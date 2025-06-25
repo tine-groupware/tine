@@ -6,46 +6,20 @@
  *
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 class Admin_Controller_SchedulerTaskTest extends TestCase
 {
     public function testCreateSchedulerTask()
     {
-        $name = 'unittest import scheduled task';
-        $task = new Admin_Model_SchedulerTask([
-            Admin_Model_SchedulerTask::FLD_NAME => $name,
-            Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => Admin_Model_SchedulerTask_Import::class,
-            Admin_Model_SchedulerTask::FLD_CONFIG       => [
-                Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS      => Calendar_Import_Ical::class,
-                Admin_Model_SchedulerTask_Import::FLD_OPTIONS           => [
-                    'container_id' => $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true)->getId(),
-                    'url' => dirname(dirname(__DIR__)) . '/Calendar/Import/files/gotomeeting.ics',
-                ],
-            ],
-            Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
-            Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
-        ]);
-        $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
+        $createdTask = $this->_getTestTask();
 
-        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CRON}, $createdTask->{Admin_Model_SchedulerTask::FLD_CRON});
-        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS}, $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS});
-        $this->assertSame($createdTask->getId(), $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG}->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID});
-        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_EMAILS}, $createdTask->{Admin_Model_SchedulerTask::FLD_EMAILS});
-
-        $this->assertNull($createdTask->last_run);
-        $this->assertEquals('0', $createdTask->failure_count);
-
-        // disable the other tasks temporarily to make sure only "our" task is run
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Tinebase_Model_SchedulerTask::class, [
-            ['field' => Tinebase_Model_SchedulerTask::FLD_NAME, 'operator' => 'not', 'value' => $name]
-        ]);
-        Tinebase_Scheduler::getInstance()->updateMultiple($filter, [
-            Tinebase_Model_SchedulerTask::FLD_ACTIVE => false,
-        ]);
-        $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
+        // run 5 times, there might be other tasks to do
+        // TODO maybe we should disable the other tasks temporarily to make sure only "our" task is run
+        for ($i = 0; $i < 5; $i++) {
+            $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
+        }
 
         $runTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
         $this->assertNotNull($runTask->last_run, print_r($runTask->toArray(), true));
@@ -63,32 +37,17 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
 
     public function testUpdateSchedulerTaskWithoutTaskConfigs()
     {
-        $task = new Admin_Model_SchedulerTask([
-            Admin_Model_SchedulerTask::FLD_NAME => 'unittest import scheduled task',
-            Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => '',
-            Admin_Model_SchedulerTask::FLD_CONFIG       => [
-                Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS      => Calendar_Import_Ical::class,
-                Admin_Model_SchedulerTask_Import::FLD_OPTIONS           => [
-                    'container_id' => $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true)->getId(),
-                    'url' => dirname(dirname(__DIR__)) . '/Calendar/Import/files/gotomeeting.ics',
-                ],
-            ],
-            Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
-            Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
-        ]);
-
-
-        $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
+        $createdTask = $this->_getTestTask();
         $createdTask['next_run'] = Tinebase_DateTime::now();
         $updatedTask = Admin_Controller_SchedulerTask::getInstance()->update($createdTask);
         $this->assertNotNull($updatedTask);
     }
 
-    public function testUpdateSystemSchedulerTask()
+    protected function _getTestTask(array $data = []): Admin_Model_SchedulerTask
     {
-        $task = new Admin_Model_SchedulerTask([
+        $task = new Admin_Model_SchedulerTask(array_merge([
             Admin_Model_SchedulerTask::FLD_NAME => 'unittest import scheduled task',
-            Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => '',
+            Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => Admin_Model_SchedulerTask_Import::class,
             Admin_Model_SchedulerTask::FLD_CONFIG       => [
                 Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS      => Calendar_Import_Ical::class,
                 Admin_Model_SchedulerTask_Import::FLD_OPTIONS           => [
@@ -98,25 +57,43 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
             ],
             Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
             Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
-        ]);
-
+        ], $data));
+        /** @var Admin_Model_SchedulerTask $createdTask */
         $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
 
-        $db = Tinebase_Core::getDb();
-        $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'scheduler_task') . ' SET ' . $db->quoteIdentifier('is_system') . ' = "1" WHERE ' . $db->quoteIdentifier('id') . ' = \'' . $createdTask->getId() .'\'')->closeCursor();
-        $createdTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
+        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CRON}, $createdTask->{Admin_Model_SchedulerTask::FLD_CRON});
+        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS}, $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS});
+        $this->assertSame($createdTask->getId(), $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG}->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID});
+        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_EMAILS}, $createdTask->{Admin_Model_SchedulerTask::FLD_EMAILS});
 
-        $now = Tinebase_DateTime::now();
-        $createdTask[Admin_Model_SchedulerTask::FLD_NEXT_RUN] = $now;
-        $createdTask[Admin_Model_SchedulerTask::FLD_CRON] = '23 4 28 * *';
-        $createdTask[Admin_Model_SchedulerTask::FLD_EMAILS] = 'test@mail.test';
-        $createdTask[Admin_Model_SchedulerTask::FLD_ACTIVE] = 0;
+        $this->assertNull($createdTask->last_run);
+        $this->assertEquals('0', $createdTask->failure_count);
 
-        $updatedTask = Admin_Controller_SchedulerTask::getInstance()->update($createdTask);
+        return $createdTask;
+    }
 
-        $this->assertEquals($now, $updatedTask[Admin_Model_SchedulerTask::FLD_NEXT_RUN]);
-        $this->assertEquals('23 4 28 * *', $updatedTask[Admin_Model_SchedulerTask::FLD_CRON]);
-        $this->assertEquals('test@mail.test', $updatedTask[Admin_Model_SchedulerTask::FLD_EMAILS]);
-        $this->assertEquals(0, $updatedTask[Admin_Model_SchedulerTask::FLD_ACTIVE]);
+    public function testTaskNotification()
+    {
+        $recipient = $this->_getPersona('sclever');
+
+        self::flushMailer();
+
+        try {
+            $scheduler = Tinebase_Core::getScheduler();
+            $task = $scheduler->getBackend()->getByProperty('Tinebase_Alarm', 'name');
+            $adminTask = Admin_Controller_SchedulerTask::getInstance()->get($task->getId());
+            $adminTask->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS} = Admin_Model_SchedulerTask_Import::class;
+            $config = $adminTask->{Admin_Model_SchedulerTask::FLD_CONFIG};
+            $config['emails'] = $recipient->accountEmailAddress;
+            $adminTask->{Admin_Model_SchedulerTask::FLD_CONFIG} = $config;
+
+            $adminTask = $scheduler->update($adminTask);
+            $adminTask->config->run();
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
+            static::fail($e->getMessage());
+        }
+        $this->_assertMail('sclever', '0 alarms sent (limit: 100).', 'body');
     }
 }

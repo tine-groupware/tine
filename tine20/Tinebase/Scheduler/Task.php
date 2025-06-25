@@ -263,6 +263,9 @@ class Tinebase_Scheduler_Task
             $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
             $writer = new Zend_Log_Writer_Stream($tmpPath);
             $priority = $this->_config['loglevel'] ?? 5;
+            // Create a simple formatter that only outputs the message
+            $formatter = new Zend_Log_Formatter_Simple('%message%' . PHP_EOL);
+            $writer->setFormatter($formatter);
             $writer->addFilter(new Zend_Log_Filter_Priority($priority));
             Tinebase_Core::getLogger()->addWriter($writer);
         } else {
@@ -273,14 +276,19 @@ class Tinebase_Scheduler_Task
         try {
             $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
             if ($sendNotification) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
+                $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
+                if ($result && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Task ' . $taskName . ' has been executed successfully.');
+                } else if (! $result && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Task ' . $taskName . ' has been executed ' . ($result ? 'successfully' : 'with a failure'));
+                        . ' Task ' . $taskName . ' has failed.');
                 };
                 $notificationBody = file_get_contents($tmpPath);
+                if (! empty($notificationBody)) {
                 // send the file contents as notification to configured email
                 $this->_sendNotification($callable, $notificationBody);
+                }
             }
         } finally {
             if ($sendNotification) {
