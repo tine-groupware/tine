@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,13 +17,7 @@
  */
 class Tinebase_Server_Plugin_Expressive implements Tinebase_Server_Plugin_Interface
 {
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase_Server_Plugin_Interface::getServer()
-     * @param Laminas\Http\Request $request
-     * @return Tinebase_Server_Interface|null
-     */
-    public static function getServer(\Laminas\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
         /**************************** JSON API *****************************/
         if (null !== $request->getQuery(Tinebase_Server_Expressive::QUERY_PARAM_DO_EXPRESSIVE)) {

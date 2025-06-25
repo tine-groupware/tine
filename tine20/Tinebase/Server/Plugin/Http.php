@@ -20,11 +20,7 @@
  */
 class Tinebase_Server_Plugin_Http implements Tinebase_Server_Plugin_Interface
 {
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase_Server_Plugin_Interface::getServer()
-     */
-    public static function getServer(\Laminas\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
         if (null !== $request->getQuery('method') || null !== $request->getPost('method') ||
             (($request::METHOD_GET === $request->getMethod() || $request::METHOD_POST === $request->getMethod()) &&

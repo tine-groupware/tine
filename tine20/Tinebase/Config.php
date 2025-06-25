@@ -399,10 +399,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     
     /**
      * Config key for configuring allowed origins of the json frontend
-     *  
+     *
+     * @deprected use ALLOWEDORIGINS!
      * @var string
      */
     public const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
+    public const ALLOWEDORIGINS = 'allowedOrigins';
 
     /**
      * Config key for configuring allowed health check ips
@@ -2117,6 +2119,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => TRUE,
+        ),
+        self::ALLOWEDORIGINS => array(
+            //_('Allowed Origins')
+            self::LABEL => 'Allowed Origins',
+            //_('Allowed Origins')
+            self::DESCRIPTION => 'Allowed Origins',
+            self::TYPE => 'array',
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
         ),
         self::ALLOWEDJSONORIGINS => array(
                                    //_('Allowed Origins')
@@ -3921,6 +3933,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var array
      */
     protected static $_serverPlugins = array(
+        Tinebase_Server_Plugin_Cors::class   => 10,
         Tinebase_Server_Plugin_Expressive::class   => 15,
         Tinebase_Server_Plugin_Json::class      => 79,
         Tinebase_Server_Plugin_WebDAV::class    => 80,

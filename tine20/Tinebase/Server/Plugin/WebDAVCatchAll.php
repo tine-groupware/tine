@@ -17,11 +17,7 @@
  */
 class Tinebase_Server_Plugin_WebDAVCatchAll implements Tinebase_Server_Plugin_Interface
 {
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase_Server_Plugin_Interface::getServer()
-     */
-    public static function getServer(\Laminas\Http\Request $request)
+    public static function getServer(\Laminas\Http\Request $request): ?Tinebase_Server_Interface
     {
         return new Tinebase_Server_WebDAV();
     }
