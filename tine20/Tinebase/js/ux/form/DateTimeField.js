@@ -99,6 +99,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             date.clearTime();
             date = date.add(Date.HOUR, time.getHours());
             date = date.add(Date.MINUTE, time.getMinutes());
+            date = date.add(Date.SECOND, time.getSeconds());
         }
         
         return date;
