@@ -1812,10 +1812,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }];
 
                 // getTitle might need to registerReplacer
-                let title = config.record.getTitle();
-                if (title && title.asString) {
-                    title = await title.asString();
-                }
+                const title = await config.record.getTitle().asString();
 
                 const locations = [{
                     type: 'attachment',
