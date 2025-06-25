@@ -27,10 +27,11 @@ class ExampleApplication_Controller_ExternalDbRecord extends Tinebase_Controller
      */
     protected function __construct()
     {
+        $dbConfig = Tinebase_Config::getInstance()->database->toArray();
+        $dbConfig['useUtf8mb4'] = true;
         Tinebase_Config::getInstance()->{Tinebase_Config::EXTERNAL_DATABASE} = [
-            'exampleRecordsDb' => Tinebase_Config::getInstance()->database->toArray(),
+            'exampleRecordsDb' => $dbConfig,
         ];
-        Tinebase_Config::getInstance()->{Tinebase_Config::EXTERNAL_DATABASE}->exampleRecordsDb->useUtf8mb4 = true;
 
         $this->_applicationName = ExampleApplication_Config::APP_NAME;
         $this->_modelName = ExampleApplication_Model_ExampleRecord::class;

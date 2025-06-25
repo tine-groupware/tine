@@ -1150,6 +1150,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => false,
         ],
+        /**
+         * example:
+         *
+         * 'externalDatabase' => [
+         *      'TineSaas' => [
+         *          'useUtf8mb4' => true,
+         *          'dbname' => 'db',
+         *          'username' => 'tinesaas',
+         *          'password' => 'pass',
+         *          'host' => 'db.host',
+         *      ]
+         * ],
+         */
+        self::EXTERNAL_DATABASE => [
+            //_('External Database Configuration')
+            self::LABEL => 'External Database Configuration',
+            self::DESCRIPTION => 'External Database Configuration',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+        ],
         self::LOGGER => [
             //_('Logger Configuration')
             self::LABEL => 'Logger Configuration',
