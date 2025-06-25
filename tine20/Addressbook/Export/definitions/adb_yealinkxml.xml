@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_Contact</model>
+    <name>adb_yealinkxml</name>
+    <!-- _('Yealink Xml') -->
+    <label>Yealink Xml</label>
+    <type>export</type>
+    <plugin>Addressbook_Export_Yealinkxml</plugin>
+</config>
