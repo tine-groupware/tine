@@ -1269,12 +1269,21 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $order = $this->testTransitionOfferOrder();
         Tinebase_Record_Expander::expandRecord($order);
 
+        $oldNotes = Tinebase_Notes::getInstance()->getNotesOfRecord(Sales_Model_Document_Order::class, $order->getId(), _onlyNonSystemNotes: false);
+
         $order->{Sales_Model_Document_Abstract::FLD_POSITIONS}->removeFirst();
         $order = Sales_Controller_Document_Order::getInstance()->update($order);
         Tinebase_Record_Expander::expandRecord($order);
 
+        $newNotes = Tinebase_Notes::getInstance()->getNotesOfRecord(Sales_Model_Document_Order::class, $order->getId(), _onlyNonSystemNotes: false);
+        $newNotes->removeRecordsById($oldNotes);
+        $this->assertSame(1, $newNotes->count());
+        $this->assertStringNotContainsString(Sales_Model_Document_Order::FLD_PRECURSOR_DOCUMENTS, $newNotes->getFirstRecord()->note);
+
         $this->assertCount(1, $order->{Sales_Model_Document_Abstract::FLD_POSITIONS});
         $this->assertCount(1, $order->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS});
+
+
 
         $order->{Sales_Model_Document_Abstract::FLD_POSITIONS}->removeFirst();
         $order = Sales_Controller_Document_Order::getInstance()->update($order);
