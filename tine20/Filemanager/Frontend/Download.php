@@ -25,7 +25,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $path
      */
-    public function displayNode($path)
+    public function displayNode(string $path)
     {
         try {
             $splittedPath = explode('/', trim($path, '/'));
@@ -147,7 +147,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $path
      */
-    public function downloadNode($path)
+    public function downloadNode(string $path)
     {
         try {
             $splittedPath = explode('/', trim($path, '/'));

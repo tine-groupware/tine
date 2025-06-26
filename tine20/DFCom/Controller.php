@@ -72,11 +72,7 @@ class DFCom_Controller extends Tinebase_Controller_Event
 
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $routeCollector
-     * @return null
-     */
-    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
         $routeCollector->addGroup('/DFCom/v1', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/device/dispatchRecord', (new Tinebase_Expressive_RouteHandler(
@@ -94,7 +90,5 @@ class DFCom_Controller extends Tinebase_Controller_Event
                 ],
             ]))->toArray());
         });
-
-        return null;
     }
 }

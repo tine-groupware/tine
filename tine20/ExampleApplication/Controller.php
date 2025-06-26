@@ -108,11 +108,7 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
         return $response;
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $routeCollector
-     * @return null
-     */
-    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
         $routeCollector->addGroup('/ExampleApplication', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/public/testRoute', (new Tinebase_Expressive_RouteHandler(
@@ -122,7 +118,5 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
             $routeCollector->get('/testRoute', (new Tinebase_Expressive_RouteHandler(
                 ExampleApplication_Controller::class, 'authTestRoute'))->toArray());
         });
-
-        return null;
     }
 }

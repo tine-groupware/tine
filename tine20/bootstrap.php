@@ -38,8 +38,5 @@ if (extension_loaded('mbstring')) {
 // intialize composers autoloader
 $autoloader = require __DIR__ . '/vendor/autoload.php';
 
-// initialize plugins
-require 'init_plugins.php';
-
 // activate our own error handler after autoloader initialization
 set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_STRICT | E_DEPRECATED);

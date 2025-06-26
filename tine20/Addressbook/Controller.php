@@ -285,4 +285,17 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
         }
         return $result;
     }
+
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
+    {
+        $routeCollector->addRoute('PROPFIND', '/.well-known/carddav', (new Tinebase_Expressive_RouteHandler(
+            self::class, 'publicWellKnownCardDav', [
+            Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+        ]))->toArray());
+    }
+
+    public function publicWellKnownCardDav(): \Psr\Http\Message\ResponseInterface
+    {
+        return new \Laminas\Diactoros\Response(status: 301, headers: ['Location' => '/addressbooks']);
+    }
 }

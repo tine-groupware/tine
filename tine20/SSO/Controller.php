@@ -37,10 +37,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected static $_logoutHandlerRecursion = false;
 
-    public static function addFastRoutes(
-        /** @noinspection PhpUnusedParameterInspection */
-        \FastRoute\RouteCollector $r
-    ) {
+    public static function addFastRoutes(FastRoute\RouteCollector $r): void {
         $r->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
             self::class, 'publicGetWellKnownOpenIdConfiguration', [
             Tinebase_Expressive_RouteHandler::IS_PUBLIC => true

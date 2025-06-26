@@ -492,12 +492,12 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         return;
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $routeCollector
-     * @return null
-     */
-    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
+        $routeCollector->addRoute('PROPFIND', '/.well-known/caldav', (new Tinebase_Expressive_RouteHandler(
+            self::class, 'publicWellKnownCalDav', [
+            Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+        ]))->toArray());
 
         $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
             if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
@@ -528,8 +528,11 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 Tinebase_Expressive_RouteHandler::UNAUTHORIZED_REDIRECT_LOGIN => true,
             ]))->toArray());
         });
+    }
 
-        return null;
+    public function publicWellKnownCalDav(): \Psr\Http\Message\ResponseInterface
+    {
+        return new \Laminas\Diactoros\Response(status: 301, headers: ['Location' => '/calendars']);
     }
 
     public function floorplanMainScreen($floorplan=0)
