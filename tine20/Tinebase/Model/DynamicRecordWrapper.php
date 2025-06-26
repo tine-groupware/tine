@@ -38,6 +38,13 @@ class Tinebase_Model_DynamicRecordWrapper extends Tinebase_Record_NewAbstract
 
 
         self::FIELDS        => [
+            self::ID                    => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => [[Tinebase_Record_Abstract::class, 'generateUID']],
+                ],
+            ],
             self::FLD_MODEL_NAME        => [
                 self::TYPE                  => self::TYPE_MODEL,
             ],
