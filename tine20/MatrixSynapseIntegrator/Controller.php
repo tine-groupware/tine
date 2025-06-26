@@ -45,10 +45,8 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
         return self::$_instance;
     }
 
-    public static function addFastRoutes(
-        /** @noinspection PhpUnusedParameterInspection */
-        \FastRoute\RouteCollector $r
-    ) {
+    public static function addFastRoutes(\FastRoute\RouteCollector $r): void
+    {
         $r->post('/_matrix-internal/identity/v1/check_credentials', (new Tinebase_Expressive_RouteHandler(
             self::class, 'checkCredentials', [
             Tinebase_Expressive_RouteHandler::IS_PUBLIC => true

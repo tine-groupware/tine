@@ -1188,14 +1188,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $r
-     * @return void|null
-     */
-    public static function addFastRoutes(
-        /** @noinspection PhpUnusedParameterInspection */
-        \FastRoute\RouteCollector $r
-    ) {
+    public static function addFastRoutes(\FastRoute\RouteCollector $r): void {
         $r->addGroup('', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/favicon[/{size}[/{ext}]]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getFavicon', [
@@ -1222,6 +1215,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             $routeCollector->get('/metrics[/{apiKey}]', (new Tinebase_Expressive_RouteHandler(
                 Tinebase_Controller::class, 'getStatusMetrics', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
+            ]))->toArray());
+
+            $routeCollector->get('/status.php', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'publicStatusPhpApi', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
@@ -1277,6 +1276,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
             ]))->toArray());
         });
+    }
+
+    public function publicStatusPhpApi(): \Psr\Http\Message\ResponseInterface
+    {
+        $response = new \Laminas\Diactoros\Response(headers: [
+            'Content-Type' => 'application/json',
+        ]);
+        $response->getBody()->write(json_encode([
+            'installed'     => true,
+            'version'       => '10.0.10.4',
+            'versionstring' => '10.0.10',
+            'maintenance'   => false,
+            'edition'       => '',
+            'productname'   => 'Tine 2.0' // lets try it ;-)
+        ]));
+        return $response;
     }
 
     public function postSendSupportRequest(): \Psr\Http\Message\ResponseInterface

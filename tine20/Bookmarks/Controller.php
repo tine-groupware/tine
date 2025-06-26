@@ -23,10 +23,7 @@ class Bookmarks_Controller extends Tinebase_Controller_Event
 
     protected $_applicationName = Bookmarks_Config::APP_NAME;
     
-    public static function addFastRoutes(
-        /** @noinspection PhpUnusedParameterInspection */
-        \FastRoute\RouteCollector $r
-    ) {
+    public static function addFastRoutes(\FastRoute\RouteCollector $r): void {
         $r->addGroup('/' . Bookmarks_Config::APP_NAME, function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/openBookmark/{id}', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'openBookmark', [

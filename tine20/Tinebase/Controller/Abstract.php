@@ -443,14 +443,8 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         return $isModel;
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $r
-     * @return null|void
-     */
-    public static function addFastRoutes(/** @noinspection PhpUnusedParameterInspection */\FastRoute\RouteCollector $r)
-    {
-        return null;
-    }
+    public static function addFastRoutes(/** @noinspection PhpUnusedParameterInspection */\FastRoute\RouteCollector $r): void
+    {}
 
     public static function registerContainer(ContainerBuilder $builder)
     {

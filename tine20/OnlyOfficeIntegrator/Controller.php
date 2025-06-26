@@ -38,10 +38,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected $_applicationName = OnlyOfficeIntegrator_Config::APP_NAME;
 
-    public static function addFastRoutes(
-        /** @noinspection PhpUnusedParameterInspection */
-        \FastRoute\RouteCollector $r
-    ) {
+    public static function addFastRoutes( \FastRoute\RouteCollector $r): void {
         $r->addGroup('/' . OnlyOfficeIntegrator_Config::APP_NAME, function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/getDocument/{token}', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'getDocument', [

@@ -88,11 +88,7 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
         return ;
     }
 
-    /**
-     * @param \FastRoute\RouteCollector $routeCollector
-     * @return null
-     */
-    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
         $routeCollector->addGroup('/GDPR', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/view[/{path:.+}]', (new Tinebase_Expressive_RouteHandler(
@@ -124,6 +120,5 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
-        return null;
     }
 }

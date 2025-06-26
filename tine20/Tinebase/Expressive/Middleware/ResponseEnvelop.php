@@ -92,6 +92,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response status code: " . $response->getStatusCode());
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
             }
