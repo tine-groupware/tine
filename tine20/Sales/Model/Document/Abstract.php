@@ -976,6 +976,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     {
         parent::_setFromJson($_data);
 
+        unset($_data[self::FLD_DISPATCH_HISTORY]);
         unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
         unset($_data[self::FLD_REVERSAL_STATUS]);
     }
