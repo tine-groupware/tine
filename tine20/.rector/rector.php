@@ -2,25 +2,27 @@
 /**
  * run rector:
  *
- * $ vendor/bin/rector process . --dry-run
+ * $ vendor/bin/rector --config=.rector/rector.php process . --dry-run
  */
 
 declare(strict_types=1);
 
+$tineroot = dirname(__DIR__);
+
 // just run a single rector rule...
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 return Rector\Config\RectorConfig::configure()
-    ->withPaths([__DIR__])
+    ->withPaths([$tineroot])
     ->withPhpVersion(Rector\ValueObject\PhpVersion::PHP_84)
     ->withSkipPath(
-        __DIR__ . '/vendor'
+        $tineroot . '/vendor'
     )
     // "Class "SimpleSAML\Module" not found".
     ->withSkipPath(
-        __DIR__ . '/SSO/Controller.php'
+        $tineroot . '/SSO/Controller.php'
     )
     ->withSkipPath(
-        __DIR__ . '/SSO/Facade/SAML/Session.php'
+        $tineroot . '/SSO/Facade/SAML/Session.php'
     )
     ->withRules([
         Rector\Php84\Rector\Param\ExplicitNullableParamTypeRector::class,
@@ -40,7 +42,7 @@ return Rector\Config\RectorConfig::configure()
 //        LevelSetList::UP_TO_PHP_84,
 //    ]);
 //    $rectorConfig->skip([
-//        __DIR__ . '/vendor',
+//        $tineroot . '/vendor',
 //        LongArrayToShortArrayRector::class
 //    ]);
 //};
