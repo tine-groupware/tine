@@ -71,7 +71,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen }).getEl()
                 const mask = new Ext.LoadMask(maskEl, { msg: app.formatMessage('Creating { targetRecordsName }', { targetRecordsName }) })
 
-
                 const unbooked = selections.reduce((unbooked, record) => {
                     record.noProxy = true // kill grid autoSave
                     const status = record.get(statusFieldName)
@@ -83,6 +82,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Create new { targetRecordName }?', { targetRecordName: targetRecordClass.getRecordName() }),
                         app.formatMessage('Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document.', { sourceRecordsName, targetRecordName: targetRecordClass.getRecordName() })
+                    ) !== 'yes') { return false }
+                } else if (isReversal) {
+                    if (await Ext.MessageBox.confirm(
+                        app.formatMessage('Reverse { sourceRecordsName }?', { sourceRecordsName, targetRecordName }),
+                        app.formatMessage('Reversal cannot be undone. Do you want to continue?', { sourceRecordsName, targetRecordName: targetRecordClass.getRecordName() })
                     ) !== 'yes') { return false }
                 }
 
