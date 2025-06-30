@@ -204,7 +204,7 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                             ['field' => 'type', 'operator' => 'in', 'value' => $accountTypes]
                         ]);
 
-                        $emailAccountIds = Admin_Controller_EmailAccount::getInstance()->search($filter)->getId();
+                        $emailAccountIds = Admin_Controller_EmailAccount::getInstance()->search($filter)->getArrayOfIds();
                         
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
                             ->debug(__METHOD__ . '::' . __LINE__ . ' User accounts to delete: ' . print_r($emailAccountIds, true));

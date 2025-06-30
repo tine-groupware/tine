@@ -131,12 +131,12 @@ class Calendar_Model_CalendarFilter extends Tinebase_Model_Filter_Container
      *
      * @param $currentAccount
      * @param $appName
-     * @return mixed
+     * @return array
      */
     protected function _getSharedContainer($currentAccount, $appName)
     {
         return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, Calendar_Model_Event::class, [
             Tinebase_Model_Grants::GRANT_READ
-        ])->getId();
+        ])->getArrayOfIds();
     }
 }

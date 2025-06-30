@@ -373,9 +373,10 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * returns the id of a record property
      *
      * @param string $_property
+     * @param boolean $_getIdFromRecord default true, returns null if property has a record and value is false
      * @return string|null
      */
-    public function getIdFromProperty($_property);
+    public function getIdFromProperty(string $_property, bool $_getIdFromRecord = true): ?string;
 
     /**
      * @param array $_validators

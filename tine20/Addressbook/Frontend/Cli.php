@@ -290,7 +290,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     'application' => $this->_applicationName,
                 ))
             );
-            $filter[] = ['field' => 'tag', 'operator' => 'equals', 'value' => $tag->getId()];
+            $filter[] = ['field' => 'tag', 'operator' => 'equals', 'value' => $tag->getArrayOfIds()];
         }
 
         $filter = new Addressbook_Model_ContactFilter($filter);

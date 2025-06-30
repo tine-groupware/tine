@@ -105,7 +105,7 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
         )));
 
         if (count($states) > 0) {
-            $stateRepo->delete($states->getId());
+            $stateRepo->delete($states->getArrayOfIds());
         }
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
     }

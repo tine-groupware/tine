@@ -99,6 +99,6 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
     {
         $this->checkRight('MANAGE_ACCESS_LOG');
         
-        Tinebase_AccessLog::getInstance()->delete($_ids);
+        return Tinebase_AccessLog::getInstance()->delete($_ids);
     }    
 }

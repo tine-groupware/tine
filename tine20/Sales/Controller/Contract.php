@@ -279,7 +279,7 @@ class Sales_Controller_Contract extends Sales_Controller_NumberableAbstract
         
         // handle products
         $filter = new Sales_Model_ProductAggregateFilter(array(
-            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $sourceContracts->getId())
+            array('field' => 'contract_id', 'operator' => 'equals', 'value' => $sourceContracts->getArrayOfIds())
         ));
         $products = Sales_Controller_ProductAggregate::getInstance()->search($filter);
         

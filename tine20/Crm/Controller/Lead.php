@@ -116,7 +116,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $leads->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
                 $this->_modelName, 
                 $this->_backend->getType(), 
-                $leads->getId(), 
+                $leads->getArrayOfIds(),
                 NULL,
                 array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'PRODUCT'),
                 FALSE,

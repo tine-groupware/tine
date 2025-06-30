@@ -401,10 +401,11 @@ class Tinebase_Core
      * ATTENTION if ever refactored, this is called via ActionQueue with the single parameter 'Tinebase_FOO_User' to get Tinebase_User (triggered in Tinebase_User_Sql::deleteUserInSqlBackend()
      * Tinebase_FOO_FileSystem
      *
-     * @param   string $_applicationName appname / modelname
+     * @template T
+     * @param class-string<T> $_applicationName appname / modelname
      * @param   string $_modelName
      * @param boolean $_ignoreACL
-     * @return Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract the controller of the application
+     * @return Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract<T> the controller of the application
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */

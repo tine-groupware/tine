@@ -426,7 +426,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             . ' About to ' . $_mode . ' tags for ' . count($messages) . ' messages.');
 
         $filter =  new Felamimail_Model_MessageFilter([
-            ['field' => 'id', 'operator' => 'in', 'value' => $messages->getId()]
+            ['field' => 'id', 'operator' => 'in', 'value' => $messages->getArrayOfIds()]
         ]);
 
         if ($_mode === 'clear') {
@@ -435,7 +435,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                     $tags = Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($messages);
                 }
                 if ($tags) {
-                    Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tags->getId());
+                    Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tags->getArrayOfIds());
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
                 throw new Felamimail_Exception('failed to detach tags: ' . print_r($tags, TRUE));

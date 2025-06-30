@@ -1131,7 +1131,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $resources = Calendar_Controller_Resource::getInstance()->getMultiple($ids, true);
                     // NOTE: resource detail resolving is for export only - we might switch this to async in future for better performance
                     Tinebase_Container::getInstance()->getGrantsOfRecords($resources, Tinebase_Core::getUser());
-                    $resources->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $resources->getId()));
+                    $resources->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $resources->getArrayOfIds()));
                     if (Tinebase_Core::isFilesystemAvailable()) {
                         Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($resources);
                     }
@@ -1333,6 +1333,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $resolveCf = Addressbook_Controller_Contact::getInstance()->resolveCustomfields(static::$_resolveAttendeeCustomfield);
         try {
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($contactIds), true);
+            /** @phpstan-ignore method.notFound */
             $contacts->resolveAttenderCleanUp();
         } finally {
             Addressbook_Controller_Contact::getInstance()->resolveCustomfields($resolveCf);
@@ -1356,7 +1357,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids), true);
                     // NOTE: resource detail resolving is for export only - we might switch this to async in future for better performance
                     Tinebase_Container::getInstance()->getGrantsOfRecords($typeMap[$type], Tinebase_Core::getUser());
-                    $typeMap[$type]->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $typeMap[$type]->getId()));
+                    $typeMap[$type]->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations('Calendar_Model_Resource', 'Sql', $typeMap[$type]->getArrayOfIds()));
                     if (Tinebase_Core::isFilesystemAvailable()) {
                         Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($typeMap[$type]);
                     }

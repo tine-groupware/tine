@@ -347,7 +347,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         $products = Sales_Controller_Product::getInstance()->search($filter);
         
         $filter = new Sales_Model_ProductAggregateFilter(array());
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'product_id', 'operator' => 'in', 'value' => $products->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'product_id', 'operator' => 'in', 'value' => $products->getArrayOfIds())));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'contract_id', 'operator' => 'equals', 'value' => $this->getId())));
 
         $pas = Sales_Controller_ProductAggregate::getInstance()->search($filter);

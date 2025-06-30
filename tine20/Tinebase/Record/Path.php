@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -15,6 +15,8 @@
  *
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Tinebase_Model_Path>
  */
 class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
 {
@@ -40,9 +42,9 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     /**
      * holds the instance of the singleton
      *
-     * @var Tinebase_Alarm
+     * @var Tinebase_Record_Path
      */
-    private static $instance = NULL;
+    private static $instance = null;
 
     protected $_rebuildQueue = array();
 
@@ -64,7 +66,7 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
      */
     public static function getInstance() 
     {
-        if (self::$instance === NULL) {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
         return self::$instance;

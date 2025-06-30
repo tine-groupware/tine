@@ -1005,7 +1005,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 if ($displayCalId) {
                     // finaly repair attendee records
                     $attendeeRecords = $danglingContactAttendee->filter('user_id', $danglingContactId);
-                    $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                    $this->_attendeeBackend->updateMultiple($attendeeRecords->getArrayOfIds(), array('displaycontainer_id' => $displayCalId));
                     Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following contact attendee " . print_r($attendeeRecords->toArray(), TRUE));
                 }
             }
@@ -1019,7 +1019,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             if ($resource && $resource->container_id) {
                 $displayCalId = $resource->container_id;
                 $attendeeRecords = $danglingResourceAttendee->filter('user_id', $danglingResourceId);
-                $this->_attendeeBackend->updateMultiple($attendeeRecords->getId(), array('displaycontainer_id' => $displayCalId));
+                $this->_attendeeBackend->updateMultiple($attendeeRecords->getArrayOfIds(), array('displaycontainer_id' => $displayCalId));
                 Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . " repaired the following resource attendee " . print_r($attendeeRecords->toArray(), TRUE));
             }
         }

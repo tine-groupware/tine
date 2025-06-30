@@ -1598,8 +1598,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             $persistentExceptionEvents = $this->getRecurExceptions($_event);
-            $pastPersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-            $futurePersistentExceptionEvents = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+            $pastPersistentExceptionEvents = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
+            $futurePersistentExceptionEvents = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
             foreach ($persistentExceptionEvents as $persistentExceptionEvent) {
                 $pEEOrgStart = $persistentExceptionEvent->getOriginalDtStart();
                 $pEEOrgStart->isLater($originalDtstart) ?
@@ -1650,12 +1650,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 $_event->exdate = $futureExdates;
+                /** @phpstan-ignore method.notFound */
                 $futurePersistentExceptionEvents->setRecurId($_event->getId());
                 unset($_event->recurid);
                 unset($_event->base_event_id);
                 foreach(array('attendee', 'notes', 'alarms') as $prop) {
                     if ($_event->{$prop} instanceof Tinebase_Record_RecordSet) {
-                        $_event->{$prop}->setId(NULL);
+                        $_event->{$prop}->setId(null);
                     }
                 }
 
@@ -2516,7 +2517,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $exceptions->{Tinebase_Model_Grants::GRANT_DELETE} = true;
                 $events->merge($exceptions);
 
-                $exceptionIds = $exceptions->getId();
+                $exceptionIds = $exceptions->getArrayOfIds();
                 $_ids = array_merge($_ids, $exceptionIds);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Implicitly deleting ' . $exceptions->count() . ' persistent exception(s) for recurring series with uid' . $event->uid);

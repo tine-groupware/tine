@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -18,12 +18,15 @@
  * @package     Tinebase
  * @subpackage  Record
  *
- * @method getId() - see \Tinebase_Record_Abstract::getId
- * @method setId($_id) - see \Tinebase_Record_Abstract::setId
- * @method setConvertDates($_bool) - see \Tinebase_Record_Abstract::setConvertDates
- * @method runConvertToRecord() - see \Tinebase_Record_Abstract::runConvertToRecord
- * @method getIdFromProperty($_property, $_getIdFromRecord = true) - see \Tinebase_Record_Abstract::getIdFromProperty
- * @method applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null) - see \Tinebase_Record_Abstract::applyFieldGrants
+ * @template T of Tinebase_Record_Interface
+ *
+ * DO NOT USE getId() -> use getArrayOfIds()
+ *
+ * @method array setId(null|string|int $_id)
+ * @method array setConvertDates(bool $_bool)
+ * @method array runConvertToRecord()
+ * @method array getIdFromProperty(string $_property, bool $_getIdFromRecord = true)
+ * @method array applyFieldGrants(string $action, ?T $oldRecord = null)
  */
 class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAccess, \Stringable
 {
@@ -60,8 +63,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * creates new Tinebase_Record_RecordSet
      *
-     * @param string $_className the required classType
-     * @param array|Tinebase_Record_RecordSet $_records array of record objects
+     * @param class-string<T> $_className the required classType
+     * @param array<T>|Tinebase_Record_RecordSet<T> $_records array of record objects
      * @param bool $_bypassFilters {@see Tinebase_Record_Interface::__construct}
      * @param bool $_convertDates {@see Tinebase_Record_Interface::__construct}
      * @param bool $_silentlySkipFails
@@ -651,7 +654,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns first record of this set
      *
-     * @return Tinebase_Record_Interface|NULL
+     * @return T|NULL
      */
     public function getFirstRecord()
     {
@@ -796,8 +799,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * merges records from given record set
      * 
-     * @param Tinebase_Record_RecordSet $_recordSet
-     * @return void
+     * @param Tinebase_Record_RecordSet<T> $_recordSet
+     * @return self
      */
     public function merge(Tinebase_Record_RecordSet $_recordSet)
     {
