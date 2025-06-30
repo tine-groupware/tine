@@ -61,7 +61,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             handler: async function(cmp) {
                 AbstractAction.prototype.handler.call(this, cmp);
 
-                let record = this.selections = [...this.initialConfig.selections][0]
+                let record = this.selection = [...this.initialConfig.selections][0]
                 const win = window
                 const docType = record.constructor.getMeta('recordName')
                 const className = record.constructor.getPhpClassName()
@@ -122,7 +122,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.initialConfig = (this.parentMenu?.ownerCt || this).initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
-                    let record = this.selections = this.record || [...this.initialConfig.selections][0]
+                    let record = this.selection = this.record || [...this.initialConfig.selections][0]
                     const win = window
                     const docType = record.constructor.getMeta('recordName')
                     const statusFieldName = `${docType.toLowerCase()}_status`
@@ -211,10 +211,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             document_id: record.id,
                             dispatch_transport: 'Sales_Model_EDocument_Dispatch_Manual',
                             dispatch_report: app.formatMessage('Manually dispatched by email without evaluating the configured dispatch type'),
-                            type: 'success'
+                            type: 'start'
                         },
                         type: 'attachment'
                     }]
+                    fileLocations[1] = _.set(_.cloneDeep(fileLocations[0]), 'record_id.type', 'success')
 
                     if (openProcesses.length) {
                         // @TODO don't show other options if cmp.startRecord is set?
@@ -311,14 +312,11 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             update: async (mail) => {
                                 // we need to fetch record first, as dispatchHistory is dependend and we don't have the
                                 // new dispatchHistoryRecord which we created via mail fileLocation
-                                cmp.record = await cmp.record.constructor.getProxy().promiseLoadRecord(cmp.record)
+                                let record = cmp.selection = cmp.initialConfig.selections[0]
+                                record = cmp.selection = await record.constructor.getProxy().promiseLoadRecord(record)
 
                                 if (cmp.editDialog && cmp.editDialog.loadRecord) {
-                                    await cmp.editDialog.loadRecord(cmp.record, true)
-                                    await cmp.editDialog.applyChanges()
-                                    cmp.record = cmp.editDialog.record
-                                } else {
-                                    cmp.record = await cmp.record.constructor.getProxy().promiseSaveRecord(cmp.record)
+                                    await cmp.editDialog.loadRecord(record, true)
                                 }
                                 cmp.fireEvent('sentmail', cmp)
                             }
@@ -345,7 +343,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.initialConfig = this.parentMenu.ownerCt.initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
-                    let record = this.selections = [...this.initialConfig.selections][0]
+                    let record = this.selection = [...this.initialConfig.selections][0]
 
                     DispatchHistoryDialog.openWindow({
                         editDialog: this.editDialog,
@@ -360,7 +358,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.initialConfig = this.parentMenu.ownerCt.initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
-                    let record = this.selections = [...this.initialConfig.selections][0]
+                    let record = this.selection = [...this.initialConfig.selections][0]
                     const debitorId = record.get('debitor_id').original_id
                     Tine.Sales.DebitorEditDialog.openWindow({
                         recordId: debitorId,

@@ -81,10 +81,6 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                     self::TYPE                          => self::TYPE_STRING,
                     self::LABEL                         => 'Dispatch Process', // _('Dispatch Process')
                 ],
-                self::UI_CONFIG                     => [
-                    self::DISABLED                      => true,
-                ],
-
             ],
             self::FLD_DISPATCH_DATE             => [
                 self::LABEL                         => 'Date', //_('Date')

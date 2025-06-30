@@ -129,6 +129,11 @@ Tine.Tinebase.ExceptionHandler = function() {
             exception = response.data;
         }
 
+        if (exception.code === -32000) {
+            // already decoded
+            exception = exception.data;
+        }
+
         console.error(exception);
 
         if (exception.appName != 'Tinebase' && Tine.Tinebase.ExceptionHandlerRegistry.has(exception.appName)) {
