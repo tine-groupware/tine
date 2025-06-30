@@ -49,7 +49,9 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
 
     public function getAccountData()
     {
-        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForCurrentUser();
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
+            Tinebase_Core::getUser()
+        );
 
         $conf = MatrixSynapseIntegrator_Config::getInstance();
 

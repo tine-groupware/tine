@@ -18,9 +18,9 @@
  */
 class MatrixSynapseIntegrator_Backend_CorporalMock extends MatrixSynapseIntegrator_Backend_Corporal
 {
-    public function push(Tinebase_Model_FullUser $user): bool
+    public function push(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): bool
     {
-        $this->_policy = $this->_getPolicy($user);
+        $this->_policy = $this->_getPolicy($matrixAccount);
         return true;
     }
 }

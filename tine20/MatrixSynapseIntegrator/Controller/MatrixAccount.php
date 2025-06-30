@@ -21,6 +21,8 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 {
     use Tinebase_Controller_SingletonTrait;
 
+    protected ?MatrixSynapseIntegrator_Backend_Corporal $_corporal = null;
+
     /**
      * the constructor
      *
@@ -103,14 +105,14 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         return Admin_Acl_Rights::class;
     }
 
-    public function getMatrixAccountForCurrentUser(): MatrixSynapseIntegrator_Model_MatrixAccount
+    public function getMatrixAccountForUser(Tinebase_Model_FullUser $user): MatrixSynapseIntegrator_Model_MatrixAccount
     {
         $check = $this->doRightChecks(false);
         /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
         $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             MatrixSynapseIntegrator_Model_MatrixAccount::class, [[
                 Tinebase_Model_Filter_Abstract::FIELD => MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
-                Tinebase_Model_Filter_Abstract::VALUE => Tinebase_Core::getUser()->getId()
+                Tinebase_Model_Filter_Abstract::VALUE => $user->getId()
             ]]
         ))->getFirstRecord();
         $this->doRightChecks($check);
@@ -118,5 +120,71 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             throw new Tinebase_Exception_NotFound('No Matrix Account found');
         }
         return $result;
+    }
+
+    public function setCorporalBackend(
+        ?MatrixSynapseIntegrator_Backend_Corporal $backend = null): MatrixSynapseIntegrator_Backend_Corporal
+    {
+        return $this->_corporal = $backend ?: new MatrixSynapseIntegrator_Backend_Corporal();
+    }
+
+    public function getCorporalBackend(): MatrixSynapseIntegrator_Backend_Corporal
+    {
+        return $this->_corporal ?: $this->setCorporalBackend();
+    }
+
+    protected function _pushToCorporal(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount)
+    {
+        if (! MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::HOME_SERVER_URL)) {
+            return;
+        }
+
+        $this->getCorporalBackend()->push($matrixAccount);
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $_createdRecord */
+        $this->_pushToCorporal($_createdRecord);
+    }
+
+    /**
+     * inspect update of one record (after update)
+     *
+     * @param   Tinebase_Record_Interface $updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $record          the update record
+     * @param   Tinebase_Record_Interface $currentRecord   the current record (before update)
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $updatedRecord */
+        $this->_pushToCorporal($updatedRecord);
+    }
+
+    /**
+     * inspect delete of one record (after delete)
+     *
+     * @param   Tinebase_Record_Interface $record          the just deleted record
+     * @return  void
+     */
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+
+        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $record */
+        $record->is_deleted = 1;
+        $this->_pushToCorporal($record);
     }
 }

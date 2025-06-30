@@ -20,6 +20,7 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
 {
     public const FLD_DESCRIPTION = 'description';
     public const FLD_ACCOUNT_ID = 'account_id';
+    // public const FLD_ACTIVE = 'active';
     public const FLD_CC_ID = 'cc_id';
     public const FLD_MATRIX_ACCESS_TOKEN = 'matrix_access_token';
     public const FLD_MATRIX_DEVICE_ID = 'matrix_device_id';
@@ -154,6 +155,15 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Matrix Session Key', // _('Matrix Session Key')
             ],
+            // TODO needed?
+//            self::FLD_ACTIVE => [
+//                self::TYPE                      => self::TYPE_BOOLEAN,
+//                self::NULLABLE                  => false,
+//                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+//                self::FILTER                    => [Zend_Filter_Empty::class => true],
+//                self::LABEL                     => 'Active', // _('Active')
+//                self::DEFAULT_VAL               => true,
+//            ],
         ]
     ];
 }

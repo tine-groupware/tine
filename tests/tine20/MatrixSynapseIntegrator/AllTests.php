@@ -21,7 +21,7 @@ class MatrixSynapseIntegrator_AllTests
 
         $suite->addTestSuite(MatrixSynapseIntegrator_Frontend_JsonTest::class);
         $suite->addTestSuite(MatrixSynapseIntegrator_ControllerTests::class);
-        $suite->addTestSuite(MatrixSynapseIntegrator_Controller_UserTests::class);
+        $suite->addTestSuite(MatrixSynapseIntegrator_Controller_MatrixAccountTests::class);
 
         return $suite;
     }
