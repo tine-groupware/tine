@@ -709,6 +709,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_setGeoData($_record);
 
         $this->_checkAndSetShortName($_record);
+        $this->_resolvePreferredEmailAddress($_record);
         
         if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER]) ||
@@ -765,18 +766,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        $this->_resolvePreferredEmailAddress($_record);
+
+        // syncBackendIds is read only property!
+        unset($_record->syncBackendIds);
+    }
+
+    protected function _resolvePreferredEmailAddress(Addressbook_Model_Contact $_record)
+    {
         if (empty($_record->{$_record->preferred_email})) {
-            $emailFields = Addressbook_Model_Contact::getEmailFields();
-            foreach ($emailFields as $emailFieldRecord) {
-                if (!empty($_record->{$emailFieldRecord['name']})) {
-                    $_record->preferred_email = $emailFieldRecord['name'];
+            $emailFields = array_keys(Addressbook_Model_Contact::getEmailFields());
+            foreach ($emailFields as $emailField) {
+                if (!empty($_record->{$emailField})) {
+                    $_record->preferred_email = $emailField;
                     break;
                 }
             }
         }
-
-        // syncBackendIds is read only property!
-        unset($_record->syncBackendIds);
     }
 
     /**

@@ -1229,7 +1229,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     return $attendee;
                 }
                 if (null === $secondaryMatch) {
-                    foreach (Addressbook_Model_Contact::getEmailFields() as $emailField) {
+                    foreach (array_keys(Addressbook_Model_Contact::getEmailFields()) as $emailField) {
                         if (strtolower($attendee->user_id->{$emailField} ?? '') === $email) {
                             $secondaryMatch = $attendee;
                             break;
