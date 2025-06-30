@@ -219,7 +219,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         const vatProcedure = newValue.get('vat_procedure');
         const defaultSalesTaxValue = this.salesTaxField.getValue();
         if (defaultSalesTaxValue > 0) this.defaultSalesTaxValue = defaultSalesTaxValue;
-        this.salesTaxField.setValue(vatProcedure !== 'taxable' ? 0 : (this.defaultSalesTaxValue || 0));
+        this.salesTaxField.setValue(vatProcedure !== 'standard' ? 0 : (this.defaultSalesTaxValue || 0));
         this.calcTax();
     },
 
@@ -437,7 +437,7 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 ref: '../../../../../../../vatProcedureCombo',
                                 checkState: function (editDialog, record) {
                                     const supplierRelation = record.data.relations.find(r => r.related_model === 'Sales_Model_Supplier');
-                                    this.setValue(supplierRelation?.related_record?.vat_procedure ?? 'nonTaxable');
+                                    this.setValue(supplierRelation?.related_record?.vat_procedure ?? 'outsideTaxScope');
                                 }
                             }, {
                                 columnWidth: 1,
