@@ -8,6 +8,7 @@
  *
  */
 import { HTMLProxy } from "twingEnv.es6";
+import asString from "../../../ux/asString"
 
 Ext.ns('Ext.ux.Printer');
 
@@ -149,7 +150,7 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 
     getTitle: function(editDialog) {
         return new HTMLProxy(new Promise(async (resolve) => {
-            const recordTitle = await editDialog.record.getTitle().asString();
+            const recordTitle = await asString(editDialog.record.getTitle());
             resolve(editDialog.recordClass.getRecordName() + ': ' + recordTitle);
         }));
     }

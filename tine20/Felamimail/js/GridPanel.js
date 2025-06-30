@@ -14,6 +14,7 @@ Ext.namespace('Tine.Felamimail');
 require('./MessageFileAction');
 
 import keydown from 'keydown';
+import asString from "../../Tinebase/js/ux/asString";
 
 /**
  * Message grid panel
@@ -1812,7 +1813,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }];
 
                 // getTitle might need to registerReplacer
-                const title = await config.record.getTitle().asString();
+                const title = await asString(config.record.getTitle());
 
                 const locations = [{
                     type: 'attachment',

@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import { HTMLProxy } from "../../../Tinebase/js/twingEnv.es6";
+import asString from "../../../Tinebase/js/ux/asString";
 Ext.ns('Tine.Timetracker.Model');
 
 Tine.Timetracker.Model.TimesheetMixin = {
@@ -19,7 +20,7 @@ Tine.Timetracker.Model.TimesheetMixin = {
                 if (typeof(timeaccount.get) !== 'function') {
                     timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
                 }
-                timeaccountTitle = await timeaccount.getTitle().asString();
+                timeaccountTitle = await asString(timeaccount.getTitle());
                 timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
             }
 
