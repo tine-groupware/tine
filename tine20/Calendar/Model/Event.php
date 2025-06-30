@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -567,6 +567,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::UI_CONFIG         => [
                     'searchComboConfig'     => [
                         'useEditPlugin'         => false,
+                    ],
+                ],
+                self::FILTER_DEFINITION => [
+                    self::FILTER                    => Tinebase_Model_Filter_ForeignRecords::class,
+                    self::OPTIONS                   => [
+                        self::FILTER_GROUP              => Calendar_Model_EventTypes::class . 'Filter',
+                        self::CONTROLLER                => Calendar_Controller_EventTypes::class,
+                        self::REF_ID_FIELD              => Calendar_Model_EventTypes::FLD_RECORD,
+                        self::FILTER_OPTIONS            => [
+                            'doJoin'                        => true,
+                        ],
                     ],
                 ],
             ],
