@@ -358,7 +358,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     
     /**
      * Config key for configuring allowed origins of the json frontend
-     *  
+     *
      * @var string
      */
     const ALLOWEDJSONORIGINS = 'allowedJsonOrigins';
@@ -444,7 +444,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
-    
+
     /**
      * configure if user contact data should be synced from sync backend, default yes
      *
@@ -2640,7 +2640,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom title for branding.',
             'type'                  => 'string',
             'default'               => "tine ®",
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
@@ -2651,7 +2651,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Path to custom logo.',
             'type'                  => 'string',
             'default'               => './images/tine_logo.png',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
@@ -2662,7 +2662,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom description for branding.',
             'type'                  => 'string',
             'default'               => '',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
@@ -2673,7 +2673,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom weburl for branding.',
             'type'                  => 'string',
             'default'               => 'https://github.com/tine20/tine20',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
         ),
@@ -2684,7 +2684,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom url for help.',
             'type'                  => 'string',
             'default'               => 'https://tine-docu.s3web.rz1.metaways.net/',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
         ),
@@ -2695,7 +2695,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom url for the shop.',
             'type'                  => 'string',
             'default'               => 'https://www.tine-groupware.de',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
         ),
@@ -2706,7 +2706,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Custom bugreport url.',
             'type'                  => 'string',
             'default'               => 'https://api.tine20.net/bugreport.php',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE
         ),
@@ -2721,7 +2721,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                  30 => './images/favicon30.png',
                 300 => './images/favicon300.png',
             ],
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
@@ -2732,7 +2732,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Paths to custom svg favicon.',
             'type'                  => 'string',
             'default'               => './images/favicon.svg',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
@@ -2743,7 +2743,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Background color of mask icon (safari pinned tab).',
             'type'                  => 'string',
             'default'               => '#0082ca',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
