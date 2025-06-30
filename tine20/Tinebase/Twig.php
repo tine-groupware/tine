@@ -142,9 +142,21 @@ class Tinebase_Twig
     protected function _addTwigFunctions()
     {
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('config', function ($key, $app='') {
+            // $app is not using the factory properly, this always results in TB Config.
+            // we do not fix this! This function is deprecated and should be removed and not be used at all
             $config = Tinebase_Config::getInstance();
             if ($app) {
+                if (! ($config->getProperties()[$app]['clientRegistryInclude'] ?? false)) {
+                    throw new Tinebase_Exception($app . ' doesn\'t have clientRegistryInclude set, not allowed!');
+                }
+                if (! ($config->getProperties()[$app][$key]['clientRegistryInclude'] ?? false)) {
+                    throw new Tinebase_Exception($app . '.' . $key .' doesn\'t have clientRegistryInclude set, not allowed!');
+                }
                 $config = $config->{$app};
+            } else {
+                if (! ($config->getProperties()[$key]['clientRegistryInclude'] ?? false)) {
+                    throw new Tinebase_Exception($key . ' doesn\'t have clientRegistryInclude set, not allowed!');
+                }
             }
             return $config->{$key};
         }));
