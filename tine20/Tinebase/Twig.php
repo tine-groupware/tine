@@ -125,12 +125,18 @@ class Tinebase_Twig
      */
     public function load($_filename, ?\Zend_Locale $locale = null)
     {
+        $loader = $this->_twigEnvironment->getLoader();
+        if (!$loader instanceof Twig_Loader_Filesystem) {
+            return $this->_twigEnvironment->load($_filename);
+        }
+
         $locale = $locale ?? Tinebase_Core::getLocale();
-        $path = $_filename;
+        $path = ltrim($_filename, '/');
         $filename = basename($path);
         $baseDir = dirname($path);
+        $tineRoot = dirname(__DIR__) . '/';
 
-        $localString = (String)$locale;
+            $localString = (string)$locale;
         $localeParts = explode('_', $localString);
         $language = $localeParts[0] ?? '';
 
@@ -140,23 +146,30 @@ class Tinebase_Twig
         // 1. Full locale (e.g., de_DE/file.txt)
         // 2. Language only (e.g., de/file.txt)
         // 3. Original path (baseDir/file.txt)
-        $possiblePaths = [
-            "{$baseDir}/{$localString}",
-            "{$baseDir}/{$language}",
-            "{$baseDir}"
-        ];
+        $possiblePaths = array_merge(
+            $localString ? [$localString] : [],
+            $language && $language !== $localString ? [$language] : [],
+            [$baseDir]
+        );
         // Return the first existing path
-        $loader = $this->_twigEnvironment->getLoader();
         foreach ($possiblePaths as $possiblePath) {
-            if (file_exists("$possiblePath/$filename")) {
-                if ($loader instanceof Twig_Loader_Filesystem) {
-                    $loader->addPath($possiblePath,  '__main__');
-                    return $this->_twigEnvironment->load($filename);
+            $pathToTest = $possiblePath . '/' . $filename;
+            if ($twigTmpl = Tinebase_Controller_TwigTemplate::getInstance()->getByPath($pathToTest, skipAcl: true)) {
+                $this->_twigEnvironment->setLoader(
+                    new Tinebase_Twig_CallBackLoader($pathToTest, $twigTmpl->last_modified_time->getTimestamp(),
+                        fn() => $twigTmpl->{Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE})
+                );
+                try {
+                    return $this->_twigEnvironment->load($pathToTest);
+                } finally {
+                    $this->_twigEnvironment->setLoader($loader);
                 }
+            } elseif (file_exists($tineRoot . $pathToTest)) {
+                return $this->_twigEnvironment->load($pathToTest);
             }
         }
-        //todo: remove this?
-        return $this->_twigEnvironment->load($path);
+
+        return $this->_twigEnvironment->load($_filename);
     }
 
     /**

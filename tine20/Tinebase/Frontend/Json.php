@@ -380,6 +380,80 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_updateMultiple($filter, $data, Tinebase_Core::getApplicationInstance($appName, $modelName), $filterModel);
     }
 
+    public function searchTwigTemplates(array $filter, /** @noinspection PhpUnusedParameterInspection */ array $paging): array
+    {
+        $filterModel = Tinebase_Model_TwigTemplate::class . 'Filter';
+        $filter = $this->_decodeFilter($filter, $filterModel);
+
+        $pathFilter = $filter->findFilterWithoutOr(Tinebase_Model_TwigTemplate::FLD_PATH);
+        $appFilter = $filter->findFilterWithoutOr(Tinebase_Model_TwigTemplate::FLD_APPLICATION_ID);
+
+        if (false === $pathFilter || false === $appFilter) {
+            throw new Tinebase_Exception_SystemGeneric('there may only be one path and one application filter, which must not be ORd');
+        }
+
+        if (null !== $appFilter) {
+            $apps = Tinebase_Application::getInstance()->_getBackend()->search(new Tinebase_Model_ApplicationFilter([
+                ['field' => 'id', 'operator' => $appFilter->getOperator(), 'value' => $appFilter->getValue()],
+            ]))->filter('status', Tinebase_Application::ENABLED);
+        } else {
+            $apps = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        }
+        $apps = $apps->filter(fn($app) => Tinebase_Core::getUser()->hasRight($app, Tinebase_Acl_Rights_Abstract::TWIG));
+
+        $pathFilterValue = $pathFilter?->getValue();
+        $pathFilter = match($pathFilter?->getOperator()) {
+            null => fn() => true,
+            'equals' => fn($path) => $path === $pathFilterValue,
+            'contains' => fn($path) => false !== strpos($path, $pathFilterValue),
+            default => throw new Tinebase_Exception_UnexpectedValue('path filter operator ' . $pathFilter?->getOperator() . ' not supported'),
+        };
+
+        $result = $this->_search($filter, [], Tinebase_Controller_TwigTemplate::getInstance(), $filterModel);
+
+        $foundPaths = [];
+        $tineRoot = dirname(__DIR__, 2) . '/';
+        foreach ($result['results'] as &$twigTmpl) {
+            $twigTmpl[Tinebase_Model_TwigTemplate::FLD_IS_ORIGINAL] = false;
+            if (is_file($tineRoot . $twigTmpl[Tinebase_Model_TwigTemplate::FLD_PATH])) {
+                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL] = true;
+                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_DIFF_TO_ORIGINAL] = '';
+            } else {
+                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL] = false;
+            }
+            $foundPaths[$twigTmpl[Tinebase_Model_TwigTemplate::FLD_PATH]] = true;
+        }
+
+        $iterateDirsFun = function(string $path, string $appId, Closure $fun) use($foundPaths, &$result, $tineRoot, $pathFilter) {
+            if (!is_dir($tineRoot . $path)) return;
+            foreach (scandir($tineRoot . $path) as $dirItem) {
+                if ('.' === $dirItem || '..' === $dirItem) continue;
+                $currentPath = $path . '/' . $dirItem;
+                if (is_dir($tineRoot . $currentPath)) {
+                    $fun($currentPath, $appId, $fun);
+                } elseif (!($foundPaths[$currentPath] ?? false) && str_ends_with($currentPath, '.twig') && $pathFilter($currentPath)) {
+                    $twigTmpl = file_get_contents($tineRoot . $currentPath);
+                    $twigTmpl = new Tinebase_Model_TwigTemplate([
+                        Tinebase_Model_TwigTemplate::FLD_APPLICATION_ID => $appId,
+                        Tinebase_Model_TwigTemplate::FLD_PATH => $currentPath,
+                        Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE => $twigTmpl,
+                        Tinebase_Model_TwigTemplate::FLD_IS_ORIGINAL => true,
+                        Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL => true,
+                    ]);
+                    $result['results'][] = $twigTmpl->toArray();
+                }
+            }
+        };
+
+        foreach ($apps as $app) {
+            $iterateDirsFun($app->name . '/views', $app->getId(), $iterateDirsFun);
+        }
+
+        $result['totalcount'] = count($result['results']);
+
+        return $result;
+    }
+
     /**
      * search tags
      *

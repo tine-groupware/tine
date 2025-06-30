@@ -222,7 +222,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * Search for records matching given arguments
      *
-     * @param string|array                        $_filter json encoded / array
+     * @param string|array|Tinebase_Model_Filter_FilterGroup                        $_filter json encoded / array
      * @param string|array|Tinebase_Model_Pagination $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
@@ -315,7 +315,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * decodes the filter string
      *
-     * @param string|array $_filter
+     * @param string|array|Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_filterModel the class name of the filter model to use
      * @param boolean $_throwExceptionIfEmpty
      * @return Tinebase_Model_Filter_FilterGroup

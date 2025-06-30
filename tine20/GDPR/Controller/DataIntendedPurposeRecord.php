@@ -6,7 +6,7 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Paul Mehrer <p.mehrer@metaways.de>
- * @copyright    Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -603,21 +603,17 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $locale = $this->_getLocale($templateContext['contact'] ? $templateContext['contact']->account_id : null);
             $templateContext['browserLocale'] = $locale;
 
-            $templatePath = GDPR_Config::getInstance()->{GDPR_Config::TEMPLATE_PATH};
-            if (empty($templatePath)) {
-                $templatePath = dirname(dirname(__FILE__)) . '/views/';
-            }
-            if ($templatePath && substr($templatePath, -1) !== '/') {
-                $templatePath .= '/';
-            }
+            $tineRootPos = strlen(dirname(__DIR__, 2));
+            $templatePath = dirname(__DIR__) . '/views/';
             $templateFiles = glob($templatePath . '*.twig');
+
             $translation = Tinebase_Translation::getTranslation('GDPR');
             $twig = new Tinebase_Twig($locale, $translation);
 
             foreach ($templateFiles as $templateFile) {
                 $file = basename($templateFile, '.twig');
                 if (empty($this->_templates[$file])) {
-                    $template = $twig->load($templateFile, $locale);
+                    $template = $twig->load(substr($templateFile, $tineRootPos), $locale);
                     $this->_templates[$file]['template'] = $template;
                     foreach ($template->getBlockNames() as $block) {
                         $this->_templates[$file][$block] = $template->renderBlock($block, $templateContext);

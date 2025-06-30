@@ -827,6 +827,33 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $filterData = $registryData['Tinebase']['persistentFilters'];
         self::assertNotEmpty($filterData, 'persistent filters can not loaded in the store');
     }
+
+    public function testSearchTwigTemplate(): void
+    {
+        $result = $this->_instance->searchTwigTemplates([], []);
+
+        $this->assertArrayHasKey('totalcount', $result);
+        $this->assertArrayHasKey('results', $result);
+        $this->assertIsArray($result['results']);
+        $this->assertSame($result['totalcount'], count($result['results']));
+
+        $result = $this->_instance->searchTwigTemplates([
+            ['field' => 'application_id', 'operator' => 'in', 'value' => [
+                $gdprId = Tinebase_Application::getInstance()->getApplicationByName(GDPR_Config::APP_NAME)->getId(),
+                $tbId = Tinebase_Core::getTinebaseId(),
+            ]],
+            ['field' => 'path', 'operator' => 'contains', 'value' => '/de/'],
+        ], []);
+
+        $this->assertArrayHasKey('totalcount', $result);
+        $this->assertArrayHasKey('results', $result);
+        $this->assertIsArray($result['results']);
+        $this->assertGreaterThan(0, count($result['results']));
+        foreach ($result['results'] as $twig) {
+            $this->assertStringContainsString('/de/', $twig[Tinebase_Model_TwigTemplate::FLD_PATH]);
+            $this->assertTrue(in_array($twig[Tinebase_Model_TwigTemplate::FLD_APPLICATION_ID], [$gdprId, $tbId]));
+        }
+    }
     
     /**
      * testGetUserProfile
