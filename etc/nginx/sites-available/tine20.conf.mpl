@@ -24,6 +24,5 @@ server {
     }
     {{ end }}
 
-    include /etc/nginx/snippets/tine20-rewriterules.conf;
     include /etc/nginx/snippets/tine20-locations.conf;
 }
