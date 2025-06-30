@@ -9,6 +9,7 @@
 /*global Ext, Tine*/
 
 import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin";
+import asString from "ux/asString"
 
 Ext.ns('Tine.Tinebase.widgets.form.RecordEditField');
 
@@ -73,7 +74,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
             valueRecord.phantom = true;
         }
         Promise.resolve().then(async () => {
-            let text = valueRecord ? await valueRecord.getTitle().asString() || '...' : '';
+            let text = valueRecord ? await asString(valueRecord.getTitle()) || '...' : '';
             Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, text);
         });
 
