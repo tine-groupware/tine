@@ -188,7 +188,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      *
      * @param string $_username
      * @param string $_password
-     * @param string $_ipAddress
+     * @param \Laminas\Http\Request $request
      * @return bool
      */
     protected function _authenticate($_username, $_password, \Laminas\Http\Request $request)

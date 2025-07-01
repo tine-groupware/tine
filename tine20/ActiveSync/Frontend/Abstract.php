@@ -362,14 +362,14 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         
         return $this->toSyncrotonModel($entry, $collection->options);
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see Syncroton_Data_IData::getFileReference()
      */
     public function getFileReference($fileReference)
     {
-        
+        throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
     
     /**
