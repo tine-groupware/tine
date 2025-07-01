@@ -8,6 +8,7 @@
 Ext.ns('Tine.Filemanager.Model');
 
 require('Tinebase/js/widgets/container/GrantsGrid');
+const {startTransaction: startBroadcastTransaction} = require("../../Tinebase/js/broadcastClient");
 
 /**
  * @namespace   Tine.Filemanager.Model
@@ -272,7 +273,11 @@ Tine.Filemanager.nodeBackendMixin = {
             
             options.success = (options.success || Ext.emptyFn).createSequence(fulfill);
             options.failure = (options.failure || Ext.emptyFn).createSequence(reject);
-            
+
+            const rc = Tine.Tinebase.data.RecordMgr.get('Tinebase', 'Tree_Node');
+            const treeNodeRecord = new rc({});
+            const commitBroadcastTransaction = startBroadcastTransaction(treeNodeRecord, 'create', 300000);
+
             var params = {
                     application : this.appName,
                     filename : name,
@@ -285,6 +290,7 @@ Tine.Filemanager.nodeBackendMixin = {
             options.beforeSuccess = function(response) {
                 const folder = this.recordReader(response);
                 this.postMessage('create', folder.data);
+                commitBroadcastTransaction(folder);
                 return [folder];
             };
             this.doXHTTPRequest(options);
@@ -400,6 +406,12 @@ Tine.Filemanager.nodeBackendMixin = {
 
         Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Please wait'));
 
+        const rc = Tine.Tinebase.data.RecordMgr.get('Tinebase', 'Tree_Node');
+        const commitBroadcastTransactions = items.map((record) => {
+            const treeNodeRecord = new rc(record.data);
+            return _.partial(startBroadcastTransaction(treeNodeRecord, 'update', 300000), treeNodeRecord);
+        });
+
         Ext.Ajax.request({
             params: params,
             timeout: 300000, // 5 minutes
@@ -424,6 +436,7 @@ Tine.Filemanager.nodeBackendMixin = {
                 _.each(recordsData, (recordData) => {
                     this.postMessage('update', recordData);
                 });
+                _.each(commitBroadcastTransactions, (t) => { t(); });
 
                 // var nodeData = Ext.util.JSON.decode(result.responseText),
                 //     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
@@ -493,6 +506,12 @@ Tine.Filemanager.nodeBackendMixin = {
         params.uploadKeyArray = uploadKeyArray;
         params.addToGridStore = addToGridStore;
 
+        const rc = Tine.Tinebase.data.RecordMgr.get('Tinebase', 'Tree_Node');
+        const commitBroadcastTransactions = items.map((record) => {
+            const treeNodeRecord = new rc(record.data);
+            return _.partial(startBroadcastTransaction(treeNodeRecord, 'update', 300000), treeNodeRecord);
+        });
+
         var onSuccess = (function (response, request) {
 
             var nodeData = Ext.util.JSON.decode(response.responseText);
@@ -516,7 +535,7 @@ Tine.Filemanager.nodeBackendMixin = {
                 fileRecord = Tine.Filemanager.nodeBackend.updateNodeRecord(nodeData[i], fileRecord);
                 nodeRecord.fileRecord = fileRecord;
             }
-
+            _.each(commitBroadcastTransactions, (t) => { t(); });
         }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
 
         var onFailure = (function (response, request) {
