@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -83,27 +83,26 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         );
                         $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
                     } else {
-                        // what about ors? maybe better left join and where is not null?
-                        $_select->join(
+                        $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
                             $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
                             []
                         );
+                        $groupSelect->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
                         $groupSelect->appendWhere();
                     }
                 } else {
-                    $groupSql = $groupSelect->getSQL();
                     if ($this->_valueIsNull) {
-                        // what about ors? maybe better left join and where is not null?
-                        $_select->join(
+                        $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
-                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField'])
-                            . ($groupSql ? ' AND (' . $groupSql . ')' : ''),
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
                             []
                         );
+                        $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
                     } else {
+                        $groupSql = $groupSelect->getSQL();
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
