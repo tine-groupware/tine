@@ -213,7 +213,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
             
             // add primary group to account for the group selection combo box
-            $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
+            $primaryGroup = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
             
             $userGroups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships($user->accountId))->toArray();
             
@@ -227,12 +227,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $userRoles = array();
             }
 
-            
         } else {
             $userArray = array('accountStatus' => 'enabled', 'visibility' => 'displayed');
             
             // get default primary group for the group selection combo box
-            $group = Tinebase_Group::getInstance()->getDefaultGroup();
+            $primaryGroup = Tinebase_Group::getInstance()->getDefaultGroup();
             
             // no user groups by default
             $userGroups = array();
@@ -241,22 +240,33 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $userRoles = array();
         }
         
-        // encode the account array
-        $userArray['accountPrimaryGroup'] = $group->toArray();
-        
-        // encode the groups array
+        $this->_addUserGroupRolesEtc($userArray, $userGroups, $userRoles, $primaryGroup);
+
+        return $userArray;
+    }
+
+    protected function _addUserGroupRolesEtc(&$userArray, $userGroups, $userRoles, $primaryGroup)
+    {
+        $userArray['accountPrimaryGroup'] = $primaryGroup->toArray();
+
         $userArray['groups'] = array(
             'results'         => $userGroups,
             'totalcount'     => count($userGroups)
         );
-        
-        // encode the roles array
+
         $userArray['accountRoles'] = array(
             'results'         => $userRoles,
             'totalcount'     => count($userRoles)
         );
-        
-        return $userArray;
+
+        if (Tinebase_Application::getInstance()->isInstalled('MatrixSynapseIntegrator')) {
+            try {
+                $userArray[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID] =
+                    MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
+                        Tinebase_User::getInstance()->getFullUserById($userArray['accountId'])
+                    )->toArray();
+            } catch (Tinebase_Exception_NotFound) {}
+        }
     }
     
     /**
@@ -405,18 +415,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
-            $result = array(
+            return [
                 'errors'            => $account->getValidationErrors(),
                 'errorMessage'      => 'invalid data for some fields',
                 'status'            => 'failure'
-            );
-            
-            return $result;
+            ];
         }
-        
-        // this needs long 3execution time because cache invalidation may take long
-        // @todo remove this when "0007266: make groups / group memberships cache cleaning more efficient" is resolved 
-        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         if ($account->getId() == NULL) {
             $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
@@ -425,33 +429,29 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $result = $this->_recordToJson($account);
+
+        if (Tinebase_Application::getInstance()->isInstalled('MatrixSynapseIntegrator')
+            && isset($recordData[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID])
+        ) {
+            $matrixAccountData = $recordData[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID];
+            if (empty($matrixAccountData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID])) {
+                $matrixAccountData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID] = $account->getId();
+                MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+                    new MatrixSynapseIntegrator_Model_MatrixAccount($matrixAccountData));
+            } else {
+                MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->update(
+                    new MatrixSynapseIntegrator_Model_MatrixAccount($matrixAccountData));
+            }
+        }
         
-        // add primary group to account for the group selection combo box
-        $group = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
-        
-        // add user groups
-        $userGroups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships($account->accountId))->toArray();
-        
-        // add user roles
-        $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships($account->accountId))->toArray();
-        
-        // encode the account array
-        $result['accountPrimaryGroup'] = $group->toArray();
-        
-        // encode the groups array
-        $result['groups'] = array(
-            'results'         => $userGroups,
-            'totalcount'     => count($userGroups)
-        );
-        
-        // encode the roles array
-        $result['accountRoles'] = array(
-            'results'         => $userRoles,
-            'totalcount'     => count($userRoles)
-        );
-        
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
+        $primaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
+        $userGroups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships(
+            $account->accountId))->toArray();
+        $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships(
+            $account->accountId))->toArray();
+
+        $this->_addUserGroupRolesEtc($result, $userGroups, $userRoles, $primaryGroup);
+
         return $result;
     }
     
