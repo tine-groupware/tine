@@ -654,7 +654,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 item.checkState(this, this.record);
             }
             if (item.name) {
-                _.each(this.constructor.getCheckStateProviders(item.name), (fn) => {
+                _.each(this.constructor.getCheckStateProviders?.(item.name), (fn) => {
                     fn.call(item, this, this.record);
                 });
             }
