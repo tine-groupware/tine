@@ -1,41 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Access to an undefined property Syncroton_Model_ISyncState\\:\\:\\$lastsync\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_SyncCollection\\:\\:\\$collectionId\\.$#"
-			count: 2
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Syncroton_Model_SyncCollection\\:\\:\\$options\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Method ActiveSync_Frontend_Abstract\\:\\:getFileReference\\(\\) should return Syncroton_Model_FileReference but return statement is missing\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Parameter \\$collectionData of method ActiveSync_Frontend_Abstract\\:\\:deleteEntry\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^Parameter \\$fileReference of method ActiveSync_Frontend_Abstract\\:\\:getFileReference\\(\\) has invalid type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Frontend/Abstract.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_ipAddress$#"
-			count: 1
-			path: tine20/ActiveSync/Server/Http.php
-
-		-
 			message: "#^Call to method load\\(\\) on an unknown class Zend_CacheCore\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
