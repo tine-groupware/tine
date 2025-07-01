@@ -124,6 +124,13 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (null === $previous) {
             unset($historyData['previous']);
         }
+
+        if (!OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}) {
+            $e = new Tinebase_Exception_SystemGeneric('OnlyOfficeIntegrator key is not configured');
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
+
         $historyData['token'] = JWT::encode($historyData, OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256');
 
@@ -692,6 +699,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'url' => $token->getEditorConfig()['document']['url'],
         ];
 
+        if (!OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}) {
+            $e = new Tinebase_Exception_SystemGeneric('OnlyOfficeIntegrator key is not configured');
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
+
         $config['token'] = JWT::encode($config, OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256');
 
@@ -778,6 +791,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $raii->release();
 
         $editorConfig = $token->getEditorConfig();
+
+        if (!OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}) {
+            $e = new Tinebase_Exception_SystemGeneric('OnlyOfficeIntegrator key is not configured');
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
 
         $editorConfig['token'] = JWT::encode($editorConfig, OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256');
@@ -1042,6 +1061,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $token = $this->getTokenForNodeId($nodeId, $userGrants, $revision, static::$_fileExtensions);
 
         $editorConfig = $token->getEditorConfig($userGrants);
+
+        if (!OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}) {
+            $e = new Tinebase_Exception_SystemGeneric('OnlyOfficeIntegrator key is not configured');
+            Tinebase_Exception::log($e);
+            throw $e;
+        }
 
         $editorConfig['token'] = JWT::encode($editorConfig, OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256');
