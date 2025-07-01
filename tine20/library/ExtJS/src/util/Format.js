@@ -245,7 +245,10 @@ var Format = function(){
          * @return {String} The stripped text
          */
         stripTags : function(v){
-            return !v ? v : String(v).replace(stripTagsRE, "");
+            return !v ? v : String(v)
+                .replace(stripTagsRE, "")
+                .replace('&#160;', ' ')
+                .replace('&nbsp;', ' ');
         },
 
         /**
