@@ -87,7 +87,7 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
                 if (this.editDialog) {
                     field.editDialog = this.editDialog;
                 }
-                if (_.indexOf(this.editDialog.hideFields) >= 0 || (this.editDialog.showFields && this.editDialog.showFields.length && this.editDialog.showFields.indexOf(fieldDefinition.fieldName) < 0)) {
+                if (_.indexOf(this.editDialog.hideFields, fieldDefinition.fieldName) >= 0 || (this.editDialog.showFields && this.editDialog.showFields.length && this.editDialog.showFields.indexOf(fieldDefinition.fieldName) < 0)) {
                     field.hidden = true;
                 }
                 this.items.push([field]);
