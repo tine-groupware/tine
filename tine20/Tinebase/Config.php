@@ -769,7 +769,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const SMS_ADAPTERS = 'sms_adapters';
     public const SMS_MESSAGE_TEMPLATES = 'sms_message_templates';
     public const SMS_NEW_PASSWORD_TEMPLATE = 'sms_new_password_template';
-    
+
     /**
      * max username length
      *
@@ -2925,7 +2925,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom title for branding.',
             self::TYPE => 'string',
             self::DEFAULT_STR => "tine ®",
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
@@ -2937,7 +2937,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Path to custom logo.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/tine_logo.png',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ],
@@ -2949,7 +2949,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Path to custom logo - light variant, scaleable.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/tine_logo.svg',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ],
@@ -2961,7 +2961,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Path to custom logo - light variant.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/tine_logo.png',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ],
@@ -2973,7 +2973,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Path to custom logo - dark variant, scaleable.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/tine_logo.svg',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ],
@@ -2985,7 +2985,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Path to custom logo - dark variant.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/tine_logo_dark.png',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ],
@@ -2996,7 +2996,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom description for branding.',
             self::TYPE => 'string',
             self::DEFAULT_STR => '',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
@@ -3007,7 +3007,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom weburl for branding.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://github.com/tine20/tine20',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
         ),
@@ -3018,7 +3018,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom url for help.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://tine-docu.s3web.rz1.metaways.net/',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
         ),
@@ -3029,7 +3029,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom url for the shop.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://www.tine-groupware.de',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
         ),
@@ -3040,7 +3040,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom bugreport url.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://api.tine20.net/bugreport.php',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
         ),
@@ -3055,7 +3055,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                  30 => './images/favicon30.png',
                 300 => './images/favicon300.png',
             ],
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
@@ -3066,7 +3066,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Paths to custom svg favicon.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/favicon.svg',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
@@ -3077,7 +3077,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Background color of mask icon (safari pinned tab).',
             self::TYPE => 'string',
             self::DEFAULT_STR => '#0082ca',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
@@ -3148,7 +3148,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION => 'Custom url used for logo on login page.',
             self::TYPE => 'string',
             self::DEFAULT_STR => '',
-            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
         ),
