@@ -841,8 +841,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             if (!model) return '';
             if (model.getPhpClassName() === 'Filemanager_Model_Node') {
                 const contenttype =  _.get(arguments, '[2].data.related_record.contenttype');
-                const iconCls = _.get(arguments, '[2].data.related_record.type') === 'folder' ? 'mime-icon-folder' :
-                    ('mime-icon-file ' + Tine.Tinebase.common.getMimeIconCls(contenttype));
+                const iconCls = contenttype ? (_.get(arguments, '[2].data.related_record.type') === 'folder' ? 'mime-icon-folder' :
+                    ('mime-icon-file ' + Tine.Tinebase.common.getMimeIconCls(contenttype))) : 'mime-icon-file';
 
                 return '<span class="tine-recordclass-gridicon '+ iconCls + '">&nbsp;</span>' + model.getAppName();
             }
