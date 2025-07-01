@@ -357,11 +357,10 @@ class Tinebase_Core
      */
     public static function finishProfiling()
     {
-        if (! self::getConfig() || ! self::getConfig()->profiler) {
+        if (! ($config = self::getConfig()->profiler)) {
             return;
         }
-        
-        $config = self::getConfig()->profiler;
+
         $method = self::get(self::METHOD);
     
         if ($config->xhprof) {
@@ -1170,6 +1169,13 @@ class Tinebase_Core
      */
     public static function createAndConfigureDbAdapter($dbConfigArray, $dbBackend = NULL)
     {
+        if ($dbConfigArray['profiler'] ?? false) {
+            $profiler = new Tinebase_Db_Profiler(true);
+            $profiler->setFilterElapsedSecs($dbConfigArray['profiler']['filterTime'] ?? 0.05);
+            $dbConfigArray['profiler'] = [
+                'instance' => $profiler,
+            ];
+        }
         if (!empty($dbConfigArray['password'])) {
             self::getLogger()->addReplacement($dbConfigArray['password']);
         }
@@ -1265,36 +1271,34 @@ class Tinebase_Core
      *   'database' => 
      *      array(
      *         [...] // db connection params  
-     *         'profiler' => TRUE
+     *         'profiler' => true    // enable db profiler with default filter
+     *         'profiler' => [
+     *              'filterTime' => 0.1   // set query filter time in seconds as float (so 100ms in this example)
+     *                                    // set to null to disable, default ist 0.05 => 50ms
+     *         ],
      *      ),
+     *   // optional profiler config
      *   'profiler' =>
      *      array(
-     *         'queryProfiles' => TRUE,
-     *         'queryProfilesDetails' => TRUE,
-     *         'user' => 'loginname',             // only profile this user 
-     *         'profilerFilterElapsedSecs' => 1,  // only show queries whose elapsed time is equal or greater than this
+     *         'queryProfiles' => true,            // log longest query time / longest query
+     *         'queryProfilesDetails' => true,    // log all queries
+     *         'user' => 'loginname',             // only profile this user
      *      )
      *    ),
      * 
      */
     public static function getDbProfiling()
     {
-        if (! self::getConfig() || ! self::getConfig()->database || ! (bool) self::getConfig()->database->profiler) {
+        $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
+        if (!$profiler->getEnabled()) {
             return;
         }
         
         $config = self::getConfig()->profiler;
-        
         if ($config->user && is_object(self::getUser()) && $config->user !== self::getUser()->accountLoginName) {
             return;
         }
-        
-        $profiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
-        
-        if (! empty($config->profilerFilterElapsedSecs)) {
-            $profiler->setFilterElapsedSecs($config->profilerFilterElapsedSecs);
-        }
-        
+
         $data = array(
             'totalNumQueries' => $profiler->getTotalNumQueries(),
             'totalElapsedSec' => $profiler->getTotalElapsedSecs(),
