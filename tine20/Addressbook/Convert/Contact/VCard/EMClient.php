@@ -141,8 +141,8 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     {
         $type = null;
 
-        /** @var \Sabre\VObject\Parameter $typeParameter */
         if ($typeParameter = $property['TYPE']) {
+            /** @var \Sabre\VObject\Parameter $typeParameter */
             if ($typeParameter->has('pref')) {
                 $type = 'work';
             }
@@ -201,8 +201,8 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
     /**
      * parse birthday
      * 
-     * @param array $data
-     * @param Sabre\VObject\Property $property
+     * @param array $_data
+     * @param Sabre\VObject\Property $_property
      */
     protected function _toTine20ModelParseBday(&$_data, \Sabre\VObject\Property $_property)
     {

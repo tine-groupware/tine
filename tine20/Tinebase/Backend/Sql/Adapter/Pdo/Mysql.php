@@ -12,7 +12,6 @@
 /**
  * @package     Tinebase
  * @subpackage  Backend
- * @property string $table_prefix
  */
 class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 {

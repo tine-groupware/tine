@@ -145,7 +145,7 @@ abstract class Setup_Backend_Schema_Field_Abstract extends Setup_Backend_Schema_
     /**
      * 
      * @param Setup_Backend_Schema_Field_Abstract $field
-     * @return unknown_type
+     * @return bool
      */
     public function equals(Setup_Backend_Schema_Field_Abstract $_field)
     {

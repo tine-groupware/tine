@@ -1,131 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to method load\\(\\) on an unknown class Zend_CacheCore\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Call to method save\\(\\) on an unknown class Zend_CacheCore\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_getOffsetsTemplate\\(\\) has invalid return type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) has invalid return type unknown_type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Method ActiveSync_TimezoneConverter\\:\\:_validateOffsets\\(\\) should return unknown_type but return statement is missing\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$daylightTransition$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$standardTransition$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Parameter \\$_expectedTimezone of method ActiveSync_TimezoneConverter\\:\\:getListOfTimezones\\(\\) has invalid type optional\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Property ActiveSync_TimezoneConverter\\:\\:\\$_cache has unknown class Zend_CacheCore as its type\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Result of method ActiveSync_TimezoneConverter\\:\\:_checkTimezone\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$data$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$property$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
-
-		-
-			message: "#^Variable \\$typeParameter in PHPDoc tag @var does not exist\\.$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$orgextra$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/Evolution.php
-
-		-
-			message: "#^Parameter \\$blob of method Addressbook_Convert_Contact_VCard_Telefonbuch\\:\\:toTine20Model\\(\\) has invalid type stream\\.$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/Telefonbuch.php
-
-		-
-			message: "#^Method Addressbook_Convert_Contact_VCard_WebDAVCollaborator\\:\\:fromTine20Model\\(\\) has invalid return type Sabre_VObject_Component\\.$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/WebDAVCollaborator.php
-
-		-
-			message: "#^Variable \\$listRolesResultSet might not be defined\\.$#"
-			count: 1
-			path: tine20/Addressbook/Export/List/Doc.php
-
-		-
-			message: "#^Variable \\$listRolesResultSet might not be defined\\.$#"
-			count: 1
-			path: tine20/Addressbook/Export/List/Xls.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Frontend/ActiveSync.php
-
-		-
-			message: "#^PHPDoc tag @return has invalid value \\(\\|null\\)\\: Unexpected token \"\\|\", expected type at offset 48$#"
-			count: 1
-			path: tine20/Addressbook/Import/Csv.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
-			count: 2
-			path: tine20/Addressbook/Model/Contact.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListHiddenFilter.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Filter_GroupSelect\\:\\:joinLeft\\(\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListHiddenFilter.php
-
-		-
-			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListMemberFilter.php
-
-		-
-			message: "#^Method Addressbook_Model_ListMemberFilter\\:\\:_setFilterGroup\\(\\) should return Tinebase_Model_Filter_FilterGroup but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Addressbook/Model/ListMemberFilter.php
-
-		-
 			message: "#^Access to an undefined property Addressbook_Setup_DemoData\\:\\:\\$_sharedContainer\\.$#"
 			count: 1
 			path: tine20/Addressbook/Setup/DemoData.php
@@ -134,11 +9,6 @@ parameters:
 			message: "#^Variable \\$isMan might not be defined\\.$#"
 			count: 2
 			path: tine20/Addressbook/Setup/DemoData.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$application$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Initialize.php
 
 		-
 			message: "#^Method Addressbook_Setup_Update_Release11\\:\\:update_15\\(\\) has invalid return type Set\\.$#"
@@ -3234,16 +3104,6 @@ parameters:
 			message: "#^Variable \\$grants might not be defined\\.$#"
 			count: 1
 			path: tine20/Timetracker/Setup/Import/Egw14.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Acl/Roles.php
-
-		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:getMultiple\\(\\) invoked with 4 parameters, 1\\-2 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Acl/Roles.php
 
 		-
 			message: "#^Variable \\$oldRole in PHPDoc tag @var does not exist\\.$#"

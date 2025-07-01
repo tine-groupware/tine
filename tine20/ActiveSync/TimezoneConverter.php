@@ -63,7 +63,7 @@ class ActiveSync_TimezoneConverter
      * If set then the timezone guessing results will be cached.
      * This is strongly recommended for performance reasons.
      * 
-     * @var Zend_CacheCore
+     * @var Zend_Cache_Core
      */
     protected $_cache = null;
     
@@ -154,8 +154,8 @@ class ActiveSync_TimezoneConverter
      * as the expected timezone has matched and the expected timezone will be the 
      * first entry fo the returned array.
      * 
-     * @param String | array $_offsets
-     * @param String | optional $_expectedTimezone
+     * @param string | array $_offsets
+     * @param string | null $_expectedTimezone
      * @return array
      * 
      */
@@ -368,9 +368,9 @@ class ActiveSync_TimezoneConverter
      * Check if the given {@param $_standardTransition} and {@param $_daylightTransition}
      * match to the object property {@see $_offsets}
      * 
-     * @param Array $standardTransition
-     * @param Array $daylightTransition
-     * 
+     * @param array $_standardTransition
+     * @param array $_daylightTransition
+     * @param array $_offsets
      * @return bool
      */
     protected function _checkTransition($_standardTransition, $_daylightTransition, $_offsets)
@@ -473,7 +473,7 @@ class ActiveSync_TimezoneConverter
      * Used e.g. when reverse-generating ActiveSync Timezone Offset Information
      * based on a given Timezone, {@see getOffsetsForTimezone}
      * 
-     * @return unknown_type
+     * @return array
      */
     protected function _getOffsetsTemplate()
     {
@@ -507,7 +507,7 @@ class ActiveSync_TimezoneConverter
      * 
      * @param array|string $_value [if a string is provided then it will be unpacked using {@see unpackTimezoneInfo}]
      * 
-     * @return unknown_type
+     * @return void
      */
     protected function _validateOffsets($_value)
     {
@@ -578,7 +578,7 @@ class ActiveSync_TimezoneConverter
      * 
      * @param DateTimeZone $_timezone
      * @param array $_offsets
-     * @return void
+     * @return bool|array
      */
     protected function _checkTimezone(DateTimeZone $_timezone, $_offsets) 
     {

@@ -20,7 +20,7 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
     /**
      * appends sql to given select statement
      *
-     * @param Tinebase_Backend_Sql_Filter_GroupSelect $_select
+     * @param Zend_Db_Select $_select
      * @param Tinebase_Backend_Sql_Abstract $_backend
      */
     public function appendFilterSql($_select, $_backend)

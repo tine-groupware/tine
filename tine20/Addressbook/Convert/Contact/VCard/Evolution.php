@@ -182,7 +182,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * parse extra fields provided with org entry in vcard
      * 
      * @param array $data
-     * @param array $orgextra
+     * @param array $parts
      */
     protected function _toTine20ModelParseOrgExtra(&$data,$parts) {
          $data['room'] = isset($parts[2]) ? $parts[2] : null;

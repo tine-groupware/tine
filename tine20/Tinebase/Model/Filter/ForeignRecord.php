@@ -194,7 +194,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     /**
      * get foreign filter group
      * 
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return void
      */
     protected function _setFilterGroup()
     {

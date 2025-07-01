@@ -742,7 +742,7 @@ class Timetracker_Setup_Import_Egw14
     /**
      * encode text
      *
-     * @param unknown_type $_text
+     * @param mixed $_text
      */
     protected function _encode($_text) {
         

@@ -220,7 +220,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         $task->organizer          = Tinebase_Core::getUser()->contact_id;
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC);
         
-        $task->status = Tasks_Model_Task::STATUS_CONFIRMED;
+        $task->status = Calendar_Model_Event::STATUS_CONFIRMED;
         $vevent = $converter->fromTine20Model($task)->serialize();
         #var_dump($vevent);
         $this->assertStringContainsString('STATUS:CONFIRMED',        $vevent, $vevent);

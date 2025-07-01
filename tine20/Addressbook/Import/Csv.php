@@ -168,7 +168,7 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 
     /**
      * generate notes values
-     * @return |null
+     * @return void
      * @throws Tinebase_Exception
      */
     protected function _getNotes()

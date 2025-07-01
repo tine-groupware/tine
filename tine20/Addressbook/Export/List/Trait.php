@@ -113,6 +113,8 @@ trait Addressbook_Export_List_Trait
 
             if (count($listRoles) > 0) {
                 $listRolesResultSet = Addressbook_Controller_ListRole::getInstance()->getMultiple(array_keys($listRoles));
+            } else {
+                $listRolesResultSet = new Tinebase_Record_RecordSet(Addressbook_Model_ListRole::class);
             }
 
             $memberRecords = array();

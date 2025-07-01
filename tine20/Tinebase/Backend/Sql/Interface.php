@@ -81,6 +81,8 @@ interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
      */
     public function has(array $_ids, $_getDeleted = false);
 
+    public function getByProperty(mixed $value, string $property = 'name', bool $getDeleted = false): Tinebase_Record_Interface;
+
     public function addSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void;
     public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void;
 }

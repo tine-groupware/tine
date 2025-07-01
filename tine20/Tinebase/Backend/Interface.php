@@ -46,14 +46,7 @@ interface Tinebase_Backend_Interface
      */
     public function get($_id, $_getDeleted = FALSE);
 
-    /**
-     * Returns a set of records identified by their id's
-     *
-     * @param string|array $_ids Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
-     */
-    public function getMultiple($_ids, $_containerIds = NULL);
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet;
 
     /**
      * Gets all entries

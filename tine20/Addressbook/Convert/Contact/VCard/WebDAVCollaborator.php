@@ -27,7 +27,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return Sabre_VObject_Component
+     * @return \Sabre\VObject\Component
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {

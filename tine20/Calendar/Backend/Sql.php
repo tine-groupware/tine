@@ -107,21 +107,21 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * Gets one entry (by property)
      *
-     * @param  mixed  $_value
-     * @param  string $_property
-     * @param  bool   $_getDeleted
+     * @param  mixed  $value
+     * @param  string $property
+     * @param  bool   $getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
-    public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
+    public function getByProperty(mixed $value, string $property = 'name', bool $getDeleted = false): Tinebase_Record_Interface
     {
         //$pagination = new Tinebase_Model_Pagination(array('limit' => 1));
         $filters = new Calendar_Model_EventFilter();
         
-        $filter = new Tinebase_Model_Filter_Text($_property, 'equals', $_value);
+        $filter = new Tinebase_Model_Filter_Text($property, 'equals', $value);
         $filters->addFilter($filter);
 
-        if ($_getDeleted) {
+        if ($getDeleted) {
             $deletedFilter = new Tinebase_Model_Filter_Bool('is_deleted', 'equals', Tinebase_Model_Filter_Bool::VALUE_NOTSET);
             $filters->addFilter($deletedFilter);
         }
@@ -130,8 +130,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         switch (count($resultSet)) {
             case 0: 
-                throw new Tinebase_Exception_NotFound($this->_modelName . " record with $_property " . $_value . ' not found!');
-                break;
+                throw new Tinebase_Exception_NotFound($this->_modelName . " record with $property " . $value . ' not found!');
             case 1: 
                 $result = $resultSet->getFirstRecord();
                 break;
@@ -143,19 +142,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
-     * Get multiple entries
-     *
-     * @param string|array $_id Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet
-     *
      * @todo get custom fields here as well
      */
-    public function getMultiple($_id, $_containerIds = NULL)
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet
     {
-        return $this->search(new Calendar_Model_EventFilter([
-            ['field' => 'id', 'operator' => 'in', 'value' => (array)$_id],
-        ]));
+        return $this->search(new Calendar_Model_EventFilter(array_merge([
+            ['field' => 'id', 'operator' => 'in', 'value' => (array)$_ids],
+        ], $_getDeleted ? [
+            ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+        ] : [])));
     }
 
     /**

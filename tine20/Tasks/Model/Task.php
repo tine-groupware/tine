@@ -440,17 +440,18 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     /**
      * sets and returns the addressbook entry of the organizer
      * 
-     * @return Addressbook_Model_Contact
+     * @return null|Addressbook_Model_Contact
      */
     public function resolveOrganizer()
     {
         Tinebase_User::getInstance()->resolveUsers($this, self::FLD_ORGANIZER, true);
         
-        if (! empty($this->organizer) && $this->organizer instanceof Tinebase_Model_User) {
+        if (! empty($this->organizer) && $this->organizer instanceof Tinebase_Model_User && $this->organizer->contact_id) {
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer->contact_id, TRUE);
             if ($contacts) {
                 return $contacts->getFirstRecord();
             }
         }
+        return null;
     }
 }
