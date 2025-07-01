@@ -22,7 +22,7 @@ class Addressbook_Convert_Contact_VCard_Telefonbuch extends Addressbook_Convert_
     /**
      * converts vcard to Addressbook_Model_Contact
      *
-     * @param  \Sabre\VObject\Component|stream|string  $blob       the vcard to parse
+     * @param  \Sabre\VObject\Component|resource|string  $blob       the vcard to parse
      * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact

@@ -184,14 +184,9 @@ class Addressbook_Backend_Sync_Ldap implements Tinebase_Backend_Interface
     }
 
     /**
-     * Returns a set of records identified by their id's
-     *
-     * @param string|array $_ids Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet of Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getMultiple($_ids, $_containerIds = NULL)
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }

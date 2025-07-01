@@ -802,14 +802,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     }
 
     /**
-     * Returns a set of records identified by their id's
-     *
-     * @param string|array $_ids Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return never
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function getMultiple($_ids, $_containerIds = null): never
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
     }
@@ -1150,5 +1145,10 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__);
+    }
+
+    public function getByProperty(mixed $value, string $property = 'name', bool $getDeleted = false): Tinebase_Record_Interface
+    {
+        throw new Tinebase_Exception_NotImplemented();
     }
 }

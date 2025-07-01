@@ -63,8 +63,8 @@ class HTMLPurifier_URIScheme_cid extends HTMLPurifier_URIScheme
     /**
      * mute error handler
      * 
-     * @param unknown_type $errno
-     * @param unknown_type $errstr
+     * @param mixed $errno
+     * @param mixed $errstr
      */
     public function muteErrorHandler($errno, $errstr)
     {

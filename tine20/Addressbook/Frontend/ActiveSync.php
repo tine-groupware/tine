@@ -290,7 +290,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                         $contact->setSmallContactImage($devicePhoto);
                     } else if ($entry && ! empty($entry->jpegphoto)) {
                         $contact->jpegphoto = '';
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ 
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                             . ' Deleting contact photo on device request (contact id: ' . $contact->getId() . ')');
                     }
                     

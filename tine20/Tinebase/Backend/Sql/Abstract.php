@@ -282,7 +282,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
-    public function getByProperty(mixed $value, $property = 'name', $getDeleted = false)
+    public function getByProperty(mixed $value, string $property = 'name', bool $getDeleted = false): Tinebase_Record_Interface
     {
         $rawData = $this->getRawDataByProperty($value, $property, $getDeleted)  ;
         $result = $this->_rawDataToRecord($rawData);
@@ -432,20 +432,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
 
         return $result;
     }
-    
-    /**
-     * Get multiple entries
-     *
-     * @param string|array $_id Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet
-     * 
-     * @todo get custom fields here as well
-     */
-    public function getMultiple($_id, $_containerIds = NULL) 
+
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet
     {
         // filter out any emtpy values
-        $ids = array_filter((array) $_id, fn($value) => !empty($value));
+        $ids = array_filter((array) $_ids, fn($value) => !empty($value));
         
         if (empty($ids)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
@@ -458,7 +449,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             }
         }
         
-        $select = $this->_getSelect();
+        $select = $this->_getSelect(_getDeleted: $_getDeleted);
         $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' IN (?)', $ids);
         
         $schema = $this->getSchema();
@@ -1669,12 +1660,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * get db adapter
      *
-     * @return Zend_Db_Adapter_Abstract
+     * @return Tinebase_Backend_Sql_Adapter_Pdo_Mysql
      * @throws Tinebase_Exception_Backend_Database
      */
     public function getAdapter()
     {
-        if (! $this->_db instanceof Zend_Db_Adapter_Abstract) {
+        if (! $this->_db instanceof Tinebase_Backend_Sql_Adapter_Pdo_Mysql) {
             throw new Tinebase_Exception_Backend_Database('Could not fetch database adapter');
         }
         

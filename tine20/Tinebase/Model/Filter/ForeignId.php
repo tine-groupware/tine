@@ -58,7 +58,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
     /**
      * get foreign filter group
      *
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return void
      */
     protected function _setFilterGroup()
     {
@@ -66,7 +66,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
             $this->_options['subTablename'] = uniqid('a'); // prefix is very important, uniqid might return only digits, we'd be in trouble in mysql then
         }
 
-        return parent::_setFilterGroup();
+        parent::_setFilterGroup();
     }
     
     /**

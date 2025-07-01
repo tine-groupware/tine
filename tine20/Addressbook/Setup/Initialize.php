@@ -72,7 +72,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     /**
      * create inital rights
      *
-     * @param Tinebase_Application $application
+     * @param Tinebase_Model_Application $_application
      * @return void
      */
     public static function createInitialRights(Tinebase_Model_Application $_application)

@@ -103,16 +103,7 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         throw new Tinebase_Exception_NotImplemented('paths don\'t support getAll for in memory operations');
     }
 
-    /**
-     * Gets one entry (by property)
-     *
-     * @param  mixed  $value
-     * @param  string $property
-     * @param  bool   $getDeleted
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_NotFound
-     */
-    public function getByProperty($value, $property = 'name', $getDeleted = FALSE)
+    public function getByProperty(mixed $value, string $property = 'name', bool $getDeleted = false): Tinebase_Record_Interface
     {
         if (true === static::$_delayDisabled || (count(static::$_shadowPathMapping) == 0 && count(static::$_toDelete) == 0)) {
             return parent::getByProperty($value, $property, $getDeleted);
@@ -141,24 +132,16 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         throw new Tinebase_Exception_NotFound('nothing found');
     }
 
-    /**
-     * Get multiple entries
-     *
-     * @param string|array $_id Ids
-     * @param array $_containerIds all allowed container ids that are added to getMultiple query
-     * @return Tinebase_Record_RecordSet
-     *
-     */
-    public function getMultiple($_id, $_containerIds = NULL)
+    public function getMultiple(string|array $_ids, ?array $_containerIds = null, bool $_getDeleted = false): Tinebase_Record_RecordSet
     {
-        $parentResult = parent::getMultiple($_id, $_containerIds);
+        $parentResult = parent::getMultiple($_ids, $_containerIds, $_getDeleted);
 
         if (true === static::$_delayDisabled || (count(static::$_shadowPathMapping) == 0 && count(static::$_toDelete) == 0)) {
             return $parentResult;
         }
 
         // filter out any emtpy values
-        $ids = array_filter((array) $_id, fn($value) => !empty($value));
+        $ids = array_filter((array) $_ids, fn($value) => !empty($value));
 
         if (empty($ids)) {
             return $parentResult;

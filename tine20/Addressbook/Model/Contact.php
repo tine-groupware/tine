@@ -1466,12 +1466,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         if (isset($currentPhoto) && $currentPhoto == $newPhotoBlob) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . " Photo did not change -> preserving current photo");
             }
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . " Setting new contact photo (" . strlen((string)$newPhotoBlob) . "KB)");
             }
             $this->jpegphoto = $newPhotoBlob;

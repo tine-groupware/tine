@@ -32,7 +32,7 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_ForeignRe
     /**
      * get foreign filter group
      *
-     * @return Tinebase_Model_Filter_FilterGroup
+     * @return void
      */
     protected function _setFilterGroup()
     {

@@ -350,7 +350,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * downloads an image/thumbnail at a given size
      *
-     * @param unknown_type $application
+     * @param mixed $application
      * @param string $id
      * @param string $location
      * @param int $width
