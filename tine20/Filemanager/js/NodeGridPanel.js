@@ -178,9 +178,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onRecordChanges: function(data, e) {
         const existingRecord = this.getRecordByData(data);
-        if (e.topic.match(/\.bulk/)) {
-            return;
-        }
+
         if (e.topic.match(/\.create/)) {
             if (!existingRecord || !existingRecord.data?.id) {
                 this.onUpdateGridPanel(data);

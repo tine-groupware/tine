@@ -55,6 +55,11 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     },
 
     validateValue: function(value) {
+        if (['', null, undefined].indexOf(value) >= 0) {
+            if (this.allowBlank) return true;
+            this.markInvalid(i18n._('Field must not be empty'));
+            return false;
+        }
         if (value.search(/:/) != -1) {
             value = value.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
 
@@ -62,8 +67,12 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
                 hours = parseInt(parts[0]),
                 minutes = parseInt(parts[1]);
 
-            return 'NaN' != hours && 'NaN' != minutes;
+            if (NaN !== hours && NaN !== minutes) {
+                return true;
+            }
         }
+        this.markInvalid(i18n._('No valid time format (use Hours:Minutes)'));
+        return false;
     },
 
     getValue: function() {
