@@ -249,7 +249,7 @@ Tine.HumanResources.RevenueAnalysisPanel = Ext.extend(Tine.widgets.grid.GridPane
         })
 
         const csvContent = "data:text/csv;charset=utf-8,"
-            + data.map(e => e.join(",")).join("\n");
+            + data.map(e => e.join(",")).join(Ext.isWindows ? "\r\n" : "\n");
 
         const link = document.createElement("a");
         link.setAttribute("href", encodeURI(csvContent));
