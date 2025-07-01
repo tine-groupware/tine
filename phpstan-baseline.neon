@@ -36,11 +36,6 @@ parameters:
 			path: tine20/ActiveSync/Server/Http.php
 
 		-
-			message: "#^Method ActiveSync_Server_Plugin\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
-			count: 1
-			path: tine20/ActiveSync/Server/Plugin.php
-
-		-
 			message: "#^Call to method load\\(\\) on an unknown class Zend_CacheCore\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
@@ -89,11 +84,6 @@ parameters:
 			message: "#^Result of method ActiveSync_TimezoneConverter\\:\\:_checkTimezone\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/ActiveSync/TimezoneConverter.php
-
-		-
-			message: "#^Call to an undefined method Addressbook_Controller_Contact\\:\\:_getPathPart\\(\\)\\.$#"
-			count: 3
-			path: tine20/Addressbook/Controller/Contact.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$data$#"
@@ -234,11 +224,6 @@ parameters:
 			message: "#^PHPDoc tag @var for constant Admin_Config\\:\\:QUOTA_ALLOW_TOTALINMB_MANAGEMNET with type bool is incompatible with value 'quotaAllowTotalInMB…'\\.$#"
 			count: 1
 			path: tine20/Admin/Config.php
-
-		-
-			message: "#^Method Admin_Controller_AccessLog\\:\\:delete\\(\\) should return Tinebase_Record_RecordSet but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Admin/Controller/AccessLog.php
 
 		-
 			message: "#^PHPDoc tag @param for parameter \\$_filter with type optional\\|Tinebase_Model_Filter_FilterGroup is not subtype of native type Tinebase_Model_Filter_FilterGroup\\|null\\.$#"
@@ -681,18 +666,13 @@ parameters:
 			path: tine20/Calendar/Controller/Alarm.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$uid\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/Event.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:createAttendee\\(\\)\\.$#"
 			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:deleteAttendee\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -713,11 +693,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getOriginalDtStart\\(\\)\\.$#"
 			count: 3
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setRecurId\\(\\)\\.$#"
-			count: 1
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -876,11 +851,6 @@ parameters:
 			path: tine20/Calendar/Controller/Resource.php
 
 		-
-			message: "#^Variable \\$eventContainer in PHPDoc tag @var does not exist\\.$#"
-			count: 1
-			path: tine20/Calendar/Controller/Resource.php
-
-		-
 			message: "#^Variable \\$result might not be defined\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Resource.php
@@ -966,11 +936,6 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setOption\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Frontend/Cli.php
-
-		-
 			message: "#^Method Calendar_Frontend_Cli\\:\\:exportResources\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/Cli.php
@@ -1003,11 +968,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:resolveToBaseEventsEventually\\(\\)\\.$#"
 			count: 1
-			path: tine20/Calendar/Frontend/WebDAV/Container.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Interface\\:\\:search\\(\\)\\.$#"
-			count: 3
 			path: tine20/Calendar/Frontend/WebDAV/Container.php
 
 		-
@@ -1057,16 +1017,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 3
-			path: tine20/Calendar/Frontend/iMIP.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:hasExternalOrganizer\\(\\)\\.$#"
-			count: 2
-			path: tine20/Calendar/Frontend/iMIP.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:resolveOrganizer\\(\\)\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/iMIP.php
 
@@ -1126,11 +1076,6 @@ parameters:
 			path: tine20/Calendar/Model/Attender.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:resolveAttenderCleanUp\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/Attender.php
-
-		-
 			message: "#^Cannot access property \\$email on string\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Attender.php
@@ -1161,16 +1106,6 @@ parameters:
 			path: tine20/Calendar/Model/ContactAttendeeFilter.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime dtend\\)\\: Unexpected token \"dtend\", expected variable at offset 159$#"
-			count: 1
-			path: tine20/Calendar/Model/FreeBusy.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime dtstart\\)\\: Unexpected token \"dtstart\", expected variable at offset 120$#"
-			count: 1
-			path: tine20/Calendar/Model/FreeBusy.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_Record_RecordSet      alternative_dates\\)\\: Unexpected token \"alternative_dates\", expected variable at offset 327$#"
 			count: 1
 			path: tine20/Calendar/Model/Poll.php
@@ -1187,11 +1122,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method DateTime\\:\\:toString\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/Rrule.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:toString\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Rrule.php
 
@@ -1626,16 +1556,6 @@ parameters:
 			path: tine20/EFile/Controller.php
 
 		-
-			message: "#^Cannot access property \\$exampleRecordsDb on array\\<string, mixed\\>\\.$#"
-			count: 1
-			path: tine20/ExampleApplication/Controller/ExternalDbRecord.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime datetime\\)\\: Unexpected token \"datetime\", expected variable at offset 132$#"
-			count: 1
-			path: tine20/ExampleApplication/Model/ExampleRecord.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime datetime\\)\\: Unexpected token \"datetime\", expected variable at offset 141$#"
 			count: 1
 			path: tine20/ExampleApplication/Model/OneToOne.php
@@ -1669,11 +1589,6 @@ parameters:
 			message: "#^Method Felamimail_Backend_Imap\\:\\:createFolder\\(\\) should return null but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Felamimail/Backend/Imap.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_Event_User_CreatedAccount\\:\\:\\$pwd\\.$#"
-			count: 1
-			path: tine20/Felamimail/Controller.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
@@ -1866,11 +1781,6 @@ parameters:
 			path: tine20/Felamimail/Message.php
 
 		-
-			message: "#^Variable \\$date might not be defined\\.$#"
-			count: 1
-			path: tine20/Felamimail/Message.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(string         account_grant\\)\\: Unexpected token \"account_grant\", expected variable at offset 168$#"
 			count: 1
 			path: tine20/Felamimail/Model/AccountGrants.php
@@ -1912,11 +1822,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method ZBateson\\\\MailMimeParser\\\\Header\\\\IHeader\\:\\:getPersonName\\(\\)\\.$#"
-			count: 1
-			path: tine20/Felamimail/Model/Message.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime  received received date\\)\\: Unexpected token \"received\", expected variable at offset 788$#"
 			count: 1
 			path: tine20/Felamimail/Model/Message.php
 
@@ -2282,11 +2187,6 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$lastDate$#"
-			count: 1
-			path: tine20/HumanResources/Controller/Contract.php
-
-		-
-			message: "#^Result of method Tinebase_Record_RecordSet\\:\\:merge\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/HumanResources/Controller/Contract.php
 
@@ -2696,17 +2596,7 @@ parameters:
 			path: tine20/Sales/Controller/Invoice.php
 
 		-
-			message: "#^Constant id not found\\.$#"
-			count: 1
-			path: tine20/Sales/Controller/Invoice.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(Sales_Model_Contract\\)\\: Unexpected token \"\\\\n     \\* \", expected variable at offset 115$#"
-			count: 1
-			path: tine20/Sales/Controller/Invoice.php
-
-		-
-			message: "#^Result of method Tinebase_Record_RecordSet\\:\\:merge\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/Invoice.php
 
@@ -3071,11 +2961,6 @@ parameters:
 			path: tine20/Setup/Exception/PromptUser.php
 
 		-
-			message: "#^Access to an undefined property Setup_ExtCheck\\:\\:\\$list\\.$#"
-			count: 3
-			path: tine20/Setup/ExtCheck.php
-
-		-
 			message: "#^Access to an undefined property object\\:\\:\\$host\\.$#"
 			count: 1
 			path: tine20/Setup/ExtCheck.php
@@ -3259,11 +3144,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$properties$#"
 			count: 1
 			path: tine20/Tasks/Frontend/WebDAV/Backend.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Interface\\:\\:search\\(\\)\\.$#"
-			count: 3
-			path: tine20/Tasks/Frontend/WebDAV/Container.php
 
 		-
 			message: "#^Method Tasks_Model_Task\\:\\:resolveOrganizer\\(\\) should return Addressbook_Model_Contact but return statement is missing\\.$#"
@@ -3491,11 +3371,6 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
-			message: "#^Method Tinebase_ActionQueue\\:\\:delete\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/ActionQueue/Worker.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:getBackend\\(\\)\\.$#"
 			count: 3
 			path: tine20/Tinebase/AreaLock.php
@@ -3549,21 +3424,6 @@ parameters:
 			message: "#^Constructor of class Tinebase_Auth_MFA_YubicoOTPAdapter has an unused parameter \\$_config\\.$#"
 			count: 1
 			path: tine20/Tinebase/Auth/MFA/YubicoOTPAdapter.php
-
-		-
-			message: "#^Call to an undefined static method Zend_Auth_Adapter_ModSsl\\:\\:__construct\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Auth/ModSsl.php
-
-		-
-			message: "#^Call to an undefined static method Zend_Auth_Adapter_ModSsl\\:\\:setPassword\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Auth/ModSsl.php
-
-		-
-			message: "#^Call to an undefined static method Zend_Auth_Adapter_ModSsl\\:\\:setUsername\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Auth/ModSsl.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getNtlmV2Hash\\(\\)\\.$#"
@@ -3646,16 +3506,6 @@ parameters:
 			path: tine20/Tinebase/Controller.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:setPin\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
-			message: "#^Call to an undefined method Zend_Auth_Adapter_Interface\\:\\:setCredential\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$user$#"
 			count: 1
 			path: tine20/Tinebase/Controller.php
@@ -3686,32 +3536,7 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Abstract\\:\\:_getPathPart\\(\\)\\.$#"
-			count: 3
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Abstract\\:\\:_getShadowPathPart\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Abstract\\:\\:doGrantChecks\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:setRecursiveResolve\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Path\\:\\:getPathsForRecords\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -3754,11 +3579,6 @@ parameters:
 			message: "#^Access to an undefined property object\\:\\:\\$account_grants\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Container.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Convert/Container/Json.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:xprops\\(\\)\\.$#"
@@ -4231,11 +4051,6 @@ parameters:
 			path: tine20/Tinebase/Export/Spreadsheet/Ods.php
 
 		-
-			message: "#^Method Tinebase_Export_Spreadsheet_Ods\\:\\:_addHead\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Ods.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$records$#"
 			count: 1
 			path: tine20/Tinebase/Export/Spreadsheet/Ods.php
@@ -4316,11 +4131,6 @@ parameters:
 			path: tine20/Tinebase/FileSystem/Preview/ServiceV1.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$config$#"
-			count: 1
-			path: tine20/Tinebase/FileSystem/Preview/ServiceV2.php
-
-		-
 			message: "#^Method Tinebase_FileSystem_Previews\\:\\:getPreviewCountForNodeAndType\\(\\) should return int but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tinebase/FileSystem/Previews.php
@@ -4382,16 +4192,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:searchCount\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Cli.php
-
-		-
-			message: "#^Method Tinebase_Group_Abstract\\:\\:sanitizeGroupListSync\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Frontend/Cli.php
-
-		-
-			message: "#^Variable \\$app might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Frontend/Cli.php
 
@@ -4591,26 +4391,6 @@ parameters:
 			path: tine20/Tinebase/Group.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:addGroupInSqlBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:getGroupByIdFromSyncBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:getGroupMembershipsFromSyncBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Group_Abstract\\:\\:setGroupMembershipsInSqlBackend\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:getUserAttributes\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Group.php
@@ -4726,26 +4506,6 @@ parameters:
 			path: tine20/Tinebase/Group/Typo3.php
 
 		-
-			message: "#^Method Tinebase_Group_Typo3\\:\\:addGroup\\(\\) has invalid return type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Method Tinebase_Group_Typo3\\:\\:addGroupMember\\(\\) has invalid return type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Method Tinebase_Group_Typo3\\:\\:removeGroupMember\\(\\) has invalid return type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
-			message: "#^Method Tinebase_Group_Typo3\\:\\:setGroupMembers\\(\\) has invalid return type unknown\\.$#"
-			count: 1
-			path: tine20/Tinebase/Group/Typo3.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_account$#"
 			count: 1
 			path: tine20/Tinebase/Group/Typo3.php
@@ -4832,11 +4592,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:search\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Import/Abstract.php
-
-		-
-			message: "#^Method Tinebase_Import_Abstract\\:\\:_addData\\(\\) invoked with 1 parameter, 0 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/Import/Abstract.php
 
@@ -4987,11 +4742,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Zend_Mail_Part\\:\\:\\$contentType\\.$#"
-			count: 1
-			path: tine20/Tinebase/Mail.php
-
-		-
-			message: "#^Method Zend_Mail\\:\\:addBcc\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Tinebase/Mail.php
 
@@ -5266,51 +5016,6 @@ parameters:
 			path: tine20/Tinebase/Model/CustomField/Config.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(boolean     is_system\\)\\: Unexpected token \"is_system\", expected variable at offset 421$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      account_grants\\)\\: Unexpected token \"account_grants\", expected variable at offset 310$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      application_id\\)\\: Unexpected token \"application_id\", expected variable at offset 161$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      definition\\)\\: Unexpected token \"definition\", expected variable at offset 271$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      id\\)\\: Unexpected token \"id\", expected variable at offset 130$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      label\\)\\: Unexpected token \"label\", expected variable at offset 387$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      model\\)\\: Unexpected token \"model\", expected variable at offset 204$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      name\\)\\: Unexpected token \"name\", expected variable at offset 238$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string      value\\)\\: Unexpected token \"value\", expected variable at offset 353$#"
-			count: 1
-			path: tine20/Tinebase/Model/CustomField/Config.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(boolean optional\\)\\: Unexpected token \"optional\", expected variable at offset 63$#"
 			count: 1
 			path: tine20/Tinebase/Model/CustomField/ConfigFilter.php
@@ -5556,76 +5261,6 @@ parameters:
 			path: tine20/Tinebase/Model/Image.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(int    instance_seq\\)\\: Unexpected token \"instance_seq\", expected variable at offset 440$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string application_id\\)\\: Unexpected token \"application_id\", expected variable at offset 505$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string change_type\\)\\: Unexpected token \"change_type\", expected variable at offset 473$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string id\\)\\: Unexpected token \"id\", expected variable at offset 385$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string instance_id\\)\\: Unexpected token \"instance_id\", expected variable at offset 408$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string modification_account\\)\\: Unexpected token \"modification_account\", expected variable at offset 675$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string modification_time\\)\\: Unexpected token \"modification_time\", expected variable at offset 637$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string modified_attribute\\)\\: Unexpected token \"modified_attribute\", expected variable at offset 716$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string new_value\\)\\: Unexpected token \"new_value\", expected variable at offset 785$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string old_value\\)\\: Unexpected token \"old_value\", expected variable at offset 755$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string record_backend\\)\\: Unexpected token \"record_backend\", expected variable at offset 602$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string record_id\\)\\: Unexpected token \"record_id\", expected variable at offset 540$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string record_type\\)\\: Unexpected token \"record_type\", expected variable at offset 570$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string seq\\)\\: Unexpected token \"seq\", expected variable at offset 815$#"
-			count: 1
-			path: tine20/Tinebase/Model/ModificationLog.php
-
-		-
 			message: "#^Call to an undefined static method Tinebase_Record_Interface\\:\\:getSortExternalMapping\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Pagination.php
@@ -5749,11 +5384,6 @@ parameters:
 			message: "#^PHPDoc tag @property has invalid value \\(string  acctFlags\\)\\: Unexpected token \"acctFlags\", expected variable at offset 64$#"
 			count: 1
 			path: tine20/Tinebase/Model/SAMUser.php
-
-		-
-			message: "#^Method Zend_Db_Select\\:\\:order\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/TagFilter.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(int     size\\)\\: Unexpected token \"size\", expected variable at offset 233$#"
@@ -6071,11 +5701,6 @@ parameters:
 			path: tine20/Tinebase/Notes.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$onlyNonSystemNotes$#"
-			count: 1
-			path: tine20/Tinebase/Notes.php
-
-		-
 			message: "#^Variable \\$model in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tine20/Tinebase/Notes.php
@@ -6376,11 +6001,6 @@ parameters:
 			path: tine20/Tinebase/Relation/Backend/Sql.php
 
 		-
-			message: "#^Method Tinebase_Relation_Backend_Sql\\:\\:_rawDataToRecord\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tine20/Tinebase/Relation/Backend/Sql.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(array data of a relation\\)\\: Unexpected token \"data\", expected variable at offset 64$#"
 			count: 1
 			path: tine20/Tinebase/Relation/Backend/Sql.php
@@ -6457,17 +6077,17 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: tine20/Tinebase/Server/Json.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
-			count: 3
+			count: 2
 			path: tine20/Tinebase/Server/Json.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: tine20/Tinebase/Server/Json.php
 
 		-
@@ -6494,21 +6114,6 @@ parameters:
 			message: "#^Variable \\$cacheId might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Json.php
-
-		-
-			message: "#^Method Tinebase_Server_Plugin_Cli\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Plugin/Cli.php
-
-		-
-			message: "#^Method Tinebase_Server_Plugin_Json\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Plugin/Json.php
-
-		-
-			message: "#^Method Tinebase_Server_Plugin_WebDAV\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/Plugin/WebDAV.php
 
 		-
 			message: "#^Variable \\$tbVersion might not be defined\\.$#"
@@ -6964,11 +6569,6 @@ parameters:
 			message: "#^Variable \\$directory might not be defined\\.$#"
 			count: 2
 			path: tine20/Tinebase/WebDav/Collection/AbstractContainerTree.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Controller_Record_Interface\\:\\:search\\(\\)\\.$#"
-			count: 2
-			path: tine20/Tinebase/WebDav/Container/Abstract.php
 
 		-
 			message: "#^Method Tinebase_WebDav_Container_Abstract\\:\\:getLastModified\\(\\) has invalid return type time\\.$#"
