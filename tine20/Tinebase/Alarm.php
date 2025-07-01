@@ -106,6 +106,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             ' Sending ' . count($alarms) . ' alarms (limit: ' . $limit . ').');
 
         // loop alarms and call sendAlarm in controllers
+        $sentAlarms = 0;
         /** @var Tinebase_Model_Alarm $alarm */
         foreach ($alarms as $alarm) {
             [$appName, , $itemName] = explode('_', $alarm->model);
@@ -131,7 +132,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     // NOTE: we set the status here, so controller can adopt the status itself
                     $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
                     $appController->sendAlarm($alarm);
-
+                    $sentAlarms += 1;
                 } catch (Exception $e) {
                     if (!$e instanceof Tinebase_Exception_ProgramFlow) {
                         Tinebase_Exception::log($e);
@@ -151,6 +152,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+            $sentAlarms . ' alarms sent (limit: ' . $limit . ').');
 
         return true;
     }

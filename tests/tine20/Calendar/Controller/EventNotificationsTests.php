@@ -92,8 +92,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
 
         self::flushMailer();
-        $persistentEvent = $this->_eventController->create($event);
-        $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
+        $this->_eventController->create($event);
+        $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright');
 
         $this->assertEquals($event->mute, 1);
     }
@@ -259,7 +259,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->dtend->addHour(1);
         
         self::flushMailer();
-        $updatedEvent = $this->_eventController->update($persistentEvent);
+        $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
         $this->_assertMail('sclever, jmcblack, rwright', 'reschedul');
     }
@@ -1299,83 +1299,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         Calendar_Controller_Event::getInstance()->adoptAlarmTime($savedEvent, $alarm, 'instance');
         
         $this->assertEquals('2014-03-30 21:45:00', $alarm->alarm_time->toString());
-    }
-    
-    /**
-     * checks if mail for persona got send
-     * 
-     * @param string $_personas
-     * @param string $_assertString
-     * @return void
-     * 
-     * @see #6800: add message-id to notification mails
-     */
-    protected function _assertMail($_personas, $_assertString = NULL, $_location = 'subject')
-    {
-        $messages = self::getMessages();
-        
-        foreach (explode(',', $_personas) as $personaName) {
-            $mailsForPersona = array();
-            $otherRecipients = array();
-            $personaEmail = strstr($personaName, '@') ? 
-                $personaName : 
-                $this->_getPersona(trim($personaName))->accountEmailAddress;
-            
-            foreach ($messages as $message) {
-                if (Tinebase_Helper::array_value(0, $message->getRecipients()) == $personaEmail) {
-                    array_push($mailsForPersona, $message);
-                } else {
-                    array_push($otherRecipients, $message->getRecipients());
-                }
-            }
-            
-            if (! $_assertString) {
-                $this->assertEquals(0, count($mailsForPersona), 'No mail should be send for '. $personaName);
-            } else {
-                $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName . ' other recipients: ' . print_r($otherRecipients, true));
-                $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
-                
-                switch ($_location) {
-                    case 'subject':
-                        $subject = $mailsForPersona[0]->getSubject();
-                        $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
-                        break;
-                        
-                    case 'body':
-                        $bodyPart = $mailsForPersona[0]->getBodyText(FALSE);
-                        
-                        // so odd!
-                        $s = fopen('php://temp','r+');
-                        fputs($s, $bodyPart->getContent());
-                        rewind($s);
-                        $bodyPartStream = new Zend_Mime_Part($s);
-                        $bodyPartStream->encoding = $bodyPart->encoding;
-                        $bodyText = $bodyPartStream->getDecodedContent();
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                            . ' body text: ' . $bodyText);
-                        
-                        $this->assertStringContainsString($_assertString, $bodyText);
-                        break;
-
-                    case 'ics':
-                        $parts = $mailsForPersona[0]->getParts();
-                        $vcalendarPart = $parts[0];
-                        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
-
-                        $this->assertStringContainsString($_assertString, str_replace("\r\n ", '', $vcalendar), $_assertString . ' not found for ' . $personaName . " in:\n" . $vcalendar);
-
-                        break;
-                    default:
-                        throw new Exception('no such location '. $_location);
-                        break;
-                }
-                
-                $headers = $mailsForPersona[0]->getHeaders();
-                $this->assertTrue(isset($headers['Message-Id']), 'message-id header not found');
-                $this->assertStringContainsString('@' . php_uname('n'), $headers['Message-Id'][0], 'hostname not in message-id');
-            }
-        }
     }
     
     /**
