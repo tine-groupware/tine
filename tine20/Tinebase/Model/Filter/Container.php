@@ -302,12 +302,12 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                     $modelName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
             case 'personal':
                 return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount,
-                    $modelName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+                    $modelName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getArrayOfIds();
             case 'shared':
                 return $this->_getSharedContainer($currentAccount, $modelName);
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
                 return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $modelName,
-                    $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+                    $this->_requiredGrants, $this->_options['ignoreAcl'])->getArrayOfIds();
             default:
                 if (preg_match('/shared\/(.+)/', $_node, $matches)) {
                     // try to find by name
@@ -333,7 +333,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
     protected function _getSharedContainer($currentAccount, $appName)
     {
         return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants,
-            $this->_options['ignoreAcl'])->getId();
+            $this->_options['ignoreAcl'])->getArrayOfIds();
     }
     
     /**

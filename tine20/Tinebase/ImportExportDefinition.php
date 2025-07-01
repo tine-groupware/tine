@@ -15,6 +15,8 @@
  *
  * @package     Tinebase
  * @subpackage  Controller
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Tinebase_Model_ImportExportDefinition>
  */
 class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstract
 {

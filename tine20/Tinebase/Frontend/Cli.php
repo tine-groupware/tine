@@ -581,7 +581,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $deleteIds = array();
 
             if (true === $deleteAll) {
-                $deleteIds = $customFieldValues->getId();
+                $deleteIds = $customFieldValues->getArrayOfIds();
             } elseif (class_exists($filterClass)) {
                 $model = new $customFieldConfig->model();
                 /** @var Tinebase_Model_CustomField_Value $customFieldValue */

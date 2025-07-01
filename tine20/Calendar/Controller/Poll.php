@@ -152,7 +152,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(
                 !Calendar_Config::getInstance()->get(Calendar_Config::POLL_MUTE_ALTERNATIVES_NOTIFICATIONS));
-            Calendar_Controller_Event::getInstance()->delete($existingAlternatives->getId());
+            Calendar_Controller_Event::getInstance()->delete($existingAlternatives->getArrayOfIds());
             $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
 
             $poll->closed = true;

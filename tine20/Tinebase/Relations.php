@@ -810,7 +810,7 @@ class Tinebase_Relations implements Tinebase_Controller_Interface
      * @param Tinebase_Record_Interface $record
      * @param string $degree
      * @param bool $ignoreACL
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<Tinebase_Model_Relation>
      */
     public function getRelationsOfRecordByDegree(Tinebase_Record_Interface $record, $degree, $ignoreACL = FALSE)
     {

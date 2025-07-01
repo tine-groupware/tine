@@ -143,7 +143,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param bool $_getRelations
      * @param bool $_onlyIds
      * @param string $_action
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<Tinebase_Model_Container>
      * @throws Tinebase_Exception_InvalidArgument
      */
     public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
@@ -494,7 +494,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param   array|string                        $grant
      * @param   bool                                $onlyIds return only ids
      * @param   bool                                $ignoreACL
-     * @return  Tinebase_Record_RecordSet|array
+     * @return  Tinebase_Record_RecordSet<Tinebase_Model_Container>|array
      * @throws  Tinebase_Exception_NotFound
      */
     public function getContainerByACL($accountId, $recordClass, $grant, $onlyIds = FALSE, $ignoreACL = FALSE)
@@ -677,7 +677,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param   int|Tinebase_Model_User             $_owner
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
-     * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
+     * @return  Tinebase_Record_RecordSet<Tinebase_Model_Container>
      * @throws  Tinebase_Exception_NotFound
      */
     public function getPersonalContainer($_accountId, $_recordClass, $_owner, $_grant = Tinebase_Model_Grants::GRANT_READ, $_ignoreACL = false)
@@ -968,7 +968,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @param   bool                                $_andGrants
-     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     * @return  Tinebase_Record_RecordSet<Tinebase_Model_Container>
      * @throws  Tinebase_Exception_NotFound
      */
     public function getSharedContainer($_accountId, $recordClass, $_grant, $_ignoreACL = FALSE, $_andGrants = FALSE)
@@ -2046,7 +2046,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * 
      * @param integer|Tinebase_Model_Container $containerId
      * @param integer $lastContentSeq
-     * @return Tinebase_Record_RecordSet|null
+     * @return Tinebase_Record_RecordSet<Tinebase_Model_ContainerContent>|null
      */
     public function getContentHistory($containerId, $lastContentSeq = -1)
     {
@@ -2241,11 +2241,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     /**
      * Updates existing container and clears the cache entry of the container
      *
-     * @param Tinebase_Record_Interface $_record
+     * @param Tinebase_Model_Container $_record
      * @param boolean $_updateDeleted = false
      * @param boolean $_fireEvent = true
      * @param boolean $_setMetaData = true
-     * @return Tinebase_Record_Interface Record|NULL
+     * @return Tinebase_Model_Container Record|NULL
      */
     public function update(Tinebase_Record_Interface $_record, $_updateDeleted = false, $_fireEvent = true, $_setMetaData = true)
     {

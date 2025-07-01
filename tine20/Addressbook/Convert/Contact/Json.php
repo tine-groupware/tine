@@ -27,7 +27,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
             $contact = $records->getFirstRecord();
             if ($contact->groups instanceof Tinebase_Record_RecordSet) {
                 $memberRoles = Addressbook_Controller_ListMemberRole::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_ListMemberRole::class, [
-                    ['field' => 'list_id', 'operator' => 'in', 'value' => $contact->groups->getId()],
+                    ['field' => 'list_id', 'operator' => 'in', 'value' => $contact->groups->getArrayOfIds()],
                     ['field' => 'contact_id', 'operator' => 'equals', 'value' => $contact->getid()],
                 ]));
                 foreach ($contact->groups as $list) {

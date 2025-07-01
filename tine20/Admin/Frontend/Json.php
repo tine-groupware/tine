@@ -286,7 +286,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
-            $this->_appendPersonalFolderSize($accounts->getId(),$results);
+            $this->_appendPersonalFolderSize($accounts->getArrayOfIds(),$results);
         }
 
         return array(

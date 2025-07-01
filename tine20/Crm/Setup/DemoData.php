@@ -315,7 +315,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ));
         $users = $contactController->search($filter);
         
-        $userids = $users->getId();
+        $userids = $users->getArrayOfIds();
 
         
         // remove admin user

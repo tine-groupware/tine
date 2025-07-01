@@ -148,7 +148,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
         ]));
         
         return HumanResources_Controller_FreeDay::getInstance()->search(new HumanResources_Model_FreeDayFilter([
-            ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $freeTimes->getId()],
+            ['field' => 'freetime_id', 'operator' => 'equals', 'value' => $freeTimes->getArrayOfIds()],
             ['field' => 'date',        'operator' => 'within', 'value' => $period]
         ]));
     }

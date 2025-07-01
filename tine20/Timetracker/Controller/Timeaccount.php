@@ -140,7 +140,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                 }
 
                 if (filter_var($confirmHeader, FILTER_VALIDATE_BOOLEAN) === true) {
-                    $tsBackend->updateMultiple($timesheets->getId(), [
+                    $tsBackend->updateMultiple($timesheets->getArrayOfIds(), [
                         'is_billable' => true,
                     ]);
                 }
@@ -408,7 +408,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
             $timesheets = $tsBackend->search($filter);
 
             if ($timesheets->count() > 0) {
-                $tsBackend->updateMultiple($timesheets->getId(), array_merge($invoiceIdPresent ? [
+                $tsBackend->updateMultiple($timesheets->getArrayOfIds(), array_merge($invoiceIdPresent ? [
                     'invoice_id' => $updatedRecord['invoice_id'],
                 ] : [], [
                     'is_cleared' => true,

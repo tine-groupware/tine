@@ -289,7 +289,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
                 }
                 
                 // delete invoice positions
-                $invoicePositionController->delete($invoicePositions->getId());
+                $invoicePositionController->delete($invoicePositions->getArrayOfIds());
                 
                 // set last_autobill a period back
                 if ($contract) {

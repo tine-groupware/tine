@@ -1373,7 +1373,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @param boolean $_getIdFromRecord default true, returns null if property has a record and value is false
      * @return string|null
      */
-    public function getIdFromProperty($_property, $_getIdFromRecord = true)
+    public function getIdFromProperty(string $_property, bool $_getIdFromRecord = true): ?string
     {
         if (!isset($this->_data[$_property])) {
             return null;

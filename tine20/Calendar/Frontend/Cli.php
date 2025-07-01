@@ -796,6 +796,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                                         'user_id'   => Tinebase_Core::getUser()->contact_id
                                     ));
+                                    /** @phpstan-ignore method.notFound */
                                     $alarmsToSet->setOption('attendee', Calendar_Controller_Alarm::attendeeToOption($currentUserAttender));
                                     if ($_opts->v) {
                                         echo "Setting alarms: ...\n";

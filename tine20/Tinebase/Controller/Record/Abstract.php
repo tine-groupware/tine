@@ -19,6 +19,8 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  *
  * @package     Tinebase
  * @subpackage  Controller
+ *
+ * @template T of Tinebase_Record_Interface
  */
 abstract class Tinebase_Controller_Record_Abstract
     extends Tinebase_Controller_Event
@@ -29,9 +31,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * Model name
      *
-     * @var string
-     *
-     * @todo perhaps we can remove that and build model name from name of the class (replace 'Controller' with 'Model')
+     * @var class-string<T>
      */
     protected $_modelName;
 
@@ -241,11 +241,14 @@ abstract class Tinebase_Controller_Record_Abstract
      * returns controller for records of given model
      *
      * @param string $_model
+     *
+     * @deprecated use Tinebase_Core::getApplicationInstance!
+     *
      * @return Tinebase_Controller|Tinebase_Controller_Abstract|Tinebase_Controller_Record_Abstract
      */
     public static function getController($_model)
     {
-        [$appName, , $modelName] = explode('_', $_model);
+        [$appName, , $modelName] = explode('_', $_model, 3);
         return Tinebase_Core::getApplicationInstance($appName, $modelName);
     }
     
@@ -288,6 +291,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Core::unsetUser();
             }
             if (isset($oldvalues['doGrantChecks'])) {
+                /** @phpstan-ignore method.notFound */
                 $this->doGrantChecks($oldvalues['doGrantChecks']);
             }
         };
@@ -303,7 +307,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param boolean|array|Tinebase_Record_Expander $_getRelations
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
-     * @return Tinebase_Record_RecordSet|array
+     * @return Tinebase_Record_RecordSet<T>|array
      */
     public function search(
         ?\Tinebase_Model_Filter_FilterGroup $_filter = null,
@@ -335,10 +339,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     if ($_getRelations === true) {
                         $_getRelations = null;
                     }
-                    /** @noinspection PhpUndefinedMethodInspection */
                     $result->setByIndices('relations',
                         Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName,
-                            $this->_getBackendType(), $result->getId(), null, array(), false, $_getRelations));
+                            $this->_getBackendType(), $result->getArrayOfIds(), null, array(), false, $_getRelations));
                 }
             }
             // TODO eventually put this into the expander!
@@ -547,7 +550,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param bool         $_getRelatedData
      * @param bool $_getDeleted
      * @param bool $_aclProtect
-     * @return Tinebase_Record_Interface
+     * @return T
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
@@ -679,7 +682,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   bool $_ignoreACL don't check acl grants
      * @param Tinebase_Record_Expander $_expander
      * @param   bool $_getDeleted
-     * @return Tinebase_Record_RecordSet of $this->_modelName
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false)
     {
@@ -722,7 +725,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param string $_orderBy Order result by
      * @param string $_orderDirection Order direction - allowed are ASC and DESC
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC')
     {
@@ -746,7 +749,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   boolean $_duplicateCheck
-     * @return  Tinebase_Record_Interface
+     * @return  T
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
@@ -1398,6 +1401,13 @@ abstract class Tinebase_Controller_Record_Abstract
         }   
     }
 
+    /**
+     * @param string $id
+     * @param bool $persist
+     * @return T
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
     public function copy(string $id, bool $persist): Tinebase_Record_Interface
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -1420,7 +1430,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @param   boolean $_duplicateCheck
      * @param   boolean $_updateDeleted
-     * @return  Tinebase_Record_Interface
+     * @return  T
      * @throws  Tinebase_Exception_AccessDenied
      * 
      * @todo    fix duplicate check on update / merge needs to remove the changed record / ux discussion
@@ -2037,7 +2047,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $this->_updateMultipleResult = array(
             'results'           => new Tinebase_Record_RecordSet($this->_modelName),
-            'exceptions'        => new Tinebase_Record_RecordSet('Tinebase_Model_UpdateMultipleException'),
+            'exceptions'        => new Tinebase_Record_RecordSet(Tinebase_Model_UpdateMultipleException::class),
             'totalcount'        => 0,
             'failcount'         => 0,
         );
@@ -2184,8 +2194,8 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * If one of the records could not be deleted, no record is deleted
      *
-     * @param  array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_ids array of record identifiers
-     * @return Tinebase_Record_RecordSet
+     * @param  array|T|Tinebase_Record_RecordSet<T> $_ids array of record identifiers
+     * @return Tinebase_Record_RecordSet<T>
      * @throws Exception
      */
     public function delete($_ids)
@@ -2203,7 +2213,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if ($ids instanceof Tinebase_Record_RecordSet) {
                 /** @var Tinebase_Record_RecordSet $records */
                 $records = $ids;
-                $ids = array_unique($records->getId());
+                $ids = array_unique($records->getArrayOfIds());
             } else {
                 /** @var Tinebase_Record_RecordSet $records */
                 $records = $this->_backend->getMultiple((array)$ids);
@@ -2269,7 +2279,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination|null $_pagination
-     * @return null|Tinebase_Record_RecordSet
+     * @return null|Tinebase_Record_RecordSet<T>
      * @throws Exception
      */
     public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter,
@@ -2369,7 +2379,7 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * TODO finish implementaion
      *
-     * @param Tinebase_Record_Interface $_record
+     * @param T $_record
      * @throws Tinebase_Exception_AccessDenied
      */
     public function unDelete(Tinebase_Record_Interface $_record)
@@ -2523,7 +2533,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * delete linked relations
      * 
-     * @param Tinebase_Record_Interface $record
+     * @param T $record
      * @param array $modelsToDelete
      * @param array $typesToDelete
      */
@@ -2872,7 +2882,7 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * get and resolve all alarms of given record(s)
      *
-     * @param  Tinebase_Record_Interface|Tinebase_Record_RecordSet $_record
+     * @param  T|Tinebase_Record_RecordSet<T> $_record
      */
     public function getAlarms($_record)
     {
@@ -3717,82 +3727,15 @@ HumanResources_CliTests.testSetContractsEndDate */
         unset($ctrlAclRaii);
     }
 
-    /**
-     * returns paths of record
-     *
-     * ACL check will be disabled in this function to really take all relations into account
-     *
-     * @param Tinebase_Record_Interface     $record
-     * @param boolean|int                   $depth
-     * @return Tinebase_Record_RecordSet
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Tinebase_Exception
-     */
-    protected function _getPathsOfRecord(Tinebase_Record_Interface $record, $depth = false)
-    {
-        if (false !== $depth && $depth > 8) {
-            throw new Tinebase_Exception('too many recursions while calculating record path');
-        }
-
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Path');
-
-        // we want all relations / ignoreACL, so we need to force a reload of relations
-        $oldRelations = $record->relations;
-        $record->relations = null;
-        $parentRelations = Tinebase_Relations::getInstance()->getRelationsOfRecordByDegree($record, Tinebase_Model_Relation::DEGREE_PARENT, true);
-        // restore normal relations again
-        $record->relations = $oldRelations;
-
-        foreach ($parentRelations as $parent) {
-
-            if (!is_object($parent->related_record)) {
-                $parent->related_record = Tinebase_Core::getApplicationInstance($parent->related_model)->get($parent->related_id);
-            }
-
-            if (false === $depth) {
-                // we do not need to generate the parents paths, they should be in DB
-                $parentPaths = Tinebase_Record_Path::getInstance()->getPathsForRecords($parent->related_record);
-            } else {
-                // we have to regenerate parents paths
-                $parentPaths = $this->_getPathsOfRecord($parent->related_record, $depth === true ? 1 : $depth + 1);
-            }
-
-            if (count($parentPaths) === 0) {
-                $path = new Tinebase_Model_Path(array(
-                    'path'          => $this->_getPathPart($parent->related_record) . $this->_getPathPart($record, $parent),
-                    'shadow_path'   => '/' . $parent->related_id . $this->_getShadowPathPart($record, $parent),
-                    'record_id'     => $record->getId(),
-                    'creation_time' => Tinebase_DateTime::now(),
-                ));
-                $result->addRecord($path);
-            } else {
-                // merge paths
-                foreach ($parentPaths as $path) {
-                    $newPath = new Tinebase_Model_Path(array(
-                        'path'          => $path->path . $this->_getPathPart($record, $parent),
-                        'shadow_path'   => $path->shadow_path . $this->_getShadowPathPart($record, $parent),
-                        'record_id'     => $record->getId(),
-                        'creation_time' => Tinebase_DateTime::now(),
-                    ));
-
-                    $result->addRecord($newPath);
-                }
-            }
-        }
-
-        return $result;
-    }
-
-
     // we dont want to mention the throw there, or it would be reflected everywhere
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * send notifications
      *
-     * @param Tinebase_Record_Interface  $_record
+     * @param T  $_record
      * @param Tinebase_Model_FullUser    $_updater
      * @param String                     $_action
-     * @param Tinebase_Record_Interface  $_oldRecord
+     * @param ?T  $_oldRecord
      * @param Array                      $_additionalData
      */
     public function doSendNotifications(/** @noinspection PhpUnusedParameterInspection */
@@ -3885,11 +3828,12 @@ HumanResources_CliTests.testSetContractsEndDate */
      *
      * TODO replace converter usage when we have refactored the record resolving
      *
-     * @param Tinebase_Record_Interface $record
-     * @param $foreignModel
+     * @template T1 of Tinebase_Record_Interface
+     * @param T $record
+     * @param class-string<T1> $foreignModel
      * @param $groupField
      * @param $idProp
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<T1>
      */
     public function getResolvedGroupRecords(Tinebase_Record_Interface $record, $foreignModel, $groupField, $idProp)
     {
@@ -3918,7 +3862,7 @@ HumanResources_CliTests.testSetContractsEndDate */
      *
      * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @return Tinebase_Record_Interface|null
+     * @return T|null
      * @throws Zend_Db_Statement_Exception
      */
     public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
@@ -4061,7 +4005,7 @@ HumanResources_CliTests.testSetContractsEndDate */
     }
 
     /**
-     * @return string
+     * @return class-string<T>
      */
     public function getModel()
     {
@@ -4071,7 +4015,7 @@ HumanResources_CliTests.testSetContractsEndDate */
     /**
      * @param $property
      * @param bool $_getRelatedData
-     * @return null|Tinebase_Record_Interface
+     * @return null|T
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_AreaLocked
      */

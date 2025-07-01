@@ -2515,7 +2515,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
     {
         if ($_records->getFirstRecord()->has('relations')) {
             $_records->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations(
-                $_records->getRecordClassName(), 'Sql', $_records->getId())
+                $_records->getRecordClassName(), 'Sql', $_records->getArrayOfIds())
             );
         }
     }
