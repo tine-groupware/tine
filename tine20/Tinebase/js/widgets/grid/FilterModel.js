@@ -278,6 +278,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 {operator: 'inweek',        label: i18n._('is in week no.')},
                 {operator: 'startswith',    label: i18n._('starts with')},
                 {operator: 'endswith',      label: i18n._('ends with')},
+                {operator: 'startson',      label: i18n._('starts-on')}, // weekday filter only
+                {operator: 'endson',        label: i18n._('ends-on')},  // weekday filter only
                 {operator: 'definedBy',     label: i18n._('defined by')}
             ].concat(this.getCustomOperators() || []),
             remoteSort: false,

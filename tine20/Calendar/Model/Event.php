@@ -207,6 +207,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
          * 'dtstart'               => array('filter' => 'Tinebase_Model_Filter_DateTime'),
          * 'dtend'                 => array('filter' => 'Tinebase_Model_Filter_DateTime'),
          * 'transp'                => array('filter' => 'Tinebase_Model_Filter_Text'),
+         * 'weekday'               => array('filter' => 'Calendar_Model_WeekdayFilter'),
          * 'rrule'                 => array('filter' => 'Calendar_Model_RruleFilter'),
          * 'recurid'               => array('filter' => 'Tinebase_Model_Filter_Text'),
          * 'base_event_id'         => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -262,6 +263,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
             'grants'                => [
                 self::FILTER => Calendar_Model_GrantFilter::class,
+            ],
+            'weekday'                => [
+                self::FILTER => Calendar_Model_WeekdayFilter::class,
             ],
             'site'                  => [
                 self::FILTER            => Tinebase_Model_Filter_Relation::class,

@@ -451,8 +451,8 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         $returnedFilter = $searchResultData['filter'];
-        $this->assertEquals(2, count($returnedFilter), 'Two filters shoud have been returned!');
-        $this->assertTrue($returnedFilter[1]['field'] == 'period' || $returnedFilter[0]['field'] == 'period', 'One returned filter shoud be a period filter');
+        $this->assertEquals(2, count($returnedFilter), 'Two filters should have been returned!');
+        $this->assertTrue($returnedFilter[1]['field'] == 'period' || $returnedFilter[0]['field'] == 'period', 'One returned filter should be a period filter');
     }
     
     /**

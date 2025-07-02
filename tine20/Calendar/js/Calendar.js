@@ -57,5 +57,6 @@ require('./calendarRenderer');
 require('./ImportDialog');
 require('./CalendarPanelSplitPlugin');
 require('./RruleFilter');
+require('./WeekdayFilter');
 require('./EventFinderOptionsDialog');
 require('./floorplan/src/openViewBtn');
