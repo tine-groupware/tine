@@ -343,7 +343,13 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
 
-        if (! label || _.get(fieldconfig, 'disabled') || _.get(fieldconfig, 'uiconfig.disabled') || _.get(filterOptions, 'disabled')) {
+        if (
+            ! label ||
+            _.get(fieldconfig, 'disabled') ||
+            _.get(fieldconfig, 'uiconfig.disabled') ||
+            _.get(filterOptions, 'disabled') ||
+            _.get(filterconfig, 'disabled')
+        ) {
             return null;
         }
         // prepare filter
