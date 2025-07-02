@@ -726,6 +726,18 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
+                    // TODO disabled in filter toolbar because not working atm / needs to be fixed in js client:
+                    //      it should be fixed, "equals" makes no sense
+                    //      should only offer "contains" operator.
+                    //      and make it record picker? ... don't know, maybe then
+                    //      two operators? "contains text" and "contains contact" ... and then
+                    //      you can also make "contains list" "contains list role" etc.
+                    //      but all this FE, the backend should afaik always only receive "contains"
+                    //      if record picker then "contains" -> getTitle(), not "contains" -> id (and certainly not toArray).
+                    //      that would otherwise be shadowPath not path as field, which we cannot currently do
+                    'filterOptions' => [
+                        self::DISABLED => true,
+                    ]
                 ],
             ],
             'preferred_address'             => [
