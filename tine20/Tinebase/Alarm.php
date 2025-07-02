@@ -154,7 +154,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-            $sentAlarms . ' alarms sent (limit: ' . $limit . ').');
+            __METHOD__ . '::' . __LINE__ . ' ' . $sentAlarms . ' alarms sent (limit: ' . $limit . ').');
 
         return true;
     }

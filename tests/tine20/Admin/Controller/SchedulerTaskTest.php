@@ -94,6 +94,25 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
                 . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
             static::fail($e->getMessage());
         }
-        $this->_assertMail('sclever', '0 alarms sent (limit: 100).', 'body');
+
+        $messages = self::getMessages();
+        $mailsForPersona = array();
+        $personaEmail = $this->_getPersona(trim('sclever'))->accountEmailAddress;
+
+        foreach ($messages as $message) {
+            if (Tinebase_Helper::array_value(0, $message->getRecipients()) == $personaEmail) {
+                array_push($mailsForPersona, $message);
+            }
+        }
+        $bodyPart = $mailsForPersona[0]->getBodyText(FALSE);
+        $s = fopen('php://temp','r+');
+        fputs($s, $bodyPart->getContent());
+        rewind($s);
+        $bodyPartStream = new Zend_Mime_Part($s);
+        $bodyPartStream->encoding = $bodyPart->encoding;
+        $bodyText = $bodyPartStream->getDecodedContent();
+        $this->assertStringContainsString(' 0 alarms sent (limit: 100).', $bodyText);
+        $this->assertStringNotContainsString('Tinebase_Alarm::sendPendingAlarms::157', $bodyText, 'regex should remove method and line in notification');
+        $this->assertStringNotContainsString('NOTICE', $bodyText, 'custom formatter should not include notice');
     }
 }
