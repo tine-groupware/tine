@@ -17,7 +17,7 @@ class Tinebase_Db_Profiler extends Zend_Db_Profiler
     {
         if (self::STORED === ($result = parent::queryEnd($queryId))) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' query time: '
-                . $this->_queryProfiles[$queryId]->getElapsedSecs() . ' ' . $this->_queryProfiles[$queryId]->getQuery());
+                . round($this->_queryProfiles[$queryId]->getElapsedSecs(), 4) . ' ' . $this->_queryProfiles[$queryId]->getQuery());
         }
 
         return $result;

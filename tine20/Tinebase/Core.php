@@ -1171,7 +1171,7 @@ class Tinebase_Core
     {
         if ($dbConfigArray['profiler'] ?? false) {
             $profiler = new Tinebase_Db_Profiler(true);
-            $profiler->setFilterElapsedSecs($dbConfigArray['profiler']['filterTime'] ?? 0.05);
+            $profiler->setFilterElapsedSecs(array_key_exists('filterTime', $dbConfigArray['profiler']) ? $dbConfigArray['profiler']['filterTime'] : 0.05);
             $dbConfigArray['profiler'] = [
                 'instance' => $profiler,
             ];
