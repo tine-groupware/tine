@@ -1266,7 +1266,7 @@ msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
 msgid "Destination source already exists:"
-msgstr ""
+msgstr "Die E-Mail-Destination existiert bereits"
 
 msgid "Email account or alias/forward already exists"
 msgstr ""
@@ -1470,6 +1470,9 @@ msgstr "Bearbeiten"
 
 msgid "The field is editable part of the profile"
 msgstr "Das Feld kann im Profil bearbeitet werden"
+
+msgid "Infinity %"
+msgstr "Unendlich %"
 
 msgid "Field Name"
 msgstr "Feldname"
@@ -3691,12 +3694,6 @@ msgstr "beginnt mit"
 msgid "ends with"
 msgstr "endet mit"
 
-msgid "starts-on"
-msgstr "startet am"
-
-msgid "ends-on"
-msgstr "endet am"
-
 msgid "defined by"
 msgstr "definiert durch"
 
@@ -4928,11 +4925,14 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
-msgid "Infinity %"
-msgstr "Unendlich %"
-
 msgid "Send the support request to admin"
 msgstr "Supportanfrage an den Administrator senden"
+
+msgid "starts-on"
+msgstr "startet am"
+
+msgid "ends-on"
+msgstr "endet am"
 
 #, python-brace-format
 msgid "Login with {0} account"

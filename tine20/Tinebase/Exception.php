@@ -18,6 +18,13 @@
 class Tinebase_Exception extends Exception
 {
     /**
+     * exception message (fallback)
+     *
+     * @var string
+     */
+    protected $message = 'A Tinebase exception occurred';
+
+    /**
      * the name of the application, this exception belongs to
      * 
      * @var string
