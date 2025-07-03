@@ -122,7 +122,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns name of record class this recordSet contains
      * 
-     * @returns string
+     * @returns class-string<T>
      */
     public function getRecordClassName()
     {
@@ -132,7 +132,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * add Tinebase_Record_Interface like object to internal list (it is not inserted if record is already in set)
      *
-     * @param Tinebase_Record_Interface $_record
+     * @param T $_record
      * @return int index in set of inserted record or index of existing record
      * @throws Tinebase_Exception_Record_NotAllowed
      */
@@ -175,7 +175,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * remove record from set
      * 
-     * @param Tinebase_Record_Interface $_record
+     * @param T $_record
      */
     public function removeRecord(Tinebase_Record_Interface $_record)
     {
@@ -188,7 +188,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * remove records from set
      * 
-     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Record_RecordSet<T> $_records
      */
     public function removeRecords(Tinebase_Record_RecordSet $_records)
     {
@@ -200,7 +200,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * remove records from set
      *
-     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Record_RecordSet<T> $_records
      */
     public function removeRecordsById(Tinebase_Record_RecordSet $_records)
     {
@@ -212,7 +212,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * get index of given record
      * 
-     * @param Tinebase_Record_Interface $_record
+     * @param T $_record
      * @return (int) index of record of false if not found
      */
     public function indexOf(Tinebase_Record_Interface $_record)
@@ -265,7 +265,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns index of record identified by its id
      * 
      * @param  string $_id id of record
-     * @return int|bool    index of record or false if not in set
+     * @return int|false    index of record or false if not in set
      */
     public function getIndexById($_id)
     {
@@ -278,7 +278,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns record identified by its id
      * 
      * @param  string $_id id of record
-     * @return Tinebase_Record_Interface|bool    record or false if not in set
+     * @return T|false    record or false if not in set
      */
     public function getById($_id)
     {
@@ -291,7 +291,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns record identified by its id
      * 
      * @param  integer $index of record
-     * @return Tinebase_Record_Interface|bool    record or false if not in set
+     * @return T|false    record or false if not in set
      */
     public function getByIndex($index)
     {
@@ -300,6 +300,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     
     /**
      * returns array of ids
+     * @return array
      */
     public function getArrayOfIds()
     {
@@ -317,6 +318,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     
     /**
      * returns array of ids
+     * @return array
      */
     public function getArrayOfIdsAsString()
     {
@@ -584,7 +586,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string|callable $_field
      * @param string $_value
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function filter($_field, $_value = NULL, $_valueIsRegExp = FALSE)
     {
@@ -597,7 +599,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns new set with records of this set
      *
      * @param  bool $recordsByRef
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function getClone($recordsByRef=false)
     {
@@ -615,7 +617,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string|closure $_field
      * @param string|null $_value
-     * @return Tinebase_Record_Interface
+     * @return T|null
      */
     public function find($_field, $_value, $_valueIsRegExp = FALSE)
     {
@@ -654,7 +656,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns first record of this set
      *
-     * @return T|NULL
+     * @return T|null
      */
     public function getFirstRecord()
     {
@@ -662,14 +664,14 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             reset($this->_listOfRecords);
             return current($this->_listOfRecords);
         } else {
-            return NULL;
+            return null;
         }
     }
 
     /**
      * returns last record of this set
      *
-     * @return Tinebase_Record_Interface|NULL
+     * @return Tinebase_Record_Interface|null
      */
     public function getLastRecord()
     {
@@ -678,7 +680,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             reset($this->_listOfRecords);
             return $return;
         } else {
-            return NULL;
+            return null;
         }
     }
     
@@ -800,7 +802,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * merges records from given record set
      * 
      * @param Tinebase_Record_RecordSet<T> $_recordSet
-     * @return self
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function merge(Tinebase_Record_RecordSet $_recordSet)
     {
@@ -816,8 +818,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * merges records from given record set if id not yet present in current record set
      *
-     * @param Tinebase_Record_RecordSet $_recordSet
-     * @return void
+     * @param Tinebase_Record_RecordSet<T> $_recordSet
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function mergeById(Tinebase_Record_RecordSet $_recordSet)
     {
@@ -837,7 +839,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_direction
      * @param string $_sortFunction
      * @param int $_flags sort flags for asort/arsort
-     * @return $this
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function sort($_field, $_direction = 'ASC', $_sortFunction = 'asort', $_flags = SORT_REGULAR)
     {
@@ -887,7 +889,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     * sorts this recordset by pagination sort info
     *
     * @param Tinebase_Model_Pagination $_pagination
-    * @return $this
+    * @return Tinebase_Record_RecordSet<T>
     */
     public function sortByPagination($_pagination)
     {
@@ -903,7 +905,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * limits this recordset by pagination
      * sorting should always be applied before to get the desired sequence
      * @param Tinebase_Model_Pagination $_pagination
-     * @return $this
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function limitByPagination($_pagination)
     {

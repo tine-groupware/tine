@@ -3162,7 +3162,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($exRecs->count() > 1) {
             $exRecs->removeRecord($existingDepRec);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                ' found more than one dependent record, deleting: ' . $exRecs->getArrayOfIds());
+                ' found more than one dependent record, deleting: ' . print_r($exRecs->getArrayOfIds(), true));
             $controller->delete($exRecs->getArrayOfIds());
         }
 
@@ -4103,7 +4103,7 @@ HumanResources_CliTests.testSetContractsEndDate */
             if ($duplicate->count() > 0) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Duplicates found: ' . $duplicate->getArrayOfIds());
+                    . ' Duplicates found: ' . print_r($duplicate->getArrayOfIds(), true));
 
                 $renameCounter = 1;
                 foreach ($duplicate as $dup) {

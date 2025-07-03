@@ -93,6 +93,14 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             'fieldCallback' => [self::class, 'sortFieldManipulator'],
             'noJoinRequired' => true,
         ],
+        'revision_size' => [
+            'fieldCallback' => [self::class, 'sortFieldManipulator'],
+            'noJoinRequired' => true,
+        ],
+        'size' => [
+            'fieldCallback' => [self::class, 'sortFieldManipulator'],
+            'noJoinRequired' => true,
+        ],
     ];
 
     /**
@@ -716,6 +724,9 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
     public static function sortFieldManipulator(string $field): string
     {
+        if ('size' === $field) {
+            return 'tree_filerevisions.' . $field;
+        }
         return 'tree_fileobjects.' . $field;
     }
 }
