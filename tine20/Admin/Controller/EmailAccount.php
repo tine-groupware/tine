@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -99,10 +99,80 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('get');
 
-//        $result = new Tinebase_Record_RecordSet(Admin_Model_EmailAccount::class,
-//            parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action)->toArray()
-//        );
-        $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        $result = null;
+        while (Tinebase_EmailUser::manages(Tinebase_Config::IMAP) && ('email_imap_user' === $_pagination?->sort  || ['email_imap_user'] === $_pagination?->sort)) {
+            $emailUserBackend = null;
+            try {
+                $emailUserBackend = Tinebase_EmailUser::getInstance();
+            } catch (Tinebase_Exception_NotFound) {}
+            if (!$emailUserBackend instanceof Tinebase_EmailUser_Sql) {
+                break;
+            }
+
+            $extIdToFelamiAccount = [];
+
+            $systemFilter = clone $_filter;
+            $systemFilter->andWrapItself();
+            $systemFilter->addFilter(new Tinebase_Model_Filter_Text('type', Tinebase_Model_Filter_Abstract::OP_EQUALS, Felamimail_Model_Account::TYPE_SYSTEM));
+            $systemIds = $this->_backend->search($systemFilter, _onlyIds: ['id', 'user_id']);
+            $userToFelamiAccount = array_flip($systemIds);
+            foreach (Tinebase_User::getInstance()->getUsersXprops(array_values($systemIds)) as $userId => $xprops) {
+                $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Tinebase_Model_FullUser([
+                    'id' => $userId,
+                    'xprops' => $xprops,
+                ], true));
+                $extIdToFelamiAccount[$emailUserId] = $userToFelamiAccount[$userId];
+            }
+            unset($userToFelamiAccount);
+
+            $userFilter = clone $_filter;
+            $userFilter->andWrapItself();
+            $userFilter->addFilter(new Tinebase_Model_Filter_Text('type', 'notin', [Felamimail_Model_Account::TYPE_SYSTEM, Felamimail_Model_Account::TYPE_SHARED_EXTERNAL, Felamimail_Model_Account::TYPE_USER_EXTERNAL]));
+            foreach ($this->_backend->search($userFilter, _onlyIds: ['id', 'xprops']) as $id => $xprops) {
+                $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Felamimail_Model_Account([
+                    'id' => $id,
+                    'xprops' => $xprops,
+                ], true));
+                $extIdToFelamiAccount[$emailUserId] = $id;
+            }
+
+
+            if (is_array($dir = $_pagination->dir)) {
+                $dir = $dir[0];
+            }
+
+            $sortedIds = [];
+            foreach(array_keys($emailUserBackend->getUserIdsMailSize(array_keys($extIdToFelamiAccount), $dir ?: 'ASC')) as $extId) {
+                $sortedIds[] = $extIdToFelamiAccount[$extId];
+            }
+
+            $allIds = $this->_backend->search($_filter, _onlyIds: true);
+
+            if (count($sortedIds) < count($allIds)) {
+                $toProcessIds = array_diff($allIds, $sortedIds);
+                if ('DESC' === $dir) {
+                    $sortedIds = array_merge($sortedIds, $toProcessIds);
+                } else {
+                    $sortedIds = array_merge($toProcessIds, $sortedIds);
+                }
+            }
+            $sortedIds = array_slice($sortedIds, $_pagination->start ?: 0, $_pagination->limit ?: null);
+
+            $unsortedResult = $this->_backend->getMultiple($sortedIds);
+            $result = new Tinebase_Record_RecordSet(Felamimail_Model_Account::class);
+            foreach ($sortedIds as $uid) {
+                if ($record = $unsortedResult->getById($uid)) {
+                    $result->addRecord($record);
+                }
+            }
+
+            break;
+        }
+
+        if (null === $result) {
+            $result = $this->_backend->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
+        }
+
         if (! $_onlyIds) {
             // we need to unset the accounts grants to make the admin grid actions work for all accounts
             $result->account_grants = null;

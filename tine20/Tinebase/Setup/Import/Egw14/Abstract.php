@@ -250,9 +250,13 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                     throw new Exception("account with id {$_egwAccountId} not found in static map");
                 } else if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
                     if ((int) $_egwAccountId < 0) {
-                        $this->_accountIdMapCache[$_egwAccountId] = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($_egwAccountId);
+                        /** @var Tinebase_Group_Ldap $groupBackend */
+                        $groupBackend = Tinebase_Group::getInstance();
+                        $this->_accountIdMapCache[$_egwAccountId] = $groupBackend->resolveGIdNumberToUUId($_egwAccountId);
                     } else {
-                        $this->_accountIdMapCache[$_egwAccountId] = Tinebase_User::getInstance()->resolveUIdNumberToUUId($_egwAccountId);
+                        /** @var Tinebase_User_Ldap $userBackend */
+                        $userBackend = Tinebase_User::getInstance();
+                        $this->_accountIdMapCache[$_egwAccountId] = $userBackend->resolveUIdNumberToUUId($_egwAccountId);
                     }
                 } else {
                     $this->_accountIdMapCache[$_egwAccountId] = abs($_egwAccountId);
@@ -295,9 +299,13 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 throw new Exception("account with id {$_tineAccountId} not found in static map");
             } else if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
                 if ($_accountType == 'User') {
-                    $this->_accountIdMapCache[$egwAccountId] = Tinebase_User::getInstance()->resolveUUIdToUIdNumber($_tineAccountId);
+                    /** @var Tinebase_User_Ldap $userBackend */
+                    $userBackend = Tinebase_User::getInstance();
+                    $_tineAccountId = $userBackend->resolveUUIdToUIdNumber($_tineAccountId);
                 } else {
-                    $this->_accountIdMapCache[$egwAccountId] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($_tineAccountId);
+                    /** @var Tinebase_Group_Ldap $groupBackend */
+                    $groupBackend = Tinebase_Group::getInstance();
+                    $_tineAccountId = $groupBackend->resolveUUIdToGIdNumber($_tineAccountId);
                 }
             } else {
                 $egwAccountId = ($_accountType == 'User' ? '' : '-') . $_tineAccountId;

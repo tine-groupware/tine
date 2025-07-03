@@ -618,7 +618,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         return $this->_rawDataToRecord($rawUser);
     }
 
-    public function getUserIdsMailSize(array $userIds): array
+    public function getUserIdsMailSize(array $userIds, ?string $sortDir = null): array
     {
         $select = $this->_getSelect([
             $this->_tableMapping['emailUserId']  . '.' . $this->_propertyMapping['emailUserId'],
@@ -626,6 +626,9 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         ])->where(
             $this->_db->quoteIdentifier($this->_tableMapping['emailUserId']  . '.' . $this->_propertyMapping['emailUserId']) . ' IN (?)', $userIds
         )->limit();
+        if (null !== $sortDir) {
+            $select->order($this->_tableMapping['emailMailSize']  . '.' . $this->_propertyMapping['emailMailSize'] . ' ' . $sortDir);
+        }
 
         $result = [];
         foreach ($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {

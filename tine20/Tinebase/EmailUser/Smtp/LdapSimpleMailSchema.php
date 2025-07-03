@@ -159,7 +159,9 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
 
         if (!isset($this->_ldapRawData[$_user['accountLoginName']])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown account (possibly new), guessed user's DN in ldap");
-            $originalUserDn = Tinebase_User::getInstance()->generateDn($_user);
+            /** @var Tinebase_User_Ldap $userBackend */
+            $userBackend = Tinebase_User::getInstance();
+            $originalUserDn = $userBackend->generateDn($_user);
             $filter = $this->_prepareSpecialResultFilterForLdap($originalUserDn, $_user['accountLoginName']);
             $this->_getSpecialResultDataFromLdap($filter, $_user['accountLoginName']);
         }

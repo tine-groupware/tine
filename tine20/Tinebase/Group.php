@@ -309,7 +309,9 @@ class Tinebase_Group
             $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);
         } else {
             // fake groups by reading all gidnumber's of the accounts
-            $accountProperties = Tinebase_User::getInstance()->getUserAttributes(array('gidnumber'));
+            /** @var Tinebase_User_Ldap $userBackend */
+            $userBackend = Tinebase_User::getInstance();
+            $accountProperties = $userBackend->getUserAttributes(array('gidnumber'));
             
             $groupIds = array();
             foreach ($accountProperties as $accountProperty) {
