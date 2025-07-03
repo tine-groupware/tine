@@ -191,7 +191,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
     /**
      * the singleton pattern
      *
-     * @return Tinebase_User_Abstract
+     * @return Tinebase_User_Sql
      */
     public static function getInstance() 
     {
@@ -218,7 +218,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * return an instance of the current user backend
      *
      * @param   string $backendType name of the user backend
-     * @return  Tinebase_User_Abstract
+     * @return  Tinebase_User_Sql
      * @throws  Tinebase_Exception_InvalidArgument
      */
     public static function factory($backendType) 

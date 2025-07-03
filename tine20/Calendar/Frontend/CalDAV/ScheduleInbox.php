@@ -32,7 +32,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
     
     public function __construct($_userId)
     {
-        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->get($_userId);
+        $this->_user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
     }
     
     /**

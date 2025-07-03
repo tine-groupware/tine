@@ -198,14 +198,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $this->_db->query($select)->fetchAll(Zend_Db::FETCH_COLUMN);
     }
 
-    public function getUsersXprops(array $userIds): array
+    public function getUsersXprops(?array $userIds): array
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', [
                 'accountId' => $this->rowNameMapping['accountId'],
                 'xprops' => $this->rowNameMapping['xprops']
             ])
-            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping['accountId']) . $this->_db->quoteInto(' IN (?)', $userIds));
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.is_deleted') . ' = 0');
+        if (null !== $userIds) {
+            $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping['accountId']) . $this->_db->quoteInto(' IN (?)', $userIds));
+        }
 
         $result = [];
         foreach($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {

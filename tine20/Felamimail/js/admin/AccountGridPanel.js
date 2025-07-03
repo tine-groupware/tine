@@ -67,7 +67,7 @@ Tine.Felamimail.admin.showAccountGridPanel = function () {
             },
 
             getCustomColumns: function() {
-                return [{ header: this.app.i18n._('E-mail usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'email_imap_user', renderer: Tine.Admin.user.GridPanel.prototype.emailQuotaRenderer, sortable: false}];
+                return [{ header: this.app.i18n._('E-mail usage'), id: 'emailQuota', hidden: this.isEmailBackend, dataIndex: 'email_imap_user', renderer: Tine.Admin.user.GridPanel.prototype.emailQuotaRenderer, sortable: true}];
             },
 
             getActionToolbarItems: function() {
