@@ -67,8 +67,14 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
 
             Tinebase_Core::initFramework();
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' REQUEST: ' . print_r($_REQUEST, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    .' Is HTTP request. method: ' . $this->getRequestMethod());
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    .' REQUEST: ' . print_r($_REQUEST, TRUE));
+            }
 
             if (null === Tinebase_Core::getUser() && $this->_request->getHeader('Authorization')) {
                 $this->_handleAppPwdAuth();

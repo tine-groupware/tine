@@ -1536,6 +1536,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @return bool
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
+     * @todo rename function
      */
     public function readModificationLogFromMaster()
     {
@@ -1544,7 +1545,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $tine20LoginName = $slaveConfiguration->{Tinebase_Config::MASTER_USERNAME};
         $tine20Password = $slaveConfiguration->{Tinebase_Config::MASTER_PASSWORD};
 
-        // check if we are a replication slave
+        // check if we are a replica
         if (empty($tine20Url) || empty($tine20LoginName) || empty($tine20Password)) {
             return true;
         }
@@ -1553,15 +1554,17 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $result = Tinebase_Core::acquireMultiServerLock(__METHOD__);
         if (false === $result) {
             // we are already running
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                ' failed to aquire multi server lock, it seems we are already running in a parallel process.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    ' Failed to aquire multi server lock, it seems we are already running in a parallel process.');
+            }
             return true;
         }
 
         try {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' trying to connect to master host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
+                    ' Trying to connect to primary host: ' . $tine20Url . ' with user: ' . $tine20LoginName);
             }
 
             $tine20Service = new Zend_Service_Tine20($tine20Url);
@@ -1603,12 +1606,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     $slaveConfiguration->{Tinebase_Config::NUM_OF_MODLOGS});
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
-                throw new Tinebase_Exception_Backend('could not getReplicationModificationLogs from master');
+                throw new Tinebase_Exception_Backend('Could not getReplicationModificationLogs from primary');
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                    ' received ' . count($result['results']) . ' modification logs');
+                    ' Received ' . count($result['results']) . ' modification logs');
             }
 
             // memory cleanup

@@ -1030,8 +1030,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $license = Tinebase_License::getInstance();
             if ($license->isLicenseAvailable() && !$license->isValid()) {
                 $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Account: ' . $user->accountLoginName . ' login failed: license is expired');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Account: ' . $user->accountLoginName . ' login failed: license is expired');
+                }
                 return false;
             }
 
