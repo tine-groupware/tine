@@ -18,6 +18,13 @@
 class Tinebase_Exception extends Exception
 {
     /**
+     * exception message (fallback)
+     *
+     * @var string
+     */
+    protected $message = 'A Tinebase exception occurred';
+
+    /**
      * the name of the application, this exception belongs to
      * 
      * @var string
@@ -63,7 +70,7 @@ class Tinebase_Exception extends Exception
             $this->_title = 'Exception ({0})'; // _('Exception ({0})')
         }
         
-        parent::__construct(($message ? $message : $this->message), $code, $previous);
+        parent::__construct(($message ?: $this->message), $code, $previous);
     }
     
     /**
