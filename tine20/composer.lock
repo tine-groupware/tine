@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "644c30164e62bf10375e17ac2a567987",
+    "content-hash": "2c678d19a21d91f1ce1a28c85662aa21",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -13759,11 +13759,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20.79",
+            "version": "1.12.20.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/zendframework1.git",
-                "reference": "79a1ca727f040976d66d1960a4ed2f5fc34014b5"
+                "reference": "e8259e7427741be6effafaab452de3bd20bc27c9"
             },
             "require": {
                 "php": ">=8.0"
@@ -13780,7 +13780,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2025-03-10T11:24:12+00:00"
+            "time": "2025-07-03T10:47:24+00:00"
         }
     ],
     "packages-dev": [
@@ -15614,7 +15614,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.1",
         "ext-spl": "8.1",
@@ -15638,5 +15638,5 @@
         "ext-xmlwriter": "8.1",
         "ext-zip": "8.1"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
