@@ -12,7 +12,7 @@ Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogR
                 '{[Tine.widgets.printer.headerRenderer()]}',
                 '<table><tr><td>',
                 '<div class="rp-print-single-image">',
-                '<img src="{jpegphoto}">',
+                '<img src="{[values.jpegphoto || \'\']}">',
                 '</div>',
                 '</td><td>',
                 '<div class="rp-print-single-block">',

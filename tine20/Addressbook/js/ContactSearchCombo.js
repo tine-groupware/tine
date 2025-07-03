@@ -150,7 +150,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                                 '{[this.encode(values.email)]}</td>',
                             '<td width="25%">{[Tine.Tinebase.EncodingHelper.encode(values.tel_work)]}<br/>{[Tine.Tinebase.EncodingHelper.encode(values.tel_cell)]}</td>',
                             '<td width="50px">',
-                                '<img width="45px" height="39px" src="{jpegphoto}" />',
+                                '<img width="45px" height="39px" src="{[values.jpegphoto || \'\']}" />',
                             '</td>',
                         '</tr>',
                     '</table>',
