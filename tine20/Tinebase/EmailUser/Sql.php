@@ -617,6 +617,22 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
         // convert data to Tinebase_Model_EmailUser
         return $this->_rawDataToRecord($rawUser);
     }
+
+    public function getUserIdsMailSize(array $userIds): array
+    {
+        $select = $this->_getSelect([
+            $this->_tableMapping['emailUserId']  . '.' . $this->_propertyMapping['emailUserId'],
+            $this->_tableMapping['emailMailSize']  . '.' . $this->_propertyMapping['emailMailSize']
+        ])->where(
+            $this->_db->quoteIdentifier($this->_tableMapping['emailUserId']  . '.' . $this->_propertyMapping['emailUserId']) . ' IN (?)', $userIds
+        )->limit();
+
+        $result = [];
+        foreach ($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            $result[$row[0]] = $row[1];
+        }
+        return $result;
+    }
     
     /**
      * returns array with keys mailQuota and mailSize

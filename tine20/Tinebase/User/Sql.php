@@ -163,7 +163,57 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         parent::unregisterAllPlugins();
         $this->_sqlPlugins = array();
     }
-    
+
+    protected function _addFilterToSelect(Zend_Db_Select $select, string $filter): void
+    {
+        $whereStatement = [];
+        $defaultValues = [
+            $this->rowNameMapping['accountLastName'],
+            $this->rowNameMapping['accountFirstName'],
+            $this->rowNameMapping['accountLoginName'],
+            $this->rowNameMapping['accountEmailAddress'],
+        ];
+
+        // prepare for case insensitive search
+        foreach ($defaultValues as $defaultValue) {
+            $whereStatement[] = $this->_dbCommand->prepareForILike(
+                    $this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . $defaultValue)
+                ) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
+        }
+
+        $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $filter . '%');
+    }
+
+    public function getUsersIds(?string $_filter): array
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', ['accountId' => $this->rowNameMapping['accountId']])
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.is_deleted') . ' = 0')
+            ->order($this->rowNameMapping['accountId'] . ' ASC');
+
+        if (null !== $_filter && '' !== $_filter) {
+            $this->_addFilterToSelect($select, $_filter);
+        }
+
+        return $this->_db->query($select)->fetchAll(Zend_Db::FETCH_COLUMN);
+    }
+
+    public function getUsersXprops(array $userIds): array
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', [
+                'accountId' => $this->rowNameMapping['accountId'],
+                'xprops' => $this->rowNameMapping['xprops']
+            ])
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping['accountId']) . $this->_db->quoteInto(' IN (?)', $userIds));
+
+        $result = [];
+        foreach($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            $result[$row[0]] = $row[1];
+        }
+        return $result;
+    }
+
     /**
      * get list of users
      *
@@ -185,22 +235,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         if (!empty($_filter)) {
-            $whereStatement = array();
-            $defaultValues = array(
-                $this->rowNameMapping['accountLastName'], 
-                $this->rowNameMapping['accountFirstName'], 
-                $this->rowNameMapping['accountLoginName'],
-                $this->rowNameMapping['accountEmailAddress'],
-            );
-
-            // prepare for case insensitive search
-            foreach ($defaultValues as $defaultValue) {
-                $whereStatement[] = $this->_dbCommand->prepareForILike(
-                        $this->_db->quoteIdentifier($this->_db->table_prefix . $this->_tableName . '.' . $defaultValue)
-                    ) . ' LIKE ' . $this->_dbCommand->prepareForILike('?');
-            }
-            
-            $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
+            $this->_addFilterToSelect($select, $_filter);
         }
         
         // @todo still needed?? either we use contacts from addressbook or full users now
