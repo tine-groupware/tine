@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  * @todo        extend/use sql abstract backend
@@ -16,6 +16,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Acl
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Tinebase_Model_Role>
  */
 class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
 {
@@ -561,7 +563,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
     public function setRoleMembers($_roleId, array $_roleMembers, $_allowSetId = false)
     {
         $_roleId = (string)$_roleId;
-        /** @var Tinebase_Model_Role $oldRole */
         $oldRole = $this->get($_roleId);
         
         // remove old members
@@ -656,7 +657,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
                 print_r($_account, true) . ')');
         }
 
-        /** @var Tinebase_Model_Role $oldRole */
         $oldRole = $this->get($_roleId);
         
         $data = array(
@@ -694,7 +694,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function removeRoleMember(mixed $_roleId, $_account)
     {
-        /** @var Tinebase_Model_Role $oldRole */
         try {
             $oldRole = $this->get($_roleId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -806,7 +805,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function addRoleRight($roleId, $applicationId, $right)
     {
-        /** @var Tinebase_Model_Role $oldRole */
         $oldRole = $this->get($roleId);
 
         $data = array(
@@ -832,7 +830,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
      */
     public function deleteRoleRight($roleId, $applicationId, $right)
     {
-        /** @var Tinebase_Model_Role $oldRole */
         $oldRole = $this->get($roleId);
 
         $where = array(
@@ -995,16 +992,6 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         return $this->_db;
     }
 
-    /**
-     * get by id
-     *
-     * @param string $_id
-     * @param int $_containerId
-     * @param bool         $_getRelatedData
-     * @param bool $_getDeleted
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_AccessDenied
-     */
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $result = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);

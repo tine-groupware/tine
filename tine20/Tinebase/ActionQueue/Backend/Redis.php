@@ -6,10 +6,8 @@
  * @subpackage  ActionQueue
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
-use Zend_RedisProxy as Redis;
 
 /**
  * @package     Tinebase
@@ -102,7 +100,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      */
     public function connect($host = null, $port = null, $timeout = null)
     {
-        if ($this->_redis instanceof Redis) {
+        if ($this->_redis instanceof Zend_RedisProxy) {
             $this->_redis->close();
         }
         
@@ -110,7 +108,8 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $port    = $port ?: $this->_options['port'];
         $timeout = $timeout ?: $this->_options['timeout'];
         
-        $this->_redis = new Redis;
+        $this->_redis = new Zend_RedisProxy;
+        /** @phpstan-ignore method.notFound */
         if (! $this->_redis->connect($host, $port, $timeout)) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not connect to redis server at ' . $host);
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' options: ' . print_r($this->_options, true));
@@ -195,7 +194,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
                     ' hMGet did not return valid data, deleting, possibly deadlettering job');
                 $this->delete($jobId, true);
             }
-            if ($data['time'] + $maxTime < time()) {
+            if ((int)$data['time'] + $maxTime < time()) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . 'job timed out in daemon struct!');
                 $this->reschedule($jobId);
             }
