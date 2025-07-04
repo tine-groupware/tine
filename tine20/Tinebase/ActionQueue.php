@@ -257,21 +257,13 @@
         }
     }
 
-     /** @noinspection PhpDocSignatureInspection */
      /**
      * queues an action
-     *
-     * @param string $_action
-     * @param mixed  $_arg1
-     * @param mixed  $_arg2
-     * ...
      * 
      * @return string the job id
      */
-    public function queueAction()
+    public function queueAction(string $action, ...$params)
     {
-        $params = func_get_args();
-        $action = array_shift($params);
         $user = Tinebase_Core::getUser();
         if (! is_object($user)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
@@ -336,6 +328,9 @@
 
     public function cleanDaemonStruct()
     {
+        if (!$this->_queue instanceof Tinebase_ActionQueue_Backend_Redis) {
+            throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' for ' . get_class($this->_queue));
+        }
         if (null !== $this->_ququeName && $this->_config->{Tinebase_Config::ACTIONQUEUE_CLEAN_DS . $this->_ququeName}) {
             $this->_queue->cleanDaemonStruct($this->_config->{Tinebase_Config::ACTIONQUEUE_CLEAN_DS . $this->_ququeName});
         } else {
