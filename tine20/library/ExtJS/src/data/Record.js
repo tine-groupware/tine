@@ -249,12 +249,13 @@ rec.{@link #commit}(); // updates the view
      * </ul></div>
      * @param {String} name The {@link Ext.data.Field#name name of the field} to set.
      * @param {String/Object/Array} value The value to set the field to.
+     * @return {Object} this.
      */
     set : function(name, value){
         Tine.Tinebase.common.assertComparable(value);
         var encode = isPrimitive(value) ? String : JSON.stringify;
         if(encode(this.data[name]) == encode(value)) {
-            return;
+            return this;
         }        
         this.dirty = true;
         if(!this.modified){
@@ -267,6 +268,7 @@ rec.{@link #commit}(); // updates the view
         if(!this.editing){
             this.afterEdit();
         }
+        return this;
     },
 
     /**
