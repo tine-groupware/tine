@@ -141,7 +141,7 @@ extend(Record, ExtRecord, {
     /**
      * Set the value of the {@link Field#name named field}.
      * @param {String} name The {@link Field#name name of the field} to get the value of.
-     * @return {Object} The value of the field.
+     * @return {Object} this.
      */
     set : function(name, value) {
         var encode = isPrimitive(value) ? String : JSON.stringify,
@@ -149,7 +149,7 @@ extend(Record, ExtRecord, {
             cfName;
             
         if (current !== null && encode(current) == encode(value)) {
-            return;
+            return this;
         }
         this.dirty = true;
         if (!this.modified) {
@@ -181,6 +181,8 @@ extend(Record, ExtRecord, {
         if (!this.editing) {
             this.afterEdit();
         }
+
+        return this;
     },
 
     getData: function() {
