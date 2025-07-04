@@ -544,6 +544,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                     
                     this.store.remove(attender);
+                    this.fireEvent('removeentry', this, attender)
                     if (type == 'group' && !this.showMemberOfType) {
                         this.resolveListMembers()
                     }
