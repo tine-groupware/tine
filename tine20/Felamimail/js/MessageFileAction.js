@@ -9,6 +9,7 @@
 
 
 import RecordEditFieldTriggerPlugin from "../../Tinebase/js/widgets/form/RecordEditFieldTriggerPlugin";
+import asString from "../../Tinebase/js/ux/asString";
 
 /**
  * @namespace   Tine.widgets.tags
@@ -262,16 +263,16 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
         this.menu.hide();
         this.menu.removeAll();
         
-        return await Tine.Felamimail.getFileSuggestions(messages).then((suggestions) => {
+        return await Tine.Felamimail.getFileSuggestions(messages).then(async (suggestions) => {
             //sort by suggestion.type so file_location record survives deduplication
-        
-            _.each(_.sortBy(suggestions, 'type'), (suggestion) => {
+
+            await Promise.all(_.sortBy(suggestions, 'type').map(async (suggestion) => {
                 let model = null;
                 let record = null;
                 let id;
                 let suggestionId;
                 let fileTarget;
-            
+
                 // file_location means message reference is already filed (global registry)
                 if (suggestion.type === 'file_location') {
                     id = suggestion.record.record_id;
@@ -280,20 +281,21 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         model: Tine.Tinebase.data.RecordMgr.get(suggestion.record.model),
                         data: id
                     };
-                
+
                 } else {
                     model = Tine.Tinebase.data.RecordMgr.get(suggestion.model);
                     record = Tine.Tinebase.data.Record.setFromJson(suggestion.record, model);
+                    const title = await asString(record.getTitle());
                     id = record.getId();
                     fileTarget = {
-                        record_title: record.getTitle(),
+                        record_title: title,
                         model: model,
                         data: id
                     };
-                
+
                 }
                 suggestionId = fileTarget.model.getPhpClassName() + '-' + id;
-            
+
                 if (suggestionIds.indexOf(suggestionId) < 0) {
                     this.menu.addItem({
                         itemId: suggestionId,
@@ -309,16 +311,16 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                     });
                     suggestionIds.push(suggestionId);
                 }
-            });
-            
+            }));
+
             if (suggestionIds.length > 0) {
                 this.menu.addItem('-');
             }
-            
+
             this.addDefaultSentImapFolder();
             this.addStaticMenuItems();
             this.addDownloadMenuItem();
-        
+
             this.suggestionsLoaded = true;
             this.isSuggestionLoading = false;
             this.setIconClass('action_file');
@@ -604,7 +606,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 getEventData: async function (eventName) {
                     if (eventName === 'apply') {
                         const attachRecord = this.getForm().findField('attachRecord').selectedRecord;
-                        const title = await attachRecord.getTitle().asString();
+                        const title = await asString(attachRecord.getTitle());
 
                         return {
                             record_title: title,
