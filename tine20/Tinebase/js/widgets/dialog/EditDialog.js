@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import waitFor from "util/waitFor.es6"
+import asString from "../../ux/asString"
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -1086,7 +1087,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }));
             } else {
                 (async () => {
-                    const title = await this.record.getTitle().asString();
+                    const title = await asString(this.record.getTitle());
                     this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, title));
                 })();
 

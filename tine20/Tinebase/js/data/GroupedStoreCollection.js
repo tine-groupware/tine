@@ -8,6 +8,7 @@
 
 import recordMgr from './RecordMgr'
 import Record from './Record'
+import asString from "../../../Tinebase/js/ux/asString"
 
 Ext.ns('Tine.Tinebase.data');
 
@@ -191,7 +192,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
     sanitizeGroupNames: async function(groupNames) {
         groupNames = await Promise.all(groupNames.map((groupName) => {
             if (! _.isObject(groupName)) return groupName;
-            if (_.isFunction(groupName.getTitle)) return groupName.getTitle().asString();
+            if (_.isFunction(groupName.getTitle)) return asString(groupName.getTitle());
             if (_.isString(this.group) && this.store.recordClass) return Tine.widgets.grid.RendererManager.get(
                 this.store.recordClass.getMeta('appName'),
                 this.store.recordClass.getMeta('modelName'),
