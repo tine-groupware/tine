@@ -278,7 +278,12 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 }
             }
 
-            $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
+            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
+                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
+                Tinebase_Exception::log($e);
+                throw $e;
+            }
+
             $token = JWT::encode([
                 'email' => $request['email'],
                 'issue_date' => 'the date user press',
@@ -302,7 +307,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                     $contact = new Addressbook_Model_Contact($request);
                 }
                 $this->_sendMessageWithTemplate($template, [
-                    'link' => $link,
+                    'link' => Tinebase_Core::getUrl() . $link,
                     'contact' => $contact,
                     'dipr'  =>  $dipRecord ?? null
                 ]);
@@ -550,22 +555,26 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     protected function _sendMessageWithTemplate($templateFileName, $context = [])
     {
         $templates = $this->_getTemplates($context);
-        $message = new Felamimail_Model_Message([
-            'account_id'    => Felamimail_Controller_Account::getInstance()->getSystemAccount(Tinebase_Core::getUser())->getId(),
-            'subject'       => $templates[$templateFileName]['subject'],
-            'to'            => $context['contact']['email'],
-            'content_type' => Felamimail_Model_Message::CONTENT_TYPE_HTML,
-            'body'          => $templates[$templateFileName]['body'],
-        ]);
 
-        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        Tinebase_Notification::getInstance()->send(
+            Tinebase_Core::getUser(),
+            [$context['contact']],
+            $templates[$templateFileName . '.html']['subject'],
+            $templates[$templateFileName . '.text']['body'],
+            $templates[$templateFileName . '.html']['body']
+        );
     }
 
     protected function _decodeJWTData($token)
     {
         $decoded = false;
         try {
-            $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
+            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
+                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
+                Tinebase_Exception::log($e);
+                throw $e;
+            }
+
             $tks = explode('.', $token);
             if (count($tks) !== 3) {
                 throw new UnexpectedValueException('Wrong number of segments');
@@ -601,14 +610,15 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             if ($templatePath && substr($templatePath, -1) !== '/') {
                 $templatePath .= '/';
             }
-            $templateFiles = glob($templatePath . '*.html.twig');
+            $templateFiles = glob($templatePath . '*.twig');
             $translation = Tinebase_Translation::getTranslation('GDPR');
             $twig = new Tinebase_Twig($locale, $translation);
 
             foreach ($templateFiles as $templateFile) {
-                $file = basename($templateFile, '.html.twig');
+                $file = basename($templateFile, '.twig');
                 if (empty($this->_templates[$file])) {
                     $template = $twig->load($templateFile, $locale);
+                    $this->_templates[$file]['template'] = $template;
                     foreach ($template->getBlockNames() as $block) {
                         $this->_templates[$file][$block] = $template->renderBlock($block, $templateContext);
                     }

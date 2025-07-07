@@ -47,7 +47,7 @@ const fetchData = async () => {
   try {
     const response = await fetch(window.location.pathname.replace('/view/', '/'))
     responseData.value = await response.json();
-    templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name];
+    templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
 
     // Try to extract from path if it's part of the URL path
     const pathParts = window.location.pathname.split('/');
