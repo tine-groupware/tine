@@ -1,4 +1,5 @@
 import FieldTriggerPlugin from "ux/form/FieldTriggerPlugin"
+import asString from "../../Tinebase/js/ux/asString"
 
 const OrganizerCombo = Ext.extend(Tine.Addressbook.ContactSearchCombo, {
     name: 'organizer',
@@ -38,7 +39,7 @@ const OrganizerCombo = Ext.extend(Tine.Addressbook.ContactSearchCombo, {
         return record ? record.data : id;
     },
     onSelect : async function(record, index, noCollapse) {
-        const displayName = await record.getTitle().asString();
+        const displayName = await asString(record.getTitle());
 
         this.onOrganizerSelect({
             organizer: record.id,
