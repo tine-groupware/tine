@@ -8,8 +8,12 @@
 
 
 require('./EventEditDialog.js');
-require('./OptionsPicker.js');
-//require('./RegistrationGridPanel.js');
+require('./BookedOptionEditDialog.js');
+require('./RegistrationEditDialog.js');
+require('./OptionEditDialog.js');
+require('./CheckboxOptionEditDialog.js');
+
+
 
 
 

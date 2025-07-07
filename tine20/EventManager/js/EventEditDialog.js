@@ -20,6 +20,11 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function () {
         this.supr().initComponent.apply(this, arguments);
+        this.app = Tine.Tinebase.appMgr.get('EventManager');
+
+        this.rrulePanel = new Tine.Calendar.RrulePanel({
+            eventEditDialog : this
+        });
     },
     
     getFormItems: function () {
@@ -65,28 +70,44 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     [
                                         fieldManager('name'),
                                         fieldManager('start'),
-                                        fieldManager('end'),
+                                        fieldManager('end', {
+                                            checkState: function () {
+                                                if (me.form.findField('end').getValue() && (me.form.findField('start').getValue() > me.form.findField('end').getValue())) {
+                                                    this.setValue('');
+                                                    alert(me.app.i18n._('The event should end after the start date'));
+                                                }
+                                            }
+                                        }),
                                     ], [
                                         fieldManager('location'),
                                         fieldManager('type'),
-                                        fieldManager('totalPlaces'),
+                                        fieldManager('total_places'),
                                     ],
                                     [
                                         fieldManager('status'),
                                         fieldManager('fee'),
+                                        fieldManager('registration_possible_until', {
+                                            checkState: function () {
+                                                if (me.form.findField('registration_possible_until').getValue() && (me.form.findField('end').getValue() <= me.form.findField('registration_possible_until').getValue())) {
+                                                    this.setValue('');
+                                                    alert(me.app.i18n._('One should be able to register before the end date'));
+                                                }
+                                            }
+                                        }),
                                     ],
                                     [
-                                        fieldManager('bookedPlaces', {
+                                        fieldManager('booked_places', {
                                             checkState: function () {
                                                 this.setValue(me.form.findField('registrations').getStore().getCount());
                                             }
                                         }),
-                                        fieldManager('availablePlaces', {
+                                        fieldManager('available_places', {
                                             checkState: function () {
-                                                this.setValue(me.form.findField('totalPlaces').getValue() - me.form.findField('bookedPlaces').getValue());
+                                                this.setValue(me.form.findField('total_places').getValue() - me.form.findField('booked_places').getValue());
                                             }
                                         }),
-                                        fieldManager('doubleOptIn'),
+                                        //fieldManager('double_opt_in'),
+                                        //fieldManager('is_live'),
                                     ]
                                 ]
                             }]
@@ -151,6 +172,52 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             })
                         ]
                 }]
+            }, {
+                title: this.app.i18n._('Multi-appointment'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'form',
+                items: [{
+                    xtype: 'fieldset',
+                    flex: 1,
+                    title: this.app.i18n._('Appointments'),
+                    layout: 'fit',
+                    items: [
+                        fieldManager('appointments', {
+                            checkState: function () {
+                                let sessions = me.form.findField('appointments').getValue()
+                                sessions.sort((session1, session2) => {
+                                    if (session1['session_date'] < session2['session_date']) {
+                                        return -1;
+                                    }
+                                    if (session1['session_date'] > session2['session_date']) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                })
+                                let counter = 0;
+                                sessions.forEach((session) => {
+                                    session['session_number'] = counter + 1;
+                                    counter += 1;
+                                    if (me.form.findField('end').getValue() && session['session_date'] && (me.form.findField('end').getValue() < session['session_date'])) {
+                                        session['session_date'] = me.form.findField('end').getValue();
+                                        alert(me.app.i18n._('The session should take place before the end date. Please change the date or it would be change automatically'));
+                                    }
+                                    if (session['session_date'] && me.form.findField('start').getValue() && (session['session_date'] < me.form.findField('start').getValue())) {
+                                        session['session_date'] = me.form.findField('start').getValue();
+                                        alert(me.app.i18n._('The session should start on the same date or after the event started. Please change the date or it would be change automatically'));
+                                    }
+                                    if (session['start_time'] && session['end_time'] && (session['start_time'] > session['end_time'])) {
+                                        session['end_time'] = '';
+                                        alert(me.app.i18n._('The session should end after it begun. Please change the end time, or it would be deleted'));
+                                    }
+                                })
+                            }
+                        })
+                    ]
+                }
+                ]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,

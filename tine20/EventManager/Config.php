@@ -26,10 +26,12 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const REGISTRATION_FUNCTION = 'registrationFunction';
     public const REGISTRATION_SOURCE = 'registrationSource';
     public const REGISTRATION_STATUS = 'registrationStatus';
-    public const REGISTRATION_MEMBER_STATUS = 'registrationMemberStatus';
-    public const LANGUAGES_AVAILABLE = 'languagesAvailable';
+    public const APPOINTMENT_STATUS = 'appointmentStatus';
     public const OPTION_LEVEL = 'optionLevel';
-    public const OPTION_TYPE = 'optionType';
+    public const DISPLAY_TYPE = 'displayType';
+    public const OPTION_REQUIRED_TYPE = 'optionRequiredType';
+    public const RULE_TYPE = 'ruleType';
+    public const CRITERIA_TYPE = 'criteriaType';
 
 
 
@@ -123,14 +125,15 @@ class EventManager_Config extends Tinebase_Config_Abstract
             'default'               => [
                 'records' => [
                     ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
-                    ['id' => 2,      'value' => 'Canceled'], //_('Canceled')
+                    ['id' => 2,      'value' => 'Waiting list'], //_('Waiting list')
+                    ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                 ],
                 'default' => 1
             ]
         ],
-        self::REGISTRATION_MEMBER_STATUS => [
-            //_('Member Status')
-            'label'                 => 'Member Status',
+        self::APPOINTMENT_STATUS => [
+            //_('Status')
+            'label'                 => 'Status',
             //_('')
             'description'           => '',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
@@ -138,26 +141,12 @@ class EventManager_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => [
                 'records' => [
-                    ['id' => 1,      'value' => 'Member'], //_('Member')
-                    ['id' => 2,      'value' => 'Not a Member'], //_('Not a Member')
+                    ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
+                    ['id' => 2,      'value' => 'Rescheduled'], //_('Rescheduled')
+                    ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                 ],
                 'default' => 1
             ]
-        ],
-        self::LANGUAGES_AVAILABLE => [
-            self::LABEL                 => 'Languages Available', //_('Languages Available')
-            self::DESCRIPTION           => 'List of languages available in the modules.', //_('List of languages available in the modules.')
-            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
-            'localeTranslationList'     => 'Language',
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR           => [
-                self::RECORDS               => [
-                    ['id' => 'de', 'value' => 'German'],
-                    ['id' => 'en', 'value' => 'English'],
-                ],
-                self::DEFAULT_STR           => 'en',
-            ],
         ],
         self::OPTION_LEVEL => [
             //_('Level')
@@ -179,22 +168,66 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 'default' => 1
             ]
         ],
-        self::OPTION_TYPE => [
-            //_('Type')
-            'label'                 => 'Type',
-            //_('')
-            'description'           => '',
-            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            'clientRegistryInclude' => true,
-            'setByAdminModule'      => true,
-            'default'               => [
-                'records' => [
-                    ['id' => 1,      'value' => 'Optional'], //_('Optional')
-                    ['id' => 2,      'value' => 'Required'], //_('Required')
-                    ['id' => 3,      'value' => 'Text block'], //_('Text block')
+        self::OPTION_REQUIRED_TYPE => [
+            self::LABEL                 => 'Option Required Type', //_('Option Required Type')
+            self::DESCRIPTION           => 'List of all option required type available', //_('List of all option required type available')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 1, 'value' => 'Yes'], //_('Yes')
+                    ['id' => 2, 'value' => 'No'], //_('No')
+                    ['id' => 3, 'value' => 'If'], //_('If')
                 ],
-                'default' => 1
-            ]
+                self::DEFAULT_STR => 1
+            ],
+        ],
+        self::DISPLAY_TYPE => [
+            self::LABEL                 => 'Display Type', //_('Display Type')
+            self::DESCRIPTION           => 'List of all display type available', //_('List of all display type available')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 1, 'value' => 'Always'], //_('Always')
+                    ['id' => 2, 'value' => 'If'], //_('If')
+                ],
+                self::DEFAULT_STR => 1
+            ],
+        ],
+        self::RULE_TYPE => [
+            self::LABEL                 => 'Rule Type', //_('Rule Type')
+            self::DESCRIPTION           => 'List of all rule type available', //_('List of all rule type available')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 1, 'value' => 'One or more conditions are fulfilled'], //_('One or more conditions are fulfilled')
+                    ['id' => 2, 'value' => 'All conditions are fulfilled'], //_('All conditions are fulfilled')
+                ],
+                self::DEFAULT_STR => 1
+            ],
+        ],
+        self::CRITERIA_TYPE => [
+            self::LABEL                 => 'Criteria Type', //_('Criteria Type')
+            self::DESCRIPTION           => 'List of all criteria type available', //_('List of all criteria type available')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 1, 'value' => 'Yes'], //_('Yes')
+                    ['id' => 2, 'value' => 'No'], //_('No')
+                    ['id' => 3, 'value' => 'is'], //_('is')
+                    ['id' => 4, 'value' => 'is not'], //_('is not')
+                    ['id' => 5, 'value' => 'greater or equal to'], //_('greater or equal to')
+                    ['id' => 6, 'value' => 'smaller than'], //_('smaller than')
+                ],
+                self::DEFAULT_STR => 1
+            ],
         ],
     ];
 

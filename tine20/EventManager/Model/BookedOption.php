@@ -19,11 +19,11 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class EventManager_Model_BookedOption extends Tinebase_Record_NewAbstract
 {
-    const FLD_OPTION = 'option';
-    const FLD_RECORD = 'record';
+    public const FLD_OPTION = 'option';
+    public const FLD_SELECTION_CONFIG = 'selection_config';
+    public const FLD_SELECTION_CONFIG_CLASS = 'selection_config_class';
 
-    const MODEL_NAME_PART = 'BookedOption';
-    const TABLE_NAME = 'eventmanager_booked_option';
+    public const MODEL_NAME_PART = 'BookedOption';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -31,79 +31,51 @@ class EventManager_Model_BookedOption extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
-        self::RECORD_NAME               => 'Booked Option',
-        self::RECORDS_NAME              => 'Booked Options', // ngettext('Booked Option', 'Booked Options', n)
-        self::TITLE_PROPERTY            => self::FLD_OPTION,
-        self::HAS_RELATIONS             => false,
-        self::HAS_CUSTOM_FIELDS         => false,
-        self::HAS_SYSTEM_CUSTOM_FIELDS  => false,
-        self::HAS_NOTES                 => false,
-        self::HAS_TAGS                  => false,
-        self::MODLOG_ACTIVE             => false,
-        self::HAS_ATTACHMENTS           => false,
-
-        self::CREATE_MODULE             => false,
-
-        self::EXPOSE_HTTP_API           => true,
-        self::EXPOSE_JSON_API           => true,
-
         self::APP_NAME                  => EventManager_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::TITLE_PROPERTY            => '{{option.option_config_class}}',
 
-        self::TABLE => [
-            self::NAME      => self::TABLE_NAME,
-            self::UNIQUE_CONSTRAINTS   => [
-                self::FLD_OPTION       => [
-                    self::COLUMNS           => [self::FLD_OPTION, self::FLD_RECORD],
-                ],
-                self::FLD_RECORD                => [
-                    self::COLUMNS           => [self::FLD_RECORD, self::FLD_OPTION],
-                ],
-            ]
-        ],
-
-        self::ASSOCIATIONS => [
-            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
-                'option_fk' => [
-                    'targetEntity' => EventManager_Model_Option::class,
-                    'fieldName' => self::FLD_OPTION,
-                    'joinColumns' => [[
-                        'name' => self::FLD_OPTION,
-                        'referencedColumnName'  => 'id'
-                    ]],
-                ],
-            ],
-        ],
-
-        self::JSON_EXPANDER             => [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'option'      => [],
-                'record'       => []
-            ],
-        ],
+        self::RECORD_NAME               => 'Booked Option',
+        self::RECORDS_NAME              => 'Booked Options', // ngettext('Booked Option', 'Booked Options', n)
 
         self::FIELDS => [
-            self::FLD_OPTION      => [
+            self::FLD_OPTION        => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [
                     self::APP_NAME          => EventManager_Config::APP_NAME,
                     self::MODEL_NAME        => EventManager_Model_Option::MODEL_NAME_PART,
                 ],
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::VALIDATORS        => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
                 self::LABEL             => 'Event Option', // _('Event Option')
                 self::QUERY_FILTER      => true,
+                self::NULLABLE          => true,
             ],
-            self::FLD_RECORD            => [
-                self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
-                self::CONFIG            => [
-                    self::APP_NAME          => EventManager_Config::APP_NAME,
-                    self::MODEL_NAME        => EventManager_Model_Registration::MODEL_NAME_PART,
+            self::FLD_SELECTION_CONFIG_CLASS    => [
+                self::TYPE                          => self::TYPE_MODEL,
+                self::CONFIG                        => [
+                    self::AVAILABLE_MODELS              => [
+                        EventManager_Model_Selections_Checkbox::class,
+                        EventManager_Model_Selections_File::class,
+                        EventManager_Model_Selections_TextInput::class,
+                    ],
                 ],
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL             => 'Registration', // _('Registration')
+                self::ALLOW_CAMEL_CASE              => true,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_SELECTION_CONFIG      => [
+                self::LABEL                     => 'Selection Config', // _('Selection Config')
+                self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::CONFIG                    => [
+                    self::REF_MODEL_FIELD           => self::FLD_SELECTION_CONFIG_CLASS,
+                    self::PERSISTENT                => true,
+                    self::SET_DEFAULT_INSTANCE      => true,
+                ],
+                self::ALLOW_CAMEL_CASE          => true,
+                self::NULLABLE                  => true,
             ],
         ]
     ];

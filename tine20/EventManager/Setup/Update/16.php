@@ -29,7 +29,6 @@ class EventManager_Setup_Update_16 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             EventManager_Model_Event::class,
-            EventManager_Model_EventLocalization::class,
             EventManager_Model_Option::class
             ]);
         $this->addApplicationUpdate('EventManager', '16.0', self::RELEASE016_UPDATE000);

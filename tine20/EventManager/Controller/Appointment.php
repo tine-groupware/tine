@@ -5,8 +5,8 @@
  * @package     EventManager
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,7 +16,7 @@
  * @package     EventManager
  * @subpackage  Controller
  */
-class EventManager_Controller_BookedOption extends Tinebase_Controller_Record_Abstract
+class EventManager_Controller_Appointment extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
 
@@ -28,10 +28,10 @@ class EventManager_Controller_BookedOption extends Tinebase_Controller_Record_Ab
     protected function __construct()
     {
         $this->_applicationName = EventManager_Config::APP_NAME;
-        $this->_modelName = EventManager_Model_BookedOption::class;
+        $this->_modelName = EventManager_Model_Appointment::class;
         $this->_backend = new Tinebase_Backend_Sql([
-            Tinebase_Backend_Sql::MODEL_NAME    => EventManager_Model_BookedOption::class,
-            Tinebase_Backend_Sql::TABLE_NAME    => EventManager_Model_BookedOption::TABLE_NAME,
+            Tinebase_Backend_Sql::MODEL_NAME    => EventManager_Model_Appointment::class,
+            Tinebase_Backend_Sql::TABLE_NAME    => EventManager_Model_Appointment::TABLE_NAME,
             Tinebase_Backend_Sql::MODLOG_ACTIVE => false
         ]);
 
