@@ -23,8 +23,16 @@ class EventManager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         EventManager_Model_Option::MODEL_NAME_PART,
         EventManager_Model_BookedOption::MODEL_NAME_PART,
         EventManager_Model_Registration::MODEL_NAME_PART,
-        EventManager_Model_OptionLocalization::MODEL_NAME_PART,
-        EventManager_Model_EventLocalization::MODEL_NAME_PART,
+        EventManager_Model_Selection::MODEL_NAME_PART,
+        EventManager_Model_Appointment::MODEL_NAME_PART,
+        EventManager_Model_TextOption::MODEL_NAME_PART,
+        EventManager_Model_CheckboxOption::MODEL_NAME_PART,
+        EventManager_Model_TextInputOption::MODEL_NAME_PART,
+        EventManager_Model_FileOption::MODEL_NAME_PART,
+        EventManager_Model_Selections_Checkbox::MODEL_NAME_PART,
+        EventManager_Model_Selections_TextInput::MODEL_NAME_PART,
+        EventManager_Model_Selections_File::MODEL_NAME_PART,
+        EventManager_Model_OptionsRule::MODEL_NAME_PART,
     ];
     
     /**

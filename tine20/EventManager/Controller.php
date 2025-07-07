@@ -20,6 +20,36 @@ class EventManager_Controller extends Tinebase_Controller_Event
 {
     use Tinebase_Controller_SingletonTrait;
 
-    protected $_applicationName = EventManager_Config::APP_NAME;
+    protected static $_defaultModel = EventManager_Model_Event::class;
 
+    protected function __construct()
+    {
+        $this->_applicationName = EventManager_Config::APP_NAME;
+    }
+
+    public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
+    {
+        $routeCollector->addGroup('/EventManager', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/view', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiMainScreen',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+            $routeCollector->get('/view/search/event', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiSearchEvents',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+            $routeCollector->get('/view/event/{eventId}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiGetEvent',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+           /* $routeCollector->post('/view/event/{eventId}/registration', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiPostRegistration',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());*/
+        });
+    }
 }

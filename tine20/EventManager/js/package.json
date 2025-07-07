@@ -11,5 +11,10 @@
     "extension"
   ],
   "author": "Stefanie Stamer",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "tine20": {
+    "entryPoints": [
+      "eventManagerWebsite/src/index.es6.js"
+    ]
+  }
 }
