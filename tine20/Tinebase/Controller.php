@@ -2378,4 +2378,41 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
         return array_merge($orderedTables, $lastTables);
     }
+
+
+    /**
+     * avScan hashFile
+     *
+     * @param string $_hashFile
+     * @param $options
+     * @return Tinebase_FileSystem_AVScan_Result
+     */
+    public function avScanHashFile(string $_hashFile, $options = null): Tinebase_FileSystem_AVScan_Result
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        try {
+            $avResult = Tinebase_FileSystem::getInstance()->avScanHashFile($_hashFile);
+            // Extract the directory name (first 3 characters of hash)
+            $pathParts = explode('/', $_hashFile);
+            $dirPart = $pathParts[count($pathParts) - 2];
+            $filePart = $pathParts[count($pathParts) - 1];
+            $originalHash = $dirPart . $filePart;
+
+            if ($options) {
+                $parentPath = dirname($options['tine20']['path']);
+                $parentFolder = Tinebase_FileSystem::getInstance()->stat($parentPath);
+
+                Tinebase_FileSystem::getInstance()->updateFileObject($parentFolder, $options['tine20']['node'], null, $originalHash, $_hashFile, $avResult);
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+
+                $transactionId = null;
+            }
+        } finally {
+            if (null !== $transactionId) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+            }
+        }
+
+        return $avResult;
+    }
 }

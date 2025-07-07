@@ -948,6 +948,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     public const FILESYSTEM_AVSCAN_URL = 'avscanURL';
     public const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
+    public const FILESYSTEM_AVSCAN_QUEUE_FSIZE = 'avscanQueueSize';
     public const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
     public const FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS = 'flySystemLocalBasePaths';
 
@@ -1036,6 +1037,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * scheduler user task fail notification threshold
      */
     public const SCHEDULER_USER_TASK_FAIL_NOTIFICATION_THRESHOLD = 'userTaskFailNotificationThreshold';
+
 
     /**
      * (non-PHPdoc)
@@ -3493,6 +3495,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true,
                     self::DEFAULT_STR           => 25 * 1024 * 1024,
+                ],
+                self::FILESYSTEM_AVSCAN_QUEUE_FSIZE => [
+                    //_('Antivirus Scan Queue File Size')
+                    self::LABEL                 => 'Antivirus Scan Queue File Size',
+                    //_('Antivirus Scan Queue File Size in bytes, scan immediately if file size is smaller than the config')
+                    self::DESCRIPTION           => 'Antivirus Scan Queue File Size in bytes, scan immediately if file size is smaller than the config',
+                    self::TYPE                  => self::TYPE_INT,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    self::DEFAULT_STR           => 5 * 1024 * 1024,
                 ],
                 self::FILESYSTEM_AVSCAN_MODE => [
                     //_('Antivirus Scan Mode')
