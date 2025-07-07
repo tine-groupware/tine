@@ -44,7 +44,7 @@ const fetchData = async () => {
   if(!response.ok) {
     console.log('Error fetching data:', responseData.value.error)
   }
-  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name];
+  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
 }
 
 onBeforeMount(async () => {

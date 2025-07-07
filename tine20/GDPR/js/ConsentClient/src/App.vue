@@ -39,7 +39,7 @@ const fetchData = async () => {
   const response = await fetch(window.location.pathname.replace('/view/', '/'))
   responseData.value = await response.json();
   if(!response.ok) console.error('Error fetching data:', responseData.value)
-  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name];
+  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
 }
 
 onBeforeMount(async () => {

@@ -1,0 +1,25 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% block subject %}
+    {% if dipr != '' %}
+        {{ 'Bestätigen Sie Ihre E-Mail-Adresse' }}
+    {% else -%}
+        {{ 'Bestätigung Ihrer Anmeldung' }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    {{ 'Hallo ' }}{{ contact.getTitle() | default('Kunde/Kundin') }}
+
+    {{ 'vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link :' }}
+
+    {{ link }}
+
+    {{ 'Viele Grüße' }}
+    {{ 'Ihr %1$s Team' | format(app.branding.title) }}
+{% endblock %}
