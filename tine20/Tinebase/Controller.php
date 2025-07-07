@@ -11,6 +11,7 @@
  */
 
 use \Psr\Http\Message\RequestInterface;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * the class provides functions to handle applications
@@ -796,6 +797,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _updateAccessLog(Tinebase_Model_FullUser $user, Tinebase_Model_AccessLog $accessLog)
     {
+        if (Zend_Auth_Result::SUCCESS === $accessLog->result &&
+            (ActiveSync_Server_Http::REQUEST_TYPE === $accessLog->clienttype ||
+                Tinebase_Server_WebDAV::REQUEST_TYPE === $accessLog->clienttype)) {
+            $oldAccessLog = Tinebase_AccessLog::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_AccessLog::class, [
+                [TMFA::FIELD => 'ip', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accessLog->ip],
+                [TMFA::FIELD => 'login_name', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accessLog->login_name],
+                [TMFA::FIELD => 'account_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accessLog->account_id],
+                [TMFA::FIELD => 'clienttype', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accessLog->clienttype],
+                [TMFA::FIELD => 'user_agent', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accessLog->user_agent],
+                [TMFA::FIELD => 'lo', TMFA::OPERATOR => 'isnull', TMFA::VALUE => true],
+                [TMFA::FIELD => 'li', TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()->subSecond(Tinebase_Session_Abstract::getSessionLifetime())],
+            ]))->getFirstRecord();
+            if (null !== $oldAccessLog) {
+                $accessLog = $oldAccessLog;
+            }
+        }
         if (! $accessLog->getId()) {
             $user->setLoginTime($accessLog->ip);
             if ($this->_writeAccessLog) {
