@@ -3504,7 +3504,11 @@ abstract class Tinebase_Controller_Record_Abstract
                             $existing->addRecord($record);
                         }
 
-                    } catch (Tinebase_Exception_NotFound) {
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' ' . $tenf->getMessage());
+                        }
                         $create = true;
                     }
                 } else {
