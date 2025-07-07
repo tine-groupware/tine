@@ -13,22 +13,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Manage data provenances in CoreData"
+msgid "Manage data sources in CoreData"
 msgstr ""
 
-msgid "View, create, delete or update data provenances in CoreData application"
+msgid "View, create, delete or update data sources in the CoreData application"
 msgstr ""
 
-msgid "Manage data intended purposes in CoreData"
+msgid "Manage data usage purposes in CoreData"
 msgstr ""
 
-msgid "View, create, delete or update data intended purposes in CoreData application"
+msgid "View, create, delete, or update data usage purposes in the CoreData application"
 msgstr ""
 
-msgid "Data provenance for ADB contacts mandatory"
+msgid "Data provenance is mandatory for ADB contacts"
 msgstr ""
 
-msgid "Whether the data provenance for ADB contacts is mandatory, not mandatory or empty provenances will be set to a default"
+msgid "Specifies whether data sources for ADB contacts are mandatory, optional, or if empty values should be set to a default."
 msgstr ""
 
 msgid "yes"
@@ -40,25 +40,25 @@ msgstr ""
 msgid "default"
 msgstr ""
 
-msgid "Default data provenance for ADB contacts"
+msgid "Default data source for ADB contacts"
 msgstr ""
 
-msgid "Languages Available"
+msgid "Available Languages"
 msgstr ""
 
-msgid "List of the language in which the multilingual texts are laid out."
+msgid "List of the languages in which multilingual texts are available."
 msgstr ""
 
-msgid "Subscription container id"
+msgid "Subscription container ID"
 msgstr ""
 
-msgid "Subscription container id in Addressbook."
+msgid "Subscription container ID in Addressbook."
 msgstr ""
 
 msgid "GDPR registration secret string"
 msgstr ""
 
-msgid "GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable"
+msgid "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable."
 msgstr ""
 
 msgid "GDPR template path"
@@ -67,8 +67,10 @@ msgstr ""
 msgid "Data provenances"
 msgstr ""
 
-msgid "Data intended purposes"
-msgstr ""
+msgid "Purpose of processing"
+msgid_plural "Purposes of processing"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Excel all data"
 msgstr ""
@@ -82,13 +84,13 @@ msgstr ""
 msgid "Must not be contacted"
 msgstr ""
 
-msgid "This Contact withdrawed usage of his data for any purpose."
+msgid "This contact has withdrawn consent to use their data for any purpose."
 msgstr ""
 
 msgid "Expiry Date"
 msgstr ""
 
-msgid "Contact gets deleted after this date automatically."
+msgid "The contact will be deleted automatically after this date."
 msgstr ""
 
 msgid "Blacklist"
@@ -109,7 +111,7 @@ msgstr ""
 msgid "Show expired"
 msgstr ""
 
-msgid "GDPR Intended Purpose"
+msgid "GDPR Purpose of processing"
 msgstr ""
 
 msgid "Description"
@@ -127,7 +129,7 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-msgid "Withdraw date"
+msgid "Withdrawal date"
 msgstr ""
 
 msgid "Withdraw"
@@ -139,22 +141,22 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-msgid "I hereby withdraw the following data intended purpose"
+msgid "I hereby withdraw the following intended purpose for data processing"
 msgstr ""
 
-msgid "I hereby accept the following data intended purpose"
+msgid "I hereby accept the following intended purpose for data processing"
 msgstr ""
 
-msgid "Withdraw comment"
+msgid "Withdrawal comment"
 msgstr ""
 
 msgid "Agreement comment"
 msgstr ""
 
-msgid "Don't add comment"
+msgid "Don't add a comment"
 msgstr ""
 
-msgid "Add comment"
+msgid "Add a comment"
 msgstr ""
 
 msgid "Cancel"
@@ -173,35 +175,35 @@ msgstr ""
 msgid "Go to my manage consent link"
 msgstr ""
 
-msgid "Data Intended purpose of this mass mailing"
+msgid "Processing purpose of this mass mailing"
 msgstr ""
 
 #, python-brace-format
-msgid "In {0} mass mailing mode this recipient will be removed, "
+msgid "In {0} mass mailing mode, this recipient will be removed, "
 msgstr ""
 
-msgid "Send message to individual list members instead"
+msgid "Send message individually to list members instead"
 msgstr ""
 
 msgid "as it must not be contacted at all"
 msgstr ""
 
-msgid "skip checking contact when data intended purpose has not been selected"
+msgid "Skip contact check if no data intended purpose has been selected"
 msgstr ""
 
-msgid "skip checking contact without dataIntended purpose records"
+msgid "Skip checking contact if no data intended purpose records exist"
 msgstr ""
 
-msgid "as contact has not consent to this purpose"
+msgid "as contact has not consented to this purpose"
 msgstr ""
 
 msgid "as consent date has expired"
 msgstr ""
 
-msgid "consent date is set but not reached yet"
+msgid "consent date is set but not yet reached"
 msgstr ""
 
-msgid "Please select a data intended purpose"
+msgid "Please select a purpose of processing"
 msgstr ""
 
 msgid "Errors"
@@ -210,7 +212,7 @@ msgstr ""
 msgid "You need to select an option!"
 msgstr ""
 
-msgid "The recipients will be removed if they have not consent to the selected intended purpose."
+msgid "The recipients will be removed if they have not consented to the selected intended purpose."
 msgstr ""
 
 msgid "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
@@ -222,11 +224,6 @@ msgstr ""
 msgid "Compose mass mail without recipients"
 msgstr ""
 
-msgid "Data intended purpose"
-msgid_plural "Data intended purposes"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Hide from self registration"
 msgstr ""
 
@@ -236,7 +233,7 @@ msgstr ""
 msgid "Registration link"
 msgstr ""
 
-msgid "GENDER_Data intended purpose"
+msgid "GENDER_Purpose of processing"
 msgstr ""
 
 msgid "Data provenance"
@@ -259,7 +256,7 @@ msgstr ""
 msgid "GDPR Data Expiry Date"
 msgstr ""
 
-msgid "Enter your email"
+msgid "E-Mail"
 msgstr ""
 
 msgid "E-mail"

@@ -71,7 +71,7 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
             'id' => GDPR_Model_DataIntendedPurpose::class,
             'application_id' => $application,
             'model' => GDPR_Model_DataIntendedPurpose::class,
-            'label' => 'Data intended purposes' // _('Data intended purposes')
+            'label' => 'Purpose of processing' // _('Purpose of processing')
         ]));
 
         return $result;

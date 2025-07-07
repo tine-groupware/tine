@@ -3,7 +3,7 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th class="table-light">{{ formatMessage('Data intended purposes') }}</th>
+        <th class="table-light">{{ formatMessage('Purpose of processing') }}</th>
         <th v-if="!props.consentConfig.current_contact" class="table-light">{{ formatMessage('Description') }}</th>
         <th v-if="props.consentConfig.current_contact" class="status table-light">{{ formatMessage('Status') }}</th>
         <th v-if="props.consentConfig.current_contact" class="table-light"></th>
@@ -85,7 +85,7 @@ const extendedDataIntendedPurposes = computed(() => {
         return {
           status: 'Agree',
           localizedStatus: formatMessage('Agree'),
-          statusText: formatMessage('Withdraw date') + ' ' + new Date(record.withdrawDate).toLocaleString("de"),
+          statusText: formatMessage('Withdrawal date') + ' ' + new Date(record.withdrawDate).toLocaleString("de"),
           cellClass: 'table-danger'
         };
       } else {

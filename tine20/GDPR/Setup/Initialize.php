@@ -35,7 +35,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Intended Purpose', // _('GDPR Intended Purpose')
+                    TMCC::LABEL             => 'GDPR Purpose of processing', // _('GDPR Purpose of processing')
                     TMCC::TYPE              => TMCC::TYPE_RECORDS,
                     TMCC::CONFIG            => [
                         TMCC::APP_NAME          => GDPR_Config::APP_NAME,

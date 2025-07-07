@@ -42,8 +42,8 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = [
         'version' => 2,
-        'recordName' => 'Data intended purpose',   // _('GENDER_Data intended purpose')
-        'recordsName' => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
+        'recordName' => 'Purpose of processing',   // _('GENDER_Purpose of processing')
+        'recordsName' => 'Purposes of processing', // ngettext('Purpose of processing', 'Purposes of processing', n)
         'titleProperty' => 'id',
         'hasRelations' => false,
         'hasCustomFields' => false,
@@ -117,7 +117,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                     self::MODEL_NAME        => GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL             => 'Data intended purpose', // _('Data intended purpose')
+                self::LABEL             => 'Purpose of processing', // _('Purpose of processing')
                 self::QUERY_FILTER      => true,
                 self::ALLOW_CAMEL_CASE  => true,
             ],
@@ -152,7 +152,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_DATETIME,
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL             => 'Withdraw date', // _('Withdraw date')
+                self::LABEL             => 'Withdrawal date', // _('Withdrawal date')
                 self::FILTER_DEFINITION => [
                     self::FILTER            => Tinebase_Model_Filter_DateTime::class,
                     self::OPTIONS           => [
@@ -167,7 +167,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::LENGTH            => 255,
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL             => 'Withdraw comment', // _('Withdraw comment')
+                self::LABEL             => 'Withdrawal comment', // _('Withdrawal comment')
                 self::ALLOW_CAMEL_CASE  => true,
             ],
         ]

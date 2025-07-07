@@ -36,7 +36,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         this.blacklistContactCheckbox = new Ext.form.Checkbox({
             hideLabel: true,
             disabled: true,
-            boxLabel: this.app.i18n._("This Contact withdrawed usage of his data for any purpose."),
+            boxLabel: this.app.i18n._("This contact has withdrawn consent to use their data for any purpose."),
             listeners: {scope: this, check: this.onBlacklistContactCheck}
         });
         this.expiryDatePicker = new Ext.ux.form.ClearableDateField({
@@ -45,7 +45,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
 
         this.expiryDateDescription = new Ext.form.Label({
             style: 'margin-left: 10px; margin-top: 19px; position: absolute;',
-            text: this.app.i18n._('Contact gets deleted after this date automatically.')
+            text: this.app.i18n._('The contact will be deleted automatically after this date.')
         });
 
         this.dataIntendedPurposesGrid = new Tine.widgets.grid.QuickaddGridPanel({
