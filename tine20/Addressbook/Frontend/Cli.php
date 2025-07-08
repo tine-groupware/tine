@@ -668,4 +668,52 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "remove: " . $count . " contacts \n";
         return 0;
     }
+
+    /**
+     * @return int
+     */
+    public function resolvePreferredEmail() {
+        $this->_checkAdminRight();
+
+        $emailFields = array_keys(Addressbook_Model_Contact::getEmailFields());
+        $db = Tinebase_Core::getDb();
+        $transId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+
+        //Search for records that need to be resolved
+        $emailCheckConditions = [];
+        foreach ($emailFields as $field) {
+            $quotedField = $db->quoteIdentifier($field);
+            $emailCheckConditions[] = "(preferred_email = " . $db->quote($field) . " AND ({$quotedField} IS NULL OR {$quotedField} = ''))";
+        }
+        $invalidPreferredCondition = implode(' OR ', $emailCheckConditions);
+
+        $result = $db->query('SELECT * FROM ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+            ' WHERE (' . $invalidPreferredCondition . ') OR (preferred_email IS NULL OR preferred_email = "")');
+        $recordsToFix = $result->fetchAll();
+
+        echo "Found " . count($recordsToFix) . " records that need to be resolved:\n";
+
+        foreach ($recordsToFix as $record) {
+            echo "ID: " . $record['id'] . " - Name: " . $record['n_fileas'] .  " - Current preferred_email field : '" . $record['preferred_email'] . "'\n";
+        }
+
+        //Update the records
+        $caseConditions = [];
+        foreach ($emailFields as $field) {
+            $quotedField = $db->quoteIdentifier($field);
+            // Store the field name as a string, not the field value
+            $caseConditions[] = "WHEN {$quotedField} IS NOT NULL AND {$quotedField} != '' THEN " . $db->quote($field);
+        }
+        $caseStatement = implode(' ', $caseConditions);
+
+        $updateQuery = 'UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+            ' SET preferred_email = CASE ' . $caseStatement . ' ELSE ' . $db->quote('email') . ' END' .
+            ' WHERE (' . $invalidPreferredCondition . ') OR (preferred_email IS NULL OR preferred_email = "")';
+        $updateResult = $db->query($updateQuery);
+
+        echo "Updated " . $updateResult->rowCount() . " records.\n";
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
+
+        return 0;
+    }
 }
