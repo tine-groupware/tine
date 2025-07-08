@@ -1037,7 +1037,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "type" =>  '',
                         "n_fileas" => '',
                         "email_type_field" =>  '',
-                        "record_id" => ''
+                        "contact_record" => ''
                     ],
                     'gdpr@mail.test'
                 ],

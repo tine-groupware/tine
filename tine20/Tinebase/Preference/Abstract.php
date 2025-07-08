@@ -480,17 +480,24 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      *
      * @param string $_preferenceName
      * @param string $_value
-     * @param integer $_userId
+     * @param string $_accountId
      * @param boolean $_ignoreAcl
      * @return void
-     * 
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Db_Statement_Exception
+     *
      * @todo use generic savePreference fn
      */
-    public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE)
+    public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = false): void
     {
         // check acl first
         $userId = $this->_getAccountId();
-        if(!$_ignoreAcl){
+        if (!$_ignoreAcl){
             if (
                 $_accountId !== $userId
                 && !Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, $userId, Tinebase_Acl_Rights_Abstract::ADMIN)
@@ -524,7 +531,19 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                     'type'              => Tinebase_Model_Preference::TYPE_USER,
                     'recordConfig'      => $this->_getPrefRecordConfig($_preferenceName),
                 ));
-                $this->create($preference);
+                try {
+                    $this->create($preference);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (!Tinebase_Exception::isDbDuplicate($zdse)) {
+                        throw $zdse;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                                ' Nothing to do - might have been a race condition: ' . $zdse->getMessage());
+                        }
+                        return;
+                    }
+                }
                 $action = 'Created';
             } else {
                 $action = 'No action required';
@@ -557,9 +576,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         $this->resetAppPrefsCache();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> '
-            . (is_array($_value) ? print_r($_value, true) : $_value));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> '
+                . (is_array($_value) ? print_r($_value, true) : $_value));
+        }
     }
 
     /**
