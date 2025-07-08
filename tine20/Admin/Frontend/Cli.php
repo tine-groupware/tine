@@ -962,7 +962,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 print_r($smtpuser);
             }
 
-            //  - alle destinations = mailadresse des users prüfen
             $destinationSelect = $db->select()->from($destinationsTable)->where('userid = ?', $smtpuser['userid']);
             foreach ($db->fetchAll($destinationSelect) as $destination) {
                 if ($opts->v) {
@@ -977,11 +976,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if ($opts->d) {
                         echo '  Change destination to username: ' . $destination['destination'] . ' => ' . $smtpuser['username'] . "\n";
                     } else {
-                        $db->update($destinationsTable, ['destination ' => $smtpuser['username']], $where);
+                        $db->update($destinationsTable, ['destination' => $smtpuser['username']], $where);
                     }
                 }
 
-                if ($destination['source'] === $smtpuser['username']) {
+                if ($destination['source'] === $smtpuser['username'] && $destination['destination'] === $smtpuser['username']) {
                     if ($opts->d) {
                         echo '  Drop destination (source equals username): ' . $destination['source'] . "\n";
                     } else {
@@ -989,7 +988,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                 }
             }
-
         }
 
         return 0;
