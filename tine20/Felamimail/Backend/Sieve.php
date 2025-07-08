@@ -18,6 +18,8 @@
  */
 class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
 {
+    use Felamimail_Protocol_SaslTrait;
+
     /**
      * Public constructor
      *
@@ -36,7 +38,11 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
         }
         
         try {
-            $this->authenticate($_config['username'], $_config['password']);
+            if (($_config['sasl'] ?? false) && ($_config['sasl_params'] ?? false)) {
+                $this->saslAuthenticate($_config['sasl_params'], $_config['sasl'], false);
+            } else {
+                $this->authenticate($_config['username'], $_config['password']);
+            }
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             throw new Felamimail_Exception_SieveInvalidCredentials('Could not authenticate with user '
                 . $_config['username'] . ' (' . $zmpe->getMessage() . ').');

@@ -492,7 +492,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
-    protected static function getOAuthIssuer(): string
+    public static function getOAuthIssuer(): string
     {
         return Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH);
     }
@@ -898,70 +898,13 @@ class SSO_Controller extends Tinebase_Controller_Event
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', $data);
     }
     
-    protected static function getOpenIdConnectServer(): \League\OAuth2\Server\AuthorizationServer
+    public static function getOpenIdConnectServer(): SSO_Facade_OpenIdConnect_AuthorizationServer
     {
-        // Setup the authorization server
-        $server = new \League\OAuth2\Server\AuthorizationServer(
-            new SSO_Facade_OAuth2_ClientRepository(),
-            new SSO_Facade_OAuth2_AccessTokenRepository(),
-            new SSO_Facade_OAuth2_ScopeRepository(),
-            new SSO_Facade_OAuth2_CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
-                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['kid']),
-            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
-            new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
-        );
+        if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            throw new Tinebase_Exception('OIDC not enabled');
+        }
 
-        $grant = new SSO_Facade_OpenIdConnect_AuthCodeGrant(
-            new SSO_Facade_OAuth2_AuthCodeRepository(),
-            new SSO_Facade_OAuth2_RefreshTokenRepository(),
-            new SSO_Facade_OpenIdConnect_ClaimRepository(),
-            new \Idaas\OpenID\Session(),
-            new \DateInterval('PT10M'), // authorization codes will expire after 10 minutes
-            new \DateInterval('PT1H') // id tokens will expire after 1 hour
-        );
-
-        $grant->setIssuer(static::getOAuthIssuer());
-        $grant->setRefreshTokenTTL(new \DateInterval('P1D')); // refresh tokens will expire after 1 day
-
-        // Enable the authentication code grant on the server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
-
-        $grant = new SSO_Facade_OpenIdConnect_DeviceCodeGrant(
-            new SSO_Facade_OAuth2_AuthCodeRepository(),
-            new SSO_Facade_OAuth2_RefreshTokenRepository(),
-            new SSO_Facade_OpenIdConnect_ClaimRepository(),
-            new \Idaas\OpenID\Session(),
-            new \DateInterval('PT10M'), // authorization codes will expire after 10 minutes
-            new \DateInterval('PT1H') // id tokens will expire after 1 hour
-        );
-
-        $grant->setIssuer(static::getOAuthIssuer());
-        $grant->setRefreshTokenTTL(new \DateInterval('P1D')); // refresh tokens will expire after 1 day
-
-        // Enable the authentication code grant on the server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );
-
-        /*
-        $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
-            $userRepository,
-            $refreshTokenRepository
-        );
-
-        $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
-
-        // Enable the password grant on the server
-        $server->enableGrantType(
-            $grant,
-            new \DateInterval('PT1H') // access tokens will expire after 1 hour
-        );*/
-
-        return $server;
+        return new SSO_Facade_OpenIdConnect_AuthorizationServer();
     }
 
     protected static function initSAMLServer()

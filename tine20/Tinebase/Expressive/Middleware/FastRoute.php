@@ -45,7 +45,8 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = rtrim($uri, '/');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL . $name . ': ' . ('authorization' === strtolower((string) $name) ? '*****' : $request->getHeaderLine($name)), ''));
+            . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '. $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL . $name . ': ' . ('authorization' === strtolower((string) $name) ? '*****' : $request->getHeaderLine($name)), '')
+            . print_r($request->getParsedBody(), true));
 
         return $dispatcher->dispatch($request->getMethod(), $uri);
     }

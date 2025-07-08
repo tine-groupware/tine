@@ -15,6 +15,9 @@ use Idaas\OpenID\Grant\AuthCodeGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+/**
+ * @property SSO_Facade_OpenIdConnect_UserRepository $userRepository
+ */
 class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
 {
     public function respondToAccessTokenRequest(
@@ -33,9 +36,16 @@ class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
         /** @var \Idaas\OpenID\ResponseTypes\BearerTokenResponse $result */
         $result = parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
 
-        /** @var \League\OAuth2\Server\Entities\TokenInterface $accessToken */
+        /** @var SSO_Facade_OAuth2_AccessTokenEntity $accessToken */
         $accessToken = $result->getAccessToken();
-        $result->getIdToken()->setIdentifier($accessToken->getIdentifier());
+        /** @var SSO_Facade_OpenIdConnect_IdToken $idToken */
+        $idToken = $result->getIdToken();
+        $idToken->setIdentifier($accessToken->getIdentifier());
+
+        $userEntity = $this->userRepository->getUserByIdentifier($accessToken->getUserIdentifier());
+        foreach ($this->userRepository->getAttributes($userEntity, $accessToken->getClaims(), $accessToken->getScopes()) as $claim => $value) {
+            $idToken->addExtra($claim, $value);
+        }
 
         return $result;
     }
@@ -48,9 +58,8 @@ class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
     protected function addMoreClaimsToIdToken(IdToken $idToken)
     {
         //if (in_array('groups', $this->accessTokenRepository->getStoredClaims())) {
-            $userRepo = new SSO_Facade_OpenIdConnect_UserRepository();
-            $userEntity = $userRepo->getUserByIdentifier($idToken->getSubject());
-            $result = $userRepo->getAttributes($userEntity, ['groups'], []);
+            $userEntity = $this->userRepository->getUserByIdentifier($idToken->getSubject());
+            $result = $this->userRepository->getAttributes($userEntity, ['groups'], []);
             if ($result['groups'] ?? false) {
                 $idToken->addExtra('groups', $result['groups']);
             }

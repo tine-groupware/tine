@@ -72,11 +72,16 @@ class SSO_Facade_OAuth2_AccessTokenRepository implements \Idaas\OpenID\Repositor
 
     public function storeClaims(\League\OAuth2\Server\Entities\AccessTokenEntityInterface $token, array $claims)
     {
+        $claims = array_unique($claims);
+
+        /** @var SSO_Facade_OAuth2_AccessTokenEntity $token */
+        $token->setClaims($claims);
+
         $ctrl = SSO_Controller_Token::getInstance();
 
         /** @var SSO_Model_Token $ssoToken */
         $ssoToken = $ctrl->search($this->getFilterForToken($token->getIdentifier()))->getFirstRecord();
-        $ssoToken->xprops(SSO_Model_Token::FLD_DATA)['claims'] = array_unique($claims);
+        $ssoToken->xprops(SSO_Model_Token::FLD_DATA)['claims'] = $claims;
         $ctrl->update($ssoToken);
     }
 
@@ -86,9 +91,10 @@ class SSO_Facade_OAuth2_AccessTokenRepository implements \Idaas\OpenID\Repositor
         $ssoToken = SSO_Controller_Token::getInstance()->search($this->getFilterForToken($tokenId))->getFirstRecord();
         $token = new SSO_Facade_OAuth2_AccessTokenEntity();
         $token->setClient((new SSO_Facade_OAuth2_ClientRepository())->getClientEntity($ssoToken->xprops('data')['client']));
-        foreach ($ssoToken->xprops('data')['scopes'] as $scope) {
+        foreach ($ssoToken->xprops('data')['scopes'] ?? [] as $scope) {
             $token->addScope((new SSO_Facade_OAuth2_ScopeRepository)->getScopeEntityByIdentifier($scope));
         }
+        $token->setClaims($ssoToken->xprops('data')['claims'] ?? []);
         $token->setUserIdentifier($ssoToken->xprops('data')['userIdentifier']);
 
         return $token;
