@@ -1656,6 +1656,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ];
         }
 
+        // Sort by preferred email (preferred email field first)
+        usort($possibleAddresses, function($a, $b) {
+            $aIsPreferred = $a['email_type_field'] === $this->preferred_email;
+            $bIsPreferred = $b['email_type_field'] === $this->preferred_email;
+            return $bIsPreferred <=> $aIsPreferred;
+        });
+
         return  $possibleAddresses;
     }
 }
