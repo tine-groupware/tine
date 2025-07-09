@@ -307,6 +307,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         if (this.massMailingFlag) to = 'BCC';
 
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+            // @TODO fixme, invent better handling to skip gdpr client plugin
             massMailingPlugins: records?.[0]?.data?.poll_id ? ['poll'] : ['all'],
             contentPanelConstructorInterceptor: async (config) => {
                 const waitingText = this.app.i18n._('Loading Recipients...');
