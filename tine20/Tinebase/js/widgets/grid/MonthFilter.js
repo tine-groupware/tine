@@ -187,7 +187,7 @@ Tine.widgets.grid.MonthFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
             return Tine.widgets.grid.MonthFilter.superclass.dateValueRenderer.call(this, filter, el);
         }
         
-        return filter.textfield;
+        return filter.monthPicker;
     },
     /**
      * returns past operators for date fields, may be overridden
