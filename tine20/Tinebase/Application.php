@@ -676,6 +676,7 @@ class Tinebase_Application
             'modlog'        => array('tablename' => 'timemachine_modlog'),
             'rootnode'      => array('tablename' => ''),
             'pobserver'     => array(),
+            'task'          => array('tablename' => 'scheduler_task'),
         );
         $countMessage = ' Deleted';
         
@@ -721,6 +722,14 @@ class Tinebase_Application
                     } catch (Throwable $e) {
                         // problem!
                         Tinebase_Exception::log($e);
+                    }
+                    break;
+                case 'task':
+                    try {
+                        $count = $this->_getDb()->delete(SQL_TABLE_PREFIX . $info['tablename'], $where);
+                    } catch (Zend_Db_Statement_Exception $zdse) {
+                        Tinebase_Exception::log($zdse);
+                        $count = 0;
                     }
                     break;
                 default:

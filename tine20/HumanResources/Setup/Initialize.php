@@ -465,6 +465,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
                             HumanResources_Import_OpenHolidaysApi::OPT_CALENDAR_NAME => 'Feiertage ' . $name,
                         ],
                     ],
+                    Admin_Model_SchedulerTask::FLD_APPLICATION_ID   =>  Tinebase_Application::getInstance()->getApplicationByName(HumanResources_Config::APP_NAME)->getId()
                 ])
             );
         }

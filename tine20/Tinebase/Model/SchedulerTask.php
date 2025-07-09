@@ -32,6 +32,7 @@
 class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
 {
     public const FLD_ACCOUNT_ID = 'account_id';
+    public const FLD_APPLICATION_ID = 'application_id';
     public const FLD_CONFIG = 'config';
     public const FLD_IS_SYSTEM = 'is_system';
     public const FLD_NAME = 'name';
@@ -45,7 +46,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version'           => 4,
+        'version'           => 5,
         'recordName'        => 'Scheduler task',
         'recordsName'       => 'Scheduler tasks', // ngettext('Scheduler task', 'Scheduler tasks', n)
         //'containerProperty' => 'container_id',
@@ -78,6 +79,14 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                     'columns' => ['name', self::FLD_DELETED_TIME]
                 ]
             ]
+        ],
+
+        self::FILTER_MODEL => [
+            self::FLD_APPLICATION_ID => [
+                'filter' => Tinebase_Model_Filter_Text::class,
+                'label' => 'Application', // _('Application')
+                'jsConfig' => array('filtertype' => 'admin.application'),
+            ],
         ],
 
         'fields'            => [
@@ -180,6 +189,13 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+            ],
+            self::FLD_APPLICATION_ID => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                'nullable' => false,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'],
+                self::LABEL => 'Application', // _('Application')
             ],
         ]
     ];
