@@ -52,16 +52,6 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
         }
     }
 
-    /**
-     * init scheduler tasks
-     */
-    protected function _uninitializeSchedulerTasks()
-    {
-        $scheduler = Tinebase_Core::getScheduler();
-        HumanResources_Scheduler_Task::removeAttendanceRecorderRunBLTask($scheduler);
-        HumanResources_Scheduler_Task::removeCalculateDailyWorkingTimeReportsTask($scheduler);
-    }
-
     protected function _uninitializePersistentObserver()
     {
         Tinebase_Record_PersistentObserver::getInstance()->removeObserverByIdentifier('wtreport');

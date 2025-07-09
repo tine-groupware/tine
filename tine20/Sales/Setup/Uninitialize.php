@@ -16,18 +16,6 @@
  */
 class Sales_Setup_Uninitialize extends Setup_Uninitialize
 {
-    /**
-     * uninit scheduler tasks
-     */
-    protected function _uninitializeSchedulerTasks()
-    {
-        $scheduler = Tinebase_Core::getScheduler();
-        Sales_Scheduler_Task::removeUpdateProductLifespanTask($scheduler);
-        Sales_Scheduler_Task::removeCreateAutoInvoicesDailyTask($scheduler);
-        Sales_Scheduler_Task::removeCreateAutoInvoicesMonthlyTask($scheduler);
-        Sales_Scheduler_Task::removeEMailDispatchResponseMinutelyTask($scheduler);
-    }
-
     protected function _uninitializeCustomFields()
     {
         if (Tinebase_Core::isReplica()) {

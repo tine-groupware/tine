@@ -16,13 +16,4 @@
  */
 class Calendar_Setup_Uninitialize extends Setup_Uninitialize
 {
-    /**
-     * uninit scheduler tasks
-     */
-    protected function _uninitializeSchedulerTasks()
-    {
-        $scheduler = Tinebase_Core::getScheduler();
-        Calendar_Scheduler_Task::removeTentativeNotificationTask($scheduler);
-        Calendar_Scheduler_Task::removeUpdateConstraintsExdatesTask($scheduler);
-    }
 }

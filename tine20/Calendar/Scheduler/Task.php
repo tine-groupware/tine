@@ -38,15 +38,6 @@ class Calendar_Scheduler_Task extends Tinebase_Scheduler_Task
             . ' Saved task Calendar_Controller_Event::updateConstraintsExdates in scheduler.');
     }
 
-    /**
-     * @param Tinebase_Scheduler $_scheduler
-     * @return bool
-     */
-    public static function removeUpdateConstraintsExdatesTask(Tinebase_Scheduler $_scheduler)
-    {
-        return $_scheduler->removeTask('Calendar_Controller_Event::updateConstraintsExdates');
-    }
-
     public static function addTentativeNotificationTask(Tinebase_Scheduler $_scheduler)
     {
         if ($_scheduler->hasTask('Calendar_Controller_Event::sendTentativeNotifications')) {
@@ -62,14 +53,5 @@ class Calendar_Scheduler_Task extends Tinebase_Scheduler_Task
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task Calendar_Controller_Event::sendTentativeNotifications in scheduler.');
-    }
-
-    /**
-     * @param Tinebase_Scheduler $_scheduler
-     * @return bool
-     */
-    public static function removeTentativeNotificationTask(Tinebase_Scheduler $_scheduler)
-    {
-        return $_scheduler->removeTask('Calendar_Controller_Event::sendTentativeNotifications');
     }
 }

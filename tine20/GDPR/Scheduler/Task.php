@@ -37,17 +37,4 @@ class GDPR_Scheduler_Task extends Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task GDPR_Controller_DataIntendedPurposeRecord::deleteExpiredData in scheduler.');
     }
-
-    /**
-     * remove delete expired Data task from scheduler
-     *
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function removeDeleteExpiredDataTask(Tinebase_Scheduler $_scheduler)
-    {
-        $_scheduler->removeTask('GDPR_Controller_DataIntendedPurposeRecord::deleteExpiredData');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed task GDPR_Controller_DataIntendedPurposeRecord::deleteExpiredData from scheduler.');
-    }
 }

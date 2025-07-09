@@ -37,17 +37,4 @@ class ActiveSync_Scheduler_Task extends Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task ActiveSync_Controller_Device::monitorDeviceLastPingTask in scheduler.');
     }
-
-    /**
-     * remove update product lifespan task from scheduler
-     *
-     * @param Tinebase_Scheduler $_scheduler
-     */
-    public static function removeUpdateDeviceLifespanTask(Tinebase_Scheduler $_scheduler)
-    {
-        $_scheduler->removeTask('ActiveSync_Controller_Device::monitorDeviceLastPingTask');
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed task ActiveSync_Controller_Device::monitorDeviceLastPingTask from scheduler.');
-    }
 }
