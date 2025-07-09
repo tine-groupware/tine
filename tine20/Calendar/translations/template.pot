@@ -188,6 +188,9 @@ msgstr ""
 msgid "Travel"
 msgstr ""
 
+msgid "Trailer"
+msgstr ""
+
 msgid "Available Free/Busy Types"
 msgstr ""
 

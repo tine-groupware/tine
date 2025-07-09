@@ -188,6 +188,9 @@ msgstr "Projector"
 msgid "Travel"
 msgstr "Travel"
 
+msgid "Trailer"
+msgstr "Trailer"
+
 msgid "Available Free/Busy Types"
 msgstr "Available Free/Busy Types"
 
