@@ -976,7 +976,14 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     if ($opts->d) {
                         echo '  Change destination to username: ' . $destination['destination'] . ' => ' . $smtpuser['username'] . "\n";
                     } else {
-                        $db->update($destinationsTable, ['destination' => $smtpuser['username']], $where);
+                        try {
+                            $db->update($destinationsTable, ['destination' => $smtpuser['username']], $where);
+                        } catch (Zend_Db_Statement_Exception $e) {
+                            if (Tinebase_Exception::isDbDuplicate($e)) {
+                                // already there - delete original row
+                                $db->delete($destinationsTable, $where);
+                            }
+                        }
                     }
                 }
 
