@@ -50,4 +50,15 @@ class Felamimail_Scheduler_Task extends Tinebase_Scheduler_Task
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task Felamimail_Controller_MessageExpectedAnswer::checkExpectedAnswer from scheduler.');
     }
+
+    public static function addPruneAttachmentCacheTask(Tinebase_Scheduler $_scheduler)
+    {
+        self::_addTaskIfItDoesNotExist(
+            Felamimail_Controller_AttachmentCache::class,
+            'checkTTL',
+            Tinebase_Scheduler_Task::TASK_TYPE_HOURLY,
+            $_scheduler,
+            'FelamimailPruneAttachmentCache'
+        );
+    }
 }

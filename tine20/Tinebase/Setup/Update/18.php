@@ -20,6 +20,8 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE004 = self::class . '::update004';
     protected const RELEASE018_UPDATE005 = self::class . '::update005';
     protected const RELEASE018_UPDATE006 = self::class . '::update006';
+    protected const RELEASE018_UPDATE007 = self::class . '::update007';
+    protected const RELEASE018_UPDATE008 = self::class . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -45,6 +47,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update005',
             ],
+            self::RELEASE018_UPDATE007 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update007',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -54,6 +60,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE018_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
@@ -142,5 +152,62 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addCleanUpRelationTask(Tinebase_Core::getScheduler());
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+    }
+
+    public function update007(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_SchedulerTask::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
+    }
+
+    public function update008(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $db = Tinebase_Core::getDb();
+        $select = $db->select()
+            ->from(SQL_TABLE_PREFIX . 'scheduler_task', ['id', 'config']);
+        $tasks = $db->fetchAll($select);
+        $tasksByAppId = [];
+        foreach ($tasks as $task) {
+            try {
+                $config = json_decode($task['config'], true);
+                $applicationId = null;
+                foreach ($config['callables'] as $callable) {
+                    $class = $callable['controller'] ?? $callable['class'] ?? null;
+                    if ($class) {
+                        $parts = explode('_', $class);
+                        $applicationName = $parts[0];
+
+                        try {
+                            $application = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
+                            $applicationId = $application ? $application->getId() : Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
+                            break;
+                        } catch (Exception $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e);
+                        }
+                    }
+                }
+                if ($applicationId) {
+                    if (!isset($tasksByAppId[$applicationId])) {
+                        $tasksByAppId[$applicationId] = [];
+                    }
+                    $tasksByAppId[$applicationId][] = $task['id'];
+                }
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        foreach ($tasksByAppId as $applicationId => $taskIds) {
+            $taskIdsList = implode('","', $taskIds);
+            $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'scheduler_task') . ' SET ' .
+                'application_id = "' . $applicationId . '" WHERE id IN ("' . $taskIdsList . '")');
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.8', self::RELEASE018_UPDATE008);
     }
 }

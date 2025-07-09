@@ -355,6 +355,26 @@ class Tinebase_Scheduler_Task
      */
     protected static function _getPreparedTask($name, $cron, array $callAbles)
     {
+        $applicationId = null;
+
+        foreach ($callAbles as $callable) {
+            $class = $callable['controller'] ?? $callable['class'] ?? static::class ?? null;
+            if ($class) {
+                $parts = explode('_', $class);
+                $applicationName = $parts[0];
+
+                try {
+                    $application = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
+                    $applicationId = $application ? $application->getId() : Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
+                    break;
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e);
+                }
+            } else {
+                $applicationId = Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
+            }
+        }
+
         return new Tinebase_Model_SchedulerTask([
             'name'          => $name,
             'config'        => new Tinebase_Scheduler_Task([
@@ -362,7 +382,8 @@ class Tinebase_Scheduler_Task
                 'callables' => $callAbles
             ]),
             // TODO think about this! daily jobs will be executed soon after...
-            'next_run'      => new Tinebase_DateTime('2001-01-01 01:01:01')
+            'next_run'      => new Tinebase_DateTime('2001-01-01 01:01:01'),
+            Tinebase_Model_SchedulerTask::FLD_APPLICATION_ID    => $applicationId
         ]);
     }
 

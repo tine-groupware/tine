@@ -57,6 +57,7 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
             ],
             Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
             Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
+            Admin_Model_SchedulerTask::FLD_APPLICATION_ID   =>  Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()
         ], $data));
         /** @var Admin_Model_SchedulerTask $createdTask */
         $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);

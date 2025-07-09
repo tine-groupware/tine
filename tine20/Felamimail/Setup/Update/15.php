@@ -172,8 +172,6 @@ class Felamimail_Setup_Update_15 extends Setup_Update_Abstract
             Felamimail_Model_AttachmentCache::FLD_TTL => Tinebase_DateTime::now()->addWeek(2)->toString()
         ]);
 
-        Felamimail_Setup_Initialize::addPruneAttachmentCacheSchedule();
-
         $this->addApplicationUpdate('Felamimail', '15.4', self::RELEASE015_UPDATE004);
     }
     
