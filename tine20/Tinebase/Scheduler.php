@@ -287,8 +287,17 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
                 }
             }
             $data['record']->config->setCron($minute . ($hourly ? '' : ' ' . $hour) . $data['matches'][1]);
-            $this->_backend->update($data['record']);
-            $start += $spread;
+            try {
+                $this->_backend->update($data['record']);
+                $start += $spread;
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                // skip this for the moment - app id might be missing
+                // TODO remove this in 2026.11
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $terv->getMessage());
+                }
+            }
         }
     }
 

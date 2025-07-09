@@ -51,6 +51,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update007',
             ],
+            self::RELEASE018_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -60,10 +64,6 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
-            ],
-            self::RELEASE018_UPDATE008          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update008',
             ],
         ],
     ];
