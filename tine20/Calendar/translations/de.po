@@ -205,6 +205,9 @@ msgstr "Projektor"
 msgid "Travel"
 msgstr "Reise"
 
+msgid "Trailer"
+msgstr "Anhänger"
+
 msgid "Available Free/Busy Types"
 msgstr "Verfügbare Frei/Belegt Typen"
 

@@ -455,6 +455,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     array('id' => 'MATERIAL', 'is_location' => 0, 'value' => 'Material', 'icon' => 'images/icon-set/icon_resource_material.svg', 'system' => true), //_('Material')
                     array('id' => 'PROJECTOR', 'is_location' => 0, 'value' => 'Projector', 'icon' => 'images/icon-set/icon_resource_projector.svg', 'system' => true), //_('Projector')
                     array('id' => 'TRAVEL', 'is_location' => 1, 'value' => 'Travel', 'icon' => 'images/icon-set/icon_resource_trolly.svg', 'system' => true), //_('Travel')
+                    array('id' => 'TRAILER' , 'is_location' => 1, 'value' => 'Trailer', 'icon' => 'images/icon-set/icon_car-trailer.svg', 'system' => true), //_('Trailer')
                 ),
                 'default' => 'RESOURCE'
             )
