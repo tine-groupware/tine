@@ -364,6 +364,16 @@ class Tinebase_FileSystem_Previews
         }
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $transactionTime = microtime(true);
+        $resetTransaction = function() use(&$transactionId, &$transactionTime) {
+            if (($now = microtime(true)) - $transactionTime > 1.0) {
+                // restart transaction, this also resets the aquiredWriteLock
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                $transactionTime = $now;
+                $this->_fsController->acquireWriteLock();
+            }
+        };
 
         try {
             $this->_fsController->acquireWriteLock();
@@ -378,6 +388,8 @@ class Tinebase_FileSystem_Previews
                 $this->_fsController->mkdir($basePath);
             }
 
+            $this->_fsController->updatePreviewCount($node->hash, 0);
+
             $files = [];
             $maxCount = 0;
             foreach ($config as $key => $cnf) {
@@ -391,14 +403,8 @@ class Tinebase_FileSystem_Previews
             }
             unset($result);
 
-            if ((int)$node->preview_count !== $maxCount) {
-                $this->_fsController->updatePreviewCount($node->hash, $maxCount);
-            }
-            if ($node?->tempFile?->path) {
-                $node->preview_count = $maxCount;
-            }
-
             foreach ($files as $name => &$blob) {
+                $resetTransaction();
                 $tempFile = Tinebase_TempFile::getTempPath();
                 if (false === file_put_contents($tempFile, $blob)) {
                     throw new Tinebase_Exception('could not write content to temp file');
@@ -417,6 +423,13 @@ class Tinebase_FileSystem_Previews
                 } finally {
                     unlink($tempFile);
                 }
+            }
+
+            if ((int)$node->preview_count !== $maxCount) {
+                $this->_fsController->updatePreviewCount($node->hash, $maxCount);
+            }
+            if ($node?->tempFile?->path) {
+                $node->preview_count = $maxCount;
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
