@@ -134,7 +134,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             } else {
                 Ext.MessageBox.confirm(
                     i18n._('Confirm'),
-                    app.i18n._('Datev email has been sent before , continue anyway?'),
+                    app.i18n._('The DATEV email has already been sent. Do you want to continue anyway?'),
                     function (button) {
                         if (button === 'yes') {
                             fulfill(true);

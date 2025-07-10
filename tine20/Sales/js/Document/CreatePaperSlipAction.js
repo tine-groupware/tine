@@ -101,7 +101,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top',
-                        text: app.formatMessage('Send by E-Mail'),
+                        text: app.formatMessage('Send by Email'),
                         iconCls: `action_composeEmail`,
                         disabled: !recipientData.email,
                         handler: () => {

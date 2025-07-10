@@ -28,7 +28,7 @@ class Sales_Exception_InvoiceAlreadyClearedEdit extends Sales_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The Invoice you tried to edit is cleared already, so no editing is possible anymore!'; // _('The Invoice you tried to edit is cleared already, so no editing is possible anymore!')
+    protected $message = 'The invoice you tried to edit has already been cleared, so no further editing is possible!'; // _('The invoice you tried to edit has already been cleared, so no further editing is possible!')
     
     /**
      * @see SPL Exception

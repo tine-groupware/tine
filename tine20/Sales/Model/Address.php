@@ -61,8 +61,8 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         self::VERSION   => 6,
         self::APP_NAME => Sales_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
-        self::RECORD_NAME   => 'Address', // ngettext('Address', 'Addresss', n)
-        self::RECORDS_NAME  => 'Addresss', // gettext('GENDER_Address')
+        self::RECORD_NAME   => 'Address', // ngettext('Address', 'Addresses', n)
+        self::RECORDS_NAME  => 'Addresses', // gettext('GENDER_Address')
         self::HAS_RELATIONS => true,
         self::HAS_CUSTOM_FIELDS => true,
         self::MODLOG_ACTIVE => true,
@@ -127,7 +127,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
             self::FLD_EMAIL => [
                 self::LABEL         => 'Email', // _('Email')
-                self::DESCRIPTION   => 'An e-mail address of the contact point (BT-58 [EN 16931]).', // _('An e-mail address of the contact point (BT-58 [EN 16931]).')
+                self::DESCRIPTION   => 'An email address of the contact point (BT-58 [EN 16931]).', // _('An e-mail address of the contact point (BT-58 [EN 16931]).')
                 self::NULLABLE      => true,
                 self::TYPE          => self::TYPE_STRING,
                 self::QUERY_FILTER  => true,
@@ -176,7 +176,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
             self::FLD_POSTALCODE => [
                 self::TYPE          => self::TYPE_STRING,
-                self::LABEL         => 'Postalcode', //_('Postalcode')
+                self::LABEL         => 'Postal Code', //_('Postal Code')
                 self::DESCRIPTION   => 'The zip code (BT-53 [EN 16931]).', // ('The zip code (BT-53 [EN 16931]).')
                 self::QUERY_FILTER  => TRUE,
                 self::NULLABLE      => TRUE,

@@ -50,7 +50,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 if (debitors) {
                     const debitor = debitors.length > 1 ? await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                         title: this.app.i18n._('Select Debitor'),
-                        questionText: this.app.i18n._('Please select debitor'),
+                        questionText: this.app.i18n._('Please select a debitor'),
                         height: 150,
                         allowCancel: false,
                         options: debitors.map((debitor) => { return {

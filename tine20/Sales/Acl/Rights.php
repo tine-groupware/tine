@@ -228,7 +228,7 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Add, edit and delete purchase invoices.'),
             ),
             self::CHANGE_OC_NUMBER => array(
-                'text'          => $translate->_('Change number of an order confirmations'),
+                'text'          => $translate->_('Change number of an order confirmation'),
                 'description'   => $translate->_('Allow changing the number of an order confirmation during the update.'),
             ),
             self::SET_INVOICE_NUMBER => array(

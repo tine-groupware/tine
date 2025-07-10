@@ -5,7 +5,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 3000});
-    await lib.getBrowser('Sales', 'Kunden');
+    await lib.getBrowser('Sales', 'Kund*innen');
 });
 
 describe.skip('Mainpage', () => {

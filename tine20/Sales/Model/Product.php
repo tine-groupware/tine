@@ -192,7 +192,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_PURCHASEPRICE => [
                 self::TYPE => self::TYPE_MONEY,
-                self::LABEL => 'Purchaseprice', // _('Purchaseprice')
+                self::LABEL => 'Purchase Price', // _('Purchase Price')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => 0
@@ -201,7 +201,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => 0]
             ],
             self::FLD_SALESPRICE_TYPE     => [
-                self::LABEL                         => 'Salesprice Type', //_('Salesprice Type')
+                self::LABEL                         => 'Sales Price Type', //_('Sales Price Type')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::PRICE_TYPE,
                 self::NULLABLE                      => false,
@@ -209,7 +209,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_SALESPRICE => [
                 self::TYPE => self::TYPE_MONEY,
-                self::LABEL => 'Salesprice', // _('Salesprice')
+                self::LABEL => 'Sales Price', // _('Sales Price')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => 0

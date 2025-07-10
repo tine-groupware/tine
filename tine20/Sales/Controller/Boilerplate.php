@@ -116,7 +116,7 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             if (!$boilerplate->{Sales_Model_Boilerplate::FLD_FROM} &&
                     !$boilerplate->{Sales_Model_Boilerplate::FLD_UNTIL}) {
-                $message = $translation->_('Name needs to be unique.');
+                $message = $translation->_('The name must be unique.');
             } else {
                 $message = $translation->_('Dates "' .
                     $boilerplate->{Sales_Model_Boilerplate::FLD_FROM} . ' - ' .

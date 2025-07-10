@@ -33,11 +33,11 @@ describe('Product', () => {
 describe('customer', () => {
     test('MainScreen', async () => {
         await page.waitForTimeout(1000);
-        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Kunden'});
+        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Kund*innen'});
         await page.waitForTimeout(1000);
     });
     test('open editDialog', async () => {
-        await expect(page).toClick('.t-app-sales button', {text: 'Kunde hinzufügen'});
+        await expect(page).toClick('.t-app-sales button', {text: 'Kund*in hinzufügen'});
         let newPage = await lib.getNewWindow();
         await newPage.waitForTimeout(5000);
         await newPage.screenshot({path: 'screenshots/Sales/4_sales_kunden_neu.png'}); //@todo daten eingeben
