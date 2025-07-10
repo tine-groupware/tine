@@ -19,7 +19,7 @@ Tine.widgets.grid.FilterRegistry.register('Addressbook', 'Contact', {
     independentRecords: true,
     multipleForeignRecords: true,
     ownField: 'GDPR_DataIntendedPurposeRecord',
-    // i18n._('GDPR Intended Purpose')
-    label: 'GDPR Intended Purpose'
+    // i18n._('GDPR Purpose of processing')
+    label: 'GDPR Purpose of processing'
 });
 

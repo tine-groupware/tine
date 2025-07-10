@@ -16,7 +16,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
 
         this.record = this.editDialog.record;
         this.manageConsentRecordPicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-            fieldLabel: this.app.i18n.gettext('Data Intended purpose of this mass mailing'),
+            fieldLabel: this.app.i18n.gettext('Processing purpose of this mass mailing'),
             name: 'dataIntendedPurposes',
             width: 300,
             allowBlank: true,
@@ -114,14 +114,14 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
      * @param token
      */
     validateRecipientToken(token) {
-        const defaultTip = String.format(this.app.i18n._('In {0} mass mailing mode this recipient will be removed, '), this.app.appName);
+        const defaultTip = String.format(this.app.i18n._('In {0} mass mailing mode, this recipient will be removed, '), this.app.appName);
         if (!token || !this.recipientGrid.massMailingMode) {
             return  {isValid: true, tip: 'skip checking token'};
         }
         // in mass mailing mode, list should be valid to be displayed in searchContactCombo
         if (token?.emails) {
             const app = this.editDialog.app;
-            return {isValid: true, tip: app.i18n._('Send message to individual list members instead')};
+            return {isValid: true, tip: app.i18n._('Send message individually to list members instead')};
         }
         if (!token.contact_record) {
             return {isValid: true, tip: defaultTip + 'GDPR consent missing as no contact record was found'};
@@ -131,20 +131,20 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
             return {isValid: false, tip: defaultTip + this.app.i18n._('as it must not be contacted at all')};
         }
         if (!this.selectedDataIntendedPurpose) {
-            return {isValid: true, tip: defaultTip + this.app.i18n._('skip checking contact when data intended purpose has not been selected')};
+            return {isValid: true, tip: defaultTip + this.app.i18n._('Skip contact check if no data intended purpose has been selected')};
         }
         if (!contact?.GDPR_DataIntendedPurposeRecord) {
-            return {isValid: true, tip: defaultTip + this.app.i18n._('skip checking contact without dataIntended purpose records')};
+            return {isValid: true, tip: defaultTip + this.app.i18n._('Skip checking contact if no data intended purpose records exist')};
         }
         const dip = contact.GDPR_DataIntendedPurposeRecord.find((d) => d.intendedPurpose.id === this.selectedDataIntendedPurpose.id);
         if (!dip) {
-            return {isValid: false, tip: defaultTip + this.app.i18n._('as contact has not consent to this purpose')};
+            return {isValid: false, tip: defaultTip + this.app.i18n._('as contact has not consented to this purpose')};
         }
         if (dip.withdrawDate && new Date() > new Date(dip.withdrawDate)) {
             return {isValid: false, tip: defaultTip + this.app.i18n._('as consent date has expired')};
         }
         if (dip.agreeDate && new Date() < new Date(dip.agreeDate)) {
-            return {isValid: true, tip: defaultTip + this.app.i18n._('consent date is set but not reached yet')};
+            return {isValid: true, tip: defaultTip + this.app.i18n._('consent date is set but not yet reached')};
         }
         
         return {isValid: true, tip: 'valid token'};
@@ -153,7 +153,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
     showDipSelectPicker: function(defaultDataIntendedPurpose = '') {
         const isMassMailingMode = this.editDialog.massMailingMode;
         this.dipSelectPicker = new Tine.Tinebase.dialog.Dialog({
-            windowTitle: this.app.i18n._('Please select a data intended purpose'),
+            windowTitle: this.app.i18n._('Please select a purpose of processing'),
             listeners: {
                 beforeapply: (data) => {
                     if (this.selectedDataIntendedPurpose?.id && !data.recipientMode) {
@@ -200,7 +200,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                 items: [
                     {
                         xtype: 'label',
-                        html: "1. " + this.app.i18n._('The recipients will be removed if they have not consent to the selected intended purpose.') + '<br/>'
+                        html: "1. " + this.app.i18n._('The recipients will be removed if they have not consented to the selected intended purpose.') + '<br/>'
                             + "2. " + this.app.i18n._("The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."),
                     },
                     Tine.widgets.form.RecordPickerManager.get('GDPR', 'DataIntendedPurpose',

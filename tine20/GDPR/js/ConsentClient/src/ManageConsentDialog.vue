@@ -6,15 +6,15 @@
         <!-- :footerClass="consentStatus === 'UNDECIDED' ? 'justify-content-end': 'justify-content-between'" -->
         <template #default v-if="record">
           <p> {{ consentStatus !== 'Agree'
-            ? formatMessage('I hereby withdraw the following data intended purpose')
-            : formatMessage('I hereby accept the following data intended purpose')}}:
+            ? formatMessage('I hereby withdraw the following intended purpose for data processing')
+            : formatMessage('I hereby accept the following intended purpose for data processing')}}:
           </p>
           <div v-if="record.__record.desc" class="fs-6 ps-1">
             <p class="fw-bold mb-1"> {{record?.__record.name}}:</p>
             <p>{{ record.__record.desc }}</p>
           </div>
             <div class="mt-3">
-                <h5>{{ consentStatus !== 'Agree' ? formatMessage('Withdraw comment') : formatMessage('Agreement comment') }}:</h5>
+                <h5>{{ consentStatus !== 'Agree' ? formatMessage('Withdrawal comment') : formatMessage('Agreement comment') }}:</h5>
                 <BFormTextarea
                     no-resize
                     :rows="5"
@@ -23,7 +23,7 @@
             </div>
         </template>
         <template #footer>
-            <!-- <BButton variant="primary" @click="addComment = !addComment" v-if="consentStatus !== 'UNDECIDED'">{{ addComment ? formatMessage("Don't add comment") : formatMessage("Add comment")}}</BButton> -->
+            <!-- <BButton variant="primary" @click="addComment = !addComment" v-if="consentStatus !== 'UNDECIDED'">{{ addComment ? formatMessage("Don't add a comment") : formatMessage("Add a comment")}}</BButton> -->
             <BButton variant="primary" @click="emits('close')">{{ formatMessage('Cancel') }}</BButton>
             <BButton variant="primary" @click="postConsent">{{ formatMessage('Confirm') }}</BButton>
         </template>

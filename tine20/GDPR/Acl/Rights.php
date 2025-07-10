@@ -105,13 +105,13 @@ class GDPR_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 
         $rightDescriptions = parent::getTranslatedRightDescriptions();
         $rightDescriptions[self::MANAGE_CORE_DATA_DATA_PROVENANCE] = [
-            'text'          => $translate->_('Manage data provenances in CoreData'),
-            'description'   => $translate->_('View, create, delete or update data provenances in CoreData application'),
+            'text'          => $translate->_('Manage data sources in CoreData'),
+            'description'   => $translate->_('View, create, delete or update data sources in the CoreData application'),
         ];
         $rightDescriptions[self::MANAGE_CORE_DATA_DATA_INTENDED_PURPOSE] = [
-            'text'          => $translate->_('Manage data intended purposes in CoreData'),
+            'text'          => $translate->_('Manage data usage purposes in CoreData'),
             'description'   =>
-                $translate->_('View, create, delete or update data intended purposes in CoreData application'),
+                $translate->_('View, create, delete, or update data usage purposes in the CoreData application'),
         ];
         return $rightDescriptions;
     }

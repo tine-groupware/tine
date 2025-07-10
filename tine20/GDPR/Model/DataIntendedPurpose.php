@@ -44,8 +44,8 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
         self::APP_NAME => GDPR_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
         
-        self::RECORD_NAME => 'Data intended purpose',
-        self::RECORDS_NAME => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
+        self::RECORD_NAME => 'Purpose of processing',
+        self::RECORDS_NAME => 'Purposes of processing', // ngettext('Purpose of processing', 'Purposes of processing', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
         
         self::HAS_RELATIONS => false,
@@ -85,7 +85,7 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
                     self::LENGTH => 255,
                 ],
                 self::QUERY_FILTER => true,
-                self::LABEL => 'Data intended purpose', // _('Data intended purpose')
+                self::LABEL => 'Purpose of processing', // _('Purpose of processing')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED

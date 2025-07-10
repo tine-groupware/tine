@@ -46,9 +46,9 @@ class GDPR_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = [
         self::ADB_CONTACT_DATA_PROVENANCE_MANDATORY => [
-                                        //_('Data provenance for ADB contacts mandatory')
-            self::LABEL                 => 'Data provenance for ADB contacts mandatory',
-            //_('Whether the data provenance for ADB contacts is mandatory, not mandatory or empty provenances will be set to a default')
+                                        //_('Data provenance is mandatory for ADB contacts')
+            self::LABEL                 => 'Data provenance is mandatory for ADB contacts',
+            //_('Specifies whether data sources for ADB contacts are mandatory, optional, or if empty values should be set to a default.')
             self::DESCRIPTION           => 'Sets whether the data provenance for ADB contacts is mandatory or not.',
             self::TYPE                  => self::TYPE_KEYFIELD,
             self::OPTIONS               => [
@@ -64,10 +64,10 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => self::ADB_CONTACT_DATA_PROVENANCE_MANDATORY_DEFAULT,
         ],
         self::DEFAULT_ADB_CONTACT_DATA_PROVENANCE => [
-            //_('Default data provenance for ADB contacts')
-            self::LABEL                 => 'Default data provenance for ADB contacts',
-            //_('Default data provenance for ADB contacts')
-            self::DESCRIPTION           => 'Default data provenance for ADB contacts',
+            //_('Default data source for ADB contacts')
+            self::LABEL                 => 'Default data source for ADB contacts',
+            //_('Default data source for ADB contacts')
+            self::DESCRIPTION           => 'Default data source for ADB contacts',
             self::TYPE                  => self::TYPE_RECORD,
             self::OPTIONS               => [
                 self::APPLICATION_NAME      => GDPR_Config::APP_NAME,
@@ -81,8 +81,8 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => '',
         ],
         self::LANGUAGES_AVAILABLE => [
-            self::LABEL                 => 'Languages Available', //_('Languages Available')
-            self::DESCRIPTION           => 'List of the language in which the multilingual texts are laid out.', //_('List of the language in which the multilingual texts are laid out.')
+            self::LABEL                 => 'Available Languages', //_('Available Languages')
+            self::DESCRIPTION           => 'List of the languages in which multilingual texts are available.', //_('List of the languages in which multilingual texts are available.')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             'localeTranslationList'     => 'Language',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -96,16 +96,16 @@ class GDPR_Config extends Tinebase_Config_Abstract
             ],
         ],
         self::SUBSCRIPTION_CONTAINER_ID => [
-            self::LABEL                 => 'Subscription container id', //_('Subscription container id')
-            self::DESCRIPTION           => 'Subscription container id in Addressbook.', //_('Subscription container id in Addressbook.')
+            self::LABEL                 => 'Subscription container ID', //_('Subscription container ID')
+            self::DESCRIPTION           => 'Subscription container ID in Addressbook.', //_('Subscription container ID in Addressbook.')
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => '',
         ],
         self::JWT_SECRET => [
             //_('GDPR registration secret string')
             self::LABEL                 => 'GDPR registration secret string',
-            //_('GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable')
-            self::DESCRIPTION           => 'GDPR jwt secret string corresponding to GDPR JWT_SECRET environment variable',
+            //_('The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable.')
+            self::DESCRIPTION           => 'The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable.',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
