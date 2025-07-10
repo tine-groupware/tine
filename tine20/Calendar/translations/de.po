@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2024-12-10 09:54+0100\n"
+"PO-Revision-Date: 2025-07-10 15:02+0200\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.6\n"
 
 msgid "manage shared calendars"
 msgstr "Gemeinsame Kalender Verwalten"
@@ -55,7 +55,7 @@ msgid "Right to manage event types"
 msgstr "Das Recht Terminarten zu verwalten"
 
 msgid "You can only apply one grants filter at a time."
-msgstr "Es kann nicht mehr als einen Rechtefilter geben"
+msgstr "Es kann nicht mehr als einen Rechtefilter geben."
 
 msgid "Fixed Calendars"
 msgstr "Feste Kalender"
@@ -188,13 +188,13 @@ msgid "Coffee"
 msgstr "Kaffee"
 
 msgid "Homeoffice"
-msgstr ""
+msgstr "Homeoffice"
 
 msgid "Lamp"
 msgstr "Lampe"
 
 msgid "Laptop"
-msgstr ""
+msgstr "Laptop"
 
 msgid "Material"
 msgstr "Material"
@@ -266,7 +266,7 @@ msgid "Floorplans"
 msgstr "Lagepläne"
 
 msgid "List of floorplans with their resource configurations."
-msgstr "Liste von Lageplänen mit ihren Ressourcen Konfigurationen"
+msgstr "Liste von Lageplänen mit ihren Ressourcen Konfigurationen."
 
 msgid "Enabled Features"
 msgstr "Feature aktivieren"
@@ -302,7 +302,7 @@ msgid "Recurring Events Except"
 msgstr "Wiederholen außer"
 
 msgid "Recurring events, except on certain dates."
-msgstr "Wiederholen außer an bestimmten Daten"
+msgstr "Wiederholen außer an bestimmten Daten."
 
 msgid "Activate Poll for the Events"
 msgstr "Aktiviere Terminumfragen"
@@ -314,7 +314,7 @@ msgid "Activate Event Types for the Events"
 msgstr "Terminarten für Termine aktivieren"
 
 msgid "Activate Event Types for the Events."
-msgstr "Terminarten für Termine aktivieren"
+msgstr "Terminarten für Termine aktivieren."
 
 msgid "Event Notification Confirmation"
 msgstr "Bestätigung von Termin Benachrichtigungen"
@@ -442,7 +442,7 @@ msgstr "Benachrichtigung zur Vorläufigkeit des Termins \"%1$s\" am %2$s"
 
 #, php-format
 msgid "Proposed changes for event \"%1$s\" at %2$s declined"
-msgstr ""
+msgstr "Vorgeschlagene Änderungen für den Termin \"%1$s\" am %2$s abgelehnt"
 
 msgid "Unknown action"
 msgstr "Unbekannte Aktion"
@@ -484,7 +484,7 @@ msgid "Different Calendar"
 msgstr "Anderer Kalender"
 
 msgid "Moving the EXDATE container is not allowed."
-msgstr "Verschieben eines Ausnahmen Containers ist nicht erlaubt"
+msgstr "Verschieben eines Ausnahmen Containers ist nicht erlaubt."
 
 msgid "Invalid URL given"
 msgstr "Ungültige URL angegeben"
@@ -517,10 +517,10 @@ msgid "VCalendar Report"
 msgstr "VCalendar Report"
 
 msgid "Export multiple calendars to ICS files"
-msgstr "Mehrere Kalender in eine ICS-Datei exportieren."
+msgstr "Mehrere Kalender in eine ICS-Datei exportieren"
 
 msgid "VCalendar/ICS"
-msgstr ""
+msgstr "VCalendar/ICS"
 
 msgid "Export visible events to ICS file"
 msgstr "Sichtbare Termine in ICS Datei exportieren"
@@ -613,7 +613,7 @@ msgid "Member of group"
 msgstr "Gruppenmitglied"
 
 msgid "This is the calendar where the attendee saved the event."
-msgstr "In diesem Kalender wurde der Termin vom Teilnehmenden gespeichert"
+msgstr "In diesem Kalender wurde der Termin vom Teilnehmenden gespeichert."
 
 msgid "Type"
 msgstr "Typ"
@@ -631,7 +631,7 @@ msgid "Whole group or each group member"
 msgstr "Die gesamte Gruppe oder jedes einzelne Mitglied der Gruppe"
 
 msgid "Choose \"Group\" to filter by the group as a whole. Choose \"Member of Group\" to filter by each group member."
-msgstr "Wähle \"Gruppe\" um die gesamte Gruppe zu filtern. Wähle \"Mitglied der Gruppe\" um nach jedem einzelnen Mitglied der Gruppe zu filtern"
+msgstr "Wähle \"Gruppe\" um die gesamte Gruppe zu filtern. Wähle \"Mitglied der Gruppe\" um nach jedem einzelnen Mitglied der Gruppe zu filtern."
 
 msgid "Member of Group"
 msgstr "Mitglied der Gruppe"
@@ -761,10 +761,10 @@ msgid "Additional Tags..."
 msgstr "Zusätzliche Tags..."
 
 msgid "Recurring Event"
-msgstr ""
+msgstr "Wiederholungstermin"
 
 msgid "Recurring Event Exception"
-msgstr ""
+msgstr "Wiederholungstermin Ausnahme"
 
 msgid "End Time"
 msgstr "Ende"
@@ -797,10 +797,10 @@ msgid "Saved in"
 msgstr "Gespeichert in"
 
 msgid "Update status for all attendees?"
-msgstr ""
+msgstr "Termin Status für alle Teilnehmer aktualisieren?"
 
 msgid "You are about to change the status of the event itself, not just your own. Do you really want to change the event status for all attendees?"
-msgstr ""
+msgstr "Sie sind dabei den Status für den Termin selbst zu ändern, nicht Ihren eigenen Teilnehmer Status. Wollen Sie wirklich den Termin Status für alle Teilnehmer ändern?"
 
 msgid "non-blocking"
 msgstr "nicht-blockierend"
@@ -950,10 +950,10 @@ msgid "The event of this message does not exist"
 msgstr "Der Termin von dieser Nachricht existiert nicht"
 
 msgid "The sender is not authorized to update the event"
-msgstr "Der Absendende ist nicht berechtigt, den Termin zu aktualisieren."
+msgstr "Der Absendende ist nicht berechtigt, den Termin zu aktualisieren"
 
 msgid "This message has already been processed."
-msgstr "Diese Nachricht wurde bereits verarbeitet"
+msgstr "Diese Nachricht wurde bereits verarbeitet."
 
 msgid "You are not an attendee of this event"
 msgstr "Sie nehmen nicht an diesem Termin teil"
@@ -1089,7 +1089,7 @@ msgid "Basic Data Only"
 msgstr "Nur Basis-Daten"
 
 msgid "Import only basic data (i.e., without attendees, alarms, UID, ...)."
-msgstr "Nur Basis-Daten (ohne Alarme, Teilnehmende, ...) importieren"
+msgstr "Nur Basis-Daten (ohne Alarme, Teilnehmende, ...) importieren."
 
 msgid "Add Attendee to Import Data"
 msgstr "Teilnehmende Person zu den Importdaten hinzufügen"
@@ -1101,7 +1101,7 @@ msgid "Keep Existing Attendee"
 msgstr "Vorhandene Teilnehmende beibehalten"
 
 msgid "Do not remove attendees from existing events that are not in the import data."
-msgstr "Teilnehmende nicht entfernen, wenn sie nicht in den Importdaten enthalten sind"
+msgstr "Teilnehmende nicht entfernen, wenn sie nicht in den Importdaten enthalten sind."
 
 msgid "Force Organizer for new Events"
 msgstr "Organisator*in für neue Termine erzwingen"
@@ -1476,7 +1476,7 @@ msgid "This poll is closed. No attendees can be added."
 msgstr "Dies ist eine geschlossene Umfrage. Es können keine Teilnehmenden hinzugefügt werden."
 
 msgid "This poll is already closed."
-msgstr "Diese Umfrage ist bereits abgeschlossen"
+msgstr "Diese Umfrage ist bereits abgeschlossen."
 
 #, python-brace-format
 msgid "I am not {name}"
@@ -1871,7 +1871,7 @@ msgid "The level of actions you want to be notified about. Please note that orga
 msgstr "Der Grad an Aktionen über die Sie benachrichtigt werden wollen. Bitte beachten Sie, dass Organisatoren eines Termins über alle Änderungen einschließlich der Antworten von Teilnehmern benachrichtigt werden, so lange diese Option nicht auf \"Niemals\" gestellt ist."
 
 msgid "Send notification emails for your own actions."
-msgstr "Sende Benachrichtigungen über eigene Änderungen"
+msgstr "Sende Benachrichtigungen über eigene Änderungen."
 
 msgid "Get notification emails for actions you did yourself"
 msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
@@ -1916,7 +1916,7 @@ msgid "Default set events to privat"
 msgstr "Setze standardmäßig Termine auf privat"
 
 msgid "If enabled, every created event is always private."
-msgstr "Wenn aktiviert, werden neue Termine immer als privat angelegt"
+msgstr "Wenn aktiviert, werden neue Termine immer als privat angelegt."
 
 msgid "First Day of Week"
 msgstr "Erster Tag der Woche"
@@ -1928,13 +1928,13 @@ msgid "Default calendar strategy"
 msgstr "Standard Kalender Strategie"
 
 msgid "The calendar for new events, if no container is selected."
-msgstr "Der Kalender für neue Termine, wenn kein Container selektiert wurde"
+msgstr "Der Kalender für neue Termine, wenn kein Container selektiert wurde."
 
 msgid "Remove all filters on change selection"
 msgstr "Entferne alle Filter bei Kalenderselektion"
 
 msgid "Changing the calendar will remove all filters."
-msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"
+msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt."
 
 msgid "Calendars are always selected, regardless of any filter parameters."
 msgstr "Kalender die immer angezeigt werden, unabhängig von den eingestellten Filtern."
@@ -1943,13 +1943,13 @@ msgid "Never"
 msgstr "Nie"
 
 msgid "Only on invitation and cancellation."
-msgstr "Nur bei Einladung oder Absage"
+msgstr "Nur bei Einladung oder Absage."
 
 msgid "On time changes"
 msgstr "Bei Zeitänderungen"
 
 msgid "On all updates, except attendee responses."
-msgstr "Bei allen Änderungen, außer Teilnehmer-Antworten"
+msgstr "Bei allen Änderungen, außer Teilnehmer-Antworten."
 
 msgid "On attendee responses too"
 msgstr "Auch bei Antworten von Teilnehmenden"
