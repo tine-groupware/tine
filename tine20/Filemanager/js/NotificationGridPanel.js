@@ -158,7 +158,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
             this.userCombo = new Tine.Addressbook.SearchCombo({
                 hidden: true,
                 accountsStore: this.store,
-                emptyText: i18n._('Search for users ...'),
+                emptyText: i18n._('Search for users...'),
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
@@ -296,7 +296,7 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
-                emptyText: this.app.i18n._('Search for groups ...')
+                emptyText: this.app.i18n._('Search for groups...')
             });
 
             this.groupCombo.onSelect = this.onAddRecordFromCombo.createDelegate(this, [this.groupCombo], true);

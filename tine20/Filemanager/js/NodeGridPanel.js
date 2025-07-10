@@ -308,7 +308,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         
         const title = fileHandleUploadTasks.length === 0 
-            ? this.app.i18n._('You have unfinished uploads, Please check upload monitor and restart the failed uploads again.') 
+            ? this.app.i18n._('You have unfinished uploads. Please check the upload monitor and restart any failed uploads.')
             : this.app.i18n._('Do you want to restart the failed uploads?');
         
         const paths = fileUploadTasks.map((t) => t.label).join( '<br>');
@@ -485,7 +485,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
         }, {
             id: 'isIndexed',
-            tooltip: this.app.i18n._("File contents is part of the search index"),
+            tooltip: this.app.i18n._("File contents are part of the search index"),
             width: 40,
             renderer: function(value, i, node) {
                 return node.get('type') == 'file' ? Tine.Tinebase.common.booleanRenderer(value) : '';
@@ -665,7 +665,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         if (this.dataSafeEnabled) {
             this.action_dataSafe = new Ext.Action({
-                text: 'Open Data Safe', // _('Open Data Safe')
+                text: 'Open the Data Safe', // _('Open the Data Safe')
                 iconCls: 'action_filemanager_data_safe_locked',
                 scope: this,
                 handler: this.onDataSafeToggle,
@@ -802,7 +802,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 Tine.Tinebase.areaLocks.lock(areaLock);
         });
 
-        this.getEl().mask(button.pressed ? this.app.i18n._('Locking data safe...') : this.app.i18n._('Unlocking data safe...'));
+        this.getEl().mask(button.pressed ? this.app.i18n._('Locking the data safe...') : this.app.i18n._('Unlocking the data safe...'));
         Promise.allSettled(promises).finally(() => {
             this.getEl().unmask();
         })
@@ -829,7 +829,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var cls = isLocked ? 'removeClass' : 'addClass';
         this.action_dataSafe.each(function(btn) {btn[cls]('x-type-data-safe')});
         this.action_dataSafe.each(function(btn) {btn.toggle(!isLocked)});
-        this.action_dataSafe.setText(isLocked ? this.app.i18n._('Open Data Safe') : this.app.i18n._('Close Data Safe'));
+        this.action_dataSafe.setText(isLocked ? this.app.i18n._('Open the Data Safe') : this.app.i18n._('Close the Data Safe'));
         this.action_dataSafe.setIconClass(isLocked ? 'action_filemanager_data_safe_locked' : 'action_filemanager_data_safe_unlocked')
     },
     

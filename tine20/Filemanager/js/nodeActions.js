@@ -212,7 +212,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                         });
                         
                         if (e.message === "file exists") {
-                            Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('Folder with this name already exists!'));
+                            Ext.Msg.alert(String.format(app.i18n._('No {0} added'), nodeName), app.i18n._('A folder named {0} already exists!'));
                         }
                         return false;
                     }).finally(() => {
@@ -309,7 +309,7 @@ Tine.Filemanager.nodeActions.Rename = {
             fn: function (btn, text) {
                 if (btn === 'ok') {
                     if (!text) {
-                        Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You have to supply a {0} name!'), nodeName));
+                        Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You must enter a {0} name!'), nodeName));
                         return;
                     }
                     
@@ -620,14 +620,14 @@ Tine.Filemanager.nodeActions.Publish = {
         date.setDate(date.getDate() + defaultValidDate);
         
         this.validDateField  = new Ext.form.DateField({
-            fieldLabel: app.i18n._('Valid until'),
+            fieldLabel: app.i18n._('Valid Until'),
             value: date
         });
         
         const passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: true,
             locked: false,
-            questionText: app.i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.'),
+            questionText: app.i18n._('Download links can be protected with a password. Without a password, anyone with the link can access the selected files.'),
             additionalFields: [this.validDateField]
         });
         

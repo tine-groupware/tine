@@ -42,7 +42,7 @@ Tine.Filemanager.NotificationPanel = Ext.extend(Ext.Panel, {
         this.hasOwnNotificationSettings = new Ext.form.Checkbox({
             checked: false,
             disabled: true,
-            boxLabel: this.app.i18n._('This folder has own notification settings'),
+            boxLabel: this.app.i18n._('This folder has its own notification settings'),
             listeners: {scope: this, check: this.onOwnNotificationCheck}
         });
 

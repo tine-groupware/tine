@@ -163,14 +163,14 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
             allowEmptyPassword: true,
             locked: false,
-            questionText: i18n._('Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files.')
+            questionText: i18n._('Download links can be protected with a password. Without a password, anyone with the link can access the selected files.')
         });
         passwordDialog.openWindow();
 
         passwordDialog.on('apply', function (password) {
             if (! this.createMask) {
                 this.createMask = new Ext.LoadMask(this.getEl(), {
-                    msg: this.app.i18n._('Creating new Download Link...')
+                    msg: this.app.i18n._('Creating a new Download Link...')
                 });
             }
             this.createMask.show();
@@ -287,7 +287,7 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 hidden: true
             }, {
                 id: 'expiry_time',
-                header: this.app.i18n._("Valid until"),
+                header: this.app.i18n._("Valid Until"),
                 width: 100,
                 sortable: true,
                 hidden: false,

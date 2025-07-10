@@ -228,7 +228,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals(array(
             'id'    => Tinebase_Model_Container::TYPE_OTHERUSERS,
             'path'  => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
-            'name' => $translate->_('Other users folders'),
+            'name' => $translate->_('Folders of other users'),
             'type' => 'folder',
             'grants'         => array(),
             'account_grants' => array(
@@ -593,7 +593,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testCreateContainerNodeInPersonalFolder();
         $node['grants'] = [];
 
-        static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/you can\'t remove your own admin grant/');
+        static::expectException(Tinebase_Exception_SystemGeneric::class); $this->expectExceptionMessageMatches('/You cannot remove your own admin grant./');
         $this->_getUit()->saveNode($node);
     }
 

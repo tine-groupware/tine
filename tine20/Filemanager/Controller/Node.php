@@ -282,7 +282,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     }
                 }
                 if (!$stillAdmin) {
-                    throw new Tinebase_Exception_SystemGeneric('you can\'t remove your own admin grant'); // _("you can't remove your own admin grant")
+                    throw new Tinebase_Exception_SystemGeneric('You cannot remove your own admin grant.'); // _("You cannot remove your own admin grant.")
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Setting new node grants.');
@@ -642,7 +642,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 'grants' => array(),
             ),
             array(
-                'name' => $translate->_('Other users folders'),
+                'name' => $translate->_('Folders of other users'),
                 'path' => '/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL . '/',
                 'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                 'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
@@ -1690,7 +1690,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             $translate->_('To') => 'to',
             $translate->_('Cc') => 'cc',
             $translate->_('Bcc') => 'bcc',
-            $translate->_('From (E-Mail)') => 'from_email',
+            $translate->_('From (Email)') => 'from_email',
             $translate->_('From (Name)') => 'from_name',
             $translate->_('Body') => 'body',
             $translate->_('Attachments') => 'attachments'

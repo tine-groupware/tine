@@ -28,7 +28,7 @@ class Filemanager_Exception_DestinationIsOwnChild extends Filemanager_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders.'; // _('The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders.')
+    protected $message = 'The destination is a subfolder. Copying or moving a folder into one of its subfolders is not allowed.'; // _('The destination is a subfolder. Copying or moving a folder into one of its subfolders is not allowed.')
     
     /**
      * @see SPL Exception

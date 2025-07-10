@@ -171,7 +171,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                                     const nodeName = 'folder';
                                     if (currentPath && btn === 'ok') {
                                         if (!text) {
-                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
+                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You must enter a {0} name!'), nodeName));
                                             return;
                                         }
                                         
@@ -187,7 +187,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                                             })
                                             .catch((e) => {
                                                 if (e.message === "file exists") {
-                                                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
+                                                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('A folder named {0} already exists!'));
                                                 }
                                             });
                                     }
@@ -585,7 +585,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         
         return new Promise(async (resolve) => {
             const loadMask = new Ext.LoadMask(this.getEl(), {
-                msg: this.app.i18n._('Checking ...'),
+                msg: this.app.i18n._('Checking...'),
                 removeMask: true
             });
             loadMask.show();

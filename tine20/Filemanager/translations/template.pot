@@ -16,7 +16,7 @@ msgstr ""
 msgid "Manage shared folders"
 msgstr ""
 
-msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
+msgid "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
 msgstr ""
 
 msgid "Manage anonymous download links"
@@ -37,13 +37,13 @@ msgstr ""
 msgid "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
 msgstr ""
 
-msgid "Public Download Default Valid Time"
+msgid "Public Download Default Validity"
 msgstr ""
 
-msgid "Public download default valid time. Unit is day"
+msgid "Public download default validity period (in days)"
 msgstr ""
 
-msgid "you can't remove your own admin grant"
+msgid "You cannot remove your own admin grant."
 msgstr ""
 
 msgid "My folders"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "Shared folders"
 msgstr ""
 
-msgid "Other users folders"
+msgid "Folders of other users"
 msgstr ""
 
 msgid "Received"
@@ -67,7 +67,7 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
-msgid "From (E-Mail)"
+msgid "From (Email)"
 msgstr ""
 
 msgid "From (Name)"
@@ -82,7 +82,7 @@ msgstr ""
 msgid "Destination is a Subfolder"
 msgstr ""
 
-msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
+msgid "The destination is a subfolder. Copying or moving a folder into one of its subfolders is not allowed."
 msgstr ""
 
 msgid "Destination has the same Path"
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Quarantined File"
 msgstr ""
 
-msgid "Password for download required"
+msgid "Password required for download"
 msgstr ""
 
 msgid "Submit"
@@ -121,10 +121,13 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+msgid "Loading"
+msgstr ""
+
 msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
 msgstr ""
 
-msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgid "This is possible for .doc, .jpg, .pdf and other file formats."
 msgstr ""
 
 msgid "Interested? Then let us know!"
@@ -133,7 +136,7 @@ msgstr ""
 msgid "We would be happy to make you a non-binding offer."
 msgstr ""
 
-msgid "This file has no contents. The Upload has failed or has not yet finished."
+msgid "This file has no content. The upload has either failed or is not yet complete."
 msgstr ""
 
 msgid "No preview available."
@@ -154,10 +157,10 @@ msgstr ""
 msgid "Remove record"
 msgstr ""
 
-msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
 msgstr ""
 
-msgid "Creating new Download Link..."
+msgid "Creating a new Download Link..."
 msgstr ""
 
 msgid "Deleting Download Links..."
@@ -175,7 +178,7 @@ msgstr ""
 msgid "Creation Time"
 msgstr ""
 
-msgid "Valid until"
+msgid "Valid Until"
 msgstr ""
 
 msgid "Password"
@@ -191,7 +194,7 @@ msgid "Last Modified By"
 msgstr ""
 
 #, python-brace-format
-msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
+msgid "File named {0} already exists in this location. Do you want to replace it with the current one?"
 msgstr ""
 
 msgid "Apply to All"
@@ -222,10 +225,10 @@ msgstr ""
 msgid "Do you want to replace the following file(s)?"
 msgstr ""
 
-msgid "An error occurred creating this folder"
+msgid "An error occurred while creating this folder"
 msgstr ""
 
-msgid "Item with this name already exists!"
+msgid "An item with this name already exists!"
 msgstr ""
 
 msgid "Filemanager"
@@ -266,13 +269,14 @@ msgid "No {0} added"
 msgstr ""
 
 #, python-brace-format
-msgid "You have to supply a {0} name!"
+msgid "You must enter a {0} name!"
 msgstr ""
 
 msgid "Illegal characters: "
 msgstr ""
 
-msgid "Folder with this name already exists!"
+#, python-brace-format
+msgid "A folder named {0} already exists!"
 msgstr ""
 
 msgid "Show Filters"
@@ -281,7 +285,7 @@ msgstr ""
 msgid "Hide Filters"
 msgstr ""
 
-msgid "Checking ..."
+msgid "Checking..."
 msgstr ""
 
 msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
@@ -293,7 +297,7 @@ msgstr ""
 msgid "Content type"
 msgstr ""
 
-msgid "Send as e-mail"
+msgid "Send as email"
 msgstr ""
 
 msgid "Close"
@@ -308,20 +312,20 @@ msgstr ""
 msgid "Grants"
 msgstr ""
 
-msgid "This folder has its own grants"
+msgid "This folder has its own permissions"
 msgstr ""
 
-msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgid "Permissions of a folder also apply recursively to all subfolders unless they have their own permissions."
 msgstr ""
 
-msgid "This folder is part of the data safe"
+msgid "This folder is part of the data vault"
 msgstr ""
 
-msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgid "If the data vault is activated, this folder and its contents can only be accessed while the vault is unlocked."
 msgstr ""
 
 #, python-brace-format
-msgid "Grants are inherited from {locationsHtml} as follows"
+msgid "Permissions are inherited from {locationsHtml} as follows"
 msgstr ""
 
 msgid "Errors"
@@ -330,13 +334,13 @@ msgstr ""
 msgid "Failed to download this file!"
 msgstr ""
 
-msgid "The grant to download files"
+msgid "Permission to download files"
 msgstr ""
 
 msgid "Publish"
 msgstr ""
 
-msgid "The grant to create anonymous download links for files"
+msgid "Permission to create anonymous download links for files"
 msgstr ""
 
 msgid "Revision"
@@ -350,10 +354,10 @@ msgstr ""
 msgid "Moving data .. {0}"
 msgstr ""
 
-msgid "Confirm Changing of Folder Grants"
+msgid "Confirm Changing of Folder Permissions"
 msgstr ""
 
-msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
+msgid "You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."
 msgstr ""
 
 msgid "Please wait"
@@ -421,7 +425,7 @@ msgstr ""
 msgid "Edit folder"
 msgstr ""
 
-msgid "edit file"
+msgid "Edit file"
 msgstr ""
 
 msgid "Public Links"
@@ -442,7 +446,7 @@ msgstr ""
 msgid "Enter description"
 msgstr ""
 
-msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
+msgid "You have unfinished uploads. Please check the upload monitor and restart any failed uploads."
 msgstr ""
 
 msgid "Do you want to restart the failed uploads?"
@@ -454,7 +458,7 @@ msgstr ""
 msgid "Total size of all available revisions"
 msgstr ""
 
-msgid "File contents is part of the search index"
+msgid "File contents are part of the search index"
 msgstr ""
 
 msgid "Upload Folder"
@@ -463,19 +467,19 @@ msgstr ""
 msgid "Upload File"
 msgstr ""
 
-msgid "Open Data Safe"
+msgid "Open the Data Safe"
 msgstr ""
 
 msgid "Folder Up"
 msgstr ""
 
-msgid "Locking data safe..."
+msgid "Locking the data safe..."
 msgstr ""
 
-msgid "Unlocking data safe..."
+msgid "Unlocking the data safe..."
 msgstr ""
 
-msgid "Close Data Safe"
+msgid "Close the Data Safe"
 msgstr ""
 
 msgid "Upload Failed"
@@ -520,7 +524,7 @@ msgstr ""
 msgid "Once a year"
 msgstr ""
 
-msgid "Search for users ..."
+msgid "Search for users..."
 msgstr ""
 
 msgid "No permission"
@@ -529,13 +533,13 @@ msgstr ""
 msgid "all"
 msgstr ""
 
-msgid "Search for groups ..."
+msgid "Search for groups..."
 msgstr ""
 
 msgid "Notifications"
 msgstr ""
 
-msgid "This folder has own notification settings"
+msgid "This folder has its own notification settings"
 msgstr ""
 
 msgid "path"
@@ -550,13 +554,13 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "This folder has own revision settings"
+msgid "This folder has its own revision settings"
 msgstr ""
 
 msgid "Revision active"
 msgstr ""
 
-msgid "Limit revision amount to"
+msgid "Limit number of revisions to"
 msgstr ""
 
 msgid "Hold-back in months"
@@ -565,7 +569,7 @@ msgstr ""
 msgid "Usage"
 msgstr ""
 
-msgid "This folder has own quota"
+msgid "This folder has its own quota"
 msgstr ""
 
 msgid "Quota"
@@ -596,4 +600,12 @@ msgid "Usage by User"
 msgstr ""
 
 msgid "unknown"
+msgstr ""
+
+msgid "File Location"
+msgid_plural "File Locations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_File Location"
 msgstr ""

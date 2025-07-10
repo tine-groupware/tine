@@ -120,7 +120,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $view = $this->_getView();
         $locale = new Zend_Locale();
         $translation = Tinebase_Translation::getTranslation('Filemanager', $locale);
-        $view->pwtext = $translation->_('Password for download required');
+        $view->pwtext = $translation->_('Password required for download');
         $view->title = $view->pwtext;
         $view->submittext = $translation->_('Submit');
         header('Content-Type: text/html; charset=utf-8');

@@ -202,9 +202,9 @@ Tine.widgets.container.GrantsManager.register('Filemanager_Model_Node', function
 
 Ext.override(Tine.widgets.container.GrantsGrid, {
     downloadGrantTitle: 'Download', // i18n._('Download')
-    downloadGrantDescription: 'The grant to download files', // i18n._('The grant to download files')
+    downloadGrantDescription: 'Permission to download files', // i18n._('Permission to download files')
     publishGrantTitle: 'Publish', // i18n._('Publish')
-    publishGrantDescription: 'The grant to create anonymous download links for files', // i18n._('The grant to create anonymous download links for files')
+    publishGrantDescription: 'Permission to create anonymous download links for files', // i18n._('Permission to create anonymous download links for files')
 });
 
 // NOTE: atm the activity records are stored as Tinebase_Model_Tree_Node records
@@ -387,8 +387,8 @@ Tine.Filemanager.nodeBackendMixin = {
                 Ext.MessageBox.show({
                     icon: Ext.MessageBox.WARNING,
                     buttons: Ext.MessageBox.OKCANCEL,
-                    title: app.i18n._('Confirm Changing of Folder Grants'),
-                    msg: app.i18n._("You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."),
+                    title: app.i18n._('Confirm Changing of Folder Permissions'),
+                    msg: app.i18n._("You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."),
                     fn: function(btn) {
                         if (btn === 'ok') {
                             Tine.Filemanager.nodeBackend.copyNodes(items, target, move, false, params);

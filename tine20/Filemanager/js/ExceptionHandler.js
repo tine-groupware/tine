@@ -96,8 +96,8 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
 
             } else {
                 Ext.Msg.show({
-                  title:   app.i18n._('An error occurred creating this folder'),
-                  msg:     app.i18n._('Item with this name already exists!'),
+                  title:   app.i18n._('An error occurred while creating this folder'),
+                  msg:     app.i18n._('An item with this name already exists!'),
                   icon:    Ext.MessageBox.ERROR,
                   buttons: Ext.Msg.OK
                });

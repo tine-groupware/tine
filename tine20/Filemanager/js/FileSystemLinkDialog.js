@@ -74,7 +74,7 @@ Tine.Filemanager.FileSystemLinkDialog = Ext.extend(Ext.FormPanel, {
     initButtons: function () {
         this.fbar = ['->', {
             xtype: 'button',
-            text: this.app.i18n._('Send as e-mail'),
+            text: this.app.i18n._('Send as email'),
             iconCls: 'action_composeEmail',
             handler: this.onSendAsMail.createDelegate(this),
             scope: this,
