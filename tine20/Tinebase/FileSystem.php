@@ -1352,7 +1352,10 @@ class Tinebase_FileSystem implements
 
     public function acquireWriteLock()
     {
-        Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' about to aquire exclusive write lock');
+
+        Tinebase_Application::getInstance()->getApplicationState(Tinebase_Config::APP_NAME,
             Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, true);
     }
     
