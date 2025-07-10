@@ -179,7 +179,9 @@ class Tinebase_FileSystem_StreamWrapper
             return false;
         }
 
-        Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        if (LOCK_EX === $operation) {
+            Tinebase_FileSystem::getInstance()->acquireWriteLock();
+        }
 
         return true;
     }
