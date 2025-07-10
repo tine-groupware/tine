@@ -128,7 +128,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.recordEditDialogOpener = Tine.Addressbook.ContactEditDialog.openWindow;
         this.recordClass = Tine.Addressbook.Model.Contact;
 
-        this.storeFields = Tine.Addressbook.Model.ContactArray;
+        this.storeFields = _.map(this.recordClass.getFieldDefinitions(), 'fieldDefinition');
         this.storeFields.push({name: 'relation'});   // the relation object           
         this.storeFields.push({name: 'relation_type'});
         

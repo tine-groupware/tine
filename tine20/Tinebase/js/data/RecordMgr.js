@@ -17,8 +17,8 @@ const RecordMgr = extend(MixedCollection, {
         if (! isFunction(record.getMeta)) {
             throw new Error('only records of type Tinebase.data.Record could be added');
         }
-        var appName = record.getMeta('appName'),
-            modelName = record.getMeta('modelName');
+        var appName = record.prototype.appName,
+            modelName = record.prototype.modelName;
 
         if (! appName && modelName) {
             throw new Error('appName and modelName must be in the metadatas');

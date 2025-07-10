@@ -11,6 +11,9 @@ Ext.namespace('Tine.Tinebase');
 
 require('widgets/grid/AttachmentRenderer');
 require('widgets/grid/ImageRenderer');
+const Record = require("./data/Record").default;
+const recordMgr = require("./data/RecordMgr");
+const {get} = require("lodash");
 
 /**
  * Tinebase Application Starter
@@ -28,27 +31,6 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
      * @type
      */
     userApplications: null,
-    
-    /**
-     * type mapping
-     * @type {Object}
-     */
-    types: {
-        'date':     'date',
-        'datetime': 'date',
-        'datetime_separated_date': 'date',
-        'datetime_separated_time': 'date',
-        'time':     'date',
-        'string':   'string',
-        'stringAutocomplete': 'string',
-        'text':     'string',
-        'boolean':  'bool',
-        'integer':  'int',
-        'bigint':   'int',
-        'numberableInt': 'int',
-        'float':    'float',
-        'money':    'float'
-    },
 
     __applicationStarterInitialized: new Promise( (resolve) => {
         Tine.Tinebase.ApplicationStarter.__applicationStarterInitializedResolve = resolve;
@@ -75,97 +57,6 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
 
     isInitialised: function() {
         return Tine.Tinebase.ApplicationStarter.__applicationStarterInitialized;
-    },
-
-    /**
-     * returns the field
-     * 
-     * @param {Object} fieldDefinition
-     * @return {Object}
-     */
-    getField: function(fieldDefinition, key) {
-        // default type is auto
-        var field = {
-            name: key,
-            fieldDefinition: fieldDefinition
-        };
-        
-        if (fieldDefinition.type) {
-            // add pre defined type
-            field.type = this.types[fieldDefinition.type];
-            switch (fieldDefinition.type) {
-                case 'datetime_separated_date':
-                case 'datetime':
-                case 'date':
-                    field.dateFormat = Date.patterns.ISO8601Long;
-                    break;
-                case 'time':
-                    field.dateFormat = Date.patterns.ISO8601Time;
-                    break;
-                case 'record':
-                case 'records':
-                    field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
-                    field.getRecordClass = function() {
-                        return Tine.Tinebase.data.RecordMgr.get(field.type);
-                    }
-                    break;
-            }
-            if (['attachments', 'records', 'relations', 'alarms', 'notes'].indexOf(fieldDefinition.type) >= 0
-                || (fieldDefinition.nullable)) {
-                field.defaultValue = null;
-            }
-
-            // NOTE: this field default is meant for doctrine on server
-            if (fieldDefinition.hasOwnProperty('default')) {
-                field.defaultValue = fieldDefinition['default'];
-            }
-
-            if (fieldDefinition.hasOwnProperty('validators')) {
-                if (fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty']) {
-                    // @TODO evaluate inputFilters. inputFilters run on server when the key ist set in the data whereas validators always run
-                    field.defaultValue = fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty'];
-                }
-            }
-
-            let defaultFromConfig = _.get(fieldDefinition, 'config.defaultFromConfig');
-            defaultFromConfig = defaultFromConfig ? Tine.Tinebase.configManager.get(defaultFromConfig.config, defaultFromConfig.appName) : null;
-            if (defaultFromConfig) {
-                field.defaultValue = defaultFromConfig
-            }
-
-            // php for [className, functionName]
-            if (_.get(field.defaultValue, '[0].length') === 2) {
-                if (field.defaultValue[1] === 'Tinebase_Record_RecordSet') {
-                    field.defaultValue = field.defaultValue[3];
-                } else if (field.defaultValue[0][1] === 'generateUID') {
-                    field.defaultValue = _.bind(Tine.Tinebase.data.Record.generateUID, _, field.defaultValue[1] || 40);
-                }
-            }
-
-            if ((_.toUpper(_.get(fieldDefinition, `config.storage`)) === 'JSON' || _.get(fieldDefinition, `config.persistent`) === true)
-                && !_.isArray(field.defaultValue) && String(field.defaultValue).match(/^[\[{]/)) {
-                // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}
-                field.defaultValue = JSON.parse(field.defaultValue);
-            }
-            if (fieldDefinition.type === 'dynamicRecord' && !fieldDefinition.nullable && !field.defaultValue) {
-                field.defaultValue = {};
-            }
-            if (['record', 'dynamicRecord'].indexOf(fieldDefinition.type) >=0 && JSON.stringify(field.defaultValue) === '[]') {
-                field.defaultValue = {};
-            }
-
-            // allow overwriting date pattern in model
-            if (fieldDefinition.hasOwnProperty('dateFormat')) {
-                field.dateFormat = fieldDefinition.dateFormat;
-            }
-            
-            if (fieldDefinition.hasOwnProperty('label')) {
-                field.label = fieldDefinition.label;
-            }
-        }
-        
-        // TODO: create field registry, add fields here
-        return field;
     },
 
     /**
@@ -451,6 +342,10 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         });
                     }
 
+                    if (modelConfig.createModule) {
+                        contentTypes.push(modelConfig);
+                    }
+
                     var containerProperty = modelConfig.hasOwnProperty('containerProperty') ? modelConfig.containerProperty : null;
 
                     // NOTE: we need to preserve original modelName.
@@ -459,63 +354,35 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     // modelName = modelName.replace(/_/, '');
                     
                     Ext.namespace('Tine.' + appName, 'Tine.' + appName + '.Model');
-                    
-                    var modelArrayName = modelName + 'Array',
-                        modelArray = [];
-                    
-                    Tine.log.info('ApplicationStarter::createStructure for model ' + modelName);
-                    
-                    if (modelConfig.createModule) {
-                        contentTypes.push(modelConfig);
-                    }
-                    
-                    // iterate record fields
-                    Ext.each(modelConfig.fieldKeys, function(key) {
-                        var fieldDefinition = modelConfig.fields[key];
-
-                        if (fieldDefinition.type === 'virtual') {
-                            fieldDefinition = fieldDefinition.config || {};
-                        }
-
-                        // add field to model array
-                        modelArray.push(this.getField(fieldDefinition, key));
-                        
-                    }, this);
-                    
-                    // iterate virtual record fields
-                    if (modelConfig.virtualFields && modelConfig.virtualFields.length) {
-                        Ext.each(modelConfig.virtualFields, function(field) {
-                            modelArray.push(this.getField(field, field.key));
-                        }, this);
-                    }
-
-                    Tine[appName].Model[modelArrayName] = modelArray;
-                    
-                    // create model
                     if (! Tine[appName].Model.hasOwnProperty(modelName)) {
-                        const recordConfig = Ext.copyTo({modelConfiguration: modelConfig}, modelConfig,
-                            'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
-                            'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle');
+                        let recordClass = recordMgr.get(appName, modelName)
+                        if (! recordClass) {
+                            const Mixin = Tine[appName].Model[modelName + 'Mixin'];
+                            if (Mixin /* || directInit (some legacy models)*/) {
+                                // direct init
+                                const { modelArray, recordConfig } = Record.convertModelConfig(modelConfig)
+                                _.get(modelConfig, 'mixinConfig.before.create', Ext.emptyFn)(modelArray, recordConfig);
+                                recordClass = Record.create(modelConfig, recordConfig);
+                                _.get(modelConfig, 'mixinConfig.after.create', Ext.emptyFn)(modelArray, recordConfig);
+                                Ext.override(recordClass, Mixin || {})
+                                Ext.apply(recordClass, _.get(Mixin, 'statics', {}))
 
-                        const beforeCreate = _.get(Tine, `${appName}.Model.${modelName}Mixin.mixinConfig.before.create`);
-                        if (_.isFunction(beforeCreate)) {
-                            beforeCreate(Tine[appName].Model[modelArrayName], recordConfig);
-                        }
-
-                        Tine[appName].Model[modelName] = Tine.Tinebase.data.Record.create(Tine[appName].Model[modelArrayName], recordConfig);
-
-                        // called from legacy code - but all filters should come from registy (see below)
-                        Tine[appName].Model[modelName].getFilterModel = function() { return [];};
-
-                        // NOTE: no constructor, super magic here
-                        if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin')) {
-                            Ext.override(Tine[appName].Model[modelName], Tine[appName].Model[modelName + 'Mixin']);
-                            Ext.apply(Tine[appName].Model[modelName], _.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}));
-                            const afterCreate = _.get(Tine, `${appName}.Model.${modelName}Mixin.mixinConfig.after.create`);
-                            if (_.isFunction(afterCreate)) {
-                                afterCreate(Tine[appName].Model[modelArrayName], recordConfig);
+                                // Tine[appName].Model[modelName+'Array'] = modelArray;
+                            } else {
+                                // lazy init
+                                recordClass = Record.create([], {
+                                    appName, modelName,
+                                    modelConfiguration: modelConfig,
+                                });
                             }
+                        } else {
+                            // lazy init
+                            recordClass.setModelConfiguration(modelConfig)
                         }
+                        Tine[appName].Model[modelName] = recordClass;
+
+                        // called from legacy code - but all filters should come from registry
+                        recordClass.getFilterModel = function() { return [];};
                     }
 
                     // register filters

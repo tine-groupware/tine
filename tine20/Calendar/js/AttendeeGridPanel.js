@@ -583,6 +583,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                             to: [attender.data.user_id.email]
                         }, 0);
                         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+                            // @TODO fixme, invent better handling to skip gdpr client plugin
                             massMailingPlugins: ['poll'],
                             record: record
                         });

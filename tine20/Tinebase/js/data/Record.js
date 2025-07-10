@@ -5,14 +5,12 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import {isUndefined} from "lodash";
-
-const { apply, extend, isPrimitive, isArray, isString } = require("Ext/core/core/Ext");
-const { emptyFn } = require("Ext/core/Ext-more");
-const { lowerFirst, get, set, find, forEach, isFunction, isObject, indexOf, map, difference, compact } = require('lodash');
+const { apply, extend, override, isPrimitive, isArray, isString } = require("Ext/core/core/Ext");
+const { emptyFn, copyTo } = require("Ext/core/Ext-more");
+const { lowerFirst, get, set, find, forEach, isFunction, isObject, indexOf, map, difference, compact, bind, toUpper, isUndefined } = require('lodash');
 const ExtRecord = require("Ext/data/Record");
 const MixedCollection = require("Ext/util/MixedCollection");
 const Field = require("Ext/data/DataField");
@@ -31,7 +29,11 @@ import log from "ux/Log.js"
 import getTwingEnv from "twingEnv.es6";
 // #endif
 
+const ISO8601Long = 'Y-m-d H:i:s';
+const ISO8601Time = 'H:i:s';
+
 const Record = function(data, id) {
+    this.constructor.init();
     if (id || id === 0) {
         this.id = id;
         if (!data[this.idProperty]) {
@@ -363,6 +365,140 @@ extend(Record, ExtRecord, {
 });
 
 /**
+ * type mapping
+ * @type {Object}
+ */
+const types = {
+    'date':     'date',
+    'datetime': 'date',
+    'datetime_separated_date': 'date',
+    'datetime_separated_time': 'date',
+    'time':     'date',
+    'string':   'string',
+    'stringAutocomplete': 'string',
+    'text':     'string',
+    'boolean':  'bool',
+    'integer':  'int',
+    'bigint':   'int',
+    'numberableInt': 'int',
+    'float':    'float',
+    'money':    'float'
+};
+
+/**
+ * returns the field
+ *
+ * @param {Object} fieldDefinition
+ * @return {Object}
+ */
+const getFieldFromModelConfig = function(fieldDefinition, key) {
+    // default type is auto
+    var field = {
+        name: key,
+        fieldDefinition: fieldDefinition
+    };
+
+    if (fieldDefinition.type) {
+        // add pre defined type
+        field.type = types[fieldDefinition.type];
+        switch (fieldDefinition.type) {
+            case 'datetime_separated_date':
+            case 'datetime':
+            case 'date':
+                field.dateFormat = ISO8601Long;
+                break;
+            case 'time':
+                field.dateFormat = ISO8601Time;
+                break;
+            case 'record':
+            case 'records':
+                field.type = fieldDefinition.config.appName + '.' + fieldDefinition.config.modelName;
+                field.getRecordClass = function() {
+                    return recordMgr.get(field.type);
+                }
+                break;
+        }
+        if (['attachments', 'records', 'relations', 'alarms', 'notes'].indexOf(fieldDefinition.type) >= 0
+            || (fieldDefinition.nullable)) {
+            field.defaultValue = null;
+        }
+
+        // NOTE: this field default is meant for doctrine on server
+        if (fieldDefinition.hasOwnProperty('default')) {
+            field.defaultValue = fieldDefinition['default'];
+        }
+
+        if (fieldDefinition.hasOwnProperty('validators')) {
+            if (fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty']) {
+                // @TODO evaluate inputFilters. inputFilters run on server when the key ist set in the data whereas validators always run
+                field.defaultValue = fieldDefinition['validators']['default'] || fieldDefinition['validators']['Zend_Filter_Empty'];
+            }
+        }
+
+        let defaultFromConfig = get(fieldDefinition, 'config.defaultFromConfig');
+        defaultFromConfig = defaultFromConfig ? Tine.Tinebase.configManager.get(defaultFromConfig.config, defaultFromConfig.appName) : null;
+        if (defaultFromConfig) {
+            field.defaultValue = defaultFromConfig
+        }
+
+        // php for [className, functionName]
+        if (get(field.defaultValue, '[0].length') === 2) {
+            if (field.defaultValue[1] === 'Tinebase_Record_RecordSet') {
+                field.defaultValue = field.defaultValue[3];
+            } else if (field.defaultValue[0][1] === 'generateUID') {
+                field.defaultValue = bind(Record.generateUID, _, field.defaultValue[1] || 40);
+            }
+        }
+
+        if ((toUpper(get(fieldDefinition, `config.storage`)) === 'JSON' || get(fieldDefinition, `config.persistent`) === true)
+            && !isArray(field.defaultValue) && String(field.defaultValue).match(/^[\[{]/)) {
+            // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}
+            field.defaultValue = JSON.parse(field.defaultValue);
+        }
+        if (fieldDefinition.type === 'dynamicRecord' && !fieldDefinition.nullable && !field.defaultValue) {
+            field.defaultValue = {};
+        }
+        if (['record', 'dynamicRecord'].indexOf(fieldDefinition.type) >=0 && JSON.stringify(field.defaultValue) === '[]') {
+            field.defaultValue = {};
+        }
+
+        // allow overwriting date pattern in model
+        if (fieldDefinition.hasOwnProperty('dateFormat')) {
+            field.dateFormat = fieldDefinition.dateFormat;
+        }
+
+        if (fieldDefinition.hasOwnProperty('label')) {
+            field.label = fieldDefinition.label;
+        }
+    }
+
+    // TODO: create field registry, add fields here
+    return field;
+};
+
+Record.convertModelConfig = function(modelConfig) {
+    const modelArray = map(modelConfig.fieldKeys, key => {
+        let fieldDefinition = modelConfig.fields[key];
+
+        if (fieldDefinition.type === 'virtual') {
+            fieldDefinition = fieldDefinition.config || {};
+        }
+
+        return getFieldFromModelConfig(fieldDefinition, key);
+    })
+
+    forEach(modelConfig.virtualFields, field => {
+        modelArray.push(getFieldFromModelConfig(field, field.key));
+    })
+
+    const recordConfig = copyTo({modelConfiguration: modelConfig}, modelConfig,
+        'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
+        'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle');
+
+    return { modelArray, recordConfig }
+}
+
+/**
  * Generate a constructor for a specific Record layout.
  * 
  * @param {Array} def see {@link Ext.data.Record#create}
@@ -394,30 +530,13 @@ Record.create = function(o, meta) {
     var f = extend(Record, {});
     var p = f.prototype;
     apply(p, meta);
-    p.fields = new MixedCollection(false, function(field) {
-        return field.name;
-    });
-    p.fields.get = function(name) {
-        const cfName = String(name).match(p.cfExp);
-        if (cfName) {
-            return {
-                name,
-                sortDir: 'DESC'
-            };
-        } else {
-            return MixedCollection.prototype.get.apply(this, arguments);
-        }
-    };
-    for(var i = 0, len = o.length; i < len; i++) {
-        if (o[i]['name'] == meta.containerProperty && meta.allowBlankContainer === false) {
-            o[i]['allowBlank'] = false;
-        }
-        p.fields.add(new Field(o[i]));
-    }
+
     f.getField = function(name) {
+        f.init();
         return p.fields.get(name);
     };
     f.getMeta = function(name) {
+        f.init();
         var value = null;
         switch (name) {
             case ('phpClassName'):
@@ -432,9 +551,11 @@ Record.create = function(o, meta) {
         return {};
     };
     f.getFieldDefinitions = function() {
+        f.init();
         return p.fields.items;
     };
     f.getFieldNames = function() {
+        f.init();
         if (! p.fieldsarray) {
             var arr = p.fieldsarray = [];
             forEach(p.fields.items, function(item) {arr.push(item.name);});
@@ -442,9 +563,11 @@ Record.create = function(o, meta) {
         return p.fieldsarray;
     };
     f.hasField = function(n) {
+        f.init();
         return p.fields.indexOfKey(n) >= 0;
     };
     f.getDataFields = function() {
+        f.init();
         const systemFields = map(Record.genericFields, 'name')
             .concat(f.getMeta('idProperty'))
             .concat(p.modelConfiguration?.hasUserNotes ? [] : 'notes')
@@ -474,6 +597,7 @@ Record.create = function(o, meta) {
         return i18n.n_(p.recordName, p.recordsName, 50);
     };
     f.getRecordGender = function () {
+        f.init();
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n,
             msgId = 'GENDER_' + p.recordName,
@@ -482,6 +606,7 @@ Record.create = function(o, meta) {
         return gender !== msgId ? gender : 'other';
     };
     f.getContainerGender = function () {
+        f.init();
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n,
             msgId = 'GENDER_' + p.containerName,
@@ -490,12 +615,14 @@ Record.create = function(o, meta) {
         return gender !== msgId ? gender : 'other';
     };
     f.getContainerName = function() {
+        f.init();
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n;
 
         return i18n.n_(p.containerName, p.containersName, 1);
     };
     f.getContainersName = function() {
+        f.init();
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n;
 
@@ -517,6 +644,7 @@ Record.create = function(o, meta) {
      * @return {String} php class name
      */
     f.getPhpClassName = function(app, model) {
+        f.init();
         // without arguments the php class name of the this is returned
         if (!app && !model) {
             return f.getMeta('phpClassName');
@@ -532,22 +660,67 @@ Record.create = function(o, meta) {
     f.getModelConfiguration = function() {
         return p.modelConfiguration;
     };
+    f.setModelConfiguration = function(modelConfiguration) {
+        p.modelConfiguration = modelConfiguration;
+        return this;
+    };
     f.getProxy = function() {
         return get(window, `Tine.${p.appName}.${p.modelName.toLowerCase()}Backend`);
     }
 
-    // sanitize containerProperty label
-    var containerProperty = f.getMeta('containerProperty');
-    if (containerProperty) {
-        var field = p.fields.get(containerProperty);
-        if (field) {
-            field.label = p.containerName;
+    f.init = function(o, meta) {
+        if (p.fields || p.isInitialized) return;
+        if (! (o && o.length)) {
+            // lazy init
+            const modelConfig = f.getModelConfiguration() || Tine[p.appName].registry.get('models')[p.modelName];
+            const { modelArray, recordConfig} = Record.convertModelConfig(modelConfig)
+            o = modelArray; meta = recordConfig;
         }
+
+        apply(p, meta);
+        p.fields = new MixedCollection(false, function(field) {
+            return field.name;
+        });
+        p.fields.get = function(name) {
+            const cfName = String(name).match(p.cfExp);
+            if (cfName) {
+                return {
+                    name,
+                    sortDir: 'DESC'
+                };
+            } else {
+                return MixedCollection.prototype.get.apply(this, arguments);
+            }
+        };
+
+        for(var i = 0, len = o.length; i < len; i++) {
+            if (o[i]['name'] == meta.containerProperty && meta.allowBlankContainer === false) {
+                o[i]['allowBlank'] = false;
+            }
+            p.fields.add(new Field(o[i]));
+        }
+
+        // sanitize containerProperty label
+        var containerProperty = f.getMeta('containerProperty');
+        if (containerProperty) {
+            var field = p.fields.get(containerProperty);
+            if (field) {
+                field.label = p.containerName;
+            }
+        }
+        if (!p.grantsPath) {
+            p.grantsPath = 'data' + (containerProperty ? ('.' + containerProperty) : '') + '.account_grants';
+        }
+
+        p.isInitialized = true;
     }
-    if (!p.grantsPath) {
-        p.grantsPath = 'data' + (containerProperty ? ('.' + containerProperty) : '') + '.account_grants';
-    }
+
     recordMgr.add(f);
+
+    if (o.length) {
+        f.init(o, meta)
+    }
+
     return f;
 };
 
@@ -670,12 +843,12 @@ Record.clone = function(record) {
  */
 
 Record.modlogFields = [
-    { name: 'creation_time',      type: 'date', dateFormat: "Y-m-d H:i:s", omitDuplicateResolving: true },
+    { name: 'creation_time',      type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
     { name: 'created_by',                                                              omitDuplicateResolving: true },
-    { name: 'last_modified_time', type: 'date', dateFormat: "Y-m-d H:i:s", omitDuplicateResolving: true },
+    { name: 'last_modified_time', type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
     { name: 'last_modified_by',                                                        omitDuplicateResolving: true },
     { name: 'is_deleted',         type: 'boolean',                                     omitDuplicateResolving: true },
-    { name: 'deleted_time',       type: 'date', dateFormat: "Y-m-d H:i:s", omitDuplicateResolving: true },
+    { name: 'deleted_time',       type: 'date', dateFormat: ISO8601Long, omitDuplicateResolving: true },
     { name: 'deleted_by',                                                              omitDuplicateResolving: true },
     { name: 'seq',                                                                     omitDuplicateResolving: true }
 ];

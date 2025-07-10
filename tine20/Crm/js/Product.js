@@ -89,7 +89,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.recordClass = Tine.Sales.Model.Product;
         
-        this.storeFields = Tine.Sales.Model.ProductArray;
+        this.storeFields = _.map(this.recordClass.getFieldDefinitions(), 'fieldDefinition');
         this.storeFields.push({name: 'relation'});   // the relation object           
         this.storeFields.push({name: 'relation_type'});
         this.storeFields.push({name: 'remark_price'});
