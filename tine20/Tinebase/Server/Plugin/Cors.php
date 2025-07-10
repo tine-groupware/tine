@@ -49,7 +49,11 @@ class Tinebase_Server_Plugin_Cors implements Tinebase_Server_Plugin_Interface
              * Access-Control-Allow-Credentials:true
              * Access-Control-Allow-Origin:http://other.site
              */
-            $origin = $request->getHeaders('ORIGIN')->getFieldValue();
+            try {
+                $origin = $request->getHeaders('ORIGIN')->getFieldValue();
+            } catch (Exception) {
+                return null;
+            }
             $uri    = \Laminas\Uri\UriFactory::factory($origin);
 
             $allowedOrigins = array_merge(
