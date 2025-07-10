@@ -23,12 +23,12 @@ class Sales_Exception_DuplicateNumber extends Sales_Exception
      *
      * @var string
      */
-    protected $_title = 'Number duplicate'; // _('Number duplicate')
+    protected $_title = 'Duplicate Number'; // _('Duplicate Number')
     
     /**
      * @see SPL Exception
      */
-    protected $message = 'The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number.'; // _('The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number.')
+    protected $message = 'The number you tried to use is already taken. Please use another number, or leave the field blank to automatically assign the next available number.'; // _('The number you tried to use is already taken. Please use another number, or leave the field blank to automatically assign the next available number.')
     
     /**
      * @see SPL Exception

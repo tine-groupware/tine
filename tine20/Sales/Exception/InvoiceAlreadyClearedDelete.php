@@ -28,7 +28,7 @@ class Sales_Exception_InvoiceAlreadyClearedDelete extends Sales_Exception
     /**
      * @see SPL Exception
      */
-    protected $message = 'The Invoice you tried to delete is cleared already, so deleting is not possible anymore!'; // _('The Invoice you tried to delete is cleared already, so deleting is not possible anymore!')
+    protected $message = 'The invoice you tried to delete has already been cleared and can no longer be deleted!'; // _('The invoice you tried to delete has already been cleared and can no longer be deleted!')
     
     /**
      * @see SPL Exception

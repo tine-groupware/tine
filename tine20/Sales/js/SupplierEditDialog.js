@@ -38,7 +38,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
         if (Ext.isEmpty(form.findField('adr_postalcode').getValue()) && Ext.isEmpty(form.findField('adr_pobox').getValue())) {
             isValid = false;
-            var msg = this.app.i18n._('Either postalcode or postbox is required!');
+            var msg = this.app.i18n._('Either postal code or postbox is required!');
             form.markInvalid( {'adr_postalcode': msg, 'adr_pobox': msg});
         }
 
@@ -284,7 +284,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }], [{
                                 name: 'adr_postalcode',
                                 allowBlank: false,
-                                fieldLabel: this.app.i18n._('Postalcode'),
+                                fieldLabel: this.app.i18n._('Postal Code'),
                                 columnWidth: 47/100
                             }, {
                                 name: 'adr_locality',

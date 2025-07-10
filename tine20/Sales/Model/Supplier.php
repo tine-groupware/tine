@@ -235,7 +235,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                 'type' => 'virtual',
                 'config' => array(
                     'duplicateOmit' => TRUE,
-                    'label'         => 'Postalcode', //_('Postalcode')
+                    'label'         => 'Postal Code', //_('Postal Code')
                     'shy'           => TRUE
                 ),
             ),

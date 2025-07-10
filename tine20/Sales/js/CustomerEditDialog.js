@@ -344,7 +344,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 
                             }], [{
                                 name: 'adr_postalcode',
-                                fieldLabel: this.app.i18n._('Postalcode'),
+                                fieldLabel: this.app.i18n._('Postal Code'),
                                 columnWidth: 0.5
                             }, {
                                 name: 'adr_locality',

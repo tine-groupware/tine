@@ -286,8 +286,8 @@ class Sales_Config extends Tinebase_Config_Abstract
         self::AUTO_INVOICE_CONTRACT_INTERVAL => array(
             //_('Auto Invoice Contract Interval')
             'label'                 => 'Auto Invoice Contract Interval',
-            //_('Sets the biggest interval, contracts will be billed.')
-            'description'           => 'Sets the biggest interval, contracts will be billed.',
+            //_('Sets the maximum interval at which contracts will be billed.')
+            'description'           => 'Sets the maximum interval at which contracts will be billed.',
             'type'                  => 'integer',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
@@ -761,10 +761,10 @@ class Sales_Config extends Tinebase_Config_Abstract
             ],
         ],
         self::EDOCUMENT    => [
-            //_('EDocument')
-            self::LABEL                 => 'EDocument',
-            //_('EDocument')
-            self::DESCRIPTION           => 'EDocument',
+            //_('eDocument')
+            self::LABEL                 => 'eDocument',
+            //_('eDocument')
+            self::DESCRIPTION           => 'eDocument',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
@@ -1003,7 +1003,7 @@ class Sales_Config extends Tinebase_Config_Abstract
         ),
         self::LANGUAGES_AVAILABLE => [
             self::LABEL                 => 'Languages Available', //_('Languages Available')
-            self::DESCRIPTION           => 'List of the language in which the multilingual texts are laid out.', //_('List of the language in which the multilingual texts are laid out.')
+            self::DESCRIPTION           => 'List of languages in which multilingual texts are available.', //_('List of languages in which multilingual texts are available.')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             'localeTranslationList'     => 'Language',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -1017,9 +1017,9 @@ class Sales_Config extends Tinebase_Config_Abstract
             ],
         ],
         self::INVOICE_EDOCUMENT_NAME_TMPL => [
-            //_('Invoice EDocument Attachment Name Template')
-            self::LABEL                 => 'Invoice EDocument Attachment Name Template',
-            self::DESCRIPTION           => 'Invoice EDocument Attachment Name Template',
+            //_('Invoice eDocument Attachment Name Template')
+            self::LABEL                 => 'Invoice eDocument Attachment Name Template',
+            self::DESCRIPTION           => 'Invoice eDocument Attachment Name Template',
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => '{{ sanitizeFileName(document.document_number|replace({"/": "-"})) }}-xrechnung.xml',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -1027,9 +1027,9 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => true,
         ],
         self::INVOICE_EDOCUMENT_RENAME_TMPL => [
-            //_('Invoice EDocument Attachment Rename Template')
-            self::LABEL                 => 'Invoice EDocument Attachment Rename Template',
-            self::DESCRIPTION           => 'Invoice EDocument Attachment Rename Template',
+            //_('Invoice eDocument Attachment Rename Template')
+            self::LABEL                 => 'Invoice eDocument Attachment Rename Template',
+            self::DESCRIPTION           => 'Invoice eDocument Attachment Rename Template',
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => '',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -1202,7 +1202,7 @@ class Sales_Config extends Tinebase_Config_Abstract
         ],
         self::VARIABLE_POSITION_FLAG => [
             self::LABEL                 => 'Sub-Product Variable Position Flag', //_('Sub-Product Variable Position Flag')
-            self::DESCRIPTION           => 'Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.', //_('Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document.')
+            self::DESCRIPTION           => 'The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document.', //_('The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document.')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             /*self::OPTIONS               => [
                 self::RECORD_MODEL          => ....
@@ -1489,7 +1489,7 @@ VAT ID of the service recipient: { vatid }',
                     self::LABEL                             => 'Legacy Offers',
                     //_('Legacy Offers')
                     self::DESCRIPTION                       => 'Legacy (non-document) Offers',
-                    //_('Legacy (non-document) Offers'')
+                    //_('Legacy (non-document) Offers')
                     self::TYPE                              => self::TYPE_BOOL,
                     self::DEFAULT_STR                       => false,
                 ],

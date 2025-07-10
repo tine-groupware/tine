@@ -172,7 +172,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
                 ],
             ],
             self::FLD_CONTACT_EMAIL         => [
-                self::LABEL                     => 'Contact EMail', // _('Contact EMail')
+                self::LABEL                     => 'Contact Email', // _('Contact Email')
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
