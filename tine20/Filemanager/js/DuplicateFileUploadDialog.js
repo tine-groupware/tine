@@ -54,7 +54,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
     initComponent() {
         this.app = this.app || Tine.Tinebase.appMgr.get('Filemanager');
 
-        this.questionText =  String.format(this.app.i18n._('File named {0} already exist in this location. Do you want to replace it with the current one?'), this.fileName);
+        this.questionText =  String.format(this.app.i18n._('File named {0} already exists in this location. Do you want to replace it with the current one?'), this.fileName);
         this.options =  [
             {text: this.app.i18n._('Apply to All'), name: 'apply_to_all'}
         ];

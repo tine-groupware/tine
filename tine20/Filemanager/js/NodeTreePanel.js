@@ -382,7 +382,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
                 if (currentPath && btn === 'ok') {
                     if (!text) {
-                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
+                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You must enter a {0} name!'), nodeName));
                         return;
                     }
             
@@ -404,7 +404,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                         })
                         .catch((e) => {
                             if (e.message === "file exists") {
-                                Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
+                                Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('A folder named {0} already exists!'));
                             }
                         });
                 }

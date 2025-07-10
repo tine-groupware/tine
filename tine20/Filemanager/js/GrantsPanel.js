@@ -33,7 +33,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
         this.hasOwnGrantsCheckbox = new Ext.form.Checkbox({
             readOnly: true,
-            boxLabel: this.app.i18n._('This folder has its own grants'),
+            boxLabel: this.app.i18n._('This folder has its own permissions'),
             listeners: {scope: this, check: this.onOwnGrantsCheck}
         });
         this.inheritAclNodePathInfo = new Ext.Component({
@@ -45,15 +45,15 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         });
 
         this.hasOwnRightsDescription = new Ext.form.Label({
-            text: this.app.i18n._("Grants of a folder also apply recursively to all sub folders unless they have their own grants.")
+            text: this.app.i18n._("Permissions of a folder also apply recursively to all subfolders unless they have their own permissions.")
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
             readOnly: true,
             hidden: ! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length,
-            boxLabel: this.app.i18n._('This folder is part of the data safe')
+            boxLabel: this.app.i18n._('This folder is part of the data vault')
         });
         this.pinProtectionDescription = new Ext.form.Label({
-            text: this.app.i18n._("If the data safe is activated, this folder and its contents can only be accessed when the data safe is open.")
+            text: this.app.i18n._("If the data vault is activated, this folder and its contents can only be accessed while the vault is unlocked.")
         });
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             app: this.app,
@@ -157,7 +157,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
                 record_title: this.inheriteAclNodeRecord.get('path'),
                 type: "node"
             }
-            text = this.app.formatMessage('Grants are inherited from {locationsHtml} as follows', {
+            text = this.app.formatMessage('Permissions are inherited from {locationsHtml} as follows', {
                 locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText([location], ', ')
             });
         }

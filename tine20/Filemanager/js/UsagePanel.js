@@ -48,7 +48,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             requiredGrant: this.requiredGrant,
             hidden: !showQuotaUi,
             disabled: true,
-            boxLabel: this.app.i18n._('This folder has own quota'),
+            boxLabel: this.app.i18n._('This folder has its own quota'),
             listeners: {scope: this, check: this.onOwnQuotaCheck}
         });
         this.quotaField = Ext.ComponentMgr.create({

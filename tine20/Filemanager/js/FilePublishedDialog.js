@@ -77,7 +77,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
                         editable: false,
                         hidden: !this.password
                     }, {
-                        fieldLabel: this.app.i18n._('Valid until'),
+                        fieldLabel: this.app.i18n._('Valid Until'),
                         name: 'url',
                         xtype: 'datefield',
                         editable: false,
@@ -94,7 +94,7 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
     initButtons: function () {
         this.fbar = ['->', {
             xtype: 'button',
-            text: this.app.i18n._('Send as e-mail'),
+            text: this.app.i18n._('Send as email'),
             iconCls: 'action_composeEmail',
             handler: this.onSendAsMail.createDelegate(this),
             scope: this,

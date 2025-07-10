@@ -48,7 +48,7 @@ Tine.Filemanager.RevisionPanel = Ext.extend(Ext.form.FieldSet, {
         this.hasOwnRevisionSettings = new Ext.form.Checkbox({
             checked: false,
             disabled: this.readOnly,
-            boxLabel: this.app.i18n._('This folder has own revision settings'),
+            boxLabel: this.app.i18n._('This folder has its own revision settings'),
             listeners: {scope: this, check: this.onOwnRevisionCheck}
         });
 
@@ -71,7 +71,7 @@ Tine.Filemanager.RevisionPanel = Ext.extend(Ext.form.FieldSet, {
                     cls: 'revision-checkbox-field',
                     items: [{
                         xtype: 'checkbox',
-                        boxLabel: this.app.i18n._('Limit revision amount to'),
+                        boxLabel: this.app.i18n._('Limit number of revisions to'),
                         name: 'keepNum',
                         columnWidth: 1,
                         readOnly: false,

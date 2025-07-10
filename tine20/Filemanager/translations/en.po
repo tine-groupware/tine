@@ -16,8 +16,8 @@ msgstr ""
 msgid "Manage shared folders"
 msgstr "Manage shared folders"
 
-msgid "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
-msgstr "Allow Creating and moving new subfolders under shared root folder, both deleting and renaming actions require admin grant on the node itself."
+msgid "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
+msgstr "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
 
 msgid "Manage anonymous download links"
 msgstr "Manage anonymous download links"
@@ -37,14 +37,14 @@ msgstr "Public Download URL"
 msgid "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
 msgstr "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
 
-msgid "Public Download Default Valid Time"
-msgstr "Public Download Default Valid Time"
+msgid "Public Download Default Validity"
+msgstr "Public Download Default Validity"
 
-msgid "Public download default valid time. Unit is day"
-msgstr "Public download default valid time. Unit is day"
+msgid "Public download default validity period (in days)"
+msgstr "Public download default validity period (in days)"
 
-msgid "you can't remove your own admin grant"
-msgstr "you can't remove your own admin grant"
+msgid "You cannot remove your own admin grant."
+msgstr "You cannot remove your own admin grant."
 
 msgid "My folders"
 msgstr "My folders"
@@ -52,8 +52,8 @@ msgstr "My folders"
 msgid "Shared folders"
 msgstr "Shared folders"
 
-msgid "Other users folders"
-msgstr "Other users folders"
+msgid "Folders of other users"
+msgstr "Folders of other users"
 
 msgid "Received"
 msgstr "Received"
@@ -67,8 +67,8 @@ msgstr "Cc"
 msgid "Bcc"
 msgstr "Bcc"
 
-msgid "From (E-Mail)"
-msgstr "From (E-Mail)"
+msgid "From (Email)"
+msgstr "From (Email)"
 
 msgid "From (Name)"
 msgstr "From (Name)"
@@ -82,8 +82,8 @@ msgstr "Attachments"
 msgid "Destination is a Subfolder"
 msgstr "Destination is a Subfolder"
 
-msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
-msgstr "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
+msgid "The destination is a subfolder. Copying or moving a folder into one of its subfolders is not allowed."
+msgstr "The destination is a subfolder. Copying or moving a folder into one of its subfolders is not allowed."
 
 msgid "Destination has the same Path"
 msgstr "Destination has the same Path"
@@ -94,8 +94,8 @@ msgstr "The destination has the same path as the source. No action has been perf
 msgid "Quarantined File"
 msgstr "Quarantined File"
 
-msgid "Password for download required"
-msgstr "Password for download required"
+msgid "Password required for download"
+msgstr "Password required for download"
 
 msgid "Submit"
 msgstr "Submit"
@@ -121,11 +121,14 @@ msgstr "Folder"
 msgid "File"
 msgstr "File"
 
+msgid "Loading"
+msgstr "Loading"
+
 msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
 msgstr "Sorry, Tine 2.0 would have liked to show you the contents of the file."
 
-msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
-msgstr "This is possible for .doc, .jpg, .pdf and even more file formats."
+msgid "This is possible for .doc, .jpg, .pdf and other file formats."
+msgstr "This is possible for .doc, .jpg, .pdf and other file formats."
 
 msgid "Interested? Then let us know!"
 msgstr "Interested? Then let us know!"
@@ -133,8 +136,8 @@ msgstr "Interested? Then let us know!"
 msgid "We would be happy to make you a non-binding offer."
 msgstr "We would be happy to make you a non-binding offer."
 
-msgid "This file has no contents. The Upload has failed or has not yet finished."
-msgstr "This file has no contents. The Upload has failed or has not yet finished."
+msgid "This file has no content. The upload has either failed or is not yet complete."
+msgstr "This file has no content. The upload has either failed or is not yet complete."
 
 msgid "No preview available."
 msgstr "No preview available."
@@ -154,11 +157,11 @@ msgstr "Copy Public Link"
 msgid "Remove record"
 msgstr "Remove record"
 
-msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
-msgstr "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
+msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
+msgstr "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
 
-msgid "Creating new Download Link..."
-msgstr "Creating new Download Link..."
+msgid "Creating a new Download Link..."
+msgstr "Creating a new Download Link..."
 
 msgid "Deleting Download Links..."
 msgstr "Deleting Download Links..."
@@ -175,8 +178,8 @@ msgstr "Created By"
 msgid "Creation Time"
 msgstr "Creation Time"
 
-msgid "Valid until"
-msgstr "Valid until"
+msgid "Valid Until"
+msgstr "Valid Until"
 
 msgid "Password"
 msgstr "Password"
@@ -191,8 +194,8 @@ msgid "Last Modified By"
 msgstr "Last Modified By"
 
 #, python-brace-format
-msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
-msgstr "File named {0} already exist in this location. Do you want to replace it with the current one?"
+msgid "File named {0} already exists in this location. Do you want to replace it with the current one?"
+msgstr "File named {0} already exists in this location. Do you want to replace it with the current one?"
 
 msgid "Apply to All"
 msgstr "Apply to All"
@@ -222,11 +225,11 @@ msgstr "File(s) already exists"
 msgid "Do you want to replace the following file(s)?"
 msgstr "Do you want to replace the following file(s)?"
 
-msgid "An error occurred creating this folder"
-msgstr "An error occurred creating this folder"
+msgid "An error occurred while creating this folder"
+msgstr "An error occurred while creating this folder"
 
-msgid "Item with this name already exists!"
-msgstr "Item with this name already exists!"
+msgid "An item with this name already exists!"
+msgstr "An item with this name already exists!"
 
 msgid "Filemanager"
 msgstr "Filemanager"
@@ -266,14 +269,15 @@ msgid "No {0} added"
 msgstr "No {0} added"
 
 #, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "You have to supply a {0} name!"
+msgid "You must enter a {0} name!"
+msgstr "You must enter a {0} name!"
 
 msgid "Illegal characters: "
 msgstr "Illegal characters: "
 
-msgid "Folder with this name already exists!"
-msgstr "Folder with this name already exists!"
+#, python-brace-format
+msgid "A folder named {0} already exists!"
+msgstr "A folder named {0} already exists!"
 
 msgid "Show Filters"
 msgstr "Show Filters"
@@ -281,8 +285,8 @@ msgstr "Show Filters"
 msgid "Hide Filters"
 msgstr "Hide Filters"
 
-msgid "Checking ..."
-msgstr "Checking ..."
+msgid "Checking..."
+msgstr "Checking..."
 
 msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
 msgstr "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
@@ -293,8 +297,8 @@ msgstr "Overwrite?"
 msgid "Content type"
 msgstr "Content type"
 
-msgid "Send as e-mail"
-msgstr "Send as e-mail"
+msgid "Send as email"
+msgstr "Send as email"
 
 msgid "Close"
 msgstr "Close"
@@ -308,21 +312,21 @@ msgstr "Use this link to share the entry with other system users"
 msgid "Grants"
 msgstr "Grants"
 
-msgid "This folder has its own grants"
-msgstr "This folder has its own grants"
+msgid "This folder has its own permissions"
+msgstr "This folder has its own permissions"
 
-msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
-msgstr "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
+msgid "Permissions of a folder also apply recursively to all subfolders unless they have their own permissions."
+msgstr "Permissions of a folder also apply recursively to all subfolders unless they have their own permissions."
 
-msgid "This folder is part of the data safe"
-msgstr "This folder is part of the data safe"
+msgid "This folder is part of the data vault"
+msgstr "This folder is part of the data vault"
 
-msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
-msgstr "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
+msgid "If the data vault is activated, this folder and its contents can only be accessed while the vault is unlocked."
+msgstr "If the data vault is activated, this folder and its contents can only be accessed while the vault is unlocked."
 
 #, python-brace-format
-msgid "Grants are inherited from {locationsHtml} as follows"
-msgstr "Grants are inherited from {locationsHtml} as follows"
+msgid "Permissions are inherited from {locationsHtml} as follows"
+msgstr "Permissions are inherited from {locationsHtml} as follows"
 
 msgid "Errors"
 msgstr "Errors"
@@ -330,14 +334,14 @@ msgstr "Errors"
 msgid "Failed to download this file!"
 msgstr "Failed to download this file!"
 
-msgid "The grant to download files"
-msgstr "The grant to download files"
+msgid "Permission to download files"
+msgstr "Permission to download files"
 
 msgid "Publish"
 msgstr "Publish"
 
-msgid "The grant to create anonymous download links for files"
-msgstr "The grant to create anonymous download links for files"
+msgid "Permission to create anonymous download links for files"
+msgstr "Permission to create anonymous download links for files"
 
 msgid "Revision"
 msgstr "Revision"
@@ -350,11 +354,11 @@ msgstr "Copying data .. {0}"
 msgid "Moving data .. {0}"
 msgstr "Moving data .. {0}"
 
-msgid "Confirm Changing of Folder Grants"
-msgstr "Confirm Changing of Folder Grants"
+msgid "Confirm Changing of Folder Permissions"
+msgstr "Confirm Changing of Folder Permissions"
 
-msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
-msgstr "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
+msgid "You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."
+msgstr "You are about to move a folder that has its own permissions. These permissions will be lost, and the folder will inherit permissions from its new parent folder."
 
 msgid "Please wait"
 msgstr "Please wait"
@@ -421,8 +425,8 @@ msgstr "File has been published successfully"
 msgid "Edit folder"
 msgstr "Edit folder"
 
-msgid "edit file"
-msgstr "edit file"
+msgid "Edit file"
+msgstr "Edit file"
 
 msgid "Public Links"
 msgstr "Public Links"
@@ -442,8 +446,8 @@ msgstr "Modified By"
 msgid "Enter description"
 msgstr "Enter description"
 
-msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
-msgstr "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
+msgid "You have unfinished uploads. Please check the upload monitor and restart any failed uploads."
+msgstr "You have unfinished uploads. Please check the upload monitor and restart any failed uploads."
 
 msgid "Do you want to restart the failed uploads?"
 msgstr "Do you want to restart the failed uploads?"
@@ -454,8 +458,8 @@ msgstr "Processing files..."
 msgid "Total size of all available revisions"
 msgstr "Total size of all available revisions"
 
-msgid "File contents is part of the search index"
-msgstr "File contents is part of the search index"
+msgid "File contents are part of the search index"
+msgstr "File contents are part of the search index"
 
 msgid "Upload Folder"
 msgstr "Upload Folder"
@@ -463,20 +467,20 @@ msgstr "Upload Folder"
 msgid "Upload File"
 msgstr "Upload File"
 
-msgid "Open Data Safe"
-msgstr "Open Data Safe"
+msgid "Open the Data Safe"
+msgstr "Open the Data Safe"
 
 msgid "Folder Up"
 msgstr "Folder Up"
 
-msgid "Locking data safe..."
-msgstr "Locking data safe..."
+msgid "Locking the data safe..."
+msgstr "Locking the data safe..."
 
-msgid "Unlocking data safe..."
-msgstr "Unlocking data safe..."
+msgid "Unlocking the data safe..."
+msgstr "Unlocking the data safe..."
 
-msgid "Close Data Safe"
-msgstr "Close Data Safe"
+msgid "Close the Data Safe"
+msgstr "Close the Data Safe"
 
 msgid "Upload Failed"
 msgstr "Upload Failed"
@@ -520,8 +524,8 @@ msgstr "Once a month"
 msgid "Once a year"
 msgstr "Once a year"
 
-msgid "Search for users ..."
-msgstr "Search for users ..."
+msgid "Search for users..."
+msgstr "Search for users..."
 
 msgid "No permission"
 msgstr "No permission"
@@ -529,14 +533,14 @@ msgstr "No permission"
 msgid "all"
 msgstr "all"
 
-msgid "Search for groups ..."
-msgstr "Search for groups ..."
+msgid "Search for groups..."
+msgstr "Search for groups..."
 
 msgid "Notifications"
 msgstr "Notifications"
 
-msgid "This folder has own notification settings"
-msgstr "This folder has own notification settings"
+msgid "This folder has its own notification settings"
+msgstr "This folder has its own notification settings"
 
 msgid "path"
 msgstr "path"
@@ -550,14 +554,14 @@ msgstr "This Folder"
 msgid "Search"
 msgstr "Search"
 
-msgid "This folder has own revision settings"
-msgstr "This folder has own revision settings"
+msgid "This folder has its own revision settings"
+msgstr "This folder has its own revision settings"
 
 msgid "Revision active"
 msgstr "Revision active"
 
-msgid "Limit revision amount to"
-msgstr "Limit revision amount to"
+msgid "Limit number of revisions to"
+msgstr "Limit number of revisions to"
 
 msgid "Hold-back in months"
 msgstr "Hold-back in months"
@@ -565,8 +569,8 @@ msgstr "Hold-back in months"
 msgid "Usage"
 msgstr "Usage"
 
-msgid "This folder has own quota"
-msgstr "This folder has own quota"
+msgid "This folder has its own quota"
+msgstr "This folder has its own quota"
 
 msgid "Quota"
 msgstr "Quota"
@@ -597,3 +601,11 @@ msgstr "Usage by User"
 
 msgid "unknown"
 msgstr "unknown"
+
+msgid "File Location"
+msgid_plural "File Locations"
+msgstr[0] "File Location"
+msgstr[1] "File Locations"
+
+msgid "GENDER_File Location"
+msgstr "GENDER_File Location"

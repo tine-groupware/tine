@@ -56,7 +56,7 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFittingTypeTranslation: function (isWindowTitle) {
         if (isWindowTitle) {
-            return this.record.data.type == 'folder' ? this.app.i18n._('Edit folder') : this.app.i18n._('edit file');
+            return this.record.data.type == 'folder' ? this.app.i18n._('Edit folder') : this.app.i18n._('Edit file');
         } else {
             return this.record.data.type == 'folder' ? this.app.i18n._('Folder') : this.app.i18n._('File');
         }

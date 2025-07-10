@@ -216,14 +216,14 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
 
             if (!Tine.Tinebase.configManager.get('filesystem').createPreviews) {
                 text = '<b>' + me.app.i18n._('Sorry, Tine 2.0 would have liked to show you the contents of the file.') + '</b><br/><br/>' +
-                    me.app.i18n._('This is possible for .doc, .jpg, .pdf and even more file formats.') + '<br/>' +
+                    me.app.i18n._('This is possible for .doc, .jpg, .pdf and other file formats.') + '<br/>' +
                     '<a href="https://www.tine20.com/kontakt/" target="_blank">' +
                     me.app.i18n._('Interested? Then let us know!') + '</a><br/>' +
                     me.app.i18n._('We would be happy to make you a non-binding offer.');
             } else if (String(contenttype).match(/^vnd\.adobe\.partial-upload.*/)) {
                 const [, final] = contenttype.match(/final_type=(.+)$/);
                 iconCls = final ? Tine.Tinebase.common.getMimeIconCls(final) : 'mime-icon-file';
-                text = '<b>' + me.app.i18n._('This file has no contents. The Upload has failed or has not yet finished.') + '</b>';
+                text = '<b>' + me.app.i18n._('This file has no content. The upload has either failed or is not yet complete.') + '</b>';
             } else if (!contenttype) { // how to get all previewable types?
                 text = '<b>' + me.app.i18n._('No preview available.') + '</b>';
             } else {
