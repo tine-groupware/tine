@@ -1000,10 +1000,17 @@ class Tinebase_FileSystem implements
             $applicationController = Tinebase_Application::getInstance();
             /** @var Tinebase_Model_Application $tinebaseApplication */
             $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' about to acquire exclusive write lock on FS');
+
             $rootSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, true);
             $rootRevisionSize = (int)$applicationController->getApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_REVISION_SIZE, true);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' about to acquire exclusive write lock on folders to process');
 
             $treeBackend = $this->_getTreeNodeBackend();
             $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($treeBackend);
@@ -1015,6 +1022,9 @@ class Tinebase_FileSystem implements
             }
             unset($raii);
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' FS locking done');
+
             $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($refLogBackend);
             $refLogIds = array_keys($refLogIdsFolderIds);
             $refLogs = $refLogBackend->getMultiple($refLogIds);
@@ -1025,6 +1035,9 @@ class Tinebase_FileSystem implements
             }
             $refLogIds = $refLogs->getArrayOfIds();
             unset($raii);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' reflog locking done');
 
             while ($refLogs->count()) {
                 foreach ($refLogs as $refLog) {
@@ -1074,6 +1087,9 @@ class Tinebase_FileSystem implements
 
             $transMgr->commitTransaction($transId);
             $transId = null;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' processing successfully commited');
         } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' exception: ' . $e->getMessage());
