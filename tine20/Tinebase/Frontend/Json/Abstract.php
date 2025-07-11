@@ -59,6 +59,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     protected $_currentRequestContext = [];
 
+    protected $_publicTwigPaths = [];
+
     /**
      * Configured plugins for filter model
      * @var array
@@ -812,6 +814,17 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__."::".__LINE__.":: Filter model plugin \"$plugin\" doesn't exists");
         }
+    }
+
+    public function getTwigInUserContext(string $path, ?string $locale): array
+    {
+        if (!str_starts_with($path, '/' . $this->_applicationName) || !in_array($path, $this->_publicTwigPaths)) {
+            throw new Tinebase_Exception_Unauthorized($path . ' is not a public twig path');
+        }
+        if ($twigTemplate = Tinebase_Twig::getTemplateContent($path, $locale ?? (string)Tinebase_Core::getLocale())) {
+            return $this->_recordToJson($twigTemplate);
+        }
+        throw new Tinebase_Exception_NotFound($path . ' not found');
     }
 
     /**

@@ -113,6 +113,43 @@ class Tinebase_Twig
         $this->_twigEnvironment->addGlobal('app', $globals);
     }
 
+    public static function getTemplateContent(string $path, string $locale): ?Tinebase_Model_TwigTemplate
+    {
+        $path = ltrim($path, '/');
+        $filename = basename($path);
+        $baseDir = dirname($path);
+        $tineRoot = dirname(__DIR__) . '/';
+
+        $localeParts = explode('_', $locale);
+        $language = $localeParts[0] ?? '';
+
+        // de_DE
+        // first check de_DE dir and if nothing is found check de dir fallback to given path else
+        // Check paths in order of specificity:
+        // 1. Full locale (e.g., de_DE/file.txt)
+        // 2. Language only (e.g., de/file.txt)
+        // 3. Original path (baseDir/file.txt)
+        $possiblePaths = array_merge(
+            [$baseDir . '/' . $locale],
+            $language && $language !== $locale ? [$baseDir . '/' . $language] : [],
+            [$baseDir]
+        );
+        // Return the first existing path
+        foreach ($possiblePaths as $possiblePath) {
+            $pathToTest = $possiblePath . '/' . $filename;
+            if ($twigTmpl = Tinebase_Controller_TwigTemplate::getInstance()->getByPath($pathToTest, skipAcl: true)) {
+                return $twigTmpl;
+            } elseif (file_exists($tineRoot . $pathToTest)) {
+                return new Tinebase_Model_TwigTemplate([
+                    Tinebase_Model_TwigTemplate::FLD_PATH => $pathToTest,
+                    Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE => file_get_contents($tineRoot . $pathToTest),
+                    'last_modified_time' => ($mtime = filemtime($tineRoot . $pathToTest)) ? new Tinebase_DateTime($mtime) : Tinebase_DateTime::now()->subSecond(1),
+                ], true);
+            }
+        }
+        return null;
+    }
+
     /**
      * @param string $_filename
      * @param Zend_Locale $locale
@@ -130,42 +167,15 @@ class Tinebase_Twig
             return $this->_twigEnvironment->load($_filename);
         }
 
-        $locale = $locale ?? Tinebase_Core::getLocale();
-        $path = ltrim($_filename, '/');
-        $filename = basename($path);
-        $baseDir = dirname($path);
-        $tineRoot = dirname(__DIR__) . '/';
-
-            $localString = (string)$locale;
-        $localeParts = explode('_', $localString);
-        $language = $localeParts[0] ?? '';
-
-        // de_DE
-        // first check de_DE dir and if nothing is found check de dir fallback to given path else
-        // Check paths in order of specificity:
-        // 1. Full locale (e.g., de_DE/file.txt)
-        // 2. Language only (e.g., de/file.txt)
-        // 3. Original path (baseDir/file.txt)
-        $possiblePaths = array_merge(
-            $localString ? [$localString] : [],
-            $language && $language !== $localString ? [$language] : [],
-            [$baseDir]
-        );
-        // Return the first existing path
-        foreach ($possiblePaths as $possiblePath) {
-            $pathToTest = $possiblePath . '/' . $filename;
-            if ($twigTmpl = Tinebase_Controller_TwigTemplate::getInstance()->getByPath($pathToTest, skipAcl: true)) {
-                $this->_twigEnvironment->setLoader(
-                    new Tinebase_Twig_CallBackLoader($pathToTest, $twigTmpl->last_modified_time->getTimestamp(),
-                        fn() => $twigTmpl->{Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE})
-                );
-                try {
-                    return $this->_twigEnvironment->load($pathToTest);
-                } finally {
-                    $this->_twigEnvironment->setLoader($loader);
-                }
-            } elseif (file_exists($tineRoot . $pathToTest)) {
-                return $this->_twigEnvironment->load($pathToTest);
+        if (null !== ($twigTmpl = $this::getTemplateContent($_filename, (string)($locale ?? Tinebase_Core::getLocale())))) {
+            $this->_twigEnvironment->setLoader(
+                new Tinebase_Twig_CallBackLoader($twigTmpl->{Tinebase_Model_TwigTemplate::FLD_PATH}, $twigTmpl->last_modified_time->getTimestamp(),
+                    fn() => $twigTmpl->{Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE})
+            );
+            try {
+                return $this->_twigEnvironment->load($twigTmpl->{Tinebase_Model_TwigTemplate::FLD_PATH});
+            } finally {
+                $this->_twigEnvironment->setLoader($loader);
             }
         }
 
