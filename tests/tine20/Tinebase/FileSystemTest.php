@@ -1135,6 +1135,15 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_testNodeAcl($childChildNode, $middleChildNodePath);
     }
 
+    public static function addTransactionId(string $transactionId): void
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($transactionId);
+    }
+    public static function addTransactionable(): void
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+    }
+
     public function testPreviewImageGeneration()
     {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} = true;
@@ -1144,7 +1153,15 @@ class Tinebase_FileSystemTest extends TestCase
         try {
             $oldService = $previewController->setPreviewService(new Tinebase_FileSystem_TestPreviewService());
 
+            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback([self::class, 'addTransactionId'], [$this->_transactionId]);
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([self::class, 'addTransactionable'], [$this->_transactionId]);
             $path = $this->testCreateFile('test.pdf');
+            try {
+                Tinebase_TransactionManager::getInstance()->unitTestRemoveTransactionables();
+                Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+            } finally {
+                Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+            }
             $fileNode = $this->_controller->stat($path);
 
             static::assertEquals(3, $fileNode->preview_count, 'preview count wrong');

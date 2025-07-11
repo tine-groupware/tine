@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,6 +18,8 @@
  */
 class Tinebase_FileSystem_Previews
 {
+    public static ?string $unittestTransactionId = null;
+
     /**
      * @var Tinebase_FileSystem_Preview_ServiceInterface
      */
@@ -269,11 +271,12 @@ class Tinebase_FileSystem_Previews
      */
     public function createPreviewsFromNode(Tinebase_Model_Tree_Node $node)
     {
-         if (!$this->canNodeHavePreviews($node)) {
-            return true;
+        if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions() &&
+                (null === static::$unittestTransactionId || array_diff(Tinebase_TransactionManager::getInstance()->getOpenTransactionIds(), [static::$unittestTransactionId]))) {
+            throw new Tinebase_Exception(__METHOD__ . ' must not be called with transaction open');
         }
 
-        if ($this->hasPreviews($node)) {
+        if (!$this->canNodeHavePreviews($node) || $this->hasPreviews($node)) {
             return true;
         }
 
@@ -356,27 +359,28 @@ class Tinebase_FileSystem_Previews
             unlink($tempPath);
         }
 
-
         foreach ($config as $key => $cnf) {
             if (!isset($result[$key])) {
                 return false;
             }
         }
 
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $transactionTime = microtime(true);
+        $transactionTime = 0;
+        $transactionId = null;
         $resetTransaction = function() use(&$transactionId, &$transactionTime) {
-            if (($now = microtime(true)) - $transactionTime > 1.0) {
+            if ((microtime(true)) - $transactionTime > 1.0) {
                 // restart transaction, this also resets the aquiredWriteLock
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                if (null !== $transactionId) {
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                }
                 $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                $transactionTime = $now;
                 $this->_fsController->acquireWriteLock();
+                $transactionTime = microtime(true);
             }
         };
 
         try {
-            $this->_fsController->acquireWriteLock();
+            $resetTransaction();
 
             $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
             if (!$this->_fsController->isDir($basePath)) {

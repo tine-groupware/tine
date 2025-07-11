@@ -16,33 +16,33 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  *
  * @package     Tinebase
  * @subpackage  Model
- * @property    string                      contenttype
- * @property    Tinebase_DateTime           creation_time
- * @property    string                      hash
- * @property    string                      indexed_hash
- * @property    string                      name
- * @property    Tinebase_DateTime           last_modified_time
- * @property    string                      object_id
- * @property    string                      parent_id
- * @property    int                         size
- * @property    int                         revision_size
- * @property    string                      type
- * @property    string                      revision
- * @property    string                      available_revisions
- * @property    string                      description
- * @property    string                      acl_node
- * @property    array                       revisionProps
- * @property    array                       notificationProps
- * @property    string                      preview_count
- * @property    integer                     preview_status
- * @property    integer                     preview_error_count
- * @property    integer                     quota
- * @property    Tinebase_Record_RecordSet   grants
- * @property    string                      pin_protected_node
- * @property    string                      path
- * @property    Tinebase_DateTime           lastavscan_time
- * @property    boolean                     is_quarantined
- * @property    Tinebase_Record_RecordSet   metadata
+ * @property    string                      $contenttype
+ * @property    Tinebase_DateTime           $creation_time
+ * @property    string                      $hash
+ * @property    string                      $indexed_hash
+ * @property    string                      $name
+ * @property    Tinebase_DateTime           $last_modified_time
+ * @property    string                      $object_id
+ * @property    string                      $parent_id
+ * @property    int                         $size
+ * @property    int                         $revision_size
+ * @property    string                      $type
+ * @property    int                         $revision
+ * @property    array                       $available_revisions
+ * @property    string                      $description
+ * @property    string                      $acl_node
+ * @property    array                       $revisionProps
+ * @property    array                       $notificationProps
+ * @property    string                      $preview_count
+ * @property    integer                     $preview_status
+ * @property    integer                     $preview_error_count
+ * @property    integer                     $quota
+ * @property    Tinebase_Record_RecordSet   $grants
+ * @property    string                      $pin_protected_node
+ * @property    string                      $path
+ * @property    Tinebase_DateTime           $lastavscan_time
+ * @property    boolean                     $is_quarantined
+ * @property    Tinebase_Record_RecordSet   $metadata
  * @property    string                      $flysystem
  * @property    string                      $flypath
  */
