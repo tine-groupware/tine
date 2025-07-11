@@ -259,6 +259,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     ]),
                 ],
                 Admin_Model_SchedulerTask::FLD_CRON => $interval,
+                Admin_Model_SchedulerTask::FLD_APPLICATION_ID   =>  Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()
             ])));
         } else {
             $plugin = new $plugin(array_merge($importOptions, [
