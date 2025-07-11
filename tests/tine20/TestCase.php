@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -132,7 +132,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             Tinebase_CustomField::getInstance()->deleteCustomField($cfd);
         }
 
-        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        Tinebase_FileSystem_Previews::$unittestTransactionId = $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         (new ReflectionProperty(Felamimail_Controller_Account::class, '_instance'))->setAccessible(true);
         (new ReflectionClass(Felamimail_Controller_Account::class))
@@ -172,6 +172,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
         }
+        Tinebase_FileSystem_Previews::$unittestTransactionId = null;
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(true);
 

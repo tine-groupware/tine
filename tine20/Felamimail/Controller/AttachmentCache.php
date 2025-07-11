@@ -105,27 +105,17 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             );
             $this->getBackend()->update($record);
 
+            $transaction->release();
             if (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation()) {
-                try {
-                    /** @var Tinebase_Model_Tree_Node $node */
-                    if (0 === ($node = $record->attachments?->getFirstRecord())?->preview_count
+                /** @var Tinebase_Model_Tree_Node $node */
+                if (0 === ($node = $record->attachments?->getFirstRecord())?->preview_count
                         && Tinebase_FileSystem_Previews::getInstance()->canNodeHavePreviews($node)
                         && Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($node)) {
-                        $record->attachments->removeRecord($node);
-                        $record->attachments->addRecord(Tinebase_FileSystem::getInstance()->get($node->getId()));
-                    }
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                            Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-                        }
-                        return parent::get($_id, $_containerId);
-                    } else {
-                        throw $zdse;
-                    }
+                    $record->attachments->removeRecord($node);
+                    $record->attachments->addRecord(Tinebase_FileSystem::getInstance()->get($node->getId()));
                 }
             }
+
             return $record;
 
         } catch (Tinebase_Exception $te) {

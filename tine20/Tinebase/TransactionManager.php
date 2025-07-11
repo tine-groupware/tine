@@ -315,6 +315,11 @@ class Tinebase_TransactionManager
         return count($this->_openTransactions) > 0;
     }
 
+    public function getOpenTransactionIds(): array
+    {
+        return $this->_openTransactions;
+    }
+
     public function resetTransactions()
     {
         $this->_onCommitCallbacks = [];
@@ -352,6 +357,13 @@ class Tinebase_TransactionManager
     {
         if (false === array_search($_transactionable, $this->_openTransactionables, true)) {
             $this->_openTransactionables[] = $_transactionable;
+        }
+    }
+
+    public function unitTestAddTransactionId(string $transactionId): void
+    {
+        if (false === array_search($transactionId, $this->_openTransactions, true)) {
+            $this->_openTransactions[] = $transactionId;
         }
     }
 }

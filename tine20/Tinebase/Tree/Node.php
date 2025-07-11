@@ -414,9 +414,21 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($_newRecord);
             }
         } else {
-            Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction(
-                'Tinebase_FOO_FileSystem_Previews.createPreviews', $_newRecord->getId(), $_newRecord->revision);
+            // because we might have direct backend, so inline execution
+            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback([
+                    static::class, 'queueCreatePreviews'
+                ], [$_newRecord->getId(), $_newRecord->revision]);
+            } else {
+                static::queueCreatePreviews($_newRecord->getId(), $_newRecord->revision);
+            }
         }
+    }
+
+    public static function queueCreatePreviews(string $id, int $revision): void
+    {
+        Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)->queueAction(
+            'Tinebase_FOO_FileSystem_Previews.createPreviews', $id, $revision);
     }
 
     /**
