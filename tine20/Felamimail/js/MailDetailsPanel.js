@@ -264,7 +264,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     if (!folder || !account || account.get('type') === 'user' || !messageData.is_spam_suspicions) return '';
 
                     const html = '<span style="width: 60%; padding: 5px;">'
-                        + app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"') + '</span>';
+                        + app.i18n._('This message is probably SPAM. Please help improve your anti-SPAM system by choosing: "Yes, it is SPAM" or "No, it is not"') + '</span>';
                     const aboutAction = `<span id="action_about" class="felamimail-action"><span class="felamimail-location-icon action_about"></span></span>`;
                     const actions =
                         '<span id="spam_action_spam" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +

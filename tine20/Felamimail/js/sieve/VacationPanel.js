@@ -78,7 +78,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
                     columnWidth: 1
                 },
                 items: [[{
-                    fieldLabel: this.app.i18n._('Only send all X days to the same sender'),
+                    fieldLabel: this.app.i18n._('Only send to the same sender every X days'),
                     name: 'days',
                     value: 7,
                     xtype: 'numberfield',
@@ -184,7 +184,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
         const commonConfig = this.getCommonFieldConfig();
         return [[Ext.apply({
             fieldLabel: this.app.i18n._('Start Date'),
-            emptyText: this.app.i18n._('Set vacation start date ...'),
+            emptyText: this.app.i18n._('Set vacation start date...'),
             name: 'start_date',
             xtype: 'datefield',
             checkState: () => {
@@ -193,7 +193,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             }
         }, commonConfig), Ext.apply({
             fieldLabel: this.app.i18n._('End Date'),
-            emptyText: this.app.i18n._('Set vacation end date ...'),
+            emptyText: this.app.i18n._('Set vacation end date...'),
             name: 'end_date',
             xtype: 'datefield',
             checkState: () => {
@@ -231,7 +231,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
         return [[
             new Tine.Addressbook.SearchCombo(Ext.apply({
                 fieldLabel: this.app.i18n._('Representative #1'),
-                emptyText: this.app.i18n._('Choose first Representative ...'),
+                emptyText: this.app.i18n._('Choose the first Representative...'),
                 blurOnSelect: true,
                 name: 'contact_id1',
                 selectOnFocus: true,
@@ -244,7 +244,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             }, commonConfig)),
             new Tine.Addressbook.SearchCombo(Ext.apply({
                 fieldLabel: this.app.i18n._('Representative #2'),
-                emptyText: this.app.i18n._('Choose second Representative ...'),
+                emptyText: this.app.i18n._('Choose second Representative...'),
                 blurOnSelect: true,
                 name: 'contact_id2',
                 selectOnFocus: true,
@@ -267,7 +267,7 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
             name: 'template_id',
             valueField: 'id',
             triggerAction: 'all',
-            emptyText: this.app.i18n._('Choose Template ...'),
+            emptyText: this.app.i18n._('Choose Template...'),
             editable: false,
             store: new Ext.data.JsonStore({
                 id: 'timezone',

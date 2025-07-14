@@ -260,7 +260,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.button_ExpectedAnswer = Ext.apply(new Ext.Button(this.action_expectedAnswer), {
-            tooltip: this.app.i18n._('If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired')
+            tooltip: this.app.i18n._('If you select one of these options, you will receive a notification when no reply to the email has been received by the configured deadline')
         });
 
         this.action_toggleEncrypt = new Ext.Action({
@@ -286,7 +286,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             enableToggle: true
         });
         this.button_massMailing = Ext.apply(new Ext.Button(this.action_massMailing), {
-            tooltip: this.app.i18n._('Activate this toggle button to send the mail as separate mail to each recipient.')
+            tooltip: this.app.i18n._('Activate this toggle button to send the mail separately to each recipient.')
         });
 
         this.tbar = new Ext.Toolbar({
@@ -930,7 +930,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var filter = this.record.get(field);
             this.record.set(field, []);
 
-            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Email Addresses')});
             this['AddressLoadMask'].show();
 
             Tine.Addressbook.searchContacts(filter, null, async function (response) {
@@ -1761,7 +1761,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         },
                         {
                             // mass mailing info text
-                            html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
+                            html: this.app.i18n._('NOTE: This mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
                             ref: '../../massMailingInfoText',
                             style: 'padding: 5px; display: block;',
                         }
@@ -1949,7 +1949,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             Ext.MessageBox.confirm(
                 this.app.i18n._('Warning'),
-                this.app.i18n._('Some attachments are of type "systemlinks" whereas some of the recipients (marked yellow), couldn\'t be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments.') + "<br /><br />" + this.app.i18n._('Do you really want to send?'),
+                this.app.i18n._('Some attachments are of type “systemlinks”, but some recipients (marked in yellow) could not be validated as accounts on this installation. Only recipients with an active account will be able to open these attachments.') + "<br /><br />" + this.app.i18n._('Are you sure you want to send?'),
                 function (button) {
                     if (button == 'yes') {
                         me.onApplyChanges(closeWindow, emptySubject, passwordSet, false);
@@ -1993,7 +1993,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Tine.log.debug('Tine.Felamimail.MessageEditDialog::onApplyChanges - empty subject');
             Ext.MessageBox.confirm(
                 this.app.i18n._('Empty subject'),
-                this.app.i18n._('Do you really want to send a message with an empty subject?'),
+                this.app.i18n._('Are you sure you want to send a message with an empty subject?'),
                 function (button) {
                     Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - button: ' + button);
                     if (button == 'yes') {
@@ -2107,7 +2107,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         const title = this.app.i18n._('Attention');
         const message = String.format(this.app.i18n._(
-            'The from-address for this mail got changed to {0} , as you don\'t have the send mail right for the account {1}.'), newAccount?.data?.email, currentAccount?.data?.email);
+            'The from-address for this email was changed to {0}, as you do not have send mail rights for the account {1}'), newAccount?.data?.email, currentAccount?.data?.email);
 
         Ext.ux.MessageBox.msg(title, message, 5);
     },

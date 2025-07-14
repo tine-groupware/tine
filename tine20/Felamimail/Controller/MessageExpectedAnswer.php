@@ -80,7 +80,7 @@ class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Re
         $subject = $translate->_('still unanswered: ') . $entry->subject;
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $entry->user_id);
         $preferenceDatetimeUser = Tinebase_Translation::dateToStringInTzAndLocaleFormat($entry->expected_answer, $timezone, $locale, 'date', true);
-        $text = $translate->_('Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: ') . $preferenceDatetimeUser;
+        $text = $translate->_('Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: ') . $preferenceDatetimeUser;
         $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($entry->user_id);
         $user = Tinebase_User::getInstance()->getFullUserById($entry->user_id);
         $attachments = $this->getAttachments($entry);

@@ -137,7 +137,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             ),
             self::UPDATEINTERVAL  => array(
                 'label'         => $translate->_('Email Update Interval'),
-                'description'   => $translate->_('How often should Felamimail check for new Emails (in minutes).'),
+                'description'   => $translate->_('How often should Felamimail check for new emails (in minutes).'),
             ),
             self::USEINADB  => array(
                 'label'         => $translate->_('Use for mailto links'),
@@ -148,12 +148,12 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                 'description'   => $translate->_('Show confirmation dialog when deleting mails.'),
             ),
             self::EML_FORWARD=> array(
-                'label'         => $translate->_('.eml file Attachment in forwarded mails'),
-                'description'   => $translate->_('Attach an .eml file to a forwarded mail. Otherwise all attachments separate'),
+                'label'         => $translate->_('Attach .eml file when forwarding mails'),
+                'description'   => $translate->_('Attach the original message as a .eml file when forwarding. Otherwise, attachments will be included separately.'),
             ),
             self::DEFAULT_FONT => [
                 'label'         => $translate->_('Default Font'),
-                'description'   => $translate->_('Setting the default font in the E-Mail app'),
+                'description'   => $translate->_('Setting the default font in the Email app'),
             ]
         );
         
@@ -218,11 +218,11 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                             <value>message</value>
                         </option>
                         <option>
-                            <label>' . $translate->_('Forward and forwarded email as .eml in attachment') . '</label>
+                            <label>' . $translate->_('Forwarding and forwarded email as .eml in attachment') . '</label>
                             <value>messageAndAsAttachment</value>
                         </option>
                         <option>
-                            <label>' . $translate->_('Only forwarded email as .eml in attachment') . '</label>
+                            <label>' . $translate->_('Only forward email as a .eml attachment') . '</label>
                             <value>onlyAsAttachment</value>
                         </option>
                     </options>';

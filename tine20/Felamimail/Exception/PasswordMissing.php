@@ -19,9 +19,9 @@
 class Felamimail_Exception_PasswordMissing extends Tinebase_Exception_SystemGeneric
 {
     /**
-     * @var string _('shared / adb_list accounts need to have a password set')
+     * @var string _('shared / adb_list accounts must have a password')
      */
-    protected $_title = 'shared / adb_list accounts need to have a password set';
+    protected $_title = 'shared / adb_list accounts must have a password';
 
     public function __construct($_message, $_code=925)
     {

@@ -1275,7 +1275,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             self::fail('copy should not be possible');
         } catch (Exception $e) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            self::assertEquals($translation->_('It is not allowed to copy e-mails in the same account.'), $e->getMessage(), $e);
+            self::assertEquals($translation->_('Copying emails within the same account is not allowed.'), $e->getMessage(), $e);
         }
 
         Felamimail_Config::getInstance()->set(Felamimail_Config::PREVENT_COPY_OF_MAILS_IN_SAME_ACCOUNT, false);
@@ -2022,7 +2022,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
 
         $translation = Tinebase_Translation::getTranslation('Felamimail');
-        $this->_assertHistoryNote($this->_account, $translation->_('Sieve vacation has been updated:') . ' ' .
+        $this->_assertHistoryNote($this->_account, $translation->_('Sieve vacation message has been updated:') . ' ' .
             $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class);
     }
 

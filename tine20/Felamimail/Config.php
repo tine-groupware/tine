@@ -243,8 +243,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                         'system' => true,
                     ], [
                         'id' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                        //_('Mailing list')
-                        'value' => 'Mailing list',
+                        //_('Mailing List')
+                        'value' => 'Mailing List',
                         'system' => true,
                     ],
                 ],
@@ -252,8 +252,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             )
         ),
         self::SIEVE_MAILINGLIST_REJECT_REASON => [
-            self::LABEL                 => 'Mailinglist Reject Reason', // _('Mailinglist Reject Reason')
-            self::DESCRIPTION           => 'Mailinglist Reject Reason',
+            self::LABEL                 => 'Mailing List Reject Reason', // _('Mailing List Reject Reason')
+            self::DESCRIPTION           => 'Mailing List Reject Reason',
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => 'Your email has been rejected', // _('Your email has been rejected')
             self::CLIENTREGISTRYINCLUDE => false,
@@ -301,8 +301,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::CACHE_EMAIL_BODY => array(
         //_('Cache email body')
             self::LABEL                 => 'Cache email body',
-        // _('Should the email body be cached (recommended for slow IMAP server connections)')
-            self::DESCRIPTION           => 'Should the email body be cached (recommended for slow IMAP server connections)',
+        // _('Should the email body be cached? (Recommended for slow IMAP server connections)')
+            self::DESCRIPTION           => 'Should the email body be cached? (Recommended for slow IMAP server connections)',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => FALSE,
@@ -360,8 +360,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 self::FEATURE_ACCOUNT_MOVE_NOTIFICATIONS => [
                     self::LABEL                 => 'Move notifications',
                     //_('Move notifications')
-                    self::DESCRIPTION           => 'Move notifications to a subfolder via sieve',
-                    //_('Move notifications to a subfolder via sieve')
+                    self::DESCRIPTION           => 'Move notifications to a subfolder using Sieve',
+                    //_('Move notifications to a subfolder using Sieve')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
@@ -452,8 +452,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::SPAM_INFO_DIALOG_CONTENT => array(
             //_('Confirm SPAM Suspicion Message')
             'label'                 => 'Confirm SPAM Suspicion Message',
-            // _('Message for users when they press the info button in a SPAM suspicion toolbar.')
-            'description'           => 'Message for users when they press the info button in a SPAM suspicion toolbar.',
+            // _('Message shown to users when they click the info button in the spam suspicion toolbar.')
+            'description'           => 'Message shown to users when they click the info button in the spam suspicion toolbar.',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
@@ -461,10 +461,10 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'default'               => null,
         ),
         self::FILTER_EMAIL_URIS => array(
-            //_('Filter E-Mail URIs')
-            self::LABEL                 => 'Filter E-Mail URIs',
-            // _('Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on')
-            self::DESCRIPTION           => 'Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on',
+            //_('Filter Email URIs')
+            self::LABEL                 => 'Filter Email URIs',
+            // _('Should the URIs in the email body be filtered? If enabled, only anchor tags with URIs will be allowed.')
+            self::DESCRIPTION           => 'Should the URIs in the email body be filtered? If enabled, only anchor tags with URIs will be allowed.',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => FALSE,
@@ -482,8 +482,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::SYSTEM_ACCOUNT_FOLDER_DEFAULTS => array(
             //_('System Account Folder Defaults')
             self::LABEL                 => 'System Account Folder Defaults',
-            // _('Paths of the special folders (like Sent, Trash, ...)')
-            self::DESCRIPTION           => 'Paths of the special folders (like Sent, Trash, ...)',
+            // _('Paths of special folders (such as Sent, Trash, ...)')
+            self::DESCRIPTION           => 'Paths of special folders (such as Sent, Trash, ...)',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => TRUE,
@@ -491,8 +491,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => null,
         ),
         self::IMAP_ALLOW_SELF_SIGNED_TLS_CERT => array(
-            //_('Allow self signed TLS cert for IMAP connection')
-            self::LABEL                 => 'Allow self signed TLS cert for IMAP connection',
+            //_('Allow self-signed TLS certificates for IMAP connections')
+            self::LABEL                 => 'Allow self-signed TLS certificates for IMAP connections',
             self::DESCRIPTION           => '',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => FALSE,
@@ -503,8 +503,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
         self::SIEVE_REDIRECT_ONLY_INTERNAL => array(
             //_('Sieve Redirect Only Internal')
             self::LABEL                 => 'Sieve Redirect Only Internal',
-            // _('Allow only sieve redirect rules to internal (primary/secondary) email addresses')
-            self::DESCRIPTION           => 'Allow only sieve redirect rules to internal (primary/secondary) email addresses',
+            // _('Allow only Sieve redirect rules to be applied to internal (primary and secondary) email addresses.')
+            self::DESCRIPTION           => 'Allow only Sieve redirect rules to be applied to internal (primary and secondary) email addresses.',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -523,10 +523,10 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => null,
         ),
         self::FLAG_ICON_OWN_DOMAIN => array(
-            //_('URL icon path for own domain')
-            self::LABEL                 => 'URL icon path for own domain',
-            //_('Used to mark messages from configured primary and secondary domains')
-            self::DESCRIPTION           => 'Used to mark messages from configured primary and secondary domains',
+            //_('URL path for the icon of the own domain')
+            self::LABEL                 => 'URL path for the icon of the own domain',
+            //_('This is used to mark messages from configured primary and secondary domains.')
+            self::DESCRIPTION           => 'This is used to mark messages from configured primary and secondary domains.',
             self::TYPE                  => 'string',
             self::DEFAULT_STR           => 'favicon/svg',
             self::CLIENTREGISTRYINCLUDE => true,

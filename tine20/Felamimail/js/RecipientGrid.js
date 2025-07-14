@@ -243,7 +243,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         })).join(',').replace(/^[,;]+|[,;]+$/, '');
 
                         if (!this.loadMask) {
-                            this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+                            this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Email Addresses')});
                         }
                         this.loadMask.show();
            
@@ -307,7 +307,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 renderer: (value) => {
                     let result = '';
                     if (this.record.get('massMailingFlag')) {
-                        const qtip = Ext.util.Format.htmlEncode(this.app.i18n._('A separate mail is send to each recipient.'));
+                        const qtip = Ext.util.Format.htmlEncode(this.app.i18n._('A separate email is sent to each recipient.'));
                         return `<div ext:qtip="${qtip}">${this.app.i18n._('Mass')}:</div>`;
                     } else {
                         const qtip = Ext.util.Format.htmlEncode(this.app.i18n._('Click here to set To/CC/BCC.'));
@@ -501,7 +501,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 case 'group':
                 case 'list':
                     const item = new Ext.Action({
-                        text: this.app.i18n._('Resolve to single contact'),
+                        text: this.app.i18n._('Resolve to a single contact'),
                         iconCls: '',
                         handler: async (item) => {
                             const members = record?.data?.address?.emails;

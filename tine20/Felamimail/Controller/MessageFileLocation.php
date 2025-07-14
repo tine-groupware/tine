@@ -162,7 +162,7 @@ class Felamimail_Controller_MessageFileLocation extends Tinebase_Controller_Reco
             }
             // TODO allow to file messages in recurring events
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-            $message = $translation->_('It is not possible to file the message in this record (might be a recurring event).');
+            $message = $translation->_('It is not possible to file the message in this record (it might be a recurring event).');
             throw new Tinebase_Exception_SystemGeneric($message);
         }
 

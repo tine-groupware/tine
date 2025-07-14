@@ -601,7 +601,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $translation = Tinebase_Translation::getTranslation('Felamimail');
         if ($vacation) {
-            $text = $translation->_('Sieve vacation has been updated:');
+            $text = $translation->_('Sieve vacation message has been updated:');
             if ($vacation->enabled) {
                 $text .= ' ' . $translation->_('Vacation message is now active.');
             } else {
@@ -635,7 +635,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
 
             $translate = Tinebase_Translation::getTranslation('Felamimail');
             if (in_array($account->email, $redirectEmails)) {
-                throw new Felamimail_Exception_Sieve($translate->_('It is not allowed to redirect emails to self! Please change the recipient.'));
+                throw new Felamimail_Exception_Sieve($translate->_('Redirecting emails to yourself is not allowed. Please change the recipient.'));
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
                 foreach ($redirectEmails as $email) {

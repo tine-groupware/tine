@@ -318,7 +318,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
         }
         if (! $_record->email) {
-            throw new Tinebase_Exception_SystemGeneric($translation->_('shared / adb_list accounts need to have an email set'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('shared / adb_list accounts must have an email address'));
         }
 
         $this->_createSharedEmailUser($_record);
@@ -384,23 +384,23 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             // this leads to major problems otherwise ...
             throw new Tinebase_Exception_SystemGeneric(
-                $translation->_('Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS'));
+                $translation->_('Internal user accounts are only permitted when Tinebase_Config::EMAIL_USER_ID_IN_XPROPS is enabled'));
         }
         if (!$_record->email) {
             throw new Tinebase_Exception_SystemGeneric(
-                $translation->_('Internal user accounts need an email address')
+                $translation->_('Internal user accounts must have an email address')
             );
         }
         if (!$_record->user_id) {
             throw new Tinebase_Exception_SystemGeneric(
-                $translation->_('Internal user accounts need to be assigned to a user')
+                $translation->_('Internal user accounts must be assigned to a user')
             );
         }
 
         $user = Tinebase_User::getInstance()->getFullUserById($_record->user_id);
         if ($user->accountEmailAddress === $_record->email) {
             throw new Tinebase_Exception_SystemGeneric(
-                $translation->_('Please choose a new email address for internal user account'));
+                $translation->_('Please choose a new email address for an internal user account'));
         }
     }
 
@@ -417,7 +417,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         // make sure that system account exists before copy
         if (! $emailUserBackend->userExists($systemEmailUser)) {
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-            throw new Tinebase_Exception_UnexpectedValue($translation->_('system account for user does not exist'));
+            throw new Tinebase_Exception_UnexpectedValue($translation->_('The system account for the user does not exist'));
         }
 
         return $systemEmailUser;
@@ -911,7 +911,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             if (! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
                 $translate = Tinebase_Translation::getTranslation('Felamimail');
                 throw new Tinebase_Exception_SystemGeneric(
-                    $translate->_('Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops'));
+                    $translate->_('The configuration EMAIL_USER_ID_IN_XPROPS is not enabled. Please check whether your email user backend supports this option and run the CLI method Tinebase.emailUserIdInXprops'));
             }
         }
 
@@ -938,7 +938,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         if (! isset($_record->xprops()[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP])) {
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translate->_('Could not find email user xprops!'));
+            throw new Tinebase_Exception_SystemGeneric($translate->_('The email user XProps could not be found!'));
         }
 
         /** @var Tinebase_EmailUser_Sql $emailUserBackend */
@@ -991,7 +991,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         if (! $_record->user_id) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translation->_('Internal user accounts need a valid user'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Internal user accounts must be assigned to a valid user'));
         }
 
         $this->_transferEmailUserIdXprops($_record, $_oldRecord);
@@ -1001,7 +1001,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $systemEmailUser = $this->_getEmailSystemUser($_record->user_id);
             if (! $systemEmailUser->getId()) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
-                throw new Tinebase_Exception_SystemGeneric($translation->_('System account of user is missing'));
+                throw new Tinebase_Exception_SystemGeneric($translation->_("The user's system account is missing"));
             }
             $emailUserBackend = Tinebase_EmailUser::getInstance();
             if (! $emailUserBackend instanceof Tinebase_EmailUser_Sql) {

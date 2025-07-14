@@ -371,7 +371,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     addStaticMenuItems: function() {
         this.menu.addItem({
-            text: this.app.i18n._('File (in Filemanager) ...'),
+            text: this.app.i18n._('File (in Filemanager)...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             handler: this.selectFilemanagerFolder.createDelegate(this)
         });

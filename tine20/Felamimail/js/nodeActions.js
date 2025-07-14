@@ -448,7 +448,7 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
     itemId: 'ApproveMigrationAction',
     iconCls: 'action_approve_migration',
     scope: this,
-    qtip: 'Agree that this account can be transferred to other users', // _('Agree that this account can be transferred to other users')
+    qtip: 'Agree to allow this account to be transferred to other users.', // _('Agree to allow this account to be transferred to other users.')
     handler: async function(action) {
         if (!action.node) return;
         const app = action.app;
@@ -508,7 +508,7 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
                     await selectedNodes.reduce(async (prev, selectedNode) => {
                         const folder = selectedNode.attributes;
                         if (parentGlobalname.replace(new RegExp(`^${folder.globalname.replace('.', '\.')}`), '') !== parentGlobalname) {
-                            return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder to an own sub folder!'));
+                            return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder into its own subfolder!'));
                         }
                         const newGlobalName = _.compact([parentGlobalname, folder.localname]).join(account.get('delimiter'));
                         try {

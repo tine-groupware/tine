@@ -105,7 +105,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         columns.push({
             id: 'selected_email',
-            header: this.felamimailApp.i18n._('Selected E-Mail'),
+            header: this.felamimailApp.i18n._('Selected Email'),
             renderer: this.preferredEmailRenderer.createDelegate(this),
             width: 400,
             hidden: false
@@ -433,7 +433,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
         // search contacts if all pages are selected (filter select)
         if (sm.isFilterSelect) {
-            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.felamimailApp.i18n._('Loading Mail Addresses')});
+            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.felamimailApp.i18n._('Loading Email Addresses')});
             this['AddressLoadMask'].show();
             
             var contact = null;

@@ -291,9 +291,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $nodeExistException = new Tinebase_Exception_SystemGeneric(str_replace(
                 ['{0}'],
                 [$globalname],
-                $translation->translate('Folder with name {0} already exists!')
+                $translation->translate('A folder named {0} already exists!')
             ));
-            $nodeExistException->setTitle($translation->translate('Failure on create folder'));
+            $nodeExistException->setTitle($translation->translate('Failed to create folder'));
             throw $nodeExistException;
         }
 

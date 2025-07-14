@@ -511,7 +511,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             return true;
         }
         if (exts.length !== 1 || !['eml', 'emltpl', 'msg'].includes(exts[0])) {
-            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml, emltpl and msg allowed only.'));
+            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Only files of type eml, emltpl, and msg are allowed.'));
         }
         
         this.importMask = new Ext.LoadMask(this.grid.getEl(), { msg: i18n._('Importing Messages...') });
@@ -994,7 +994,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (error) {
             Ext.Msg.show({
                 title: this.app.i18n._('Error Filing Message'),
-                msg: error.message ? error.message : this.app.i18n._('Could not file message.'),
+                msg: error.message ? error.message : this.app.i18n._('Message could not be filed.'),
                 icon: Ext.MessageBox.ERROR,
                 buttons: Ext.Msg.OK
             });
@@ -1370,7 +1370,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (record.get('headers')['disposition-notification-to']) {
                 Ext.Msg.confirm(
                     this.app.i18n._('Send Reading Confirmation'),
-                    this.app.i18n._('Do you want to send a reading confirmation message?'), 
+                    this.app.i18n._('Do you want to send a read receipt?'),
                     function(btn) {
                         if (btn == 'yes'){
                             Tine.Felamimail.sendReadingConfirmation(record.id);

@@ -46,10 +46,10 @@ msgstr ""
 msgid "Default Personal System Account"
 msgstr ""
 
-msgid "Mailing list"
+msgid "Mailing List"
 msgstr ""
 
-msgid "Mailinglist Reject Reason"
+msgid "Mailing List Reject Reason"
 msgstr ""
 
 msgid "Your email has been rejected"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Cache email body"
 msgstr ""
 
-msgid "Should the email body be cached (recommended for slow IMAP server connections)"
+msgid "Should the email body be cached? (Recommended for slow IMAP server connections)"
 msgstr ""
 
 msgid "Delete Archived Mail"
@@ -100,7 +100,7 @@ msgstr ""
 msgid "Move notifications"
 msgstr ""
 
-msgid "Move notifications to a subfolder via sieve"
+msgid "Move notifications to a subfolder using Sieve"
 msgstr ""
 
 msgid "Auto-Save Drafts"
@@ -148,37 +148,37 @@ msgstr ""
 msgid "Confirm SPAM Suspicion Message"
 msgstr ""
 
-msgid "Message for users when they press the info button in a SPAM suspicion toolbar."
+msgid "Message shown to users when they click the info button in the spam suspicion toolbar."
 msgstr ""
 
-msgid "Filter E-Mail URIs"
+msgid "Filter Email URIs"
 msgstr ""
 
-msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
+msgid "Should the URIs in the email body be filtered? If enabled, only anchor tags with URIs will be allowed."
 msgstr ""
 
 msgid "System Account Folder Defaults"
 msgstr ""
 
-msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgid "Paths of special folders (such as Sent, Trash, ...)"
 msgstr ""
 
-msgid "Allow self signed TLS cert for IMAP connection"
+msgid "Allow self-signed TLS certificates for IMAP connections"
 msgstr ""
 
 msgid "Sieve Redirect Only Internal"
 msgstr ""
 
-msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
+msgid "Allow only Sieve redirect rules to be applied to internal (primary and secondary) email addresses."
 msgstr ""
 
 msgid "Sieve Notification Bounces Reporting Email"
 msgstr ""
 
-msgid "URL icon path for own domain"
+msgid "URL path for the icon of the own domain"
 msgstr ""
 
-msgid "Used to mark messages from configured primary and secondary domains"
+msgid "This is used to mark messages from configured primary and secondary domains."
 msgstr ""
 
 msgid "URL icon path for other domains"
@@ -202,60 +202,60 @@ msgstr ""
 msgid "shared / adb_list accounts need to have a password set"
 msgstr ""
 
-msgid "shared / adb_list accounts need to have an email set"
+msgid "shared / adb_list accounts must have an email address"
 msgstr ""
 
-msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
+msgid "Internal user accounts are only permitted when Tinebase_Config::EMAIL_USER_ID_IN_XPROPS is enabled"
 msgstr ""
 
-msgid "Internal user accounts need an email address"
+msgid "Internal user accounts must have an email address"
 msgstr ""
 
-msgid "Internal user accounts need to be assigned to a user"
+msgid "Internal user accounts must be assigned to a user"
 msgstr ""
 
-msgid "Please choose a new email address for internal user account"
+msgid "Please choose a new email address for an internal user account"
 msgstr ""
 
-msgid "system account for user does not exist"
+msgid "The system account for the user does not exist"
 msgstr ""
 
 #, python-brace-format
 msgid "Account type cannot be changed from {0} to {1}"
 msgstr ""
 
-msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgid "The configuration EMAIL_USER_ID_IN_XPROPS is not enabled. Please check whether your email user backend supports this option and run the CLI method Tinebase.emailUserIdInXprops"
 msgstr ""
 
 msgid "Migration of this account has not been approved!"
 msgstr ""
 
-msgid "Could not find email user xprops!"
+msgid "The email user XProps could not be found!"
 msgstr ""
 
-msgid "Internal user accounts need a valid user"
+msgid "Internal user accounts must be assigned to a valid user"
 msgstr ""
 
-msgid "System account of user is missing"
+msgid "The user's system account is missing"
 msgstr ""
 
 msgid "Notifications"
 msgstr ""
 
 #, python-brace-format
-msgid "Folder with name {0} already exists!"
+msgid "A folder named {0} already exists!"
 msgstr ""
 
-msgid "Failure on create folder"
+msgid "Failed to create folder"
 msgstr ""
 
 msgid "still unanswered: "
 msgstr ""
 
-msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: "
 msgstr ""
 
-msgid "It is not possible to file the message in this record (might be a recurring event)."
+msgid "It is not possible to file the message in this record (it might be a recurring event)."
 msgstr ""
 
 msgid "Passed"
@@ -276,7 +276,7 @@ msgstr ""
 msgid "Flagged"
 msgstr ""
 
-msgid "It is not allowed to copy e-mails in the same account."
+msgid "Copying emails within the same account is not allowed."
 msgstr ""
 
 msgid "Bad recipient address syntax"
@@ -288,7 +288,7 @@ msgstr ""
 msgid "Invalid address format"
 msgstr ""
 
-msgid "Decryption Error: Maybe your shared credential cache key is longer than 24 chars?"
+msgid "Decryption error: The shared credential cache key may be longer than 24 characters."
 msgstr ""
 
 #, python-format, php-format
@@ -298,14 +298,14 @@ msgstr ""
 msgid "Could not send message"
 msgstr ""
 
-msgid "My Mail Download Links"
+msgid "My Email Download Links"
 msgstr ""
 
 #, php-format
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
-msgid "Sieve vacation has been updated:"
+msgid "Sieve vacation message has been updated:"
 msgstr ""
 
 msgid "Vacation message is now active."
@@ -317,7 +317,7 @@ msgstr ""
 msgid "Sieve rules have been updated."
 msgstr ""
 
-msgid "It is not allowed to redirect emails to self! Please change the recipient."
+msgid "Redirecting emails to yourself is not allowed. Please change the recipient."
 msgstr ""
 
 msgid "Redirects to external email domains are not allowed."
@@ -326,16 +326,19 @@ msgstr ""
 msgid "You have new mail from "
 msgstr ""
 
-msgid "IMAP Hostname missing"
+msgid "shared / adb_list accounts must have a password"
 msgstr ""
 
-msgid "IMAP Credentials missing"
+msgid "IMAP Hostname is missing"
 msgstr ""
 
-msgid "SMTP Hostname missing"
+msgid "IMAP Credentials are missing"
 msgstr ""
 
-msgid "SMTP Credentials missing"
+msgid "SMTP Hostname is missing"
+msgstr ""
+
+msgid "SMTP Credentials are missing"
 msgstr ""
 
 msgid "Add New Account"
@@ -345,7 +348,7 @@ msgid "Permissions"
 msgstr ""
 
 #, python-brace-format
-msgid "The recipients of this email distribution list are maintained in the list: {locationsHtml}"
+msgid "The recipients of this email distribution list are managed in: {locationsHtml}"
 msgstr ""
 
 msgid "Filter Rules"
@@ -481,7 +484,7 @@ msgstr ""
 msgid "Auto-move notifications"
 msgstr ""
 
-msgid "Auto-move notifications folder"
+msgid "Auto-move notifications to folder"
 msgstr ""
 
 msgid "Explore Sieve script"
@@ -493,13 +496,13 @@ msgstr ""
 msgid "Other Settings"
 msgstr ""
 
-msgid "Behavior of sent mails"
+msgid "Folder for sent emails"
 msgstr ""
 
-msgid "Save copy of sent mail on mail server."
+msgid "Save a copy of sent mail on the mail server."
 msgstr ""
 
-msgid "Folder of the source mail if it is no system folder."
+msgid "Source mail folder, if it is not a system folder."
 msgstr ""
 
 msgid "Sent Folder Name"
@@ -532,10 +535,10 @@ msgstr ""
 msgid "Reply-To Email"
 msgstr ""
 
-msgid "It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled."
+msgid "It is not possible to convert accounts because the configuration option EMAIL_USER_ID_IN_XPROPS is disabled."
 msgstr ""
 
-msgid "Migration has not been approved."
+msgid "The migration has not been approved."
 msgstr ""
 
 msgid "It is not possible to convert the account to this type."
@@ -547,37 +550,37 @@ msgstr ""
 msgid "Mailinglist accounts cannot be created manually."
 msgstr ""
 
-msgid "Account type change not possible"
+msgid "Account type change is not possible"
 msgstr ""
 
-msgid "E-Mail account needs a password"
+msgid "The email account needs a password"
 msgstr ""
 
 msgid "Use"
 msgstr ""
 
-msgid "The grant use the shared email account"
+msgid "The grant uses the shared email account"
 msgstr ""
 
 msgid "Edit"
 msgstr ""
 
-msgid "The grant edit the shared email account"
+msgid "The grant edits the shared email account"
 msgstr ""
 
-msgid "Send Mails"
+msgid "Send Emails"
 msgstr ""
 
-msgid "The grant to send mails via the email account"
+msgid "The grant to send emails via the email account"
 msgstr ""
 
 msgid "Warning"
 msgstr ""
 
-msgid "Server connection failed. Do you still want to save this setting and exit?"
+msgid "Server connection failed. Do you want to save this setting and exit anyway?"
 msgstr ""
 
-msgid "Connection succeed"
+msgid "Connection succeeded"
 msgstr ""
 
 #, python-brace-format
@@ -600,16 +603,16 @@ msgstr ""
 msgid "Edit Filter Rules"
 msgstr ""
 
-msgid "E-mail usage"
+msgid "Email usage"
 msgstr ""
 
 msgid "Save As"
 msgstr ""
 
-msgid "File (in Filemanager) ..."
+msgid "File (in Filemanager)..."
 msgstr ""
 
-msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}"
+msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments were saved}}"
 msgstr ""
 
 msgid "Success"
@@ -629,7 +632,7 @@ msgid_plural "Attachments"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Filemanager (Download link)"
+msgid "Filemanager (Download Link)"
 msgstr ""
 
 msgid "Filemanager (Download link, password)"
@@ -641,7 +644,7 @@ msgstr ""
 msgid "Attachment Type"
 msgstr ""
 
-msgid "Click icon to change"
+msgid "Click the icon to change"
 msgstr ""
 
 msgid "name"
@@ -653,7 +656,7 @@ msgstr ""
 msgid "type"
 msgstr ""
 
-msgid "Selected E-Mail"
+msgid "Selected Email"
 msgstr ""
 
 msgid "Add as \"To\""
@@ -668,10 +671,10 @@ msgstr ""
 msgid "Remove from recipients"
 msgstr ""
 
-msgid "Loading Mail Addresses"
+msgid "Loading Email Addresses"
 msgstr ""
 
-msgid "Preferred E-Mail"
+msgid "Preferred Email"
 msgstr ""
 
 msgid "New Mail"
@@ -695,7 +698,7 @@ msgstr ""
 msgid "{0} as default mailer"
 msgstr ""
 
-msgid "No e-mail account assigned"
+msgid "No email account has been assigned"
 msgstr ""
 
 msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
@@ -724,7 +727,7 @@ msgstr ""
 msgid "IMAP Credentials Error"
 msgstr ""
 
-msgid "Your email credentials are wrong. Please contact your administrator"
+msgid "Your email login details are incorrect. Please check them or contact your administrator"
 msgstr ""
 
 msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
@@ -855,7 +858,7 @@ msgstr ""
 msgid "Wrong File Type"
 msgstr ""
 
-msgid "Files of type eml, emltpl and msg allowed only."
+msgid "Only files of type eml, emltpl, and msg are allowed."
 msgstr ""
 
 msgid "Importing Messages..."
@@ -903,7 +906,7 @@ msgstr ""
 msgid "Error Filing Message"
 msgstr ""
 
-msgid "Could not file message."
+msgid "Message could not be filed."
 msgstr ""
 
 msgid "Ctrl+N / Ctrl+M : Compose message"
@@ -939,7 +942,7 @@ msgstr ""
 msgid "Send Reading Confirmation"
 msgstr ""
 
-msgid "Do you want to send a reading confirmation message?"
+msgid "Do you want to send a read receipt?"
 msgstr ""
 
 msgid "Creating new Task..."
@@ -954,7 +957,7 @@ msgstr ""
 msgid "Open in Felamimail"
 msgstr ""
 
-msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
+msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
 msgstr ""
 
 msgid "Yes, it is SPAM"
@@ -999,7 +1002,7 @@ msgstr ""
 msgid "Activate this toggle button to receive a reading confirmation."
 msgstr ""
 
-msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
+msgid "If you select one of these options, you will receive a notification when no reply to the email has been received by the configured deadline"
 msgstr ""
 
 msgid "Encrypt Email"
@@ -1008,7 +1011,7 @@ msgstr ""
 msgid "Encrypt email using Mailvelope"
 msgstr ""
 
-msgid "Activate this toggle button to send the mail as separate mail to each recipient."
+msgid "Activate this toggle button to send the mail separately to each recipient."
 msgstr ""
 
 msgid "Click to search for and add recipients from the Addressbook."
@@ -1062,7 +1065,7 @@ msgstr ""
 msgid "Body"
 msgstr ""
 
-msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
+msgid "NOTE: This mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
 msgstr ""
 
 msgid "Add email address here for reply-to"
@@ -1073,16 +1076,16 @@ msgid_plural "Signatures"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
+msgid "Some attachments are of type “systemlinks”, but some recipients (marked in yellow) could not be validated as accounts on this installation. Only recipients with an active account will be able to open these attachments."
 msgstr ""
 
-msgid "Do you really want to send?"
+msgid "Are you sure you want to send?"
 msgstr ""
 
 msgid "Empty subject"
 msgstr ""
 
-msgid "Do you really want to send a message with an empty subject?"
+msgid "Are you sure you want to send a message with an empty subject?"
 msgstr ""
 
 msgid "No recipients set."
@@ -1096,7 +1099,7 @@ msgid "Attention"
 msgstr ""
 
 #, python-brace-format
-msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
+msgid "The from-address for this email was changed to {0}, as you do not have send mail rights for the account {1}"
 msgstr ""
 
 msgid "Expected Answer"
@@ -1263,7 +1266,7 @@ msgstr ""
 msgid "Update Folder List"
 msgstr ""
 
-msgid "Agree that this account can be transferred to other users"
+msgid "Agree to allow this account to be transferred to other users."
 msgstr ""
 
 msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
@@ -1276,7 +1279,7 @@ msgstr ""
 msgid "Invalid Selection"
 msgstr ""
 
-msgid "You cannot move the folder to an own sub folder!"
+msgid "You cannot move the folder into its own subfolder!"
 msgstr ""
 
 msgid "Update Folder"
@@ -1286,14 +1289,14 @@ msgid "Folder cache has been cleared!"
 msgstr ""
 
 #, python-brace-format
-msgid "Mailvelope decryption Error [{0}]"
+msgid "Mailvelope Decryption Error [{0}]"
 msgstr ""
 
 #, python-brace-format
-msgid "To decrypt this message please install {0} with API support enabled"
+msgid "To decrypt this message, please install {0} with API support enabled"
 msgstr ""
 
-msgid "PGP encrypted Message"
+msgid "PGP Encrypted Message"
 msgstr ""
 
 msgid "To:"
@@ -1305,7 +1308,7 @@ msgstr ""
 msgid "Bcc:"
 msgstr ""
 
-msgid "A separate mail is send to each recipient."
+msgid "A separate email is sent to each recipient."
 msgstr ""
 
 msgid "Mass"
@@ -1317,7 +1320,7 @@ msgstr ""
 msgid "Send message to individual list members instead"
 msgstr ""
 
-msgid "Resolve to single contact"
+msgid "Resolve to a single contact"
 msgstr ""
 
 msgid "from"
@@ -1359,7 +1362,7 @@ msgstr ""
 msgid "Notification Email"
 msgstr ""
 
-msgid "Add a new email ..."
+msgid "Add a new email..."
 msgstr ""
 
 msgid "From (Email and Name)"
@@ -1471,7 +1474,7 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-msgid "Only send all X days to the same sender"
+msgid "Only send to the same sender every X days"
 msgstr ""
 
 msgid "Incoming mails will be answered with this text:"
@@ -1489,31 +1492,31 @@ msgstr ""
 msgid "Start Date"
 msgstr ""
 
-msgid "Set vacation start date ..."
+msgid "Set vacation start date..."
 msgstr ""
 
 msgid "End Date"
 msgstr ""
 
-msgid "Set vacation end date ..."
+msgid "Set vacation end date..."
 msgstr ""
 
 msgid "Representative #1"
 msgstr ""
 
-msgid "Choose first Representative ..."
+msgid "Choose the first Representative..."
 msgstr ""
 
 msgid "Representative #2"
 msgstr ""
 
-msgid "Choose second Representative ..."
+msgid "Choose second Representative..."
 msgstr ""
 
 msgid "Message Template"
 msgstr ""
 
-msgid "Choose Template ..."
+msgid "Choose Template..."
 msgstr ""
 
 msgid "Signatures"
@@ -1583,9 +1586,6 @@ msgid "Templates Folder"
 msgstr ""
 
 msgid "Reply-To"
-msgstr ""
-
-msgid "E-Mail"
 msgstr ""
 
 msgid "Signature Position"
@@ -1682,7 +1682,7 @@ msgstr ""
 msgid "Email Update Interval"
 msgstr ""
 
-msgid "How often should Felamimail check for new Emails (in minutes)."
+msgid "How often should Felamimail check for new emails (in minutes)."
 msgstr ""
 
 msgid "Use for mailto links"
@@ -1697,16 +1697,16 @@ msgstr ""
 msgid "Show confirmation dialog when deleting mails."
 msgstr ""
 
-msgid ".eml file Attachment in forwarded mails"
+msgid "Attach .eml file when forwarding mails"
 msgstr ""
 
-msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgid "Attach the original message as a .eml file when forwarding. Otherwise, attachments will be included separately."
 msgstr ""
 
 msgid "Default Font"
 msgstr ""
 
-msgid "Setting the default font in the E-Mail app"
+msgid "Setting the default font in the Email app"
 msgstr ""
 
 msgid "All folders of my email accounts"
@@ -1724,7 +1724,7 @@ msgstr ""
 msgid "All highlighted mail"
 msgstr ""
 
-msgid "All highlighted mail of my email accounts"
+msgid "All highlighted mail from my email accounts"
 msgstr ""
 
 msgid "All drafts"
@@ -1733,11 +1733,11 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "Can not combine \"allow external\" and \"allow only members\""
+msgid "Cannot combine \"allow external\" and \"allow only members\" options"
 msgstr ""
 
-msgid "Forward and forwarded email as .eml in attachment"
+msgid "Forwarding and forwarded email as .eml in attachment"
 msgstr ""
 
-msgid "Only forwarded email as .eml in attachment"
+msgid "Only forward email as a .eml attachment"
 msgstr ""
