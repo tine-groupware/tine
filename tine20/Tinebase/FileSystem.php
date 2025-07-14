@@ -2578,7 +2578,9 @@ class Tinebase_FileSystem implements
      */
     public function avScanHashFile($hashFile)
     {
-        $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, null);
+        $avResult = new Tinebase_FileSystem_AVScan_Result(
+            Tinebase_FileSystem_AVScan_Result::RESULT_ERROR,
+            null);
         
         if (file_exists($hashFile)) {
             if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
@@ -4976,7 +4978,9 @@ class Tinebase_FileSystem implements
 
                     if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
                         Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                            'Got RESULT_ERROR from scanner for file: ' . $path));
+                            'Got RESULT_ERROR from scanner for file: ' . $path
+                            . ' (' . $scanResult->message . ')'
+                        ));
                         $errorCount++;
                     } else {
                         $this->_updateAvScanOfFileHash($hashDir . $file, $scanResult->result);
@@ -5002,8 +5006,10 @@ class Tinebase_FileSystem implements
         // only for unused variable check
         unset($raii);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Scan complete. Error count: ' . $errorCount);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Scan complete. Error count: ' . $errorCount);
+        }
 
         return true;
     }
