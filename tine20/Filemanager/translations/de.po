@@ -328,7 +328,7 @@ msgid "This folder is part of the data safe"
 msgstr "Dieser Ordner ist Teil des Datentresors"
 
 msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
-msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
+msgstr "Wenn der Datentresor aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datentresor geöffnet ist."
 
 #, python-brace-format
 msgid "Grants are inherited from {locationsHtml} as follows"
