@@ -1,9 +1,6 @@
 Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
 
-    // TODO replace this with matrix account management in a separate tab in user edit dialog
-    return;
-
     if (!Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator')) {
         Tine.log.debug('MatrixSynapseIntegrator: matrixDomain not configured - skipping admin user edit dialog hook');
         return;
@@ -16,68 +13,48 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
         initComponent: function() {
             this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
             this.title = this.app.i18n._('Matrix Integration');
-            this.matrixIdField = new Ext.form.TextField({
-                fieldLabel: this.app.i18n.gettext('Matrix ID'),
-                name: 'matrixId',
-            });
-            this.matrixActiveField = new Ext.form.Checkbox({
-                fieldLabel: this.app.i18n.gettext('Matrix Account Active'),
-                name: 'matrixActive',
-                listeners: {
-                    'check': function(checkbox, value) {
-                        if (value) {
-                            if (!this.matrixIdField.getValue()) {
-                                this.setDefaultMatrixId(this.editDialog.record);
-                            }
-                            this.matrixIdField.enable();
-                        } else {
-                            this.matrixIdField.disable();
-                        }
-                    },
-                    scope: this
+
+            this.matrixAccountField = Ext.create({
+                xtype: 'tw-recordEditField',
+                appName: 'MatrixSynapseIntegrator',
+                modelName: 'MatrixAccount',
+                fieldName: 'matrix_account',
+                fieldLabel: this.app.i18n._('Matrix Account'),
+                editDialogConfig: {
+                    // mode: 'load(remote):save(local)',
+                    mode: 'local',
+                    hideFields: [
+                        'account_id'
+                    ]
+                },
+                getRecordDefaults: () => {
+                    const matrixDomain = Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator');
+                    const userId = this.editDialog.record.phantom ? '@{user.id}' : this.editDialog.record.id;
+                    return {
+                        matrix_id: `@${userId}:${matrixDomain}`
+                    };
                 }
-            });
+            })
 
             this.items = [{
                     xtype: 'columnform',
                     labelAlign: 'top',
-                    items: [[this.matrixActiveField, this.matrixIdField]]
+                    items: [[this.matrixAccountField]]
                 }];
 
             this.supr().initComponent.apply(this, arguments);
         },
 
-        setDefaultMatrixId: function(record) {
-            const matrixDomain = Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator');
-            const userId = record.phantom ? '@{user.id}' : record.id;
-            this.matrixIdField.setValue(`${userId}:${matrixDomain}`);
-        },
-
         onRecordLoad: async function(editDialog, record) {
-            if (record.phantom) {
-                // new record
-                this.setDefaultMatrixId(record);
-                this.matrixActiveField.setValue(true);
-            } else {
-                // get value from xprops
-                let xprops = record.get('xprops');
-                xprops = Ext.isObject(xprops) ? xprops : {};
-                if (xprops.matrixId) {
-                    this.matrixIdField.setValue(xprops.matrixId);
-                }
-                if (xprops.matrixActive) {
-                    this.matrixActiveField.setValue(xprops.matrixActive);
-                } else {
-                    this.matrixIdField.disable();
-                }
-            }
+            // TODO make this work
+            const matrixAccount =
+                Tine.Tinebase.data.Record.setFromJson(record.get('matrix_account_id'),
+                    Tine.MatrixSynapseIntegrator.Model.MatrixAccount);
+            this.matrixAccountField.setValue(matrixAccount);
         },
 
         onRecordUpdate: function(editDialog, record) {
-            let xprops = record.get('xprops');
-            xprops = Ext.isObject(xprops) ? xprops : {};
-            xprops.matrixId = this.matrixIdField.getValue();
-            xprops.matrixActive = this.matrixActiveField.getValue();
+            record.set('matrix_account_id', this.matrixAccountField.getValue());
         },
 
         onRender: function() {

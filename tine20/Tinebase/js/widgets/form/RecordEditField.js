@@ -19,13 +19,18 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
      * @cfg {Bool} allowDelete show delete trigger
      */
     enableDelete: false,
-    
+
+    /**
+     * @cfg {Object} editDialogConfig (optional)
+     */
+    editDialogConfig: null,
+
     itemCls: 'tw-recordEditField',
     triggerClass: 'action_edit',
     editable: false,
     expandOnFocus: true,
     blurOnSelect: true,
-    
+
     initComponent: async function () {
         var _ = window.lodash;
 
@@ -42,6 +47,8 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
             });
             this.plugins.push(this.trigger_delete);
         }
+
+        this.editDialogConfig = this.editDialogConfig || {};
 
         Tine.Tinebase.widgets.form.RecordEditField.superclass.initComponent.call(this);
     },
@@ -66,7 +73,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     
     setValue : function(v, owningRecord){
         this.recordData = Tine.Tinebase.common.assertComparable(_.get(v, 'data', v));
-        this.recordData = ((_.isString(this.recordData) && this.recordData === '[]') || (_.isArray(this.recordData) && this.recordData.length === 0)) ? {} : this.recordData; // transform server defaults
+        this.recordData = ((_.isString(this.recordData) && this.recordData === '[]') || (_.isArray(this.recordData) && this.recordData.length === 0)) ? null : this.recordData; // transform server defaults
         this.assertRecordClass(owningRecord);
 
         const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
@@ -103,6 +110,10 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         this.assertRecordClass(owningRecord);
     },
 
+    getRecordDefaults: () => {
+        return {};
+    },
+
     onTriggerClick: function () {
         this.assertRecordClass(this.owningRecord);
         if (! this.recordClass) {
@@ -116,9 +127,15 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         if (! editDialogClass) {
             return;
         }
-        
-        editDialogClass.openWindow({
-            mode: 'local',
+
+        if (!this.recordData) {
+            const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(this.recordData || {}, this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+            record.phantom = true;
+            this.recordData = record.getData();
+        }
+        this.editDialogConfig.mode = this.editDialogConfig.mode || 'local';
+
+        editDialogClass.openWindow(Object.assign({
             record: this.recordData,
             needsUpdateEvent: true,
             listeners: {
@@ -146,7 +163,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
                     }, 100);
                 }
             }
-        });
+        }, this.editDialogConfig));
     }
 });
 

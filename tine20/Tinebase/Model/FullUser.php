@@ -64,6 +64,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     public const PASSWORD_FLAGGED = 'flagged';
     public const PASSWORD_NEVER_CHANGED = 'neverChanged';
 
+    public const FLD_MATRIX_ACCOUNT_ID = 'matrix_account_id';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -263,11 +264,14 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 self::NULLABLE          => true,
                 self::IS_VIRTUAL        => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-            ]
+            ],
+            self::FLD_MATRIX_ACCOUNT_ID => [
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::IS_VIRTUAL => true,
+            ],
         ],
     ];
 
-    
     /**
      * adds email and samba users, generates username + user password and 
      *   applies multiple options (like accountLoginNamePrefix, accountHomeDirectoryPrefix, ...)
