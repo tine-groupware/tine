@@ -53,7 +53,7 @@ const getFileAttachmentAction = (fileFn, config) => {
         text: app.i18n._('Save As'),
         iconCls: 'action_filemanager_save_all',
         menu: [{
-            text: app.i18n._('File (in Filemanager) ...'),
+            text: app.i18n._('File (in Filemanager)...'),
             hidden: !Tine.Tinebase.common.hasRight('run', 'Filemanager'),
             disabled: config.record?.get('from_node'), // not implemented @see \Felamimail_Controller_Message_File::fileAttachments
             handler: (action, e) => {
@@ -92,7 +92,7 @@ const getFileAttachmentAction = (fileFn, config) => {
                         file_name: attachments.length === 1 ? filePickerDialog.filePicker.fileName : null
                     }], action, attachments);
                     
-                    const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
+                    const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments were saved}}',
                         {attachmentCount});
                     Ext.ux.MessageBox.msg(app.formatMessage('Success'), msg);
                 });
@@ -133,7 +133,7 @@ const getFileAttachmentAction = (fileFn, config) => {
                                             listeners: {
                                                 apply: async (fileTarget) => {
                                                     const attachmentCount = await fileFn([fileTarget], action);
-                                                    const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}',
+                                                    const msg = app.formatMessage('{attachmentCount, plural, one {Attachment was saved} other {# Attachments were saved}}',
                                                         {attachmentCount});
                                                     Ext.ux.MessageBox.msg(app.formatMessage('Success'), msg);
                                                 }

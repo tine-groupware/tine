@@ -77,7 +77,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         if(!Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('onlyPwDownloadLink')) {
             methods = methods.concat([{
                     id: 'download_public_fm',
-                    name: this.app.i18n._('Filemanager (Download link)')
+                    name: this.app.i18n._('Filemanager (Download Link)')
                 }]
             );
         }
@@ -147,7 +147,7 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
             sortable: true,
             width: 150,
             header: this.app.i18n._('Attachment Type'),
-            tooltip: this.app.i18n._('Click icon to change'),
+            tooltip: this.app.i18n._('Click the icon to change'),
             listeners: {},
             value: 'attachment',
             renderer: function (value) {

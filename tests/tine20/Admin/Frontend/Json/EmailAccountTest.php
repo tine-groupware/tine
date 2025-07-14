@@ -459,7 +459,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $this->assertStringContainsString('currentdate', $script);
 
         $translation = Tinebase_Translation::getTranslation('Felamimail');
-        $this->_assertHistoryNote($account, $translation->_('Sieve vacation has been updated:') . ' ' .
+        $this->_assertHistoryNote($account, $translation->_('Sieve vacation message has been updated:') . ' ' .
             $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class, 2);
     }
 

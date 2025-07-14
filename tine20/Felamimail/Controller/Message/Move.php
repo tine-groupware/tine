@@ -188,7 +188,7 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
                 && $checkCopyPreventionConfig
             ) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
-                throw new Tinebase_Exception_SystemGeneric($translation->_('It is not allowed to copy e-mails in the same account.'));
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Copying emails within the same account is not allowed.'));
             }
             $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $_targetFolder, $keepOriginalMessages);
         } else {

@@ -1032,12 +1032,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if ('' === $params->host) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Hostname missing'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Hostname is missing'));
         }
 
         if ('' ===  $params->user || (!$accountId && '' ===  $params->password)) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Credentials missing'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('IMAP Credentials are missing'));
         }
         
         foreach ($fields as $key => $field) {
@@ -1113,12 +1113,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if ('' === $fields['smtp_hostname']) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Hostname missing'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Hostname is missing'));
         }
 
         if ('' === $fields['smtp_user'] || (!$accountId && '' === $fields['smtp_password'])) {
             $translation = Tinebase_Translation::getTranslation('Felamimail');
-            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Credentials missing'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('SMTP Credentials are missing'));
         }
 
         foreach ($fields as $key => $field) {

@@ -122,7 +122,7 @@ Ext.namespace('Tine.Felamimail.sieve');
                     hideable: false,
                     sortable: true,
                     quickaddField: new Ext.form.TextField({
-                        emptyText: app.i18n.gettext('Add a new email ...'),
+                        emptyText: app.i18n.gettext('Add a new email...'),
                         vtype: 'email'
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})

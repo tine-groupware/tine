@@ -338,7 +338,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     
                     const app = Tine.Tinebase.appMgr.get('Felamimail');
                     const description = document.createElement('div');
-                    description.innerHTML = app.formatMessage('The recipients of this email distribution list are maintained in the list: {locationsHtml}', {
+                    description.innerHTML = app.formatMessage('The recipients of this email distribution list are managed in: {locationsHtml}', {
                         locationsHtml: listItem.outerHTML
                     });
                     description.style.padding = '5px';
@@ -798,7 +798,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         this.setDisabled(!me.isSystemAccount());
                     }
                 }], [{
-                    fieldLabel: this.app.i18n._('Auto-move notifications folder'),
+                    fieldLabel: this.app.i18n._('Auto-move notifications to folder'),
                     name: 'sieve_notification_move_folder',
                     maxLength: 255,
                     hidden: !Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('accountMoveNotifications'),
@@ -833,11 +833,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 formDefaults: commonFormDefaults,
                 items: [[{
                     xtype: 'fieldset',
-                    title: this.app.i18n.gettext('Behavior of sent mails'),
+                    title: this.app.i18n.gettext('Folder for sent emails'),
                     items: [[{
                         hideLabel: true,
                         xtype: 'checkbox',
-                        boxLabel: this.app.i18n._('Save copy of sent mail on mail server.'),
+                        boxLabel: this.app.i18n._('Save a copy of sent mail on the mail server.'),
                         name: 'save_sent_mail_copy',
                         checked: me.record.get('message_sent_copy_behavior') !== 'skip',
                         listeners: {
@@ -852,7 +852,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         hideLabel: true,
                         xtype: 'checkbox',
                         name: 'save_sent_mail_to_source',
-                        boxLabel: this.app.i18n._('Folder of the source mail if it is no system folder.'),
+                        boxLabel: this.app.i18n._('Source mail folder, if it is not a system folder.'),
                         checked: me.record.get('message_sent_copy_behavior') === 'source',
                         listeners: {
                             'check': (checkbox, value) => {
@@ -941,7 +941,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.record.id) {
             if (! Tine.Tinebase.configManager.get('emailUserIdInXprops')) {
                 this.onTypeChangeError(combo,
-                    this.app.i18n._('It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled.'));
+                    this.app.i18n._('It is not possible to convert accounts because the configuration option EMAIL_USER_ID_IN_XPROPS is disabled.'));
             }
 
             if (newValue === 'shared' && [
@@ -951,7 +951,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ) {
                 // check migration_approved
                 if (! this.record.get('migration_approved')) {
-                    this.onTypeChangeError(combo, this.app.i18n._('Migration has not been approved.'));
+                    this.onTypeChangeError(combo, this.app.i18n._('The migration has not been approved.'));
                     return false;
                 }
                 this.showPasswordDialog();
@@ -981,7 +981,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     onTypeChangeError: function(combo, errorText) {
         combo.setValue(this.record.get('type'));
-        Ext.MessageBox.alert(this.app.i18n._('Account type change not possible'), errorText);
+        Ext.MessageBox.alert(this.app.i18n._('Account type change is not possible'), errorText);
     },
 
     /**
@@ -1005,7 +1005,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     showPasswordDialog: function(apply) {
         var me = this,
             dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-                windowTitle: this.app.i18n._('E-Mail account needs a password')
+                windowTitle: this.app.i18n._('The email account needs a password')
             });
         dialog.openWindow();
 
@@ -1023,18 +1023,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             new Ext.ux.grid.CheckColumn({
                 header: this.app.i18n._('Use'),
                 dataIndex: 'readGrant',
-                tooltip: this.app.i18n._('The grant use the shared email account'),
+                tooltip: this.app.i18n._('The grant uses the shared email account'),
                 width: 60
             }),
             new Ext.ux.grid.CheckColumn({
                 header: this.app.i18n._('Edit'),
-                tooltip: this.app.i18n._('The grant edit the shared email account'),
+                tooltip: this.app.i18n._('The grant edits the shared email account'),
                 dataIndex: 'editGrant',
                 width: 60
             }),
             new Ext.ux.grid.CheckColumn({
-                header: this.app.i18n._('Send Mails'),
-                tooltip: this.app.i18n._('The grant to send mails via the email account'),
+                header: this.app.i18n._('Send Emails'),
+                tooltip: this.app.i18n._('The grant to send emails via the email account'),
                 dataIndex: 'addGrant',
                 width: 60
             }),
@@ -1085,7 +1085,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.MessageBox.show({
                 title: this.app.i18n._('Warning'),
                 msg: this.app.i18n._(
-                    'Server connection failed. Do you still want to save this setting and exit?')
+                    'Server connection failed. Do you want to save this setting and exit anyway?')
                     + '<br>'
                     + errorMessage,
                 buttons: Ext.MessageBox.YESNO,
@@ -1113,7 +1113,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     testConnection: async function (server, showDialog = true, forceConnect = false) {
 
-        let message = this.app.i18n._('Connection succeed');
+        let message = this.app.i18n._('Connection succeeded');
         let fields = {
             'SMTP': {
                 'smtp_hostname': '',

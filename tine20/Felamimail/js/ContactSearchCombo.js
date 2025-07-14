@@ -201,7 +201,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         const isPreferred = Tine.Addressbook.Model.EmailAddress.prototype.isPreferred(token);
         const preferredIconEl =  document.createElement('div');
         preferredIconEl.className = `tine-combo-icon renderer_PreferredIcon`;
-        preferredIconEl.setAttribute('ext:qtip', i18n._('Preferred E-Mail'));
+        preferredIconEl.setAttribute('ext:qtip', i18n._('Preferred Email'));
         if (isPreferred) el.append(preferredIconEl);
 
         return el.outerHTML;

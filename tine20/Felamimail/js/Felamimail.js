@@ -687,7 +687,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Ext.Msg.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
-                title: this.i18n._('No e-mail account assigned'),
+                title: this.i18n._('No email account has been assigned'),
                 msg: this.i18n._('You have not yet been assigned an e-mail account. This view is therefore empty')
             });
         }
@@ -1150,7 +1150,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
                     // just show message box for system accounts
                     Ext.Msg.show({
                        title:   app.i18n._('IMAP Credentials Error'),
-                       msg:     app.i18n._('Your email credentials are wrong. Please contact your administrator'),
+                       msg:     app.i18n._('Your email login details are incorrect. Please check them or contact your administrator'),
                        icon:    Ext.MessageBox.ERROR,
                        buttons: Ext.Msg.OK
                     });

@@ -386,7 +386,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
-                self::LABEL => 'E-Mail', // _('E-Mail')
+                self::LABEL => 'Email', // _('Email')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER => true,
             ],
@@ -605,7 +605,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             ],
             'sieve_notification_move_folder' => [
                 self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'Auto-move notifications folder', // _('Auto-move notifications folder')
+                self::LABEL => 'Auto-move notifications to folder', // _('Auto-move notifications to folder')
                 self::LENGTH => 255,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
