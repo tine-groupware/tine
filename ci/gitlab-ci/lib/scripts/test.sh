@@ -49,7 +49,7 @@ test_prepare_working_dir() {
 }
 
 test_prepare_global_configs() {
-    log "prepareing global configs ..."
+    log "Preparing global configs ..."
     rm /etc/supervisor.d/worker.ini || true
     rm /etc/crontabs/tine20 || true
     gomplate --config /etc/gomplate/config.yaml
@@ -60,7 +60,7 @@ test_prepare_global_configs() {
 }
 
 test_prepare_mail_db() {
-    log "prepareing databases for mail setup ..."
+    log "Preparing databases for mail setup ..."
     mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"SET GLOBAL wait_timeout=31536000; SET GLOBAL interactive_timeout=31536000"
     mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
     mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS postfix"
@@ -138,7 +138,7 @@ test_npm_install() {
 
 
 test_phpunit() {
-    log "prepareing test .."
+    log "Preparing test .."
     if [ -f ${TINE20ROOT}/scripts/postInstallGitlab.sh ]; then
         ${TINE20ROOT}/scripts/postInstallGitlab.sh
     fi
