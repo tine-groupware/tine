@@ -18,41 +18,57 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Public OnlyOffice document server url"
+msgid "Public URL of OnlyOffice Document Server"
 msgstr "Öffentliche OnlyOffice Document-Server URL"
 
-msgid "OnlyOffice document server url accessible by the users browser"
-msgstr "OnlyOffice Document-Server URL die durch die Nutzer*innen Browser erreichbar ist"
+msgid "Internal/Server OnlyOffice Document Server URL"
+msgstr "OnlyOffice Document-Server URL"
 
-msgid "Internal/Server OnlyOffice document server url"
-msgstr "Interne/Server OnlyOffice Document Server URL"
+msgid ""
+"OnlyOffice Document Server URL accessible from this server. Leave empty if "
+"it is the same as the public URL"
+msgstr ""
+"OnlyOffice Document-Server URL die durch diesen Server erreichbar ist. Leer "
+"lassen wenn diese der öffentlichen URL entspricht"
 
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr "OnlyOffice Document-Server URL die durch diesen Server erreichbar ist. Leer lassen wenn diese der öffentlichen URL entspricht"
-
-msgid "Server url of this installation"
+msgid "Server URL of this installation"
 msgstr "Server URL dieser Installation"
 
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr "Server URL dieser Installation die durch den OnlyOffice Document-Server erreichbar ist"
+msgid ""
+"Server URL of this installation accessible to the OnlyOffice document server"
+msgstr ""
+"Server URL dieser Installation die durch den OnlyOffice Document-Server "
+"erreichbar ist"
 
-msgid "Enable oo jwt tokens"
+msgid "Enable OnlyOffice JWT tokens"
 msgstr "OnlyOffice Jet Tokens aktivieren"
 
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr "Aktiviert Tokens für Browser-Anfragen. Korrespondiert mit der OnlyOffice JWT_ENABLED Umgebungsvariable"
+msgid ""
+"Enables tokens for browser requests. This corresponds to the OnlyOffice "
+"JWT_ENABLED environment variable"
+msgstr ""
+"Aktiviert Tokens für Browser-Anfragen. Korrespondiert mit der OnlyOffice "
+"JWT_ENABLED Umgebungsvariable"
 
-msgid "OnlyOffice jwt secret string"
+msgid "OnlyOffice JWT secret string"
 msgstr "OnlyOffice JWT Geheimnis"
 
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr "OnlyOffice JWT Geheimnis. Korrespondiert mit der OnlyOffice JWT_SECRET Umgebungsvariable"
+msgid ""
+"OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET "
+"environment variable"
+msgstr ""
+"OnlyOffice JWT Geheimnis. Korrespondiert mit der OnlyOffice JWT_SECRET "
+"Umgebungsvariable"
 
 msgid "Interval in seconds to force save"
 msgstr "Intervall (in Sekunden) für Erzwungenes Speichern"
 
-msgid "Live time of token subscriptions"
+msgid "Lifetime of token subscriptions"
 msgstr "Lebenszeit für Token"
+
+msgid "OnlyOffice Document Server URL accessible by the user"
+msgstr ""
+"OnlyOffice Document-Server URL die durch die Nutzer*innen erreichbar ist"
 
 msgid "conflict"
 msgstr "Konflikt"
@@ -70,19 +86,22 @@ msgid "New Document (%1$d)"
 msgstr "Neues Dokument  (%1$d)"
 
 msgid "New Spreadsheet (%1$d)"
-msgstr "Neue Tabellenkalkulation  (%1$d)"
+msgstr "Neue Tabellenkalkulation (%1$d)"
 
 msgid "New Presentation (%1$d)"
-msgstr "Neue Präsentation  (%1$d)"
+msgstr "Neue Präsentation (%1$d)"
 
-msgid "filetype of node is not supported"
+msgid "Node file type is not supported"
 msgstr "Dateityp wird nicht unterstützt"
 
-msgid "node has no revision, it might be a partial upload"
+msgid "The node has no revision, it might be a partial upload"
 msgstr "Der Knoten hat keine Revision, es könnte ein Teil-Upload sein"
 
-msgid "this revision currently can't be opened as a different revision is already open"
-msgstr "Diese Revision kann nicht geöffnet werden, da eine andere bereits offen ist"
+msgid ""
+"This revision cannot currently be opened, as a different revision is already "
+"open"
+msgstr ""
+"Diese Revision kann nicht geöffnet werden, da eine andere bereits offen ist"
 
 msgid "Only Office Integrator"
 msgstr "Only Office Integrator"
@@ -115,11 +134,19 @@ msgid "Absence detected"
 msgstr "Abwesenheit erkannt"
 
 #, python-brace-format
-msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
-msgstr "Es sieht so aus als würden sie das Dokument derzeit nicht bearbeiten. Um die Inhalte zu schützen wird es daher in {0} Sekunden automatisch geschlossen."
+msgid ""
+"It looks like you are not currently editing the document. Therefore, to "
+"protect the contents, it will be closed automatically in {0} seconds."
+msgstr ""
+"Es sieht so aus als würden sie das Dokument derzeit nicht bearbeiten. Um die "
+"Inhalte zu schützen wird es daher in {0} Sekunden automatisch geschlossen."
 
-msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
-msgstr "Es sah so aus als hätten sie das Dokument nicht mehr bearbeitet. Um die Inhalte zu schützen wurde es daher automatisch geschlossen."
+msgid ""
+"It looked like you were no longer editing the document. Therefore, to "
+"protect the contents, it was closed automatically."
+msgstr ""
+"Es sah so aus als hätten sie das Dokument nicht mehr bearbeitet. Um die "
+"Inhalte zu schützen wurde es daher automatisch geschlossen."
 
 msgid "Select Image"
 msgstr "Bild auswählen"
@@ -127,20 +154,25 @@ msgstr "Bild auswählen"
 msgid "Save Copy As"
 msgstr "Kopie speichern als"
 
-msgid "Exporting Document ..."
-msgstr "Dokument wird exportiert…"
+msgid "Exporting Document..."
+msgstr "Dokument wird exportiert..."
 
-msgid "Version details for version { version } not available."
-msgstr "Details zur Versoin { version } sind nicht verfügbar."
+msgid "Version details for version { version } are not available."
+msgstr "Details zur Version { version } sind nicht verfügbar."
 
 msgid "Overwrite Existing File?"
 msgstr "Bestehende Datei überschreiben?"
 
 #, python-brace-format
-msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
-msgstr "Sie sind im Begriff die Datei „{filename}“ mit der alten Version {version} zu ersetzen. Alle neueren Änderungen gehen verloren .Wollen sie wirklich fortfahren?"
+msgid ""
+"You are about to replace \"{filename}\" with the old version {version}. All "
+"changes made since will be lost. Do you want to continue?"
+msgstr ""
+"Sie sind im Begriff die Datei „{filename}“ mit der alten Version {version} "
+"zu ersetzen. Alle neueren Änderungen gehen verloren .Wollen sie wirklich "
+"fortfahren?"
 
-msgid "Restoring ..."
+msgid "Restoring..."
 msgstr "Wiederherstellen..."
 
 msgid "No Document Specified"
@@ -153,16 +185,110 @@ msgid "Do you really want to open this file format?"
 msgstr "Wollen Sie dieses Dateiformat wirklich öffnen?"
 
 msgid "The file format can be lost and saved as an Microsoft Office file!"
-msgstr "Das Dateiformat kann verloren gehen und als eine Microsoft Office Datei gespeichert werden!"
+msgstr ""
+"Das Dateiformat kann verloren gehen und als eine Microsoft Office Datei "
+"gespeichert werden!"
 
 msgid "Error"
 msgstr "Fehler"
 
-msgid "Saving Document ..."
-msgstr "Dokument wird gespeichert …"
+msgid "Saving Document..."
+msgstr "Dokument wird gespeichert..."
 
 msgid "Editing"
 msgstr "In Bearbeitung"
 
 msgid "Current Editors"
-msgstr "Derzeitige Bearbeiter"
+msgstr "Derzeitige Bearbeitende"
+
+msgid "Public OnlyOffice document server url"
+msgstr "Öffentliche OnlyOffice Document-Server URL"
+
+msgid "OnlyOffice document server url accessible by the users browser"
+msgstr ""
+"OnlyOffice Document-Server URL die durch die Nutzer*innen Browser "
+"erreichbar ist"
+
+msgid "Internal/Server OnlyOffice document server url"
+msgstr "Interne/Server OnlyOffice Document Server URL"
+
+msgid ""
+"OnlyOffice document server url accessible from this server. Leave empty "
+"if this is the same as the public url"
+msgstr ""
+"OnlyOffice Document-Server URL die durch diesen Server erreichbar ist. "
+"Leer lassen wenn diese der öffentlichen URL entspricht"
+
+msgid "Server url of this installation"
+msgstr "Server URL dieser Installation"
+
+msgid ""
+"Server url of this installation accessible by the OnlyOffice document "
+"server"
+msgstr ""
+"Server URL dieser Installation die durch den OnlyOffice Document-Server "
+"erreichbar ist"
+
+msgid "Enable oo jwt tokens"
+msgstr "OnlyOffice Jet Tokens aktivieren"
+
+msgid ""
+"Enable tokens for browser requests corresponding to OnlyOffice "
+"JWT_ENABLED environment variable"
+msgstr ""
+"Aktiviert Tokens für Browser-Anfragen. Korrespondiert mit der OnlyOffice "
+"JWT_ENABLED Umgebungsvariable"
+
+msgid "OnlyOffice jwt secret string"
+msgstr "OnlyOffice JWT Geheimnis"
+
+msgid ""
+"OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET "
+"environment variable"
+msgstr ""
+"OnlyOffice JWT Geheimnis. Korrespondiert mit der OnlyOffice JWT_SECRET "
+"Umgebungsvariable"
+
+msgid "Live time of token subscriptions"
+msgstr "Lebenszeit für Token"
+
+msgid "filetype of node is not supported"
+msgstr "Dateityp wird nicht unterstützt"
+
+msgid "node has no revision, it might be a partial upload"
+msgstr "Der Knoten hat keine Revision, es könnte ein Teil-Upload sein"
+
+msgid ""
+"this revision currently can't be opened as a different revision is "
+"already open"
+msgstr ""
+"Diese Revision kann nicht geöffnet werden, da eine andere bereits offen "
+"ist"
+
+msgid ""
+"It looked like you where not editing the document any longer. Therefore, "
+"to protect the contents, it was be closed automatically."
+msgstr ""
+"Es sah so aus als hätten sie das Dokument nicht mehr bearbeitet. Um die "
+"Inhalte zu schützen wurde es daher automatisch geschlossen."
+
+msgid "Exporting Document ..."
+msgstr "Dokument wird exportiert…"
+
+msgid "Version details for version { version } not available."
+msgstr "Details zur Version { version } sind nicht verfügbar."
+
+#, python-brace-format
+msgid ""
+"You are about to replace \"{filename}\" by the old version {version}. All "
+"newer changes will be lost. Do you want to continue?"
+msgstr ""
+"Sie sind im Begriff die Datei „{filename}“ mit der alten Version "
+"{version} zu ersetzen. Alle neueren Änderungen gehen verloren .Wollen sie "
+"wirklich fortfahren?"
+
+msgid "Restoring ..."
+msgstr "Wiederherstellen..."
+
+msgid "Saving Document ..."
+msgstr "Dokument wird gespeichert …"

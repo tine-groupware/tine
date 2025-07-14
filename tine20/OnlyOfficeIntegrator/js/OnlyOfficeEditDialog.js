@@ -96,7 +96,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
                     this.docEditor.destroyEditor();
                     Ext.MessageBox.show({
                         title: this.app.i18n._('Absence detected'),
-                        msg: this.app.i18n._('It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically.'),
+                        msg: this.app.i18n._('It looked like you were no longer editing the document. Therefore, to protect the contents, it was closed automatically.'),
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.INFO,
                         fn: () => {
@@ -248,7 +248,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
                     if (!path.endsWith(`.${fileType}`)) path = `${path}.${fileType}`;
                     
                     const loadMask = new Ext.LoadMask(Ext.getBody(), {
-                        msg: this.app.i18n._('Exporting Document ...'),
+                        msg: this.app.i18n._('Exporting Document...'),
                         removeMask: true
                     });
 
@@ -303,7 +303,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
             this.docEditor.setHistoryData(historyData);
         } catch (err) {
             this.docEditor.setHistoryData({
-                "error": this.app.i18n.formatMessage('Version details for version { version } not available.', {version}),
+                "error": this.app.i18n.formatMessage('Version details for version { version } are not available.', {version}),
                 "version": version
             });
         }
@@ -331,7 +331,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         }
 
         const title = this.app.formatMessage('Overwrite Existing File?');
-        const msg = this.app.formatMessage('You are about to replace "{filename}" by the old version {version}. All newer changes will be lost. Do you want to continue?', {
+        const msg = this.app.formatMessage('You are about to replace "{filename}" with the old version {version}. All changes made since will be lost. Do you want to continue?', {
             version: version,
             filename: this.record.get('name')
         });
@@ -344,7 +344,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
 
         if (confirm) {
             const loadMask = new Ext.LoadMask(this.getEl(), {
-                msg: this.app.formatMessage('Restoring ...'),
+                msg: this.app.formatMessage('Restoring...'),
                 removeMask: true
             });
             loadMask.show();
@@ -464,7 +464,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose = async funct
         if (dirty) {
             if  (isTempFile) {
                 loadMask = new Ext.LoadMask(Ext.getBody(), {
-                    msg: app.i18n._('Saving Document ...'),
+                    msg: app.i18n._('Saving Document...'),
                     removeMask: true
                 });
                 loadMask.show();

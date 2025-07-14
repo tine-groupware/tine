@@ -22,25 +22,32 @@ msgstr ""
 msgid "Internal/Server OnlyOffice document server url"
 msgstr ""
 
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgid ""
+"OnlyOffice document server url accessible from this server. Leave empty if "
+"this is the same as the public url"
 msgstr ""
 
 msgid "Server url of this installation"
 msgstr ""
 
-msgid "Server url of this installation accessible by the OnlyOffice document server"
+msgid ""
+"Server url of this installation accessible by the OnlyOffice document server"
 msgstr ""
 
 msgid "Enable oo jwt tokens"
 msgstr ""
 
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgid ""
+"Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED "
+"environment variable"
 msgstr ""
 
 msgid "OnlyOffice jwt secret string"
 msgstr ""
 
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgid ""
+"OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET "
+"environment variable"
 msgstr ""
 
 msgid "Interval in seconds to force save"
@@ -76,7 +83,9 @@ msgstr ""
 msgid "node has no revision, it might be a partial upload"
 msgstr ""
 
-msgid "this revision currently can't be opened as a different revision is already open"
+msgid ""
+"this revision currently can't be opened as a different revision is already "
+"open"
 msgstr ""
 
 msgid "Only Office Integrator"
@@ -110,10 +119,14 @@ msgid "Absence detected"
 msgstr ""
 
 #, python-brace-format
-msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
+msgid ""
+"It looks like you are not currently editing the document. Therefore, to "
+"protect the contents, it will be closed automatically in {0} seconds."
 msgstr ""
 
-msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
+msgid ""
+"It looked like you where not editing the document any longer. Therefore, to "
+"protect the contents, it was be closed automatically."
 msgstr ""
 
 msgid "Select Image"
@@ -132,7 +145,9 @@ msgid "Overwrite Existing File?"
 msgstr ""
 
 #, python-brace-format
-msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
+msgid ""
+"You are about to replace \"{filename}\" by the old version {version}. All "
+"newer changes will be lost. Do you want to continue?"
 msgstr ""
 
 msgid "Restoring ..."
@@ -142,12 +157,6 @@ msgid "No Document Specified"
 msgstr ""
 
 msgid "Something went wrong, please try again later."
-msgstr ""
-
-msgid "Do you really want to open this file format?"
-msgstr ""
-
-msgid "The file format can be lost and saved as an Microsoft Office file!"
 msgstr ""
 
 msgid "Error"
@@ -160,4 +169,78 @@ msgid "Editing"
 msgstr ""
 
 msgid "Current Editors"
+msgstr ""
+
+msgid "Public URL of OnlyOffice Document Server"
+msgstr ""
+
+msgid "Internal/Server OnlyOffice Document Server URL"
+msgstr ""
+
+msgid ""
+"OnlyOffice Document Server URL accessible from this server. Leave empty if "
+"it is the same as the public URL"
+msgstr ""
+
+msgid "Server URL of this installation"
+msgstr ""
+
+msgid ""
+"Server URL of this installation accessible to the OnlyOffice document server"
+msgstr ""
+
+msgid "Enable OnlyOffice JWT tokens"
+msgstr ""
+
+msgid ""
+"Enables tokens for browser requests. This corresponds to the OnlyOffice "
+"JWT_ENABLED environment variable"
+msgstr ""
+
+msgid "OnlyOffice JWT secret string"
+msgstr ""
+
+msgid ""
+"OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET "
+"environment variable"
+msgstr ""
+
+msgid "Lifetime of token subscriptions"
+msgstr ""
+
+msgid "OnlyOffice Document Server URL accessible by the user"
+msgstr ""
+
+msgid "Node file type is not supported"
+msgstr ""
+
+msgid "The node has no revision, it might be a partial upload"
+msgstr ""
+
+msgid ""
+"This revision cannot currently be opened, as a different revision is already "
+"open"
+msgstr ""
+
+msgid ""
+"It looked like you were no longer editing the document. Therefore, to "
+"protect the contents, it was closed automatically."
+msgstr ""
+
+msgid "Exporting Document..."
+msgstr ""
+
+msgid "Version details for version { version } are not available."
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"You are about to replace \"{filename}\" with the old version {version}. All "
+"changes made since will be lost. Do you want to continue?"
+msgstr ""
+
+msgid "Restoring..."
+msgstr ""
+
+msgid "Saving Document..."
 msgstr ""

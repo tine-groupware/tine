@@ -22,26 +22,40 @@ msgstr "OnlyOffice document server url accessible by the users browser"
 msgid "Internal/Server OnlyOffice document server url"
 msgstr "Internal/Server OnlyOffice document server url"
 
-msgid "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
-msgstr "OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url"
+msgid ""
+"OnlyOffice document server url accessible from this server. Leave empty if "
+"this is the same as the public url"
+msgstr ""
+"OnlyOffice document server url accessible from this server. Leave empty if "
+"this is the same as the public url"
 
 msgid "Server url of this installation"
 msgstr "Server url of this installation"
 
-msgid "Server url of this installation accessible by the OnlyOffice document server"
-msgstr "Server url of this installation accessible by the OnlyOffice document server"
+msgid ""
+"Server url of this installation accessible by the OnlyOffice document server"
+msgstr ""
+"Server url of this installation accessible by the OnlyOffice document server"
 
 msgid "Enable oo jwt tokens"
 msgstr "Enable oo jwt tokens"
 
-msgid "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
-msgstr "Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable"
+msgid ""
+"Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED "
+"environment variable"
+msgstr ""
+"Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED "
+"environment variable"
 
 msgid "OnlyOffice jwt secret string"
 msgstr "OnlyOffice jwt secret string"
 
-msgid "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
-msgstr "OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable"
+msgid ""
+"OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET "
+"environment variable"
+msgstr ""
+"OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET "
+"environment variable"
 
 msgid "Interval in seconds to force save"
 msgstr "Interval in seconds to force save"
@@ -76,8 +90,12 @@ msgstr "filetype of node is not supported"
 msgid "node has no revision, it might be a partial upload"
 msgstr "node has no revision, it might be a partial upload"
 
-msgid "this revision currently can't be opened as a different revision is already open"
-msgstr "this revision currently can't be opened as a different revision is already open"
+msgid ""
+"this revision currently can't be opened as a different revision is already "
+"open"
+msgstr ""
+"this revision currently can't be opened as a different revision is already "
+"open"
 
 msgid "Only Office Integrator"
 msgstr "Only Office Integrator"
@@ -110,11 +128,19 @@ msgid "Absence detected"
 msgstr "Absence detected"
 
 #, python-brace-format
-msgid "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
-msgstr "It looks like you are not currently editing the document. Therefore, to protect the contents, it will be closed automatically in {0} seconds."
+msgid ""
+"It looks like you are not currently editing the document. Therefore, to "
+"protect the contents, it will be closed automatically in {0} seconds."
+msgstr ""
+"It looks like you are not currently editing the document. Therefore, to "
+"protect the contents, it will be closed automatically in {0} seconds."
 
-msgid "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
-msgstr "It looked like you where not editing the document any longer. Therefore, to protect the contents, it was be closed automatically."
+msgid ""
+"It looked like you where not editing the document any longer. Therefore, to "
+"protect the contents, it was be closed automatically."
+msgstr ""
+"It looked like you where not editing the document any longer. Therefore, to "
+"protect the contents, it was be closed automatically."
 
 msgid "Select Image"
 msgstr "Select Image"
@@ -132,8 +158,12 @@ msgid "Overwrite Existing File?"
 msgstr "Overwrite Existing File?"
 
 #, python-brace-format
-msgid "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
-msgstr "You are about to replace \"{filename}\" by the old version {version}. All newer changes will be lost. Do you want to continue?"
+msgid ""
+"You are about to replace \"{filename}\" by the old version {version}. All "
+"newer changes will be lost. Do you want to continue?"
+msgstr ""
+"You are about to replace \"{filename}\" by the old version {version}. All "
+"newer changes will be lost. Do you want to continue?"
 
 msgid "Restoring ..."
 msgstr "Restoring ..."
@@ -143,12 +173,6 @@ msgstr "No Document Specified"
 
 msgid "Something went wrong, please try again later."
 msgstr "Something went wrong, please try again later."
-
-msgid "Do you really want to open this file format?"
-msgstr "Do you really want to open this file format?"
-
-msgid "The file format can be lost and saved as an Microsoft Office file!"
-msgstr "The file format can be lost and saved as an Microsoft Office file!"
 
 msgid "Error"
 msgstr "Error"
@@ -161,3 +185,96 @@ msgstr "Editing"
 
 msgid "Current Editors"
 msgstr "Current Editors"
+
+msgid "Public URL of OnlyOffice Document Server"
+msgstr "Public URL of OnlyOffice Document Server"
+
+msgid "Internal/Server OnlyOffice Document Server URL"
+msgstr "Internal/Server OnlyOffice Document Server URL"
+
+msgid ""
+"OnlyOffice Document Server URL accessible from this server. Leave empty if "
+"it is the same as the public URL"
+msgstr ""
+"OnlyOffice Document Server URL accessible from this server. Leave empty if "
+"it is the same as the public URL"
+
+msgid "Server URL of this installation"
+msgstr "Server URL of this installation"
+
+msgid ""
+"Server URL of this installation accessible to the OnlyOffice document server"
+msgstr ""
+"Server URL of this installation accessible to the OnlyOffice document server"
+
+msgid "Enable OnlyOffice JWT tokens"
+msgstr "Enable OnlyOffice JWT tokens"
+
+msgid ""
+"Enables tokens for browser requests. This corresponds to the OnlyOffice "
+"JWT_ENABLED environment variable"
+msgstr ""
+"Enables tokens for browser requests. This corresponds to the OnlyOffice "
+"JWT_ENABLED environment variable"
+
+msgid "OnlyOffice JWT secret string"
+msgstr "OnlyOffice JWT secret string"
+
+msgid ""
+"OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET "
+"environment variable"
+msgstr ""
+"OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET "
+"environment variable"
+
+msgid "Lifetime of token subscriptions"
+msgstr "Lifetime of token subscriptions"
+
+msgid "OnlyOffice Document Server URL accessible by the user"
+msgstr "OnlyOffice Document Server URL accessible by the user"
+
+msgid "Node file type is not supported"
+msgstr "Node file type is not supported"
+
+msgid "The node has no revision, it might be a partial upload"
+msgstr "The node has no revision, it might be a partial upload"
+
+msgid ""
+"This revision cannot currently be opened, as a different revision is already "
+"open"
+msgstr ""
+"This revision cannot currently be opened, as a different revision is already "
+"open"
+
+msgid ""
+"It looked like you were no longer editing the document. Therefore, to "
+"protect the contents, it was closed automatically."
+msgstr ""
+"It looked like you were no longer editing the document. Therefore, to "
+"protect the contents, it was closed automatically."
+
+msgid "Exporting Document..."
+msgstr "Exporting Document..."
+
+msgid "Version details for version { version } are not available."
+msgstr "Version details for version { version } are not available."
+
+#, python-brace-format
+msgid ""
+"You are about to replace \"{filename}\" with the old version {version}. All "
+"changes made since will be lost. Do you want to continue?"
+msgstr ""
+"You are about to replace \"{filename}\" with the old version {version}. All "
+"changes made since will be lost. Do you want to continue?"
+
+msgid "Restoring..."
+msgstr "Restoring..."
+
+msgid "Saving Document..."
+msgstr "Saving Document..."
+
+msgid "Do you really want to open this file format?"
+msgstr "Do you really want to open this file format?"
+
+msgid "The file format can be lost and saved as an Microsoft Office file!"
+msgstr "The file format can be lost and saved as an Microsoft Office file!"

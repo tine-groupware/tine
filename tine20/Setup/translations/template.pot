@@ -56,7 +56,7 @@ msgstr ""
 msgid "uninstall"
 msgstr ""
 
-msgid "Do you really want to uninstall the application(s)?"
+msgid "Are you sure you want to uninstall the application(s)?"
 msgstr ""
 
 msgid "This may take a while"
@@ -71,7 +71,7 @@ msgstr ""
 msgid "Delete all existing users and groups"
 msgstr ""
 
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
 msgstr ""
 
 msgid "Backend"
@@ -616,4 +616,10 @@ msgid "Application Manager"
 msgstr ""
 
 msgid "Subscription"
+msgstr ""
+
+msgid "Maximum number of users reached. You might not want to update to this version, as some of the users might no longer be able to log in."
+msgstr ""
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users. To continue updating tine, you can skip this check by adding this to your config: \"setupSkipUpdateMaxUserCheck\" => true"
 msgstr ""

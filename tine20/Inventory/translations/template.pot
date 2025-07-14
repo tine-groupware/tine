@@ -52,7 +52,7 @@ msgstr ""
 msgid "Tine 2.0 inventory CSV import"
 msgstr ""
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
+msgid "Import CSV formatted contacts from Tine 2.0 Inventory (Export Format)"
 msgstr ""
 
 msgid "Import list (###CURRENTDATE###)"
@@ -67,10 +67,13 @@ msgstr ""
 msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-msgid "The active number must be less than or equal total number."
+msgid "The active number must be less than or equal to total number."
 msgstr ""
 
 msgid "Purchase Invoice"
+msgstr ""
+
+msgid "Employee"
 msgstr ""
 
 msgid "General"
@@ -83,9 +86,6 @@ msgid "Serial Number"
 msgstr ""
 
 msgid "Inventory Type"
-msgstr ""
-
-msgid "Employee"
 msgstr ""
 
 msgid "Description"
@@ -110,6 +110,9 @@ msgid "Available number"
 msgstr ""
 
 msgid "Status"
+msgstr ""
+
+msgid "ID"
 msgstr ""
 
 msgid "Accounting"

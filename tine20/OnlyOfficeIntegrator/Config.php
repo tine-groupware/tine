@@ -45,40 +45,40 @@ class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = [
         self::ONLYOFFICE_PUBLIC_URL => [
-            //_('Public OnlyOffice document server url')
-            self::LABEL                 => 'Public OnlyOffice document server url',
-            //_('OnlyOffice document server url accessible by the users browser')
-            self::DESCRIPTION           => 'OnlyOffice document server url accessible by the users browser',
+            //_('Public URL of OnlyOffice Document Server')
+            self::LABEL                 => 'Public URL of OnlyOffice Document Server',
+            //_('OnlyOffice Document Server URL accessible by the user's browser')
+            self::DESCRIPTION           => 'OnlyOffice Document Server URL accessible by the user\'s browser',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
         ],
         self::ONLYOFFICE_SERVER_URL => [
-            //_('Internal/Server OnlyOffice document server url')
-            self::LABEL                 => 'Internal/Server OnlyOffice document server url',
-            //_('OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url')
-            self::DESCRIPTION           => 'OnlyOffice document server url accessible from this server. Leave empty if this is the same as the public url',
+            //_('Internal/Server OnlyOffice Document Server URL')
+            self::LABEL                 => 'Internal/Server OnlyOffice Document Server URL',
+            //_('OnlyOffice Document Server URL accessible from this server. Leave empty if it is the same as the public URL')
+            self::DESCRIPTION           => 'OnlyOffice Document Server URL accessible from this server. Leave empty if it is the same as the public URL',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
         ],
         self::TINE20_SERVER_URL => [
-            //_('Server url of this installation')
+            //_('Server URL of this installation')
             self::LABEL                 => 'Server url of this installation',
-            //_('Server url of this installation accessible by the OnlyOffice document server')
-            self::DESCRIPTION           => 'Server url of this installation accessible by the OnlyOffice document server',
+            //_('Server URL of this installation accessible to the OnlyOffice document server')
+            self::DESCRIPTION           => 'Server URL of this installation accessible to the OnlyOffice document server',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
         ],
         self::JWT_ENABLED => [
-            //_('Enable oo jwt tokens')
-            self::LABEL                 => 'Enable oo jwt tokens',
-            //_('Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable')
-            self::DESCRIPTION           => 'Enable tokens for browser requests corresponding to OnlyOffice JWT_ENABLED environment variable',
+            //_('Enable OnlyOffice JWT tokens')
+            self::LABEL                 => 'Enable OnlyOffice JWT tokens',
+            //_('Enables tokens for browser requests. This corresponds to the OnlyOffice JWT_ENABLED environment variable')
+            self::DESCRIPTION           => 'Enables tokens for browser requests. This corresponds to the OnlyOffice JWT_ENABLED environment variable',
             self::TYPE                  => self::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
@@ -86,10 +86,10 @@ class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
         ],
 
         self::JWT_SECRET => [
-            //_('OnlyOffice jwt secret string')
+            //_('OnlyOffice JWT secret string')
             self::LABEL                 => 'OnlyOffice inbox secret string',
-            //_('OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable')
-            self::DESCRIPTION           => 'OnlyOffice jwt secret string corresponding to OnlyOffice JWT_SECRET environment variable',
+            //_('OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET environment variable')
+            self::DESCRIPTION           => 'OnlyOffice JWT secret string corresponding to the OnlyOffice JWT_SECRET environment variable',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
@@ -107,10 +107,10 @@ class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => true,
         ],
         self::TOKEN_LIVE_TIME => [
-            //_('Live time of token subscriptions')
-            self::LABEL                 => 'Live time of token subscriptions',
-            //_('Live time of token subscriptions')
-            self::DESCRIPTION           => 'Live time of token subscriptions',
+            //_('Lifetime of token subscriptions')
+            self::LABEL                 => 'Lifetime of token subscriptions',
+            //_('Lifetime of token subscriptions')
+            self::DESCRIPTION           => 'Lifetime of token subscriptions',
             self::TYPE                  => self::TYPE_INT,
             self::DEFAULT_STR           => 1200,
             self::CLIENTREGISTRYINCLUDE => true,

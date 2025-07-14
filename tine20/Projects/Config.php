@@ -57,8 +57,8 @@ class Projects_Config extends Tinebase_Config_Abstract
         self::PROJECT_ATTENDEE_ROLE => array(
             //_('Available Project Attendee Role')
             self::LABEL => 'Available Project Attendee Role',
-            //_('Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation.')
-            self::DESCRIPTION => 'Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation.',
+            //_('Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems during export or synchronization.')
+            self::DESCRIPTION => 'Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems during export or synchronization.',
             self::TYPE => 'keyFieldConfig',
             self::OPTIONS => array('recordModel' => 'Projects_Model_AttendeeRole'),
             self::CLIENTREGISTRYINCLUDE => TRUE,
@@ -87,8 +87,8 @@ class Projects_Config extends Tinebase_Config_Abstract
         self::PROJECT_STATUS => array(
             //_('Available Project Status')
             self::LABEL => 'Available Project Status',
-            //_('Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation.')
-            self::DESCRIPTION => 'Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation.',
+            //_('Possible Project statuses. Please note that additional project statuses might impact other Projects systems during export or synchronization.')
+            self::DESCRIPTION => 'Possible Project statuses. Please note that additional project statuses might impact other Projects systems during export or synchronization.',
             self::TYPE => 'keyFieldConfig',
             self::OPTIONS => array('recordModel' => 'Projects_Model_Status'),
             self::CLIENTREGISTRYINCLUDE => TRUE,

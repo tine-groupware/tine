@@ -58,7 +58,7 @@ class Projects_Preference extends Tinebase_Preference_Abstract
         $prefDescriptions = array(
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('Default Favorite'),
-                'description'   => $translate->_('The default favorite which is loaded on Projects startup'),
+                'description'   => $translate->_('The default favorite that is loaded on Projects startup'),
             ),
         );
         
