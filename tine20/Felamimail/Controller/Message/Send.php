@@ -101,7 +101,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
 
         // only check send grant for shared accounts
-        if (in_array($account->type, [
+        if ($this->_doContainerACLChecks && in_array($account->type, [
                 Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
                 Felamimail_Model_Account::TYPE_SHARED_EXTERNAL,
                 Felamimail_Model_Account::TYPE_ADB_LIST,

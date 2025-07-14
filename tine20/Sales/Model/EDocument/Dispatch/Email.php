@@ -109,6 +109,7 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
                 'body' => $body,
                 'attachments' => $attachments,
             ], true);
+            Felamimail_Controller_Message_Send::getInstance()->doContainerACLChecks(false);
             $msg = Felamimail_Controller_Message_Send::getInstance()->sendMessage($msg);
             // TODO FIXME this is not concurrency safe at all!!! need to fix this code in felamimail
             if (null === ($sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
@@ -132,6 +133,8 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             ]));
 
             return false;
+        } finally {
+            Felamimail_Controller_Message_Send::getInstance()->doContainerACLChecks(true);
         }
 
         /** @var Felamimail_Model_Message $sentMessage */
