@@ -245,7 +245,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                xtype:'button',
                                ref: '../../../../../../../contactButton',
                                iconCls: 'applyContactData',
-                               tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Apply contact data on form')),
+                               tooltip: Ext.util.Format.htmlEncode(this.app.i18n._('Apply contact data to the form')),
                                disabled: (this.record && Ext.isObject(this.record.get('account_id'))) ? false : true,
                                fieldLabel: '&nbsp;',
                                lazyLoading: false,

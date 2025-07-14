@@ -372,7 +372,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                         $oldReport->calculation_failure = 1;
                         $oldReport->system_remark =
                             Tinebase_Translation::getTranslation(HumanResources_Config::APP_NAME)
-                                ->_('No valid blpipe for the working time scheme of this contract for this date');
+                                ->_('No valid blpipe for the working time scheme of this contract on this date');
 
                         $this->update($oldReport);
                         $this->_reportResult['errors'] += 1;

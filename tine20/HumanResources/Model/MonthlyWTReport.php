@@ -219,7 +219,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
-                self::LABEL                         => 'Sum Accepted Working Time Correction', // _('Sum Accepted Working Time Correction')
+                self::LABEL                         => 'Sum of Accepted Working Time Corrections', // _('Sum of Accepted Working Time Corrections')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
             ],

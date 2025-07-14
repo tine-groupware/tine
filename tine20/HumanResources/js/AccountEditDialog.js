@@ -105,10 +105,10 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                             formDefaults: cfDefaults,
                             labelAlign: 'top',
                             items: [[
-                                {fieldLabel: this.app.i18n._('Possible vaction days'), name: 'possible_vacation_days', columnWidth: 1/4, readOnly: true },
-                                {fieldLabel: this.app.i18n._('Requested vaction days'), name: 'scheduled_requested_vacation_days', columnWidth: 1/4, readOnly: true },
-                                {fieldLabel: this.app.i18n._('Taken vaction days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/4, readOnly: true },
-                                {fieldLabel: this.app.i18n._('Remaining vaction days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Possible vacation days'), name: 'possible_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Requested vacation days'), name: 'scheduled_requested_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Taken vacation days'), name: 'scheduled_taken_vacation_days', columnWidth: 1/4, readOnly: true },
+                                {fieldLabel: this.app.i18n._('Remaining vacation days'), name: 'scheduled_remaining_vacation_days', columnWidth: 1/4, readOnly: true },
                             ],[
                                 this.vacationCorrectionPicker = new vacationCorrectionPicker({
                                     columnWidth: 1,

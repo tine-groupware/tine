@@ -129,7 +129,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ],
             ),
             'postalcode' => array(
-                'label' => 'Postalcode', //_('Postalcode')
+                'label' => 'Postal code', //_('Postal code')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,
@@ -169,7 +169,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ],
             ),
             'email' => array(
-                'label' => 'E-Mail', //_('E-Mail')
+                'label' => 'Email', //_('Email')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'   => TRUE,

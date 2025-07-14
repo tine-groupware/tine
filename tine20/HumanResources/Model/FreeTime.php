@@ -33,8 +33,8 @@ class HumanResources_Model_FreeTime extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         'version'         => 10,
-        'recordName'      => 'Free Time', // ngettext('Free Time', 'Free Times', n)
-        'recordsName'     => 'Free Times', // gettext('GENDER_Free Time')
+        'recordName'      => 'Absence', // ngettext('Absence', 'Absences', n)
+        'recordsName'     => 'Absences', // gettext('GENDER_Absence')
         'hasRelations'    => FALSE,
         'hasCustomFields' => FALSE,
         'hasNotes'        => FALSE,

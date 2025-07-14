@@ -386,11 +386,11 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         _.defer(_.bind(btn.setDisabled, btn, true))
         this.sounds.shortbeep.play();
         this.hideClock();
-        this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data saving is performed ...')}</div>`);
+        this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Saving data...')}</div>`);
         // let result
         try {
             const result = await Tine.HumanResources[fn](Object.assign({ [FLD_DEVICE_ID]: SYSTEM_WORKING_TIME_ID }, options));
-            // this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data saving successful!')}</div>`);
+            // this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data saved successfully!')}</div>`);
             const message = await Tine.HumanResources.wtInfo();
             this.menu.displayPanel.update(`<div class="attendance-clock-msg">${ Ext.util.Format.nl2br(message) }</div>`);
             return result;
@@ -438,7 +438,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         _.defer(_.bind(btn.setDisabled, btn, true))
         this.sounds.shortbeep.play();
         this.hideClock();
-        this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Data loading is performed ...')}</div>`);
+        this.menu.displayPanel.update(`<div class="attendance-clock-msg">${this.app.i18n._('Loading data...')}</div>`);
 
         try {
             const message = await Tine.HumanResources.wtInfo();

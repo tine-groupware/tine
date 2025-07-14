@@ -157,8 +157,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             )
         ),
         self::DEFAULT_FEAST_CALENDAR => array(
-            // _('Default Feast Calendar')
-            self::LABEL                 => 'Default Feast Calendar',
+            // _('Default Holiday Calendar')
+            self::LABEL                 => 'Default Holiday Calendar',
             // _('Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker')
             self::DESCRIPTION           => 'Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker',
             self::TYPE                  =>  Tinebase_Config_Abstract::TYPE_RECORD,
@@ -226,8 +226,8 @@ class HumanResources_Config extends Tinebase_Config_Abstract
         self::VACATION_EXPIRES => array(
             // _('Vacation expires')
             'label'                 => 'Vacation expires',
-            // _('Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD.')
-            'description'           => 'Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD.',
+            // _('Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD.')
+            'description'           => 'Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD.',
             'type'                  => 'string',
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
@@ -256,9 +256,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => false,
         ),
         self::STREAM_INTERVAL => [
-            //_('Stream Intervals available')
-            self::LABEL                     => 'Stream Intervals available',
-            self::DESCRIPTION               => 'Stream Intervals available',
+            //_('Available Stream Intervals')
+            self::LABEL                     => 'Available Stream Intervals',
+            self::DESCRIPTION               => 'Available Stream Intervals',
             self::TYPE                      => 'keyFieldConfig',
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => false,
@@ -272,9 +272,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             ],
         ],
         self::STREAM_TYPE => [
-            //_('Stream Types available')
-            self::LABEL                     => 'Stream Types available',
-            self::DESCRIPTION               => 'Stream Types available',
+            //_('Available Stream Types')
+            self::LABEL                     => 'Available Stream Types',
+            self::DESCRIPTION               => 'Available Stream Types',
             self::TYPE                      => 'keyFieldConfig',
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,

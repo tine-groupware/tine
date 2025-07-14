@@ -82,7 +82,7 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract implemen
             self::FLD_FREE_TIME_CAL         => [
                 self::TYPE                      => self::TYPE_CONTAINER,
                 self::NULLABLE                  => true,
-                self::LABEL                     => 'Free Time Calendar', // _('Free Time Calendar')
+                self::LABEL                     => 'Absence Calendar', // _('Absence Calendar')
                 self::FILTER_DEFINITION         => [
                     self::FILTER                    => Tinebase_Model_Filter_Container::class,
                     self::OPTIONS                   => [

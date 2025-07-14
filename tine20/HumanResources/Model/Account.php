@@ -190,7 +190,7 @@ class HumanResources_Model_Account extends Tinebase_Record_Abstract
             ),
             'vacation_corrections'              => [
                 self::TYPE                          => self::TYPE_RECORDS,
-                self::LABEL                         => 'Vacation Corrections', // _('Vacation Corrections')
+                self::LABEL                         => 'Vacation corrections', // _('Vacation corrections')
                 self::NULLABLE                      => true,
                 self::DOCTRINE_IGNORE               => true,
                 self::CONFIG                        => [

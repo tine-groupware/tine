@@ -12,7 +12,7 @@ Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
 
     const defaults = {
         appName: 'HumanResources',
-        group: app.i18n._('Workingtime Tracking'),
+        group: app.i18n._('Working Time Tracking'),
         groupIconCls: 'HumanResourcesTimetrackerHooks',
         config: {
             hideColumnsMode: 'hide',
@@ -42,7 +42,7 @@ Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
 
     Tine.widgets.MainScreen.registerContentType('Timetracker', _.merge({
         contentType: 'FreeTimePlanning',
-        text: app.i18n._('Free Time Planning'),
+        text: app.i18n._('Absence Planning'),
         xtype: 'humanresources.freetimeplanning',
     }, defaults));
 

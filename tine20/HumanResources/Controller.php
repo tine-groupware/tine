@@ -85,7 +85,7 @@ class HumanResources_Controller extends Tinebase_Controller_Event
                 'id' => 'hr_freetimetype',
                 'application_id' => $application,
                 'model' => HumanResources_Model_FreeTimeType::class,
-                'label' => 'Free time types' // _('Free time types')
+                'label' => 'Absence types' // _('Absence types')
             )));
         }
 

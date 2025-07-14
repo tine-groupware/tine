@@ -79,9 +79,9 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         let type = this.typePicker.selectedRecord || this.record.get('type') || {};
         let employee = this.employeePicker.selectedRecord || this.record.get('employee_id');
         let employeeName = _.get(employee, 'data.n_fn', _.get(employee, 'n_fn', this.app.i18n._('Employee')));
-        let typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || this.app.i18n._('Free Time');
+        let typeString = _.get(type, 'data.name', _.get(type, 'name', type)) || this.app.i18n._('Absence');
         if (Ext.isObject(typeString)) {
-            typeString = this.app.i18n._('Free Time');
+            typeString = this.app.i18n._('Absence');
         }
         const isNewRecord = !this.record.get('creation_time');
         const grants = _.get(employee, 'data.division_id.account_grants', _.get(employee, 'data.account_grants', {}));
@@ -151,7 +151,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     onApplyChanges: function(closeWindow) {
         // if no day is selected, show message and break saving
         if (! this.datePicker.getSelected().length) {
-            var msg = this.app.i18n._('You have to select at least one day to save this freetime entry.');
+            var msg = this.app.i18n._('You have to select at least one day to save this free time entry.');
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,

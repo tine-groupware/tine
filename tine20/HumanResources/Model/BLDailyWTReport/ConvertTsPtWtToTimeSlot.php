@@ -31,8 +31,8 @@ class HumanResources_Model_BLDailyWTReport_ConvertTsPtWtToTimeSlot extends Tineb
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
-        self::RECORD_NAME   => 'Workingtime Converter',
-        self::RECORDS_NAME  => 'Workingtime Converter', // ngettext('Workingtime Converter', 'Workingtime Converter', n)
+        self::RECORD_NAME   => 'Working Time Converter',
+        self::RECORDS_NAME  => 'Working Time Converter', // ngettext('Workingtime Converter', 'Workingtime Converter', n)
         self::TITLE_PROPERTY=> 'Prefer workingtime over projecttime timesheets on a daily bases.', // _('Prefer workingtime over projecttime timesheets on a daily bases.')
 
         self::FIELDS        => [

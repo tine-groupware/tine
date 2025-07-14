@@ -72,7 +72,7 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
             }
         }
         
-        this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("There could not be found any {0}. Please try to change your filter-criteria or view-options."), this.i18nRecordsName);        
+        this.i18nEmptyText = this.i18nEmptyText || String.format(this.app.i18n._("No {0} could be found. Please try changing your filter criteria or view options."), this.i18nRecordsName);
 
         this.recordClass = Tine.HumanResources.Model.FreeTime;
         this.recordProxy = Tine.HumanResources.freetimeBackend;
@@ -129,7 +129,7 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
         // if there are not enough vacation days left
         if (results.remainingVacation < record.get('days_count')) {
             Ext.MessageBox.show({
-                title: this.app.i18n._('Could not book as vacation'), 
+                title: this.app.i18n._('Could not booked as vacation'),
                 msg: this.app.i18n._('The unexcused sickness days could not be booked as vacation. There are not enough days left!'),
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING
