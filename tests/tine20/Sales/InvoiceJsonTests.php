@@ -23,7 +23,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
      * setUp
      */
     protected function setUp(): void
-{
+    {
         if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('needs enabled invoices module');
         }
@@ -427,7 +427,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $tsController->delete($timesheets[0]);
             self::fail('should throw Sales_Exception_InvoiceAlreadyClearedDelete');
         } catch (Sales_Exception_InvoiceAlreadyClearedDelete $seiacd) {
-            self::assertEquals('The Invoice you tried to delete is cleared already, so deleting is not possible anymore!', $seiacd->getMessage());
+            self::assertEquals('The invoice you tried to delete has already been cleared and can no longer be deleted!', $seiacd->getMessage());
         }
     }
 
