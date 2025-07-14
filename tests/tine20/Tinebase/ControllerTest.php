@@ -295,6 +295,12 @@ class Tinebase_ControllerTest extends TestCase
         Tinebase_Controller::getInstance()->getStatus();
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testWebfinger()
     {
         $relHandler = Tinebase_Config::getInstance()->{Tinebase_Config::WEBFINGER_REL_HANDLER};
