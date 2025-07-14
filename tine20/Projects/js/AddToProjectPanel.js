@@ -41,7 +41,7 @@ Tine.Projects.AddToProjectPanel = Ext.extend(Tine.widgets.dialog.AddToRecordPane
             valid = false;
         }
         if(this.chooseRoleBox.getValue() == '') {
-            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the attenders\' role'));
+            this.chooseRoleBox.markInvalid(this.app.i18n._('Please select the attendee\'s role'));
             valid = false;
         }
         

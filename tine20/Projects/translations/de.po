@@ -30,16 +30,16 @@ msgid "Create new shared project favorites"
 msgstr "Neuen gemeinsamen Projekt-Favoriten anlegen"
 
 msgid "Available Project Attendee Role"
-msgstr "Verfügbare Teilnehmerrollen"
+msgstr "Verfügbare Teilnehmendenrollen"
 
-msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
-msgstr "Mögliche Projekt Teilnehmer*innen Rollen. Bitte beachten sie dass zusätzliche Projekt Teilnehmer*innen Rolle andere Projektsysteme bei Export oder Synchronisation betrifft."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems during export or synchronization."
+msgstr "Mögliche Rollen von Projektteilnehmenden. Bitte beachten Sie, dass zusätzliche Rollen von Projektteilnehmenden andere Projektsysteme beim Export oder bei der Synchronisation beeinflussen können."
 
 msgid "Coworker"
-msgstr "Mitarbeiter"
+msgstr "Mitarbeitende"
 
 msgid "Responsible"
-msgstr "Projektleiter"
+msgstr "Projektleitende"
 
 msgid "Available Project Scopes"
 msgstr "Verfügbare Projekt Arten"
@@ -53,8 +53,8 @@ msgstr "Extern"
 msgid "Available Project Status"
 msgstr "Verfügbare Projektstatus"
 
-msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
-msgstr "Mögliche Projekt Status. Bitte beachten sie dass zusätzliche Projekt Status andere Projektsysteme bei Export oder Synchronisation betrifft."
+msgid "Possible Project statuses. Please note that additional project statuses might impact other Projects systems during export or synchronization."
+msgstr ""
 
 msgid "On hold"
 msgstr "Wartend"
@@ -94,8 +94,8 @@ msgstr "Excel Alle Daten"
 msgid "Please choose the Project to add the contacts to"
 msgstr "Bitte wählen Sie ein Projekt, zu dem die Kontakte hinzugefügt werden sollen"
 
-msgid "Please select the attenders' role"
-msgstr "Bitte wählen Sie die Rolle des Teilnehmers"
+msgid "Please select the attendee's role"
+msgstr "Bitte wählen Sie die Rolle des Teilnehmenden"
 
 msgid "Select Project"
 msgstr "Projekt auswählen"
@@ -108,13 +108,13 @@ msgstr "Rolle auswählen"
 
 #, python-brace-format
 msgid "Adding {0} Participants to project"
-msgstr "Füge {0} Teilnehmer zum Projekt hinzu"
+msgstr "Füge {0} Teilnehmenden zum Projekt hinzu"
 
 msgid "Attendee"
-msgstr "Teilnehmer"
+msgstr "Teilnehmende"
 
 msgid "Attendee Role"
-msgstr "Teilnehmerrolle"
+msgstr "Teilnehmendenrolle"
 
 msgid "Title"
 msgstr "Titel"
@@ -160,7 +160,7 @@ msgstr "Alle meine Projekte"
 msgid "Default Favorite"
 msgstr "Standard Favorit"
 
-msgid "The default favorite which is loaded on Projects startup"
+msgid "The default favorite that is loaded on Projects startup"
 msgstr "Standard Favorit, der beim starten von Projekten geladen wird"
 
 msgid "All my open projects"

@@ -930,7 +930,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
     {
         $translation = Tinebase_Translation::getTranslation('OnlyOfficeIntegrator');
         static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage($translation->_('filetype of node is not supported'));
+        static::expectExceptionMessage($translation->_('Node file type is not supported'));
         $this->_uit->getEmbedUrlForNodeId($node->getId());
     }
 
@@ -975,7 +975,7 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
 
         $translation = Tinebase_Translation::getTranslation('OnlyOfficeIntegrator');
         static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage($translation->_('this revision currently can\'t be opened as a different revision is already open'));
+        static::expectExceptionMessage($translation->_('This revision cannot currently be opened, as a different revision is already open'));
         static::expectExceptionCode(647);
         $this->_uit->getEditorConfigForNodeId($node->getId());
     }

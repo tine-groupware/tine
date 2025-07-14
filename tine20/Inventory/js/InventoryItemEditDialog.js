@@ -42,7 +42,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         var form = this.getForm();
         var isValid = true;
         if (form.findField('total_number').getValue() < form.findField('active_number').getValue()) {
-            var invalidString = String.format(this.app.i18n._('The active number must be less than or equal total number.'));
+            var invalidString = String.format(this.app.i18n._('The active number must be less than or equal to total number.'));
             form.findField('active_number').markInvalid(invalidString);
             isValid = false;
         }

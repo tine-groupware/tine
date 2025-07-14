@@ -60,16 +60,16 @@ msgid "Types"
 msgstr ""
 
 msgid "Tine 2.0 inventory CSV import"
-msgstr ""
+msgstr "CSV-Import aus Tine 2.0-Inventar"
 
-msgid "Import CSV formated contacts from Tine 2.0 Inventory (Export Format)"
-msgstr ""
+msgid "Import CSV formatted contacts from Tine 2.0 Inventory (Export Format)"
+msgstr "CSV-formatierte Kontakte aus dem Tine 2.0-Inventar importieren (Exportformat)"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importierte Liste (###CURRENTDATE###)"
 
 msgid "Inventory Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr ""
+msgstr "Inventarartikel am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME### importiert"
 
 msgid "Inventory CSV import"
 msgstr "Inventar CSV Import"
@@ -77,11 +77,14 @@ msgstr "Inventar CSV Import"
 msgid "Items imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
 
-msgid "The active number must be less than or equal total number."
+msgid "The active number must be less than or equal to total number."
 msgstr "Die verwendbare Anzahl muss geringer oder gleich wie die Anzahl sein."
 
 msgid "Purchase Invoice"
 msgstr "Eingangsrechnung"
+
+msgid "Employee"
+msgstr "Mitarbeitende"
 
 msgid "General"
 msgstr "Allgemein"
@@ -94,9 +97,6 @@ msgstr "Seriennummer"
 
 msgid "Inventory Type"
 msgstr "Inventartyp"
-
-msgid "Employee"
-msgstr "Mitarbeiter"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -121,6 +121,9 @@ msgstr "Verfügbare Anzahl"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "ID"
+msgstr "ID"
 
 msgid "Accounting"
 msgstr "Buchhaltung"
@@ -152,8 +155,8 @@ msgstr ""
 
 msgid "Inventory type"
 msgid_plural "Inventory types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Inventartyp"
+msgstr[1] "Inventartypen"
 
 msgid "Default Inventory Item Container"
 msgstr "Standardinventarliste"

@@ -22,7 +22,7 @@ msgstr ""
 msgid "Available Project Attendee Role"
 msgstr ""
 
-msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or synchronisation."
+msgid "Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems during export or synchronization."
 msgstr ""
 
 msgid "Coworker"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Available Project Status"
 msgstr ""
 
-msgid "Possible Project status. Please note that additional project status might impact other Projects systems on export or synchronisation."
+msgid "Possible Project statuses. Please note that additional project statuses might impact other Projects systems during export or synchronization."
 msgstr ""
 
 msgid "On hold"
@@ -84,7 +84,7 @@ msgstr ""
 msgid "Please choose the Project to add the contacts to"
 msgstr ""
 
-msgid "Please select the attenders' role"
+msgid "Please select the attendee's role"
 msgstr ""
 
 msgid "Select Project"
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Default Favorite"
 msgstr ""
 
-msgid "The default favorite which is loaded on Projects startup"
+msgid "The default favorite that is loaded on Projects startup"
 msgstr ""
 
 msgid "All my open projects"
