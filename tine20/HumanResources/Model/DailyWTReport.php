@@ -254,7 +254,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'break_time_net'    => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
-                self::LABEL                 => 'Break Time Net', // _('Break Time Net')
+                self::LABEL                 => 'Net Break Time', // _('Net Break Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
                 ],
@@ -317,7 +317,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
-                self::LABEL                 => 'Sum Accepted Working Time Correction', // _('Sum Accepted Working Time Correction')
+                self::LABEL                 => 'Sum of Accepted Working Time Corrections', // _('Sum of Accepted Working Time Corrections')
                 self::DEFAULT_VAL           => 0,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0],
                 self::INPUT_FILTERS         => ['Zend_Filter_Empty' => 0],
@@ -339,7 +339,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
-                self::LABEL                         => 'Working Time Balance Previous Day', // _('Working Time Balance Previous Day')
+                self::LABEL                         => 'Working Time Balance for Previous Day', // _('Working Time Balance for Previous Day')
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::DEFAULT_VAL                   => 0,
             ],
@@ -355,7 +355,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             ],
             // z.b. krankheit, urlaub, feiertag (bei regelarbeit leer)
             'system_remark' => [
-                self::LABEL                 => 'System Remark', // _('System Remark')
+                self::LABEL                 => 'System Note', // _('System Note')
                 self::TYPE                  => 'text',
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
@@ -365,7 +365,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
                 self::QUERY_FILTER          => true,
             ],
             'user_remark' => [
-                self::LABEL                 => 'Remark', // _('Remark')
+                self::LABEL                 => 'Note', // _('Note')
                 self::TYPE                  => 'text',
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,

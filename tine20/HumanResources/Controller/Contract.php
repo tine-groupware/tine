@@ -262,7 +262,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         /** @phpstan-ignore-next-line */
         if ($this->searchCount($filter) > 0) {
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-            throw new Tinebase_Exception_SystemGeneric($translation->_('Contracts may not overlap'));
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Contracts must not overlap'));
         }
     }
 

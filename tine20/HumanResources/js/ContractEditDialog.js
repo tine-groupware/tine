@@ -281,7 +281,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         select: this.onWorkingtimeSchemaSelect.createDelegate(this)
                                     }
                                 }), {
-                                    fieldLabel: this.app.i18n._('Working Hours per week'),
+                                    fieldLabel: this.app.i18n._('Working Hours per Week'),
                                     xtype: 'durationspinner',
                                     baseUnit: 'seconds',
                                     disabled: true,

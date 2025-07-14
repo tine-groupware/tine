@@ -72,8 +72,8 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Add new divisions'),
             ),
             self::MANAGE_EMPLOYEE => array(
-                'text'          => $translate->_('Manage all Employee'),
-                'description'   => $translate->_('Manage all employee regardless configured division grants.'),
+                'text'          => $translate->_('Manage all Employees'),
+                'description'   => $translate->_('Manage all employees regardless of configured division grants.'),
             ),
             self::MANAGE_STREAMS => array(
                 'text'          => $translate->_('Manage Streams'),
@@ -81,7 +81,7 @@ class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             ),
             self::MANAGE_WORKINGTIME => array(
                 'text'          => $translate->_('Manage working times'),
-                'description'   => $translate->_('Manage all working times regardless configured division grants.'),
+                'description'   => $translate->_('Manage all working times regardless of configured division grants.'),
             ),
         );
 

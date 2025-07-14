@@ -161,7 +161,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_BOOLEAN,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::DEFAULT_VAL       => false,
-                self::LABEL             => 'Enable Freetime Timetracking', // _('Enable Freetime Timetracking')
+                self::LABEL             => 'Enable Absence Time Tracking', // _('Enable Absence Time Tracking')
             ],
             'timeaccount' => [
                 self::TYPE              => self::TYPE_RECORD,
@@ -170,7 +170,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                     self::MODEL_NAME        => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL             => 'Timeaccount', // _('Timeaccount')
+                self::LABEL             => 'Time Account', // _('Time Account')
                 self::QUERY_FILTER      => false,
                 self::NULLABLE          => true,
             ],

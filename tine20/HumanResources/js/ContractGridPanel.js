@@ -150,8 +150,8 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         
         if (found) {
             Ext.MessageBox.show({
-                title: this.app.i18n._('Vacation in same period'), 
-                msg: this.app.i18n._('There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore.'),
+                title: this.app.i18n._('Vacation in the same period'),
+                msg: this.app.i18n._('Some vacation days fall within the period of the contract you added. Once you save this employee, the contract can no longer be changed.'),
                 buttons: Ext.Msg.OK,
                 scope: this,
                 icon: Ext.MessageBox.WARNING

@@ -21,8 +21,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
     public static $freeTimeTypes = [
         // NOTE: no feastday type as feastdays are treated via feastday cal which is shared and not per user
         ['name' => '[S] Sickness',                               'system' => true,  'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK,          'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_SICKNESS, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[S] Sickness')
-        ['name' => '[C] Sickness of Child',                      'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[C] Sickness of Child')
-        ['name' => '[7] Sick pay - Sickness from 7nth week on',  'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_SICKPAY,  'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[7] Sick pay - Sickness from 7nth week on')
+        ['name' => '[C] Child Sick',                             'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_CHILD,    'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'workingTimeCalculationStrategy' => [HumanResources_Model_WTCalcStrategy::FLD_FILL_DAILY_TARGET => true]], // gettext('[C] Child Sick')
+        ['name' => '[7] Sick pay - Sickness from 7th week on',  'system' => false, 'color' => '#F4D03F', 'wage_type' => HumanResources_Model_WageType::ID_SICK_SICKPAY,  'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[7] Sick pay - Sickness from 7th week on')
         ['name' => '[V] Vacation',                               'system' => true,  'color' => '#2ECC71', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false, 'id' => HumanResources_Model_FreeTimeType::ID_VACATION], // gettext('[V] Vacation')
         ['name' => '[P] Special Vacation',                       'system' => false, 'color' => '#58D68D', 'wage_type' => HumanResources_Model_WageType::ID_VACATION,      'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[P] Special Vacation')
         ['name' => '[U] Unpaid Vacation',                        'system' => false, 'color' => '#82E0AA', 'wage_type' => HumanResources_Model_WageType::ID_NO_WAGE,       'allow_booking' => false, 'allow_planning' => true,  'enable_timetracking' => false], // gettext('[U] Unpaid Vacation')
@@ -166,8 +166,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "Daily WTR Corretions Requested", // _('Daily WTR Corretions Requested')
-                'description' => "Daily WTR Corretions Requested", // _('Daily WTR Corretions Requested')
+                'name' => "Daily WTR Corrections Requested", // _('Daily WTR Corrections Requested')
+                'description' => "Daily WTR Corrections Requested", // _('Daily WTR Corrections Requested')
                 'filters' => [
                     ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS, 'operator' => 'definedBy', 'value' => [
                         ['field' => 'status', 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED],
@@ -179,8 +179,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $commonValues['model'] = HumanResources_Model_MonthlyWTReport::class;
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "Monthly WTR Corretions Requested", // _('Monthly WTR Corretions Requested')
-                'description' => "Monthly WTR Corretions Requested", // _('Monthly WTR Corretions Requested')
+                'name' => "Monthly WTR Corrections Requested", // _('Monthly WTR Corrections Requested')
+                'description' => "Monthly WTR Corrections Requested", // _('Monthly WTR Corrections Requested')
                 'filters' => [
                     ['field' => HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS, 'operator' => 'definedBy', 'value' => [
                         ['field' => 'status', 'operator' => 'equals', 'value' => HumanResources_Config::WTR_CORRECTION_STATUS_REQUESTED],
@@ -201,16 +201,16 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "All Free Times", // _('All Free Times')
-                'description' => "All free time records", // _('All free time records')
+                'name' => "All Absences", // _('All Absences')
+                'description' => "All absence records", // _('All absence records')
                 'filters' => [],
             ))
         ));
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "All Free Times this year", // _('All Free Times this year')
-                'description' => "All Free Times this year", // _('All Free Times this year')
+                'name' => "All absences this year", // _('All absences this year')
+                'description' => "All absences this year", // _('All absences this year')
                 'filters' => [[
                     'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
                     'filters' => [
@@ -223,8 +223,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "All Free Times next year", // _('All Free Times next year')
-                'description' => "All Free Times next year", // _('All Free Times next year')
+                'name' => "All absences next year", // _('All absences next year')
+                'description' => "All absences next year", // _('All absences next year')
                 'filters' => [[
                     'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
                     'filters' => [
@@ -237,8 +237,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name' => "All Free Times requested", // _('All Free Times requested')
-                'description' => "All Free Times requested", // _('All Free Times requested')
+                'name' => "All absences requested", // _('All absences requested')
+                'description' => "All absences requested", // _('All absences requested')
                 'filters' => [
                     ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED],
                 ],
@@ -334,8 +334,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             ['number' => '2000', 'name' => $translate->_('Salary'),                                 'system' => true,   'wage_factor' => 100, 'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SALARY],
             //['number' => '2500', 'name' => $translate->_('Business trip'),     'system' => false, 'wage_factor' => 100, 'additional_wage' => false],
             //['number' => '3000', 'name' => $translate->_('Sunday bonus'),      'system' => false, 'wage_factor' =>  50, 'additional_wage' => true ],
-            ['number' => '3100', 'name' => $translate->_('Feast day'),                              'system' => true, 'wage_factor' =>  100, 'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_FEAST],
-            //['number' => '3200', 'name' => $translate->_('Feast day bonus'),   'system' => false, 'wage_factor' => 125, 'additional_wage' => true ],
+            ['number' => '3100', 'name' => $translate->_('Holiday'),                              'system' => true, 'wage_factor' =>  100, 'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_FEAST],
+            //['number' => '3200', 'name' => $translate->_('Holiday bonus'),   'system' => false, 'wage_factor' => 125, 'additional_wage' => true ],
             //['number' => '3400', 'name' => $translate->_('Overtime'),          'system' => false, 'wage_factor' => 125, 'additional_wage' => false],
             //['number' => '3450', 'name' => $translate->_('Overtime bonus'),    'system' => false, 'wage_factor' => 150, 'additional_wage' => false],
             //['number' => '3600', 'name' => $translate->_('Late shift bonus'),  'system' => false, 'wage_factor' => 105, 'additional_wage' => true ],
@@ -344,8 +344,8 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             ['number' => '5100', 'name' => $translate->_('Special Vacation'),                       'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SPECIAL_VACATION],
             ['number' => '5200', 'name' => $translate->_('Unpaid Vacation'),                        'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_UNPAID_VACATION],
             ['number' => '5500', 'name' => $translate->_('Sickness'),                               'system' => true,   'wage_factor' => 100, 'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SICK],
-            ['number' => '5600', 'name' => $translate->_('Sick pay - Sickness of Child'),           'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SICK_CHILD],
-            ['number' => '5700', 'name' => $translate->_('Sick pay - Sickness from 7nth week on'),  'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SICK_SICKPAY],
+            ['number' => '5600', 'name' => $translate->_('Sick pay - Child Sick'),           'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SICK_CHILD],
+            ['number' => '5700', 'name' => $translate->_('Sick pay - Sickness from 7th week on'),  'system' => false,  'wage_factor' => 0,   'additional_wage' => false, 'id' => HumanResources_Model_WageType::ID_SICK_SICKPAY],
             //['number' => '6000', 'name' => $translate->_('Break'),             'system' => true,  'wage_factor' =>   0, 'additional_wage' => false],
             //['number' => '7000', 'name' => $translate->_('Stand by'),          'system' => false, 'wage_factor' =>  20, 'additional_wage' => false],
             ['number' => '9000', 'name' => $translate->_('Special Payment'),                        'system' => false,  'wage_factor' => 50,  'additional_wage' => true,  'id' => HumanResources_Model_WageType::ID_SPECIAL_PAYMENT],

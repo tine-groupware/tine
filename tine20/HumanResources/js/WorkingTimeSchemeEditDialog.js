@@ -222,7 +222,7 @@ Tine.HumanResources.WorkingTimeSchemeEditDialog = Ext.extend(Tine.widgets.dialog
                                     columnWidth: 2/3
                                 }
                             ), {
-                                fieldLabel: this.app.i18n._('Working Hours per week'),
+                                fieldLabel: this.app.i18n._('Working Hours per Week'),
                                 xtype: 'durationspinner',
                                 baseUnit: 'seconds',
                                 name: 'working_hours',

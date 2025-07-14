@@ -74,47 +74,47 @@ class HumanResources_Model_DivisionGrants extends Tinebase_Model_Grants
         return [
             self::READ_OWN_DATA    => [
                 self::LABEL         => 'Read own data', // _('Read own data')
-                self::DESCRIPTION   => 'The grant to read own basic employee data, accounts, free times and working time reports.', // _('The grant to read own basic employee data, accounts, free times and working time reports.')
+                self::DESCRIPTION   => 'The permission to read own basic employee data, accounts, absences and working time reports.', // _('The permission to read own basic employee data, accounts, absences and working time reports.')
             ],
             self::READ_BASIC_EMPLOYEE_DATA => [
                 self::LABEL         => 'Read basic employee',  // _('Read basic employee')
-                self::DESCRIPTION   => 'The grant to read basic employees data for all employees in this division.',  // _('The grant to read basic employees data for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to read basic employee data for all employees in this division..',  // _('The permission to read basic employee data for all employees in this division.')
             ],
             self::READ_EMPLOYEE_DATA => [
                 self::LABEL         => 'Read employee',  // _('Read employee')
-                self::DESCRIPTION   => 'The grant to read full employees data, accounts, contracts and free times for all employees in this division.',  // _('The grant to read full employees data, accounts, contracts and free times for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to read complete employee data, accounts, contracts, and absence for all employees in this division.',  // _('The permission to read complete employee data, accounts, contracts, and absence for all employees in this division.')
             ],
             self::UPDATE_EMPLOYEE_DATA => [
                 self::LABEL         => 'Update employee', // _('Update employee')
-                self::DESCRIPTION   => 'The grant to update full employees data, accounts, contracts and free times for all employees in this division.', // _('The grant to update full employees data, accounts, contracts and free times for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to update complete employee data, accounts, contracts, and absence for all employees in this division.', // _('The permission to update complete employee data, accounts, contracts, and absence for all employees in this division.')
             ],
             self::READ_TIME_DATA => [
                 self::LABEL         => 'Read time data', // _('Read time data')
-                self::DESCRIPTION   => 'The grant to read working time reports for all employees in this division.', // _('The grant to read working time reports for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to read working time reports for all employees in this division.', // _('The permission to read working time reports for all employees in this division.')
             ],
             self::UPDATE_TIME_DATA => [
                 self::LABEL         => 'Update time data', // _('Update time data')
-                self::DESCRIPTION   => 'The grant to update working time reports for all employees in this division.', // _('The grant to update working time reports for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to update working time reports for all employees in this division.', // _('The permission to update working time reports for all employees in this division.')
             ],
             self::CREATE_OWN_CHANGE_REQUEST => [
                 self::LABEL         => 'Create own change requests', // _('Create own change requests')
-                self::DESCRIPTION   => 'The grant to create own free times and working time reports change requests.', // _('The grant to create own free times and working time reports change requests.')
+                self::DESCRIPTION   => 'The permission to create change requests for own absences and working time reports.', // _('The permission to create change requests for own absences and working time reports.')
             ],
             self::READ_CHANGE_REQUEST => [
                 self::LABEL         => 'Read change requests', // _('Read change requests')
-                self::DESCRIPTION   => 'The grant to read free times and working time reports change requests for all employees in this division.', // _('The grant to read free times and working time reports change requests for all employees in this division.')
+                self::DESCRIPTION   => 'The permission to read absences and change requests for working time reports for all employees in this division.', // _('The permission to read absences and change requests for working time reports for all employees in this division.')
             ],
             self::CREATE_CHANGE_REQUEST => [
                 self::LABEL         => 'Create change requests', // _('Create change requests')
-                self::DESCRIPTION   => 'The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).', // _('The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).')
+                self::DESCRIPTION   => 'The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data).', // _('The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data).')
             ],
             self::UPDATE_CHANGE_REQUEST => [
                 self::LABEL         => 'Update change requests', // _('Update change requests')
-                self::DESCRIPTION   => 'The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).', // _('The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data).')
+                self::DESCRIPTION   => 'The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data).', // _('The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data).')
             ],
             self::GRANT_ADMIN => [
                 self::LABEL         => 'Admin', // _('Admin')
-                self::DESCRIPTION   => 'The grant to administrate this division (implies all other grants and the grant to set grants as well).', // _('The grant to administrate this division (implies all other grants and the grant to set grants as well).')
+                self::DESCRIPTION   => 'The permission to administrate this division (implies all other grants and the grant to set grants as well).', // _('The permission to administrate this division (implies all other grants and the grant to set grants as well).')
             ],
         ];
     }

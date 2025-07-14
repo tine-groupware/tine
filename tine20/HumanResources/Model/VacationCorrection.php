@@ -30,7 +30,7 @@ class HumanResources_Model_VacationCorrection extends Tinebase_Record_NewAbstrac
     protected static $_modelConfiguration = [
         self::VERSION               => 1,
         self::RECORD_NAME           => 'Vacation correction', // gettext('GENDER_Vacation correction')
-        self::RECORDS_NAME          => 'Vacation corrections', // ngettext('Vacation corrections', 'Vacation corrections', n)
+        self::RECORDS_NAME          => 'Vacation corrections', // ngettext('Vacation correction', 'Vacation corrections', n)
         self::MODLOG_ACTIVE         => true,
         self::HAS_ATTACHMENTS       => true,
         self::TITLE_PROPERTY        => self::FLD_TITLE,

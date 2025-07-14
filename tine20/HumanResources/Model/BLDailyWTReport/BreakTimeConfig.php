@@ -45,8 +45,8 @@ class HumanResources_Model_BLDailyWTReport_BreakTimeConfig extends Tinebase_Reco
         self::MODEL_NAME    => self::MODEL_NAME_PART,
         self::RECORD_NAME   => 'Break Time',
         self::RECORDS_NAME  => 'Break Times', // ngettext('Break Time', 'Break Times', n)
-                          // _('After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time gets deducted automatically.')
-        self::TITLE_PROPERTY=> 'After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time gets deducted automatically.',
+                          // _('After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time will be deducted automatically.')
+        self::TITLE_PROPERTY=> 'After exceeding {{time_worked|date("H:i", "GMT")}} of working time {{break_time|date("H:i", "GMT")}} break time will be deducted automatically.',
 
 
         self::FIELDS        => [

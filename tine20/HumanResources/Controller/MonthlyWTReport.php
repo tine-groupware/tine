@@ -313,8 +313,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         if ($updatedRecord->is_cleared && !$currentRecord->is_cleared) {
             // previous month needs to be cleared first!
             if (null !== ($prev = $this->getPreviousMonthlyWTR($updatedRecord)) && !$prev->is_cleared) {
-                // _('previous months need to be cleared first')
-                throw new Tinebase_Exception_SystemGeneric('previous months need to be cleared first', 600, HumanResources_Config::APP_NAME);
+                // _('You need to clear the previous month first.')
+                throw new Tinebase_Exception_SystemGeneric('You need to clear the previous month first.', 600, HumanResources_Config::APP_NAME);
             }
 
             $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$updatedRecord]);
@@ -336,8 +336,8 @@ class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Reco
         } elseif (!$updatedRecord->is_cleared && $currentRecord->is_cleared) {
             // next month must not be cleared!
             if (null !== ($next = $this->getNextMonthlyWTR($updatedRecord)) && $next->is_cleared) {
-                // _('following months need to be uncleared first')
-                throw new Tinebase_Exception_SystemGeneric('following months need to be uncleared first', 600, HumanResources_Config::APP_NAME);
+                // _('You need to revert the clearing of the previous month first.')
+                throw new Tinebase_Exception_SystemGeneric('You need to revert the clearing of the previous month first.', 600, HumanResources_Config::APP_NAME);
             }
 
             $rs = new Tinebase_Record_RecordSet(HumanResources_Model_MonthlyWTReport::class, [$updatedRecord]);

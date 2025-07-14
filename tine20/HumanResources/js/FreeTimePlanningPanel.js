@@ -126,7 +126,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 width: 100,
                 id: 'remainingVacation',
                 header: this.app.formatMessage('Remaining vacation'),
-                tooltip: this.app.formatMessage('Present remaining vacation based on accepted scheduled vacations days including non expired vacations of previous periods'),
+                tooltip: this.app.formatMessage('Present remaining vacation based on accepted scheduled vacation days, including unexpired vacation days from previous periods.'),
                 renderer: (value, metaData, record, rowIndex, colIndex, store) => {
                     const remainingVacation  = _.get(record, `feastAndFreeDays[${this.periodPicker.getValue().from.format('Y')}].remainingVacation`, null);
                     return remainingVacation ? this.app.formatMessage('{remainingVacation} days', { remainingVacation }) : '';
@@ -357,7 +357,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
 
     showLoadMask: function() {
         if (! this.loadMask) {
-            this.loadMask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading free time planning data...")});
+            this.loadMask = new Ext.LoadMask(this.getEl(), {msg: this.app.i18n._("Loading absence planning data...")});
         }
         this.loadMask.show.defer(100, this.loadMask);
         return Promise.resolve();
@@ -372,20 +372,20 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
         let me = this;
 
         me.action_addInNewWindow = new Ext.Action({
-            text: me.app.i18n._('Add Free Time'),
+            text: me.app.i18n._('Add Absence'),
             handler: _.bind(me.onEditInNewWindow, me, 'add'),
             iconCls: 'action_add',
         });
 
         me.action_editInNewWindow = new Ext.Action({
-            text: me.app.i18n._('Edit Free Time'),
+            text: me.app.i18n._('Edit Absence'),
             disabled: true,
             handler: _.bind(me.onEditInNewWindow, me, 'edit'),
             iconCls: 'action_edit',
         });
 
         me.action_deleteRecord = new Ext.Action({
-            text: me.app.i18n._('Delete Free Time'),
+            text: me.app.i18n._('Delete Absence'),
             handler: _.bind(me.onDeleteRecords, me),
             disabled: true,
             iconCls: 'action_delete',

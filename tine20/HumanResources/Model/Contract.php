@@ -123,7 +123,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'showInDetailsPanel' => TRUE,
             ),
             self::FLD_VACATION_ENTITLEMENT_BASE => [
-                self::LABEL => 'Vacation Days Base',    // _('Vacation Days Base')
+                self::LABEL => 'Base Vacation Days',    // _('Base Vacation Days')
                 self::TYPE => self::TYPE_INTEGER,
                 self::DEFAULT_VAL => 27,
                 'sortable'   => false,
@@ -131,7 +131,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 self::DISABLED  => true, // not working yet, calculation in update script was wrong, no ui yet
             ],
             self::FLD_VACATION_ENTITLEMENT_DAYS => [
-                self::LABEL => 'Vacations weekly working days',    // _('Vacations weekly working days')
+                self::LABEL => 'Weekly working days for vacation',    // _('Weekly working days for vacation')
                 self::TYPE => self::TYPE_INTEGER,
                 self::DEFAULT_VAL => 5,
                 'sortable'   => false,
@@ -139,7 +139,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 self::DISABLED => true, // not working yet
             ],
             'feast_calendar_id' => array(
-                'label' => 'Feast Calendar',    // _('Feast Calendar')
+                'label' => 'Holiday Calendar',    // _('Holiday Calendar')
                 'type'  => self::TYPE_RECORD,
                 'config' => [
                     self::APP_NAME      => Tinebase_Config::APP_NAME,

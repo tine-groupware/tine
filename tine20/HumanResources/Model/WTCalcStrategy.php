@@ -31,7 +31,7 @@ class HumanResources_Model_WTCalcStrategy extends Tinebase_Record_Abstract
         self::FIELDS                    => [
             self::FLD_FILL_DAILY_TARGET     => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
-                self::LABEL                     => 'Fill to daily target time' // _('Fill to daily target time')
+                self::LABEL                     => 'Fill up to daily target time' // _('Fill up to daily target time')
             ],
         ],
     ];

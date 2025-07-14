@@ -132,7 +132,7 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
                 ]
             ],
             self::FLD_RESPONSIBLES      => [
-                self::LABEL                 => 'Responsibles', // _('Responsibles')
+                self::LABEL                 => 'Responsible Persons', // _('Responsible Persons')
                 self::TYPE                  => self::TYPE_VIRTUAL,
                 self::CONFIG                => [
                     self::TYPE                  => self::TYPE_RELATIONS,
@@ -145,7 +145,7 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
                 ]
             ],
             self::FLD_TIME_ACCOUNTS     => [
-                self::LABEL                 => 'Timeaccounts', // _('Timeaccounts')
+                self::LABEL                 => 'Time Accounts', // _('Time Accounts')
                 self::TYPE                  => self::TYPE_VIRTUAL,
                 self::CONFIG                => [
                     self::TYPE                  => self::TYPE_RELATIONS,
