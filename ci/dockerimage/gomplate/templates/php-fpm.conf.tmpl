@@ -13,9 +13,10 @@ listen = 127.0.0.1:9000
 
 pm = {{ getenv "PHPFPM_DYNAMIC" "dynamic" }}
 pm.max_children = {{ getenv "PHPFPM_PM_MAX_CHILDREN" "10" }}
-pm.start_servers = {{ getenv "PHPFPM_PM_START_SERVER" "4" }}
-pm.min_spare_servers = {{ getenv "PHPFPM_PM_MIN_SPARE_SERVER" "2" }}
-pm.max_spare_servers = {{ getenv "PHPFPM_PM_MAX_SPARE_SERVER" "6" }}
+{{- /* Up to 2025.15.7 these env vars did not have a S at the end. Our documentation documented them having an s. New we allow both options. Document the one without S, for backwards compatibility. */ }}
+pm.start_servers = {{ getenv "PHPFPM_PM_START_SERVER" ( getenv "PHPFPM_PM_START_SERVERS" "4") }}
+pm.min_spare_servers = {{ getenv "PHPFPM_PM_MIN_SPARE_SERVER" ( getenv "PHPFPM_PM_MIN_SPARE_SERVERS" "2") }}
+pm.max_spare_servers = {{ getenv "PHPFPM_PM_MAX_SPARE_SERVER" ( getenv "PHPFPM_PM_MAX_SPARE_SERVERS" "6") }}
 ;pm.process_idle_timeout = 10s;
 pm.max_requests = {{ getenv "PHPFPM_PM_MAX_REQUESTS" "500" }}
 
