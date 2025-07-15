@@ -105,11 +105,11 @@ class Filemanager_Controller extends Tinebase_Controller_Event implements Tineba
 
     public static function addFastRoutes(\FastRoute\RouteCollector $r): void
     {
-        $r->get('/download/get/{path:.*}', (new Tinebase_Expressive_RouteHandler(
+        $r->addRoute(['GET', 'POST'], '/download/get/{path:.*}', (new Tinebase_Expressive_RouteHandler(
             Filemanager_Frontend_Download::class, 'downloadNode', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-        $r->get('/download/show/{path:.*}', (new Tinebase_Expressive_RouteHandler(
+        $r->addRoute(['GET', 'POST'], '/download/show/{path:.*}', (new Tinebase_Expressive_RouteHandler(
             Filemanager_Frontend_Download::class, 'displayNode', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
