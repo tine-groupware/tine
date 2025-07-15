@@ -145,16 +145,17 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         $addressController = Sales_Controller_Address::getInstance();
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $supplier['id'])));
-        
+        $mc = Sales_Model_Supplier::getConfiguration();
         $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
         
         if ($postalAddressRecord) {
             $supplier['postal_id'] = $postalAddressRecord->toArray();
             foreach($postalAddressRecord as $field => $value) {
-                $supplier[('adr_' . $field)] = $value;
+                if (in_array('adr_' . $field, $mc->fieldKeys)) {
+                    $supplier[('adr_' . $field)] = $value;
+                }
             }
         }
-        
         return $supplier;
     }
     
