@@ -243,7 +243,11 @@ class Tinebase_ImageHelper
         $positionY2 = 0;
         if (isset($configWatermark)) {
             if (isset($configWatermark['x'])) {
-                $positionX1 = $configWatermark['x'] - ($watermarktextCount * 9);
+                if ($fontsize > 20) {
+                    $positionX1 = $configWatermark['x'] - ($watermarktextCount * $fontsize - 10);
+                } else {
+                    $positionX1 = $configWatermark['x'] - ($watermarktextCount * $fontsize);
+                }
             }
             if (isset($configWatermark['y'])) {
                 $positionY2 = $configWatermark['y'];
