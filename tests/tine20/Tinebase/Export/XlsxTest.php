@@ -391,6 +391,13 @@ class Tinebase_Export_XlsxTest extends TestCase
         }
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     * @throws Zend_Session_Exception
+     */
     public function testExpressiveApiWithBrokenToken()
     {
         $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
@@ -422,6 +429,18 @@ class Tinebase_Export_XlsxTest extends TestCase
         $this->assertSame(401, $emitter->response->getStatusCode());
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Session_Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function testExpressiveApiWithToken()
     {
         $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
@@ -487,6 +506,17 @@ class Tinebase_Export_XlsxTest extends TestCase
         unset($raii);
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function testExpressiveApi()
     {
         $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
