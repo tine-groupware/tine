@@ -906,6 +906,12 @@ msgstr ""
 msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
 msgstr ""
 
+msgid "Reverse { sourceRecordsName }?"
+msgstr ""
+
+msgid "Reversal cannot be undone. Do you want to continue?"
+msgstr ""
+
 msgid "Book unbooked { sourceRecordsName }"
 msgstr ""
 

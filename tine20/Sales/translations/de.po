@@ -919,7 +919,13 @@ msgid "Create new { targetRecordName }?"
 msgstr "{ targetRecordName } neu erzeugen?"
 
 msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
-msgstr "Storno { sourceRecordsName } können nicht rückgängig gemacht werden. Wenn sie fortfahren, wird ein neuer { targetRecordName }s-Beleg mit positiven Werten erstellt."
+msgstr "Storno { sourceRecordsName } können nicht rückgängig gemacht werden. Wenn Sie fortfahren, wird ein neuer { targetRecordName }s-Beleg mit positiven Werten erstellt."
+
+msgid "Reverse { sourceRecordsName }?"
+msgstr "Storniere { sourceRecordsName }?"
+
+msgid "Reversal cannot be undone. Do you want to continue?"
+msgstr "Stornierung kann nicht rückgängig gemacht werden. Wollen Sie trotzdem fortfahren?"
 
 msgid "Book unbooked { sourceRecordsName }"
 msgstr "Ungebuchte { sourceRecordsName } buchen"
