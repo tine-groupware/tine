@@ -661,6 +661,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
     /**
      * test get all registry data
      *
+     * @group ServerTests
      * @return void
      *
      * @see 0007934: change pw button active even if it is not allowed

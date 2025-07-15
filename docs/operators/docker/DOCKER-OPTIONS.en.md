@@ -42,8 +42,8 @@ tine Groupware Docker Options
 | PHPFPM_DYNAMIC | dynamic                    | should be named pm
 | PHPFPM_PM_MAX_CHILDREN | 5                          
 | PHPFPM_PM_START_SERVER | 2                          
-| PHPFPM_PM_MIN_SPARE_SERVERS | 1                          
-| PHPFPM_PM_MAX_SPARE_SERVERS | 3                          
+| PHPFPM_PM_MIN_SPARE_SERVER | 1                          
+| PHPFPM_PM_MAX_SPARE_SERVER | 3                          
 | PHPFPM_PM_MAX_REQUETS | 500                        
 | PHP_MAX_EXECUTION_TIME | 30                         
 | PHP_MAX_INPUT_TIME | 60                         

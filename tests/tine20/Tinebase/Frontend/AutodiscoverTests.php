@@ -15,6 +15,12 @@
  */
 class Tinebase_Frontend_AutodiscoverTests extends TestCase
 {
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testOutlook2006Request()
     {
         $enabledFeatures = Tinebase_Config::getInstance()->get(Tinebase_Config::ENABLED_FEATURES);
@@ -63,6 +69,12 @@ class Tinebase_Frontend_AutodiscoverTests extends TestCase
         static::assertSame('MobileSync', (string)$responseXml->Response->Action->Settings->Server->Type);
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testMobilesyncRequest()
     {
         $enabledFeatures = Tinebase_Config::getInstance()->get(Tinebase_Config::ENABLED_FEATURES);
