@@ -4,7 +4,7 @@ return [
     'logger' => [
         'active' => true,
         'filename' => 'php://stdout',
-        'priority' => 5,
+        'priority' => 4,
         'logruntime' => true,
         'logdifftime' => true,
         'traceQueryOrigins' => true,
@@ -26,6 +26,12 @@ return [
                 'active' => true,
                 'filename' => '/var/log/tine20/debug.log',
                 'priority' => '7',
+            ],
+{% else %}
+            [
+                'active' => true,
+                'filename' => '/var/log/tine20/tine.log',
+                'priority' => '5',
             ],
 {% endif %}
         ],
