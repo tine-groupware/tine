@@ -379,6 +379,7 @@ class Tinebase_FileSystem_Previews
             }
         };
 
+        $oldAvScan = $this->_fsController->doAVScan(false);
         try {
             $resetTransaction();
 
@@ -440,6 +441,7 @@ class Tinebase_FileSystem_Previews
             $transactionId = null;
 
         } finally {
+            $this->_fsController->doAVScan($oldAvScan);
             if (null !== $transactionId) {
                 // this only happens if an exception is thrown, no need to return false
                 Tinebase_TransactionManager::getInstance()->rollBack();
