@@ -4015,6 +4015,9 @@ HumanResources_CliTests.testSetContractsEndDate */
             'record_backend'    => ucfirst(strtolower('sql')),
             'record_id'         => $record->getId(),
         ]);
+        if (!$record->notes instanceof Tinebase_Record_RecordSet) {
+            $record->notes = new Tinebase_Record_RecordSet(Tinebase_Model_Note::class);
+        }
         $record->notes->addRecord($note);
         Tinebase_Notes::getInstance()->setNotesOfRecord($record);
     }
