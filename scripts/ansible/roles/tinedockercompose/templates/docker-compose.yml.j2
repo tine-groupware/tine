@@ -136,7 +136,7 @@ services:
       - external_network
       - internal_network
     environment:
-      REDIS_URL: redis://cache:6379
+      REDIS_URL: redis://{{ tinedockercompose_redis_hostname }}:6379
       REDIS_CHANNEL: broadcasthub
       TINE20_JSON_API_URL: http://web
       AUTH_TIMEOUT: 5000
