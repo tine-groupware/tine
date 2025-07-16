@@ -206,11 +206,12 @@ Tine.Addressbook.ContactGridPanel.contactTypeRenderer = function(data, cell, rec
 
     const hasAccount = ((record.get && record.get('account_id')) || record.account_id);
     const isEmailAccount = record.data?.type === 'email_account';
+    const isExternalEmail = record.data?.type === 'email_external' || record?.type === 'email_external';
     
-    const typeRenderer = hasAccount ? 'renderer_typeAccountIcon' : isEmailAccount ? 'renderer_typeEmailAccountIcon' : 'renderer_typeContactIcon';
+    const typeRenderer = hasAccount ? 'renderer_typeAccountIcon' : isEmailAccount ? 'renderer_typeEmailAccountIcon' : isExternalEmail ? 'renderer_typeEmailIcon' : 'renderer_typeContactIcon';
     
     const cssClass = 'tine-grid-row-action-icon ' + typeRenderer;
-    const qtipText = Tine.Tinebase.common.doubleEncode(hasAccount ? i18n._('Contact of a user account') : isEmailAccount ? i18n._('Email Account Contact') : i18n._('Contact'));
+    const qtipText = Tine.Tinebase.common.doubleEncode(hasAccount ? i18n._('Contact of a user account') : isEmailAccount ? i18n._('Email Account Contact') : isExternalEmail ? i18n._('External E-Mail') : i18n._('Contact'));
     
     return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
 };

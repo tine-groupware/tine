@@ -580,7 +580,9 @@ Ext.form.TriggerField.prototype.taskForResize.delay(300);
 Ext.form.ComboBox.prototype.expand = Ext.form.ComboBox.prototype.expand.createSequence(function() {
     // fix z-index problem when used in editorGrids
     // manage z-index by windowMgr
-    this.list.setActive = Ext.emptyFn;
+    if (this.list) {
+        this.list.setActive = Ext.emptyFn;
+    }
     // this.list.setZIndex = Ext.emptyFn;
     Ext.WindowMgr.register(this.list);
     Ext.WindowMgr.bringToFront(this.list);

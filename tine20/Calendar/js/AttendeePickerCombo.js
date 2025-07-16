@@ -53,6 +53,8 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
         });
 
         Tine.Calendar.AttendeePickerCombo.superclass.initComponent.call(this);
+
+        this.store.on('datachanged', this.onStoreChange, this);
     },
 
     /**
@@ -77,18 +79,41 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
      * create bogus attendee record for directly entered email-addresses
      */
     getValue: function() {
+        this.getAttendeeFromInputField();
+        return Tine.Calendar.AttendeePickerCombo.superclass.getValue.apply(this, arguments);
+    },
+
+
+    onStoreChange: function(store, records) {
+        if (store?.totalLength === 0) {
+            const record = this.getAttendeeFromInputField();
+            if (record) {
+                store.data.add(record);
+            }
+        }
+    },
+
+    getAttendeeFromInputField() {
         if (this.el.dom) {
-            var raw = _.get(this, 'el.dom') ? this.getRawValue() : Ext.value(this.value, '');
+            const raw = _.get(this, 'el.dom') ? this.getRawValue() : Ext.value(this.value, '');
             if (Ext.form.VTypes.email(raw)) {
                 this.value = raw;
                 this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                     'user_type': 'email',
                     'user_displayname': this.value,
-                    'user_email': this.value
-                }));
+                    'user_email': this.value,
+                    'user_id': {
+                        n_fileas: raw,
+                        email: raw,
+                        type: 'email_external',
+                        jpegphoto: 'images/icon-set/icon_undefined_contact.svg',
+                    },
+                }), 'new-' + Ext.id());
+
+                return this.selectedRecord;
             }
         }
-        return Tine.Calendar.AttendeePickerCombo.superclass.getValue.apply(this, arguments);
+        return null;
     },
 
     /**
@@ -127,6 +152,7 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
 
             switch (type) {
                 case 'user':
+                case 'email':
                     p = Tine.Addressbook.ContactSearchCombo.prototype;
                     break;
                 case 'group':

@@ -323,8 +323,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var isDuplicate = false;
 
                 this.store.each(function(attender) {
-                    if (o.record.getUserId() == attender.getUserId()
-                            && o.record.get('user_type') == attender.get('user_type')
+                    if (o.record.getUserId() === attender.getUserId()
+                            && o.record.get('user_type') === attender.get('user_type')
                             && o.record != attender) {
                         attender.set('checked', true);
                         var row = this.getView().getRow(this.store.indexOf(attender));
@@ -800,6 +800,15 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.stopEditing(false);
 
         this.updateFreeBusyInfo();
+
+        // remove fake user_id from external email
+        this.store.each(function(attendee) {
+            if (attendee.get('user_type') === 'email') {
+                attendee.set('user_id', null);
+                attendee.commit();
+            }
+        }, this);
+
         Tine.Calendar.Model.Attender.getAttendeeStore.getData(this.store, record);
     },
     
