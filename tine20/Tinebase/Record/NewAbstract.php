@@ -472,7 +472,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * validate and filter the the internal data
+     * validate and filter the internal data
      *
      * @param $_throwExceptionOnInvalidData
      * @return bool

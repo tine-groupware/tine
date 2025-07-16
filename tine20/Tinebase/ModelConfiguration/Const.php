@@ -187,6 +187,7 @@ class Tinebase_ModelConfiguration_Const {
     public const MULTIPLE_EDIT = 'multipleEdit';
 
     public const NAME = 'name';
+    public const NO_DEFAULT_VALIDATOR = 'noDefaultValidator';
     public const NORESOLVE = 'noResolve';
     public const NULLABLE = 'nullable';
 

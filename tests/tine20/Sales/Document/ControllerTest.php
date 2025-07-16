@@ -312,43 +312,11 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        $customer = $this->_createCustomer();
-        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_TYPE} = Sales_Model_EDocument_Dispatch_Email::class;
-        $customer->debitors->getFirstRecord()->{Sales_Model_Debitor::FLD_EDOCUMENT_DISPATCH_CONFIG} = new Sales_Model_EDocument_Dispatch_Email([
-            Sales_Model_EDocument_Dispatch_Email::FLD_EMAIL => 'fail@' . TestServer::getPrimaryMailDomain(),
-            Sales_Model_EDocument_Dispatch_Email::FLD_DOCUMENT_TYPES => new Tinebase_Record_RecordSet(Sales_Model_EDocument_Dispatch_DocumentType::class, [
-                new Sales_Model_EDocument_Dispatch_DocumentType([
-                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_PAPERSLIP,
-                ]),
-                new Sales_Model_EDocument_Dispatch_DocumentType([
-                    Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE => Sales_Config::ATTACHED_DOCUMENT_TYPES_EDOCUMENT,
-                ]),
-            ]),
-        ], true);
-        $customer = Sales_Controller_Customer::getInstance()->update($customer);
-
-
         $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
         $division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID} = $dispatchFMAccount->getId();
         Sales_Controller_Division::getInstance()->update($division);
 
-        $product = $this->_createProduct();
-
-        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
-            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
-            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
-            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
-            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
-                new Sales_Model_DocumentPosition_Invoice([
-                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
-                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
-                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
-                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
-                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
-                ], true),
-            ])
-        ]));
-
+        $invoice = $this->_createInvoice();
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
