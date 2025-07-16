@@ -564,6 +564,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::OMIT_MOD_LOG              => true,
             ],
+            'groups_diff'                   => [
+                self::TYPE                      => 'virtual',
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
+            ],
             'industry'                      => [
                 self::TYPE                      => self::TYPE_STRING, // TODO make a record out of it?
                 self::LENGTH                    => 86,

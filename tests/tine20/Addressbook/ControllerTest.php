@@ -401,9 +401,15 @@ class Addressbook_ControllerTest extends TestCase
         $this->assertContains($publicList->getId(), $groups);
         $this->assertNotContains($privateList->getId(), $groups);
 
-        unset($groups[array_search($publicList->getId(), $groups)]);
-        $groups[] = $publicList2->getId();
-        $contact->groups = $groups;
+        $contact->groups_diff = [
+            'model' => Addressbook_Model_List::class,
+            'added' => [
+                ['id' => $publicList2->getId()],
+            ],
+            'removed' => [
+                ['id' => $publicList->getId()],
+            ],
+        ];
 
         $contact = $this->_instance->update($contact);
         $groups = $contact->groups->getArrayOfIds();

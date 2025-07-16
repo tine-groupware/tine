@@ -326,23 +326,27 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _setRelatedData(Tinebase_Record_Interface $updatedRecord, Tinebase_Record_Interface $record, ?\Tinebase_Record_Interface $currentRecord = null, $returnUpdatedRelatedData = false, $isCreate = false)
     {
-        if (is_array($groups = $record->groups)) {
-            foreach ($groups as &$group) {
-                if ($group['id'] ?? false) {
-                    $group = $group['id'];
-                }
+        if (is_array($groupsDiff = $record->groups_diff) && !empty($groupsDiff)) {
+            $groupsDiff = new Tinebase_Record_RecordSetDiff($groupsDiff, true);
+            if (is_array($groupsDiff->added)) {
+                $groupsDiff->added = new Tinebase_Record_RecordSet(Addressbook_Model_List::class, $groupsDiff->added, true);
             }
-        } elseif ($groups instanceof Tinebase_Record_RecordSet) {
-            $groups = $groups->getArrayOfIds();
-        } else {
+            if (is_array($groupsDiff->removed)) {
+                $groupsDiff->removed = new Tinebase_Record_RecordSet(Addressbook_Model_List::class, $groupsDiff->removed, true);
+            }
+        } elseif (!$groupsDiff instanceof Tinebase_Record_RecordSetDiff) {
             return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
         }
 
-        if ($currentRecord) {
-            $toAdd = array_diff($groups, $currentRecord->groups->getArrayOfIds());
-            $toDelete = array_diff($currentRecord->groups->getArrayOfIds(), $groups);
+        if ($groupsDiff->added instanceof Tinebase_Record_RecordSet) {
+            $toAdd = $groupsDiff->added->getArrayOfIds();
         } else {
-            $toAdd = $groups;
+            $toAdd = [];
+        }
+
+        if ($groupsDiff->removed instanceof Tinebase_Record_RecordSet) {
+            $toDelete = $groupsDiff->removed->getArrayOfIds();
+        } else {
             $toDelete = [];
         }
 
@@ -352,7 +356,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         foreach ($toDelete as $groupId) {
             Addressbook_Controller_List::getInstance()->removeListMember($groupId, $updatedRecord->getId());
         }
-        $updatedRecord->groups = $groups;
+        $updatedRecord->groups = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord);
 
         return parent::_setRelatedData($updatedRecord, $record, $currentRecord, $returnUpdatedRelatedData, $isCreate);
     }
