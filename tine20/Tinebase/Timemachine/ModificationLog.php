@@ -1488,6 +1488,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $httpClient->setStream($path);
         $httpClient->setParameterGet('method', 'Tinebase.getBlob');
         $httpClient->setParameterGet('hash', $hash);
+        $httpClient->setHeaders('X-TINE20-REQUEST-TYPE', null);
 
         try {
             $response = $httpClient->request(Zend_Http_Client::GET);
