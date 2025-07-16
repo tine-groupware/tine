@@ -62,7 +62,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected $_invalidateRolesCache = false;
     
     /**
-     * test personas
+     * test personas (sclever,pwulf,rwright,jmcblack...)
      * 
      * @var array
      */

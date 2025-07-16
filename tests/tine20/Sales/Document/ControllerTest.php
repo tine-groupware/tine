@@ -578,7 +578,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             // TODO FIXME is that so? create subset of test to work without email?
         }
 
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_testNeedsTransaction();
 
         $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount(Tinebase_Core::getUser());
         Felamimail_Controller_Cache_Folder::getInstance()->update($account);
@@ -595,28 +595,25 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Felamimail_Controller_Message::getInstance()->delete($msg);
         }
 
-        $testCredentials = TestServer::getInstance()->getTestCredentials();
-        if (null === ($dispatchFMAccount = Felamimail_Controller_Account::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            [TMFA::FIELD => 'email', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'dispatch@' . TestServer::getPrimaryMailDomain()]
-        ]))->getFirstRecord())) {
-            $dispatchFMAccount = Felamimail_Controller_Account::getInstance()->create(new Felamimail_Model_Account([
-                'name' => 'unittest sales dispatch account',
-                'email' => 'dispatch@' . TestServer::getPrimaryMailDomain(),
-                'type' => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL,
-                'user_id' => Tinebase_Core::getUser()->getId(),
-                'host' => $imapConfig->hostname,
-                'ssl' => $imapConfig->ssl,
-                'port' => $imapConfig->port,
-                'user' => $testCredentials['username'],
-                'password' => $testCredentials['password'],
-                'smtp_host' => $smtpConfig->hostname,
-                'smtp_ssl' => $smtpConfig->ssl,
-                'smtp_auth' => $smtpConfig->auth,
-                'smtp_port' => $smtpConfig->port,
-                'smtp_user' => $testCredentials['username'],
-                'smtp_password' => $testCredentials['password'],
-            ]));
+        $dispatchEmailAddress = 'dispatch@' . TestServer::getPrimaryMailDomain();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            [TMFA::FIELD => 'email', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dispatchEmailAddress],
+            [TMFA::FIELD => 'type', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL],
+        ]);
+        if (null === ($dispatchFMAccount = Admin_Controller_EmailAccount::getInstance()->search($filter)
+                ->getFirstRecord())
+        ) {
+            $sharedAccount = \Admin_Frontend_Json_EmailAccountTest::getSharedAccountData(
+                data: ['email' => $dispatchEmailAddress]
+            );
+            $adminJson = new Admin_Frontend_Json();
+            $adminJson->saveEmailAccount($sharedAccount);
+            $dispatchFMAccount = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord();
         }
+
+        // TODO improve test by using a different user to test mail account ignore acl
+        //      -> but user needs right to manage customers
+        // Tinebase_Core::setUser($this->_personas['jmcblack']);
 
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 

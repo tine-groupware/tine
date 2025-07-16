@@ -4,7 +4,7 @@
  *
  * @package     DFCom
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -27,7 +27,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
      * set up tests
      */
     protected function setUp(): void
-{
+    {
         $this->emitter = new Tinebase_Server_UnittestEmitter();
         $this->server = new Tinebase_Server_Expressive($this->emitter);
         /** @var \Symfony\Component\DependencyInjection\Container $this->container */
@@ -39,6 +39,13 @@ class DFCom_HTTPAPIv1Test extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @group ServerTests
+     *
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testWrongApiLevel()
     {
         $request = Tinebase_Http_Request::fromString(self::getTestRecordRequestData('alive', [
@@ -56,6 +63,13 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertEquals(406, $this->emitter->response->getStatusCode());
     }
 
+    /**
+     * @group ServerTests
+     *
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testUnauthDevice()
     {
         $request = Tinebase_Http_Request::fromString(self::getTestRecordRequestData('alive', [
@@ -74,6 +88,14 @@ class DFCom_HTTPAPIv1Test extends TestCase
     }
 
 
+    /**
+     * @group ServerTests
+     * @return DFCom_Model_Device|void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testDispatchAliveRecord()
     {
         $setupAuthKey = DFCom_Config::getInstance()->get(DFCom_Config::SETUP_AUTH_KEY);
@@ -117,6 +139,16 @@ class DFCom_HTTPAPIv1Test extends TestCase
         return $device;
     }
 
+    /**
+     * @group ServerTests
+     * @return DFCom_Model_DeviceList|void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public function testGetDeviceList()
     {
         $device = $this->testDispatchAliveRecord();
@@ -165,6 +197,16 @@ class DFCom_HTTPAPIv1Test extends TestCase
         return $loadedList;
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
     public function testDispatchListFeedbackRecord()
     {
         // prepare list state
@@ -194,6 +236,14 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertEquals('application/x-www-form-urlencoded; charset: iso-8859-1', $headers['Content-Type'][0]);
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testDispatchTimeaccountingRecord()
     {
         // have some demo data
@@ -230,6 +280,14 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertCount(1, $timesheets, 'timesheet not created');
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testControlComands()
     {
         /** @var DFCom_Model_Device $device */
@@ -258,6 +316,14 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertTrue(!!strstr($body, "df_service=1,10.133.1.222,18000"), $body);
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotImplemented
+     */
     public function testUpdateSetup()
     {
         $device = $this->testDispatchAliveRecord();
