@@ -369,7 +369,7 @@ class Tinebase_FileSystem_RecordAttachments
             Tinebase_ImageHelper::resize($img, $newWidth, $newHeight, 1);
         }
         $configWatermark = ['x' => ($img->width), 'y' => ($img->height - 2)];
-        $fontSizePX = $img->height * 0.07;
+        $fontSizePX = $img->height * 0.03;
         $fontSizePT = intval(($fontSizePX * 3) / 4);
         Tinebase_ImageHelper::createWatermark($img, $font, $fontSizePT, $text, $configWatermark);
 
