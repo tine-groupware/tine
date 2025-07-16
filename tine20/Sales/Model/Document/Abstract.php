@@ -240,6 +240,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Reversal', // _('Reversal')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
+                self::CONFIG                        => [
+                    self::NO_DEFAULT_VALIDATOR          => true,
+                ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -990,6 +993,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         $this->_isDirty = $isDirty;
+    }
+
+    public function isValid($_throwExceptionOnInvalidData = false)
+    {
+        if (array_key_exists(self::FLD_REVERSAL_STATUS, $this->_data) && empty($this->_data[self::FLD_REVERSAL_STATUS])) {
+            $this->_data[self::FLD_REVERSAL_STATUS] = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_REVERSAL_STATUS}->default;
+        }
+        return parent::isValid($_throwExceptionOnInvalidData);
     }
 
     protected function _updateFollowupStatusFields(string $statusFields, bool $onlyBooked = false): void

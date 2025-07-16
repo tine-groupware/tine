@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -214,6 +214,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     {
         static $idMap = [];
         if ($id = $this->getId()) {
+            if (is_array($id)) {
+                if (isset($id['id'])) {
+                    $id = $id['id'];
+                } else {
+                    $id = Tinebase_Helper::arrayHash($id);
+                }
+            }
             if (isset($idMap[$id])) {
                 return;
             }
@@ -466,7 +473,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * validate and filter the the internal data
+     * validate and filter the internal data
      *
      * @param $_throwExceptionOnInvalidData
      * @return bool

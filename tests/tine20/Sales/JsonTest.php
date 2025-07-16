@@ -4,14 +4,14 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test class for Sales_Frontend_Json
  */
-class Sales_JsonTest extends TestCase
+class Sales_JsonTest extends Sales_Document_Abstract
 {
     /**
      * @var Sales_Frontend_Json
@@ -987,12 +987,12 @@ class Sales_JsonTest extends TestCase
             ]
         ], true);
         $invoice = Sales_Controller_PurchaseInvoice::getInstance()->update($invoice);
-        //feed test invoice data
+        // feed test invoice data
         Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
         $attachments = $invoice->attachments;
         $invoiceData[$invoice['id']] = $attachments->id;
         $this->_instance->exportInvoicesToDatevEmail('PurchaseInvoice', $invoiceData);
-        //assert acitionLog and decode data
+        // assert actionLog and decode data
         $actionLog = Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL, 1);
         $actionLog = $actionLog->getFirstRecord();
         $data = json_decode($actionLog->data, true);
@@ -1000,5 +1000,19 @@ class Sales_JsonTest extends TestCase
         $invoice = Sales_Controller_PurchaseInvoice::getInstance()->get($invoice['id']);
         $this->assertEquals($invoice['last_datev_send_date'], $actionLog->datetime, 'invoice datev sent date should be the same as action log datetime');
         $this->assertStringContainsString('testAttachmentData.txt', $data['attachments'][0], 'attachement is invalid');
+    }
+
+    public function testInvoiceReversalStatusUpdate()
+    {
+        $invoice = $this->_createInvoice();
+        $invoice->{Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED;
+        $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        self::assertEquals(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED,
+            $updatedInvoice->{Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS});
+
+        $invoiceUpdatedViaJsonFE = $this->_instance->saveDocument_Invoice($updatedInvoice->toArray());
+        self::assertEquals(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED,
+            $invoiceUpdatedViaJsonFE[Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS],
+            'reversal status should stay the same');
     }
 }

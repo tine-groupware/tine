@@ -382,7 +382,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
 
     /**
-     * creates recordsets for depedent records or records instead of arrays for records on record fields
+     * creates record sets for dependent records or records instead of arrays for records on record fields
      * and sets timezone of these records to utc
      *
      * @param Tinebase_Record_Interface $record

@@ -26,7 +26,20 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
     }
 
-    protected function _createInvoice(array $positions, array $invoiceData = [], ?Sales_Model_Customer $customer = null): SMDI
+    /**
+     * TODO use \Sales_Document_Abstract::_createInvoice
+     *
+     * @param array $positions
+     * @param array $invoiceData
+     * @param Sales_Model_Customer|null $customer
+     * @return Sales_Model_Document_Invoice
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createUblInvoice(array $positions, array $invoiceData = [], ?Sales_Model_Customer $customer = null): SMDI
     {
         if (null === $customer) {
             $customer = $this->_createCustomer();
@@ -84,7 +97,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions);
+        $invoice = $this->_createUblInvoice($positions);
 
         $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
         $division->{Sales_Model_Division::FLD_VAT_NUMBER} = '';
@@ -121,7 +134,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         ];
         $customer = $this->_createCustomer(additionalCustomerData: ['discount' => 10]);
 
-        $invoice = $this->_createInvoice($positions, customer: $customer);
+        $invoice = $this->_createUblInvoice($positions, customer: $customer);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
@@ -152,7 +165,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.1
             ], true)
         ];
-        $invoice = $this->_createInvoice($positions);
+        $invoice = $this->_createUblInvoice($positions);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
@@ -174,7 +187,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
             ], true),
         ];
 
-        $invoice = $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE]);
+        $invoice = $this->_createUblInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE]);
         $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
         $this->assertSame('vatex-eu-ae', $invoice->{SMDI::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE});
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
@@ -197,7 +210,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_SALES_TAX_RATE => 0,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_FREE_EXPORT_ITEM]);
+        $invoice = $this->_createUblInvoice($positions, [SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_FREE_EXPORT_ITEM]);
         $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
         $this->assertSame('vatex-eu-g', $invoice->{SMDI::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE});
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
@@ -220,7 +233,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_SALES_TAX_RATE => 0,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_OUTSIDE_TAX_SCOPE,
         ]);
         $this->assertInstanceOf(Sales_Model_EDocument_VATEX::class, $invoice->{SMDI::FLD_VATEX_ID});
@@ -245,7 +258,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_SALES_TAX_RATE => 0,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             SMDI::FLD_VAT_PROCEDURE => Sales_Config::VAT_PROCEDURE_ZERO_RATED_GOODS,
         ]);
         $this->assertNull($invoice->{SMDI::FLD_VATEX_ID});
@@ -279,7 +292,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.1
             ], true)
         ];
-        $invoice = $this->_createInvoice($positions);
+        $invoice = $this->_createUblInvoice($positions);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
@@ -310,7 +323,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01
             ], true)
         ];
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             SMDI::FLD_INVOICE_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
             SMDI::FLD_INVOICE_DISCOUNT_SUM => 0.01
         ]);
@@ -336,7 +349,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
             ], true),
         ];
         $buyRef = 'buy refüÜß³';
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             SMDI::FLD_BUYER_REFERENCE => $buyRef,
         ]);
         $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
@@ -380,7 +393,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_SALES_TAX => 4.5 - round(4.5/1.07, 2),
             ], true)
         ];
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             SMDI::FLD_INVOICE_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
             SMDI::FLD_INVOICE_DISCOUNT_SUM => 0.01
         ]);
@@ -414,7 +427,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
             ], true),
         ];
-        $invoice = $this->_createInvoice($positions, [
+        $invoice = $this->_createUblInvoice($positions, [
             Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [
                 new Sales_Model_PaymentMeans([
                     Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getAll()->find(Sales_Model_EDocument_PaymentMeansCode::FLD_CODE, '59')->getId(),
