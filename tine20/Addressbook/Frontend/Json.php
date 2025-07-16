@@ -139,9 +139,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $contacts = Addressbook_Controller_Contact::getInstance()->search(
             new Addressbook_Model_ContactFilter($filter),
-            $contactPaging,
-            true
+            $contactPaging
         );
+        /** @var Addressbook_Model_Contact $contact */
         foreach ($contacts as $contact) {
             $results = array_merge($results, $contact->getRecipientTokens());
         }
