@@ -26,8 +26,7 @@
               <span @click="msgClickHandler" v-html="props.opt.msg"></span>
             </div>
             <div
-              class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity"
-              @keyup.enter="confirm">
+              class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity">
               <BFormTextarea v-model="textElValue" :rows="textAreaHeight" ref="textAreaField"/>
             </div>
             <div
