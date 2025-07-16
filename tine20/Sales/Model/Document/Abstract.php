@@ -240,6 +240,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Reversal', // _('Reversal')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
+                self::CONFIG                        => [
+                    self::NO_DEFAULT_VALIDATOR          => true,
+                ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],

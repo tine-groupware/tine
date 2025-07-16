@@ -1432,7 +1432,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                             $fieldDef[self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] = $keyField->default;
                         }
                         // yes array_key_exists, as you should be able to set default to null
-                        if ($keyField && !array_key_exists(Zend_Filter_Empty::class, $fieldDef[self::INPUT_FILTERS] ?? []) && is_scalar($keyField->default)) {
+                        if ($keyField && !array_key_exists(Zend_Filter_Empty::class, $fieldDef[self::INPUT_FILTERS] ?? []) && is_scalar($keyField->default) && !($fieldDef[self::CONFIG][self::NO_DEFAULT_VALIDATOR] ?? false)) {
                             $fieldDef[self::INPUT_FILTERS][Zend_Filter_Empty::class] = $keyField->default;
                         }
                         if ($fieldDef[self::CONFIG][self::VALIDATE] ?? false) {
