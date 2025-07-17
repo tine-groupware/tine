@@ -19,6 +19,10 @@
  */
 class Admin_Controller_Application extends Tinebase_Controller_Abstract
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
+    protected $_modelName = Tinebase_Model_Application::class;
+
     /**
      * holds the instance of the singleton
      *
@@ -112,11 +116,23 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
      * @param   string $_state           state to set
      * @return boolean
      */
-    public function setApplicationState($_applicationIds, $_state)
+    public function setApplicationState(array $_applicationIds, string $_state): bool
     {
         $this->checkRight('MANAGE_APPS');
-        
-        Tinebase_Application::getInstance()->setApplicationStatus($_applicationIds, $_state);
+
+        foreach ($_applicationIds as $appId) {
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+            $appBackend = Tinebase_Application::getInstance()->_getBackend();
+            $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($appBackend);
+
+            $application = $appBackend->get($appId);
+            Tinebase_Application::getInstance()->setApplicationStatus([$appId], $_state);
+            $updatedApplication = $appBackend->get($appId);
+            $this->_writeModLog($updatedApplication, $application);
+
+            unset($forUpdateRaii);
+            $transaction->release();
+        }
 
         return true;
     }           

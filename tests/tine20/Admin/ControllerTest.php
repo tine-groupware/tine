@@ -29,6 +29,26 @@ class Admin_ControllerTest extends TestCase
             Admin_Controller_User::getInstance()->setRequestContext([]);
         }
     }
+
+    public function testSetApplicatonStateReplication(): void
+    {
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $efileApp = Tinebase_Application::getInstance()->getApplicationByName(EFile_Config::APP_NAME);
+
+        Admin_Controller_Application::getInstance()->setApplicationState([$efileApp->getId()], Tinebase_Application::DISABLED);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $this->assertSame(1, $modifications->count());
+        $this->assertSame(Tinebase_Application::DISABLED, Tinebase_Application::getInstance()->_getBackend()->get($efileApp->getId())->status);
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $this->assertSame(Tinebase_Application::ENABLED, Tinebase_Application::getInstance()->_getBackend()->get($efileApp->getId())->status);
+        Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($modifications);
+        $this->assertSame(Tinebase_Application::DISABLED, Tinebase_Application::getInstance()->_getBackend()->get($efileApp->getId())->status);
+    }
+
     /**
      * testCustomFieldCreate
      *
