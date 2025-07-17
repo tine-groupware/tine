@@ -690,8 +690,17 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
+msgid "Loading Recipients..."
+msgstr ""
+
 #, python-brace-format
 msgid "Poll URL: {0}"
+msgstr ""
+
+msgid "All Recipients"
+msgstr ""
+
+msgid "Compose email"
 msgstr ""
 
 #, python-brace-format
@@ -780,9 +789,6 @@ msgstr ""
 msgid "Message not available."
 msgstr ""
 
-msgid "Compose email"
-msgstr ""
-
 msgid "To"
 msgstr ""
 
@@ -793,9 +799,6 @@ msgid "BCC"
 msgstr ""
 
 msgid "Mass Mailing"
-msgstr ""
-
-msgid "Loading Recipients..."
 msgstr ""
 
 msgid "No Messages found."

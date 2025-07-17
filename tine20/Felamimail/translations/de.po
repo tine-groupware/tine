@@ -707,9 +707,18 @@ msgstr "Aktive Abwesenheitsbenachrichtigung"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "E-Mailkonto {0} hat eine aktive Abwesenheitsbenachrichtigung."
 
+msgid "Loading Recipients..."
+msgstr "Empfänger laden..."
+
 #, python-brace-format
 msgid "Poll URL: {0}"
 msgstr "Umfrage Link: {0}"
+
+msgid "All Recipients"
+msgstr "Alle Empfänger"
+
+msgid "Compose email"
+msgstr "Nachricht verfassen"
 
 #, python-brace-format
 msgid "{0} as default mailer"
@@ -797,9 +806,6 @@ msgstr "Ordner aller Konten"
 msgid "Message not available."
 msgstr "Nachricht nicht verfügbar."
 
-msgid "Compose email"
-msgstr "Nachricht verfassen"
-
 msgid "To"
 msgstr "An"
 
@@ -811,9 +817,6 @@ msgstr "BCC"
 
 msgid "Mass Mailing"
 msgstr "Massen-Mail"
-
-msgid "Loading Recipients..."
-msgstr "Empfänger laden..."
 
 msgid "No Messages found."
 msgstr "Keine Nachrichten gefunden."

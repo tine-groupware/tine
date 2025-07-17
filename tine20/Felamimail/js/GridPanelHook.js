@@ -170,7 +170,6 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     
     contactInRelation: false,
     relationType: null,
-    addMailFromRecord: null,
     mailAddresses: null,
 
     // TODO move to a messageData object
@@ -179,9 +178,6 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
     massMailingFlag: false,
 
     subjectField: null,
-    subjectFn: null,
-    bodyFn: null,
-    massMailingFlagFn: null,
     records: [],
 
     /**
@@ -211,18 +207,13 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                         promises.push(this.addRecipientTokenFromContacts(mailAddresses, [relation.related_record]));
                     }
                 }, this);
-            } else if (Ext.isFunction(this.addMailFromRecord)) {
-                // addMailFromRecord can be defined in config
-                promises.push(this.addMailFromRecord(mailAddresses, record));
             } else {
                 promises.push(this.addRecipientTokenFromContacts(mailAddresses, [record]));
             }
         }, this);
         
         await Promise.allSettled(promises).then(() => {
-            if (mailAddresses.length > 0) {
-                this.mailAddresses = mailAddresses;
-            }
+            this.mailAddresses = mailAddresses;
         })
         
         return this.mailAddresses;
@@ -242,7 +233,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
             
             await _.reduce(contacts, async (prev, contact) => {
                 return prev.then(async () => {
-                    contact = Ext.isFunction(contact.beginEdit) ? contact : new Tine.Addressbook.Model.Contact(contact);
+                    contact = Ext.isFunction(contact?.beginEdit) ? contact : new Tine.Addressbook.Model.Contact(contact);
                     const memberIds = contact.get("members");
     
                     if (memberIds && memberIds.length > 0) {
@@ -299,7 +290,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
      *
      * @param {Button} btn
      * @param to
-     */
+ */
     onComposeEmail: async function (btn, to) {
         const sm = this.getGridPanel().grid ? this.getGridPanel().grid.getSelectionModel() : null;
         const records = sm?.isFilterSelect ? sm.getSelections(): this.records;
@@ -430,14 +421,6 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         
         if (this.subjectField && records.length > 0) {
             this.subject = records[0].get(this.subjectField);
-        } else if (Ext.isFunction(this.subjectFn)) {
-            this.subject = this.subjectFn(records[0]);
-        }
-        if (Ext.isFunction(this.bodyFn)) {
-            this.body = this.bodyFn(records[0]);
-        }
-        if (Ext.isFunction(this.massMailingFlagFn)) {
-            this.massMailingFlag = this.massMailingFlagFn(records[0]);
         }
     }
 });
