@@ -1363,7 +1363,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     record.addFlag('\\Seen');
                     record.mtime = new Date().getTime();
                     Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-                    this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+                    const folderId = record.get('folder_id');
+                    this.app.getMainScreen().getTreePanel().decrementFolderUnreadCount(folderId);
                 }, 2000);
             }
             
