@@ -260,7 +260,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         new Tine.widgets.tags.TagPanel({
                             app: 'Inventory',
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
+                            // bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]

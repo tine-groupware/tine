@@ -103,7 +103,7 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                     new Tine.widgets.tags.TagPanel({
                         app: 'ExampleApplication',
                         border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
+                        // bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({

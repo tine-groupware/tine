@@ -569,7 +569,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             items.push(new Tine.widgets.tags.TagPanel({
                 app: this.appName,
                 border: false,
-                bodyStyle: 'border:1px solid #B5B8C8;'
+                // bodyStyle: 'border:1px solid #B5B8C8;'
             }));
         }
 

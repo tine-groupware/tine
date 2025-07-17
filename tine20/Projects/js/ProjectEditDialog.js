@@ -239,7 +239,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         new Tine.widgets.tags.TagPanel({
                             app: 'Projects',
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
+                            // bodyStyle: 'border:1px solid #B5B8C8;'
                         }),
                         new Ext.Panel({
                             title: this.app.i18n._('Description'),
