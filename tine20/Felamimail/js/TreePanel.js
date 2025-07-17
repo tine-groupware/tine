@@ -947,12 +947,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * decrement unread count of currently selected folder
+     * decrement unread count of the selected folder
      */
-    decrementCurrentUnreadCount: function() {
-        var store  = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore(),
-            node   = this.getSelectionModel().getSelectedNode(),
-            folder = node ? store.getById(node.id) : null;
+    decrementFolderUnreadCount: function(folderId) {
+        const store  = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore();
+        const folder = store.getById(folderId);
             
         if (folder) {
             folder.set('cache_unreadcount', parseInt(folder.get('cache_unreadcount'), 10) -1);
