@@ -272,9 +272,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     getListItemQtip(record) {
         let value = _.get(record, 'data.description', '');
 
-        if (this.ownLangPicker) {
-            const language = this.ownLangPicker.getValue();
-            value = _.get(_.find(value, { language }) || _.get(value, '[0]'), 'text', '');
+        if (Array.isArray(value)) {
+            const langMatch = this.ownLangPicker ?
+                _.find(value, { language: this.ownLangPicker.getValue() }) : null;
+
+            value = _.get(langMatch || value[0], 'text', '');
         }
 
         return value;
@@ -471,6 +473,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         var el = this.getEl();
         if (el) {
+            if (r) {
+                description = this.getListItemQtip(r);
+            }
             el.set({qtip: Tine.Tinebase.common.doubleEncode(description)});
         }
 
