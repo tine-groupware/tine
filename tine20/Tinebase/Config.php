@@ -2267,8 +2267,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          *  $key   => [
          *      [
          *          Tinebase_Model_RateLimit::FLD_METHOD            =>  'Filemanager.save*', // all save methods in Filemanager_Frontend_Json
-         *          Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  100, // times
-         *          Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600 // minutes
+         *          Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  60, // times
+         *          Tinebase_Model_RateLimit::FLD_PERIOD            =>  60 // seconds, it is also the record lifetime in redis db
          *      ]
          *  ]
          *
@@ -2313,8 +2313,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         '*'     => [
                             [
                                 Tinebase_Model_RateLimit::FLD_METHOD            =>  '*',
-                                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  10000,
-                                Tinebase_Model_RateLimit::FLD_PERIOD            =>  3600
+                                Tinebase_Model_RateLimit::FLD_MAX_REQUESTS      =>  60,
+                                Tinebase_Model_RateLimit::FLD_PERIOD            =>  60
                             ],
                         ],
                         */
