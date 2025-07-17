@@ -667,7 +667,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' cleaning twig cache in ' . $cacheDir . ' ...');
 
-            $time = time() - (7 * 24 * 3600); // older than one week
+            $time = time() - (Zend_Cache::CLEANING_MODE_ALL === $_mode ? -100000 /*the future -> everything*/ : (7 * 24 * 3600) /* older than one week */);
             $startTime = time();
             /** @var DirectoryIterator $di */
             foreach (new DirectoryIterator($cacheDir) as $di) {
