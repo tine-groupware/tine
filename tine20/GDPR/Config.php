@@ -39,6 +39,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
     const SUBSCRIPTION_CONTAINER_ID = 'subscriptionContainerId';
     const JWT_SECRET = 'jwtSecret';
     const TEMPLATE_PATH = 'templatePath';
+    const MANAGE_CONSENT_EMAIL_TEMPLATE = 'manageConsentEmailTemplate';
 
     /**
      * (non-PHPdoc)
@@ -79,6 +80,21 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => '',
+        ],
+
+        self::MANAGE_CONSENT_EMAIL_TEMPLATE => [
+            //_('Manage consent Email template')
+            self::LABEL                 => 'Manage consent Email template',
+            //_('Manage consent Email template')
+            self::DESCRIPTION           => 'Manage consent Email template',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => [
+                'de' => '<a href="{{manageconstentlink}}">Abmelden</a>',
+                'en' => '<a href="{{manageconstentlink}}">Unsubscribe</a>'
+            ],
         ],
         self::LANGUAGES_AVAILABLE => [
             self::LABEL                 => 'Available Languages', //_('Available Languages')
