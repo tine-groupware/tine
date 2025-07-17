@@ -756,7 +756,7 @@ class Tinebase_Application
      * 
      * @return Tinebase_Backend_Sql
      */
-    protected function _getBackend()
+    public function _getBackend()
     {
         if (!isset($this->_backend)) {
             $this->_backend = new Tinebase_Backend_Sql(array(
@@ -902,6 +902,14 @@ class Tinebase_Application
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
                         Setup_Controller::INSTALL_NO_REPLICA_CHECK => true]);
+                break;
+
+            case Tinebase_Timemachine_ModificationLog::UPDATED:
+                $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                if (!isset($diff->diff['status'])) {
+                    break;
+                }
+                $this->setApplicationStatus($_modification->record_id, $diff->diff['status']);
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
