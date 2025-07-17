@@ -1113,12 +1113,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData = $applicationJson->getRegistryData();
 
         } catch (Exception $e) {
-            if (! $e instanceof Tinebase_Exception_AccessDenied && ! in_array($application->name, array('Tinebase', 'Addressbook', 'Admin'))) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Disabling ' . $application->name);
+            if (!$e instanceof Tinebase_Exception_AccessDenied) {
                 Tinebase_Exception::log($e);
-                Tinebase_Application::getInstance()->setApplicationStatus(array($application->getId()), Tinebase_Application::DISABLED);
             }
-            return array();
+            return [];
         }
 
         // TODO get this from app controller / modelconfig
