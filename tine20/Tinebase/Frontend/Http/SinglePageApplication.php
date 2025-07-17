@@ -39,11 +39,19 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
             }
 
-            return '<script type="text/javascript" src="' . $baseUrl . '/' . $file .'"></script>';
+            return '<script type="text/javascript" src="'/* . $baseUrl . '/'*/ . $file .'"></script>';
         }, ['is_safe' => ['all']]));
 
         $textTemplate = $twig->load($template);
 
+        if (! array_key_exists('base', $context)) {
+            /** @var \Psr\Http\Message\ServerRequestInterface $request */
+            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+            $depth = substr_count(preg_replace('/^\//', '', $request->getUri()->getPath()), '/');
+            if ($depth > 0) {
+                $context['base'] = str_repeat('../', $depth);
+            }
+        }
         $context += [
             'assetHash' => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             'jsFiles' => $entryPoints,
