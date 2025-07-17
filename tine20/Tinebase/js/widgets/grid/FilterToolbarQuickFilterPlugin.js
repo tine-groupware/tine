@@ -264,7 +264,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        this.setDetailsHidden(this.filterPanel.isVisible());
+        this.setDetailsHidden(this.filterPanel ? this.filterPanel.isVisible() : this.ftb.isVisible());
     },
     /**
      * sets the visibility of the managed filterPanel
