@@ -738,6 +738,12 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertSame('HTTP/1.1 403 Forbidden', $this->response->status);
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     public function testPutWithUrlencode()
     {
         $this->_skipIfLDAPBackend('FIXME: auth has a problem with LDAP backend');
