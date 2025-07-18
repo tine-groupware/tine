@@ -431,7 +431,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_recordToJson($account);
 
         if (Tinebase_Application::getInstance()->isInstalled('MatrixSynapseIntegrator')
-            && isset($recordData[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID])
+            && is_array($recordData[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID] ?? null)
         ) {
             $matrixAccountData = $recordData[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID];
             if (empty($matrixAccountData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID])) {
