@@ -902,6 +902,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function createPaperSlip(string $model, string $documentId)
     {
+        if ('0' === $documentId || '' === $documentId) {
+            throw new Tinebase_Exception_SystemGeneric('documentId missing');
+        }
+
         if (!($stream = fopen('php://memory', 'w+'))) {
             throw new Tinebase_Exception_Backend('could not create memory stream');
         }
