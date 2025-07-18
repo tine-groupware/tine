@@ -99,7 +99,7 @@ Tine.widgets.form.FieldManager = function() {
                 i18n = fieldDefinition.useGlobalTranslation ? window.i18n : app.i18n;
 
             if (_.get(fieldDefinition, 'config.validate'))  delete fieldDefinition.config.validate; // server only
-            Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {}, fieldDefinition.uiconfig?.fieldConfig || {});
+            Object.assign(field, fieldDefinition, fieldDefinition.config || {},  fieldDefinition.uiconfig || {}, fieldDefinition.uiconfig?.fieldConfig || {}, _.get(fieldDefinition, `uiconfig.fieldConfig.${category}`, {}));
             if (fieldType === 'virtual' && fieldDefinition.config) {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
@@ -120,7 +120,7 @@ Tine.widgets.form.FieldManager = function() {
                 field.emptyText = i18n._hidden(field.emptyText);
             }
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
-            field.readOnly = !! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly');
+            field.readOnly = field.hasOwnProperty('readOnly') ? field.readOnly : (!! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly'));
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
             // make field available via recordForm.formfield_NAME
             field.ref = '../../formfield_' + field.name;
