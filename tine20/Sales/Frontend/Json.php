@@ -964,6 +964,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         $document->attachments->addRecord(new Tinebase_Model_Tree_Node(['name' => $name, 'tempFile' => $stream], true));
+        /** @var Sales_Model_Document_Abstract $document */
         $document = $docCtrl->update($document);
         $attachmentId = $document->attachments->find('name', $name)->getId();
         if (!$document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}) {
@@ -978,8 +979,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1,
             ], true));
         }
-        $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
-            ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ})
+        $document->getCurrentAttachedDocuments()
             ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} === Sales_Model_Document_AttachedDocument::TYPE_EDOCUMENT)
             ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
         $result = $this->_recordToJson($docCtrl->update($document));

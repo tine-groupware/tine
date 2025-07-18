@@ -222,8 +222,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                     Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ => $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1,
                 ], true));
             }
-            $record->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}
-                ->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ})
+            $record->getCurrentAttachedDocuments()
                 ->filter(fn ($rec) => $rec->{Sales_Model_Document_AttachedDocument::FLD_TYPE} === Sales_Model_Document_AttachedDocument::TYPE_PAPERSLIP)
                 ->{Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ} = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ} + 1;
 
