@@ -29,6 +29,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     {
         try {
             $splittedPath = explode('/', trim($path, '/'));
+            array_walk($splittedPath, fn(&$val) => $val = urldecode($val));
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__
@@ -151,6 +152,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     {
         try {
             $splittedPath = explode('/', trim($path, '/'));
+            array_walk($splittedPath, fn(&$val) => $val = urldecode($val));
             $downloadId = array_shift($splittedPath);
             $download = $this->_getDownloadLink($downloadId);
 
@@ -216,6 +218,12 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         header('Content-Type: text/html; charset=utf-8');
         die($view->render('folder.phtml'));
     }
+
+    public static function urlEncodeArray(array $array): array
+    {
+        array_walk($array, fn(&$val) => $val = urlencode($val));
+        return $array;
+    }
     
     /**
      * generate file overview
@@ -229,7 +237,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $view = $this->_getView($path, $node);
 
         $view->file = $node;
-        $view->file->path = $download->getDownloadUrl('get') . '/' . implode('/', $path);
+        $view->file->path = $download->getDownloadUrl('get') . '/' . implode('/', static::urlEncodeArray($path));
 
         // <tr><th>Name</th><th>letzte Änderung</th><th>Größe</th></tr>
         $locale = new Zend_Locale();
