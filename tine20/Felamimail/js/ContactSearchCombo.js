@@ -208,18 +208,27 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
     },
     
     removeInvalidRecords(store) {
+        const processedEmails = new Set();
+        const recordsToRemove = [];
+
         store.each((record) => {
-            const idx = store.indexOf(record);
-            if (!this.validate(record)){
-                store.removeAt(idx);
+            if (!this.validate(record)) {
+                recordsToRemove.push(record);
                 return;
             }
-            const duplicates = store.queryBy((contact) => {
-                return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) === Tine.Felamimail.getEmailStringFromContact(contact);
-            });
-            if (duplicates.getCount() > 0) {
-                Tine.log.debug(`remove duplicate email from ${record.data.type}: ${record.data.email}`);
+            const emailString = Tine.Felamimail.getEmailStringFromContact(record);
+            if (processedEmails.has(emailString)) {
+                recordsToRemove.push(record);
+            } else {
+                processedEmails.add(emailString);
+            }
+        });
+
+        recordsToRemove.forEach(record => {
+            const idx = store.indexOf(record);
+            if (idx !== -1) {
                 store.removeAt(idx);
+                Tine.log.debug(`remove duplicate email from ${record.data.type}: ${record.data.email}`);
             }
         });
     },
