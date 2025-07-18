@@ -248,12 +248,12 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
 
         $basePath = $download->getDownloadUrl() . '/';
         if (count($splittedPath) > 0) {
-            $basePath .= implode('/', $splittedPath) . '/';
+            $basePath .= implode('/', Filemanager_Frontend_Download::urlEncodeArray($splittedPath)) . '/';
         }
         
         $children = $this->_getTreeNodeBackend()->getChildren($node, false);
         foreach ($children as $child) {
-            $child->path = $basePath . $child->name;
+            $child->path = $basePath . urlencode($child->name);
         }
         
         $files = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
