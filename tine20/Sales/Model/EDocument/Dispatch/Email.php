@@ -69,8 +69,8 @@ class Sales_Model_EDocument_Dispatch_Email extends Sales_Model_EDocument_Dispatc
             /** @var Sales_Model_EDocument_Dispatch_DocumentType $docType */
             foreach ($this->{self::FLD_DOCUMENT_TYPES} as $docType) {
                 /** @var Sales_Model_Document_AttachedDocument $attachedDoc */
-                foreach ($document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_TYPE,
-                    $docType->{Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE}) as $attachedDoc) {
+                foreach ($document->getCurrentAttachedDocuments()->filter(Sales_Model_Document_AttachedDocument::FLD_TYPE,
+                        $docType->{Sales_Model_EDocument_Dispatch_DocumentType::FLD_DOCUMENT_TYPE}) as $attachedDoc) {
                     $attachedDocSend->addRecord($attachedDoc);
                     $node = Tinebase_FileSystem::getInstance()->get($attachedDoc->getIdFromProperty(Sales_Model_Document_AttachedDocument::FLD_NODE_ID));
                     $attachments[] = [

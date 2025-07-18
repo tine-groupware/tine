@@ -1197,4 +1197,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->isValid();
     }
+
+    public function getCurrentAttachedDocuments(): Tinebase_Record_RecordSet
+    {
+        return $this->{self::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $this->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ});
+    }
 }
