@@ -60,7 +60,7 @@ abstract class Sales_Model_EDocument_Dispatch_Abstract extends Tinebase_Record_N
     public function getMissingDocumentTypes(Sales_Model_Document_Abstract $document): array
     {
         $missingDoyTypes = [];
-        $attachedDocs = $document->{Sales_Model_Document_Abstract::FLD_ATTACHED_DOCUMENTS}->filter(Sales_Model_Document_AttachedDocument::FLD_CREATED_FOR_SEQ, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_SEQ});
+        $attachedDocs = $document->getCurrentAttachedDocuments();
         foreach ($this->getRequiredDocumentTypes() as $docType) {
             if (null === $attachedDocs->find(Sales_Model_Document_AttachedDocument::FLD_TYPE, $docType)) {
                 $missingDoyTypes[] = $docType;
