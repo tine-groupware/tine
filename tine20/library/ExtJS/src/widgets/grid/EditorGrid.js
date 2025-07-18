@@ -309,7 +309,7 @@ grid.on('validateedit', function(e) {
             if(this.fireEvent("beforeedit", e) !== false && !e.cancel){
                 this.editing = true;
                 var ed = this.colModel.getCellEditor(col, row);
-                if(!ed){
+                if(!ed || ed.field?.readOnly){
                     return;
                 }
                 if(!ed.rendered){

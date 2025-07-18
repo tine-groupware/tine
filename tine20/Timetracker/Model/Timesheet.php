@@ -283,14 +283,28 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     Zend_Filter_Callback::class => [['callback' => [self::class, 'filterEmptyNonZero']]]
                 ],
                 'type'                  => 'float',
-                'default'               => 1
+                'default'               => 1,
+                self::UI_CONFIG         => [
+                    self::FIELDS_CONFIG     => [
+                        'propertyGrid'          => [
+                            'readOnly' => true,
+                        ],
+                    ],
+                ],
             ),
             'accounting_time'  => array(
                 'label'                 => 'Accounting Projecttime', // _('Accounting Projecttime')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',
-                'default'               => '30'
+                'default'               => '30',
+                self::UI_CONFIG         => [
+                    self::FIELDS_CONFIG     => [
+                        'propertyGrid'          => [
+                            'readOnly' => true,
+                        ],
+                    ],
+                ],
             ),
             'workingtime_is_cleared'    => array(
                 'label'                 => 'Workingtime is cleared', // _('Workingtime is cleared')

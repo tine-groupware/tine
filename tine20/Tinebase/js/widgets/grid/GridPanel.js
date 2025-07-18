@@ -736,7 +736,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     (this.hideColumns && this.hideColumns.indexOf(key) !== -1) || // blacklist
                     (this.showColumns && this.showColumns.indexOf(key) === -1)    // whitelist
                 )) {
-                    if (this.hideColumnsMode === 'exclude') {
+                    if (this.hideColumnsMode === 'exclude' || this.excludeColumns && this.excludeColumns.indexOf(key) !== -1) {
                         return;
                     }
                     config.hideable = config.hidden = true;
