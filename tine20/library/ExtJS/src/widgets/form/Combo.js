@@ -1324,8 +1324,12 @@ var menu = new Ext.menu.Menu({
             this.doResize(this.bufferSize);
             delete this.bufferSize;
         }
-        this.list.alignTo.apply(this.list, [this.listAlignEl || this.el].concat(this.listAlign));
-        this.list.show();
+
+        if (this.list) {
+            this.list.alignTo.apply(this.list, [this.listAlignEl || this.el].concat(this.listAlign));
+            this.list.show();
+        }
+
         if(Ext.isGecko2){
             this.innerList.setOverflow('auto'); // necessary for FF 2.0/Mac
         }

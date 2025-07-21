@@ -192,6 +192,9 @@ msgstr "Sync Backends"
 msgid "Default telephone country code"
 msgstr "Default telephone country code"
 
+msgid "Record)icon"
+msgstr "Record)icon"
+
 msgid "It is not allowed to delete a contact linked to an user account!"
 msgstr "It is not allowed to delete a contact linked to an user account!"
 
@@ -266,6 +269,9 @@ msgstr "Excel all data"
 msgid "Excel current columns"
 msgstr "Excel current columns"
 
+msgid "Yealink Xml"
+msgstr "Yealink Xml"
+
 msgid "Addressbooks to export"
 msgstr "Addressbooks to export"
 
@@ -275,8 +281,8 @@ msgstr "Export target"
 msgid "All Contacts"
 msgstr "All Contacts"
 
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "This contact has been automatically added by the system as an event attender"
+msgid "This contact was automatically added by the system as an event attendee."
+msgstr "This contact was automatically added by the system as an event attendee."
 
 msgid "Import CSV formated contacts from Google address book"
 msgstr "Import CSV formated contacts from Google address book"
@@ -504,6 +510,9 @@ msgstr "Contact of a user account"
 
 msgid "Email Account Contact"
 msgstr "Email Account Contact"
+
+msgid "External E-Mail"
+msgstr "External E-Mail"
 
 msgid "No name"
 msgstr "No name"
@@ -863,6 +872,9 @@ msgstr[1] "Sites"
 
 msgid "GENDER_Group"
 msgstr "GENDER_Group"
+
+msgid "List Member"
+msgstr "List Member"
 
 msgid "Name/Email"
 msgstr "Name/Email"
