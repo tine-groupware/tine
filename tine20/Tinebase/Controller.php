@@ -409,8 +409,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             /** end of fix **/
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Save account object in session');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Save account object in session');
+        }
 
         Tinebase_Session::getSessionNamespace()->currentAccount = Tinebase_Core::getUser();
     }
@@ -2401,8 +2403,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * avScan hashFile
      *
      * @param string $_hashFile
-     * @param $options
+     * @param null $options
      * @return Tinebase_FileSystem_AVScan_Result
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws \League\Flysystem\FilesystemException
      */
     public function avScanHashFile(string $_hashFile, $options = null): Tinebase_FileSystem_AVScan_Result
     {
@@ -2419,10 +2426,24 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $parentPath = dirname($options['tine20']['path']);
                 $parentFolder = Tinebase_FileSystem::getInstance()->stat($parentPath);
 
-                Tinebase_FileSystem::getInstance()->updateFileObject($parentFolder, $options['tine20']['node'], null, $originalHash, $_hashFile, $avResult);
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-                $transactionId = null;
+                try {
+                    Tinebase_FileSystem::getInstance()->updateFileObject(
+                        $parentFolder,
+                        $options['tine20']['node'],
+                        null,
+                        $originalHash,
+                        $_hashFile,
+                        $avResult
+                    );
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                    $transactionId = null;
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // file has been deleted - ignore
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    }
+                }
             }
         } finally {
             if (null !== $transactionId) {
