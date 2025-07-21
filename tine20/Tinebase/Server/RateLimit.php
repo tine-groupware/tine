@@ -67,7 +67,6 @@ class Tinebase_Server_RateLimit
         };
 
         $user = $this->_getUsername();
-        $ip = Tinebase_Helper::getIpAddress();
 
         $allMatched = [];
         $rateLimitArray = $ratelimitConfigs->toArray();
@@ -102,9 +101,11 @@ class Tinebase_Server_RateLimit
             }
         }
 
+        $prefix = $this->_config['redis']['prefix'] ?? '';
+
         if (count($allMatched) > 0){
             $matched = array_shift($allMatched);
-            $matched['rateLimit']['name'] = $frontend . '_' . $ip . '_' . $user . '_' . $method;
+            $matched['rateLimit']['name'] = $prefix . '_ratelimit_' . $user;
             return $matched['rateLimit'];
         }
 
@@ -152,9 +153,8 @@ class Tinebase_Server_RateLimit
 
     protected function _getId(string $frontend, string $method)
     {
-        $prefix = $this->_config['redis']['prefix'] ?? '';
-        $user = $this->_getUsername();
-        return $prefix . '_ratelimit_'. $user . '_' . $frontend . '_' . $method;
+        $ip = Tinebase_Helper::getIpAddress();
+        return $frontend . '_' . $method . '_' . (!empty($ip) ? $ip : 'localhost');
     }
 
     protected function _getAdapter(): RedisAdapter

@@ -339,8 +339,8 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         $rateLimit = new Tinebase_Server_RateLimit();
         if ($rateLimit->hasRateLimit($frontend, $_method)) {
             if (! $rateLimit->check($frontend, $_method)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
                         __METHOD__ . '::' . __LINE__ . ' Rate limit hit for : ' . $frontend . '.' . $_method);
                 }
                 throw new Tinebase_Exception_RateLimit($frontend . ' Method is rate-limited: ' . $_method);
