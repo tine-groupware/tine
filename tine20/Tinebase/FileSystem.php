@@ -770,13 +770,23 @@ class Tinebase_FileSystem implements
      * update file object with hash file info
      *
      * @param Tinebase_Model_Tree_Node $_parentNode
-     * @param string|Tinebase_Model_Tree_FileObject $_id file object (or id)
-     * @param string $_hash
-     * @param string $_hashFile
-     * @param Tinebase_FileSystem_AVScan_Result $_avResult
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param Tinebase_Model_Tree_FileObject|null $_fileObject
+     * @param null $_hash
+     * @param null $_hashFile
+     * @param null $_avResult
      * @return Tinebase_Model_Tree_FileObject
+     * @throws Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws \League\Flysystem\FilesystemException
      */
-    public function updateFileObject(Tinebase_Model_Tree_Node $_parentNode, Tinebase_Model_Tree_Node $_node, Tinebase_Model_Tree_FileObject $_fileObject = null, $_hash = null, $_hashFile = null, $_avResult = null)
+    public function updateFileObject(Tinebase_Model_Tree_Node $_parentNode,
+                                     Tinebase_Model_Tree_Node $_node,
+                                     Tinebase_Model_Tree_FileObject $_fileObject = null,
+                                     $_hash = null,
+                                     $_hashFile = null,
+                                     $_avResult = null): Tinebase_Model_Tree_FileObject
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
         $currentFileObject = $_fileObject ?: $this->_fileObjectBackend->get($_node->object_id);
