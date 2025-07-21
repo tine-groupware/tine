@@ -384,7 +384,14 @@ Tine.Felamimail.nodeActions.MarkFolderSeenAction = {
         const selectedNode = action.node;
         const folderStore = app.getFolderStore();
         const selModel = selectedNode?.ownerTree?.selModel;
-        const folderIds = selModel?.selNodes.map((n) => n.attributes.folder_id);
+        let folderIds = [selectedNode.id];
+
+        if (!selModel) return;
+
+        // if select multiple folders, we ignored selectedNode and always search the selected records
+        if (selModel.getSelectedNodes().length > 1) {
+            folderIds = Object.keys(selModel.selMap);
+        }
         if (folderIds.length === 0) return;
 
         const filter = [
@@ -394,9 +401,10 @@ Tine.Felamimail.nodeActions.MarkFolderSeenAction = {
         
         Tine.Felamimail.messageBackend.addFlags(filter, '\\Seen', {
             callback: function() {
-                selModel?.selNodes.forEach((selectedNode) => {
-                    const folder = folderStore.getById(selectedNode.id);
+                folderIds.forEach((folderId) => {
+                    const folder = folderStore.getById(folderId);
                     folder.set('cache_unreadcount', 0);
+                    folder.commit();
                 })
                 app.getMainScreen().getCenterPanel().loadGridData({
                     removeStrategy: 'keepBuffered'
