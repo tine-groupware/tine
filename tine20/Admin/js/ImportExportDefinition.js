@@ -26,12 +26,3 @@ Tine.Admin.importexportdefinitions.show = function () {
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.importexportdefinitionsGridPanel, true);
     Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Admin.importexportdefinitionsGridPanel.actionToolbar, true);
 };
-
-Tine.widgets.grid.RendererManager.register('Tinebase', 'ImportExportDefinition', 'application_id', function(v) {
-    if (v && v.hasOwnProperty('name')) {
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain(v.name);
-        return this.translation.gettext(v.name);
-    }
-    return '';
-});

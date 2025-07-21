@@ -135,6 +135,7 @@ class Admin_Config extends Tinebase_Config_Abstract
                 'emailaccounts',
                 'devices',
                 'scheduler',
+                'templates',
                 // disabled by default
 //                'quotamanagement',
 //                'computers',

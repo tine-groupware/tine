@@ -43,7 +43,10 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
+        self::RECORD_NAME                   => 'Twig Template', // ngettext('Twig Template', 'Twig Templates', n)
+        self::RECORDS_NAME                  => 'Twig Templates', // gettext('GENDER_Twog Template')
         self::EXPOSE_JSON_API           => true,
+//        'idProperty'                    => self::FLD_PATH,
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -69,6 +72,7 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
 
         self::FIELDS                    => [
             self::FLD_PATH                  => [
+                self::LABEL                     => 'Path', // _('Path')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
                 self::VALIDATORS                => [
@@ -77,35 +81,74 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_NAME                  => [
+                self::LABEL                     => 'Name', // _('Name')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+                ],
             ],
             self::FLD_APPLICATION_ID        => [
+                self::LABEL                     => 'Application', // _('Application')
                 self::TYPE                      => self::TYPE_STRING,
+                self::SPECIAL_TYPE              => 'application',
                 self::LENGTH                    => 40,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+//                    'xtype'                         => 'tw-app-picker',
+                ],
             ],
             self::FLD_DESCRIPTION           => [
+                self::LABEL                     => 'Description', // _('Description')
                 self::TYPE                      => self::TYPE_TEXT,
                 self::NULLABLE                  => true,
             ],
             self::FLD_TWIG_TEMPLATE         => [
+                self::LABEL                     => 'Twig Template', // _('Twig Template')
                 self::TYPE                      => self::TYPE_TEXT,
+                self::SPECIAL_TYPE              => 'twig',
+                self::UI_CONFIG                 => [
+                    self::FIELDS_CONFIG             => [
+                        'height'                        => 500,
+                    ],
+                ],
             ],
             self::FLD_LOCALE                 => [
-                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Locale', // _('Locale')
+                self::TYPE                      => self::TYPE_LANGUAGE,
                 self::DOCTRINE_IGNORE           => true,
+                self::UI_CONFIG                 => [
+                    self::FIELDS_CONFIG             => [
+                        'xtype'                         => 'tinelangchooser',
+                    ],
+                ],
             ],
             self::FLD_IS_ORIGINAL           => [
+                self::LABEL                     => 'Is Original', // _('Is Original')
+                self::DESCRIPTION               => 'This template is unmodified and will follow changes from updated software versions.', // _('This template is unmodified and will follow changes from updated software versions.')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DOCTRINE_IGNORE           => true,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+                ],
             ],
             self::FLD_HAS_ORIGINAL          => [
+                self::LABEL                     => 'Has Original', // _('Has Original')
+                self::DESCRIPTION               => 'An original template exists in the software.', // _('An original template exists in the software.')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DOCTRINE_IGNORE           => true,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+                ],
             ],
             self::FLD_DIFF_TO_ORIGINAL      => [
+                self::LABEL                     => 'Diff to original', // _('Diff to original')
+                self::SHY                       => true,
                 self::TYPE                      => self::TYPE_TEXT,
                 self::DOCTRINE_IGNORE           => true,
+                self::UI_CONFIG                 => [
+                    self::DISABLED                  => true,
+                ],
             ],
         ],
     ];
@@ -123,6 +166,8 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
             $_data[self::FLD_PATH] = trim(trim($_data[self::FLD_PATH]), '/');
             $pathParts = explode('/', $_data[self::FLD_PATH]);
             $count = count($pathParts);
+            $appid = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
+            $_data[self::FLD_APPLICATION_ID] = $appid;
             $_data[self::FLD_NAME] = $pathParts[$count - 1];
             if ($count > 3) {
                 $locale = $pathParts[$count - 2];

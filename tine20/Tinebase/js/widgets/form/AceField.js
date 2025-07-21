@@ -7,6 +7,7 @@
  */
 
 Ext.ns('Tine.Tinebase.widgets.form');
+const supportedTypes = ['json', 'xml', 'twig', 'sieve']
 
 const AceField = Ext.extend(Ext.form.Field, {
     defaultAutoCreate: {tag: 'div'},
@@ -54,13 +55,26 @@ const AceField = Ext.extend(Ext.form.Field, {
             case 'json':
                 this.ed.setValue(Ext.isString(value) ? value : JSON.stringify(value, undefined, 4), -1);
                 break;
-            case 'xml':
-            case 'sieve':
+            default:
                 this.ed.setValue(value);
-                this.ed.clearSelection();
                 break;
         }
+        this.ed.clearSelection();
+        if (this.readOnly) {
+            this.ed.setReadOnly(true)
+        }
+    },
+
+    setReadOnly: function(readOnly) {
+        if (this.ed) {
+            this.ed.setReadOnly(readOnly);
+        }
+        this.readOnly = readOnly;
     }
-    
 });
 Ext.reg('tw-acefield', AceField);
+
+export default AceField
+export {
+    supportedTypes
+}

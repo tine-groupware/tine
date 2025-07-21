@@ -70,7 +70,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Label'), id: 'label', dataIndex: 'definition', hidden: false, width: 150, renderer: this.labelRenderer.createDelegate(this)},
             { header: this.app.i18n._('Name'), id: 'name', hidden: true, width: 75},
             { header: this.app.i18n._('Type'), id: 'xtype', dataIndex: 'definition', hidden: false, width: 75, renderer: this.typeRenderer.createDelegate(this)},
-            { header: this.app.i18n._('Application'), id: 'application_id', hidden: false, renderer: this.appRenderer.createDelegate(this)},
+            { header: this.app.i18n._('Application'), id: 'application_id', hidden: false, renderer: Tine.Tinebase.common.applicationRenderer},
             { header: this.app.i18n._('Model'), id: 'model', hidden: false },
             { header: this.app.i18n._('Required'), id: 'required', hidden: false },
             { header: this.app.i18n._('Grouping'), id: 'group', hidden: false },
@@ -101,17 +101,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     typeRenderer: function(value) {
         return this.app.i18n._(value.type) + (value.type === 'string' &&  value?.length ? ` (${value.length})` : '');
     },
-    
-    /**
-     * returns application name
-     * 
-     * @param {Object} value
-     * @return {String}
-     */
-    appRenderer: function(value) {
-        return this.app.i18n._(value.name);
-    },
-       
+
     /**
      * initialises filter toolbar
      */

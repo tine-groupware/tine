@@ -69,6 +69,10 @@
     background-image:url(../../images/icon-set/icon_time.svg) !important;
 }
 
+.admin-node-templates {
+    background-image:url(../../images/icon-set/icon_template.svg) !important;
+}
+
 .x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 
 .x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-checkbox ,

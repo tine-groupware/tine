@@ -143,7 +143,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
 
         self::FIELDS        => [
             self::FLDS_APPLICATION_ID => [
-                self::TYPE => 'application',
+                self::TYPE => self::TYPE_STRING,
+                self::SPECIAL_TYPE => 'application',
                 self::LENGTH => 255,
                 'nullable' => false,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'],
@@ -211,7 +212,8 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
             self::FLDS_PLUGIN_OPTIONS => [
                 self::LABEL => 'Plugin Options', // _('Plugin Options')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::TYPE => 'xml',
+                self::TYPE => self::TYPE_TEXT,
+                self::SPECIAL_TYPE => 'xml',
             ],
             self::FLDS_PLUGIN_OPTIONS_JSON => [
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],

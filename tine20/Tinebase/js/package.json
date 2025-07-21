@@ -21,6 +21,7 @@
     "@tabler/icons": "^3.29.0",
     "@vueuse/core": "^10.3.0",
     "ace-builds": "^1.14.0",
+    "ace-diff": "^3.0.3",
     "async": "^3.2.4",
     "axios": "^1.2.2",
     "bootstrap": "^5.3.3",

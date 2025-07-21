@@ -381,6 +381,15 @@ const common = {
         return result;
     },
 
+    applicationRenderer: function(applicationId) {
+        const app = Tine.Tinebase.appMgr.getById(applicationId?.id || applicationId);
+        if (!app) return '';
+
+        const translation = new Locale.Gettext();
+        translation.textdomain(app.name);
+        return translation.gettext(app.name);
+    },
+
     /**
      * Returns rendered relations
      *

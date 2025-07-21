@@ -10,6 +10,7 @@
         "@tabler/icons": "^3.29.0",
         "@vueuse/core": "^10.3.0",
         "ace-builds": "^1.14.0",
+        "ace-diff": "^3.0.3",
         "async": "^3.2.4",
         "axios": "^1.2.2",
         "bootstrap": "^5.3.3",
@@ -3864,6 +3865,14 @@
       "resolved": "https://registry.npmjs.org/ace-builds/-/ace-builds-1.14.0.tgz",
       "integrity": "sha512-3q8LvawomApRCt4cC0OzxVjDsZ609lDbm8l0Xl9uqG06dKEq4RT0YXLUyk7J2SxmqIp5YXzZNw767Dr8GKUruw=="
     },
+    "node_modules/ace-diff": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/ace-diff/-/ace-diff-3.0.3.tgz",
+      "integrity": "sha512-CJaV9Oi6BWLWGL2Kj//h5BNXlRCRu1GYHPOT7o+ZSAuJv9PaL9FWr/cCf16IuSVDo7oj6VriO+qgoHR8G9McLA==",
+      "dependencies": {
+        "diff-match-patch": "^1.0.5"
+      }
+    },
     "node_modules/acorn": {
       "version": "8.8.1",
       "resolved": "https://registry.npmjs.org/acorn/-/acorn-8.8.1.tgz",
@@ -6089,6 +6098,11 @@
       "engines": {
         "node": ">=0.3.1"
       }
+    },
+    "node_modules/diff-match-patch": {
+      "version": "1.0.5",
+      "resolved": "https://registry.npmjs.org/diff-match-patch/-/diff-match-patch-1.0.5.tgz",
+      "integrity": "sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw=="
     },
     "node_modules/diff-sequences": {
       "version": "29.6.3",
@@ -21475,6 +21489,14 @@
       "resolved": "https://registry.npmjs.org/ace-builds/-/ace-builds-1.14.0.tgz",
       "integrity": "sha512-3q8LvawomApRCt4cC0OzxVjDsZ609lDbm8l0Xl9uqG06dKEq4RT0YXLUyk7J2SxmqIp5YXzZNw767Dr8GKUruw=="
     },
+    "ace-diff": {
+      "version": "3.0.3",
+      "resolved": "https://registry.npmjs.org/ace-diff/-/ace-diff-3.0.3.tgz",
+      "integrity": "sha512-CJaV9Oi6BWLWGL2Kj//h5BNXlRCRu1GYHPOT7o+ZSAuJv9PaL9FWr/cCf16IuSVDo7oj6VriO+qgoHR8G9McLA==",
+      "requires": {
+        "diff-match-patch": "^1.0.5"
+      }
+    },
     "acorn": {
       "version": "8.8.1",
       "resolved": "https://registry.npmjs.org/acorn/-/acorn-8.8.1.tgz",
@@ -23160,6 +23182,11 @@
       "resolved": "https://registry.npmjs.org/diff/-/diff-5.0.0.tgz",
       "integrity": "sha512-/VTCrvm5Z0JGty/BWHljh+BAiw3IK+2j87NGMu8Nwc/f48WoDAC395uomO9ZD117ZOBaHmkX1oyLvkVM/aIT3w==",
       "dev": true
+    },
+    "diff-match-patch": {
+      "version": "1.0.5",
+      "resolved": "https://registry.npmjs.org/diff-match-patch/-/diff-match-patch-1.0.5.tgz",
+      "integrity": "sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw=="
     },
     "diff-sequences": {
       "version": "29.6.3",
