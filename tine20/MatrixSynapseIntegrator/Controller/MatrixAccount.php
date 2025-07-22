@@ -4,7 +4,7 @@
  * 
  * @package     MatrixSynapseIntegrator
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
@@ -22,6 +22,7 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     use Tinebase_Controller_SingletonTrait;
 
     protected ?MatrixSynapseIntegrator_Backend_Corporal $_corporal = null;
+    protected ?MatrixSynapseIntegrator_Backend_Synapse $_synapse = null;
 
     /**
      * the constructor
@@ -138,9 +139,20 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         return $this->_corporal ?: $this->setCorporalBackend();
     }
 
+    public function setSynapseBackend(
+        ?MatrixSynapseIntegrator_Backend_Synapse $backend = null): MatrixSynapseIntegrator_Backend_Synapse
+    {
+        return $this->_synapse = $backend ?: new MatrixSynapseIntegrator_Backend_Synapse();
+    }
+
+    public function getSynapseBackend(): MatrixSynapseIntegrator_Backend_Synapse
+    {
+        return $this->_synapse ?: $this->setSynapseBackend();
+    }
+
     protected function _pushToCorporal(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount)
     {
-        if (! MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::HOME_SERVER_URL)) {
+        if (! MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN)) {
             return;
         }
 
@@ -191,5 +203,11 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $record */
         $record->is_deleted = 1;
         $this->_pushToCorporal($record);
+    }
+
+    public function synapseLogin(): array
+    {
+        $account = $this->getMatrixAccountForUser(Tinebase_Core::getUser());
+        return $this->getSynapseBackend()->login($account);
     }
 }

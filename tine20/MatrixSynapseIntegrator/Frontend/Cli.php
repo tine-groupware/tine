@@ -28,4 +28,11 @@ class MatrixSynapseIntegrator_Frontend_Cli extends Tinebase_Frontend_Cli_Abstrac
         MatrixSynapseIntegrator_Controller_Directory::getInstance()->exportDirectory(true);
         return 0;
     }
+
+    public function testMatrixLogin()
+    {
+        $response = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->synapseLogin();
+        print_r($response);
+        return 0;
+    }
 }

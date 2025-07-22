@@ -103,7 +103,6 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => false,
             self::SETBYADMINMODULE          => false,
             self::SETBYSETUPMODULE          => false,
-            self::DEFAULT_STR               => 'SynapseSharedSecretAuthenticatorTineSharedSecret',
         ],
         self::MATRIX_DIRECTORY_ENABLED => [
             //_('Synapse directory export enabled')

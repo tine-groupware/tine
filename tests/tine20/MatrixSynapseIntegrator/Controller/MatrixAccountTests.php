@@ -16,6 +16,9 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
     {
         parent::setUp();
 
+        MatrixSynapseIntegrator_Config::getInstance()->set(
+            MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN,
+            'SynapseSharedSecretAuthenticatorTineSharedSecret');
         MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setCorporalBackend(
             new MatrixSynapseIntegrator_Backend_CorporalMock()
         );

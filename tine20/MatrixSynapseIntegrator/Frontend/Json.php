@@ -38,40 +38,45 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
         // TODO implement
     }
  
-    public function regenerateAccessToken()
+    /**
+     * Request new access_token and mx_device_id for user
+     * this can be done using the corporal shared auth key or
+     * using the users password. Both options will be needed. User password requires synapse to authenticate via
+     * ldap or rest against tine. Corporal shared auth key requires shared secret authenticate
+     * plugin to be setup in synapse. This is needed if matrix does not authenticate against tine or sso is used.
+     * Optional: Request an access token with custom device_id branded with tine e.g tine-ERER2423d. Device ids
+     * need to be uniqid
+     *
+     * @return array
+     */
+    public function getLogindata()
     {
-        // TODO implement
-        // one access token per tine account
-        // device id are a one to one mapping with access_token
-        // device id and access token need to be store until this function is called again
-        // only needs to return success
+        $login_response = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->synapseLogin();
+
+        $conf = MatrixSynapseIntegrator_Config::getInstance();
+        return [
+            'mx_hs_url' => $conf->{MatrixSynapseIntegrator_Config::HOME_SERVER_URL},
+            'mx_is_url' => $conf->{MatrixSynapseIntegrator_Config::IDENTITY_SERVER_URL},
+            'mx_user_id' => $login_response['user_id'],
+            'mx_device_id' => $login_response['device_id'],
+            'mx_access_token' => $login_response['access_token'],
+        ];
     }
 
-    public function getAccountData()
+    public function getBootstrapdata()
     {
         $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
             Tinebase_Core::getUser()
         );
-
-        $conf = MatrixSynapseIntegrator_Config::getInstance();
-
-        // @TODO do the master login for user to get accessToken
-//        $conf->{MatrixSynapseIntegrator_Config::HOME_SERVER_URL};
-//        $conf->{MatrixSynapseIntegrator_Config::COPORAL_SHARED_AUTH_TOKEN};
-        // TODO if access token is empty generate one (and device id)
         // TODO if recovery_password empty generate one
 
         $userData = $this->_recordToJson($matrixAccount);
         return [
-            'mx_access_token' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ACCESS_TOKEN],
-            'mx_hs_url' => $conf->{MatrixSynapseIntegrator_Config::HOME_SERVER_URL},
-            'mx_is_url' => $conf->{MatrixSynapseIntegrator_Config::IDENTITY_SERVER_URL},
             'mx_user_id' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID],
             'recovery_key' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY],
             'recovery_password' => $matrixAccount->getPasswordFromProperty(
                 MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD
             ),
-            'mx_device_id' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_DEVICE_ID],
             'session_key' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY],
         ];
     }
