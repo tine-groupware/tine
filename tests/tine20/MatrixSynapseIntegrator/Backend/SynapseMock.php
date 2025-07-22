@@ -16,11 +16,15 @@
  * @package      MatrixSynapseIntegrator
  * @subpackage   Backend
  */
-class MatrixSynapseIntegrator_Backend_CorporalMock extends MatrixSynapseIntegrator_Backend_Corporal
+class MatrixSynapseIntegrator_Backend_SynapseMock extends MatrixSynapseIntegrator_Backend_Synapse
 {
-    public function push(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): bool
+    public function login(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
     {
-        $this->_policy = $this->_getPolicy($matrixAccount);
-        return true;
+        return [
+             'user_id' => '@monkey83:matrix.local.tine-dev.de',
+             'home_server' => 'matrix.local.tine-dev.de',
+             'access_token' => 'syt_bW9ua2V5ODM_lZeStfEXvhyzIREMPfjW_0oJGpP',
+             'device_id' => 'ZMRHTQVBVI',
+         ];
     }
 }

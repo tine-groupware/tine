@@ -23,18 +23,21 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     },
 
     initComponent: function () {
-        this.accountDataPromise = Tine.MatrixSynapseIntegrator.getAccountData();
+        this.bootstrapDataPromise = Tine.MatrixSynapseIntegrator.getBootstrapdata();
 
         this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
         const url = Tine.Tinebase.configManager.get('elementUrl', 'MatrixSynapseIntegrator');
 
 
         this.on('afterrender', async () => {
-            const accountData = await this.accountDataPromise;
+            const bootstrapData = await this.bootstrapDataPromise;
 
-            if (accountData.mx_user_id && url) {
-                this.url = new URL(url.replace('{MATRIX_USER_ID}', await this.sha256(accountData.mx_user_id)));
+            if (bootstrapData.mx_user_id && url) {
+                this.url = new URL(url.replace('{MATRIX_USER_ID}', await this.sha256(bootstrapData.mx_user_id)));
                 this.el.dom.src = this.url.href
+                this.el.dom.style.visibility = 'hidden'
+                // todo add some kind of loading indicator
+                // and some option to not hide element while loading for debugging
 
                 // window.emnt = this.el.dom
                 // @TODO paste some 'here we are msg'?
@@ -46,14 +49,33 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         });
 
         window.addEventListener("message", async (event) => {
-            const accountData = await this.accountDataPromise;
+            const bootstrapData = await this.bootstrapDataPromise;
             // note: elementRequestCredentials is only send by element, if it requires credentials and can not bootstrap from local storage
-            if (event.origin !== this.url.origin || event.data.type != "elementUserdataRequest") return;
+            if (event.origin !== this.url.origin) return;
             console.error(event)
             
-            event.source.postMessage(Object.assign({
-                type: "elementUserdataResponse",
-            }, accountData), this.url.origin);
+            switch (event.data.type) {
+                case "elementBootstrapdataRequest":
+                    event.source.postMessage(Object.assign({
+                        type: "elementBootstrapdataResponse",
+                    }, bootstrapData), this.url.origin);
+                    break;
+                case "elementLogindataRequest":
+                    event.source.postMessage(Object.assign({
+                        type: "elementLogindataResponse",
+                    }, await Tine.MatrixSynapseIntegrator.getLogindata()), this.url.origin);
+                    break;
+                case "elementSetupEncryptionDone":
+                    this.el.dom.style.visibility = 'visible'
+                    break
+                case "elementStartupFailure":
+                    this.el.dom.style.visibility = 'visible'
+                    alert(event.data)
+                    //todo implement
+                    break
+                default:
+                    return
+            }
         }, false);
 
         this.supr().initComponent.call(this);

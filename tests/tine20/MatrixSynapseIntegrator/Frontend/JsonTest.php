@@ -45,19 +45,19 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         );
     }
 
-    public function testGetAccountData()
+    public function testGetBootstrapdata()
     {
         $this->testMatrixAccountApi(false);
-        $accountData = $this->_getUit()->getAccountData();
+        $accountData = $this->_getUit()->getBootstrapdata();
         self::assertIsArray($accountData);
         self::assertEquals('somepw',  $accountData['recovery_password']);
     }
 
-    public function testMissingGetAccountData()
+    public function testMissingGetBootstrapdata()
     {
         Tinebase_Core::setUser($this->_personas['sclever']);
         try {
-            $this->_getUit()->getAccountData();
+            $this->_getUit()->getBootstrapdata();
             self::fail('should throw 404 exception');
         } catch (Tinebase_Exception_NotFound $tenf) {
             self::assertEquals('No Matrix Account found', $tenf->getMessage());
@@ -84,5 +84,17 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             self::assertEquals($user->getId(), $matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID]);
             self::assertNotEmpty($matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::ID]);
         }
+    }
+
+    public function testGetLogindata(): void
+    {
+        $testSynapse = new MatrixSynapseIntegrator_Backend_SynapseMock();
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setSynapseBackend($testSynapse);
+
+        $this->testMatrixAccountApi(false);
+        $result = $this->_getUit()->getLogindata();
+        self::assertEquals('@monkey83:matrix.local.tine-dev.de', $result['mx_user_id']);
+        self::assertEquals(MatrixSynapseIntegrator_Config::getInstance()
+            ->{MatrixSynapseIntegrator_Config::HOME_SERVER_URL}, $result['mx_hs_url']);
     }
 }
