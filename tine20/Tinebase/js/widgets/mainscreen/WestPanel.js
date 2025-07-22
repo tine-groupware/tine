@@ -340,7 +340,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                         animCollapse: true,
                         titleCollapse:true,
                         draggable : true,
-                        autoScroll: false
+                        autoScroll: false,
+                        autoHeight: true
                     };
                 }
                 
@@ -377,7 +378,8 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                         animCollapse: true,
                         titleCollapse:true,
                         draggable : true,
-                        autoScroll: false
+                        autoScroll: false,
+                        autoHeight: true,
                     }
                 }],
                 columnWidth: 1,
