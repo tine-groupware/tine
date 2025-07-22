@@ -30,10 +30,7 @@ TEST_WORKER doesn´t work
 
 # run it
 
-timeout command is needed, because node does not exist on some failures
-
     npm install
     npm test -> for all test
     npm test src/test/Addressbook/Addressbook.test.js -> all test in file Addressbook.test.js
-
-
+    npm test src/test/Setup/setup.test.js -> run setup tests
