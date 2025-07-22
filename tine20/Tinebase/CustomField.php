@@ -609,7 +609,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     protected function _getValueForRecordOrListCf($_record, $_customField, $_value)
     {
-        // get model parts from saved record class e.g. Tine.Admin.Model.Group
+        // get model parts from saved record class e.g. Tine.Tinebase.Model.Group
         $modelName = self::getModelNameFromDefinition($_customField->definition);
         $model = new $modelName(array(), true);
         $idProperty = $model->getIdProperty();

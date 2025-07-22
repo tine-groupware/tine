@@ -74,7 +74,7 @@ Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
  * AccessLog data proxy
  * 
  * @type Tine.Tinebase.data.RecordProxy
- */ 
+ */
 Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'AccessLog',
@@ -84,12 +84,12 @@ Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
 
 /**
  * @namespace Tine.Admin.Model
- * @class     Tine.Admin.Model.Group
+ * @class     Tine.Tinebase.Model.Group
  * @extends   Tine.Admin.data.Record
  * 
  * Model of a user group
  */
-Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
@@ -100,7 +100,7 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.ge
     {name: 'xprops'},
     {name: 'members'}
 ]), {
-    appName: 'Admin',
+    appName: 'Tinebase',
     modelName: 'Group',
     idProperty: 'id',
     titleProperty: 'name',
@@ -112,11 +112,11 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.ge
 /**
  * returns default group data
  * 
- * @namespace Tine.Admin.Model.Group
+ * @namespace Tine.Tinebase.Model.Group
  * @static
  * @return {Object} default data
  */
-Tine.Admin.Model.Group.getDefaultData = function () {
+Tine.Tinebase.Model.Group.getDefaultData = function () {
     var internalAddressbook = Tine.Admin.registry.get('defaultInternalAddressbook');
     
     return {
@@ -125,10 +125,10 @@ Tine.Admin.Model.Group.getDefaultData = function () {
     };
 };
 
-Tine.Admin.groupBackend = new Tine.Tinebase.data.RecordProxy({
+Tine.Tinebase.groupBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'Group',
-    recordClass: Tine.Admin.Model.Group,
+    recordClass: Tine.Tinebase.Model.Group,
     idProperty: 'id'
 });
 

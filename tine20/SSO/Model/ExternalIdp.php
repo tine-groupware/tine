@@ -89,6 +89,9 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_DOMAINS => [],
+                self::FLD_GROUPS_NEW_ACCOUNT => [],
+                self::FLD_DENY_GROUPS => [],
+                self::FLD_DENY_ROLES => [],
             ],
         ],
 
@@ -111,6 +114,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CONFIG_CLASS      => [
                 self::TYPE                  => self::TYPE_MODEL,
+                self::LABEL                 => 'Specific Type', // _('Specific Type')
                 self::FILTER_DEFINITION     => [self::FILTER => Tinebase_Model_Filter_Text::class],
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS              => [
@@ -127,6 +131,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CONFIG            => [
                 self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
+                self::LABEL                 => 'Specific Configuration', // _('Specific Configuration')
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,
                     self::PERSISTENT            => true,
@@ -138,6 +143,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_DOMAINS           => [
+                self::LABEL                 => 'Domains', // _('Domains')
                 self::TYPE                  => self::TYPE_RECORDS,
                 self::CONFIG                => [
                     self::DEPENDENT_RECORDS     => true,
@@ -199,9 +205,12 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::LABEL                 => 'Update local properties', // _('Update local properties')
             ],
             self::FLD_PRIMARY_GROUP_NEW_ACCOUNT => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LENGTH                => 40,
+                self::TYPE                  => self::TYPE_RECORD,
                 self::NULLABLE              => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => 'Group',
+                ],
                 self::LABEL                 => 'Primary group for created local accounts', // _('Primary group for created local accounts')
             ],
             self::FLD_GROUPS_NEW_ACCOUNT => [
@@ -257,12 +266,14 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
             self::FLD_ACCOUNT_PREFIX        => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
-                self::LABEL                     => 'The name of the "groups" claim, defaults to "groups"', // _('The name of the "groups" claim, defaults to "groups"')
+                self::LABEL                     => 'Account Name Prefix', // _('Account Name Prefix')
+                self::DESCRIPTION               => 'String prefixed to local account names when created from this IDP', // _('String prefixed to local account names when created from this IDP',)
             ],
             self::FLD_GROUP_PREFIX          => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
-                self::LABEL                     => 'The name of the "groups" claim, defaults to "groups"', // _('The name of the "groups" claim, defaults to "groups"')
+                self::LABEL                     => 'Group Name Prefix', // _('Group Name Prefix')
+                self::DESCRIPTION               => 'String prefixed to local group names when created from this IDP', // _('String prefixed to local group names when created from this IDP',)
             ],
         ],
     ];
