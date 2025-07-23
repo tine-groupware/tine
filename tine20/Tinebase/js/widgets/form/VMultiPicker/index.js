@@ -26,6 +26,14 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
 
     recordRenderer: null,
 
+    /**
+     * Number of lines the box can grow to be.
+     * NOTE: if set, the container in which the Picker is rendered has to adjust it's height to show the full content.
+     *
+     * @type {number|null} MultiLine
+     */
+    multiLine: null,
+
     initComponent: function() {
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
@@ -62,7 +70,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             injectKey: this.injectKey,
             records: this.records,
             emptyText: this.emptyText,
-            recordRenderer: this.recordRenderer
+            recordRenderer: this.recordRenderer,
+            multiLine: this.multiLine,
         })
         if (_.isArray(this.value)) {
             this.setValue(this.value)
@@ -74,7 +83,12 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         Tine.Tinebase.widgets.form.VMultiPicker.superclass.onRender.apply(this, arguments)
         this.vueEventBus.on('onTriggerClick', this.onTriggerClick.bind(this))
         this.vueEventBus.on('removeRecord', this.removeRecordById.bind(this))
+        this.vueEventBus.on('pickerResize', this.handleResize.bind(this))
         this.renderUI()
+    },
+
+    handleResize: function(e) {
+        // TODO
     },
 
     renderUI: function() {
