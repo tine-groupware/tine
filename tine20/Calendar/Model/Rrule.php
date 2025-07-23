@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -722,7 +722,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param  Tinebase_Record_RecordSet    $_exceptions
      * @param  Tinebase_DateTime            $_from
      * @param  Tinebase_DateTime            $_until
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<Calendar_Model_Event>
      * @throws Tinebase_Exception_UnexpectedValue
      */
     public static function computeRecurrenceSet($_event, $_exceptions, $_from, $_until)
@@ -853,7 +853,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $recurIds = $_exceptions->recurid;
         
         if (! empty($_event->exdate)) {
-            $exdates = is_array($_event->exdate) ? $_event->exdate : array($_event->exdate);
+            $exdates = is_array($_event->exdate) || $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : array($_event->exdate);
             foreach ($exdates as $exdate) {
                 if ($exdate instanceof Tinebase_DateTime) {
                     $date = $exdate->toString(Tinebase_Record_Abstract::ISO8601LONG);

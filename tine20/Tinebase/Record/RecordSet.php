@@ -452,7 +452,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * required by IteratorAggregate interface
      * 
-     * @return iterator
+     * @return Traversable<int, T>
      */
     public function getIterator(): Traversable
     {

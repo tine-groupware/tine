@@ -957,7 +957,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         $dtstart = $this->getOriginalDtStart();
         $dtstart->setTimezone('UTC');
         
-        $this->recurid = $this->uid . '-' . $dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $this->recurid = $this->uid . '-' . $dtstart->format(Tinebase_Record_Abstract::ISO8601LONG);
         $this->base_event_id = $baseEventId;
 
         return $this->recurid;
@@ -1350,5 +1350,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
 
         return false;
+    }
+
+    public function getRecurIdOrUid(): string
+    {
+        return (string)($this->recurid ?: $this->uid);
     }
 }

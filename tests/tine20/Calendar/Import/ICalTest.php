@@ -352,7 +352,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
 
         $startbucks = $importEvents->find('uid', '3632597');
         foreach($forcedOrganizerData as $field => $value) {
-            $this->assertEquals($forcedOrganizerData[$field], $startbucks->{$field}, "failed to force field '{$field}'");
+            $this->assertEquals($forcedOrganizerData[$field], $field === 'organizer' ? $startbucks->getIdFromProperty($field) : $startbucks->{$field}, "failed to force field '{$field}'");
         }
     }
 

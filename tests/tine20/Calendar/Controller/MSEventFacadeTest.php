@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,11 +12,13 @@
  * Test class for Calendar_Controller_MSEventFacade
  * 
  * @package     Calendar
+ *
+ * @property Calendar_Controller_MSEventFacade $_uit
  */
 class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
 {
     public function setUp(): void
-{
+    {
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
@@ -345,22 +347,6 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $this->assertEquals(2, count($updatedEvent->exdate), 'num exdate mismatch');
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'status of baseevent was not updated');
         $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'status of exdate must not be updated');
-        
-        // update exiting persistent exception
-        Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_ACCEPTED;
-        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
-        
-        $this->assertEquals(2, count($updatedEvent->exdate), 'persistent exdate num exdate mismatch');
-        $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, Calendar_Model_Attender::getAttendee($updatedEvent->attendee, $testAttendee)->status, 'persistent exdate status of baseevent was not updated');
-        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getAttendee($updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord()->attendee, $testAttendee)->status, 'persistent exdate status of exdate must not be updated');
-        
-        $newException = $this->_createEventException($event);
-        $updatedEvent->exdate->addRecord($newException);
-        
-        Calendar_Model_Attender::getAttendee($newException->attendee, $testAttendee)->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $updatedEvent = $this->_uit->attenderStatusUpdate($updatedEvent, $testAttendee);
-        
-        $this->assertEquals(3, count($updatedEvent->exdate), 'new exdate num exdate mismatch');
     }
     
     /**

@@ -1406,11 +1406,12 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
         
         $this->assertEquals(1, count($message->preparedParts));
+        /** @var Calendar_Model_iMIP $preparediMIPPart */
         $preparediMIPPart = $message->preparedParts->getFirstRecord()->preparedData;
         $this->assertTrue($preparediMIPPart instanceof Calendar_Model_iMIP, 'is no iMIP');
         $this->assertEquals($expectedOriginator, $preparediMIPPart->originator);
         $this->assertNotEmpty($preparediMIPPart->method, 'method is empty: ' . print_r($preparediMIPPart->toArray(), true));
-        $event = $preparediMIPPart->getEvent();
+        $event = $preparediMIPPart->getEvents()->getFirstRecord();
         $this->assertTrue($event instanceof Calendar_Model_Event, 'is no event');
         $this->assertEquals($expectedEventSummary, $event->summary);
         $this->assertEquals($expectedAttendeeCount, count($event->attendee), 'attendee count mismatch: ' . print_r($event->attendee->toArray(), true));

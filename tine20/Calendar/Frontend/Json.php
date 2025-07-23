@@ -581,40 +581,36 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $this->getEvent($baseEvent->getId());
     }
-    
-    /**
-     * prepares an iMIP (RFC 6047) Message
-     * 
-     * @param array|Calendar_Model_iMIP $iMIP
-     * @return array prepared iMIP part
-     */
-    public function iMIPPrepare($iMIP)
+
+    protected function iMIPPrepare(Calendar_Model_iMIP $iMIP, null|string|Calendar_Model_Attender $status): array
     {
-        $iMIPMessage = $iMIP instanceof Calendar_Model_iMIP ? $iMIP : new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
-        
-        $iMIPMessage->preconditionsChecked = FALSE;
-        $iMIPFrontend->prepareComponent($iMIPMessage);
-        $iMIPMessage->setTimezone(Tinebase_Core::getUserTimezone());
-        return $iMIPMessage->toArray();
+
+        $iMIP->preconditionsChecked = FALSE;
+        $iMIPFrontend->prepareComponent($iMIP, status: $status);
+        $iMIP->setTimezone(Tinebase_Core::getUserTimezone());
+        return $iMIP->toArray();
     }
 
     /**
      * process an iMIP (RFC 6047) Message
      *
      * @param array  $iMIP
-     * @param string $status
+     * @param mixed $status
      * @return array prepared iMIP part
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      * @throws Zend_Db_Statement_Exception
      */
-    public function iMIPProcess($iMIP, $status = null): array
+    public function iMIPProcess(array $iMIP, null|string|array $status = null): array
     {
         $iMIPMessage = new Calendar_Model_iMIP($iMIP);
         $iMIPFrontend = new Calendar_Frontend_iMIP();
 
+        if (is_array($status)) {
+            $status = new Calendar_Model_Attender($status, true);
+        }
         try {
             $iMIPFrontend->process($iMIPMessage, $status);
         } catch (Felamimail_Exception_IMAPMessageNotFound $feimmnf) {
@@ -625,7 +621,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             throw new Tinebase_Exception_NotFound('Could not find message on IMAP server.');
         }
         
-        return $this->iMIPPrepare($iMIPMessage);
+        return $this->iMIPPrepare($iMIPMessage, $status);
     }
 
     /**

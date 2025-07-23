@@ -9,6 +9,8 @@
  * @copyright   Copyright (c) 2010-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Facade for Calendar_Controller_Event
  * 
@@ -31,6 +33,8 @@
  * 
  * @package     Calendar
  * @subpackage  Controller
+ *
+ * @implements Tinebase_Controller_Record_Interface<Calendar_Model_Event>
  */
 class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_Interface
 {
@@ -136,17 +140,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
         return $currentUser->contact_id;
     }
-    
-    /**
-     * get by id
-     *
-     * @param string $_id
-     * @return Calendar_Model_Event
-     * @throws  Tinebase_Exception_AccessDenied
-     */
-    public function get($_id)
+
+    public function get($_id, bool $_getDeleted = false): Calendar_Model_Event
     {
-        $event = $this->_eventController->get($_id);
+        $event = $this->_eventController->get($_id, _getDeleted: $_getDeleted);
         $this->_resolveData($event);
         
         return $this->_toiTIP($event);
@@ -280,7 +277,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             if ($event->rrule) {
                 $eventId = $event->id;
                 $baseEventMap[$eventId] = $event;
-                $exceptionSets[$eventId] = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                $exceptionSets[$eventId] = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
             } else if ($event->recurid) {
                 $exceptionMap[] = $event;
             }
@@ -315,12 +312,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_event)
+    public function create(Tinebase_Record_Interface $_event, bool $allowRecurExceptions = false)
     {
-        if ($_event->recurid) {
+        if (!$allowRecurExceptions && $_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
         }
-        
+
         $this->_fromiTIP($_event, new Calendar_Model_Event(array(), TRUE));
         
         $exceptions = $_event->exdate;
@@ -502,66 +499,17 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
     }
-    
-    /**
-     * updates an attender status of a event
-     *
-     * @param  Calendar_Model_Event    $_event
-     * @param  Calendar_Model_Attender $_attendee
-     * @return Calendar_Model_Event    updated event
-     */
-    public function attenderStatusUpdate($_event, $_attendee)
+
+    public function attenderStatusUpdate(Calendar_Model_Event $_event, Calendar_Model_Attender $_attendee): Calendar_Model_Event
     {
-        if ($_event->recurid) {
-            throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
-        }
-        
-        $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $_event->exdate = $exceptions->getOriginalDtStart();
-        
-        // update base event status
-        $attendeeFound = Calendar_Model_Attender::getAttendee($_event->attendee, $_attendee);
-        if (!isset($attendeeFound)) {
-            throw new Tinebase_Exception_UnexpectedValue('not an attendee');
+        if (!($attendeeFound = Calendar_Model_Attender::getAttendee($_event->attendee, $_attendee))) {
+            return $_event;
         }
         $attendeeFound->displaycontainer_id = $_attendee->displaycontainer_id;
         $attendeeFound->xprops = $_attendee->xprops;
+        $attendeeFound->status = $_attendee->status;
         Calendar_Controller_Event::getInstance()->attenderStatusUpdate($_event, $attendeeFound, $attendeeFound->status_authkey);
-        
-        // update exceptions
-        foreach($exceptions as $exception) {
-            // do not attempt to set status of an deleted instance
-            if ($exception->is_deleted) continue;
-            
-            $exceptionAttendee = Calendar_Model_Attender::getAttendee($exception->attendee, $_attendee);
-            
-            if (! $exception->getId()) {
-                if (! $exceptionAttendee) {
-                    // set user status to DECLINED
-                    $exceptionAttendee = clone $attendeeFound;
-                    $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
-                }
-                $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
-                $exceptionAttendee->xprops = $_attendee->xprops;
-                Calendar_Controller_Event::getInstance()->attenderStatusCreateRecurException($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
-            } else {
-                /*if (! $exceptionAttendee) {
-                    // we would need to find out the users authkey to decline him -> not allowed!?
-                    if (!isset($attendeeFound)) {
-                        throw new Tinebase_Exception_UnexpectedValue('not an attendee');
-                    }
-                }*/
-                if (! $exceptionAttendee) {
-                    // set user status to DECLINED
-                    $exceptionAttendee = clone $attendeeFound;
-                    $exceptionAttendee->status = Calendar_Model_Attender::STATUS_DECLINED;
-                }
-                $exceptionAttendee->displaycontainer_id = $_attendee->displaycontainer_id;
-                $exceptionAttendee->xprops = $_attendee->xprops;
-                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($exception, $exceptionAttendee, $exceptionAttendee->status_authkey);
-            }
-        }
-        
+
         return $this->get($_event->getId());
     }
 
@@ -606,26 +554,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $this->_eventController->delete($ids);
         return $events;
-    }
-    
-    /**
-     * Delete Attendees from event
-     *
-     * @param Calendar_Model_Event $_event
-     * @param Calendar_Model_Event $_iMIP
-     *
-     */
-    public function deleteAttendees($_event, $_iMIP) {
-
-        foreach ($_iMIP->attendee as $attendeeToDelete) {
-            $attenderToRemove = Calendar_Model_Attender::getAttendee($_event->attendee, $attendeeToDelete);
-            if ($attenderToRemove) {
-                $_event->attendee->removeRecord($attenderToRemove);
-            }
-        }
-        $_event->last_modified_time = $_iMIP->last_modified_time;
-        $this->update($_event);
-        return $_event;
     }
 
     /**
@@ -1169,89 +1097,113 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         return $oldValue;
     }
 
-    public function getExistingEventById($_id, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
+    public function getExistingEventFromExternalEventData(Calendar_Model_Event $_event, string $_containerId, string $_action, bool $_getDeleted = false, array $requiredGrants = []): ?Calendar_Model_Event
+    {
+        $result = null;
+        $foundWithoutGrant = false;
+        $checkGrantFun = function(bool $throw) use($requiredGrants, &$result, &$foundWithoutGrant) {
+            foreach ($requiredGrants as $grant) {
+                if (!$result->hasGrant($grant)) {
+                    $result = null;
+                    $foundWithoutGrant = true;
+                    if ($throw) {
+                        throw new Tinebase_Exception_AccessDenied('access denied');
+                    }
+                }
+            }
+        };
+        if ($_event->getId()) {
+            try {
+                $result = $this->get($_event->getId(), $_getDeleted);
+                $checkGrantFun(true);
+            } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {}
+        }
+
+        if (null === $result) {
+            $filter = new Calendar_Model_EventFilter([
+                [TMFA::FIELD => 'uid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->uid],
+                [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_containerId],
+            ]);
+            if ($_event->isRecurException()) {
+                if (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid)) {
+                    $_event->setRecurId($_event->base_event_id);
+                }
+                $filter->addFilter($filter->createFilter(
+                    [TMFA::FIELD => 'recurid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->recurid]
+                ));
+            } else {
+                $filter->addFilter($filter->createFilter(
+                    [TMFA::FIELD => 'recurid', TMFA::OPERATOR => 'isnull', TMFA::VALUE => null]
+                ));
+            }
+            if ($_getDeleted) {
+                $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', TMFA::OP_EQUALS,
+                    Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+            }
+            if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
+                $checkGrantFun(false);
+            }
+
+            if (null === $result && $_event->hasExternalOrganizer() && ($_event->organizer_email || $_event->resolveOrganizer())) {
+                $filter->getFilter('container_id')->setValue(
+                    Calendar_Controller::getInstance()->getInvitationContainer($_event->organizer_email ? null : $_event->resolveOrganizer(), $_event->organizer_email)->getId()
+                );
+                if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
+                    $checkGrantFun(false);
+                }
+            }
+            if (null === $result) {
+                $filter->removeFilter('container_id');
+                $filter->addFilterGroup(new Calendar_Model_EventFilter([
+                    ['field' => 'organizer', 'operator' => 'equals', 'value' => $this->getCalendarUser()->user_id],
+                    ['field' => 'attender', 'operator' => 'equals', 'value' => $this->getCalendarUser()],
+                ], Calendar_Model_EventFilter::CONDITION_OR));
+                if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
+                    $checkGrantFun(false);
+                }
+            }
+        }
+        if (null === $result && $foundWithoutGrant) {
+            throw new Tinebase_Exception_AccessDenied('access denied');
+        }
+        return $result;
+    }
+
+    public function getExistingEventByUID(string $_uid, ?string $_recurid, string $_action, string $_grant, bool $_getDeleted = false): ?Calendar_Model_Event
     {
         $filters = new Calendar_Model_EventFilter([
-            ['field' => ($this->_useExternalIdUid ? 'external_id' : 'id'), 'operator' => 'equals', 'value' => $_id],
+            ['field' => 'uid', 'operator' => 'equals', 'value' => $_uid],
+            ['field' => 'recurid', 'operator' => null === $_recurid ? 'isnull' : 'equals', 'value' => $_recurid],
         ]);
         if ($_getDeleted) {
             $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));
         }
 
-        $event = null;
-        if ($_assumeExternalOrganizer) {
-            $event = $this->_getExistingEventByUIDExternal($filters);
+        if (null !== ($event = $this->_getExistingEventByUID($filters, $_action, $_grant)) && $event->rrule) {
+            $event->exdate->mergeById($this->_eventController->search(new Calendar_Model_EventFilter([
+                ['field' => 'base_event_id', 'operator' => 'equals', 'value' => $event->getId()],
+            ]), new Tinebase_Model_Pagination([
+                'sort' => 'dtstart',
+                'dir' => 'ASC',
+            ]), _action: $_action)->filter($_grant, true));
         }
-        if (null === $event) {
-            $event = $this->_getExistingEventByUIDInternal($filters, $_action, $_grant);
-        }
-        if (null === $event && !$_assumeExternalOrganizer) {
-            $event = $this->_getExistingEventByUIDExternal($filters);
-        }
-
         return $event;
     }
 
-    public function getExistingEventByUID($_uid, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
+    protected function _getExistingEventByUID(Tinebase_Model_Filter_FilterGroup $_filter, string $_action, string $_grant): ?Calendar_Model_Event
     {
-        $filters = new Calendar_Model_EventFilter([
-            ['field' => ($this->_useExternalIdUid ? 'external_uid' : 'uid'), 'operator' => 'equals', 'value' => $_uid],
-        ]);
-        if ($_getDeleted) {
-            $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
-                Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+        $events = $this->search($_filter, _action: $_action);
+        $events = $events->filter(fn(Calendar_Model_Event $event) => $event->hasExternalOrganizer() || $event->{$_grant});
+
+        /** @var Calendar_Model_Event $event */
+        foreach ($events as $event) {
+            if (!$event->hasExternalOrganizer()) {
+                return $event;
+            }
         }
 
-        $event = null;
-        if ($_assumeExternalOrganizer) {
-            $event = $this->_getExistingEventByUIDExternal($filters);
-        }
-        if (null === $event) {
-            $event = $this->_getExistingEventByUIDInternal($filters, $_action, $_grant);
-        }
-        if (null === $event && !$_assumeExternalOrganizer) {
-            $event = $this->_getExistingEventByUIDExternal($filters);
-        }
-
-        return $event;
-    }
-
-    /**
-     * @param $_filter
-     * @param $_grant
-     * @return null|Tinebase_Record_Abstract
-     */
-    protected function _getExistingEventByUIDInternal($_filter, $_action, $_grant)
-    {
-        $events = Calendar_Controller_MSEventFacade::getInstance()->search($_filter, null, false, false, $_action);
-        if (null !== $_grant) {
-            $events = $events->filter($_grant, true);
-        }
         return $events->getFirstRecord();
-    }
-
-    /**
-     * @param $_filter
-     * @param $_grant
-     * @return null|Tinebase_Record_Abstract
-     */
-    protected function _getExistingEventByUIDExternal($_filter)
-    {
-        $calCtrl = Calendar_Controller_Event::getInstance();
-        $oldCalenderAcl = $calCtrl->doContainerACLChecks(false);
-        try {
-            /** @var Calendar_Model_Event $event */
-            $event = Calendar_Controller_MSEventFacade::getInstance()->search($_filter)->getFirstRecord();
-        } finally {
-            $calCtrl->doContainerACLChecks($oldCalenderAcl);
-        }
-
-        if (null !== $event && !$event->hasExternalOrganizer()) {
-            return null;
-        }
-
-        return $event;
     }
 
     /**
