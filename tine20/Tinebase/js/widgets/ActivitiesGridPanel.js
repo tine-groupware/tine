@@ -364,8 +364,8 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 columnWidth: 0.25,
                 value: false,
                 store: [
-                    [ false, this.app.i18n._('for all') ],
-                    [ true, this.app.i18n._('only for the creator of the note') ],
+                    [ false, i18n._('for all') ],
+                    [ true, i18n._('only for the creator of the note') ],
                 ],
             },{
                 xtype: 'textarea',
