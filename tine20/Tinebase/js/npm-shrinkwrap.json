@@ -59,7 +59,7 @@
         "stream-browserify": "^3.0.0",
         "twing": "^5.1.2",
         "twing-intl": "0.0.2",
-        "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
+        "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
         "util": "^0.12.5",
         "vue": "^3.2.45",
         "vue-color-kit": "^1.0.5",
@@ -17613,8 +17613,8 @@
     },
     "node_modules/unminified-webpack-plugin": {
       "version": "3.0.0",
-      "resolved": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
-      "integrity": "sha512-GEipZn1AVRI6o6V9DCd0aZpA5VgUTuyVLAkVFUk2eYvGVp4+I/UJXghLT2GL46GH1UsKj4MMa8B8UPZChvqRcQ==",
+      "resolved": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
+      "integrity": "sha512-upfTqKZI6YcAdpaWVoE2dN8i1adwih1ky2DG8kyHqnKqe33yokuEwX8zFapwKI2WJlVF0yMtwbDEUG/oxMhyMA==",
       "license": "MIT",
       "engines": {
         "node": ">=10.0.0"
@@ -31580,9 +31580,9 @@
       "integrity": "sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg=="
     },
     "unminified-webpack-plugin": {
-      "version": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
-      "integrity": "sha512-GEipZn1AVRI6o6V9DCd0aZpA5VgUTuyVLAkVFUk2eYvGVp4+I/UJXghLT2GL46GH1UsKj4MMa8B8UPZChvqRcQ==",
-      "from": "unminified-webpack-plugin@github:tine-groupware/unminified-webpack-plugin#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
+      "version": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
+      "integrity": "sha512-upfTqKZI6YcAdpaWVoE2dN8i1adwih1ky2DG8kyHqnKqe33yokuEwX8zFapwKI2WJlVF0yMtwbDEUG/oxMhyMA==",
+      "from": "unminified-webpack-plugin@github:tine-groupware/unminified-webpack-plugin#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
       "requires": {}
     },
     "unpipe": {

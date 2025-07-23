@@ -70,7 +70,7 @@
     "stream-browserify": "^3.0.0",
     "twing": "^5.1.2",
     "twing-intl": "0.0.2",
-    "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
+    "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
     "util": "^0.12.5",
     "vue": "^3.2.45",
     "vue-color-kit": "^1.0.5",
