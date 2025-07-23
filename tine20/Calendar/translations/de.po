@@ -1131,7 +1131,7 @@ msgstr "Importiere Termine"
 
 #, python-brace-format
 msgid "Paste event \"{0}\""
-msgstr "Event \"{0}\" einfügen"
+msgstr "Termin \"{0}\" einfügen"
 
 msgid "Set as definite event"
 msgstr "Definitiven Termin festlegen"
