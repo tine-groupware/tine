@@ -843,16 +843,34 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 $tbId = Tinebase_Core::getTinebaseId(),
             ]],
             ['field' => 'path', 'operator' => 'contains', 'value' => '/de/'],
-        ], []);
+        ], ['sort' => 'path', 'dir' => 'desc']);
 
         $this->assertArrayHasKey('totalcount', $result);
         $this->assertArrayHasKey('results', $result);
         $this->assertIsArray($result['results']);
-        $this->assertGreaterThan(0, count($result['results']));
+        $this->assertGreaterThan(1, count($result['results']));
+        $this->assertGreaterThan(0, strcmp($result['results'][0]['path'], $result['results'][1]['path']));
         foreach ($result['results'] as $twig) {
             $this->assertStringContainsString('/de/', $twig[Tinebase_Model_TwigTemplate::FLD_PATH]);
             $this->assertTrue(in_array($twig[Tinebase_Model_TwigTemplate::FLD_APPLICATION_ID], [$gdprId, $tbId]));
         }
+    }
+
+    public function testTwigTemplateSave(): void
+    {
+        $twig = $this->_instance->saveTwigTemplate([
+            Tinebase_Model_TwigTemplate::FLD_PATH => 'Tinebase/views/unittest/tmpl.view',
+            Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE => 'a and b and unittest',
+        ]);
+
+        $twig2 = $twig;
+        $twig2[Tinebase_Model_TwigTemplate::FLD_PATH] = 'Tinebase/views/unittest/de/tmpl.view';
+        unset($twig2['id']);
+        $twig2 = $this->_instance->saveTwigTemplate($twig2);
+
+        $this->assertNotSame($twig['id'], $twig2['id']);
+        $this->assertNotSame($twig['path'], $twig2['path']);
+        $this->assertSame('de', $twig2[Tinebase_Model_TwigTemplate::FLD_LOCALE] ?? '');
     }
     
     /**

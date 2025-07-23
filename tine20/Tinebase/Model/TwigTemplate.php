@@ -30,7 +30,7 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
 
     public const FLD_IS_ORIGINAL = 'is_original';
     public const FLD_HAS_ORIGINAL = 'has_original';
-    public const FLD_DIFF_TO_ORIGINAL = 'diff_to_original';
+    public const FLD_ORIGINAL_TWIG = 'original_twig';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -43,13 +43,18 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
-        self::RECORD_NAME                   => 'Twig Template', // ngettext('Twig Template', 'Twig Templates', n)
-        self::RECORDS_NAME                  => 'Twig Templates', // gettext('GENDER_Twog Template')
+        self::RECORD_NAME               => 'Twig Template', // ngettext('Twig Template', 'Twig Templates', n)
+        self::RECORDS_NAME              => 'Twig Templates', // gettext('GENDER_Twog Template')
         self::EXPOSE_JSON_API           => true,
-//        'idProperty'                    => self::FLD_PATH,
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
+            // this means: id will become an auto increment on mysql
+            self::INDEXES                   => [
+                self::FLD_APPLICATION_ID        => [
+                    self::COLUMNS                   => [self::FLD_APPLICATION_ID],
+                ],
+            ],
             self::UNIQUE_CONSTRAINTS        => [
                 self::FLD_PATH                  => [
                     self::COLUMNS                   => [self::FLD_PATH, self::FLD_DELETED_TIME],
@@ -77,7 +82,8 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 255,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_Regex::class, '#^/?\w+/views/.+#'],
                 ],
             ],
             self::FLD_NAME                  => [
@@ -141,9 +147,8 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                 => true,
                 ],
             ],
-            self::FLD_DIFF_TO_ORIGINAL      => [
-                self::LABEL                     => 'Diff to original', // _('Diff to original')
-                self::SHY                       => true,
+            self::FLD_ORIGINAL_TWIG         => [
+                self::LABEL                     => 'Original Twig Template', // _('Original Twig Template')
                 self::TYPE                      => self::TYPE_TEXT,
                 self::DOCTRINE_IGNORE           => true,
                 self::UI_CONFIG                 => [
@@ -184,5 +189,20 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
         }
 
         parent::setFromArray($_data);
+    }
+
+    public function hydrateFromBackend(array &$data)
+    {
+        if (is_string($data[self::FLD_PATH] ?? null)) {
+            $pathParts = explode('/', trim($data[self::FLD_PATH], '/'));
+            $count = count($pathParts);
+            if ($count > 3) {
+                $locale = $pathParts[$count - 2];
+                if (Zend_Locale::isLocale($locale)) {
+                    $data[self::FLD_LOCALE] = $locale;
+                }
+            }
+        }
+        parent::hydrateFromBackend($data);
     }
 }

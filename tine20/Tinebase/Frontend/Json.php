@@ -381,7 +381,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_updateMultiple($filter, $data, Tinebase_Core::getApplicationInstance($appName, $modelName), $filterModel);
     }
 
-    public function searchTwigTemplates(array $filter, /** @noinspection PhpUnusedParameterInspection */ array $paging): array
+    public function getTwigTemplate(): void
+    {
+        throw new Tinebase_Exception_NotImplemented('we use searchTwigTemplates with path equals X');
+    }
+
+    public function searchTwigTemplates(array $filter, array $paging): array
     {
         $filterModel = Tinebase_Model_TwigTemplate::class . 'Filter';
         $filter = $this->_decodeFilter($filter, $filterModel);
@@ -413,12 +418,16 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $this->_search($filter, [], Tinebase_Controller_TwigTemplate::getInstance(), $filterModel);
 
         $foundPaths = [];
-        $tineRoot = dirname(__DIR__, 2) . '/';
+        $tineRoot = realpath(dirname(__DIR__, 2)) . '/';
         foreach ($result['results'] as &$twigTmpl) {
             $twigTmpl[Tinebase_Model_TwigTemplate::FLD_IS_ORIGINAL] = false;
-            if (is_file($tineRoot . $twigTmpl[Tinebase_Model_TwigTemplate::FLD_PATH])) {
+            $templatePath = realpath($tineRoot . $twigTmpl[Tinebase_Model_TwigTemplate::FLD_PATH]);
+            if ($templatePath && !str_starts_with($templatePath, $tineRoot)) {
+                Tinebase_Exception::log(new Tinebase_Exception('potentially malicious twig template path: ' . $twigTmpl[Tinebase_Model_TwigTemplate::FLD_PATH]));
+                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL] = false;
+            } elseif ($templatePath) {
                 $twigTmpl[Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL] = true;
-                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_DIFF_TO_ORIGINAL] = '';
+                $twigTmpl[Tinebase_Model_TwigTemplate::FLD_ORIGINAL_TWIG] = file_get_contents($templatePath);
             } else {
                 $twigTmpl[Tinebase_Model_TwigTemplate::FLD_HAS_ORIGINAL] = false;
             }
@@ -451,6 +460,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $result['totalcount'] = count($result['results']);
+
+        if ($result['totalcount'] > 0 && ($paging['sort'] ?? false) && is_string($paging['sort']) && isset($result['results'][0][$paging['sort']])) {
+            $dir = ($paging['dir'] ?? 'ASC') === 'ASC';
+            $sort = $paging['sort'];
+            usort($result['results'], fn($a, $b) => $dir ? strcmp((string)$a[$sort], (string)$b[$sort]) : strcmp((string)$b[$sort], (string)$a[$sort]));
+        }
 
         return $result;
     }
