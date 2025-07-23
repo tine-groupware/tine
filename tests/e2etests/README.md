@@ -1,5 +1,7 @@
 # dependencies
 
+## Ubuntu
+
 nodejs and puppeteer. run this on an ubuntu system:
 
 nodejs
@@ -14,11 +16,19 @@ puppeteer deps
 
 see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix
 
+## MacOS
+
+nodejs + puppeteer
+
+    $ npm install (if it doesn't work try: npm install puppeteer@^13.0.0)
+    $ sudo npm i -g n
+    $ sudo n lts
+
 # config
 
 config via .env file or env variables
 
-    export TEST_URL=http://localhost/tine20
+    export TEST_URL=http://tine.local.tine-dev.de
     export TEST_USERNAME=test
     export TEST_PASSWORD=test
     export TEST_MODE=headless
