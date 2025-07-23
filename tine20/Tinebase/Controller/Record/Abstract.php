@@ -567,7 +567,15 @@ abstract class Tinebase_Controller_Record_Abstract
         if (! is_scalar($_id)) {
             if (! $_id instanceof Tinebase_Record_Interface) {
                 if (is_array($_id) && isset($_id['id']) && ! is_scalar($_id['id'])) {
-                    throw new Tinebase_Exception_InvalidArgument('ID should be scalar');
+                    if (isset($_id['id']['id']) && is_scalar($_id['id']['id'])) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' ID found in structure... But $_id param might be used in a wrong way.');
+                        }
+                        $_id = $_id['id']['id'];
+                    } else {
+                        throw new Tinebase_Exception_InvalidArgument('ID should be scalar');
+                    }
                 }
             }
         }
@@ -849,8 +857,10 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (! method_exists($configuration, 'getAutoincrementFields')) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' CLass has no getAutoincrementFields(): ' . $configuration::class);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Class has no getAutoincrementFields(): ' . $configuration::class);
+            }
             return null;
         }
 

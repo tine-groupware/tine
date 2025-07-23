@@ -852,8 +852,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
     {
         $contact = $this->_addContact();
 
-        self::expectException(Tinebase_Exception_InvalidArgument::class);
-        $this->_uit->getContact(['id' => $contact]);
+        $result = $this->_uit->getContact(['id' => $contact]);
+        self::assertEquals($contact['id'], $result['id'], 'getting contact failed');
     }
 
     public function testTelNormalizedNotWriteable()
