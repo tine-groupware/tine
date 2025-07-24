@@ -473,7 +473,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         var el = this.getEl();
         if (el) {
-            if (r) {
+            if (r && typeof this.getListItemQtip === 'function') {
                 description = this.getListItemQtip(r);
             }
             el.set({qtip: Tine.Tinebase.common.doubleEncode(description)});
