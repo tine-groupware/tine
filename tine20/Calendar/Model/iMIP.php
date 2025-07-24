@@ -347,8 +347,12 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
      * @param Tinebase_Record_RecordSet<Calendar_Model_Attender> $attendees
      * @return void
      */
-    public function aggregateInternalAttendees(Tinebase_Record_RecordSet $attendees): void
+    public function aggregateInternalAttendees(?Tinebase_Record_RecordSet $attendees): void
     {
+        if (empty($attendees)) {
+            return;
+        }
+
         foreach ($attendees as $attendee) {
             $key = $attendee->user_type . $attendee->user_id;
             if ($this->_aggregatedAttendees[$key] ?? false) {
