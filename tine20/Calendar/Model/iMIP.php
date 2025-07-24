@@ -354,17 +354,20 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
         }
 
         foreach ($attendees as $attendee) {
-            $key = $attendee->user_type . $attendee->user_id;
+            if (!$attendee->user_id) {
+                continue;
+            }
+            $key = $attendee->user_type . (is_string($attendee->user_id) ? $attendee->user_id : $attendee->user_id->getId());
             if ($this->_aggregatedAttendees[$key] ?? false) {
                 continue;
             }
             if (Calendar_Model_Attender::USERTYPE_RESOURCE === $attendee->user_type) {
-                $this->_aggregatedAttendees[$key] = [$attendee->displaycontainer_id];
+                $this->_aggregatedAttendees[$key] = [$attendee->displaycontainer_id->toArray()]; /* @phpstan-ignore-line */
             } elseif (Calendar_Model_Attender::USERTYPE_USER === $attendee->user_type && $attendee->user_id instanceof Addressbook_Model_Contact
                     && $attendee->user_id->account_id) {
                 $this->_aggregatedAttendees[$key] = Tinebase_Container::getInstance()->getPersonalContainer(
                     Tinebase_Core::getUser(), Calendar_Model_Event::class, $attendee->user_id->account_id,
-                    Tinebase_Model_Grants::GRANT_ADD)->asArray();
+                    Tinebase_Model_Grants::GRANT_ADD)->toArray();
             }
         }
     }
