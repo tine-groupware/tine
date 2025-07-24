@@ -100,9 +100,8 @@ class Calendar_Frontend_iMIP
                 if (null !== $existingEvent) {
                     Calendar_Model_Attender::resolveAttendee($existingEvent->attendee, _events: $existingEvent);
                     $_iMIP->aggregateInternalAttendees($existingEvent->attendee);
-                } else {
-                    $_iMIP->aggregateInternalAttendees($event->attendee); // $event has resolved attendees due to Calendar_Convert_Event_Json::resolveRelatedData($event);
                 }
+                $_iMIP->aggregateInternalAttendees($event->attendee); // $event has resolved attendees due to Calendar_Convert_Event_Json::resolveRelatedData($event);
             }
         }
         $_iMIP->finishInternalAttendeeAggregation();
