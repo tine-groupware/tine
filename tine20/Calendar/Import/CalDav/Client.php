@@ -19,6 +19,9 @@
  */
 class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 {
+    public const OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE = 'extSeqCheckUpdate';
+    public const OPT_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
+
     /**
      * used to overwrite default retry behavior (if != null)
      *
@@ -48,6 +51,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected $_uuidPrefix = '';
 
     protected $_allowDuplicateEvents = false;
+    protected bool $_doExternalSeqCheckBeforeUpdate = false;
+    protected bool $_skipInternalOtherOrganizer = false;
 
     protected $userName;
     
@@ -66,6 +71,12 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         
         if (isset($settings['allowDuplicateEvents'])) {
             $this->_allowDuplicateEvents = $settings['allowDuplicateEvents'];
+        }
+        if ($settings[self::OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE] ?? false) {
+            $this->_doExternalSeqCheckBeforeUpdate = true;
+        }
+        if ($settings[self::OPT_SKIP_INTERNAL_OTHER_ORGANIZER] ?? false) {
+            $this->_skipInternalOtherOrganizer = true;
         }
 
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
@@ -509,6 +520,9 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                 try {
                     if (isset($this->existingRecordIds[$calUri][$id])) {
                         $webdavFrontend = new $this->webdavFrontend($targetContainer, $this->existingRecordIds[$calUri][$id]);
+                        if ($this->_doExternalSeqCheckBeforeUpdate && $webdavFrontend instanceof Calendar_Frontend_WebDAV_EventImport) {
+                            $webdavFrontend->setDoExternalSeqUpdateCheck(true);
+                        }
                         $webdavFrontend->_getConverter()->setOptionsValue(\Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID, true);
                         $webdavFrontend->put($data);
                     } else {
@@ -516,8 +530,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                             $targetContainer,
                             $name,
                             $data,
-                            false,
-                            [Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID => true]
+                            $this->_skipInternalOtherOrganizer,
+                            [Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID => true],
                         ]);
                     }
 

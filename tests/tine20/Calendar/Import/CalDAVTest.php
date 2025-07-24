@@ -70,6 +70,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $event = $events->getFirstRecord();
         $this->assertEmpty($event->organizer);
         $this->assertNotEmpty($event->organizer_email);
+        $this->assertNotEmpty($event->external_seq);
         $this->assertSame(1, $event->attendee->count());
         $attendees = $event->attendee->filter('user_email', 'klaustu@test.net');
         $this->assertSame(1, $attendees->count());

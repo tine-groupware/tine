@@ -19,6 +19,13 @@
  */
 class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Event
 {
+    protected bool $doExternalSeqUpdateCheck = false;
+
+    public function setDoExternalSeqUpdateCheck(bool $value): void
+    {
+        $this->doExternalSeqUpdateCheck = $value;
+    }
+
     /**
      * Updates the VCard-formatted object
      *
@@ -50,16 +57,18 @@ class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Even
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
 
-        try {
-            $this->update($event, $cardData);
+        if (!$this->doExternalSeqUpdateCheck || (int)$this->getRecord()->external_seq < (int)$event->external_seq) {
+            try {
+                $this->update($event, $cardData);
 
-            // in case we have a deadlock, retry operation once
-        } catch (Zend_Db_Statement_Exception $zdbse) {
-            if ($retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-                return $this->put($cardData, false);
-            } else {
-                throw $zdbse;
+                // in case we have a deadlock, retry operation once
+            } catch (Zend_Db_Statement_Exception $zdbse) {
+                if ($retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                    Tinebase_TransactionManager::getInstance()->rollBack();
+                    return $this->put($cardData, false);
+                } else {
+                    throw $zdbse;
+                }
             }
         }
         

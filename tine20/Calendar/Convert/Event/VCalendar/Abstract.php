@@ -693,6 +693,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         $recurException->attendee->addRecord(new Calendar_Model_Attender(array(
                             'user_id'   => $attendee->user_id,
                             'user_type' => $attendee->user_type,
+                            'user_email' => $attendee->user_email,
+                            'user_displayname' => $attendee->user_displayname,
                             'role'      => $attendee->role,
                             'status'    => $attendee->status
                         )));
@@ -1297,7 +1299,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
         
         // merge old and new attendee
-        Calendar_Model_Attender::emailsToAttendee($event, $newAttendees);
+        Calendar_Model_Attender::emailsToAttendee($event, $newAttendees, false);
 
         $this->_setDefaultsForEmptyValues($event);
 
@@ -1356,12 +1358,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             // it's not possible to change the organizer by spec
             if (empty($event->organizer)) {
                 $name = $property->offsetExists('CN') ? $property->offsetGet('CN')->getValue() : $email;
-                $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-                    'email'     => $email,
-                    'lastName'  => $name,
-                ));
-
-                $event->organizer = $contact->getId();
+                if (null === ($contact = Calendar_Model_Attender::resolveEmailToContact([
+                            'email'     => $email,
+                            'lastName'  => $name,
+                        ], false))) {
+                    $event->organizer_type = Calendar_Model_Event::ORGANIZER_TYPE_EMAIL;
+                    $event->organizer_email = $email;
+                    $event->organizer_displayname = $name;
+                } else {
+                    $event->organizer = $contact->getId();
+                }
             }
 
             // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer

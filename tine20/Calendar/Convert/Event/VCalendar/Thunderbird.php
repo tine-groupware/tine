@@ -35,7 +35,8 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
             // special handling for Lightning <= 1.0b2
             // attendees get screwed up, if the CN contains commas
             Calendar_Model_Attender::resolveAttendee($event->attendee, FALSE, $event);
-            
+
+            /** @var Calendar_Model_Attender $eventAttendee */
             foreach($event->attendee as $eventAttendee) {
                 $attendeeEmail = $eventAttendee->getEmail();
                 if ($attendeeEmail) {

@@ -330,7 +330,7 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP);
         $organizer = $existingEvent ? $existingEvent->resolveOrganizer() : $_iMIP->getEvent()->resolveOrganizer();
         
-        if ($_assertExistence && ! $organizer) {
+        if ($_assertExistence && ! $organizer && !$_iMIP->getEvent()->hasExternalOrganizer()) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer is not possible");
             $result = FALSE;
         }
@@ -398,7 +398,7 @@ class Calendar_Frontend_iMIP
         //  - event is up-to-date
         //  - status change could also be done by calendar method
         //  - normal notifications
-        if ($organizer->account_id) {
+        if ($organizer?->account_id) {
             if (! $existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
                 // do not send notifications in this case + create event in context of organizer

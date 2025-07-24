@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -7,9 +6,8 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
 
 class Calendar_Import_CalDav_Decorator_MacOSX extends Calendar_Import_CalDav_Decorator_Abstract
 {
@@ -36,7 +34,7 @@ class Calendar_Import_CalDav_Decorator_MacOSX extends Calendar_Import_CalDav_Dec
         }
     }
     
-    public function initCalendarImport()
+    public function initCalendarImport(array $options = [])
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
     }

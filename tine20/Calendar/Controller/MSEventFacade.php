@@ -315,9 +315,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Tinebase_Record_Interface $_event)
+    public function create(Tinebase_Record_Interface $_event, bool $allowRecurExceptions = false)
     {
-        if ($_event->recurid) {
+        if (!$allowRecurExceptions && $_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
         }
         
