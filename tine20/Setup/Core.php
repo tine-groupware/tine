@@ -54,6 +54,7 @@ class Setup_Core extends Tinebase_Core
         Setup_Core::set(Tinebase_Core::USERTIMEZONE, 'UTC');
         
         Setup_Core::setupUserLocale();
+        Setup_Core::setupContainer(); // is it correct to use the same container cache in Tinebase and Setup?
         
         header('X-API: http://www.tine20.org/apidocs/tine20/');
     }
