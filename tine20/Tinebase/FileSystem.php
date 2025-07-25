@@ -4156,33 +4156,39 @@ class Tinebase_FileSystem implements
     public function walkNodeTree(?string $startParentId, callable $visitor): void
     {
         $nodeIdsToWalk = [];
-        $filter = new Tinebase_Model_Tree_Node_Filter(
-            [
-                [
-                    'field' => 'parent_id',
-                    'operator' => null === $startParentId ? 'isnull' : 'equals',
-                    'value' => $startParentId],
-                [
-                    'field' => 'is_deleted',
-                    'operator' => 'equals',
-                    'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
-            ],
-            Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
-            ['ignoreAcl' => true]
-        );
-        $start = 0;
-        do {
-            $pagination = new Tinebase_Model_Pagination([
-                Tinebase_Model_Pagination::FLD_START => $start,
-                Tinebase_Model_Pagination::FLD_LIMIT => 100
-            ]);
-            foreach (($result = $this->_getTreeNodeBackend()->search($filter, $pagination)) as $node) {
+
+        $backend = $this->_getTreeNodeBackend();
+        $db = Tinebase_Core::getDb();
+        $tableName = $db->quoteIdentifier($backend->getTablePrefix() . $backend->getTableName());
+        $ids = $db->query('SELECT id FROM ' . $tableName . ' WHERE parent_id ' .
+            (null === $startParentId ? 'IS NULL' : $db->quoteInto('= ?', $startParentId)))->fetchAll(Zend_Db::FETCH_COLUMN);
+        $filter = null;
+        while (count($ids) > 0) {
+            if (null === $filter) {
+                $filter = new Tinebase_Model_Tree_Node_Filter([
+                        [
+                            'field' => 'id',
+                            'operator' => 'in',
+                            'value' => array_slice($ids, 0, 100),
+                        ], [
+                            'field' => 'is_deleted',
+                            'operator' => 'equals',
+                            'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET
+                        ],
+                    ],
+                    Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
+                    ['ignoreAcl' => true]
+                );
+            } else {
+                $filter->getFilter('id')->setValue(array_slice($ids, 0, 100));
+            }
+            foreach ($backend->search($filter) as $node) {
                 if ($visitor($node) && Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
                     $nodeIdsToWalk[] = $node->getId();
                 }
             }
-            $start += 100;
-        } while ($result->count() === 100);
+            $ids = array_slice($ids, 100);
+        }
 
         foreach ($nodeIdsToWalk as $id) {
             $this->walkNodeTree($id, $visitor);
