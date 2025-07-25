@@ -845,7 +845,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     renderAttenderEmailName: function(name, metadata, record) {
         return this.renderAttenderUserName({
             "email": record.get('user_email'),
-            "n_fileas": record.get('user_displayname'),
+            "n_fileas": record.get('user_displayname') || record.get('user_email'),
             "n_fn": record.get('user_displayname')
         });
     },
