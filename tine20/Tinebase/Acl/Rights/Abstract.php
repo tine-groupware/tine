@@ -31,6 +31,8 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      */
     public const RUN = 'run';
 
+    public const TWIG = 'twig';
+
     /**
      * the right to see an application in the FE
      *
@@ -67,7 +69,7 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
      */
     public function getAllApplicationRights()
     {
-        return [self::RUN, self::MAINSCREEN, self::ADMIN];
+        return [self::RUN, self::MAINSCREEN, self::ADMIN, self::TWIG];
     }
 
     /**
@@ -88,6 +90,10 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
             self::RUN                   => array(
                 'text'          => $translate->_('run'),
                 'description'   => $translate->_('run right description'),
+            ),
+            self::TWIG                  => array(
+                'text'          => $translate->_('twig'),
+                'description'   => $translate->_('Manage applications twig templates right'),
             ),
             self::MAINSCREEN            => array(
                 'text'          => $translate->_('Use Mainscreen'),

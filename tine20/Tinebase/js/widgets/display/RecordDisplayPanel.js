@@ -145,7 +145,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
         Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
 
         Ext.each(fieldNames, function(fieldName) {
-            var fieldDefinition = modelConfig.fields[fieldName],
+            var fieldDefinition = Object.assign({}, modelConfig.fields[fieldName], modelConfig.fields[fieldName].uiconfig || {}),
                 fieldType = fieldDefinition.type || 'textfield',
                 field = {
                     xtype: 'ux.displayfield',

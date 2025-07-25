@@ -341,7 +341,7 @@ class Admin_ControllerTest extends TestCase
         // remove a right
         $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
             Tinebase_Core::getUser()->getId());
-        static::assertEquals(3, count($rights));
+        static::assertEquals(4, count($rights));
         $mod = $modifications->getFirstRecord();
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(
@@ -349,7 +349,7 @@ class Admin_ControllerTest extends TestCase
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
             Tinebase_Core::getUser()->getId());
-        static::assertEquals(2, count($rights));
+        static::assertEquals(3, count($rights));
 
         // add a right
         $mod = $modifications->getFirstRecord();
@@ -359,7 +359,7 @@ class Admin_ControllerTest extends TestCase
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
             Tinebase_Core::getUser()->getId());
-        static::assertEquals(3, count($rights));
+        static::assertEquals(4, count($rights));
 
         // remove a right
         $mod = $modifications->getFirstRecord();
@@ -369,6 +369,6 @@ class Admin_ControllerTest extends TestCase
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         $rights = Tinebase_Acl_Roles::getInstance()->getApplicationRights('ExampleApplication',
             Tinebase_Core::getUser()->getId());
-        static::assertEquals(2, count($rights));
+        static::assertEquals(3, count($rights));
     }
 }

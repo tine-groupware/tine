@@ -455,7 +455,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
         $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiPostRegisterForDataIntendedPurpose();
         $responseData = json_decode($response->getBody(), true);
-        $this->assertEquals($responseData, ['success' => true]);
+        $this->assertEquals(['success' => true], $responseData, print_r($responseData, true));
     }
 
     public function testPublicApiGetRegisterFromToken()

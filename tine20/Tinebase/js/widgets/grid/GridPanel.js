@@ -2700,22 +2700,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     // if edit action is disabled or not available, we also don't open a new window
                     return false;
                 }
-                var selectedRows = this.grid.getSelectionModel().getSelections();
-                record = selectedRows[0];
+                record = this.grid.getSelectionModel().getSelections()[0];
             } else {
                 record = this.createNewRecord();
             }
         }
 
         // plugins to add to edit dialog
-        var plugins = plugins ? plugins : [];
-        
-        var totalcount = this.selectionModel.getCount(),
+        var plugins = plugins ? plugins : [],
+            totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
             fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) :
                 (this.editDialogConfig.fixedFields ?? Ext.encode(button.fixedFields)),
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
-            additionalConfig = additionalConfig ? additionalConfig : {};
+            additionalConfig = additionalConfig ? additionalConfig : {},
+            editDialogConfig = { ... this.editDialogConfig || {} },
+            mode = editDialogConfig.mode || editDialogClass.prototype.mode;
         
         // add "multiple_edit_dialog" plugin to dialog, if required
         if (((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
@@ -2735,13 +2735,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Tine.log.debug('GridPanel::onEditInNewWindow');
         Tine.log.debug(record);
         
-        var popupWindow = editDialogClass.openWindow(Ext.copyTo(
-            this.editDialogConfig || {}, {
+        var popupWindow = editDialogClass.openWindow(Object.assign({
                 openerCt: this,
                 plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
-                record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
+                // @fixme: we should never work on a direct reference in editDialogs as checkState changes record (which is in our store)
+                //         but some legacy code works with custom properties in record, so we can't clone always
+                record: mode === 'local' ? Ext.encode(record.data) : (mode.match(/load\(local\)/) ? Tine.Tinebase.data.Record.clone(record) : record),
                 recordId: record.getId(),
                 copyRecord: (button.actionType == 'copy'),
                 asAdminModule: this.asAdminModule,
@@ -2749,7 +2750,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     'update': ((this.selectionModel.getCount() > 1) && (this.multipleEdit)) ? this.onUpdateMultipleRecords : this.onUpdateRecord
                 }
-            }, 'record,recordId,listeners,fixedFields,copyRecord,plugins,additionalConfig,asAdminModule')
+            }, editDialogConfig)
         );
         return true;
     },

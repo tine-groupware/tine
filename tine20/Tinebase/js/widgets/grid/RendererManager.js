@@ -11,6 +11,9 @@ require('./AttachmentRenderer');
 require('./ImageRenderer');
 require('./jsonRenderer');
 
+import {supportedTypes as supportedACETypes} from "../form/AceField";
+import getACERenderer from './ACERenderer'
+
 /**
  * central renderer manager
  * - get renderer for a given field
@@ -193,6 +196,9 @@ Tine.widgets.grid.RendererManager = function() {
                             case 'currency':
                                 renderer = Tine.Tinebase.common.currencyRenderer;
                                 break;
+                            case 'application':
+                                renderer = Tine.Tinebase.common.applicationRenderer;
+                                break;
                             default:
                                 renderer = this.defaultRenderer;
                         }
@@ -201,6 +207,11 @@ Tine.widgets.grid.RendererManager = function() {
                 case 'text':
                 case 'fulltext':
                     renderer = this.defaultRenderer;
+                    if (fieldDefinition.hasOwnProperty('specialType')) {
+                        if (supportedACETypes.indexOf(fieldDefinition.specialType) >= 0) {
+                            renderer = getACERenderer(fieldDefinition.specialType);
+                        }
+                    }
                     break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;

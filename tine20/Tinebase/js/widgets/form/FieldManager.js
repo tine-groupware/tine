@@ -14,6 +14,7 @@ import 'widgets/form/RecordEditField';
 import 'widgets/form/LocalizedField';
 import 'widgets/form/UrlField';
 import 'widgets/form/EmailField';
+import {supportedTypes as supportedACETypes} from "./AceField";
 
 /**
  * central form field manager
@@ -44,7 +45,8 @@ Tine.widgets.form.FieldManager = function() {
             country: 'widget-countrycombo',
             currency: 'widget-currencycombo',
             url: 'urlfield',
-            email: 'tw-emailField'
+            email: 'tw-emailField',
+            application: 'tw-app-picker'
         },
 
         /**
@@ -338,12 +340,12 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'text':
                 case 'fulltext':
-                    field.xtype = 'textarea';
-                    if (fieldDefinition.uiconfig) {
-                        field.height = fieldDefinition.uiconfig.height || 70;
-                    } else {
-                        field.height = 70; // 5 lines
+                    if (! field.xtype && supportedACETypes.indexOf(fieldDefinition.specialType) >= 0) {
+                        field.xtype = 'tw-acefield';
+                        field.mode = fieldDefinition.specialType;
                     }
+                    field.xtype = field.xtype || 'textarea';
+                    field.height = _.get(fieldDefinition, 'uiconfig.fieldConfig.height') || _.get(fieldDefinition, 'uiconfig.height') || 70;
                     break;
                 case 'stringAutocomplete':
                     field.xtype = 'tine.widget.field.AutoCompleteField';

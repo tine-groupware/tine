@@ -192,6 +192,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
             ],
             self::FLD_APPLICATION_ID => [
                 self::TYPE => self::TYPE_STRING,
+                self::SPECIAL_TYPE => 'application',
                 self::LENGTH => 255,
                 'nullable' => false,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => false,   'presence' => 'required'],

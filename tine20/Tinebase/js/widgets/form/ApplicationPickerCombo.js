@@ -44,6 +44,14 @@ Tine.Tinebase.widgets.form.ApplicationPickerCombo = Ext.extend(Ext.form.ComboBox
         Tine.Tinebase.widgets.form.ApplicationPickerCombo.superclass.initComponent.call(this);
     },
 
+    setValue: function(app) {
+        if (app?.id) {
+            console.error(app)
+            arguments[0] = app.id;
+        }
+        Tine.Tinebase.widgets.form.ApplicationPickerCombo.superclass.setValue.apply(this, arguments);
+    },
+
     /**
      * store a copy of the selected record
      *

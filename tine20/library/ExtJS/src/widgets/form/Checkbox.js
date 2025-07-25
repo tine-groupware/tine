@@ -113,7 +113,10 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         }else{
             this.checked = this.el.dom.checked;
         }
-        this.el.dom.disabled = this.readOnly || this.disabled;
+        this.el.dom.disabled = this.disabled;
+        if (this.readOnly) {
+            this.el.dom.onclick = function() { return false; }
+        }
         // Need to repaint for IE, otherwise positioning is broken
         if(Ext.isIE){
             this.wrap.repaint();
@@ -145,7 +148,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
 
     setReadOnly: function(readOnly){
         if (this.rendered) {
-            this.el.dom.disabled = readOnly || this.disabled;
+            this.el.dom.onclick = readOnly ? function() { return false; } : null;
         }
         return Ext.form.Checkbox.superclass.setReadOnly.call(this, readOnly);
     },
@@ -153,7 +156,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
     setDisabled: function(disabled){
         Ext.form.Checkbox.superclass.setDisabled.call(this, disabled);
         if (this.rendered) {
-            this.el.dom.disabled = this.readOnly || disabled;
+            this.el.dom.disabled = disabled;
         }
         return this;
     },

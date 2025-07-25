@@ -59,6 +59,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
 
     protected $_currentRequestContext = [];
 
+    protected $_publicTwigPaths = [];
+
     /**
      * Configured plugins for filter model
      * @var array
@@ -222,7 +224,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * Search for records matching given arguments
      *
-     * @param string|array                        $_filter json encoded / array
+     * @param string|array|Tinebase_Model_Filter_FilterGroup                        $_filter json encoded / array
      * @param string|array|Tinebase_Model_Pagination $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
@@ -315,7 +317,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * decodes the filter string
      *
-     * @param string|array $_filter
+     * @param string|array|Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_filterModel the class name of the filter model to use
      * @param boolean $_throwExceptionIfEmpty
      * @return Tinebase_Model_Filter_FilterGroup
@@ -812,6 +814,17 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__."::".__LINE__.":: Filter model plugin \"$plugin\" doesn't exists");
         }
+    }
+
+    public function getTwigInUserContext(string $path, ?string $locale): array
+    {
+        if (!str_starts_with($path, '/' . $this->_applicationName) || !in_array($path, $this->_publicTwigPaths)) {
+            throw new Tinebase_Exception_Unauthorized($path . ' is not a public twig path');
+        }
+        if ($twigTemplate = Tinebase_Twig::getTemplateContent($path, $locale ?? (string)Tinebase_Core::getLocale())) {
+            return $this->_recordToJson($twigTemplate);
+        }
+        throw new Tinebase_Exception_NotFound($path . ' not found');
     }
 
     /**

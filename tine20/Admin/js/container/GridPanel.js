@@ -64,21 +64,11 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const columns = [
             { header: this.app.i18n._('ID'), id: 'id', hidden: false },
             { header: this.app.i18n._('Container Name'), id: 'name', hidden: false},
-            { header: this.app.i18n._('Application'), id: 'application_id', renderer: this.appRenderer.createDelegate(this), hidden: false },
+            { header: this.app.i18n._('Application'), id: 'application_id', renderer: Tine.Tinebase.common.applicationRenderer, hidden: false },
             { header: this.app.i18n._('Type'), id: 'type', renderer: this.typeRenderer.createDelegate(this), hidden: false },
             { header: this.app.i18n._('Container Order'), id: 'order', hidden: true }
         ];
         return columns;
-    },
-    
-    /**
-     * returns application name
-     * 
-     * @param {Object} value
-     * @return {String}
-     */
-    appRenderer: function(value) {
-        return this.app.i18n._(value.name);
     },
     
     /**

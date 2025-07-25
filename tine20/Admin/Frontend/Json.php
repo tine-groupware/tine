@@ -1949,17 +1949,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     }
                 }
                 break;
-            case 'Tinebase_Model_Container':
-            case 'Tinebase_Model_ImportExportDefinition':
-            case 'Tinebase_Model_CustomField_Config':
-                $applications = Tinebase_Application::getInstance()->getApplications();
-                foreach ($_records as $record) {
-                    $idx = $applications->getIndexById($record->application_id);
-                    if ($idx !== FALSE) {
-                        $record->application_id = $applications[$idx];
-                    }
-                }
-                break;
             case Tinebase_Model_Tree_Node::class:
                 // check if we filtered for /personal and expand accountid's
                 if ($_filter) {

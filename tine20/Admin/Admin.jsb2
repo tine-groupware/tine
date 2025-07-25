@@ -134,6 +134,10 @@
         {
           "text": "SchedulerModelPicker.js",
           "path": "js/"
+        },
+        {
+          "text": "TwigTemplatePanel.js",
+          "path": "js/"
         }
       ]
     },

@@ -184,6 +184,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
             'application_id'     => array(
                 'label'             => 'Application', // _('Application')
                 self::TYPE          => self::TYPE_STRING,
+                self::SPECIAL_TYPE  => 'application',
                 self::LENGTH        => 40,
                 self::NULLABLE      => false,
                 'validators'        => array('Alnum', 'presence' => 'required'),

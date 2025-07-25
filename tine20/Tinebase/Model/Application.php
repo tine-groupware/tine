@@ -26,6 +26,8 @@
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Application';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -52,7 +54,7 @@ class Tinebase_Model_Application extends Tinebase_Record_Abstract
 
         'titleProperty'     => 'name',
         'appName'           => 'Tinebase',
-        'modelName'         => 'Application',
+        'modelName'         => self::MODEL_NAME_PART,
         self::TABLE         => [
             self::NAME                  => 'applications',
             self::UNIQUE_CONSTRAINTS    => [
