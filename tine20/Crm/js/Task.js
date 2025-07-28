@@ -82,8 +82,8 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         this.title = this.app.i18n._('Tasks');
         this.recordEditDialogOpener = Tine.Tasks.TaskEditDialog.openWindow;
         this.recordClass = Tine.Tasks.Model.Task;
-        
-        this.storeFields = _.map(this.recordClass.getFieldDefinitions(), 'fieldDefinition');
+
+        this.storeFields = this.recordClass.getFieldDefinitions();
         this.storeFields.push({name: 'relation'});   // the relation object
         this.storeFields.push({name: 'relation_type'});
         
