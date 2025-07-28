@@ -53,16 +53,20 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
             // note: elementRequestCredentials is only send by element, if it requires credentials and can not bootstrap from local storage
             if (event.origin !== this.url.origin) return;
             console.error(event)
+
+            const notificationMap = new Map()
             
             switch (event.data.type) {
                 case "elementBootstrapdataRequest":
                     event.source.postMessage(Object.assign({
                         type: "elementBootstrapdataResponse",
+                        eventUUID: event.data.eventUUID,
                     }, bootstrapData), this.url.origin);
                     break;
                 case "elementLogindataRequest":
                     event.source.postMessage(Object.assign({
                         type: "elementLogindataResponse",
+                        eventUUID: event.data.eventUUID,
                     }, await Tine.MatrixSynapseIntegrator.getLogindata()), this.url.origin);
                     break;
                 case "elementSetupEncryptionDone":
@@ -73,6 +77,57 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     alert(event.data)
                     //todo implement
                     break
+                case "elementSendNotification":
+                    const notification = new Notification(event.data.notification.title, {
+                        body: event.data.notification.body,
+                        silent: event.data.notification.silent,
+                        icon: event.data.notification.icon,
+                    })
+
+                    notificationMap.set(event.data.notification.uuid, notification)
+
+                    notification.onclick = () => {
+                        //todo jump to chat tab
+                        event.source.postMessage({
+                            type: "elementNotificationOnClick",
+                            eventUUID: event.data.eventUUID,
+                        }, this.url.origin);
+                    }
+                    break
+                case "elementSetNotificationCount":
+                    // todo use
+                    console.error(`ELEMENT-NOTIFICATION-COUNT: ${event.data.count}`)
+                    break
+                case "elementNotificationClear":
+                    // todo: dose this work?
+                    const notif = notificationMap.get(event.data.notification.uuid)
+                    if (notif.close) {
+                        notif.close();
+                    }
+                    break
+                case "elementNotificationPermissionRequest":
+                    if (window.Notification.permission === "granted") {
+                        event.source.postMessage({
+                            type: "elementNotificationPermissionResponse",
+                            eventUUID: event.data.eventUUID,
+                            grant: "granted",
+                        }, this.url.origin);
+                    } else {
+                        window.Notification.requestPermission().then((grant) => {
+                            event.source.postMessage({
+                                type: "elementNotificationPermissionResponse",
+                                eventUUID: event.data.eventUUID,
+                                grant: grant,
+                            }, this.url.origin);
+                        }).catch(() => {
+                            event.source.postMessage({
+                                type: "elementNotificationPermissionResponse",
+                                eventUUID: event.data.eventUUID,
+                                grant: "denied",
+                            }, this.url.origin);
+                        })
+                    }
+                    break;
                 default:
                     return
             }
