@@ -1245,6 +1245,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
+            $routeCollector->get('/privacy-policy', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getPrivacy', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1517,6 +1521,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $response = new \Laminas\Diactoros\Response\JsonResponse($data);
         return $response;
+    }
+
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getPrivacy()
+    {
+        $translation = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME);
+        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+        $template = $twig->load(Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
+        die($template->render());
     }
 
     /**
