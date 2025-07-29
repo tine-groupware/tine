@@ -1162,7 +1162,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
             'user_type'     => Calendar_Model_Attender::USERTYPE_EMAIL,
-            'user_email'       => $iMIP->getEvents()->getFirstRecord()->attendee->getFirstRecord()->user_email,
+            'user_email'    => $iMIP->getEvents()->getFirstRecord()->attendee->getFirstRecord()->user_email,
             'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
         ));
 

@@ -1113,7 +1113,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         };
 
-        if (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid)) {
+        if ($_event->isRecurException() && (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid))) {
             $_event->setRecurId($_event->base_event_id);
         }
 
