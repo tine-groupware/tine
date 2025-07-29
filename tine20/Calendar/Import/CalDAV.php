@@ -70,6 +70,9 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         if ($this->_options[self::OPTION_SKIP_INTERNAL_OTHER_ORGANIZER]) {
             $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER] = true;
         }
+        if ($this->_options[self::OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR]) {
+            $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR] = true;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);

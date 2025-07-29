@@ -42,6 +42,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
             'baseUri' => 'localhost',
             'userName' => Tinebase_Core::getUser()->accountLoginName,
             'password' => $testCredentials['password'],
+            Calendar_Import_CalDAV_ClientMock::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
         );
         $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic');
         $this->_uit->setVerifyPeer(false);
