@@ -822,8 +822,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $contactId = $_contact->getId();
 
-        // prevent changing of email if it does not match configured domains
-        Tinebase_EmailUser::checkDomain($_contact->email, true);
+        if (! Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->allowExternalEmail) {
+            // prevent changing of email if it does not match configured domains
+            Tinebase_EmailUser::checkDomain($_contact->email, true);
+        }
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
 

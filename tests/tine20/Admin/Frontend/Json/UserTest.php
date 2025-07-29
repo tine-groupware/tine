@@ -586,6 +586,11 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
         self::assertFalse(isset($updatedUser['xprops']['emailUserIdImap']),
             'user should no longer have email xprops:' . print_r($updatedUser['xprops'], true));
+
+        // test contact update
+        $contact = Addressbook_Controller_Contact::getInstance()->get($user['contact_id']);
+        $updatedContact = Addressbook_Controller_Contact::getInstance()->update($contact);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedContact->email);
     }
 
     /**
