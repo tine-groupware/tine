@@ -667,6 +667,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                         $recurException->attendee->addRecord(new Calendar_Model_Attender(array(
                             'user_id'   => $attendee->user_id,
                             'user_type' => $attendee->user_type,
+                            'user_email' => $attendee->user_email,
+                            'user_displayname' => $attendee->user_displayname,
                             'role'      => $attendee->role,
                             'status'    => $attendee->status
                         )));

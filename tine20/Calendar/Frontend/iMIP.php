@@ -238,7 +238,7 @@ class Calendar_Frontend_iMIP
         //  - event is up-to-date
         //  - status change could also be done by calendar method
         //  - normal notifications 
-        if ($organizer->account_id) {
+        if ($organizer?->account_id) {
             if (! $existingEvent || $existingEvent->is_deleted) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Organizer has an account but no event exists!');

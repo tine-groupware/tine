@@ -57,7 +57,9 @@ class Calendar_Convert_Event_VCalendar_MacOSXTest extends Calendar_TestCase
 
         // assert testuser is not attendee
         $this->assertEquals(1, $event->attendee->count(), 'there sould only be one attendee');
-        $this->assertNotEquals($event->organizer, $event->attendee[0]->user_id, 'organizer should not attend');
+        $this->assertNull($event->organizer);
+        $this->assertNull($event->attendee[0]->user_id);
+        $this->assertNotSame($event->organizer_email, $event->attendee[0]->user_email, 'organizer should not attend');
 
         // assert alarm
         $this->assertEquals(1, $event->alarms->count(), 'there should be exactly one alarm');

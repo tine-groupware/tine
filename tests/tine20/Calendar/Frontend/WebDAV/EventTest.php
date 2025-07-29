@@ -854,11 +854,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event = $this->testCreateEventWithExternalOrganizer();
 
         // change email address of organizer / attendee
-        $contact = $event->getRecord()->organizer;
-        $contact->email = 'changed@mail.domain';
-        sleep(1);
-        Addressbook_Controller_Contact::getInstance()->update($contact);
-        Calendar_Model_Attender::clearCache();
+        $realEvent = $event->getRecord();
+        $realEvent->organizer_email = 'changed@mail.domain';
+        Calendar_Controller_Event::getInstance()->update($realEvent);
 
         $vcalendar = self::getVCalendar(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         $vcalendar = str_replace("lars@kneschke.de", "l.kneschke@metaways.de", $vcalendar);
@@ -867,8 +865,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         /** @var Calendar_Model_Event $record */
         $record = $event->getRecord();
 
-        $this->assertEquals($contact->getId(), $record->organizer->getId(), 'organizer must not change');
-        $this->assertCount(1, $record->attendee->filter('user_id', $contact->getId()), 'attendee must not change');
+        $this->assertSame($realEvent->organizer_email, $record->organizer_email, 'organizer must not change');
+        $this->assertCount(0, $record->attendee->filter('user_email', $realEvent->organizer_email), 'attendee must not change');
     }
 
     public function testPutEventWithRecurExceptions()

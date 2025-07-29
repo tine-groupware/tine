@@ -19,8 +19,16 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
 {
     const HEADER_MATCH = '/Tine20SyncClient\/(?P<version>.+)/';
 
+    public static bool $skipOrganizerOverwrite = false;
+    public static bool $skipAttendeeOverwrite = false;
+
     protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Sabre\VObject\Property $property): void
     {
+        if (static::$skipOrganizerOverwrite) {
+            parent::_fromVEvent_Organizer($event, $newAttendees, $property);
+            return;
+        }
+
         $email = null;
 
         if (!empty($property['EMAIL'])) {
@@ -56,6 +64,10 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
      */
     protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress): ?array
     {
+        if (static::$skipAttendeeOverwrite) {
+            return parent::_getAttendee($calAddress);
+        }
+
         if (null !== ($attendee = parent::_getAttendee($calAddress))) {
             $attendee['userType'] = Calendar_Model_Attender::USERTYPE_EMAIL;
         }

@@ -392,7 +392,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getName()
     {
         if (self::USERTYPE_EMAIL === $this->user_type) {
-            return $this->user_displayname;
+            return $this->user_displayname ?: $this->user_email;
         }
         $resolvedUser = $this->getResolvedUser(null, false);
         if (! $resolvedUser instanceof Tinebase_Record_Interface) {
@@ -720,11 +720,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                     $attendeeId = $lists->getFirstRecord()->group_id;
                 }
-            } elseif (self::USERTYPE_EMAIL === $newAttendee['userType']) {
+            }
+
+            if (self::USERTYPE_EMAIL === $newAttendee['userType'] || null === $attendeeId) {
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_email'=> $newAttendee['email'],
-                    'user_displayName'=> $newAttendee['displayName'],
-                    'user_type' => $newAttendee['userType'],
+                    'user_displayName'=> $newAttendee['displayName'] ?? null,
+                    'user_type' => self::USERTYPE_EMAIL,
                     'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
                     'role'      => $newAttendee['role']
                 )));

@@ -43,7 +43,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @var Calendar_Convert_Event_VCalendar
      */
     protected $_converter;
-    
+
     /**
      * Constructor 
      * 
@@ -127,7 +127,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         if (true === $onlyCurrentUserOrganizer) {
-            if ($event->organizer && $event->organizer != Tinebase_Core::getUser()->contact_id) {
+            if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id) {
                 return null;
             }
         }
@@ -168,7 +168,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                     $oldSkipRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
                     $raii = new Tinebase_RAII(fn () => Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkipRollback));
                 }
-                $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
+                $event = Calendar_Controller_MSEventFacade::getInstance()->create($event, true);
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
                 $retry = true;
