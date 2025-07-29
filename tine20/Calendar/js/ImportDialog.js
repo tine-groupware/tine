@@ -290,8 +290,10 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 xtype: 'panel',
                 heigth: 150,
                 layout: 'hbox',
+                border: false,
                 items: [{
                     xtype: 'panel',
+                    border: false,
                     flex: 1,
                     height: 20,
                     items: [new Tine.widgets.container.SelectionComboBox({
@@ -396,11 +398,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         });
 
         return {
-            title: this.app.i18n._('Choose File and Format'),
+            // title: this.app.i18n._('Choose File and Format'),
+            // baseCls: 'ux-subformpanel',
             layout: 'vbox',
             border: false,
             xtype: 'ux.displaypanel',
-            frame: true,
+            // frame: true,
             ref: '../filePanel',
             items: [{
                 xtype: 'panel',
@@ -494,11 +497,13 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
     getEventOptionsPanel: function () {
         return {
             title: this.app.i18n._('Event Import Options'),
+            baseCls: 'ux-subformpanel',
             border: false,
             layout: 'fit',
-            frame: true,
             items: [{
                 xtype: 'form',
+                // frame: true,
+                border: false,
                 ref: '../eventOptionsForm',
                 labelAlign: 'top',
                 bodyStyle: 'padding: 5px;',
@@ -518,6 +523,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     fieldLabel: this.app.i18n._('Delete Missing Events'),
                     boxLabel: this.app.i18n._('Delete events missing in import data (future only)'),
                     name: 'deleteMissing'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Match Attendee'),
+                    boxLabel: this.app.i18n._('Match attendee with existing users or contacts.'),
+                    name: 'matchAttendees',
+                    checked: true
                 }/*, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Basic Data Only'),
@@ -551,6 +562,25 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                     fieldLabel: this.app.i18n._('Keep Existing Attendee'),
                     boxLabel: this.app.i18n._('Do not remove attendee of existing events which are not in the import data'),
                     name: 'keepExistingAttendee'
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Match Organizer'),
+                    boxLabel: this.app.i18n._('Match organizer with existing user or contact.'),
+                    name: 'matchOrganizer',
+                    checked: true
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Skip from other internal organizers') +
+                        Tine.widgets.form.FieldManager.getDescriptionHTML(this.app.i18n._('Use this when events of other internal organizers are already present in this installation or get imported with an other job.')),
+                    boxLabel: this.app.i18n._('Skip Events if organizer matched an other internal user than the import user.'),
+                    name: 'skipInternalOtherOrganizer',
+                    checked: false
+                }, {
+                    xtype: 'checkbox',
+                    fieldLabel: this.app.i18n._('Disable external organizer calendar'),
+                    boxLabel: this.app.i18n._('Import events of external organizers directly into the import calendar.'),
+                    name: 'disableExternalOrganizerCalendar',
+                    checked: false
                 }, {
                     xtype: 'calendar-event-organizer-combo',
                     fieldLabel: this.app.i18n._('Force Organizer for new Events'),
