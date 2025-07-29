@@ -852,9 +852,15 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
 
         $event = $this->testCreateEventWithExternalOrganizer();
+        $realEvent = $event->getRecord();
+        $this->assertSame('l.kneschke@metaways.de', $realEvent->organizer_email);
+        $this->assertCount(3, $realEvent->attendee);
+        $this->assertCount(1, $realEvent->attendee->filter('user_email', 'lars@kneschke.de'));
+        $this->assertCount(1, $realEvent->attendee->filter('user_id', $this->_originalTestUser->contact_id));
+        $this->assertCount(1, $realEvent->attendee->filter('user_email', 'l.kneschke@metaways.de'));
+
 
         // change email address of organizer / attendee
-        $realEvent = $event->getRecord();
         $realEvent->organizer_email = 'changed@mail.domain';
         Calendar_Controller_Event::getInstance()->update($realEvent);
 
@@ -867,6 +873,10 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
         $this->assertSame($realEvent->organizer_email, $record->organizer_email, 'organizer must not change');
         $this->assertCount(0, $record->attendee->filter('user_email', $realEvent->organizer_email), 'attendee must not change');
+        $this->assertCount(0, $record->attendee->filter('user_email', 'lars@kneschke.de'), 'attendee must not change');
+        $this->assertCount(1, $record->attendee->filter('user_email', 'l.kneschke@metaways.de'), 'attendee must not change');
+        $this->assertCount(1, $record->attendee->filter('user_id', $this->_originalTestUser->contact_id));
+        $this->assertCount(2, $record->attendee);
     }
 
     public function testPutEventWithRecurExceptions()

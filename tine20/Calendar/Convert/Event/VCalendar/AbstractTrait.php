@@ -126,7 +126,7 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
 
         if (!empty($email)) {
             // it's not possible to change the organizer by spec
-            if (empty($event->organizer)) {
+            if (empty($event->organizer) && empty($event->organizer_email)) {
                 $name = isset($property['CN']) ? $property['CN']->getValue() : $email;
                 if (null === ($contact = Calendar_Model_Attender::resolveEmailToContact([
                         'email'     => $email,
@@ -137,6 +137,7 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
                     $event->organizer_displayname = $name;
                 } else {
                     $event->organizer = $contact->getId();
+                    $event->organizer_email = $email;
                 }
             }
 
