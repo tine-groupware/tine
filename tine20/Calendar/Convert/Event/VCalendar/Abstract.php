@@ -1356,7 +1356,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
 
         if (!empty($email)) {
             // it's not possible to change the organizer by spec
-            if (empty($event->organizer)) {
+            if (empty($event->organizer) && empty($event->organizer_email)) {
                 $name = $property->offsetExists('CN') ? $property->offsetGet('CN')->getValue() : $email;
                 if (null === ($contact = Calendar_Model_Attender::resolveEmailToContact([
                             'email'     => $email,
@@ -1367,6 +1367,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     $event->organizer_displayname = $name;
                 } else {
                     $event->organizer = $contact->getId();
+                    $event->organizer_email = $email;
                 }
             }
 
