@@ -319,7 +319,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertTrue($secondIMIP->preconditionsChecked, 'preconditions have not been checked');
         static::assertNotEmpty($secondIMIP->existing_event, 'there should be an existing event');
         static::assertEmpty($secondIMIP->preconditions, 'no preconditions should be raised');
-        static::assertEquals($secondIMIP->event->organizer->getId(), $secondIMIP->existing_event->organizer->getId(),
+        static::assertEquals($secondIMIP->event->organizer_email, $secondIMIP->existing_event->organizer_email,
             'organizer mismatch');
         static::assertEquals(4, count($secondIMIP->event->attendee));
         static::assertEquals(5, count($secondIMIP->existing_event->attendee));
@@ -597,7 +597,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->_eventIdsToDelete[] = $iMIP->event->getId();
 
         // assert external organizer
-        $this->assertEquals('l.kneschke@caldav.org', $iMIP->event->organizer->email, 'wrong organizer');
+        $this->assertEquals('l.kneschke@caldav.org', $iMIP->event->organizer_email, 'wrong organizer');
         $this->assertTrue(empty($iMIP->event->organizer->account_id), 'organizer must not have an account');
         
         // assert attendee
@@ -608,8 +608,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // assert no status authkey for external attendee
         foreach($iMIP->event->attendee as $attendee) {
-            if (!$attendee->user_id->account_id) {
-                $this->assertFalse(!!$attendee->user_id->status_authkey, 'authkey should be skipped');
+            if (!$attendee->user_id?->account_id) {
+                $this->assertFalse(!!$attendee->user_id?->status_authkey, 'authkey should be skipped');
             }
         }
         
@@ -777,7 +777,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -795,7 +795,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         Calendar_Controller_MSEventFacade::unsetInstance();
 
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
 
         static::assertNull($this->_iMIPFrontend->autoProcess($iMIP), 'auto process failed');
@@ -821,7 +821,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -875,7 +875,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -942,7 +942,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite_addAttender.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -958,7 +958,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         Calendar_Controller_MSEventFacade::unsetInstance();
 
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -992,7 +992,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -1012,7 +1012,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         Calendar_Controller_MSEventFacade::unsetInstance();
 
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
 
         static::assertNull($this->_iMIPFrontend->autoProcess($iMIP), 'auto process failed');
@@ -1033,7 +1033,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_invite.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
 
         $this->_iMIPFrontend->prepareComponent($iMIP);
@@ -1052,7 +1052,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
         Calendar_Controller_MSEventFacade::unsetInstance();
 
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -1084,8 +1084,8 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // force creation of external attendee
         $externalAttendee = new Calendar_Model_Attender(array(
-            'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_id,
+            'user_type'     => Calendar_Model_Attender::USERTYPE_EMAIL,
+            'user_email'       => $iMIP->getEvent()->attendee->getFirstRecord()->user_email,
             'status'        => Calendar_Model_Attender::STATUS_NEEDSACTION
         ));
 
@@ -1365,7 +1365,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */
@@ -1382,7 +1382,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         Tinebase_Core::set(Tinebase_Core::USER, $this->_personas['sclever']);
 
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
 
         $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP, true);
@@ -1433,7 +1433,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
     {
         // test external invite
         $iMIP = $this->_createiMIPFromFile('google_external_inviteLongUID.ics');
-        $iMIP->originator = $iMIP->getEvent()->resolveOrganizer()->email;
+        $iMIP->originator = $iMIP->getEvent()->organizer_email;
         $iMIP->method = 'REQUEST';
         $this->_iMIPFrontend->prepareComponent($iMIP);
         /** @var Calendar_Model_iMIP $processedIMIP */

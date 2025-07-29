@@ -19,6 +19,12 @@
  */
 abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
 {
+    public const OPTION_FORCE_UPDATE_EXISTING = 'forceUpdateExisting';
+    public const OPTION_MATCH_ORGANIZER = 'matchOrganizer';
+    public const OPTION_MATCH_ATTENDEES = 'matchAttendees';
+    public const OPTION_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
+    public const OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR = 'disableExternalOrganizerCalendar';
+
     /**
      * @var Calendar_Controller_Event
      */
@@ -39,7 +45,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          * update exiting events even if imported sequence number isn't higher
          * @var boolean
          */
-        'forceUpdateExisting'   => FALSE,
+        self::OPTION_FORCE_UPDATE_EXISTING   => FALSE,
         /**
          * list of event attendee to add or replace (see attendeeStrategy)
          * @var array of attendeeData
@@ -113,6 +119,10 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          * credential cache id
          */
         'cc_id'                 => null,
+        self::OPTION_MATCH_ATTENDEES => true,
+        self::OPTION_MATCH_ORGANIZER => true,
+        self::OPTION_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+        self::OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => false,
     );
 
     protected function _getCalendarController()

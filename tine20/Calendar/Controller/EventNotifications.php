@@ -673,7 +673,7 @@
                         }
                         
                         // we don't send iMIP parts to organizers with an account cause event is already up to date
-                        if ($_event->organizer && ($_event->resolveOrganizer() === null || !$_event->resolveOrganizer()->account_id)) {
+                        if ($_event->resolveOrganizer() === null || !$_event->resolveOrganizer()->account_id) {
                             $method = Calendar_Model_iMIP::METHOD_REPLY;
                         }
                         break;

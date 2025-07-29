@@ -116,7 +116,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC,     $event->class);
         $this->assertEquals('9320E052-6AF0-45E7-9352-04BBEC898D47', $event->uid);
         $this->assertEquals(2, count($event->attendee));
-        $this->assertTrue(!empty($event->organizer));
+        $this->assertNull($event->organizer);
+        $this->assertNotEmpty($event->organizer_email);
+        $this->assertNotEmpty($event->organizer_displayname);
         $this->assertEquals('2012-02-27 15:56:00', $event->creation_time->toString(), 'CREATED not taken from ics');
         $this->assertEquals('2012-02-27 15:56:20', $event->last_modified_time, 'DTSTAMP not taken from ics');
         $this->assertTrue($event->hasExternalOrganizer(), 'external organizer expected');
@@ -142,7 +144,9 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->assertEquals(Calendar_Model_Event::CLASS_PUBLIC,     $event->class);
         $this->assertEquals('A5C4058C8C5926C8C12579B100622D66-Lotus_Notes_Generated', $event->uid);
         $this->assertEquals(3, count($event->attendee));
-        $this->assertTrue(!empty($event->organizer));
+        $this->assertNull($event->organizer);
+        $this->assertNotEmpty($event->organizer_email);
+        $this->assertNotEmpty($event->organizer_displayname);
     
         return $event;
     }

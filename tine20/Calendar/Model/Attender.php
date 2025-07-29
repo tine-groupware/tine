@@ -286,7 +286,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getEmail($event=null)
     {
-        if (self::USERTYPE_EMAIL === $this->user_type) {
+        if ($this->user_email || self::USERTYPE_EMAIL === $this->user_type) {
             return $this->user_email;
         }
 
@@ -392,7 +392,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getName()
     {
         if (self::USERTYPE_EMAIL === $this->user_type) {
-            return $this->user_displayname;
+            return $this->user_displayname ?: $this->user_email;
         }
         $resolvedUser = $this->getResolvedUser(null, false);
         if (! $resolvedUser instanceof Tinebase_Record_Interface) {
@@ -632,6 +632,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
+                // does a resouce with this email address exist?
+                $resource = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+                    array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
+                )))->getFirstRecord();
+
+                if($resource) {
+                    $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+                    $attendeeId = $resource->getId();
+                }
+
                 // list from groupmember expand
                 if ( ! $attendeeId &&
                     preg_match('#^urn:uuid:principals/intelligroups/([a-z0-9]+)#', $newAttendee['email'], $matches)
@@ -652,20 +662,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a contact with this email address exist?
                 if (! $attendeeId && $contact = self::resolveEmailToContact($newAttendee, false)) {
                     $attendeeId = $contact->getId();
-                    
                 }
-                
-                // does a resouce with this email address exist?
-                if (! $attendeeId) {
-                    $resources = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
-                        array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
-                    )));
-                    
-                    if(count($resources) > 0) {
-                        $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
-                        $attendeeId = $resources->getFirstRecord()->getId();
-                    }
-                }
+
                 // does a list with this name exist?
                 if ( ! $attendeeId &&
                     isset($smtpConfig['primarydomain']) && 
@@ -720,11 +718,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                     $attendeeId = $lists->getFirstRecord()->group_id;
                 }
-            } elseif (self::USERTYPE_EMAIL === $newAttendee['userType']) {
+            }
+
+            if (self::USERTYPE_EMAIL === $newAttendee['userType'] || null === $attendeeId) {
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_email'=> $newAttendee['email'],
-                    'user_displayName'=> $newAttendee['displayName'],
-                    'user_type' => $newAttendee['userType'],
+                    'user_displayName'=> $newAttendee['displayName'] ?? null,
+                    'user_type' => self::USERTYPE_EMAIL,
                     'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
                     'role'      => $newAttendee['role']
                 )));
@@ -735,6 +735,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_id'   => $attendeeId,
                     'user_type' => $newAttendee['userType'],
+                    'user_email'=> $newAttendee['email'],
                     'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
                     'role'      => $newAttendee['role']
                 )));
