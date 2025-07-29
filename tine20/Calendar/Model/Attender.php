@@ -286,7 +286,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getEmail($event=null)
     {
-        if (self::USERTYPE_EMAIL === $this->user_type) {
+        if ($this->user_email || self::USERTYPE_EMAIL === $this->user_type) {
             return $this->user_email;
         }
 
@@ -735,6 +735,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 $_event->attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_id'   => $attendeeId,
                     'user_type' => $newAttendee['userType'],
+                    'user_email'=> $newAttendee['email'],
                     'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
                     'role'      => $newAttendee['role']
                 )));
