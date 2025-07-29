@@ -1112,12 +1112,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'UID':
                     // it's not possible to change the uid by spec
                     if (empty($event->uid)) {
-                        if ($this->getOptionsValue(self::OPTION_USE_EXTERNAL_ID_UID)) {
-                            $event->external_uid = $property->getValue();
-                            $event->uid = sha1($property->getValue());
-                        } else {
-                            $event->uid = $property->getValue();
-                        }
+                        $event->uid = $property->getValue();
                     }
                     break;
                     

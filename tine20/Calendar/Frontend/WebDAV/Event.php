@@ -103,7 +103,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param  stream|string             $vobjectData
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [])
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [], bool $ignoreMove = false)
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -137,8 +137,11 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (strlen((string)$id) > 40) {
             $id = sha1($id);
         }
-        if ($converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
+        $msExternalIdRAII = null;
+        if ($useExternalUId = $converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
             $event->external_id = $id;
+            $oldMsExternalIdValue = Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
+            $msExternalIdRAII = new Tinebase_RAII(fn() => Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid($oldMsExternalIdValue));
         } else {
             $event->setId($id);
         }
@@ -155,8 +158,12 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 $event->uid, $event->hasExternalOrganizer(), 'sync', null, true))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Did not find existing event by UID - trying to find one by id (' . $event->uid . ')');
-            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventById($event->uid,
+            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventById($useExternalUId ? ($event->external_id ?: $event->getId()) : $event->getId(),
                 $event->hasExternalOrganizer(), 'sync', null, true);
+        }
+
+        if ($ignoreMove && $existingEvent && $existingEvent->container_id !== $event->container_id) {
+            $existingEvent = null;
         }
         
         if ($existingEvent === null) {
@@ -274,7 +281,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 $calCtrl->doContainerACLChecks($oldCalenderAcl);
             }
         }
-        
+
+        unset($msExternalIdRAII);
         return $vevent;
     }
 

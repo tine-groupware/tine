@@ -1196,7 +1196,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function getExistingEventByUID($_uid, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
     {
         $filters = new Calendar_Model_EventFilter([
-            ['field' => ($this->_useExternalIdUid ? 'external_uid' : 'uid'), 'operator' => 'equals', 'value' => $_uid],
+            ['field' => 'uid', 'operator' => 'equals', 'value' => $_uid],
         ]);
         if ($_getDeleted) {
             $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
