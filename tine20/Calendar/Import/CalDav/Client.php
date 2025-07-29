@@ -21,6 +21,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 {
     public const OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE = 'extSeqCheckUpdate';
     public const OPT_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
+    public const OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR = 'disableExternalOrganizerCalendar';
 
     /**
      * used to overwrite default retry behavior (if != null)
@@ -54,6 +55,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected bool $_doExternalSeqCheckBeforeUpdate = false;
     protected bool $_skipInternalOtherOrganizer = false;
 
+    protected bool $_disableExternalOrganizerCalendar = false;
+
     protected $userName;
     
     /**
@@ -77,6 +80,9 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($settings[self::OPT_SKIP_INTERNAL_OTHER_ORGANIZER] ?? false) {
             $this->_skipInternalOtherOrganizer = true;
+        }
+        if ($settings[self::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR] ?? false) {
+            $this->_disableExternalOrganizerCalendar = true;
         }
 
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
@@ -452,7 +458,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 
         $oldExternalIdUid = Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
         $oldAssertUser = Calendar_Controller_MSEventFacade::getInstance()->assertCalUserAttendee(false);
-        $oldExternalOrgContainer = Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer(false);
+        $oldExternalOrgContainer = Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer(!$this->_disableExternalOrganizerCalendar);
         $msEventRaii = new Tinebase_RAII(function() use($oldExternalIdUid, $oldAssertUser, $oldExternalOrgContainer) {
             Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid($oldExternalIdUid);
             Calendar_Controller_MSEventFacade::getInstance()->assertCalUserAttendee($oldAssertUser);
