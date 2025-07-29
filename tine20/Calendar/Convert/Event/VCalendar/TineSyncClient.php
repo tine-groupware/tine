@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,8 +19,16 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
 {
     const HEADER_MATCH = '/Tine20SyncClient\/(?P<version>.+)/';
 
+    public static bool $skipOrganizerOverwrite = false;
+    public static bool $skipAttendeeOverwrite = false;
+
     protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Sabre\VObject\Property $property): void
     {
+        if (static::$skipOrganizerOverwrite) {
+            parent::_fromVEvent_Organizer($event, $newAttendees, $property);
+            return;
+        }
+
         $email = null;
 
         if (!empty($property['EMAIL'])) {
@@ -56,6 +64,10 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
      */
     protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
     {
+        if (static::$skipAttendeeOverwrite) {
+            return parent::_getAttendee($calAddress);
+        }
+
         if (null !== ($attendee = parent::_getAttendee($calAddress))) {
             $attendee['userType'] = Calendar_Model_Attender::USERTYPE_EMAIL;
         }

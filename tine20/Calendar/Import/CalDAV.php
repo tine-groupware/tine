@@ -63,6 +63,13 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
             'userName' => $this->_options['username'],
             'password' => $this->_options['password'],
         ] : []));
+
+        if (!$this->_options[self::OPTION_FORCE_UPDATE_EXISTING]) {
+            $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE] = true;
+        }
+        if ($this->_options[self::OPTION_SKIP_INTERNAL_OTHER_ORGANIZER]) {
+            $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER] = true;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);
@@ -71,7 +78,7 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic');
         // TODO FIXME really? why? this is debug code...
         $this->_calDAVClient->setVerifyPeer(false);
-        $this->_calDAVClient->getDecorator()->initCalendarImport();
+        $this->_calDAVClient->getDecorator()->initCalendarImport($this->_options);
         $this->_calDAVClient->syncCalendarEvents($uri['path'], $container);
     }
 

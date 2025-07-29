@@ -28,14 +28,11 @@ class Calendar_Convert_Event_VCalendar_ThunderbirdTest extends \PHPUnit\Framewor
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $event = $converter->toTine20Model($vcalendarStream);
-        $organizerId = $event->organizer instanceof Addressbook_Model_Contact ? $event->organizer->getId() :
-            $event->organizer;
-        $organizer = Addressbook_Controller_Contact::getInstance()->get($organizerId);
         
         static::assertEquals(Calendar_Model_Event::CLASS_PRIVATE, $event->class);
         static::assertEquals('Hamburg',                           $event->location);
-        static::assertEquals('l.kneschke@metaways.de',            $organizer->email);
-        static::assertGreaterThan(0, count($event->attendee->filter('user_id', $organizerId)),
+        static::assertEquals('l.kneschke@metaways.de',            $event->organizer_email);
+        static::assertGreaterThan(0, count($event->attendee->filter('user_email', $event->organizer_email)),
             'Organizer must be attendee too');
     }
 
