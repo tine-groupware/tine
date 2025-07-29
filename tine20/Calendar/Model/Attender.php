@@ -632,6 +632,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             $attendeeId = NULL;
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
+                // does a resouce with this email address exist?
+                $resource = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+                    array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
+                )))->getFirstRecord();
+
+                if($resource) {
+                    $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+                    $attendeeId = $resource->getId();
+                }
+
                 // list from groupmember expand
                 if ( ! $attendeeId &&
                     preg_match('#^urn:uuid:principals/intelligroups/([a-z0-9]+)#', $newAttendee['email'], $matches)
@@ -652,20 +662,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 // does a contact with this email address exist?
                 if (! $attendeeId && $contact = self::resolveEmailToContact($newAttendee, false)) {
                     $attendeeId = $contact->getId();
-                    
                 }
-                
-                // does a resouce with this email address exist?
-                if (! $attendeeId) {
-                    $resources = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
-                        array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
-                    )));
-                    
-                    if(count($resources) > 0) {
-                        $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
-                        $attendeeId = $resources->getFirstRecord()->getId();
-                    }
-                }
+
                 // does a list with this name exist?
                 if ( ! $attendeeId &&
                     isset($smtpConfig['primarydomain']) && 
