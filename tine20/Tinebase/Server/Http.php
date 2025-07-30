@@ -76,7 +76,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     .' REQUEST: ' . print_r($_REQUEST, TRUE));
             }
 
-            if (null === Tinebase_Core::getUser() && $this->_request->getHeader('Authorization')) {
+            if (null === Tinebase_Core::getUser() && ($this->_request->getHeader('Authorization') || $this->_request->getQuery('Authorization'))) {
                 $this->_handleAppPwdAuth();
             }
 

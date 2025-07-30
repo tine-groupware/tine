@@ -69,7 +69,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         }
 
         if (false === $exception && null === Tinebase_Core::getUser() && $this->_request->getHeader('Authorization')) {
-            $exception = $this->_handleAppPwdAuth();
+            try {
+                $this->_handleAppPwdAuth();
+            } catch (Throwable $t) {
+                $exception = $t;
+            }
         }
         
         $json = $this->_request->getContent();
