@@ -122,7 +122,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     this.initialConfig = (this.parentMenu?.ownerCt || this).initialConfig;
                     AbstractAction.prototype.handler.call(this, cmp);
 
-                    let record = this.selection = this.record || [...this.initialConfig.selections][0]
+                    let record = this.selection = cmp.record = this.record || [...this.initialConfig.selections][0]
                     const win = window
                     const docType = record.constructor.getMeta('recordName')
                     const statusFieldName = `${docType.toLowerCase()}_status`
@@ -310,14 +310,15 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         },
                         listeners: {
                             update: async (mail) => {
-                                // we need to fetch record first, as dispatchHistory is dependend and we don't have the
+                                // we need to fetch record first, as dispatchHistory is dependent and we don't have the
                                 // new dispatchHistoryRecord which we created via mail fileLocation
-                                let record = cmp.selection = cmp.initialConfig.selections[0]
-                                record = cmp.selection = await record.constructor.getProxy().promiseLoadRecord(record)
+                                // NOTE: we need to rely on cmp.record here see DispatchHistoryGridPanel::action_completeByMail
+                                cmp.record = await cmp.record.constructor.getProxy().promiseLoadRecord(cmp.record)
 
                                 if (cmp.editDialog && cmp.editDialog.loadRecord) {
-                                    await cmp.editDialog.loadRecord(record, true)
+                                    await cmp.editDialog.loadRecord(cmp.record, true)
                                 }
+                                // needed by DispatchHistoryGridPanel::action_completeByMail
                                 cmp.fireEvent('sentmail', cmp)
                             }
                         }
