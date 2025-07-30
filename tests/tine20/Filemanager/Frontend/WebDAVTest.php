@@ -1330,6 +1330,21 @@ EOS
         self::assertRegExp('/"[a-z0-9]+"/', $etag);
     }
 
+    public function testCreateFileIllegalChar()
+    {
+        $parent = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory();
+        $rc = fopen('php://temp', 'r');
+
+        try {
+            $etag = $parent->createFile('AR-0394xa5 = : GS-00sb064', $rc);
+            $this->fail('should not create file with illegal character');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof \Sabre\DAV\Exception\Forbidden);
+        } finally {
+            fclose($rc);
+        }
+    }
+
     public function testUpdateFileWithOCMTime()
     {
         $node = $this->testgetNodeForPath_webdav_filemanager_shared_unittestdirectory_file();
