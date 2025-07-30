@@ -23,7 +23,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE007 = self::class . '::update007';
     protected const RELEASE018_UPDATE008 = self::class . '::update008';
     protected const RELEASE018_UPDATE009 = self::class . '::update009';
-    protected const RELEASE018_UPDATE010 = self::class . '::update009';
+    protected const RELEASE018_UPDATE010 = self::class . '::update010';
 
 
     static protected $_allUpdates = [
