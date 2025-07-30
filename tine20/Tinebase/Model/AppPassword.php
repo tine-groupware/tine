@@ -25,6 +25,7 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
     public const FLD_ACCOUNT_ID = 'account_id';
     public const FLD_CHANNELS = 'channels';
     public const FLD_VALID_UNTIL = 'valid_until';
+    public const FLD_ALLOW_GET = 'allow_get';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -32,7 +33,7 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION               => 1,
+        self::VERSION               => 2,
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE         => false,
@@ -78,6 +79,10 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                     Tinebase_Record_Validator_Json::class,
                 ],
+            ],
+            self::FLD_ALLOW_GET         => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
             ],
         ]
     ];
