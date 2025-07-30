@@ -1902,6 +1902,28 @@ fi';
         return 0;
     }
 
+    public function generateAppPwd(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+        $data = $this->_parseArgs($opts, ['user', 'channels']);
+
+        $user = Tinebase_User::getInstance()->getFullUserByLoginName($data['user']);
+
+        $pwd =  Tinebase_Record_Abstract::generateUID(Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys((array)$data['channels'], true),
+            Tinebase_Model_AppPassword::FLD_ALLOW_GET => (bool)($data['allow_get'] ?? false),
+        ]));
+        $pwd = base64_encode($user->accountLoginName . ':' . $pwd);
+
+        echo PHP_EOL . 'generated pwd: ' . $pwd . PHP_EOL . PHP_EOL;
+
+        return 0;
+    }
+
     /**
      * recalculates the revision sizes and then the folder sizes
      *
