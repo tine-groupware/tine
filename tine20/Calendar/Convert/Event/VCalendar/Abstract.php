@@ -216,16 +216,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             
             $recurrenceId = $vevent->add('RECURRENCE-ID', $originalDtStart);
 
-            if (null === $_mainEvent) {
+            if (null === $_mainEvent && $event->base_event_id) {
                 $oldAclVal = Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
                 try {
                     $_mainEvent = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
                 } finally {
                     Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldAclVal);
                 }
-            }
-            if ($_mainEvent->is_all_day_event == true) {
-                $recurrenceId->offsetSet('VALUE', 'DATE');
+                if ($_mainEvent->is_all_day_event) {
+                    $recurrenceId->offsetSet('VALUE', 'DATE');
+                }
             }
         }
         
