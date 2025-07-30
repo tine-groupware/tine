@@ -1112,7 +1112,59 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 }
             }
         };
-        if ($_event->getId()) {
+
+        if ($_event->isRecurException() && (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid))) {
+            $_event->setRecurId($_event->base_event_id);
+        }
+
+        if ($this->_useExternalIdUid) {
+            if ($_event->external_id) {
+                $filter = new Calendar_Model_EventFilter([
+                    [TMFA::FIELD => 'external_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->external_id],
+                ]);
+
+                if ($_event->isRecurException()) {
+                    $filter->addFilter($filter->createFilter(
+                        [TMFA::FIELD => 'recurid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->recurid]
+                    ));
+                } else {
+                    $filter->addFilter($filter->createFilter(
+                        [TMFA::FIELD => 'recurid', TMFA::OPERATOR => 'isnull', TMFA::VALUE => null]
+                    ));
+                }
+                if ($_getDeleted) {
+                    $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', TMFA::OP_EQUALS,
+                        Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+                }
+                if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
+                    $checkGrantFun(false);
+                }
+            }
+            if (null === $result && $_event->external_uid) {
+                $filter = new Calendar_Model_EventFilter([
+                    [TMFA::FIELD => 'external_uid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->external_uid],
+                ]);
+
+                if ($_event->isRecurException()) {
+                    $filter->addFilter($filter->createFilter(
+                        [TMFA::FIELD => 'recurid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->recurid]
+                    ));
+                } else {
+                    $filter->addFilter($filter->createFilter(
+                        [TMFA::FIELD => 'recurid', TMFA::OPERATOR => 'isnull', TMFA::VALUE => null]
+                    ));
+                }
+                if ($_getDeleted) {
+                    $filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', TMFA::OP_EQUALS,
+                        Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+                }
+                if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
+                    $checkGrantFun(false);
+                }
+            }
+        }
+
+        if (null === $result && $_event->getId()) {
             try {
                 $result = $this->get($_event->getId(), $_getDeleted);
                 $checkGrantFun(true);
@@ -1125,9 +1177,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_containerId],
             ]);
             if ($_event->isRecurException()) {
-                if (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid)) {
-                    $_event->setRecurId($_event->base_event_id);
-                }
                 $filter->addFilter($filter->createFilter(
                     [TMFA::FIELD => 'recurid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->recurid]
                 ));

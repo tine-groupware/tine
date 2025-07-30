@@ -350,12 +350,7 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
                     // it's not possible to change the uid by spec
                     // TODO FIXME isnt this braking stuff? we need to remove that option!?
                     if (empty($event->uid)) {
-                        if ($this->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
-                            $event->external_uid = $property->getValue();
-                            $event->uid = sha1($property->getValue());
-                        } else {
-                            $event->uid = $property->getValue();
-                        }
+                        $event->uid = $property->getValue();
                     }
                     break;
 

@@ -731,7 +731,7 @@ class Calendar_Frontend_iMIP
         $result = true;
 
         $existingEvent = $_iMIP->getExistingEvent($_event, _getDeleted: true);
-        $organizer = $existingEvent?->organizer_email ?: ($existingEvent?->resolveOrganizer() ?: ($_event->organizer_email ?: $_event->resolveOrganizer()));
+        $organizer = $existingEvent?->resolveOrganizer() ?: ($existingEvent?->organizer_email ?: ($_event->resolveOrganizer() ?: $_event->organizer_email));
 
         if (!$organizer) {
             $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer is not possible");
@@ -743,17 +743,17 @@ class Calendar_Frontend_iMIP
 
         // config setting overwrites method param
         $assertAccount = Calendar_Config::getInstance()->get(Calendar_Config::DISABLE_EXTERNAL_IMIP, $_assertAccount);
-        if ($assertAccount && $organizer && !$organizer->account_id) {
+        if ($assertAccount && (!$organizer instanceof Addressbook_Model_Contact || !$organizer->account_id)) {
             $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} without organizer user account is not possible");
             $result = false;
         }
 
-        if ($_assertOwn && $organizer && $organizer->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId()) {
+        if ($_assertOwn && (!$organizer instanceof Addressbook_Model_Contact || $organizer->getIdFromProperty('account_id') !== Tinebase_Core::getUser()->getId())) {
             $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} requires to be organizer");
             $result = false;
         }
 
-        if ($_assertNotOwn && $organizer && $organizer->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
+        if ($_assertNotOwn && $organizer instanceof Addressbook_Model_Contact && $organizer->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
             $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_ORGANIZER, "processing {$_iMIP->method} requires not to be organizer");
             $result = false;
         }
