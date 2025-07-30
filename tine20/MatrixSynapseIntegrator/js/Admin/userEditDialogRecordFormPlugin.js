@@ -47,10 +47,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
 
         onRecordLoad: async function(editDialog, record) {
             // TODO make this work
-            const matrixAccount =
-                Tine.Tinebase.data.Record.setFromJson(record.get('matrix_account_id'),
-                    Tine.MatrixSynapseIntegrator.Model.MatrixAccount);
-            this.matrixAccountField.setValue(matrixAccount);
+            const matrixAccountData = record.get('matrix_account_id');
+            if (_.isObject(matrixAccountData)) {
+                const matrixAccount = Tine.Tinebase.data.Record.setFromJson(matrixAccountData, 'MatrixSynapseIntegrator.MatrixAccount');
+                this.matrixAccountField.setValue(matrixAccount);
+            } else {
+                this.matrixAccountField.clearValue();
+            }
         },
 
         onRecordUpdate: function(editDialog, record) {
