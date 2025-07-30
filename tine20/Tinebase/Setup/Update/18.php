@@ -22,6 +22,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE006 = self::class . '::update006';
     protected const RELEASE018_UPDATE007 = self::class . '::update007';
     protected const RELEASE018_UPDATE008 = self::class . '::update008';
+    protected const RELEASE018_UPDATE009 = self::class . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -54,6 +55,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE018_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -209,5 +214,14 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.8', self::RELEASE018_UPDATE008);
+    }
+
+    public function update009(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_AppPassword::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.9', self::RELEASE018_UPDATE009);
     }
 }
