@@ -19,6 +19,7 @@ class Calendar_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
 
 
     static protected $_allUpdates = [
@@ -104,5 +105,12 @@ class Calendar_Setup_Update_17 extends Setup_Update_Abstract
         ]));
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+    }
+
+    public function update006()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Calendar_Model_Event::TABLE_NAME . ' SET uid = external_uid WHERE LENGTH(external_uid) > 0');
+
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
     }
 }
