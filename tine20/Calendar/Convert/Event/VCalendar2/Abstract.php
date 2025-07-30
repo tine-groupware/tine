@@ -59,7 +59,7 @@ class Calendar_Convert_Event_VCalendar2_Abstract extends Tinebase_Convert_VCalen
         /** @var Calendar_Model_Event $exception */
         foreach ($exceptions as $exception) {
             /** @var Calendar_Model_Event $baseEvent */
-            if ($baseEvent = $records->find('uid', $exception->uid)) {
+            if (($baseEvent = $records->find('uid', $exception->uid)) && !$baseEvent->isRecurException()) {
                 if (!$baseEvent->exdate instanceof Tinebase_Record_RecordSet) {
                     $baseEvent->exdate = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, is_array($baseEvent->exdate) ? $baseEvent->exdate : []);
                 }

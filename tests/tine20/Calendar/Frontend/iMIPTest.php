@@ -1152,6 +1152,61 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $this->assertSame($event->getId(), $newEvent->base_event_id);
     }
 
+    public function testInvitationRecureExceptionThenSeries(): void
+    {
+        $iMIP = $this->_createiMIPFromFile('invitationICALexception1.ics');
+        $iMIP->originator = $iMIP->getEvents()->getFirstRecord()->organizer_email;
+        $iMIP->method = 'REQUEST';
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdException1 = Calendar_Controller_Event::getInstance()->get($iMIP->getEvents()->getFirstRecord()->getId());
+        $this->assertSame('TEST', $createdException1->summary);
+        $this->assertSame('13', $createdException1->dtstart->format('d'));
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdException1->attendee);
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+
+        $iMIP = $this->_createiMIPFromFile('invitationICALexception2.ics');
+        $iMIP->originator = $iMIP->getEvents()->getFirstRecord()->organizer_email;
+        $iMIP->method = 'REQUEST';
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdException2 = Calendar_Controller_Event::getInstance()->get($iMIP->getEvents()->getLastRecord()->getId());
+        $this->assertSame('TEST', $createdException2->summary);
+        $this->assertSame('14', $createdException2->dtstart->format('d'));
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdException2->attendee);
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+
+
+        $iMIP = $this->_createiMIPFromFile('invitationICALseries.ics');
+        $iMIP->originator = $iMIP->getEvents()->getFirstRecord()->organizer_email;
+        $iMIP->method = 'REQUEST';
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        /** @var Calendar_Model_iMIP $processedIMIP */
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $createdSeries = Calendar_Controller_MSEventFacade::getInstance()->get($iMIP->getEvents()->getFirstRecord()->getId());
+        $this->assertSame('TEST', $createdSeries->summary);
+        $this->assertSame('12', $createdSeries->dtstart->format('d'));
+        $this->assertFalse($createdSeries->isRecurException());
+        $ownAttender = Calendar_Model_Attender::getOwnAttender($createdSeries->attendee);
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
+        $this->assertNotFalse($createdSeries->exdate->getById($createdException1->getId()));
+        $this->assertNotFalse($createdSeries->exdate->getById($createdException2->getId()));
+
+        $updateException1 = Calendar_Controller_Event::getInstance()->get($createdException1->getId());
+        $updateException2 = Calendar_Controller_Event::getInstance()->get($createdException2->getId());
+        $this->assertSame($createdSeries->getId(), $updateException1->base_event_id);
+        $this->assertSame($createdSeries->getId(), $updateException2->base_event_id);
+        $this->assertSame($createdSeries->uid, $updateException1->uid);
+        $this->assertSame($createdSeries->uid, $updateException2->uid);
+    }
+
     /**
      * testInvitationExternalReply
      */
@@ -1235,7 +1290,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
     protected function _createiMIPFromFile($_filename): Calendar_Model_iMIP
     {
-        $email = $email = $this->_getEmailAddress();
+        $email = $this->_getEmailAddress();
 
         $ics = file_get_contents(dirname(__FILE__) . '/files/' . $_filename);
         $ics = preg_replace('/unittest@tine20\.org/', $email, $ics);
