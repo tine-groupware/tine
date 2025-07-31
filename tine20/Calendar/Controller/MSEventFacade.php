@@ -319,9 +319,48 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $_event->exdate = NULL;
 
         if ($this->_assertCalUserAttendee) {
-            $_event->assertAttendee($this->getCalendarUser());
+            $_event->assertAttendee($this->_calendarUser);
         }
+
+        $attenderStatusRaii = null;
+        // recur exceptions for external events that have not been rescheduled should take the baseevents attendee status for internal attendees
+        while ($_event->hasExternalOrganizer() && $_event->base_event_id) {
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, false);
+            while ($_event->dtstart->equals($_event->getOriginalDtStart())) {
+                try {
+                    $baseEvent = $this->_eventController->get($_event->base_event_id);
+                } catch (Tinebase_Exception_NotFound) {
+                    break;
+                }
+                if (!$_event->dtend->equals($_event->getOriginalDtStart($baseEvent->dtstart->diff($baseEvent->dtend)))) {
+                    break;
+                }
+                Calendar_Model_Attender::resolveAttendee($baseEvent->attendee, false);
+                foreach ($_event->attendee as $a) {
+                    if ($a->getIdFromProperty('user_id') === $this->_calendarUser->getIdFromProperty('user_id')) {
+                        continue;
+                    }
+                    if ($a->user_id instanceof Addressbook_Model_Contact && $a->user_id->account_id) {
+                        if ($baseAttender = $baseEvent->attendee->find('user_id', $a->user_id)) {
+                            $a->status = $baseAttender->status;
+                            if (null === $attenderStatusRaii) {
+                                $oldKeepAttenderStatusValue = $this->_eventController->keepAttenderStatus(true);
+                                $attenderStatusRaii = new Tinebase_RAII(fn() => $this->_eventController->keepAttenderStatus($oldKeepAttenderStatusValue));
+                            }
+                        } else {
+                            $a->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                        }
+                    }
+                }
+                break 2;
+            }
+            $_event->attendee->filter(fn(Calendar_Model_Attender $a) => $a->user_id instanceof Addressbook_Model_Contact && $a->user_id->account_id)
+                ->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            break;
+        }
+
         $savedEvent = $this->_eventController->create($_event);
+        unset($attenderStatusRaii);
         
         if ($exceptions instanceof Tinebase_Record_RecordSet) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

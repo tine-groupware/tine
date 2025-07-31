@@ -145,6 +145,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         self::$_instance = null;
     }
 
+    public function keepAttenderStatus(?bool $value = null): bool
+    {
+        $oldValue = $this->_keepAttenderStatus;
+        if (null !== $value) {
+            $this->_keepAttenderStatus = $value;
+        }
+        return $oldValue;
+    }
+
     public function useExternalOrganizerContainer(?bool $value = null): bool
     {
         $oldValue = $this->_moveExternalOrganizerToContainer;

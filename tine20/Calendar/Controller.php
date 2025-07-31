@@ -319,7 +319,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
     /**
      * Get/Create Calendar for external organizer
      * 
-     * @param  Addressbook_Model_Contact $organizer organizer id
+     * @param  Addressbook_Model_Contact|null $organizer organizer id
      * @param  string $emailAddress
      * @return Tinebase_Model_Container  container id
      */

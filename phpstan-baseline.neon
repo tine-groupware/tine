@@ -921,7 +921,7 @@ parameters:
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getEmail\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\<Calendar_Model_Attender\\>\\:\\:getEmail\\(\\)\\.$#"
 			count: 3
 			path: tine20/Calendar/Frontend/iMIP.php
 
