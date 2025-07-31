@@ -164,22 +164,11 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
         $newAttendees = array();
         $attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class);
         $event->alarms = new Tinebase_Record_RecordSet(Tinebase_Model_Alarm::class);
-        // TODO FIXME if uid is here, recurid needs to be there too!
-        $skipFieldsIfOnlyBasicData = array('ATTENDEE', 'UID', 'ORGANIZER', 'VALARM', 'ATTACH', 'CATEGORIES');
+
         $imipProps = [];
 
         /** @var \Sabre\VObject\Property $property */
         foreach ($vevent->children() as $property) {
-            if (isset($this->_options['onlyBasicData'])
-                && $this->_options['onlyBasicData']
-                && in_array((string) $property->name, $skipFieldsIfOnlyBasicData))
-            {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping '
-                        . $property->name . ' (using option onlyBasicData)');
-                continue;
-            }
-
             switch ($property->name) {
                 case 'DTSTAMP':
                     $imipProps['DTSTAMP'] = trim($property->serialize());

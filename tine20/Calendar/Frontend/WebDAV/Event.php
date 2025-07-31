@@ -45,12 +45,17 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     protected $_converter;
 
     /**
+     * @var array<string, Closure>
+     */
+    protected static array $_eventDeserializedHooks = [];
+
+    /**
      * Constructor 
      * 
      * @param Tinebase_Model_Container $_container
      * @param null|string|Calendar_Model_Event  $_event  the id of a event or the event itself
      */
-    public function __construct(Tinebase_Model_Container $_container, $_event = null) 
+    final public function __construct(Tinebase_Model_Container $_container, $_event = null)
     {
         $this->_container = $_container;
         $this->_event     = $_event;
@@ -60,6 +65,16 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
+    }
+
+    public static function addEventDeserializedHook(string $name, Closure $c): void
+    {
+        static::$_eventDeserializedHooks[$name] = $c;
+    }
+
+    public static function removeEventDeserializedHook(string $name): void
+    {
+        unset(static::$_eventDeserializedHooks[$name]);
     }
 
     /**
@@ -124,6 +139,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
             throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+        }
+
+        foreach (static::$_eventDeserializedHooks as $closure) {
+            $closure($event);
         }
 
         if (true === $onlyCurrentUserOrganizer) {
@@ -248,7 +267,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
-            $vevent = new self($container, $existingEvent);
+            $vevent = new static($container, $existingEvent);
             $vevent->_getConverter()->setOptions($converterOptions);
             $event = static::_allowOnlyAttendeeProperties($existingEvent, $event, $container);
 
@@ -555,6 +574,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $event = $this->_getConverter()->toTine20Model($vobject, clone $this->getRecord(), array(
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
+        foreach (static::$_eventDeserializedHooks as $closure) {
+            $closure($event);
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));

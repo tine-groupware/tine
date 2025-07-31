@@ -65,6 +65,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         'keepExistingAttendee'  => FALSE,
         /**
          * delete events missing in import file (future only)
+         * @var boolean
          */
         'deleteMissing'         => FALSE,
         /**
@@ -77,15 +78,6 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
          * @var string
          */
         'container_id'          => NULL,
-        /**
-         * import only basic data (i.e. without attendee, alarms, uid, ...)
-         * @var string
-         */
-        'onlyBasicData'         => NULL,
-        /**
-         * TODO needed? if yes: document!
-         */
-        'allowDuplicateEvents'  => false,
         /**
          * remote url
          * @var string
@@ -246,7 +238,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         $event->seq = $existingEvent->seq;
 
         if ($this->_options['keepExistingAttendee']) {
-            $this->_checkForExistingAttendee($event, $existingEvent);
+            static::checkForExistingAttendee($event, $existingEvent);
         }
 
         $diff = $event->diff($existingEvent, array(
@@ -273,7 +265,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         $this->_importResult['results']->addRecord($event);
     }
 
-    protected function _checkForExistingAttendee(Calendar_Model_Event $event, Calendar_Model_Event $existingEvent)
+    public static function checkForExistingAttendee(Calendar_Model_Event $event, Calendar_Model_Event $existingEvent)
     {
         $existingAttendee = $existingEvent->attendee instanceof Tinebase_Record_RecordSet
             ? $existingEvent->attendee

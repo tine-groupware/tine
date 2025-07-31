@@ -40,6 +40,7 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
      */
     public function import($_resource = NULL, $_clientRecordData = array())
     {
+        $raiis = [];
         $container = Tinebase_Container::getInstance()->getContainerById($this->_options['container_id']);
 
         $uri = $this->_splitUri($this->_options['url']);
@@ -55,7 +56,6 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         $caldavClientOptions = array_merge([
             'baseUri' => $uri['host'],
             'calenderUri' => $uri['path'],
-            'allowDuplicateEvents' => $this->_options['allowDuplicateEvents'],
         ], $cc ? [
             'userName' => $cc->username,
             'password' => $cc->password,
@@ -73,7 +73,36 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         if ($this->_options[self::OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR]) {
             $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR] = true;
         }
-        
+        if (is_array($this->_options['overwriteOrganizer'])) {
+            Calendar_Frontend_WebDAV_EventImport::addEventDeserializedHook(static::class . 'overwriteOrganizer', function(Calendar_Model_Event $event) {
+                foreach($this->_options['overwriteOrganizer'] as $fieldName => $value) {
+                    $event->{$fieldName} = $value;
+                }
+            });
+            $raiis[] = new Tinebase_RAII(fn() => Calendar_Frontend_WebDAV_EventImport::removeEventDeserializedHook(static::class . 'overwriteOrganizer'));
+        }
+        if (is_array($this->_options['attendee'])) {
+            if ($this->_options['attendeeStrategy'] === 'add' && is_array($this->_options['attendee'])) {
+                Calendar_Frontend_WebDAV_EventImport::addEventDeserializedHook(static::class . 'attendee', function(Calendar_Model_Event $event) {
+                    $attendees = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, $this->_options['attendee']);
+                    foreach($attendees as $attendee) {
+                        if (! Calendar_Model_Attender::getAttendee($event->attendee, $attendee)) {
+                            $event->attendee->addRecord($attendee);
+                        }
+                    }
+                });
+                $raiis[] = new Tinebase_RAII(fn() => Calendar_Frontend_WebDAV_EventImport::removeEventDeserializedHook(static::class . 'attendee'));
+            } else if ($this->_options['attendeeStrategy'] === 'replace') {
+                Calendar_Frontend_WebDAV_EventImport::addEventDeserializedHook(static::class . 'attendee', function(Calendar_Model_Event $event) {
+                    $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, $this->_options['attendee']);
+                });
+                $raiis[] = new Tinebase_RAII(fn() => Calendar_Frontend_WebDAV_EventImport::removeEventDeserializedHook(static::class . 'attendee'));
+            }
+        }
+        if ($this->_options['keepExistingAttendee']) {
+            $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_KEEP_EXISTING_ATTENDEE] = true;
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);
         }
@@ -82,7 +111,13 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         // TODO FIXME really? why? this is debug code...
         $this->_calDAVClient->setVerifyPeer(false);
         $this->_calDAVClient->getDecorator()->initCalendarImport($this->_options);
-        $this->_calDAVClient->syncCalendarEvents($uri['path'], $container);
+        $this->_calDAVClient->syncCalendarEvents($uri['path'], $container, [
+            Tinebase_Controller_Record_Abstract::ACTION_CREATE => true,
+            Tinebase_Controller_Record_Abstract::ACTION_UPDATE => $this->_options['updateExisting'],
+            Tinebase_Controller_Record_Abstract::ACTION_DELETE => $this->_options['deleteMissing'],
+        ]);
+
+        unset($raiis);
     }
 
     protected function _getImportEvents($_resource, $container)

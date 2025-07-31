@@ -22,6 +22,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     public const OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE = 'extSeqCheckUpdate';
     public const OPT_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
     public const OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR = 'disableExternalOrganizerCalendar';
+    public const OPT_KEEP_EXISTING_ATTENDEE = 'keepExistingAttendee';
 
     /**
      * used to overwrite default retry behavior (if != null)
@@ -51,11 +52,12 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected $webdavFrontend = Calendar_Frontend_WebDAV_EventImport::class;
     protected $_uuidPrefix = '';
 
-    protected $_allowDuplicateEvents = false;
     protected bool $_doExternalSeqCheckBeforeUpdate = false;
     protected bool $_skipInternalOtherOrganizer = false;
 
     protected bool $_disableExternalOrganizerCalendar = false;
+
+    protected bool $_keepExistingAttendee = false;
 
     protected $userName;
     
@@ -71,10 +73,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         parent::__construct($settings);
 
         $this->userName = $settings['userName'] ?? null;
-        
-        if (isset($settings['allowDuplicateEvents'])) {
-            $this->_allowDuplicateEvents = $settings['allowDuplicateEvents'];
-        }
+
         if ($settings[self::OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE] ?? false) {
             $this->_doExternalSeqCheckBeforeUpdate = true;
         }
@@ -83,6 +82,9 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($settings[self::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR] ?? false) {
             $this->_disableExternalOrganizerCalendar = true;
+        }
+        if ($settings[self::OPT_KEEP_EXISTING_ATTENDEE] ?? false) {
+            $this->_keepExistingAttendee = true;
         }
 
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
@@ -528,6 +530,9 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                         $webdavFrontend = new $this->webdavFrontend($targetContainer, $this->existingRecordIds[$calUri][$id]);
                         if ($this->_doExternalSeqCheckBeforeUpdate && $webdavFrontend instanceof Calendar_Frontend_WebDAV_EventImport) {
                             $webdavFrontend->setDoExternalSeqUpdateCheck(true);
+                        }
+                        if ($this->_keepExistingAttendee && $webdavFrontend instanceof Calendar_Frontend_WebDAV_EventImport) {
+                            $webdavFrontend->setKeepExistingAttendee(true);
                         }
                         $webdavFrontend->_getConverter()->setOptionsValue(\Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID, true);
                         $webdavFrontend->put($data);
