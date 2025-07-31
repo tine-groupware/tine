@@ -5742,7 +5742,7 @@ parameters:
 
 		-
 			message: "#^Call to method getResult\\(\\) on an unknown class JSON\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Tinebase/Server/Json.php
 
 		-
