@@ -152,7 +152,6 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         $this->_initImportResult();
         $this->_cc = $this->_getCalendarController();
         $ccAssertions = [
-            'assertCalUserOrganizer' => $this->_cc->assertCalUserOrganizer(),
             'assertCalUserAttendee' => $this->_cc->assertCalUserAttendee(),
         ];
         
@@ -178,9 +177,6 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
             . ' Filter: ' . print_r($existingEventsFilter->toArray(), true));
 
         $this->_cc->assertCalUserAttendee(false);
-        if (is_array($this->_options['overwriteOrganizer'])) {
-            $this->_cc->assertCalUserOrganizer(false);
-        }
 
         // insert one by one in a single transaction
         foreach ($events as $event) {
