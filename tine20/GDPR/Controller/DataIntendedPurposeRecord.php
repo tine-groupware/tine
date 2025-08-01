@@ -105,8 +105,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
     protected function checkAgreeWithdrawDates(GDPR_Model_DataIntendedPurposeRecord $_record): void
     {
+        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+
         if ($_record->withdrawDate && $_record->withdrawDate < $_record->agreeDate) {
-            throw new Tinebase_Exception_Record_Validation('agreeDate must not be after withdrawDate');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('agree date must not be after withdraw date'));
         }
         $filter = [
             [TMFA::FIELD => 'intendedPurpose', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->getIdFromProperty('intendedPurpose')],
@@ -120,8 +122,14 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $filter[] = [TMFA::FIELD => TMCC::ID, TMFA::OPERATOR => 'not', TMFA::VALUE => $_record->getId()];
         }
         /** @phpstan-ignore-next-line */
-        if ($this->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filter)) > 0) {
-            throw new Tinebase_Exception_Record_Validation('agreeDate and withdrawDate must not overlap');
+        $results = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filter));
+        if (count($results) > 0) {
+            foreach ($results as $result) {
+                if (empty($result->withdrawDate)) {
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('withdraw date must not be empty before create the new record'));
+                }
+            }
+            throw new Tinebase_Exception_SystemGeneric($translation->_('agree date and withdraw date must not overlap'));
         }
     }
 

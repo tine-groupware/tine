@@ -59,6 +59,15 @@ msgstr "List of the language in which the multilingual texts are laid out."
 msgid "Consent management for"
 msgstr "Consent management for"
 
+msgid "agree date must not be after withdraw date"
+msgstr "agree date must not be after withdraw date"
+
+msgid "withdraw date must not be empty before create the new record"
+msgstr "withdraw date must not be empty before create the new record"
+
+msgid "agree date and withdraw date must not overlap"
+msgstr "agree date and withdraw date must not overlap"
+
 msgid "Data provenances"
 msgstr "Data provenances"
 
