@@ -274,7 +274,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         qtip: this.app.i18n._('Open Debitor'),
                         onTriggerClick: () => {
                             // @TODO open document debitor once dispatch config gets denormalized
-                            const debitorId = this.record.get('debitor_id').original_id
+                            const debitorId = this.record.get('debitor_id').original_id || this.record.get('debitor_id').id
                             Tine.Sales.DebitorEditDialog.openWindow({recordId: debitorId, record: {id: debitorId}, mode: 'remote'})
                         }
                     }))
