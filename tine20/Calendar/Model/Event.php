@@ -38,7 +38,7 @@
  * @property string                         $organizer_type
  * @property string                         $organizer_email
  * @property string                         $organizer_displayname
- * @property Tinebase_Record_RecordSet      $attendee
+ * @property Tinebase_Record_RecordSet<Calendar_Model_Attender>      $attendee
  * @property Tinebase_DateTime              $dtstart
  * @property Tinebase_DateTime              $dtend
  * @property Calendar_Model_Rrule           $rrule

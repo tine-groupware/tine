@@ -1105,6 +1105,122 @@ class Calendar_Frontend_iMIPTest extends TestCase
         static::assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $ownAttender->status);
     }
 
+    public function testInvitationSeriesExceptionForDifferentAttendees(): void
+    {
+        Tinebase_Core::setUser($this->_personas['rwright']);
+        $iMIP = $this->_createiMIPFromFile('invitationICALseriesNoException.ics');
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $eventSeries = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $this->assertNull($eventSeries->organizer);
+        $this->assertNotNull($eventSeries->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $eventSeries->organizer_type);
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $eventSeries->organizer_email)->getId(),
+            $eventSeries->container_id);
+        $this->assertNotNull($rwrightAttendee = Calendar_Model_Attender::getOwnAttender($eventSeries->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $rwrightAttendee->status);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        Calendar_Controller_Event::unsetInstance();
+
+        $iMIP = $this->_createiMIPFromFile('invitationICALexception1.ics');
+        $iMIP->ics = str_replace('CREATED:20240613T160230Z', 'ATTENDEE;CN=Paul Mehrer;CUTYPE=INDIVIDUAL;EMAIL=' . $this->_personas['rwright']->accountEmailAddress . ';PART
+ STAT=NEEDS-ACTION:mailto:' . $this->_personas['rwright']->accountEmailAddress . '
+CREATED:20240613T160230Z', $iMIP->ics);
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $exception = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $this->assertNull($exception->organizer);
+        $this->assertNotNull($exception->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $exception->organizer_type);
+        $this->assertSame($eventSeries->container_id, $exception->container_id);
+        $this->assertNotNull($pwulfAttendee = Calendar_Model_Attender::getOwnAttender($exception->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $pwulfAttendee->status);
+
+        $this->assertSame($eventSeries->getId(), $exception->base_event_id);
+        $this->assertNotNull($rwrightExAttendee = $exception->attendee->find('user_id', $rwrightAttendee->user_id));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $rwrightExAttendee->status);
+    }
+
+    public function testInvitationSeriesExceptionRescheduledForDifferentAttendees(): void
+    {
+        Tinebase_Core::setUser($this->_personas['rwright']);
+        $iMIP = $this->_createiMIPFromFile('invitationICALseriesNoException.ics');
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $eventSeries = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $this->assertNull($eventSeries->organizer);
+        $this->assertNotNull($eventSeries->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $eventSeries->organizer_type);
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $eventSeries->organizer_email)->getId(),
+            $eventSeries->container_id);
+        $this->assertNotNull($rwrightAttendee = Calendar_Model_Attender::getOwnAttender($eventSeries->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $rwrightAttendee->status);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        Calendar_Controller_Event::unsetInstance();
+
+        $iMIP = $this->_createiMIPFromFile('invitationICALexception1.ics');
+        $iMIP->ics = str_replace([
+                'CREATED:20240613T160230Z',
+                'DTEND;TZID=Europe/Berlin:20240613T084500',
+            ], [
+                'ATTENDEE;CN=Paul Mehrer;CUTYPE=INDIVIDUAL;EMAIL=' . $this->_personas['rwright']->accountEmailAddress . ';PART
+ STAT=NEEDS-ACTION:mailto:' . $this->_personas['rwright']->accountEmailAddress . '
+CREATED:20240613T160230Z',
+            'DTEND;TZID=Europe/Berlin:20240613T084400',
+            ], $iMIP->ics);
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $exception = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $this->assertNull($exception->organizer);
+        $this->assertNotNull($exception->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $exception->organizer_type);
+        $this->assertSame($eventSeries->container_id, $exception->container_id);
+        $this->assertNotNull($pwulfAttendee = Calendar_Model_Attender::getOwnAttender($exception->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $pwulfAttendee->status);
+
+        $this->assertSame($eventSeries->getId(), $exception->base_event_id);
+        $this->assertNotNull($rwrightExAttendee = $exception->attendee->find('user_id', $rwrightAttendee->user_id));
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, $rwrightExAttendee->status);
+    }
+
+    public function testInvitationExceptionSeriesForDifferentAttendees(): void
+    {
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $iMIP = $this->_createiMIPFromFile('invitationICALexception1.ics');
+        $iMIP->ics = str_replace('CREATED:20240613T160230Z', 'ATTENDEE;CN=Paul Mehrer;CUTYPE=INDIVIDUAL;EMAIL=' . $this->_personas['rwright']->accountEmailAddress . ';PART
+ STAT=NEEDS-ACTION:mailto:' . $this->_personas['rwright']->accountEmailAddress . '
+CREATED:20240613T160230Z', $iMIP->ics);
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+        $exception = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $this->assertNull($exception->organizer);
+        $this->assertNotNull($exception->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $exception->organizer_type);
+        $this->assertNotNull($pwulfAttendee = Calendar_Model_Attender::getOwnAttender($exception->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $pwulfAttendee->status);
+
+        Tinebase_Core::setUser($this->_personas['rwright']);
+        Calendar_Controller_MSEventFacade::unsetInstance();
+        Calendar_Controller_Event::unsetInstance();
+
+        $iMIP = $this->_createiMIPFromFile('invitationICALseriesNoException.ics');
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_ACCEPTED);
+
+        $eventSeries = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord());
+        $exception = Calendar_Controller_MSEventFacade::getInstance()->get($exception->getId());
+        $this->assertNull($eventSeries->organizer);
+        $this->assertNotNull($eventSeries->organizer_email);
+        $this->assertSame(Calendar_Model_Event::ORGANIZER_TYPE_EMAIL, $eventSeries->organizer_type);
+        $this->assertSame(Calendar_Controller::getInstance()->getInvitationContainer(null, $eventSeries->organizer_email)->getId(),
+            $eventSeries->container_id);
+        $this->assertNotNull($rwrightAttendee = Calendar_Model_Attender::getOwnAttender($eventSeries->attendee));
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $rwrightAttendee->status);
+        $this->assertSame($eventSeries->container_id, $exception->container_id);
+        $this->assertSame($eventSeries->getId(), $exception->base_event_id);
+        $this->assertNull($exception->attendee->find('user_id', $rwrightAttendee->user_id));
+    }
+
     public function testInvitationExternalReplyRecurInstance(): void
     {
         // force creation of external attendee
