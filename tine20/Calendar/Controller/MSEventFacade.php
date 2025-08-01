@@ -69,11 +69,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected $_assertCalUserAttendee = true;
 
     /**
-     * @var bool
-     */
-    protected $_assertCalUserOrganizer = true;
-
-    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -944,8 +939,37 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         // assert organizer
-        if ($this->_assertCalUserOrganizer && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
-            $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
+        // if no organizer is set, set current calendarUser
+        if (Calendar_Model_Event::ORGANIZER_TYPE_EMAIL !== $_event->organizer_type && !$_event->organizer) {
+            if (Calendar_Model_Event::ORGANIZER_TYPE_EMAIL === $_currentEvent->organizer_type) {
+                $_event->organizer_type = Calendar_Model_Event::ORGANIZER_TYPE_EMAIL;
+                $_event->organizer_email = $_currentEvent->organizer_email;
+                $_event->organizer_displayname = $_currentEvent->organizer_displayname;
+            } else {
+                $_event->organizer = $_currentEvent?->organizer ?: $this->_calendarUser->user_id;
+            }
+        }
+        // if event moved from old organizers personal calendar to calendarUsers personal calendar => change organizer
+        while (Calendar_Model_Event::ORGANIZER_TYPE_EMAIL !== $_event->organizer_type && $_event->container_id && $_currentEvent->container_id &&
+                $_event->organizer !== $this->_calendarUser->user_id && $_currentEvent->container_id !== $_event->container_id) {
+            /** @var Tinebase_Model_Container $currentContainer */
+            $currentContainer = Tinebase_Container::getInstance()->get($_currentEvent->container_id);
+            /** @var Addressbook_Model_Contact $currentOrganizer */
+            $currentOrganizer = Addressbook_Controller_Contact::getInstance()->get($_currentEvent->organizer);
+            if ($currentContainer->owner_id !== $currentOrganizer->account_id) {
+                break;
+            }
+
+            /** @var Tinebase_Model_Container $newContainer */
+            $newContainer = Tinebase_Container::getInstance()->get($_event->container_id);
+            /** @var Addressbook_Model_Contact $currentOrganizer */
+            $newOrganizer = Addressbook_Controller_Contact::getInstance()->get($this->_calendarUser->user_id);
+            if ($newContainer->owner_id !== $newOrganizer->account_id) {
+                break;
+            }
+            
+            $_event->organizer = $this->_calendarUser->user_id;
+            break;
         }
 
         $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
@@ -998,15 +1022,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         $_event->alarms->merge($_currentEvent->alarms);
 
-        // assert organizer for personal calendars to be calendar owner
-        if ($this->_currentEventFacadeContainer && $this->_currentEventFacadeContainer->getId() == $_event->container_id
-            && $this->_currentEventFacadeContainer->type == Tinebase_Model_Container::TYPE_PERSONAL
-            && !$_event->hasExternalOrganizer()
-            && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type
-            && ($this->_assertCalUserOrganizer || !$_event->organizer)) {
-
-            $_event->organizer = $this->_calendarUser->user_id;
-        }
         // in MS world only cal_user can do status updates
         if ($CUAttendee) {
             $CUAttendee->status_authkey = $currentCUAttendee ? $currentCUAttendee->status_authkey : NULL;
@@ -1148,14 +1163,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $oldValue = $this->_assertCalUserAttendee;
         if (null !== $b) {
             $this->_assertCalUserAttendee = $b;
-        }
-        return $oldValue;
-    }
-    public function assertCalUserOrganizer(?bool $b = null): bool
-    {
-        $oldValue = $this->_assertCalUserOrganizer;
-        if (null !== $b) {
-            $this->_assertCalUserOrganizer = $b;
         }
         return $oldValue;
     }
