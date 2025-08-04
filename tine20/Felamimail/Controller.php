@@ -8,9 +8,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * main controller for Felamimail
@@ -316,5 +318,27 @@ class Felamimail_Controller extends Tinebase_Controller_Event
         }
         
         return $data;
+    }
+
+    public function createEmailSSORelyingParty(): SSO_Model_RelyingParty
+    {
+        return SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
+            SSO_Model_RelyingParty::FLD_NAME => 'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST),
+            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [
+                    new SSO_Model_OAuthGrant([
+                        SSO_Model_OAuthGrant::FLD_GRANT => \SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE,
+                    ], true),
+                ]),
+            ], true),
+        ], true));
+    }
+
+    public function deleteEmailSSORelyingParty(): void
+    {
+        SSO_Controller_RelyingParty::getInstance()->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_RelyingParty::class, [
+            [TMFA::FIELD => SSO_Model_RelyingParty::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)],
+        ]));
     }
 }
