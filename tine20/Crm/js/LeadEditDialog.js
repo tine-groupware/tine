@@ -560,7 +560,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             new Tine.widgets.tags.TagPanel({
                                 app: 'Crm',
                                 border: false,
-                                bodyStyle: 'border:1px solid #B5B8C8;'
+                                // bodyStyle: 'border:1px solid #B5B8C8;'
                             })
                         ]} // end of accordion panel (east)
                     ] // end of lead tabpanel items

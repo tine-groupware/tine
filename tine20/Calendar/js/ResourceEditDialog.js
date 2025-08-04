@@ -170,7 +170,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [new Tine.widgets.tags.TagPanel({
                             app: 'Calendar',
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
+                            // bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]

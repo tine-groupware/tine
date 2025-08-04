@@ -356,14 +356,14 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     iconCls: 'tinebase-accounttype-group',
                     layout: 'fit',
                     border: false,
-                    bodyStyle: 'border:1px solid #B5B8C8;',
+                    // bodyStyle: 'border:1px solid #B5B8C8;',
                     items: [
                         this.groupsPanel
                     ]
                 }), new Tine.widgets.tags.TagPanel({
                     app: 'Addressbook',
                     border: false,
-                    bodyStyle: 'border:1px solid #B5B8C8;'
+                    // bodyStyle: 'border:1px solid #B5B8C8;'
                 })
             ]
         };

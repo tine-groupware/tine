@@ -275,7 +275,7 @@ import './DependencyPanel'
                         new Tine.widgets.tags.TagPanel({
                             app: 'Tasks',
                             border: false,
-                            bodyStyle: 'border:1px solid #B5B8C8;'
+                            // bodyStyle: 'border:1px solid #B5B8C8;'
                         })
                     ]
                 }]

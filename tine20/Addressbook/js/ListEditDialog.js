@@ -171,7 +171,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     new Tine.widgets.tags.TagPanel({
                         app: 'Addressbook',
                         border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
+                        // bodyStyle: 'border:1px solid #B5B8C8;'
                     })
                 ]
             }]
