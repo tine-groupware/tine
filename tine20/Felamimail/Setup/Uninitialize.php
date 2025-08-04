@@ -26,4 +26,12 @@ class Felamimail_Setup_Uninitialize extends Setup_Uninitialize
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed persistent observer DeleteMessageFileLocation.');
     }
+
+    protected function _uninitializeEmailSSORelyingParty()
+    {
+        if (Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::SASL} ||
+            Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->{Tinebase_Config::SASL}) {
+            Felamimail_Controller::getInstance()->deleteEmailSSORelyingParty();
+        }
+    }
 }

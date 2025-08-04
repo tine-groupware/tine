@@ -15,6 +15,8 @@
  *
  * @package     SSO
  * @subpackage  Controller
+ *
+ * @extends Tinebase_Controller_Record_Abstract<SSO_Model_RelyingParty>
  */
 class SSO_Controller_RelyingParty extends Tinebase_Controller_Record_Abstract
 {

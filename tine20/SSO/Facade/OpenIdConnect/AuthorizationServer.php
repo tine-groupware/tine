@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use League\OAuth2\Server\Grant\GrantTypeInterface;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * facade for the Authorization Server
@@ -82,18 +83,22 @@ class SSO_Facade_OpenIdConnect_AuthorizationServer extends \League\OAuth2\Server
 
     public function getIdToken(Tinebase_Model_FullUser $account, string $azp): string
     {
-        $rp = new SSO_Model_RelyingParty([
-            SSO_Model_RelyingParty::ID => Tinebase_Record_Abstract::generateUID(),
-            SSO_Model_RelyingParty::FLD_NAME => $azp,
-            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
-            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
-                SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [
-                    new SSO_Model_OAuthGrant([
-                        SSO_Model_OAuthGrant::FLD_GRANT => \SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE,
-                    ], true),
-                ]),
-            ], true),
-        ], true);
+        if (null === ($rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_RelyingParty::class, [
+                    [TMFA::FIELD => SSO_Model_RelyingParty::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $azp],
+                ]))->getFirstRecord())) {
+            $rp = new SSO_Model_RelyingParty([
+                SSO_Model_RelyingParty::ID => Tinebase_Record_Abstract::generateUID(),
+                SSO_Model_RelyingParty::FLD_NAME => $azp,
+                SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+                SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                    SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [
+                        new SSO_Model_OAuthGrant([
+                            SSO_Model_OAuthGrant::FLD_GRANT => \SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE,
+                        ], true),
+                    ]),
+                ], true),
+            ], true);
+        }
 
         /** @var SSO_Facade_OpenIdConnect_DeviceCodeGrant $grant */
         $grant = $this->enabledGrantTypes[SSO_Facade_OpenIdConnect_DeviceCodeGrant::IDENTIFIER];

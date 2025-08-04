@@ -176,4 +176,12 @@ vacation_template_test
         Felamimail_Scheduler_Task::addCheckExpectedAnswerTask(Tinebase_Core::getScheduler());
         Felamimail_Scheduler_Task::addPruneAttachmentCacheTask(Tinebase_Core::getScheduler());
     }
+
+    protected function _initializeEmailSSORelyingParty()
+    {
+        if (Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::SASL} ||
+                Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->{Tinebase_Config::SASL}) {
+            Felamimail_Controller::getInstance()->createEmailSSORelyingParty();
+        }
+    }
 }

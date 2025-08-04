@@ -47,4 +47,11 @@ class Felamimail_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Felamimail_Controller::getInstance()->truncateEmailCache();
         return 0;
     }
+
+    public function createEmailSSORelyingParty(): int
+    {
+        $this->_checkAdminRight();
+        Felamimail_Controller::getInstance()->createEmailSSORelyingParty();
+        return 0;
+    }
 }
