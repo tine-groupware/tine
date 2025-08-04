@@ -2110,7 +2110,6 @@ class Calendar_JsonTests extends Calendar_TestCase
                 'container_id'          => $container->getId(),
                 'sourceType'            => 'remote_caldav',
                 'importFileByScheduler' => false,
-                'allowDuplicateEvents'  => true,
                 'username'              => $testUserCredentials['username'],
                 'password'              => $testUserCredentials['password'],
             ));

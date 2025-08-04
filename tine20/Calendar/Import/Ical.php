@@ -54,9 +54,6 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory(
             Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC
         );
-        if (isset($this->_options['onlyBasicData'])) {
-            $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));
-        }
 
         try {
             $events = $converter->toTine20RecordSet($_resource);

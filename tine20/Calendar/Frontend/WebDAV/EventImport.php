@@ -21,9 +21,16 @@ class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Even
 {
     protected bool $doExternalSeqUpdateCheck = false;
 
+    protected bool $keepExistingAttendee = false;
+
     public function setDoExternalSeqUpdateCheck(bool $value): void
     {
         $this->doExternalSeqUpdateCheck = $value;
+    }
+
+    public function setKeepExistingAttendee(bool $value): void
+    {
+        $this->keepExistingAttendee = $value;
     }
 
     /**
@@ -53,6 +60,13 @@ class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Even
             Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
         $event->container_id = $this->_container->getId();
+        foreach (static::$_eventDeserializedHooks as $closure) {
+            $closure($event);
+        }
+
+        if ($this->keepExistingAttendee) {
+            Calendar_Import_Abstract::checkForExistingAttendee($event, $this->getRecord());
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
