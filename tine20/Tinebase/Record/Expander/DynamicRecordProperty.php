@@ -76,7 +76,8 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
 
     protected function _setData(Tinebase_Record_RecordSet $_data)
     {
-        $expandData = new Tinebase_Record_RecordSet($_data->getRecordClassName());
+        $modelToProcess = $_data->getRecordClassName();
+        $expandData = new Tinebase_Record_RecordSet($modelToProcess);
         // we will get called multiple times, for each model once, so we need to clean up recordsToProcess
         $removeRecords = [];
 
@@ -87,7 +88,7 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
                 $record->{$this->_property} = $subRecord;
                 $expandData->addRecord($subRecord);
                 $removeRecords[] = $record;
-            } elseif ($record->{$this->_property} instanceof Tinebase_Record_Interface) {
+            } elseif ($record->{$this->_property} instanceof $modelToProcess) {
                 $expandData->addRecord($record->{$this->_property});
                 $removeRecords[] = $record;
             }
@@ -101,16 +102,15 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
         }
 
         $this->_subExpanders = [];
-        $_model = $_data->getRecordClassName();
         if (isset($this->_expanderDefinition[self::EXPANDER_PROPERTIES])) {
             foreach ($this->_expanderDefinition[self::EXPANDER_PROPERTIES] as $prop => $definition) {
-                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, $definition, $prop,
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($modelToProcess, $definition, $prop,
                     $this->_rootExpander);
             }
         }
         if (isset($this->_expanderDefinition[self::EXPANDER_PROPERTY_CLASSES])) {
             foreach ($this->_expanderDefinition[self::EXPANDER_PROPERTY_CLASSES] as $propClass => $definition) {
-                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::createPropClass($_model, $definition,
+                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::createPropClass($modelToProcess, $definition,
                     $propClass, $this->_rootExpander);
             }
         }
