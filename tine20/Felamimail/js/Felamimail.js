@@ -270,40 +270,107 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             modelName: 'Lead',
             subjectField: 'lead_name'
         });
-        var calHook = new Tine.Felamimail.GridPanelHook({
-            app: this,
-            foreignAppName: 'Calendar',
-            modelName: 'Event',
-            subjectFn: function(record) {
-                var _ = window.lodash;
-                return _.get(record, 'data.poll.name', _.get(record, 'data.summary', '') , '');
-            },
-            bodyFn: function(record) {
-                if (record && record.hasPoll()) {
-                    return String.format(this.app.i18n._('Poll URL: {0}'), record.getPollUrl());
-                } else {
-                    return '';
-                }
-            },
-            massMailingFlagFn: function(record) {
-                return record && record.hasPoll();
-            },
-            addMailFromRecord: async function (mailAddresses, record) {
-                const recipients = [];
-                Ext.each(record.get('attendee'), function (attender) {
-                    Tine.log.debug('Tine.Felamimail.Application::initGridPanelHooks/addMailFromRecord() - Calendar attender:');
-                    Tine.log.debug(attender);
-                    if (attender.user_type === 'user' || attender.user_type === 'groupmember') {
+
+        let eventRecords = null;
+        const actionUpdater = function(action, grants, records) {
+            eventRecords = records ?? [];
+            if (eventRecords.length > 0){
+                const hasEmailAddress = eventRecords[0].data?.members?.length > 0 || eventRecords[0].data?.attendee?.length > 0;
+                action.setDisabled(!hasEmailAddress);
+            }
+            if (['to', 'cc', 'bcc', 'mass'].includes(action?.itemId)) {
+                const isFilterSelect = action.initialConfig?.selectionModel?.isFilterSelect;
+                action.setDisabled(isFilterSelect ? action?.itemId !== 'mass' : false);
+            }
+        };
+        const composeEmail = (to, eventRecords, status) => {
+            const recipients = [];
+            let massMailingFlag = to === 'mass';
+            const firstSelectedEvent = eventRecords[0];
+
+            eventRecords.forEach((eventRecord) => {
+                Ext.each(eventRecord.get('attendee'), function (attender) {
+                    let recipient = null;
+                    if (attender.user_id?.id && ['user', 'groupmember'].includes(attender.user_type)) {
                         attender.user_id.type = 'user';
-                        recipients.push(attender.user_id);
+                        recipient = attender.user_id;
                     }
                     if (attender.user_type === 'email') {
-                        recipients.push({ 'email': attender.user_email});
+                        recipient = { 'email': attender.user_email};
+                    }
+                    if (recipient && (status === 'ALL-RECIPIENTS' || attender.status === status)) {
+                        recipients.push(recipient);
                     }
                 }, this);
-                await this.addRecipientTokenFromContacts(mailAddresses, recipients);
+            })
+
+            if (firstSelectedEvent.hasPoll()) {
+                massMailingFlag = true;
             }
-        });
+
+            if (massMailingFlag) to = 'bcc';
+
+            const popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+                // @TODO fixme, invent better handling to skip gdpr client plugin
+                massMailingPlugins: firstSelectedEvent.data?.poll_id ? ['poll'] : ['all'],
+                contentPanelConstructorInterceptor: async (config) => {
+                    const waitingText = this.i18n._('Loading Recipients...');
+                    const mask = await config.setWaitText(waitingText);
+                    const mailAddresses = await Tine.Felamimail.GridPanelHook.prototype.getMailAddresses(recipients);
+
+                    config.record = new Tine.Felamimail.Model.Message({
+                        subject: _.get(firstSelectedEvent, 'data.poll.name', _.get(firstSelectedEvent, 'data.summary', ''), ''),
+                        body: firstSelectedEvent && firstSelectedEvent.hasPoll() ? String.format(this.i18n._('Poll URL: {0}'), firstSelectedEvent.getPollUrl()) : '',
+                        massMailingFlag: massMailingFlag,
+                        [to]: mailAddresses
+                    }, 0);
+
+                    config.listeners = {
+                        single: true,
+                        load: function () {
+                            mask.hide();
+                        }
+                    };
+                },
+            });
+        }
+
+        const types = ['To', 'CC', 'BCC', 'Mass'].map((to) => {
+            const itemId = to.toLowerCase();
+
+            return new Ext.Action({
+                text: itemId === 'mass' ? this.i18n._('Mass Mailing') : this.i18n._(to),
+                itemId: itemId,
+                actionUpdater: actionUpdater,
+                menu: ['ALL-RECIPIENTS', 'NEEDS-ACTION', 'ACCEPTED', 'DECLINED', 'TENTATIVE'].map((key) => {
+                    const statusConfig = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(key);
+                    const action = {
+                        itemId: key,
+                        handler: function (action, e) {
+                            composeEmail(itemId, eventRecords, key);
+                        }
+                    };
+                    if (key === 'ALL-RECIPIENTS') {
+                        action.text = this.i18n._('All Recipients');
+                        action.iconCls = this.getIconCls();
+                    }
+                    if (statusConfig) {
+                        action.text = statusConfig.get('i18nValue');
+                        action.icon = statusConfig.get('icon');
+                    }
+                    return action;
+                })
+            });
+        })
+
+        const action = {
+            text: this.i18n._('Compose email'),
+            iconCls: this.getIconCls(),
+            menu: types,
+            actionUpdater: actionUpdater,
+        }
+        Ext.ux.ItemRegistry.registerItem('Calendar' + '-' + 'Event' + '-GridPanel-ActionToolbar-leftbtngrp', action, 30);
+        Ext.ux.ItemRegistry.registerItem('Calendar' + '-' + 'Event' + '-GridPanel-ContextMenu', action, 80);
     },
 
     registerProtocolHandler: function() {
