@@ -40,8 +40,11 @@ class Tinebase_Model_BLConfig extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::APP_NAME      => Tinebase_Config::APP_NAME,
-        self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::APP_NAME                  => Tinebase_Config::APP_NAME,
+        self::MODEL_NAME                => self::MODEL_NAME_PART,
+        self::TITLE_PROPERTY            => self::FLDS_CLASSNAME,
+        self::RECORD_NAME               => 'Business Logic Pipeline Item', // gettext('GENDER_Business Logic Pipeline Item')
+        self::RECORDS_NAME              => 'Business Logic Pipeline Items', // ngettext('Business Logic Pipeline Item', 'Business Logic Pipeline Items', n)
 
 
         self::FIELDS        => [

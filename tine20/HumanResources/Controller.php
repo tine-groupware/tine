@@ -75,6 +75,13 @@ class HumanResources_Controller extends Tinebase_Controller_Event
             HumanResources_Config::FEATURE_WORKING_TIME_ACCOUNTING)
         ) {
             $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'hr_attendancerecorderdevice',
+                'application_id' => $application,
+                'model' => HumanResources_Model_AttendanceRecorderDevice::class,
+                'label' => 'Attendance Recorder Devices' // _('Attendance Recorder Devices')
+            )));
+
+            $result->addRecord(new CoreData_Model_CoreData(array(
                 'id' => 'hr_wagetype',
                 'application_id' => $application,
                 'model' => HumanResources_Model_WageType::class,

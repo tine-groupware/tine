@@ -411,6 +411,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ),
             ),
             self::FLD_AR_PT_DEVICE_ID => [
+                self::LABEL                 => 'Project Time Recorder Device', // _('Project Time Recorder Device')
                 self::TYPE                  => self::TYPE_RECORD,
                 self::NULLABLE              => true,
                 self::CONFIG                => [
@@ -419,6 +420,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 ],
             ],
             self::FLD_AR_WT_DEVICE_ID => [
+                self::LABEL                 => 'Working Time Recorder Device', // _('Working Time Recorder Device')
                 self::TYPE                  => self::TYPE_RECORD,
                 self::NULLABLE              => true,
                 self::CONFIG                => [

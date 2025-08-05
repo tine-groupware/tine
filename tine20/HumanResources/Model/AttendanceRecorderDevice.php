@@ -48,6 +48,9 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
         self::TITLE_PROPERTY            => self::FLD_NAME,
+        self::RECORD_NAME               => 'Attendance Recorder Device', // gettext('GENDER_Attendance Recorder Device')
+        self::RECORDS_NAME              => 'Attendance Recorder Devices', // ngettext('Attendance Recorder Device', 'Attendance Recorder Devices', n)
+        self::EXPOSE_JSON_API           => true,
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -71,6 +74,16 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                         HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID => [],
                     ],
                 ],
+                self::FLD_BLPIPE => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tinebase_Model_BLConfig::FLDS_CONFIG_RECORD => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA => [],
+                                HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_FILL_GAPS_OF_DEVICES => [],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
 
@@ -85,6 +98,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
 
         self::FIELDS                    => [
             self::FLD_NAME                  => [
+                self::LABEL                     => 'Name', // _('Name')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
                 self::VALIDATORS                => [
@@ -93,24 +107,29 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                 ],
             ],
             self::FLD_DESCRIPTION           => [
+                self::LABEL                     => 'Description', // _('Description')
                 self::TYPE                      => self::TYPE_TEXT,
                 self::NULLABLE                  => true,
             ],
             self::FLD_IS_TINE_UI_DEVICE     => [
+                self::LABEL                     => 'Show in User Interface', // _('Show in User Interface')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => false,
             ],
             self::FLD_ALLOW_MULTI_START     => [
+                self::LABEL                     => 'Allow Multiple Starts', // _('Allow Multiple Starts')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => false,
                 self::ALLOW_CAMEL_CASE          => true,
             ],
             self::FLD_ALLOW_PAUSE           => [
+                self::LABEL                     => 'Allow Pause', // _('Allow Pause')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => true,
                 self::ALLOW_CAMEL_CASE          => true,
             ],
             self::FLD_STOPS                 => [
+                self::LABEL                     => 'Stops', // _('Stops')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -126,6 +145,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                 ],
             ],
             self::FLD_STARTS                => [
+                self::LABEL                     => 'Starts', // _('Starts')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -141,6 +161,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                 ],
             ],
             self::FLD_PAUSES                => [
+                self::LABEL                     => 'Pauses', // _('Pauses')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -156,6 +177,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
                 ],
             ],
             self::FLD_UNPAUSES              => [
+                self::LABEL                     => 'Unpauses', // _('Unpauses')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -172,6 +194,7 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
             ],
             // field restarts?
             self::FLD_BLPIPE                => [
+                self::LABEL                     => 'Device Config', // _('Device Config')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [

@@ -62,6 +62,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_WageType::MODEL_NAME_PART,
         HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
         HumanResources_Model_FreeTime::MODEL_NAME_PART,
+        HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
+        HumanResources_Model_AttendanceRecorderDeviceRef::MODEL_NAME_PART,
+        HumanResources_Model_BLAttendanceRecorder_Config::MODEL_NAME_PART,
+        HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::MODEL_NAME_PART,
     ];
 
     protected $_defaultModel = 'Employee';
