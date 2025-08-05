@@ -18,6 +18,7 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -42,6 +43,10 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE018_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -101,5 +106,18 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
             HumanResources_Model_Employee::class,
         ]);
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
+    }
+
+    public function update005(): void
+    {
+        $employees = HumanResources_Controller_Employee::getInstance()->getAll();
+        $employees->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID} = HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID;
+        $employees->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID} = HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID;
+
+        foreach ($employees as $employee) {
+            HumanResources_Controller_Employee::getInstance()->update($employee);
+        }
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
     }
 }

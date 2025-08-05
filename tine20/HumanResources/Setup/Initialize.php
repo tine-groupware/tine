@@ -42,6 +42,15 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
             'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
             HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system standalone project time',
             HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system standalone project time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE => new Tinebase_Record_RecordSet(
+                HumanResources_Model_BLAttendanceRecorder_Config::class, [
+                new HumanResources_Model_BLAttendanceRecorder_Config([
+                    HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CLASSNAME => HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::class,
+                    HumanResources_Model_BLAttendanceRecorder_Config::FLDS_CONFIG_RECORD => new HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig([
+                        HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_ALLOW_OTHER_TA => true,
+                    ])
+                ]),
+            ]),
         ]));
 
         $tineWorkingTimeDevice = $arDeviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([

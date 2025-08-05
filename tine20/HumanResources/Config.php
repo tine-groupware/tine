@@ -71,6 +71,9 @@ class HumanResources_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_REVENUE_ANALYSIS = 'revenueAnalysis';
 
+    const EMPLOYEE_DEFAULT_AR_WT_DEVICE_ID = 'emplyoeeDefaultARWTDeviceId';
+    const EMPLOYEE_DEFAULT_AR_PT_DEVICE_ID = 'emplyoeeDefaultARPTDeviceId';
+    
     /**
      * attendance recorder default description
      * 
@@ -178,6 +181,26 @@ class HumanResources_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR => 'attendance recorder generated', // _('attendance recorder generated')
+        ],
+        self::EMPLOYEE_DEFAULT_AR_PT_DEVICE_ID => [
+            // _('Employees default AR PT device id')
+            self::LABEL                 => 'Employees default AR PT device id',
+            // _('Employees default AR PT device id')
+            self::DESCRIPTION           => 'Employees default AR PT device id',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
+        ],
+        self::EMPLOYEE_DEFAULT_AR_WT_DEVICE_ID => [
+            // _('Employees default AR WT device id')
+            self::LABEL                 => 'Employees default AR WT device id',
+            // _('Employees default AR WT device id')
+            self::DESCRIPTION           => 'Employees default AR WT device id',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
         ],
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
