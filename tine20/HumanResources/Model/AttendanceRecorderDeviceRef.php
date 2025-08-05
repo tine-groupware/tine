@@ -39,6 +39,7 @@ class HumanResources_Model_AttendanceRecorderDeviceRef extends Tinebase_Record_N
         self::RECORD_NAME               => 'Device Reference', // gettext('GENDER_Device Reference')
         self::RECORDS_NAME              => 'Device Reference', // ngettext('Device Reference', 'Device References', n)
         self::TITLE_PROPERTY            => '{{ device_id.name }}',
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::ID],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
