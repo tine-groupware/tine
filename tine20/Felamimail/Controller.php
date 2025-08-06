@@ -326,6 +326,8 @@ class Felamimail_Controller extends Tinebase_Controller_Event
             SSO_Model_RelyingParty::FLD_NAME => 'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST),
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS => ['/'],
+                SSO_Model_OAuthOIdRPConfig::FLD_SECRET => Tinebase_Record_Abstract::generateUID(),
                 SSO_Model_OAuthOIdRPConfig::FLD_OAUTH2_GRANTS => new Tinebase_Record_RecordSet(SSO_Model_OAuthGrant::class, [
                     new SSO_Model_OAuthGrant([
                         SSO_Model_OAuthGrant::FLD_GRANT => \SSO_Config::OAUTH2_GRANTS_AUTHORIZATION_CODE,
