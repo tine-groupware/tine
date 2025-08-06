@@ -177,6 +177,11 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
     onLayout : function(ct, target){
         Ext.layout.VBoxLayout.superclass.onLayout.call(this, ct, target);
 
+        if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
+            ct.enableResponsive = ct.ownerCt.enableResponsive;
+            this.enableResponsive = ct.ownerCt.enableResponsive;
+        }
+
         var cs = this.getRenderedItems(ct), csLen = cs.length,
             c, i, cm, ch, margin, cl, diff, aw, availHeight,
             size = this.getLayoutTargetSize(),
@@ -203,7 +208,7 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         }
 
         var innerCtWidth = maxWidth + this.padding.left + this.padding.right;
-        if (ct.autoHeight) h = 'auto'
+        if (ct.autoHeight && this.enableResponsive) h = 'auto'
         switch(this.align){
             case 'stretch':
                 this.innerCt.setSize(w, h);
@@ -290,8 +295,10 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
 
             c.setPosition(cl, t);
 
-            if(c.autoHeight) c.el.setStyle('position', 'unset');
-            else c.el.setStyle('position', '');
+            if (this.enableResponsive) {
+                if(c.autoHeight) c.el.setStyle('position', 'unset');
+                else c.el.setStyle('position', '');
+            }
 
             if(isStart && c.flex){
                 ch = Math.max(0, heights[idx++] + (leftOver-- > 0 ? 1 : 0));
