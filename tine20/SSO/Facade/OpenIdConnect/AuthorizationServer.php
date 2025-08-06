@@ -81,7 +81,7 @@ class SSO_Facade_OpenIdConnect_AuthorizationServer extends \League\OAuth2\Server
         );*/
     }
 
-    public function getIdToken(Tinebase_Model_FullUser $account, string $azp): string
+    public function getIdToken(Tinebase_Model_FullUser $account, string $azp, ?array $claims = null, ?DateInterval $ttl = null): string
     {
         if (null === ($rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_RelyingParty::class, [
                     [TMFA::FIELD => SSO_Model_RelyingParty::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $azp],
@@ -104,7 +104,7 @@ class SSO_Facade_OpenIdConnect_AuthorizationServer extends \League\OAuth2\Server
         $grant = $this->enabledGrantTypes[SSO_Facade_OpenIdConnect_DeviceCodeGrant::IDENTIFIER];
         /** @var \Idaas\OpenID\ResponseTypes\BearerTokenResponse $response */
         $response = $grant->getAccessTokenReponse($account, $rp, $this->getResponseType(),
-            $this->grantTypeAccessTokenTTL[SSO_Facade_OpenIdConnect_DeviceCodeGrant::IDENTIFIER]);
+            $ttl ?: $this->grantTypeAccessTokenTTL[SSO_Facade_OpenIdConnect_DeviceCodeGrant::IDENTIFIER], $claims);
 
         /** @var \Idaas\OpenID\Entities\IdToken $idToken */
         $idToken = $response->getIdToken();

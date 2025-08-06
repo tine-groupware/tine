@@ -41,6 +41,7 @@ class SSO_Facade_OAuth2_AccessTokenRepository implements \Idaas\OpenID\Repositor
                 'scopes' => $scopes,
                 'userIdentifier' => $accessTokenEntity->getUserIdentifier(),
             ],
+            SSO_Model_Token::FLD_TTL    => (new Tinebase_DateTime($accessTokenEntity->getExpiryDateTime()))->setTimezone('UTC'),
         ]);
 
         SSO_Controller_Token::getInstance()->create($token);
@@ -87,8 +88,10 @@ class SSO_Facade_OAuth2_AccessTokenRepository implements \Idaas\OpenID\Repositor
 
     public function getAccessToken($tokenId)
     {
-        /** @var SSO_Model_Token $ssoToken */
-        $ssoToken = SSO_Controller_Token::getInstance()->search($this->getFilterForToken($tokenId))->getFirstRecord();
+        if (null === ($ssoToken = SSO_Controller_Token::getInstance()->search($this->getFilterForToken($tokenId))->getFirstRecord())) {
+            throw new Tinebase_Exception_NotFound('not found');
+        }
+
         $token = new SSO_Facade_OAuth2_AccessTokenEntity();
         $token->setClient((new SSO_Facade_OAuth2_ClientRepository())->getClientEntity($ssoToken->xprops('data')['client']));
         foreach ($ssoToken->xprops('data')['scopes'] ?? [] as $scope) {

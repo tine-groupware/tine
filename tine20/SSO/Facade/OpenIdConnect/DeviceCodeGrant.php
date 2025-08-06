@@ -72,28 +72,6 @@ class SSO_Facade_OpenIdConnect_DeviceCodeGrant extends SSO_Facade_OpenIdConnect_
             $deviceCode->getIdFromProperty(SSO_Model_OAuthDeviceCode::FLD_RELYING_PARTY_ID)
         );
         $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS} = ['/'];
-        /*$clientEntity = new SSO_Facade_OAuth2_ClientEntity($rp);
-
-        $authRequest = new \Idaas\OpenID\RequestTypes\AuthenticationRequest();
-        $authRequest->setAuthorizationApproved(true);
-        $authRequest->setClient($clientEntity);
-        $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity(Tinebase_User::getInstance()->getFullUserById($deviceCode->getIdFromProperty(SSO_Model_OAuthDeviceCode::FLD_APPROVED_BY))));
-        $authRequest->setRedirectUri('/');
-        $authRequest->setResponseType('code');
-
-        $response = $this->completeAuthorizationRequest($authRequest)->generateHttpResponse(new \Laminas\Diactoros\Response());
-        $token = substr(current($response->getHeader('location')), 7);
-
-        $request = $request->withParsedBody([
-            'code' => $token,
-            'client_id' => $clientEntity->getIdentifier(),
-            'client_secret' => $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_SECRET},
-            'redirect_uri' => '/',
-        ]);
-
-        $this->setClientRepository(new SSO_Facade_OAuth2_ClientRepositoryStatic($clientEntity));
-
-        return parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);*/
 
         return $this->getAccessTokenReponse(
             Tinebase_User::getInstance()->getFullUserById($deviceCode->getIdFromProperty(SSO_Model_OAuthDeviceCode::FLD_APPROVED_BY)),
@@ -101,7 +79,7 @@ class SSO_Facade_OpenIdConnect_DeviceCodeGrant extends SSO_Facade_OpenIdConnect_
     }
 
     public function getAccessTokenReponse(Tinebase_Model_FullUser $account, SSO_Model_RelyingParty $rp,
-                               ResponseTypeInterface $responseType, \DateInterval $accessTokenTTL): ResponseTypeInterface
+                               ResponseTypeInterface $responseType, \DateInterval $accessTokenTTL, ?array $claims = null): ResponseTypeInterface
     {
         $rp->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS} = ['/'];
         $clientEntity = new SSO_Facade_OAuth2_ClientEntity($rp);
@@ -112,7 +90,7 @@ class SSO_Facade_OpenIdConnect_DeviceCodeGrant extends SSO_Facade_OpenIdConnect_
         $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($account));
         $authRequest->setRedirectUri('/');
         $authRequest->setResponseType('code');
-        $authRequest->setClaims(['email']);
+        $authRequest->setClaims($claims ?? ['email']);
 
         $response = $this->completeAuthorizationRequest($authRequest)->generateHttpResponse(new \Laminas\Diactoros\Response());
         $token = substr(current($response->getHeader('location')), 7);

@@ -18,6 +18,7 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -42,6 +43,10 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE018_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -93,5 +98,14 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
+    }
+
+    public function update005()
+    {
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . SSO_Model_Token::TABLE_NAME . ' SET `ttl` = "' . Tinebase_DateTime::now()->addDay(7)->toString() . '" WHERE `ttl` IS NULL' );
+
+        SSO_Scheduler_Task::addDeleteExpiredTokensTask(Tinebase_Core::getScheduler());
+
+        $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
     }
 }

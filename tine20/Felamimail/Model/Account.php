@@ -729,13 +729,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             $result['sasl'] = 'XOAUTH2';
             $result['sasl_params'] = [
                 'email' => $this->email,
-                'token' => SSO_Controller::getOpenIdConnectServer()->getIdToken(
-                    new Tinebase_Model_FullUser([
-                        'accountId' => $this->email,
-                        'accountEmailAddress' => $this->email,
-                    ], true),
-                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
-                ),
+                'token' => $this->getIdTokenForEmail($this->email),
             ];
         } else {
             $this->resolveCredentials(false);
@@ -762,14 +756,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         if (!$this->isExternalAccount()) {
             if (Tinebase_Config::SASL_XOAUTH2 === Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->{Tinebase_Config::SASL}) {
                 $this->smtp_user = $this->email;
-                $this->smtp_password = SSO_Controller::getOpenIdConnectServer()->getIdToken(
-                    new Tinebase_Model_FullUser([
-                        'accountId' => $this->email,
-                        'accountEmailAddress' => $this->email,
-                    ], true),
-                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
-                );
-                $this->smtp_auth = 'plain';
+                $this->smtp_password = $this->getIdTokenForEmail($this->email);
+                $this->smtp_auth = 'XOauth2';
             }
         }
         if (! $this->smtp_user || ! $this->smtp_password) {
@@ -810,6 +798,37 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         return $result;
     }
 
+    protected function getIdTokenForEmail(string $email): string
+    {
+        $idTokens = Tinebase_Session::getSessionNamespace(static::class)->idTokens ?? [];
+        if (isset($idTokens[$email])) {
+            $parser = new \Lcobucci\JWT\Token\Parser(new \Lcobucci\JWT\Encoding\JoseEncoder());
+            try {
+                /** @var \Lcobucci\JWT\UnencryptedToken $token */
+                $token = $parser->parse($idTokens[$email]);
+                if ($token->isExpired(Tinebase_DateTime::now()->addMinute(10))) {
+                    unset($idTokens[$email]);
+                }
+            } catch (Throwable) {
+                unset($idTokens[$email]);
+            }
+        }
+        if (!isset($idTokens[$email])) {
+            $idTokens[$email] = SSO_Controller::getOpenIdConnectServer()->getIdToken(
+                new Tinebase_Model_FullUser([
+                    'accountId' => Tinebase_Core::getUser()->getId(),
+                    'accountEmailAddress' => $email,
+                ], true),
+                'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST),
+                ['email', 'sasl_loginname'],
+                new DateInterval('PT12H')
+            );
+            Tinebase_Session::getSessionNamespace(static::class)->idTokens = $idTokens;
+        }
+
+        return $idTokens[$email];
+    }
+
     /**
      * get sieve config array
      *
@@ -828,13 +847,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             $result['sasl'] = 'XOAUTH2';
             $result['sasl_params'] = [
                 'email' => $this->email,
-                'token' => SSO_Controller::getOpenIdConnectServer()->getIdToken(
-                    new Tinebase_Model_FullUser([
-                        'accountId' => $this->email,
-                        'accountEmailAddress' => $this->email,
-                    ], true),
-                    'email.' . Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST)
-                ),
+                'token' => $this->getIdTokenForEmail($this->email),
             ];
         } else {
             $this->resolveCredentials(FALSE);

@@ -11,6 +11,7 @@
  */
 
 use Jumbojett\OpenIDConnectClientException;
+use League\OAuth2\Server\CryptKey;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
@@ -158,17 +159,22 @@ class SSO_Controller extends Tinebase_Controller_Event
 
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
-        (new Idaas\OpenID\UserInfo(
-            new SSO_Facade_OpenIdConnect_UserRepository(),
+        $userInfo = new Idaas\OpenID\UserInfo(
+            $userRep = new SSO_Facade_OpenIdConnect_UserRepository(),
             $tokenRepo = new SSO_Facade_OAuth2_AccessTokenRepository(),
             new \League\OAuth2\Server\ResourceServer(
                 $tokenRepo,
-                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
-                new BearerTokenValidator($tokenRepo)
+                $cryptKey = new CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey']),
+                $bearerTokenValidator = new SSO_Facade_OAuth2_BearerTokenValidator($tokenRepo, $userRep)
             ),
             new SSO_Facade_OpenIdConnect_ClaimRepository()
-        ))->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response());
-
+        );
+        $bearerTokenValidator->setPublicKey($cryptKey);
+        try {
+            $userInfo->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response(headers: ['Cache-Control' => 'no-store']));
+        } catch (Tinebase_Exception_NotFound) {
+            return new \Laminas\Diactoros\Response(status: 401);
+        }
         return $response;
     }
 
