@@ -1985,7 +1985,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // init various grid / sm listeners
         this.grid.on('keydown', this.onKeyDown, this);
         this.grid.on('rowclick', this.onRowClick, this);
-        this.grid.on('rowdblclick', this.onRowDblClick, this);
+        this.grid.on('rowdblclick', this.onRowDblClick, this, {buffer: Ext.isTouchDevice ? 300 : null }); // NOTE: we buffer to prevent duplicate events if touch device has a pointer too. 300ms is the default interval of hammerjs
         this.grid.on('newentry', this.onStoreNewEntry, this);
         this.grid.on('headerclick', this.onHeaderClick, this);
         
