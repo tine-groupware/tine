@@ -48,6 +48,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
             this.owningRecordClass = this.editDialog.recordClass;
         }
 
+        this.defaultSortInfo = {}; // blconfig should not be sorted
         this.recordClass = this.recordClass  || Tine.Tinebase.data.RecordMgr.get(_.get(this.owningRecordClass.getField(this.owningField), 'fieldDefinition.config.recordClassName'));
         this.modelConfig = this.modelConfig || _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
         this.classNameField = this.classNameField || _.get(this.recordClass.getField(this.dynamicRecordField), 'fieldDefinition.config.refModelField', 'classname');
@@ -84,6 +85,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
     customizeColumns: function(columns) {
         _.each(columns, (col) => {
             col.editor = Tine.widgets.form.FieldManager.get(this.recordClass.getMeta('appName'), this.recordClass, col.dataIndex, Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+            col.sortable = false;
         });
         _.assign(_.find(columns, {dataIndex: this.classNameField}), {
             quickaddField: this.BLElementPicker,
