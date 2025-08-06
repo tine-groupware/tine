@@ -874,19 +874,26 @@ viewConfig: {
     
     updateColumnStyle(col, styles) {
         const tw = this.getTotalWidth();
-        _.each(styles, (value, key) => {
-            const hd = this.getHeaderCell(col);
-            hd.style[key] = value;
-            const ns = this.getRows();
-            ns.forEach((row) => {
-                row.style.width = tw;
-                if(row.firstChild){
-                    row.firstChild.style.width = tw;
-                    row.firstChild.rows[0].childNodes[col].style[key] = value;
-                }
-            })
+        const hd = this.getHeaderCell(col);
+        const gridColumnClass = [...hd.classList].find(cls => cls.startsWith('x-grid3-td-'));
+
+        Object.assign(hd.style, styles);
+
+        const ns = this.getRows();
+        ns.forEach((row) => {
+            row.style.width = tw;
+            const firstChild = row.firstChild;
+            if (!firstChild) return;
+
+            row.firstChild.style.width = tw;
+
+            const matchingCell = firstChild.rows[0]?.querySelector(`.${gridColumnClass}`);
+            if (matchingCell) {
+                Object.assign(matchingCell.style, styles);
+            }
         })
     },
+
 
     // template functions for subclasses and plugins
     // these functions include precalculated values
@@ -1215,6 +1222,8 @@ viewConfig: {
                 this.grid.stateId = this.latestGridStateId;
                 if (currentGridState) {
                     this.grid.applyState(currentGridState, true);
+                    const result = this.renderBody();
+                    this.mainBody.update(result).setWidth(this.getTotalWidth());
                     this.updateHeaders();
                     this.updateHeaderSortState();
                 }
