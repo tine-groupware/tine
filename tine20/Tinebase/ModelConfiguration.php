@@ -1035,6 +1035,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
+        if (empty($this->_modelName)) {
+            [,,$this->_modelName] = explode('_', $recordClass, 3);
+        }
 
         $this->_application = $this->_applicationName = $this->_appName;
 

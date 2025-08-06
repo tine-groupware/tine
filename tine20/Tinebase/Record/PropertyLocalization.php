@@ -102,7 +102,7 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
         if (preg_match('/^((.*)_Model_(.*))Localization$/', static::class, $m)) {
             $model = $m[1];
         } else {
-            return; // or throw?
+            throw new Tinebase_Exception_Record_DefinitionFailure(static::class . ' does not match /^((.*)_Model_(.*))Localization$/');
         }
 
         if (static::MODEL_NAME_PART !== $m[3] . 'Localization') {
