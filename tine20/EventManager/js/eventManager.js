@@ -12,9 +12,8 @@ require('./BookedOptionEditDialog.js');
 require('./RegistrationEditDialog.js');
 require('./OptionEditDialog.js');
 require('./CheckboxOptionEditDialog.js');
-
-
-
-
-
+require('./FileOptionUploadGrid.js');
+require('./FileOptionEditDialog.js');
+require('./FileEditDialog.js');
+require('./FileUploadGrid.js');
 

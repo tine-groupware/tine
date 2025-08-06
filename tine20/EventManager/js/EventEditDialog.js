@@ -4,9 +4,10 @@
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+import './filePanel';
 
 Ext.namespace('Tine.EventManager');
 
@@ -17,7 +18,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1050,
 
     windowNamePrefix: 'EventEditWindow_',
-    
+
     initComponent: function () {
         this.supr().initComponent.apply(this, arguments);
         this.app = Tine.Tinebase.appMgr.get('EventManager');
@@ -26,7 +27,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             eventEditDialog : this
         });
     },
-    
+
     getFormItems: function () {
         const me = this;
         const fieldManager = _.bind(
@@ -43,6 +44,12 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             plain: true,
             activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }],
             items: [{
                 title: this.app.i18n._('Sign Up'),
                 autoScroll: true,

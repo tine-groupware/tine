@@ -16,6 +16,10 @@
 class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'FileOption';
+    public const FLD_NODE_ID = 'node_id';
+    public const FLD_FILE_NAME = 'file_name';
+    public const FLD_FILE_SIZE = 'file_size';
+    public const FLD_FILE_TYPE = 'file_type';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -28,21 +32,48 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::RECORD_NAME           => 'File Option',
         self::RECORDS_NAME          => 'File Options', // ngettext('File Option', 'File Options', n)
+        self::TITLE_PROPERTY        => self::FLD_FILE_NAME,
 
         self::FIELDS => [
-           /* self::FLD_NODE_ID => [
-                self::TYPE => self::TYPE_RECORD,
-                self::LENGTH => 40,
-                self::OMIT_MOD_LOG => true,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+            self::FLD_NODE_ID                   => [
+                self::LENGTH                        => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
-                self::CONFIG => [
-                    self::APP_NAME => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME => 'Tree_Node',
-                ]
-            ],*/
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_NAME => [
+                self::LENGTH                       => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                   => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_SIZE => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_TYPE => [
+                self::LENGTH                       => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                   => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
         ]
     ];
 
@@ -53,4 +84,3 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
      */
     protected static $_configurationObject = null;
 }
-

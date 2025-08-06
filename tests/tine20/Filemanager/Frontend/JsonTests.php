@@ -2356,10 +2356,16 @@ class Filemanager_Frontend_JsonTests extends TestCase
         ));
         $result = $this->_getUit()->searchNodes($filter, array());
 
-        self::assertEquals(1, $result['totalcount']);
-        $node = $result['results'][0];
-        self::assertEquals('/shared/testcontainer/', $node['path'], 'no path found in node: ' . print_r($node, true));
-        $this->_assertGrantsInNode($node);
+        self::assertEquals(2, $result['totalcount']);
+        $node = $result['results'][1];
+        if ($node['name'] === 'testcontainer') {
+            self::assertEquals('/shared/testcontainer/', $node['path'], 'no path found in node: ' . print_r($node, true));
+            $this->_assertGrantsInNode($node);
+        } else {
+            $node = $result['results'][0];
+            self::assertEquals('/shared/testcontainer/', $node['path'], 'no path found in node: ' . print_r($node, true));
+            $this->_assertGrantsInNode($node);
+        }
 
         // search files + assert grants
         $filter = array(array(

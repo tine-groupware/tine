@@ -255,10 +255,10 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory', $responseDoc->textContent);
 
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
-        $this->_assertQueryResponse($responseDoc, $query, 2);
+        $this->_assertQueryResponse($responseDoc, $query, 3);
 
         $query = '//d:multistatus/d:response/d:propstat/d:prop/d:getetag';
-        $this->_assertQueryResponse($responseDoc, $query, 2);
+        $this->_assertQueryResponse($responseDoc, $query, 3);
 
         $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory', [
             'DEPTH' => '1',

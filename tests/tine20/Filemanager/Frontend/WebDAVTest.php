@@ -1065,7 +1065,7 @@ EOS
         
         $children = $node->getChildren();
         $properties = $childNode->getProperties(array());
-        $this->assertCount(1, $children);
+        $this->assertCount(2, $children);
 
         return $childNode;
     }

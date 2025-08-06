@@ -16,7 +16,11 @@
 class EventManager_Model_Selections_File extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Selections_File';
-    public const FLD_FILE = 'file';
+
+    public const FLD_NODE_ID = 'node_id';
+    public const FLD_FILE_NAME = 'file_name';
+    public const FLD_FILE_SIZE = 'file_size';
+    public const FLD_FILE_TYPE = 'file_type';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -29,14 +33,47 @@ class EventManager_Model_Selections_File extends Tinebase_Record_NewAbstract
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::RECORD_NAME           => 'File selection',
         self::RECORDS_NAME          => 'File selections', // ngettext('File selection', 'File selections', n)
-        self::TITLE_PROPERTY        => self::FLD_FILE,
+        self::TITLE_PROPERTY        => self::FLD_FILE_NAME,
 
         self::FIELDS => [
-            self::FLD_FILE     => [
-                self::LABEL                 => 'File', // _('File') //Todo should be name of FileOption!
-                self::TYPE                  => self::TYPE_ATTACHMENTS,
-                self::DEFAULT_VAL           => false,
-                self::NULLABLE              => true,
+            self::FLD_NODE_ID                   => [
+                self::LENGTH                        => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_NAME => [
+                self::LENGTH                       => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                   => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_SIZE => [
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_FILE_TYPE => [
+                self::LENGTH                       => 40,
+                self::TYPE                          => self::TYPE_STRING,
+                self::VALIDATORS                   => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
         ]
     ];
