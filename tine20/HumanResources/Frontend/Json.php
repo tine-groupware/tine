@@ -62,6 +62,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         HumanResources_Model_WageType::MODEL_NAME_PART,
         HumanResources_Model_WorkingTimeScheme::MODEL_NAME_PART,
         HumanResources_Model_FreeTime::MODEL_NAME_PART,
+        HumanResources_Model_AttendanceRecorderDevice::MODEL_NAME_PART,
+        HumanResources_Model_AttendanceRecorderDeviceRef::MODEL_NAME_PART,
+        HumanResources_Model_BLAttendanceRecorder_Config::MODEL_NAME_PART,
+        HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::MODEL_NAME_PART,
     ];
 
     protected $_defaultModel = 'Employee';
@@ -206,6 +210,31 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } finally {
             $dwtrCtrl->setRequestContext($oldContext);
         }
+    }
+
+    public function getRegistryData(): array
+    {
+        if (null === ($employee = HumanResources_Controller_Employee::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                    ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+                ]))->getFirstRecord())) {
+            return [];
+        }
+        Tinebase_Record_Expander::expandRecord($employee);
+
+        return [
+            'attendance_recorder' => [
+                'wt_device' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID} ? [
+                    'id' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->getId(),
+                    'title' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->getTitle(),
+                    'description' => $employee->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID}->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION},
+                ] : null,
+                'pt_device' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID} ? [
+                    'id' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->getId(),
+                    'title' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->getTitle(),
+                    'description' => $employee->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID}->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION},
+                ] : null,
+            ],
+        ];
     }
 
     public function recalculateEmployeesWTReports(string $employeeId, bool $force = false)

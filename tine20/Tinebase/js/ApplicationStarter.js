@@ -413,7 +413,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
 
                     if (Tine[appName].Model.hasOwnProperty(modelName + 'Mixin') && _.isFunction(_.get(Tine[appName].Model[modelName + 'Mixin'], 'statics', {}).getDefaultData)) {
                         //Do nothing
-                    } else {
+                    } else if (!_.isFunction(Tine[appName].Model[modelName].getDefaultData) || Tine[appName].Model[modelName].getDefaultData.isEmptyDefault){
                         // default function
                         Tine[appName].Model[modelName].getDefaultData = function(defaults) {
                             return Tine.Tinebase.data.Record.getDefaultData(Tine[appName].Model[modelName], defaults);

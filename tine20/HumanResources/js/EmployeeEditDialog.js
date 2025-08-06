@@ -320,14 +320,17 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                         change: this.updateDisplayName
                                     }
                                 }
-                            )], [
+                            )], [[
+                                this.fieldManager('ar_wt_device_id')
+                            ], [
+                                this.fieldManager('ar_pt_device_id')
+                            ],
                                 Tine.widgets.form.FieldManager.get(
                                 this.appName,
                                 this.modelName,
                                 'dfcom_id',
                                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
                                 {
-                                    columnWidth: 1,
                                     allowBlank: true
                                 }
                             )]

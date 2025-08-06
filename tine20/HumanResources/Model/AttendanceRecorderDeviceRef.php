@@ -36,6 +36,10 @@ class HumanResources_Model_AttendanceRecorderDeviceRef extends Tinebase_Record_N
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
+        self::RECORD_NAME               => 'Device Reference', // gettext('GENDER_Device Reference')
+        self::RECORDS_NAME              => 'Device Reference', // ngettext('Device Reference', 'Device References', n)
+        self::TITLE_PROPERTY            => '{{ device_id.name }}',
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::ID],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -48,6 +52,7 @@ class HumanResources_Model_AttendanceRecorderDeviceRef extends Tinebase_Record_N
 
         self::FIELDS                    => [
             self::FLD_TYPE                  => [
+                self::LABEL                     => 'Type', // _('Type')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
                 self::VALIDATORS                => [
@@ -56,6 +61,7 @@ class HumanResources_Model_AttendanceRecorderDeviceRef extends Tinebase_Record_N
                 ],
             ],
             self::FLD_PARENT_ID             => [
+                self::LABEL                     => 'Parent', // _('Parent')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -68,6 +74,7 @@ class HumanResources_Model_AttendanceRecorderDeviceRef extends Tinebase_Record_N
                 ],
             ],
             self::FLD_DEVICE_ID             => [
+                self::LABEL                     => 'Device', // _('Device')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,

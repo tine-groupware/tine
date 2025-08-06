@@ -32,9 +32,12 @@ class HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig extends Tinebase
     protected static $_modelConfiguration = [
         self::APP_NAME      => HumanResources_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::RECORD_NAME               => 'Timesheet Config', // gettext('GENDER_Timesheet Config')
+        self::RECORDS_NAME              => 'Timesheet Configs', // ngettext('Timesheet Config', 'Timesheet Configs', n)
 
         self::FIELDS        => [
             self::FLD_STATIC_TA             => [
+                self::LABEL                     => 'Timeaccount', // _('Timeaccount')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Timetracker_Config::APP_NAME,
@@ -42,9 +45,11 @@ class HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig extends Tinebase
                 ],
             ],
             self::FLD_ALLOW_OTHER_TA        => [
+                self::LABEL                     => 'Allow Other Timeaccounts', // _('Allow Other Timeaccounts')
                 self::TYPE                      => self::TYPE_BOOLEAN,
             ],
             self::FLD_FILL_GAPS_OF_DEVICES  => [
+                self::LABEL                     => 'Fill Gaps of Devices', // _('Fill Gaps of Devices')
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => HumanResources_Config::APP_NAME,
@@ -53,15 +58,18 @@ class HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig extends Tinebase
                 ],
             ],
             self::FLD_ROUNDING_BY_CLOCK     => [
+                self::LABEL                     => 'Rounding by Clock', // _('Rounding by Clock')
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class        => 0,
                 ],
             ],
             self::FLD_ROUNDING_PAUSE_THRESHOLD => [
+                self::LABEL                     => 'Rounding Pause Threshold', // _('Rounding Pause Threshold')
                 self::TYPE                      => self::TYPE_INTEGER,
             ],
             self::FLD_ROUNDING_TO_MIN       => [
+                self::LABEL                     => 'Rounding to Minutes', // _('Rounding to Minute')
                 self::TYPE                      => self::TYPE_INTEGER,
             ],
         ],

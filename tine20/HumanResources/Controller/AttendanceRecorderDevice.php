@@ -37,13 +37,29 @@ class HumanResources_Controller_AttendanceRecorderDevice extends Tinebase_Contro
         $this->_doContainerACLChecks = false;
     }
 
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+        parent::_checkRight($_action);
+
+        if (self::ACTION_GET === $_action) {
+            return;
+        }
+        if (!Tinebase_Core::getUser()->hasRight(HumanResources_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
+            throw new Tinebase_Exception_AccessDenied('no right to ' . $_action . ' ' . $this->_modelName);
+        }
+    }
+
     protected function _inspectDelete(array $_ids)
     {
         $_ids = parent::_inspectDelete($_ids);
 
         return array_filter($_ids, function($val) {
             return $val !== HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID &&
-                $val !== HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID;
+                $val !== HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID &&
+                $val !== HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID;
         });
     }
 }

@@ -16,12 +16,19 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
+    protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE018_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE018_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -32,6 +39,14 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE018_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE018_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -64,4 +79,45 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
     }
 
+    public function update003(): void
+    {
+        $deviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
+        $deviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
+            'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
+            HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system standalone project time',
+            HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system standalone project time',
+        ]));
+
+        $device = $deviceCtrl->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
+        $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION} = 'tine system project time in conjunction with working time';
+        $deviceCtrl->update($device);
+
+        $device = $deviceCtrl->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+        $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION} = 'tine system working time in conjunction with project time';
+        $deviceCtrl->update($device);
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
+    }
+
+    public function update004(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_AttendanceRecorderDevice::class,
+            HumanResources_Model_Employee::class,
+        ]);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
+    }
+
+    public function update005(): void
+    {
+        $employees = HumanResources_Controller_Employee::getInstance()->getAll();
+        $employees->{HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID} = HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID;
+        $employees->{HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID} = HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID;
+
+        foreach ($employees as $employee) {
+            HumanResources_Controller_Employee::getInstance()->update($employee);
+        }
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
+    }
 }
