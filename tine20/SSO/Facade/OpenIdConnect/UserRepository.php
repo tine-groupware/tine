@@ -63,6 +63,13 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
         try {
             return new SSO_Facade_OAuth2_UserEntity(Tinebase_User::getInstance()->getUserById($identifier));
         } catch (Tinebase_Exception_NotFound $tenf) {
+            // this is for email tokens, they have the email as id
+            if (false !== strpos($identifier, '@')) {
+                return new SSO_Facade_OAuth2_UserEntity(new Tinebase_Model_FullUser([
+                    'accountId' => $identifier,
+                    'accountEmailAddress' => $identifier,
+                ], true));
+            }
             return null;
         }
     }

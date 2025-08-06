@@ -2,6 +2,6 @@
 <application>
     <name>SSO</name>
     <version>18.4</version>
-    <order>100</order>
+    <order>25</order><!-- we need to install before Felamimail -->
     <status>enabled</status>
 </application>
