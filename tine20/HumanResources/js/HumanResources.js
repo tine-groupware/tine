@@ -10,6 +10,22 @@
 
 Ext.namespace('Tine.HumanResources');
 
+import '../css//HumanResources.css'
+
+import './Models'
+import './EmployeeGridPanel'
+import './ExceptionHandler'
+import './ContractEditDialog'
+import './EmployeeEditDialog'
+import './FreeDayGridPanel'
+import './FreeTimeEditDialog'
+import './ContractDetailsPanel'
+import './ContractGridPanel'
+import './FreeTimeEmployeeFilter'
+import './AccountGridPanel'
+import './EmployeeEditDialogFreeTimeGridPanel'
+import './AccountEditDialog'
+import './WorkingTimeSchemeEditDialog'
 import './DailyWTReportGridPanel'
 import './DailyWTReportEditDialog'
 import './MonthlyWTReportGridPanel'

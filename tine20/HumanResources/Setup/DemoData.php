@@ -63,7 +63,8 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         'jsmith' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'Bank of England',
             'bank_code_number' => '23563473535', 'bank_account_number' => '2038957221',
-            'position' => 'Photographer'
+            'position' => 'Photographer',
+            \HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID => \HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
         ),
         'rwright' => array(
             'health_insurance' => 'NHS', 'bank_name' => 'RBS',
@@ -222,7 +223,9 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $defaultData = array(
             'supervisor_id' => $pwulf->getId(), 'countryname' => 'GB', 'region' => 'East Sussex', 'locality' => 'Brighton',
-            'employment_begin' => $sdate
+            'employment_begin' => $sdate,
+            \HumanResources_Model_Employee::FLD_AR_WT_DEVICE_ID => \HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID,
+            \HumanResources_Model_Employee::FLD_AR_PT_DEVICE_ID => \HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID,
         );
             
         foreach ($employees as $employee) {
