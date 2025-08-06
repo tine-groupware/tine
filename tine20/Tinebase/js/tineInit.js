@@ -128,18 +128,6 @@ Tine.Tinebase.tineInit = {
     },
 
     initWindow: function () {
-        const initialDataRe = /initialData\/(.*)\/?/;
-        if (initialDataRe.test(window.location.hash)) {
-            let hashData = initialDataRe.exec(window.location.hash)[1];
-            window.location.href = location.href.replace(initialDataRe, '');
-            try {
-                window.initialData = window.initialData || {};
-                Object.assign(window.initialData, JSON.parse(decodeURIComponent(hashData)));
-            } catch (e) {
-                console.error("can't decode initialData", hashData, e);
-            }
-        }
-
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
                 // disable the native 'select all'
