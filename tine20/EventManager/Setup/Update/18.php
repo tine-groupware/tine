@@ -71,9 +71,6 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             EventManager_Model_Event::class,
-            EventManager_Model_FileOption::class,
-            EventManager_Model_Selections_File::class,
-            EventManager_Model_Selections_TextInput::class,
             EventManager_Model_Registration::class,
         ]);
 
