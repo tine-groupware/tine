@@ -46,7 +46,7 @@
         </b-col>
         <b-col cols="4" class="text-right">
           <a href="http://localhost:4000/EventManager/view/#/event">{{formatMessage('to the top')}}</a>
-<!--          <router-link @click.native="$scrollToTop">-->
+<!--          <router-link @click.native="$scrollToTop"> todo-->
         </b-col>
       </b-row>
     </footer>

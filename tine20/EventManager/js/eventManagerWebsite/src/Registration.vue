@@ -94,7 +94,13 @@
           label-for="input-horizontal"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.birthday"></b-form-input>
+          <b-form-input
+            id="birthday-input"
+            type="date"
+            class="form-registration"
+            v-model="contactDetails.birthday"
+            :max="maxBirthDate"
+          ></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -202,14 +208,13 @@
         <h4 class="mb-4">Event Specific Information:</h4>
         <h5>{{eventDetails.name}}</h5>
         <div v-for="optionGroup in sortOptionsByGroup">
-          <h6 v-if="optionGroup.group" :style="{'margin-left' : (optionGroup.level-1) * 2 + 'em'}">{{optionGroup.group}}</h6>
+<!--          <h6 v-if="optionGroup.group" :style="{'margin-left' : (optionGroup.level-1) * 2 + 'em'}">{{optionGroup.group}}</h6>-->
           <div v-for="option in optionGroup.options" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
             <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
               <h6>{{option.name_option}}:</h6>
               <div class="mb-3">{{option.option_config.text_option}}</div>
             </div>
             <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
-              <h6>{{option.name_option}}:</h6>
               <b-form-group
                 label-cols-sm="4"
                 label-cols-lg="3"
@@ -219,12 +224,12 @@
                 label-for="input-horizontal"
                 class="mb-3"
               >
-                <b-form-input v-model="responses[option.id]"></b-form-input>
+                <b-form-input v-model="replies[option.id]"></b-form-input>
               </b-form-group>
             </div>
-            <div v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'">
+            <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'">
               <b-form-checkbox
-                v-model="responses[option.id]"
+                v-model="replies[option.id]"
                 value="true"
                 unchecked-value="false"
                 @click="singleSelection(option)"
@@ -237,10 +242,24 @@
               </b-form-checkbox>
             </div>
             <div v-if="option.option_config_class === 'EventManager_Model_FileOption'">
-              <h6>{{option.name_option}}:</h6>
+              <div class="mb-3">
+                <h6>{{option.name_option}}:</h6>
+                <b-button @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+              </div>
+              <div class="mb-3">
+                <input
+                  id="file-input"
+                  type="file"
+                  class="form-control"
+                  @change="(event) => handleFileChange(event, option.id)"
+                  :accept="acceptedTypes"
+                  :multiple="allowMultiple"
+                >
+              </div>
             </div>
           </div>
         </div>
+        <b-button @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -292,7 +311,10 @@ const contactDetails = ref({
   country : "",
 });
 
-const responses = ref({});
+const replies = ref({});
+const uploadedFiles = ref({});
+const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls'
+const allowMultiple = false;
 
 const sortOptionsByGroup = computed(() => {
   let options = eventDetails.value.options;
@@ -345,20 +367,59 @@ const sortOptionsByGroup = computed(() => {
 
 const postRegistration = async () => {
   let eventId = route.params.id;
-  let registration = {'contactDetails': contactDetails, 'responses': responses};
+  let registration = {'eventId': eventId, 'contactDetails': contactDetails.value, 'replies': replies.value};
   const body = JSON.parse(JSON.stringify(registration));
-  await fetch(`/EventManager/view/event/${eventId}/registration`, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'POST',
-    body: JSON.stringify(body)
-  }).then(resp => resp.json())
-    .then(data => {
-      console.debug(data);
-    })
+  let registrationId = '';
+  try {
+    const response = await fetch(`/EventManager/register/${eventId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(body)
+    }).then(resp => resp.json())
+      .then(data => {
+        registrationId = data.id
+        console.debug(data);
+      })
+  } catch (error) {
+    console.error('Registration request failed:', error);
+  }
+  await uploadFiles(eventId, registrationId);
 }
+
+const uploadFiles = async (eventId, registrationId) => {
+  const hasFiles = Object.values(uploadedFiles.value).some(files => files && files.length > 0);
+  try {
+    for (const [optionId, files] of Object.entries(uploadedFiles.value)) {
+      if (files && files.length > 0) {
+        const formData = new FormData();
+        formData.append('eventId', eventId);
+
+        // Add files for this specific option
+        Array.from(files).forEach((file) => {
+          formData.append('files[]', file);
+        });
+
+        const fileResponse = await fetch(`/EventManager/files/${eventId}/${optionId}/${registrationId}`, {
+          method: 'POST',
+          body: formData
+        });
+
+        const fileData = await fileResponse.json();
+        console.debug('File upload response:', fileData);
+
+      }
+    }
+  } catch (error) {
+    console.error('File upload failed:', error);
+  }
+}
+
+const maxBirthDate = computed(() => {
+  return new Date().toISOString().split('T')[0]
+});
 
 // function to only select one of the checkboxes inside a group
 function singleSelection(option) {
@@ -366,11 +427,31 @@ sortOptionsByGroup.value.forEach((group) => {
   if (option.group === group.group && group.group !== "") {
     group.options.forEach((o) => {
       if (o.id !== option.id && o.option_config_class === 'EventManager_Model_CheckboxOption') {
-        responses.value[o.id] = "false";
+        replies.value[o.id] = "false";
       }
     })
   }
 })
+}
+
+const download = (data, name, type) => {
+  const url = window.URL.createObjectURL(new Blob([data], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', name);
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(() => {
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }, 200);
+};
+async function downloadFile(nodeId, name, type) {
+  await fetch(`/EventManager/getFile/${nodeId}`, {
+    method: 'GET'
+  }).then(res => res.blob()).then(data => {
+    download(data, name, type)
+  })
 }
 
 async function getEvent() {
@@ -381,10 +462,21 @@ async function getEvent() {
     .then(data => {
       eventDetails.value = data;
       eventDetails.value.options.forEach((option) => {
-        responses.value[option.id] = '';
+        replies.value[option.id] = '';
       });
       console.log(data);
     })
+}
+
+function handleFileChange(event, optionId) {
+  const files = event.target.files;
+  if (files.length > 0) {
+    console.log(`Selected files for option ${optionId}:`, files);
+    uploadedFiles.value[optionId] = files;
+  } else {
+    // Clear files if none selected
+    delete uploadedFiles.value[optionId];
+  }
 }
 
 getEvent();

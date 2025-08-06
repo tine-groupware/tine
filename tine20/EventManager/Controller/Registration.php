@@ -5,8 +5,8 @@
  * @package     EventManager
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,6 +37,94 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+    }
+
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        $this->_handleFileUpload($_record);
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
+    {
+        parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
+        $this->_handleFileUpload($_updatedRecord);
+    }
+
+    protected function _handleFileUpload(EventManager_Model_Registration $_registration)
+    {
+        if ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
+            foreach ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
+                if (
+                    !$bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                    === EventManager_Model_FileOption::class
+                ) {
+                    continue;
+                }
+
+                // put uploaded tempfile into filemanager
+                if (
+                    is_string($bookedOption
+                        ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                        ->{EventManager_Model_Selections_File::FLD_NODE_ID})
+                ) {
+                    try {
+                        $tempFile = Tinebase_TempFile::getInstance()->getTempFile(
+                            $bookedOption
+                                ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                                ->{EventManager_Model_Selections_File::FLD_NODE_ID}
+                        );
+                        $event = EventManager_Controller_Event::getInstance()->get(
+                            $_registration->{EventManager_Model_Registration::FLD_EVENT_ID}
+                        );
+                        $eventName = $event->{EventManager_Model_Event::FLD_NAME};
+                        $participantId = $_registration->{EventManager_Model_Registration::FLD_NAME};
+                        $participantName = Addressbook_Controller_Contact::getInstance()->get($participantId)->n_fileas;
+                        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen";
+                        $folders = ["/$eventName", "/Anmeldungen", "/$participantName"];
+                        $nodeController = Filemanager_Controller_Node::getInstance();
+                        $prefix = Tinebase_FileSystem::getInstance()
+                                ->getApplicationBasePath('Filemanager') . '/folders/';
+
+                        foreach ($folders as $folder) {
+                            $path = $path . $folder;
+                            if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $path)) {
+                                $nodeController->createNodes(
+                                    [$path],
+                                    [Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
+                                );
+                            }
+                        }
+                        $fileName = $path . "/" . $bookedOption
+                                ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                                ->{EventManager_Model_Selections_File::FLD_FILE_NAME};
+                        if (!Tinebase_FileSystem::getInstance()->fileExists($prefix . $fileName)) {
+                            $nodeController->createNodes(
+                                [$fileName],
+                                [Tinebase_Model_Tree_FileObject::TYPE_FILE],
+                                [$tempFile->getId()]
+                            );
+                        }
+                    } catch (Tinebase_Exception_NotFound) {
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -189,7 +277,45 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $records;
     }
 
-    public function publicApiPostRegistration($eventId) // todo: do this right
+    public function publicApiGetFile($nodeId)
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+        try {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+            $file = $fileSystem->get($nodeId);
+
+            $filename = $fileSystem->getPathOfNode($file, true);
+            $handle = $fileSystem->fopen($filename, 'r', $file->revision);
+
+            if (false === $handle) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' Could not open file by real path for file path ' . $filename);
+                }
+                throw new Tinebase_Exception_NotFound('Could not open file ' . $filename);
+            }
+
+            $content = fread($handle, $file->revision_size);
+            fclose($handle);
+
+            $response = new \Laminas\Diactoros\Response(headers: ['Content-Type' => $file->contenttype]);
+            $response->getBody()->write($content);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response->getBody()->write(json_encode($e->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;
+    }
+
+    public function publicApiPostRegistration($eventId)
     {
         $assertAclUsage = $this->assertPublicUsage();
 
@@ -197,37 +323,72 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
             $response = new \Laminas\Diactoros\Response();
             $contact = new Addressbook_Model_Contact([
-                'adr_one_countryname'   => $request['country'],
-                'adr_one_locality'      => $request['city'],
-                'adr_one_postalcode'    => $request['postalCode'],
-                'adr_one_region'        => $request['region'],
-                'adr_one_street'        => $request['street'],
-                'adr_one_street2'       => $request['houseNumber'],
-                'bday'                  => $request['birthday'], //'1975-01-02 03:04:05', // new Tinebase_DateTime???
-                'email'                 => $request['email'],
-                'title'                 => $request['title'],
-                'n_family'              => $request['lastName'],
-                //'n_fileas'              => 'Kneschke, Lars',
-                'n_given'               => $request['firstName'],
-                'n_middle'              => $request['middleName'],
-                'n_prefix'              => $request['salutation'],
-                'org_name'              => $request['company'],
-                'tel_cell'              => $request['mobile'],
-                //'tel_cell_private'      => '+49TELCELLPRIVATE',
-                'tel_home'              => $request['telephone'],
-                //'tel_work'              => '+49TELWORK',
+                'adr_one_countryname'   => $request['contactDetails']['country'],
+                'adr_one_locality'      => $request['contactDetails']['city'],
+                'adr_one_postalcode'    => $request['contactDetails']['postalCode'],
+                'adr_one_region'        => $request['contactDetails']['region'],
+                'adr_one_street'        => $request['contactDetails']['street'],
+                'adr_one_street2'       => $request['contactDetails']['houseNumber'],
+                'bday'                  => $request['contactDetails']['birthday'],
+                'email'                 => $request['contactDetails']['email'],
+                'title'                 => $request['contactDetails']['title'],
+                'n_family'              => $request['contactDetails']['lastName'],
+                'n_given'               => $request['contactDetails']['firstName'],
+                'n_middle'              => $request['contactDetails']['middleName'],
+                'n_prefix'              => $request['contactDetails']['salutation'],
+                'org_name'              => $request['contactDetails']['company'],
+                'tel_cell'              => $request['contactDetails']['mobile'],
+                'tel_home'              => $request['contactDetails']['telephone'],
             ]);
-            $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+                // todo: do we want to create a contact for every person who registers?
+            } catch (Tinebase_Exception_Duplicate $ted) {
+                $contact = 'no name';
+                //todo : already a contact
+            }
+            $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION);
+            $attendee = $attendee->records->getById('1');
+            $online = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE);
+            $online = $online->records->getById('1');
+            $waitingList = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS);
+            $waitingList = $waitingList->records->getById('2');
+            $options = $request['replies'];
+            $bookedOption = [];
+            foreach ($options as $optionId => $reply) {
+                $option = EventManager_Controller_Option::getInstance()->get($optionId);
+                if ($option->option_config_class === EventManager_Model_CheckboxOption::class) {
+                    $selection_config = new EventManager_Model_Selections_Checkbox([
+                        'booked' => boolval($reply),
+                    ], true);
+                    $bookedOption[] = new EventManager_Model_BookedOption([
+                        'event_id' => $request['eventId'],
+                        'option' => $option->getId(),
+                        'selection_config' => $selection_config,
+                        'selection_config_class' => EventManager_Model_Selections_Checkbox::class,
+                    ], true);
+                } elseif ($option->option_config_class === EventManager_Model_TextInputOption::class) {
+                    $selection_config = new EventManager_Model_Selections_TextInput([
+                        'response' => $reply,
+                    ], true);
+                    $bookedOption[] = new EventManager_Model_BookedOption([
+                        'event_id' => $request['eventId'],
+                        'option' => $option->getId(),
+                        'selection_config' => $selection_config,
+                        'selection_config_class' => EventManager_Model_Selections_TextInput::class,
+                    ], true);
+                }
+            }
             $registration = new EventManager_Model_Registration([
                 'event_id' => EventManager_Controller_Event::getInstance()->get($eventId),
                 'name' => $contact,
-                'function' => EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION, 'Attendee'),
-                'source' => EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE, 'Online'),
-                'status' => EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS, 'Waiting list'),
-                'booked_options' => $request['bookedOptions'], //todo: registration answers here in the correct selection_config
-                'description' => $request['description'],
+                'function' => $attendee,
+                'source' => $online,
+                'status' => $waitingList,
+                'booked_options' => $bookedOption,
+                'description' => '',
             ], true);
-            $registration = EventManager_Controller_Registration::getInstance()->create($registration);
+            $registration = $this->create($registration);
             $response->getBody()->write(json_encode($registration->toArray()));
         } catch (Tinebase_Exception_Record_Validation $terv) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
@@ -244,4 +405,57 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $response;
     }
 
+    public function publicApiPostFileToFileManager($eventId, $optionId, $registrationId)
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+        header('Content-Type: application/json');
+        try {
+            $response = new \Laminas\Diactoros\Response();
+            if (isset($_FILES['files']) && is_array($_FILES['files']['name'])) {
+                $fileCount = count($_FILES['files']['name']);
+                $registration = $this->get($registrationId);
+                $bookedOption = $registration->booked_options;
+                for ($i = 0; $i < $fileCount; $i++) {
+                    if ($_FILES['files']['error'][$i] === UPLOAD_ERR_OK) {
+                        $path = Tinebase_TempFile::getTempPath();
+                        file_put_contents($path, $_FILES['files']['name'][$i]);
+                        $tempFile = Tinebase_TempFile::getInstance()->createTempFile(
+                            $path,
+                            $_FILES['files']['name'][$i],
+                            $_FILES['files']['type'][$i],
+                            $_FILES['files']['size'][$i],
+                            $_FILES['files']['error'][$i]
+                        );
+                        $selection_config = new EventManager_Model_Selections_File([
+                            'node_id'   => $tempFile->getId(),
+                            'file_name' => $_FILES['files']['name'][$i],
+                            'file_type' => $_FILES['files']['type'][$i],
+                            'file_size' => $_FILES['files']['size'][$i],
+                        ], true);
+                        $bookedOption[] = new EventManager_Model_BookedOption([
+                            'event_id' => $eventId,
+                            'option' => $optionId,
+                            'selection_config' => $selection_config,
+                            'selection_config_class' => EventManager_Model_Selections_File::class,
+                        ], true);
+                    }
+                }
+                $registration->booked_options = $bookedOption;
+                $registration = $this->update($registration);
+                $response->getBody()->write(json_encode($registration->toArray()));
+            }
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($terv->getMessage()));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;
+    }
 }

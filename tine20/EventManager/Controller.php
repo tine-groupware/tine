@@ -30,6 +30,11 @@ class EventManager_Controller extends Tinebase_Controller_Event
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
         $routeCollector->addGroup('/EventManager', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/getFile/{nodeId}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
+                'publicApiGetFile',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
             $routeCollector->get('/view', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Event::class,
                 'publicApiMainScreen',
@@ -45,11 +50,16 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetEvent',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
-           /* $routeCollector->post('/view/event/{eventId}/registration', (new Tinebase_Expressive_RouteHandler(
-                EventManager_Controller_Event::class,
+            $routeCollector->post('/register/{eventId}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
                 'publicApiPostRegistration',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
-            ))->toArray());*/
+            ))->toArray());
+            $routeCollector->post('/files/{eventId}/{optionId}/{registrationId}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
+                'publicApiPostFileToFileManager',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
         });
     }
 }

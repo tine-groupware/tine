@@ -56,7 +56,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::HAS_NOTES                 => true,
         self::HAS_TAGS                  => true,
         self::MODLOG_ACTIVE             => true,
-        self::HAS_ATTACHMENTS           => true,
 
         self::CREATE_MODULE             => true,
 
