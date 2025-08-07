@@ -1501,7 +1501,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.copyRecord = false;
             this.onRecordLoad();
 
-            mainCardPanel.layout.setActiveItem(this.id);
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this.id);
             resolveGridPanel.doLayout();
 
             this.doDuplicateCheck = false;
@@ -1510,7 +1510,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // place in viewport
         this.window.setTitle(String.format(i18n._('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
-        var mainCardPanel = this.findParentBy(function(p) {return p.isWindowMainCardPanel });
+        const mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
         mainCardPanel.add(resolveGridPanel);
         mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
         resolveGridPanel.doLayout();
