@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "PasswordLess Login"
+msgid "Passwordless Login"
 msgstr ""
 
 msgid "Oauth2"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "SAML2"
 msgstr ""
 
-msgid "SAML2 bindings"
+msgid "SAML2 Bindings"
 msgstr ""
 
 msgid "Relying Parties"
@@ -38,13 +38,13 @@ msgstr ""
 msgid "Please proceed with {0}."
 msgstr ""
 
-msgid "Please proceed with your device or programm."
+msgid "Please proceed with your device or program."
 msgstr ""
 
 msgid "You can close this page now."
 msgstr ""
 
-msgid "Could not Find Device"
+msgid "Device Could Not Be Found"
 msgstr ""
 
 msgid "No device authentication request found, please recheck your code!"
@@ -57,14 +57,14 @@ msgstr ""
 msgid "Please enter the device code for {0}."
 msgstr ""
 
-msgid "Please enter the device code provided by external device or programm."
+msgid "Please enter the device code provided by external device or program."
 msgstr ""
 
 msgid "SSO"
 msgstr ""
 
 #, python-brace-format
-msgid "Login for {0} (external device/programm)"
+msgid "Login for {0} (external device/program)"
 msgstr ""
 
 #, python-brace-format

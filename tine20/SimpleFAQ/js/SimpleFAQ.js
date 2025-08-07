@@ -32,7 +32,7 @@ Tine.SimpleFAQ.Application = Ext.extend(Tine.Tinebase.Application, {
             modal: true,
             items: [{
                 xtype: 'faqpickercombobox',
-                fieldLabel: app.i18n.gettext('Search question'),
+                fieldLabel: app.i18n.gettext('Search Question'),
                 listeners: {
                     scope: this,
                     'select': function (combo, record) {

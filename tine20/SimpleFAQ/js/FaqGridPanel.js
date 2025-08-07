@@ -69,7 +69,7 @@ Tine.SimpleFAQ.FaqGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         },
         columns: [{
             id: 'id',
-            header: this.app.i18n._('FAQ id'),
+            header: this.app.i18n._('FAQ ID'),
             width: 30,
             sortable: false,
             dataIndex: 'id',

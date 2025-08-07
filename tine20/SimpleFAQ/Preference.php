@@ -72,7 +72,7 @@ class SimpleFAQ_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULTFAQLIST  => array(
                 'label'         => $translate->_('Default FAQ List'),
-                'description'   => $translate->_('The default FAQ list to create new FAQ in.'),
+                'description'   => $translate->_('The default FAQ list in which new FAQs are created.'),
             ),
         );
         

@@ -46,10 +46,10 @@ class SSO_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = [
         self::PWD_LESS_LOGIN        => [
-            //_('PasswordLess Login')
-            self::LABEL                 => 'PasswordLess Login',
-            //_('PasswordLess Login')
-            self::DESCRIPTION           => 'PasswordLess Login',
+            //_('Passwordless Login')
+            self::LABEL                 => 'Passwordless Login',
+            //_('Passwordless Login')
+            self::DESCRIPTION           => 'Passwordless Login',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -125,8 +125,8 @@ class SSO_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [],
         ],
         self::SAML2_BINDINGS => [
-            self::LABEL                 => 'SAML2 bindings', //_('SAML2 bindings')
-            self::DESCRIPTION           => 'SAML2 bindings', //_('SAML2 bindings')
+            self::LABEL                 => 'SAML2 Bindings', //_('SAML2 Bindings')
+            self::DESCRIPTION           => 'SAML2 Bindings', //_('SAML2 Bindings')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => false,
