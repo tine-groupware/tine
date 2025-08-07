@@ -74,7 +74,7 @@ msgstr ""
 msgid "No answer yet"
 msgstr ""
 
-msgid "FAQ id"
+msgid "FAQ ID"
 msgstr ""
 
 msgid "Add a new FAQ Status..."
@@ -105,7 +105,7 @@ msgstr ""
 msgid "Find Question"
 msgstr ""
 
-msgid "Search question"
+msgid "Search Question"
 msgstr ""
 
 msgid "All my FAQs"
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Default FAQ List"
 msgstr ""
 
-msgid "The default FAQ list to create new FAQ in."
+msgid "The default FAQ list in which new FAQs are created."
 msgstr ""
 
 msgid "All FAQs of my FAQ Lists"

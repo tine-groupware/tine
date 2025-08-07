@@ -30,7 +30,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                         closeable: false,
                         msg: (rpInfo.label ?
                             String.format(i18n._('Please proceed with {0}.'), rpInfo.label) :
-                            i18n._('Please proceed with your device or programm.')) + '<br /><br />' + i18n._('You can close this page now.')
+                            i18n._('Please proceed with your device or program.')) + '<br /><br />' + i18n._('You can close this page now.')
                     });
                 }
 
@@ -38,7 +38,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                     await Ext.Msg.show({
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.ERROR,
-                        title: i18n._('Could not Find Device'),
+                        title: i18n._('Device Could Not Be Found'),
                         msg: i18n._('No device authentication request found, please recheck your code!'),
                     });
                 }
@@ -48,7 +48,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                     title: i18n._('Enter Device Code'),
                     msg: rpInfo.label ?
                         String.format(i18n._('Please enter the device code for {0}.'), rpInfo.label) :
-                        i18n._('Please enter the device code provided by external device or programm.'),
+                        i18n._('Please enter the device code provided by external device or program.'),
                     closeable: false,
                     prompt: true,
                     value: initialData.sso.userCode || '',
@@ -81,7 +81,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
             infoText:
                 (rpInfo.logo ? '<img class="tb-login-infotext-logo" src="' + rpInfo.logo + '" />' : '') +
                 (rpInfo.label ? '<p class="tb-login-infotext-label">' + (window.initialData.sso?.userCode ?
-                    String.format(i18n._('Login for {0} (external device/programm)'), rpInfo.label) :
+                    String.format(i18n._('Login for {0} (external device/program)'), rpInfo.label) :
                     String.format(i18n._('After successful login you will be redirected to {0}'), rpInfo.label))  +
                 '</p>' : '') +
                 (rpInfo.description ? '<p class="tb-login-infotext-description">' + rpInfo.description + '</p>' : ''),
