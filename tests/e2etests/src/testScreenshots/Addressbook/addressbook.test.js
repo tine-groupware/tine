@@ -15,7 +15,7 @@ describe('Contacts', () => {
             await expect(page).toMatchElement('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.click('.t-app-addressbook .ext-ux-grid-gridviewmenuplugin-menuBtn');
             await page.waitForSelector('.x-menu-list');
-            await page.screenshot({path: 'screenshots/Adressbuch/9_adressbuch_mit_spaltenauswahl.png'});
+            await lib.makeScreenshot(page,'screenshots/Adressbuch/9_adressbuch_mit_spaltenauswahl.png');
         });
 
         test('Import', async () => {
@@ -29,12 +29,12 @@ describe('Contacts', () => {
             await importDialog.waitForXPath('//button');
             await lib.uploadFile(importDialog, 'src/testScreenshots/Addressbook/test.csv');
             await expect(importDialog).toMatchElement('button', {text: new RegExp('test.csv.*'), timeout:10000})
-            await importDialog.screenshot({path: 'screenshots/Adressbuch/1_adressbuch_importfenster.png'});
+            await lib.makeScreenshot(importDialog,'screenshots/Adressbuch/1_adressbuch_importfenster.png');
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
-            await importDialog.screenshot({path: 'screenshots/Adressbuch/4_adressbuch_mit_import_optionen_setzen.png.png'});
+            await lib.makeScreenshot(importDialog,'screenshots/Adressbuch/4_adressbuch_mit_import_optionen_setzen.png.png');
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await expect(importDialog).toMatchElement('span', {text: 'Zusammenfassung'});
-            await importDialog.screenshot({path: 'screenshots/Adressbuch/8_adressbuch_mit_import_zusammenfassung.png'});
+            await lib.makeScreenshot(importDialog,'screenshots/Adressbuch/8_adressbuch_mit_import_zusammenfassung.png');
             await expect(importDialog).toClick('button', {text: 'Ende'});
             await importDialog.close();
         });
@@ -53,7 +53,7 @@ describe('Contacts', () => {
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await expect(importDialog).toMatchElement('span', {text: 'Konflikte auflösen'});
-            await importDialog.screenshot({path: 'screenshots/Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen.png'});
+            await lib.makeScreenshot(importDialog,'screenshots/Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen.png');
             await importDialog.close();
         });
 
@@ -71,7 +71,7 @@ describe('Contacts', () => {
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await expect(importDialog).toClick('button', {text: 'Vorwärts'});
             await expect(importDialog).toMatchElement('span', {text: 'Konflikte auflösen'});
-            await importDialog.screenshot({path: 'screenshots/Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen.png'});
+            await lib.makeScreenshot(importDialog,'screenshots/Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen.png');
             await expect(importDialog).toClick('button', {text: 'Ende'});
             await importDialog.close();
         });
@@ -89,7 +89,7 @@ describe('Contacts', () => {
                 try {
                     await expect(popupWindow).toClick('span', {text: 'Karte'});
                     await popupWindow.waitForTimeout(10000); // wait to load map
-                    await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/12_adressbuch_kontakt_karte.png'});
+                    await lib.makeScreenshot(popupWindow,'screenshots/1_adressverwaltung/12_adressbuch_kontakt_karte.png');
                 } catch (e) {
                     await console.log('Map musst enabled');
                 }
@@ -97,37 +97,37 @@ describe('Contacts', () => {
 
         test('notes', async () => {
             await selectTab(popupWindow, 'Notizen.*');
-            await popupWindow.screenshot({path: 'screenshots/StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz.png');
             await expect(popupWindow).toClick('button', {text: 'Notizen hinzufügen'});
             await popupWindow.waitForSelector('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
             await popupWindow.click('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
             //await popupWindow.waitForTimeout(1000);
-            await popupWindow.screenshot({path: 'screenshots/StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz.png');
             await expect(popupWindow).toClick('.x-window-bwrap button', 'Abbrechen');
         });
 
             test('attachments', async () => {
                 await expect(popupWindow).toClick('span', {text: new RegExp("Anhänge.*")});
-                await popupWindow.screenshot({path: 'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png'});
+                await lib.makeScreenshot(popupWindow,'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png');
             });
 
             test('relations', async () => {
                 await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
                 await popupWindow.waitForTimeout(3000);
-                await popupWindow.screenshot({path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
+                await lib.makeScreenshot(popupWindow,'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png');
                 let test = await popupWindow.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel');
 
                 let arrowtrigger = await test.$$('.x-form-arrow-trigger');
                 await arrowtrigger[0].click(); // test!
-                await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links.png'});
-                await popupWindow.screenshot({path: 'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png'});
+                await lib.makeScreenshot(popupWindow,'screenshots/1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links.png');
+                await lib.makeScreenshot(popupWindow,'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png');
                 await arrowtrigger[1].click(); // test!
-                await popupWindow.screenshot({path: 'screenshots/1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts.png'});
+                await lib.makeScreenshot(popupWindow,'screenshots/1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts.png');
             });
 
             test('history', async () => {
                 await expect(popupWindow).toClick('span', {text: new RegExp("Historie.*")});
-                await popupWindow.screenshot({path: 'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png'});
+                await lib.makeScreenshot(popupWindow,'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png');
                 await popupWindow.close();
             });
         });
@@ -142,7 +142,7 @@ describe('Contacts', () => {
             await expect(page).toClick('.x-window .x-form-arrow-trigger');
             await page.waitForSelector('.x-widget-tag-tagitem-text');
             await page.hover('.x-widget-tag-tagitem-text');
-            await page.screenshot({path: 'screenshots/Adressbuch/18_adressbuch_kontakten_tags_zuweisen.png'});
+            await lib.makeScreenshot(page,'screenshots/Adressbuch/18_adressbuch_kontakten_tags_zuweisen.png');
             await page.keyboard.press('Escape');
             await page.keyboard.press('Escape');
         });
@@ -155,7 +155,7 @@ describe('Contacts', () => {
             await expect(page).toClick('.x-grid3-row.x-grid3-row-first', {button: 'right'});
             felamimailIcon = await expect(page).toMatchElement('.x-menu-item-text', {text: 'Nachricht verfassen'});
             await felamimailIcon.hover();
-            await page.screenshot({path: 'screenshots/Adressbuch/17_adressbuch_email_viele_empfaenger.png'});
+            await lib.makeScreenshot(page,'screenshots/Adressbuch/17_adressbuch_email_viele_empfaenger.png');
         });
 
         test('send mail', async () => {
@@ -163,7 +163,7 @@ describe('Contacts', () => {
             await felamimailIcon.click();
             popupWindow = await popupWindow
             await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
-            await popupWindow.screenshot({path: 'screenshots/Adressbuch/20_adressbuch_email_als_notiz.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/Adressbuch/20_adressbuch_email_als_notiz.png');
             await popupWindow.close();
         })
 
@@ -190,7 +190,7 @@ describe('Contacts', () => {
             await page.waitForTimeout(1000);
             await page.waitForSelector('.x-menu-item-icon.action_managePermissions');
             await page.hover('.x-menu-item-icon.action_managePermissions');
-            await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
+            await lib.makeScreenshot(page,'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png');
         });
 
         test('permissions dialog', async () => {
@@ -204,7 +204,7 @@ describe('Contacts', () => {
                 });
             }
             await page.click('.x-menu-item-icon.action_managePermissions');
-            await page.screenshot({path: 'screenshots/StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png'});
+            await lib.makeScreenshot(page,'screenshots/StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png');
             await page.keyboard.press('Escape');
         });
     });
@@ -246,7 +246,7 @@ describe('Contacts', () => {
             await expect(popupWindow).toFill('input[name=adr_one_countryname]', 'Deutschland');
             await popupWindow.waitForSelector('.x-combo-list-item');
             await popupWindow.keyboard.down('Enter');
-            await popupWindow.screenshot({path: 'screenshots/Adressbuch/10_adressbuch_kontakt_bearbeiten.png'})
+            await lib.makeScreenshot(popupWindow,'screenshots/Adressbuch/10_adressbuch_kontakt_bearbeiten.png');
         });
 
         test('parseAddress', async () => {
@@ -254,7 +254,7 @@ describe('Contacts', () => {
             await expect(popupWindow).toClick('button', {text: 'Adresse einlesen'});
             await popupWindow.waitForSelector('.ext-mb-textarea');
             await expect(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann Beispielweg 1 354234 Musterdorf !');
-            await popupWindow.screenshot({path: 'screenshots/Adressbuch/11_adressbuch_kontakt_neu_einlesen.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/Adressbuch/11_adressbuch_kontakt_neu_einlesen.png');
             await expect(popupWindow).toClick('button.btn-close');
         });
 
@@ -263,12 +263,12 @@ describe('Contacts', () => {
             // TODO we should not make this dependent on the number of arrow triggers
             await arrowtrigger[10].click();
             await expect(popupWindow).toMatchElement('.x-widget-tag-tagitem-text', {text: 'Elbphilharmonie'});
-            await popupWindow.screenshot({path: 'screenshots/Adressbuch/15_adressbuch_tag_hinzu.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/Adressbuch/15_adressbuch_tag_hinzu.png');
             let btn_text = await popupWindow.$$('.x-btn-text');
             await btn_text[3].click();
             await popupWindow.waitForSelector('.ext-mb-input');
             await expect(popupWindow).toFill('.ext-mb-input', 'Persönlicher Tag');
-            await popupWindow.screenshot({path: 'screenshots/Adressbuch/16_adressbuch_persoenlicher_tag_hinzu.png'});
+            await lib.makeScreenshot(popupWindow,'screenshots/Adressbuch/16_adressbuch_persoenlicher_tag_hinzu.png');
             await expect(popupWindow).toClick('button', {text: 'Abbrechen'});
         });
 
@@ -285,11 +285,12 @@ describe.skip('Group', () => {
         test('go to Mainscreen', async () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
             await page.waitForTimeout(500);
-            await page.screenshot({path: 'screenshots/Adressbuch/22_adressbuch_gruppen_uebersicht.png'});
-            await page.screenshot({
-                path: 'screenshots/Adressbuch/23_adressbuch_gruppen_modul.png',
-                clip: {x: 0, y: 0, width: 150, height: 300}
-            })
+            await lib.makeScreenshot(page,'screenshots/Adressbuch/22_adressbuch_gruppen_uebersicht.png');
+            await lib.makeScreenshot(page,'screenshots/Adressbuch/23_adressbuch_gruppen_modul.png');
+            //await page.screenshot({
+            //    path: 'screenshots/Adressbuch/23_adressbuch_gruppen_modul.png',
+            //    clip: {x: 0, y: 0, width: 150, height: 300}
+            //})
         });
     });
 });

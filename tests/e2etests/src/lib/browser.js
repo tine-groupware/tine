@@ -8,28 +8,34 @@ const path = require('path');
 const uuid = require('uuid');
 
 const simpleConsole = require('console');
-const { blue, cyan, green, magenta, red, yellow } = require('colorette')
+const {blue, cyan, green, magenta, red, yellow} = require('colorette')
 const colors = {
     LOG: text => text,
     ERR: red,
     WAR: yellow,
     INF: cyan
 };
+
+const modes = ['light', 'dark'];
+const resolutions = [
+    {width: 1280, height: 720},   // 720p
+    {width: 1920, height: 1080}   // 1080p
+];
 const priorities = {
-        EME:    0,  // Emergency: system is unusable
-        ALE:    1,  // Alert: action must be taken immediately
-        CRI:     2,  // Critical: critical conditions
-        ERR:      3,  // Error: error conditions
-        WAR:     4,  // Warning: warning conditions
-        NOT:   5,  // Notice: normal but significant condition
-        INF:     6,  // Informational: informational messages
-        DEB:    7,   // Debug: debug messages
-        TRA:    8   // Debug: debug messages
+    EME: 0,  // Emergency: system is unusable
+    ALE: 1,  // Alert: action must be taken immediately
+    CRI: 2,  // Critical: critical conditions
+    ERR: 3,  // Error: error conditions
+    WAR: 4,  // Warning: warning conditions
+    NOT: 5,  // Notice: normal but significant condition
+    INF: 6,  // Informational: informational messages
+    DEB: 7,   // Debug: debug messages
+    TRA: 8   // Debug: debug messages
 
-    };
+};
 
 
-    module.exports = {
+module.exports = {
     download: async function (page, selector, option = {}) {
         const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
         mkdirp(downloadPath);
@@ -50,7 +56,7 @@ const priorities = {
         return filename;
     },
 
-    uploadFile: async function (page,file) {
+    uploadFile: async function (page, file) {
         let inputUploadHandle;
 
         inputUploadHandle = await page.$('input[type=file]');
@@ -70,7 +76,8 @@ const priorities = {
         this.proxyConsole(popupWindow);
         try {
             await popupWindow.waitForSelector('.ext-el-mask', {timeout: 10000});
-        } catch {}
+        } catch {
+        }
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
         await popupWindow.waitForTimeout(2000);
         return popupWindow;
@@ -155,7 +162,7 @@ const priorities = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', `--window-size=1366,768`];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', `--window-size=1366,768`, '--ignore-certificate-errors'];
 
         try {
             const opts = {
@@ -170,9 +177,9 @@ const priorities = {
             }
 
             browser = await puppeteer.launch(opts);
-	} catch (e) {
-	    console.log(e);
-	}
+        } catch (e) {
+            console.log(e);
+        }
         page = await browser.newPage();
 
         this.proxyConsole(page);
@@ -218,7 +225,7 @@ const priorities = {
         await expect(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.tine-dock', {timeout: 0});
-            if(!!+process.env.MFA) {
+            if (!!+process.env.MFA) {
                 await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
                 const mfaDialog = await this.getEditDialog('OK');
                 await expect(mfaDialog).toClick('button', {text: "Abbrechen"});
@@ -240,37 +247,37 @@ const priorities = {
         }
     },
 
-    proxyConsole: async function(page) {
+    proxyConsole: async function (page) {
 
         page
             .on('console', message => {
                 const type = message.type().substr(0, 3).toUpperCase()
                 const messageText = message.text();
-                if(process.env.LOGLEVEL >= priorities[type] && !messageText.match('sockjs-node')) {
+                if (process.env.LOGLEVEL >= priorities[type] && !messageText.match('sockjs-node')) {
                     const color = colors[type] || blue
                     simpleConsole.log(color(`${type} ${messageText}`))
                 }
             })
-            .on('pageerror', ({ message }) => {
-                    if(process.env.LOGLEVEL >= priorities['ERR'] && !message.match('sockjs-node')) {
-                        simpleConsole.log(red(message))
-                    }
+            .on('pageerror', ({message}) => {
+                if (process.env.LOGLEVEL >= priorities['ERR'] && !message.match('sockjs-node')) {
+                    simpleConsole.log(red(message))
+                }
             })
             .on('response', response => {
-                if(process.env.LOGLEVEL >= priorities['DEB']) {
+                if (process.env.LOGLEVEL >= priorities['DEB']) {
                     simpleConsole.log(green(`${response.status()} ${response.url()}`))
                 }
             })
             .on('requestfailed', request => {
                 const url = request.url();
-                    if(process.env.LOGLEVEL >= ['ERR'] && !url.match('sockjs-node')) {
-                        simpleConsole.log(magenta(`${request.failure().errorText} ${url}`))
-                    }
+                if (process.env.LOGLEVEL >= ['ERR'] && !url.match('sockjs-node')) {
+                    simpleConsole.log(magenta(`${request.failure().errorText} ${url}`))
+                }
             })
     },
 
 
-    getSetup: async function() {
+    getSetup: async function () {
 
         jasmine.getEnv().addReporter({
             specStarted: result => jasmine.currentTest = result
@@ -310,7 +317,7 @@ const priorities = {
             height: 768,
         });
         await page.authenticate({'username': process.env.HTACCESS_USERNAME, 'password': process.env.HTACCESS_PASSWORD});
-        await page.goto(process.env.TEST_URL+'/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
+        await page.goto(process.env.TEST_URL + '/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
@@ -340,16 +347,56 @@ const priorities = {
         }
     },
 
-    clickSlitButton: async function(page, text) {
+    clickSlitButton: async function (page, text) {
         return await page.evaluate((text) => {
             const btn = document.evaluate('//em[button[text()="' + text + '"]]', document).iterateNext();
             const box = btn.getBoundingClientRect();
 
             // cruid split btn hack
             const tmp = Ext.EventObject.getPageX;
-            Ext.EventObject.getPageX = () => {return 10000}
-            document.elementFromPoint(box.x+box.width, box.y).click();
+            Ext.EventObject.getPageX = () => {
+                return 10000
+            }
+            document.elementFromPoint(box.x + box.width, box.y).click();
             Ext.EventObject.getPageX = tmp;
         }, text);
+    },
+
+    /**
+     *
+     * @param page
+     * @param path
+     * @param combo
+     * @returns {Promise<void>}
+     */
+    makeScreenshot: async function (page, path, combo=false) {
+        if(process.env.TEST_ALL_SCREENSHOT === 'true') {
+            for (const mode of modes) {
+                for (const resolution of resolutions) {
+                    const filename = path
+                        ? `${path.replace(/(\.\w+)$/, `_${mode}_${resolution.width}x${resolution.height}$1`)}`
+                        : null;
+                    await page.evaluate((mode) => {
+                        document.body.className = document.body.className.replace(/(light|dark)-mode/, `${mode}-mode`);
+                    }, mode);
+                    await page.setViewport({width: resolution.width, height: resolution.height});
+                    await page.waitForTimeout(500);
+                    if(combo) {
+                        console.log('TEST')
+                        await page.keyboard.press('Escape');
+                        await page.waitForTimeout(500);
+                        await page.click('.x-form-text.x-form-field.x-form-focus + .x-form-trigger.x-form-arrow-trigger');
+                        await page.waitForTimeout(500);
+                    }
+                    if (filename) {
+                        await page.screenshot({path: filename});
+                    } else {
+                        throw new Error('Kein Pfad für den Screenshot angegeben.');
+                    }
+                }
+            }
+        } else {
+            await page.screenshot({path: path});
+        }
     }
 };
