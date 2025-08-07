@@ -23,6 +23,7 @@ class SSO_Facade_OAuth2_RefreshTokenRepository implements \League\OAuth2\Server\
         $token = new SSO_Model_Token([
             SSO_Model_Token::FLD_TOKEN  => $refreshTokenEntity->getIdentifier(),
             SSO_Model_Token::FLD_TYPE   => SSO_Model_Token::TYPE_REFRESH,
+            SSO_Model_Token::FLD_TTL    => (new Tinebase_DateTime($refreshTokenEntity->getExpiryDateTime()))->setTimezone('UTC'),
         ]);
 
         SSO_Controller_Token::getInstance()->create($token);

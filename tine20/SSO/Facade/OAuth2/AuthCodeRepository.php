@@ -23,6 +23,7 @@ class SSO_Facade_OAuth2_AuthCodeRepository implements \League\OAuth2\Server\Repo
         $token = new SSO_Model_Token([
             'token' => $authCodeEntity->getIdentifier(),
             SSO_Model_Token::FLD_TYPE => SSO_Model_Token::TYPE_AUTH,
+            SSO_Model_Token::FLD_TTL    => (new Tinebase_DateTime($authCodeEntity->getExpiryDateTime()))->setTimezone('UTC'),
         ]);
 
         SSO_Controller_Token::getInstance()->create($token);

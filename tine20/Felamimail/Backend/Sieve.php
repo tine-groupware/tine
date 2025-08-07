@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,8 +18,6 @@
  */
 class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
 {
-    use Felamimail_Protocol_SaslTrait;
-
     /**
      * Public constructor
      *
@@ -46,6 +44,20 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             throw new Felamimail_Exception_SieveInvalidCredentials('Could not authenticate with user '
                 . $_config['username'] . ' (' . $zmpe->getMessage() . ').');
+        }
+    }
+
+    public function saslAuthenticate(array $_params, string $_method, bool $dontParse = true): void
+    {
+        switch ($_method)
+        {
+            case 'XOAUTH2':
+                $token = base64_encode('user=' . ($_params['email'] ?? '') . chr(1) . chr(1)  . 'auth=Bearer ' . ($_params['token'] ?? '') . chr(1) . chr(1));
+                $this->requestAndResponse('AUTHENTICATE', $this->escapeString('XOAUTH2', $token), dontParse: $dontParse);
+                break;
+
+            default :
+                throw new Exception("Sasl method $_method not implemented!");
         }
     }
 }

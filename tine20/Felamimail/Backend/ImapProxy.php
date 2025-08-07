@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -72,8 +72,8 @@ class Felamimail_Backend_ImapProxy
             $params->user = $account->user . '*' . $masterLogin;
         }
 
-        if (!isset($params->user)) {
-            throw new Felamimail_Exception_IMAPInvalidCredentials('Need at least user in params.');
+        if (!isset($params->user) && !isset($params->sasl)) {
+            throw new Felamimail_Exception_IMAPInvalidCredentials('Need at least user or sasl in params.');
         }
         
         $params->host     = isset($params->host)     ? $params->host     : 'localhost';

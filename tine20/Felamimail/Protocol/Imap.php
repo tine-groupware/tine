@@ -6,7 +6,7 @@
  * @subpackage  Protocol
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,7 +18,19 @@
  */
 class Felamimail_Protocol_Imap extends Zend_Mail_Protocol_Imap
 {
-    use Felamimail_Protocol_SaslTrait;
+    public function saslAuthenticate(array $_params, string $_method, bool $dontParse = true): array|bool
+    {
+        switch ($_method)
+        {
+            case 'XOAUTH2':
+                $token = base64_encode('user=' . ($_params['email'] ?? '') . chr(1) . chr(1)  . 'auth=Bearer ' . ($_params['token'] ?? '') . chr(1) . chr(1));
+                $result = $this->requestAndResponse('AUTHENTICATE XOAUTH2 ' . $token, dontParse: $dontParse);
+                return is_array($result) || $result ? $result : false;
+
+            default :
+                throw new Exception("Sasl method $_method not implemented!");
+        }
+    }
 
     /**
      * Examine and select have the same response. The common code for both

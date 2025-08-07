@@ -14,6 +14,12 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
 {
     use \Idaas\OpenID\Repositories\UserRepositoryTrait;
 
+    protected ?\Lcobucci\JWT\UnencryptedToken $idToken = null;
+    public function setIdToken(\Lcobucci\JWT\UnencryptedToken $token): void
+    {
+        $this->idToken = $token;
+    }
+
     public function getUserEntityByUserCredentials($username, $password, $grantType, \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__);
@@ -42,6 +48,9 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                     break;
                 case 'email':
                     $result['email'] = $userEntity->getTineUser()->accountEmailAddress;
+                    break;
+                case 'sasl_loginname':
+                    $result['sasl_loginname'] = $this->idToken?->claims()->get('sasl_loginname') ?: $userEntity->getTineUser()->accountEmailAddress;
                     break;
                 case 'groups':
                     $result['groups'] = array_values(Tinebase_Group::getInstance()->getMultiple(

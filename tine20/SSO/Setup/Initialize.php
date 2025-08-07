@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
   * 
  * @package     SSO
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -23,5 +23,11 @@ class SSO_Setup_Initialize extends Setup_Initialize
         $webfingerHandler = Tinebase_Config::getInstance()->{Tinebase_Config::WEBFINGER_REL_HANDLER};
         $webfingerHandler[SSO_Controller::WEBFINGER_REL] = [SSO_Controller::class, 'webfingerHandler'];
         Tinebase_Config::getInstance()->{Tinebase_Config::WEBFINGER_REL_HANDLER} = $webfingerHandler;
+    }
+
+    protected function _initializeTasks(): void
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        SSO_Scheduler_Task::addDeleteExpiredTokensTask($scheduler);
     }
 }
