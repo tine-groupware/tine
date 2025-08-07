@@ -52,10 +52,10 @@ class Tasks_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = array(
         self::TASK_STATUS => array(
-                                   //_('Tasks status available')
-            'label'                 => 'Tasks status available',
-                                   //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation.')
-            'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation.',
+                                   //_('Available task statuses')
+            'label'                 => 'Available task statuses',
+                                   //_('Possible task status. Please note that additional attendee status might impact other Tasks systems on export or synchronization.')
+            'description'           => 'Possible task status. Please note that additional attendee status might impact other Tasks systems on export or synchronization.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => true,
@@ -75,10 +75,10 @@ class Tasks_Config extends Tinebase_Config_Abstract
             ]
         ),
         self::TASK_PRIORITY => array(
-                                   //_('Task priorities available')
-            'label'                 => 'Task priorities available',
-                                   //_('Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation.')
-            'description'           => 'Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation.',
+                                   //_('Available task priorities')
+            'label'                 => 'Available task priorities',
+                                   //_('Possible task priorities. Please note that additional priorities might impact other task systems on export or synchronization.')
+            'description'           => 'Possible task priorities. Please note that additional priorities might impact other Task systems on export or synchronization.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Priority'),
             'clientRegistryInclude' => TRUE,
@@ -93,10 +93,10 @@ class Tasks_Config extends Tinebase_Config_Abstract
             )
         ),
         self::ATTENDEE_STATUS => array(
-            //_('Collaborator Status Available')
-            'label'                 => 'Collaborator Status Available',
-            //_('Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.')
-            'description'           => 'Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.',
+            //_('Available collaborator statuses')
+            'label'                 => 'Available collaborator statuses',
+            //_('Possible task collaborator statuses. Please note that additional collaborator statuses might impact other task systems on export or synchronization.')
+            'description'           => 'Possible task collaborator statuses. Please note that additional collaborator statuses might impact other task systems on export or synchronization.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
             'options'               => array('recordModel' => Tasks_Model_AttendeeStatus::class),
             'clientRegistryInclude' => TRUE,

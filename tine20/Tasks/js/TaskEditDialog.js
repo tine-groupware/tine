@@ -141,7 +141,7 @@ import './DependencyPanel'
             alarms = this.alarmPanel.alarmGrid.getFromStoreAsArray();
             
         if (! Ext.isEmpty(alarms) && ! Ext.isDate(dueDate)) {
-            dueField.markInvalid(this.app.i18n._('You have to supply a due date, because an alarm ist set!'));
+            dueField.markInvalid(this.app.i18n._('You have to supply a due date, because an alarm is set!'));
             
             isValid = false;
         }
@@ -219,7 +219,7 @@ import './DependencyPanel'
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
                             fieldLabel: this.app.i18n._('Organizer / Responsible'),
-                            emptyText: i18n._('Add Responsible ...'),
+                            emptyText: i18n._('Add Responsible...'),
                             useAccountRecord: true,
                             name: 'organizer',
                             allowBlank: true,

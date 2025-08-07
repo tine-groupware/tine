@@ -37,7 +37,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => Tasks_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All tasks of my taskslists", // _("All tasks of my taskslists")
+            'description'       => "All tasks in my task lists", // _("All tasks in my task lists")
             'filters'           => array(
                 array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT),
                 array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),

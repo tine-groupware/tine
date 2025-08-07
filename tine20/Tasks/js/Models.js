@@ -72,7 +72,7 @@ Tine.Tasks.Model.Status = Tine.Tinebase.data.Record.create([
     modelName: 'Status',
     idProperty: 'id',
     titleProperty: 'i18nValue',
-    // ngettext('Status', 'Status', n); gettext('Status');
+    // ngettext('Status', 'Statuses', n); gettext('Status');
     recordName: 'Status',
     recordsName: 'Status'
 });

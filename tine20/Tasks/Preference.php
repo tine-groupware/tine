@@ -83,11 +83,11 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
             ),
             self::DEFAULTTASKLIST  => array(
                 'label'         => $translate->_('Default Task List'),
-                'description'   => $translate->_('The default task list to create new tasks in.'),
+                'description'   => $translate->_('The default task list in which to create new tasks.'),
             ),
             self::DEFAULTALARM_ENABLED => array(
                 'label'         => $translate->_('Enable Standard Alarm'),
-                'description'   => $translate->_('New task get a standard alarm as defined below'),
+                'description'   => $translate->_('New tasks get a standard alarm, as defined below.'),
             ),
             self::DEFAULTALARM_MINUTESBEFORE => array(
                 'label'         => $translate->_('Standard Alarm Time'),
