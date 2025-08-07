@@ -16,19 +16,19 @@ msgstr ""
 msgid "manage shared task lists"
 msgstr ""
 
-msgid "Create new shared tasks lists"
+msgid "Create new shared task lists"
 msgstr ""
 
-msgid "manage shared tasks favorites"
+msgid "manage shared task favorites"
 msgstr ""
 
-msgid "Create or update shared tasks favorites"
+msgid "Create or update shared task favorites"
 msgstr ""
 
-msgid "Tasks status available"
+msgid "Available task statuses"
 msgstr ""
 
-msgid "Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation."
+msgid "Possible task status. Please note that additional attendee status might impact other Tasks systems on export or synchronization."
 msgstr ""
 
 msgid "No response"
@@ -43,10 +43,10 @@ msgstr ""
 msgid "In process"
 msgstr ""
 
-msgid "Task priorities available"
+msgid "Available task priorities"
 msgstr ""
 
-msgid "Possible task priorities. Please note that additional priorities might impact other Tasks systems on export or syncronisation."
+msgid "Possible task priorities. Please note that additional priorities might impact other task systems on export or synchronization."
 msgstr ""
 
 msgid "low"
@@ -61,10 +61,10 @@ msgstr ""
 msgid "urgent"
 msgstr ""
 
-msgid "Collaborator Status Available"
+msgid "Available collaborator statuses"
 msgstr ""
 
-msgid "Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation."
+msgid "Possible task collaborator statuses. Please note that additional collaborator statuses might impact other task systems on export or synchronization."
 msgstr ""
 
 msgid "Accepted"
@@ -85,10 +85,11 @@ msgstr ""
 msgid "Container for task templates"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal tasks"
 msgstr ""
 
+#, php-format
 msgid "Notification for Task %1$s"
 msgstr ""
 
@@ -98,7 +99,7 @@ msgstr ""
 msgid "Create from Template"
 msgstr ""
 
-msgid "Use show all button bellow to search for all tasks"
+msgid "Use the show all button below to search for all tasks"
 msgstr ""
 
 msgid "Show all"
@@ -129,7 +130,7 @@ msgid "Percent"
 msgstr ""
 
 msgid "Status"
-msgid_plural "Status"
+msgid_plural "Statuses"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -145,7 +146,7 @@ msgstr ""
 msgid "This Task is part of:"
 msgstr ""
 
-msgid "You have to supply a due date, because an alarm ist set!"
+msgid "You have to supply a due date, because an alarm is set!"
 msgstr ""
 
 msgid "Due date"
@@ -154,7 +155,7 @@ msgstr ""
 msgid "Organizer / Responsible"
 msgstr ""
 
-msgid "Add Responsible ..."
+msgid "Add Responsible..."
 msgstr ""
 
 msgid "Notes"
@@ -183,7 +184,7 @@ msgstr ""
 msgid "Show all tasks matching all the following criteria:"
 msgstr ""
 
-msgid "Tasks has an open status."
+msgid "Task has an open status."
 msgstr ""
 
 msgid "Filtered person is either:"
@@ -198,7 +199,7 @@ msgstr ""
 msgid "Coworker with an open status assigned."
 msgstr ""
 
-msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgid "Please note: Tasks are hidden if the filtered person is the organizer, the due date has not yet passed, and a coworker with an open status is assigned."
 msgstr ""
 
 msgid "New Task"
@@ -285,13 +286,13 @@ msgstr ""
 msgid "Default Task List"
 msgstr ""
 
-msgid "The default task list to create new tasks in."
+msgid "The default task list in which to create new tasks."
 msgstr ""
 
 msgid "Enable Standard Alarm"
 msgstr ""
 
-msgid "New task get a standard alarm as defined below"
+msgid "New tasks get a standard alarm, as defined below."
 msgstr ""
 
 msgid "Standard Alarm Time"
@@ -306,7 +307,7 @@ msgstr ""
 msgid "How to build task titles."
 msgstr ""
 
-msgid "All tasks of my taskslists"
+msgid "All tasks in my task lists"
 msgstr ""
 
 msgid "My responsibility"
@@ -331,4 +332,7 @@ msgid "Tasks without responsible"
 msgstr ""
 
 msgid "Tasks"
+msgstr ""
+
+msgid "(source): Summary"
 msgstr ""

@@ -27,7 +27,7 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tasks.tasksdue'] =  Ext.extend(Tine.wid
                         title: i18n._('Filter: To be done for'),
                         msg: `${i18n._('Show all tasks matching all the following criteria:')} <br />
 <ul class="x-ux-messagebox-msg">
-    <li>${i18n._('Tasks has an open status.')}</li>
+    <li>${i18n._('Task has an open status.')}</li>
     <li>${i18n._('Filtered person is either:')}</li>
     <ul class="x-ux-messagebox-msg">
         <li>${i18n._('Organizer and no coworker with open status is assigned.')}</li>
@@ -36,7 +36,7 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tasks.tasksdue'] =  Ext.extend(Tine.wid
     </ul>
 </ul>
 <br /><br>
-${i18n._('Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned.')}`
+${i18n._('Please note: Tasks are hidden if the filtered person is the organizer, the due date has not yet passed, and a coworker with an open status is assigned.')}`
 
                     });
                 }

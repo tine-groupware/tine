@@ -14,7 +14,7 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
             this.searchComboConfig = {
                 mode: 'local',
-                listEmptyText: this.app.i18n._('Use show all button bellow to search for all tasks'),
+                listEmptyText: this.app.i18n._('Use the show all button below to search for all tasks'),
                 recordEditPluginConfig: {
                     editDialogConfig: this.editDialogConfig,
                     getRecordDefaults: async () => {
