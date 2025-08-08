@@ -45,6 +45,80 @@ class Setup_CliTest extends TestCase
         }
     }
 
+    public function testImportConfigToDb(): void
+    {
+        $oldCfg = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        $resetCfg = fn() => SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $oldCfg;
+        $raii = new Tinebase_RAII($resetCfg);
+        $file = dirname(__DIR__) . '/files/importConfigToDb.php';
+        $fileContents = @include $file;
+        $this->assertNotSame($oldCfg, $fileContents[SSO_Config::APP_NAME][SSO_Config::OAUTH2][SSO_Config::OAUTH2_KEYS]);
+
+        $this->_cliHelper('importConfigToDb', ['--importConfigToDb', '--',
+                'file=' . $file,
+                'fileKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+                'configKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+                'mode=set',
+        ]);
+
+        $this->assertSame($oldCfg, SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS});
+
+        $this->_cliHelper('importConfigToDb', ['--importConfigToDb', '--',
+            'file=' . $file,
+            'fileKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'configKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'mode=set',
+            'execute=1',
+        ]);
+
+        $this->assertSame($fileContents[SSO_Config::APP_NAME][SSO_Config::OAUTH2][SSO_Config::OAUTH2_KEYS],
+            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS});
+
+        $resetCfg();
+
+        $this->assertSame($oldCfg, SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS});
+
+        $this->_cliHelper('importConfigToDb', ['--importConfigToDb', '--',
+            'file=' . $file,
+            'fileKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'configKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'mode=mergeKeep',
+            'execute=1',
+        ]);
+
+        $expectedValue = $oldCfg;
+        $expectedValue[0]['foo'] = 'unittest';
+        $sort = $expectedValue[0];
+        ksort($sort);
+        $expectedValue[0] = $sort;
+        $isValue = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        $sort = $isValue[0];
+        ksort($sort);
+        $isValue[0] = $sort;
+        $this->assertSame($expectedValue, $isValue);
+
+        $resetCfg();
+
+        $this->assertSame($oldCfg, SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS});
+
+        $this->_cliHelper('importConfigToDb', ['--importConfigToDb', '--',
+            'file=' . $file,
+            'fileKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'configKeyPath=' . SSO_Config::APP_NAME . '.' . SSO_Config::OAUTH2 . '.' . SSO_Config::OAUTH2_KEYS,
+            'mode=mergeOverwrite',
+            'execute=1',
+        ]);
+
+        $expectedValue[0]['use'] = 'unittest';
+        $isValue = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        $sort = $isValue[0];
+        ksort($sort);
+        $isValue[0] = $sort;
+        $this->assertSame($expectedValue, $isValue);
+
+        unset($raii);
+    }
+
     /**
      * Test SetConfig
      */

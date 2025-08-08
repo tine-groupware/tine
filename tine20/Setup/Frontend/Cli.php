@@ -100,6 +100,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->_clearCacheDir($_opts);
         } elseif (isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
+        } elseif (isset($_opts->importConfigToDb)) {
+            $this->_importConfigToDb($_opts);
         } elseif (isset($_opts->getconfig)) {
             $this->_getConfig($_opts);
         } elseif (isset($_opts->reset_demodata)) {
@@ -1017,12 +1019,97 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * USAGE: php setup.php --importConfigToDb -- file=/path/to/file fileKeyPath=SSO.oauth2.keys configKeyPath=SSO.oauth2.keys mode=[set|mergeKeep|mergeOverwrite] [execute=1]
+     */
+    protected function _importConfigToDb(Zend_Console_Getopt $_opts): int
+    {
+        $params = $this->_parseArgs($_opts, ['file', 'fileKeyPath', 'configKeyPath', 'mode']);
+
+        if (!is_file($params['file'])) {
+            $this->echoErrMsg('can\'t read file ' . $params['file']);
+            return 1;
+        }
+
+        $fileData = @include $params['file'];
+        foreach (explode('.', $params['fileKeyPath']) as $keyPart) {
+            if (!is_array($fileData) || !array_key_exists($keyPart, $fileData)) {
+                $this->echoErrMsg('path part "' . $keyPart . '" failed with path: ' . $params['fileKeyPath'] . ' and data: ' . print_r($fileData, true));
+                return 1;
+            }
+            $fileData = $fileData[$keyPart];
+        }
+
+        $configKeyParts = explode('.', $params['configKeyPath']);
+        if (count($configKeyParts) < 2) {
+            $this->echoErrMsg('invalid configKeyPath: ' . $params['configKeyPath']);
+            return 1;
+        }
+        if (null === ($cfgData = Tinebase_Config::getAppConfig(array_shift($configKeyParts)))) {
+            $this->echoErrMsg('app in configKeyPath: ' . $params['configKeyPath'] . ' not found');
+            return 1;
+        }
+
+        foreach (array_slice($configKeyParts, 0, count($configKeyParts) - 1) as $keyPart) {
+            $cfgData = $cfgData->{$keyPart};
+            if (!is_object($cfgData)) {
+                $this->echoErrMsg('path part "' . $keyPart . '" failed with path: ' . $params['configKeyPath']);
+            }
+        }
+
+        $cfgKey = array_slice($configKeyParts, -1)[0];
+
+        $from = $cfgData->{$cfgKey};
+        if (is_object($from)) {
+            $from = $from->toArray();
+        }
+
+        switch ($params['mode']) {
+            case 'set':
+                echo PHP_EOL . 'from: ' . print_r($from, true) . PHP_EOL . 'to: ' . print_r($fileData, true) . PHP_EOL;
+                if ($params['execute'] ?? false) {
+                    $cfgData->{$cfgKey} = $fileData;
+                }
+                break;
+
+            case 'mergeKeep':
+                $fileData = array_replace_recursive($fileData, $from);
+                echo PHP_EOL . 'from: ' . print_r($from, true) . PHP_EOL . 'to: ' . print_r($fileData, true) . PHP_EOL;
+                if ($params['execute'] ?? false) {
+                    $cfgData->{$cfgKey} = $fileData;
+                }
+                break;
+
+            case 'mergeOverwrite':
+                $fileData = array_replace_recursive($from, $fileData);
+                echo PHP_EOL . 'from: ' . print_r($from, true) . PHP_EOL . 'to: ' . print_r($fileData, true) . PHP_EOL;
+                if ($params['execute'] ?? false) {
+                    $cfgData->{$cfgKey} = $fileData;
+                }
+                break;
+
+            default:
+                $this->echoErrMsg('mode unknown: ' . $params['mode']);
+                return 1;
+        }
+
+        if ($params['execute'] ?? false) {
+            echo PHP_EOL . 'config set!' . PHP_EOL;
+        } else {
+            echo PHP_EOL . 'dry run, config NOT set!' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
+    protected function echoErrMsg(string $msg): void
+    {
+        echo PHP_EOL . $msg . PHP_EOL;
+    }
+
+    /**
      * set config
      * USAGE: php setup.php --setconfig -- configkey={{configkey}} configvalue={{configvalue}} [default=1]
      *  (default=1 removes the config from database to return to the default value)
-     *
-     * @param Zend_Console_Getopt $_opts
-     * @return array
      */
     protected function _setConfig(Zend_Console_Getopt $_opts)
     {
