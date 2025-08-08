@@ -19,5 +19,13 @@ class SSO_Setup_Uninitialize extends Setup_Uninitialize
     {
         $scheduler = Tinebase_Core::getScheduler();
         SSO_Scheduler_Task::removeDeleteExpiredTokensTask($scheduler);
+        SSO_Scheduler_Task::removeKeyRotateTask($scheduler);
+    }
+
+    protected function _uninitializeKeys()
+    {
+        if ($path = SSO_Controller::getInstance()->getKeyBaseDir()) {
+            @exec('rm -rf ' . escapeshellarg($path));
+        }
     }
 }

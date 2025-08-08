@@ -5,25 +5,10 @@ return [
         'pwdLessLogin' => 'both',
         'oauth2' => [
             'enabled' => true,
-            'keys' => [
-                array_merge(json_decode(file_get_contents(__DIR__ . '/sso_cert.jwk'), true), [
-                    'use' => 'sig',
-                    'alg' => 'RS256',
-                    'kid' => 'tine-sso',
-                    'publickey' => __DIR__ . '/sso_cert.crt',
-                    'privatekey' => __DIR__ . '/sso_key.pem',
-                ]),
-            ],
         ],
         'saml2' => [
             'enabled' => true,
             'tineLogout' => true,
-            'keys' => [
-                [
-                    'privatekey' => __DIR__ . '/sso_key.pem',
-                    'certificate' => __DIR__ . '/sso_cert.pem',
-                ]
-            ]
         ],
     ],
 ];

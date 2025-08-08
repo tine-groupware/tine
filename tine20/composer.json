@@ -145,6 +145,7 @@
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
     "spomky-labs/otphp": "^10.0",
+    "strobotti/php-jwk": "^1.4",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",

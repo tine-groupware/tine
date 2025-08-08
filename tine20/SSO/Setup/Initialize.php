@@ -28,6 +28,12 @@ class SSO_Setup_Initialize extends Setup_Initialize
     protected function _initializeTasks(): void
     {
         $scheduler = Tinebase_Core::getScheduler();
-        SSO_Scheduler_Task::addDeleteExpiredTokensTask($scheduler);
+        SSO_Scheduler_Task::addDeleteExpiredTokensTask($scheduler);e();
+        SSO_Scheduler_Task::addKeyRotateTask($scheduler);
+    }
+
+    protected function _initializeKeys()
+    {
+        SSO_Controller::getInstance()->keyRotate();
     }
 }

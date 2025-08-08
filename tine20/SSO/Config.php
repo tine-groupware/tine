@@ -20,6 +20,8 @@ class SSO_Config extends Tinebase_Config_Abstract
     public const APP_NAME = 'SSO';
     public const ENABLED = 'enabled';
 
+    public const KEY_ROTATION_ENABLED = 'keyRotationEnabled';
+
     public const OAUTH2 = 'oauth2';
     public const OAUTH2_KEYS = 'keys';
     public const OAUTH2_GRANTS = 'grants';
@@ -137,6 +139,14 @@ class SSO_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR           => self::SAML2_BINDINGS_POST,
             ],
+        ],
+        self::KEY_ROTATION_ENABLED => [
+            self::LABEL                 => 'Key rotation enabled', //_('Key rotation enabled')
+            self::DESCRIPTION           => 'Key rotation enabled', //_('Key rotation enabled')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => true,
         ],
     ];
 
