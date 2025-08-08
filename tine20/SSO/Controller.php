@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -18,9 +18,8 @@ use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
-use SimpleSAML\Logger;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
-use SimpleSAML\Stats;
+use Strobotti\JWK\KeyFactory;
 
 /**
  * 
@@ -115,18 +114,6 @@ class SSO_Controller extends Tinebase_Controller_Event
             ];
         }
 
-        /*$keys = [
-            'keys' => [
-                [
-                    'use' => 'sig',
-                    'kty' => 'RSA',
-                    'alg' => 'RS256',
-                    'kid' => 'tempkid',
-                    'e'   => 'AQAB',
-                    'n'   => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArXkViV0Cz0cwmGAcnP1U9z2K5utziToHUBHnWanV1HvLym8xsvlpjXVtqPXdnBQuHIXxDcDUfL7SWlKrrdkZTDZn21YJQvar3nS0Hwl1fpKd/CK1uWukmkfiOnuew6cwgskAbr4Oc3QVREEGBNTnpqiB0rLwlUqB4Pey/nGXCe2h8bm9NwNp/T9IlZhrwhfzMDhUSLo7FA6v9ShWVSLBDwvwXodLbq9DVX9OomZCPAapFjljxveCcSoKy1oQNUMDKdE7t1MEh5V4FAP2Ezhvexrq3cyLZtImypL15wgWujY2CXlDi9NkKAL7LyeevrQ2SbRAmKzTmCiZ7OKH4OpZWwIDAQAB',
-                ]
-            ]
-        ];*/
         $response = (new \Laminas\Diactoros\Response())
             // the jwks_uri SHOULD include a Cache-Control header in the response that contains a max-age directive
             ->withHeader('cache-control', 'public, max-age=20683, must-revalidate, no-transform');
@@ -1022,5 +1009,213 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         return static::publicOidAuthResponseErrorRedirect($authRequest);
+    }
+
+    public function generateKey(string $path, string $name): void
+    {
+        $path = rtrim($path, '/') . '/';
+        if (!is_dir($path)) {
+            throw new Tinebase_Exception($path . ' does not exist');
+        }
+        $fileNames = [
+            'keyFile' => $path . $name . '_key.pem',
+            'pemCertFile' => $path . $name . '_cert.pem',
+            'crtCertFile' => $path . $name . '_cert.crt',
+            'jwkCertFile' => $path . $name . '_cert.jwk',
+        ];
+        foreach ($fileNames as $fileName) {
+            if (is_file($fileName)) {
+                throw new Tinebase_Exception($fileName . ' already exists');
+            }
+        }
+
+        $cmd = 'openssl req -x509 -newkey rsa:4096 -keyout ' . escapeshellarg($fileNames['keyFile']) . ' -out ' . escapeshellarg($fileNames['pemCertFile']) . ' -days 730 -nodes -subj \'/CN=tine-sso\' 2>&1';
+        exec($cmd, $output, $returnCode);
+        if (0 !== $returnCode) {
+            @unlink($fileNames['keyFile']);
+            @unlink($fileNames['pemCertFile']);
+            throw new Tinebase_Exception($cmd . PHP_EOL . 'failed with code ' . $returnCode . ' and ' . join(PHP_EOL, $output));
+        }
+
+        $cmd = 'openssl pkey -in ' . escapeshellarg($fileNames['keyFile']) . ' -out ' . escapeshellarg($fileNames['crtCertFile']) . ' -pubout 2>&1';
+        exec($cmd, $output, $returnCode);
+        if (0 !== $returnCode) {
+            @unlink($fileNames['keyFile']);
+            @unlink($fileNames['pemCertFile']);
+            @unlink($fileNames['crtCertFile']);
+            throw new Tinebase_Exception($cmd . PHP_EOL . 'failed with code ' . $returnCode . ' and ' . join(PHP_EOL, $output));
+        }
+
+        $options = [
+            'use' => 'sig',
+            'alg' => 'RS256',
+            'kid' => Tinebase_Record_Abstract::generateUID(),
+        ];
+
+        $keyFactory = new KeyFactory();
+        if (false === file_put_contents($fileNames['jwkCertFile'], json_encode($keyFactory->createFromPem(file_get_contents($fileNames['crtCertFile']), $options)))) {
+            @unlink($fileNames['keyFile']);
+            @unlink($fileNames['pemCertFile']);
+            @unlink($fileNames['crtCertFile']);
+            @unlink($fileNames['jwkCertFile']);
+            throw new Tinebase_Exception('failed to write file '.  $fileNames['jwkCertFile']);
+        }
+
+        foreach ($fileNames as $fileName) {
+            $cmd = 'chmod 640 ' . escapeshellarg($fileName) . ' 2>&1';
+            exec($cmd, $output, $returnCode);
+            if (0 !== $returnCode) {
+                @unlink($fileNames['keyFile']);
+                @unlink($fileNames['pemCertFile']);
+                @unlink($fileNames['crtCertFile']);
+                @unlink($fileNames['jwkCertFile']);
+                throw new Tinebase_Exception($cmd . PHP_EOL . 'failed with code ' . $returnCode . ' and ' . join(PHP_EOL, $output));
+            }
+        }
+    }
+
+    public function keyRotate(): bool
+    {
+        if (!SSO_Config::getInstance()->{SSO_Config::KEY_ROTATION_ENABLED}) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()
+                    ->info(__METHOD__ . '::' . __LINE__ . ' key rotation disabled.');
+            return true;
+        }
+
+        if (isset(SSO_Config::getInstance()->getConfigFileData()[SSO_Config::APP_NAME][SSO_Config::OAUTH2][SSO_Config::OAUTH2_KEYS]) ||
+                isset(SSO_Config::getInstance()->getConfigFileData()[SSO_Config::APP_NAME][SSO_Config::SAML2][SSO_Config::SAML2_KEYS])) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' keys set in config file, can\'t rotate. Please remove them from file config.');
+            return false;
+        }
+
+        if (null === ($basePath = $this->getKeyBaseDir())) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t find key basedir.');
+            return false;
+        }
+
+        if ($existingKey = (SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'] ?? null)) {
+            if (preg_match('/^\d\d\d\d-\d\d-\d\d$/', ($date = basename(dirname($existingKey))))) {
+                $date = new Tinebase_DateTime($date);
+                if ($date->isLater(Tinebase_DateTime::today()->subMonth(6))) {
+                    // key still valid, nothing to do
+                    $this->retireKeys();
+                    return true;
+                }
+            }
+        }
+
+        if (null === ($basePath = $this->_makeDatedDir($basePath))) {
+            return false;
+        }
+        $cleanDatedDir = fn() => @exec('rm -rf ' . escapeshellarg($basePath) . ' 2>&1');
+        try {
+            $this->generateKey($basePath, $keyName = 'tine-sso-' . basename($basePath));
+        } catch (Tinebase_Exception $e) {
+            $e->setLogToSentry(false);
+            Tinebase_Exception::log($e);
+            $cleanDatedDir();
+            return false;
+        }
+
+        if (!$this->addKeysToConfig($basePath, $keyName)) {
+            $cleanDatedDir();
+            return false;
+        }
+
+        $this->retireKeys();
+        return true;
+    }
+
+    public function addKeysToConfig(string $path, string $keyName): bool
+    {
+        if (!str_ends_with($path, '/')) {
+            $path .= '/';
+        }
+
+        if (!($cert = file_get_contents($path . $keyName . '_cert.jwk'))) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t read cert file ' . $path . $keyName . '_cert.jwk');
+            return false;
+        }
+        if (!is_array($certData = json_decode($cert, true))) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t corrupted cert file ' . $path . $keyName . '_cert.jwk');
+            return false;
+        }
+        $oauth2Keys = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        array_unshift($oauth2Keys, array_merge($certData, [
+            'use' => 'sig',
+            'alg' => 'RS256',
+            'kid' => $keyName,
+            'publickey' => $path . $keyName . '_cert.crt',
+            'privatekey' => $path . $keyName . '_key.pem',
+        ]));
+        SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $oauth2Keys;
+
+        $saml2Keys = SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS};
+        array_unshift($saml2Keys, [
+            'privatekey' => $path . $keyName . '_key.pem',
+            'certificate' => $path . $keyName . '_cert.pem',
+        ]);
+        SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS} = $saml2Keys;
+
+        return true;
+    }
+
+    protected function retireKeys(): void
+    {
+        $filterKeys = function(array $keys) {
+            $validKey = false;
+            $changed = false;
+            foreach($keys as $index => $key) {
+                if (!isset($key['privatekey'])) continue;
+                $date = basename(dirname($key['privatekey']));
+                if (!preg_match('/^\d\d\d\d-\d\d-\d\d$/', $date)) {
+                    $changed = true;
+                    unset($keys[$index]);
+                } else {
+                    if ((new Tinebase_DateTime($date))->isLater(Tinebase_DateTime::today()->subMonth(6)->subDay(2))) {
+                        $validKey = true;
+                    } else {
+                        $changed = true;
+                        unset($keys[$index]);
+                    }
+                }
+            }
+            if ($validKey && $changed) {
+                return $keys;
+            }
+            return null;
+        };
+
+        $saml2Keys = SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS};
+        if (null !== ($saml2Keys = $filterKeys($saml2Keys))) {
+            SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS} = $saml2Keys;
+        }
+
+        $oauth2Keys = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+        if (null !== ($saml2Keys = $filterKeys($oauth2Keys))) {
+            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $oauth2Keys;
+        }
+    }
+
+    protected function _makeDatedDir($path): ?string
+    {
+        $path .= '/' . Tinebase_DateTime::today()->format('Y-m-d');
+        if (!mkdir($path)) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t mkdir ' . $path);
+            return null;
+        }
+        return $path . '/';
+    }
+
+    public function getKeyBaseDir(): ?string
+    {
+        $path = rtrim(Tinebase_Config::getInstance()->{Tinebase_Config::FILESDIR}, '/') . '/.ssokeys';
+        if (!is_dir($path)) {
+            if (!mkdir($path)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t mkdir ' . $path);
+                return null;
+            }
+        }
+        return $path;
     }
 }
