@@ -3015,7 +3015,7 @@ class Tinebase_FileSystem implements
                 continue;
             }
             $subDir = $item->getFilename();
-            if ($subDir[0] == '.') continue;
+            if (str_starts_with($subDir, '.')) continue;
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Checking ' . $subDir);
             $subDirIterator = new DirectoryIterator($this->_basePath . '/' . $subDir);

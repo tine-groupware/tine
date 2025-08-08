@@ -1216,6 +1216,9 @@ viewConfig: {
                     this.mainBody.update(result).setWidth(this.getTotalWidth());
                     this.updateHeaders();
                     this.updateHeaderSortState();
+                    this.processRows(0, true);
+                    this.layout();
+                    this.applyEmptyText();
                 }
             }
             const mode = this.getResponsiveMode();
