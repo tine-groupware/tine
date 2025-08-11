@@ -557,6 +557,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     onLoginSuccess: function(response) {
         const responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
+            if (responseData.initialData) {
+                window.initialData = window.initialData || {};
+                Object.assign(window.initialData, responseData.initialData);
+            }
             if (window.initialData?.afterLoginRedirect) {
                 return this.redirect(window.initialData.afterLoginRedirect);
             }
