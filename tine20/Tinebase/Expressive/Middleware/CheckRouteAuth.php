@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -117,11 +117,16 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
                     $path = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH) . $uri->getPath() . ($uri->getQuery() ? '?' . $uri->getQuery() : '') .
                         ($uri->getFragment() ? '#' . $uri->getFragment() : '');
 
+                    if (!Tinebase_Session::sessionExists()) {
+                        Tinebase_Core::startCoreSession();
+                    }
+                    Tinebase_Session::getSessionNamespace()->login = ['afterLoginRedirect' => [
+                        'method' => 'GET',
+                        'url' => $path,
+                    ]];
+
                     return new Response('php://memory', 302, [
-                        'Location' => Tinebase_Core::getUrl() . '#initialData/' . urlencode(json_encode(['afterLoginRedirect' => [
-                                'method' => 'GET',
-                                'url' => $path,
-                            ]])),
+                        'Location' => Tinebase_Core::getUrl(),
                     ]);
                 }
                 return new Response('php://memory', 401);
