@@ -38,12 +38,18 @@ class SSO_JsonTest extends TestCase
             SSO_Model_ExternalIdp::FLD_DOMAINS => [
                 [SSO_Model_ExIdpDomain::FLD_DOMAIN => 'unittest1'],
                 [SSO_Model_ExIdpDomain::FLD_DOMAIN => 'unittest2'],
-            ]
+            ],
+            SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT => ($userGroup = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Group::DEFAULT_USER_GROUP))->toArray(),
+            SSO_Model_ExternalIdp::FLD_DENY_GROUPS => [($anonymousGroup = Tinebase_Group::getInstance()->getGroupByName(Tinebase_Group::DEFAULT_ANONYMOUS_GROUP))->toArray()],
+            SSO_Model_ExternalIdp::FLD_DENY_ROLES => [($repRole = Tinebase_Role::getInstance()->getRoleByName('replication role'))->toArray()],
         ]);
 
         $this->assertNull($savedExtIdp[SSO_Model_ExternalIdp::FLD_CONFIG][SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_SECRET]);
         $this->assertNotNull($savedExtIdp[SSO_Model_ExternalIdp::FLD_CONFIG][SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_SECRET_CCID]);
         $this->assertCount(2, $savedExtIdp[SSO_Model_ExternalIdp::FLD_DOMAINS]);
+        $this->assertSame($userGroup->getId(), $savedExtIdp[SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT]['id']);
+        $this->assertSame($anonymousGroup->getId(), $savedExtIdp[SSO_Model_ExternalIdp::FLD_DENY_GROUPS][0]['id']);
+        $this->assertSame($repRole->getId(), $savedExtIdp[SSO_Model_ExternalIdp::FLD_DENY_ROLES][0]['id']);
 
         /** @var SSO_Model_ExternalIdp $extIdp */
         $extIdp = SSO_Controller_ExternalIdp::getInstance()->get($savedExtIdp['id']);

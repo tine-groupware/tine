@@ -50,7 +50,9 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
     public const FLD_CREATE_GROUPS = 'create_groups';
     public const FLD_ASSIGN_GROUPS = 'assign_groups';
     public const FLD_ACCOUNT_PREFIX = 'account_prefix';
+    public const FLD_ACCOUNT_DISPLAY_NAME_PREFIX = 'account_display_name_prefix';
     public const FLD_GROUP_PREFIX = 'group_prefix';
+    public const FLD_ADDRESSBOOK = 'addressbook';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -86,10 +88,12 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
             ],
         ],
 
+        self::SKIP_LEGACY_JSON_CONVERT => true,
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_DOMAINS => [],
                 self::FLD_GROUPS_NEW_ACCOUNT => [],
+                self::FLD_PRIMARY_GROUP_NEW_ACCOUNT => [],
                 self::FLD_DENY_GROUPS => [],
                 self::FLD_DENY_ROLES => [],
             ],
@@ -220,6 +224,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => 'Group',
                     self::STORAGE                   => self::TYPE_JSON_REFID,
+                    self::REF_ID_FIELD              => self::ID,
                 ],
                 self::LABEL                     => 'Groups to be set for created local accounts', // _('Groups to be set for created local accounts')
             ],
@@ -230,6 +235,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => 'Group',
                     self::STORAGE                   => self::TYPE_JSON_REFID,
+                    self::REF_ID_FIELD              => self::ID,
                 ],
                 self::LABEL                     => 'Groups that deny login for existing local accounts', // _('Groups that deny login for existing local accounts')
             ],
@@ -267,13 +273,31 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Account Name Prefix', // _('Account Name Prefix')
-                self::DESCRIPTION               => 'String prefixed to local account names when created from this IDP', // _('String prefixed to local account names when created from this IDP',)
+                self::DESCRIPTION               => 'String prefixed to local account names when created from this IDP', // _('String prefixed to local account names when created from this IDP')
             ],
             self::FLD_GROUP_PREFIX          => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Group Name Prefix', // _('Group Name Prefix')
-                self::DESCRIPTION               => 'String prefixed to local group names when created from this IDP', // _('String prefixed to local group names when created from this IDP',)
+                self::DESCRIPTION               => 'String prefixed to local group names when created from this IDP', // _('String prefixed to local group names when created from this IDP')
+            ],
+            self::FLD_ACCOUNT_DISPLAY_NAME_PREFIX => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Account Display Name Prefix', // _('Account Display Name Prefix')
+                self::DESCRIPTION               => 'String prefixed to local account display names when created from this IDP', // _('String prefixed to local account display names when created from this IDP')
+            ],
+            self::FLD_ADDRESSBOOK           => [
+                self::TYPE                      => self::TYPE_CONTAINER,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Addressbook Container', // _('Addressbook Container')
+                self::DESCRIPTION               => 'Addressbook container to store newly created account contacts and lists', // _('Addressbook container to store newly created account contacts and lists')
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Container::class,
+                    self::OPTIONS                   => [
+                        self::MODEL_NAME                => Addressbook_Model_Contact::class,
+                    ],
+                ],
             ],
         ],
     ];

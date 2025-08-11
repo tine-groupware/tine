@@ -613,7 +613,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
 
             // @todo: resolve alarms?
             // @todo: use parts parameter?
-            if ($foreignRecordModelConfiguration->resolveRelated && $fr) {
+            if ($foreignRecordModelConfiguration && $foreignRecordModelConfiguration->resolveRelated && $fr) {
                 if ($fr->has('notes')) {
                     Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($foreignRecords);
                 }

@@ -1095,7 +1095,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         Tinebase_Core::setUser($user);
 
                         $pw = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
-                        $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser([
+                        $account = new Tinebase_Model_FullUser([
                             'accountLoginName' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_ACCOUNT_PREFIX} . $loginName,
                             'accountEmailAddress' => $data->email,
                             'accountStatus' => 'enabled',
@@ -1105,7 +1105,15 @@ class SSO_Controller extends Tinebase_Controller_Event
                             'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?: Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
                             'groups' => is_array($ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT}) ? $ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT} : [],
                             'xprops' => [Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD => true],
-                        ]), $pw, $pw);
+                        ]);
+                        $account->applyTwigTemplates();
+                        if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ACCOUNT_DISPLAY_NAME_PREFIX}) {
+                            $account->accountDisplayName = $ssoIdp->{SSO_Model_ExternalIdp::FLD_ACCOUNT_DISPLAY_NAME_PREFIX} . $account->accountDisplayName;
+                        }
+                        if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ADDRESSBOOK}) {
+                            $account->container_id = $ssoIdp->{SSO_Model_ExternalIdp::FLD_ADDRESSBOOK};
+                        }
+                        $account = Admin_Controller_User::getInstance()->create($account, $pw, $pw);
                     } catch (Tinebase_Exception $e) {
                         $e->setLogLevelMethod('notice');
                         $e->setLogToSentry(false);
@@ -1139,18 +1147,26 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             /** @var Tinebase_Group_Sql $groupCtrl */
             $groupCtrl = Tinebase_Group::getInstance();
+            $admGroupCtrl = Admin_Controller_Group::getInstance();
+            $oldRightsCheck = $admGroupCtrl->doRightChecks(false);
+            $raii = new Tinebase_RAII(fn() => $admGroupCtrl->doRightChecks($oldRightsCheck));
             if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_CREATE_GROUPS} && $groupsClaim) {
                 foreach ((array)$groupsClaim as $groupName) {
                     $groupName = $ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUP_PREFIX} . $groupName;
                     try {
                         $groupCtrl->getGroupByName($groupName);
                     } catch (Tinebase_Exception_Record_NotDefined) {
-                        $groupCtrl->create(new Tinebase_Model_Group([
+                        $groupToBeCreated = new Tinebase_Model_Group([
                             'name' => $groupName,
-                        ], true));
+                        ], true);
+                        if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ADDRESSBOOK}) {
+                            $groupToBeCreated->container_id = $ssoIdp->{SSO_Model_ExternalIdp::FLD_ADDRESSBOOK};
+                        }
+                        $admGroupCtrl->create($groupToBeCreated);
                     }
                 }
             }
+            unset($raii);
 
             if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ASSIGN_GROUPS} && $groupsClaim) {
                 $groupMemberships = $groupCtrl->getGroupMemberships($account->getId());
