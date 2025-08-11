@@ -780,6 +780,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword) {
             $response['mustChangePassword'] = Tinebase_Core::get(Tinebase_Core::SESSION)->mustChangePassword;
         }
+        if (Tinebase_Session::getSessionNamespace()->login) {
+            if (Tinebase_Session::getSessionNamespace()->login['afterLoginRedirect'] ?? false) {
+                $response['initialData'] = [
+                    'afterLoginRedirect' => Tinebase_Session::getSessionNamespace()->login['afterLoginRedirect'],
+                ];
+            }
+            unset(Tinebase_Session::getSessionNamespace()->login);
+        }
 
         if (!headers_sent()) {
             $cookieOptions = Tinebase_Helper::getDefaultCookieSettings();
