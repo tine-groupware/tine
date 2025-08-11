@@ -214,12 +214,14 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function getRegistryData(): array
     {
+        $raii = new Tinebase_RAII(HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
         if (null === ($employee = HumanResources_Controller_Employee::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
                     ['field' => 'account_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
                 ]))->getFirstRecord())) {
             return [];
         }
         Tinebase_Record_Expander::expandRecord($employee);
+        unset($raii);
 
         return [
             'attendance_recorder' => [
