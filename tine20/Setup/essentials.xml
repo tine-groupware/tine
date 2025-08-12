@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <essential>
-    <enviroment name="PHP" version="8.0.2"/>
+    <enviroment name="PHP" version="8.1"/>
     <extensions>
         <extension name="bcmath" />
         <extension name="SPL" />
         <extension name="SimpleXML" />
         <extension name="ctype" />
+        <extension name="curl" />
         <extension name="date" />
         <extension name="dom" />
         <extension name="gd" />
@@ -13,9 +14,14 @@
         <extension name="iconv" />
         <extension name="intl" />
         <extension name="json" />
+        <extension name="libxml" />
         <extension name="mbstring" />
         <extension name="openssl" />
+        <extension name="pdo" />
+        <extension name="redis" />
         <extension name="xml" />
+        <extension name="xmlreader" />
+        <extension name="xmlwriter" />
         <extension name="zip" />
     </extensions>
 </essential>
