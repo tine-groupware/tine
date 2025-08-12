@@ -1227,7 +1227,7 @@ class Tinebase_Core
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
                 );
-                /* @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
+                /** @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
 
                 if (! isset($dbConfigArray['useUtf8mb4'])) {
@@ -1248,9 +1248,10 @@ class Tinebase_Core
                     }
                 }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' DB connection id: '
-                    . $db->query('SELECT connection_id()')->fetchColumn());
+                /** @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
+                $db->connectionId = $db->query('SELECT connection_id()')->fetchColumn();
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))  Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' DB connection id: ' . $db->connectionId);
 
                 break;
                 

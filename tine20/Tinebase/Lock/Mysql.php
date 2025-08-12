@@ -26,12 +26,16 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
     {
         if ($this->_isLocked) {
             $db = Tinebase_Core::getDb();
-            if (!($stmt = $db->query('SELECT IS_USED_LOCK("' . $this->_lockId . '") = CONNECTION_ID()')) ||
+            if (!($stmt = $db->query('SELECT IS_USED_LOCK("' . $this->_lockId . '") = CONNECTION_ID(), CONNECTION_ID()')) ||
                     !$stmt->setFetchMode(Zend_Db::FETCH_NUM) ||
                     !($row = $stmt->fetch()) ||
                     $row[0] != 1) {
                 throw new Tinebase_Exception_Backend('lock is not held by us anymore');
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' connection id: ' . $row[1]);
+        } else {
+            throw new Tinebase_Exception_Backend('lock is not locked');
         }
     }
 

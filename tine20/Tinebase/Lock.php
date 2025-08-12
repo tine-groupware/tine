@@ -54,7 +54,9 @@ class Tinebase_Lock
         /** @var Tinebase_Lock_Abstract $lock */
         foreach (static::$locks as $lock) {
             // each lock will check that it is still owns the lock
-            $lock->keepAlive();
+            if ($lock->isLocked()) {
+                $lock->keepAlive();
+            }
         }
     }
 

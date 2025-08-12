@@ -87,7 +87,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected $_identifier = 'id';
     
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql
      */
     protected $_db;
     

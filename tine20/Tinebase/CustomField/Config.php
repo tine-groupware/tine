@@ -121,8 +121,16 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         Tinebase_Container::addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
 
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        $stmt = $this->_db->query($select);
+
+        try {
+            $stmt = $this->_db->query($select);
+        } catch (Zend_Db_Statement_Exception $e) {
+            if (($previous = $e->getPrevious()) instanceof PDOException && false !== strpos($previous->getMessage(), 'MySQL server has gone away')) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Mysql server has gone away for DB connection id: ' . $this->_db->connectionId);
+            }
+            throw $e;
+        }
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $result = array();

@@ -16,6 +16,7 @@
 class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 {
     public string $table_prefix;
+    public string $connectionId = '';
 
     /**
      * Creates a PDO object and connects to the database.
