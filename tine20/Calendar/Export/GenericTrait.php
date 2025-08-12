@@ -74,14 +74,16 @@ trait Calendar_Export_GenericTrait
             // to support rrule & sorting we can't do pagination in calendar exports
             $records = $this->_controller->search($this->_filter, null, $this->_getRelations, false, 'export');
 
-            //TODO a lot of expanding for events is not done by the expander see Calendar_Convert_Event_Json::fromTine20RecordSet
-            // We might want to fix this in the future
-            $mc = $records->getFirstRecord()::getConfiguration();
-            $expander = new Tinebase_Record_Expander(Calendar_Model_Event::class, $mc->jsonExpander);
-            $expander->expand($records);
-            $mc->setJsonExpander(null);
+            if ($records->count() > 0) {
+                //TODO a lot of expanding for events is not done by the expander see Calendar_Convert_Event_Json::fromTine20RecordSet
+                // We might want to fix this in the future
+                $mc = $records->getFirstRecord()::getConfiguration();
+                $expander = new Tinebase_Record_Expander(Calendar_Model_Event::class, $mc->jsonExpander);
+                $expander->expand($records);
+                $mc->setJsonExpander(null);
 
-            Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
+                Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($records, $this->_filter);
+            }
         } else {
             $records = $this->_records;
         }
