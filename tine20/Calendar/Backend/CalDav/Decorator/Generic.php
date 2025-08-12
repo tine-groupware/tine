@@ -3,18 +3,13 @@
  * Tine 2.0
  *
  * @package     Calendar
- * @subpackage  Import
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-/**
- * Generic decorator for caldav
- *
- * Uses Calendar_Convert_Event_VCalendar_Tine for import.
- */
-class Calendar_Import_CalDav_Decorator_Generic extends Calendar_Import_CalDav_Decorator_Abstract
+class Calendar_Backend_CalDav_Decorator_Generic extends Calendar_Backend_CalDav_Decorator_Abstract
 {
     protected static array $raiis = [];
 

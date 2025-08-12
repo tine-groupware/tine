@@ -32,7 +32,7 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
         $email = null;
 
         if (!empty($property['EMAIL'])) {
-            $email = $property['EMAIL'];
+            $email = (string)$property['EMAIL'];
         } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
             $email = $matches['email'];
         }

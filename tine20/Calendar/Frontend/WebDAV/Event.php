@@ -157,16 +157,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
 
         $event->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        if (strlen((string)$id) > 40) {
+        if (strlen($id) > 40) {
             $id = sha1($id);
         }
+        $event->setId($id);
         $msExternalIdRAII = null;
         if ($useExternalUId = $converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
             $event->external_id = $id;
             $oldMsExternalIdValue = Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
             $msExternalIdRAII = new Tinebase_RAII(fn() => Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid($oldMsExternalIdValue));
-        } else {
-            $event->setId($id);
         }
 
         if (true === $onlyCurrentUserOrganizer) {

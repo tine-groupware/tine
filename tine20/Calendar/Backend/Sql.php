@@ -76,6 +76,21 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $this->_attendeeBackend = new Calendar_Backend_Sql_Attendee($_dbAdapter);
     }
+
+    public function getEtagsForContainerId(string $containerId, ?string $externalId = null): array
+    {
+        $select = $this->_db->select();
+        $select->from($this->_tablePrefix . $this->_tableName, ['id', 'external_id', 'etag', 'base_event_id']);
+        $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
+        $select->where($this->_db->quoteIdentifier('external_id') . (null === $externalId ? ' IS NOT NULL' : ' = ?'), $externalId);
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
+
+        $result = [];
+        foreach ($select->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            $result[$row['external_id']] = $row;
+        }
+        return $result;
+    }
     
     /**
      * Creates new entry

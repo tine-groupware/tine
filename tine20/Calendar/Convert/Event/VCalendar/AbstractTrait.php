@@ -21,7 +21,7 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
 {
     /**
      * options array
-     * @var array
+     * @var array<string, mixed>
      *
      * current options:
      *  - onlyBasicData (only use basic event data when converting from VCALENDAR to Tine 2.0)
@@ -40,12 +40,12 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
         $this->_options = $options;
     }
 
-    public function setOptionsValue(string $key, string $value): void
+    public function setOptionsValue(string $key, mixed $value): void
     {
         $this->_options[$key] = $value;
     }
 
-    public function getOptionsValue(string $key)
+    public function getOptionsValue(string $key): mixed
     {
         return !isset($this->_options[$key]) ? null : $this->_options[$key];
     }
