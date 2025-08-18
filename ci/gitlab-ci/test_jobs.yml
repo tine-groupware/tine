@@ -238,3 +238,16 @@ release-update-tests:
     - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $RELEASE_UPDATE_TEST_START_REF
       variables:
         RELEASE_TYPE: customer
+
+prevent-upstream-changes:
+  extends: .php-unit-update-tests
+  script:
+    - !reference [.lib, script]
+    - git fetch --unshallow || true
+    - prevent_upstream_change
+  rules:
+    - if: $PREVENT_UPSTREAM_CHANGES == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-upstream-changes/
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
