@@ -24,6 +24,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE008 = self::class . '::update008';
     protected const RELEASE018_UPDATE009 = self::class . '::update009';
     protected const RELEASE018_UPDATE010 = self::class . '::update010';
+    protected const RELEASE018_UPDATE011 = self::class . '::update011';
 
 
     static protected $_allUpdates = [
@@ -65,6 +66,12 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
+            ],
+        ],
+        self::PRIO_TINEBASE_UPDATE          => [
+            self::RELEASE018_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -238,5 +245,28 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
+    }
+
+    public function update011(): void
+    {
+        $select = $this->getDb()->select()
+            ->from(['rr' => SQL_TABLE_PREFIX . 'role_rights'], ['rr.role_id', 'rr.application_id'])
+            ->joinLeft(
+                ['rr2' => SQL_TABLE_PREFIX . 'role_rights'],
+                'rr.role_id = rr2.role_id AND rr.application_id = rr2.application_id AND rr2.right = "twig"',
+                []
+            )
+            ->where('rr.right = "admin" AND rr2.id IS NULL');
+
+        foreach ($select->query(Zend_Db::FETCH_NUM)->fetchAll() as $row) {
+            $this->getDb()->insert(SQL_TABLE_PREFIX . 'role_rights', [
+                'id' => Tinebase_Record_Abstract::generateUID(),
+                'role_id' => $row[0],
+                'application_id' => $row[1],
+                'right' => 'twig',
+            ]);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
     }
 }
