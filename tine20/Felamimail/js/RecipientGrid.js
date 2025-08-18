@@ -234,6 +234,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 select: this.onSearchComboSelect,
                 render: (combo) => {
                     combo.getEl().on('paste', async (e, dom) => {
+                        this.searchCombo.isCopyAndPasteEvent = true;
+
                         e = e.browserEvent;
                         const clipboardData = e.clipboardData || window.clipboardData;
                         const pastedData = clipboardData.getData('Text');
@@ -249,9 +251,15 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
            
                         const contacts = await Tine.Tinebase.common.findContactsByEmailString(value);
                         this.searchCombo.setRawValue('');
-                        await this.updateRecipientsToken(null, contacts);
 
+                        if (this.activeEditor) {
+                            this.activeEditor.completeEdit();
+                        }
+
+                        await this.updateRecipientsToken(null, contacts);
                         this.loadMask.hide();
+
+                        this.searchCombo.isCopyAndPasteEvent = false;
                     })
                 },
                 blur: async (combo) => {

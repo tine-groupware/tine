@@ -75,7 +75,9 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      */
     onBeforeQuery: function (qevent) {
         Tine.Felamimail.ContactSearchCombo.superclass.onBeforeQuery.apply(this, arguments);
-    
+
+        if (qevent?.combo?.isCopyAndPasteEvent) return false;
+
         const filter = this.store.baseParams.filter;
         const queryFilter = _.find(filter, {field: 'query'});
         _.remove(filter, queryFilter);
