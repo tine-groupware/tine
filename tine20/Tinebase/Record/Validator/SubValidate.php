@@ -55,6 +55,7 @@ class Tinebase_Record_Validator_SubValidate implements Zend_Validate_Interface
         foreach ($value as $val) {
             if (!$val->isValid()) {
                 $this->_messages[] = 'subvalidation failed';
+                $this->_messages = array_merge($this->_messages, $val->getValidationErrors());
                 return false;
             }
         }
