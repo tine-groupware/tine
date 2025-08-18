@@ -10,7 +10,7 @@ variables:
   MAJOR_COMMIT_REF_NAME: "${CUSTOMER_MAJOR_COMMIT_REF_NAME}${BASE_MAJOR_COMMIT_REF_NAME}"
 
   # Upstream branch as string. For non custom branches, the branch should be its own UPSTREAM_BRANCH.
-  UPSTREAM_BRANCH: '2024.11'
+  UPSTREAM_BRANCH: 'main'
 
   # General
   # "Docker hub tag for this build."
