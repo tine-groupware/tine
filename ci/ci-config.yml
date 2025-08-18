@@ -9,6 +9,9 @@ variables:
   # DO NOT CHANGE MANUAL: needs to be, in the main variables section CUSTOMER_MAJOR_COMMIT_REF_NAME and BASE_MAJOR_COMMIT_REF_NAME are not set jet
   MAJOR_COMMIT_REF_NAME: "${CUSTOMER_MAJOR_COMMIT_REF_NAME}${BASE_MAJOR_COMMIT_REF_NAME}"
 
+  # Upstream branch as string. For non custom branches, the branch should be its own UPSTREAM_BRANCH.
+  UPSTREAM_BRANCH: '2023.11'
+
   # General
   # "Docker hub tag for this build."
   DOCKERHUB_TAG: "dev"
