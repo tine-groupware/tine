@@ -229,20 +229,14 @@ class Felamimail_Controller extends Tinebase_Controller_Event
 
     public function handleAccountLogin(Tinebase_Model_FullUser $_account, $pwd)
     {
-        if (! empty($_account->accountEmailAddress)
-            && Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
-            && Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}
-            && Tinebase_EmailUser::checkDomain($_account->accountEmailAddress)
-        ) {
+        try {
             // this is sort of a weird flag to make addSystemAccount do its actual work
             $_account->imapUser = new Tinebase_Model_EmailUser(null, true);
-            try {
-                Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
-            } catch (Zend_Db_Adapter_Exception $zdae) {
-                Tinebase_Exception::log($zdae);
-            } catch (Tinebase_Exception_Backend $teb) {
-                Tinebase_Exception::log($teb);
-            }
+            Felamimail_Controller_Account::getInstance()->createSystemAccount($_account, $pwd);
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            Tinebase_Exception::log($zdae);
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
         }
     }
 
