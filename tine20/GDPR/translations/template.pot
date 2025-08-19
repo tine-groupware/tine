@@ -58,6 +58,15 @@ msgstr ""
 msgid "Consent management for"
 msgstr ""
 
+msgid "agree date must not be after withdraw date"
+msgstr ""
+
+msgid "withdraw date must not be empty before create the new record"
+msgstr ""
+
+msgid "agree date and withdraw date must not overlap"
+msgstr ""
+
 msgid "Data provenances"
 msgstr ""
 

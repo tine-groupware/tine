@@ -63,6 +63,15 @@ msgstr "Liste der Sprache in denen die mehrsprachigen Texte gelegt werden."
 msgid "Consent management for"
 msgstr "Consent management für"
 
+msgid "agree date must not be after withdraw date"
+msgstr "Das Zustimmungsdatum darf nicht nach dem Widerrufsdatum liegen"
+
+msgid "withdraw date must not be empty before create the new record"
+msgstr "Das Widerrufsdatum darf nicht leer sein, bevor der neue Datensatz erstellt wird"
+
+msgid "agree date and withdraw date must not overlap"
+msgstr "Zustimmungsdatum und Widerrufsdatum dürfen sich nicht überschneiden"
+
 msgid "Data provenances"
 msgstr "Datenherkünfte"
 
