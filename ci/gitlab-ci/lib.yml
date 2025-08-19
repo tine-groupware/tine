@@ -634,19 +634,15 @@
     - |
       # lib/scripts/prevent_upsteam_changes.sh
       function prevent_upstream_change() {
-          downstream=${DOWNSTREAM_BRANCH}
-          upstream=${CI_COMMIT_REFNAME}
+          downstream=${MAJOR_COMMIT_REF_NAME}
       
-          if [ -z "downstream" ]; then
-              echo "downstream not set"
-              return 1
-          fi
-      
-          if [ "$downstream" == "$upstream" ]; then
+          if [ "$downstream" == "$CI_COMMIT_REF_NAME" ]; then
               return
           fi
       
-          changes="$(git diff-tree --name-only -r --diff-filter=a origin/$downstream origin/$upstream)"
+          git rebase origin/$downstream
+      
+          changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
       
           for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
               changes="$(echo "$changes" | grep -v -E "^$allowed$")"
@@ -656,7 +652,9 @@
               return
           fi
       
-          echo 'Changing downstream files upstream is not encouraged! If changing them is nesasary, add an exception to "ci/upstream-change-whitelist.txt".'
+          echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
+          echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
+          echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
           echo Changes:
           echo "$changes"
       
@@ -2875,19 +2873,15 @@
 
         # lib/scripts/prevent_upsteam_changes.sh
         function prevent_upstream_change() {
-            downstream=${DOWNSTREAM_BRANCH}
-            upstream=${CI_COMMIT_REFNAME}
+            downstream=${MAJOR_COMMIT_REF_NAME}
         
-            if [ -z "downstream" ]; then
-                echo "downstream not set"
-                return 1
-            fi
-        
-            if [ "$downstream" == "$upstream" ]; then
+            if [ "$downstream" == "$CI_COMMIT_REF_NAME" ]; then
                 return
             fi
         
-            changes="$(git diff-tree --name-only -r --diff-filter=a origin/$downstream origin/$upstream)"
+            git rebase origin/$downstream
+        
+            changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
         
             for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
                 changes="$(echo "$changes" | grep -v -E "^$allowed$")"
@@ -2897,7 +2891,9 @@
                 return
             fi
         
-            echo 'Changing downstream files upstream is not encouraged! If changing them is nesasary, add an exception to "ci/upstream-change-whitelist.txt".'
+            echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
+            echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
+            echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
             echo Changes:
             echo "$changes"
         
@@ -4052,19 +4048,15 @@
 
         # lib/scripts/prevent_upsteam_changes.sh
         function prevent_upstream_change() {
-            downstream=${DOWNSTREAM_BRANCH}
-            upstream=${CI_COMMIT_REFNAME}
+            downstream=${MAJOR_COMMIT_REF_NAME}
         
-            if [ -z "downstream" ]; then
-                echo "downstream not set"
-                return 1
-            fi
-        
-            if [ "$downstream" == "$upstream" ]; then
+            if [ "$downstream" == "$CI_COMMIT_REF_NAME" ]; then
                 return
             fi
         
-            changes="$(git diff-tree --name-only -r --diff-filter=a origin/$downstream origin/$upstream)"
+            git rebase origin/$downstream
+        
+            changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
         
             for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
                 changes="$(echo "$changes" | grep -v -E "^$allowed$")"
@@ -4074,7 +4066,9 @@
                 return
             fi
         
-            echo 'Changing downstream files upstream is not encouraged! If changing them is nesasary, add an exception to "ci/upstream-change-whitelist.txt".'
+            echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
+            echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
+            echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
             echo Changes:
             echo "$changes"
         

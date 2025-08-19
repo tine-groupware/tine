@@ -246,6 +246,8 @@ prevent-upstream-changes:
     - git fetch --unshallow || true
     - prevent_upstream_change
   rules:
+    - if: $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
+      when: never
     - if: $PREVENT_UPSTREAM_CHANGES == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-upstream-changes/
