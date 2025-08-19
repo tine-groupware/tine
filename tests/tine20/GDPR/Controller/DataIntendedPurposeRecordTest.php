@@ -266,7 +266,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->create(new GDPR_Model_DataIntendedPurposeRecord($data, true));
             $this->fail('create multiple dips should fail when agreeDate overlap');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_Record_Validation);
+            $this->assertTrue($e instanceof Tinebase_Exception_SystemGeneric);
         }
     }
 
@@ -282,7 +282,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->create(new GDPR_Model_DataIntendedPurposeRecord($data, true));
             $this->fail('create multiple dips should fail when existing dip still have empty withdrawDate');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_Record_Validation);
+            $this->assertTrue($e instanceof Tinebase_Exception_SystemGeneric);
         }
     }
     
@@ -298,7 +298,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[1]);
             $this->fail('update dip agreeDate should fail when there is an overlap in existing dip');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof Tinebase_Exception_Record_Validation);
+            $this->assertTrue($e instanceof Tinebase_Exception_SystemGeneric);
         }
     }
 
@@ -314,7 +314,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[0]);
             $this->fail('update withdrawDate to overlap open ended second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
     
     public function testUpdateWithdrawDateOverlap1()
@@ -332,7 +332,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $dip['withdrawDate'] = $today;
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($dip);
             $this->fail('update withdrawDate earlier than agreeDate should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testUpdateWithdrawDateOverlap2()
@@ -347,7 +347,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[0]);
             $this->fail('update withdrawDate to overlap second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testUpdateWithdrawDateOverlap3()
@@ -362,7 +362,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[0]);
             $this->fail('update withdrawDate to overlap second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testUpdateWithdrawDateOverlap4()
@@ -374,7 +374,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[1]);
             $this->fail('update agreeDate to overlap second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testUpdateWithdrawDateOverlap5()
@@ -386,7 +386,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[1]);
             $this->fail('update agreeDate to overlap second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testUpdateWithdrawDateOverlap6()
@@ -398,7 +398,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         try {
             GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr[1]);
             $this->fail('update agreeDate to overlap second intended purpose should not be possible and throw exception');
-        } catch (Tinebase_Exception_Record_Validation) {}
+        } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
     public function testPublicApiGetManageConsentByContactId()
