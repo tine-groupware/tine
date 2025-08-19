@@ -50,9 +50,10 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         self::assertNotNull($script);
         self::assertStringContainsString('require ["envelope","copy","reject","editheader","variables"];', $script->getSieve());
         $domains = Tinebase_EmailUser::getAllowedDomains();
+        $sieveScript = $script->getSieve();
         self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
-} else { reject', $script->getSieve());
+} else { reject', $sieveScript);
 
         // TODO make it work (our sieve testsetup is not ready for this)
         return true;
@@ -132,7 +133,12 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         // check if sieve script is on sieve server
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $script->getSieve());
-        self::assertStringContainsString('reject "Your email has been rejected"', $script->getSieve());
+
+        $sieveScript = $script->getSieve();
+        self::assertStringContainsString(Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
+            ->_('Your email has been rejected'), $sieveScript);
+        self::assertStringContainsString(Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
+            ->_('Only internal senders can send emails to this address.'), $sieveScript);
         
         unset($raii);
     }
@@ -163,7 +169,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
         $sieve = $script->getSieve();
         self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $sieve);
-        self::assertStringContainsString('reject "Your email has been rejected"', $sieve);
+        self::assertStringContainsString(Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
+            ->_('Your email has been rejected'), $sieve);
         
         unset($raii);
     }

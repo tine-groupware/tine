@@ -41,6 +41,8 @@ class Felamimail_Sieve_AdbList
                 $result .= 'discard;' . PHP_EOL;
             }
         } else {
+            $rejectMsg .= "\r\n" . $translation->_("Only internal senders can send emails to this address.");
+
             if ($this->_allowOnlyGroupMembers && !empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
             } else {

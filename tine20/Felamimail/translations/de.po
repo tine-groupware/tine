@@ -714,6 +714,9 @@ msgstr "Empfänger laden..."
 msgid "Poll URL: {0}"
 msgstr "Umfrage Link: {0}"
 
+msgid "Mass Mailing"
+msgstr "Massen-Mail"
+
 msgid "All Recipients"
 msgstr "Alle Empfänger"
 
@@ -814,9 +817,6 @@ msgstr "CC"
 
 msgid "BCC"
 msgstr "BCC"
-
-msgid "Mass Mailing"
-msgstr "Massen-Mail"
 
 msgid "No Messages found."
 msgstr "Keine Nachrichten gefunden."
@@ -1753,6 +1753,9 @@ msgstr "Alle Entwürfe"
 
 msgid "All mails with the draft flag"
 msgstr "Alle Nachrichten mit dem Entwurfs-Flag"
+
+msgid "Only internal senders can send emails to this address."
+msgstr "Nur interne Absender können E-Mails an diese Adresse senden."
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
 msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
