@@ -50,14 +50,14 @@ php-unit-all-tests-source-matrix:
   parallel:
     matrix:
       - DATABASE_IMAGE:
-          - "mariadb:10.6"
-          - "mariadb:10.5"
-          - "mariadb:10.4"
-          - "dockerregistry.metaways.net/tine20/tine20/mysql:8"
-      - PHP_VERSION:
+          - "mariadb:12.0"
+          - "mariadb:11.6"
+          - "mariadb:11.0"
+          - "mariadb:10.11"
+          - "mariadb:10.11" # tine cloud version
+          - "mariadb:10.2"
+        PHP_VERSION:
           - "8.0"
-          - "8.1"
-          - "8.2"
           - "8.3"
   rules:
     - if: $PIPELINE_TYPE =~ /matrix-tests/
