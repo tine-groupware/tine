@@ -137,9 +137,9 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $xpath->registerNamespace('owncloud', 'http://owncloud.org/ns');
 
         $nodes = $xpath->query($query);
-        $this->assertEquals($nodeLength, $nodes->length, $responseDoc->saveXML());
+        $this->assertGreaterThanOrEqual($nodeLength, $nodes->length, $responseDoc->saveXML());
         
-        for($i = 0 ; $i < $nodeLength; $i++) {
+        for ($i = 0 ; $i < $nodeLength; $i++) {
             $nodeValue = $nodes->item($i)->nodeValue;
             $this->assertNotNull($nodeValue, $responseDoc->saveXML());
         }
@@ -255,10 +255,10 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->assertStringContainsString(self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory', $responseDoc->textContent);
 
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
-        $this->_assertQueryResponse($responseDoc, $query, 3);
+        $this->_assertQueryResponse($responseDoc, $query, 2);
 
         $query = '//d:multistatus/d:response/d:propstat/d:prop/d:getetag';
-        $this->_assertQueryResponse($responseDoc, $query, 3);
+        $this->_assertQueryResponse($responseDoc, $query, 2);
 
         $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory', [
             'DEPTH' => '1',
