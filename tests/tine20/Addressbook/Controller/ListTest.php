@@ -440,7 +440,7 @@ class Addressbook_Controller_ListTest extends TestCase
 
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($updatedList)->getSieve();
         self::assertStringContainsString('reject "' . Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
-                ->_('Your email has been rejected') . '"', $script);
+                ->_('Your email has been rejected'), $script);
         self::assertStringContainsString($this->_personas['sclever']->accountEmailAddress, $script);
     }
 

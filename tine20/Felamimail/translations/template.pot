@@ -697,6 +697,9 @@ msgstr ""
 msgid "Poll URL: {0}"
 msgstr ""
 
+msgid "Mass Mailing"
+msgstr ""
+
 msgid "All Recipients"
 msgstr ""
 
@@ -796,9 +799,6 @@ msgid "CC"
 msgstr ""
 
 msgid "BCC"
-msgstr ""
-
-msgid "Mass Mailing"
 msgstr ""
 
 msgid "No Messages found."
@@ -1734,6 +1734,9 @@ msgid "All drafts"
 msgstr ""
 
 msgid "All mails with the draft flag"
+msgstr ""
+
+msgid "Only internal senders can send emails to this address."
 msgstr ""
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
