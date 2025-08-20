@@ -71,7 +71,7 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
 
         $tenant = $conf->{MatrixSynapseIntegrator_Config::MATRIX_SYNAPSE_TENANT_NAME};
 
-        $query = $conn->prepare("DELETE FROM public.directory WHERE tenant = :tenant");
+        $query = $conn->prepare("DELETE FROM data.directory WHERE tenant = :tenant");
         $query->execute(["tenant" => $tenant]);
     
         // CREATE TABLE data.directory (tenant text, idColumn text, displayNameColumn text, search text);
@@ -151,6 +151,11 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
     public function exportDirectory($force = false) {
         if (MatrixSynapseIntegrator_Config::getInstance()->{MatrixSynapseIntegrator_Config::MATRIX_DIRECTORY_ENABLED} || $force) {
             $synapseUsers = $this->synapseListUsersWithOidc();
+
+            if (sizeof($synapseUsers) == 0) {
+                return true;
+            }
+
             $directory = $this->generateDirectoryFromAddressbook($synapseUsers);
             $this->synapseOverwriteDirectory($directory);
         }
