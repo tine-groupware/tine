@@ -154,7 +154,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .  ' ' . $zmse->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' Removing folder and contained messages from cache.');
-                Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
+                Felamimail_Controller_Message::getInstance()->deleteByFolder($folder, true);
                 Felamimail_Controller_Cache_Folder::getInstance()->delete($folder->getId());
                 continue;
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -292,7 +292,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         } catch (Felamimail_Exception_IMAPFolderNotFound $feifnf) {
             return $folder;
         }
-        
+
+        $isCacheStatusEmpty = $folder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
+
         $this->_initUpdate($folder);
         $this->_updateMessageSequence($folder, $imap);
         $this->_deleteMessagesInCache($folder, $imap);
@@ -301,7 +303,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_updateFolderStatus($folder);
         
         if ($folder->supports_condstore || rand(1, $_updateFlagFactor) == 1) {
-            $folder = $this->updateFlags($folder);
+            $folder = $this->updateFlags($folder, 60, $isCacheStatusEmpty);
         }
         
         $this->_updateFolderQuota($folder, $imap);
@@ -1216,9 +1218,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache of ' . $folder->globalname);
-        
-        $this->deleteByFolder($folder);
-        
+
+        Felamimail_Controller_Message::getInstance()->deleteByFolder($folder, true);
+
         $folder->cache_timestamp        = Tinebase_DateTime::now();
         $folder->cache_status           = Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
         $folder->cache_job_actions_est = 0;
@@ -1229,9 +1231,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'cache_recentcount' => 0,
             'cache_unreadcount' => 0
         ));
-        
+
         $folder = Felamimail_Controller_Folder::getInstance()->update($folder);
-        
+
         return $folder;
     }
     
@@ -1245,7 +1247,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @todo only get flags of current batch of messages from imap?
      * @todo add status/progress to start at later messages when this is called next time?
      */
-    public function updateFlags($_folder, $_time = 60)
+    public function updateFlags($_folder, $_time = 60, $updateAll = false)
     {
         // always read folder from database
         $folder  = Felamimail_Controller_Folder::getInstance()->get($_folder);
@@ -1276,7 +1278,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         // switch to folder (read-only)
         $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
         
-        if ($folder->supports_condstore) {
+        if ($folder->supports_condstore && !$updateAll) {
             $this->_updateCondstoreFlags($imap, $folder);
         } else {
             $this->_updateAllFlags($imap, $folder);
@@ -1304,7 +1306,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' Folder supports condstore, fetching flags since last mod seq ' . $folder->imap_lastmodseq);
         $flags = $imap->getChangedFlags($folder->imap_lastmodseq);
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' got ' . count($flags) . ' changed flags');
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__

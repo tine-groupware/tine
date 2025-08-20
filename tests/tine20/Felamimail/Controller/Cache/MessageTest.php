@@ -482,4 +482,51 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $result = $this->_controller->addMessageToCache($message);
         self::assertTrue($result !== false);
     }
+
+
+    public function testTagFlagCachePersistence()
+    {
+        $this->_testNeedsTransaction();
+        // Get test message
+        $message = $this->_emailTestClass->messageTestHelper('multipart_alternative.eml');
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart_alternative.eml';
+
+        $filter = array(array(
+            'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
+        ));
+        $json = new Felamimail_Frontend_Json();
+
+        // Create and attach a test tag
+        $tag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag(array(
+            'name' => 'phpunit',
+            'type' => Tinebase_Model_Tag::TYPE_SHARED,
+            'description' => 'this is the shared tag',
+            'color' => '#' . Tinebase_Helper::generateRandomColor(),
+        )));
+
+        $right = new Tinebase_Model_TagRight([
+            'tag_id'        => $tag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true
+        ]);
+        Tinebase_Tags::getInstance()->setRights($right);
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags([$message], [$tag->getId()]);
+
+        $result = $json->searchMessages($filter, []);
+        $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should have tag');
+
+        // Clear message from cache (simulates what happens during cache refresh)
+        $result = Felamimail_Controller_Cache_Message::getInstance()->clear($message->folder_id);
+        $updatedFolder = $this->_controller->updateCache($message->folder_id, 30, 1);
+        $result = $json->searchMessages($filter, []);
+        $updatedTags = Tinebase_Tags::getInstance()->searchTagsByForeignFilter(new Felamimail_Model_MessageFilter([
+            ['field' => 'id', 'operator' => 'in', 'value' => [$result['results'][0]['id']]],
+        ]));
+
+        $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should fetch the tags again');
+        $this->assertEquals(1, count($updatedTags), 'tag should be recreated');
+
+    }
 }

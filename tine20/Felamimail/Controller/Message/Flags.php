@@ -83,7 +83,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     public function addFlags($_messages, $_flags)
     {
-        return $this->_addOrClearFlags($_messages, $_flags, 'add');
+        return $this->_addOrClearFlags($_messages, $_flags);
     }
     
     /**
@@ -93,9 +93,10 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      * @param array                     $_flags
      * @return Tinebase_Record_RecordSet with affected folders
      */
-    public function clearFlags($_messages, $_flags)
+    public function clearFlags($_messages, $_flags, $_keepTagsOnImap = false)
     {
-        return $this->_addOrClearFlags($_messages, $_flags, 'clear');
+        $mode = $_keepTagsOnImap ? 'clear_cache_only' : 'clear';
+        return $this->_addOrClearFlags($_messages, $_flags, $mode);
     }
     
     /**
@@ -103,14 +104,15 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      *
      * @param mixed                     $_messages
      * @param array                     $_flags
-     * @param string                    $_mode add/clear
+     * @param string                    $_mode add/clear/clear_cache_only
      * @return Tinebase_Record_RecordSet with affected folders
      * 
      * @todo use iterator here
      */
-    protected function _addOrClearFlags($_messages, $_flags, $_mode = 'add')
+    protected function _addOrClearFlags($_messages, $_flags, string $_mode = 'add')
     {
         $flags = (array) $_flags;
+        $isClearMode = in_array($_mode, ['clear_cache_only', 'clear']);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: ' . print_r($_flags, TRUE));
 
@@ -159,7 +161,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                             'decrementMessagesCounter' => 0, 
                             'decrementUnreadCounter'   => 0
                         );
-                    } elseif ($_mode === 'clear') {
+                    } elseif ($isClearMode) {
                         $folderCounterById[$lastFolderId] = array(
                             'incrementUnreadCounter' => 0
                         );
@@ -176,7 +178,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     
             if ($_mode === 'add') {
                 $folderCounterById = $this->_addFlagsOnCache($messagesToUpdate, $flags, $folderCounterById);
-            } else if ($_mode === 'clear') {
+            } else if ($isClearMode) {
                 $folderCounterById = $this->_clearFlagsOnCache($messagesToUpdate, $flags, $folderCounterById);
             }
             
@@ -213,6 +215,12 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         }, ARRAY_FILTER_USE_BOTH); 
         
         if (empty($flagsToChange)) {
+            return;
+        }
+
+        if ($_mode === 'clear_cache_only') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . $_mode . ', skip clearing flags on IMAP server');
             return;
         }
         
