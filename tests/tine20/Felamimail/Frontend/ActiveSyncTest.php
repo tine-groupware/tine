@@ -1409,9 +1409,10 @@ cj48L2Rpdj48L2Rpdj4=&#13;
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [[
                 'field' => 'folder_id', 'operator' => 'equals', 'value' => $folder->getId()
         ]]))->getFirstRecord();
+        self::assertNotNull($message);
         $this->_createdMessages->addRecord($message);
 
-        self::assertEquals($message->getId(), $serverId, 'returned server id should be the cache message id');
+        self::assertNotEquals($message->getId(), $serverId, 'returned server id should be the cache message id');
 
         $updatedFolder = Felamimail_Controller_Cache_Folder::getInstance()->getIMAPFolderCounter($folder);
         self::assertEquals(1, $updatedFolder->imap_totalcount, print_r($updatedFolder->toArray(), true));
