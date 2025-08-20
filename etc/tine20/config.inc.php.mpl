@@ -14,6 +14,7 @@ return array(
         'password' => '{{.Env.TINE20_DATABASE_PASSWORD}}',
         'tableprefix'  => '{{getenv "TINE20_DATABASE_TABLEPREFIX" "tine20_"}}',
         'adapter' => '{{getenv "TINE20_DATABASE_ADAPTER" "pdo_mysql"}}',
+        'profiler' => {{ getenv "TINE20_DATABASE_PROFILER" "false" }},
     ),
 
     'setupuser' => array(
