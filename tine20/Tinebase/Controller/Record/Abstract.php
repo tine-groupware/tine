@@ -3488,7 +3488,6 @@ abstract class Tinebase_Controller_Record_Abstract
 
             /** @var Tinebase_Record_Interface $record */
             foreach ($_record->{$_property} as $record) {
-                
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
 
                 $create = false;
@@ -3502,10 +3501,17 @@ abstract class Tinebase_Controller_Record_Abstract
 
                         if (!empty($prevRecord->diff($record)->diff)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
+                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                                    . ' Updating dependent record with id = "' . $record->getId()
+                                    . '" on property ' . $_property . ' for ' . $this->_applicationName
+                                    . ' ' . $this->_modelName);
                             }
                             if ($this->_delayDependentRecords) {
-                                $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($record, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, false);
+                                $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc(
+                                    $record,
+                                    $controller,
+                                    $_fieldConfig[TMCC::IGNORE_ACL] ?? false,
+                                    false);
                                 $existing->addRecord($record);
                             } else {
                                 $existing->addRecord($controller->update($record));
@@ -3522,6 +3528,10 @@ abstract class Tinebase_Controller_Record_Abstract
                         $create = true;
                     }
                 } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Record has no ID -> create');
+                    }
                     $create = true;
                     $record->setId(Tinebase_Record_Abstract::generateUID());
                 }
