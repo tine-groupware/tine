@@ -35,16 +35,23 @@ merge:
   stage: merge1
   extends: .abstract.merge
   script:
-    - merge_merge_upwards 2023.11 2024.11
-    - merge_merge_upwards 2024.11 2025.11
-    - merge_merge_upwards 2025.11 main
-    - merge_merge_mirror customers main github main
-    - merge_merge_mirror github main customers main
+    - merge_merge_upwards $TINE_VERSION_LTS $TINE_VERSION_BE
+    - merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_BETA
+    - merge_merge_upwards $TINE_VERSION_BETA $TINE_VERSION_NEXT
+    - |
+      if [ "${TINE_VERSION_BETA}" != "" ];then
+        merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_BETA
+        merge_merge_upwards $TINE_VERSION_BETA $TINE_VERSION_NEXT
+      else
+        merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_NEXT
+      fi
+    - merge_merge_mirror customers $TINE_VERSION_NEXT github main
+    - merge_merge_mirror github main customers $TINE_VERSION_NEXT
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "2023.11" || $CI_COMMIT_REF_NAME == "2024.11" || $CI_COMMIT_REF_NAME == "2025.11" || $CI_COMMIT_REF_NAME == "main")
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == $TINE_VERSION_LTS || $CI_COMMIT_REF_NAME == $TINE_VERSION_BE || $CI_COMMIT_REF_NAME == $TINE_VERSION_BETA || $CI_COMMIT_REF_NAME == $TINE_VERSION_NEXT)
       variables:
         AUTO_MERGE_VAR: "true"
     - if: $AUTO_MERGE == "true"
