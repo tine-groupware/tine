@@ -1,11 +1,9 @@
 # add custom / branch specific merge jobs here (merge2-x)
+# TODO is this still needed?
 merge_be:
   stage: merge2
   extends: .abstract.merge
   script:
-    ### 2022.11
-    - merge_merge_upwards 2022.11 tine20.com/2022.11-custom
-    - merge_merge_upwards tine20.com/2022.11-custom tine20.com/2022.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE_BE == "true"
