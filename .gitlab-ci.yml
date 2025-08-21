@@ -57,10 +57,10 @@ workflow:
     - if: $CI_COMMIT_TAG =~ /^main-.*/
       variables:
         PIPELINE_TYPE: release, release-monthly
-    - if: $CI_COMMIT_TAG =~ /^20..\.11\-.*/ && $BASE_MAJOR_COMMIT_REF_NAME == "2025.11" && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
+    - if: $CI_COMMIT_TAG =~ /^20..\.11\-.*/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
       variables:
         PIPELINE_TYPE: release, release-beta
-    - if: $CI_COMMIT_TAG =~ /^20..\.11\..*/ && $BASE_MAJOR_COMMIT_REF_NAME == "2024.11" && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
+    - if: $CI_COMMIT_TAG =~ /^20..\.11\..*/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
       variables:
         PIPELINE_TYPE: release, release-be
     - if: $CI_COMMIT_TAG =~ /^20..\.11\..*/ && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
