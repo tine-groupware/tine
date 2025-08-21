@@ -35,19 +35,16 @@ merge:
   stage: merge1
   extends: .abstract.merge
   script:
-    - merge_merge_upwards 2022.11 2023.11
     - merge_merge_upwards 2023.11 2024.11
-    # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
-    - merge_merge_upwards tine20.com/2022.11-custom 2023.11
-    - merge_merge_upwards 2023.11 2024.11
-    - merge_merge_upwards 2024.11 main
+    - merge_merge_upwards 2024.11 2025.11
+    - merge_merge_upwards 2025.11 main
     - merge_merge_mirror customers main github main
     - merge_merge_mirror github main customers main
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "2022.11" || $CI_COMMIT_REF_NAME == "2023.11" || $CI_COMMIT_REF_NAME == "2024.11" ||  $CI_COMMIT_REF_NAME == "tine20.com/2022.11-custom")
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "2023.11" || $CI_COMMIT_REF_NAME == "2024.11" || $CI_COMMIT_REF_NAME == "2025.11")
       variables:
         AUTO_MERGE_VAR: "true"
     - if: $AUTO_MERGE == "true"
