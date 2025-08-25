@@ -1988,7 +1988,7 @@ class Tinebase_FileSystem implements
                 try {
                     // let's try to get the node from backend, to make sure it still exists
                     $this->_getTreeNodeBackend()->setRevision($revision);
-                    return $this->_checkRevision($this->_getTreeNodeBackend()->get($this->_statCache[$cacheId]), $revision);
+                    return $this->_checkRevision($this->_getTreeNodeBackend()->get($this->_statCache[$cacheId], $getDeleted), $revision);
                 } catch (Tinebase_Exception_NotFound) {
                     // something went wrong. let's clear the whole statCache
                     $this->clearStatCache();
@@ -2031,7 +2031,7 @@ class Tinebase_FileSystem implements
             if (null !== $revision) {
                 try {
                     $this->_getTreeNodeBackend()->setRevision($revision);
-                    $node = $this->_checkRevision($this->_getTreeNodeBackend()->get($node->getId()), $revision);
+                    $node = $this->_checkRevision($this->_getTreeNodeBackend()->get($node->getId(), $getDeleted), $revision);
 
                     // add found path to statCache
                     $this->_addStatCache($pathParts, $node, $revision);
