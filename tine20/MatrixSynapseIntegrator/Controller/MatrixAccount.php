@@ -160,6 +160,22 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     }
 
     /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        if (empty($_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY})) {
+            $_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY} =
+                base64_encode(Tinebase_Record_Abstract::generateUID(32));
+        }
+    }
+
+    /**
      * inspect creation of one record (after create)
      *
      * @param   Tinebase_Record_Interface $_createdRecord
