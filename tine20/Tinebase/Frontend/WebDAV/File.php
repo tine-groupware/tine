@@ -89,7 +89,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     }
 
     /**
-     * @param mixed $data
+     * @param null|resource $data
      * @return string|null
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
@@ -131,8 +131,6 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
             if (false === stream_copy_to_stream($data, $handle)) {
                 throw new Tinebase_Exception_Backend('stream_copy_to_stream failed');
             }
-        } else {
-            throw new Tinebase_Exception_UnexpectedValue('data should be a resource');
         }
 
         // save file object
