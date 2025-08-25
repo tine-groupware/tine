@@ -42,6 +42,12 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
             ])
         );
 
+        self::assertNotNull($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY});
+        self::assertEquals(
+            32,
+            strlen(base64_decode($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY}))
+        );
+
         // assert corporal policy json
         $backend = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getCorporalBackend();
         $policy = $backend->getPushedPolicy();
