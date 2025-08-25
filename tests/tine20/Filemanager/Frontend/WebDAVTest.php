@@ -1386,6 +1386,8 @@ EOS
             . Tinebase_Core::getUser()->accountLoginName);
 
         $node->createFile('test.file');
+        // test to recreate the file
+        $node->createFile('test.file');
     }
 
     public function testCreateFileInFilemanagerForeignPersonalFolderWithReadGrant()
