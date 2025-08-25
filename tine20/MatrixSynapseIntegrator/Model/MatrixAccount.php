@@ -137,7 +137,11 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::LABEL                     => 'Matrix Recovery Password', // _('Matrix Recovery Password')
             ],
             self::FLD_MATRIX_RECOVERY_KEY => [
-                self::TYPE                      => self::TYPE_STRING,
+                self::TYPE                      => self::TYPE_PASSWORD,
+                self::CONFIG        => [
+                    self::CREDENTIAL_CACHE => 'shared',
+                    self::REF_ID_FIELD => self::FLD_CC_ID,
+                ],
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -149,7 +153,11 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
             // (It is used to "bind" the lifetime of the matrix index db to the session store)
             // example value: '2sPibjzJ8tbmmZFQ19Ncw9DMZuGqFlIQyG3zUTM3NCE='
             self::FLD_MATRIX_SESSION_KEY => [
-                self::TYPE                      => self::TYPE_STRING,
+                self::TYPE                      => self::TYPE_PASSWORD,
+                self::CONFIG        => [
+                    self::CREDENTIAL_CACHE => 'shared',
+                    self::REF_ID_FIELD => self::FLD_CC_ID,
+                ],
                 self::LENGTH                    => 44,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
