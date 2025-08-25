@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 import waitFor from "util/waitFor.es6";
@@ -11,8 +11,12 @@ import waitFor from "util/waitFor.es6";
 Ext.namespace('Tine.MatrixSynapseIntegrator');
 
 Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
+    hideMode: 'visibility', // just initially, see changeHideMode
     url: null,
-    autoEl: { tag: 'iframe', cls: 't-app-matrixsynapseintegrator', style: 'width:100%; height: 100%; border: none;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
+    autoEl: { tag: 'div', cls: 't-app-matrixsynapseintegrator', cn: [
+        { tag: 'iframe', style: 'width:100%; height: 100%; border: none; visibility: hidden;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
+        { tag: 'div', cls: 'tine-viewport-waitcycle'}
+    ]},
 
     // @TODO move somewhere
     sha256: async function (message){
@@ -22,46 +26,77 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     },
 
-    initComponent: function () {
-        this.bootstrapDataPromise = Tine.MatrixSynapseIntegrator.getBootstrapdata();
-
-        this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
-        const url = Tine.Tinebase.configManager.get('elementUrl', 'MatrixSynapseIntegrator');
-
-
-        this.on('afterrender', async () => {
-            const bootstrapData = await this.bootstrapDataPromise;
-
-            if (bootstrapData.mx_user_id && url) {
-                this.url = new URL(url.replace('{MATRIX_USER_ID}', await this.sha256(bootstrapData.mx_user_id)));
-                this.el.dom.src = this.url.href
-                this.el.dom.style.visibility = 'hidden'
-                // todo add some kind of loading indicator
-                // and some option to not hide element while loading for debugging
-
-                // window.emnt = this.el.dom
-                // @TODO paste some 'here we are msg'?
-                //  we better wait for a query from the page
-                // window.parent.postMessage('TEST', 'https://web:4430')
-            } else {
-                this.el.dom.srcdoc = 'No element url configured!'
+    changeHideMode: function() {
+        // NOTE: we start client in background to show unread count (see Application::init)
+        // when hideMode === 'display' element's feature detection fails (e.g. display-table)
+        // but with hideMode === 'visibility' element is displayed on bottom of the page when fully loaded
+        // so initially we hide by visibility and change to display once feature detection has passed
+        if (this.hideMode === 'visibility') {
+            this.hideMode = 'display';
+            if (this.isHidden()) {
+                this.getVisibilityEl().addClass('x-hide-display');
+                this.getVisibilityEl().removeClass('x-hide-visibility');
             }
-        });
+        }
+    },
+
+    showClient: function() {
+        this.clientFrame.dom.style.visibility = 'visible'
+        this.loadingIndicator.hide();
+    },
+
+    showUnavailableAlertIf: async function() {
+        await this.initPromise
+        if (!this.isAvailable && this.isVisible()) {
+            Ext.Msg.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                title: this.app.formatMessage('No chat account has been assigned'),
+                msg: this.app.formatMessage('You have not yet been assigned an chat account. This view is therefore empty')
+            });
+        }
+    },
+
+    initComponent: function () {
+        this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
+
+        this.initPromise = Promise.all([
+            this.afterIsRendered(),
+            Tine.MatrixSynapseIntegrator.getBootstrapdata().catch(() => {})
+        ]).then(async values => {
+            const [cmp, bootstrapData] = values;
+            this.bootstrapData = bootstrapData;
+            const url = Tine.Tinebase.configManager.get('elementUrl', 'MatrixSynapseIntegrator', '')
+            this.url = new URL(url.replace('{MATRIX_USER_ID}', await this.sha256(this.bootstrapData?.mx_user_id)));
+
+            this.isAvailable = !!this.bootstrapData && !!url
+            if (this.isAvailable) {
+                this.clientFrame = this.el.down('iframe')
+                this.loadingIndicator = this.el.down('.tine-viewport-waitcycle')
+                this.loadingIndicator.on('dblclick', this.showClient, this)
+
+                this.clientFrame.dom.src = this.url.href
+            } else {
+                this.changeHideMode()
+                this.showUnavailableAlertIf()
+            }
+        })
+
 
         window.addEventListener("message", async (event) => {
-            const bootstrapData = await this.bootstrapDataPromise;
             // note: elementRequestCredentials is only send by element, if it requires credentials and can not bootstrap from local storage
-            if (event.origin !== this.url.origin) return;
+            if (event.origin !== this.url?.origin) return;
             console.error(event)
 
             const notificationMap = new Map()
             
             switch (event.data.type) {
                 case "elementBootstrapdataRequest":
+                    this.changeHideMode()
                     event.source.postMessage(Object.assign({
                         type: "elementBootstrapdataResponse",
                         eventUUID: event.data.eventUUID,
-                    }, bootstrapData), this.url.origin);
+                    }, this.bootstrapData), this.url.origin);
                     break;
                 case "elementLogindataRequest":
                     event.source.postMessage(Object.assign({
@@ -70,12 +105,31 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     }, await Tine.MatrixSynapseIntegrator.getLogindata()), this.url.origin);
                     break;
                 case "elementSetupEncryptionDone":
-                    this.el.dom.style.visibility = 'visible'
+                    this.showClient()
                     break
                 case "elementStartupFailure":
-                    this.el.dom.style.visibility = 'visible'
-                    alert(event.data)
-                    //todo implement
+                    this.showClient()
+                    if (event.data.failure === 'recoveryKeyIncorrect') {
+                        const [btn, string] = await Ext.MessageBox.show({
+                            title: this.app.formatMessage('Recovery Key or Password Needed'),
+                            msg: this.app.formatMessage('{ brandingTitle } needs your recovery key/password to access your chats. The provided key/password will be saved in a secret store on this server.', {
+                                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+                            }),
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            icon: Ext.MessageBox.QUESTION_INPUT,
+                            prompt: true
+                        });
+                        if (btn === 'ok') {
+                            // @TODO save in account, reload frame
+                            // await Tine.MatrixSynapseIntegrator.setRecoveryPassword(string)
+                            // || await Tine.MatrixSynapseIntegrator.setRecoveryKey(string)
+
+                        } else {
+                            // show info for user?
+                            // let user use client
+                            // ask with element prompt?
+                        }
+                    }
                     break
                 case "elementSendNotification":
                     const notification = new Notification(event.data.notification.title, {
@@ -95,8 +149,8 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     }
                     break
                 case "elementSetNotificationCount":
-                    // todo use
-                    console.error(`ELEMENT-NOTIFICATION-COUNT: ${event.data.count}`)
+                    this.app.setDockBadge(event.data.count)
+                    // console.error(`ELEMENT-NOTIFICATION-COUNT: ${event.data.count}`)
                     break
                 case "elementNotificationClear":
                     // todo: dose this work?
