@@ -237,6 +237,11 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
 
         this.grantsGrid.setDisabled(! (this.isSharedAccount() && this.asAdminModule));
+
+        // this field is only used in user edit dialog
+        if (this.contactRecordPicker) {
+            this.contactRecordPicker.hide();
+        }
     },
 
     disableUserCombo: function(item) {
@@ -1342,15 +1347,24 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      */
     updateContactAddressbook: function () {
-        if (this.record.get('type') === 'system') {
+        const item = this.getForm().findField('container_id');
+
+        if (this.record.get('type') === 'system' || !item) {
             return;
         }
 
         if (this.record.data?.visibility === 'displayed') {
-            this.record.data.contact_id = {
-                'id' : this.record.data?.contact_id,
-                'container_id' : this.getForm().findField('container_id')?.getValue()
+            let contact = this.record.get('contact_id');
+            if (!contact) return;
+            if (typeof contact === 'string') {
+                contact = {
+                    'id' : contact,
+                };
             }
+            if (typeof contact === 'object') {
+                contact.container_id = item.getValue();
+            }
+            this.record.set('contact_id', contact);
         }
     },
 
