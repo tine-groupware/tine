@@ -123,7 +123,7 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                 throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path not found");
             }
 
-            return (new Filemanager_Frontend_WebDAV_Container($node, $this->_useIdAsName))->createFile($name, $data);
+            return (new Filemanager_Frontend_WebDAV_Directory(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)))->createFile($name, $data);
         } else {
             throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
         }
