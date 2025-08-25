@@ -549,10 +549,10 @@ class Tinebase_FileSystem implements
      *
      * @param string $path if given, only remove this path from statcache
      */
-    public function clearStatCache($path = null)
+    public function clearStatCache(?string $path = null)
     {
         if ($path !== null) {
-            $cacheId = $this->_getCacheId($path);
+            $cacheId = $this->_getStatCacheId($path);
             if (isset($this->_statCache[$cacheId])) {
                 unset($this->_statCacheById[$this->_statCache[$cacheId]->getId()]);
                 unset($this->_statCache[$cacheId]);
@@ -1878,8 +1878,7 @@ class Tinebase_FileSystem implements
                 } else {
                     /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
-                        $pathParts = $this->_splitPath($path . '/' . $child->name);
-                        $cacheId = $this->_getCacheId($pathParts);
+                        $cacheId = $this->_getStatCacheId($path . '/' . $child->name);
                         $this->_statCache[$cacheId] = $child;
                         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
                             $this->rmdir($path . '/' . $child->name, true, true, $deleteFlySys);
@@ -1958,6 +1957,23 @@ class Tinebase_FileSystem implements
         }
     }
 
+    protected function _resolveAppName(array $pathParts): array
+    {
+        // is pathParts[0] not an id (either 40 characters or only digits), then its an application name to resolve
+        if (strlen((string) $pathParts[0]) !== 40 && !ctype_digit((string) $pathParts[0])) {
+            $pathParts[0] = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
+        }
+        return $pathParts;
+    }
+
+    protected function _getStatCacheId(string|array $path, ?int $revision = null): string
+    {
+        $pathParts = is_array($path) ? $path : $this->_splitPath($path);
+        $pathParts = $this->_resolveAppName($pathParts);
+        array_unshift($pathParts, '@' . $revision);
+        return sha1(implode('', $pathParts));
+    }
+
     /**
      * return node for a path, caches found nodes in statcache
      *
@@ -1973,15 +1989,7 @@ class Tinebase_FileSystem implements
 
         try {
 
-            $pathParts = $this->_splitPath($path);
-            // is pathParts[0] not an id (either 40 characters or only digits), then its an application name to resolve
-            if (strlen((string) $pathParts[0]) !== 40 && !ctype_digit((string) $pathParts[0])) {
-                $oldPart = $pathParts[0];
-                $pathParts[0] = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
-                // + 1 in mb_substr offset because of the leading / char
-                $path = '/' . $pathParts[0] . mb_substr('/' . ltrim($path, '/'), mb_strlen((string) $oldPart) + 1);
-            }
-            $cacheId = $this->_getCacheId($pathParts, $revision);
+            $cacheId = $this->_getStatCacheId($path, $revision);
 
             // let's see if the path is cached in statCache
             if (isset($this->_statCache[$cacheId])) {
@@ -1997,20 +2005,23 @@ class Tinebase_FileSystem implements
                 }
             }
 
-            $parentNode = null;
-            $node       = null;
+            $parentNode     = null;
+            $node           = null;
+            $pathParts      = $this->_resolveAppName($this->_splitPath($path));
+            $allPathParts   = $pathParts;
 
             // find out if we have cached any node up in the path
             do {
-                $cacheId = $this->_getCacheId($pathParts);
+                $cacheId = $this->_getStatCacheId($pathParts);
 
                 if (isset($this->_statCache[$cacheId])) {
                     $node = $parentNode = $this->_statCache[$cacheId];
                     break;
                 }
-            } while (($pathPart = array_pop($pathParts) !== null));
+                array_pop($pathParts);
+            } while (!empty($pathParts));
 
-            $missingPathParts = array_diff_assoc($this->_splitPath($path), $pathParts);
+            $missingPathParts = array_diff_assoc($allPathParts, $pathParts);
 
             foreach ($missingPathParts as $pathPart) {
                 $node = $this->_getTreeNodeBackend()->getChild($parentNode, $pathPart, $getDeleted);
@@ -2715,22 +2726,7 @@ class Tinebase_FileSystem implements
         if (null === $revision) {
             $this->_statCacheById[$node->getId()] = $node;
         }
-        $this->_statCache[$this->_getCacheId($path, $revision)] = $node;
-    }
-    
-    /**
-     * generate cache id
-     * 
-     * @param  string|array  $path
-     * @param  int|null $revision
-     * @return string
-     */
-    protected function _getCacheId($path, $revision = null)
-    {
-        $pathParts = is_array($path) ? $path : $this->_splitPath($path);
-        array_unshift($pathParts, '@' . $revision);
-
-        return sha1(implode('', $pathParts));
+        $this->_statCache[$this->_getStatCacheId($path, $revision)] = $node;
     }
     
     /**
@@ -3821,10 +3817,9 @@ class Tinebase_FileSystem implements
         }
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-            $pathParts = $this->_splitPath($this->getPathOfNode($node, true));
-            $cacheId = $this->_getCacheId($pathParts);
+            $cacheId = $this->_getStatCacheId($path = $this->getPathOfNode($node, true));
             $this->_statCache[$cacheId] = $node;
-            $this->rmdir('/' . implode('/', $pathParts), true, false, false);
+            $this->rmdir($path, true, false, false);
         } else {
             $this->deleteFileNode($node, false, false);
         }
