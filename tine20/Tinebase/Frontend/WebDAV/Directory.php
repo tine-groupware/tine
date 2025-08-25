@@ -173,8 +173,6 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 if (false === stream_copy_to_stream($data, $handle)) {
                     throw new Sabre\DAV\Exception('stream_copy_to_stream failed');
                 }
-            } else {
-                throw new Sabre\DAV\Exception('data should be a resource');
             }
 
             if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
