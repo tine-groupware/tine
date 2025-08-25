@@ -22,8 +22,6 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
     public const FLD_ACCOUNT_ID = 'account_id';
     // public const FLD_ACTIVE = 'active';
     public const FLD_CC_ID = 'cc_id';
-    public const FLD_MATRIX_ACCESS_TOKEN = 'matrix_access_token';
-    public const FLD_MATRIX_DEVICE_ID = 'matrix_device_id';
     public const FLD_MATRIX_ID = 'matrix_id';
     public const FLD_MATRIX_RECOVERY_KEY = 'matrix_recovery_key';
     public const FLD_MATRIX_RECOVERY_PASSWORD = 'matrix_recovery_password';
@@ -100,22 +98,6 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::NULLABLE      => true,
                 self::TYPE          => self::TYPE_STRING,
             ],
-            self::FLD_MATRIX_ACCESS_TOKEN => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL                     => 'Matrix Access Token', // _('Matrix Access Token')
-            ],
-            self::FLD_MATRIX_DEVICE_ID => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL                     => 'Matrix Device ID', // _('Matrix Device ID')
-                self::QUERY_FILTER              => true,
-            ],
-            // device id is a transliterate from branding with an alphanumeric at the end
             self::FLD_MATRIX_ID                  => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
