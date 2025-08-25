@@ -15,12 +15,17 @@ class MatrixSynapseIntegrator_Setup_Update_18 extends Setup_Update_Abstract
 {
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE        => [
             self::RELEASE018_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE018_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -43,5 +48,14 @@ class MatrixSynapseIntegrator_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(MatrixSynapseIntegrator_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
+    }
+
+    public function update002(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            MatrixSynapseIntegrator_Model_MatrixAccount::class,
+        ]);
+
+        $this->addApplicationUpdate(MatrixSynapseIntegrator_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
     }
 }
