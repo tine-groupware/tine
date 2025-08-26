@@ -5,9 +5,11 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * class for Sales initialization
@@ -68,10 +70,52 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $this->_contractController    = Sales_Controller_Contract::getInstance();
         $this->_division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
 
+        $updateDivision = false;
+
         if ($this->_division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
             $this->_division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
                 Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => Tinebase_Controller_BankAccount::getInstance()->getAll()->getFirstRecord()->getId(),
             ], true));
+            $updateDivision = true;
+        }
+        if (null === $this->_division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID}) {
+            $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+            $dispatchEmailAddress = 'dispatch@failedToFindDomain.tld';
+            if (isset($smtpConfig['primarydomain'])) {
+                $dispatchEmailAddress = 'dispatch@' . $smtpConfig['primarydomain'];
+            }
+            if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+                list(,$domain) = explode('@', Tinebase_Core::getUser()->accountEmailAddress, 2);
+                $dispatchEmailAddress = 'dispatch@' . $domain;
+            }
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                [TMFA::FIELD => 'email', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dispatchEmailAddress],
+                [TMFA::FIELD => 'type', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_EmailUser_Model_Account::TYPE_SHARED_INTERNAL],
+            ]);
+            if (null === ($dispatchFMAccount = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord())) {
+                (new Admin_Frontend_Json())->saveEmailAccount([
+                    'name' => 'sales dispatch mail account',
+                    'email' => $dispatchEmailAddress,
+                    'type' => Felamimail_Model_Account::TYPE_SHARED_INTERNAL,
+                    'password' => '123',
+                    'grants' => [
+                        [
+                            'readGrant' => true,
+                            'editGrant' => true,
+                            'addGrant' => true,
+                            'account_type' => 'user',
+                            'account_id' => Tinebase_Core::getUser()->getId(),
+                        ]
+                    ]
+                ]);
+                $dispatchFMAccount = Admin_Controller_EmailAccount::getInstance()->search($filter)->getFirstRecord();
+            }
+
+            $this->_division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID} = $dispatchFMAccount;
+            $updateDivision = true;
+        }
+
+        if ($updateDivision) {
             $this->_division = Sales_Controller_Division::getInstance()->update($this->_division);
         }
 
