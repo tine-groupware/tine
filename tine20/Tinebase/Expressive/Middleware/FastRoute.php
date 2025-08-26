@@ -116,7 +116,7 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 
         try {
             $cachedDispatcher = static::_getCachedDispatcher($enabledApplications, $appsHash);
-        } catch (RuntimeException $runtimeException) {
+        } catch (RuntimeException|Error $runtimeException) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' Got exception: ' . $runtimeException->getMessage() . ' - clear cache & trying again');
             clearstatcache();
