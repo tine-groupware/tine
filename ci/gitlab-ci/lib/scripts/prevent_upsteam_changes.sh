@@ -5,6 +5,8 @@ function prevent_upstream_change() {
         return
     fi
 
+    git config user.email "ci@gitlab.metaways.net"
+    git config user.name "ci"
     git rebase origin/$downstream
 
     changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
