@@ -373,7 +373,8 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
             return;
         }
         var p = this.getParams();
-        this.cursor = (o?.params?.paging && o?.params.paging[p.start]) ? o.params.paging[p.start] : 0;
+        const paging = o?.params?.paging ?? o.params;
+        this.cursor = paging?.[p.start] ?? 0;
         var d = this.getPageData(), ap = d.activePage, ps = d.pages;
 
         this.afterTextItem.setText(String.format(this.afterPageText, d.pages));
