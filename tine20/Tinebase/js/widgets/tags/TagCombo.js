@@ -44,12 +44,14 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
      */
     initComponent: function() {
         this.emptyText = this.emptyText ? this.emptyText : i18n._('tag name');
-        
+
         this.initStore();
         this.initTemplate();
+        this.appName = this.app?.appName ?? this.app;
+
         this.plugins = [new RecordEditFieldTriggerPlugin({
             qtip: i18n._('Add a new personal tag'),
-            visible: Tine.Tinebase.common.hasRight('use_personal_tags', this.app.appName),
+            visible: this.appName ? Tine.Tinebase.common.hasRight('use_personal_tags', this.appName) : false,
             scope: this,
             onTriggerClick: () => {
                 Ext.Msg.prompt(i18n._('Add New Personal Tag'),
@@ -136,7 +138,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         
         var filter = {
             name: (qevent.query && qevent.query != '') ? '%' + qevent.query + '%' : '',
-            application: this.app ? this.app.appName : '',
+            application: this.appName ?? '',
             grant: (this.onlyUsableTags) ? 'use' : 'view' 
         };
         
