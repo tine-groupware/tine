@@ -624,6 +624,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertTrue(is_dir($path . 'test2'));
         $this->assertSame('/test2', $fs->stat('Filemanager/folders/shared/flysystem1/test2')->flypath);
 
+        $fs->clearStatCache();
+
         // move directory within a flysystem to subfolder
         $request = new Sabre\HTTP\Request('MOVE', '/webdav/Filemanager/shared/flysystem1/test2', [
             'DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test1/foo',
