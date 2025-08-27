@@ -520,7 +520,10 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                 $contact = Addressbook_Controller_Contact::getInstance()->get(self::$_instance
                     ->{self::INSTALLATION_REPRESENTATIVE});
             } catch (Tinebase_Exception $e) {
-                Tinebase_Exception::log($e);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                }
             }
         }
 
