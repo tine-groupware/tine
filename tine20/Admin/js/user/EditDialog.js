@@ -139,6 +139,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.mustChangePasswordCheck()
 
+        this.forceUpdateContact = !this.record.id;
+
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
 
@@ -261,7 +263,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Tinebase.common.assertComparable(xprops);
         this.record.set('xprops', xprops);
 
-        if (!this.record.id && this.contactRecordPicker.selectedRecord && this.displayContactInAddressbookCombo.getValue() === 'displayed') {
+        if (this.forceUpdateContact && this.contactRecordPicker.selectedRecord && this.displayContactInAddressbookCombo.getValue() === 'displayed') {
             this.record.set('contact_id', this.contactRecordPicker.selectedRecord.data);
         }
     },
@@ -1380,7 +1382,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             scope.app.i18n._('Confirm'),
                             scope.app.i18n._(msg),
                             (btn) => {
-                                if (btn === 'yes') {
+                                this.forceUpdateContact = btn === 'yes';
+
+                                if (this.forceUpdateContact) {
                                     combo.setValue(status.id);
                                 }
                             },
