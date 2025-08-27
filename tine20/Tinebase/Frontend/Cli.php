@@ -1845,6 +1845,8 @@ fi';
      *
      * @param Zend_Console_Getopt $opts
      * @return int
+     *
+     * TODO refactor dry-run: normally it is activated with the "-d" flag
      */
     public function clearDeletedFilesFromDatabase(Zend_Console_Getopt $opts)
     {
