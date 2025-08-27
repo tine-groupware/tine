@@ -887,7 +887,7 @@ viewConfig: {
 
             row.firstChild.style.width = tw;
 
-            const matchingCell = firstChild.rows[0]?.querySelector(`.${gridColumnClass}`);
+            const matchingCell = firstChild.rows[0]?.querySelector(`[class~="${gridColumnClass}"]`);
             if (matchingCell) {
                 Object.assign(matchingCell.style, styles);
             }
