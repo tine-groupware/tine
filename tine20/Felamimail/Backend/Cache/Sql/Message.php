@@ -95,7 +95,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param  Tinebase_Model_Pagination            $_pagination
      * @return array
      */
-    public function searchMessageUids(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL)    
+    public function searchMessageUids(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL)
     {
         return $this->search($_filter, $_pagination, array(self::IDCOL, 'messageuid'));
     }
@@ -434,7 +434,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 if (sizeof($tags) === 0) {
                     $tags = Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($messages);
                 }
-                if ($tags) {
+                if (count($tags) > 0) {
                     Tinebase_Tags::getInstance()->detachTagsFromMultipleRecords($filter, $tags->getArrayOfIds());
                 }
             } catch (Zend_Db_Statement_Exception $zdse) {
