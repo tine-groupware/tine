@@ -58,6 +58,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     );
 
     /**
+     * keep tags on IMAP when clear flags
+     *
+     * @var array
+     */
+    protected $_keepTagsOnImap;
+
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -1393,8 +1401,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Model_Folder $_folder
      */
-    public function deleteByFolder(Felamimail_Model_Folder $_folder)
+    public function deleteByFolder(Felamimail_Model_Folder $_folder, $_keepTagsOnImap = false)
     {
+        $this->_keepTagsOnImap = $_keepTagsOnImap;
         $this->_backend->deleteByFolderId($_folder);
     }
 
@@ -1822,7 +1831,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function detachTagsHook($recordIds, $tagId)
     {
         foreach ($recordIds as $messageId) {
-            Felamimail_Controller_Message_Flags::getInstance()->clearFlags($messageId, [$tagId]);
+            Felamimail_Controller_Message_Flags::getInstance()->clearFlags($messageId, [$tagId], $this->_keepTagsOnImap);
         }
     }
 }
