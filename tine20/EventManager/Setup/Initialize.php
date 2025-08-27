@@ -29,9 +29,14 @@ class EventManager_Setup_Initialize extends Setup_Initialize
      */
     public static function createEventFolder()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         $nodeController = Filemanager_Controller_Node::getInstance();
         try {
-            $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Veranstaltungen', Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+            // TODO translate folder name
+            $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Veranstaltungen',
+                Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
         } catch (Filemanager_Exception_NodeExists $e) {
             // This is fine
         };

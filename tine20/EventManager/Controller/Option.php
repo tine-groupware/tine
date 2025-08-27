@@ -84,6 +84,7 @@ class EventManager_Controller_Option extends Tinebase_Controller_Record_Abstract
                     $_option->{EventManager_Model_Option::FLD_EVENT_ID}
                 );
                 $eventName = $event->{EventManager_Model_Event::FLD_NAME};
+                // TODO translate folder names
                 $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen";
                 $folders = ["/$eventName", "/Optionen"];
                 $nodeController = Filemanager_Controller_Node::getInstance();
