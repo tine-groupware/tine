@@ -114,6 +114,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
 
     const WEB_EVENT_TITLE_TEMPLATE = 'webEventTitleTemplate';
 
+    const SYNC_FREE_BUSY_EVENTS = 'syncFreeBusyEvents';
+
     /**
      * @var string application
      */
@@ -149,6 +151,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_CALENDAR_STRATEGY,
             self::REMOVE_FILTERS_ON_SELECT_CONTAINER,
             self::FIXED_CALENDARS,
+            self::SYNC_FREE_BUSY_EVENTS,
         );
         
         if ($cropDays) {
@@ -248,6 +251,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Fixed Calendars'),
                 'description'   => $translate->_('Calendars are always selected, regardless of any filter parameters.'),
             ),
+            self::SYNC_FREE_BUSY_EVENTS => [
+                'label'         => $translate->_('Sync FreeBusy events'),
+                'description'   => $translate->_('Receive FreeBusy events via CalDAV and ActiveSync.'),
+            ],
         );
         
         return $prefDescriptions;
@@ -532,6 +539,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     'model'       => 'Event',
                 );
                 $preference->personal_only = true;
+                break;
+            case self::SYNC_FREE_BUSY_EVENTS:
+                $preference->value      = true;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

@@ -738,10 +738,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (!$this->_doContainerACLChecks) return;
 
+        $syncFreeBusy = Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->{Calendar_Preference::SYNC_FREE_BUSY_EVENTS};
+
         /** @var Calendar_Model_Event $event */
         foreach ($_events as $event) {
             $doFreeBusyCleanup = $event->doFreeBusyCleanup();
-            if ($doFreeBusyCleanup && $_action !== 'get') {
+            if ($doFreeBusyCleanup && ($_action !== self::ACTION_GET && (!$syncFreeBusy || $_action !== self::ACTION_SYNC))) {
                 $_events->removeRecord($event);
             }
         }
