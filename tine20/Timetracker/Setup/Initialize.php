@@ -128,8 +128,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name'              => "Timeaccounts to bill", // _('Timeaccounts to bill')
-                'description'       => "Timeaccounts to bill",
+                'name'              => "Time accounts to bill", // _('Time accounts to bill')
+                'description'       => "Time accounts to bill",
                 'filters'           => array(
                     array(
                         'field'     => 'status',
@@ -142,8 +142,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name'              => "Timeaccounts not yet billed", // _('Timeaccounts not yet billed')
-                'description'       => "Timeaccounts not yet billed",
+                'name'              => "Time accounts not yet billed", // _('Time accounts not yet billed')
+                'description'       => "Time accounts not yet billed",
                 'filters'           => array(
                     array(
                         'field'     => 'status',
@@ -157,8 +157,8 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
             array_merge($commonValues, array(
-                'name'              => "Timeaccounts already billed", // _('Timeaccounts already billed')
-                'description'       => "Timeaccounts already billed",
+                'name'              => "Time accounts already billed", // _('Time accounts already billed')
+                'description'       => "Time accounts already billed",
                    'filters'           => array(
                     array(
                         'field'     => 'status',
@@ -201,14 +201,14 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         )->getId();
 
         $cf = new Tinebase_Model_CustomField_Config([
-            'name' => 'timeaccount',
+            'name' => 'time Account',
             'application_id' => $taskAppId,
             'model' => Tasks_Model_Task::class,
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::NAME => 'timeaccount',
-                    TMCC::LABEL => 'Timeaccount', //_('Timeaccount')
+                    TMCC::NAME => 'time Account',
+                    TMCC::LABEL => 'Time Account', //_('Time Account')
                     TMCC::TYPE => TMCC::TYPE_RECORD,
                     TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                     TMCC::NULLABLE => true,

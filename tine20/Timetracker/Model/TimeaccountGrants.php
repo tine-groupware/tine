@@ -60,27 +60,27 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         return [
             self::READ_OWN    => [
                 self::LABEL         => 'Read Own', // _('Read Own')
-                self::DESCRIPTION   => 'The grant to read own time sheets in this time account.', // _('The grant to read own time sheets in this time account.')
+                self::DESCRIPTION   => 'Permission to read own timesheets in this time account.', // _('Permission to read own timesheets in this time account.')
             ],
             self::REQUEST_OWN => [
                 self::LABEL         => 'Request Own',  // _('Request Own')
-                self::DESCRIPTION   => 'The grant to add own time sheets request in this time account.',  // _('The grant to add own time sheets request in this time account.')
+                self::DESCRIPTION   => 'Permission to request own timesheets in this time account.',  // _('Permission to request own timesheets in this time account.')
             ],
             self::BOOK_OWN => [
                 self::LABEL         => 'Book Own', // _('Book Own')
-                self::DESCRIPTION   => 'The grant to add Timesheets to this Timeaccount', // _('The grant to add Timesheets to this Timeaccount')
+                self::DESCRIPTION   => 'Permission to add timesheets to this time account.', // _('Permission to add timesheets to this time account.')
             ],
             self::VIEW_ALL => [
                 self::LABEL         => 'View All', // _('View All')
-                self::DESCRIPTION   => 'The grant to view Timesheets of other users', // _('The grant to view Timesheets of other users')
+                self::DESCRIPTION   => 'Permission to view timesheets of other users.', // _('Permission to view timesheets of other users.')
             ],
             self::BOOK_ALL => [
                 self::LABEL         => 'Book All', // _('Book All')
-                self::DESCRIPTION   => 'The grant to add Timesheets for other users', // _('The grant to add Timesheets for other users')
+                self::DESCRIPTION   => 'Permission to add timesheets for other users.', // _('Permission to add timesheets for other users.')
             ],
             self::MANAGE_BILLABLE => [
                 self::LABEL         => 'Manage Clearing', // _('Manage Clearing')
-                self::DESCRIPTION   => 'The grant to manage clearing of Timesheets', // _('The grant to manage clearing of Timesheets')
+                self::DESCRIPTION   => 'Permission to manage clearing of Timesheets', // _('Permission to manage clearing of Timesheets')
             ],
         ];
     }

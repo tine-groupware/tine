@@ -74,7 +74,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Timetracker.TimesheetGridPanel.superclass.initLayout.call(this);
         
         this.pagingToolbar.insert(this.pagingToolbar.items.length -3,
-            Ext.create({ id: 'wt-label', xtype: 'tbtext', text: this.app.i18n._('Workingtime:'), displayPriority: 40}),
+            Ext.create({ id: 'wt-label', xtype: 'tbtext', text: this.app.i18n._('Working Time:'), displayPriority: 40}),
             new Ext.Component({ id: 'wt-bar', displayPriority: 50, style: { margin: '3px 10px', width: '100px', height: '16px' } }),
             Ext.create({ id: 'to-label', xtype: 'tbtext', text: this.app.i18n._('Turnover:'), displayPriority: 40 }),
             new Ext.Component({ id: 'to-bar', displayPriority: 50, style: { margin: '3px 10px', width: '100px', height: '16px' } })
@@ -337,7 +337,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         gridPanel: this
                     }),
                     new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ...'),
+                        text: this.app.i18n._('Export as...'),
                         iconCls: 'tinebase-action-export-xls',
                         exportFunction: 'Timetracker.exportTimesheets',
                         showExportDialog: true,

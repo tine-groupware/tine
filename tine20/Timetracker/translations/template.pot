@@ -13,19 +13,19 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Manage timeaccounts"
+msgid "Manage time accounts"
 msgstr ""
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgid "Add, edit and delete time accounts (includes all timesheet permissions)"
 msgstr ""
 
-msgid "Add timeaccounts"
+msgid "Add time accounts"
 msgstr ""
 
-msgid "Manage shared timeaccount favorites"
+msgid "Manage shared time account favorites"
 msgstr ""
 
-msgid "Create or update shared timeaccount favorites"
+msgid "Create or update shared time account favorites"
 msgstr ""
 
 msgid "Manage shared timesheet favorites"
@@ -37,10 +37,13 @@ msgstr ""
 msgid "Enabled Features"
 msgstr ""
 
-msgid "Enabled Features in Timetracker Application."
+msgid "Enabled Features in the Timetracker Application."
 msgstr ""
 
-msgid "Timeaccount Bookmarks"
+msgid "Time Account Bookmarks"
+msgstr ""
+
+msgid "Add time accounts as favorite to speed up timesheet creation."
 msgstr ""
 
 msgid "none"
@@ -67,20 +70,17 @@ msgstr ""
 msgid "Declined"
 msgstr ""
 
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
+#, python-format, php-format
+msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
 msgstr ""
 
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr ""
 
-msgid ""
-"The Invoice you tried to edit is cleared already, change date will rebill "
-"the invoice, do you still want to execute this action?"
+msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 msgstr ""
 
-msgid ""
-"The related Timeaccount is already closed, do you still want to execute this "
-"action?"
+msgid "The related time account is already closed. Do you still want to perform this action?"
 msgstr ""
 
 msgid "Add Timesheet"
@@ -111,6 +111,9 @@ msgid "Factor"
 msgstr ""
 
 msgid "Budget in hours"
+msgstr ""
+
+msgid "All timesheet durations are aggregated here, no matter if they are billable or not"
 msgstr ""
 
 msgid "Status"
@@ -154,13 +157,10 @@ msgstr ""
 msgid "Update Timesheets?"
 msgstr ""
 
-msgid ""
-"Attention: There are timesheets that have not yet been accounted. If you "
-"continue, they will be set to accounted. This action cannot be undone. "
-"Continue anyway?"
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
 msgstr ""
 
-msgid "Timeaccount Favorites"
+msgid "Time Account Favorites"
 msgstr ""
 
 #, python-brace-format
@@ -172,10 +172,10 @@ msgstr[1] ""
 msgid "Favorite"
 msgstr ""
 
-msgid "Bookmark Timeaccount"
+msgid "Bookmark Time Account"
 msgstr ""
 
-msgid "Close Timeaccount"
+msgid "Close Time Account"
 msgstr ""
 
 msgid "Show closed"
@@ -207,7 +207,7 @@ msgid_plural "Timesheets"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "End must not before start."
+msgid "End must not be before start."
 msgstr ""
 
 msgid "Accounting"
@@ -216,11 +216,6 @@ msgstr ""
 msgid "Accounting time"
 msgstr ""
 
-msgid "Timeaccount"
-msgid_plural "Timeaccounts"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Failed"
 msgstr ""
 
@@ -228,20 +223,19 @@ msgstr ""
 msgid "Could not save {0}."
 msgstr ""
 
-msgid "Booking deadline for this Timeaccount has been exceeded."
+msgid "Booking deadline for this time account has been exceeded."
 msgstr ""
 
-msgid "Closed Timeaccount Warning!"
+msgid "Closed time account warning!"
 msgstr ""
 
-msgid "The selected Time Account is already closed."
+msgid "The selected time account is already closed."
 msgstr ""
 
-msgid ""
-"The selected Time Account is already closed. Do you wish to continue anyway?"
+msgid "The selected time account is already closed. Do you wish to continue anyway?"
 msgstr ""
 
-msgid "Workingtime:"
+msgid "Working Time:"
 msgstr ""
 
 msgid "Turnover:"
@@ -263,6 +257,9 @@ msgid "Turnover Target: { target }"
 msgstr ""
 
 msgid "Turnover Recorded: { recorded }"
+msgstr ""
+
+msgid "Turnover Cleared: { cleared }"
 msgstr ""
 
 msgid "timeframe"
@@ -299,43 +296,46 @@ msgstr ""
 msgid "Export as CSV"
 msgstr ""
 
-msgid "Export as ..."
+msgid "Export as..."
 msgstr ""
 
 msgid "Read Own"
 msgstr ""
 
-msgid "The grant to read own time sheets in this time account."
+msgid "Permission to read own timesheets in this time account."
 msgstr ""
 
 msgid "Request Own"
 msgstr ""
 
-msgid "The grant to add own time sheets request in this time account."
+msgid "Permission to request own timesheets in this time account."
 msgstr ""
 
 msgid "Book Own"
 msgstr ""
 
-msgid "The grant to add Timesheets to this Timeaccount"
+msgid "Permission to add timesheets to this time account."
 msgstr ""
 
 msgid "View All"
 msgstr ""
 
-msgid "The grant to view Timesheets of other users"
+msgid "Permission to view timesheets of other users."
 msgstr ""
 
 msgid "Book All"
 msgstr ""
 
-msgid "The grant to add Timesheets for other users"
+msgid "Permission to add timesheets for other users."
 msgstr ""
 
 msgid "Manage Clearing"
 msgstr ""
 
-msgid "The grant to manage clearing of Timesheets"
+msgid "Permission to manage clearing of Timesheets"
+msgstr ""
+
+msgid "Project time budget in hours"
 msgstr ""
 
 msgid "Price"
@@ -357,6 +357,12 @@ msgid "Accounting time factor"
 msgstr ""
 
 msgid "Stream"
+msgstr ""
+
+msgid "Budget level in %"
+msgstr ""
+
+msgid "Budget booked hours"
 msgstr ""
 
 msgid "hour"
@@ -383,6 +389,9 @@ msgstr ""
 msgid "Cleared amount"
 msgstr ""
 
+msgid "Recorded amount"
+msgstr ""
+
 msgid "Date"
 msgstr ""
 
@@ -398,16 +407,16 @@ msgstr ""
 msgid "Need for Clarification"
 msgstr ""
 
-msgid "Projecttime Accounting factor"
+msgid "Project Time Accounting factor"
 msgstr ""
 
-msgid "Accounting Projecttime"
+msgid "Accounting Project Time"
 msgstr ""
 
-msgid "Workingtime is cleared"
+msgid "Working time is cleared"
 msgstr ""
 
-msgid "Workingtime cleared in"
+msgid "Working time cleared in"
 msgstr ""
 
 msgid "Process Status"
@@ -422,10 +431,10 @@ msgstr ""
 msgid "Use this configuration for the timesheet ODS export."
 msgstr ""
 
-msgid "A Tag which is available in context menu for fast assignment"
+msgid "A Tag which is available in the context menu for fast assignment"
 msgstr ""
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Quick Tag allows you to simply assign a predefined tag by the context menu."
 msgstr ""
 
 msgid "default"
@@ -449,28 +458,14 @@ msgstr ""
 msgid "My Timesheets last month"
 msgstr ""
 
-msgid "Timeaccounts to bill"
+msgid "Time accounts to bill"
 msgstr ""
 
-msgid "Timeaccounts not yet billed"
+msgid "Time accounts not yet billed"
 msgstr ""
 
-msgid "Timeaccounts already billed"
+msgid "Time accounts already billed"
 msgstr ""
 
 msgid "Timetracker"
-msgstr ""
-
-msgid ""
-"All timesheet durations are aggregated here, no matter if they are billable "
-"or not"
-msgstr ""
-
-msgid "Project time budget in hours"
-msgstr ""
-
-msgid "Budget level in %"
-msgstr ""
-
-msgid "Budget booked hours"
 msgstr ""
