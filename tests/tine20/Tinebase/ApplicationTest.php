@@ -295,6 +295,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Addressbook_Model_ContactProperties_InstantMessenger::class,
                 Addressbook_Model_ContactProperties_Phone::class,
                 Addressbook_Model_ContactProperties_Url::class,
+                Addressbook_Model_ExternalFreeBusyUrl::class,
                 Addressbook_Model_Industry::class,
                 Addressbook_Model_List::class,
                 Addressbook_Model_ListGrants::class,

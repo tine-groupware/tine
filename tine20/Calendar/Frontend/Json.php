@@ -338,6 +338,74 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'timeSearchStopped' => $timeSearchStopped,
         );
     }
+
+    public static ?string $getExternalFreeBusyInfoTestData = null;
+
+    /**
+     * @param array $freeBusyUrl
+     * @return array of Calendar_Model_FreeBusy::toArray
+     */
+    public function getExternalFreeBusyInfo(array $freeBusyUrl): array
+    {
+        $url = $freeBusyUrl[Addressbook_Model_ExternalFreeBusyUrl::FLD_URL] ?? '';
+        if (!str_starts_with(strtolower($url), 'https://')) {
+            throw new Tinebase_Exception_SystemGeneric('free busy url "' . $url . '" does not start with a https:// scheme');
+        }
+        if (!($fbData = static::$getExternalFreeBusyInfoTestData)) {
+            if (false === ($fbData = file_get_contents($url, length: 10 * 1024 * 1024))) {// read 10 MB max
+                throw new Tinebase_Exception_SystemGeneric('could not fetch data from free busy url "' . $url . '"');
+            }
+        }
+
+        try {
+            $vcalendar = Tinebase_Convert_VCalendar_Abstract::getVObject($fbData);
+        } catch (\Sabre\VObject\ParseException) {
+            throw new Tinebase_Exception_SystemGeneric('could not parse data from free busy url "' . $url . '"');
+        }
+
+        $userTz = Tinebase_Core::getUserTimezone();
+        $result = [];
+        foreach ($vcalendar->select('VFREEBUSY') as $vfreebusy) {
+            /** @var \Sabre\VObject\Property $organizer */
+            if (null === ($organizer = $vfreebusy->ORGANIZER) || null === ($email = Calendar_Convert_Event_VCalendar2_Abstract::getEmailFromProperty($organizer))) {
+                continue;
+            }
+            foreach ($vfreebusy->select('FREEBUSY') as $fb) {
+                if (!in_array($type = str_replace('-', '_', $fb['FBTYPE']?->getValue() ?: Calendar_Model_FreeBusy::FREEBUSY_BUSY), [
+                            Calendar_Model_FreeBusy::FREEBUSY_BUSY,
+                            Calendar_Model_FreeBusy::FREEBUSY_BUSY_TENTATIVE,
+                            Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+                            Calendar_Model_FreeBusy::FREEBUSY_FREE,
+                        ])) {
+                    continue;
+                }
+                foreach (explode(',', $fb->getValue()) as $interval) {
+                    @[$start, $end] = explode('/', $interval);
+                    if (null === $end) continue;
+                    try {
+                        $start = new Tinebase_DateTime($start);
+                        if (str_starts_with($end, 'P')) {
+                            /** @var Tinebase_DateTime $end */
+                            $end = $start->getClone()->add(new DateInterval($end));
+                        } else {
+                            $end = new Tinebase_DateTime($end);
+                        }
+                    } catch (Exception) {
+                        continue;
+                    }
+                    $result[] = /*(new Calendar_Model_FreeBusy(*/
+                        [
+                            'user_id' => $email,
+                            'type' => $type,
+                            'dtstart' => $start->setTimezone($userTz)->toString(),
+                            'dtend' => $end->setTimezone($userTz)->toString(),
+                        ]/*, true))->toArray()*/
+                    ;
+                }
+            }
+        }
+        return $result;
+    }
     
     /**
      * Search for events matching given arguments
