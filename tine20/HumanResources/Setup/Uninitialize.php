@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -67,5 +67,13 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
         Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
             HumanResources_Model_CostCenter::class,
         ]);
+    }
+
+    protected function _uninitializeSchedulerTasks(): void
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        HumanResources_Scheduler_Task::removeAutoCreateAccounts($scheduler);
+        HumanResources_Scheduler_Task::removeCalculateDailyWorkingTimeReportsTask($scheduler);
+        HumanResources_Scheduler_Task::removeAttendanceRecorderRunBLTask($scheduler);
     }
 }

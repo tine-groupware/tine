@@ -100,7 +100,17 @@ class HumanResources_Controller_Account extends Tinebase_Controller_Record_Abstr
 
         return $this->search($filter)->getFirstRecord();
     }
-    
+
+    public function autoCreateAccounts(): bool
+    {
+        // this year, next year
+        $this->createMissingAccounts();
+        // the year after next year
+        $this->createMissingAccounts(intval(date('Y')) + 2);
+
+        return true;
+    }
+
     /**
      * creates missing accounts for all employees having a valid contract
      * if a year is given, missing accounts for this year will be built, otherwise the current and following year will be used
