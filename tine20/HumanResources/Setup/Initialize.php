@@ -5,7 +5,7 @@
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -415,6 +415,7 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         $scheduler = Tinebase_Core::getScheduler();
         HumanResources_Scheduler_Task::addCalculateDailyWorkingTimeReportsTask($scheduler);
         HumanResources_Scheduler_Task::addAttendanceRecorderRunBLTask($scheduler);
+        HumanResources_Scheduler_Task::addAutoCreateAccounts($scheduler);
     }
 
     protected function _initializeCORSystemCustomField()
