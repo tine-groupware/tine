@@ -16,4 +16,6 @@ require('./FileOptionUploadGrid.js');
 require('./FileOptionEditDialog.js');
 require('./FileEditDialog.js');
 require('./FileUploadGrid.js');
+require('./OptionsRuleEditDialog.js');
+require('./OptionRelationEditDialog.js');
 

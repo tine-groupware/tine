@@ -55,11 +55,6 @@ const routes = [
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
-    methods: {
-        scrollToTop() {
-            window.scrollTo(0,0);
-        }
-    }
 })
 
 app.use(router);

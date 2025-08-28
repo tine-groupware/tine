@@ -192,6 +192,7 @@ class EventManager_ControllerTest extends TestCase
         $bookedOptions = [$createdOption1, $createdOption2];
         $registration = $this->_getRegistration($event->getId(), $bookedOptions);
         $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        self::assertEquals(count($createdRegistration->booked_options), count($bookedOptions));
     }
 
     /************ protected helper funcs *************/
@@ -213,13 +214,18 @@ class EventManager_ControllerTest extends TestCase
             'adr_one_locality' => 'Test City'
         ]));
 
+        $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE);
+        $event_type = $event_type->records->getById('1');
+        $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS);
+        $event_status = $event_status->records->getById('1');
+
         return new EventManager_Model_Event([
             'name'                          => 'phpunit event',
             'start'                         => new Tinebase_DateTime("2025-05-28"),
             'end'                           => new Tinebase_DateTime("2025-05-31"),
             'location'                      => $contact,
-            'type'                          => EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE, 'Main Event'),
-            'status'                        => EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS, 'Open'),
+            'type'                          => $event_type,
+            'status'                        => $event_status,
             'fee'                           => 0,
             'total_places'                  => 50,
             'booked_places'                 => 0,
@@ -248,20 +254,28 @@ class EventManager_ControllerTest extends TestCase
             'available_places' => 10,
             'description' => 'description checkbox phpunit',
         ]);
+        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $display = $display->records->getById('1');
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $option_required = $option_required->records->getById('2');
+        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
+        $level = $level->records->getById('1');
+        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE);
+        $rule_type = $rule_type->records->getById('1');
 
         return new EventManager_Model_Option([
             'event_id'                  => $event_id,
             'name_option'               => 'phpunit checkbox option',
             'option_config'             => $option_config_checkbox,
             'option_config_class'       => EventManager_Model_CheckboxOption::class,
-            'display'                   => EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE, 'Always'),
-            'option_required'           => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE, 'No'),
+            'display'                   => $display,
+            'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
             'group_sorting'             => 1,
-            'level'                     => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL, 'Level 1'),
+            'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],
-            'rule_type'                 => EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE, 'One or more conditions are fulfilled'),
+            'rule_type'                 => $rule_type,
         ],true);
     }
 
@@ -279,20 +293,28 @@ class EventManager_ControllerTest extends TestCase
             'file_type' => $tempfile->type,
             'file_size' => $tempfile->size,
         ]);
+        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $display = $display->records->getById('1');
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $option_required = $option_required->records->getById('2');
+        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
+        $level = $level->records->getById('1');
+        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE);
+        $rule_type = $rule_type->records->getById('1');
 
         return new EventManager_Model_Option([
             'event_id'                  => $event_id,
             'name_option'               => 'phpunit file option',
             'option_config'             => $option_config_fileoption,
             'option_config_class'       => EventManager_Model_FileOption::class,
-            'display'                   => EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE, 'Always'),
-            'option_required'           => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE, 'No'),
+            'display'                   => $display,
+            'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
             'group_sorting'             => 1,
-            'level'                     => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL, 'Level 1'),
+            'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],
-            'rule_type'                 => EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE, 'One or more conditions are fulfilled'),
+            'rule_type'                 => $rule_type,
         ],true);
     }
 

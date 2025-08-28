@@ -50,7 +50,10 @@
           label-for="input-horizontal"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.firstName"></b-form-input>
+          <b-form-input
+            v-model="contactDetails.firstName"
+            :class="{ 'required-field-error': validationErrors.includes('firstName') }"
+          ></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -72,7 +75,10 @@
           label-for="input-horizontal"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.lastName"></b-form-input>
+          <b-form-input
+            v-model="contactDetails.lastName"
+            :class="{ 'required-field-error': validationErrors.includes('lastName') }"
+          ></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -111,7 +117,10 @@
           label-for="input-horizontal"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.email"></b-form-input>
+          <b-form-input
+            v-model="contactDetails.email"
+            :class="{ 'required-field-error': validationErrors.includes('email') }"
+          ></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -205,60 +214,79 @@
     </b-row>
     <b-row>
       <b-col v-if="eventDetails.options">
-        <h4 class="mb-4">Event Specific Information:</h4>
+        <h4 class="mb-4">{{formatMessage('Event Specific Information:')}}</h4>
         <h5>{{eventDetails.name}}</h5>
-        <div v-for="optionGroup in sortOptionsByGroup">
-<!--          <h6 v-if="optionGroup.group" :style="{'margin-left' : (optionGroup.level-1) * 2 + 'em'}">{{optionGroup.group}}</h6>-->
-          <div v-for="option in optionGroup.options" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
-            <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
-              <h6>{{option.name_option}}:</h6>
-              <div class="mb-3">{{option.option_config.text_option}}</div>
-            </div>
-            <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
-              <b-form-group
-                label-cols-sm="4"
-                label-cols-lg="3"
-                content-cols-sm
-                content-cols-lg="7"
-                :label="option.option_config.text"
-                label-for="input-horizontal"
-                class="mb-3"
-              >
-                <b-form-input v-model="replies[option.id]"></b-form-input>
-              </b-form-group>
-            </div>
-            <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'">
-              <b-form-checkbox
-                v-model="replies[option.id]"
-                value="true"
-                unchecked-value="false"
-                @click="singleSelection(option)"
-              >
+        <div v-for="optionGroup in visibleOptionsByGroup" :key="optionGroup.group">
+          <h6>{{optionGroup.group}}</h6>
+          <div :class="{
+          'required-field-error-container': optionGroup.group && optionGroup.group.trim() !== '' && hasGroupValidationError(optionGroup.group)
+          }">
+            <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
+              <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
                 <h6>{{option.name_option}}</h6>
-                <div v-if="option.option_config">
-                  <div v-if="option.option_config.description">{{option.option_config.description}}</div>
-                  <div v-if="option.option_config.price">Price: {{option.option_config.price}}</div>
-                </div>
-              </b-form-checkbox>
-            </div>
-            <div v-if="option.option_config_class === 'EventManager_Model_FileOption'">
-              <div class="mb-3">
-                <h6>{{option.name_option}}:</h6>
-                <b-button @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+                <div class="mb-3">{{option.option_config.text_option}}</div>
               </div>
-              <div class="mb-3">
-                <input
-                  id="file-input"
-                  type="file"
-                  class="form-control"
-                  @change="(event) => handleFileChange(event, option.id)"
-                  :accept="acceptedTypes"
-                  :multiple="allowMultiple"
+              <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
+                <b-form-group
+                  label-cols-sm="4"
+                  label-cols-lg="3"
+                  content-cols-sm
+                  content-cols-lg="7"
+                  :label="option.option_config.text"
+                  label-for="input-horizontal"
+                  class="mb-3"
                 >
+                  <b-form-input
+                    v-model="replies[option.id]"
+                    :class="{
+                        'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)
+                      }"
+                  ></b-form-input>
+                </b-form-group>
+              </div>
+              <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'"
+                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id) }">
+                <b-form-checkbox
+                  v-model="replies[option.id]"
+                  value="true"
+                  unchecked-value="false"
+                  @click="singleSelection(option)"
+                >
+                  <h6>{{option.name_option}}</h6>
+                  <div v-if="option.option_config">
+                    <div v-if="option.option_config.description">{{option.option_config.description}}</div>
+                    <div v-if="option.option_config.price">Price: {{option.option_config.price}}</div>
+                  </div>
+                </b-form-checkbox>
+              </div>
+              <div v-if="option.option_config_class === 'EventManager_Model_FileOption'">
+                <div class="mb-3">
+                  <h6>{{option.name_option}}</h6>
+                  <div v-if="option.option_config">
+                    <b-button @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <input
+                    id="file-input"
+                    type="file"
+                    class="form-control"
+                    @change="(event) => handleFileChange(event, option.id)"
+                    :accept="acceptedTypes"
+                    :multiple="allowMultiple"
+                    :class="{
+                        'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)
+                      }"
+                  >
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <b-modal v-model="showModal" :title="formatMessage(modalTitle)" hide-footer>
+          <p>{{ formatMessage(modalMessage) }}</p>
+          <b-button @click="handleModalClose" variant="primary">OK</b-button>
+        </b-modal>
         <b-button @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
       </b-col>
     </b-row>
@@ -313,6 +341,10 @@ const contactDetails = ref({
 
 const replies = ref({});
 const uploadedFiles = ref({});
+const showModal = ref(false);
+const modalTitle = ref('');
+const modalMessage = ref('');
+const validationErrors = ref([]);
 const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls'
 const allowMultiple = false;
 
@@ -363,13 +395,246 @@ const sortOptionsByGroup = computed(() => {
     let g2 = group2.sorting ? group2.sorting : 1000;
       return g1 - g2;
   });
-})
+});
+
+const visibleOptionsByGroup = computed(() => {
+  const sortedGroups = sortOptionsByGroup.value;
+  return sortedGroups.map(group => ({
+    ...group,
+    options: group.options.filter(option => isOptionVisible(option))
+  }));
+});
+
+const getGroupedAndUngroupedOptions = () => {
+  const optionsByGroup = new Map();
+  const ungroupedOptions = [];
+
+  visibleOptionsByGroup.value.forEach(group => {
+    group.options.forEach(option => {
+      if (option.group && option.group.trim() !== '') {
+        if (!optionsByGroup.has(option.group)) {
+          optionsByGroup.set(option.group, []);
+        }
+        optionsByGroup.get(option.group).push(option);
+      } else {
+        ungroupedOptions.push(option);
+      }
+    });
+  });
+
+  return { optionsByGroup, ungroupedOptions };
+};
+
+const hasOptionValue = (option) => {
+  switch (option.option_config_class) {
+    case 'EventManager_Model_TextInputOption':
+      return replies.value[option.id] && replies.value[option.id].trim() !== '';
+    case 'EventManager_Model_CheckboxOption':
+      return replies.value[option.id] === 'true';
+    case 'EventManager_Model_FileOption':
+      return uploadedFiles.value[option.id] && uploadedFiles.value[option.id].length > 0;
+    case 'EventManager_Model_TextOption':
+      return true; // Text options are display-only
+    default:
+      return false;
+  }
+};
+
+const isOptionVisible = (option) => {
+  if (!option.option_rule || option.option_rule.length === 0) {
+    return true;
+  }
+
+  const ruleType = option.rule_type !== undefined ? Number(option.rule_type) : 1;
+
+  if (ruleType === 1) { // at least one rule must be satisfied
+    return option.option_rule.some(rule => evaluateRule(rule));
+  } else { // all rules must be satisfied
+    return option.option_rule.every(rule => evaluateRule(rule));
+  }
+};
+const isOptionRequired = (option) => {
+  if (!option.option_required) {
+    return false;
+  }
+
+  const requiredType = Number(option.option_required);
+
+  switch (requiredType) {
+    case 1: // yes
+      return true;
+    case 2: // no
+      return false;
+    case 3: // if
+      return isOptionVisible(option) && option.option_rule && option.option_rule.length > 0;
+    default:
+      return false;
+  }
+};
+
+const hasGroupValidationError = (groupName) => {
+  if (!groupName || groupName.trim() === '') return false;
+
+  const { optionsByGroup } = getGroupedAndUngroupedOptions();
+  const groupOptions = optionsByGroup.get(groupName);
+
+  if (!groupOptions) return false;
+
+  return groupOptions.some(option => validationErrors.value.includes(option.id));
+};
+
+const validateRequiredFields = () => {
+  validationErrors.value = [];
+  const errors = [];
+
+  const requiredPersonalFields = [
+    { key: 'firstName', value: contactDetails.value.firstName },
+    { key: 'lastName', value: contactDetails.value.lastName },
+    { key: 'email', value: contactDetails.value.email }
+  ];
+
+  requiredPersonalFields.forEach(field => {
+    if (!field.value || field.value.trim() === '') {
+      errors.push(field.key);
+    }
+  });
+
+  // check grouped options (only one needs to be filled per group if option is required)
+  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
+  optionsByGroup.forEach((groupOptions, groupName) => {
+    const requiredOptions = groupOptions.filter(option => isOptionRequired(option));
+
+    if (requiredOptions.length > 0) {
+      // Check if ANY option in the group has a value
+      const hasAnyValue = groupOptions.some(option => hasOptionValue(option));
+
+      // If no option in the group has a value, mark all required options in the group as errors
+      if (!hasAnyValue) {
+        requiredOptions.forEach(option => {
+          errors.push(option.id);
+        });
+      }
+    }
+  });
+
+    // Validate ungrouped options (each must be filled individually)
+    ungroupedOptions.forEach(option => {
+      if (isOptionRequired(option) && !hasOptionValue(option)) {
+        errors.push(option.id);
+      }
+    });
+
+    validationErrors.value = errors;
+    return errors.length === 0;
+};
+
+
+  const evaluateRule = (rule) => {
+
+  const refOptionField = rule.ref_option_field;
+  const referencedOption = eventDetails.value.options.find(opt => opt.id === refOptionField);
+
+  if (referencedOption?.option_config_class === 'EventManager_Model_FileOption') {
+    const hasFiles = uploadedFiles.value[refOptionField] &&
+      uploadedFiles.value[refOptionField].length > 0;
+
+    switch (rule.criteria) {
+      case 1:
+        return hasFiles;
+      case 2:
+        return !hasFiles;
+      default:
+        return false;
+    }
+
+  } else {
+
+    const requiredValue = rule.value;
+    const criteria = rule.criteria !== undefined ? Number(rule.criteria) : 1;
+    const currentValue = replies.value[refOptionField];
+    const referencedOptionType = referencedOption?.option_config_class;
+    let result;
+
+    switch (criteria) {
+      case 1: // yes
+        if (referencedOptionType === 'EventManager_Model_CheckboxOption') {
+          result = currentValue === 'true';
+        } else {
+          result = currentValue && currentValue.trim() !== '';
+        }
+        break;
+
+      case 2: // no
+        if (referencedOptionType === 'EventManager_Model_CheckboxOption') {
+          result = currentValue === 'false' || !currentValue;
+        } else {
+          result = !currentValue || currentValue.trim() === '';
+        }
+        break;
+
+      case 3: // is
+        result = currentValue && currentValue === requiredValue;
+        break;
+
+      case 4: // is not
+        result = !currentValue || currentValue !== requiredValue ;
+        break;
+
+      case 5: // greater or equal to
+        const currentNum = parseFloat(String(currentValue).trim());
+        const requiredNum = parseFloat(String(requiredValue).trim());
+        result = !isNaN(currentNum) && !isNaN(requiredNum) && currentNum >= requiredNum;
+        break;
+
+      default:
+        return currentValue === requiredValue;
+    }
+    return result;
+  }
+};
 
 const postRegistration = async () => {
-  let eventId = route.params.id;
-  let registration = {'eventId': eventId, 'contactDetails': contactDetails.value, 'replies': replies.value};
+  validationErrors.value = [];
+
+  if (!validateRequiredFields()) {
+    modalTitle.value = 'Validation Error';
+    modalMessage.value = 'Please fill all required fields.';
+    showModal.value = true;
+    return;
+  }
+
+  const filteredReplies = {};
+  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
+
+  optionsByGroup.forEach((groupOptions, groupName) => {
+    groupOptions.forEach(option => {
+      if (option.option_config_class === 'EventManager_Model_FileOption' ||
+        option.option_config_class === 'EventManager_Model_TextOption') {
+        return;
+      }
+
+      if (hasOptionValue(option)) {
+        filteredReplies[option.id] = replies.value[option.id];
+      }
+    });
+  });
+
+  ungroupedOptions.forEach(option => {
+    if (option.option_config_class === 'EventManager_Model_FileOption' ||
+      option.option_config_class === 'EventManager_Model_TextOption') {
+      return;
+    }
+
+    if (hasOptionValue(option)) {
+      filteredReplies[option.id] = replies.value[option.id];
+    }
+  });
+
+  const eventId = route.params.id;
+  const registration = {'eventId': eventId, 'contactDetails': contactDetails.value, 'replies': filteredReplies};
   const body = JSON.parse(JSON.stringify(registration));
   let registrationId = '';
+
   try {
     const response = await fetch(`/EventManager/register/${eventId}`, {
       headers: {
@@ -382,15 +647,25 @@ const postRegistration = async () => {
       .then(data => {
         registrationId = data.id
         console.debug(data);
-      })
+      });
+
+  await uploadFiles(eventId, registrationId);
+
+    modalTitle.value = 'Success';
+    modalMessage.value = 'Registration completed successfully!';
+    showModal.value = true;
+
   } catch (error) {
     console.error('Registration request failed:', error);
+    modalTitle.value = 'Error';
+    modalMessage.value = 'Registration failed. Please try again.';
+    showModal.value = true;
   }
-  await uploadFiles(eventId, registrationId);
 }
 
 const uploadFiles = async (eventId, registrationId) => {
   const hasFiles = Object.values(uploadedFiles.value).some(files => files && files.length > 0);
+
   try {
     for (const [optionId, files] of Object.entries(uploadedFiles.value)) {
       if (files && files.length > 0) {
@@ -417,21 +692,60 @@ const uploadFiles = async (eventId, registrationId) => {
   }
 }
 
+const clearForm = () => {
+  contactDetails.value = {
+    salutation: '',
+    title: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    company: '',
+    birthday: '',
+    email: '',
+    mobile: '',
+    telephone: '',
+    street: '',
+    houseNumber: '',
+    postalCode: '',
+    city: '',
+    region: '',
+    country: ''
+  };
+
+  replies.value = {};
+
+  const fileInputs = document.querySelectorAll('input[type="file"]');
+  fileInputs.forEach(input => {
+    input.value = '';
+  });
+}
+
+const handleModalClose = () => {
+  showModal.value = false;
+  if (modalTitle.value === 'Success') {
+    clearForm();
+  }
+}
+
 const maxBirthDate = computed(() => {
   return new Date().toISOString().split('T')[0]
 });
 
 // function to only select one of the checkboxes inside a group
 function singleSelection(option) {
-sortOptionsByGroup.value.forEach((group) => {
-  if (option.group === group.group && group.group !== "") {
-    group.options.forEach((o) => {
-      if (o.id !== option.id && o.option_config_class === 'EventManager_Model_CheckboxOption') {
-        replies.value[o.id] = "false";
-      }
-    })
+  if (option.group && option.group.trim() !== "") {
+    if (replies.value[option.id] !== 'true') {
+      visibleOptionsByGroup.value.forEach((group) => {
+        if (group.group === option.group) {
+          group.options.forEach((o) => {
+            if (o.id !== option.id && o.option_config_class === 'EventManager_Model_CheckboxOption') {
+              replies.value[o.id] = "false";
+            }
+          });
+        }
+      });
+    }
   }
-})
 }
 
 const download = (data, name, type) => {
@@ -461,9 +775,30 @@ async function getEvent() {
   }).then(resp => resp.json())
     .then(data => {
       eventDetails.value = data;
-      eventDetails.value.options.forEach((option) => {
-        replies.value[option.id] = '';
-      });
+      if (eventDetails.value.options.length > 1) {
+        eventDetails.value.options.forEach((option) => {
+          switch (option.option_config_class) {
+            case 'EventManager_Model_CheckOption':
+              replies.value[option.id] = 'false';
+              break;
+            case 'EventManager_Model_TextInputOption':
+              replies.value[option.id] = '';
+              break;
+            case 'EventManager_Model_FileOption':
+              uploadedFiles.value[option.id] = null;
+              break;
+            case 'EventManager_Model_TextOption':
+              // Display-only, no input needed
+              break;
+          }
+        });
+      } else {
+        if (eventDetails.value.options.option_config_class === 'EventManager_Model_CheckOption') {
+          replies.value[eventDetails.value.options.id] = 'false';
+        } else {
+          replies.value[eventDetails.value.options.id] = '';
+        }
+      }
       console.log(data);
     })
 }
@@ -491,4 +826,14 @@ export default {
 
 <style scoped lang="scss">
 
+.required-field-error {
+  border: 2px solid #dc3545 !important;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+.required-field-error-container {
+  border: 2px solid #dc3545;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+  background-color: rgba(220, 53, 69, 0.05);
+}
 </style>

@@ -64,20 +64,11 @@ msgstr "Manually"
 msgid "Confirmed"
 msgstr "Confirmed"
 
-msgid "Member Status"
-msgstr "Member Status"
+msgid "Waiting list"
+msgstr "Waiting list"
 
-msgid "Member"
-msgstr "Member"
-
-msgid "Not a Member"
-msgstr "Not a Member"
-
-msgid "Languages Available"
-msgstr "Languages Available"
-
-msgid "List of languages available in the modules."
-msgstr "List of languages available in the modules."
+msgid "Rescheduled"
+msgstr "Rescheduled"
 
 msgid "Level"
 msgstr "Level"
@@ -100,20 +91,77 @@ msgstr "Level 5"
 msgid "Level 6"
 msgstr "Level 6"
 
-msgid "Optional"
-msgstr "Optional"
+msgid "Option Required Type"
+msgstr "Option Required Type"
 
-msgid "Required"
-msgstr "Required"
+msgid "List of all option required type available"
+msgstr "List of all option required type available"
 
-msgid "Text block"
-msgstr "Text block"
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "If"
+msgstr "If"
+
+msgid "Display Type"
+msgstr "Display Type"
+
+msgid "List of all display type available"
+msgstr "List of all display type available"
+
+msgid "Always"
+msgstr "Always"
+
+msgid "Rule Type"
+msgstr "Rule Type"
+
+msgid "List of all rule type available"
+msgstr "List of all rule type available"
+
+msgid "One or more conditions are fulfilled"
+msgstr "One or more conditions are fulfilled"
+
+msgid "All conditions are fulfilled"
+msgstr "All conditions are fulfilled"
+
+msgid "Criteria Type"
+msgstr "Criteria Type"
+
+msgid "List of all criteria type available"
+msgstr "List of all criteria type available"
+
+msgid "is"
+msgstr "is"
+
+msgid "is not"
+msgstr "is not"
+
+msgid "greater or equal to"
+msgstr "greater or equal to"
+
+msgid "smaller than"
+msgstr "smaller than"
+
+msgid "Default Container for Contacts of an Event"
+msgstr "Default Container for Contacts of an Event"
+
+msgid "The container where new contacts are created."
+msgstr "The container where new contacts are created."
 
 msgid "Sign Up"
 msgstr "Sign Up"
 
 msgid "Event Information"
 msgstr "Event Information"
+
+msgid "The event should end after the start date"
+msgstr "The event should end after the start date"
+
+msgid "One should be able to register before the end date"
+msgstr "One should be able to register before the end date"
 
 msgid "Event Options"
 msgstr "Event Options"
@@ -127,14 +175,119 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Enter description"
 
-msgid "Booked Options"
-msgstr "Booked Options"
+msgid "Multi-appointment"
+msgstr "Multi-appointment"
 
-msgid "Options"
-msgstr "Options"
+msgid "Appointments"
+msgstr "Appointments"
+
+msgid "The session should take place before the end date. Please change the date or it would be change automatically"
+msgstr "The session should take place before the end date. Please change the date or it would be change automatically"
+
+msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+msgstr "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+
+msgid "The session should end after it begun. Please change the end time, or it would be deleted"
+msgstr "The session should end after it begun. Please change the end time, or it would be deleted"
+
+msgid "Imprint"
+msgstr "Imprint"
+
+msgid "Privacy Notice"
+msgstr "Privacy Notice"
+
+msgid "Information of the event:"
+msgstr "Information of the event:"
+
+msgid "When:"
+msgstr "When:"
+
+msgid "Until:"
+msgstr "Until:"
+
+msgid "Appointments:"
+msgstr "Appointments:"
+
+msgid "Address:"
+msgstr "Address:"
+
+msgid "Fee:"
+msgstr "Fee:"
+
+msgid "Registration possible until:"
+msgstr "Registration possible until:"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Registration"
+msgstr[1] "Registrations"
+
+msgid "Events"
+msgstr "Events"
+
+msgid "More Information"
+msgstr "More Information"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Event Specific Information:"
+msgstr "Event Specific Information:"
+
+msgid "Download file"
+msgstr "Download file"
+
+msgid "Complete Registration"
+msgstr "Complete Registration"
+
+msgid "Files"
+msgstr "Files"
 
 msgid "Name"
 msgstr "Name"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Content type"
+msgstr "Content type"
+
+msgid "Folder"
+msgstr "Folder"
+
+msgid "Creation Time"
+msgstr "Creation Time"
+
+msgid "Last Modified Time"
+msgstr "Last Modified Time"
+
+msgid "Edit Rules"
+msgstr "Edit Rules"
+
+msgid "Option"
+msgid_plural "Options"
+msgstr[0] "Option"
+msgstr[1] "Options"
+
+msgid "Rules"
+msgstr "Rules"
+
+msgid "Appointment"
+msgid_plural "Appointments"
+msgstr[0] "Appointment"
+msgstr[1] "Appointments"
+
+msgid "Session number"
+msgstr "Session number"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Start Time"
+msgstr "Start Time"
+
+msgid "End Time"
+msgstr "End Time"
 
 msgid "Booked Option"
 msgid_plural "Booked Options"
@@ -144,10 +297,25 @@ msgstr[1] "Booked Options"
 msgid "Event Option"
 msgstr "Event Option"
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Registration"
-msgstr[1] "Registrations"
+msgid "Selection Config"
+msgstr "Selection Config"
+
+msgid "Checkbox Option "
+msgid_plural "Checkbox Options"
+msgstr[0] "Checkbox Option "
+msgstr[1] "Checkbox Options"
+
+msgid "Price"
+msgstr "Price"
+
+msgid "Total places"
+msgstr "Total places"
+
+msgid "Booked places"
+msgstr "Booked places"
+
+msgid "Available places"
+msgstr "Available places"
 
 msgid "Event"
 msgid_plural "Events"
@@ -169,40 +337,147 @@ msgstr "Location"
 msgid "Fee"
 msgstr "Fee"
 
-msgid "Total places"
-msgstr "Total places"
-
-msgid "Booked places"
-msgstr "Booked places"
-
-msgid "Available places"
-msgstr "Available places"
-
-msgid "Double Opt-in"
-msgstr "Double Opt-in"
-
 msgid "Event Registrations"
 msgstr "Event Registrations"
+
+msgid "Event Appointments"
+msgstr "Event Appointments"
 
 msgid "Event is live"
 msgstr "Event is live"
 
-msgid "Required Contact fields"
-msgstr "Required Contact fields"
+msgid "File Option"
+msgid_plural "File Options"
+msgstr[0] "File Option"
+msgstr[1] "File Options"
 
-msgid "Contact auto Tags"
-msgstr "Contact auto Tags"
+msgid "Option Config Class"
+msgstr "Option Config Class"
 
-msgid "Option"
-msgid_plural "Options"
-msgstr[0] "Option"
-msgstr[1] "Options"
+msgid "Option Config"
+msgstr "Option Config"
 
-msgid "Price"
-msgstr "Price"
+msgid "Display"
+msgstr "Display"
 
-msgid "URL"
-msgstr "URL"
+msgid "Option required"
+msgstr "Option required"
+
+msgid "Display Sorting"
+msgstr "Display Sorting"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+msgstr "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+
+msgid "Option rule"
+msgid_plural "Option rules"
+msgstr[0] "Option rule"
+msgstr[1] "Option rules"
+
+msgid "Criteria"
+msgstr "Criteria"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Booked options"
+msgstr "Booked options"
+
+msgid "Selection"
+msgid_plural "Selections"
+msgstr[0] "Selection"
+msgstr[1] "Selections"
+
+msgid "GENDER_Selections"
+msgstr "GENDER_Selections"
+
+msgid "Selection Config Class"
+msgstr "Selection Config Class"
+
+msgid "Checkbox"
+msgid_plural "Checkboxes"
+msgstr[0] "Checkbox"
+msgstr[1] "Checkboxes"
+
+msgid "Booked"
+msgstr "Booked"
+
+msgid "File selection"
+msgid_plural "File selections"
+msgstr[0] "File selection"
+msgstr[1] "File selections"
+
+msgid "TextInput"
+msgid_plural "TextInputs"
+msgstr[0] "TextInput"
+msgstr[1] "TextInputs"
+
+msgid "Response"
+msgstr "Response"
+
+msgid "Text Input Option "
+msgid_plural "Text Input Options"
+msgstr[0] "Text Input Option "
+msgstr[1] "Text Input Options"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Text Option "
+msgid_plural "Text Options"
+msgstr[0] "Text Option "
+msgstr[1] "Text Options"
 
 msgid "EventManager"
 msgstr "EventManager"
+
+msgid "Salutation"
+msgstr "Salutation"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "First Name"
+msgstr "First Name"
+
+msgid "Middle Name"
+msgstr "Middle Name"
+
+msgid "Last Name"
+msgstr "Last Name"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Day of Birth"
+msgstr "Day of Birth"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Mobile"
+msgstr "Mobile"
+
+msgid "Telephone"
+msgstr "Telephone"
+
+msgid "Street"
+msgstr "Street"
+
+msgid "House Nr."
+msgstr "House Nr."
+
+msgid "Postal Code"
+msgstr "Postal Code"
+
+msgid "City"
+msgstr "City"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Country"
+msgstr "Country"

@@ -45,6 +45,12 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
             self::NAME                  => self::TABLE_NAME,
         ],
 
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_REF_OPTION_FIELD => [],
+            ],
+        ],
+
         self::FIELDS => [
             self::FLD_REF_OPTION_FIELD      => [
                 self::LABEL                     => 'Event Option', // _('Event Option')
