@@ -123,7 +123,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             self::fail('should throw Tinebase_Exception_Confirmation!');
         } catch (Tinebase_Exception_Confirmation $tec) {
             $translation = Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME);
-            self::assertEquals(sprintf($translation->_('There are %s hours have not yet been billed, do you want to make them billable?'), 1), $tec->getMessage());
+            self::assertEquals(sprintf($translation->_('There are %s hours that have not yet been billed. Do you want to make them billable?'), 1), $tec->getMessage());
         }
 
         // user timeaccount with the confirmation header
@@ -1207,7 +1207,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             self::fail('should throw Tinebase_Exception_Confirmation');
         } catch (Tinebase_Exception_Confirmation $tec) {
             $translate = Tinebase_Translation::getTranslation('Timetracker');
-            self::assertEquals($translate->_('Timeaccounts are still in use! Are you sure you want to delete them?'), $tec->getMessage());
+            self::assertEquals($translate->_('Time accounts are still in use! Are you sure you want to delete them?'), $tec->getMessage());
         }
     }
 
@@ -1533,7 +1533,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             $this->fail('Failed asserting that exception of type "Tinebase_Exception_Confirmation" is thrown.');
         } catch (Tinebase_Exception_Confirmation $tec) {
             $translate = Tinebase_Translation::getTranslation('Timetracker');
-            $this->assertEquals($translate->_('The related Timeaccount is already closed, do you still want to execute this action?'), $tec->getMessage());
+            $this->assertEquals($translate->_('The related time account is already closed. Do you still want to perform this action?'), $tec->getMessage());
         }
 
         // update with the confirmation header

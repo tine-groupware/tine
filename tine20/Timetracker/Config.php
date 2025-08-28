@@ -67,7 +67,7 @@ class Timetracker_Config extends Tinebase_Config_Abstract
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
-            //_('Enabled Features in Timetracker Application.')
+            //_('Enabled Features in the Timetracker Application.')
             self::DESCRIPTION           => 'Enabled Features in Timetracker Application.',
             self::TYPE                  => self::TYPE_OBJECT,
             self::CLASSNAME             => Tinebase_Config_Struct::class,
@@ -75,10 +75,10 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             self::CONTENT               => [
                 self::FEATURE_TIMEACCOUNT_BOOKMARK  => [
                     self::LABEL                         => 'Timeaccount Bookmarks',
-                    //_('Timeaccount Bookmarks')
+                    //_('Time Account Bookmarks')
                     self::DESCRIPTION                   =>
-                        'Add timeaccounts as favorite to speedup timesheet creation.',
-                    //_('Add timeaccounts as favorite to speedup timesheet creation.)
+                        'Add time accounts as favorite to speed up timesheet creation.',
+                    //_('Add time accounts as favorite to speed up timesheet creation.')
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => false,
                 ],
