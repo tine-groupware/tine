@@ -339,6 +339,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 'org_name'              => $request['contactDetails']['company'],
                 'tel_cell'              => $request['contactDetails']['mobile'],
                 'tel_home'              => $request['contactDetails']['telephone'],
+                'container_id'          => EventManager_Config::getInstance()
+                                            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER),
             ]);
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->create($contact);

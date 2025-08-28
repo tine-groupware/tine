@@ -274,8 +274,7 @@ class Tinebase_CustomFieldTest extends TestCase
         )));
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_family'     => 'testcontact',
-            'container_id' => Tinebase_Container::getInstance()->getSharedContainer(
-                Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ)->getFirstRecord()->getId()
+            'container_id' => Addressbook_Controller::getDefaultInternalAddressbook()
         )));
         $cfValue = array(
             $createdCustomField->name => 'test value',

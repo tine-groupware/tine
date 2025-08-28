@@ -32,6 +32,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const OPTION_REQUIRED_TYPE = 'optionRequiredType';
     public const RULE_TYPE = 'ruleType';
     public const CRITERIA_TYPE = 'criteriaType';
+    public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer';
 
 
 
@@ -228,6 +229,15 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR => 1
             ],
+        ],
+        self::DEFAULT_CONTACT_EVENT_CONTAINER => [
+            //_('Default Container for Contacts of an Event')
+            'label'                 => 'Default Container for Contacts of an Event',
+            //_('The container where new contacts are created.')
+            'description'           => 'The container where new contacts are created.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
         ],
     ];
 
