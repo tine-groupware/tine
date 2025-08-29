@@ -47,6 +47,11 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         return $smdArray;
     }
 
+    public function updateApplications()
+    {
+        Setup_Controller::getInstance()->updateApplications();
+    }
+
     /**
      * display Tine 2.0 main screen
      */
