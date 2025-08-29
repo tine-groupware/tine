@@ -1291,6 +1291,8 @@ class Tinebase_FileSystemTest extends TestCase
         $now = Tinebase_DateTime::now();
         $file = $this->testCreateFile('avModeUnittestFound.txt',
             'shubidubidulala');
+        Tinebase_FileSystem::getInstance()->clearStatCache();
+        Tinebase_TransactionManager::getInstance()->unitTestExecCallBacks();
         $node = Tinebase_FileSystem::getInstance()->stat($file);
         static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
         static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);

@@ -20,7 +20,7 @@ use Sabre\HTTP\ResponseInterface;
  *
  * @package    Sabre
  * @subpackage CalDAV
- * @copyright  Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Cornelius Weiss <c.weiss@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
@@ -149,8 +149,9 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
             }
         }
         rewind($inputStream);
-        //todo: fix avscan process for attachments ?
-        list ($attachmentId) = Tinebase_FileSystem::getInstance()->createFileBlob($inputStream);
+
+        list ($attachmentId) = Tinebase_FileSystem::getInstance()->createFileBlob($inputStream, avscan: false);
+        $hashPath = Tinebase_FileSystem::getInstance()->getRealPathForHash($attachmentId);
         
         switch ($getVars['action']) {
             case 'attachment-add':
@@ -212,6 +213,17 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
                     
                 $node->update($node->getRecord());
                 break;
+        }
+
+        if (Tinebase_FileSystem_AVScan_Factory::MODE_OFF !== Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE}) {
+            $fileSize = filesize($hashPath);
+            $queueSize = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_AVSCAN_QUEUE_FSIZE};
+            if ($fileSize && $fileSize > $queueSize) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(fn() => Tinebase_ActionQueue::getInstance()->queueAction('Tinebase.avScanHashFile', $hashPath));
+            } else {
+                Tinebase_Controller::getInstance()->avScanHashFile($hashPath);
+            }
         }
         
 //         @TODO respect Prefer header
