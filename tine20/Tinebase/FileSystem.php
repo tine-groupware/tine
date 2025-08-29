@@ -2560,10 +2560,7 @@ class Tinebase_FileSystem implements
             $queueSize = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_AVSCAN_QUEUE_FSIZE};
             if ($fileSize && $fileSize > $queueSize) {
                 $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, 'processing avscan in queue');
-                Tinebase_ActionQueue::getInstance()->queueAction('Tinebase.avScanHashFile',
-                    $hashFile,
-                    $options
-                );
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(fn() => Tinebase_ActionQueue::getInstance()->queueAction('Tinebase.avScanHashFile', $hashFile));
             } else {
                 $avResult = $this->avScanHashFile($hashFile);
             }
@@ -5040,7 +5037,7 @@ class Tinebase_FileSystem implements
      * @param string $scanResult
      * @return void
      */
-    protected function _updateAvScanOfFileHash(string $hash, string $scanResult)
+    public function _updateAvScanOfFileHash(string $hash, string $scanResult)
     {
         $this->_fileObjectBackend->updateRevisionByHash($hash, [
             'lastavscan_time' => Tinebase_DateTime::now()->toString(),

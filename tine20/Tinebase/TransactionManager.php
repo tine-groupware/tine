@@ -366,4 +366,14 @@ class Tinebase_TransactionManager
             $this->_openTransactions[] = $transactionId;
         }
     }
+
+    public function unitTestExecCallBacks(): void
+    {
+        foreach ($this->_onCommitCallbacks as $callable) {
+            call_user_func_array($callable[0], $callable[1]);
+        }
+        foreach ($this->_afterCommitCallbacks as $callable) {
+            call_user_func_array($callable[0], $callable[1]);
+        }
+    }
 }

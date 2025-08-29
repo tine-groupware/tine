@@ -2418,55 +2418,22 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     /**
      * avScan hashFile
      *
-     * @param string $_hashFile
-     * @param null $options
-     * @return Tinebase_FileSystem_AVScan_Result
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Tinebase_Exception_Record_Validation
-     * @throws \League\Flysystem\FilesystemException
+     * @throws Tinebase_Exception_UnexpectedValue
      */
-    public function avScanHashFile(string $_hashFile, $options = null): Tinebase_FileSystem_AVScan_Result
+    public function avScanHashFile(string $_hashFile): bool
     {
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        try {
-            $avResult = Tinebase_FileSystem::getInstance()->avScanHashFile($_hashFile);
-            // Extract the directory name (first 3 characters of hash)
-            $pathParts = explode('/', $_hashFile);
-            $dirPart = $pathParts[count($pathParts) - 2];
-            $filePart = $pathParts[count($pathParts) - 1];
-            $originalHash = $dirPart . $filePart;
-
-            if ($options) {
-                $parentPath = dirname($options['tine20']['path']);
-                $parentFolder = Tinebase_FileSystem::getInstance()->stat($parentPath);
-
-                try {
-                    Tinebase_FileSystem::getInstance()->updateFileObject(
-                        $parentFolder,
-                        $options['tine20']['node'],
-                        null,
-                        $originalHash,
-                        $_hashFile,
-                        $avResult
-                    );
-                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                    $transactionId = null;
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    // file has been deleted - ignore
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-                    }
-                }
-            }
-        } finally {
-            if (null !== $transactionId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
+        $avResult = Tinebase_FileSystem::getInstance()->avScanHashFile($_hashFile);
+        // Extract the directory name (first 3 characters of hash)
+        $pathParts = explode('/', $_hashFile);
+        if (count($pathParts) < 2) {
+            throw new Tinebase_Exception_UnexpectedValue('not a valid hash file path ' . $_hashFile);
         }
+        $dirPart = $pathParts[count($pathParts) - 2];
+        $filePart = $pathParts[count($pathParts) - 1];
+        $originalHash = $dirPart . $filePart;
 
-        return $avResult;
+        Tinebase_FileSystem::getInstance()->_updateAvScanOfFileHash($originalHash, $avResult->result);
+
+        return true;
     }
 }
