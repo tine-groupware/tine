@@ -25,6 +25,12 @@ msgstr "run"
 msgid "run right description"
 msgstr "run right description"
 
+msgid "twig"
+msgstr "twig"
+
+msgid "Manage applications twig templates right"
+msgstr "Manage applications twig templates right"
+
 msgid "Use Mainscreen"
 msgstr "Use Mainscreen"
 
@@ -173,6 +179,9 @@ msgstr "Configured Area Locks"
 
 msgid "Database Configuration"
 msgstr "Database Configuration"
+
+msgid "External Database Configuration"
+msgstr "External Database Configuration"
 
 msgid "Logger Configuration"
 msgstr "Logger Configuration"
@@ -382,6 +391,12 @@ msgstr "Default Admin Role Name"
 
 msgid "Default User Role Name"
 msgstr "Default User Role Name"
+
+msgid "Default Currency"
+msgstr "Default Currency"
+
+msgid "The currency defined here is used as default currency in the customerd edit dialog."
+msgstr "The currency defined here is used as default currency in the customerd edit dialog."
 
 msgid "Deleted Data Retention Time"
 msgstr "Deleted Data Retention Time"
@@ -800,12 +815,6 @@ msgstr "Enable SyncToken plugin"
 msgid "Enable the use of the SyncToken plugin."
 msgstr "Enable the use of the SyncToken plugin."
 
-msgid "currency symbol"
-msgstr "currency symbol"
-
-msgid "Path to custom favicon."
-msgstr "Path to custom favicon."
-
 msgid "Role receiving support requests"
 msgstr "Role receiving support requests"
 
@@ -895,6 +904,12 @@ msgstr "Ignore Proxy config for preview service"
 
 msgid "Antivirus Scan Max File Size"
 msgstr "Antivirus Scan Max File Size"
+
+msgid "Antivirus Scan Queue File Size"
+msgstr "Antivirus Scan Queue File Size"
+
+msgid "Antivirus Scan Queue File Size in bytes, scan immediately if file size is smaller than the config"
+msgstr "Antivirus Scan Queue File Size in bytes, scan immediately if file size is smaller than the config"
 
 msgid "Antivirus Scan Mode"
 msgstr "Antivirus Scan Mode"
@@ -1193,8 +1208,8 @@ msgstr "This is a system container which could not be deleted!"
 msgid "Generic System Exception"
 msgstr "Generic System Exception"
 
-msgid "Exporttime"
-msgstr "Exporttime"
+msgid "Export Time"
+msgstr "Export Time"
 
 msgid "Export only currently shown columns"
 msgstr "Export only currently shown columns"
@@ -1932,6 +1947,11 @@ msgid_plural "Countries"
 msgstr[0] "Country"
 msgstr[1] "Countries"
 
+msgid "Currency"
+msgid_plural "Currencies"
+msgstr[0] "Currency"
+msgstr[1] "Currencies"
+
 msgid "Grant"
 msgid_plural "Grants"
 msgstr[0] "Grant"
@@ -2172,6 +2192,12 @@ msgstr "{0} is not a valid unit"
 msgid "choose other {0}..."
 msgstr "choose other {0}..."
 
+msgid "Field must not be empty"
+msgstr "Field must not be empty"
+
+msgid "No valid time format (use Hours:Minutes)"
+msgstr "No valid time format (use Hours:Minutes)"
+
 msgid "Not a valid time"
 msgstr "Not a valid time"
 
@@ -2285,6 +2311,9 @@ msgstr "Select all pages ({0} records)"
 
 msgid "Toggle selection"
 msgstr "Toggle selection"
+
+msgid "Infinity %"
+msgstr "Infinity %"
 
 msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
 msgstr "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
@@ -2535,6 +2564,9 @@ msgstr "Modules"
 
 msgid "Select a country..."
 msgstr "Select a country..."
+
+msgid "Select a Currency..."
+msgstr "Select a Currency..."
 
 msgid "Custom Fields"
 msgstr "Custom Fields"
@@ -3987,6 +4019,14 @@ msgstr "Date"
 msgid "Fraction"
 msgstr "Fraction"
 
+msgid "GENDER_Business Logic Pipeline Item"
+msgstr "GENDER_Business Logic Pipeline Item"
+
+msgid "Business Logic Pipeline Item"
+msgid_plural "Business Logic Pipeline Items"
+msgstr[0] "Business Logic Pipeline Item"
+msgstr[1] "Business Logic Pipeline Items"
+
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] "Record Name"
@@ -4043,6 +4083,14 @@ msgstr "Depends on"
 
 msgid "Sorting"
 msgstr "Sorting"
+
+msgid "File Location"
+msgid_plural "File Locations"
+msgstr[0] "File Location"
+msgstr[1] "File Locations"
+
+msgid "GENDER_File Location"
+msgstr "GENDER_File Location"
 
 msgid "Area lock configurations"
 msgstr "Area lock configurations"
@@ -4318,6 +4366,9 @@ msgstr "Last failure"
 msgid "Failure count"
 msgstr "Failure count"
 
+msgid "Active"
+msgstr "Active"
+
 msgid "SMS Adapter Type"
 msgstr "SMS Adapter Type"
 
@@ -4353,6 +4404,32 @@ msgstr "MD5 Hash"
 
 msgid "Revision Size"
 msgstr "Revision Size"
+
+msgid "Twig Template"
+msgid_plural "Twig Templates"
+msgstr[0] "Twig Template"
+msgstr[1] "Twig Templates"
+
+msgid "GENDER_Twog Template"
+msgstr "GENDER_Twog Template"
+
+msgid "Locale"
+msgstr "Locale"
+
+msgid "Is Original"
+msgstr "Is Original"
+
+msgid "This template is unmodified and will follow changes from updated software versions."
+msgstr "This template is unmodified and will follow changes from updated software versions."
+
+msgid "Has Original"
+msgstr "Has Original"
+
+msgid "An original template exists in the software."
+msgstr "An original template exists in the software."
+
+msgid "Original Twig Template"
+msgstr "Original Twig Template"
 
 msgid "by"
 msgstr "by"
@@ -4470,6 +4547,9 @@ msgstr "MFA configs are not valid:"
 
 msgid "Your Tine 2.0 account has been deactivated"
 msgstr "Your Tine 2.0 account has been deactivated"
+
+msgid "BASE"
+msgstr "BASE"
 
 msgid "Your user account has been deactivated"
 msgstr "Your user account has been deactivated"
