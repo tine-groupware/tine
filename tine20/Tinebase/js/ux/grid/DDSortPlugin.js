@@ -100,7 +100,7 @@ Ext.extend(DDSortPlugin, Ext.util.Observable, {
 
                 if (sortState.field != this.ddSortCol) {
                     Ext.Msg.alert(
-                        String.format(i18n._('Please Sort by "{0}"'), sortColumn.header),
+                        String.format(i18n._('Please sort by "{0}"'), sortColumn.header),
                         String.format(i18n._('To use manual sorting, you need to sort by column "{0}"'), sortColumn.header)
                     );
 

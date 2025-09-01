@@ -120,8 +120,8 @@ class AreaLocks extends Ext.util.Observable {
     if (mfaDevices.length > 1) {
       selectedDevice = _.find(mfaDevices, {
         id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
-          title: window.i18n._('Choose MFA Deivce'),
-          questionText: window.i18n._('This area is locked. Which device should be used to unlock?'),
+          title: window.i18n._('Choose MFA Device'),
+          questionText: window.i18n._('This area is locked. Which device should be used to unlock it?'),
           height: 100 + mfaDevices.length * 30,
           allowCancel: true,
           options: _.map(mfaDevices, (mfaDevice) => {
@@ -244,7 +244,7 @@ class AreaLocks extends Ext.util.Observable {
       if (isLocked) {
         const lockState = this.getLockState(areaName)
         if (lockState.isUnlocking) {
-          maskEls.forEach((maskEl) => { if (!maskEl.skipMsg) { maskEl.mask(i18n._('Unlocking ...'), 'x-mask-loading') } })
+          maskEls.forEach((maskEl) => { if (!maskEl.skipMsg) { maskEl.mask(i18n._('Unlocking...'), 'x-mask-loading') } })
         } else {
           maskEls.forEach((maskEl) => {
             let mask = maskEl.mask(maskEl.skipMsg ? '' : i18n._('Click here to unlock this area.'), 'tb-arealocks-msg')

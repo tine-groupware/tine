@@ -461,8 +461,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         this.i18nEmptyText = this.i18nEmptyText ||
             this.i18nContainersName
-            ? String.format(i18n._("There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
-            : String.format(i18n._("There could not be found any {0}. Please try to change your filter-criteria, view-options or change the module you search in."), this.i18nRecordsName);
+            ? String.format(i18n._("No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
+            : String.format(i18n._("No {0} could be found. Please try changing your filter criteria, view options, or the module you are searching in."), this.i18nRecordsName);
 
         this.i18nEditActionText = this.i18nEditActionText ? this.i18nEditActionText : [String.format(i18n.ngettext('Edit {0}', 'Edit {0}', 1), this.i18nRecordName), String.format(i18n.ngettext('Edit {0}', 'Edit {0}', 2), this.i18nRecordsName)];
 
@@ -3052,7 +3052,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {
-                        msg: String.format(i18n._('Deleting {0}'), i18nItems) + ' ' + i18n._('... This may take a long time!')
+                        msg: String.format(i18n._('Deleting {0}'), i18nItems) + ' ' + i18n._('... this may take a long time!')
                     });
                 }
                 this.deleteMask.show();

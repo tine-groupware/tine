@@ -96,8 +96,8 @@ abstract class Tinebase_Acl_Rights_Abstract implements Tinebase_Acl_Rights_Inter
                 'description'   => $translate->_('Manage applications twig templates right'),
             ),
             self::MAINSCREEN            => array(
-                'text'          => $translate->_('Use Mainscreen'),
-                'description'   => $translate->_('App mainscreen is available in UI'),
+                'text'          => $translate->_('Use main screen'),
+                'description'   => $translate->_('App main screen is available in UI'),
             ),
             self::USE_PERSONAL_TAGS     => array(
                 'text'          => $translate->_('Personal tags'),

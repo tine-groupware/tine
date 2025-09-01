@@ -16,7 +16,7 @@ Tine.Tinebase.MFA.DeviceSelfServiceDialog = Ext.extend(Tine.Tinebase.dialog.Dial
     layout: 'vbox',
 
     initComponent() {
-        this.window.setTitle(i18n._('Multi Factor Authentication Device Configuration'));
+        this.window.setTitle(i18n._('Multi-Factor Authentication Device Configuration'));
 
         this.MFAPanel = new UserConfigPanel({
             selfServiceMode: true,

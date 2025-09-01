@@ -107,7 +107,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             { id: 'note', header: i18n._('Note'), renderer: this.renderMultipleLines },
             { id: 'restricted_to', header: i18n._('Private'), renderer: Tine.Tinebase.common.booleanRenderer },
             { id: 'created_by', header: i18n._('Created By'), renderer: Tine.Tinebase.common.usernameRenderer },
-            { id: 'creation_time', header: i18n._('Creation time'), renderer: Tine.Tinebase.common.dateTimeRenderer }
+            { id: 'creation_time', header: i18n._('Creation Time'), renderer: Tine.Tinebase.common.dateTimeRenderer }
         ];
         return columns;
     },

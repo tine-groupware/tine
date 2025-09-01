@@ -60,14 +60,14 @@ class Tinebase_Model_LogEntry extends Tinebase_Record_Abstract
                 'length' => 255,
                 'nullable' => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label' => 'Client Requestid', // _('Client Requestid')
+                'label' => 'Client Request ID', // _('Client Request ID')
             ),
             'request_id' => array(
                 'type' => 'string',
                 'length' => 255,
                 'nullable' => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'label' => 'Server Requestid', // _('Server Requestid')
+                'label' => 'Server Request ID', // _('Server Request ID')
             ),
             'user' => array(
                 'label' => 'User', //_('User')
@@ -75,17 +75,17 @@ class Tinebase_Model_LogEntry extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'timestamp' => array(
-                'label' => 'Logtime', // _('Logtime')
+                'label' => 'Log Time', // _('Log Time')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type' => 'datetime',
             ),
             'logdifftime' => array(
-                'label' => 'Difftime', // _('Difftime')
+                'label' => 'Time Difference', // _('Time Difference')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type' => 'string',
             ),
             'logruntime' => array(
-                'label' => 'Runtime', // _('Difftime')
+                'label' => 'Runtime', // _('Runtime')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'type' => 'string',
             ),
@@ -98,7 +98,7 @@ class Tinebase_Model_LogEntry extends Tinebase_Record_Abstract
                 'type' => 'string',
                 'nullable' => false,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => True),
-                'label' => 'Loglevel', // _('Loglevel'),
+                'label' => 'Log Level', // _('Log Level'),
                 'queryFilter'       => true,
                 self::ALLOW_CAMEL_CASE          => true,
             ),

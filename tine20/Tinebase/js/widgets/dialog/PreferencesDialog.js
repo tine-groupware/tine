@@ -227,7 +227,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
         
         this.window.setTitle(this.i18n._('Edit Preferences'));
-        this.loadMask = new Ext.LoadMask(ct, {msg: i18n._('Loading ...')});
+        this.loadMask = new Ext.LoadMask(ct, {msg: i18n._('Loading...')});
     },
     
     /**
@@ -281,7 +281,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */
     onApplyChanges: async function (closeWindow) {
         if (!this.isValid()) {
-            Ext.MessageBox.alert(i18n._('Errors'), i18n._('You need to correct the red marked fields before config could be saved'));
+            Ext.MessageBox.alert(i18n._('Errors'), i18n._('You need to correct the fields marked in red before the configuration can be saved'));
             return;
         }
     

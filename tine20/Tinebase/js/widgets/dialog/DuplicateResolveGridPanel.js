@@ -38,7 +38,7 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
 
     initComponent: function() {
 
-        this.title = i18n._('The record you try to add might already exist.');
+        this.title = i18n._('The record you are trying to add might already exist.');
 
         this.view = new Ext.grid.GroupingView({
             forceFit:true,

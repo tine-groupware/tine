@@ -20,7 +20,7 @@ Tine.Tinebase.MunicipalityKeyPicker = Ext.extend(Tine.Tinebase.widgets.form.Reco
     initComponent: function(){
         this.app = Tine.Tinebase.appMgr.get('Tinebase');
         this.recordClass = Tine.Tinebase.Model.MunicipalityKey;
-        this.emptyText = this.app.i18n._('Search for Municipality Keys ...');
+        this.emptyText = this.app.i18n._('Search for Municipality Keys...');
 
         this.initTemplate();
         Tine.Tinebase.MunicipalityKeyPicker.superclass.initComponent.call(this);

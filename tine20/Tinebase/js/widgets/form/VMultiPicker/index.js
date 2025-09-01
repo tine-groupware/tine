@@ -35,7 +35,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     multiLine: null,
 
     initComponent: function() {
-        this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
+        this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records...'));
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
 
         // Autodetect if our record has additional metadata for the refId Record or is only a cross table

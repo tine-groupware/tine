@@ -206,7 +206,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 409:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Concurrent Updates'),
-                    msg: i18n._('Someone else saved this record while you where editing the data. You need to reload and make your changes again.')
+                    msg: i18n._('Someone else saved this record while you were editing the data. You need to reload and reapply your changes again.')
                 }));
                 break;
             // outdated client
@@ -228,7 +228,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                 Ext.MessageBox.show({
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR,
-                    title: formatMessage('There where Errors:'),
+                    title: formatMessage('There were Errors:'),
                     msg: formatMessage('({e.code}) { e.message }', {e: exception})
                         + (exception.html ? `&nbsp;<a data-error-num="0" href="#">(details)</a>` : ''),
                     onMessageClick: (e) => {
@@ -273,7 +273,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 520:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Timeout'),
-                    msg: i18n._('Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator.')
+                    msg: i18n._('Sorry, some timeout occurred while processing your request. Please reload your browser, try again or contact your administrator.')
                 }));
                 
                 break;
@@ -282,7 +282,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 540:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('No Response'),
-                    msg: i18n._('Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator.')
+                    msg: i18n._('Sorry, the Server did not respond with any data. Please reload your browser, try again or contact your administrator.')
                 }));
                 break;
             
@@ -290,7 +290,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 550: 
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Out of Resources'),
-                    msg: i18n._('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.')
+                    msg: i18n._('Sorry, the Server reported a "memory exhausted" condition. Please contact your administrator.')
                 }));
                 break;
                 
@@ -363,10 +363,10 @@ Tine.Tinebase.ExceptionHandler = function() {
                 }));
                 break;
                 
-            // lost/insufficent permissions for api call or bad api call
+            // lost/Insufficient permissions for api call or bad api call
             case -32601:
                 Ext.MessageBox.show(Ext.apply(defaults, {
-                    title: i18n._('Method Not Found / Insufficent Permissions'),
+                    title: i18n._('Method Not Found / Insufficient Permissions'),
                     msg: i18n._('You tried to access a function that is not available. Please reload your browser, try again or contact your administrator.')
                 }));
                 break;

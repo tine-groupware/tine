@@ -423,7 +423,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,
                 title: i18n._('No Dialog'),
-                msg: i18n._("The Record can't be opened. There doesn't exist any dialog for editing this Record!")
+                msg: i18n._("The record can't be opened. There is no dialog available to edit this record!")
             });
         }
     },
