@@ -253,6 +253,7 @@ prevent-upstream-changes:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-upstream-changes/
       allow_failure: true
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  artifacts: {}
 
 prevent-wrong-branch:
   image: alpine
