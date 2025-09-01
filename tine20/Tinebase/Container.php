@@ -2119,8 +2119,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         $defaultAddressbookId = Addressbook_Controller::getDefaultInternalAddressbook();
 
         if ($defaultAddressbookId && in_array($defaultAddressbookId, $containerIds)) {
-            // _('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!')
-            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this Container. Please define another container as the default addressbook for internal contacts!');
+            // _('You are not allowed to delete this container. Please define another container as the default Addressbook for internal contacts!')
+            throw new Tinebase_Exception_Record_SystemContainer('You are not allowed to delete this container. Please define another container as the default Addressbook for internal contacts!');
         }
     }
 

@@ -73,7 +73,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         }
         
         this.ftb.setActiveSheet(filter.sheet);
-        filter.formFields.value.setText(i18n._('Defined by ...'));
+        filter.formFields.value.setText(i18n._('Defined by...'));
     },
     
     /**
@@ -115,7 +115,7 @@ Tine.widgets.relation.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      */
     valueRenderer: function(filter, el) {
         var value = new Ext.Button({
-            text: i18n._('Define ...'),
+            text: i18n._('Define...'),
             filter: filter,
             renderTo: el,
             value: filter.data.value ? filter.data.value : this.defaultValue,

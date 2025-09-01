@@ -635,7 +635,7 @@ class Tinebase_Helper
     {
         $html = '<html>
   <body>
-    <p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>
+    <p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting...').'</p>
     <form method="POST" action="' . $redirectUrl . '">';
             foreach ($postData as $name => $value) {
                 $html .= '      <input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)

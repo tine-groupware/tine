@@ -28,7 +28,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
         this.hasSmsAdapters = Tine.Tinebase.registry.get('hasSmsAdapters');
 
         if (this.hasSmsAdapters) {
-            this.windowTitle = i18n._('Send SMS message with new password');
+            this.windowTitle = i18n._('Send SMS with new password');
         }
 
         const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
@@ -48,7 +48,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
             doAssertState: false,
             triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
             onTriggerClick:  Ext.emptyFn,
-            qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
+            qtip: i18n._('Password has expired in accordance with the password policy and needs to be changed'),
             preserveElStyle: true
         })
 

@@ -88,7 +88,7 @@ Ext.ux.form.LockCombo = Ext.extend(Ext.form.ComboBox, {
             t.on("click", this['on'+triggerIndex+'Click'], this, {preventDefault:true});
     
             if(t.id === 'trigger2') {
-                t.set({'ext:qtip': i18n._('When preference is locked, normal user can not edit the preference anymore.')});
+                t.set({'ext:qtip': i18n._('When a preference is locked, a normal user cannot edit the preference anymore.')});
                 if(this.hiddenFieldData === '0') {
                     const _cssClass = this.trigger2ClassLocked.toString();
                     t.addClass(_cssClass);

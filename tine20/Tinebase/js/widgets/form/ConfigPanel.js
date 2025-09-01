@@ -131,7 +131,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     },
     
     alertInvalidData: function() {
-        Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the red marked fields before config could be saved'));
+        Ext.Msg.alert(this.app.i18n._('Invalid configuration'), this.app.i18n._('You need to correct the fields marked in red before the configuration can be saved'));
     },
     
     /**

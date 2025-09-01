@@ -203,7 +203,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'           => $translate->_('The right to manage the own profile (selected contact data).'),
             ),
             self::MANAGE_NUMBERABLES => [
-                'text'                  => $translate->_('Manage Numberables'),
+                'text'                  => $translate->_('Manage numberables'),
                 'description'           => $translate->_('The right to manage numberables.'),
             ],
             self::MANAGE_OWN_STATE   => array(

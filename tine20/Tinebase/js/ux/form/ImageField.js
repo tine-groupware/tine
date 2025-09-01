@@ -159,7 +159,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.loadMask.hide();
         }, this);
         img.on('error', function () {
-            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator'));
+            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your administrator'));
             this.loadMask.hide();
         }, this);
     },
@@ -225,7 +225,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.uploader.un('uploadcomplete', this.onUploadComplete, this);
         this.uploader.un('uploadfailure', this.onUploadFail, this);
         
-        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator'));
+        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your administrator'));
     },
     /**
      * executed on image contextmenu

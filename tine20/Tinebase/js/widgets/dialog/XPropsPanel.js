@@ -22,17 +22,17 @@ export default Ext.extend(Ext.grid.PropertyGrid, {
         }, this);
 
         this.bbar = [{
-            text: i18n._('Create xprop'),
+            text: i18n._('Create XProp'),
             iconCls: 'action_add',
             handler: () => {
-                Ext.Msg.prompt(window.i18n._('xprop Name'), window.i18n._('Please enter the name of the new xprop'), function(btn, propName) {
+                Ext.Msg.prompt(window.i18n._('XProp Name'), window.i18n._('Please enter the name of the new XProp'), function(btn, propName) {
                     if (btn == 'ok') {
                         this.setProperty(propName, '', true);
                     }
                 }, this);
             }
         }, {
-            text: i18n._('Delete xprop'),
+            text: i18n._('Delete XProp'),
             iconCls: 'action_delete',
             disabled: true,
             handler: () => {

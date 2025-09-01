@@ -124,7 +124,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
         this.appSearchField = new Ext.form.TextField({
             width: '100%',
             cls: 'x-form-field-wrap',
-            emptyText: i18n._('Search for Application ...'),
+            emptyText: i18n._('Search for Application...'),
             enableKeyEvents: true,
             listeners: {
                 keyup: (f) => {

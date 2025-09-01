@@ -288,7 +288,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             this.contactSearchCombo = new Tine.Addressbook.SearchCombo({
                 hidden: true,
                 accountsStore: this.store,
-                emptyText: i18n._('Search for users ...'),
+                emptyText: i18n._('Search for users...'),
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
@@ -313,7 +313,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
-                emptyText: i18n._('Search for groups ...'),
+                emptyText: i18n._('Search for groups...'),
                 onSelect: this.onAddRecordFromCombo,
                 additionalFilters: [{field: 'type', operator: 'equals', value: 'group'}]
             });
@@ -331,7 +331,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
-                emptyText: i18n._('Search for roles ...'),
+                emptyText: i18n._('Search for roles...'),
                 onSelect: this.onAddRecordFromCombo
             });
         }

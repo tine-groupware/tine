@@ -261,7 +261,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             fields: ['operator', 'label'],
             data: [
                 {operator: 'contains',      label: i18n._('contains')},
-                {operator: 'wordstartswith',label: i18n._('contains word starting with')},
+                {operator: 'wordstartswith',label: i18n._('contains a word starting with')},
                 {operator: 'notcontains',   label: i18n._('contains not')},
                 {operator: 'regex',         label: i18n._('reg. exp.')},
                 {operator: 'equals',        label: i18n._('is equal to')},
@@ -501,7 +501,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 break;
             case 'user':
                 value = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', Ext.apply(commonOptions, {
-                    emptyText: i18n._('Search Account ...'),
+                    emptyText: i18n._('Search Account...'),
                     userOnly: true,
                     name: 'organizer',
                     nameField: 'n_fileas',
@@ -650,7 +650,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             comboValue = this.defaultValue.toString();
         }
         if (this.dateFilterSupportsPeriod) {
-            comboOps.unshift(['period', i18n._('Period ...')]);
+            comboOps.unshift(['period', i18n._('Period...')]);
         }
 
         filter.withinCombo = new Ext.form.ComboBox({

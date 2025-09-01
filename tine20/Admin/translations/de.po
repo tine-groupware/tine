@@ -861,6 +861,21 @@ msgstr "Verwendung:&#160;"
 msgid "System Tag"
 msgstr "System Tag"
 
+msgid "Show diff"
+msgstr ""
+
+msgid "Compare with original version"
+msgstr ""
+
+msgid "Apply Changes?"
+msgstr ""
+
+msgid "Do you want to apply the changes you made to the twig template?"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
 msgid "Allowed Domains"
 msgstr "Erlaubte Domänen"
 

@@ -163,9 +163,9 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
                                 xtype: 'panel',
                                 border: false,
                                 html: '<div class="tb-exceptiondialog-text">' +
-                                    '<p>' + i18n._('An error occurred, the program ended abnormal.') + '</p>' +
-                                    '<p>' + i18n._('The last action you made was potentially not performed correctly.') + '</p>' +
-                                    '<p>' + i18n._('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' +
+                                    '<p>' + i18n._('An error occurred, the program ended abnormally.') + '</p>' +
+                                    '<p>' + i18n._('Your last action may not have been performed correctly.') + '</p>' +
+                                    '<p>' + i18n._('Please help improve this software and notify the vendor. Include a brief description of what you were doing when the error occurred.') + '</p>' +
                                     '</div>'
                             }, {
                                 id: 'tb-exceptiondialog-description',
@@ -305,7 +305,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
     showTransmissionCompleted: function () {
         Ext.MessageBox.show({
             title: i18n._('Transmission Completed'),
-            msg: i18n._('Your report has been sent. Thanks for your contribution') + '<br /><b>' + i18n._('Please restart your browser now!') + '</b>',
+            msg: i18n._('Your report has been sent. Thanks for your contribution!') + '<br /><b>' + i18n._('Please restart your browser now!') + '</b>',
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO
         });

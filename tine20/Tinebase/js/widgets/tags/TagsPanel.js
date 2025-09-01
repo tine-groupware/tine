@@ -250,7 +250,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                             Ext.MessageBox.confirm(
                                 i18n.ngettext('Really delete selected tag?', 'Really delete selected tags?', selectedTags.length),
                                 i18n.ngettext('The selected tag will be deleted and disappear for all entries',
-                                                        'The selected tags will be removed and disappear for all entries', selectedTags.length), 
+                                                        'The selected tags will be deleted and disappear for all entries', selectedTags.length),
                                 function(btn) {
                                     if (btn == 'yes'){
                                         Ext.MessageBox.wait(i18n._('Please wait a moment...'), i18n.ngettext('Deleting Tag', 'Deleting Tags', selectedTags.length));

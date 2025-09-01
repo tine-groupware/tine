@@ -133,7 +133,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'type'          => 'string',
                 'length'        => 255,
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                'label'         => 'Lock id', // _('Lock id')
+                'label'         => 'Lock ID', // _('Lock ID')
                 'default'       => null,
                 'nullable'      => true,
                 self::UI_CONFIG                     => [
