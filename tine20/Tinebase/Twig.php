@@ -54,7 +54,10 @@ class Tinebase_Twig
         if (isset($_options[self::TWIG_LOADER])) {
             $twigLoader = $_options[self::TWIG_LOADER];
         } else {
-            $twigLoader = new Twig\Loader\FilesystemLoader(['./'], dirname(__DIR__));
+            $twigLoader = new Twig\Loader\ChainLoader([
+                new Tinebase_Twig_TineLoader(),
+                new Twig\Loader\FilesystemLoader(['./'], dirname(__DIR__)),
+            ]);
         }
 
         if (!defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE === 'DEVELOPMENT'
@@ -158,26 +161,11 @@ class Tinebase_Twig
      *    some.twig          <-- default (en), taken if nothing else matches
      *    de_DE/some.twig    <-- exact match for de_DE
      *    de/some.twig       <-- matches de_AT for example
-     * @return Twig_TemplateWrapper
+     * @return Twig\TemplateWrapper
      */
     public function load($_filename, ?\Zend_Locale $locale = null)
     {
-        $loader = $this->_twigEnvironment->getLoader();
-        if (!$loader instanceof Twig_Loader_Filesystem) {
-            return $this->_twigEnvironment->load($_filename);
-        }
-
-        if (null !== ($twigTmpl = $this::getTemplateContent($_filename, (string)($locale ?? Tinebase_Core::getLocale())))) {
-            $this->_twigEnvironment->setLoader(
-                new Tinebase_Twig_CallBackLoader($twigTmpl->{Tinebase_Model_TwigTemplate::FLD_PATH}, $twigTmpl->last_modified_time->getTimestamp(),
-                    fn() => $twigTmpl->{Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE})
-            );
-            try {
-                return $this->_twigEnvironment->load($twigTmpl->{Tinebase_Model_TwigTemplate::FLD_PATH});
-            } finally {
-                $this->_twigEnvironment->setLoader($loader);
-            }
-        }
+        Tinebase_Twig_TineLoader::$locale = $locale;
 
         return $this->_twigEnvironment->load($_filename);
     }
