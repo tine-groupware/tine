@@ -17,6 +17,15 @@ class Filemanager_Frontend_HttpTest extends TestCase
 {
     use GetProtectedMethodTrait;
 
+    public function testDownloadPwdPrompt(): void
+    {
+        $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
+        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+        $template = $twig->load(Filemanager_Config::APP_NAME . '/views/password.html.twig');
+        $html = $template->render();
+        $this->assertStringContainsString('class="password-form"', $html);
+    }
+
     public function testDownloadFile()
     {
         $jsonTests = new Filemanager_Frontend_JsonTests();
