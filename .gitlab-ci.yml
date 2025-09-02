@@ -47,7 +47,7 @@ workflow:
     - if: $RUN_CI_PIPELINE == "false"
       when: never
     # Do not run pipelines on push for feature branches. Only merge requests should run feature branche pipelines.
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(^change)|(^tcloud)/
       when: never
     # Set PIPELINE_TYPE variable for tag pipelines
     # Overwriting pipeline types is ok here. PIPELINE_TYPE should be empty for pipelines where $CI_COMMIT_TAG != ""

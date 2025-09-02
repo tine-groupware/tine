@@ -128,6 +128,7 @@ release-image-to-mw-registry:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-image-to-mw-registry/
       when: manual
     - !reference [deploy-test-cloud, rules]
+    - !reference [deploy-test-cloud-nightly, rules]
   timeout: 20m
   interruptible: false
 
@@ -342,29 +343,57 @@ update-version-check:
   rules:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
 
-deploy-test-cloud:
+.deploy-test-cloud:
   image: ghcr.io/helmfile/helmfile:v0.162.0
   stage: deploy
   needs:
     - release-image-to-mw-registry
   before_script:
-    - apk add coreutils
+    - apk add coreutils yq mariadb-client
   script:
     - !reference [.lib, script]
     - test_cloud_deploy
+  timeout: 20m
+  interruptible: false
+deploy-test-cloud:
+  extends: .deploy-test-cloud
+  environment:
+    # if running for tags, ci commit ref name is not the branch
+    name: $MAJOR_COMMIT_REF_NAME
+    url: https://${CI_ENVIRONMENT_SLUG}.tcloud.tine-dev.de
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
-      variables:
-        RELEASE_TYPE: nightly
-      when: manual
-    - if: $PIPELINE_TYPE =~ /deploy-test-cloud-nightly(,|$)/
-      variables:
-        RELEASE_TYPE: nightly
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
         RELEASE_TYPE: be
     - if: $PIPELINE_TYPE =~ /release-monthly(,|$)/
       variables:
         RELEASE_TYPE: monthly
-  timeout: 20m
-  interruptible: false
+deploy-test-cloud-nightly:
+  extends: .deploy-test-cloud
+  environment:
+    name: nightly-$CI_COMMIT_REF_NAME
+    url: https://${CI_ENVIRONMENT_SLUG}.tcloud.tine-dev.de
+    on_stop: teardown-test-cloud-nightly
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
+      variables:
+        RELEASE_TYPE: nightly
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME =~ /(^tcloud)/
+      variables:
+        RELEASE_TYPE: nightly
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /tcloud/
+      variables:
+        RELEASE_TYPE: nightly
+    - if: $PIPELINE_TYPE =~ /deploy-test-cloud-nightly(,|$)/
+      variables:
+        RELEASE_TYPE: nightly
+
+teardown-test-cloud-nightly:
+  extends: deploy-test-cloud-nightly
+  environment:
+    action: stop
+  script:
+    - !reference [.lib, script]
+    - test_cloud_teardown
+  when: manual
