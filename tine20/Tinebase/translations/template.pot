@@ -3747,6 +3747,12 @@ msgstr ""
 msgid "(shared)"
 msgstr ""
 
+msgid "Follow Preference"
+msgstr ""
+
+msgid "this config can not be set because its overwritten from a locked preference in admin mode."
+msgstr ""
+
 msgid "Defined by..."
 msgstr ""
 

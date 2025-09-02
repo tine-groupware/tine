@@ -3764,6 +3764,12 @@ msgstr "Favorit \"{0}\" speichern"
 msgid "(shared)"
 msgstr "(geteilt)"
 
+msgid "Follow Preference"
+msgstr "Einstellung folgen"
+
+msgid "this config can not be set because its overwritten from a locked preference in admin mode."
+msgstr "Diese Konfiguration kann nicht gesetzt werden, da sie durch eine gesperrte Einstellung im Admin-Modus überschrieben wird."
+
 msgid "Defined by..."
 msgstr "Definiert durch..."
 
@@ -4730,12 +4736,3 @@ msgstr "Nur Nachbarn"
 
 msgid "Preview"
 msgstr "Vorschau"
-
-#~ msgid "Setting new timezone..."
-#~ msgstr "Neue Zeitzone setzen..."
-
-#~ msgid "Confirm Logout"
-#~ msgstr "Ausloggen bestätigen"
-
-#~ msgid "Show confirmation dialog on logout."
-#~ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."

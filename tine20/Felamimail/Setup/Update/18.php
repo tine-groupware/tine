@@ -17,6 +17,7 @@ class Felamimail_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     public const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -37,6 +38,10 @@ class Felamimail_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -107,5 +112,26 @@ class Felamimail_Setup_Update_18 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
+    }
+
+    public function update004()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'felamimail_account SET display_format = "' . Tinebase_ModelConfiguration_Const::FOLLOW_PREFERENCE .
+            '" WHERE display_format = "' . Felamimail_Model_Account::DISPLAY_HTML . '"');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>display_format</name>
+                <type>text</type>
+                <length>64</length>
+                <default>follow_preference</default>
+            </field>
+        ');
+
+        $this->_backend->alterCol('felamimail_account', $declaration);
+
+        $this->setTableVersion('felamimail_account', 32);
+
+        $this->addApplicationUpdate('Felamimail', '18.4', self::RELEASE018_UPDATE004);
     }
 }
