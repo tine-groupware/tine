@@ -32,7 +32,7 @@ test_cloud_teardown() {
 
     test_cloud_teardown_database
 
-    kubectl delete jobs.batch -l app.kubernetes.io/instance=tine-${DEPLOYMENT_NAME},app.kubernetes.io/name=tine
+    kubectl --context tine20/gitlab-agent:k8s-se01 -n test-tine delete jobs.batch -l app.kubernetes.io/instance=tine-${DEPLOYMENT_NAME},app.kubernetes.io/name=tine
 }
 
 test_cloud_mariadb() {
