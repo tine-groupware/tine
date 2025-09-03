@@ -12,7 +12,7 @@ function prevent_upstream_change() {
     changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
 
     for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
-        changes="$(echo "$changes" | grep -v -E "^$allowed$")"
+        changes="$(echo "$changes" | grep -v -E "^$allowed$" || true)"
     done
 
     if [[ -z "$changes" ]]; then
