@@ -25,6 +25,12 @@ msgstr ""
 msgid "run right description"
 msgstr ""
 
+msgid "twig"
+msgstr ""
+
+msgid "Manage applications twig templates right"
+msgstr ""
+
 msgid "Use Mainscreen"
 msgstr ""
 
@@ -172,6 +178,9 @@ msgid "Configured Area Locks"
 msgstr ""
 
 msgid "Database Configuration"
+msgstr ""
+
+msgid "External Database Configuration"
 msgstr ""
 
 msgid "Logger Configuration"
@@ -381,6 +390,12 @@ msgid "Default Admin Role Name"
 msgstr ""
 
 msgid "Default User Role Name"
+msgstr ""
+
+msgid "Default Currency"
+msgstr ""
+
+msgid "The currency defined here is used as default currency in the customerd edit dialog."
 msgstr ""
 
 msgid "Deleted Data Retention Time"
@@ -800,12 +815,6 @@ msgstr ""
 msgid "Enable the use of the SyncToken plugin."
 msgstr ""
 
-msgid "currency symbol"
-msgstr ""
-
-msgid "Path to custom favicon."
-msgstr ""
-
 msgid "Role receiving support requests"
 msgstr ""
 
@@ -894,6 +903,12 @@ msgid "Ignore Proxy config for preview service"
 msgstr ""
 
 msgid "Antivirus Scan Max File Size"
+msgstr ""
+
+msgid "Antivirus Scan Queue File Size"
+msgstr ""
+
+msgid "Antivirus Scan Queue File Size in bytes, scan immediately if file size is smaller than the config"
 msgstr ""
 
 msgid "Antivirus Scan Mode"
@@ -1193,7 +1208,7 @@ msgstr ""
 msgid "Generic System Exception"
 msgstr ""
 
-msgid "Exporttime"
+msgid "Export Time"
 msgstr ""
 
 msgid "Export only currently shown columns"
@@ -1932,6 +1947,11 @@ msgid_plural "Countries"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Currency"
+msgid_plural "Currencies"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Grant"
 msgid_plural "Grants"
 msgstr[0] ""
@@ -2172,6 +2192,12 @@ msgstr ""
 msgid "choose other {0}..."
 msgstr ""
 
+msgid "Field must not be empty"
+msgstr ""
+
+msgid "No valid time format (use Hours:Minutes)"
+msgstr ""
+
 msgid "Not a valid time"
 msgstr ""
 
@@ -2284,6 +2310,9 @@ msgid "Select all pages ({0} records)"
 msgstr ""
 
 msgid "Toggle selection"
+msgstr ""
+
+msgid "Infinity %"
 msgstr ""
 
 msgid "This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded."
@@ -2534,6 +2563,9 @@ msgid "Modules"
 msgstr ""
 
 msgid "Select a country..."
+msgstr ""
+
+msgid "Select a Currency..."
 msgstr ""
 
 msgid "Custom Fields"
@@ -3987,6 +4019,14 @@ msgstr ""
 msgid "Fraction"
 msgstr ""
 
+msgid "GENDER_Business Logic Pipeline Item"
+msgstr ""
+
+msgid "Business Logic Pipeline Item"
+msgid_plural "Business Logic Pipeline Items"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] ""
@@ -4042,6 +4082,14 @@ msgid "Depends on"
 msgstr ""
 
 msgid "Sorting"
+msgstr ""
+
+msgid "File Location"
+msgid_plural "File Locations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_File Location"
 msgstr ""
 
 msgid "Area lock configurations"
@@ -4318,6 +4366,9 @@ msgstr ""
 msgid "Failure count"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 msgid "SMS Adapter Type"
 msgstr ""
 
@@ -4352,6 +4403,32 @@ msgid "MD5 Hash"
 msgstr ""
 
 msgid "Revision Size"
+msgstr ""
+
+msgid "Twig Template"
+msgid_plural "Twig Templates"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Twog Template"
+msgstr ""
+
+msgid "Locale"
+msgstr ""
+
+msgid "Is Original"
+msgstr ""
+
+msgid "This template is unmodified and will follow changes from updated software versions."
+msgstr ""
+
+msgid "Has Original"
+msgstr ""
+
+msgid "An original template exists in the software."
+msgstr ""
+
+msgid "Original Twig Template"
 msgstr ""
 
 msgid "by"
@@ -4469,6 +4546,9 @@ msgid "MFA configs are not valid:"
 msgstr ""
 
 msgid "Your Tine 2.0 account has been deactivated"
+msgstr ""
+
+msgid "BASE"
 msgstr ""
 
 msgid "Your user account has been deactivated"
