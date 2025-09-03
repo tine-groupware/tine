@@ -1,8 +1,8 @@
 environments:
   default:
     values:
-      - domain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.tine-dev.de
-        mailDomain: {{ requiredEnv "DEPLOYMENT_NAME" }}.tcloud.tine-dev.de
+      - domain: {{ requiredEnv "DEPLOYMENT_NAME" }}.{{ requiredEnv "DEPLOYMENT_BASE_DOMAIN" }}
+        mailDomain: {{ requiredEnv "DEPLOYMENT_NAME" }}.{{ requiredEnv "DEPLOYMENT_BASE_DOMAIN" }}
         instance: {{ requiredEnv "DEPLOYMENT_NAME" }}
 
 ---
