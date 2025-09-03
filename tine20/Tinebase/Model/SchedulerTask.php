@@ -173,6 +173,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_ACTIVE => [
+                self::LABEL => 'Active', // _('Active')
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL => true,
             ],
