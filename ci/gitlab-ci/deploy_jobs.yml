@@ -357,10 +357,12 @@ update-version-check:
   interruptible: false
 deploy-test-cloud:
   extends: .deploy-test-cloud
+  variables:
+    DEPLOYMENT_BASE_DOMAIN: tcloud.tine-dev.de
   environment:
     # if running for tags, ci commit ref name is not the branch
     name: $MAJOR_COMMIT_REF_NAME
-    url: https://${CI_ENVIRONMENT_SLUG}.tcloud.tine-dev.de
+    url: https://${CI_ENVIRONMENT_SLUG}.${DEPLOYMENT_BASE_DOMAIN}
   rules:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
@@ -370,9 +372,11 @@ deploy-test-cloud:
         RELEASE_TYPE: monthly
 deploy-test-cloud-nightly:
   extends: .deploy-test-cloud
+  variables:
+    DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
   environment:
     name: nightly-$CI_COMMIT_REF_NAME
-    url: https://${CI_ENVIRONMENT_SLUG}.tcloud.tine-dev.de
+    url: https://${CI_ENVIRONMENT_SLUG}.${DEPLOYMENT_BASE_DOMAIN}
     on_stop: teardown-test-cloud-nightly
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
