@@ -1049,8 +1049,7 @@
       
           cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
       
-      
-          log "testing ..."
+          log "Testing ..."
           cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
       
           if test -n "${ARG_FILTER}"; then
@@ -1067,6 +1066,11 @@
       
           mkdir -p ${CI_PROJECT_DIR}/coverage    
           cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+      
+          # TODO remove that when we fixed the logging issue
+          log "The first phpunit command does not write any tine logs - so we call it twice ...";
+          echo "${cmd} AllTests.php --filter Tinebase_ApplicationTest::testGetAllRights";
+          ${cmd} AllTests.php --filter EventManager_ControllerTest::testFileOptionFileUpload
       
           cmd="${cmd} ${ARG_TEST}";
       
@@ -1260,6 +1264,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log dev image: pushing ...
@@ -1276,6 +1281,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 .
         
             log test image: pushing ...
@@ -1291,6 +1297,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -1316,6 +1323,7 @@
                 --tag ${image} \
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg PHP_IMAGE=php${PHP_VERSION} \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg JSDEPENDENCY_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE_TYPE \
@@ -1340,6 +1348,7 @@
             docker build \
                 --target packages \
                 --file ./ci/dockerimage/Dockerfile \
+                --build-arg APT_MIRROR=${APT_MIRROR} \
                 --build-arg BUILT_IMAGE \
                 --build-arg ZIP_PACKAGES \
                 --build-arg RELEASE=$(release_get_package_version) \
@@ -1797,6 +1806,37 @@
             matrix_send_message $MATRIX_ROOM "$message"
         }
 
+        # lib/scripts/prevent_upsteam_changes.sh
+        function prevent_upstream_change() {
+            downstream=${MAJOR_COMMIT_REF_NAME}
+        
+            if [ "$downstream" == "$CI_COMMIT_REF_NAME" ]; then
+                return
+            fi
+        
+            git config user.email "ci@gitlab.metaways.net"
+            git config user.name "ci"
+            git rebase origin/$downstream
+        
+            changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
+        
+            for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
+                changes="$(echo "$changes" | grep -v -E "^$allowed$" || true)"
+            done
+        
+            if [[ -z "$changes" ]]; then
+                return
+            fi
+        
+            echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
+            echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
+            echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
+            echo Changes:
+            echo "$changes"
+        
+            return 1
+        }
+
         # lib/scripts/release.sh
         release_tag() {
             branch="$(echo "$CI_COMMIT_REF_NAME" | sed sI/I-Ig)"
@@ -2179,8 +2219,7 @@
         
             cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
         
-        
-            log "testing ..."
+            log "Testing ..."
             cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
@@ -2197,6 +2236,11 @@
         
             mkdir -p ${CI_PROJECT_DIR}/coverage    
             cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
+            # TODO remove that when we fixed the logging issue
+            log "The first phpunit command does not write any tine logs - so we call it twice ...";
+            echo "${cmd} AllTests.php --filter Tinebase_ApplicationTest::testGetAllRights";
+            ${cmd} AllTests.php --filter EventManager_ControllerTest::testFileOptionFileUpload
         
             cmd="${cmd} ${ARG_TEST}";
         
@@ -2229,19 +2273,10 @@
             fi
         }
 
+
         # lib/scripts/test_cloud.sh
-        test_cloud_generate_deployment_name() {
-            deployment_name=$MAJOR_COMMIT_REF_NAME
-        
-            if [ "$RELEASE_TYPE" == "nightly" ]; then
-                deployment_name=nightly-$deployment_name
-            fi
-        
-            echo -n $deployment_name | sed 's/\./-/g' | sed 's/\//-/g'
-        }
-        
         test_cloud_deploy() {
-            export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
+            export DEPLOYMENT_NAME=${CI_ENVIRONMENT_SLUG}
             export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
         
             echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
@@ -2253,7 +2288,50 @@
             #     # fail for pvc to be deleted
             # fi
         
+            # other functions need thees values
+            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
+        
+            test_cloud_setup_database
+        
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
+        }
+        
+        test_cloud_teardown() {
+            export DEPLOYMENT_NAME=${CI_ENVIRONMENT_SLUG}
+            export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
+        
+            echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
+        
+            # other functions need thees values
+            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
+        
+            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+        
+            test_cloud_teardown_database
+        
+            kubectl delete jobs.batch -l app.kubernetes.io/instance=tine-${DEPLOYMENT_NAME},app.kubernetes.io/name=tine
+        }
+        
+        test_cloud_mariadb() {
+            # helmfile write-values needs to run before!
+        
+            db_host=$(cat /tmp/values.yaml | yq .database.host)
+            db_username=$(cat /tmp/values.yaml | yq .database.username)
+            db_password=$(cat /tmp/values.yaml | yq .database.password)
+        
+            mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl
+        }
+        
+        test_cloud_setup_database() {
+            db_name=$(cat /tmp/values.yaml | yq .database.name)
+        
+            echo 'CREATE DATABASE IF NOT EXISTS `'${db_name}'`;' | test_cloud_mariadb
+        }
+        
+        test_cloud_teardown_database() {
+            db_name=$(cat /tmp/values.yaml | yq .database.name)
+        
+            echo 'DROP DATABASE IF EXISTS `'${db_name}'`;' | test_cloud_mariadb
         }
 
         # lib/scripts/version_check.sh
@@ -3319,8 +3397,7 @@
         
             cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
         
-        
-            log "testing ..."
+            log "Testing ..."
             cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
@@ -3337,6 +3414,11 @@
         
             mkdir -p ${CI_PROJECT_DIR}/coverage    
             cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
+            # TODO remove that when we fixed the logging issue
+            log "The first phpunit command does not write any tine logs - so we call it twice ...";
+            echo "${cmd} AllTests.php --filter Tinebase_ApplicationTest::testGetAllRights";
+            ${cmd} AllTests.php --filter EventManager_ControllerTest::testFileOptionFileUpload
         
             cmd="${cmd} ${ARG_TEST}";
         
@@ -4529,8 +4611,7 @@
         
             cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
         
-        
-            log "testing ..."
+            log "Testing ..."
             cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
         
             if test -n "${ARG_FILTER}"; then
@@ -4547,6 +4628,11 @@
         
             mkdir -p ${CI_PROJECT_DIR}/coverage    
             cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+        
+            # TODO remove that when we fixed the logging issue
+            log "The first phpunit command does not write any tine logs - so we call it twice ...";
+            echo "${cmd} AllTests.php --filter Tinebase_ApplicationTest::testGetAllRights";
+            ${cmd} AllTests.php --filter EventManager_ControllerTest::testFileOptionFileUpload
         
             cmd="${cmd} ${ARG_TEST}";
         
