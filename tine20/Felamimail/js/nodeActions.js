@@ -167,8 +167,8 @@ Tine.Felamimail.nodeActions.DeleteFolderAction = {
         const selectedNode = action.node;
         const selModel = selectedNode?.ownerTree?.selModel;
         const selectedNodes = selModel?.selNodes;
-        const account = action.account;
-        const folderStore = selectedNode.ownerTree.folderStore;
+        const treePanel = selectedNode.ownerTree;
+        const targetNodes = selectedNodes.length > 1 ? selectedNodes : [selectedNode];
 
         this.conflictConfirmWin = Tine.widgets.dialog.FileListDialog.openWindow({
             modal: true,
@@ -176,23 +176,62 @@ Tine.Felamimail.nodeActions.DeleteFolderAction = {
             height: 180,
             width: 350,
             title: app.i18n._('Do you really want to delete the following folders?'),
-            text: selectedNodes.map((n) => n.attributes.localname).join('</br>'),
+            text: targetNodes.map((n) => n.attributes.localname).join('</br>'),
             scope: this,
             handler: async function (button) {
                 if (button === 'yes') {
-                    await selectedNodes.reduce(async (prev, selectedNode) => {
-                        const folder = selectedNode.attributes;
-                        try {
-                            selectedNode.getUI().addClass("x-tree-node-loading");
-                            const result = await Tine.Felamimail.deleteFolder(folder.globalname, account.id);
-                            selectedNode.getUI().removeClass("x-tree-node-loading");
-                            selectedNode.remove();
-                            folderStore.remove(folderStore.getById(selectedNode.id));
-                        } catch (e) {
-                            Tine.Felamimail.folderBackend.handleRequestException(e.data);
+                    const folderStore = treePanel.folderStore;
+                    const foldersToDelete = [];
+                    const foldersToMove = {};
+
+                    targetNodes.forEach((node) => {
+                        const folder = node.attributes;
+                        const accountId = folder.account_id;
+                        const account = treePanel.accountStore.getById(accountId);
+                        const trashFolderIdx = folderStore.findBy((folder) => {
+                            return folder.get('globalname') === account.get('trash_folder') && folder.get('account_id') === accountId;
+                        });
+
+                        if (trashFolderIdx > -1) {
+                            const trashFolder = folderStore.getAt(trashFolderIdx);
+                            //always delete folder if parent is already the trash folder
+                            if (folder.path.includes(trashFolder.id)) {
+                                foldersToDelete.push(node);
+                            } else {
+                                if (!foldersToMove[trashFolder.id]) foldersToMove[trashFolder.id] = [];
+                                foldersToMove[trashFolder.id].push(node);
+                            }
+                        } else {
+                            foldersToDelete.push(node);
                         }
-                        return Promise.resolve();
-                    }, Promise.resolve());
+                    })
+
+                    if (Object.keys(foldersToMove).length > 0) {
+                        await Object.entries(foldersToMove).reduce(async (prev, data) => {
+                            const newParentNode = treePanel.getNodeById(data[0]);
+                            await Tine.Felamimail.nodeActions.moveFolders(action, data[1], newParentNode);
+
+                            return Promise.resolve();
+                        }, Promise.resolve());
+                    }
+
+                    if (foldersToDelete.length > 0) {
+                        await foldersToDelete.reduce(async (prev, node) => {
+                            const folder = node.attributes;
+
+                            try {
+                                node.getUI().addClass("x-tree-node-loading");
+                                const result = await Tine.Felamimail.deleteFolder(folder.globalname, folder.account_id);
+                                node.getUI().removeClass("x-tree-node-loading");
+                                node.remove();
+                                folderStore.remove(folderStore.getById(node.id));
+                            } catch (e) {
+                                Tine.Felamimail.folderBackend.handleRequestException(e.data);
+                            }
+                            return Promise.resolve();
+                        }, Promise.resolve());
+                    }
+
                 }
             }
         });
@@ -498,7 +537,6 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
         const treePanel = selectedNode.ownerTree;
         const selModel = treePanel?.selModel;
         const selectedNodes = selModel?.selNodes ?? [];
-        const folderStore = treePanel.folderStore;
 
         treePanel.getSelectionModel().clearSelections();
         const selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
@@ -509,48 +547,60 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
                 async folderselect(newParentNode) {
                     selectPanel.close();
                     newParentNode = treePanel.getNodeById(newParentNode.id); // switch context
-                    const parentGlobalname = newParentNode.attributes.globalname;
-                    newParentNode.getUI().addClass("x-tree-node-loading");
-                    const newNodes = [];
-
-                    await selectedNodes.reduce(async (prev, selectedNode) => {
-                        const folder = selectedNode.attributes;
-                        if (parentGlobalname.replace(new RegExp(`^${folder.globalname.replace('.', '\.')}`), '') !== parentGlobalname) {
-                            return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder into its own subfolder!'));
-                        }
-                        const newGlobalName = _.compact([parentGlobalname, folder.localname]).join(account.get('delimiter'));
-                        try {
-                            selectedNode.getUI().addClass("x-tree-node-loading");
-                            const result = await Tine.Felamimail.moveFolder(newGlobalName, folder.globalname, account.id);
-                            newNodes.push(result);
-                            selectedNode.getUI().removeClass("x-tree-node-loading");
-                            selectedNode.remove();
-                            folderStore.remove(folderStore.getById(selectedNode.id));
-                        } catch (e) {
-                            Tine.Felamimail.folderBackend.handleRequestException(e.data);
-                        }
-                        return Promise.resolve();
-                    }, Promise.resolve());
-
-                    newNodes.forEach((record) => {
-                        const newChildNode = newParentNode.ownerTree.loader.createNode(record);
-                        newParentNode.appendChild(newChildNode);
-                        const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: record});
-                        folderStore.getById(newParentNode.id)?.set('has_children', true);
-                        folderStore.add([newRecord]);
-
-                        treePanel.initNewFolderNode(newRecord);
-                        newParentNode.expand(false, false, () => {
-                            treePanel.getNodeById(newRecord.id).select();
-                        });
-                    })
-                    newParentNode.getUI().removeClass("x-tree-node-loading");
+                    await Tine.Felamimail.nodeActions.moveFolders(action, selectedNodes, newParentNode);
                 }
+
             }
         });
     },
     actionUpdater: Tine.Felamimail.nodeActions.actionUpdater,
 };
+
+Tine.Felamimail.nodeActions.moveFolders = async function (action, selectedNodes, newParentNode) {
+    const selectedNode = action.node;
+    const treePanel = selectedNode.ownerTree;
+    const folderStore = treePanel.folderStore;
+    const parentGlobalname = newParentNode.attributes.globalname;
+    const newNodes = [];
+
+    newParentNode.getUI().addClass("x-tree-node-loading");
+
+    await selectedNodes.reduce(async (prev, node) => {
+        const folder = node.attributes;
+        const accountId = folder.account_id;
+        const account = treePanel.accountStore.getById(accountId);
+
+        if (parentGlobalname.replace(new RegExp(`^${folder.globalname.replace('.', '\.')}`), '') !== parentGlobalname) {
+            return Ext.Msg.alert(app.i18n._('Invalid Selection'), app.i18n._('You cannot move the folder into its own subfolder!'));
+        }
+        const newGlobalName = _.compact([parentGlobalname, folder.localname]).join(account.get('delimiter'));
+        try {
+            node.getUI().addClass("x-tree-node-loading");
+            const result = await Tine.Felamimail.moveFolder(newGlobalName, folder.globalname, account.id);
+            newNodes.push(result);
+            node.getUI().removeClass("x-tree-node-loading");
+            node.remove();
+            folderStore.remove(folderStore.getById(node.id));
+        } catch (e) {
+            Tine.Felamimail.folderBackend.handleRequestException(e.data);
+        }
+        return Promise.resolve();
+    }, Promise.resolve());
+
+    newNodes.forEach((record) => {
+        const newChildNode = newParentNode.ownerTree.loader.createNode(record);
+        newParentNode.appendChild(newChildNode);
+        const newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: record});
+        folderStore.getById(newParentNode.id)?.set('has_children', true);
+        folderStore.add([newRecord]);
+
+        treePanel.initNewFolderNode(newRecord);
+        newParentNode.expand(false, false, () => {
+            treePanel.getNodeById(newRecord.id).select();
+        });
+    })
+    newParentNode.getUI().removeClass("x-tree-node-loading");
+}
 
 Tine.Felamimail.nodeActions.RefreshFolderAction = {
     app: 'Felamimail',
