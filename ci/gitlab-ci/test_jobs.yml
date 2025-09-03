@@ -289,7 +289,7 @@ prevent-upstream-changes:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-upstream-changes/
       allow_failure: true
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  artifacts: {}
+  artifacts: null
 
 prevent-wrong-branch:
   image: alpine
@@ -300,8 +300,6 @@ prevent-wrong-branch:
         echo If this is intentional you can merge the merge request manually or add the label allow-failure-prevent-wrong-branch to allow fail of this check.
         exit 1
       fi
-      
-
   rules:
     - if: $PREVENT_WRONG_BRANCH == "false"
       when: never
