@@ -1,5 +1,9 @@
+test_cloud_generate_deployment_name() {
+    echo -n $DEPLOYMENT_NAME_RAW | sed 's/\./-/g' | sed 's/\//-/g'
+}
+
 test_cloud_deploy() {
-    export DEPLOYMENT_NAME=${CI_ENVIRONMENT_SLUG}
+    export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
     export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
 
     echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
@@ -20,7 +24,7 @@ test_cloud_deploy() {
 }
 
 test_cloud_teardown() {
-    export DEPLOYMENT_NAME=${CI_ENVIRONMENT_SLUG}
+    export DEPLOYMENT_NAME=$(test_cloud_generate_deployment_name)
     export DEPLOYMENT_IMAGE_TAG=${TEST_CLOUD_DEPLOY_DEPLOYMENT_IMAGE_TAG_OVERWRITE:-$(release_get_package_version)}
 
     echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG

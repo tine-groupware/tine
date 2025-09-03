@@ -359,10 +359,7 @@ deploy-test-cloud:
   extends: .deploy-test-cloud
   variables:
     DEPLOYMENT_BASE_DOMAIN: tcloud.tine-dev.de
-  environment:
-    # if running for tags, ci commit ref name is not the branch
-    name: $MAJOR_COMMIT_REF_NAME
-    url: https://${CI_ENVIRONMENT_SLUG}.${DEPLOYMENT_BASE_DOMAIN}
+    DEPLOYMENT_NAME_RAW: ${MAJOR_COMMIT_REF_NAME} # DEPLOYMENT_NAME = MAJOR_COMMIT_REF_NAME with . and / replaced by -
   rules:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
@@ -374,8 +371,9 @@ deploy-test-cloud-nightly:
   extends: .deploy-test-cloud
   variables:
     DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
+    DEPLOYMENT_NAME_RAW: ${CI_ENVIRONMENT_SLUG}  # DEPLOYMENT_NAME = CI_ENVIRONMENT_SLUG (There should be nothing to replace)
   environment:
-    name: nightly-$CI_COMMIT_REF_NAME
+    name: $CI_COMMIT_REF_NAME
     url: https://${CI_ENVIRONMENT_SLUG}.${DEPLOYMENT_BASE_DOMAIN}
     on_stop: teardown-test-cloud-nightly
   rules:
