@@ -2491,8 +2491,10 @@ abstract class Tinebase_Controller_Record_Abstract
      * unDelete linked objects (notes, relations, attachments) of record
      *
      * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _unDeleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _unDeleteLinkedObjects(Tinebase_Record_Interface $_record): void
     {
         if ($_record->has('notes') && count($_record->notes ?: []) > 0) {
             $ids = array();
@@ -2502,11 +2504,14 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_Notes::getInstance()->unDeleteNotes($ids);
         }
 
-        if ($_record->has('relations') && count($_record->relations) > 0) {
+        if ($_record->has('relations') && $_record->relations && count($_record->relations) > 0) {
             Tinebase_Relations::getInstance()->undeleteRelations($_record->relations);
         }
 
-        if ($_record->has('attachments') && count($_record->attachments) > 0 && Tinebase_Core::isFilesystemAvailable()) {
+        if ($_record->has('attachments')
+            && count($_record->attachments) > 0
+            && Tinebase_Core::isFilesystemAvailable()
+        ) {
             foreach ($_record->attachments as $attachment) {
                 Tinebase_FileSystem::getInstance()->unDeleteFileNode($attachment['id']);
             }
