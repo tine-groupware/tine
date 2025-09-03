@@ -861,17 +861,17 @@ class Tinebase_Core
      */
     public static function setupLogger(?\Zend_Log_Writer_Abstract $_defaultWriter = NULL)
     {
-        $config = self::getConfig();
         $logger = new Tinebase_Log();
+        $loggerConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::LOGGER);
         
-        if (isset($config->logger) && $config->logger->active) {
+        if ($loggerConfig && $loggerConfig->active) {
             try {
-                if ($config->logger->tz) {
-                    $logger->setTimezone($config->logger->tz);
+                if ($loggerConfig->tz) {
+                    $logger->setTimezone($loggerConfig->tz);
                 }
-                $logger->addWriterByConfig($config->logger);
-                if ($config->logger->additionalWriters) {
-                    foreach ($config->logger->additionalWriters as $writerConfig) {
+                $logger->addWriterByConfig($loggerConfig);
+                if ($loggerConfig->additionalWriters) {
+                    foreach ($loggerConfig->additionalWriters as $writerConfig) {
                         $logger->addWriterByConfig($writerConfig);
                     }
                 }
@@ -882,11 +882,11 @@ class Tinebase_Core
             }
             
             // For saving log into syslog too, create a key syslog into logger (value does not matter)
-            if ((bool) $config->logger->syslog){
+            if ((bool) $loggerConfig->syslog){
                 $writer = new Zend_Log_Writer_Syslog(array(
                         'application'   => 'Tine 2.0'
                 ));
-                $prio = ($config->logger->priority) ? (int) $config->logger->priority : 3;
+                $prio = ($loggerConfig->priority) ? (int) $loggerConfig->priority : 3;
                 $filter = new Zend_Log_Filter_Priority($prio);
                 $writer->addFilter($filter);
                 $logger->addWriter($writer);
@@ -903,10 +903,10 @@ class Tinebase_Core
         
         self::set(self::LOGGER, $logger);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized.'
-            . (isset($writer) ? ' Writer: ' . $writer::class : ''));
-        if (isset($config->logger) && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) $logger->trace(__METHOD__ . '::' . __LINE__ 
-            .' Logger settings: ' . print_r($config->logger->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            $logger->info(__METHOD__ . '::' . __LINE__ .' Logger initialized.'
+                . (isset($writer) ? ' Writer: ' . $writer::class : ''));
+        }
     }
 
     /**
