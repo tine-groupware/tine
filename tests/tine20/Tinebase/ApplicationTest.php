@@ -46,14 +46,10 @@ class Tinebase_ApplicationTest extends TestCase
         $application = Tinebase_Application::getInstance()->getApplicationByName('Admin');
         $rights = Tinebase_Application::getInstance()->getAllRights($application->getId());
 
-        //print_r($rights);
-
         $this->assertGreaterThan(0, count($rights));
 
         $application = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $rights = Tinebase_Application::getInstance()->getAllRights($application->getId());
-
-        //print_r($rights);
 
         $this->assertGreaterThan(0, count($rights));
     }

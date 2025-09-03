@@ -149,8 +149,7 @@ test_phpunit() {
 
     cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
 
-
-    log "testing ..."
+    log "Testing ..."
     cmd="php -d pcov.directory=$TINE20ROOT/tine20 -d memory_limit=-1 ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
 
     if test -n "${ARG_FILTER}"; then
@@ -167,6 +166,11 @@ test_phpunit() {
 
     mkdir -p ${CI_PROJECT_DIR}/coverage    
     cmd="${cmd} --coverage-cobertura=${CI_PROJECT_DIR}/phpunit-coverage.xml --coverage-html=${CI_PROJECT_DIR}/coverage"
+
+    # TODO remove that when we fixed the logging issue
+    log "The first phpunit command does not write any tine logs - so we call it twice ...";
+    echo "${cmd} AllTests.php --filter Tinebase_ApplicationTest::testGetAllRights";
+    ${cmd} AllTests.php --filter EventManager_ControllerTest::testFileOptionFileUpload
 
     cmd="${cmd} ${ARG_TEST}";
 
