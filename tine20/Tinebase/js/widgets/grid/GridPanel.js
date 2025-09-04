@@ -1183,12 +1183,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
-        var treePanel = this.treePanel || this.getMainScreen().getWestPanel().getContainerTreePanel(),
+        var treePanel = this.treePanel || this.getMainScreen().getWestPanel?.().getContainerTreePanel(),
             _ = window.lodash;
 
         var container = _.get(this.modelConfig, 'import.defaultImportContainerRegistryKey', false);
 
-        if (container) {
+        if (container && treePanel) {
             container = treePanel.getDefaultContainer(container);
         } else if (Ext.isFunction(this.getDefaultContainer)) {
             container = this.getDefaultContainer();
