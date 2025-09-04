@@ -366,6 +366,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             return;
         }
         var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+
+        if (filterModel?.ftb) {
+            filterModel.ftb = this;
+        }
         
         // field
         filter.formFields.field = new Ext.form.ComboBox({

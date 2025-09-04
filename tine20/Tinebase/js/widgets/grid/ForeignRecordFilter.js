@@ -520,6 +520,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             const filterModel = foreignRecordClass.getModelConfiguration()?.filterModel;
 
             filter.toolbar = new Tine.widgets.grid.FilterToolbar({
+                app: this.app,
                 recordClass: foreignRecordClass,
                 title: this.crossRecordForeignField || this.metaDataForField ? this.label : null,
                 filterModels: filterModels,
