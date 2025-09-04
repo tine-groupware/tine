@@ -22,7 +22,7 @@ describe('accounts', () => {
     let newUserDialog;
     test('new user', async () => {
         newUserDialog = lib.getNewWindow();
-        await expectPuppeteer(page).toClick('button', {text: 'Benutzer hinzufügen'});
+        await expect(page).toClick('button', {text: 'Benutzer*in hinzufügen'});
         newUserDialog = await newUserDialog;
         await new Promise(r => setTimeout(r, 2500));
         await lib.makeScreenshot(newUserDialog,{path: 'screenshots/Administration/3_admin_benutzer_neu.png'});
