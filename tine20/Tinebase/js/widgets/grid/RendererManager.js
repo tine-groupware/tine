@@ -218,7 +218,7 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'keyfield':
                 case 'keyField':
-                    renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(appName, _.get(fieldDefinition,
+                    renderer = Tine.Tinebase.widgets.keyfield.Renderer.get(fieldDefinition?.config?.application || appName, _.get(fieldDefinition,
                         'keyFieldConfigName', fieldDefinition.name));
                     break;
                 case 'datetime_separated_date':
