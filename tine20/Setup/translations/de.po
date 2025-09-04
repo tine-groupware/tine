@@ -93,7 +93,7 @@ msgid "TLS client certificate"
 msgstr "TLS Client-Zertifikat"
 
 msgid "Initial Admin User"
-msgstr "Initialer Admin-Benutzer*in"
+msgstr "Initiale*r Admin-Benutzer*in"
 
 msgid "Initial admin login name"
 msgstr "Initialer Admin Loginname"

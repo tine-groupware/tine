@@ -66,7 +66,7 @@ msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
 msgid "Folders of other users"
-msgstr "Ordner anderer Benutzer"
+msgstr "Ordner anderer Benutzer*innen"
 
 msgid "Received"
 msgstr "Erhalten"
@@ -293,7 +293,7 @@ msgid "Download"
 msgstr "Herunterladen"
 
 msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer oder einer anderen Systembenutzerin zu teilen"
 
 msgid "Grants"
 msgstr "Berechtigungen"
@@ -526,7 +526,7 @@ msgid "Once a year"
 msgstr "Einmal pro Jahr"
 
 msgid "Search for users..."
-msgstr "Suche nach Benutzern..."
+msgstr "Suche nach Benutzer*innen..."
 
 msgid "No permission"
 msgstr "Keine Berechtigung"
@@ -595,10 +595,10 @@ msgid "Usage by File Type"
 msgstr "Verbrauch nach Dateityp"
 
 msgid "User"
-msgstr "Benutzer"
+msgstr "Benutzer*in"
 
 msgid "Usage by User"
-msgstr "Verbrauch nach Benutzer"
+msgstr "Verbrauch nach Benutzer*innen"
 
 msgid "unknown"
 msgstr "unbekannt"
@@ -617,6 +617,9 @@ msgstr "Aktion"
 msgid "No Files Found"
 msgstr "Keine Dateien gefunden"
 
+msgid "Folders of other users"
+msgstr "Ordner anderer Benutzer*innen"
+
 msgid "This folder appears to be empty."
 msgstr "Dieser Ordner scheint leer zu sein."
 
@@ -625,6 +628,140 @@ msgstr "Datei nicht gefunden!"
 
 msgid "Password required for download"
 msgstr "Zum Herunterladen Passwort eingeben"
+
+msgid "Loading"
+msgstr "Laden"
+
+msgid "This is possible for .doc, .jpg, .pdf and other file formats."
+msgstr ""
+"Das geht z.B. für .doc, .jpg, .pdf und noch für weitere Dateiformate."
+
+msgid ""
+"This file has no content. The upload has either failed or is not yet "
+"complete."
+msgstr ""
+"Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen "
+"oder noch nicht fertig."
+
+msgid ""
+"Download links can be protected with a password. Without a password, "
+"anyone with the link can access the selected files."
+msgstr ""
+"Download Links können mit einem Passwort geschützt werden. Wenn kein "
+"Passwort angegeben ist, kann jeder der den Link kennt auf die "
+"selektierten Dateien zugreifen."
+
+msgid "Creating a new Download Link..."
+msgstr "Erstelle einen neuen Download Link..."
+
+msgid "Valid Until"
+msgstr "Gültig bis"
+
+#, python-brace-format
+msgid ""
+"File named {0} already exists in this location. Do you want to replace it "
+"with the current one?"
+msgstr ""
+"Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese "
+"durch die aktuelle Datei ersetzen?"
+
+msgid "An error occurred while creating this folder"
+msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
+
+msgid "An item with this name already exists!"
+msgstr "Ein Item mit diesem Namen ist schon vorhanden!"
+
+#, python-brace-format
+msgid "You must enter a {0} name!"
+msgstr "Sie müssen einen {0}-namen angeben!"
+
+#, python-brace-format
+msgid "A folder named {0} already exists!"
+msgstr "Ein Ordner mit dem Namen ist bereits vorhanden!"
+
+msgid "Checking..."
+msgstr "Prüfe..."
+
+msgid "Send as email"
+msgstr "Sende als E-Mail"
+
+msgid "This folder has its own permissions"
+msgstr "Dieser Ordner hat eigene Berechtigungen"
+
+msgid ""
+"Permissions of a folder also apply recursively to all subfolders unless "
+"they have their own permissions."
+msgstr ""
+"Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei "
+"denn, sie verfügen über eigene Rechte."
+
+msgid "This folder is part of the data vault"
+msgstr "Dieser Ordner ist Teil des Datentresors"
+
+#, python-brace-format
+msgid "Permissions are inherited from {locationsHtml} as follows"
+msgstr "Berechtigungen geerbt von {locationsHtml} wie folgt"
+
+msgid "Permission to download files"
+msgstr "Das Recht, Dateien herunterzuladen"
+
+msgid "Permission to create anonymous download links for files"
+msgstr "Das Recht, anonyme Download Links für Dateien zu erstellen"
+
+msgid "Confirm Changing of Folder Permissions"
+msgstr "Ordner Berechtigungen werden geändert"
+
+msgid ""
+"You are about to move a folder that has its own permissions. These "
+"permissions will be lost, and the folder will inherit permissions from "
+"its new parent folder."
+msgstr ""
+"Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen "
+"enthält. Diese gehen verloren und es werden die Berechtigungen des neuen "
+"übergeordneten Ordners geerbt."
+
+msgid "Edit file"
+msgstr "Datei bearbeiten"
+
+msgid ""
+"You have unfinished uploads. Please check the upload monitor and restart "
+"any failed uploads."
+msgstr ""
+"Es gab fehlgeschlagene Uploads. Bitte überprüfen Sie den Upload-"
+"Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
+
+msgid "File contents are part of the search index"
+msgstr "Dateiinhalte sind im Suchindex"
+
+msgid "Open the Data Safe"
+msgstr "Datentresor öffnen"
+
+msgid "Locking the data safe..."
+msgstr "Datentresor wird geschlossen..."
+
+msgid "Unlocking the data safe..."
+msgstr "Datentresor wird geöffnet..."
+
+msgid "Close the Data Safe"
+msgstr "Datentresor schließen"
+
+msgid "Search for users..."
+msgstr "Suche nach Benutzern..."
+
+msgid "Search for groups..."
+msgstr "Suche nach Gruppen..."
+
+msgid "This folder has its own notification settings"
+msgstr "Dieser Ordner hat eigene Benachrichtigungseinstellungen"
+
+msgid "This folder has its own revision settings"
+msgstr "Dieser Ordner hat eigene Revisions Einstellungen"
+
+msgid "Limit number of revisions to"
+msgstr "Revisionen limitieren auf"
+
+msgid "This folder has its own quota"
+msgstr "Dieser Ordner hat ein eigenes Kontingent"
 
 msgid "Submit"
 msgstr "Abschicken"

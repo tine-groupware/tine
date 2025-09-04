@@ -87,13 +87,13 @@ msgid "Teacher password"
 msgstr "Passwort für Lehrende"
 
 msgid "Student username schema"
-msgstr "Benutzernamensschema für Schüler*innen"
+msgstr "Benutzer*innennamensschema für Schüler*innen"
 
 msgid "Student username schema (0 = only lastname (10 chars), 1 = lastname + 2 chars of firstname"
-msgstr "Benutzernamensschema für Schüler*innen (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
+msgstr "Benutzer*innennamensschema für Schüler*innen (0 = nur Nachname (10 Zeichen), 1 = Nachname + 2 Zeichen des Vornamens)"
 
 msgid "Samba user settings"
-msgstr "Samba-Benutzereinstellungen"
+msgstr "Samba-Benutzer*inneneinstellungen"
 
 msgid "Default department"
 msgstr "Standard Abteilung"

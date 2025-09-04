@@ -35,10 +35,10 @@ msgid "Delete access log entries."
 msgstr "Zugriffsprotokoll-Einträge löschen."
 
 msgid "Manage accounts"
-msgstr "Benutzerkonten verwalten"
+msgstr "Benutzer*innenkonten verwalten"
 
 msgid "Add and edit users and groups, add group members, change user passwords."
-msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen."
+msgstr "Benutzer*innen und Gruppen anlegen und bearbeiten, Benutzer*innen zu Gruppen zuordnen, Passwörter zurücksetzen."
 
 msgid "Manage email accounts"
 msgstr "E-Mail Konten verwalten"
@@ -56,7 +56,7 @@ msgid "Manage roles"
 msgstr "Rollen verwalten"
 
 msgid "Add and edit roles, add new members to roles, add application rights to roles."
-msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen."
+msgstr "Rollen anlegen und bearbeiten, Benutzer*innenkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen."
 
 msgid "Manage shared tags"
 msgstr "Gemeinsame Tags verwalten"
@@ -107,10 +107,10 @@ msgid "View access log list."
 msgstr "Zugriffsprotokoll-Liste ansehen."
 
 msgid "View accounts"
-msgstr "Benutzerkonten ansehen"
+msgstr "Benutzer*innenkonten ansehen"
 
 msgid "View accounts list and details."
-msgstr "Benutzerkonten ansehen (Liste und Details)"
+msgstr "Benutzer*innenkonten ansehen (Liste und Details)"
 
 msgid "View email accounts"
 msgstr "E-Mail Konten ansehen"
@@ -191,7 +191,7 @@ msgid "Default password must change for new user"
 msgstr "Erst-Passwort muss von neuen Nutzenden geändert werden"
 
 msgid "Default IMAP user settings"
-msgstr "Standard IMAP-Benutzer-Einstellungen"
+msgstr "Standard IMAP-Benutzer*innen-Einstellungen"
 
 msgid "Enabled Features"
 msgstr "Aktiviertes Features"
@@ -203,7 +203,7 @@ msgid "Prevent special chars in login name"
 msgstr "Vermeiden Sie Sonderzeichen im Anmeldenamen"
 
 msgid "Force retype of new password in user edit dialog"
-msgstr "Erzwinge die erneute Eingabe des neuen Passworts im Benutzer-Bearbeitungsdialog"
+msgstr "Erzwinge die erneute Eingabe des neuen Passworts im Benutzer*innen-Bearbeitungsdialog"
 
 msgid "Enable XProps Editor in Edit-Dialogs"
 msgstr "XProps-Editor in Bearbeitungsdialogen aktivieren"
@@ -212,7 +212,7 @@ msgid "Prevent applications disable in front end"
 msgstr "Deaktivieren von Anwendungen im Frontend verhindern"
 
 msgid "Allow to change user type"
-msgstr "Benutzertyp ändern erlauben"
+msgstr "Benutzer*innentyp ändern erlauben"
 
 msgid "Modules to show in admin app, default value null means all modules."
 msgstr "Module, die in der Admin-App angezeigt werden sollen. Der Standardwert null bedeutet alle Module."
@@ -243,13 +243,13 @@ msgid "Password is needed for system account creation"
 msgstr "Passwort wird für die Erstellung eines E-Mail-Kontos benötigt"
 
 msgid "Maximum number of users reached."
-msgstr "Maximale Anzahl von Benutzern erreicht."
+msgstr "Maximale Anzahl von Benutzer*innen erreicht."
 
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
 msgstr "Bitte kontaktieren Sie Metaways Infosystems GmbH um eine Lizenz mit entsprechend höherer Nutzeranzahl zu erwerben."
 
 msgid "Delete user will trigger the [V] events, do you still want to execute this action?"
-msgstr "Das Löschen des Benutzers wird die mit [V] markierten Aktionen auslösen, wollen Sie das Löschen durchführen?"
+msgstr "Das Löschen des Benutzers oder der Benutzerin wird die mit [V] markierten Aktionen auslösen, wollen Sie das Löschen durchführen?"
 
 msgid "CSV all data"
 msgstr "CSV Alle Daten"
@@ -267,8 +267,8 @@ msgstr "IP-Adresse"
 
 msgid "User"
 msgid_plural "Users"
-msgstr[0] "Benutzer"
-msgstr[1] "Benutzer"
+msgstr[0] "Benutzer*in"
+msgstr[1] "Benutzer*innen"
 
 msgid "Login Time"
 msgstr "Einlogzeit"
@@ -283,7 +283,7 @@ msgid "Session ID"
 msgstr "Session-ID"
 
 msgid "Login Name"
-msgstr "Benutzername"
+msgstr "Benutzer*innenname"
 
 msgid "Name"
 msgstr "Name"
@@ -295,22 +295,22 @@ msgid "User Agent"
 msgstr ""
 
 msgid "user blocked"
-msgstr "Benutzer gesperrt"
+msgstr "Benutzer*in gesperrt"
 
 msgid "password expired"
 msgstr "Passwort abgelaufen"
 
 msgid "user disabled"
-msgstr "Benutzer deaktiviert"
+msgstr "Benutzer*in deaktiviert"
 
 msgid "invalid password"
 msgstr "ungültiges Passwort"
 
 msgid "ambiguous username"
-msgstr "Benutzername mehrdeutig"
+msgstr "Benutzer*innenname mehrdeutig"
 
 msgid "user not found"
-msgstr "Benutzer nicht gefunden"
+msgstr "Benutzer*in nicht gefunden"
 
 msgid "failure"
 msgstr "Gescheitert"
@@ -612,7 +612,7 @@ msgid "Email"
 msgstr "E-Mail"
 
 msgid "Only system accounts can be added to Addressbook group"
-msgstr "Nur Systembenutzer in der zugehörigen Addressbuch-Gruppe erlauben"
+msgstr "Nur Systembenutzer*innen in der zugehörigen Addressbuch-Gruppe erlauben"
 
 msgid "Group Members"
 msgstr "Gruppenmitglieder"
@@ -646,7 +646,7 @@ msgid "No groups to display"
 msgstr "Keine Gruppen anzuzeigen"
 
 msgid "Account only"
-msgstr "Nur Systembenutzer"
+msgstr "Nur Systembenutzer*innen"
 
 msgid "Creation Time"
 msgstr "Erstellungszeit"
@@ -673,8 +673,8 @@ msgstr "Kontingent"
 
 msgid "Email User"
 msgid_plural "Email Users"
-msgstr[0] "E-Mail-Benutzer"
-msgstr[1] "E-Mail-Benutzer"
+msgstr[0] "E-Mail-Benutzer*in"
+msgstr[1] "E-Mail-Benutzer*innen"
 
 msgid "IMAP Quota"
 msgstr "IMAP Kontingent"
@@ -818,7 +818,7 @@ msgid "Context"
 msgstr "Kontexte"
 
 msgid "Account Rights"
-msgstr "Benutzerrechte"
+msgstr "Benutzer*innenrechte"
 
 msgid "Tag Name"
 msgstr "Tag Name"
@@ -880,7 +880,7 @@ msgid "Allowed Domains"
 msgstr "Erlaubte Domänen"
 
 msgid "Special characters are not allowed in login name."
-msgstr "Der Benutzername darf keine Sonderzeichen enthalten."
+msgstr "Der Benutzer*innenname darf keine Sonderzeichen enthalten."
 
 msgid "Passwords do not match!"
 msgstr "Passwörter sind ungleich!"
@@ -974,7 +974,7 @@ msgid "Forwarding to self"
 msgstr "Weiterleitung zu sich selbst"
 
 msgid "You are not allowed to set a forwarding email address that is identical to the users primary email or one of his aliases."
-msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers oder einem seiner Aliase identisch ist."
+msgstr "Sie dürfen keine E-Mail-Adresse zur Weiterleitung festlegen, die mit der primären E-Mail-Adresse des Benutzers, der Benutzerin oder eines deren Aliase identisch ist."
 
 msgid "Email Forward"
 msgstr "E-Mail weiterleiten"
@@ -995,7 +995,7 @@ msgid "Password is expired in accordance with the password policy and needs to b
 msgstr "Das Passwort ist gemäß der Passwortrichtlinie abgelaufen und muss geändert werden"
 
 msgid "Account"
-msgstr "Benutzerkonto"
+msgstr "Benutzer*innenkonto"
 
 msgid "First name"
 msgstr "Vorname"
@@ -1025,7 +1025,7 @@ msgid "OpenID"
 msgstr "OpenID"
 
 msgid "User Type"
-msgstr "Benutzer Typ"
+msgstr "Benutzer*innentyp"
 
 msgid "enabled"
 msgstr "aktiviert"
@@ -1043,7 +1043,7 @@ msgid "Invalid Status"
 msgstr "Ungültiger Status"
 
 msgid "The blocked status is only valid if the user has attempted to log in with an incorrect password too many times. It is not possible to set this status here."
-msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
+msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer oder die Benutzerin sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
 
 msgid "Expires"
 msgstr "Verfällt"
@@ -1088,10 +1088,10 @@ msgid "The selected contact will be updated"
 msgstr "Der ausgewählte Kontakt wird aktualisiert"
 
 msgid "Enable Account"
-msgstr "Benutzer aktivieren"
+msgstr "Benutzer*in aktivieren"
 
 msgid "Disable Account"
-msgstr "Benutzer deaktivieren"
+msgstr "Benutzer*in deaktivieren"
 
 msgid "Reset Password"
 msgstr "Passwort zurücksetzen"
@@ -1109,12 +1109,12 @@ msgid "Password changed"
 msgstr "Passwort geändert"
 
 msgid "Users"
-msgstr "Benutzer"
+msgstr "Benutzer*innen"
 
 msgid "Samba User"
 msgid_plural "Samba Users"
-msgstr[0] "Samba-Benutzer"
-msgstr[1] "Samba-Benutzer"
+msgstr[0] "Samba-Benutzer*in"
+msgstr[1] "Samba-Benutzer*innen"
 
 msgid "GENDER_Task config"
 msgstr "female"
