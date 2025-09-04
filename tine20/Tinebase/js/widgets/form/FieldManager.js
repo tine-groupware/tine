@@ -335,7 +335,7 @@ Tine.widgets.form.FieldManager = function() {
                     break
                 case 'keyfield':
                     field.xtype = 'widget-keyfieldcombo';
-                    field.app = app;
+                    field.app = fieldDefinition.config?.application || app;
                     field.keyFieldName = fieldDefinition.name;
                     break;
                 case 'text':

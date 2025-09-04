@@ -672,6 +672,9 @@ Record.create = function(o, meta) {
     f.getProxy = function() {
         return get(window, `Tine.${p.appName}.${p.modelName.toLowerCase()}Backend`);
     }
+    f.setFromJson = function(json) {
+        return Record.setFromJson(json, p);
+    }
 
     f.init = function(o, meta) {
         if (p.fields || p.isInitialized) return;
