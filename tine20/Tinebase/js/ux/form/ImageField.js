@@ -138,6 +138,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     * show image
     */
     updateImage: function () {
+        if (!this.rendered) return;
         var img = Ext.DomHelper.insertAfter(this.imageCt, '<img src="' + this.value + '"/>' , true);
         this.imageCt.remove();
         this.imageCt = img;
