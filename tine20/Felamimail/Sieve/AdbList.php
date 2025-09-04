@@ -185,7 +185,8 @@ class Felamimail_Sieve_AdbList
                 ->xprops()[Addressbook_Model_List::XPROP_SIEVE_ALLOW_ONLY_MEMBERS]) {
             if ($sieveRule->_allowExternal) {
                 $translation = Tinebase_Translation::getTranslation('Felamimail');
-                throw new Tinebase_Exception_SystemGeneric($translation->_('Cannot combine "allow external" and "allow only members" options'));
+                throw new Tinebase_Exception_SystemGeneric($translation->_(
+                    'Cannot combine "allow external" and "allow only members" options'));
             }
             $sieveRule->_allowOnlyGroupMembers = true;
         }
@@ -202,8 +203,23 @@ class Felamimail_Sieve_AdbList
         return $sieveRule;
     }
 
-    static public function setScriptForList(Addressbook_Model_List $list)
+    /**
+     * @param Addressbook_Model_List $list
+     * @return bool
+     * @throws Felamimail_Exception_SieveInvalidCredentials
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    static public function setScriptForList(Addressbook_Model_List $list): bool
     {
+        if (!Tinebase_EmailUser::manages(Tinebase_Config::SIEVE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                    __LINE__ . ' SIEVE management deactivated');
+            }
+            return false;
+        }
+
         $oldValue = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
         $raii = new Tinebase_RAII(function() use ($oldValue) {
             Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldValue);});
@@ -223,8 +239,10 @@ class Felamimail_Sieve_AdbList
 
         $sieveRule = static::createFromList($list)->__toString();
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
-            __LINE__ . ' add sieve script: ' . $sieveRule);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' add sieve script: ' . $sieveRule);
+        }
 
         try {
             Felamimail_Controller_Sieve::getInstance()->setAdbListScript($account,
