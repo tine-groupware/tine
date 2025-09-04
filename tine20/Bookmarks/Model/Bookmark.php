@@ -92,6 +92,7 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
                 self::NULLABLE      => false,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL         => 'Url', // _('Url')
+                self::SHY           => true,
                 self::QUERY_FILTER  => true
             ],
             self::FLDS_DESCRIPTION => [
