@@ -3,8 +3,8 @@ avialable parameters:
     link
     app.branding.title
     contact
-    localizeString(dipr.name, app.user.locale)
-    localizeString(dipr.description, app.user.locale)
+    localizeString(dip.name, app.user.locale)
+    localizeString(dip.description, app.user.locale)
 #}
 
 {#
@@ -14,14 +14,14 @@ url: GDPR/view/manageConsent/contactId
 
 {% block manageConsentPageExplainText %}
     {% if contact != '' %}
-        <h1>{{ 'Consent from' }}: <span>{{ contact.email }}</span></h1>
+        <h1>{{ _('Consent from') }}: <span>{{ contact.email }}</span></h1>
         <div class="my-4">
-            {% if contact.n_fileas != '' %}<a>Name: {{ contact.n_fileas }}</a><br>{% endif %}
-            {% if contact.org_name != '' %}<a>Organization: {{ contact.org_name }}</a>{% endif %}
+            {% if contact.n_fileas != '' %}<a>{{ _('Name') }} : {{ contact.n_fileas }}</a><br>{% endif %}
+            {% if contact.org_name != '' %}<a>{{ _('Organization') }} : {{ contact.org_name }}</a>{% endif %}
         </div>
     {% endif %}
         <div class="my-4">
-            <a><b>{{ 'Welcome to your consent management.'}}</b></a><br>
-            <a>{{ 'Here you can decide for which purposes we may contact you.'}}</a>
+            <a><b>{{ _('Welcome to your consent management.') }}</b></a><br>
+            <a>{{ _('Here you can decide for which purposes we may contact you.') }}</a>
         </div>
 {% endblock %}

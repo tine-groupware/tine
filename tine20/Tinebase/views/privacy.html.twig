@@ -1,184 +1,185 @@
 {% extends 'Tinebase/views/base.html.twig' %}
 
 {% block content %}
+<h2 class="mb-4 text-center text-primary">PRIVACY POLICY</h2>
 <pre>
-    {{ app.branding.title }} PRIVACY POLICY
-    Version 2, 28 November 2009
+{{ app.branding.title }} PRIVACY POLICY
+Version 2, 28 November 2009
 
 
-    {{ app.branding.title }} takes privacy seriously.  According to our key principles of
-    openness, freedom, transparency and quality, privacy is in fact a core
-    component and motivation behind the {{ app.branding.title }} software.
+{{ app.branding.title }} takes privacy seriously.  According to our key principles of
+openness, freedom, transparency and quality, privacy is in fact a core
+component and motivation behind the {{ app.branding.title }} software.
 
-    In Contrast to many other web services where using the software is paid
-    by the disposal of personal information and the abundance of privacy the
-    {{ app.branding.title }} open source software gives back freedom and privacy to its
-    users.
+In Contrast to many other web services where using the software is paid
+by the disposal of personal information and the abundance of privacy the
+{{ app.branding.title }} open source software gives back freedom and privacy to its
+users.
 
-    In the following privacy policy we explain how {{ app.branding.title }} may impact its
-    users privacy and discuss topics to consider from administrative side to
-    ensure and enhance the users privacy.
-
-
-    SECTION I: DATA STORAGE
-
-    (a) Related Software Products
-    {{ app.branding.title }} is a software which runs in conjunction with various related
-    software products such as Web-Servers, Database-Servers, Directory-
-    Servers, SMTP- and IMAP-Servers and others.  All these related software
-    products may store personal and sensitive data which could impact the
-    privacy of {{ app.branding.title }} users in various ways. In first place the logfiles
-    of these related software products must be considered, as they may
-    contain personal or confidential data. For further impacts on the users
-    privacy the user manuals of the related software products have to be
-    consulted.
-
-    (b) Database
-    {{ app.branding.title }} stores almost any information in the configured databases.
-    These databases contain personal and confidential data. As such these
-    databases are to be protected against any form of unauthorized access.
-    More details about securing the database can be found in the vendors
-    users manual.
-
-    (c) Session Files
-    {{ app.branding.title }} stores personal information about the user (username,
-    fullname, connection IP-Address etc.) in the users session file of the
-    web-server. These session files have to be protected against any form of
-    unauthorized access. In the {{ app.branding.title }} setup process the path where this
-    session files are saved can be configured.
-
-    (d) Caches
-    {{ app.branding.title }} maintains caches to improve the performance of the software.
-    These caches may contain sensitive or personal data.  Therefore the
-    caches have to be protected against unauthorized access in any form. In
-    the {{ app.branding.title }} setup process the path where cache files are saved can be
-    configured.
-
-    (e) Logfiles
-    {{ app.branding.title }} is capable to write logfiles containing information of
-    operation in different levels. Depending on the level this information
-    may contain sensitive or personal data.  This is particularly the case
-    for the log levels DEBUG and INFO.  Therefore the logfiles have to be
-    protected against unauthorized access in any form.  In the {{ app.branding.title }}
-    setup process the path where logfiles are saved and the log level can be
-    configured.
-
-    (f) Error Messages
-    If {{ app.branding.title }} detects an exceptional state of the software, informations
-    about the exceptional state are reported in the logfiles and to the
-    user. This information contain a so called 'stack trace' of the point
-    where the exceptional state got detected. This stack traces are
-    extremely useful to track the source of the exceptional state, e.g. bugs
-    or misconfigurations of the system, but also may contain sensitive or
-    personal data of the current user.  To suppress the stack traces in the
-    error messages the configuration 'suppressExceptionTraces' can be set in
-    the installations config.inc.php.
-
-    (g) User Client Session Data
-    The {{ app.branding.title }} client software is a javascript software which runs in the
-    browser of the user. During a users session, this client holds various
-    caches and local stores of data objects which may contain personal or
-    sensitive data. Therefore the computer system the client software runs
-    on is to be protected against unauthorized access in any form.
-    Destruction of these client side data should take place at quitting time
-    of the user agent. Details of this destruction process are subject of
-    the particular privacy policies of the clients user agent.
+In the following privacy policy we explain how {{ app.branding.title }} may impact its
+users privacy and discuss topics to consider from administrative side to
+ensure and enhance the users privacy.
 
 
-    SECTION II: DATA TRANSFER WITH VENDORS SERVICES
+SECTION I: DATA STORAGE
 
-    (a) Bug Reports
-    If {{ app.branding.title }} detects an exceptional state of the software, informations
-    about the exceptional state are reported to the user containing a "Bug
-    Reporting Form". In this form the user can add a description of what he
-    did when the error occurred and moreover add contact information for
-    further inquiries. Submissions of this form are send as 'Bug Reports' to
-    the software vendor and are extremely useful to find bugs and exception
-    sources within the software. The permission to send Bug Reports can be
-    set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
-    Additionally to the description and optional contact information, these
-    Bug Reports contain the version of the {{ app.branding.title }} installation and, if
-    configured, the stack trace of the exceptional state as well as
-    informations about the request and response of the transaction which
-    lead to the exceptional state. Due to the nature of data transmission,
-    the referrer, user agent and IP address of the user are included in the
-    submission.
+(a) Related Software Products
+{{ app.branding.title }} is a software which runs in conjunction with various related
+software products such as Web-Servers, Database-Servers, Directory-
+Servers, SMTP- and IMAP-Servers and others.  All these related software
+products may store personal and sensitive data which could impact the
+privacy of {{ app.branding.title }} users in various ways. In first place the logfiles
+of these related software products must be considered, as they may
+contain personal or confidential data. For further impacts on the users
+privacy the user manuals of the related software products have to be
+consulted.
 
-    (b) Version Checks
-    {{ app.branding.title }} offers the possibility to check for updates and inform the
-    user if new versions or critical updates of the software are available.
-    The permission to check for new versions can be set as 'Role Right' in
-    the {{ app.branding.title }} Role Administration module. The request for new versions
-    contain the current version of the {{ app.branding.title }} installation.  Due to the
-    nature of data transmission, the referrer, user agent and IP address of
-    the user are included in the request.
+(b) Database
+{{ app.branding.title }} stores almost any information in the configured databases.
+These databases contain personal and confidential data. As such these
+databases are to be protected against any form of unauthorized access.
+More details about securing the database can be found in the vendors
+users manual.
 
-    (c) Survey Offerings
-    To consequently improve the usability of the {{ app.branding.title }} the software
-    vendor offers user surveys where users directly can give feedback and
-    help to improve the software to their own needs. To check if a new
-    survey for participation is available a request to a foreign website has
-    to be made. To suppress this request, the configuration 'denySurveys'
-    can be set in the  config.inc.php config file. Due to the nature of data
-    transmission, the referrer, user agent and IP address of the user are
-    included in the request.
+(c) Session Files
+{{ app.branding.title }} stores personal information about the user (username,
+fullname, connection IP-Address etc.) in the users session file of the
+web-server. These session files have to be protected against any form of
+unauthorized access. In the {{ app.branding.title }} setup process the path where this
+session files are saved can be configured.
 
-    (d) Usage of Transfered Data
-    The {{ app.branding.title }} software vendor process and stores transmitted data
-    exclusively for the purpose of analyzing and resolving technical
-    problems as well as gaining statistical data about the propagation of
-    the {{ app.branding.title }} software suite. In rare cases transmitted bug reports might
-    contain personal or sensitive data according to paragraph (a). The
-    software vendor guarantees to handle such data with absolute discretion
-    and never to systematically collect, analyze or publish such data. Bug
-    reports data are kept in an access controlled and private database and
-    deleted as soon as the technical problem is resolved.
+(d) Caches
+{{ app.branding.title }} maintains caches to improve the performance of the software.
+These caches may contain sensitive or personal data.  Therefore the
+caches have to be protected against unauthorized access in any form. In
+the {{ app.branding.title }} setup process the path where cache files are saved can be
+configured.
+
+(e) Logfiles
+{{ app.branding.title }} is capable to write logfiles containing information of
+operation in different levels. Depending on the level this information
+may contain sensitive or personal data.  This is particularly the case
+for the log levels DEBUG and INFO.  Therefore the logfiles have to be
+protected against unauthorized access in any form.  In the {{ app.branding.title }}
+setup process the path where logfiles are saved and the log level can be
+configured.
+
+(f) Error Messages
+If {{ app.branding.title }} detects an exceptional state of the software, informations
+about the exceptional state are reported in the logfiles and to the
+user. This information contain a so called 'stack trace' of the point
+where the exceptional state got detected. This stack traces are
+extremely useful to track the source of the exceptional state, e.g. bugs
+or misconfigurations of the system, but also may contain sensitive or
+personal data of the current user.  To suppress the stack traces in the
+error messages the configuration 'suppressExceptionTraces' can be set in
+the installations config.inc.php.
+
+(g) User Client Session Data
+The {{ app.branding.title }} client software is a javascript software which runs in the
+browser of the user. During a users session, this client holds various
+caches and local stores of data objects which may contain personal or
+sensitive data. Therefore the computer system the client software runs
+on is to be protected against unauthorized access in any form.
+Destruction of these client side data should take place at quitting time
+of the user agent. Details of this destruction process are subject of
+the particular privacy policies of the clients user agent.
 
 
-    SECTION III: DATA TRANSFER WITH THRID PARTY SERVICES
+SECTION II: DATA TRANSFER WITH VENDORS SERVICES
 
-    (a) Third Party Mail Systems
-    The {{ app.branding.title }} email client can be configured to access mail systems of
-    third party providers. {{ app.branding.title }} has no influence of the data handling
-    and privacy implications related to the policies of the third party
-    service vendors. In addition to the personal or sensitive data stored
-    and exchanged with the third party service connections to third party
-    mail services also contain the IP-Address of the {{ app.branding.title }} server system
-    or upstream security system due to the nature of data transmission. The
-    permission for users to define their own mail services, including third
-    party services, can be set as a 'Role Right' in the {{ app.branding.title }} Role
-    Administration module. Considerations about the permission to connect
-    third party mail systems should imply administrative tasks to ensure
-    encrypted network communication to these systems.
+(a) Bug Reports
+If {{ app.branding.title }} detects an exceptional state of the software, informations
+about the exceptional state are reported to the user containing a "Bug
+Reporting Form". In this form the user can add a description of what he
+did when the error occurred and moreover add contact information for
+further inquiries. Submissions of this form are send as 'Bug Reports' to
+the software vendor and are extremely useful to find bugs and exception
+sources within the software. The permission to send Bug Reports can be
+set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
+Additionally to the description and optional contact information, these
+Bug Reports contain the version of the {{ app.branding.title }} installation and, if
+configured, the stack trace of the exceptional state as well as
+informations about the request and response of the transaction which
+lead to the exceptional state. Due to the nature of data transmission,
+the referrer, user agent and IP address of the user are included in the
+submission.
 
-    (b) Using of ActiveSync services
-    {{ app.branding.title }} offers an ActiveSync module for data synchronization with
-    mobile devices. The ActiveSync module respects access rights and user
-    data grants of the user the device authenticates for. {{ app.branding.title }} has no
-    influence of the data handling and privacy implications of the
-    ActiveSync clients. The permission to use the ActiveSync service can be
-    set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
-    Considerations about the permission to synchronize data using the
-    ActiveSync service should imply administrative tasks to ensure encrypted
-    network communication between the related systems.
+(b) Version Checks
+{{ app.branding.title }} offers the possibility to check for updates and inform the
+user if new versions or critical updates of the software are available.
+The permission to check for new versions can be set as 'Role Right' in
+the {{ app.branding.title }} Role Administration module. The request for new versions
+contain the current version of the {{ app.branding.title }} installation.  Due to the
+nature of data transmission, the referrer, user agent and IP address of
+the user are included in the request.
 
-    (c) Third Party Service Consumers
-    {{ app.branding.title }} comes with a variety of interfaces and API's, allowing the
-    exchange of data with authenticated users. Those interfaces and API's
-    respects access rights and user data grants of the user the service
-    consumer is authenticated for. {{ app.branding.title }} has no influence of the data
-    handling and privacy implications of third party service consumers.
-    Considerations about offering the {{ app.branding.title }} service in a public network
-    should imply administrative tasks to ensure encrypted network
-    communication between all related systems.
+(c) Survey Offerings
+To consequently improve the usability of the {{ app.branding.title }} the software
+vendor offers user surveys where users directly can give feedback and
+help to improve the software to their own needs. To check if a new
+survey for participation is available a request to a foreign website has
+to be made. To suppress this request, the configuration 'denySurveys'
+can be set in the  config.inc.php config file. Due to the nature of data
+transmission, the referrer, user agent and IP address of the user are
+included in the request.
 
-    (d) OpenStreetMap.org services
-    {{ app.branding.title }} uses a number of services offered by openStreetMap.org.
-    OpenStreetMap.org is a community dedicated to mapping and geolocation
-    related topics. As of the nature of web-services, {{ app.branding.title }} needs to
-    send personal data to openstreetmap.org as input parameters for retrieving
-    maps or geolocations. To disable communications and features based on
-    this services, you need to set the configuration option 'useMapService' to
-    false in the installations config.inc.php.
+(d) Usage of Transfered Data
+The {{ app.branding.title }} software vendor process and stores transmitted data
+exclusively for the purpose of analyzing and resolving technical
+problems as well as gaining statistical data about the propagation of
+the {{ app.branding.title }} software suite. In rare cases transmitted bug reports might
+contain personal or sensitive data according to paragraph (a). The
+software vendor guarantees to handle such data with absolute discretion
+and never to systematically collect, analyze or publish such data. Bug
+reports data are kept in an access controlled and private database and
+deleted as soon as the technical problem is resolved.
+
+
+SECTION III: DATA TRANSFER WITH THRID PARTY SERVICES
+
+(a) Third Party Mail Systems
+The {{ app.branding.title }} email client can be configured to access mail systems of
+third party providers. {{ app.branding.title }} has no influence of the data handling
+and privacy implications related to the policies of the third party
+service vendors. In addition to the personal or sensitive data stored
+and exchanged with the third party service connections to third party
+mail services also contain the IP-Address of the {{ app.branding.title }} server system
+or upstream security system due to the nature of data transmission. The
+permission for users to define their own mail services, including third
+party services, can be set as a 'Role Right' in the {{ app.branding.title }} Role
+Administration module. Considerations about the permission to connect
+third party mail systems should imply administrative tasks to ensure
+encrypted network communication to these systems.
+
+(b) Using of ActiveSync services
+{{ app.branding.title }} offers an ActiveSync module for data synchronization with
+mobile devices. The ActiveSync module respects access rights and user
+data grants of the user the device authenticates for. {{ app.branding.title }} has no
+influence of the data handling and privacy implications of the
+ActiveSync clients. The permission to use the ActiveSync service can be
+set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
+Considerations about the permission to synchronize data using the
+ActiveSync service should imply administrative tasks to ensure encrypted
+network communication between the related systems.
+
+(c) Third Party Service Consumers
+{{ app.branding.title }} comes with a variety of interfaces and API's, allowing the
+exchange of data with authenticated users. Those interfaces and API's
+respects access rights and user data grants of the user the service
+consumer is authenticated for. {{ app.branding.title }} has no influence of the data
+handling and privacy implications of third party service consumers.
+Considerations about offering the {{ app.branding.title }} service in a public network
+should imply administrative tasks to ensure encrypted network
+communication between all related systems.
+
+(d) OpenStreetMap.org services
+{{ app.branding.title }} uses a number of services offered by openStreetMap.org.
+OpenStreetMap.org is a community dedicated to mapping and geolocation
+related topics. As of the nature of web-services, {{ app.branding.title }} needs to
+send personal data to openstreetmap.org as input parameters for retrieving
+maps or geolocations. To disable communications and features based on
+this services, you need to set the configuration option 'useMapService' to
+false in the installations config.inc.php.
 </pre>
 {% endblock %}

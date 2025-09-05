@@ -1249,6 +1249,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Controller::class, 'getPrivacy', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
             ]))->toArray());
+            $routeCollector->get('/imprint', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getImprint', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
+            $routeCollector->get('/terms', (new Tinebase_Expressive_RouteHandler(
+                Tinebase_Controller::class, 'getTermsOfService', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1533,6 +1541,30 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
         $template = $twig->load(Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
         die($template->render());
+    }
+
+    /**
+     * @return \Laminas\Diactoros\Response\HtmlResponse
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getImprint()
+    {
+        $locale = Tinebase_Core::getLocale();
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
+        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/imprint.html.twig');
+        return $html;
+    }
+
+    /**
+     * @return \Laminas\Diactoros\Response\HtmlResponse
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public function getTermsOfService()
+    {
+        $locale = Tinebase_Core::getLocale();
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
+        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/terms.html.twig');
+        return $html;
     }
 
     /**

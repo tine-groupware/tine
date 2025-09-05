@@ -1,4 +1,12 @@
-{{ _('Thank you for attending the poll "%1$s"') | format(name) }}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
 
+{% block subject %}
+{{ _("Attendance Confirmation for Poll „%1$s“") | format(name) }}
+{% endblock %}
+
+{% block body %}
+{{ _("Thank you for attending the poll „%1$s“") | format(name) }}
 {{ _('To review or edit your status, please use your personal link:') }}
+
 {{ link }}
+{% endblock %}

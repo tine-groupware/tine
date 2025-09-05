@@ -3,8 +3,8 @@ avialable parameters:
     link
     app.branding.title
     contact
-    localizeString(dipr.name, app.user.locale)
-    localizeString(dipr.description, app.user.locale)
+    localizeString(dip.name, app.user.locale)
+    localizeString(dip.description, app.user.locale)
 #}
 
 {#
@@ -20,6 +20,6 @@ file: tine20/GDPR/js/ConsentClient/src/App.vue
     </div>
     <div>
         <a>{{ 'footer@metaways.de' }}</a><br>
-        <a href="">Imprint</a>
+        <a href="">{{ _('Imprint') }}</a>
     </div>
 {% endblock %}

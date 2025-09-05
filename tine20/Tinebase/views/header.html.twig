@@ -1,6 +1,10 @@
-<div class="mt-4 mb-4">
-    <img src="{{ app.branding.logoContent.getBody() | data_uri }}"
-         class="img-fluid"
-         style="max-width: 80px;"
-         alt="Logo" />
-</div>
+<header>
+    <div class="m-10">
+        <a href="{{ config(constant('Tinebase_Config::BRANDING_WEBURL')) }}">
+            <img src="{{ app.branding.logoContent.getBody() | data_uri }}"
+                 class="img-fluid"
+                 style="max-width: 80px;"
+                 alt="Logo" />
+        </a>
+    </div>
+</header>

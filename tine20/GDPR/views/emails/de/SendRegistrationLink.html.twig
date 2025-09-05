@@ -1,0 +1,25 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {% if dip != '' %}
+        {{ _('Bestätigen Sie Ihre E-Mail-Address') }}
+    {% else -%}
+        {{ _('Bestätigung Ihrer Anmeldung') }}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-3">
+        <p class="text-start">{{ _('Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link') }}</p>
+    </div>
+    <div class="ax-center my-3">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('E-Mail-Adresse bestätigen') }}</a>
+    </div>
+{% endblock %}

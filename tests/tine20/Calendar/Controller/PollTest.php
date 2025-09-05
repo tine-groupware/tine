@@ -612,7 +612,6 @@ EOT;
             $text = $confirmationMessage->getBodyText()->getContent();
             $this->assertStringContainsString('Thank you for attending', $text);
             $this->assertStringNotContainsString('Array', $text, 'notification did not cope with resolved stuff');
-
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
             Felamimail_Transport::setTestTransport($oldTestTransport);

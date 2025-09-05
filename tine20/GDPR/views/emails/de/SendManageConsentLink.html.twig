@@ -1,0 +1,23 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ 'Link zur Verwaltung von Zustimmung' }}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-3">
+        <p class="text-start">{{ 'Über diesen Link können Sie verwalten, zu welchem Zweck wir Sie kontaktieren dürfen' }}</p>
+    </div>
+    <div class="ax-center my-3">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ 'Mein Abonnement verwalten' }}</a>
+    </div>
+{% endblock %}
+
+

@@ -87,6 +87,7 @@ class Tinebase_Twig
         $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
         $this->_twigEnvironment->addExtension(new CssInlinerExtension());
         $this->_twigEnvironment->addExtension(new HtmlExtension());
+        $this->_twigEnvironment->addExtension(new Tinebase_Twig_BootstrapEmailExtension());
 
 
         $this->_addTwigFunctions();
@@ -99,6 +100,7 @@ class Tinebase_Twig
         $tbConfig = Tinebase_Config::getInstance();
 
         $globals = [
+            Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             'branding'          => [
                 'logo'              => Tinebase_Core::getInstallLogo(),

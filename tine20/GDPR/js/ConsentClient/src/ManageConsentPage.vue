@@ -73,12 +73,4 @@ $secondary: #8cb8d7;
   }
 }
 
-.manage-consent .route-view{
-  align-items: flex-start;
-}
-
-.manage-consent .footer-content {
-  justify-content: flex-start;
-}
-
 </style>

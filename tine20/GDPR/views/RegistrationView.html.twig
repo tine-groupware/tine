@@ -3,8 +3,8 @@ avialable parameters:
     link
     app.branding.title
     contact
-    localizeString(dipr.name, app.user.locale)
-    localizeString(dipr.description, app.user.locale)
+    localizeString(dip.name, app.user.locale)
+    localizeString(dip.description, app.user.locale)
 #}
 
 
@@ -14,25 +14,25 @@ avialable parameters:
 #}
 
 {% block registrationViewTemplate %}
-    <h1>{{ 'Registration' }} </h1>
+    <h1>{{ _('Registration') }} </h1>
     <div class="my-4">
-        <p>{{ 'Register and we will send you news and information about our services in the future.' }}</p>
-        {% if dipr != '' %}
+        <p>{{ _('Register and we will send you news and information about our services in the future.') }}</p>
+        {% if dip != '' %}
             <div class="my-1">
-                <p><b>{{ localizeString(dipr.name, browserLocale|default(app.user.locale)) }}</b></p>
-                <p>{{ 'We use your data exclusively for the stated purpose, you can request the deletion of your data at any time.' }}</p>
+                <p><b>{{ localizeString(dip.name, browserLocale|default(app.user.locale)) }}</b></p>
+                <p>{{ _('We use your data exclusively for the stated purpose, you can request the deletion of your data at any time.') }}</p>
             </div>
         {% endif %}
     </div>
 {% endblock %}
 
 {% block afterClickRegistrationTemplate %}
-    <h1>{{ "Thank you for the registration!" }} </h1>
+    <h1>{{ _("Thank you for the registration!") }} </h1>
     <div class="my-4">
-        {% if dipr != '' %}
-            <p><b>{{ localizeString(dipr.name, browserLocale|default(app.user.locale)) }}</b></p>
-            <p>{{ 'The submitted E-mail address will only be used for the selected purpose.' }}</p>
-            <p>{{ 'You can withdraw your consent or change the use of your data at any time.' }}</p>
+        {% if dip != '' %}
+            <p><b>{{ localizeString(dip.name, browserLocale|default(app.user.locale)) }}</b></p>
+            <p>{{ _('The submitted E-mail address will only be used for the selected purpose.') }}</p>
+            <p>{{ _('You can withdraw your consent or change the use of your data at any time.') }}</p>
         {% endif %}
     </div>
 {% endblock %}

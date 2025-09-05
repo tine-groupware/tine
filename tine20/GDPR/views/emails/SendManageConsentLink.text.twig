@@ -1,0 +1,18 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+{{ _('Link to consent management') }}
+{% endblock %}
+
+{% block body %}
+{{ _('you can use this link to manage the purpose for which we may contact you') }}
+
+{{ link }}
+{% endblock %}
+
+
