@@ -33,25 +33,25 @@ describe('setup checks', () => {
 
 describe('config manager', () => {
     test('main page', async () => {
-        await expect(page).toClick('a > span', {text: 'Konfigurations-Verwaltung'});
+        await expect(page).toClick('a > span', {text: 'Konfigurationsverwaltung'});
     });
 });
 
 describe('authentication/accounts', () => {
     test('main page', async () => {
-        await expect(page).toClick('a > span', {text: 'Authentifizierung/Benutzerkonten'});
+        await expect(page).toClick('a > span', {text: 'Authentifizierung/Benutzer*innenkonten'});
     });
 });
 
 describe('email', () => {
     test('main page', async () => {
-        await expect(page).toClick('a > span', {text: 'Email'});
+        await expect(page).toClick('a > span', {text: 'E-Mail'});
     });
 });
 
 describe('Application Manager', () => {
     test('main page', async () => {
-        await expect(page).toClick('a > span', {text: 'Anwendungs-Verwaltung'});
+        await expect(page).toClick('a > span', {text: 'Anwendungsverwaltung'});
     });
 });
 

@@ -71,8 +71,8 @@ msgstr "CLI Required"
 msgid "Delete all existing users and groups"
 msgstr "Delete all existing users and groups"
 
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
-msgstr "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP?"
+msgstr "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP?"
 
 msgid "Backend"
 msgstr "Backend"
@@ -215,14 +215,14 @@ msgstr "Forbid part of username in password"
 msgid "Redirect Settings"
 msgstr "Redirect Settings"
 
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr "Redirect Url (redirect to login screen if empty)"
+msgid "Redirect URL (redirect to login screen if empty)"
+msgstr "Redirect URL (redirect to login screen if empty)"
 
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr "Redirect Always (if No, only redirect after logout)"
 
-msgid "Redirect to referring site, if exists"
-msgstr "Redirect to referring site, if exists"
+msgid "Redirect to the referring site, if exists"
+msgstr "Redirect to the referring site, if exists"
 
 msgid "Password encoding"
 msgstr "Password encoding"
@@ -284,23 +284,23 @@ msgstr "Group Filter"
 msgid "Group Search Scope"
 msgstr "Group Search Scope"
 
-msgid "Use Rfc 2307 bis"
-msgstr "Use Rfc 2307 bis"
+msgid "Use RFC 2307 bis"
+msgstr "Use RFC 2307 bis"
 
 msgid "Maintain RFC 2307 attributes"
 msgstr "Maintain RFC 2307 attributes"
 
-msgid "Min User Id"
-msgstr "Min User Id"
+msgid "Min User ID"
+msgstr "Min User ID"
 
-msgid "Max User Id"
-msgstr "Max User Id"
+msgid "Max User ID"
+msgstr "Max User ID"
 
-msgid "Min Group Id"
-msgstr "Min Group Id"
+msgid "Min Group ID"
+msgstr "Min Group ID"
 
-msgid "Max Group Id"
-msgstr "Max Group Id"
+msgid "Max Group ID"
+msgstr "Max Group ID"
 
 msgid "Group UUID Attribute name"
 msgstr "Group UUID Attribute name"
@@ -308,8 +308,8 @@ msgstr "Group UUID Attribute name"
 msgid "User UUID Attribute name"
 msgstr "User UUID Attribute name"
 
-msgid "Readonly access"
-msgstr "Readonly access"
+msgid "Read-only access"
+msgstr "Read-only access"
 
 msgid "Save config and install"
 msgstr "Save config and install"
@@ -426,8 +426,8 @@ msgstr "Cyrus Admin Password"
 msgid "Use proxy auth"
 msgstr "Use proxy auth"
 
-msgid "Smtp"
-msgstr "Smtp"
+msgid "SMTP"
+msgstr "SMTP"
 
 msgid "Authentication"
 msgstr "Authentication"
@@ -444,8 +444,8 @@ msgstr "Primary Domain"
 msgid "Secondary Domains (comma separated)"
 msgstr "Secondary Domains (comma separated)"
 
-msgid "Aditional Domains (comma separated)"
-msgstr "Aditional Domains (comma separated)"
+msgid "Additional Domains (comma separated)"
+msgstr "Additional Domains (comma separated)"
 
 msgid "Notifications service address"
 msgstr "Notifications service address"
@@ -462,20 +462,20 @@ msgstr "Notifications local client (hostname or IP address)"
 msgid "SIEVE"
 msgstr "SIEVE"
 
-msgid "MySql Hostname"
-msgstr "MySql Hostname"
+msgid "MySQL Hostname"
+msgstr "MySQL Hostname"
 
-msgid "MySql Database"
-msgstr "MySql Database"
+msgid "MySQL Database"
+msgstr "MySQL Database"
 
-msgid "MySql User"
-msgstr "MySql User"
+msgid "MySQL User"
+msgstr "MySQL User"
 
-msgid "MySql Password"
-msgstr "MySql Password"
+msgid "MySQL Password"
+msgstr "MySQL Password"
 
-msgid "MySql Port"
-msgstr "MySql Port"
+msgid "MySQL Port"
+msgstr "MySQL Port"
 
 msgid "User or UID"
 msgstr "User or UID"
@@ -517,8 +517,8 @@ msgid "Performing Environment Checks..."
 msgstr "Performing Environment Checks..."
 
 #, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgid "No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."
+msgstr "No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."
 
 msgid "Check"
 msgstr "Check"
