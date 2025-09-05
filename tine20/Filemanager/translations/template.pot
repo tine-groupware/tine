@@ -94,33 +94,6 @@ msgstr ""
 msgid "Quarantined File"
 msgstr ""
 
-msgid "Password required for download"
-msgstr ""
-
-msgid "Submit"
-msgstr ""
-
-msgid "File not found!"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Size"
-msgstr ""
-
-msgid "Last Modified"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Folder"
-msgstr ""
-
-msgid "File"
-msgstr ""
-
 msgid "Loading"
 msgstr ""
 
@@ -294,7 +267,16 @@ msgstr ""
 msgid "Overwrite?"
 msgstr ""
 
+msgid "Name"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
 msgid "Content type"
+msgstr ""
+
+msgid "Folder"
 msgstr ""
 
 msgid "Send as email"
@@ -428,6 +410,9 @@ msgstr ""
 msgid "Edit file"
 msgstr ""
 
+msgid "File"
+msgstr ""
+
 msgid "Public Links"
 msgstr ""
 
@@ -441,6 +426,12 @@ msgid "Not yet indexed"
 msgstr ""
 
 msgid "Modified By"
+msgstr ""
+
+msgid "Last Modified"
+msgstr ""
+
+msgid "Description"
 msgstr ""
 
 msgid "Enter description"
@@ -608,4 +599,19 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "GENDER_File Location"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "No Files Found"
+msgstr ""
+
+msgid "This folder appears to be empty."
+msgstr ""
+
+msgid "File not found!"
+msgstr ""
+
+msgid "Password required for download"
 msgstr ""
