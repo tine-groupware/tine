@@ -362,7 +362,8 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
                 continue;
             }
             if (Calendar_Model_Attender::USERTYPE_RESOURCE === $attendee->user_type && $attendee->displaycontainer_id !== null) {
-                $this->_aggregatedAttendees[$key] = [$attendee->displaycontainer_id->toArray()]; /* @phpstan-ignore-line */
+                $this->_aggregatedAttendees[$key] =
+                    is_string($attendee->displaycontainer_id) ? [$attendee->displaycontainer_id] : $attendee->displaycontainer_id->toArray(); /* @phpstan-ignore-line */
             } elseif (Calendar_Model_Attender::USERTYPE_USER === $attendee->user_type && $attendee->user_id instanceof Addressbook_Model_Contact
                     && $attendee->user_id->account_id) {
                 $this->_aggregatedAttendees[$key] = Tinebase_Container::getInstance()->getPersonalContainer(
