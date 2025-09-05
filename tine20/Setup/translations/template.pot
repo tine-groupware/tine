@@ -71,7 +71,7 @@ msgstr ""
 msgid "Delete all existing users and groups"
 msgstr ""
 
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP?"
 msgstr ""
 
 msgid "Backend"
@@ -215,13 +215,13 @@ msgstr ""
 msgid "Redirect Settings"
 msgstr ""
 
-msgid "Redirect Url (redirect to login screen if empty)"
+msgid "Redirect URL (redirect to login screen if empty)"
 msgstr ""
 
 msgid "Redirect Always (if No, only redirect after logout)"
 msgstr ""
 
-msgid "Redirect to referring site, if exists"
+msgid "Redirect to the referring site, if exists"
 msgstr ""
 
 msgid "Password encoding"
@@ -284,22 +284,22 @@ msgstr ""
 msgid "Group Search Scope"
 msgstr ""
 
-msgid "Use Rfc 2307 bis"
+msgid "Use RFC 2307 bis"
 msgstr ""
 
 msgid "Maintain RFC 2307 attributes"
 msgstr ""
 
-msgid "Min User Id"
+msgid "Min User ID"
 msgstr ""
 
-msgid "Max User Id"
+msgid "Max User ID"
 msgstr ""
 
-msgid "Min Group Id"
+msgid "Min Group ID"
 msgstr ""
 
-msgid "Max Group Id"
+msgid "Max Group ID"
 msgstr ""
 
 msgid "Group UUID Attribute name"
@@ -308,7 +308,7 @@ msgstr ""
 msgid "User UUID Attribute name"
 msgstr ""
 
-msgid "Readonly access"
+msgid "Read-only access"
 msgstr ""
 
 msgid "Save config and install"
@@ -426,7 +426,7 @@ msgstr ""
 msgid "Use proxy auth"
 msgstr ""
 
-msgid "Smtp"
+msgid "SMTP"
 msgstr ""
 
 msgid "Authentication"
@@ -444,7 +444,7 @@ msgstr ""
 msgid "Secondary Domains (comma separated)"
 msgstr ""
 
-msgid "Aditional Domains (comma separated)"
+msgid "Additional Domains (comma separated)"
 msgstr ""
 
 msgid "Notifications service address"
@@ -462,19 +462,19 @@ msgstr ""
 msgid "SIEVE"
 msgstr ""
 
-msgid "MySql Hostname"
+msgid "MySQL Hostname"
 msgstr ""
 
-msgid "MySql Database"
+msgid "MySQL Database"
 msgstr ""
 
-msgid "MySql User"
+msgid "MySQL User"
 msgstr ""
 
-msgid "MySql Password"
+msgid "MySQL Password"
 msgstr ""
 
-msgid "MySql Port"
+msgid "MySQL Port"
 msgstr ""
 
 msgid "User or UID"
@@ -517,7 +517,7 @@ msgid "Performing Environment Checks..."
 msgstr ""
 
 #, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgid "No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."
 msgstr ""
 
 msgid "Check"
