@@ -1434,7 +1434,7 @@ class Tinebase_FileSystemTest extends TestCase
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = true;
         $this->_controller->resetBackends();
 
-        static::assertTrue($this->_controller->indexFileObject($ids[0]));
+        static::assertTrue($this->_controller->indexFileObject($ids[0]), 'indexFileObject failed');
         $ids1 = $this->_controller->getFileObjectBackend()->getNotIndexedObjectIds();
         static::assertEquals(count($ids) - 1, count($ids1));
     }
