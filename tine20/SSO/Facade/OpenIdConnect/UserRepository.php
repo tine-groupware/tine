@@ -57,9 +57,18 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                         Tinebase_Group::getInstance()->getGroupMemberships($userEntity->getTineUser()->getId()))->name);
                     break;
                 case 'tine/matrix_synapse_integrator/matrix_id':
-                    $xprops = $userEntity->getTineUser()->xprops();
-                    if (array_key_exists(MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID, $xprops)) {
-                        $result['tine/matrix_synapse_integrator/matrix_id'] = $userEntity->getTineUser()->xprops()[MatrixSynapseIntegrator_Config::USER_XPROP_MATRIX_ID];
+                    // TODO move this code to MatrixSynapseIntegrator and write a test
+                    if (Tinebase_Application::getInstance()->isInstalled(
+                        MatrixSynapseIntegrator_Config::APP_NAME)
+                    ) {
+                        try {
+                            $result['tine/matrix_synapse_integrator/matrix_id'] =
+                                MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
+                                    $userEntity->getTineUser()
+                                )->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+                        } catch (Tinebase_Exception_NotFound) {
+                            // don't set attribute
+                        }
                     }
                     break;
             }
