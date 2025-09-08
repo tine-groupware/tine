@@ -107,11 +107,11 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     }
 
     /**
-     * @param Tinebase_Model_FullUser $user
+     * @param Tinebase_Model_User $user
      * @return MatrixSynapseIntegrator_Model_MatrixAccount
      * @throws Tinebase_Exception_NotFound
      */
-    public function getMatrixAccountForUser(Tinebase_Model_FullUser $user): MatrixSynapseIntegrator_Model_MatrixAccount
+    public function getMatrixAccountForUser(Tinebase_Model_User $user): MatrixSynapseIntegrator_Model_MatrixAccount
     {
         $check = $this->doRightChecks(false);
         /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
