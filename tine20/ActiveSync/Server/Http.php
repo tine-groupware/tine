@@ -29,6 +29,18 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
             $this->_body = $this->_getBody($body);
 
+            if($request->getQuery('Cmd') == 'Options') {
+                $this->_initializeRegistry();
+                $request = new Zend_Controller_Request_Http();
+                $request->setRequestUri($this->_request->getRequestUri());
+                $syncFrontend = new Syncroton_Server(null, $request, $this->_body);
+                $syncFrontend->handle();
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'ActiveSync Options request served anonymous on fast lane.');
+                }
+                return;
+            }
+
             try {
                 $authData = $this->_getAuthData($this->_request);
                 if (count($authData) === 2) {
