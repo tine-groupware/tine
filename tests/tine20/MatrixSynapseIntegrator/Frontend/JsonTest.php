@@ -50,7 +50,7 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         $this->testMatrixAccountApi(false);
         $accountData = $this->_getUit()->getBootstrapdata();
         self::assertIsArray($accountData);
-        self::assertEquals('somepw',  $accountData['recovery_password']);
+        self::assertEquals('somepw', $accountData['recovery_password']);
     }
 
     public function testMissingGetBootstrapdata()
@@ -96,5 +96,21 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         self::assertEquals('@monkey83:matrix.local.tine-dev.de', $result['mx_user_id']);
         self::assertEquals(MatrixSynapseIntegrator_Config::getInstance()
             ->{MatrixSynapseIntegrator_Config::HOME_SERVER_URL}, $result['mx_hs_url']);
+    }
+
+    public function testSetRecoveryPassword()
+    {
+        $this->testMatrixAccountApi(false);
+        $pw = 'abcde';
+        $updatedMatrixAccount = $this->_getUit()->setRecoveryPassword($pw);
+        self::assertEquals($pw, $updatedMatrixAccount['recovery_password']);
+    }
+
+    public function testSetRecoveryKey()
+    {
+        $this->testMatrixAccountApi(false);
+        $key = 'abcdefghi';
+        $updatedMatrixAccount = $this->_getUit()->setRecoveryKey($key);
+        self::assertEquals($key, $updatedMatrixAccount['recovery_key']);
     }
 }
