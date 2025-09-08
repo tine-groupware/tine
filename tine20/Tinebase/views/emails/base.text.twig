@@ -1,0 +1,8 @@
+{{ _('Hello') }}  {{ contact.getTitle() | default(_('User')) }}
+
+{% block body %}
+    {{ 'This is an enhanced email template with improved styling and functionality.' }}
+{% endblock %}
+
+{{ _('Thank you') }}
+{{ _('Your %1$s Team') | format(app.branding.title) }}

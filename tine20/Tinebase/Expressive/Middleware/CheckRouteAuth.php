@@ -154,7 +154,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
 
             try {
                 return $delegate->handle($request);
-            } finally {
+            }  finally{
                 // TODO eventually we want this to happen in the ResponseEnvelop actually! if expanding would happen
                 // TODO there... if expanding happens inside the delegate above we are fine
                 $routeHandler->unsetPublicRoles();

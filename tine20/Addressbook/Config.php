@@ -518,7 +518,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         if (null === $contact && !empty(self::getInstance()->{self::INSTALLATION_REPRESENTATIVE})) {
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get(self::$_instance
-                    ->{self::INSTALLATION_REPRESENTATIVE});
+                    ->{self::INSTALLATION_REPRESENTATIVE}, _getRelatedData: false, _aclProtect: false);
             } catch (Tinebase_Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(

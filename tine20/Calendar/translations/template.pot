@@ -455,14 +455,6 @@ msgstr ""
 msgid "This contact was automatically added by the system as an event attendee."
 msgstr ""
 
-#, php-format
-msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr ""
-
-#, php-format
-msgid "%1$s is scheduled for %2$s"
-msgstr ""
-
 msgid "Different Calendar"
 msgstr ""
 
@@ -1068,6 +1060,12 @@ msgstr ""
 msgid "Delete events missing from the import data (future events only)."
 msgstr ""
 
+msgid "Match Attendee"
+msgstr ""
+
+msgid "Match attendee with existing users or contacts."
+msgstr ""
+
 msgid "Basic Data Only"
 msgstr ""
 
@@ -1084,6 +1082,27 @@ msgid "Keep Existing Attendee"
 msgstr ""
 
 msgid "Do not remove attendees from existing events that are not in the import data."
+msgstr ""
+
+msgid "Match Organizer"
+msgstr ""
+
+msgid "Match organizer with existing user or contact."
+msgstr ""
+
+msgid "Skip from other internal organizers"
+msgstr ""
+
+msgid "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
+msgstr ""
+
+msgid "Skip Events if organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Disable external organizer calendar"
+msgstr ""
+
+msgid "Import events of external organizers directly into the import calendar."
 msgstr ""
 
 msgid "Force Organizer for new Events"
@@ -2034,19 +2053,31 @@ msgstr ""
 msgid "Event details"
 msgstr ""
 
-msgid "Thank you for attending the poll \"%1$s\""
+msgid "Attendance Confirmation for Poll „%1$s“"
+msgstr ""
+
+msgid "Thank you for attending the poll „%1$s“"
 msgstr ""
 
 msgid "To review or edit your status, please use your personal link:"
 msgstr ""
 
-msgid "The poll \"%1$s\" has been closed."
+msgid "My Link"
 msgstr ""
 
-msgid "The definite event is scheduled for \"%1$s\""
+msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "The poll „%1$s“ has been closed."
+msgstr ""
+
+msgid "The definite event is scheduled for „%1$s“."
 msgstr ""
 
 msgid "You can review the poll results here:"
+msgstr ""
+
+msgid "My Poll"
 msgstr ""
 
 msgid "Summary - Organizer"
