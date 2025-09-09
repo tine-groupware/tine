@@ -108,7 +108,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 /** @var Admin_Event_BeforeUpdateAccount $_eventObject */
                 try {
                     $newContact = $_eventObject->newAccount->contact_id;
-                    $oldContact = $_eventObject->oldAccount->contact_id;
+                    $oldContact = $_eventObject->oldAccount ? $_eventObject->oldAccount->contact_id : null;
 
                     if ($newContact instanceof Addressbook_Model_Contact && is_string($oldContact) && $oldContact === $newContact->getId()) {
                         $contact = Addressbook_Controller_Contact::getInstance()->update($newContact, false);
