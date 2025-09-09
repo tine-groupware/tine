@@ -50,7 +50,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param Tinebase_Model_Container $_container
      * @param null|string|Calendar_Model_Event  $_event  the id of a event or the event itself
      */
-    public function __construct(Tinebase_Model_Container $_container, $_event = null) 
+    public function __construct(Tinebase_Model_Container $_container, $_event = null)
     {
         $this->_container = $_container;
         $this->_event     = $_event;
@@ -187,7 +187,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 $retry = true;
-                Tinebase_Exception::log($tead, true);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                }
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -196,8 +198,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             }
 
             if ($retry) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Might be a duplicate exception, try with new id');
+                }
 
                 unset($event->id);
                 try {
@@ -244,8 +247,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 ));
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
+            }
 
             $vevent = new self($container, $existingEvent);
             $vevent->_getConverter()->setOptions($converterOptions);
