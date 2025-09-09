@@ -83,10 +83,9 @@ class MatrixSynapseIntegrator_Backend_Synapse
     protected function _getSharedSecretLoginParams(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
     {
         $full_user_id = $account->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
-        $hmac = hash_hmac('sha512', $full_user_id, MatrixSynapseIntegrator_Config::getInstance()->get(
+        $token = hash_hmac('sha512', $full_user_id, MatrixSynapseIntegrator_Config::getInstance()->get(
             MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN
         ));
-        $token = bin2hex($hmac);
 
         return [
             'type' => 'com.devture.shared_secret_auth',
