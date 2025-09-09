@@ -28,9 +28,6 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
 
     public const CORPORAL_SHARED_AUTH_TOKEN = 'corporalSharedAuthToken';
 
-    public const USER_XPROP_MATRIX_ID = 'matrixId';
-    public const USER_XPROP_MATRIX_ACTIVE = 'matrixActive';
-
     public const MATRIX_DIRECTORY_ENABLED = 'matrixDirectoryEnabled';
     public const MATRIX_DIRECTORY_DATABASE_URL = 'matrixDirectoryDatabaseUrl';
     public const MATRIX_DIRECTORY_DATABASE_USERNAME = 'matrixDirectoryDatabaseUsername';
@@ -39,6 +36,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     public const MATRIX_SYNAPSE_DATABASE_URL = 'matrixSynapseDatabaseUrl';
     public const MATRIX_SYNAPSE_DATABASE_USERNAME = 'matrixSynapseDatabaseUsername';
     public const MATRIX_SYNAPSE_DATABASE_PASSWORD = 'matrixSynapseDatabasePassword';
+    public const MATRIX_SYNAPSE_SHARED_SECRET_AUTH = 'matrixSynapseSharedSecretAuth';
 
     /**
      * (non-PHPdoc)
@@ -181,6 +179,17 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             //_('Synapse database postgres password')
             self::DESCRIPTION           => 'Synapse database postgres password',
             self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        // @see \MatrixSynapseIntegrator_Backend_Synapse::login
+        self::MATRIX_SYNAPSE_SHARED_SECRET_AUTH => [
+            //_('Synapse shared secret auth')
+            self::LABEL                 => 'Synapse shared secret auth',
+            //_('Synapse shared secret auth')
+            self::DESCRIPTION           => 'Synapse shared secret auth',
+            self::TYPE                  => self::TYPE_BOOL,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,

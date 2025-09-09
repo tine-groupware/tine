@@ -6,8 +6,8 @@
  * @package      MatrixSynapseIntegrator
  * @subpackage   Backend
  * @license      https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright    Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author       Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -22,9 +22,6 @@ class MatrixSynapseIntegrator_Backend_Synapse
 
     public function login(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
     {
-        // curl -X POST https://MATRIXURL/_matrix/client/v3/login -d '{"type": "m.login.password",
-        // "identifier": {"type": "m.id.user", "user": "@matrixid:DOMAIN"}, "password": "'"$MATRIX_PASSWORD"'"}'
-
         $client = $this->_getHttpClient();
 
         // TODO set some headers?
@@ -34,19 +31,14 @@ class MatrixSynapseIntegrator_Backend_Synapse
 //            'Content-Type' =>  'application/json',
 //        ]);
 
-        $credentials = Tinebase_Core::getUserCredentialCache();
-        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-        $credentialsBackend->getCachedCredentials($credentials);
-
-        $data = [
-            'type' => 'm.login.password',
-            'password' => $credentials->password,
-            'identifier' => [
-                'type' => 'm.id.user',
-                'user' => $account->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID},
-            ],
-        ];
-        $client->setRawData(json_encode($data));
+        if (MatrixSynapseIntegrator_Config::getInstance()->get(
+            MatrixSynapseIntegrator_Config::MATRIX_SYNAPSE_SHARED_SECRET_AUTH
+        )) {
+            $loginData = $this->_getSharedSecretLoginParams($account);
+        } else {
+            $loginData = $this->_getPasswordLoginParams($account);
+        }
+        $client->setRawData(json_encode($loginData));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -70,6 +62,40 @@ class MatrixSynapseIntegrator_Backend_Synapse
             }
             throw new Tinebase_Exception_Backend('synapse login failed');
         }
+    }
+
+    protected function _getPasswordLoginParams(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
+    {
+        $credentials = Tinebase_Core::getUserCredentialCache();
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+        $credentialsBackend->getCachedCredentials($credentials);
+
+        return [
+            'type' => 'm.login.password',
+            'password' => $credentials->password,
+            'identifier' => [
+                'type' => 'm.id.user',
+                'user' => $account->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID},
+            ],
+        ];
+    }
+
+    protected function _getSharedSecretLoginParams(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
+    {
+        $full_user_id = $account->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+        $hmac = hash_hmac('sha512', $full_user_id, MatrixSynapseIntegrator_Config::getInstance()->get(
+            MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN
+        ));
+        $token = bin2hex($hmac);
+
+        return [
+            'type' => 'com.devture.shared_secret_auth',
+            'token' => $token,
+            'identifier' => [
+                'type' => 'm.id.user',
+                'user' => $full_user_id,
+            ],
+        ];
     }
 
     protected function _getHttpClient(): Zend_Http_Client
