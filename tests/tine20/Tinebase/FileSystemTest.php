@@ -1427,14 +1427,21 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertGreaterThanOrEqual(2, count($ids));
 
         // check for tika installation
-        if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}) {
+        if ('' == Tinebase_Core::getConfig()->get(Tinebase_Config::FULLTEXT)->{Tinebase_Config::FULLTEXT_TIKAJAR}
+        ) {
             return;
         }
 
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT} = true;
         $this->_controller->resetBackends();
 
-        static::assertTrue($this->_controller->indexFileObject($ids[0]), 'indexFileObject failed');
+        // we might have created some invalid files (for example DATE_Proforma-OF-0000001.pdf ...)
+        foreach ($ids as $notIndexedId) {
+            if ($indexResult = $this->_controller->indexFileObject($notIndexedId)) {
+                break;
+            }
+        }
+        static::assertTrue($indexResult, 'indexFileObject failed');
         $ids1 = $this->_controller->getFileObjectBackend()->getNotIndexedObjectIds();
         static::assertEquals(count($ids) - 1, count($ids1));
     }
