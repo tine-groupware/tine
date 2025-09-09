@@ -35,11 +35,9 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
     {
         $user = $this->_createTestUser();
         $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
-            new MatrixSynapseIntegrator_Model_MatrixAccount([
-                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $user->getId(),
-                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $user->getId() . ':matrix.domain',
-                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD => 'somepw',
-            ])
+            new MatrixSynapseIntegrator_Model_MatrixAccount(
+                MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData($user)
+            )
         );
 
         self::assertNotNull($matrixAccount->getPasswordFromProperty(
