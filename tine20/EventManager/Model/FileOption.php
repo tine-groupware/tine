@@ -20,6 +20,8 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
     public const FLD_FILE_NAME = 'file_name';
     public const FLD_FILE_SIZE = 'file_size';
     public const FLD_FILE_TYPE = 'file_type';
+    public const FLD_FILE_ACKNOWLEDGMENT = 'file_acknowledgement';
+    public const FLD_FILE_UPLOAD = 'file_upload';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -30,8 +32,8 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'File Option',
-        self::RECORDS_NAME          => 'File Options', // ngettext('File Option', 'File Options', n)
+        self::RECORD_NAME           => 'File',
+        self::RECORDS_NAME          => 'File', // ngettext('File', 'Files', n)
         self::TITLE_PROPERTY        => self::FLD_FILE_NAME,
 
         self::FIELDS => [
@@ -73,6 +75,19 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
+            ],
+            self::FLD_FILE_ACKNOWLEDGMENT => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => true,
+                self::LABEL                         =>
+                    'Only participant acknowledgement is necessary (no participant document upload)',
+                // _('Only participant acknowledgement is necessary (no participant document upload)')
+            ],
+            self::FLD_FILE_UPLOAD => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         => 'Participant should upload a file',
+                // _('Participant should upload a file')
             ],
         ]
     ];

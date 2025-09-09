@@ -43,13 +43,19 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
 
-        // check if $currentrecord had options that have been deleted in $record - those need to be removed from registrations
-        $diff = $currentRecord->{EventManager_Model_Event::FLD_OPTIONS}->diff($updatedRecord->{EventManager_Model_Event::FLD_OPTIONS});
+        // check if $currentrecord had options that have been deleted in $record
+        // - those need to be removed from registrations
+        $diff = $currentRecord->{EventManager_Model_Event::FLD_OPTIONS}
+            ->diff($updatedRecord->{EventManager_Model_Event::FLD_OPTIONS});
         foreach ($diff->removed as $removedOption) {
             foreach ($currentRecord->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
                 foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
-                    if ($removedOption->getId() === $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION}->getId()) {
-                        $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->removeRecord($bookedOption);
+                    if (
+                        $removedOption->getId() ===
+                        $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION}->getId()
+                    ) {
+                        $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}
+                            ->removeRecord($bookedOption);
                         EventManager_Controller_Registration::getInstance()->update($registration);
                     }
                 }

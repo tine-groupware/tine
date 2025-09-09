@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0
-  * 
+  *
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Leuschel <t.leuschel@metaways.de>
@@ -11,7 +11,7 @@
 
 /**
  * class for EventManager initialization
- * 
+ *
  * @package EventManager
  */
 class EventManager_Setup_Initialize extends Setup_Initialize
@@ -34,14 +34,37 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         }
         $nodeController = Filemanager_Controller_Node::getInstance();
         try {
-            // TODO translate folder name
-            $nodeController->createNodes('/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/Veranstaltungen',
-                Tinebase_Model_Tree_FileObject::TYPE_FOLDER);
+            $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
+            $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
+
+            EventManager_Config::getInstance()
+                ->set(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH, $path);
+
+            $basePath = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH);
+
+            if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $basePath)) {
+                $node = $nodeController->createNodes(
+                    [$path],
+                    Tinebase_Model_Tree_FileObject::TYPE_FOLDER
+                )->getFirstRecord();
+            } else {
+                $node = Tinebase_FileSystem::getInstance()->stat($prefix . $basePath);
+            }
+
+            $grants = Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($node);
+            $grants->addRecord(new Tinebase_Model_Grants([
+                'account_id' => Tinebase_User::getInstance()
+                    ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS)->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+            ]));
+            Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
         } catch (Filemanager_Exception_NodeExists $e) {
             // This is fine
         };
     }
-
     protected function _initializeDefaultContainer()
     {
         $groupsBackend = Tinebase_Group::getInstance();
