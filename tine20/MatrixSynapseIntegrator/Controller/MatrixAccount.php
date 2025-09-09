@@ -113,12 +113,20 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     public function getMatrixAccountForUser(Tinebase_Model_User $user): MatrixSynapseIntegrator_Model_MatrixAccount
     {
+        return $this->_getMatrixAccount(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
+            $user->getId()
+        );
+    }
+
+    protected function _getMatrixAccount(string $field, string $value): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
         $check = $this->doRightChecks(false);
         /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
         $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             MatrixSynapseIntegrator_Model_MatrixAccount::class, [[
-                Tinebase_Model_Filter_Abstract::FIELD => MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
-                Tinebase_Model_Filter_Abstract::VALUE => $user->getId()
+                Tinebase_Model_Filter_Abstract::FIELD => $field,
+                Tinebase_Model_Filter_Abstract::VALUE => $value
             ]]
         ))->getFirstRecord();
         $this->doRightChecks($check);
@@ -126,6 +134,19 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             throw new Tinebase_Exception_NotFound('No Matrix Account found');
         }
         return $result;
+    }
+
+    /**
+     * @param string $matrixId
+     * @return MatrixSynapseIntegrator_Model_MatrixAccount
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getMatrixAccountByMatrixId(string $matrixId): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
+        return $this->_getMatrixAccount(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID,
+            $matrixId
+        );
     }
 
     public function setCorporalBackend(
