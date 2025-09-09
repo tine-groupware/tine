@@ -204,7 +204,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 $retry = true;
-                //Tinebase_Exception::log($tead, true);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+                }
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -213,8 +215,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             }
 
             if ($retry) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Might be a duplicate exception, try with new id');
+                }
 
                 unset($event->id);
                 try {
@@ -264,8 +267,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 ));
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
+            }
 
             $vevent = new static($container, $existingEvent);
             $vevent->_getConverter()->setOptions($converterOptions);
