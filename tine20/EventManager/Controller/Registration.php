@@ -50,7 +50,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
-        $this->_handleFileUpload($_record);
+        $this->_handleRegistrationFileUpload($_record);
     }
 
     /**
@@ -63,67 +63,48 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
-        $this->_handleFileUpload($_updatedRecord);
+        $this->_handleRegistrationFileUpload($_updatedRecord);
     }
 
-    protected function _handleFileUpload(EventManager_Model_Registration $_registration)
+    protected function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)
     {
-        if ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
-            foreach ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
-                if (
-                    !$bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
-                    === EventManager_Model_FileOption::class
-                ) {
-                    continue;
-                }
+        if (!$_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
+            return;
+        }
 
-                // put uploaded tempfile into filemanager
-                if (
-                    is_string($bookedOption
-                        ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                        ->{EventManager_Model_Selections_File::FLD_NODE_ID})
-                ) {
-                    try {
-                        $tempFile = Tinebase_TempFile::getInstance()->getTempFile(
-                            $bookedOption
-                                ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                                ->{EventManager_Model_Selections_File::FLD_NODE_ID}
-                        );
-                        $event = EventManager_Controller_Event::getInstance()->get(
-                            $_registration->{EventManager_Model_Registration::FLD_EVENT_ID}
-                        );
-                        $eventName = $event->{EventManager_Model_Event::FLD_NAME};
-                        $participantId = $_registration->{EventManager_Model_Registration::FLD_NAME};
-                        $participantName = Addressbook_Controller_Contact::getInstance()->get($participantId)->n_fileas;
-                        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen";
-                        $folders = ["/$eventName", "/Anmeldungen", "/$participantName"];
-                        $nodeController = Filemanager_Controller_Node::getInstance();
-                        $prefix = Tinebase_FileSystem::getInstance()
-                                ->getApplicationBasePath('Filemanager') . '/folders/';
+        foreach ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
+            if (!$bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS} === EventManager_Model_FileOption::class) {
+                continue;
+            }
 
-                        foreach ($folders as $folder) {
-                            $path = $path . $folder;
-                            if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $path)) {
-                                $nodeController->createNodes(
-                                    [$path],
-                                    [Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
-                                );
-                            }
-                        }
-                        $fileName = $path . "/" . $bookedOption
-                                ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-                                ->{EventManager_Model_Selections_File::FLD_FILE_NAME};
-                        if (!Tinebase_FileSystem::getInstance()->fileExists($prefix . $fileName)) {
-                            $nodeController->createNodes(
-                                [$fileName],
-                                [Tinebase_Model_Tree_FileObject::TYPE_FILE],
-                                [$tempFile->getId()]
-                            );
-                        }
-                    } catch (Tinebase_Exception_NotFound) {
-                    }
+            $nodeId = $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                ->{EventManager_Model_Selections_File::FLD_NODE_ID};
+
+            if (!is_string($nodeId)) {
+                continue;
+            }
+
+            $fileName = $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                ->{EventManager_Model_Selections_File::FLD_FILE_NAME};
+
+            $eventId = $_registration->{EventManager_Model_Registration::FLD_EVENT_ID};
+
+            // Build participant-specific folder path
+            $participantId = $_registration->{EventManager_Model_Registration::FLD_NAME};
+            $participantName = $participantId;
+            try {
+                $participantName = Addressbook_Controller_Contact::getInstance()->get($participantId)->n_fileas;
+            } catch (Tinebase_Exception_NotFound $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Exception: ' . $e->getMessage());
                 }
             }
+
+            $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            $folderPath = ['/' . $translation->_('Registrations'), "/$participantName"];
+
+            EventManager_Controller::processFileUpload($nodeId, $fileName, $eventId, $folderPath);
         }
     }
 
@@ -379,6 +360,21 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         'selection_config' => $selection_config,
                         'selection_config_class' => EventManager_Model_Selections_TextInput::class,
                     ], true);
+                } elseif ($option->option_config_class === EventManager_Model_FileOption::class) {
+                    if (
+                        isset($option->option_config->file_acknowledgement)
+                        && $option->option_config->file_acknowledgement
+                    ) {
+                        $selection_config = new EventManager_Model_Selections_File([
+                            'file_acknowledgement' => boolval($reply),
+                        ], true);
+                        $bookedOption[] = new EventManager_Model_BookedOption([
+                            'event_id' => $request['eventId'],
+                            'option' => $option->getId(),
+                            'selection_config' => $selection_config,
+                            'selection_config_class' => EventManager_Model_Selections_File::class,
+                        ], true);
+                    }
                 }
             }
             $registration = new EventManager_Model_Registration([
@@ -459,5 +455,65 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $assertAclUsage();
         }
         return $response;
+    }
+
+    public function publicApiPostDoubleOptIn($dipId)
+    {
+        $assertAclUsage = $this->assertPublicUsage();
+
+       /* try {
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+
+            $dipRecord = null;
+            if ($dipId && !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $dipId)) {
+                try {
+                    $dipRecord = GDPR_Controller_DataIntendedPurpose::getInstance()->get($dipId);
+                } catch (Exception $e) {
+                }
+            }
+
+            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
+                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
+                Tinebase_Exception::log($e);
+                throw $e;
+            }
+
+            $token = JWT::encode([
+                'email' => $request['email'],
+                'issue_date' => 'the date user press',
+                'dipId' => $dipRecord ? $dipId : null,
+                'n_given'   =>  $request['n_given'] ?? null,
+                'n_family'   =>  $request['n_family'] ?? null,
+                'org_name' => $request['org_name'] ?? null,
+            ], $key, 'HS256');
+
+            if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $request['email'])) {
+                if ($contact = $this->_getGDPRContact($request)) {
+                    $link = '/GDPR/view/manageConsent/' . $contact['id'];
+                    $template = 'SendManageConsentLink';
+                    // create dipr before send the link to existing contact
+                    if (!empty($dipRecord))  {
+                        $this->_createAcceptedDipr($dipRecord->getId(), $contact);
+                    }
+                } else {
+                    $template = 'SendRegistrationLink';
+                    $link = '/GDPR/view/register/' . $token;
+                    $contact = new Addressbook_Model_Contact($request);
+                }
+                $this->_sendMessageWithTemplate($template, [
+                    'link' => Tinebase_Core::getUrl() . $link,
+                    'contact' => $contact,
+                    'dipr'  =>  $dipRecord ?? null
+                ]);
+            }
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write(json_encode(['success' => true]));
+        } catch (Exception $e) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($e->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;*/
     }
 }

@@ -21,6 +21,8 @@ class EventManager_Model_Selections_File extends Tinebase_Record_NewAbstract
     public const FLD_FILE_NAME = 'file_name';
     public const FLD_FILE_SIZE = 'file_size';
     public const FLD_FILE_TYPE = 'file_type';
+    public const FLD_FILE_ACKNOWLEDGMENT = 'file_acknowledgement';
+    public const FLD_FILE_UPLOAD = 'file_upload';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -74,6 +76,19 @@ class EventManager_Model_Selections_File extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
+            ],
+            self::FLD_FILE_ACKNOWLEDGMENT => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         =>
+                    'Participant acknowledged the document',
+                // _('Participant acknowledged the document')
+            ],
+            self::FLD_FILE_UPLOAD => [
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
+                self::LABEL                         => 'Participant uploaded a file',
+                // _('Participant uploaded a file')
             ],
         ]
     ];

@@ -96,7 +96,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_OPTION_CONFIG_CLASS   => [
-                self::LABEL                     => 'Option Config Class', // _('Option Config Class')
+                self::LABEL                     => 'Config Class', // _('Config Class')
                 self::TYPE                      => self::TYPE_MODEL,
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS      => [
@@ -114,7 +114,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::NULLABLE                  => true,
             ],
             self::FLD_OPTION_CONFIG           => [
-                self::LABEL                     => 'Option Config', // _('Option Config')
+                self::LABEL                     => 'Config', // _('Config')
                 self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
                 self::CONFIG                    => [
                     self::REF_MODEL_FIELD           => self::FLD_OPTION_CONFIG_CLASS,
