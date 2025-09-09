@@ -18,4 +18,5 @@ require('./FileEditDialog.js');
 require('./FileUploadGrid.js');
 require('./OptionsRuleEditDialog.js');
 require('./OptionRelationEditDialog.js');
+require('./TextInputOptionEditDialog.js');
 
