@@ -123,9 +123,9 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         this.westRegionPanel.on('click', () => { })
 
         _.defer(() => {
-            // NOTE: we need to defer as legacy apps init filtertoolbar after mainscreen
+            // NOTE: we need to defer as legacy apps init filter toolbar after mainscreen
             this.getTopToolbar().setVisible(isSmall);
-            const qfp = this.getCenterPanel()?.filterToolbar.getQuickFilterPlugin();
+            const qfp = this.getCenterPanel()?.filterToolbar?.getQuickFilterPlugin();
             qfp?.setDetailsHidden(isSmall || qfp.detailsToggleBtn.pressed);
             this.resizeRespFilterBar(isSmall, qfp, me);
             this.doLayout()
