@@ -34,7 +34,7 @@ class EventManager_Model_Selections_TextInput extends Tinebase_Record_NewAbstrac
         self::FIELDS => [
             self::FLD_RESPONSE     => [
                 self::LABEL                 => 'Response', // _('Response')
-                self::TYPE                  => self::TYPE_STRING,
+                self::TYPE                  => self::TYPE_FULLTEXT,
                 self::DEFAULT_VAL           => false,
                 self::NULLABLE              => true,
             ]
