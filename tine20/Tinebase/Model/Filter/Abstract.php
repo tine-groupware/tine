@@ -25,6 +25,7 @@ abstract class Tinebase_Model_Filter_Abstract
     public const FIELD = 'field';
     public const OPERATOR = 'operator';
     public const OPERATOR_EQUALS = 'equals';
+    public const OPERATOR_NOT = 'not';
     public const VALUE = 'value';
     public const OPTIONS = 'options';
 

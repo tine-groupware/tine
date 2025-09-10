@@ -285,7 +285,7 @@ class Tinebase_Scheduler_Task
                         . ' Task ' . $taskName . ' has failed.');
                 };
                 $notificationBody = file_get_contents($tmpPath);
-                $purifiedNotificationBody = preg_replace('/[^:]+::\S+[^:]+::(\d{1,})/', '', $notificationBody);
+                $purifiedNotificationBody = preg_replace('/\w+::\w+::\d+\s*/', '', $notificationBody);
                 if (! empty($purifiedNotificationBody)) {
                     // send the file contents as notification to configured email
                     $this->_sendNotification($callable, $purifiedNotificationBody);

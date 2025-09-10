@@ -29,7 +29,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         1 => 'contains',
         2 => 'startswith',
         3 => 'endswith',
-        4 => 'not',
+        4 => Tinebase_Model_Filter_Abstract::OPERATOR_NOT,
         5 => 'in',
         6 => 'notin',
         7 => 'isnull',

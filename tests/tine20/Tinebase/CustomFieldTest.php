@@ -322,19 +322,31 @@ class Tinebase_CustomFieldTest extends TestCase
         $this->testAddressbookCustomFieldAcl(true);
     }
 
+    protected function _createTestCustomField(?array $definition = null)
+    {
+        $cfData = [
+            'name' => 'test',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model' => 'Addressbook_Model_Contact',
+        ];
+        if ($definition) {
+            $cfData['definition'] = $definition;
+        }
+
+        $this->_testCustomField = $this->_instance->addCustomField(self::getCustomField($cfData));
+    }
+
     /**
      * testMultiRecordCustomField
      */
     public function testRecordCustomField()
     {
-        $this->_testCustomField = $this->_instance->addCustomField(self::getCustomField(array(
-            'name' => 'test',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            'model' => 'Addressbook_Model_Contact',
-            'definition' => array('type' => 'record', "recordConfig" => array("value" => array("records" => "Tine.Addressbook.Model.Contact")))
-        )));
+        $this->_createTestCustomField([
+            'type' => 'record',
+            "recordConfig" => ["value" => ["records" => "Tine.Addressbook.Model.Contact"]]
+        ]);
 
-        //Customfield record 1
+        // Customfield record 1
         $contact1 = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'org_name'     => 'contact 1'
         )));
@@ -427,10 +439,19 @@ class Tinebase_CustomFieldTest extends TestCase
 
     /**
      * @param mixed $customFieldValue
-     * @return Tinebase_Record_Interface
+     * @return Addressbook_Model_Contact
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createContactWithCustomField($customFieldValue)
+    protected function _createContactWithCustomField(mixed $customFieldValue = null): Addressbook_Model_Contact
     {
+        if (! $this->_testCustomField) {
+            $this->_createTestCustomField();
+        }
+        /** @var Addressbook_Model_Contact */
         return Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_family'     => 'customfield_test_contact',
             'customfields' => [
@@ -595,11 +616,11 @@ class Tinebase_CustomFieldTest extends TestCase
             'definition' => array('type' => 'date')
         ]);
         $this->_instance->addCustomField($cf);
-        
+
         $contact = new Addressbook_Model_Contact(array('n_given' => 'Rita', 'n_family' => 'Blütenrein'));
         $contact->customfields = array($cf->name => $date);
         $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
-        
+
         $json = new Addressbook_Frontend_Json();
         $filter = array("condition" => "OR",
             "filters" => array(array("condition" => "AND",
@@ -609,7 +630,7 @@ class Tinebase_CustomFieldTest extends TestCase
             ))
         );
         $result = $json->searchContacts(array($filter), array());
-        
+
         $this->assertEquals(1, $result['totalcount'], 'searched contact not found. filter: ' . print_r($filter, true));
         $this->assertEquals('Rita', $result['results'][0]['n_given']);
 
@@ -626,10 +647,22 @@ class Tinebase_CustomFieldTest extends TestCase
         $this->assertEquals(1, $result['totalcount'], 'searched contact not found. filter: ' . print_r($filter, true));
         $this->assertEquals('Rita', $result['results'][0]['n_given']);
 
-
         $json->deleteContacts(array($contact->getId()));
         
         $this->_instance->deleteCustomField($cf);
+    }
+
+    public function testSearchWithEmptyValue()
+    {
+        $contact = $this->_createContactWithCustomField();
+        $result = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter([
+            ['field' => 'customfield', 'operator' => Tinebase_Model_Filter_Abstract::OPERATOR_NOT, 'value' => [
+                'cfId' => $this->_testCustomField->getId(),
+                'value' => null
+            ]],
+            ['field' => 'id', 'operator' => 'equals', 'value' => $contact->getId()]
+        ]));
+        self::assertNull($result->getFirstRecord());
     }
     
     /**
