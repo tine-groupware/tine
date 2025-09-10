@@ -1,34 +1,64 @@
-{% extends 'Tinebase/views/base.html.twig' %}
+{% extends 'Filemanager/views/base.html.twig' %}
 
 {% block custom_style %}
-    .path-breadcrumb {
-        background-color: #e9ecef;
-        padding: 10px 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        font-family: monospace;
-        word-break: break-all;
-    }
-
-    .file-table {
-        margin-top: 20px;
-    }
-
+    {{ parent() }}
     .file-link {
-        text-decoration: none;
-        color: #007bff;
+        color: black;
         font-weight: 500;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        padding: 4px 8px;
+        border-radius: 4px;
     }
 
     .file-link:hover {
-        color: #0056b3;
-        text-decoration: underline;
+        background-color: rgba(0, 123, 255, 0.1);
+        transform: translateX(3px);
     }
 
     .table-responsive {
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Table layout and fixed column widths */
+    .table {
+        table-layout: auto !important;
+        min-width: 630px; /* Sum of all min-widths: 200+180+100+150 */
+        width: 100% !important;
+        border: none !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Column width specifications */
+    .table th:first-child,
+    .table td:first-child {
+        width: 35%;
+        min-width: 200px;
+    }
+
+    .table th:nth-child(2),
+    .table td:nth-child(2) {
+        width: 25%;
+        min-width: 180px;
+        max-width: 300px;
+    }
+
+    .table th:nth-child(3),
+    .table td:nth-child(3) {
+        width: 15%;
+        min-width: 100px;
+        max-width: 150px;
+    }
+
+    .table th:nth-child(4),
+    .table td:nth-child(4) {
+        width: 25%; /* Description - resizable */
+        min-width: 150px;
+        max-width: 250px;
     }
 
     .table thead th {
@@ -46,21 +76,41 @@
         transition: background-color 0.2s ease;
     }
 
+    /* Table cell styling */
     .table td {
         vertical-align: middle;
-        border-top: 1px solid #dee2e6;
+        border: none;
+        border-top: none;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Name column - left aligned and allow wrapping */
+    .table td:first-child {
+        text-align: left;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+    }
+
+    .table thead th:first-child {
+        text-align: left;
+    }
+
+    /* Other columns - right aligned */
+    .table td:not(:first-child) {
+        text-align: right;
+    }
+
+    .table thead th:not(:first-child) {
+        text-align: right;
     }
 
     .empty-state {
         text-align: center;
         padding: 60px 20px;
         color: #6c757d;
-    }
-
-    .empty-state i {
-        font-size: 3rem;
-        margin-bottom: 20px;
-        opacity: 0.5;
     }
 {% endblock %}
 
@@ -73,24 +123,23 @@
     <div class="path-breadcrumb">
         <strong>{{ path }}</strong>
     </div>
-
     <!-- File Listing Table -->
     {% if files and files|length > 0 %}
-        <div class="table-responsive file-table">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive">
+            <table class="table table-hover">
                 <thead>
                 <tr>
                     <th scope="col" class="w-40">
-                        <i class="fas fa-file me-2"></i>{{ _('Name') }}
+                        <i class="fas me-2"></i>{{ _('Name') }}
                     </th>
                     <th scope="col" class="w-25">
-                        <i class="fas fa-clock me-2"></i>{{ _('Last Modified') }}
+                        <i class="fas me-2"></i>{{ _('Last Modified') }}
                     </th>
                     <th scope="col" class="w-15">
-                        <i class="fas fa-weight me-2"></i>{{ _('Size') }}
+                        <i class="fas me-2"></i>{{ _('Size') }}
                     </th>
                     <th scope="col" class="w-20">
-                        <i class="fas fa-info-circle me-2"></i>{{ _('Description') }}
+                        <i class="fas me-2"></i>{{ _('Description') }}
                     </th>
                 </tr>
                 </thead>
@@ -98,19 +147,19 @@
                 {% for file in files %}
                     <tr>
                         <td>
-                            <a href="{{ file.path }}" class="file-link">
-                                <i class="fas fa-file-alt me-2"></i>
+                            <a class="file-link" href="{{ file.path }}">
+                                <span class="mime-icon mime-icon-folder {{ getMimeIconCls(file) }}"></span>
+                                <i class="fas me-2"></i>
                                 {{ file.name|e }}
                             </a>
                         </td>
                         <td>
-                            {{ dateFormat(file.last_modified_time, Date.patterns.ISO8601Long) }}                                </td>
-                        <td>
-                            {{ file.size }}
+                            {% if file.last_modified_time is not empty %}
+                                {{ dateFormat(file.last_modified_time, Date.patterns.ISO8601Long) }}
+                            {% endif %}
                         </td>
-                        <td>
-                            {{ file.description }}
-                        </td>
+                        <td>{{ getSize(file.size) }}</td>
+                        <td>{{ file.description }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -119,9 +168,9 @@
     {% else %}
         <!-- Empty State -->
         <div class="empty-state">
-            <i class="fas fa-folder-open"></i>
-            <h4>No Files Found</h4>
-            <p class="text-muted">This directory appears to be empty.</p>
+            <i class="fas"></i>
+            <h4>{{ _('No Files Found') }}</h4>
+            <p class="text-muted">{{ _('This folder appears to be empty.') }}</p>
         </div>
     {% endif %}
 {% endblock %}

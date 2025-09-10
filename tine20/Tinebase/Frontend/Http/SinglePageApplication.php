@@ -21,7 +21,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Tinebase'));
+        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation($context['application'] ?? 'Tinebase'));
         $twig->getEnvironment()->addFunction(new Twig_SimpleFunction('jsInclude', function ($file) {
             $fileMap = self::getAssetsMap();
             if (isset($fileMap[$file]['js'])) {

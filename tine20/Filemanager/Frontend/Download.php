@@ -39,7 +39,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             $download = $this->_getDownloadLink($downloadId);
 
             if (! $this->_verfiyPassword($download)) {
-                $this->_renderPasswordForm();
+                return $this->_renderPasswordForm();
                 exit;
             }
 
@@ -49,16 +49,16 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             
             switch ($node->type) {
                 case Tinebase_Model_Tree_FileObject::TYPE_FILE:
-                    $this->_displayFile($download, $node, $splittedPath);
+                    return $this->_displayFile($download, $node, $splittedPath);
                     break;
                     
                 case Tinebase_Model_Tree_FileObject::TYPE_FOLDER:
-                    $this->_listDirectory($download, $node, $splittedPath);
+                    return $this->_listDirectory($download, $node, $splittedPath);
                     break;
             }
             
         } catch (Exception $e) {
-            $this->_handleExceptionAndShow404($e);
+            return $this->_handleExceptionAndShow404($e);
         }
         
         exit;
@@ -75,7 +75,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         } else {
             Tinebase_Exception::log($e);
         }
-        $this->_renderNotFoundPage();
+        return $this->_renderNotFoundPage();
     }
 
     protected function _verfiyPassword($download)
@@ -118,10 +118,22 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _renderPasswordForm()
     {
-        $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
-        $template = $twig->load(Filemanager_Config::APP_NAME . '/views/password.html.twig');
-        die($template->render());
+        return $this->_getHTML('password');
+    }
+
+    protected function _getHTML($templateName, $context = [])
+    {
+        $locale = Tinebase_Core::getLocale();
+        $jsFiles[] = "Filemanager/js/publicDownload/index.js";
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
+        $context['noLoadingAnnimation'] = true;
+        $context['base'] = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
+        $context['application'] = Filemanager_Config::APP_NAME;
+
+        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles,
+            Filemanager_Config::APP_NAME . '/views/' . $templateName . '.html.twig',
+            $context);
+        return $html;
     }
 
     /**
@@ -129,11 +141,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _renderNotFoundPage()
     {
-        header('HTTP/1.0 404 Not found');
-        $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
-        $template = $twig->load(Filemanager_Config::APP_NAME . '/views/notfound.html.twig');
-        die($template->render());
+        return $this->_getHTML('notfound');
     }
 
     /**
@@ -197,13 +205,11 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _listDirectory(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
-        $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
-        $template = $twig->load(Filemanager_Config::APP_NAME . '/views/folder.html.twig');
-        die($template->render([
-            'files' => Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node),
+        $files = Filemanager_Controller_DownloadLink::getInstance()->getFileList($download, $path, $node);
+        return $this->_getHTML('folder', [
+            'files' => $files,
             'path' => $node->path
-        ]));
+        ]);
     }
 
     public static function urlEncodeArray(array $array): array
@@ -221,18 +227,12 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      */
     protected function _displayFile(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
-        $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
-        $template = $twig->load(Filemanager_Config::APP_NAME . '/views/file.html.twig');
-        die($template->render([
-            'file' => [
-                'path' => $download->getDownloadUrl('get') . '/' . implode('/', $path),
-                'size' => Tinebase_Helper::formatBytes($node->size),
-                'last_modified_time' => Tinebase_Translation::dateToStringInTzAndLocaleFormat($node->last_modified_time ?? $node->creation_time),
-                'name' => $node->name,
-            ],
+        return $this->_getHTML('file', [
+            'path' => $download->getDownloadUrl('get') . '/' . implode('/', $path),
+            'last_modified_time' => Tinebase_Translation::dateToStringInTzAndLocaleFormat($node->last_modified_time ?? $node->creation_time),
+            'file' => $node,
             'timezone' => Tinebase_Core::getUserTimezone()
-        ]));
+        ]);
     }
     
     /**
