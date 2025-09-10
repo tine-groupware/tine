@@ -302,16 +302,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
         if (null !== $this->_valueFilter) {
             $valueIdentifier = $db->quoteIdentifier("{$this->_correlationName}.value");
-            if (!$this->_value['value']) {
+            if (!$this->_value['value'] && $this->_operator !== Tinebase_Model_Filter_Abstract::OPERATOR_NOT) {
                 $_select->where($db->quoteInto($valueIdentifier . ' IS NULL OR ' . $valueIdentifier . ' = ?',
                     // this is all just wrong....
                     is_numeric($this->_value['value']) || is_bool($this->_value['value'])  ? '0' : ''));
             } else {
-                if (str_starts_with($this->_operator, 'not')) {
+                if ($this->_operator === Tinebase_Model_Filter_Abstract::OPERATOR_NOT) {
                     $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
                     $this->_valueFilter->appendFilterSql($groupSelect, $_backend);
-                    $groupSelect->orWhere($valueIdentifier . ' IS NULL');
-                    $groupSelect->appendWhere(Zend_Db_Select::SQL_OR);
+                    if (!empty($this->_value['value'])) {
+                        $groupSelect->orWhere($valueIdentifier . ' IS NULL');
+                        $groupSelect->appendWhere(Zend_Db_Select::SQL_OR);
+                    } else {
+                        $groupSelect->where($valueIdentifier . ' IS NOT NULL');
+                        $groupSelect->appendWhere();
+                    }
                 } else {
                     $this->_valueFilter->appendFilterSql($_select, $_backend);
                 }
