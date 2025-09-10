@@ -151,21 +151,6 @@ msgstr ""
 msgid "The container where new contacts are created."
 msgstr ""
 
-msgid "Allowed file type"
-msgstr ""
-
-msgid "Event Folder FileManager Path"
-msgstr ""
-
-msgid "Event Folder FileManager Path Options"
-msgstr ""
-
-msgid "Options"
-msgstr ""
-
-msgid "Registrations"
-msgstr ""
-
 msgid "Sign Up"
 msgstr ""
 
@@ -179,6 +164,9 @@ msgid "One should be able to register before the end date"
 msgstr ""
 
 msgid "Event Options"
+msgstr ""
+
+msgid "Registrations"
 msgstr ""
 
 msgid "Description"
@@ -229,24 +217,6 @@ msgstr ""
 msgid "Registration possible until:"
 msgstr ""
 
-msgid "Please enter your email address to register for this event:"
-msgstr ""
-
-msgid "Email Address:"
-msgstr ""
-
-msgid "Please enter a valid email address."
-msgstr ""
-
-msgid "Cancel"
-msgstr ""
-
-msgid "Sending..."
-msgstr ""
-
-msgid "Send Registration Request"
-msgstr ""
-
 msgid "Registration"
 msgid_plural "Registrations"
 msgstr[0] ""
@@ -264,43 +234,10 @@ msgstr ""
 msgid "Event Specific Information:"
 msgstr ""
 
-msgid "characters"
-msgstr ""
-
 msgid "Download file"
 msgstr ""
 
-msgid "I have read and accept the terms and conditions"
-msgstr ""
-
 msgid "Complete Registration"
-msgstr ""
-
-msgid "File Acknowledgement"
-msgstr ""
-
-msgid "File Upload"
-msgstr ""
-
-msgid "Multiple files not allowed"
-msgstr ""
-
-msgid "Please select only one file."
-msgstr ""
-
-msgid "File type not allowed: "
-msgstr ""
-
-msgid "File type not allowed"
-msgstr ""
-
-msgid "The type of the file \""
-msgstr ""
-
-msgid "\" is not allowed. Please select another file."
-msgstr ""
-
-msgid "File Configuration"
 msgstr ""
 
 msgid "Files"
@@ -325,12 +262,6 @@ msgid "Last Modified Time"
 msgstr ""
 
 msgid "Edit Rules"
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "Failed to update rules: "
 msgstr ""
 
 msgid "Option"
@@ -369,8 +300,8 @@ msgstr ""
 msgid "Selection Config"
 msgstr ""
 
-msgid "Checkbox"
-msgid_plural "Checkbox"
+msgid "Checkbox Option "
+msgid_plural "Checkbox Options"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -415,21 +346,15 @@ msgstr ""
 msgid "Event is live"
 msgstr ""
 
-msgid "File"
-msgid_plural "Files"
+msgid "File Option"
+msgid_plural "File Options"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Only participant acknowledgement is necessary (no participant document upload)"
+msgid "Option Config Class"
 msgstr ""
 
-msgid "Participant should upload a file"
-msgstr ""
-
-msgid "Config Class"
-msgstr ""
-
-msgid "Config"
+msgid "Option Config"
 msgstr ""
 
 msgid "Display"
@@ -472,6 +397,11 @@ msgstr ""
 msgid "Selection Config Class"
 msgstr ""
 
+msgid "Checkbox"
+msgid_plural "Checkboxes"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Booked"
 msgstr ""
 
@@ -479,12 +409,6 @@ msgid "File selection"
 msgid_plural "File selections"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Participant acknowledged the document"
-msgstr ""
-
-msgid "Participant uploaded a file"
-msgstr ""
 
 msgid "TextInput"
 msgid_plural "TextInputs"
@@ -494,24 +418,18 @@ msgstr[1] ""
 msgid "Response"
 msgstr ""
 
-msgid "Text Input"
-msgid_plural "Text Input"
+msgid "Text Input Option "
+msgid_plural "Text Input Options"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Text"
-msgid_plural "Text"
+msgstr ""
+
+msgid "Text Option "
+msgid_plural "Text Options"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Reply should only be a number"
-msgstr ""
-
-msgid "Multiple lines reply"
-msgstr ""
-
-msgid "Maximal number of characters allowed"
-msgstr ""
 
 msgid "EventManager"
 msgstr ""
@@ -562,10 +480,4 @@ msgid "Region"
 msgstr ""
 
 msgid "Country"
-msgstr ""
-
-msgid "Event Registration"
-msgstr ""
-
-msgid "Enter your email address"
 msgstr ""

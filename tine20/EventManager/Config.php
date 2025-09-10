@@ -5,8 +5,8 @@
  * @package     EventManager
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2020-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -33,9 +33,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const RULE_TYPE = 'ruleType';
     public const CRITERIA_TYPE = 'criteriaType';
     public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer';
-    public const ALLOWED_FILE_TYPE = 'allowedFileType';
-
-    public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';
 
 
 
@@ -51,109 +48,117 @@ class EventManager_Config extends Tinebase_Config_Abstract
      */
     protected static $_properties = [
         self::EVENT_TYPE => [
-            self::LABEL                 => 'Type', //_('Type')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR              => [
-                self::RECORDS  => [
+            //_('Type')
+            'label'                 => 'Type',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Main Event'], //_('Main Event')
                     ['id' => 2,      'value' => 'Workshop'], //_('Workshop')
                     ['id' => 3,      'value' => 'Project Event'], //_('Project Event')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::EVENT_STATUS => [
-            self::LABEL                 => 'Status', //_('Status')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Status')
+            'label'                 => 'Status',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Open'], //_('Open')
                     ['id' => 2,      'value' => 'Closed'], //_('Closed')
                     ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                     ['id' => 4,      'value' => 'Planning'], //_('Planning')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::REGISTRATION_FUNCTION => [
-            self::LABEL                 => 'Function', //_('Function')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Function')
+            'label'                 => 'Function',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Attendee'], //_('Attendee')
                     ['id' => 2,      'value' => 'Speaker'], //_('Speaker')
                     ['id' => 3,      'value' => 'Moderator'], //_('Moderator')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::REGISTRATION_SOURCE => [
-            self::LABEL                 => 'Source', //_('Source')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Source')
+            'label'                 => 'Source',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Online'], //_('Online')
                     ['id' => 2,      'value' => 'Manually'], //_('Manually')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::REGISTRATION_STATUS => [
-            self::LABEL                 => 'Status', //_('Status')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Status')
+            'label'                 => 'Status',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
                     ['id' => 2,      'value' => 'Waiting list'], //_('Waiting list')
                     ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::APPOINTMENT_STATUS => [
-            self::LABEL                 => 'Status', //_('Status')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Status')
+            'label'                 => 'Status',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
                     ['id' => 2,      'value' => 'Rescheduled'], //_('Rescheduled')
                     ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::OPTION_LEVEL => [
-            self::LABEL                 => 'Level', //_('Level')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR               => [
-                self::RECORDS  => [
+            //_('Level')
+            'label'                 => 'Level',
+            //_('')
+            'description'           => '',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
+            'default'               => [
+                'records' => [
                     ['id' => 1,      'value' => 'Level 1'], //_('Level 1')
                     ['id' => 2,      'value' => 'Level 2'], //_('Level 2')
                     ['id' => 3,      'value' => 'Level 3'], //_('Level 3')
@@ -161,14 +166,12 @@ class EventManager_Config extends Tinebase_Config_Abstract
                     ['id' => 5,      'value' => 'Level 5'], //_('Level 5')
                     ['id' => 6,      'value' => 'Level 6'], //_('Level 6')
                 ],
-                self::DEFAULT_STR => 1
+                'default' => 1
             ]
         ],
-
         self::OPTION_REQUIRED_TYPE => [
             self::LABEL                 => 'Option Required Type', //_('Option Required Type')
-            self::DESCRIPTION           => 'List of all option required type available',
-                                        //_('List of all option required type available')
+            self::DESCRIPTION           => 'List of all option required type available', //_('List of all option required type available')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -181,11 +184,9 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::DISPLAY_TYPE => [
             self::LABEL                 => 'Display Type', //_('Display Type')
-            self::DESCRIPTION           => 'List of all display type available',
-                                        //_('List of all display type available')
+            self::DESCRIPTION           => 'List of all display type available', //_('List of all display type available')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -197,7 +198,6 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::RULE_TYPE => [
             self::LABEL                 => 'Rule Type', //_('Rule Type')
             self::DESCRIPTION           => 'List of all rule type available', //_('List of all rule type available')
@@ -206,19 +206,15 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => 1, 'value' => 'One or more conditions are fulfilled'],
-                                        //_('One or more conditions are fulfilled')
-                    ['id' => 2, 'value' => 'All conditions are fulfilled'],
-                                        //_('All conditions are fulfilled')
+                    ['id' => 1, 'value' => 'One or more conditions are fulfilled'], //_('One or more conditions are fulfilled')
+                    ['id' => 2, 'value' => 'All conditions are fulfilled'], //_('All conditions are fulfilled')
                 ],
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::CRITERIA_TYPE => [
             self::LABEL                 => 'Criteria Type', //_('Criteria Type')
-            self::DESCRIPTION           => 'List of all criteria type available',
-                                        //_('List of all criteria type available')
+            self::DESCRIPTION           => 'List of all criteria type available', //_('List of all criteria type available')
             self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
@@ -234,34 +230,14 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => 1
             ],
         ],
-
         self::DEFAULT_CONTACT_EVENT_CONTAINER => [
-            self::LABEL                 => 'Default Container for Contacts of an Event',
-                                        //_('Default Container for Contacts of an Event')
-            self::DESCRIPTION           => 'The container where new contacts are created.',
-                                        //_('The container where new contacts are created.')
-            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-        ],
-
-        self::ALLOWED_FILE_TYPE => [
-            self::LABEL                 => 'Allowed file type', //_('Allowed file type')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                  => self::TYPE_ARRAY,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
-            self::DEFAULT_STR           => [
-                '.pdf', '.doc' ,'.docx', '.png', '.jpeg', '.txt', '.html', '.htm', '.jpg', '.csv', '.xlsx', '.xls'
-            ],
-        ],
-
-        self::EVENT_FOLDER_FILEMANAGER_PATH => [
-            self::LABEL                 => 'Event Folder FileManager Path', //_('Event Folder FileManager Path')
-            self::DESCRIPTION           => '', //_('')
-            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => true,
+            //_('Default Container for Contacts of an Event')
+            'label'                 => 'Default Container for Contacts of an Event',
+            //_('The container where new contacts are created.')
+            'description'           => 'The container where new contacts are created.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
+            'clientRegistryInclude' => true,
+            'setByAdminModule'      => true,
         ],
     ];
 

@@ -15,7 +15,6 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     initComponent: function () {
         Tine.EventManager.OptionEditDialog.superclass.initComponent.call(this);
         this.app = Tine.Tinebase.appMgr.get('EventManager');
-        this.translation = new Locale.Gettext();
     },
 
     onAfterRecordLoad: function () {
@@ -153,12 +152,20 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set('rule_type', updatedData.rule_type);
             }
 
+            // Mark the record as modified so the main dialog knows there are changes
+            this.record.modified = this.record.modified || {};
+            if (updatedData.option_rule !== undefined) {
+                this.record.modified['option_rule'] = this.record.data['option_rule'];
+            }
+            if (updatedData.rule_type !== undefined) {
+                this.record.modified['rule_type'] = this.record.data['rule_type'];
+            }
             this.fireEvent('recordUpdate', this, this.record);
             if (this.actionUpdater) {
                 this.actionUpdater.updateActions([this.record]);
             }
         } catch (e) {
-            Ext.MessageBox.alert(this.translation.gettext('Error'), this.translation.gettext('Failed to update rules: ') + e.message);
+            Ext.MessageBox.alert('Error', 'Failed to update rules: ' + e.message);
         }
     },
 

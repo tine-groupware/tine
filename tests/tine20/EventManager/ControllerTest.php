@@ -150,6 +150,15 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
         self::assertNotEquals($tempfId, $node_id);
+
+        // make sure that uploaded file (from temp file) is put into filemanager (path shared/Veranstaltungen/_eventname_/Optionen/_uploadedfilename_)
+        $eventName = $event->{EventManager_Model_Event::FLD_NAME};
+        $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
+        $file_name = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_FILE_NAME};
+        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen/$eventName/Optionen/$file_name";
+        $exists = Tinebase_FileSystem::getInstance()->fileExists($prefix . $path);
+        self::assertTrue($exists);
     }
 
     public function testFileUploadToRegistration()
@@ -161,30 +170,6 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
         $createdOption = EventManager_Controller_Option::getInstance()->create($option);
         $registration = $this->_getRegistration($event->getId(), $createdOption);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
-        $event = EventManager_Controller_Event::getInstance()->get($event->getId());
-
-        //check that file node is returned
-        $node_id = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}->getFirstRecord()
-            ->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->getFirstRecord()
-            ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
-            ->{EventManager_Model_Selections_File::FLD_NODE_ID};
-        self::assertNotEquals($tempfId, $node_id);
-    }
-
-    public function testFileUploadToRegistrationAnonymousUser()
-    {
-        $event = $this->_getEvent();
-        EventManager_Controller_Event::getInstance()->create($event);
-        $option = $this->_getFileOption($event->getId());
-        $tempfId = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_FileOption::FLD_NODE_ID};
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
-        //anonymous user
-        $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
-        Tinebase_Core::setUser($user);
-
         $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
 

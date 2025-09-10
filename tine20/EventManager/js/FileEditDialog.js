@@ -15,39 +15,16 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     initComponent: function () {
         this.app = this.app || Tine.Tinebase.appMgr.get('EventManager');
         this.editDialog = this;
-        this.allowedFilesTypes = ['.pdf', '.doc', '.docx', '.png', '.jpeg', '.txt', '.html', '.htm', '.jpg', '.csv', '.xlsx', '.xls'];
         Tine.EventManager.Selections_FileEditDialog.superclass.initComponent.call(this);
     },
 
     getFormItems: function () {
-        const fieldManager = _.bind(
-            Tine.widgets.form.FieldManager.get,
-            Tine.widgets.form.FieldManager,
-            this.appName,
-            this.modelName,
-            _,
-            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
-        );
         return {
             xtype: 'tabpanel',
             border: false,
             plain: true,
             activeTab: 0,
-            items: [{
-                xtype: 'fieldset',
-                title: this.app.i18n._('File Acknowledgement'),
-                items: [
-                    fieldManager('file_acknowledgement'),
-                ]
-            },{
-                xtype: 'fieldset',
-                title: this.app.i18n._('File Upload'),
-                layout: 'fit',
-                items: [
-                    this.getFileUploadGrid()
-                ]
-            }
-            ]
+            items: [this.getFileUploadGrid()]
         }
     },
 
@@ -74,45 +51,32 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
         return this.gridPanel;
     },
 
-    validateFiles: function (uploadedFiles) {
-        if (uploadedFiles.length > 1) {
-            let title = this.app.i18n._('Multiple files not allowed');
-            let message = this.app.i18n._('Please select only one file.');
-            Ext.ux.Notification.show(title, message);
-            return false;
-        }
-
-        // Validate file type for each file
-        for (let i = 0; i < uploadedFiles.length; i++) {
-            let uploadedFile = uploadedFiles[i];
-            let fileName = uploadedFile.get('name') || uploadedFile.data.name;
-
-            if (fileName) {
-                let uploadedFileType = '.' + fileName.split('.').pop().toLowerCase();
-
-                if (this.allowedFilesTypes.indexOf(uploadedFileType) === -1) {
-                    Tine.log.info(this.app.i18n._('File type not allowed: ') + uploadedFileType);
-                    let title = this.app.i18n._('File type not allowed');
-                    let message = this.app.i18n._('The type of the file "') + fileName + this.app.i18n._('" is not allowed. Please select another file.');
-                    Ext.ux.Notification.show(title, message);
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    },
-
     onFilesSelected: function () {
         const uploadedFiles = Array.from(this.gridPanel.store.data.items);
-        if (!this.validateFiles(uploadedFiles)) {
-            uploadedFiles.forEach((invalidFile) => {
-                if (invalidFile.phantom) {
-                    this.deleteOldUploadedFile(invalidFile);
+        if (uploadedFiles.length > 0) {
+            uploadedFiles.forEach((uploadedFile) => {
+                if (uploadedFile.data.input) {
+                    this.waitForUploadComplete(uploadedFile, (fileRecord) => {
+                        this.linkFileToRecord(fileRecord);
+                    });
+                } else {
+                    this.deleteOldUploadedFile(uploadedFile);
                 }
             });
-            return;
         }
+    },
+
+    waitForUploadComplete: function (fileRecord, callback) {
+        let checkStatus = () => {
+            if (fileRecord.get('status') === 'complete') {
+                callback(fileRecord);
+            } else if (fileRecord.get('status') === 'failure') {
+                console.error('File upload failed');
+            } else {
+                setTimeout(checkStatus, 500);
+            }
+        };
+        checkStatus();
     },
 
     linkFileToRecord: function (fileRecord) {
@@ -123,6 +87,17 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                 this.record.set('file_name', tempFile.name);
                 this.record.set('file_size', tempFile.size);
                 this.record.set('file_type', tempFile.type);
+                // Update the form field if it exists
+                let nodeIdField = this.getForm().findField('node_id');
+                let fileName = this.getForm().findField('file_name');
+                let fileSize = this.getForm().findField('file_size');
+                let fileType = this.getForm().findField('file_type');
+                if (nodeIdField) {
+                    nodeIdField.setValue(tempFile.id);
+                    fileName.setValue(tempFile.name);
+                    fileSize.setValue(tempFile.size);
+                    fileType.setValue(tempFile.type);
+                }
             }
         }
     },

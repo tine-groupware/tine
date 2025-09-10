@@ -25,6 +25,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Salutation')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.salutation"></b-form-input>
@@ -35,6 +36,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Title')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.title"></b-form-input>
@@ -45,6 +47,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('First Name') + '*'"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input
@@ -58,6 +61,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Middle Name')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.middleName"></b-form-input>
@@ -68,6 +72,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Last Name') + '*'"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input
@@ -81,6 +86,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Company')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.company"></b-form-input>
@@ -91,6 +97,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Day of Birth')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input
@@ -107,6 +114,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('E-mail') + '*'"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input
@@ -120,6 +128,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Mobile')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.mobile"></b-form-input>
@@ -130,6 +139,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Telephone')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.telephone"></b-form-input>
@@ -140,6 +150,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Street')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.street"></b-form-input>
@@ -150,6 +161,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('House Nr.')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.houseNumber"></b-form-input>
@@ -160,6 +172,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Postal Code')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.postalCode"></b-form-input>
@@ -170,6 +183,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('City')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.city"></b-form-input>
@@ -180,6 +194,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Region')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.region"></b-form-input>
@@ -190,6 +205,7 @@
           content-cols-sm
           content-cols-lg="7"
           :label="formatMessage('Country')"
+          label-for="input-horizontal"
           class="mb-3"
         >
           <b-form-input v-model="contactDetails.country"></b-form-input>
@@ -217,33 +233,19 @@
                   content-cols-sm
                   content-cols-lg="7"
                   :label="option.option_config.text"
+                  label-for="input-horizontal"
                   class="mb-3"
                 >
-                  <b-form-textarea
-                    v-if="option.option_config.multiple_lines"
-                    v-model="replies[option.id]"
-                    :maxlength="option.option_config.max_characters || undefined"
-                    :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
-                    rows="4"
-                  ></b-form-textarea>
                   <b-form-input
-                    v-else
                     v-model="replies[option.id]"
-                    :type="option.option_config.only_numbers ? 'number' : 'text'"
-                    :maxlength="!option.option_config.only_numbers && option.option_config.max_characters ? option.option_config.max_characters : undefined"
-                    :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
-                    @input="handleTextInputChange(option, $event)"
+                    :class="{
+                        'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)
+                      }"
                   ></b-form-input>
-                  <small v-if="option.option_config.multiple_lines && option.option_config.max_characters" class="text-muted">
-                    {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
-                  </small>
-                  <small v-else-if="!option.option_config.only_numbers && option.option_config.max_characters" class="text-muted">
-                    {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
-                  </small>
                 </b-form-group>
               </div>
               <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'"
-                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
+                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id) }">
                 <b-form-checkbox
                   v-model="replies[option.id]"
                   value="true"
@@ -257,31 +259,25 @@
                   </div>
                 </b-form-checkbox>
               </div>
-              <div v-if="option.option_config_class === 'EventManager_Model_FileOption'"
-                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
+              <div v-if="option.option_config_class === 'EventManager_Model_FileOption'">
                 <div class="mb-3">
                   <h6>{{option.name_option}}</h6>
-                  <div v-if="option.option_config && option.option_config.node_id !== ''">
-                    <b-button class="mb-3" @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+                  <div v-if="option.option_config">
+                    <b-button @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
                   </div>
-                  <div class="mb-3" v-if="option.option_config && option.option_config.file_acknowledgement && option.option_config.node_id !== ''">
-                    <b-form-checkbox
-                      v-model="replies[option.id]"
-                      value="true"
-                      unchecked-value="false"
-                      @click="singleSelection(option)"
-                    >{{formatMessage('I have read and accept the terms and conditions')}}</b-form-checkbox>
-                  </div>
-                  <div v-else-if="option.option_config && option.option_config.file_upload" class="mb-3">
-                    <input
-                      id="file-input"
-                      type="file"
-                      class="form-control"
-                      @change="(event) => handleFileChange(event, option.id)"
-                      :accept="acceptedTypes"
-                      :multiple=false
-                    >
-                  </div>
+                </div>
+                <div class="mb-3">
+                  <input
+                    id="file-input"
+                    type="file"
+                    class="form-control"
+                    @change="(event) => handleFileChange(event, option.id)"
+                    :accept="acceptedTypes"
+                    :multiple="allowMultiple"
+                    :class="{
+                        'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)
+                      }"
+                  >
                 </div>
               </div>
             </div>
@@ -291,7 +287,7 @@
           <p>{{ formatMessage(modalMessage) }}</p>
           <b-button @click="handleModalClose" variant="primary">OK</b-button>
         </b-modal>
-        <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
+        <b-button @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
       </b-col>
     </b-row>
   </b-container>
@@ -350,23 +346,7 @@ const modalTitle = ref('');
 const modalMessage = ref('');
 const validationErrors = ref([]);
 const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls'
-
-const getCharacterCount = (optionId) => {
-  return replies.value[optionId] ? replies.value[optionId].length : 0;
-};
-
-// Handle text input changes with validation
-const handleTextInputChange = (option, value) => {
-  if (option.option_config.only_numbers) {
-      replies.value[option.id] = value;
-  } else {
-    if (option.option_config.max_characters && value.length > option.option_config.max_characters) {
-      replies.value[option.id] = value.substring(0, option.option_config.max_characters);
-    } else {
-      replies.value[option.id] = value;
-    }
-  }
-};
+const allowMultiple = false;
 
 const sortOptionsByGroup = computed(() => {
   let options = eventDetails.value.options;
@@ -452,12 +432,7 @@ const hasOptionValue = (option) => {
     case 'EventManager_Model_CheckboxOption':
       return replies.value[option.id] === 'true';
     case 'EventManager_Model_FileOption':
-      if (option.option_config && option.option_config.file_acknowledgement) {
-        return replies.value[option.id] === 'true';
-      } else if (option.option_config && option.option_config.file_upload) {
-        return uploadedFiles.value[option.id] && uploadedFiles.value[option.id].length > 0;
-      }
-      return true; // For other file options (display only)
+      return uploadedFiles.value[option.id] && uploadedFiles.value[option.id].length > 0;
     case 'EventManager_Model_TextOption':
       return true; // Text options are display-only
     default:
@@ -633,17 +608,8 @@ const postRegistration = async () => {
 
   optionsByGroup.forEach((groupOptions, groupName) => {
     groupOptions.forEach(option => {
-      if (option.option_config_class === 'EventManager_Model_FileOption') {
-        if (option.option_config && option.option_config.file_acknowledgement) {
-          if (hasOptionValue(option)) {
-            filteredReplies[option.id] = replies.value[option.id];
-          }
-        }
-        // skip file upload options (handle in uploadFiles)
-        return;
-      }
-
-      if (option.option_config_class === 'EventManager_Model_TextOption') {
+      if (option.option_config_class === 'EventManager_Model_FileOption' ||
+        option.option_config_class === 'EventManager_Model_TextOption') {
         return;
       }
 
@@ -654,17 +620,8 @@ const postRegistration = async () => {
   });
 
   ungroupedOptions.forEach(option => {
-    if (option.option_config_class === 'EventManager_Model_FileOption') {
-      if (option.option_config && option.option_config.file_acknowledgement) {
-        if (hasOptionValue(option)) {
-          filteredReplies[option.id] = replies.value[option.id];
-        }
-      }
-      // skip file upload options (handle in uploadFiles)
-      return;
-    }
-
-    if (option.option_config_class === 'EventManager_Model_TextOption') {
+    if (option.option_config_class === 'EventManager_Model_FileOption' ||
+      option.option_config_class === 'EventManager_Model_TextOption') {
       return;
     }
 
@@ -818,34 +775,28 @@ async function getEvent() {
   }).then(resp => resp.json())
     .then(data => {
       eventDetails.value = data;
-      if (eventDetails.value.options) {
-        if (eventDetails.value.options.length > 1) {
-          eventDetails.value.options.forEach((option) => {
-            switch (option.option_config_class) {
-              case 'EventManager_Model_CheckOption':
-                replies.value[option.id] = 'false';
-                break;
-              case 'EventManager_Model_TextInputOption':
-                replies.value[option.id] = '';
-                break;
-              case 'EventManager_Model_FileOption':
-                if (option.option_config && option.option_config.file_acknowledgement) {
-                  replies.value[option.id] = 'false';
-                } else {
-                  uploadedFiles.value[option.id] = null;
-                }
-                break;
-              case 'EventManager_Model_TextOption':
-                // Display-only, no input needed
-                break;
-            }
-          });
-        } else {
-          if (eventDetails.value.options.option_config_class === 'EventManager_Model_CheckOption') {
-            replies.value[eventDetails.value.options.id] = 'false';
-          } else {
-            replies.value[eventDetails.value.options.id] = '';
+      if (eventDetails.value.options.length > 1) {
+        eventDetails.value.options.forEach((option) => {
+          switch (option.option_config_class) {
+            case 'EventManager_Model_CheckOption':
+              replies.value[option.id] = 'false';
+              break;
+            case 'EventManager_Model_TextInputOption':
+              replies.value[option.id] = '';
+              break;
+            case 'EventManager_Model_FileOption':
+              uploadedFiles.value[option.id] = null;
+              break;
+            case 'EventManager_Model_TextOption':
+              // Display-only, no input needed
+              break;
           }
+        });
+      } else {
+        if (eventDetails.value.options.option_config_class === 'EventManager_Model_CheckOption') {
+          replies.value[eventDetails.value.options.id] = 'false';
+        } else {
+          replies.value[eventDetails.value.options.id] = '';
         }
       }
       console.log(data);
