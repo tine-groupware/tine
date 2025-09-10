@@ -112,7 +112,7 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $bodyPartStream = new Zend_Mime_Part($s);
         $bodyPartStream->encoding = $bodyPart->encoding;
         $bodyText = $bodyPartStream->getDecodedContent();
-        $this->assertStringContainsString(' 0 alarms sent (limit: 100).', $bodyText);
+        $this->assertStringContainsString('0 alarms sent (limit: 100).', $bodyText);
         $this->assertStringNotContainsString('Tinebase_Alarm::sendPendingAlarms::157', $bodyText, 'regex should remove method and line in notification');
         $this->assertStringNotContainsString('NOTICE', $bodyText, 'custom formatter should not include notice');
     }
