@@ -57,7 +57,6 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             EventManager_Model_Appointment::class,
             EventManager_Model_Event::class,
             EventManager_Model_Option::class,
-            EventManager_Model_OptionsRule::class,
             EventManager_Model_Registration::class,
             EventManager_Model_Selection::class,
         ]);
