@@ -620,7 +620,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const bodyContent = this.record.get('body');
         const format = this.record.get('content_type');
         const ch = format === 'text/html' ? '<br>' : '\n';
-        if (bodyContent && bodyContent !== '' && !bodyContent.startsWith(ch)) {
+        const isBootstrapMailRe = /\s*<meta name="generator" content="bootstrapemail"/;
+
+        if (bodyContent && bodyContent !== '' && !bodyContent.startsWith(ch) && !isBootstrapMailRe.test(bodyContent)) {
             this.record.set('body', `${ch}${ch}${bodyContent}`);
             this.msgBody = this.record.get('body');
             this.bodyCards.layout.activeItem.setValue(this.msgBody);
@@ -1592,7 +1594,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             const signatureElement = document.createElement('span');
             signatureElement.className = 'felamimail-body-signature-current';
             signatureElement.innerHTML = resolvedSignature;
-            bodyContent = this.appendHtmlNode(signatureElement, newPosition);
+
+            const signatureContainer = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-container')[0];
+            if (signatureContainer) {
+                signatureContainer.innerHTML = '';
+                signatureContainer.appendChild(signatureElement)
+                bodyContent = this.htmlEditor.getDoc().getElementsByTagName('body')[0].innerHTML;
+            } else {
+                bodyContent = this.appendHtmlNode(signatureElement, newPosition);
+            }
         }
 
         this.record.set('body', bodyContent);

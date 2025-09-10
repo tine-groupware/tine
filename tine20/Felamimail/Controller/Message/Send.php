@@ -209,7 +209,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         foreach ($this->_massMailingPlugins as $plugin) {
             $plugin->prepareMassMailingMessage($_message, $_twig);
         }
-        $_message->body = $_twig->getEnvironment()->createTemplate($_message->body)->render();
+        $_message->body = $_twig->getEnvironment()->createTemplate($_message->body)->render([
+            'contact' => $_message->to[0]['contact_record'] ?? null,
+        ]);
     }
 
     /**
