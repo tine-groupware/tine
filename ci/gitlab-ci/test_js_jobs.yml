@@ -93,7 +93,7 @@ js-e2e-tests-source:
   rules:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
       when: never
-    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true"
+    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true" || ($CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source-save-screenshots/)
       when: never
     - !reference [.js-e2e-tests-source, rules]
 js-e2e-tests-source-save-screenshots:
@@ -110,7 +110,7 @@ js-e2e-tests-source-save-screenshots:
   rules:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
       when: never
-    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true"
+    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true" && ($CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS !~ /js-e2e-tests-source-save-screenshots/)
       when: never
     - !reference [.js-e2e-tests-source, rules]
 js-e2e-tests-source-php-version-matrix:
