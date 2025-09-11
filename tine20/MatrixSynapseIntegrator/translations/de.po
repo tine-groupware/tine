@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - MatrixSynapseIntegrator\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+msgid "Matrix Domain"
+msgstr ""
+
+msgid "Element URL"
+msgstr ""
+
+msgid "Home Server URL"
+msgstr ""
+
+msgid "Identity Server URL"
+msgstr ""
+
+msgid "Corporal Shared Auth Token"
+msgstr ""
+
+msgid "Synapse directory export enabled"
+msgstr ""
+
+msgid "Synapse directory database postgres url"
+msgstr ""
+
+msgid "Synapse directory database postgres username"
+msgstr ""
+
+msgid "Synapse directory database postgres password"
+msgstr ""
+
+msgid "Synapse tenant name"
+msgstr ""
+
+msgid "Synapse database postgres url"
+msgstr ""
+
+msgid "Synapse database postgres username"
+msgstr ""
+
+msgid "Synapse database postgres password"
+msgstr ""
+
+msgid "Synapse shared secret auth"
+msgstr ""
+
+msgid "Matrix Integration"
+msgstr "Matrix Integration"
+
+msgid "Matrix Account"
+msgid_plural "Matrix Accounts"
+msgstr[0] "Matrix Konto"
+msgstr[1] "Matrix Konten"
+
+msgid "Chat"
+msgstr ""
+
+msgid "No chat account has been assigned"
+msgstr "Kein Chat Konto zugewiesen"
+
+msgid "You have not yet been assigned an chat account. This view is therefore empty"
+msgstr "Ihnen wurde bis jetzt kein Chat-Konto zugewiesen. Diese Ansicht ist daher leer."
+
+msgid "Recovery Key or Password Needed"
+msgstr "Wiederherstellungs-Schlüssel oder -Passwort benötigt"
+
+msgid "{ brandingTitle } requires your recovery key or password to decrypt your chats. The recovery data you enter will be stored in secure storage on this { brandingTitle } server."
+msgstr "{ brandingTitle } benötigt ihren Wiederherstellungs-Schlüssel oder -Passwort um ihre Chats zu entschlüsseln. Die eingegebenen Wiederherstellungsdaten werden in einem sicheren Speicher auf diesem { brandingTitle } Server gespeichert."
+
+msgid "Recovery Key or Password Incorrect"
+msgstr "Wiederherstellungs-Schlüssel oder -Passwort falsch"
+
+msgid "The recovery data you entered was incorrect. Please try again."
+msgstr "Ihre eingegebenen Wiederherstellungsdaten waren nicht korrekt. Bitte versuchen sie es noch einmal."
+
+msgid "Manual Management Required"
+msgstr "Manuelle Verwaltung benötigt"
+
+msgid "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
+msgstr "{ brandingTitle } kennt ihren ihre korrekten Wiederherstellungsdaten nicht und kann kann ihre Chats daher nicht entsperren. Sie können versuchen ihre Wiederherstellungsdaten direkt im Chat Programm eingeben. In diesem Fall speichert { brandingTitle } diese Daten nicht und sie müssen sie ggf. mehrfach eingeben."
+
+msgid "Matrix Accounts"
+msgstr "Matrix Konten"
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Account"
+msgstr "Konto"
+
+msgid "Matrix ID"
+msgstr ""
+
+msgid "Matrix Recovery Password"
+msgstr "Matrix Wiederherstellungs-Passwort"
+
+msgid "Matrix Recovery Key"
+msgstr "Matrix Wiederherstellungs-Schlüssel"
+
+msgid "Matrix Session Key"
+msgstr "Matrix Sitzungs-Schlüssel"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "MatrixSynapseIntegrator"
+msgstr ""

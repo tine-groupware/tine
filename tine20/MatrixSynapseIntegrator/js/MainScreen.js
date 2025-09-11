@@ -18,6 +18,19 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         { tag: 'div', cls: 'tine-viewport-waitcycle'}
     ]},
 
+    clientRPC: async function (type, args, timeout=1000) {
+        return new Promise((resolve, reject) => {
+            const eventUUID = Tine.Tinebase.data.Record.generateUID()
+            this.clientRPCCallbacks[eventUUID] = { resolve, reject }
+            this.clientFrame.dom.contentWindow.postMessage({ type, eventUUID, args }, this.url.origin)
+            try {
+                waitFor(() => !this.clientRPCCallbacks.hasOwnProperty(eventUUID), timeout)
+            } catch (e) {
+                reject(`${type} rpc call did not respond within ${timeout}ms`)
+            }
+        })
+    },
+
     // @TODO move somewhere
     sha256: async function (message){
         const msgBuffer = new TextEncoder().encode(message);
@@ -59,6 +72,8 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
 
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
+
+        this.clientRPCCallbacks = {}
 
         this.initPromise = Promise.all([
             this.afterIsRendered(),
@@ -110,25 +125,8 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                 case "elementStartupFailure":
                     this.showClient()
                     if (event.data.failure === 'recoveryKeyIncorrect') {
-                        const [btn, string] = await Ext.MessageBox.show({
-                            title: this.app.formatMessage('Recovery Key or Password Needed'),
-                            msg: this.app.formatMessage('{ brandingTitle } needs your recovery key/password to access your chats. The provided key/password will be saved in a secret store on this server.', {
-                                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
-                            }),
-                            buttons: Ext.MessageBox.OKCANCEL,
-                            icon: Ext.MessageBox.QUESTION_INPUT,
-                            prompt: true
-                        });
-                        if (btn === 'ok') {
-                            // @TODO save in account, reload frame
-                            // await Tine.MatrixSynapseIntegrator.setRecoveryPassword(string)
-                            // || await Tine.MatrixSynapseIntegrator.setRecoveryKey(string)
-
-                        } else {
-                            // show info for user?
-                            // let user use client
-                            // ask with element prompt?
-                        }
+                        await this.promptRecoveryData()
+                        break
                     }
                     break
                 case "elementSendNotification":
@@ -183,10 +181,57 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     }
                     break;
                 default:
+                    if (this.clientRPCCallbacks.hasOwnProperty(event.data.eventUUID)) {
+                        const cbs = this.clientRPCCallbacks[event.data.eventUUID]
+                        delete this.clientRPCCallbacks[event.data.eventUUID]
+                        if (! event.data.hasOwnProperty('failure')) {
+                            cbs.resolve(event.data.result)
+                        } else {
+                            cbs.reject(event.data.failure, event.data)
+                        }
+                    }
                     return
             }
         }, false);
 
         this.supr().initComponent.call(this);
     },
+
+    promptRecoveryData: async function() {
+        const [btn, recoveryDatum] = await Ext.MessageBox.show({
+            title: this.app.formatMessage('Recovery Key or Password Needed'),
+            msg: this.app.formatMessage('{ brandingTitle } requires your recovery key or password to decrypt your chats. The recovery data you enter will be stored in secure storage on this { brandingTitle } server.', {
+                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+            }),
+            buttons: Ext.MessageBox.OKCANCEL,
+            icon: Ext.MessageBox.QUESTION_INPUT,
+            prompt: true
+        });
+        if (btn === 'ok') {
+            const [success, type ] = await this.clientRPC('checkRecoveryDatumRequest', { recoveryDatum })
+            if (success) {
+                this.bootstrapData = await Tine.MatrixSynapseIntegrator[`setRecovery${_.upperFirst(type)}`](recoveryDatum)
+                this.clientFrame.dom.src = this.clientFrame.dom.src
+                return
+            } else {
+                if (await Ext.MessageBox.show({
+                    title: this.app.formatMessage('Recovery Key or Password Incorrect'),
+                    msg: this.app.formatMessage('The recovery data you entered was incorrect. Please try again.'),
+                    buttons: Ext.MessageBox.OKCANCEL,
+                    icon: Ext.MessageBox.QUESTION_WARN
+                }) === 'ok') {
+                    return this.promptRecoveryData()
+                }
+            }
+        }
+        await Ext.MessageBox.show({
+            title: this.app.formatMessage('Manual Management Required'),
+            msg: this.app.formatMessage('{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times.', {
+                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+            }),
+            // { brandingTitle } kennt ihren ihre korrekten Wiederherstellungsdaten nicht und kann kann ihre Chats daher nicht entsperren. Sie können versuchen ihre Wiederherstellungsdaten direkt im Chat Programm eingeben. In diesem Fall speichert { brandingTitle } diese Daten nicht und sie müssen sie ggf. mehrfach eingeben.
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.INFO_INSTRUCTION
+        })
+    }
 });
