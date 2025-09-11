@@ -228,7 +228,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     protected function _displayFile(Filemanager_Model_DownloadLink $download, Tinebase_Model_Tree_Node $node, $path)
     {
         return $this->_getHTML('file', [
-            'path' => $download->getDownloadUrl('get') . '/' . implode('/', $path),
+            'path' => $download->getDownloadUrl('get') . '/' . implode('/', static::urlEncodeArray($path)),
             'last_modified_time' => Tinebase_Translation::dateToStringInTzAndLocaleFormat($node->last_modified_time ?? $node->creation_time),
             'file' => $node,
             'timezone' => Tinebase_Core::getUserTimezone()
