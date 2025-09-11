@@ -562,7 +562,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
         $replace = array('${ROW}', '${/ROW}');
         /** @var Cell $cell */
-        foreach($cellIterator as $cell) {
+        foreach ($cellIterator as $cell) {
             $this->_cloneRow[] = array(
                 'column'        => $cell->getColumn(),
                 'value'         => str_replace($replace, '', $cell->getValue()),
