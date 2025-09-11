@@ -1427,7 +1427,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _writeGenericHead()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' writing generic header...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Writing generic header...');
+        }
 
         $this->_currentRowType = self::ROW_TYPE_GENERIC_HEADER;
 
@@ -1457,7 +1459,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 
                 $systemFields = [];
                 
-                foreach($this->_fields as $field) {
+                foreach ($this->_fields as $field) {
                     if (isset($modelConfigFields[$field]) && isset($modelConfigFields[$field]['system']) && $modelConfigFields[$field]['system'] === true) {
                         $systemFields[] = $field;
                     }   

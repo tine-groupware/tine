@@ -30,14 +30,15 @@ class Addressbook_Export_XlsTest extends TestCase
 
         $reader = PHPExcel_IOFactory::createReader('Excel2007');
         $doc = $reader->load($xls);
-        $arrayData = $doc->getActiveSheet()->rangeToArray('A1:CC4');
+        // depending on the number of contact fields, the range might have to be increased some more
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A1:CH4');
 
         $positionIndex = array_search('Salutation', $arrayData[2], true);
         static::assertNotEquals(false, $positionIndex, 'can\'t find Salutation in: ' . print_r($arrayData[2], true));
         static::assertEquals('Mr', $arrayData[3][$positionIndex], $positionIndex . ' ' . print_r($arrayData[3], true));
 
         $positionIndex = array_search('Tags', $arrayData[2], true);
-        static::assertNotSame(false, $positionIndex);
+        static::assertNotSame(false, $positionIndex, 'could not find "Tags" column');
         static::assertStringContainsString('tag1', $arrayData[3][$positionIndex]);
         static::assertStringContainsString('tag2', $arrayData[3][$positionIndex]);
     }
