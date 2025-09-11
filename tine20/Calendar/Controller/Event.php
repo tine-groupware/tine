@@ -2604,7 +2604,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $_record->container_id,
                     Tinebase_Model_Grants::GRANT_ADMIN
                 ))
-            // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
+            // external invitations are in a special invitation calendar. only attendee can see it via display calendar
             ||  $_record->hasExternalOrganizer()
         ) {
             return true;
