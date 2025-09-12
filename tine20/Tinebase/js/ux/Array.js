@@ -57,7 +57,7 @@ Object.assign(Array.prototype, {
     /**
      * returns an array containing all the values of this array that are present in all the arguments.
      * taken from https://github.com/lovasoa/fast_array_intersect
-     * 
+     *
      * @param {Array} array1
      * @param {Array} [array2]
      * @param {Array} [...]
@@ -65,6 +65,8 @@ Object.assign(Array.prototype, {
     intersect: function() {
         const arrays = arguments
         if (arrays.length === 0) return [];
+        arrays[arrays.length] = this;
+        arrays.length = arrays.length+1;
 
         // Put the smallest array in the beginning
         for (let i=1; i<arrays.length; i++) {
