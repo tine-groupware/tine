@@ -161,4 +161,15 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             }
         }
     }
+
+    public static function loginFor($path)
+    {
+        if (!Tinebase_Session::sessionExists()) {
+            Tinebase_Core::startCoreSession();
+        }
+        Tinebase_Session::getSessionNamespace()->login = ['afterLoginRedirect' => [
+            'method' => 'GET',
+            'url' => $path,
+        ]];
+    }
 }

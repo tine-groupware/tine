@@ -565,7 +565,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
             $currentCalUser = $anonymousAccess && !$userKey ? null : 
-                Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->contact_id));
+                Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->getIdFromProperty('contact_id')));
             
             // check authkey
             // NOTE: maybe we have different authkeys for some reason, so lets check that at least one matches
@@ -666,6 +666,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 'config' => $config
             ])));
 
+            if ($anonymousAccess) {
+                $url = Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $pollId
+                    . ($userKey ? '/' . $userKey : '')
+                    . ($authKey ? '/' . $authKey : '');
+                Tinebase_Expressive_Middleware_CheckRouteAuth::loginFor($url);
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));

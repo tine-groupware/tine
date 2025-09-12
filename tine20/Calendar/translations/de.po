@@ -1522,6 +1522,12 @@ msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."
 msgid "If you did not receive the link, please contact the organiser."
 msgstr "Wenn Sie ihn nicht erhalten haben, wenden Sie sich bitte an den Organisator."
 
+msgid "Password Protected Poll"
+msgstr "Passwort geschützte Umfrage"
+
+msgid "Please enter the survey password to continue."
+msgstr "Bitte geben sie das Umfrage Passwort ein um fortzufahren. "
+
 msgid "Submit"
 msgstr "Abschicken"
 
@@ -2510,8 +2516,8 @@ msgstr "Montag"
 #~ msgid "This is a closed poll. No Attendee can be added."
 #~ msgstr "Dies ist eine geschlossene Umfrage. Es können keine Teilnehmer hinzugefügt werden."
 
-#~ msgid "This poll is closed already"
-#~ msgstr "Diese Umfrage ist bereits abgeschlossen"
+msgid "This poll is closed already"
+msgstr "Diese Umfrage ist bereits abgeschlossen"
 
 #~ msgid "We have sent it to your E-Mail account again."
 #~ msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."

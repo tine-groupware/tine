@@ -100,10 +100,14 @@ class Tinebase_Twig
         $tbConfig = Tinebase_Config::getInstance();
 
         $account = Tinebase_Core::getUser();
-        $contact = $account instanceof Tinebase_Model_User ? Addressbook_Controller_Contact::getInstance()->getContactByUserId(
-            $account->getId(),
-            true) : null;
-
+        try {
+            $contact = $account instanceof Tinebase_Model_User ? Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                $account->getId(),
+                true) : null;
+        } catch (\Exception $e) {
+            $contact = null;
+        }
+        
         $globals = [
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},

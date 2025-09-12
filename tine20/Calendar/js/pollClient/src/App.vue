@@ -4,7 +4,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jan Evers <j.evers@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 -->
 <template>
@@ -13,102 +13,41 @@
       <b-alert class="global-error" variant="danger" :show="globalError.length > 0">{{globalError}}</b-alert>
       <p v-if="publicUrl.length > 0"><a :href="publicUrl">{{formatMessage('Switch to public poll')}}</a></p>
       <template v-if="!transferingPoll && !askPassword && showPoll">
-        <div class="row">
-          <div class="col-md-8 col-sm-12">
-            <h1 class="poll-event">{{poll.event_summary}}</h1>
-            <h2 class="poll-name" v-if="poll.name && poll.name.length > 0">{{poll.name}}</h2>
-          </div>
-          <div class="col-md-4 col-sm-12 text-end">
-            <a :href="poll.config.brandingWeburl">
-              <img style="max-width: 300px; max-height: 80px" :src="`${window.location.origin}/${poll.config.installLogo}`" :alt="poll.config.brandingTitle"/>
-            </a>
-          </div>
-        </div>
-        <div class="row greetings">
-          <div class="col-md-6 col-sm-12 greetings-text">
-            <p>
-              <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
-              <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
-              <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
-            </p>
-          </div>
-          <div class="col-md-6 col-sm-12 text-end">
-            <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
-            <b-btn v-else @click="askTineLogin = true" variant="primary">{{formatMessage('Login')}}</b-btn>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full} {headerDate, time, short}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="attendee in poll.attendee_status.filter(attendee => attendee.user_type !== 'group')" :key="attendee.key" :class="{'row-active': activeAttendee.user_id === attendee.user_id}" >
-                  <td :class="activeAttendee.user_id === attendee.user_id ? 'table-info' : 'table-light'">{{attendee.name}}</td>
-                  <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus.id"
-                    :class="[{'editable': datestatus.status_authkey !== null}, statusList[datestatus.status].cellclass]"
-                    @click="nextStatus(datestatus, attendee.key)"
-                    :title="statusName(datestatus.status)"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                  >
-                    <div class="modified-marker" v-if="datestatus.status !== datestatus.initial"></div>
-                    <span @click.stop="showCalendar(datestatus)"
-                      class="calendar-symbol"
-                      v-if="!poll.config.is_anonymous && activeAttendee.user_id !== null && activeAttendee.user_id === attendee.user_id"
-                    >
-                      <img :src="getCalendarIcon(datestatus)" alt="formatMessage('Calendar')" />
-                    </span>
-                    <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
-                  </td>
-                </tr>
-                <tr v-if="activeAttendee.user_id === null && poll.locked == '0' && poll.closed !== '1'" class="row-active">
-                  <td class="table-info name-field">
-                    <input type="text" v-model="activeAttendee.name" :placeholder="formatMessage('First name, last name')"
-                           class="form-control name-field" v-bind:class="{highlight: this.highlightName}"
-                           @input="highlightName = false" required />
-                    <input type="text" v-model="activeAttendee.email" :placeholder="formatMessage('Email address')"
-                           class="form-control email-field" v-bind:class="{highlight: this.highlightEmail}"
-                           @input="highlightEmail = false" required />
-                  </td>
-                  <td v-for="date in poll.alternative_dates.filter(date => {return typeof activeAttendee[date.id] !== 'undefined'})" :key="date.id" class="status-cell icon-cell editable"
-                    :class="statusList[activeAttendee[date.id].status].cellclass"
-                    @click="nextStatus(activeAttendee[date.id], null)"
-                    :title="statusName(activeAttendee[date.id].status)"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                  >
-                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="statusName(activeAttendee[date.id].status)" />
-                  </td>
-                </tr>
-                <tr v-if="activeAttendee.user_id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
-                  <td class="table-info">{{activeAttendee.name}}</td>
-                  <td v-for="date in poll.alternative_dates.filter(date => {return typeof activeAttendee[date.id] !== 'undefined'})" class="status-cell icon-cell" :key="date.id"
-                    :class="statusList[activeAttendee[date.id].status].cellclass"
-                    @click="nextStatus(activeAttendee[date.id], null)"
-                    :title="statusName(activeAttendee[date.id].status)"
-                    data-toggle="tooltip"
-                    data-placement="bottom"
-                  >
-                    <img :src="getStatusIcon(activeAttendee[date.id].status)" :alt="statusName(activeAttendee[date.id].status)" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12" v-if="showChangeButtons()">
-            <b-button-group class="change-buttons">
-              <b-btn @click="onCancelChanges" variant="secondary">{{formatMessage('Cancel')}}</b-btn>
-              <b-btn @click="onApplyChanges" variant="primary">{{formatMessage('Save')}}</b-btn>
-            </b-button-group>
-          </div>
-        </div>
+        <Poll :poll="{participants: participants, closed: poll.closed}" :events="poll.alternative_dates" :userId="activeAttendee.user_id" :loading="transferingPoll"
+              @saveReply="onApplyChanges" @resetPoll="loadPoll" @addParticipant="addParticipant">
+
+          <template v-slot:header>
+            <div class="col-md-8 col-sm-12">
+              <h1 class="poll-event">{{poll.event_summary}}</h1>
+              <h2 class="poll-name" v-if="poll.name && poll.name.length > 0">{{poll.name}}</h2>
+            </div>
+            <div class="col-md-4 col-sm-12 text-end">
+              <a :href="poll.config.brandingWeburl">
+                <img style="max-width: 300px; max-height: 80px" :src="`${window.location.origin}/${poll.config.installLogo}`" :alt="poll.config.brandingTitle"/>
+              </a>
+            </div>
+            <div class="row greetings">
+              <div class="col-md-6 col-sm-12 greetings-text">
+                <p>
+                  <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
+                  <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
+                  <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
+                </p>
+              </div>
+              <div class="col-md-6 col-sm-12 text-end">
+                <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
+                <b-btn v-else @click="redirectToTine" variant="primary">{{formatMessage('Login')}}</b-btn>
+              </div>
+            </div>
+          </template>
+
+          <template #replyField="{ participant_id, date }" v-slot:replyField>
+            <span @click.stop="showCalendar(date, participant_id)" class="calendar-symbol"
+              v-if="!poll.config.is_anonymous && activeAttendee.user_id !== null && activeAttendee.user_id === participant_id">
+              <img :src="getCalendarIcon(date)" alt="formatMessage('Calendar')" />
+            </span>
+          </template>
+        </Poll>
         <div class="row footer" v-if="!hidegtcmessage">
           <div class="col-md-12">
             <p>
@@ -128,37 +67,25 @@
         </b-modal>
       </div>
       <div>
-        <b-modal ref="gtc" hide-footer centered title="formatMessage('General terms and conditions')" v-model="showGtc">
+        <b-modal ref="gtc" hide-footer centered :title="formatMessage('General terms and conditions')" v-model="showGtc">
           {{gtcText}}
         </b-modal>
       </div>
       <div>
-        <b-modal ref="linkInfo" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
+        <b-modal ref="linkInfo" hide-footer centered :title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
           <p>{{formatMessage('Use your personal link please.')}}</p>
           <p>{{formatMessage('We have sent it to your email address again.')}}</p>
           <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>
       <div>
-        <b-modal ref="password" v-model="askPassword" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
+        <b-modal ref="password" v-model="askPassword" :title="formatMessage('Password Protected Poll')" hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
+            <p>{{formatMessage('Please enter the survey password to continue.')}}</p>
             <label for="password">{{formatMessage('Password')}}<input id="password" type="password" class="form-control" v-model="password" /></label>
             <b-btn variant="primary" @click.prevent="submitPassword" type="submit">{{formatMessage('Submit')}}</b-btn>
             <b-alert variant="danger" :show="wrongPassword">
               {{formatMessage('Wrong password!')}}
-            </b-alert>
-          </form>
-        </b-modal>
-      </div>
-      <div>
-        <b-modal ref="tine-login" v-model="askTineLogin" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
-          <form>
-            <h2>{{formatMessage('Please log in')}}</h2>
-            <label for="tine-user">{{formatMessage('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
-            <label for="tine-password">{{formatMessage('Password')}}<input id="tine-password" type="password" class="form-control" v-model="login.password" /></label>
-            <b-btn variant="primary" @click.prevent="submitTineLogin" type="submit">{{formatMessage('Submit')}}</b-btn>
-            <b-alert variant="danger" class="login-error" :show="wrongLogin">
-              {{loginErrorMessage}}
             </b-alert>
           </form>
         </b-modal>
@@ -178,6 +105,7 @@ import axios from 'axios'
 import { BModal, BButton, BButtonGroup, BAlert, BSpinner/* VBModal */} from 'bootstrap-vue-next'
 // import Spinner from 'vue-simple-spinner'
 import _ from 'lodash'
+import Poll from "./Poll.vue";
 
 export default {
   data () {
@@ -197,17 +125,16 @@ export default {
       wrongPassword: false,
       statusList: [],
       defaultStatus: 'NEEDS-ACTION',
-      askTineLogin: false,
-      wrongLogin: false,
-      login: { user: '', password: '' },
-      loginErrorMessage: '',
       newAccountContact: false,
       showCalendarModal: false,
       calendarUrl: '',
       usePersonalLink: false,
       publicUrl: '',
       highlightName: false,
-      highlightEmail: false
+      highlightEmail: false,
+      events: [],
+      participantId: null,
+      participants: []
     }
   },
 
@@ -229,20 +156,14 @@ export default {
       }
     }
   },
-  computed: {
-
-  },
 
   components: {
+    Poll,
     'b-modal': BModal,
     'b-btn': BButton,
     'b-button-group': BButtonGroup,
     'b-spinner': BSpinner,
     'b-alert': BAlert
-  },
-
-  directives: {
-    // 'b-modal': VBModal
   },
 
   mounted () {
@@ -276,20 +197,6 @@ export default {
 
       let payload = { status: [] }
       if (this.activeAttendee.id === null || this.newAccountContact) {
-        let incomplete = false
-        if (this.activeAttendee.name === '') {
-          this.highlightName = true
-          incomplete = true
-        }
-        if (this.activeAttendee.email === '') {
-          this.highlightEmail = true
-          incomplete = true
-        }
-        if (incomplete) {
-          this.transferingPoll = false
-          return
-        }
-
         url = this.baseUrl + 'Calendar/poll/join/' + this.poll.id
         newAttendee = true
         needUpdate = true
@@ -300,7 +207,7 @@ export default {
         _.each(this.poll.alternative_dates, (date) => {
           payload.status.push({
             cal_event_id: date.id,
-            status: this.activeAttendee[date.id].status
+            status: this.activeAttendee[date.id]?.status ?? this.defaultStatus
           })
         })
       } else {
@@ -357,18 +264,13 @@ export default {
 
           if (error.response.data.indexOf('poll is locked') > -1) {
             this.poll.locked = 1
-            this.askTineLogin = false
           }
 
           if (error.response.data.indexOf('please log in') > -1) {
-            if (this.askTineLogin) {
-              this.wrongLogin = true
-            }
-            this.askTineLogin = true
+            this.redirectToTine()
           }
 
           if (error.response.data.indexOf('use personal link') > -1) {
-            this.askTineLogin = false
             this.usePersonalLink = true
           }
         } else {
@@ -376,6 +278,9 @@ export default {
           console.log(arguments)
         }
       })
+    },
+    redirectToTine () {
+      window.location.replace('/')
     },
     onCancelChanges () {
       this.loadPoll()
@@ -405,8 +310,6 @@ export default {
         }
 
         this.askPassword = this.poll.password !== null && this.password !== this.poll.password
-
-        // let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
 
         if (!this.poll.config.current_contact || this.forceNewAttendee) {
           this.activeAttendee.id = null
@@ -470,10 +373,20 @@ export default {
         }
         this.statusList[previous].next = first
 
+        this.participants = []
         _.each(this.poll.attendee_status, (attendee) => {
+          let participant = attendee
+          participant.poll_replies = []
           _.each(attendee.status, (status) => {
             status.initial = status.status
+            participant.poll_replies.push(status)
           })
+          this.participants.push(participant)
+        })
+
+        this.events = []
+        _.each(this.poll.alternative_dates, (date) => {
+          this.events.push(date)
         })
 
         this.transferingPoll = false
@@ -497,24 +410,6 @@ export default {
           console.log(arguments)
         }
       })
-    },
-    getAttendeeId (attendee) {
-      return attendee.user_type + '-' + _.get(attendee.user_id, 'id', attendee.user_id)
-    },
-    statusName (status) {
-      let statusName = _.get(_.find(_.get(this.poll, 'config.status_available.records', {}), { id: status }), 'value', status)
-      return this.fmHidden(statusName)
-    },
-    nextStatus (attendee, id) {
-      if (attendee.status_authkey === null && id !== null) {
-        return
-      }
-      if (!this.showChangeButtons()) {
-        return
-      }
-
-      attendee.status = this.statusList[attendee.status].next
-      this.$forceUpdate()
     },
     onOtherUser () {
       let urlParams = window.location.pathname.replace(/\/$/, '').split('/')
@@ -545,30 +440,6 @@ export default {
       this.wrongPassword = false
       this.loadPoll()
     },
-    submitTineLogin () {
-      let params = {
-        username: this.login.user,
-        password: this.login.password
-      }
-
-      this.$tine20.request('Tinebase.login', params).then(response => {
-        let account = response.result.account
-        this.activeAttendee.id = 'user-' + account.contact_id
-        this.activeAttendee.name = account.accountDisplayName
-        this.activeAttendee.email = account.accountEmailAddress
-        this.activeAttendee.user_id = account.contact_id
-
-        this.wrongLogin = false
-        this.askTineLogin = false
-        this.forceNewAttendee = false
-
-        // replace with onApplyChanges()
-        this.loadPoll()
-      }).catch(error => {
-        this.wrongLogin = true
-        this.loginErrorMessage = error.result.errorMessage
-      })
-    },
     retrieveGTC () {
       if (this.gtcText.length > 0) {
         return
@@ -585,8 +456,21 @@ export default {
         console.log(arguments)
       })
     },
-    showCalendar (date) {
-      let calendarUrl = _.get(date, 'info_url', null)
+    showCalendar (date, participant_id) {
+      let calendarUrl = null
+      _.each(this.participants, (participant) => {
+        if (participant.user_id === participant_id) {
+          _.each(participant.status, (status) => {
+            if (status.cal_event_id === date.id) {
+              calendarUrl = status.info_url
+              return false
+            }
+          })
+        }
+        if (calendarUrl !== null) {
+          return false
+        }
+      })
 
       if (calendarUrl !== null) {
         this.calendarUrl = calendarUrl
@@ -603,29 +487,12 @@ export default {
       return iconUrl
     },
     getCalendarIcon (date) {
-      let start = null
-      _.each(this.poll.alternative_dates, (pollDate) => {
-        if (date.cal_event_id === pollDate.id) {
-          start = pollDate.dtstart
-        }
-      })
-
+      let start = date.dtstart
       return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start.replace(' ', 'T')).getDate() + '.svg'
     },
-    showChangeButtons () {
-      if (_.isEmpty(this.poll)) {
-        return false
-      }
-
-      if (this.poll.closed === '1') {
-        return false
-      }
-
-      if (this.poll.locked === '1' && !this.activeAttendee.id) {
-        return false
-      }
-
-      return true
+    addParticipant (participant) {
+      this.activeAttendee = participant
+      this.onApplyChanges()
     }
   }
 }
@@ -753,10 +620,14 @@ div.modified-marker {
 }
 
 span.calendar-symbol {
-  display: absolute;
   float: left;
   margin-right: -21px;
   margin-left: 5px;
+}
+
+span.calendar-symbol img {
+  min-height: 20px;
+  min-width: 20px;
 }
 
 iframe.calendar {

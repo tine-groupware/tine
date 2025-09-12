@@ -507,7 +507,8 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 ]))->toArray());
                 $routeCollector->get('/view/poll/{pollId}[/{userKey}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiMainScreen', [
-                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+                    Tinebase_Expressive_RouteHandler::UNAUTHORIZED_REDIRECT_LOGIN => true,
                 ]))->toArray());
                 $routeCollector->get('/poll/{pollId}[/{userKey}[/{authKey}]]', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiGetPoll', [
