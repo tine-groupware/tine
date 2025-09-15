@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+// import recordMgr from './RecordMgr'
+// import Record from './Record'
 import asString from "../../../Tinebase/js/ux/asString"
 
 Ext.ns('Tine.Tinebase.data');
@@ -161,6 +163,23 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             groupNames = [groupNames];
         }
 
+        groupNames = groupNames.map((groupName) => {
+            if (_.isObject(groupName) && ! _.isFunction(groupName.getTitle) && _.isString(this.group)) {
+                let recordClass;
+                if(this.group.match(/^#/)) {
+                    const conf = Tine.widgets.customfields.ConfigManager.getConfig(record.constructor.getMeta('appName'), record.constructor.getMeta('modelName'), this.group.replace('#', ''));
+                    recordClass = Tine.Tinebase.data.RecordMgr.get(_.get(conf, 'data.definition.recordConfig.value.records'));
+                } else {
+                    const conf = _.get(record.constructor.getField(this.group), 'fieldDefinition.config');
+                    recordClass = Tine.Tinebase.data.RecordMgr.get(_.get(conf, 'appName'), _.get(conf, 'modelName'))
+                }
+
+                if (recordClass) {
+                    return Tine.Tinebase.data.Record.setFromJson(groupName, recordClass)
+                }
+            }
+            return groupName;
+        })
         groupNames = await this.sanitizeGroupNames(groupNames);
 
         if (this.fixedGroups.length) {

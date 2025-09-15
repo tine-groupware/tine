@@ -407,7 +407,7 @@ Ext.data.Record.id(rec); // automatically generate a unique sequential id
      * @return {Record}
      */
     copy : function(newId) {
-        return  new this.constructor(_.cloneDeep(this.data), newId || this.id);
+        return new this.constructor(Ext.apply({}, this.data), newId || this.id);
     },
 
     /**
