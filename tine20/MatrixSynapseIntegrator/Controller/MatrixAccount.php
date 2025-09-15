@@ -192,7 +192,15 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 
         if (empty($_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY})) {
             $_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY} =
-                base64_encode(Tinebase_Record_Abstract::generateUID(32));
+                base64_encode(random_bytes(32));
+        }
+
+        if (
+            empty($_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY})
+            && empty($_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD})
+        ) {
+            $_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD} =
+                base64_encode(random_bytes(32));
         }
     }
 

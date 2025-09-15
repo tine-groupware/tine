@@ -63,6 +63,53 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
         return $user;
     }
 
+    public function testCreateUserDefaults() {
+        $userWithRecoveryKey = $this->_createTestUser();
+        $matrixAccountWithRecoveryKey = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount([
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $userWithRecoveryKey->getId(),
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $userWithRecoveryKey->getId() . ':matrix.domain',
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY => 'somekey',
+            ])
+        );
+
+        self::assertNotNull($matrixAccountWithRecoveryKey->getPasswordFromProperty(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY
+        ));
+
+        self::assertEquals('somekey', $matrixAccountWithRecoveryKey->getPasswordFromProperty(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY
+        ));
+
+        self::assertNull($matrixAccountWithRecoveryKey->getPasswordFromProperty(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD
+        ));
+
+        $userWithoutRecoveryData  = $this->_createTestUser();
+        $matrixAccountWithoutRecoveryData = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount([
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $userWithoutRecoveryData->getId(),
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $userWithoutRecoveryData->getId() . ':matrix.domain',
+            ])
+        );
+
+        self::assertNull($matrixAccountWithoutRecoveryData->getPasswordFromProperty(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY
+        ));
+
+        self::assertNotNull($matrixAccountWithoutRecoveryData->getPasswordFromProperty(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD
+        ));
+
+        // Generated password format itself is not important. It should be secure.
+        self::assertGreaterThan(
+            31,
+            strlen($matrixAccountWithoutRecoveryData->getPasswordFromProperty(
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD
+            ))
+        );
+    }
+
     public function testUpdateUser()
     {
         $user = $this->testCreateUser();
