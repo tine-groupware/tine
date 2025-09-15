@@ -7,7 +7,7 @@ beforeAll(async () => {
     await lib.getBrowser('Crm');
     await page.mouse.move(0, 0);
     await page.waitForTimeout(1000);
-    await page.screenshot({path: 'screenshots/Crm/1_crm_leadtabellen.png'});
+    await lib.makeScreenshot(page, 'screenshots/Crm/1_crm_leadtabellen.png');
 });
 
 describe('Edit Lead', () => {

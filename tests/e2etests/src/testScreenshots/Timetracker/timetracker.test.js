@@ -7,10 +7,10 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('Zeiterfassung');
-    await page.screenshot({
-        path: 'screenshots/Zeiterfassung/1_zeiterfassung_module.png',
-        clip: {x: 0, y: 0, width: 150, height: 300}
-    })
+    await lib.makeScreenshot(
+        page, 'screenshots/Zeiterfassung/1_zeiterfassung_module.png',
+        clip, {x: 0, y: 0, width: 150, height: 300}
+    )
 });
 
 describe('timeaccount', () => {

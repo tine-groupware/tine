@@ -11,16 +11,16 @@ describe('accounts', () => {
     test('User Mainpage', async () => {
         await page.waitForTimeout(1000);
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Benutzer'});
-        await page.screenshot({path: 'screenshots/Administration/1_admin_benutzertabelle.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/1_admin_benutzertabelle.png');
     });
     test('choose grid fields', async () => {
         await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-accountLoginName', {text: 'tine20admin'});
         await page.click('.t-app-admin .ext-ux-grid-gridviewmenuplugin-menuBtn');
         await page.waitForSelector('.x-menu-list');
-        await page.screenshot({
-            path: 'screenshots/Administration/2_admin_spaltenauswahl.png',
-            clip: {x: (1366 - (1366 / 5)), y: 0, width: (1366 / 5), height: 768}
-        });
+        await lib.makeScreenshot(
+            page, 'screenshots/Administration/2_admin_spaltenauswahl.png',
+            clip, {x: (1366 - (1366 / 5)), y: 0, width: (1366 / 5), height: 768}
+        );
     });
     let newUserDialog;
     test('new user', async () => {
@@ -54,7 +54,7 @@ describe('groups', () => {
         await page.waitForTimeout(1000);
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
         await page.waitForTimeout(2000);
-        await page.screenshot({path: 'screenshots/Administration/6_admin_gruppen.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/6_admin_gruppen.png');
     });
     test('edit group', async () => {
         let groupDialog = lib.getNewWindow();
@@ -71,7 +71,7 @@ describe('roles', () => {
     test('roles mainpage', async () => {
         await page.waitForTimeout(1000);
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Rollen'});
-        //await page.screenshot({path: 'screenshots/Administration/6_admin_gruppen.png'});
+        //await lib.makeScreenshot(page, 'screenshots/Administration/6_admin_gruppen.png');
     });
     test('edit roles', async () => {
         let roleDialog = lib.getNewWindow();
@@ -92,7 +92,7 @@ describe('application', () => {
         await page.waitForTimeout(1000);
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Anwendungen'});
         await page.waitForTimeout(2000);
-        await page.screenshot({path: 'screenshots/Administration/10_admin_anwendungen.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/10_admin_anwendungen.png');
     });
     test('addressbook settings', async () => {
         let editDialog = await getAppConfigDialog('Adressbuch');
@@ -146,7 +146,7 @@ describe('container', () => {
     test('container mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Container'});
         await page.waitForTimeout(2000);
-        await page.screenshot({path: 'screenshots/Administration/24_admin_container.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/24_admin_container.png');
         let containerDialog = lib.getNewWindow();
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Internal Contacts', clickCount: 2});
         containerDialog = await containerDialog;
@@ -168,7 +168,7 @@ describe('shared tags', () => {
     test('tag mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gemeinsame Tags'});
         await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Administration/21_admin_gemeinsame_tags.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/21_admin_gemeinsame_tags.png');
         let tagDialog = lib.getNewWindow();
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', clickCount: 2});
         tagDialog = await tagDialog;
@@ -185,7 +185,7 @@ describe('customfields', () => {
     test('mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zusatzfelder'});
         await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Administration/27_admin_zusatzfelder.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/27_admin_zusatzfelder.png');
     });
     test('edit customfields', async () => {
         let cfDialog = lib.getNewWindow();
@@ -201,7 +201,7 @@ describe('activSync', () => {
     test('mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'ActiveSync Geräte'});
         await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Administration/30_admin_activesync_devices.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/30_admin_activesync_devices.png');
     });
     test('edit dialog', async () => {
         let activSyncDialog = lib.getNewWindow();
@@ -221,7 +221,7 @@ describe('access log', () => {
     test('mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zugriffslog'});
         await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Administration/20_admin_zugriffslog.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/20_admin_zugriffslog.png');
     })
 });
 
@@ -229,7 +229,7 @@ describe('server info', () => {
     test('mainpage', async () => {
         await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Server Informationen'});
         await page.waitForTimeout(1000);
-        await page.screenshot({path: 'screenshots/Administration/29_admin_serverinfo.png'});
+        await lib.makeScreenshot(page, 'screenshots/Administration/29_admin_serverinfo.png');
     })
 });
 

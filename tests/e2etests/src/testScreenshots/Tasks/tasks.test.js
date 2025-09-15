@@ -5,7 +5,7 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('Aufgaben');
-    await page.screenshot({path: 'screenshots/Aufgaben/1_aufgaben_uebersicht.png'});
+    await lib.makeScreenshot(page, 'screenshots/Aufgaben/1_aufgaben_uebersicht.png');
 });
 
 describe('Edit Contact', () => {
