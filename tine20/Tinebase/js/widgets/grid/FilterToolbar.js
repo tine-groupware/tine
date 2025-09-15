@@ -582,6 +582,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         var filterModel = this.getFilterModel(newField);
         var fRow = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+
+        if (filterModel?.ftb) {
+            filterModel.ftb = this;
+        }
         
         var opEl = fRow.child('td[class^=tw-ftb-frow-operator]');
         var valEl = fRow.child('td[class^=tw-ftb-frow-value]');
