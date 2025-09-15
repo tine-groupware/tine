@@ -79,6 +79,13 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             self::assertEquals($user->getId(), $matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID]);
             self::assertNotEmpty($matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::ID]);
         }
+
+        $updatedMatrixId = '@somethingelse:matrix.domain';
+        $getUser[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID]
+            [MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID] = $updatedMatrixId;
+        $savedUser = $adminFE->saveUser($getUser);
+        self::assertEquals($updatedMatrixId, $savedUser[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID]
+            [MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]);
     }
 
     public function testGetLogindata(): void
@@ -107,5 +114,18 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         $key = 'abcdefghi';
         $updatedMatrixAccount = $this->_getUit()->setRecoveryKey($key);
         self::assertEquals($key, $updatedMatrixAccount['recovery_key']);
+    }
+
+    public function testChangeMatrixId()
+    {
+        $account = $this->testMatrixAccountApi(false);
+        $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID] = '@somethingelse:matrix.domain';
+        $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID]
+            = $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID]['accountId'];
+        $updatedAccount = $this->_getUit()->saveMatrixAccount($account);
+        self::assertEquals(
+            $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID],
+            $updatedAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]
+        );
     }
 }
