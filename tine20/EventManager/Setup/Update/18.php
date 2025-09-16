@@ -83,6 +83,6 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     {
         $this->_backend->dropTable('eventmanager_options_rule', EventManager_Config::APP_NAME);
         EventManager_Setup_Initialize::createEventFolder();
-        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE003);
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
     }
 }
