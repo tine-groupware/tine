@@ -758,7 +758,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function deleteEntry($_folderId, $_serverId, $_collectionData)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " delete ColectionId: $_folderId Id: $_serverId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " Delete CollectionId: $_folderId Id: $_serverId");
+        }
         
         $folder  = Felamimail_Controller_Folder::getInstance()->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
@@ -767,12 +770,17 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
             // move message to trash folder
             $trashFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account->getId(),
                 Felamimail_Model_Folder::FOLDER_TRASH);
-            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_serverId to trash folder");
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_serverId, $trashFolder, keepCacheId: false);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Moved entry $_serverId to trash folder");
+            }
         } else {
             // set delete flag
             Felamimail_Controller_Message_Flags::getInstance()->addFlags($_serverId, Zend_Mail_Storage::FLAG_DELETED);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry " . $_serverId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Deleted entry " . $_serverId);
+            }
         }
     }
     
@@ -782,8 +790,10 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
      */
     public function updateEntry($folderId, $serverId, Syncroton_Model_IEntry $entry)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . " CollectionId: $folderId Id: $serverId");
+        }
         
         try {
             $message = $this->_contentController->get($serverId);
@@ -1022,41 +1032,62 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
     }
     
     /**
+     * returns new server id after move (updates message cache of target folder)
+     *
      * (non-PHPdoc)
      * @see ActiveSync_Frontend_Abstract::moveItem()
      */
     public function moveItem($srcFolderId, $serverId, $dstFolderId)
     {
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'     => 'id',
-                'operator'  => 'equals',
-                'value'     => $serverId
-            )
-        ));
+        $filter = new Felamimail_Model_MessageFilter([[
+            'field'     => 'id',
+            'operator'  => 'equals',
+            'value'     => $serverId
+        ]]);
+
+        // get message from cache first, to find moved message afterward
+        $cachedMessage = Felamimail_Controller_Message::getInstance()->search($filter)->getFirstRecord();
         
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $dstFolderId);
-        
-        return $serverId;
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $dstFolderId, keepCacheId: false);
+
+        do {
+            $folder = $this->updateCache($dstFolderId);
+        } while ($folder !== null && $folder->cache_status !== Felamimail_Model_Folder::CACHE_STATUS_COMPLETE);
+
+        // fetch new server id and return it
+        $filter = new Felamimail_Model_MessageFilter([[
+            'field'     => 'message_id',
+            'operator'  => 'equals',
+            'value'     => $cachedMessage->messsage_id,
+        ],[
+            'field'     => 'folder_id',
+            'operator'  => 'equals',
+            'value'     => $dstFolderId,
+        ]]);
+        $movedMessage = Felamimail_Controller_Message::getInstance()->search($filter)->getFirstRecord();
+
+        return $movedMessage ? $movedMessage->getId() : $serverId;
     }
-    
+
     /**
      * used by the mail backend only. Used to update the folder cache
      * 
      * @param  string  $_folderId
+     * @return ?Felamimail_Model_Folder
      */
-    public function updateCache($_folderId)
+    public function updateCache($_folderId): ?Felamimail_Model_Folder
     {
         try {
-            Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folderId, 5);
+            return Felamimail_Controller_Cache_Message::getInstance()->updateCache($_folderId, 5);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " catched exception " . get_class($e));
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " caught exception " . get_class($e));
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
         }
+        return null;
     }
     
     /**
