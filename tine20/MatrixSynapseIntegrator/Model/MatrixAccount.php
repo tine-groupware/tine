@@ -32,6 +32,8 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
     public const MODEL_NAME_PART = 'MatrixAccount';
     public const TABLE_NAME = 'matrix_account';
 
+    public const MATRIX_ID_TWIG = '@{user.id}';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
