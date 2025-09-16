@@ -238,6 +238,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
 
     /**
      * @return Tinebase_Record_RecordSet<Calendar_Model_Event>
+     * @throws Tinebase_Exception_Record_NotDefined
      */
     public function getEvents(): Tinebase_Record_RecordSet
     {
@@ -259,7 +260,7 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Events: ' . print_r($this->events->toArray(), true));
+                    . ' Got ' . $this->events->count() .  ' events');
             }
             
             if (null !== $this->_getConverter()->getMethod()) {
