@@ -935,7 +935,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
             e.stopEvent();
             e.preventDefault();
 
-            this.createEvent.defer(100, this, [e, event]);
+            this.createEvent.defer(500, this, [e, event]);
         }
     },
     
