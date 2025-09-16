@@ -31,6 +31,7 @@
  * @property    array   $structure          the message structure
  * @property    array   $attachments        the attachments
  * @property    string  $messageuid         the message uid on the imap server
+ * @property    string  $message_id         the mailserver message id header
  * @property    string  $reply_to           reply-to header
  * @property    array   $preparedParts      prepared parts
  * @property    integer $reading_conf       true if it must send a reading confirmation

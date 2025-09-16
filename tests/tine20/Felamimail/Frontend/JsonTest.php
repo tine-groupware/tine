@@ -703,11 +703,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
-     * try search for a message with globing filter
+     * try search for a message with globbing filter
      */
-    public function testSearchMessageWithGlobingFilter()
+    public function testSearchMessageWithGlobbingFilter()
     {
-        //https://toools.cloud/miscellaneous/glob-tester
+        // https://toools.cloud/miscellaneous/glob-tester
         $this->_moveMessageToFolder('INBOX', false, $this->_account);
         $this->_moveMessageToFolder('1', false, $this->_account);
         $this->_moveMessageToFolder('1.2', false, $this->_account);
@@ -716,7 +716,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         
         $shareAccount = $this->_createSharedAccount();
         $this->_moveMessageToFolder('1', false, $shareAccount);
-        $this->_json->updateFolderCache($shareAccount->getId(), '');
+
         $systemFolders = ['INBOX', 'Trash', 'Drafts', 'Junk', 'Sent', 'Template'];
         $allFolderPath = Felamimail_Model_MessageFilter::PATH_ALLFOLDERS;
         $this->_assertMessageInFolderByGlobFilter($allFolderPath,    5, array_merge(['1', '1.2', '1.2.3'], $systemFolders));
@@ -1239,6 +1239,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
         // sleep for 2 secs because mailserver may be slower than expected
         sleep(2);
+
+        do {
+            $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($testFolder->getId(), 5);
+        } while ($folder !== null && $folder->cache_status !== Felamimail_Model_Folder::CACHE_STATUS_COMPLETE);
 
         return $message;
     }

@@ -21,6 +21,7 @@
  * @property  string $localname
  * @property  string $globalname
  * @property  string $parent
+ * @property  string $cache_status
  * @property  boolean $has_children
  * @property  boolean $is_selectable
  * @property  boolean $supports_condstore
