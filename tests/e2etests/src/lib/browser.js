@@ -17,10 +17,7 @@ const colors = {
 };
 
 const modes = ['light', 'dark'];
-const resolutions = [
-    {width: 1280, height: 720},   // 720p
-    {width: 1920, height: 1080}   // 1080p
-];
+const resolution = JSON.parse(process.env.TEST_RESOLUTION);
 const priorities = {
     EME: 0,  // Emergency: system is unusable
     ALE: 1,  // Alert: action must be taken immediately
@@ -162,13 +159,13 @@ module.exports = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', `--window-size=1366,768`, '--ignore-certificate-errors'];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors'];
 
         try {
             const opts = {
                 headless: process.env.TEST_MODE != 'debug', //ignoreDefaultArgs: ['--enable-automation'],
                 //slowMo: 250,
-                defaultViewport: {width: 1366, height: 768},
+                defaultViewport: resolution,
                 args: args
             };
 
@@ -187,20 +184,8 @@ module.exports = {
         await page.setExtraHTTPHeaders({
             'Accept-Language': 'de'
         });
-        await page.setDefaultTimeout(15000);
-        await page.setViewport({
-            width: 1366,
-            height: 768,
-        });
+        await page.setViewport(resolution);
 
-        console.log(await page.evaluate(() => {
-            return {
-                innerWidth: window.innerWidth,
-                innerHeight: window.innerHeight,
-                screenWidth: window.screen.width,
-                screenHeight: window.screen.height,
-            }
-        }))
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: 30000});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
@@ -291,7 +276,7 @@ module.exports = {
             const opts = {
                 headless: process.env.TEST_MODE != 'debug', //ignoreDefaultArgs: ['--enable-automation'],
                 //slowMo: 250,
-                //defaultViewport: {width: 1366, height: 768},
+                defaultViewport: resolution,
                 args: args
             };
 
@@ -312,10 +297,7 @@ module.exports = {
             'Accept-Language': 'de'
         });
         await page.setDefaultTimeout(15000);
-        await page.setViewport({
-            width: 1366,
-            height: 768,
-        });
+        await page.setViewport(resolution);
         await page.authenticate({'username': process.env.HTACCESS_USERNAME, 'password': process.env.HTACCESS_PASSWORD});
         await page.goto(process.env.TEST_URL + '/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
@@ -366,37 +348,29 @@ module.exports = {
      *
      * @param page
      * @param path
-     * @param combo
+     * @param options
      * @returns {Promise<void>}
      */
-    makeScreenshot: async function (page, path, combo=false) {
+    makeScreenshot: async function (page, path, options=null)  {
         if(process.env.TEST_ALL_SCREENSHOT === 'true') {
             for (const mode of modes) {
-                for (const resolution of resolutions) {
                     const filename = path
-                        ? `${path.replace(/(\.\w+)$/, `_${mode}_${resolution.width}x${resolution.height}$1`)}`
+                        ? `${path.replace(/(\.\w+)$/, `_${mode}_${resolution}$1`)}`
                         : null;
                     await page.evaluate((mode) => {
                         document.body.className = document.body.className.replace(/(light|dark)-mode/, `${mode}-mode`);
                     }, mode);
-                    await page.setViewport({width: resolution.width, height: resolution.height});
+                    await page.setViewport(resolution);
                     await page.waitForTimeout(500);
-                    if(combo) {
-                        console.log('TEST')
-                        await page.keyboard.press('Escape');
-                        await page.waitForTimeout(500);
-                        await page.click('.x-form-text.x-form-field.x-form-focus + .x-form-trigger.x-form-arrow-trigger');
-                        await page.waitForTimeout(500);
-                    }
                     if (filename) {
-                        await page.screenshot({path: filename});
+                        console.log({path: filename}.assign(options));
+                        await page.screenshot({path: filename}.assign(options));
                     } else {
                         throw new Error('Kein Pfad für den Screenshot angegeben.');
                     }
                 }
-            }
         } else {
-            await page.screenshot({path: path});
+            await page.screenshot({path: path}.assign(options));
         }
     }
 };

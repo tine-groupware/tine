@@ -97,8 +97,10 @@ js-e2e-tests-source:
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true" || $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source-save-screenshots/
       when: never
     - !reference [.js-e2e-tests-source, rules]
-js-e2e-tests-source-save-screenshots:
+js-e2e-tests-source-save-screenshots-720p:
   extends: .js-e2e-tests-source
+  variables:
+    TEST_RESOLUTION: '{"width": 1920, "height": 1020}'
   artifacts:
     when: always
     reports:
@@ -114,6 +116,10 @@ js-e2e-tests-source-save-screenshots:
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true" && $CI_MERGE_REQUEST_LABELS !~ /js-e2e-tests-source-save-screenshots/
       when: never
     - !reference [.js-e2e-tests-source, rules]
+js-e2e-tests-source-save-screenshots-1080p:
+  extends: js-e2e-tests-source-save-screenshots-720p
+  variables:
+    TEST_RESOLUTION: '{"width": 1920, "height": 1020}'
 js-e2e-tests-source-php-version-matrix:
   extends: .js-e2e-tests-source
   parallel:

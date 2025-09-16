@@ -9,7 +9,7 @@ beforeAll(async () => {
     // modules
     await lib.makeScreenshot(
         page, 'screenshots/HumanResources/1_humanresources_module.png',
-        clip, {x: 0, y: 0, width: 150, height: 300}
+        {clip: {x: 0, y: 0, width: 150, height: 300}}
     )
 });
 
@@ -33,7 +33,7 @@ describe.skip('employee', () => {
         await newPage.waitForTimeout(1000);
         await lib.makeScreenshot(
             newPage, 'screenshots/HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab.png',
-            clip, {x: 0, y: 0, width: 1366, height: (768 / 3)}
+            {clip: {x: 0, y: 0, width: 1366, height: (768 / 3)}}
         );
     });
 

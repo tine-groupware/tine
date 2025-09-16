@@ -17,7 +17,7 @@ describe('MainScreen', () => {
         await lib.makeScreenshot(page, 'screenshots/EMail/2_email_posteingang_geflaggt.png');
         await lib.makeScreenshot(
             page, 'screenshots/EMail/3_email_posteingang_speicherplatz.png',
-            clip, {x: 1366 / 2, y: 0, width: 1366 / 2, height: 768 / 2}
+            {clip: {x: 1366 / 2, y: 0, width: 1366 / 2, height: 768 / 2}}
         ); //@todo needs Mail data and select one mail
     });
 
@@ -28,11 +28,11 @@ describe('MainScreen', () => {
         await page.waitForSelector('.x-menu-list');
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl.png',  //@ todo x/y of element +/-.
-            clip, {x: 1000, y: 0, width: 1366 - 1000, height: 500}
+            {clip: {x: 1000, y: 0, width: 1366 - 1000, height: 500}}
         );
         await lib.makeScreenshot(
             page, 'screenshots/EMail/1_email_favoriten_und_konten.png',
-            clip, {x: 0, y: 0, width: 200, height: 400}
+            {clip: {x: 0, y: 0, width: 200, height: 400}}
         )
     });
 });
@@ -131,7 +131,7 @@ describe('filterBar', () => {
         }
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/8_standardbedienhinweise_suchfilter.png'
-            , clip, {x: 1000, y: 0, width: 1366 - 1000, height: 100}
+            , {clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
         await page.type('.t-app-felamimail .x-toolbar-right-row .x-form-text.x-form-field.x-form-empty-field', 'Test Search');
         await page.waitForTimeout(2000);
@@ -139,7 +139,7 @@ describe('filterBar', () => {
         await page.waitForTimeout(2000);
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button.png'
-            , clip, {x: 1000, y: 0, width: 1366 - 1000, height: 100}
+            , {clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
         await page.click('div.t-app-felamimail .x-form-trigger.x-form-clear-trigger');
         await page.click('div.t-app-felamimail .x-form-trigger.x-form-search-trigger');
@@ -167,7 +167,7 @@ describe('filterBar', () => {
         await page.hover('.t-app-felamimail .action_delAllFilter');
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen.png',
-            clip, {x: 850, y: 0, width: 1366 - 850, height: 150}
+            {clip: {x: 850, y: 0, width: 1366 - 850, height: 150}}
         );
         await page.click('.t-app-felamimail .action_delAllFilter');
         //console.log('delete all filter!');
@@ -191,19 +191,19 @@ describe('filterBar', () => {
         await page.waitForTimeout(500);
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter.png',
-            clip, {x: 850, y: 0, width: 1366 - 850, height: 200}
+            {clip: {x: 850, y: 0, width: 1366 - 850, height: 200}}
         );
         await expect(page).toClick('.t-app-felamimail span', {text: 'Alternativen Filter hinzufügen'});
         await page.waitForTimeout(500);
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter.png',
-            clip, {x: 850, y: 0, width: 1366 - 850, height: 200}
+            {clip: {x: 850, y: 0, width: 1366 - 850, height: 200}}
         );
         await page.keyboard.press('Enter');
         await page.click('.t-app-felamimail .tw-ftb-filterstructure-treepanel .x-tree-selected .x-tree-node-anchor', {button: 'right'});
         await lib.makeScreenshot(
             page, 'screenshots/StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen.png',
-            clip, {x: 850, y: 0, width: 1366 - 850, height: 200}
+            {clip: {x: 850, y: 0, width: 1366 - 850, height: 200}}
         );
         await page.click('.x-menu-item-icon.action_remove');
 

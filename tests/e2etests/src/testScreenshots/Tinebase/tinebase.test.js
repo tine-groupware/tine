@@ -59,7 +59,7 @@ describe('usersettings', () => {
         await settings.hover();
         await lib.makeScreenshot(
             page, 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png',
-            clip, {x: 1000, y: 0, width: 1366 - 1000, height: 100}
+            {clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
     });
     test('usersettings', async () => {

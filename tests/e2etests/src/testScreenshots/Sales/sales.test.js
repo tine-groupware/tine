@@ -15,8 +15,8 @@ describe('Product', () => {
         await lib.makeScreenshot(page, 'screenshots/Sales/1_sales_uebersicht.png');
         await lib.makeScreenshot(
                 page, 'screenshots/Sales/2_sales_module.png',
-                clip, {x: 0, y: 0, width: 150, height: 300
-            }
+                {clip: {x: 0, y: 0, width: 150, height: 300
+            }}
         )
     });
 

@@ -17,10 +17,8 @@ describe('accounts', () => {
         await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-accountLoginName', {text: 'tine20admin'});
         await page.click('.t-app-admin .ext-ux-grid-gridviewmenuplugin-menuBtn');
         await page.waitForSelector('.x-menu-list');
-        await lib.makeScreenshot(
-            page, 'screenshots/Administration/2_admin_spaltenauswahl.png',
-            clip, {x: (1366 - (1366 / 5)), y: 0, width: (1366 / 5), height: 768}
-        );
+        await lib.makeScreenshot(page,'screenshots/Administration/2_admin_spaltenauswahl.png'
+            , {clip:{x:(1366 - (1366 / 5)), y: 0}})
     });
     let newUserDialog;
     test('new user', async () => {

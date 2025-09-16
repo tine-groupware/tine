@@ -16,7 +16,7 @@ describe('MainScreen', () => {
         await page.waitForTimeout(1000);
         await lib.makeScreenshot(
             page, 'screenshots/Kalender/2_kalender_favoriten_ausschnit.png',  //@ todo x/y of element +/-.
-            clip, {x: 0, y: 0, width: 200, height: 300}
+            {clip: {x: 0, y: 0, width: 200, height: 300}}
         );
     });
 
@@ -28,7 +28,7 @@ describe('MainScreen', () => {
         await expect(page).toClick('button', {text: 'Woche'});
         await lib.makeScreenshot(
             page, 'screenshots/Kalender/14_kalender_ansicht.png',
-            clip, {x: 900, y: 0, width: 1366 - 900, height: 150}
+            {clip: {x: 900, y: 0, width: 1366 - 900, height: 150}}
         );
         await expect(page).toClick('button', {text: 'Monat'});
         await page.waitForTimeout(2000);
@@ -49,7 +49,7 @@ describe('MainScreen', () => {
     test('mini calendar', async () => {
         await lib.makeScreenshot(
             page, 'screenshots/Kalender/4_kalender_minikalender.png',
-            clip, {x: 0, y: 768 / 3, width: 250, height: 400}
+            {clip: {x: 0, y: 768 / 3, width: 250, height: 400}}
         );
     });
 
@@ -60,7 +60,7 @@ describe('MainScreen', () => {
         await page.waitForTimeout(500);
         await lib.makeScreenshot(
             page, 'screenshots/Kalender/Kalender_teilnehmer_hinzu.png',
-            clip, {x: 0, y: 768 / 4, width: 500, height: 500}
+            {clip: {x: 0, y: 768 / 4, width: 500, height: 500}}
         );
     });
 
@@ -100,14 +100,14 @@ describe('editDialog', () => {
         let viewport = await newPage.viewport();
         await lib.makeScreenshot(
             newPage, 'screenshots/Kalender/8_kalender_teilnehmer_hinzu.png',
-            clip, {x: 0, y: viewport.height * 1 / 3, width: viewport.width, height: viewport.height * 2 / 3}
+            {clip: {x: 0, y: viewport.height * 1 / 3, width: viewport.width, height: viewport.height * 2 / 3}}
         );
         await newPage.waitForSelector('.x-grid3-row.x-cal-add-attendee-row.x-grid3-row-last .x-grid3-cell-inner.x-grid3-col-user_type');
         await newPage.click('.x-grid3-row.x-cal-add-attendee-row.x-grid3-row-last .x-grid3-cell-inner.x-grid3-col-user_type');
         await newPage.waitForSelector('.x-combo-list-item ');
         await lib.makeScreenshot(
             newPage, 'screenshots/Kalender/9_kalender_termin_teilnehmertyp.png',
-            clip, {x: 0, y: viewport.height * 1 / 3, width: viewport.width, height: viewport.height * 2 / 3}
+            {clip: {x: 0, y: viewport.height * 1 / 3, width: viewport.width, height: viewport.height * 2 / 3}}
         );
         await newPage.click('.x-grid3-row.x-cal-add-attendee-row.x-grid3-row-last .x-grid3-cell-inner.x-grid3-col-user_id');
         await newPage.waitForTimeout(2000);
