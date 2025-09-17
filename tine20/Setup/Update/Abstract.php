@@ -648,4 +648,20 @@ class Setup_Update_Abstract
             // $configController->set($configName, $config);
         }
     }
+
+    /**
+     * apply modlogs during update process - might be necessary to wait for primary changes before updating replicas
+     *
+     * @return bool error applying modlogs
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     */
+    public function applyPrimaryModlogs(): bool
+    {
+        if (! Tinebase_Core::isReplica()) {
+            return true;
+        }
+
+        return Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster(1000);
+    }
 }
