@@ -484,7 +484,17 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
     }
 
 
-    public function testTagFlagCachePersistence()
+    /**
+     * @group noupdate
+     *
+     * @return void
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function testTagFlagCachePersistence(): void
     {
         $this->_testNeedsTransaction();
         // Get test message
@@ -518,8 +528,8 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should have tag');
 
         // Clear message from cache (simulates what happens during cache refresh)
-        $result = Felamimail_Controller_Cache_Message::getInstance()->clear($message->folder_id);
-        $updatedFolder = $this->_controller->updateCache($message->folder_id, 30, 1);
+        Felamimail_Controller_Cache_Message::getInstance()->clear($message->folder_id);
+        $this->_controller->updateCache($message->folder_id, 30, 1);
         $result = $json->searchMessages($filter, []);
         $updatedTags = Tinebase_Tags::getInstance()->searchTagsByForeignFilter(new Felamimail_Model_MessageFilter([
             ['field' => 'id', 'operator' => 'in', 'value' => [$result['results'][0]['id']]],
@@ -527,6 +537,5 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
 
         $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should fetch the tags again');
         $this->assertEquals(1, count($updatedTags), 'tag should be recreated');
-
     }
 }
