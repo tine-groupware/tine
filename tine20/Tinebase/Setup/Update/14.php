@@ -237,7 +237,7 @@ class Tinebase_Setup_Update_14 extends Setup_Update_Abstract
         if (Tinebase_Core::isReplica()) {
             $tries = 0;
             do {
-                Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster();
+               $this->applyPrimaryModlogs();
                 try {
                     $defaultContainer = Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
                     break;

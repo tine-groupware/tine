@@ -1535,12 +1535,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     }
 
     /**
+     * @param ?int $numOfModlogs if set, overwrites config Tinebase_Config::NUM_OF_MODLOGS
      * @return bool
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
-     * @todo rename function
+     *
+     * @todo rename function: readModificationLogFromPrimary (also need to change the scheduler task)
      */
-    public function readModificationLogFromMaster()
+    public function readModificationLogFromMaster(?int $numOfModlogs = null)
     {
         $slaveConfiguration = Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_SLAVE};
         $tine20Url = $slaveConfiguration->{Tinebase_Config::MASTER_URL};
@@ -1605,7 +1607,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             try {
                 /** @noinspection PhpUndefinedMethodInspection */
                 $result = $tinebaseProxy->getReplicationModificationLogs($masterReplicationId,
-                    $slaveConfiguration->{Tinebase_Config::NUM_OF_MODLOGS});
+                    $numOfModlogs ?: $slaveConfiguration->{Tinebase_Config::NUM_OF_MODLOGS});
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
                 throw new Tinebase_Exception_Backend('Could not getReplicationModificationLogs from primary');
