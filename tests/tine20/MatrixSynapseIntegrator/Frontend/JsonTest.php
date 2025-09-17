@@ -62,9 +62,10 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
     public function testCreateUpdateMatrixAccountViaAdmin()
     {
         $user = $this->_createTestUser();
-        $matrixId = '@' . $user->getId() . ':matrix.domain';
+        $matrixIdFromClient = '@@{user.id}:matrix.domain';
+        $matrixIdExpected = '@' . $user->getId() . ':matrix.domain';
         $user->{Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID} = [
-            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => $matrixId,
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => $matrixIdFromClient,
             MatrixSynapseIntegrator_Model_MatrixAccount::ID => Tinebase_Record_Abstract::generateUID(),
         ];
 
@@ -75,7 +76,7 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         foreach ([$savedUser, $getUser] as $userToCheck) {
             self::assertArrayHasKey(Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID, $userToCheck);
             $matrixAccount = $userToCheck[Tinebase_Model_FullUser::FLD_MATRIX_ACCOUNT_ID];
-            self::assertEquals($matrixId, $matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]);
+            self::assertEquals($matrixIdExpected, $matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]);
             self::assertEquals($user->getId(), $matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID]);
             self::assertNotEmpty($matrixAccount[MatrixSynapseIntegrator_Model_MatrixAccount::ID]);
         }
