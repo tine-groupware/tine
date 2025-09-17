@@ -160,7 +160,7 @@ module.exports = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors'];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors', '--start-maximized'];
 
         try {
             const opts = {
@@ -271,7 +271,7 @@ module.exports = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--start-maximized'];
 
         try {
             const opts = {
