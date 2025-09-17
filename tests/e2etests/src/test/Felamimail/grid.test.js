@@ -21,7 +21,7 @@ describe.skip('grid adopts to folder selected', () => {
         // await lib.checkDisplayOfElement(page, '.x-grid3-hd.x-grid3-cell.x-grid3-td-to', true);
 
         // just for debugging
-        // await page.screenshot({path: 'screenshots/4_email/grid_test_sent.png'});
+        // await lib.makeScreenshot(page,{path: 'screenshots/4_email/grid_test_sent.png'});
 
         let from_email_td_display = await page.evaluate(() => document.querySelector(
             '.x-grid3-hd.x-grid3-cell.x-grid3-td-from_email').style.display);
@@ -67,7 +67,7 @@ describe.skip('grid adopts to folder selected', () => {
     // TODO add this again when we can be sure that the folder exists in the test account
     // test('select Drafts folder', async () => {
     //     // just for debugging
-    //     //await page.screenshot({path: 'screenshots/4_email/grid_test.png'});
+    //     //await lib.makeScreenshot(page,{path: 'screenshots/4_email/grid_test.png'});
     //
     //     // select 'Drafts' folder -> expect 'from_email' and from_name to disappear, to should appear
     //     expect(page).toClick('.felamimail-node-drafts .x-tree-node-anchor', {text:'Entwürfe'});
@@ -76,7 +76,7 @@ describe.skip('grid adopts to folder selected', () => {
     //     await page.waitForTimeout(5000); // wait for columns to be hidden/shown
     //
     //     // just for debugging
-    //     await page.screenshot({path: 'screenshots/4_email/grid_test_drafts.png'});
+    //     await lib.makeScreenshot(page,{path: 'screenshots/4_email/grid_test_drafts.png'});
     //
     //     let from_email_td_display = await page.evaluate(() => document.querySelector(
     //         '.x-grid3-hd.x-grid3-cell.x-grid3-td-from_email').style.display);

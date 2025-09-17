@@ -6,7 +6,7 @@ require('dotenv').config();
 beforeAll(async () => {
     await lib.getBrowser('Inventarisierung');
     await page.waitForTimeout(1000);
-    await lib.makeScreenshot(page,'screenshots/Inventarisierung/1_inventar_uebersicht.png');
+    await lib.makeScreenshot(page,{path: 'screenshots/Inventarisierung/1_inventar_uebersicht.png'});
 });
 
 describe('mainScreen', () => {
@@ -22,7 +22,7 @@ describe('mainScreen', () => {
         }
         newPage = await newPage;
         await newPage.waitForXPath('//button');
-        await lib.makeScreenshot(newPage,'screenshots/Inventarisierung/5_inventar_import.png');
+        await lib.makeScreenshot(newPage,{path:'screenshots/Inventarisierung/5_inventar_import.png'});
         await newPage.keyboard.press('Escape')
         await expect(newPage).toClick('button', {text: 'Abbrechen'});
     })
@@ -33,16 +33,16 @@ describe('Edit Inventory Item', () => {
     test('open EditDialog', async () => {
         newPage = await lib.getEditDialog('Inventargegenstand hinzufügen');
         await newPage.waitForTimeout(5000); // @todo waitfor selector...
-        await lib.makeScreenshot(newPage,'screenshots/Inventarisierung/2_inventar_gegenstand_neu.png');
+        await lib.makeScreenshot(newPage,{path:'screenshots/Inventarisierung/2_inventar_gegenstand_neu.png'});
         await newPage.click('input[name=status]');
         await newPage.waitForTimeout(1000);
         await newPage.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus');
-        await lib.makeScreenshot(newPage,'screenshots/Inventarisierung/3_inventar_gegenstand_status.png', true);
+        await lib.makeScreenshot(newPage,{path: 'screenshots/Inventarisierung/3_inventar_gegenstand_status.png'});
     });
 
     test('accounting', async () => {
         await expect(newPage).toClick('span', {text: 'Buchhaltung'});
-        await lib.makeScreenshot(newPage,'screenshots/Inventarisierung/4_inventar_gegenstand_buchhaltung.png');
+        await lib.makeScreenshot(newPage,{path: 'screenshots/Inventarisierung/4_inventar_gegenstand_buchhaltung.png'});
     })
 });
 

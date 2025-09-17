@@ -19,7 +19,7 @@ describe('Test mainpage', () => {
         } catch (e) {
             console.log('tree also expand');
         }
-        await lib.makeScreenshot(page, 'screenshots/Dateimanager/1_dateimanager_baumstruktur.png');
+        await lib.makeScreenshot(page, {path: 'screenshots/Dateimanager/1_dateimanager_baumstruktur.png'});
     });
 
     test('add folder', async () => {
@@ -28,7 +28,7 @@ describe('Test mainpage', () => {
         await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen'});
         await page.type('.x-layer.x-editor.x-small-editor.x-grid-editor input', "Test");
         await page.waitForTimeout(1000);
-        await lib.makeScreenshot(page, 'screenshots/Dateimanager/2_dateimanager_neuer_ordner.png');
+        await lib.makeScreenshot(page, {path: 'screenshots/Dateimanager/2_dateimanager_neuer_ordner.png'});
         await page.keyboard.press('Enter');
     })
 });
@@ -38,7 +38,7 @@ describe('Context menu', () => {
        await page.waitForTimeout(2000);
        await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Test', button: 'right'});
        await page.hover('.x-menu-item-icon.action_rename');
-       await lib.makeScreenshot(page, 'screenshots/Dateimanager/3_dateimanager_ordner_kontextmenu.png');
+       await lib.makeScreenshot(page, {path: 'screenshots/Dateimanager/3_dateimanager_ordner_kontextmenu.png'});
        await page.keyboard.press('Escape');
    });
     test('rights', async () => {
@@ -48,7 +48,7 @@ describe('Context menu', () => {
         var newPage = await lib.getNewWindow();
         await newPage.waitForTimeout(2000);
         await expect(newPage).toClick('span', {text: 'Berechtigungen'});
-        await lib.makeScreenshot(newPage, 'screenshots/Dateimanager/5_dateimanager_ordner_rechte.png');
+        await lib.makeScreenshot(newPage, {path: 'screenshots/Dateimanager/5_dateimanager_ordner_rechte.png'});
         [button] = await help.getElement('button', newPage, 'Abbrechen');
         await button.click();
     })
@@ -60,13 +60,13 @@ describe('editDialog', () => {
         await expect(page).toClick('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Vorlagen'});
         // @todo need folder and file !
         await page.waitForTimeout(2000);
-        await lib.makeScreenshot(page, 'screenshots/Dateimanager/6_dateimanager_bearbeitungsmenu.png');
+        await lib.makeScreenshot(page, {path: 'screenshots/Dateimanager/6_dateimanager_bearbeitungsmenu.png'});
         await page.click('.x-grid3-row.x-grid3-row-first.x-grid3-row-last');
         var [button] = await lib.getElement('button', page, 'Eigenschaften bearbeiten');
         await button.click();
         var newPage = await lib.getNewWindow();
         await newPage.waitForTimeout(2000);
-        await lib.makeScreenshot(newPage, 'screenshots/Dateimanager/8_dateimanager_eigenschaften_datei.png');
+        await lib.makeScreenshot(newPage, {path: 'screenshots/Dateimanager/8_dateimanager_eigenschaften_datei.png'});
     })
 });
 

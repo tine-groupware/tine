@@ -44,7 +44,7 @@ describe('mainScreen', () => {
         }
         await expect(page).toClick('#tine-docked-app-addressbook');
         await page.waitForSelector('.tine-bar__active-app' , {text: 'Adressbuch'});
-        await lib.makeScreenshot(page, 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png');
+        await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
 });
 
@@ -58,8 +58,8 @@ describe('usersettings', () => {
         settings = await expect(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
         await settings.hover();
         await lib.makeScreenshot(
-            page, 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png',
-            {clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
+            page, {path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png',
+            clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
     });
     test('usersettings', async () => {
@@ -67,7 +67,7 @@ describe('usersettings', () => {
         await settings.click();
         newPage = await newPage;
         await newPage.waitForTimeout(5000);
-        await lib.makeScreenshot(newPage, 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png');
+        await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });
 
     test('appsettings', async () => {
@@ -88,7 +88,7 @@ describe('usersettings', () => {
         await newPage.waitForTimeout(2000);
         await newPage.click('.x-btn-image.action_adminMode');
         await newPage.waitForTimeout(2000);
-        await lib.makeScreenshot(newPage, 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png');
+        await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});
         await expect(newPage).toClick('button', {text: 'Abbrechen'});
     });
 });
@@ -100,5 +100,5 @@ afterAll(async () => {
 async function getSettingScreenshots(newPage, text, screenName) {
     await expect(newPage).toClick('span', {text: text});
     await newPage.waitForTimeout(1000);
-    await lib.makeScreenshot(newPage, 'screenshots/Benutzereinstellungen/' + screenName + '.png');
+    await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/' + screenName + '.png'});
 }

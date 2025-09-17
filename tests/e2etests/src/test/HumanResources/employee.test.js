@@ -216,7 +216,7 @@ describe('employee', () => {
                         throw new Error('days count mismatch');
                     }
 
-                    await employeeEditDialog.screenshot({path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
+                    await lib.makeScreenshot(employeeEditDialog,{path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
 
                 }, 300000);
             });

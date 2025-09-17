@@ -96,7 +96,7 @@ describe('message', () => {
 
     test('contextMenu', async () => {
         await newMail.click({button: 'right'});
-        await page.screenshot({path: 'screenshots/EMail/17_email_kontextmenu_email.png'});
+        await lib.makeScreenshot(page,{path: 'screenshots/EMail/17_email_kontextmenu_email.png'});
         await page.keyboard.press('Escape')
     })
 

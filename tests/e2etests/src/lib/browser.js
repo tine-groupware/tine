@@ -18,6 +18,7 @@ const colors = {
 
 const modes = ['light', 'dark'];
 const resolution = JSON.parse(process.env.TEST_RESOLUTION);
+const resolutionString = `${resolution.width}x${resolution.height}`;
 const priorities = {
     EME: 0,  // Emergency: system is unusable
     ALE: 1,  // Alert: action must be taken immediately
@@ -351,26 +352,35 @@ module.exports = {
      * @param options
      * @returns {Promise<void>}
      */
-    makeScreenshot: async function (page, path, options=null)  {
-        if(process.env.TEST_ALL_SCREENSHOT === 'true') {
+    makeScreenshot: async function (page, options) {
+        if (process.env.TEST_ALL_SCREENSHOT === 'true') {
+            const basePath = options.path;
+            console.log(options);
+            console.log(basePath);
+            if (!basePath) {
+                throw new Error('Kein Pfad für den Screenshot angegeben.');
+            }
+
             for (const mode of modes) {
-                    const filename = path
-                        ? `${path.replace(/(\.\w+)$/, `_${mode}_${resolution}$1`)}`
-                        : null;
-                    await page.evaluate((mode) => {
-                        document.body.className = document.body.className.replace(/(light|dark)-mode/, `${mode}-mode`);
-                    }, mode);
-                    await page.setViewport(resolution);
-                    await page.waitForTimeout(500);
-                    if (filename) {
-                        console.log({path: filename}.assign(options));
-                        await page.screenshot({path: filename}.assign(options));
-                    } else {
-                        throw new Error('Kein Pfad für den Screenshot angegeben.');
-                    }
-                }
+                const filePath = basePath.replace(
+                    /(\.\w+)$/,
+                    `_${mode}_${resolutionString}$1`
+                );
+
+                await page.evaluate((m) => {
+                    document.body.className = document.body.className.replace(
+                        /(light|dark)-mode/,
+                        `${m}-mode`
+                    );
+                }, mode);
+
+                await page.setViewport(resolution);
+                await page.waitForTimeout(500);
+
+                await page.screenshot({ ...options, path: filePath });
+            }
         } else {
-            await page.screenshot({path: path}.assign(options));
+            await page.screenshot(options);
         }
     }
 };
