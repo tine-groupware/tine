@@ -307,7 +307,7 @@ php-unit-nogitlabci-tests-built-parallel:
     NODE_TOTAL: 1
     NODE_INDEX: 1
     ARG_TEST: AllTests.php
-    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests,nodockerci
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests,nodockerci,noupdate
   needs: []
   stage: test
   timeout: 2h
