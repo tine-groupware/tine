@@ -232,6 +232,20 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     }
 
     /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        $this->_replaceStringInMatrixId($_record);
+    }
+
+    /**
      * inspect creation of one record (after create)
      *
      * @param   Tinebase_Record_Interface $_createdRecord
