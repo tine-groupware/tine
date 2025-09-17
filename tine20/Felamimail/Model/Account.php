@@ -148,6 +148,12 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
         'appName' => 'Felamimail',
         'modelName' => 'Account',
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'signatures' => [],
+            ],
+        ],
+
         self::FIELDS => [
             'user_id' => [
                 self::TYPE => self::TYPE_USER,
