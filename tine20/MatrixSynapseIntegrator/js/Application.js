@@ -27,6 +27,7 @@ Tine.MatrixSynapseIntegrator.Application = Ext.extend(Tine.Tinebase.Application,
             const chatPanel = this.getMainScreen()
             const mcp = Tine.Tinebase.MainScreen.getCenterPanel()
             if (mcp.items.indexOf(chatPanel) < 0) {
+                chatPanel.keep = true // see Ext.ux.layout.CardLayout.helper.cleanupCardPanelItems
                 mcp.add(chatPanel)
                 mcp.layout.renderItem(chatPanel, mcp.items.indexOf(chatPanel), mcp.getLayoutTarget())
             }
