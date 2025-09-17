@@ -92,11 +92,14 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         $mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Notification Service'));
         
         if (empty($this->_fromAddress)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No notification service address set. Could not send notification.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' No notification service address set. Could not send notification.');
+            }
             return;
         }
         
-        if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
+        if ($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
             $mail->setFrom($_updater->accountEmailAddress, $_updater->accountFullName);
             if ($_actionLogType === Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL) {
                 $mail->setSender($_updater->accountEmailAddress, $_updater->accountFullName);
@@ -106,7 +109,15 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         } else {
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Notification mail'
+                    . ' from: ' . $mail->getFrom()
+                    . ' / sender: ' . $mail->getHeaders()['Sender']
+            );
+        }
+
         // attachments
         if (is_array($_attachments) || $_attachments instanceof Tinebase_Record_RecordSet) {
             $attachments = &$_attachments;
@@ -144,8 +155,10 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         // send
         if (! empty($preferredEmailAddress)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress);
+            }
             $mail->addTo($preferredEmailAddress, $_recipient->n_fn);
             try {
                 Tinebase_Smtp::getInstance()->sendMessage($mail);
