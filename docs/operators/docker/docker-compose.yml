@@ -19,7 +19,7 @@ services:
       - internal_network
 
   web:
-    image: tinegroupware/tine:2023
+    image: tinegroupware/tine:2024
     restart: always
     depends_on:
       - db
@@ -180,6 +180,27 @@ services:
 #    volumes:
 #      - "./letsencrypt:/letsencrypt"
 #      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+############################################################################
+#  edocument
+############################################################################
+#
+#  return [
+#    'Sales' => [
+#        'edocument' => [
+#            'validation_svc' => 'http://edocument:3000/ubl',
+#            'view_svc' => 'http://edocument:3000/ublView',
+#        ],
+#    ],
+#];
+#
+#   edocument:
+#     image: registry.rz1.metaways.net/tine/edocument-services:0.0.14-amd64
+#     restart: always
+#     ports:
+#       - "3000:3000"
+#     networks:
+#       - internal_network
 
 ### if you use directory mounts, you might no need that
 volumes:
