@@ -115,6 +115,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             this.record.set('price_gross', this.record.get('price_gross') * -1);
             this.record.set('price_net', this.record.get('price_net') * -1);
+            this.record.set('inventory_change', this.record.get('inventory_change') * -1);
 
             var relations = this.record.get('relations');
             var newRelations = [];
@@ -138,6 +139,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             });
 
             this.record.set('relations', newRelations);
+            this.record.set('attachments', '');
         }
 
         // this will start preparing the gridpanels for the invoice positions
@@ -281,6 +283,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             foundCustomer = await Tine.Sales.getCustomer(foundCustomer.id);
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
+            this.addressPicker.reset();
 
             if (this.addressPicker.disabled) {
                 if (record.get('billing_address_id')) {
@@ -289,15 +292,14 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         billingAddress = new Tine.Sales.Model.Address(billingAddress);
                     }
                     billingAddress.set('customer', foundCustomer);
-                    this.addressPicker.setValue(billingAddress);
                     this.onAddressLoad(this.addressPicker, billingAddress);
                 }
-            } else {
-                this.addressPicker.reset();
             }
 
             this.getForm().findField('credit_term').setValue(foundCustomer.credit_term);
-
+            this.getForm().findField('buyer_reference').setValue(record.get('buyer_reference'));
+            this.getForm().findField('purchase_order_reference').setValue(record.get('purchase_order_reference'));
+            this.getForm().findField('project_reference').setValue(record.get('project_reference'));
         } else {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
