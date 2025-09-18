@@ -157,8 +157,11 @@ msgstr "Allowed file type"
 msgid "Event Folder FileManager Path"
 msgstr "Event Folder FileManager Path"
 
-msgid "Event Folder FileManager Path Options"
-msgstr "Event Folder FileManager Path Options"
+msgid "EventManager registration secret string"
+msgstr "EventManager registration secret string"
+
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgstr "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
 
 msgid "Options"
 msgstr "Options"
@@ -229,8 +232,20 @@ msgstr "Fee:"
 msgid "Registration possible until:"
 msgstr "Registration possible until:"
 
-msgid "Please enter your email address to register for this event:"
-msgstr "Please enter your email address to register for this event:"
+msgid "Please enter your details to register for this event:"
+msgstr "Please enter your details to register for this event:"
+
+msgid "First Name:"
+msgstr "First Name:"
+
+msgid "Please enter your first name."
+msgstr "Please enter your first name."
+
+msgid "Last Name:"
+msgstr "Last Name:"
+
+msgid "Please enter your last name."
+msgstr "Please enter your last name."
 
 msgid "Email Address:"
 msgstr "Email Address:"
@@ -246,6 +261,9 @@ msgstr "Sending..."
 
 msgid "Send Registration Request"
 msgstr "Send Registration Request"
+
+msgid "Manage my registration"
+msgstr "Manage my registration"
 
 msgid "Registration"
 msgid_plural "Registrations"
@@ -273,8 +291,26 @@ msgstr "Download file"
 msgid "I have read and accept the terms and conditions"
 msgstr "I have read and accept the terms and conditions"
 
+msgid "Uploaded file"
+msgstr "Uploaded file"
+
 msgid "Complete Registration"
 msgstr "Complete Registration"
+
+msgid "Mr"
+msgstr "Mr"
+
+msgid "Ms"
+msgstr "Ms"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Person"
+msgstr "Person"
+
+msgid "Deutschland"
+msgstr "Deutschland"
 
 msgid "File Acknowledgement"
 msgstr "File Acknowledgement"
@@ -531,9 +567,6 @@ msgstr "Middle Name"
 msgid "Last Name"
 msgstr "Last Name"
 
-msgid "Company"
-msgstr "Company"
-
 msgid "Day of Birth"
 msgstr "Day of Birth"
 
@@ -567,5 +600,44 @@ msgstr "Country"
 msgid "Event Registration"
 msgstr "Event Registration"
 
+msgid "Enter your first name"
+msgstr "Enter your first name"
+
+msgid "Enter your last name"
+msgstr "Enter your last name"
+
 msgid "Enter your email address"
 msgstr "Enter your email address"
+
+msgid "Verwalten Sie Ihre Registrierung"
+msgstr "Verwalten Sie Ihre Registrierung"
+
+msgid "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
+msgstr "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
+
+msgid "Meine Registrierung verwalten"
+msgstr "Meine Registrierung verwalten"
+
+msgid "Bestätigen Sie Ihre E-Mail-Address"
+msgstr "Bestätigen Sie Ihre E-Mail-Address"
+
+msgid "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgstr "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+
+msgid "E-Mail-Adresse bestätigen"
+msgstr "E-Mail-Adresse bestätigen"
+
+msgid "Manage your registration"
+msgstr "Manage your registration"
+
+msgid "To manage your registration, please follow the link below"
+msgstr "To manage your registration, please follow the link below"
+
+msgid "Confirm your registration"
+msgstr "Confirm your registration"
+
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+
+msgid "Confirm E-Mail address"
+msgstr "Confirm E-Mail address"

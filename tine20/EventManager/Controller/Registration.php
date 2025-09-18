@@ -10,6 +10,8 @@
  *
  */
 
+use Firebase\JWT\JWT;
+
 /**
  * Event controller
  *
@@ -66,7 +68,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $this->_handleRegistrationFileUpload($_updatedRecord);
     }
 
-    protected function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)
+    public function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)
     {
         if (!$_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
             return;
@@ -104,7 +106,25 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
             $folderPath = ['/' . $translation->_('Registrations'), "/$participantName"];
 
-            EventManager_Controller::processFileUpload($nodeId, $fileName, $eventId, $folderPath);
+            $result = EventManager_Controller::processFileUpload($nodeId, $fileName, $eventId, $folderPath);
+
+            // necessary to update nodeId to match id from tree_nodes and not temp file
+            if ($result !== false) {
+                $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                    ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
+                $event = EventManager_Controller_Event::getInstance()->get($eventId);
+                foreach ($event->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
+                    if ($registration->id === $_registration->id) {
+                        foreach (
+                            $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption
+                        ) {
+                            $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                                ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
+                        }
+                    }
+                    EventManager_Controller_Event::getInstance()->update($event);
+                }
+            }
         }
     }
 
@@ -303,32 +323,34 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
             $response = new \Laminas\Diactoros\Response();
-            $contact = new Addressbook_Model_Contact([
-                'adr_one_countryname'   => $request['contactDetails']['country'],
-                'adr_one_locality'      => $request['contactDetails']['city'],
-                'adr_one_postalcode'    => $request['contactDetails']['postalCode'],
-                'adr_one_region'        => $request['contactDetails']['region'],
-                'adr_one_street'        => $request['contactDetails']['street'],
-                'adr_one_street2'       => $request['contactDetails']['houseNumber'],
-                'bday'                  => $request['contactDetails']['birthday'],
-                'email'                 => $request['contactDetails']['email'],
-                'title'                 => $request['contactDetails']['title'],
-                'n_family'              => $request['contactDetails']['lastName'],
-                'n_given'               => $request['contactDetails']['firstName'],
-                'n_middle'              => $request['contactDetails']['middleName'],
-                'n_prefix'              => $request['contactDetails']['salutation'],
-                'org_name'              => $request['contactDetails']['company'],
-                'tel_cell'              => $request['contactDetails']['mobile'],
-                'tel_home'              => $request['contactDetails']['telephone'],
-                'container_id'          => EventManager_Config::getInstance()
-                                            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER),
-            ]);
-            try {
-                $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-                // todo: do we want to create a contact for every person who registers?
-            } catch (Tinebase_Exception_Duplicate $ted) {
-                $contact = 'no name';
-                //todo : already a contact
+
+            $abContact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
+            $contact = null;
+
+            if (empty($abContact)) {
+                try {
+                    $contactData = array_map(function ($value) {
+                        return $value;
+                    }, $request['contactDetails']);
+                    $contactData['container_id'] = EventManager_Config::getInstance()
+                        ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+
+                    $contact = new Addressbook_Model_Contact($contactData);
+                    $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+                } catch (Tinebase_Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Exception: ' . $e->getMessage());
+                    }
+                }
+            } else {
+                foreach ($request['contactDetails'] as $field => $value) {
+                    if ($abContact->has($field)) {
+                        $abContact->$field = $value;
+                    }
+                }
+                $abContact->container_id = $abContact->getContainerId();
+                $contact = Addressbook_Controller_Contact::getInstance()->update($abContact);
             }
             $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION);
             $attendee = $attendee->records->getById('1');
@@ -378,13 +400,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 }
             }
             $registration = new EventManager_Model_Registration([
-                'event_id' => EventManager_Controller_Event::getInstance()->get($eventId),
-                'name' => $contact,
-                'function' => $attendee,
-                'source' => $online,
-                'status' => $waitingList,
-                'booked_options' => $bookedOption,
-                'description' => '',
+                'event_id'          => EventManager_Controller_Event::getInstance()->get($eventId),
+                'name'              => $contact,
+                'function'          => $attendee,
+                'source'            => $online,
+                'status'            => $waitingList,
+                'booked_options'    => $bookedOption,
+                'description'       => '',
             ], true);
             $registration = $this->create($registration);
             $response->getBody()->write(json_encode($registration->toArray()));
@@ -457,53 +479,59 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $response;
     }
 
-    public function publicApiPostDoubleOptIn($dipId)
+    public function publicApiPostDoubleOptIn($eventId)
     {
         $assertAclUsage = $this->assertPublicUsage();
 
-       /* try {
+        try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
 
-            $dipRecord = null;
-            if ($dipId && !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $dipId)) {
-                try {
-                    $dipRecord = GDPR_Controller_DataIntendedPurpose::getInstance()->get($dipId);
-                } catch (Exception $e) {
-                }
-            }
-
-            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
-                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
+            if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
+                $e = new Tinebase_Exception_SystemGeneric('EventManager JWT key is not configured');
                 Tinebase_Exception::log($e);
                 throw $e;
             }
 
             $token = JWT::encode([
                 'email' => $request['email'],
-                'issue_date' => 'the date user press',
-                'dipId' => $dipRecord ? $dipId : null,
-                'n_given'   =>  $request['n_given'] ?? null,
-                'n_family'   =>  $request['n_family'] ?? null,
-                'org_name' => $request['org_name'] ?? null,
+                'n_given'  => $request['n_given'],
+                'n_family'  => $request['n_family'],
             ], $key, 'HS256');
 
             if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $request['email'])) {
-                if ($contact = $this->_getGDPRContact($request)) {
-                    $link = '/GDPR/view/manageConsent/' . $contact['id'];
-                    $template = 'SendManageConsentLink';
-                    // create dipr before send the link to existing contact
-                    if (!empty($dipRecord))  {
-                        $this->_createAcceptedDipr($dipRecord->getId(), $contact);
+                $abContact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
+                if (!empty($abContact)) {
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Registration::class,
+                        [
+                            [
+                                'field' => EventManager_Model_Registration::FLD_EVENT_ID,
+                                'operator' => 'equals',
+                                'value' => $eventId
+                            ],
+                            [
+                                'field' => EventManager_Model_Registration::FLD_NAME,
+                                'operator' => 'equals',
+                                'value' => $abContact
+                            ],
+                        ],
+                    );
+                    $registerParticipant = $this->getInstance()->search($filter)->getFirstRecord();
+                    if (!empty($registerParticipant)) {
+                        $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
+                        $template = 'SendManageRegistrationLink';
+                    } else {
+                        $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
+                        $template = 'SendRegistrationLink';
                     }
                 } else {
+                    $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
                     $template = 'SendRegistrationLink';
-                    $link = '/GDPR/view/register/' . $token;
-                    $contact = new Addressbook_Model_Contact($request);
                 }
                 $this->_sendMessageWithTemplate($template, [
                     'link' => Tinebase_Core::getUrl() . $link,
-                    'contact' => $contact,
-                    'dipr'  =>  $dipRecord ?? null
+                    'userName' => $request['name'],
+                    'email' => $request['email'],
                 ]);
             }
             $response = new \Laminas\Diactoros\Response();
@@ -514,6 +542,87 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         } finally {
             $assertAclUsage();
         }
-        return $response;*/
+        return $response;
+    }
+
+    protected function _sendMessageWithTemplate($templateFileName, $context = [])
+    {
+        $locale = Tinebase_Core::getLocale();
+
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME));
+        $htmlTemplate = $twig
+            ->load(EventManager_Config::APP_NAME . '/views/emails/' . $templateFileName . '.html.twig');
+        $textTemplate = $twig
+            ->load(EventManager_Config::APP_NAME . '/views/emails/' . $templateFileName . '.text.twig');
+
+        $html = $htmlTemplate->render($context);
+        $text = $textTemplate->render($context);
+        $subject = $htmlTemplate->renderBlock('subject', $context);
+        $updater = Tinebase_Core::getUser();
+
+        // using Tinebase_Notification_Backend_Smtp send method, but changing recipients,
+        // they don't need to be contacts in this case
+        $mail = new Tinebase_Mail('UTF-8');
+        $mail->setSubject($subject);
+        $mail->setBodyText($text);
+        $mail->setBodyHtml($html);
+
+        $mail->addHeader('X-Tine20-Type', 'Notification');
+        $mail->addHeader('Precedence', 'bulk');
+        $mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Notification Service'));
+
+        $fromAddress = Tinebase_Notification_Backend_Smtp::getFromAddress();
+        $fromName = 'Tine 2.0 notification service';
+
+        if (empty($fromAddress)) {
+            Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' No notification service address set. Could not send notification.'
+            );
+            return;
+        }
+
+        if ($updater !== null && ! empty($updater->accountEmailAddress)) {
+            $mail->setFrom($updater->accountEmailAddress, $updater->accountFullName);
+            $mail->setSender($fromAddress, $fromName);
+        } else {
+            $mail->setFrom($fromAddress, $fromName);
+        }
+
+        $preferredEmailAddress = $context['email'];
+
+        // send
+        if (! empty($preferredEmailAddress)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress
+                );
+            }
+            $mail->addTo($preferredEmailAddress, $context['name']);
+            try {
+                Tinebase_Smtp::getInstance()->sendMessage($mail);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                // TODO check Felamimail - there is a similar error handling. should be generalized!
+                if (preg_match('/^5\.1\.1/', $zmpe->getMessage())) {
+                    // User unknown in virtual mailbox table
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage()
+                        );
+                    }
+                } elseif (preg_match('/^5\.1\.3/', $zmpe->getMessage())) {
+                    // Bad recipient address syntax
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage()
+                        );
+                    }
+                } else {
+                    throw $zmpe;
+                }
+            }
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Not sending notification email to ' . $context['name'] . '. No email address available.');
+        }
     }
 }

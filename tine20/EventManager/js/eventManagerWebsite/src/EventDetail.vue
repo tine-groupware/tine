@@ -21,11 +21,11 @@
       <div class="col-4">{{formatMessage('Until:')}}</div>
       <div class="col-8">{{eventDetails.end}}</div>
     </div>
-    <div class="row mb-3" v-if="eventDetails.appointments">
+    <div class="row mb-3" v-if="eventDetails.appointments && eventDetails.appointments.length > 0">
       <div class="col-4">{{formatMessage('Appointments:')}}</div>
       <div class="col-8">{{eventDetails.appointments}}</div>
     </div>
-    <div class="row mb-3" v-if="eventDetails.location">
+    <div class="row mb-3" v-if="eventDetails.location && eventDetails.location.adr_one_postalcode">
       <div class="col-4">{{formatMessage('Address:')}}</div>
       <div class="col-8">
         <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_street')}}</p>
@@ -44,7 +44,37 @@
     <div class="mb-3">
       <b-modal ref="emailModal" v-model="showEmailModal" :title="formatMessage('Event Registration')" @hidden="resetEmailForm" hide-footer>
         <div class="mb-3">
-          <p>{{ formatMessage('Please enter your email address to register for this event:') }}</p>
+          <p>{{ formatMessage('Please enter your details to register for this event:') }}</p>
+          <div class="form-group mb-3">
+            <label for="name-input">{{ formatMessage('First Name:') }}</label>
+            <input
+              id="name-input"
+              v-model="userFirstName"
+              type="text"
+              class="form-control"
+              :placeholder="formatMessage('Enter your first name')"
+              required
+              @keyup.enter="handleEmailSubmit"
+            />
+            <div v-if="userFirstName && !isNameValid" class="text-danger mt-1">
+              {{ formatMessage('Please enter your first name.') }}
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="name-input">{{ formatMessage('Last Name:') }}</label>
+            <input
+              id="name-input"
+              v-model="userLastName"
+              type="text"
+              class="form-control"
+              :placeholder="formatMessage('Enter your last name')"
+              required
+              @keyup.enter="handleEmailSubmit"
+            />
+            <div v-if="userLastName && !isNameValid" class="text-danger mt-1">
+              {{ formatMessage('Please enter your last name.') }}
+            </div>
+          </div>
           <div class="form-group">
             <label for="email-input">{{ formatMessage('Email Address:') }}</label>
             <input
@@ -68,7 +98,7 @@
             <button
               class="btn btn-primary"
               @click="handleEmailSubmit"
-              :disabled="!isEmailValid || isSubmitting"
+              :disabled="!isFormValid || isSubmitting"
             >
               <span v-if="isSubmitting">{{ formatMessage('Sending...') }}</span>
               <span v-else>{{ formatMessage('Send Registration Request') }}</span>
@@ -81,10 +111,14 @@
         <p>{{ formatMessage(modalMessage) }}</p>
         <b-button @click="handleModalClose" variant="primary">OK</b-button>
       </b-modal>
-
-      <b-button @click="openEmailModal" variant="primary">
-        {{ formatMessage('Registration') }}
-      </b-button>
+      <div class="text-end">
+        <b-button @click="openEmailModal" variant="primary">
+          {{ formatMessage('Manage my registration') }}
+        </b-button>
+        <b-button @click="openEmailModal" variant="primary" class="mx-3">
+          {{ formatMessage('Registration') }}
+        </b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -101,6 +135,8 @@ const showModal = ref(false);
 const showEmailModal = ref(false);
 const modalTitle = ref('');
 const modalMessage = ref('');
+const userFirstName = ref('');
+const userLastName = ref('');
 const userEmail = ref('');
 const isSubmitting = ref(false);
 const eventDetails = ref({
@@ -123,10 +159,18 @@ const eventDetails = ref({
   registration_possible_until: "",
 });
 
-// Email validation computed property
+const isNameValid = computed(() => {
+  return userFirstName.value.trim().length > 0;
+  return userLastName.value.trim().length > 0;
+});
+
 const isEmailValid = computed(() => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return userEmail.value.length > 0 && emailRegex.test(userEmail.value);
+});
+
+const isFormValid = computed(() => {
+  return isNameValid.value && isEmailValid.value;
 });
 
 const emailValidation = computed(() => {
@@ -135,17 +179,16 @@ const emailValidation = computed(() => {
 });
 
 const openEmailModal = () => {
-  console.log('Opening email modal');
   showEmailModal.value = true;
 };
 
 const resetEmailForm = () => {
-  console.log('Resetting email form');
+  userFirstName.value = '';
+  userLastName.value = '';
   userEmail.value = '';
   isSubmitting.value = false;
 };
 
-// THIS IS THE PROBLEMATIC FUNCTION
 const handleEmailSubmit = async () => {
 
   if (!isEmailValid.value || isSubmitting.value) {
@@ -155,18 +198,22 @@ const handleEmailSubmit = async () => {
   isSubmitting.value = true;
 
   try {
-    const response = await fetch(`/EventManager/registration/doubleOptIn`, {
+    const eventId = route.params.id;
+    const response = await fetch(`/EventManager/registration/doubleOptIn/${eventId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         eventId: route.params.id,
-        email: userEmail.value
+        n_given: userFirstName.value,
+        n_family: userLastName.value,
+        email: userEmail.value,
       })
     });
 
     if (response.ok) {
+      const responseData = await response.json();
       console.log('Registration request successful');
       showEmailModal.value = false;
       modalTitle.value = 'Registration Request Sent';

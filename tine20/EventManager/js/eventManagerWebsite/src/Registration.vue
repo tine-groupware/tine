@@ -27,7 +27,7 @@
           :label="formatMessage('Salutation')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.salutation"></b-form-input>
+          <b-form-select v-model="contactDetails.salutation" :options="salutations"></b-form-select>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -48,8 +48,8 @@
           class="mb-3"
         >
           <b-form-input
-            v-model="contactDetails.firstName"
-            :class="{ 'required-field-error': validationErrors.includes('firstName') }"
+            v-model="contactDetails.n_given"
+            :class="{ 'required-field-error': validationErrors.includes('n_given') }"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -60,7 +60,7 @@
           :label="formatMessage('Middle Name')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.middleName"></b-form-input>
+          <b-form-input v-model="contactDetails.n_middle"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -71,8 +71,8 @@
           class="mb-3"
         >
           <b-form-input
-            v-model="contactDetails.lastName"
-            :class="{ 'required-field-error': validationErrors.includes('lastName') }"
+            v-model="contactDetails.n_family"
+            :class="{ 'required-field-error': validationErrors.includes('n_family') }"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -83,7 +83,7 @@
           :label="formatMessage('Company')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.company"></b-form-input>
+          <b-form-input v-model="contactDetails.org_name"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -97,7 +97,7 @@
             id="birthday-input"
             type="date"
             class="form-registration"
-            v-model="contactDetails.birthday"
+            v-model="contactDetails.bday"
             :max="maxBirthDate"
           ></b-form-input>
         </b-form-group>
@@ -112,6 +112,7 @@
           <b-form-input
             v-model="contactDetails.email"
             :class="{ 'required-field-error': validationErrors.includes('email') }"
+            :readonly="isVerifyEmail"
           ></b-form-input>
         </b-form-group>
         <b-form-group
@@ -122,7 +123,7 @@
           :label="formatMessage('Mobile')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.mobile"></b-form-input>
+          <b-form-input v-model="contactDetails.tel_cell"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -132,7 +133,7 @@
           :label="formatMessage('Telephone')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.telephone"></b-form-input>
+          <b-form-input v-model="contactDetails.tel_home"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -142,7 +143,7 @@
           :label="formatMessage('Street')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.street"></b-form-input>
+          <b-form-input v-model="contactDetails.adr_one_street"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -152,7 +153,7 @@
           :label="formatMessage('House Nr.')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.houseNumber"></b-form-input>
+          <b-form-input v-model="contactDetails.adr_one_street2"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -162,7 +163,7 @@
           :label="formatMessage('Postal Code')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.postalCode"></b-form-input>
+          <b-form-input v-model="contactDetails.adr_one_postalcode"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -172,7 +173,7 @@
           :label="formatMessage('City')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.city"></b-form-input>
+          <b-form-input v-model="contactDetails.adr_one_locality"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -182,7 +183,7 @@
           :label="formatMessage('Region')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.region"></b-form-input>
+          <b-form-input v-model="contactDetails.adr_one_region"></b-form-input>
         </b-form-group>
         <b-form-group
           label-cols-sm="4"
@@ -192,7 +193,7 @@
           :label="formatMessage('Country')"
           class="mb-3"
         >
-          <b-form-input v-model="contactDetails.country"></b-form-input>
+          <b-form-select v-model="contactDetails.adr_one_countryname" :options="countries"></b-form-select>
         </b-form-group>
       </b-col>
     </b-row>
@@ -281,6 +282,12 @@
                       :accept="acceptedTypes"
                       :multiple=false
                     >
+                    <div v-if="uploadedFiles[option.id] && uploadedFiles[option.id].length > 0" class="mt-2">
+                      <small class="text-muted">
+                        {{formatMessage('Uploaded file')}}:
+                        <span style="color:blue;font-weight:bold;cursor:pointer" @click="downloadFile(uploadedFiles[option.id][0].node_id, uploadedFiles[option.id][0].name, uploadedFiles[option.id][0].file_type)">{{uploadedFiles[option.id][0].name}}</span>
+                      </small>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -291,16 +298,19 @@
           <p>{{ formatMessage(modalMessage) }}</p>
           <b-button @click="handleModalClose" variant="primary">OK</b-button>
         </b-modal>
-        <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
+        <div class="text-end mb-3">
+          <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
+        </div>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script setup>
-import {inject, ref, computed} from 'vue';
+import {computed, inject, ref} from 'vue';
 import {translationHelper} from "./keys";
 import {useRoute} from 'vue-router';
+import "./Registration.vue";
 
 const formatMessage = inject(translationHelper);
 const route = useRoute();
@@ -326,21 +336,21 @@ const eventDetails = ref({
 
 const contactDetails = ref({
   salutation : "",
-  title : "",
-  firstName : "",
-  middleName : "",
-  lastName : "",
-  company : "",
-  birthday : "",
+  n_prefix : "",
+  n_given : "",
+  n_middle : "",
+  n_family : "",
+  org_name : "",
+  bday : "",
   email : "",
-  mobile: "",
-  telephone : "",
-  street : "",
-  houseNumber: "",
-  postalCode : "",
-  city : "",
-  region : "",
-  country : "",
+  tel_cell: "",
+  tel_home : "",
+  adr_one_street : "",
+  adr_one_street2: "",
+  adr_one_postalcode : "",
+  adr_one_locality : "",
+  adr_one_region : "",
+  adr_one_countryname : "",
 });
 
 const replies = ref({});
@@ -349,7 +359,17 @@ const showModal = ref(false);
 const modalTitle = ref('');
 const modalMessage = ref('');
 const validationErrors = ref([]);
-const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls'
+const isVerifyEmail = ref(false);
+const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
+const salutations = ref([
+  { value: 'MR', text: formatMessage('Mr') },
+  { value: 'MS', text: formatMessage('Ms') },
+  { value: 'COMPANY', text: formatMessage('Company') },
+  { value: 'PERSON', text: formatMessage('Person') },
+]); //todo: change this to work with values from registry (conny)
+const countries = ref([
+  { value: 'DE', text: formatMessage('Deutschland') }, //todo: change this to work with values from registry (conny)
+]);
 
 const getCharacterCount = (optionId) => {
   return replies.value[optionId] ? replies.value[optionId].length : 0;
@@ -513,8 +533,8 @@ const validateRequiredFields = () => {
   const errors = [];
 
   const requiredPersonalFields = [
-    { key: 'firstName', value: contactDetails.value.firstName },
-    { key: 'lastName', value: contactDetails.value.lastName },
+    { key: 'n_given', value: contactDetails.value.n_given },
+    { key: 'n_family', value: contactDetails.value.n_family },
     { key: 'email', value: contactDetails.value.email }
   ];
 
@@ -735,24 +755,35 @@ const uploadFiles = async (eventId, registrationId) => {
   }
 }
 
+function handleFileChange(event, optionId) {
+  const files = event.target.files;
+  if (files.length > 0) {
+    console.log(`Selected files for option ${optionId}:`, files);
+    uploadedFiles.value[optionId] = files;
+  } else {
+    // Clear files if none selected
+    delete uploadedFiles.value[optionId];
+  }
+}
+
 const clearForm = () => {
   contactDetails.value = {
     salutation: '',
-    title: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    company: '',
-    birthday: '',
+    n_prefix: '',
+    n_given: '',
+    n_middle: '',
+    n_family: '',
+    org_name: '',
+    bday: '',
     email: '',
-    mobile: '',
-    telephone: '',
-    street: '',
-    houseNumber: '',
-    postalCode: '',
-    city: '',
-    region: '',
-    country: ''
+    tel_cell: '',
+    tel_home: '',
+    adr_one_street: '',
+    adr_one_street2: '',
+    adr_one_postalcode: '',
+    adr_one_locality: '',
+    adr_one_region: '',
+    adr_one_countryname: ''
   };
 
   replies.value = {};
@@ -849,17 +880,91 @@ async function getEvent() {
         }
       }
       console.log(data);
-    })
+    });
+  if (route.params.token) {
+    await getEventContactDetails();
+  }
 }
 
-function handleFileChange(event, optionId) {
-  const files = event.target.files;
-  if (files.length > 0) {
-    console.log(`Selected files for option ${optionId}:`, files);
-    uploadedFiles.value[optionId] = files;
-  } else {
-    // Clear files if none selected
-    delete uploadedFiles.value[optionId];
+async function getEventContactDetails() {
+  let eventId = route.params.id;
+  let token = route.params.token;
+  try {
+    const resp = await fetch(`/EventManager/get/contact/${token}/${eventId}`, {
+      method: 'GET'
+    });
+    const data = await resp.json();
+    const [contactData, registrationId] = data;
+
+    contactDetails.value = contactData;
+    if (contactData.email && contactData.email.trim() !== '') {
+      isVerifyEmail.value = true;
+    }
+
+    if (registrationId && registrationId !== '') {
+      const registrations = eventDetails._value.registrations || [];
+      for(const registration of registrations) {
+        if (registration.id === registrationId) {
+          const bookedOptions = registration.booked_options || [];
+          for(const bookedOption of bookedOptions) {
+            const optionId = bookedOption.option.id;
+            if (optionId) {
+              const sc = bookedOption.selection_config;
+              switch (bookedOption.selection_config_class) {
+                case 'EventManager_Model_Selections_Checkbox':
+                  replies.value[optionId] = sc.booked === true || optionId === 'true' ? 'true' : 'false';
+                  break;
+
+                case 'EventManager_Model_Selections_TextInput':
+                  replies.value[optionId] = sc.response || '';
+                  break;
+
+                case 'EventManager_Model_Selections_File':
+                  if (sc.node_id) {
+                    try {
+                      await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
+                    } catch (error) {
+                      console.error(`Failed to load file for option ${optionId}:`, error);
+                    }
+                  } else {
+                    replies.value[optionId] = sc.file_acknowledgement === true || sc.file_acknowledgement === 'true' ? 'true' : 'false';
+                  }
+                  break;
+              }
+            }
+          }
+          break;
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching contact details: ', error);
+  }
+}
+
+async function loadPreviouslyUploadedFile(optionId, nodeId, fileName) {
+  try {
+    const response = await fetch(`/EventManager/getFile/${nodeId}`, {
+      method: 'GET'
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+    const file = new File([blob], fileName, {
+      type: blob.type
+    });
+
+    if (!uploadedFiles.value[optionId]) {
+      uploadedFiles.value[optionId] = [];
+    }
+
+    uploadedFiles.value[optionId] = [file];
+
+  } catch (error) {
+    console.error(`Error loading file for option ${optionId}:`, error);
+    throw error;
   }
 }
 
@@ -884,5 +989,9 @@ export default {
   border-radius: 0.375rem;
   padding: 0.5rem;
   background-color: rgba(220, 53, 69, 0.05);
+}
+.form-control[readonly] {
+  background-color: #f8f9fa;
+  opacity: 1;
 }
 </style>
