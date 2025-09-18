@@ -22,6 +22,8 @@ use Sabre\VObject;
  */
 class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\CalDAV\ICalendarObject, Sabre\DAVACL\IACL
 {
+    public const ALLOW_EXTERNAL_ORGANIZER_ANYWAY = 'allowExternalOrganizerAnyway';
+
     /**
      * @var Tinebase_Model_Container
      */
@@ -93,7 +95,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         return $newAttachmentNode->object_id;
     }
-    
+
     /**
      * this function creates a Calendar_Model_Event and stores it in the database
      * 
@@ -105,6 +107,9 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [], bool $ignoreMove = false)
     {
+        $allowExternalOrganizerAnyway = $converterOptions[self::ALLOW_EXTERNAL_ORGANIZER_ANYWAY] ?? false;
+        unset($converterOptions[self::ALLOW_EXTERNAL_ORGANIZER_ANYWAY]);
+
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
         }
@@ -128,7 +133,13 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
 
         if (true === $onlyCurrentUserOrganizer) {
             if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id) {
-                return null;
+                if ($allowExternalOrganizerAnyway) {
+                    if ($event->resolveOrganizer()?->account_id) {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
             }
         }
         

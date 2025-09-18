@@ -643,6 +643,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 
                 if (! $this->attendee instanceof Tinebase_Record_RecordSet) {
                     $this->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+                } elseif (($newEmail = $assertionAttendee->getEmail()) && ($emailAttendee = $this->attendee->find('user_email', $newEmail))) {
+                    $this->attendee->removeRecord($emailAttendee);
                 }
                 $this->attendee->addRecord($assertionAttendee);
             }

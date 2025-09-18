@@ -400,6 +400,9 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             'attendeeStrategy' => 'add',
             'attendee' => [$sclever],
         ]);
+        $startbucks = $importEvents->find('uid', '3632597');
+        $this->assertSame(1, $startbucks->attendee->count());
+        $this->assertNotNull(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
 
         // second import: without sclever added
         $importEvents = $this->_importHelper('simple.ics', 6, /* $fromString = */ true, [
@@ -408,7 +411,7 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
             'keepExistingAttendee' => true,
         ]);
         $startbucks = $importEvents->find('uid', '3632597');
-        $this->assertEquals(2, count($startbucks->attendee), 'attendee replaced instead of added');
-        $this->assertNotEmpty(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
+        $this->assertSame(1, $startbucks->attendee->count());
+        $this->assertNotNull(Calendar_Model_Attender::getAttendee($startbucks->attendee, new Calendar_Model_Attender($sclever)), 'sclever not added');
     }
 }
