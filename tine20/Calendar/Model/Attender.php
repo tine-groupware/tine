@@ -698,6 +698,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     }
                 }
 
+                if (! $attendeeId && ($list = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
+                            array('field' => 'email',      'operator' => 'equals', 'value' => $newAttendee['email']),
+                            array('field' => 'type',       'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP),
+                            array('field' => 'showHidden', 'operator' => 'equals', 'value' => true),
+                        )))->getFirstRecord())) {
+                    $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_GROUP;
+                    $attendeeId = $list->group_id;
+                }
+
                 if (! $attendeeId) {
                     // autocreate a contact if allowed
                     $contact = self::resolveEmailToContact($newAttendee, $_implicitAddMissingContacts);
