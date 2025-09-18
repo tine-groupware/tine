@@ -1519,7 +1519,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      *
      * @param {Object} exception
      */
-    onDuplicateException: function(exception) {
+    onDuplicateException: async function(exception) {
         var resolveGridPanel = new Tine.widgets.dialog.DuplicateResolveGridPanel({
             app: this.app,
             store: new Tine.widgets.dialog.DuplicateResolveStore({
@@ -1553,7 +1553,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.copyRecord = false;
             this.onRecordLoad();
 
-            Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this.id);
+            this.window.mainCardPanel.layout.setActiveItem(this.id);
             resolveGridPanel.doLayout();
 
             this.doDuplicateCheck = false;
@@ -1562,9 +1562,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // place in viewport
         this.window.setTitle(String.format(i18n._('Resolve Duplicate {0} Suspicion'), this.i18nRecordName));
-        const mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
-        mainCardPanel.add(resolveGridPanel);
-        mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
+        this.window.mainCardPanel.add(resolveGridPanel);
+        this.window.mainCardPanel.layout.setActiveItem(resolveGridPanel.id);
         resolveGridPanel.doLayout();
     },
 
