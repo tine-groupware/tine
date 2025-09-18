@@ -542,7 +542,10 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                             $name,
                             $data,
                             $this->_skipInternalOtherOrganizer,
-                            [Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID => true],
+                            [
+                                Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID => true,
+                                Calendar_Frontend_WebDAV_Event::ALLOW_EXTERNAL_ORGANIZER_ANYWAY => $this->_skipInternalOtherOrganizer,
+                            ],
                             true,
                         ]);
                     }

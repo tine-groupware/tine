@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
@@ -22,16 +22,24 @@ class Calendar_Import_CalDav_Decorator_Generic extends Calendar_Import_CalDav_De
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Tine20SyncClient/' . TINE20_PACKAGESTRING;
 
+        $oldOrganizerValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite;
+        $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = $oldOrganizerValue);
         if ($options[Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER] ?? false) {
-            $oldValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite;
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match organizer to true');
             Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = true;
-            $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = $oldValue);
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match organizer to false');
+            Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = false;
         }
 
+        $oldAttendeeValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite;
+        $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = $oldAttendeeValue);
         if ($options[Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES] ?? false) {
-            $oldValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite;
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match attendees to true');
             Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = true;
-            $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = $oldValue);
+        } else {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match attendees to false');
+            Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = false;
         }
     }
 }
