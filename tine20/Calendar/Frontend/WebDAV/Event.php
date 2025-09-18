@@ -151,9 +151,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         if (true === $onlyCurrentUserOrganizer) {
-            if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id
-                    && !$allowExternalOrganizerAnyway) {
-                return null;
+            if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id) {
+                if ($allowExternalOrganizerAnyway) {
+                    if ($event->resolveOrganizer()?->account_id) {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
             }
         }
         
