@@ -110,14 +110,6 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Notification mail'
-                    . ' from: ' . $mail->getFrom()
-                    . ' / sender: ' . $mail->getHeaders()['Sender']
-            );
-        }
-
         // attachments
         if (is_array($_attachments) || $_attachments instanceof Tinebase_Record_RecordSet) {
             $attachments = &$_attachments;
@@ -155,11 +147,17 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         // send
         if (! empty($preferredEmailAddress)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(
+            $mail->addTo($preferredEmailAddress, $_recipient->n_fn);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress);
             }
-            $mail->addTo($preferredEmailAddress, $_recipient->n_fn);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Sending notification mail with headers: '
+                    . ' ' . print_r($mail->getHeaders(), true)
+                );
+            }
             try {
                 Tinebase_Smtp::getInstance()->sendMessage($mail);
             } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -176,7 +174,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
                     throw $zmpe;
                 }
             }
-        } else {
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                 . ' Not sending notification email to ' . $_recipient->n_fn . '. No email address available.');
         }
