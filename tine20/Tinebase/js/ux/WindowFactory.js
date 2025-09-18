@@ -122,7 +122,7 @@ Ext.ux.WindowFactory.prototype = {
             win = new winConstructor(c);
 
             this.getCenterPanel(c, win).then((cp) => {
-                const cardPanel = win.items.get(0)
+                const cardPanel = win.items.get(0);
                 cardPanel.items.add(cp);
                 cardPanel.layout.setActiveItem(0);
                 cp.doLayout();
@@ -142,6 +142,8 @@ Ext.ux.WindowFactory.prototype = {
     
     /**
      * constructs window items from config properties
+     *
+     * @param {Ext.Window} [win] only used for Ext Windows, see getExtWindow
      */
      getCenterPanel: async function (config, win) {
         config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
@@ -158,9 +160,8 @@ Ext.ux.WindowFactory.prototype = {
             return mask;
         }
 
-        // place a reference to current window class in the itemConstructor.
-        // this may be overwritten depending on concrete window implementation
-        config.contentPanelConstructorConfig.window = win || config.window || config;
+        // place a reference to current window object (instance of Ext.Window ||  Ext.ux.PopupWindow) in the itemConstructor.
+        const windowObj = config.contentPanelConstructorConfig.window = win || config.window || config;
         if (config.contentPanelConstructorConfig._isAutoWrapped) {
             config.contentPanelConstructorConfig.items.window = config.contentPanelConstructorConfig.window;
         }
@@ -179,7 +180,8 @@ Ext.ux.WindowFactory.prototype = {
             config.contentPanelConstructorConfig.items.listeners = null;
         }
         config.contentPanelConstructed = true;
-        
+
+        windowObj.mainCardPanel = config.popup ? windowObj.popup.Tine.Tinebase.viewport.tineViewportMaincardpanel : windowObj.items.get(0);
         return centerPanel;
     },
     
