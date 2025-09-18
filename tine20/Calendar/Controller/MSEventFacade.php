@@ -408,7 +408,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         //        -> in the sync world this is scenario is called delegation and handled differently
         //        -> it might be consequent to have the same behavior (organizer is always attendee with role chair)
         //           in tine20 in general. This is how Thunderbird handles it as well
-        $_event->assertAttendee($this->getCalendarUser());
+        if ($this->_assertCalUserAttendee) {
+            $_event->assertAttendee($this->getCalendarUser());
+        }
         
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $exceptions->addIndices(array('is_deleted'));
@@ -436,7 +438,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             . ' Found ' . count($migration['toCreate']) . ' exceptions to create and ' . count($migration['toUpdate']) . ' to update.');
         
         foreach ($migration['toCreate'] as $exception) {
-            $exception->assertAttendee($this->getCalendarUser());
+            if ($this->_assertCalUserAttendee) {
+                $exception->assertAttendee($this->getCalendarUser());
+            }
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_preserveMetaData($updatedBaseEvent, $exception, true);
             $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
@@ -453,8 +457,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
                 . ' Update exdate ' . $exception->getId() . ' at ' . $exception->dtstart->toString());
-            
-            $exception->assertAttendee($this->getCalendarUser());
+
+            if ($this->_assertCalUserAttendee) {
+                $exception->assertAttendee($this->getCalendarUser());
+            }
             $this->_prepareException($updatedBaseEvent, $exception);
             $this->_preserveMetaData($updatedBaseEvent, $exception, false);
             $this->_addStatusAuthkeyForOwnAttender($exception);
