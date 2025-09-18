@@ -92,8 +92,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     } catch (e) {
                         e.data.title = this.app.formatMessage('Dispatching not Possible');
                         await Tine.Tinebase.ExceptionHandler.handleRequestException(e);
-                        this.mask.hide()
-                        return
                     }
 
                     record = await record.constructor.getProxy().promiseLoadRecord(record)
