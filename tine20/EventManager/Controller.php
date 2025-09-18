@@ -50,6 +50,11 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetEvent',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
+            $routeCollector->get('/get/contact/{token}/{eventId}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiGetEventContactDetails',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
             $routeCollector->post('/register/{eventId}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Registration::class,
                 'publicApiPostRegistration',
@@ -60,7 +65,7 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiPostFileToFileManager',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
-            $routeCollector->post('/registration/doubleOptIn', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->post('/registration/doubleOptIn/{eventId}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Registration::class,
                 'publicApiPostDoubleOptIn',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]

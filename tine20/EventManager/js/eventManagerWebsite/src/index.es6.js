@@ -49,7 +49,7 @@ const routes = [
   { path: '/event', component: Events},
   { path: '/event/:id', component: EventDetail},
   { path: '/contact', component: Contact},
-  { path: '/event/:id/registration', component: Registration},
+  { path: '/event/:id/registration/:token?', component: Registration},
 ]
 
 const router = createRouter({

@@ -36,6 +36,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const ALLOWED_FILE_TYPE = 'allowedFileType';
 
     public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';
+    public const JWT_SECRET = 'jwtSecret';
 
 
 
@@ -262,6 +263,18 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
+        ],
+
+        self::JWT_SECRET => [
+            self::LABEL                 => 'EventManager registration secret string',
+                                        //_('EventManager registration secret string')
+            self::DESCRIPTION           =>
+                'The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable.',
+            //_('The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable.')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
         ],
     ];
 

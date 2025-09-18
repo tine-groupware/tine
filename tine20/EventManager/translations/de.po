@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-09-09 12:27+0200\n"
+"PO-Revision-Date: 2025-09-16 14:31+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -161,8 +161,11 @@ msgstr "Zulässiger Dateityp"
 msgid "Event Folder FileManager Path"
 msgstr "Veranstaltungsordner Dateimanager Pfad"
 
-msgid "Event Folder FileManager Path Options"
-msgstr "Veranstaltungsordner Dateimanager Pfad Optionen"
+msgid "EventManager registration secret string"
+msgstr "EventManager-Registrierungs-Geheimstring"
+
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
 
 msgid "Options"
 msgstr "Optionen"
@@ -233,8 +236,20 @@ msgstr "Gebühr:"
 msgid "Registration possible until:"
 msgstr "Anmeldung möglich bis:"
 
-msgid "Please enter your email address to register for this event:"
-msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um sich für diese Veranstaltung anzumelden:"
+msgid "Please enter your details to register for this event:"
+msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
+
+msgid "First Name:"
+msgstr "Vorname:"
+
+msgid "Please enter your first name."
+msgstr "Bitte geben Sie Ihren Vornamen ein."
+
+msgid "Last Name:"
+msgstr "Nachname:"
+
+msgid "Please enter your last name."
+msgstr "Bitte geben Sie Ihren Nachnamen ein."
 
 msgid "Email Address:"
 msgstr "E-Mail-Adresse:"
@@ -250,6 +265,9 @@ msgstr "Anfrage senden…"
 
 msgid "Send Registration Request"
 msgstr "Anmeldeanfrage senden"
+
+msgid "Manage my registration"
+msgstr "Meine Registrierung verwalten"
 
 msgid "Registration"
 msgid_plural "Registrations"
@@ -277,8 +295,26 @@ msgstr "Datei herunterladen"
 msgid "I have read and accept the terms and conditions"
 msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
 
+msgid "Uploaded file"
+msgstr "Hochgeladene Datei"
+
 msgid "Complete Registration"
 msgstr "Registrierung abschließen"
+
+msgid "Mr"
+msgstr "Herr"
+
+msgid "Ms"
+msgstr "Frau"
+
+msgid "Company"
+msgstr "Firma / Organisation"
+
+msgid "Person"
+msgstr "Person"
+
+msgid "Deutschland"
+msgstr "Deutschland"
 
 msgid "File Acknowledgement"
 msgstr "Bestätigung der Datei"
@@ -537,9 +573,6 @@ msgstr "Zweiter Vorname"
 msgid "Last Name"
 msgstr "Nachname"
 
-msgid "Company"
-msgstr "Firma / Organisation"
-
 msgid "Day of Birth"
 msgstr "Geburtstag"
 
@@ -573,8 +606,56 @@ msgstr "Land"
 msgid "Event Registration"
 msgstr "Veranstaltungsanmeldung"
 
+msgid "Enter your first name"
+msgstr ""
+
+msgid "Enter your last name"
+msgstr ""
+
 msgid "Enter your email address"
 msgstr "Geben Sie Ihre E-Mail-Adresse ein"
+
+msgid "Verwalten Sie Ihre Registrierung"
+msgstr ""
+
+msgid "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
+msgstr ""
+
+msgid "Meine Registrierung verwalten"
+msgstr ""
+
+msgid "Bestätigen Sie Ihre E-Mail-Address"
+msgstr ""
+
+msgid "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgstr ""
+
+msgid "E-Mail-Adresse bestätigen"
+msgstr ""
+
+msgid "Manage your registration"
+msgstr "Verwalten Sie Ihre Registrierung"
+
+msgid "To manage your registration, please follow the link below"
+msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+
+msgid "Confirm your registration"
+msgstr "Bestätigen Sie Ihre Registrierung"
+
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+
+msgid "Confirm E-Mail address"
+msgstr "E-Mail-Adresse bestätigen"
+
+#~ msgid "To manage your registration, please follow thie link below"
+#~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+
+#~ msgid "Event Folder FileManager Path Options"
+#~ msgstr "Veranstaltungsordner Dateimanager Pfad Optionen"
+
+#~ msgid "Please enter your email address to register for this event:"
+#~ msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um sich für diese Veranstaltung anzumelden:"
 
 #~ msgid "Checkbox Option "
 #~ msgid_plural "Checkbox Options"

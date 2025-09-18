@@ -1,0 +1,21 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ _('Confirm your registration') }}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-5">
+        <p class="text-start">{{ _('thank you for your registration, to complete the registration, please confirm your e-mail address via this link') }}</p>
+    </div>
+    <div class="ax-center my-5">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('Confirm E-Mail address') }}</a>
+    </div>
+{% endblock %}

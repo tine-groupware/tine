@@ -157,7 +157,10 @@ msgstr ""
 msgid "Event Folder FileManager Path"
 msgstr ""
 
-msgid "Event Folder FileManager Path Options"
+msgid "EventManager registration secret string"
+msgstr ""
+
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
 msgstr ""
 
 msgid "Options"
@@ -229,7 +232,19 @@ msgstr ""
 msgid "Registration possible until:"
 msgstr ""
 
-msgid "Please enter your email address to register for this event:"
+msgid "Please enter your details to register for this event:"
+msgstr ""
+
+msgid "First Name:"
+msgstr ""
+
+msgid "Please enter your first name."
+msgstr ""
+
+msgid "Last Name:"
+msgstr ""
+
+msgid "Please enter your last name."
 msgstr ""
 
 msgid "Email Address:"
@@ -245,6 +260,9 @@ msgid "Sending..."
 msgstr ""
 
 msgid "Send Registration Request"
+msgstr ""
+
+msgid "Manage my registration"
 msgstr ""
 
 msgid "Registration"
@@ -273,7 +291,25 @@ msgstr ""
 msgid "I have read and accept the terms and conditions"
 msgstr ""
 
+msgid "Uploaded file"
+msgstr ""
+
 msgid "Complete Registration"
+msgstr ""
+
+msgid "Mr"
+msgstr ""
+
+msgid "Ms"
+msgstr ""
+
+msgid "Company"
+msgstr ""
+
+msgid "Person"
+msgstr ""
+
+msgid "Deutschland"
 msgstr ""
 
 msgid "File Acknowledgement"
@@ -531,9 +567,6 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-msgid "Company"
-msgstr ""
-
 msgid "Day of Birth"
 msgstr ""
 
@@ -567,5 +600,44 @@ msgstr ""
 msgid "Event Registration"
 msgstr ""
 
+msgid "Enter your first name"
+msgstr ""
+
+msgid "Enter your last name"
+msgstr ""
+
 msgid "Enter your email address"
+msgstr ""
+
+msgid "Verwalten Sie Ihre Registrierung"
+msgstr ""
+
+msgid "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
+msgstr ""
+
+msgid "Meine Registrierung verwalten"
+msgstr ""
+
+msgid "Bestätigen Sie Ihre E-Mail-Address"
+msgstr ""
+
+msgid "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgstr ""
+
+msgid "E-Mail-Adresse bestätigen"
+msgstr ""
+
+msgid "Manage your registration"
+msgstr ""
+
+msgid "To manage your registration, please follow the link below"
+msgstr ""
+
+msgid "Confirm your registration"
+msgstr ""
+
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr ""
+
+msgid "Confirm E-Mail address"
 msgstr ""
