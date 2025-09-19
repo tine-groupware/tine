@@ -1098,6 +1098,24 @@ msgstr "Nutzen sie diese Option wenn die Termine von anderen internen Organisier
 msgid "Skip Events if organizer matched an other internal user than the import user."
 msgstr "Überspringe Termine von anderen internen Organisierenden."
 
+msgid "Use own attendee status for other internal organizer events"
+msgstr "Eigenen Teilnehmer*innenstatus bei Terminen anderer interner Organisierenden übernehmen"
+
+msgid "Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response."
+msgstr "Nutzen sie diese Option wenn der Teilnehmer*innenstatus im Import-Calender richtiger ist. Z.B. weil die Organisator*in Antworten nicht erhalten/verarbeitet hat."
+
+msgid "Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user."
+msgstr "Verwende den Teilnehmer*innenstatus der importierenden Benutzer*in, wenn der Termin bereits existiert, die importierenden Benutzer*in Teilnehmer*in des Termins ist und die Organisator*in eine andere interne Benutzer*in ist."
+
+msgid "Allow party crushing for other internal organizer events"
+msgstr "Party-Crushing bei Terminen anderer interner Organisierenden erlauben"
+
+msgid "Use this when attendee added themselves and organizer did not receive/process/accept response."
+msgstr "Nutzen sie diese Option wenn der Teilnehmer*innen sich selbst dem Termin zugefügt haben und die Organisator*in Antworten nicht erhalten/verarbeitet/akzeptiert hat."
+
+msgid "Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user."
+msgstr "Füge die Benutzer*in hinzu, wenn der Termin bereits existiert, die importierende Benutzer*in Teilnehmer*in des Import-Termins ist aber nicht im existierenden Termin und die Organisator*in eine andere interne Benutzer*in ist."
+
 msgid "Disable external organizer calendar"
 msgstr "Deaktiviere Kalender für externe Organisierende"
 

@@ -51,7 +51,28 @@ class Tinebase_FileSystem_RecordAttachmentsTest extends TestCase
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem(false);
     }
-    
+
+    public function testRenameRecordAttachment(): void
+    {
+        $stream = fopen('php://memory', 'w');
+        $record = new Addressbook_Model_Contact([
+            'n_family' => Tinebase_Record_Abstract::generateUID(),
+            'container_id' => Addressbook_Controller::getDefaultInternalAddressbook(),
+            'attachments' => [[
+                'name' => 'a',
+                'tempFile' => Tinebase_TempFile::getInstance()->createTempFileFromStream($stream),
+            ]],
+        ]);
+        $record = Addressbook_Controller_Contact::getInstance()->create($record);
+        $this->assertSame(1, $record->attachments->count());
+        $this->assertSame('a', $record->attachments->getFirstRecord()->name);
+
+        $record->attachments->getFirstRecord()->name = 'b';
+        $record = Addressbook_Controller_Contact::getInstance()->update($record);
+        $this->assertSame(1, $record->attachments->count());
+        $this->assertSame('b', $record->attachments->getFirstRecord()->name);
+    }
+
     /**
      * test adding attachments to record
      * 
