@@ -2744,9 +2744,7 @@ class Tinebase_FileSystem implements
             $currentNodeObject = $this->get($_node->getId());
 
             if ($_node->name !== $currentNodeObject->name) {
-                $translation = Tinebase_Translation::getTranslation();
-                throw new Tinebase_Exception_SystemGeneric(
-                    $translation->_('Node name may not be changed in update'));
+                throw new Tinebase_Exception_Record_Validation('name may not be changed in update');
             }
             if (isset($_node->grants)) {
                 if ($currentNodeObject->getId() !== $currentNodeObject->acl_node) {
