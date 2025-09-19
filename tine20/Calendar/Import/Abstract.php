@@ -24,6 +24,8 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
     public const OPTION_MATCH_ATTENDEES = 'matchAttendees';
     public const OPTION_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
     public const OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR = 'disableExternalOrganizerCalendar';
+    public const OPTION_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'useOwnAttendeeForSkipInternalOtherOrganizerEvents';
+    public const OPTION_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'allowPartyCrushForSkipInternalOtherOrganizerEvents';
 
     /**
      * @var Calendar_Controller_Event
@@ -123,6 +125,8 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         self::OPTION_MATCH_ORGANIZER => true,
         self::OPTION_SKIP_INTERNAL_OTHER_ORGANIZER => true,
         self::OPTION_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => false,
+        self::OPTION_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => false,
+        self::OPTION_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => false,
     );
 
     protected function _getCalendarController()
