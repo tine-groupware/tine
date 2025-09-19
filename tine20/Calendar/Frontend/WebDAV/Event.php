@@ -111,6 +111,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         return $newAttachmentNode->object_id;
     }
 
+    public static ?Calendar_Model_Event $lastEventCreated = null;
+
     /**
      * this function creates a Calendar_Model_Event and stores it in the database
      * 
@@ -122,6 +124,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      */
     public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [], bool $ignoreMove = false)
     {
+        static::$lastEventCreated = null;
+
         $allowExternalOrganizerAnyway = $converterOptions[self::ALLOW_EXTERNAL_ORGANIZER_ANYWAY] ?? false;
         unset($converterOptions[self::ALLOW_EXTERNAL_ORGANIZER_ANYWAY]);
 
@@ -140,6 +144,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         try {
             /** @var Calendar_Model_Event $event */
             $event = $converter->toTine20Model($vobjectData);
+            static::$lastEventCreated = $event;
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -150,18 +155,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $closure($event);
         }
 
-        if (true === $onlyCurrentUserOrganizer) {
-            if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id) {
-                if ($allowExternalOrganizerAnyway) {
-                    if ($event->resolveOrganizer()?->account_id) {
-                        return null;
-                    }
-                } else {
-                    return null;
-                }
-            }
-        }
-        
         $event->container_id = $container->getId();
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
         if (strlen((string)$id) > 40) {
@@ -174,6 +167,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $msExternalIdRAII = new Tinebase_RAII(fn() => Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid($oldMsExternalIdValue));
         } else {
             $event->setId($id);
+        }
+
+        if (true === $onlyCurrentUserOrganizer) {
+            if ($event->organizer && $event->getIdFromProperty('organizer') !== Tinebase_Core::getUser()->contact_id) {
+                if ($allowExternalOrganizerAnyway) {
+                    if ($event->resolveOrganizer()?->account_id) {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
