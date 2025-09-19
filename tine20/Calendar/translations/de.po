@@ -1191,6 +1191,12 @@ msgstr "Fehlende Termine löschen"
 msgid "Delete events missing in import data (future only)"
 msgstr "Termine löschen die nicht in den Import-Daten sind (nur zukünftige)"
 
+msgid "Match Attendee"
+msgstr "Teilnehmende zuordnen"
+
+msgid "Match attendee with existing users or contacts."
+msgstr "Ordne Teilnehmende vorhandenen Nutzenden und Kontakten zu."
+
 msgid "Basic Data Only"
 msgstr "Nur Basis-Daten"
 
@@ -1209,6 +1215,35 @@ msgstr "Vorhandene Teilnehmende beibehalten"
 msgid ""
 "Do not remove attendee of existing events which are not in the import data"
 msgstr "Teilnehmende nicht entfernen wenn sie nicht in den Import-Daten sind"
+
+msgid "Match Organizer"
+msgstr "Organisierende zuordnen"
+
+msgid "Match organizer with existing user or contact."
+msgstr "Ordne Organisierende vorhandenen Nutzenden und Kontakten zu."
+
+msgid "Skip from other internal organizers"
+msgstr "Termine anderer interner Organisierende überspringen"
+
+msgid ""
+"Use this when events of other internal organizers are already present in "
+"this installation or get imported with an other job."
+msgstr ""
+"Nutzen sie diese Option wenn die Termine von anderen internen "
+"Organisierenden breits im System sind oder durch andere Aufgaben importiert "
+"werden."
+
+msgid ""
+"Skip Events if organizer matched an other internal user than the import user."
+msgstr "Überspringe Termine von anderen internen Organisierenden."
+
+msgid "Disable external organizer calendar"
+msgstr "Deaktiviere Kalender für externe Organisierende"
+
+msgid "Import events of external organizers directly into the import calendar."
+msgstr ""
+"Importiere Termine von externen Organisierenden direkt in den Import-"
+"Kalender."
 
 msgid "Force Organizer for new Events"
 msgstr "Erzwinge Organisierenden für neue Termine"
@@ -2208,40 +2243,48 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
 
-msgid "Match Attendee"
-msgstr "Teilnehmende zuordnen"
-
-msgid "Match attendee with existing users or contacts."
-msgstr "Ordne Teilnehmende vorhandenen Nutzenden und Kontakten zu."
-
-msgid "Match Organizer"
-msgstr "Organisierende zuordnen"
-
-msgid "Match organizer with existing user or contact."
-msgstr "Ordne Organisierende vorhandenen Nutzenden und Kontakten zu."
-
-msgid "Skip from other internal organizers"
-msgstr "Termine anderer interner Organisierende überspringen"
+msgid "Use own attendee status for other internal organizer events"
+msgstr ""
+"Eigenen Teilnehmer*innenstatus bei Terminen anderer interner Organisierenden "
+"übernehmen"
 
 msgid ""
-"Use this when events of other internal organizers are already present in "
-"this installation or get imported with an other job."
+"Use this when status in the attendees calendar is more accurate, e.g. "
+"because organizer did not receive/process response."
 msgstr ""
-"Nutzen sie diese Option wenn die Termine von anderen internen "
-"Organisierenden breits im System sind oder durch andere Aufgaben importiert "
-"werden."
+"Nutzen sie diese Option wenn der Teilnehmer*innenstatus im Import-Calender "
+"richtiger ist. Z.B. weil die Organisator*in Antworten nicht erhalten/"
+"verarbeitet hat."
 
 msgid ""
-"Skip Events if organizer matched an other internal user than the import user."
-msgstr "Überspringe Termine von anderen internen Organisierenden."
-
-msgid "Disable external organizer calendar"
-msgstr "Deaktiviere Kalender für externe Organisierende"
-
-msgid "Import events of external organizers directly into the import calendar."
+"Use attendee status of import user if event already exists, import user is "
+"attendee of import event and existing event and organizer matched an other "
+"internal user than the import user."
 msgstr ""
-"Importiere Termine von externen Organisierenden direkt in den Import-"
-"Kalender."
+"Verwende den Teilnehmer*innenstatus der importierenden Benutzer*in, wenn der "
+"Termin bereits existiert, die importierenden Benutzer*in Teilnehmer*in des "
+"Termins ist und die Organisator*in eine andere interne Benutzer*in ist."
+
+msgid "Allow party crushing for other internal organizer events"
+msgstr "Party-Crushing bei Terminen anderer interner Organisierenden erlauben"
+
+msgid ""
+"Use this when attendee added themselves and organizer did not receive/"
+"process/accept response."
+msgstr ""
+"Nutzen sie diese Option wenn der Teilnehmer*innen sich selbst dem Termin "
+"zugefügt haben und die Organisator*in Antworten nicht erhalten/verarbeitet/"
+"akzeptiert hat."
+
+msgid ""
+"Add attendee of import user if event already exists, import user is attendee "
+"of import event but not in existing event and organizer matched an other "
+"internal user than the import user."
+msgstr ""
+"Füge die Benutzer*in hinzu, wenn der Termin bereits existiert, die "
+"importierende Benutzer*in Teilnehmer*in des Import-Termins ist aber nicht im "
+"existierenden Termin und die Organisator*in eine andere interne Benutzer*in "
+"ist."
 
 msgid "manage shared calendar favorites"
 msgstr "Gemeinsame Kalender-Favoriten verwalten"
