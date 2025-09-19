@@ -11,6 +11,8 @@
  * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Calendar_Import_CalDAV
  * 
@@ -22,6 +24,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     public const OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE = 'extSeqCheckUpdate';
     public const OPT_SKIP_INTERNAL_OTHER_ORGANIZER = 'skipInternalOtherOrganizer';
     public const OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR = 'disableExternalOrganizerCalendar';
+    public const OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'useOwnAttendeeForSkipInternalOtherOrganizerEvents';
+    public const OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'allowPartyCrushForSkipInternalOtherOrganizerEvents';
 
     /**
      * used to overwrite default retry behavior (if != null)
@@ -54,6 +58,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected $_allowDuplicateEvents = false;
     protected bool $_doExternalSeqCheckBeforeUpdate = false;
     protected bool $_skipInternalOtherOrganizer = false;
+    protected bool $_useOwnAttendeeForSkipIOO = false;
+    protected bool $_allowPartyCrushForSkipIOO = false;
 
     protected bool $_disableExternalOrganizerCalendar = false;
 
@@ -83,6 +89,12 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($settings[self::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR] ?? false) {
             $this->_disableExternalOrganizerCalendar = true;
+        }
+        if ($settings[self::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS] ?? false) {
+            $this->_useOwnAttendeeForSkipIOO = true;
+        }
+        if ($settings[self::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS] ?? false) {
+            $this->_allowPartyCrushForSkipIOO = true;
         }
 
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
@@ -292,10 +304,6 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         Calendar_Controller_Event::getInstance()->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
 
-        // sets $_SERVER['HTTP_USER_AGENT'] for ics import / conversion handling
-        $this->decorator->initCalendarImport();
-
-
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Looking for updates in ' . $uri . ' calendar ...');
         $updateResult = $this->calculateCalendarUpdates($uri, $this->calendarICSs[$uri], $targetContainer);
@@ -453,8 +461,6 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         Calendar_Controller_Event::getInstance()->sendNotifications(false);
         Calendar_Controller_Event::getInstance()->useNotes(false);
         Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
-        
-        $this->decorator->initCalendarImport();
 
         $oldExternalIdUid = Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
         $oldAssertUser = Calendar_Controller_MSEventFacade::getInstance()->assertCalUserAttendee(false);
@@ -543,6 +549,38 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                             ],
                             true,
                         ]);
+                        // if the event was not created (due to skipInternalOtherOrganizer) we check useOwnAttenderForSkipInternalOtherOrganizer
+                        if (null === $webdavFrontend && ($this->_useOwnAttendeeForSkipIOO || $this->_allowPartyCrushForSkipIOO) &&
+                                Calendar_Frontend_WebDAV_Event::$lastEventCreated?->external_id &&
+                                ($ownAttender = Calendar_Model_Attender::getOwnAttender(Calendar_Frontend_WebDAV_Event::$lastEventCreated->attendee))) {
+                            $oldAclCheck = Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
+                            $calCtrlAclRaii = new Tinebase_RAII(fn() => Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldAclCheck));
+                            $existingEvent = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
+                                    [TMFA::FIELD => 'external_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Calendar_Frontend_WebDAV_Event::$lastEventCreated->external_id],
+                                ]))->getFirstRecord();
+
+                            $updateRequired = false;
+                            if ($existingEvent && $this->_useOwnAttendeeForSkipIOO && ($existingOwnAttender = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee))) {
+                                if ($ownAttender->status !== $existingOwnAttender->status) {
+                                    $existingOwnAttender->status = $ownAttender->status;
+                                }
+                                if ($ownAttender->transp !== $existingOwnAttender->transp) {
+                                    $existingOwnAttender->transp = $ownAttender->transp;
+                                }
+                                if ($existingOwnAttender->isDirty()) {
+                                    $updateRequired = true;
+                                }
+                            } elseif ($existingEvent && $this->_allowPartyCrushForSkipIOO) {
+                                $ownAttender->displaycontainer_id = Calendar_Controller_Event::getInstance()->getDefaultDisplayContainerId(Tinebase_Core::getUser());
+                                $existingEvent->attendee->addRecord($ownAttender);
+                                $updateRequired = true;
+                            }
+                            if ($updateRequired) {
+                                $existingEvent = Calendar_Controller_Event::getInstance()->update($existingEvent);
+                                $webdavFrontend = new Calendar_Frontend_WebDAV_Event($targetContainer, $existingEvent);
+                            }
+                            unset($calCtrlAclRaii);
+                        }
                     }
 
                     if ($webdavFrontend) {
