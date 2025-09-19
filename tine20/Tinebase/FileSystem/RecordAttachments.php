@@ -175,7 +175,18 @@ class Tinebase_FileSystem_RecordAttachments
         }
 
         foreach ($attachmentDiff->modified as $modified) {
-            $this->_fsController->update($attachmentsToSet->getById($modified->getId()));
+            $newNode = $attachmentsToSet->getById($modified->getId());
+            $oldNode = $currentAttachments->getById($modified->getId());
+            if ($newNode->name !== $oldNode->name) {
+                $path = $this->_fsController->getPathOfNode($oldNode);
+                array_walk($path, fn(&$val) => $val = $val['name']);
+                $oldPath = '/' . join('/', $path);
+                array_pop($path);
+                array_push($path, $newNode->name);
+                $this->_fsController->rename($oldPath, '/' . join('/', $path));
+            } else {
+                $this->_fsController->update($newNode);
+            }
         }
 
         foreach ($attachmentDiff->added as $added) {
