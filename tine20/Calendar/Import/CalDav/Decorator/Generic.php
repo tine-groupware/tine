@@ -16,14 +16,16 @@
  */
 class Calendar_Import_CalDav_Decorator_Generic extends Calendar_Import_CalDav_Decorator_Abstract
 {
-    protected array $raiis = [];
+    protected static array $raiis = [];
 
     public function initCalendarImport(array $options = [])
     {
+        static::$raiis = [];
+
         $_SERVER['HTTP_USER_AGENT'] = 'Tine20SyncClient/' . TINE20_PACKAGESTRING;
 
         $oldOrganizerValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite;
-        $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = $oldOrganizerValue);
+        static::$raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = $oldOrganizerValue);
         if ($options[Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER] ?? false) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match organizer to true');
             Calendar_Convert_Event_VCalendar_TineSyncClient::$skipOrganizerOverwrite = true;
@@ -33,7 +35,7 @@ class Calendar_Import_CalDav_Decorator_Generic extends Calendar_Import_CalDav_De
         }
 
         $oldAttendeeValue = Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite;
-        $this->raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = $oldAttendeeValue);
+        static::$raiis[] = new Tinebase_RAII(fn() => Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = $oldAttendeeValue);
         if ($options[Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES] ?? false) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting match attendees to true');
             Calendar_Convert_Event_VCalendar_TineSyncClient::$skipAttendeeOverwrite = true;
