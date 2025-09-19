@@ -58,7 +58,7 @@ class Calendar_Import_CalDAV_ClientMock extends Calendar_Import_CalDav_Client
     
     protected $_serverEvents = array();
     
-    public function __construct(array $a, $flavor)
+    public function __construct(array $a, string $flavor, string $scleverEmail)
     {
         parent::__construct($a, $flavor);
         
@@ -180,6 +180,86 @@ END:VEVENT
 END:VCALENDAR
 ',
                     '{DAV:}getetag' => '"0b3621a20e9045d8679075db57e881dd"',
+                ),
+            '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/20E3E0E4-762D-42D6-A563-206161A9F1CE.ics' =>
+                array (
+                    self::calendarDataKey => 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Apple Inc.//iCal 5.0.3//EN
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+DTSTART:19810329T020000
+TZNAME:CEST
+TZOFFSETTO:+0200
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+DTSTART:19961027T030000
+TZNAME:CET
+TZOFFSETTO:+0100
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+CREATED:20140602T131852Z
+UID:20E3E0E4-762D-42D6-A563-206161A9F1CE
+DTEND;TZID=Europe/Berlin:20140604T171500
+TRANSP:OPAQUE
+SUMMARY:TEST06
+DTSTART;TZID=Europe/Berlin:20140604T161500
+DTSTAMP:20140602T131935Z
+SEQUENCE:3
+ORGANIZER;CN="Clever, Susan":MAILTO:' . $scleverEmail . '
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
+END:VEVENT
+END:VCALENDAR',
+                    '{DAV:}getetag' => '"bcc36c611f0b60bfee64b4d42e44bb1d"',
+                ),
+            '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/20E3E0E4-762D-42D6-A563-206161A9F1CF.ics' =>
+                array (
+                    self::calendarDataKey => 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Apple Inc.//iCal 5.0.3//EN
+CALSCALE:GREGORIAN
+BEGIN:VTIMEZONE
+TZID:Europe/Berlin
+BEGIN:DAYLIGHT
+TZOFFSETFROM:+0100
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU
+DTSTART:19810329T020000
+TZNAME:CEST
+TZOFFSETTO:+0200
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:+0200
+RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU
+DTSTART:19961027T030000
+TZNAME:CET
+TZOFFSETTO:+0100
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+CREATED:20140602T131852Z
+UID:20E3E0E4-762D-42D6-A563-206161A9F1CF
+DTEND;TZID=Europe/Berlin:20140604T171500
+TRANSP:OPAQUE
+SUMMARY:TEST06
+DTSTART;TZID=Europe/Berlin:20140604T161500
+DTSTAMP:20140602T131935Z
+SEQUENCE:3
+ORGANIZER;CN="Clever, Susan":MAILTO:' . $scleverEmail . '
+ATTENDEE;CN="This, is us";CUTYPE=INDIVIDUAL;EMAIL="' . Tinebase_Core::getUser()->accountEmailAddress . '"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '
+ATTENDEE;CN="TestUser, Klaus";CUTYPE=INDIVIDUAL;EMAIL="klaustu@test.net"
+ ;PARTSTAT=ACCEPTED;ROLE=REQ-PARTICIPANT:mailto:klaustu@test.net
+END:VEVENT
+END:VCALENDAR',
+                    '{DAV:}getetag' => '"bcc36c611f0b60bfee64b4d42e44bb1d"',
                 ),
         );
     }

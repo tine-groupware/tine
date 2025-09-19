@@ -35,19 +35,136 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         return $this->_uit;
     }
 
-    protected function setUit()
+    protected function setUit(array $options = [])
     {
         $testCredentials = TestServer::getInstance()->getTestCredentials();
-        $caldavClientOptions = array(
-            'baseUri' => 'localhost',
-            'userName' => Tinebase_Core::getUser()->accountLoginName,
-            'password' => $testCredentials['password'],
-            Calendar_Import_CalDAV_ClientMock::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
-        );
-        $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic');
+        $caldavClientOptions = array_merge([
+                'baseUri' => 'localhost',
+                'userName' => Tinebase_Core::getUser()->accountLoginName,
+                'password' => $testCredentials['password'],
+                Calendar_Import_CalDAV_ClientMock::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
+            ], $options);
+        $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic', $this->_personas['sclever']->accountEmailAddress);
         $this->_uit->setVerifyPeer(false);
+        $this->_uit->getDecorator()->initCalendarImport($caldavClientOptions);
     }
-    
+
+    public function testImportSkipInternalOtherOrganizer()
+    {
+        $this->setUit([
+            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
+        ]);
+        $uitRaii = new Tinebase_RAII(fn() => $this->_uit = null);
+
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(3, count($events));
+        $etags = $events->etag;
+        sort($etags);
+        $this->assertSame([
+            '"0b3621a20e9045d8679075db57e881dd"',
+            '"8b89914690ad7290fa9a2dc1da490489"',
+            '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+        ], $etags);
+
+        unset($uitRaii);
+    }
+
+    public function testImportSkipInternalOtherOrganizerWithStatusUpdate()
+    {
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $this->setUit([
+            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Import_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
+        ]);
+        $uitRaii = new Tinebase_RAII(fn() => $this->_uit = null);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $event = $this->_getEvent();
+        $event->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+        $event->organizer = $this->_personas['sclever']->contact_id;
+        $event->external_id = '20E3E0E4-762D-42D6-A563-206161A9F1CF';
+        $createdEvent = $calCtrl->create($event);
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        $this->assertSame(Calendar_Model_Attender::STATUS_NEEDSACTION, Calendar_Model_Attender::getOwnAttender($createdEvent->attendee)->status);
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(3, count($events));
+        $etags = $events->etag;
+        sort($etags);
+        $this->assertSame([
+            '"0b3621a20e9045d8679075db57e881dd"',
+            '"8b89914690ad7290fa9a2dc1da490489"',
+            '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+        ], $etags);
+
+        $updatedEvent = $calCtrl->get($createdEvent->getId());
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee)->status);
+
+        unset($uitRaii);
+    }
+
+    public function testImportSkipInternalOtherOrganizerWithPartyCrush()
+    {
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $this->setUit([
+            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Import_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Import_CalDav_Client::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
+        ]);
+        $uitRaii = new Tinebase_RAII(fn() => $this->_uit = null);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $event = $this->_getEvent();
+        $event->container_id = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+        $event->organizer = $this->_personas['sclever']->contact_id;
+        $event->external_id = '20E3E0E4-762D-42D6-A563-206161A9F1CF';
+        $event->attendee = null;
+        $createdEvent = $calCtrl->create($event);
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        $this->assertNull(Calendar_Model_Attender::getOwnAttender($createdEvent->attendee));
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(3, count($events));
+        $etags = $events->etag;
+        sort($etags);
+        $this->assertSame([
+            '"0b3621a20e9045d8679075db57e881dd"',
+            '"8b89914690ad7290fa9a2dc1da490489"',
+            '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+        ], $etags);
+
+        $updatedEvent = $calCtrl->get($createdEvent->getId());
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee)->status);
+
+        unset($uitRaii);
+    }
+
     /**
      * test import of a single container/calendar of current user
      */
@@ -60,15 +177,17 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
             ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
         ]));
-        $this->assertSame(3, count($events));
+        $this->assertSame(5, count($events));
         $etags = $events->etag;
         sort($etags);
         $this->assertSame([
                 '"0b3621a20e9045d8679075db57e881dd"',
                 '"8b89914690ad7290fa9a2dc1da490489"',
                 '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+                '"bcc36c611f0b60bfee64b4d42e44bb1d"',
+                '"bcc36c611f0b60bfee64b4d42e44bb1d"',
             ], $etags);
-        $event = $events->getFirstRecord();
+        $event = $events->find('external_id', '88F077A1-6F5B-4C6C-8D73-94C1F0127492');
         $this->assertEmpty($event->organizer);
         $this->assertNotEmpty($event->organizer_email);
         $this->assertNotEmpty($event->external_seq);
@@ -85,13 +204,15 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $updatedEvents = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
             ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
         ]));
-        $this->assertSame(3, count($updatedEvents));
+        $this->assertSame(5, count($updatedEvents));
         $etags = $updatedEvents->etag;
         sort($etags);
         $this->assertSame([
                 '"-1030341843%40citrixonlinecom"',
                 '"aa3621a20e9045d8679075db57e881dd"',
                 '"bcc36c611f0b60bfee64b4d42e44aa1d"',
+                '"bcc36c611f0b60bfee64b4d42e44bb1d"',
+                '"bcc36c611f0b60bfee64b4d42e44bb1d"',
             ], $etags);
 
         $oldIds = $events->getArrayOfIds();
