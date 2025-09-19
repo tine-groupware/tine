@@ -506,7 +506,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 border: false,
                 ref: '../eventOptionsForm',
                 labelAlign: 'top',
-                bodyStyle: 'padding: 5px;',
+                bodyStyle: 'overflow: scroll; padding: 5px;',
                 defaults: { anchor: '100%' },
                 items: [{
                     xtype: 'checkbox',
@@ -537,6 +537,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 }*/, new Tine.Calendar.AttendeeGridPanel({
                     height: 200,
                     name: 'attendee',
+                    canonicalName: 'importDialogAttendee',
                     initComponent: function() {
                         Tine.Calendar.AttendeeGridPanel.prototype.initComponent.call(this);
                         this.onRecordLoad(new Tine.Calendar.Model.Event({
@@ -574,7 +575,39 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                         Tine.widgets.form.FieldManager.getDescriptionHTML(this.app.i18n._('Use this when events of other internal organizers are already present in this installation or get imported with an other job.')),
                     boxLabel: this.app.i18n._('Skip Events if organizer matched an other internal user than the import user.'),
                     name: 'skipInternalOtherOrganizer',
-                    checked: false
+                    checked: false,
+                    listeners: {
+                        check: (cb, checked) => {
+                            this.eventOptionsForm.getForm().findField('useOwnAttendeeForSkipInternalOtherOrganizerEvents').setDisabled(!checked);
+                            this.eventOptionsForm.getForm().findField('allowPartyCrushForSkipInternalOtherOrganizerEvents').setDisabled(!checked);
+                            if (! checked) {
+                                this.eventOptionsForm.getForm().findField('useOwnAttendeeForSkipInternalOtherOrganizerEvents').setValue(false);
+                                this.eventOptionsForm.getForm().findField('allowPartyCrushForSkipInternalOtherOrganizerEvents').setValue(false);
+                            }
+                        }
+                    }
+                }, {
+                    autoHeight: true,
+                    layout: 'form',
+                    style: 'padding-left: 20px; padding-bottom: 10px;',
+                    border: false,
+                    items: [{
+                        xtype: 'checkbox',
+                        fieldLabel: this.app.i18n._('Use own attendee status for other internal organizer events') +
+                            Tine.widgets.form.FieldManager.getDescriptionHTML(this.app.i18n._('Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response.')),
+                        boxLabel: this.app.i18n._('Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user.'),
+                        name: 'useOwnAttendeeForSkipInternalOtherOrganizerEvents',
+                        disabled: true,
+                        checked: false
+                    }, {
+                        xtype: 'checkbox',
+                        fieldLabel: this.app.i18n._('Allow party crushing for other internal organizer events') +
+                            Tine.widgets.form.FieldManager.getDescriptionHTML(this.app.i18n._('Use this when attendee added themselves and organizer did not receive/process/accept response.')),
+                        boxLabel: this.app.i18n._('Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user.'),
+                        name: 'allowPartyCrushForSkipInternalOtherOrganizerEvents',
+                        disabled: true,
+                        checked: false
+                    }]
                 }, {
                     xtype: 'checkbox',
                     fieldLabel: this.app.i18n._('Disable external organizer calendar'),
