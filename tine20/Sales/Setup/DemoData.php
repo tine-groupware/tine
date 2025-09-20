@@ -78,7 +78,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ], true));
             $updateDivision = true;
         }
-        if (null === $this->_division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID}) {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
+            && null === $this->_division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID}
+        ) {
             $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
             $dispatchEmailAddress = 'dispatch@failedToFindDomain.tld';
             if (isset($smtpConfig['primarydomain'])) {
@@ -113,6 +115,9 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
             $this->_division->{Sales_Model_Division::FLD_DISPATCH_FM_ACCOUNT_ID} = $dispatchFMAccount;
             $updateDivision = true;
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' IMAP not managed - skip creating dispatch mail account.');
         }
 
         if ($updateDivision) {
