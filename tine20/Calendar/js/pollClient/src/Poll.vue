@@ -11,27 +11,30 @@
       <span class="text-danger">{{formatMessage('This poll is closed already')}}</span>
     </div>
 
-    <table>
-      <PollHeader :dates="events"></PollHeader>
-      <PollParticipant v-for="participant in participants" :participant="participant"
-                       :dates="events"
-                       :read_only="isReadonly(participant)"
-                       :loading="loading"
-                       @saveReply="saveReply"
-                       @clicked-participant="clickedParticipant">
-        <template #replyField="{ participant_id, date }" v-slot:replyField>
-          <slot name="replyField" :participant_id="participant_id" :date="date"></slot>
-        </template>
-      </PollParticipant>
-      <PollParticipant v-if="allowJoin && userId === null && !poll.closed"
-                       :participant="{name: '', email: '', id: null}"
-                       :dates="events"
-                       :loading="loading"
-                       @saveReply="saveReply"
-                       :read_only="false"
-                       @addParticipant="addParticipant">
-      </PollParticipant>
-    </table>
+    <div class="table-container">
+<!--      Because native HTML tables do not scroll themselves.-->
+      <table>
+        <PollHeader :dates="events"></PollHeader>
+        <PollParticipant v-for="participant in participants" :participant="participant"
+                         :dates="events"
+                         :read_only="isReadonly(participant)"
+                         :loading="loading"
+                         @saveReply="saveReply"
+                         @clicked-participant="clickedParticipant">
+          <template #replyField="{ participant_id, date }" v-slot:replyField>
+            <slot name="replyField" :participant_id="participant_id" :date="date"></slot>
+          </template>
+        </PollParticipant>
+        <PollParticipant v-if="allowJoin && userId === null && !poll.closed"
+                         :participant="{name: '', email: '', id: null}"
+                         :dates="events"
+                         :loading="loading"
+                         @saveReply="saveReply"
+                         :read_only="false"
+                         @addParticipant="addParticipant">
+        </PollParticipant>
+      </table>
+    </div>
     <PollControls @resetPoll="resetPoll"></PollControls>
   </div>
 </template>
@@ -66,6 +69,11 @@ export default defineComponent({
     poll () {
       if (this.poll.participants) {
         this.participants = this.poll.participants
+        this.participants.sort((a, b) => {
+          if (a.contact_id?.n_fn < b.contact_id?.n_fn) return -1
+          if (a.contact_id?.n_fn > b.contact_id?.n_fn) return 1
+          return 0
+        })
       }
     },
   },
@@ -109,6 +117,12 @@ export default defineComponent({
     margin: 0 auto;
     width: 100%;
   }
+
+  .table-container {
+    overflow: auto;
+    max-height: 50vh;
+  }
+
   .is-closed-message {
     margin: 20px 0 20px 0;
     font-size: 1.4rem;
