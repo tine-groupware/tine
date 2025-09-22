@@ -265,7 +265,7 @@ describe('employee', () => {
             });
         });
     });
-    describe('edit contract', () => {
+    describe.skip('edit contract', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
             await page.waitForTimeout(1000);

@@ -12,7 +12,12 @@ beforeAll(async () => {
 describe('MainScreen', () => {
     test('favorite', async () => {
         await page.waitForTimeout(2000);
-        await expect(page).toClick('button', {text: 'Blatt'});
+        try {
+            await expect(page).toClick('button', {text: 'Blatt'});
+        } catch (e) {
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
+            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt'});
+        }
         await page.waitForTimeout(1000);
         await lib.makeScreenshot(page
             , {path: 'screenshots/Kalender/2_kalender_favoriten_ausschnit.png', clip: {x: 0, y: 0, width: 200, height: 300}}
@@ -64,7 +69,12 @@ describe('MainScreen', () => {
     });
 
     test('time beam', async () => {
-        await expect(page).toClick('button', {text: 'Zeitstrahl'});
+        try {
+            await expect(page).toClick('button', {text: 'Zeitstrahl'});
+        } catch (e) {
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
+            await expect(page).toClick('.x-menu-item-text', {text: 'Zeitstrahl'});
+        }
         await page.waitForTimeout(1000);
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/5_kalender_termine_listenansicht.png'});
         await page.waitForTimeout(1000);
@@ -140,7 +150,12 @@ describe('editDialog', () => {
 
 describe('context menu', () => {
     test('email', async () => {
-        await expect(page).toClick('button', {text: 'Blatt'});
+        try {
+            await expect(page).toClick('button', {text: 'Blatt'});
+        } catch (e) {
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
+            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt'});
+        }
         await page.waitForTimeout(2000);
         await expect(page).toClick('button', {text: 'Woche'});
         await page.waitForTimeout(2000);
