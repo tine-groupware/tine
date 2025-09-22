@@ -1452,9 +1452,20 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/'
             . Tinebase_Core::getUser()->accountLoginName);
 
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertSame(1, preg_match('/^Moved file to (.*)$/', $e->getMessage(), $m));
+            $this->assertNotEmpty($this->_getWebDAVTree()->getNodeForPath('/webdav/'.$m[1]));
+        }
         // test to recreate the file
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertStringStartsWith('Moved file to', $e->getMessage());
+        }
     }
 
     public function testCreateFileInFilemanagerForeignPersonalFolderWithReadGrant()
@@ -1494,7 +1505,12 @@ EOS
 
         Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertStringStartsWith('Moved file to', $e->getMessage());
+        }
     }
 
     public function testCreateFolderInFilemanagerForeignPersonalFolder()
