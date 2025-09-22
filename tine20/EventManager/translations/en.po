@@ -169,6 +169,9 @@ msgstr "Options"
 msgid "Registrations"
 msgstr "Registrations"
 
+msgid "Deregistered"
+msgstr "Deregistered"
+
 msgid "Sign Up"
 msgstr "Sign Up"
 
@@ -608,24 +611,6 @@ msgstr "Enter your last name"
 
 msgid "Enter your email address"
 msgstr "Enter your email address"
-
-msgid "Verwalten Sie Ihre Registrierung"
-msgstr "Verwalten Sie Ihre Registrierung"
-
-msgid "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
-msgstr "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
-
-msgid "Meine Registrierung verwalten"
-msgstr "Meine Registrierung verwalten"
-
-msgid "Bestätigen Sie Ihre E-Mail-Address"
-msgstr "Bestätigen Sie Ihre E-Mail-Address"
-
-msgid "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-msgstr "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-
-msgid "E-Mail-Adresse bestätigen"
-msgstr "E-Mail-Adresse bestätigen"
 
 msgid "Manage your registration"
 msgstr "Manage your registration"
