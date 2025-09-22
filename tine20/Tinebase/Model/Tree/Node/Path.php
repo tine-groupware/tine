@@ -203,7 +203,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     public static function getParentAndChild($_path)
     {
-        $pathParts = $pathParts = explode('/', trim($_path, '/'));
+        $pathParts = explode('/', trim($_path, '/'));
         $child = array_pop($pathParts);
         
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath('/' . implode('/', $pathParts));
@@ -235,7 +235,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     public function getParent()
     {
         if (! $this->parentrecord) {
-            [$this->parentrecord, $unused] = self::getParentAndChild($this->flatpath);
+            [$this->parentrecord,] = self::getParentAndChild($this->flatpath);
         }
         return $this->parentrecord;
     }

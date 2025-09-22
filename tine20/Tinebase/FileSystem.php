@@ -2351,6 +2351,7 @@ class Tinebase_FileSystem implements
                     'name' => $name,
                     'object_id' => $directoryObject->getId(),
                     'parent_id' => $parentId,
+                    'type' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
                     'acl_node' => $parentNode && !empty($parentNode->acl_node) ? $parentNode->acl_node : null,
                     'pin_protected_node' => $parentNode && !empty($parentNode->pin_protected_node) ?
                         $parentNode->pin_protected_node : null,
@@ -3392,104 +3393,86 @@ class Tinebase_FileSystem implements
 
     /**
      * check acl of path
+     * $_action can be one of get|add|delete|update
      *
-     * @param Tinebase_Model_Tree_Node_Path $_path
-     * @param string $_action get|add|delete|update
-     * @param boolean $_topLevelAllowed
-     * @param boolean $_throw
-     * @param Tinebase_Model_Tree_Node_Path $_nodePath
      * @throws Tinebase_Exception_AccessDenied
-     * @return boolean
      */
-    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = true, $_throw = true, $_nodePath = null)
+    public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, string $_action = 'get', bool $_topLevelAllowed = true, bool $_throw = true): bool
     {
-        switch ($_path->containerType) {
-            case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
-                if ($_path->containerOwner && ($_topLevelAllowed || ! $_path->isToplevelPath())) {
-                    if ($_path->isToplevelPath()) {
-                        if (!($hasPermission = ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get')) && $_nodePath) {
-                            $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
-                        } elseif($hasPermission) {
-                            // check pin protection anyway
-                            $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                        }
-                    } else {
-                        $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
-                    }
-                } elseif ($hasPermission = ($_action === 'get')) {
-                    // check pin protection anyway
-                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                }
-                break;
-            case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
-                // if is toplevel path and action is add, allow manage_shared_folders right
-                // if it is toplevel path and action is get allow
-                // else just do normal ACL node check
-                if ($_path->isToplevelPath() && $_action !== 'get' && !$_topLevelAllowed) {
-                    $hasPermission = false;
+        $hasPermission = false;
+        if ($_topLevelAllowed || !$_path->isToplevelPath()) {
+            switch ($_path->containerType) {
+                case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
+                    $hasPermission = $_path->isToplevelPath() ?
+                        ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get') :
+                        $this->_checkACLNode($_path->getNode(), $_action);
                     break;
-                }
-                if (true === ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
+                    if ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
                         Tinebase_Core::getUser()->getId(),
                         Tinebase_Acl_Rights::ADMIN
-                    ))) {
-                    // admin, go ahead
-                    // check pin protection anyway
-                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                    break;
-                }
-                if ($_path->isToplevelPath()) {
-                    if ('add' === $_action) {
-                        if ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
-                                    $_path->application->name,
-                                    Tinebase_Core::getUser()->getId(),
-                                    Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
-                                )) {
-                            // check pin protection anyway
-                            $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                        }
+                    )) {
+                        // admin, go ahead
                         break;
                     }
-                    if (!($hasPermission = 'get' === $_action) && $_nodePath) {
-                        $hasPermission = $this->_checkACLNode($_nodePath->getNode(), 'admin');
-                    } else {
-                        // check pin protection anyway
-                        $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                    }
-                } else {
-                    $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
-                    if ($_nodePath && $_action === 'delete') {
-                        $parentNode = $_path->getNode();
-                        $sourceNode = $_nodePath->getNode();
-                        if ($sourceNode->type === Tinebase_Model_Tree_FileObject::TYPE_FILE && $parentNode->getId() === $sourceNode->parent_id) {
-                            $hasPermission = $this->_checkACLNode($sourceNode, $_action);
+                    if ($_path->isToplevelPath()) {
+                        if ('add' === $_action) {
+                            $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
+                                $_path->application->name,
+                                Tinebase_Core::getUser()->getId(),
+                                Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
+                            );
+                            break;
                         }
+                        $hasPermission = 'get' === $_action;
+                    } else {
+                        $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
                     }
+                    break;
+                case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
+                    $hasPermission = $_action === 'get';
+                    break;
+                case self::FOLDER_TYPE_RECORDS:
+                    if ($_action !== 'get') {
+                        throw new Tinebase_Exception_InvalidArgument('only "get" action supported here');
+                    }
+                    try {
+                        Tinebase_Core::getApplicationInstance($_path->application, $_path->getRecordModel())
+                            ->get($_path->getRecordId());
+                        $hasPermission = true;
+                    } catch (Tinebase_Exception_AccessDenied) {
+                        $hasPermission = false;
+                    }
+                    break;
+                default:
+                    $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
+            }
+        }
+
+        if ($hasPermission && 'delete' === $_action) {
+            $parentPath = $_path->getParent();
+            if ($parentPath->isToplevelPath()) {
+                switch ($parentPath->containerType) {
+                    case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
+                        $hasPermission = $parentPath->containerOwner && ($parentPath->containerOwner === Tinebase_Core::getUser()->accountLoginName ||
+                            $this->_checkACLNode($_path->getNode(), 'admin'));
+                        break;
+                    case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
+                        // we already checked for admin above
+                        break;
+                    default: // should not reach this ever...
+                        $hasPermission = false;
+                        break;
                 }
-                break;
-            case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
-                if ($hasPermission = ($_action === 'get')) {
-                    // check pin protection anyway
-                    $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
-                }
-                break;
-            case self::FOLDER_TYPE_RECORDS:
-                if ($_action !== 'get') {
-                    throw new Tinebase_Exception_InvalidArgument('only "get" action supported here');
-                }
-                $model = $_path->getRecordModel();
-                try {
-                    $controller = Tinebase_Core::getApplicationInstance($_path->application, $model);
-                    $recordId = $_path->getRecordId();
-                    $controller->get($recordId);
-                    $hasPermission = true;
-                } catch (Tinebase_Exception_AccessDenied) {
-                    $hasPermission = false;
-                }
-                break;
-            default:
-                $hasPermission = $this->_checkACLNode($_path->getNode(), $_action);
+            } else {
+                $hasPermission = $this->_checkACLNode($parentPath->getNode(), $_action, _doRecursionForDelete: false);
+            }
+        }
+
+        if ($hasPermission) {
+            // check pin protection
+            $hasPermission = $this->_checkAreaLock($this->get($_path->getNode()));
         }
 
         if (true === $_throw && ! $hasPermission) {
@@ -3511,7 +3494,7 @@ class Tinebase_FileSystem implements
      * @param string $_action get|update|...
      * @return boolean
      */
-    protected function _checkACLNode(Tinebase_Model_Tree_Node $_node, $_action = 'get')
+    protected function _checkACLNode(Tinebase_Model_Tree_Node $_node, string $_action = 'get', bool $_doRecursionForDelete = true): bool
     {
         if (Tinebase_Core::getUser()->hasGrant($_node, Tinebase_Model_Grants::GRANT_ADMIN, 'Tinebase_Model_Tree_Node')) {
             return true;
@@ -3537,7 +3520,8 @@ class Tinebase_FileSystem implements
         }
 
         $result = Tinebase_Core::getUser()->hasGrant($_node, $requiredGrant, 'Tinebase_Model_Tree_Node');
-        if (true === $result && Tinebase_Model_Grants::GRANT_DELETE === $requiredGrant) {
+
+        if (true === $result && Tinebase_Model_Grants::GRANT_DELETE === $requiredGrant && $_doRecursionForDelete) {
             // check that we have the grant for all children too!
             $allChildIds = $this->getAllChildIds(array($_node->getId()));
             $deleteGrantChildIds = $this->getAllChildIds(array($_node->getId()), array(), false, $requiredGrant);
@@ -3580,17 +3564,21 @@ class Tinebase_FileSystem implements
 
     protected function _checkAreaLock(Tinebase_Model_Tree_Node $node): bool
     {
-        if (!isset($this->_areaLockCache[$node->getId()])
-            && null !== $node->pin_protected_node
-            && Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
-            && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
-        ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                . __LINE__ . ' The area is locked for this node : ' . $node->path);
-            }
+        static $dataSafeUnlocked = false;
 
-            return false;
+        if (!$dataSafeUnlocked
+            && !isset($this->_areaLockCache[$node->getId()])
+            && null !== $node->pin_protected_node
+        ) {
+            if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)
+                    && Tinebase_AreaLock::getInstance()->isLocked(Tinebase_Model_AreaLockConfig::AREA_DATASAFE)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' The area is locked for this node : ' . $node->path);
+                }
+                return false;
+            }
+            $dataSafeUnlocked = true;
         }
         $this->_areaLockCache[$node->getId()] = true;
         return true;
