@@ -288,8 +288,9 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
 
         $fs = Tinebase_FileSystem::getInstance();
-        if (!$fs->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fs->getPathOfNode(
-                $this->_getContainer()->parent_id, true)), 'add') || !$fs->checkPathACL($parentPath, 'delete')) {
+        // we need add on the parent and delete on ourself
+        $ourPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($fs->getPathOfNode($this->_getContainer(), true));
+        if (!$fs->checkPathACL($ourPath->getParent(), 'add') || !$fs->checkPathACL($ourPath, 'delete')) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
 

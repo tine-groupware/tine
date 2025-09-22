@@ -93,38 +93,22 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      */
     public function setName($name)
     {
-        self::checkForbiddenFile($name);
-
-        [$dirname, ] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
-
-        if (!Tinebase_FileSystem::getInstance()->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
-                , 'add', true, false, $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path)) ||
-            !Tinebase_FileSystem::getInstance()->checkPathACL($parentPath, 'delete', true, false, $path)) {
-            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
-        }
-
-        try {
-            if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
-        }
-        $this->_node = $result;
-        $this->_path = $result->path;
+        list($dirname,) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        $this->rename($dirname . '/' . $name);
     }
 
     public function rename(string $newPath)
     {
-        [$dirname, ] = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
+        list($dirname, $newName) = Tinebase_WebDav_XMLUtil::splitPath($newPath);
+        self::checkForbiddenFile($newName);
 
-        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
-                , 'delete', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path),
+                'delete', true, false)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
-        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath))
-                , 'add', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath))) {
+        if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname),
+                'add', true, false)) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
         }
 
