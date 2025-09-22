@@ -2,6 +2,7 @@ FROM squidfunk/mkdocs-material
 RUN pip install mkdocs-static-i18n
 RUN pip install mkdocs-awesome-pages-plugin
 RUN pip install pymdown-extensions
+RUN pip install mkdocs-macros-plugin
 
 # for phpdoc-md
 RUN apk add php composer s3cmd

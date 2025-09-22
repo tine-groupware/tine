@@ -86,7 +86,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
                 $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED} = [];
             }
             try {
-                $result = !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
+                $result = $_data !== null && !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
                     $otp->verify($_data, null, 1);
             } catch (RuntimeException $re) {
                 $result = false;
@@ -111,7 +111,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
                             return true;
                         });
             }
-            return $result;
+            return false;
         }
     }
 }
