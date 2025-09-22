@@ -14,6 +14,8 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
 {
     public function setUp(): void
     {
+        self::_skipIfLDAPBackend();
+
         parent::setUp();
 
         MatrixSynapseIntegrator_Config::getInstance()->set(
@@ -63,7 +65,8 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
         return $user;
     }
 
-    public function testCreateUserDefaults() {
+    public function testCreateUserDefaults()
+    {
         $userWithRecoveryKey = $this->_createTestUser();
         $matrixAccountWithRecoveryKey = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
             new MatrixSynapseIntegrator_Model_MatrixAccount([
