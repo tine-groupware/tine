@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-09-16 14:31+0200\n"
+"PO-Revision-Date: 2025-09-22 10:07+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -172,6 +172,9 @@ msgstr "Optionen"
 
 msgid "Registrations"
 msgstr "Registrierung"
+
+msgid "Deregistered"
+msgstr "Abgemeldet"
 
 msgid "Sign Up"
 msgstr "Anmelden"
@@ -607,31 +610,13 @@ msgid "Event Registration"
 msgstr "Veranstaltungsanmeldung"
 
 msgid "Enter your first name"
-msgstr ""
+msgstr "Geben Sie Ihren Vornamen ein"
 
 msgid "Enter your last name"
-msgstr ""
+msgstr "Geben Sie Ihren Nachnamen ein"
 
 msgid "Enter your email address"
 msgstr "Geben Sie Ihre E-Mail-Adresse ein"
-
-msgid "Verwalten Sie Ihre Registrierung"
-msgstr ""
-
-msgid "Um Ihre Registrierung zu verwalten, bestätigen Sie bitte Ihre E-Mail-Adresse indem Sie diesen Link folgen"
-msgstr ""
-
-msgid "Meine Registrierung verwalten"
-msgstr ""
-
-msgid "Bestätigen Sie Ihre E-Mail-Address"
-msgstr ""
-
-msgid "Vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-msgstr ""
-
-msgid "E-Mail-Adresse bestätigen"
-msgstr ""
 
 msgid "Manage your registration"
 msgstr "Verwalten Sie Ihre Registrierung"
