@@ -86,9 +86,11 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 $this->_handleAppPwdAuth();
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
-                . $this->_request->getUri()->getQuery() . ' method: ' . $this->_request->getMethod());
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
+                    . $this->_request->getUri()->getQuery() . ' method: ' . $this->_request->getMethod());
+            }
 
             $middleWarePipe = new MiddlewarePipe();
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_ResponseEnvelop());
@@ -100,21 +102,29 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
             try {
                 $response = $middleWarePipe->handle(Tinebase_Core::getContainer()->get(RequestInterface::class));
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
                 self::setHttpHeader(self::HTTP_ERROR_CODE_NOT_FOUND);
                 return false;
             } catch (Tinebase_Exception_AccessDenied $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                }
                 self::setHttpHeader(self::HTTP_ERROR_CODE_FORBIDDEN);
                 return false;
             } catch (ErrorException $ee) {
-                if (preg_match('/route\.cache\.[0-9a-f]+\): failed to open stream: No such file or directory/', $ee->getMessage())) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__
-                        . ' Routing cache not ready - clearing stat cache and trying again'
-                        . ' (' . $ee->getMessage() . ')');
+                if (preg_match('/route\.cache\.[0-9a-f]+\): failed to open stream: No such file or directory/',
+                    $ee->getMessage())
+                ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Routing cache not ready - clearing stat cache and trying again'
+                            . ' (' . $ee->getMessage() . ')');
+                    }
                     clearstatcache();
                     $response = $middleWarePipe->handle(Tinebase_Core::getContainer()->get(RequestInterface::class));
                 } else {
