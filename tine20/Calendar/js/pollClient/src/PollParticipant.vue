@@ -1,6 +1,10 @@
 <template>
   <tr v-if="dates && !!participant" :class="read_only ? 'inactive' : 'active'">
-    <td class="table-info" v-if="participant.id || participant.user_id" @click="onClickParticipant(participant)">{{participant.contact_id?.n_fn || participant.name}}</td>
+    <td class="table-info" v-if="participant.id || participant.user_id" @click="onClickParticipant(participant)">
+      <span class="row-title">
+       {{participant.contact_id?.n_fn || participant.name}}
+      </span>
+    </td>
     <td v-else>
       <input type="text" name="name" v-model="participant.name" class="form-text" required="required" :placeholder="formatMessage('Name')" @blur="addParticipant"><br />
       <input type="email" name="email" v-model="participant.email" class="form-text" required="required" :placeholder="formatMessage('Email')" @blur="addParticipant">
@@ -81,6 +85,14 @@ td {
   border: 1px solid #ccc;
   height: inherit;
 }
+
+td:first-child {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 1;
+  box-shadow: inset -1px 0 0 #ccc;
+}
 tr {
   height: 4em;
 }
@@ -94,6 +106,10 @@ tr.inactive {
 td.table-info {
   padding: 5px;
 }
+.row-title {
+  display: inline-block;
+  text-align: left;
+  white-space: nowrap;}
 input {
   margin: 0;
   border: none;
