@@ -35,6 +35,7 @@ php-unit-all-tests-source-sequential:
       fi
   needs: []
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-sequential/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"
       when: never
     - !reference [.php-unit-all-tests-source, rules]
