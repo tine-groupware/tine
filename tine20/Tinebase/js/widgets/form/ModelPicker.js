@@ -25,27 +25,28 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
     initComponent() {
         const availableModels = this.availableModels?.map((model) => { return Tine.Tinebase.data.RecordMgr.get(model) });
         const availableModelsRegExp = this.availableModelsRegExp ? new RegExp(this.availableModelsRegExp.replaceAll('/','')) : null;
+        const models = Tine.Tinebase.data.RecordMgr.items.reduce((models, recordClass) => {
+            const className = recordClass.getPhpClassName();
+            if ((!availableModels || availableModels.indexOf(recordClass) >= 0)
+                && (!availableModelsRegExp || availableModelsRegExp.test(className))) {
+                models.push(recordClass);
+            }
+            return models;
+        }, []);
 
+        this.includeAppName = _.isBoolean(this.includeAppName) ? this.includeAppName : Object.keys(_.groupBy(models, (recordClass) => recordClass.getAppName())).length > 1;
         this.emptyText = i18n._('Search for Model...');
-
         this.store = new Ext.data.ArrayStore({
             fields: ['className', 'modelName'],
-            data: Tine.Tinebase.data.RecordMgr.items.reduce((models, recordClass) => {
+            data: models.map((recordClass) => {
                 const className = recordClass.getPhpClassName();
                 let name = this.useRecordName ? recordClass.getRecordName() : recordClass.getRecordsName();
-
-                name = !name || name === 'records'? recordClass.getMeta('modelName') : name;
+                name = !name || name === 'records' ? recordClass.getMeta('modelName') : name;
                 const label = (this.includeAppName ? recordClass.getAppName() + ' ' : '') + name + (this.includeClassName ? ` (${className})` : '');
-
-                if ((!availableModels || availableModels.indexOf(recordClass) >= 0)
-                    && (!availableModelsRegExp || availableModelsRegExp.test(className))) {
-                    models.push([className, label]);
-                }
-
-                return models;
-            }, [])
+                return [className, label];
+            })
         });
-        
+
         Tine.Tinebase.widgets.form.ModelPicker.superclass.initComponent.call(this);
     }
 });
