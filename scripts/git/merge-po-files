@@ -26,12 +26,12 @@ show_file() {
 
 # wraps msgmerge with default options
 m_msgmerge() {
-  msgmerge --force-po --quiet --no-fuzzy-matching $@
+  msgmerge --no-wrap --force-po --quiet --no-fuzzy-matching $@
 }
 
 # wraps msgcat with default options
 m_msgcat() {
-  msgcat --force-po $@
+  msgcat --no-wrap --force-po $@
 }
 
 
@@ -48,12 +48,12 @@ replace_graveyard() {
 # select messages with a conflict marker
 # pass -v to inverse selection
 grep_conflicts() {
-  msggrep $@ --msgstr -F -e '#-#-#' -
+  msggrep --no-wrap $@ --msgstr -F -e '#-#-#' -
 }
 
 # select messages from $1 that are also in $2 but whose contents have changed
 extract_changes() {
-  msgcat -o - $1 $2 \
+  msgcat --no-wrap -o - $1 $2 \
     | grep_conflicts \
     | m_msgmerge -o - $1 - \
     | strip_graveyard
@@ -72,9 +72,9 @@ echo "Using custom PO merge driver (`show_file ${LOCAL}`; $TEMP)"
 sed -e '/^$/q' < $LOCAL > ${TEMP}.header
 
 # clean input files
-msguniq --force-po -o ${TEMP}.base   --unique ${BASE}
-msguniq --force-po -o ${TEMP}.local  --unique ${LOCAL}
-msguniq --force-po -o ${TEMP}.remote --unique ${REMOTE}
+msguniq --no-wrap --force-po -o ${TEMP}.base   --unique ${BASE}
+msguniq --no-wrap --force-po -o ${TEMP}.local  --unique ${LOCAL}
+msguniq --no-wrap --force-po -o ${TEMP}.remote --unique ${REMOTE}
 
 # messages changed on local
 extract_changes ${TEMP}.local ${TEMP}.base > ${TEMP}.local-changes
