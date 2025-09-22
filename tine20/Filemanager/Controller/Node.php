@@ -309,7 +309,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
                 $this->_backend->getPathOfNode($node->getId(), true));
-            if (! $this->_backend->checkPathACL($path, 'get', true, false)) {
+            if (! $this->_backend->checkPathACL($path, _throw: false)) {
                 $results->removeRecord($node);
             }
         }
@@ -354,7 +354,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $nodePath = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_backend->getPathOfNode($record, true));
 
-        $this->_backend->checkPathACL($nodePath, 'get');
+        $this->_backend->checkPathACL($nodePath);
 
         $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
 
@@ -539,7 +539,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
         if (strpos($parentPath->statpath, $appPath) !== 0) {
             throw new Tinebase_Exception_NotFound('no parent matching given filter found');
         }
-        $this->_backend->checkPathACL($parentPath, 'get');
+        $this->_backend->checkPathACL($parentPath);
         $parent->path = substr($parentPath->statpath, strlen($appPath));
 
         return $parent;
@@ -700,7 +700,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function getFileNode(Tinebase_Model_Tree_Node_Path $_path, $_revision = null)
     {
-        $this->_backend->checkPathACL($_path, 'get');
+        $this->_backend->checkPathACL($_path);
         
         if (! $this->_backend->fileExists($_path->statpath, $_revision)) {
             throw new Tinebase_Exception_NotFound('File does not exist,');
@@ -911,7 +911,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     if ($existingNode->size == 0) {
                         $this->_backend->checkPathACL($parentPathRecord, 'add');
                     } else {
-                        $this->_backend->checkPathACL($parentPathRecord, 'update');
+                        $this->_backend->checkPathACL($path, 'update');
                     }
                 }
             } else if (! $_forceOverwrite) {
@@ -1283,7 +1283,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 
         $newNode = NULL;
         
-        $this->_backend->checkPathACL($_source, 'get', FALSE);
+        $this->_backend->checkPathACL($_source, _topLevelAllowed: false);
         
         $sourceNode = $this->_backend->stat($_source->statpath);
         
@@ -1312,7 +1312,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
-        $this->_backend->checkPathACL($_destination->getParent(), 'update', FALSE);
+        $this->_backend->checkPathACL($_destination->getParent(), 'add', _topLevelAllowed: false);
         
         try {
             $this->_checkIfExists($_destination);
@@ -1335,6 +1335,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $newNode = $this->_backend->copy($_source->statpath, $_destination->statpath);
                 break;
             case 'move':
+                $this->_backend->checkPathACL($_source, 'delete', _topLevelAllowed: false);
                 try {
                     $newNode = $this->_backend->rename($_source->statpath, $_destination->statpath);
                 } catch (Zend_Db_Statement_Exception $zdse) {
@@ -1440,7 +1441,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _moveFolderNode($source, $destination, $_forceOverwrite = FALSE)
     {
-        $this->_backend->checkPathACL($source->getParent(), 'delete', true, true, $source);
+        $this->_backend->checkPathACL($source, 'delete');
         
         $destinationParentPathRecord = $destination->getParent();
         
@@ -1510,10 +1511,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
             ' Delete path: ' . $_flatpath);
 
         $flatpathWithBasepath = $this->addBasePath($_flatpath);
-        list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
         
-        $this->_backend->checkPathACL($parentPathRecord, 'delete', true, true, $pathRecord);
+        $this->_backend->checkPathACL($pathRecord, 'delete');
         $success = $this->_deleteNodeInBackend($pathRecord, $_flatpath);
 
         return $success;

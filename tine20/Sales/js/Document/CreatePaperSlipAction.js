@@ -43,7 +43,7 @@ const createAttachedDocument = async (config) => {
             ( (await config.editDialog.isModified()) || config.force ? Tine.Tinebase.data.Record.setFromJson(await config.editDialog.applyChanges(), recordClass) : config.editDialog.record)
         attachedDocument = record.getAttachedDocument(config.type)
         if (!attachedDocument || config.force) {
-            record = Tine.Tinebase.data.Record.setFromJson(await api(recordClass.getPhpClassName(), config.record.id), recordClass)
+            record = Tine.Tinebase.data.Record.setFromJson(await api(recordClass.getPhpClassName(), record.id), recordClass)
             config.editDialog && config.editDialog.loadRecord ? await config.editDialog.loadRecord(record) : null
             window.postal.publish({
                 channel: "recordchange",

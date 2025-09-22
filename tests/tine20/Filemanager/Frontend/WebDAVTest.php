@@ -1088,7 +1088,7 @@ EOS
         $nodeDir1 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1');
         $nodeDir1->createDirectory('dir2');
         $treeNodeDir1 = $nodeDir1->getNode();
-        
+
         $testSyncUser = $this->_personas['sclever'];
         Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir1);
         // set default grant for test sync user first
@@ -1121,6 +1121,73 @@ EOS
         }
         Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir1, $treeNodeDir1->grants);
         $etag = $treeNodeDir2->createFile('tine_logo.png', fopen($filename, 'r'));
+        Tinebase_Core::setUser($this->_originalTestUser);
+    }
+
+    public function testRenameNodeInFilemanagerSharedWithoutDeleteGrantFromSiblingFolder()
+    {
+        Tinebase_Core::setUser($this->_originalTestUser);
+
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $node->createDirectory('dir1');
+        $nodeDir1 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1');
+        $treeNodeDir1 = $nodeDir1->getNode();
+        $testSyncUser = $this->_personas['sclever'];
+
+        $nodeDir1->createDirectory('dir2a');
+        $nodeDir2a = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/dir2a');
+        $treeNodeDir2a = $nodeDir2a->getNode();
+
+        $nodeDir1->createDirectory('dir2b');
+        $nodeDir2b = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/dir2b');
+        $treeNodeDir2b = $nodeDir2b->getNode();
+
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir1);
+        $treeNodeDir1->grants->addRecord(new Tinebase_Model_Grants([
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'        => $testSyncUser->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+            Tinebase_Model_Grants::GRANT_ADD => true,
+            Tinebase_Model_Grants::GRANT_DELETE => true,
+        ]));
+        foreach ( $treeNodeDir1->grants as $grant) {
+            if ($grant->account_type !== Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                $treeNodeDir1->grants->removeRecord($grant);
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir1, $treeNodeDir1->grants);
+
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir2b);
+        foreach ( $treeNodeDir2b->grants as $grant) {
+            if ($grant->account_type !== Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                $treeNodeDir2b->grants->removeRecord($grant);
+            }
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $grant->deleteGrant = false;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir2b, $treeNodeDir2b->grants);
+
+        // change current user to test the sync ability
+        Tinebase_Core::setUser($testSyncUser);
+
+        // test rename folder when user has delete_grant on parent folder dir1, and user has no delete grant on dir2b
+        $request = new Sabre\HTTP\Request('MOVE', '/webdav/Filemanager/shared/dir1/dir2a', [
+            'DESTINATION'  => '/webdav/Filemanager/shared/dir1/dir99',
+        ]);
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        Tinebase_FileSystem::getInstance()->clearStatCache();
+        $this->assertSame(201, $this->response->status);
+
+        // test delete folder where user has delete_grant on parent folder dir1 , but user has not delete grant on sibling folder dir2b
+        $request = new Sabre\HTTP\Request('DELETE', '/webdav/Filemanager/shared/dir1/dir99');
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+        Tinebase_FileSystem::getInstance()->clearStatCache();
+        $this->assertSame(204, $this->response->status);
+
         Tinebase_Core::setUser($this->_originalTestUser);
     }
 
@@ -1385,9 +1452,20 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/'
             . Tinebase_Core::getUser()->accountLoginName);
 
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertSame(1, preg_match('/^Moved file to (.*)$/', $e->getMessage(), $m));
+            $this->assertNotEmpty($this->_getWebDAVTree()->getNodeForPath('/webdav/'.$m[1]));
+        }
         // test to recreate the file
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertStringStartsWith('Moved file to', $e->getMessage());
+        }
     }
 
     public function testCreateFileInFilemanagerForeignPersonalFolderWithReadGrant()
@@ -1427,7 +1505,12 @@ EOS
 
         Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
-        $node->createFile('test.file');
+        try {
+            $node->createFile('test.file');
+            $this->fail('exception expected');
+        } catch (\Sabre\DAV\Exception\Forbidden $e) {
+            $this->assertStringStartsWith('Moved file to', $e->getMessage());
+        }
     }
 
     public function testCreateFolderInFilemanagerForeignPersonalFolder()

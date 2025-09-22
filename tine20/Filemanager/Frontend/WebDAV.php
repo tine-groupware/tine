@@ -122,8 +122,8 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                     . ' has either not READ or SYNC grants for container ' . $node->getId());
                 throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path not found");
             }
-
-            return (new Filemanager_Frontend_WebDAV_Directory(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)))->createFile($name, $data);
+            (new Filemanager_Frontend_WebDAV_Directory(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)))->createFile($name, $data);
+            throw new \Sabre\DAV\Exception\Forbidden('Moved file to ' . $this->_path . '/' . $node->name . '/' . $name);
         } else {
             throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
         }
