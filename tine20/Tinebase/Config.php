@@ -1393,8 +1393,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "ssl":"none" (string)
          * "auth":"none" (string)
          * "primarydomain":"mail.test" (string)
-         * "secondarydomains":"second.test,third.test" (string - comma separated)
-         * "additionaldomains":"another.test,onemore.test" (string - comma separated)
+         * "secondarydomains":"second.test,third.test" (string - comma separated) - secondarydomains that are handled by tine & allowed in tine user email addresses
+         * "additionaldomains":"another.test,onemore.test" (string - comma separated) - additional domains that are allowed in tine user email addresses (but not handled by tine)
          * "instanceName":"tine.test" (string)
          * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "destinationisusername": false (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createAliasDestinations)
@@ -1406,9 +1406,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * TODO make this a structured config with subconfig keys
          */
         self::SMTP => array(
-                                   //_('System SMTP')
+            //_('System SMTP')
             self::LABEL => 'System SMTP',
-                                   //_('System SMTP server configuration.')
+            //_('System SMTP server configuration.')
             self::DESCRIPTION => 'System SMTP server configuration.',
             self::TYPE => 'object',
             self::CLASSNAME => Tinebase_Config_Struct::class,
