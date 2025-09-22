@@ -31,9 +31,12 @@ class Tinebase_Setup_DemoData_Import
     public function __construct($modelName, $options = [])
     {
         $extract = Tinebase_Application::extractAppAndModel($modelName);
-        $this->_options['modelName'] = $extract['modelName'];
-        $this->_options['dryrun'] = false;
-        $this->_options['demoData'] = true;
+        $this->_options = [
+            'modelName' => $extract['modelName'],
+            'dryrun' => false,
+            'demoData' => true,
+            'duplicateResolveStrategy' => 'mergeMine',
+        ];
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($extract['appName']);
         $this->_options = array_merge($this->_options, $options);
     }
@@ -51,8 +54,10 @@ class Tinebase_Setup_DemoData_Import
             throw new Tinebase_Exception_NotFound('Import dir not found: ' . $importDir);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Importing files in import dir ' . $importDir );
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Importing files in import dir ' . $importDir );
+        }
 
         // TODO allow more filters / subdirs
         $fh = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($importDir), RecursiveIteratorIterator::CHILD_FIRST);

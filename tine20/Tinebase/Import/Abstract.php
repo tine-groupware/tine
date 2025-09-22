@@ -1067,10 +1067,14 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _importAndResolveConflict(Tinebase_Record_Interface $record, $resolveStrategy = null, $clientRecord = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ResolveStrategy: ' . $resolveStrategy);
-        if ($clientRecord && Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Client record: ' . print_r($clientRecord->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ResolveStrategy: ' . $resolveStrategy);
+        }
+        if ($clientRecord && Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Client record: ' . print_r($clientRecord->toArray(), TRUE));
+        }
         
         switch ($resolveStrategy) {
             case 'mergeTheirs':
@@ -1265,7 +1269,16 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $result = null;
         } else {
             $this->_importResult['duplicatecount']++;
-            $result = $ted->toArray();
+            try {
+                $result = $ted->toArray();
+            } catch (Tinebase_Exception_Record_Validation $terv) {
+                $result = [
+                    'code'          => $terv->getCode(),
+                    'message'       => $terv->getMessage(),
+                    'clientRecord'  => [],
+                    'duplicates'    => [],
+                ];
+            }
         }
         
         return $result;
