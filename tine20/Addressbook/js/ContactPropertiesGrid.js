@@ -53,7 +53,7 @@ export default (config) => {
             if (isPreferredField(field.fieldName)) {
                 result = `<div class="tinebase-property-field">
                     <div>${result}</div>
-                    <div class="tine-textfield-icon renderer_PreferredIcon" ext:qtip="${app.i18n._('Preferred')}"></div>
+                    <div class="tine-textfield-icon ${value ? "renderer_PreferredIcon" : ""}" ext:qtip="${app.i18n._('Preferred')}"></div>
                 </div>`
             }
 
