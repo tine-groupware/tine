@@ -3,7 +3,7 @@
     <tr v-if="dates[0].summary" ref="summaryRow">
       <th></th>
       <th v-for="date in dates" :key="date.dtstart" class="title">
-        <div class="title">{{ date.summary }}</div>
+        <div class="title">{{ date.summary }}{{!show_site || !date.event_site ? '' : ', ' + date.event_site.n_fn}}</div>
       </th>
     </tr>
     <tr class="tr-date">
@@ -20,7 +20,10 @@
 import { ref, onMounted } from 'vue'
 import { useElementSize } from '@vueuse/core'
 
-const props = defineProps({dates: Array})
+const props = defineProps({
+  dates: Array,
+  show_site: {type: Boolean, default: false}
+})
 
 const summaryRow = ref()
 const { height } = useElementSize(summaryRow)

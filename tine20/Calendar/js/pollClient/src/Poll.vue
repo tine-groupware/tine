@@ -14,7 +14,7 @@
     <div class="table-container">
 <!--      Because native HTML tables do not scroll themselves.-->
       <table>
-        <PollHeader :dates="events"></PollHeader>
+        <PollHeader :dates="events" :show_site="!poll.site"></PollHeader>
         <PollParticipant v-for="participant in participants" :participant="participant"
                          :dates="events"
                          :read_only="isReadonly(participant)"
