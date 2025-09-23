@@ -1,0 +1,22 @@
+########################
+# Tine 2.0
+# @package     ChewScheduling
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Jan Evers <j.evers@metaways.de>
+# @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for CrewScheduling module
+########################
+---
+name: polls
+
+files:
+    #$app,$model,$definition,$file
+    - CrewScheduling/Poll/crewscheduling_poll_csv/crewscheduling_poll.csv
+    - CrewScheduling/PollParticipant/crewscheduling_poll_participant_csv/crewscheduling_poll_participant.csv
+    - CrewScheduling/PollReply/crewscheduling_poll_reply_csv/crewscheduling_poll_reply.csv
+
+# this set could contain other sets:
+# sets:
+#   - another_set.yml

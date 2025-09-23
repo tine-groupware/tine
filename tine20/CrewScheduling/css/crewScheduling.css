@@ -1,0 +1,23 @@
+.CrewSchedulingIconCls {
+    background-image:url(../images/icon_crewShedule.svg) !important;
+}
+
+.cs-refresh {
+    background-image: url(../images/icon_reload.svg) !important;
+}
+
+.cs-auto-scheduling {
+    background-image: url(../images/icon_magic_wand.svg) !important;
+}
+
+.dark-mode .x-form-check-group.favorite_days label {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.cs_poll {
+    background-image:url(Tinebase/js/node_modules/@tabler/icons/icons/outline/calendar-question.svg) !important;
+}
+
+.cs_poll_mail {
+    background-image:url(Tinebase/js/node_modules/@tabler/icons/icons/outline/mail.svg) !important;
+}

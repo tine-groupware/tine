@@ -1,0 +1,111 @@
+[[chap.dienstplanung]]
+== Dienstplanung ==
+////
+Author: Stefanie Stamer <s.stamer@metaways.de>
+////
+
+[[sec.dienstplanung.einleitung]]
+=== Einleitung ===
+
+{{{/CrewScheduling}}}
+Über die Dienstplanung lassen sich die verschiedenen Teilnehmerrollen für Termine planen, in dem Benutzer einfach per Drag and Drop in entsprechende Rollen verteilt werden. Beim Speichern werden diese dann direkt in den Termin übertragen.
+
+////
+Bild zeigt eine beispielhafte Dienstplanung
+////
+.Die Dienstplanung
+image::Dienstplanung/1_dienstplanung_overview.png[id="fig_crewscheduling_overview",width="100%"]
+
+Es gibt jedoch einige Ergänzungen, die eingestellt werden müssen, um dies zu ermöglichen. Diese sollen im folgenden Kapitel erläutert werden.
+
+[[sec.dienstplanung.vorbereitung]]
+=== Vorbereitung ===
+
+Mit der Anwendung menu:[Dienstplanung] wird die menu:[Kalender]- und menu:[Adressbuch]-Anwendung erweitert. Im menu:[Kalender] gibt es zwei Änderungen. Zum einen kann nun beim Erstellen eines Termins auch eine Terminart eingestellt werden. Nur die Termine, die einer Terminart zugeordnet sind, werden innerhalb der Dienstplanungs-Anwendung angezeigt.
+
+////
+Bild zeigt die Ausgeklappten Terminarten in den Termineinstellungen
+////
+.Terminarten in der Termin Einstellung
+image::Dienstplanung/4_dienstplanung_terminarten.png[id="fig_crewscheduling_terminarten",width="100%"]
+
+
+Des weiteren gibt es nun auch den Reiter menu:[Dienstplanung]. Hier kann eingestellt werden, wieviele unterschiedliche Mitarbeiter für diesen Termin benötigt werden.
+
+////
+Bild zeigt den Dienstplanungs Reiter im Kalender
+////
+.Terminarten in der Termin Einstellung
+image::Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter.png[id="fig_crewscheduling_termineinstellungen_dienstplanungsreiter",width="100%"]
+
+In der menu:[Adressbuch] Anwendung gibt es ebenso zwei kleine Änderungen. Zum einen gibt es im Modul menu:[Gruppen] nun auch die Möglichkeit Gruppen für die Dienstplanung zu erstellen. Diese Gruppe kann nun einer menu:[Dienstplanungs-Rolle] zugeordnet werden. Dies geschieht über den Reiter menu:[Dienstplanung]. Mit dieser Funktion kann dann ein Mitarbeiter dieser Gruppe zugeordnet werden, und die Anwendung menu:[Dienstplanung] weiß, welche Person was für eine Tätigkeit hat.
+
+////
+Bild zeigt den Dienstplanungsreiter im Gruppen-Modul
+////
+.Terminarten in der Termin Einstellung
+image::Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter.png[id="fig_crewscheduling_gruppen_dienstplanungsreiter",width="100%"]
+
+Mitglieder dieser Gruppe zuordnen passiert, wie gewohnt, im ersten Reiter menu:[Gruppe] unter dem Punkt menu:[Mitglieder].
+
+Dies führt uns direkt zur zweiten Änderung. Im Modul menu:[Kontakte] in den Einstellungen eines Kontaktes finden wir nun auch den Reiter menu:[Dienstplanung]. Hier kann eingestellt werden, an welchen Tag dieser Kontakt verfügbar ist.
+
+Kommen wir zurück zur Anwendung menu:[Dienstplanung].
+Über die Filter im linken, oberen Bereich lassen sich die Termine feiner filtern. Dies ist besonders nützlich, wenn sehr viele Termine zur Auswahl stehen. So können Sie zum Beispiel nur Termine für einen bestimmten Standort oder Zeitraum anzeigen lassen.
+Im oberen Bereich der Dienstplanung finden Sie die Benutzer, die eingeplant werden können. Damit ein Benutzer zu einer Rolle zugewiesen werden kann, muss dieser zunächst einer entsprechenden Gruppe zugeordnet werden. Die Gruppe wiederum muss mit einer entsprechenden Dienstplanungsrolle verknüpft sein. Diese lässt sich sich im Gruppen-Bearbeitungsdialog unter dem Reiter Dienstplanung auswählen.
+
+
+[[sec.dienstplanung.terminansicht]]
+=== Die Terminansicht ===
+
+Die Termine werden zeilenweise angezeigt. Am Anfang finden sich Name und Zeitpunkt des Termins, dann folgen spaltenweise die zu planenden Rollen.
+Jede Rolle besitzt eine Box mit einem farbigen Rahmen sowie einem Anzahl-Feld. Das Anzahl-Feld gibt Auskunft über die benötigte Anzahl von Personen für diese Rolle. Der farbige Rahmen zeigt wiederum, ob die benötigte Anzahl erreicht oder überschritten ist.
+
+* Grün: Die erforderliche Anzahl ist erreicht
+* Rot: Die erforderliche Anzahl ist noch nicht erreicht
+* Blau: die erforderliche Anzahl ist überschritten
+
+Durch einen Klick auf einzelne Felder oder den Spaltenkopf einer Rolle werden die verfügbaren Benutzer gefiltert. Es werden nur jene Benutzer angezeigt, die den entsprechenden Feldern zugeordnet werden können.
+
+////
+Bild zeigt eine Unterfilterung
+////
+.Eine Unterfilterung nach Küstern
+image::Dienstplanung/2_dienstplanung_filter.png[id="fig_crewscheduling_filter",width="100%"]
+
+[[sec.dienstplanung.teilnehmeransicht]]
+=== Die Teilnehmeransicht ===
+
+Im oberen Bereich befinden sich die verfügbaren Teilnehmer in Form von Tokens. Ein Token setzt sich wie folgt zusammen:
+
+* Ein roter Kreis mit einer Anzahl. Dieser gibt an, wie oft der Teilnehmer bereits verplant wurde.
+* Der Name des Teilnehmers.
+* Die Wochentage, an denen dieser Teilnehmer verfügbar ist.
+* Ein Herz-Symbol, dies ist optional und gibt an, dass dieser Teilnehmer Lieblingspartner hat.
+* Ein oder mehrere Rollensymbole, für die dieser Teilnehmer verfügbar ist. Die Symbole finden sich auch entsprechend im Kopf der Terminansicht.
+
+////
+Bild zeigt 3 beispiel Token
+////
+.Verschiedene Teilnehmer Token
+image::Dienstplanung/3_dienstplanung_token.png[id="fig_crewscheduling_token",width="100%"]
+
+[[sec.dienstplanung.planen]]
+=== Einen Termin planen ===
+
+Um einen Termin zu planen, führen Sie einfach eine Drag&Drop-Geste auf den Teilnehmer-Token aus, den Sie verplanen möchten. Sobald Sie den Token „halten“, werden alle Felder, die unzulässig sind, ausgegraut. Dies können auf der einen Seite Rollen sein, für die dieser Teilnehmer nicht zuständig ist, aber auch Termine, die außerhalb der Tage liegt, zu denen dieser Teilnehmer zur Verfügung steht.
+Ziehen Sie nun den Token in das gewünschte Feld.
+
+
+[[sec.dienstplanung.lieblingspartner]]
+==== Lieblingspartner ====
+
+Ein Benutzer verfügt möglicherweise über Lieblingspartner. Dies wird durch ein Herzsymbol angezeigt. Wenn Sie den Token an diesem Herzsymbol greifen, werden nicht nur dieser Token, sondern auch die Token der Lieblingspartner gegriffen. Diese können dann gemeinsam geplant werden.
+Ob und welche Lieblingspartner ein Teilnehmer hat, kann im Adressbuch-Eintrag des Teilnehmers eingestellt werden. Wählen Sie hierfür im Kontakt-Bearbeitungsdialog den Reiter Dienstplanung aus.
+
+
+[[sec.dienstplanung.wochentage]]
+==== Zeitliche Beschränkung ====
+
+Teilnehmer sind möglicherweise nur an bestimmten Wochentagen verfügbar. Dies wird gegebenenfalls im Teilnehmer-Token angezeigt.
+Ob und wann ein Teilnehmer verfügbar ist, kann im Adressbuch-Eintrag des Teilnehmers eingestellt werden. Wählen Sie hierfür im Kontakt-Bearbeitungsdialog den Reiter Dienstplanung aus.
