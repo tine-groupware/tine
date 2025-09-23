@@ -43,7 +43,7 @@ variables:
   PHP_VERSION: "8.3"
 
   # "Codename for build"
-  CODENAME: "TBA"
+  CODENAME: "Mats"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
