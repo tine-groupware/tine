@@ -1,0 +1,12 @@
+{% extends 'Tinebase/views/base.html.twig' %}
+
+{% block content %}
+<h2 class="mb-4 text-primary text-center">IMPRINT</h2>
+{% if app.installationRepresentative is not empty -%}
+    <div class="text-sm">{{ app.installationRepresentative.n_fileas }}</div>
+    <div class="text-sm">{{ app.installationRepresentative.org_name }}</div>
+    <div class="text-sm">{{ app.installationRepresentative.email }}</div>
+    <div class="text-sm">{{ app.installationRepresentative.address_street }}</div>
+{% endif %}
+
+{% endblock %}

@@ -712,10 +712,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
                     'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
                     'lang' => $locale,
-                    'initialData' => json_encode([
+                    'initialData' => [
                         'logoutUrls' => $urls,
                         'finalLocation' => $spMetadata->getValue('SingleLogoutService')['Location']
-                    ])
+                    ]
                 ]);
             }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
@@ -739,7 +739,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
                 'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
                 'lang' => $locale,
-                'initialData' => json_encode([
+                'initialData' => [
                     'logoutStatus' => $message->getStatus(),
                     'relyingParty' => [
                         SSO_Model_RelyingParty::FLD_LABEL => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LABEL} : null,
@@ -747,7 +747,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         SSO_Model_RelyingParty::FLD_LOGO_LIGHT => $rp ? $rp->{SSO_Model_RelyingParty::FLD_LOGO_LIGHT} : null,
                         SSO_Model_RelyingParty::FLD_LOGO_DARK => $rp?->{SSO_Model_RelyingParty::FLD_LOGO_DARK},
                     ],
-                ])
+                ]
             ]);
         } else {
             throw new \SimpleSAML\Error\BadRequest('Unknown message received on logout endpoint: ' . get_class($message));
@@ -888,7 +888,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $data = [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
-            'initialData' => json_encode($initialData),
+            'initialData' => $initialData,
         ];
 
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', $data);

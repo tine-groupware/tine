@@ -11,13 +11,13 @@ How to Customize GDOR Template
 
 ```
 {% block subject %}
-    {{ _('Confirm the subscription for ') }} {{ localizeString(dipr.name, app.user.locale) }}
+    {{ _('Confirm the subscription for ') }} {{ localizeString(dip.name, app.user.locale) }}
 {% endblock %}
 
 {% block body %}
-    {% set localized_dip_name = localizeString(dipr.name, app.user.locale)  | default('') %}
+    {% set localized_dip_name = localizeString(dip.name, app.user.locale)  | default('') %}
     <div>{{ _('Dear ' )}}  {{ contact.getTitle() | default('user') }} </div>
-    <div>{{ _('Please click this link to finalize the subscription for ') }} {{  localizeString(dipr.name, app.user.locale) }} : <a href="{{ link }}">Subscribe</a></div>
+    <div>{{ _('Please click this link to finalize the subscription for ') }} {{  localizeString(dip.name, app.user.locale) }} : <a href="{{ link }}">Subscribe</a></div>
     {% if localized_dip_name != '' and localized_dip_name == 'Newsletter' %}
         <div>{{ _('We sill send our latest news to you !' )}}</div>
     {% endif %}
@@ -31,9 +31,9 @@ How to Customize GDOR Template
 Available parameters
 ----
 - `link` (registration link / manage consent page link / email page link)
-- `dipr` (data intended purpose record)
-  - localized name : `localizeString(dipr.name, app.user.locale)`
-  - localized description : `localizeString(dipr.description, app.user.locale)`
+- `dip` (data intended purpose)
+  - localized name : `localizeString(dip.name, app.user.locale)`
+  - localized description : `localizeString(dip.description, app.user.locale)`
 - `contact` (contact record)
 - global parameters
 

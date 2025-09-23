@@ -52,6 +52,20 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $context['base'] = str_repeat('../', $depth);
             }
         }
+
+        $headerTemplate = $twig->load('Tinebase/views/header.html.twig');
+        $footerTemplate = $twig->load('Tinebase/views/footer.html.twig');
+
+        if (!isset($context['initialData'])) {
+            $context['initialData'] = [];
+        }
+
+        $context['initialData'] = array_merge($context['initialData'], [
+            'header'    => $headerTemplate->render($context),
+            'footer'    => $footerTemplate->render($context),
+        ]);
+        $context['initialData'] = json_encode($context['initialData']);
+
         $context += [
             'assetHash' => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             'jsFiles' => $entryPoints,

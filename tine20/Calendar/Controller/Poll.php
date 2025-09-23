@@ -896,10 +896,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             Calendar_Controller_EventNotifications::getNotificationPreferences($attendee, $event);
 
         $twig = new Tinebase_Twig($locale, $translate);
-
-        // TODO what about the html template?
-        //$htmlTemplate = $twig->load('Calendar/views/pollConfirmationMail.html.twig');
-        $textTemplate = $twig->load('Calendar/views/pollConfirmationMail.text.twig');
+        $htmlTemplate = $twig->load(Calendar_Config::APP_NAME . '/views/pollConfirmationMail.html.twig');
+        $textTemplate = $twig->load(Calendar_Config::APP_NAME . '/views/pollConfirmationMail.text.twig');
 
         $renderContext = [
             'name'              => $poll->name ? $poll->name : $event->summary,
@@ -911,11 +909,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             'alternativeEvents' => $alternativeEvents,
         ];
 
-        $subject = sprintf($translate->_('Attendance Confirmation for Poll "%1$s"'), $renderContext['name']);
+        $subject = $htmlTemplate->renderBlock('subject', $renderContext);
 
         try {
             Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
-                $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+                $textTemplate->render($renderContext), $htmlTemplate->render($renderContext));
         } catch (Zend_Mail_Protocol_Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                 . ': ' . $e->getMessage());
@@ -943,10 +941,8 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             $contact = $attendee->getResolvedUser();
 
             $twig = new Tinebase_Twig($locale, $translate);
-
-            // TODO what about the html template?
-            //$htmlTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.html.twig');
-            $textTemplate = $twig->load('Calendar/views/pollDefiniteEventMail.text.twig');
+            $htmlTemplate = $twig->load(Calendar_Config::APP_NAME . '/views/pollDefiniteEventMail.html.twig');
+            $textTemplate = $twig->load(Calendar_Config::APP_NAME . '/views/pollDefiniteEventMail.text.twig');
 
             $renderContext = [
                 'name'              => $poll->name ? $poll->name : $definiteEvent->summary,
@@ -958,11 +954,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 'event'             => $definiteEvent,
             ];
 
-            $subject = sprintf($translate->_('%1$s is scheduled for %2$s'), $renderContext['name'], $renderContext['sstart']);
+            $subject = $htmlTemplate->renderBlock('subject', $renderContext);
 
             try {
                 Tinebase_Notification::getInstance()->send($prefUser, [$contact], $subject,
-                    $textTemplate->render($renderContext)/*, $htmlTemplate->render($renderContext)*/);
+                    $textTemplate->render($renderContext), $htmlTemplate->render($renderContext));
             } catch (Zend_Mail_Protocol_Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ': ' . $e->getMessage());

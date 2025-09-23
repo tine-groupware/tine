@@ -557,14 +557,14 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
-            'initialData' => json_encode([
+            'initialData' => [
                 'floorplans' => Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS},
                 'resources' => Calendar_Controller_Resource::getInstance()->getAll()->toArray(),
                 'currentContact' => $userContactArray,
                 'jsonKey' => Tinebase_Core::get('jsonKey'),
                 'locale' => $locale->toString(),
                 'broadcasthubConfig' => Tinebase_Config::getInstance()->getClientRegistryConfig()['Tinebase']['broadcasthub']['value']
-            ])
+            ]
         ]);
     }
 }
