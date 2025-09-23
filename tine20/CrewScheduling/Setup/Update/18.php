@@ -124,11 +124,12 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
 
         $roleCtrl = CrewScheduling_Controller_SchedulingRole::getInstance();
         $oldValue = $roleCtrl->doContainerACLChecks(false);
-        try {
-            $setContainerMethod = new ReflectionMethod(CrewScheduling_Controller_SchedulingRole::class,
-                '_setContainer');
-            $setContainerMethod->setAccessible(true);
+        $setContainerMethod = new ReflectionMethod(CrewScheduling_Controller_SchedulingRole::class,
+            '_setContainer');
+        $setContainerMethod->setAccessible(true);
 
+        $updateContainer = null;
+        try {
             $updateContainer = Tinebase_Container::getInstance()->createSystemContainer(
                 CrewScheduling_Config::APP_NAME,
                 CrewScheduling_Model_SchedulingRole::class,
@@ -160,7 +161,9 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             }
         } finally {
             $roleCtrl->doContainerACLChecks($oldValue);
-            Tinebase_Container::getInstance()->deleteContainer($updateContainer);
+            if ($updateContainer) {
+                Tinebase_Container::getInstance()->deleteContainer($updateContainer);
+            }
         }
         
         $this->addApplicationUpdate('CrewScheduling', '18.4', self::RELEASE018_UPDATE004);

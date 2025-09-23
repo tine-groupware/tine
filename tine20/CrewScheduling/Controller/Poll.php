@@ -189,7 +189,10 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
 
     /**
      * @param Felamimail_Model_Message $_message
+     * @param Tinebase_Twig $_twig
      * @return null
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
     public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
@@ -207,10 +210,13 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
         if (! $contactId) {
             return;
         }
-        /** @var CrewScheduling_Model_Poll $poll */
         if (!isset($this->_cachedPolls[$pollId])) {
+            /** @var CrewScheduling_Model_Poll $poll */
             $poll = $this->get($pollId);
-            $poll->{CrewScheduling_Model_Poll::FLD_PARTICIPANTS} = CrewScheduling_Controller_PollParticipant::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(CrewScheduling_Model_PollParticipant::class, [
+            $poll->{CrewScheduling_Model_Poll::FLD_PARTICIPANTS} =
+                CrewScheduling_Controller_PollParticipant::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        CrewScheduling_Model_PollParticipant::class, [
                 ['field' => CrewScheduling_Model_PollParticipant::FLD_POLL, 'operator' => 'equals', 'value' => $pollId],
             ]));
             $this->_cachedPolls[$pollId] = $poll;
@@ -225,6 +231,5 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
         }
 
         $_message->body = str_replace($poll->getUrl(), $poll->getUrl($participant), $_message->body);
-        return;
     }
 }
