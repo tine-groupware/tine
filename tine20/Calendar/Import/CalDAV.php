@@ -79,6 +79,30 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
         if ($this->_options[self::OPTION_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS]) {
             $caldavClientOptions[Calendar_Import_CalDav_Client::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS] = true;
         }
+        if ($this->_options[self::OPTION_IMPORT_VTODOS]) {
+            $caldavClientOptions[self::OPTION_IMPORT_VTODOS] = true;
+            if (null === $this->_options[self::OPTION_TASK_CONTAINER] && Tinebase_Model_Container::TYPE_SHARED === $container->type) {
+                try {
+                    $this->_options[self::OPTION_TASK_CONTAINER] = Tinebase_Container::getInstance()
+                        ->getContainerByName(Tasks_Model_Task::class, $container->name, $container->type)->getId();
+                } catch (Tinebase_Exception_NotFound) {
+                    $this->_options[self::OPTION_TASK_CONTAINER] = Tinebase_Container::getInstance()
+                        ->addContainer(new Tinebase_Model_Container([
+                            'name' => $container->name,
+                            'type' => $container->type,
+                            'backend' => 'Sql',
+                            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME)->getId(),
+                            'model' => Tasks_Model_Task::class,
+                        ], true), Tinebase_Container::getInstance()->getGrantsOfContainer($container))->getId();
+                }
+            }
+        }
+        if ($this->_options[self::OPTION_TASK_CONTAINER]) {
+            $caldavClientOptions[self::OPTION_TASK_CONTAINER] = $this->_options[self::OPTION_TASK_CONTAINER];
+        }
+        if ($this->_options['calDavRequestTries']) {
+            $caldavClientOptions['calDavRequestTries'] = $this->_options['calDavRequestTries'];
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);

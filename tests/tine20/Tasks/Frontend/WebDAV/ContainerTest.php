@@ -165,14 +165,14 @@ class Tasks_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
         
         $container = new Tasks_Frontend_WebDAV_Container($this->objects['initialContainer']);
         
-        $id = Tinebase_Record_Abstract::generateUID();
+        $id = 'cd701589-4e76-4e87-8aae-1d32a6020159';
         
         $etag   = $container->createFile("$id.ics", $vcalendarStream);
         $event  = $container->getChild("$id.ics");
         $record = $event->getRecord();
         
         $this->assertTrue($event instanceof Tasks_Frontend_WebDAV_Task);
-        $this->assertEquals($id, $record->getId(), 'ID mismatch');
+        $this->assertEquals($id, $record->uid, 'UID mismatch');
         
         return $event;
     }

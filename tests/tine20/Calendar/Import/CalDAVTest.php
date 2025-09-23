@@ -49,6 +49,49 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $this->_uit->getDecorator()->initCalendarImport($caldavClientOptions);
     }
 
+    public function testVTodoImportCreateSharedContainer(): void
+    {
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        $import = new Calendar_Import_CalDAV([
+            'container_id' => $importCalendar->getId(),
+            'url' => 'https://some.domain.invalidTld/foo/fee/fum',
+            Calendar_Import_Abstract::OPTION_IMPORT_VTODOS => true,
+            'calDavRequestTries' => 1,
+        ]);
+
+        try {
+            $import->import();
+        } catch (Tinebase_Exception){}
+
+        $taskContainer = Tinebase_Container::getInstance()
+            ->getContainerByName(Tasks_Model_Task::class, $importCalendar->name, $importCalendar->type);
+        $tasks = Tasks_Controller_Task::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $taskContainer->getId()],
+        ]));
+        $this->assertSame(0, $tasks->count());
+    }
+
+    public function testVTodoImportTask(): void
+    {
+        $this->setUit([
+            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
+            Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
+            Calendar_Import_Abstract::OPTION_IMPORT_VTODOS => true,
+        ]);
+
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+
+        $container = Tinebase_Container::getInstance()->getDefaultContainer(Tasks_Model_Task::class);
+        $tasks = Tasks_Controller_Task::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $container->getId()],
+        ]));
+        $this->assertSame(1, $tasks->count());
+    }
+
     public function testImportWithGroupMatching(): void
     {
         $oldImapValue = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT};
