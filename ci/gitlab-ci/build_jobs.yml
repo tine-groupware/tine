@@ -64,7 +64,11 @@ docker-build-dev:
             - "8.1"
             - "8.2"
             - "8.3"
-  script:  
+  script:
+    - |
+      if [[ $ARCH == "arm64" ]]; then
+        APT_MIRROR=""
+      fi
     - |
       buildctl-daemonless.sh build \
       --frontend=dockerfile.v0 \
