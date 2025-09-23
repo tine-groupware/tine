@@ -2,7 +2,7 @@
 <application>
     <name>UserManual</name>
     <!-- gettext('User Manual') -->
-    <version>19.0</version>
+    <version>18.0</version>
     <order>200</order>
     <status>enabled</status>
 </application>

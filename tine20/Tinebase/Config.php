@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    public const TINEBASE_VERSION = 19;
+    public const TINEBASE_VERSION = 18;
 
     /**
      * access log rotation in days
