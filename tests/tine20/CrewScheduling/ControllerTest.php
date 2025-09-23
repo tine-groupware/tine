@@ -16,6 +16,10 @@ class CrewScheduling_ControllerTest extends TestCase
 {
     public function testCalEventSysCF()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ChurchEdition')) {
+            self::markTestSkipped('only works with ChurchEdition');
+        }
+
         $allRoles = CrewScheduling_Controller_SchedulingRole::getInstance()->getAll('order');
         $this->assertGreaterThan(1, $allRoles->count()); // we need at least 2
         $allTypes = Calendar_Controller_EventType::getInstance()->getAll();
@@ -75,12 +79,15 @@ class CrewScheduling_ControllerTest extends TestCase
 
         Calendar_Controller_Event::getInstance()->delete([$createdEvent->getId()]);
 
-        //$this->assertSame(0, CrewScheduling_Controller_AttendeeRole::getInstance()->getAll()->count());
         $this->assertSame(0, CrewScheduling_Controller_EventRoleConfig::getInstance()->getAll()->count());
     }
 
     public function testSearchAdbLists()
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ChurchEdition')) {
+            self::markTestSkipped('only works with ChurchEdition');
+        }
+
         $cfCfg = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook'), 'schedulingRole',
             Addressbook_Model_List::class);

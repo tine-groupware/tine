@@ -61,6 +61,7 @@ class CrewScheduling_Export_AbstractTest extends TestCase
 
     /**
      * @return array
+     * @todo remove dependency on ChurchEdition (or move test to ChurchEdition)
      */
     protected function _createSchedulingEvent()
     {

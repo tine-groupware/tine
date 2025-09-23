@@ -30,6 +30,10 @@ class CrewScheduling_Export_PdfTest extends CrewScheduling_Export_AbstractTest
      */
     protected function _testExport($_withMail)
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ChurchEdition')) {
+            self::markTestSkipped('only works with ChurchEdition');
+        }
+
         $this->_createSchedulingGroups();
 
         /*$event = */$this->_createSchedulingEvent();

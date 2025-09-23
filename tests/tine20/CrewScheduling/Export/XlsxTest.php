@@ -48,6 +48,10 @@ class CrewScheduling_Export_XlsxTest extends CrewScheduling_Export_AbstractTest
      */
     protected function _testExport($_withMail)
     {
+        if (! Tinebase_Application::getInstance()->isInstalled('ChurchEdition')) {
+            self::markTestSkipped('only works with ChurchEdition');
+        }
+
         /** @var CrewScheduling_Model_SchedulingRole $schedulingRole */
         $schedulingRole = $this->_schedulingRoles->getFirstRecord();
 
