@@ -226,11 +226,14 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
 
     /**
      * @param Felamimail_Model_Message $_message
-     * @return null
+     * @param Tinebase_Twig $_twig
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig): void
     {
-        return CrewScheduling_Controller_Poll::getInstance()->prepareMassMailingMessage($_message, $_twig);
+        CrewScheduling_Controller_Poll::getInstance()->prepareMassMailingMessage($_message, $_twig);
     }
 
     /**

@@ -190,15 +190,15 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
     /**
      * @param Felamimail_Model_Message $_message
      * @param Tinebase_Twig $_twig
-     * @return null
+     * @return void
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig): void
     {
         if (!preg_match('#/CrewScheduling/view/Poll/([a-z0-9]+)#', $_message->body, $matches)) {
-            // nothing do do here
-            return null;
+            // nothing to do here
+            return;
         }
         $pollId = $matches[1];
 
