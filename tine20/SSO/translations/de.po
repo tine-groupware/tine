@@ -178,7 +178,7 @@ msgstr "Gruppen lokal zuweisen"
 msgid "Account Name Prefix"
 msgstr "Präfix für Anmelde-Namen"
 
-msgid "String prefixed to local account display names when created from this IDP"
+msgid "String prefixed to local account names when created from this IDP"
 msgstr "Zeichenkette die lokalen Anmelde-Namen vorangestellt wird wenn durch diesen IDP erstellt"
 
 msgid "Group Name Prefix"
