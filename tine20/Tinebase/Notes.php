@@ -563,7 +563,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_array($value)) $value = $value['id'] ?? '';
                             try {
                                 $valueString = $controller->get($value, null, false, true)->getTitle();
-                            } catch(Tinebase_Exception_NotFound) {
+                            } catch(Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
                                 $valueString = $value;
                             }
                         } else {
