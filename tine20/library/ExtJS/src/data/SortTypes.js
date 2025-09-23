@@ -19,7 +19,7 @@ module.exports = {
      * @return {Mixed} The comparison value
      */
     none : function(s){
-        return s;
+        return s?.sortValue || s;
     },
     
     /**

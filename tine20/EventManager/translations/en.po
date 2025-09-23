@@ -64,20 +64,11 @@ msgstr "Manually"
 msgid "Confirmed"
 msgstr "Confirmed"
 
-msgid "Member Status"
-msgstr "Member Status"
+msgid "Waiting list"
+msgstr "Waiting list"
 
-msgid "Member"
-msgstr "Member"
-
-msgid "Not a Member"
-msgstr "Not a Member"
-
-msgid "Languages Available"
-msgstr "Languages Available"
-
-msgid "List of languages available in the modules."
-msgstr "List of languages available in the modules."
+msgid "Rescheduled"
+msgstr "Rescheduled"
 
 msgid "Level"
 msgstr "Level"
@@ -100,14 +91,86 @@ msgstr "Level 5"
 msgid "Level 6"
 msgstr "Level 6"
 
-msgid "Optional"
-msgstr "Optional"
+msgid "Option Required Type"
+msgstr "Option Required Type"
 
-msgid "Required"
-msgstr "Required"
+msgid "List of all option required type available"
+msgstr "List of all option required type available"
 
-msgid "Text block"
-msgstr "Text block"
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "If"
+msgstr "If"
+
+msgid "Display Type"
+msgstr "Display Type"
+
+msgid "List of all display type available"
+msgstr "List of all display type available"
+
+msgid "Always"
+msgstr "Always"
+
+msgid "Rule Type"
+msgstr "Rule Type"
+
+msgid "List of all rule type available"
+msgstr "List of all rule type available"
+
+msgid "One or more conditions are fulfilled"
+msgstr "One or more conditions are fulfilled"
+
+msgid "All conditions are fulfilled"
+msgstr "All conditions are fulfilled"
+
+msgid "Criteria Type"
+msgstr "Criteria Type"
+
+msgid "List of all criteria type available"
+msgstr "List of all criteria type available"
+
+msgid "is"
+msgstr "is"
+
+msgid "is not"
+msgstr "is not"
+
+msgid "greater or equal to"
+msgstr "greater or equal to"
+
+msgid "smaller than"
+msgstr "smaller than"
+
+msgid "Default Container for Contacts of an Event"
+msgstr "Default Container for Contacts of an Event"
+
+msgid "The container where new contacts are created."
+msgstr "The container where new contacts are created."
+
+msgid "Allowed file type"
+msgstr "Allowed file type"
+
+msgid "Event Folder FileManager Path"
+msgstr "Event Folder FileManager Path"
+
+msgid "EventManager registration secret string"
+msgstr "EventManager registration secret string"
+
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgstr "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Registrations"
+msgstr "Registrations"
+
+msgid "Deregistered"
+msgstr "Deregistered"
 
 msgid "Sign Up"
 msgstr "Sign Up"
@@ -115,11 +178,14 @@ msgstr "Sign Up"
 msgid "Event Information"
 msgstr "Event Information"
 
+msgid "The event should end after the start date"
+msgstr "The event should end after the start date"
+
+msgid "One should be able to register before the end date"
+msgstr "One should be able to register before the end date"
+
 msgid "Event Options"
 msgstr "Event Options"
-
-msgid "Registrations"
-msgstr "Registrations"
 
 msgid "Description"
 msgstr "Description"
@@ -127,14 +193,209 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Enter description"
 
-msgid "Booked Options"
-msgstr "Booked Options"
+msgid "Multi-appointment"
+msgstr "Multi-appointment"
 
-msgid "Options"
-msgstr "Options"
+msgid "Appointments"
+msgstr "Appointments"
+
+msgid "The session should take place before the end date. Please change the date or it would be change automatically"
+msgstr "The session should take place before the end date. Please change the date or it would be change automatically"
+
+msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+msgstr "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+
+msgid "The session should end after it begun. Please change the end time, or it would be deleted"
+msgstr "The session should end after it begun. Please change the end time, or it would be deleted"
+
+msgid "Imprint"
+msgstr "Imprint"
+
+msgid "Privacy Notice"
+msgstr "Privacy Notice"
+
+msgid "Information of the event:"
+msgstr "Information of the event:"
+
+msgid "When:"
+msgstr "When:"
+
+msgid "Until:"
+msgstr "Until:"
+
+msgid "Appointments:"
+msgstr "Appointments:"
+
+msgid "Address:"
+msgstr "Address:"
+
+msgid "Fee:"
+msgstr "Fee:"
+
+msgid "Registration possible until:"
+msgstr "Registration possible until:"
+
+msgid "Please enter your details to register for this event:"
+msgstr "Please enter your details to register for this event:"
+
+msgid "First Name:"
+msgstr "First Name:"
+
+msgid "Please enter your first name."
+msgstr "Please enter your first name."
+
+msgid "Last Name:"
+msgstr "Last Name:"
+
+msgid "Please enter your last name."
+msgstr "Please enter your last name."
+
+msgid "Email Address:"
+msgstr "Email Address:"
+
+msgid "Please enter a valid email address."
+msgstr "Please enter a valid email address."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Sending..."
+msgstr "Sending..."
+
+msgid "Send Registration Request"
+msgstr "Send Registration Request"
+
+msgid "Manage my registration"
+msgstr "Manage my registration"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Registration"
+msgstr[1] "Registrations"
+
+msgid "Events"
+msgstr "Events"
+
+msgid "More Information"
+msgstr "More Information"
+
+msgid "Website"
+msgstr "Website"
+
+msgid "Event Specific Information:"
+msgstr "Event Specific Information:"
+
+msgid "characters"
+msgstr "characters"
+
+msgid "Download file"
+msgstr "Download file"
+
+msgid "I have read and accept the terms and conditions"
+msgstr "I have read and accept the terms and conditions"
+
+msgid "Uploaded file"
+msgstr "Uploaded file"
+
+msgid "Complete Registration"
+msgstr "Complete Registration"
+
+msgid "Mr"
+msgstr "Mr"
+
+msgid "Ms"
+msgstr "Ms"
+
+msgid "Company"
+msgstr "Company"
+
+msgid "Person"
+msgstr "Person"
+
+msgid "Deutschland"
+msgstr "Deutschland"
+
+msgid "File Acknowledgement"
+msgstr "File Acknowledgement"
+
+msgid "File Upload"
+msgstr "File Upload"
+
+msgid "Multiple files not allowed"
+msgstr "Multiple files not allowed"
+
+msgid "Please select only one file."
+msgstr "Please select only one file."
+
+msgid "File type not allowed: "
+msgstr "File type not allowed: "
+
+msgid "File type not allowed"
+msgstr "File type not allowed"
+
+msgid "The type of the file \""
+msgstr "The type of the file \""
+
+msgid "\" is not allowed. Please select another file."
+msgstr "\" is not allowed. Please select another file."
+
+msgid "File Configuration"
+msgstr "File Configuration"
+
+msgid "Files"
+msgstr "Files"
 
 msgid "Name"
 msgstr "Name"
+
+msgid "Size"
+msgstr "Size"
+
+msgid "Content type"
+msgstr "Content type"
+
+msgid "Folder"
+msgstr "Folder"
+
+msgid "Creation Time"
+msgstr "Creation Time"
+
+msgid "Last Modified Time"
+msgstr "Last Modified Time"
+
+msgid "Edit Rules"
+msgstr "Edit Rules"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Failed to update rules: "
+msgstr "Failed to update rules: "
+
+msgid "Option"
+msgid_plural "Options"
+msgstr[0] "Option"
+msgstr[1] "Options"
+
+msgid "Rules"
+msgstr "Rules"
+
+msgid "Appointment"
+msgid_plural "Appointments"
+msgstr[0] "Appointment"
+msgstr[1] "Appointments"
+
+msgid "Session number"
+msgstr "Session number"
+
+msgid "Date"
+msgstr "Date"
+
+msgid "Start Time"
+msgstr "Start Time"
+
+msgid "End Time"
+msgstr "End Time"
 
 msgid "Booked Option"
 msgid_plural "Booked Options"
@@ -144,10 +405,25 @@ msgstr[1] "Booked Options"
 msgid "Event Option"
 msgstr "Event Option"
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Registration"
-msgstr[1] "Registrations"
+msgid "Selection Config"
+msgstr "Selection Config"
+
+msgid "Checkbox"
+msgid_plural "Checkbox"
+msgstr[0] "Checkbox"
+msgstr[1] "Checkbox"
+
+msgid "Price"
+msgstr "Price"
+
+msgid "Total places"
+msgstr "Total places"
+
+msgid "Booked places"
+msgstr "Booked places"
+
+msgid "Available places"
+msgstr "Available places"
 
 msgid "Event"
 msgid_plural "Events"
@@ -169,40 +445,184 @@ msgstr "Location"
 msgid "Fee"
 msgstr "Fee"
 
-msgid "Total places"
-msgstr "Total places"
-
-msgid "Booked places"
-msgstr "Booked places"
-
-msgid "Available places"
-msgstr "Available places"
-
-msgid "Double Opt-in"
-msgstr "Double Opt-in"
-
 msgid "Event Registrations"
 msgstr "Event Registrations"
+
+msgid "Event Appointments"
+msgstr "Event Appointments"
 
 msgid "Event is live"
 msgstr "Event is live"
 
-msgid "Required Contact fields"
-msgstr "Required Contact fields"
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "File"
+msgstr[1] "Files"
 
-msgid "Contact auto Tags"
-msgstr "Contact auto Tags"
+msgid "Only participant acknowledgement is necessary (no participant document upload)"
+msgstr "Only participant acknowledgement is necessary (no participant document upload)"
 
-msgid "Option"
-msgid_plural "Options"
-msgstr[0] "Option"
-msgstr[1] "Options"
+msgid "Participant should upload a file"
+msgstr "Participant should upload a file"
 
-msgid "Price"
-msgstr "Price"
+msgid "Config Class"
+msgstr "Config Class"
 
-msgid "URL"
-msgstr "URL"
+msgid "Config"
+msgstr "Config"
+
+msgid "Display"
+msgstr "Display"
+
+msgid "Option required"
+msgstr "Option required"
+
+msgid "Display Sorting"
+msgstr "Display Sorting"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+msgstr "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+
+msgid "Option rule"
+msgid_plural "Option rules"
+msgstr[0] "Option rule"
+msgstr[1] "Option rules"
+
+msgid "Criteria"
+msgstr "Criteria"
+
+msgid "Value"
+msgstr "Value"
+
+msgid "Booked options"
+msgstr "Booked options"
+
+msgid "Selection"
+msgid_plural "Selections"
+msgstr[0] "Selection"
+msgstr[1] "Selections"
+
+msgid "GENDER_Selections"
+msgstr "GENDER_Selections"
+
+msgid "Selection Config Class"
+msgstr "Selection Config Class"
+
+msgid "Booked"
+msgstr "Booked"
+
+msgid "File selection"
+msgid_plural "File selections"
+msgstr[0] "File selection"
+msgstr[1] "File selections"
+
+msgid "Participant acknowledged the document"
+msgstr "Participant acknowledged the document"
+
+msgid "Participant uploaded a file"
+msgstr "Participant uploaded a file"
+
+msgid "TextInput"
+msgid_plural "TextInputs"
+msgstr[0] "TextInput"
+msgstr[1] "TextInputs"
+
+msgid "Response"
+msgstr "Response"
+
+msgid "Text Input"
+msgid_plural "Text Input"
+msgstr[0] "Text Input"
+msgstr[1] "Text Input"
+
+msgid "Text"
+msgid_plural "Text"
+msgstr[0] "Text"
+msgstr[1] "Text"
+
+msgid "Reply should only be a number"
+msgstr "Reply should only be a number"
+
+msgid "Multiple lines reply"
+msgstr "Multiple lines reply"
+
+msgid "Maximal number of characters allowed"
+msgstr "Maximal number of characters allowed"
 
 msgid "EventManager"
 msgstr "EventManager"
+
+msgid "Salutation"
+msgstr "Salutation"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "First Name"
+msgstr "First Name"
+
+msgid "Middle Name"
+msgstr "Middle Name"
+
+msgid "Last Name"
+msgstr "Last Name"
+
+msgid "Day of Birth"
+msgstr "Day of Birth"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Mobile"
+msgstr "Mobile"
+
+msgid "Telephone"
+msgstr "Telephone"
+
+msgid "Street"
+msgstr "Street"
+
+msgid "House Nr."
+msgstr "House Nr."
+
+msgid "Postal Code"
+msgstr "Postal Code"
+
+msgid "City"
+msgstr "City"
+
+msgid "Region"
+msgstr "Region"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "Event Registration"
+msgstr "Event Registration"
+
+msgid "Enter your first name"
+msgstr "Enter your first name"
+
+msgid "Enter your last name"
+msgstr "Enter your last name"
+
+msgid "Enter your email address"
+msgstr "Enter your email address"
+
+msgid "Manage your registration"
+msgstr "Manage your registration"
+
+msgid "To manage your registration, please follow the link below"
+msgstr "To manage your registration, please follow the link below"
+
+msgid "Confirm your registration"
+msgstr "Confirm your registration"
+
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+
+msgid "Confirm E-Mail address"
+msgstr "Confirm E-Mail address"

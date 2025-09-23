@@ -286,7 +286,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 
                 if (app && fieldDefinition?.name) {
                     try {
-                        const store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, fieldDefinition.name);
+                        const store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(fieldDefinition.config?.application || app, fieldDefinition.name);
                         const data = store.getData();
                         const maxText = data.map((f) => f.i18nValue).reduce((longest, current) => {
                             return current.length > longest.length ? current : longest;

@@ -113,12 +113,20 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     public function getMatrixAccountForUser(Tinebase_Model_User $user): MatrixSynapseIntegrator_Model_MatrixAccount
     {
+        return $this->_getMatrixAccount(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
+            $user->getId()
+        );
+    }
+
+    protected function _getMatrixAccount(string $field, string $value): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
         $check = $this->doRightChecks(false);
         /** @var ?MatrixSynapseIntegrator_Model_MatrixAccount $result */
         $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             MatrixSynapseIntegrator_Model_MatrixAccount::class, [[
-                Tinebase_Model_Filter_Abstract::FIELD => MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
-                Tinebase_Model_Filter_Abstract::VALUE => $user->getId()
+                Tinebase_Model_Filter_Abstract::FIELD => $field,
+                Tinebase_Model_Filter_Abstract::VALUE => $value
             ]]
         ))->getFirstRecord();
         $this->doRightChecks($check);
@@ -126,6 +134,19 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             throw new Tinebase_Exception_NotFound('No Matrix Account found');
         }
         return $result;
+    }
+
+    /**
+     * @param string $matrixId
+     * @return MatrixSynapseIntegrator_Model_MatrixAccount
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getMatrixAccountByMatrixId(string $matrixId): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
+        return $this->_getMatrixAccount(
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID,
+            $matrixId
+        );
     }
 
     public function setCorporalBackend(
@@ -157,6 +178,71 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         }
 
         $this->getCorporalBackend()->push($matrixAccount);
+    }
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        $this->_replaceStringInMatrixId($_record);
+
+        $this->_setRandomBase64EncodedField($_record,
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY);
+        if (empty($_record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY})) {
+            $this->_setRandomBase64EncodedField($_record,
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD);
+        }
+    }
+
+    protected function _replaceStringInMatrixId(MatrixSynapseIntegrator_Model_MatrixAccount $record)
+    {
+        // TODO use twig (but how?)
+//        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+//        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
+//        $templateString = MatrixSynapseIntegrator_Model_MatrixAccount::MATRIX_ID_TWIG;
+//        $template = $twig->getEnvironment()->createTemplate($templateString);
+//        $record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} =
+//            $template->render($user->toArray());
+
+        $user = Tinebase_User::getInstance()->getUserById(
+            $record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID}
+        );
+        $record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} =
+            str_replace(MatrixSynapseIntegrator_Model_MatrixAccount::MATRIX_ID_TWIG, $user->getId(),
+                $record->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}
+            );
+    }
+
+    protected function _setRandomBase64EncodedField(MatrixSynapseIntegrator_Model_MatrixAccount $record, string $field)
+    {
+        if (empty($record->$field)) {
+            try {
+                $record->$field = base64_encode(random_bytes(32));
+            } catch (Exception) {
+                // random_bytes might fail
+                $record->$field = base64_encode(Tinebase_Record_Abstract::generateUID(32));
+            }
+        }
+    }
+
+    /**
+     * inspect update of one record (before update)
+     *
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        $this->_replaceStringInMatrixId($_record);
     }
 
     /**

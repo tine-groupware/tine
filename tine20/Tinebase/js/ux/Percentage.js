@@ -246,7 +246,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     }
     
     if(record.get('is_quarantined') === '1') {
-        const warningText = i18n._('This file might potentially harm your computer. Therefore it got quarantined and cannot be edited or downloaded.');
+        const warningText = i18n._('This file could potentially harm your computer. Therefore it has been quarantined and cannot be edited or downloaded.');
         fileName = '<div class="mime-icon-overlay x-tinebase-virus" ext:qtip="'+ Tine.Tinebase.common.doubleEncode(warningText) +'"></div>' + fileName + ' (' + i18n._('quarantined') + ')';
     }
 

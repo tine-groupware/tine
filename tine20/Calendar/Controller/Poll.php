@@ -449,6 +449,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
      */
     public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
+        if (!preg_match('#/Calendar/view/poll/([a-z0-9]+)#', $_message->body, $matches)) {
+            // nothing to do here
+            return null;
+        }
+        $pollId = $matches[1];
+
         if (!is_array($_message->to) || !isset($_message->to[0])) {
             throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
         }
@@ -458,10 +464,6 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             // nothing to do for us
             return;
         }
-        if (!preg_match('#/Calendar/view/poll/([a-z0-9]+)#', $_message->body, $matches)) {
-            throw new Tinebase_Exception_UnexpectedValue('invalid poll url found in body: ' . $_message->body);
-        }
-        $pollId = $matches[1];
 
         /** @var Calendar_Model_Poll $poll */
         if (!isset($this->_cachedPolls[$pollId])) {
@@ -565,7 +567,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
             $alternative_dates = Calendar_Controller_Poll::getInstance()->getPollEvents($pollId);
             $currentCalUser = $anonymousAccess && !$userKey ? null : 
-                Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->contact_id));
+                Calendar_Model_Attender::fromKey($anonymousAccess ? $userKey : ('user-' . Tinebase_Core::getUser()->getIdFromProperty('contact_id')));
             
             // check authkey
             // NOTE: maybe we have different authkeys for some reason, so lets check that at least one matches
@@ -666,6 +668,12 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
                 'config' => $config
             ])));
 
+            if ($anonymousAccess) {
+                $url = Tinebase_Core::getUrl() . '/Calendar/view/poll/' . $pollId
+                    . ($userKey ? '/' . $userKey : '')
+                    . ($authKey ? '/' . $authKey : '');
+                Tinebase_Expressive_Middleware_CheckRouteAuth::loginFor($url);
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));

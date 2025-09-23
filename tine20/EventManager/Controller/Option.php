@@ -50,7 +50,7 @@ class EventManager_Controller_Option extends Tinebase_Controller_Record_Abstract
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
-        $this->_handleFileUpload($_record);
+        $this->_handleOptionFileUpload($_record);
     }
 
     /**
@@ -63,54 +63,36 @@ class EventManager_Controller_Option extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
-        $this->_handleFileUpload($_updatedRecord);
+        $this->_handleOptionFileUpload($_updatedRecord);
     }
 
-    protected function _handleFileUpload(EventManager_Model_Option $_option)
+    protected function _handleOptionFileUpload(EventManager_Model_Option $_option)
     {
         if (!$_option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS} === EventManager_Model_FileOption::class) {
             return;
         }
 
-        // put uploaded tempfile into filemanager
-        if (is_string(
-            $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}->{EventManager_Model_FileOption::FLD_NODE_ID})) {
-            try {
-                $tempFile = Tinebase_TempFile::getInstance()->getTempFile(
-                    $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-                        ->{EventManager_Model_FileOption::FLD_NODE_ID}
-                );
-                $event = EventManager_Controller_Event::getInstance()->get(
-                    $_option->{EventManager_Model_Option::FLD_EVENT_ID}
-                );
-                $eventName = $event->{EventManager_Model_Event::FLD_NAME};
-                $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen";
-                $folders = ["/$eventName", "/Optionen"];
-                $nodeController = Filemanager_Controller_Node::getInstance();
-                $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
+        $nodeId = $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_NODE_ID};
 
-                foreach ($folders as $folder) {
-                    $path = $path . $folder;
-                    if (!Tinebase_FileSystem::getInstance()->isDir($prefix . $path)) {
-                        $nodeController->createNodes(
-                            [$path],
-                            [Tinebase_Model_Tree_FileObject::TYPE_FOLDER]
-                        );
-                    }
-                }
-                $fileName = $path . "/" . $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-                        ->{EventManager_Model_FileOption::FLD_FILE_NAME};
-                if (!Tinebase_FileSystem::getInstance()->fileExists($prefix . $fileName)) {
-                    $node = $nodeController->createNodes(
-                        [$fileName],
-                        [Tinebase_Model_Tree_FileObject::TYPE_FILE],
-                        [$tempFile->getId()]
-                    )->getFirstRecord();
-                    $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-                        ->{EventManager_Model_FileOption::FLD_NODE_ID} = $node->getId();
-                    $this->update($_option);
-                }
-            } catch (Tinebase_Exception_NotFound) {}
+        if (!is_string($nodeId)) {
+            return;
         }
+
+        $fileName = $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_FILE_NAME};
+
+        $eventId = $_option->{EventManager_Model_Option::FLD_EVENT_ID};
+
+        $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+        $folderPath = ['/' . $translation->_('Options')];
+
+        $updateCallback = function ($node) use ($_option) {
+            $_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_FileOption::FLD_NODE_ID} = $node->getId();
+            $this->update($_option);
+        };
+
+        EventManager_Controller::processFileUpload($nodeId, $fileName, $eventId, $folderPath, $updateCallback);
     }
 }

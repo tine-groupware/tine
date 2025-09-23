@@ -185,7 +185,7 @@ Tine.widgets.dialog.SimpleImportDialog = Ext.extend(Tine.widgets.dialog.ImportDi
                     html: '<p>' + i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Below you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
                     html: '<p>' + i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'

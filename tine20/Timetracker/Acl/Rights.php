@@ -118,16 +118,16 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $rightDescriptions = array(
             self::MANAGE_TIMEACCOUNTS  => array(
-                'text'          => $translate->_('Manage timeaccounts'),
-                'description'   => $translate->_('Add, edit and delete timeaccounts (includes all timesheet grants)'),
+                'text'          => $translate->_('Manage time accounts'),
+                'description'   => $translate->_('Add, edit and delete time accounts (includes all timesheet permissions)'),
             ),
             self::ADD_TIMEACCOUNTS  => array(
-                'text'          => $translate->_('Add timeaccounts'),
-                'description'   => $translate->_('Add timeaccounts'),
+                'text'          => $translate->_('Add time accounts'),
+                'description'   => $translate->_('Add time accounts'),
             ),
             self::MANAGE_SHARED_TIMEACCOUNT_FAVORITES => array(
-                'text'          => $translate->_('Manage shared timeaccount favorites'),
-                'description'   => $translate->_('Create or update shared timeaccount favorites'),
+                'text'          => $translate->_('Manage shared time account favorites'),
+                'description'   => $translate->_('Create or update shared time account favorites'),
             ),
             self::MANAGE_SHARED_TIMESHEET_FAVORITES => array(
                 'text'          => $translate->_('Manage shared timesheet favorites'),

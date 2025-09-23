@@ -76,7 +76,7 @@ class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DATA_SOURCE       => [
                 self::TYPE                  => self::TYPE_STRING,
-                self::LABEL                 => 'Data Source Url', // _('Data Source Url')
+                self::LABEL                 => 'Data Source URL', // _('Data Source URL')
                 self::LENGTH                => 1000,
                 self::NULLABLE              => true,
             ],

@@ -458,7 +458,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     let isValid = this.supr().validateValue();
                                     const duration = this.findParentBy((c) => {return c.getForm }).getForm().findField('duration').getValue();
                                     if (duration < 0) {
-                                        this.markInvalid(me.app.i18n._('End must not before start.'));
+                                        this.markInvalid(me.app.i18n._('End must not be before start.'));
                                         return false;
                                     }
                                     return isValid;
@@ -567,7 +567,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     ]
                 }]
             }, {
-                    title: this.app.i18n._('Timeaccount'),
+                    title: this.app.i18n._('Time Account'),
                     autoScroll: true,
                     border: false,
                     frame: true,
@@ -622,7 +622,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed'), 
                 String.format(this.app.i18n._('Could not save {0}.'), this.i18nRecordName) 
-                    + ' ( ' + this.app.i18n._('Booking deadline for this Timeaccount has been exceeded.') /* + ' ' + response.message  */ + ')'
+                    + ' ( ' + this.app.i18n._('Booking deadline for this time account has been exceeded.') /* + ' ' + response.message  */ + ')'
             );
         } else if (response.code && response.code == 444) {
             //Time Account is closed
@@ -630,8 +630,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 this.onClosedWarning.apply(this, arguments);
             } else {
                 Ext.MessageBox.alert(
-                    this.app.i18n._('Closed Timeaccount Warning!'), 
-                    String.format(this.app.i18n._('The selected Time Account is already closed.'))
+                    this.app.i18n._('Closed time account warning!'),
+                    String.format(this.app.i18n._('The selected time account is already closed.'))
                 );
             }
         } if (response.code === 650) {
@@ -646,8 +646,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
     
     onClosedWarning: function() {
-        Ext.Msg.confirm(this.app.i18n._('Closed Timeaccount Warning!'),
-            this.app.i18n._('The selected Time Account is already closed. Do you wish to continue anyway?'),
+        Ext.Msg.confirm(this.app.i18n._('Closed time account warning!'),
+            this.app.i18n._('The selected time account is already closed. Do you wish to continue anyway?'),
             function(btn) {
                 if (btn == 'yes') {
                     this.context = { 'skipClosedCheck': true };

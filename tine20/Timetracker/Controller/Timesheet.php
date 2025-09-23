@@ -713,13 +713,13 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
         if ($_oldRecord && $this->isTSDateChanged($_record, $_oldRecord) && $_record->is_cleared && !empty($_record->invoice_id)) {
             $exception = new Tinebase_Exception_Confirmation(
-                $translation->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?')
+                $translation->_('The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?')
             );
         }
 
         if (!$timeaccount->is_open) {
             $exception = new Tinebase_Exception_Confirmation(
-                $translation->_('The related Timeaccount is already closed, do you still want to execute this action?')
+                $translation->_('The related time account is already closed. Do you still want to perform this action?')
             );
         }
 

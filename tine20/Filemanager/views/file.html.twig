@@ -1,87 +1,54 @@
-{% extends 'Tinebase/views/base.html.twig' %}
+{% extends 'Filemanager/views/base.html.twig' %}
 
 {% block custom_style %}
-.path-breadcrumb {
-    background-color: #e9ecef;
-    padding: 12px 20px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    font-family: monospace;
-    word-break: break-all;
-    border-left: 4px solid #007bff;
-}
+    {{ parent() }}
+    .file-details-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 0;
+        margin-top: 20px;
+        overflow: hidden;
+        border: 1px solid #dee2e6;
+    }
 
-.file-details-card {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 0;
-    margin-top: 20px;
-    overflow: hidden;
-    border: 1px solid #dee2e6;
-}
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px 20px;
+        font-weight: 600;
+    }
 
-.card-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px 20px;
-    font-weight: 600;
-    border-bottom: 1px solid #0056b3;
-}
+    .details-table {
+        margin: 0;
+        background-color: white;
+    }
 
-.details-table {
-    margin: 0;
-    background-color: white;
-}
+    .details-table td {
+        padding: 15px 20px;
+        vertical-align: middle;
+    }
 
-.details-table td {
-    padding: 15px 20px;
-    border-bottom: 1px solid #dee2e6;
-    vertical-align: middle;
-}
+    .details-table tr:last-child td {
+        border-bottom: none;
+    }
 
-.details-table tr:last-child td {
-    border-bottom: none;
-}
+    .details-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
 
-.details-table tr:nth-child(even) {
-    background-color: #f8f9fa;
-}
+    .label-cell {
+        font-weight: 600;
+        color: #495057;
+        width: 20%;
+        background-color: #e9ecef !important;
+    }
 
-.label-cell {
-    font-weight: 600;
-    color: #495057;
-    width: 20%;
-    background-color: #e9ecef !important;
-}
-
-.value-cell {
-    color: #212529;
-    font-family: system-ui, -apple-system, sans-serif;
-}
-
-.file-name {
-    font-weight: 600;
-    color: #007bff;
-    word-break: break-all;
-}
-
-.file-size {
-    font-family: monospace;
-    color: #6c757d;
-    font-weight: 500;
-}
-
-.file-date {
-    font-family: monospace;
-    color: #6c757d;
-}
-
-.timezone-info {
-    font-size: 0.875rem;
-    color: #6c757d;
-    font-style: italic;
-}
-
+    .value-cell {
+        color: #212529;
+        font-family: system-ui, -apple-system, sans-serif;
+        display: flex;
+        align-items: center;
+    }
 {% endblock %}
 
 
@@ -92,8 +59,8 @@
 {% block content %}
     <!-- Current Path -->
     <div class="path-breadcrumb">
-        <i class="fas fa-folder me-2"></i>
-        <strong>{{ file.path }}</strong>
+        <i class="fas me-2"></i>
+        <strong>{{ path }}</strong>
     </div>
 
     <!-- File Details Card -->
@@ -105,7 +72,9 @@
                     {{ _('Name') }}
                 </td>
                 <td class="value-cell">
-                    <span class="file-name">{{ file.name|e }}</span>
+                    <span class="mime-icon mime-icon-file {{ getMimeIconCls(file) }}"></span>
+                    <i class="fas fa-file-alt me-2"></i>
+                    <span>{{ file.name|e }}</span>
                 </td>
             </tr>
 
@@ -114,7 +83,7 @@
                     {{ _('Size') }}
                 </td>
                 <td class="value-cell">
-                    <span class="file-size">{{ file.size }}</span>
+                    <span>{{ getSize(file.size) }}</span>
                 </td>
             </tr>
 
@@ -123,8 +92,7 @@
                     {{ _('Last Modified') }}
                 </td>
                 <td class="value-cell">
-                    <div class="file-date">{{ dateFormat(file.last_modified_time, Date.patterns.ISO8601Long) }}</div>
-                    <div class="timezone-info">{{ timezone }}</div>
+                    <div>{{ dateFormat(file.last_modified_time, Date.patterns.ISO8601Long) }}</div>
                 </td>
             </tr>
 
@@ -133,7 +101,7 @@
                     {{ _('Action') }}
                 </td>
                 <td class="value-cell">
-                    <a class="btn btn-primary p-2" href="{{ file.path }}" role="button">{{ _('Download') }}</a>
+                    <a class="btn btn-primary p-2" href="{{ path }}" role="button">{{ _('Download') }}</a>
                 </td>
             </tr>
             </tbody>

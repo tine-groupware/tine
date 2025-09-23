@@ -463,7 +463,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             criterias = this.getCriteriasText(filters);
 
         if (! Ext.isEmpty(criterias)) {
-            text = String.format(i18n.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criterias:', criterias.length), criterias.length) +
+            text = String.format(i18n.ngettext('Your view is limited by {0} criteria:', 'Your view is limited by {0} criteria:', criterias.length), criterias.length) +
                    '<br />' +
                    '&nbsp;' + criterias.join(', ');
         }

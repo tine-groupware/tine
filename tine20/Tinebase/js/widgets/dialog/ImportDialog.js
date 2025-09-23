@@ -249,8 +249,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             example = options && options.example ? options.example : '';
 
         const importText = (example !== '')
-            ? i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title)
-            : i18n._('Following you find a list of all supported import formats.');
+            ? i18n._('Below you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look.').replace(/Tine 2\.0/g, Tine.title)
+            : i18n._('Below you find a list of all supported import formats.');
             
         return {
             title: i18n._('Choose File and Format'),
@@ -283,7 +283,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 flex: 1,
                 items: [{
                     xtype: 'label',
-                    html: '<p>' + i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + i18n._('Tine 2.0 does not understand all kinds of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
                     html: '<p>' + importText + '</p><br />'

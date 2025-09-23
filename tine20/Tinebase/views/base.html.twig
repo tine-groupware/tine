@@ -1,14 +1,19 @@
 {#remove bootstrap.min.css after refactor all templates to singleapp template#}
 {% apply inline_css(source("Tinebase/css/build/bootstrap/bootstrap.min.css")) %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html{% if lang %} lang="{{ lang }}"{% endif %}>
 <head>
     {% block title %}
         <title>{{ _('BASE') }}</title>
     {% endblock %}
+    {% if base is defined -%}
+        <base href='{{ base }}'>
+    {% endif %}
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Tine20-Version" content="{{ constant('TINE20_PACKAGESTRING') }}" />
+    <meta name="google" content="notranslate">
+
     <style>
         :root {
             --header-height: 80px;
@@ -86,6 +91,9 @@
     </style>
 </head>
 <body>
+    {% block jsIncludes -%}
+        {%- include 'Tinebase/views/partials/jsInclude.html.twig' -%}
+    {%- endblock jsIncludes %}
     <!-- Header Section - Fixed Top Left -->
     <div class="header-section">
         {% include 'Tinebase/views/header.html.twig' %}

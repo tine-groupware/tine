@@ -43,7 +43,7 @@ Tine.widgets.grid.BbarGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.i18nEmptyText = this.i18nEmptyText ||
             String.format(i18n._(
-                "There could not be found any {0}. Please try to change your filter-criteria or view-options."),
+                "No {0} could be found. Please try changing your filter criteria or view options."),
                 this.i18nRecordsName
             );
 

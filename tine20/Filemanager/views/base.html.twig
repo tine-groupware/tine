@@ -1,0 +1,30 @@
+{% extends 'Tinebase/views/base.html.twig' %}
+
+{% block custom_style %}
+.path-breadcrumb {
+    background-color: #e9ecef;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-family: monospace;
+    word-break: break-all;
+}
+
+.mime-icon {
+    min-width: 20px;
+    min-height: 20px;
+    background-repeat: no-repeat;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+{% endblock %}

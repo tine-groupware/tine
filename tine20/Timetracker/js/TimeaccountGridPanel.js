@@ -62,7 +62,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
 
         this.action_bookmark = new Ext.Action({
-            text: i18n._('Bookmark Timeaccount'),
+            text: i18n._('Bookmark Time Account'),
             iconCls: 'action_add',
             requiredGrant: 'readGrant',
             scope: this,
@@ -139,7 +139,7 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     getContextMenuItems: function() {
         var items = [
             '-', {
-                text: Tine.Tinebase.appMgr.get('Timetracker').i18n._('Close Timeaccount'),
+                text: Tine.Tinebase.appMgr.get('Timetracker').i18n._('Close Time Account'),
                 iconCls: 'action_close',
                 scope: this,
                 disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),

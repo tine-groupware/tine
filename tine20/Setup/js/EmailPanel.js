@@ -301,7 +301,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 }
             ]
         }, {
-            title: this.app.i18n._('Smtp'),
+            title: this.app.i18n._('SMTP'),
             id: 'setup-smtp-group',
             checkboxToggle:true,
             collapsed: true,
@@ -343,7 +343,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     xtype: 'textfield'
                 }, {
                     name: 'smtp_additionaldomains',
-                    fieldLabel: this.app.i18n._('Aditional Domains (comma separated)'),
+                    fieldLabel: this.app.i18n._('Additional Domains (comma separated)'),
                     xtype: 'textfield'
                 }, {
                     name: 'smtp_from',
@@ -504,21 +504,21 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         
         return [{
             name: type1 + '_' + type2 + '_host',
-            fieldLabel: typeString + this.app.i18n._('MySql Hostname')
+            fieldLabel: typeString + this.app.i18n._('MySQL Hostname')
         }, {
             name: type1 + '_' + type2 + '_dbname',
-            fieldLabel: typeString + this.app.i18n._('MySql Database')
+            fieldLabel: typeString + this.app.i18n._('MySQL Database')
         }, {
             name: type1 + '_' + type2 + '_username',
-            fieldLabel: typeString + this.app.i18n._('MySql User')
+            fieldLabel: typeString + this.app.i18n._('MySQL User')
         }, {
             name: type1 + '_' + type2 + '_password',
-            fieldLabel: typeString + this.app.i18n._('MySql Password'),
+            fieldLabel: typeString + this.app.i18n._('MySQL Password'),
             xtype: 'tw-passwordTriggerField',
             clipboard: false
         }, {
             name: type1 + '_' + type2 + '_port',
-            fieldLabel: typeString + this.app.i18n._('MySql Port'),
+            fieldLabel: typeString + this.app.i18n._('MySQL Port'),
             value: 3306
         }];
     },

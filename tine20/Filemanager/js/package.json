@@ -1,0 +1,19 @@
+{
+  "name": "filemanager",
+  "version": "0.0.1",
+  "description": "Tine 2.0 Filemanager",
+  "main": "Filemanager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "filemanager"
+  ],
+  "author": "Cornelius Weiß",
+  "license": "AGPL-3.0",
+  "tine20": {
+    "entryPoints": [
+      "publicDownload/index.js"
+    ]
+  }
+}

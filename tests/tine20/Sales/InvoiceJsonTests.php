@@ -291,13 +291,14 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
             $this->assertEquals('billed', $ta->status);
         }
 
-        //test update ts date after status set to is_cleared
+        // test update ts date after status set to is_cleared
         try {
             $timesheets[0]->start_time = '10:00:00';
             $tsController->update($timesheets[0]);
             self::fail('should throw Tinebase_Exception_Confirmation!');
         } catch (Tinebase_Exception_Confirmation $tec) {
-            self::assertEquals(Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_('The Invoice you tried to edit is cleared already, change date will rebill the invoice, do you still want to execute this action?'), $tec->getMessage());
+            self::assertEquals(Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)
+                ->_('The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?'), $tec->getMessage());
         }
     }
 

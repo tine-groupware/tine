@@ -21,9 +21,9 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
     public const FLD_DESCRIPTION = 'description';
     public const FLD_ACCOUNT_ID = 'account_id';
     // public const FLD_ACTIVE = 'active';
-    public const FLD_CC_ID = 'cc_id';
-    public const FLD_MATRIX_ACCESS_TOKEN = 'matrix_access_token';
-    public const FLD_MATRIX_DEVICE_ID = 'matrix_device_id';
+    public const FLD_CC_ID_RECOVERY_PASSWORD = 'cc_id_recovery_password';
+    public const FLD_CC_ID_RECOVERY_KEY = 'cc_id_recovery_key';
+    public const FLD_CC_ID_SESSION_KEY = 'cc_id_session_key';
     public const FLD_MATRIX_ID = 'matrix_id';
     public const FLD_MATRIX_RECOVERY_KEY = 'matrix_recovery_key';
     public const FLD_MATRIX_RECOVERY_PASSWORD = 'matrix_recovery_password';
@@ -31,6 +31,8 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
 
     public const MODEL_NAME_PART = 'MatrixAccount';
     public const TABLE_NAME = 'matrix_account';
+
+    public const MATRIX_ID_TWIG = '@{user.id}';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -95,27 +97,21 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false],
                self::LABEL                     => 'Account', // _('Account')
             ],
-            self::FLD_CC_ID => [
+            self::FLD_CC_ID_RECOVERY_PASSWORD => [
                 self::DISABLED      => true,
                 self::NULLABLE      => true,
                 self::TYPE          => self::TYPE_STRING,
             ],
-            self::FLD_MATRIX_ACCESS_TOKEN => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL                     => 'Matrix Access Token', // _('Matrix Access Token')
+            self::FLD_CC_ID_RECOVERY_KEY => [
+                self::DISABLED      => true,
+                self::NULLABLE      => true,
+                self::TYPE          => self::TYPE_STRING,
             ],
-            self::FLD_MATRIX_DEVICE_ID => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL                     => 'Matrix Device ID', // _('Matrix Device ID')
-                self::QUERY_FILTER              => true,
+            self::FLD_CC_ID_SESSION_KEY => [
+                self::DISABLED      => true,
+                self::NULLABLE      => true,
+                self::TYPE          => self::TYPE_STRING,
             ],
-            // device id is a transliterate from branding with an alphanumeric at the end
             self::FLD_MATRIX_ID                  => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
@@ -130,14 +126,18 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
                 self::TYPE                      => self::TYPE_PASSWORD,
                 self::CONFIG        => [
                     self::CREDENTIAL_CACHE => 'shared',
-                    self::REF_ID_FIELD => self::FLD_CC_ID,
+                    self::REF_ID_FIELD => self::FLD_CC_ID_RECOVERY_PASSWORD,
                 ],
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Matrix Recovery Password', // _('Matrix Recovery Password')
             ],
             self::FLD_MATRIX_RECOVERY_KEY => [
-                self::TYPE                      => self::TYPE_STRING,
+                self::TYPE                      => self::TYPE_PASSWORD,
+                self::CONFIG        => [
+                    self::CREDENTIAL_CACHE => 'shared',
+                    self::REF_ID_FIELD => self::FLD_CC_ID_RECOVERY_KEY,
+                ],
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -149,7 +149,11 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
             // (It is used to "bind" the lifetime of the matrix index db to the session store)
             // example value: '2sPibjzJ8tbmmZFQ19Ncw9DMZuGqFlIQyG3zUTM3NCE='
             self::FLD_MATRIX_SESSION_KEY => [
-                self::TYPE                      => self::TYPE_STRING,
+                self::TYPE                      => self::TYPE_PASSWORD,
+                self::CONFIG        => [
+                    self::CREDENTIAL_CACHE => 'shared',
+                    self::REF_ID_FIELD => self::FLD_CC_ID_SESSION_KEY,
+                ],
                 self::LENGTH                    => 44,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],

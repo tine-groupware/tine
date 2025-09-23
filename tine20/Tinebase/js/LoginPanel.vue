@@ -212,7 +212,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
           {{ i18n._('Your browser is not supported by Tine 2.0.') }}
         </p>
         <p v-else-if="browserSupport === 'unknown'">
-          {{ i18n._('You are using an unrecognized browser. This could result in unexpected behaviour.') }}
+          {{ i18n._('You are using an unrecognized browser. This could result in unexpected behavior.') }}
         </p>
         <p>{{ i18n._('You might try one of these browsers:') }}<br/>
           <a href="https://www.google.com/chrome" target="_blank">Google Chrome</a><br/>
@@ -225,7 +225,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
         <div v-if="licenseCheck === 'status_license_invalid'">
           <p class="fw-semibold fs-3">{{ String.format(i18n._('Your {0} license expired.'), Tine.title) }}</p>
           <p>
-            {{ String.format(i18n._('Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license.'), Tine.title) }}</p>
+            {{ String.format(i18n._('Your {0} license has expired! Users cannot log in anymore. Please contact Metaways Infosystems GmbH to buy a new license.'), Tine.title) }}</p>
         </div>
         <div v-else>
           <p class="fw-bold fs-3">{{ String.format(i18n._('{0} trial'), Tine.title) }}</p>

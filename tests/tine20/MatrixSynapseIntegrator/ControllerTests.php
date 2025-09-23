@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  *
  * @package     MatrixSynapseIntegrator
  * @subpackage  Test
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -37,7 +37,6 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         $this->_oldRequest = Tinebase_Core::getContainer()->get(RequestInterface::class);
 
         $this->_uit = MatrixSynapseIntegrator_Controller::getInstance();
-
     }
 
     public function tearDown(): void
@@ -104,13 +103,21 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
     {
         $this->_skipIfLDAPBackend();
 
-        $mxid = '@' . Tinebase_Core::getUser()->accountLoginName . ':' .
-            MatrixSynapseIntegrator_Controller::getInstance()->getMatrixDomain();
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount(
+                MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData()
+            )
+        );
+        $mxid = $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+
         $fh = fopen('php://memory', 'rw');
         fwrite($fh, json_encode([
             'user' => [
                 'id'       => $mxid,
-                'password' => Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials())
+                'password' => Tinebase_Helper::array_value(
+                    'password',
+                    TestServer::getInstance()->getTestCredentials()
+                )
             ]
         ]));
         rewind($fh);
@@ -296,5 +303,17 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
                 ]
             ]
         ], json_decode((string)$response->getBody(), true));
+    }
+
+    public static function getMatrixAccountData(?Tinebase_Model_FullUser $user = null): array
+    {
+        if (!$user) {
+            $user = Tinebase_Core::getUser();
+        }
+        return [
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID => $user->getId(),
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID => '@' . $user->getId() . ':matrix.domain',
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD => 'somepw',
+        ];
     }
 }

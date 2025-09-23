@@ -45,7 +45,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
         self::FIELDS                        => [
             self::FLD_PUBLIC_ID                 => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                         => 'Yubico OTP public id', // _('Yubico OTP public id')
+                self::LABEL                         => 'Yubico OTP public ID', // _('Yubico OTP public ID')
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -54,7 +54,7 @@ class Tinebase_Model_MFA_YubicoOTPUserConfig extends Tinebase_Auth_MFA_AbstractU
             ],
             self::FLD_PRIVAT_ID                 => [
                 self::TYPE                          => self::TYPE_STRING,
-                self::LABEL                         => 'Yubico OTP privat id', // _('Yubico OTP privat id')
+                self::LABEL                         => 'Yubico OTP privat ID', // _('Yubico OTP privat ID')
             ],
             self::FLD_AES_KEY                   => [
                 self::TYPE                          => self::TYPE_STRING,

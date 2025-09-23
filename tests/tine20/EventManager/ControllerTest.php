@@ -150,15 +150,6 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
         self::assertNotEquals($tempfId, $node_id);
-
-        // make sure that uploaded file (from temp file) is put into filemanager (path shared/Veranstaltungen/_eventname_/Optionen/_uploadedfilename_)
-        $eventName = $event->{EventManager_Model_Event::FLD_NAME};
-        $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
-        $file_name = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
-            ->{EventManager_Model_FileOption::FLD_FILE_NAME};
-        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . "/Veranstaltungen/$eventName/Optionen/$file_name";
-        $exists = Tinebase_FileSystem::getInstance()->fileExists($prefix . $path);
-        self::assertTrue($exists);
     }
 
     public function testFileUploadToRegistration()
@@ -181,6 +172,30 @@ class EventManager_ControllerTest extends TestCase
         self::assertNotEquals($tempfId, $node_id);
     }
 
+    public function testFileUploadToRegistrationAnonymousUser()
+    {
+        $event = $this->_getEvent();
+        EventManager_Controller_Event::getInstance()->create($event);
+        $option = $this->_getFileOption($event->getId());
+        $tempfId = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_FileOption::FLD_NODE_ID};
+        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $createdOption);
+        //anonymous user
+        $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
+        Tinebase_Core::setUser($user);
+
+        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $event = EventManager_Controller_Event::getInstance()->get($event->getId());
+
+        //check that file node is returned
+        $node_id = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}->getFirstRecord()
+            ->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->getFirstRecord()
+            ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+            ->{EventManager_Model_Selections_File::FLD_NODE_ID};
+        self::assertNotEquals($tempfId, $node_id);
+    }
+
     public function testMoreThanOneBookedOptionTypeToRegistration()
     {
         $event = $this->_getEvent();
@@ -192,6 +207,7 @@ class EventManager_ControllerTest extends TestCase
         $bookedOptions = [$createdOption1, $createdOption2];
         $registration = $this->_getRegistration($event->getId(), $bookedOptions);
         $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        self::assertEquals(count($createdRegistration->booked_options), count($bookedOptions));
     }
 
     /************ protected helper funcs *************/
@@ -213,13 +229,18 @@ class EventManager_ControllerTest extends TestCase
             'adr_one_locality' => 'Test City'
         ]));
 
+        $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE);
+        $event_type = $event_type->records->getById('1');
+        $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS);
+        $event_status = $event_status->records->getById('1');
+
         return new EventManager_Model_Event([
             'name'                          => 'phpunit event',
             'start'                         => new Tinebase_DateTime("2025-05-28"),
             'end'                           => new Tinebase_DateTime("2025-05-31"),
             'location'                      => $contact,
-            'type'                          => EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE, 'Main Event'),
-            'status'                        => EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS, 'Open'),
+            'type'                          => $event_type,
+            'status'                        => $event_status,
             'fee'                           => 0,
             'total_places'                  => 50,
             'booked_places'                 => 0,
@@ -248,20 +269,28 @@ class EventManager_ControllerTest extends TestCase
             'available_places' => 10,
             'description' => 'description checkbox phpunit',
         ]);
+        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $display = $display->records->getById('1');
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $option_required = $option_required->records->getById('2');
+        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
+        $level = $level->records->getById('1');
+        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE);
+        $rule_type = $rule_type->records->getById('1');
 
         return new EventManager_Model_Option([
             'event_id'                  => $event_id,
             'name_option'               => 'phpunit checkbox option',
             'option_config'             => $option_config_checkbox,
             'option_config_class'       => EventManager_Model_CheckboxOption::class,
-            'display'                   => EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE, 'Always'),
-            'option_required'           => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE, 'No'),
+            'display'                   => $display,
+            'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
             'group_sorting'             => 1,
-            'level'                     => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL, 'Level 1'),
+            'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],
-            'rule_type'                 => EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE, 'One or more conditions are fulfilled'),
+            'rule_type'                 => $rule_type,
         ],true);
     }
 
@@ -279,20 +308,28 @@ class EventManager_ControllerTest extends TestCase
             'file_type' => $tempfile->type,
             'file_size' => $tempfile->size,
         ]);
+        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $display = $display->records->getById('1');
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $option_required = $option_required->records->getById('2');
+        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
+        $level = $level->records->getById('1');
+        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE);
+        $rule_type = $rule_type->records->getById('1');
 
         return new EventManager_Model_Option([
             'event_id'                  => $event_id,
             'name_option'               => 'phpunit file option',
             'option_config'             => $option_config_fileoption,
             'option_config_class'       => EventManager_Model_FileOption::class,
-            'display'                   => EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE, 'Always'),
-            'option_required'           => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE, 'No'),
+            'display'                   => $display,
+            'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
             'group_sorting'             => 1,
-            'level'                     => EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL, 'Level 1'),
+            'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],
-            'rule_type'                 => EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE, 'One or more conditions are fulfilled'),
+            'rule_type'                 => $rule_type,
         ],true);
     }
 

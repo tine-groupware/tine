@@ -51,10 +51,10 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      */
     protected static $_modelConfiguration = array(
         'version'           => 15,
-        'containerName'     => 'Timeaccount',
-        'containersName'    => 'Timeaccounts',
-        'recordName'        => 'Timeaccount',
-        'recordsName'       => 'Timeaccounts', // ngettext('Timeaccount', 'Timeaccounts', n)
+        'containerName'     => 'Time Account',
+        'containersName'    => 'Time Accounts',
+        'recordName'        => 'Time Account',
+        'recordsName'       => 'Time Accounts', // ngettext('Time Account', 'Time Accounts', n)
         'hasRelations'      => TRUE,
         'copyRelations'     => FALSE,
         'hasCustomFields'   => TRUE,

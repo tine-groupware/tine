@@ -64,7 +64,7 @@ Ext.extend(Tine.Timetracker.TimeaccountFavoritesPanel, Ext.tree.TreePanel, {
         this.root = {
             path: '/',
             cls: 'tinebase-tree-hide-collapsetool',
-            text: this.app.i18n._('Timeaccount Favorites'),
+            text: this.app.i18n._('Time Account Favorites'),
             iconCls: 'folder',
             expanded: true,
             children: favorites

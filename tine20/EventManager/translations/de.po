@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-01-27 11:45+0100\n"
+"PO-Revision-Date: 2025-09-22 10:07+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.7\n"
 
 msgid "Type"
 msgstr "Typ"
@@ -51,7 +51,7 @@ msgid "Attendee"
 msgstr "Teilnehmende"
 
 msgid "Speaker"
-msgstr "vortragende Person"
+msgstr "Vortragende Person"
 
 msgid "Moderator"
 msgstr "Moderator*in"
@@ -68,20 +68,11 @@ msgstr "Manuell"
 msgid "Confirmed"
 msgstr "Bestätigt"
 
-msgid "Member Status"
-msgstr "Mitgliedsstatus"
+msgid "Waiting list"
+msgstr "Warteliste"
 
-msgid "Member"
-msgstr "Mitglied"
-
-msgid "Not a Member"
-msgstr "Kein Mitglied"
-
-msgid "Languages Available"
-msgstr "Verfügbare Sprachen"
-
-msgid "List of languages available in the modules."
-msgstr "Liste der in den Modulen verfügbaren Sprachen."
+msgid "Rescheduled"
+msgstr "Verschoben"
 
 msgid "Level"
 msgstr "Ebene"
@@ -104,14 +95,86 @@ msgstr "Ebene 5"
 msgid "Level 6"
 msgstr "Ebene 6"
 
-msgid "Optional"
-msgstr "Optional"
+msgid "Option Required Type"
+msgstr "Option erforderlich Typ"
 
-msgid "Required"
-msgstr "Erforderlich"
+msgid "List of all option required type available"
+msgstr "Liste aller verfügbaren erforderlichen Optionstypen"
 
-msgid "Text block"
-msgstr "Textbaustein"
+msgid "Yes"
+msgstr "Ja"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "If"
+msgstr "Wenn"
+
+msgid "Display Type"
+msgstr "Anzeigetyp"
+
+msgid "List of all display type available"
+msgstr "Liste aller verfügbaren Anzeigetypen"
+
+msgid "Always"
+msgstr "Immer"
+
+msgid "Rule Type"
+msgstr "Regeltyp"
+
+msgid "List of all rule type available"
+msgstr "Liste aller verfügbaren Regeltypen"
+
+msgid "One or more conditions are fulfilled"
+msgstr "Eine oder mehrere Bedingungen sind erfüllt"
+
+msgid "All conditions are fulfilled"
+msgstr "Alle Bedingungen sind erfüllt"
+
+msgid "Criteria Type"
+msgstr "Kriteriumstyp"
+
+msgid "List of all criteria type available"
+msgstr "Liste aller verfügbaren Kriterientypen"
+
+msgid "is"
+msgstr "Ist"
+
+msgid "is not"
+msgstr "Ist nicht"
+
+msgid "greater or equal to"
+msgstr "gleich oder größer als"
+
+msgid "smaller than"
+msgstr "kleiner als"
+
+msgid "Default Container for Contacts of an Event"
+msgstr "Standard Ordner für Kontakte einer Veranstaltung"
+
+msgid "The container where new contacts are created."
+msgstr "Der Ordner, in dem neue Kontakte erstellt werden."
+
+msgid "Allowed file type"
+msgstr "Zulässiger Dateityp"
+
+msgid "Event Folder FileManager Path"
+msgstr "Veranstaltungsordner Dateimanager Pfad"
+
+msgid "EventManager registration secret string"
+msgstr "EventManager-Registrierungs-Geheimstring"
+
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
+
+msgid "Options"
+msgstr "Optionen"
+
+msgid "Registrations"
+msgstr "Registrierung"
+
+msgid "Deregistered"
+msgstr "Abgemeldet"
 
 msgid "Sign Up"
 msgstr "Anmelden"
@@ -119,94 +182,541 @@ msgstr "Anmelden"
 msgid "Event Information"
 msgstr "Eventinformationen"
 
+msgid "The event should end after the start date"
+msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
+
+msgid "One should be able to register before the end date"
+msgstr "Man sollte sich vor dem Enddatum registrieren können"
+
 msgid "Event Options"
 msgstr "Eventoptionen"
-
-msgid "Registrations"
-msgstr "Registrierung"
 
 msgid "Description"
 msgstr "Beschreibung"
 
 msgid "Enter description"
-msgstr ""
+msgstr "Beschreibung eingeben"
 
-msgid "Booked Options"
-msgstr ""
+msgid "Multi-appointment"
+msgstr "Mehrfachtermin"
 
-msgid "Options"
-msgstr ""
+msgid "Appointments"
+msgstr "Termine"
+
+msgid "The session should take place before the end date. Please change the date or it would be change automatically"
+msgstr "Die Sitzung sollte vor dem Enddatum stattfinden. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+
+msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+msgstr "Die Sitzung sollte am selben Tag oder nach Beginn der Veranstaltung beginnen. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+
+msgid "The session should end after it begun. Please change the end time, or it would be deleted"
+msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie die Endzeit, da sie sonst gelöscht wird"
+
+msgid "Imprint"
+msgstr "Impressum"
+
+msgid "Privacy Notice"
+msgstr "Datenschutzerklärung"
+
+msgid "Information of the event:"
+msgstr "Informationen zur Veranstaltung:"
+
+msgid "When:"
+msgstr "Von:"
+
+msgid "Until:"
+msgstr "Bis:"
+
+msgid "Appointments:"
+msgstr "Termine:"
+
+msgid "Address:"
+msgstr "Adresse:"
+
+msgid "Fee:"
+msgstr "Gebühr:"
+
+msgid "Registration possible until:"
+msgstr "Anmeldung möglich bis:"
+
+msgid "Please enter your details to register for this event:"
+msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
+
+msgid "First Name:"
+msgstr "Vorname:"
+
+msgid "Please enter your first name."
+msgstr "Bitte geben Sie Ihren Vornamen ein."
+
+msgid "Last Name:"
+msgstr "Nachname:"
+
+msgid "Please enter your last name."
+msgstr "Bitte geben Sie Ihren Nachnamen ein."
+
+msgid "Email Address:"
+msgstr "E-Mail-Adresse:"
+
+msgid "Please enter a valid email address."
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Sending..."
+msgstr "Anfrage senden…"
+
+msgid "Send Registration Request"
+msgstr "Anmeldeanfrage senden"
+
+msgid "Manage my registration"
+msgstr "Meine Registrierung verwalten"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Anmeldung"
+msgstr[1] "Anmeldungen"
+
+msgid "Events"
+msgstr "Veranstaltungen"
+
+msgid "More Information"
+msgstr "Mehr Information"
+
+msgid "Website"
+msgstr "Webseite"
+
+msgid "Event Specific Information:"
+msgstr "Veranstaltungsspezifische Informationen:"
+
+msgid "characters"
+msgstr "Zeichen"
+
+msgid "Download file"
+msgstr "Datei herunterladen"
+
+msgid "I have read and accept the terms and conditions"
+msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
+
+msgid "Uploaded file"
+msgstr "Hochgeladene Datei"
+
+msgid "Complete Registration"
+msgstr "Registrierung abschließen"
+
+msgid "Mr"
+msgstr "Herr"
+
+msgid "Ms"
+msgstr "Frau"
+
+msgid "Company"
+msgstr "Firma / Organisation"
+
+msgid "Person"
+msgstr "Person"
+
+msgid "Deutschland"
+msgstr "Deutschland"
+
+msgid "File Acknowledgement"
+msgstr "Bestätigung der Datei"
+
+msgid "File Upload"
+msgstr "Datei-Upload"
+
+msgid "Multiple files not allowed"
+msgstr "Das Hochladen mehrerer Dateien ist nicht erlaubt"
+
+msgid "Please select only one file."
+msgstr "Bitte wählen Sie nur eine Datei aus."
+
+msgid "File type not allowed: "
+msgstr "Dateityp nicht zulässig: "
+
+msgid "File type not allowed"
+msgstr "Dateityp nicht zulässig"
+
+msgid "The type of the file \""
+msgstr "Der Typ der Datei „"
+
+msgid "\" is not allowed. Please select another file."
+msgstr "\" ist nicht zulässig. Bitte wählen Sie eine andere Datei aus."
+
+msgid "File Configuration"
+msgstr "Dateikonfiguration"
+
+msgid "Files"
+msgstr "Dateien"
 
 msgid "Name"
 msgstr "Name"
 
-msgid "Booked Option"
-msgid_plural "Booked Options"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Size"
+msgstr "Größe"
 
-msgid "Event Option"
-msgstr ""
+msgid "Content type"
+msgstr "Inhaltstyp"
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Folder"
+msgstr "Ordner"
 
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Creation Time"
+msgstr "Erstellungszeit"
 
-msgid "Event start"
-msgstr ""
+msgid "Last Modified Time"
+msgstr "Letzte Änderungszeit"
 
-msgid "Event end"
-msgstr ""
+msgid "Edit Rules"
+msgstr "Regeln bearbeiten"
 
-msgid "Registration possible until"
-msgstr ""
+msgid "Error"
+msgstr "Fehler"
 
-msgid "Location"
-msgstr ""
-
-msgid "Fee"
-msgstr ""
-
-msgid "Total places"
-msgstr ""
-
-msgid "Booked places"
-msgstr ""
-
-msgid "Available places"
-msgstr ""
-
-msgid "Double Opt-in"
-msgstr ""
-
-msgid "Event Registrations"
-msgstr ""
-
-msgid "Event is live"
-msgstr ""
-
-msgid "Required Contact fields"
-msgstr ""
-
-msgid "Contact auto Tags"
-msgstr ""
+msgid "Failed to update rules: "
+msgstr "Aktualisierung der Regeln fehlgeschlagen: "
 
 msgid "Option"
 msgid_plural "Options"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Option"
+msgstr[1] "Optionen"
+
+msgid "Rules"
+msgstr "Regeln"
+
+msgid "Appointment"
+msgid_plural "Appointments"
+msgstr[0] "Termin"
+msgstr[1] "Termine"
+
+msgid "Session number"
+msgstr "Sitzungsnummer"
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Start Time"
+msgstr "Startzeit"
+
+msgid "End Time"
+msgstr "Endzeit"
+
+msgid "Booked Option"
+msgid_plural "Booked Options"
+msgstr[0] "Gebuchte Option"
+msgstr[1] "Gebuchte Optionen"
+
+msgid "Event Option"
+msgstr "Veranstaltungsoption"
+
+msgid "Selection Config"
+msgstr "Auswahlkonfiguration"
+
+#, fuzzy
+msgid "Checkbox"
+msgid_plural "Checkbox"
+msgstr[0] "Checkbox"
+msgstr[1] "Checkboxes"
 
 msgid "Price"
-msgstr ""
+msgstr "Preis"
 
-msgid "URL"
-msgstr "URL"
+msgid "Total places"
+msgstr "Gesamtzahl der Plätze"
+
+msgid "Booked places"
+msgstr "Gebuchte Plätze"
+
+msgid "Available places"
+msgstr "Verfügbare Plätze"
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Veranstaltung"
+msgstr[1] "Veranstaltungen"
+
+msgid "Event start"
+msgstr "Veranstaltungsbeginn"
+
+msgid "Event end"
+msgstr "Veranstaltungsende"
+
+msgid "Registration possible until"
+msgstr "Anmeldung möglich bis"
+
+msgid "Location"
+msgstr "Standort"
+
+msgid "Fee"
+msgstr "Gebühr"
+
+msgid "Event Registrations"
+msgstr "Veranstaltungsanmeldungen"
+
+msgid "Event Appointments"
+msgstr "Veranstaltungstermine"
+
+msgid "Event is live"
+msgstr "Veranstaltung ist live"
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Datei"
+msgstr[1] "Dateien"
+
+msgid "Only participant acknowledgement is necessary (no participant document upload)"
+msgstr "Nur die Bestätigung der Teilnehmer ist erforderlich (kein Hochladen von Teilnehmerdokumenten)."
+
+msgid "Participant should upload a file"
+msgstr "Die Teilnehmer sollten eine Datei hochladen"
+
+msgid "Config Class"
+msgstr "Konfigurationklasse"
+
+msgid "Config"
+msgstr "Konfiguration"
+
+msgid "Display"
+msgstr "Anzeigen"
+
+msgid "Option required"
+msgstr "Option erforderlich"
+
+msgid "Display Sorting"
+msgstr "Anzeigesortierung"
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+msgstr "Wenn Sie mehrere Optionen als Gruppe festlegen möchten, sodass nur eine Option aus der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
+
+msgid "Option rule"
+msgid_plural "Option rules"
+msgstr[0] "Optionsregel"
+msgstr[1] "Optionsregeln"
+
+msgid "Criteria"
+msgstr "Kriterium"
+
+msgid "Value"
+msgstr "Wert"
+
+msgid "Booked options"
+msgstr "Gebuchte Optionen"
+
+msgid "Selection"
+msgid_plural "Selections"
+msgstr[0] "Auswahl"
+msgstr[1] "Auswahl"
+
+msgid "GENDER_Selections"
+msgstr "GENDER_Auswahl"
+
+msgid "Selection Config Class"
+msgstr "Auswahlkonfigurationsklasse"
+
+msgid "Booked"
+msgstr "Gebucht"
+
+msgid "File selection"
+msgid_plural "File selections"
+msgstr[0] "Dateiauswahl"
+msgstr[1] "Dateiauswahl"
+
+msgid "Participant acknowledged the document"
+msgstr "Der Teilnehmer hat das Dokument zur Kenntnis genommen"
+
+msgid "Participant uploaded a file"
+msgstr "Teilnehmer hat eine Datei hochgeladen"
+
+msgid "TextInput"
+msgid_plural "TextInputs"
+msgstr[0] "Texteingabe"
+msgstr[1] "Texteingaben"
+
+msgid "Response"
+msgstr "Antwort"
+
+msgid "Text Input"
+msgid_plural "Text Input"
+msgstr[0] "Texteingabe"
+msgstr[1] "Texteingabe"
+
+#, fuzzy
+msgid "Text"
+msgid_plural "Text"
+msgstr[0] "Text"
+msgstr[1] "Text"
+
+msgid "Reply should only be a number"
+msgstr "Die Antwort sollte nur eine Zahl sein"
+
+msgid "Multiple lines reply"
+msgstr "Mehrere Zeilen Antwort"
+
+msgid "Maximal number of characters allowed"
+msgstr "Maximal zulässige Zeichenanzahl"
 
 msgid "EventManager"
-msgstr ""
+msgstr "Veranstaltungsmanager"
+
+msgid "Salutation"
+msgstr "Anrede"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "First Name"
+msgstr "Vorname"
+
+msgid "Middle Name"
+msgstr "Zweiter Vorname"
+
+msgid "Last Name"
+msgstr "Nachname"
+
+msgid "Day of Birth"
+msgstr "Geburtstag"
+
+msgid "E-mail"
+msgstr "E-mail"
+
+msgid "Mobile"
+msgstr "Handy"
+
+msgid "Telephone"
+msgstr "Telefon"
+
+msgid "Street"
+msgstr "Straße"
+
+msgid "House Nr."
+msgstr "Hsnr."
+
+msgid "Postal Code"
+msgstr "Postleitzahl"
+
+msgid "City"
+msgstr "Ort"
+
+msgid "Region"
+msgstr "Bundesland"
+
+msgid "Country"
+msgstr "Land"
+
+msgid "Event Registration"
+msgstr "Veranstaltungsanmeldung"
+
+msgid "Enter your first name"
+msgstr "Geben Sie Ihren Vornamen ein"
+
+msgid "Enter your last name"
+msgstr "Geben Sie Ihren Nachnamen ein"
+
+msgid "Enter your email address"
+msgstr "Geben Sie Ihre E-Mail-Adresse ein"
+
+msgid "Manage your registration"
+msgstr "Verwalten Sie Ihre Registrierung"
+
+msgid "To manage your registration, please follow the link below"
+msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+
+msgid "Confirm your registration"
+msgstr "Bestätigen Sie Ihre Registrierung"
+
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+
+msgid "Confirm E-Mail address"
+msgstr "E-Mail-Adresse bestätigen"
+
+#~ msgid "To manage your registration, please follow thie link below"
+#~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+
+#~ msgid "Event Folder FileManager Path Options"
+#~ msgstr "Veranstaltungsordner Dateimanager Pfad Optionen"
+
+#~ msgid "Please enter your email address to register for this event:"
+#~ msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um sich für diese Veranstaltung anzumelden:"
+
+#~ msgid "Checkbox Option "
+#~ msgid_plural "Checkbox Options"
+#~ msgstr[0] "Checkbox Option "
+#~ msgstr[1] "Checkbox Optionen"
+
+#~ msgid "File Option"
+#~ msgid_plural "File Options"
+#~ msgstr[0] "Datei Option"
+#~ msgstr[1] "Datei Optionen"
+
+#~ msgid "Option Config Class"
+#~ msgstr "Option Konfigurationsklasse"
+
+#~ msgid "Option Config"
+#~ msgstr "Option Konfiguration"
+
+#~ msgid "Text Input Option "
+#~ msgid_plural "Text Input Options"
+#~ msgstr[0] "Texteingabe Option "
+#~ msgstr[1] "Texteingabe Optionen"
+
+#~ msgid "Text Option "
+#~ msgid_plural "Text Options"
+#~ msgstr[0] "Text Option "
+#~ msgstr[1] "Text Optionen"
+
+#~ msgid "/Events"
+#~ msgstr "/Veranstaltungen"
+
+#~ msgid "to the top"
+#~ msgstr "nach oben"
+
+#~ msgid "Edit Option Rules"
+#~ msgstr "Bearbeiten Sie die Optionsregeln"
+
+#, python-brace-format
+#~ msgid "Transferring {0}..."
+#~ msgstr "Übertragung von {0}..."
+
+#, python-brace-format
+#~ msgid "Copy {0}"
+#~ msgstr "Kopieren {0}"
+
+#~ msgid "Edit Rules for: "
+#~ msgstr "Regeln bearbeiten für:"
+
+#~ msgid "Option Name"
+#~ msgstr "Optionsname"
+
+#~ msgid "Option Required"
+#~ msgstr "Option erforderlich"
+
+#~ msgid "Member Status"
+#~ msgstr "Mitgliedsstatus"
+
+#~ msgid "Member"
+#~ msgstr "Mitglied"
+
+#~ msgid "Not a Member"
+#~ msgstr "Kein Mitglied"
+
+#~ msgid "Languages Available"
+#~ msgstr "Verfügbare Sprachen"
+
+#~ msgid "List of languages available in the modules."
+#~ msgstr "Liste der in den Modulen verfügbaren Sprachen."
+
+#~ msgid "Optional"
+#~ msgstr "Optional"
+
+#~ msgid "Required"
+#~ msgstr "Erforderlich"
+
+#~ msgid "Text block"
+#~ msgstr "Textbaustein"
+
+#~ msgid "URL"
+#~ msgstr "URL"

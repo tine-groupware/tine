@@ -32,8 +32,8 @@ class EventManager_Model_CheckboxOption  extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'Checkbox Option ',
-        self::RECORDS_NAME          => 'Checkbox Options', // ngettext('Checkbox Option ', 'Checkbox Options', n)
+        self::RECORD_NAME           => 'Checkbox',
+        self::RECORDS_NAME          => 'Checkbox', // ngettext('Checkbox', 'Checkbox', n)
 
         self::FIELDS => [
             self::FLD_PRICE     => [

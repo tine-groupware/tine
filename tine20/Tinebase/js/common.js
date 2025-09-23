@@ -965,7 +965,7 @@ const common = {
      * @param Boolean closewindow
      */
     confirmApplicationRestart: function (closewindow) {
-        Ext.Msg.confirm(i18n._('Confirm'), i18n._('Restart application to apply new configuration?'), function (btn) {
+        Ext.Msg.confirm(i18n._('Confirm'), i18n._('Restart application to apply the new configuration?'), function (btn) {
             if (btn == 'yes') {
                 // reload mainscreen to make sure registry gets updated
                 Tine.Tinebase.common.reload();

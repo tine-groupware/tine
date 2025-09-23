@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'OptionsRule';
-    public const TABLE_NAME = 'eventmanager_options_rule';
     public const FLD_REF_OPTION_FIELD = 'ref_option_field';
     public const FLD_CRITERIA = 'criteria';
     public const FLD_VALUE = 'value';
@@ -31,7 +30,6 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
         self::RECORD_NAME               => 'Option rule',
         self::RECORDS_NAME              => 'Option rules', // ngettext('Option rule', 'Option rules', n)
         self::TITLE_PROPERTY            => self::FLD_CRITERIA,
@@ -41,8 +39,10 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
         self::APP_NAME                  => EventManager_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
 
-        self::TABLE => [
-            self::NAME                  => self::TABLE_NAME,
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_REF_OPTION_FIELD => [],
+            ],
         ],
 
         self::FIELDS => [
