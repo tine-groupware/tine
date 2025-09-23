@@ -573,12 +573,7 @@ class Courses_JsonTest extends TestCase
         
         $this->assertEquals(1, count($result['results']));
         
-        $id = NULL;
-        foreach ($result['results'] as $result) {
-            if ($result['name'] === 'Jhot') {
-                $id = $result['id'];
-            }
-        }
+        $id = $result['results'][0]['id'] ?? null;
         $this->assertTrue($id !== NULL);
         
         $newUser = Tinebase_User::getInstance()->getFullUserById($id);
@@ -594,6 +589,16 @@ class Courses_JsonTest extends TestCase
             $id . ' not member of the internet group ' . print_r($newUserMemberships, TRUE));
         $this->assertTrue(in_array($this->_configGroups[Courses_Config::STUDENTS_GROUP]->getId(), $newUserMemberships),
             $id . ' not member of the students group ' . print_r($newUserMemberships, TRUE));
+
+        $oldValue = Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS};
+        $raii = new Tinebase_RAII(fn() => Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS} = $oldValue);
+        Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS} = [
+            Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
+        ];
+
+        $this->_json->resetPassword($newUser->toArray(), 'test', false);
+
+        unset($raii);
     }
     
     /**
