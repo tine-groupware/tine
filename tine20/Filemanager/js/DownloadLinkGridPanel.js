@@ -64,13 +64,18 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 'update': this.onStoreUpdate
             }
         });
-        
-        this.actionCreate = new Ext.Action({
-            text: this.app.i18n._('Create Public Link'),
-            disabled: true,
-            scope: this,
-            handler: this.onCreate,
-            iconCls: 'action_add'
+
+        this.actionCreate = Tine.Filemanager.nodeActionsMgr.get('publish', {
+            initialApp: this.app,
+            selections: [
+                new this.recordClass({
+                    id: this.editDialog.record.get('id'),
+                    type: this.editDialog.record.get('type'),
+                })
+            ],
+            executor: (record) => {
+                this.store.load();
+            }
         });
 
         this.actionCopy = new Ext.Action({
@@ -157,35 +162,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         this.contextMenu.showAt(e.getXY());
-    },
-    
-    onCreate: function() {
-        var passwordDialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
-            allowEmptyPassword: true,
-            locked: false,
-            questionText: i18n._('Download links can be protected with a password. Without a password, anyone with the link can access the selected files.')
-        });
-        passwordDialog.openWindow();
-
-        passwordDialog.on('apply', function (password) {
-            if (! this.createMask) {
-                this.createMask = new Ext.LoadMask(this.getEl(), {
-                    msg: this.app.i18n._('Creating a new Download Link...')
-                });
-            }
-            this.createMask.show();
-
-            var date = new Date();
-            date.setDate(date.getDate() + 30);
-
-            var record = new this.recordClass({node_id: this.editDialog.record.get('id'), expiry_time: date, password: password});
-            this.recordProxy.saveRecord(record, {success: this.onAfterCreate, scope: this});
-        }, this);
-    },
-    
-    onAfterCreate: function() {
-        this.store.load();
-        this.createMask.hide();
     },
     
     onAfterDelete: function() {
