@@ -30,6 +30,9 @@ msgstr ""
 msgid "SAML2 Bindings"
 msgstr ""
 
+msgid "Key rotation enabled"
+msgstr ""
+
 msgid "Relying Parties"
 msgstr ""
 
@@ -109,38 +112,92 @@ msgstr[1] ""
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Show on Login Screen"
+msgid "Specific Type"
+msgstr "Spezifischer Typ"
+
+msgid "Specific Configuration"
+msgstr "Spezifische Konfiguration"
+
+msgid "Domains"
 msgstr ""
+
+msgid "Show on Login Screen"
+msgstr "Zeige auf Login Seite"
 
 msgid "Label"
 msgstr "Bezeichnung"
 
 msgid "Logo Light"
-msgstr ""
+msgstr "Logo hell"
 
 msgid "Logo Dark"
-msgstr ""
+msgstr "Logo dunkel"
 
 msgid "Allow assignment of existing local accounts"
-msgstr ""
+msgstr "Erlaube Zuweisung zu existierenden lokalen Konten"
 
 msgid "Allow reassignment of existing local accounts"
-msgstr ""
+msgstr "Erlaube geänderte Zuweisung zu existierenden lokalen Konten"
 
 msgid "Allow creation of new local accounts"
-msgstr ""
+msgstr "Erlaube das SAnlegen von neuen lokalen Konten"
 
 msgid "Allow local login of assigned accounts"
-msgstr ""
+msgstr "Erlaube lokale Logins bei zugewiesenen Konten"
 
 msgid "Require local MFA"
-msgstr ""
+msgstr "Lokaler MFA benötigt"
 
 msgid "Update local properties"
-msgstr ""
+msgstr "Lokale Eigenschaften aktualisieren"
 
 msgid "Primary group for created local accounts"
-msgstr ""
+msgstr "Primäre Gruppe für neue lokale Konten"
+
+msgid "Groups to be set for created local accounts"
+msgstr "Gruppen die neu erstellten Konten zugewiesen werden"
+
+msgid "Groups that deny login for existing local accounts"
+msgstr "Gruppen die bei bestehenden Konten das Login verhindern"
+
+msgid "Roles that deny login for existing local accounts"
+msgstr "Rollen die bei bestehenden Konten das Login verhindern"
+
+msgid "One of these group claims needs to be present"
+msgstr "Einer dieser Gruppen Claims muss vorhanden sein"
+
+msgid "The name of the \"groups\" claim, defaults to \"groups\""
+msgstr "Name des \"Gruppen\" Claims, standardmäßig \"groups\""
+
+msgid "Create groups locally"
+msgstr "Gruppen lokal anlegen"
+
+msgid "Assign groups locally"
+msgstr "Gruppen lokal zuweisen"
+
+msgid "Account Name Prefix"
+msgstr "Präfix für Anmelde-Namen"
+
+msgid "String prefixed to local account display names when created from this IDP"
+msgstr "Zeichenkette die lokalen Anmelde-Namen vorangestellt wird wenn durch diesen IDP erstellt"
+
+msgid "Group Name Prefix"
+msgstr "Präfix für Gruppen-Namen"
+
+msgid "String prefixed to local group names when created from this IDP"
+msgstr "Zeichenkette die lokalen Gruppen-Namen vorangestellt wird wenn durch diesen IDP erstellt"
+
+msgid "Account Display Name Prefix"
+msgstr "Präfix für Bildschirm-Namen"
+
+msgid "String prefixed to local account display names when created from this IDP"
+msgstr "Zeichenkette die lokalen Bildschirm-Namen vorangestellt wird wenn durch diesen IDP erstellt"
+
+msgid "Addressbook Container"
+msgstr "Adressbuch Ordner"
+
+msgid "Addressbook container to store newly created account contacts and lists"
+msgstr "Ordner im Adressbuch zum speichern für neu erstellte Konten-Kontakte und Gruppen"
 
 msgid "OAuth Device Code"
 msgid_plural "OAuth Device Codes"
@@ -213,19 +270,3 @@ msgstr ""
 
 msgid "TTL"
 msgstr ""
-
-#~ msgid "PasswordLess Login"
-#~ msgstr "Kennwortlose Anmeldung"
-
-#~ msgid "Please proceed with your device or programm."
-#~ msgstr "Bitte fahren Sie mit Ihrem Gerät oder Programm fort."
-
-#~ msgid "Could not Find Device"
-#~ msgstr "Gerät konnte nicht gefunden werden"
-
-#~ msgid "Please enter the device code provided by external device or programm."
-#~ msgstr "Bitte geben Sie den vom externen Gerät oder Programm bereitgestellten Gerätecode ein."
-
-#, python-brace-format
-#~ msgid "Login for {0} (external device/programm)"
-#~ msgstr "Anmeldung für {0} (externes Gerät/Programm)"
