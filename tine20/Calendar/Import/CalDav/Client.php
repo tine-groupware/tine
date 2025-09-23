@@ -62,6 +62,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected bool $_allowPartyCrushForSkipIOO = false;
 
     protected bool $_disableExternalOrganizerCalendar = false;
+    protected bool $_importVTodos = false;
+    protected ?Tinebase_Model_Container $_taskContainer = null;
 
     protected $userName;
     
@@ -77,7 +79,10 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         parent::__construct($settings);
 
         $this->userName = $settings['userName'] ?? null;
-        
+
+        if (is_int($settings['calDavRequestTries'] ?? null)) {
+            $this->_requestTries = $settings['calDavRequestTries'];
+        }
         if (isset($settings['allowDuplicateEvents'])) {
             $this->_allowDuplicateEvents = $settings['allowDuplicateEvents'];
         }
@@ -95,6 +100,20 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($settings[self::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS] ?? false) {
             $this->_allowPartyCrushForSkipIOO = true;
+        }
+        if ($settings[Calendar_Import_Abstract::OPTION_IMPORT_VTODOS] ?? false) {
+            $this->_importVTodos = true;
+        }
+        if ($settings[Calendar_Import_Abstract::OPTION_TASK_CONTAINER] ?? false) {
+            /** @var Tinebase_Model_Container $container */
+            $container = Tinebase_Container::getInstance()->get($settings[Calendar_Import_Abstract::OPTION_TASK_CONTAINER]);
+            $this->_taskContainer = $container;
+        }
+
+        if ($this->_importVTodos && null === $this->_taskContainer) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' no task container provided, using default personal task container');
+            $this->_taskContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tasks_Model_Task::class);
         }
 
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
@@ -517,17 +536,25 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 
                 $data = $value['{urn:ietf:params:xml:ns:caldav}calendar-data'];
 
-                if (strpos($data, 'BEGIN:' . $this->skipComonent) !== false) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Skipping ' . $this->skipComonent);
+                $name = explode('/', $key);
+                $name = end($name);
+
+                if ($this->_importVTodos && strpos($data, 'BEGIN:VTODO') !== false) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                        . ' Processing VTODO record: ' . $key);
+
+                    Tasks_Frontend_WebDAV_Task::create($this->_taskContainer, $name, $data);
+                }
+
+                if (strpos($data, 'BEGIN:VEVENT') === false) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                        . ' no VEVENT found: ' . $key);
                     continue;
                 }
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                        . ' Processing caldav record: ' . $key);
+                        . ' Processing VEVENT record: ' . $key);
 
-                $name = explode('/', $key);
-                $name = end($name);
                 $id = $this->_getEventIdFromName($name);
                 try {
                     if (isset($this->existingRecordIds[$calUri][$id])) {
