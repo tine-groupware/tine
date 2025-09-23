@@ -193,32 +193,48 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
-    public function checkCredentials()
+    public function checkCredentials(): \Zend\Diactoros\Response
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '...');
-
         /** @var \Zend\Diactoros\Request $request **/
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
         $bodyMsg = json_decode((string)$request->getBody(), true);
 
         if (!is_array($bodyMsg) || !isset($bodyMsg['user']['id']) || !isset($bodyMsg['user']['password'])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' illegal body: ' . (string)$request->getBody());
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Illegal body: ' . $request->getBody());
+            }
             throw new Tinebase_Exception_Expressive_HttpStatus('illegal or missing json body', 400);
         }
 
         $matrixId = $bodyMsg['user']['id'];
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' matrix id: ' . $matrixId);
-
-        $domain = $this->getMatrixDomain();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Matrix id: ' . $matrixId);
+        }
 
         $result = ['auth' => ['success' => false]];
-        if (preg_match('/^@(.*):' . preg_quote($domain, '/') . '$/', $matrixId, $matches)) {
-            $username = $matches[1];
 
-            $authResult = Tinebase_Auth::getInstance()->authenticate($username, $bodyMsg['user']['password']);
-            if ($authResult->getCode() === Tinebase_Auth::SUCCESS && $user = Tinebase_User::getInstance()->getFullUserByLoginName(
-                    $authResult->getIdentity())) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' auth succeeded');
+        try {
+            $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
+                ->getMatrixAccountByMatrixId($matrixId);
+        } catch (Tinebase_Exception_NotFound) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No matrix account found');
+            }
+            $matrixAccount = null;
+        }
+
+        if ($matrixAccount) {
+            $user = Tinebase_User::getInstance()->getFullUserById(
+                $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID}
+            );
+
+            $authResult = Tinebase_Auth::getInstance()->authenticate($user->accountLoginName, $bodyMsg['user']['password']);
+            if ($authResult->getCode() === Tinebase_Auth::SUCCESS) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Auth succeeded');
+                }
 
                 // needed for acl checks
                 Tinebase_Core::set(Tinebase_Core::USER, $user);
@@ -226,9 +242,12 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
                 $result['auth']['mxid'] = $matrixId;
                 $result['auth']['profile'] = $this->_getProfileForUser($user);
             }
-        }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' response: ' . print_r($result, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Response: ' . print_r($result, true));
+            }
+        }
 
         $response = (new \Zend\Diactoros\Response())->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($result));

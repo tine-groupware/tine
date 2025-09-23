@@ -1,0 +1,16 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+{{ _('Manage your registration') }}
+{% endblock %}
+
+{% block body %}
+{{ _('To manage your registration, please follow the link below') }}
+
+{{ link }}
+{% endblock %}

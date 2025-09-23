@@ -198,7 +198,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
                 msg: `
                     ${i18n._('We strongly encourage you to enable Multi-Factor Authentication for added security.')}<br />
                     <br />
-                    ${i18n._('Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code.')}
+                    ${i18n._('Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sign in you will be asked to enter both your username and password as well as a second factor such as a security code.')}
                 `,
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.WARNING,

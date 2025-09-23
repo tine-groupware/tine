@@ -1,14 +1,12 @@
-{% extends 'Tinebase/views/base.html.twig' %}
-
-{% block custom_style %}
-{% endblock %}
+{% extends 'Filemanager/views/base.html.twig' %}
 
 {% block title %}
     <title>{{ _('File not found!') }}</title>
 {% endblock %}
 
 {% block content %}
-    <div>
-        <strong>{{ _('File not found!') }}</strong>
+    <div class="empty-state">
+        <i class="fas"></i>
+        <h4>{{ _('File not found!') }}</h4>
     </div>
 {% endblock %}

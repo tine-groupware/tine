@@ -76,7 +76,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
                 const option = hasUnFinishedUploads ? await Tine.widgets.dialog.MultiOptionsDialog.getOption({
                     title: this.app.i18n._('Empty List'),
-                    questionText: this.app.i18n._('Not all uploads are finished yet. What would you to do?') + '</b><br>',
+                    questionText: this.app.i18n._('Not all uploads are finished yet. What would you like to do?') + '</b><br>',
                     height: 150,
                     allowCancel: false,
                     options: [

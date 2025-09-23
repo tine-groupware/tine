@@ -25,12 +25,12 @@ class Tinebase_Exception_Record_SystemContainer extends Tinebase_Exception_Syste
     
    /**
     * the constructor
-    * _('This is a system container which could not be deleted!')
+    * _('This is a system container which cannot be deleted!')
     * 
     * @param string $_message
     * @param int    $_code 
     */
-    public function __construct($_message = 'This is a system container which could not be deleted!', $_code=600)
+    public function __construct($_message = 'This is a system container which cannot be deleted!', $_code=600)
     {
         parent::__construct($_message, $_code);
     }

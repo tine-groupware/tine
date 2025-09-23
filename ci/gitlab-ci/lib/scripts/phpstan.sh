@@ -11,6 +11,7 @@ phpstan_analyse() {
     find $TINE20ROOT/tine20 -maxdepth 1 -type l -exec echo "        - '{}'" \; >> excludes;
     #    unexclude vendor/metaways
     find $TINE20ROOT/tine20/vendor -mindepth 1 -maxdepth 1 -type d -exec echo "        - '{}'" \; >> excludes;
+    sort -o excludes excludes
     sed -i '/tine20\/vendor\*/r excludes' $TINE20ROOT/phpstan.neon;
     sed -i '/tine20\/vendor\/metaways/d' $TINE20ROOT/phpstan.neon;
     rm excludes

@@ -71,8 +71,8 @@ class Timetracker_Preference extends Tinebase_Preference_Abstract
                 'description'   => $translate->_('Use this configuration for the timesheet ODS export.'),
             ),
             self::QUICKTAG => array(
-                'label'         => $translate->_('A Tag which is available in context menu for fast assignment'),
-                'description'   => $translate->_('Quick Tag allows to simply assign a predefined tag by the context menu.')
+                'label'         => $translate->_('A Tag which is available in the context menu for fast assignment'),
+                'description'   => $translate->_('Quick Tag allows you to simply assign a predefined tag by the context menu.')
             )
         );
         

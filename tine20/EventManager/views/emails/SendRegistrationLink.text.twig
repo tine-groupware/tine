@@ -1,0 +1,16 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+{{ _('Confirm your registration') }}
+{% endblock %}
+
+{% block body %}
+{{ _('thank you for your registration, to complete the registration, please confirm your e-mail address via this link') }}
+
+{{ link }}
+{% endblock %}

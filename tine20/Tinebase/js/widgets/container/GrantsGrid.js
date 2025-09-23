@@ -57,7 +57,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     exportGrantTitle: 'Export', // i18n._('Export')
     exportGrantDescription: 'The grant to export records from this container', // i18n._('The grant to export records from this container')
     syncGrantTitle: 'Sync', // i18n._('Sync')
-    syncGrantDescription: 'The grant to synchronise records with this container', // i18n._('The grant to synchronise records with this container')
+    syncGrantDescription: 'The grant to synchronize records with this container', // i18n._('The grant to synchronize records with this container')
     adminGrantTitle: 'Admin', // i18n._('Admin')
     adminGrantDescription: 'The grant to administrate this container', // i18n._('The grant to administrate this container')
     

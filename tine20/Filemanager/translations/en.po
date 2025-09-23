@@ -94,33 +94,6 @@ msgstr "The destination has the same path as the source. No action has been perf
 msgid "Quarantined File"
 msgstr "Quarantined File"
 
-msgid "Password required for download"
-msgstr "Password required for download"
-
-msgid "Submit"
-msgstr "Submit"
-
-msgid "File not found!"
-msgstr "File not found!"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Size"
-msgstr "Size"
-
-msgid "Last Modified"
-msgstr "Last Modified"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Folder"
-msgstr "Folder"
-
-msgid "File"
-msgstr "File"
-
 msgid "Loading"
 msgstr "Loading"
 
@@ -294,8 +267,17 @@ msgstr "{attachmentCount, plural, one {Do you really want to overwrite the exist
 msgid "Overwrite?"
 msgstr "Overwrite?"
 
+msgid "Name"
+msgstr "Name"
+
+msgid "Size"
+msgstr "Size"
+
 msgid "Content type"
 msgstr "Content type"
+
+msgid "Folder"
+msgstr "Folder"
 
 msgid "Send as email"
 msgstr "Send as email"
@@ -428,6 +410,9 @@ msgstr "Edit folder"
 msgid "Edit file"
 msgstr "Edit file"
 
+msgid "File"
+msgstr "File"
+
 msgid "Public Links"
 msgstr "Public Links"
 
@@ -442,6 +427,12 @@ msgstr "Not yet indexed"
 
 msgid "Modified By"
 msgstr "Modified By"
+
+msgid "Last Modified"
+msgstr "Last Modified"
+
+msgid "Description"
+msgstr "Description"
 
 msgid "Enter description"
 msgstr "Enter description"
@@ -609,3 +600,18 @@ msgstr[1] "File Locations"
 
 msgid "GENDER_File Location"
 msgstr "GENDER_File Location"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "No Files Found"
+msgstr "No Files Found"
+
+msgid "This folder appears to be empty."
+msgstr "This folder appears to be empty."
+
+msgid "File not found!"
+msgstr "File not found!"
+
+msgid "Password required for download"
+msgstr "Password required for download"

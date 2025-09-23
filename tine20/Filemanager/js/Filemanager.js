@@ -12,6 +12,29 @@ import './DuplicateFileUploadDialog';
 
 Ext.ns('Tine.Filemanager');
 
+require('./ExceptionHandler.js');
+require('./Model.js');
+require('./PathFilterModel.js');
+require('./SearchCombo.js');
+require('./NodeTreePanel.js');
+require('./PathFilterPlugin.js');
+require('./NodeEditDialog.js');
+require('./NodeGridPanel.js');
+require('./DownloadLinkDialog.js');
+require('./DownloadLinkGridPanel.js');
+require('./FilePickerDialog.js');
+require('./FilePicker.js');
+require('./RecursiveFilter.js');
+require('./UsagePanel.js');
+require('./GrantsPanel.js');
+require('./FilePublishedDialog.js');
+require('./NotificationPanel.js');
+require('./NotificationGridPanel.js');
+require('./RevisionPanel.js');
+require('../css/Filemanager.css');
+require('../css/Node.css');
+
+
 /**
  * @namespace Tine.Filemanager
  * @class Tine.Filemanager.Application

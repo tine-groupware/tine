@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    public const TINEBASE_VERSION = 18;
+    public const TINEBASE_VERSION = 19;
 
     /**
      * access log rotation in days
@@ -1429,10 +1429,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ),
         // TODO remove this config and all old code in 2021.11
         self::EMAIL_USER_ID_IN_XPROPS => [
-            //_('Use record XPROPS to save email user id')
-            self::LABEL => 'Use record XPROPS to save email user id',
-            //_('Use record XPROPS to save email user id')
-            self::DESCRIPTION => 'Use record XPROPS to save email user id',
+            //_('Use the record XProp to save the email user ID')
+            self::LABEL => 'Use the record XProp to save the email user ID',
+            //_('Use the record XProp to save the email user ID')
+            self::DESCRIPTION => 'Use the record XProp to save the email user ID',
             self::TYPE => 'bool',
             // we need this to disable any convert actions in the GUI
             self::CLIENTREGISTRYINCLUDE => true,
@@ -1929,7 +1929,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR                   => true,
                 ),
                 self::FEATURE_REMEMBER_POPUP_SIZE   => array(
-                    self::LABEL                         => 'Remeber Popup Size', //_('Remeber Popup Size')
+                    self::LABEL                         => 'Remember Popup Size', //_('Remember Popup Size')
                     self::DESCRIPTION                   => 'Save edit dialog size in state',
                     //_('Save edit dialog size in state')
                     self::TYPE                          => self::TYPE_BOOL,
@@ -1962,10 +1962,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR           => true,
                 ],
                 self::FEATURE_AUTODISCOVER_MAILCONFIG  => [
-                    self::LABEL                 => 'Autodiscover mail config',
-                    //_('Autodiscover mail config')
-                    self::DESCRIPTION           => 'Autodiscover mail config',
-                    //_('Autodiscover mail config')
+                    self::LABEL                 => 'Autodiscover email config',
+                    //_('Autodiscover email config')
+                    self::DESCRIPTION           => 'Autodiscover email config',
+                    //_('Autodiscover email config')
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => true,
                 ],
@@ -1980,8 +1980,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FEATURE_SITE => array(
                     self::LABEL             => 'Activate Sites',
                     //_('Activate Sites')
-                    self::DESCRIPTION       => 'Sites are addressbook contacts matching the siteFilter config.',
-                    //_('Sites are addressbook contacts matching the siteFilter config.')
+                    self::DESCRIPTION       => 'Sites are Addressbook contacts matching the siteFilter config.',
+                    //_('Sites are Addressbook contacts matching the siteFilter config.')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => false,
                 ),
@@ -2011,8 +2011,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::DEFAULT_CURRENCY => array(
             // _('Default Currency')
             'label'                 => 'Default Currency',
-            // _('The currency defined here is used as default currency in the customerd edit dialog.')
-            'description'           => 'The currency defined here is used as default currency in the customerd edit dialog.',
+            // _('The currency defined here is used as the default currency in the customer edit dialog.')
+            'description'           => 'The currency defined here is used as the default currency in the customer edit dialog.',
             'type'                  => 'string',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => false,
@@ -2399,8 +2399,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::SYNC_USER_HOOK_CLASS => array(
                                    //_('Configure hook class for user sync')
             self::LABEL                 => 'Configure hook class for user sync',
-                                   //_('Allows to change data after fetching user from sync backend')
-            self::DESCRIPTION           => 'Allows to change data after fetching user from sync backend',
+                                   //_('Allows changing data after fetching user from sync backend')
+            self::DESCRIPTION           => 'Allows changing data after fetching user from sync backend',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
@@ -2420,8 +2420,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::SYNC_USER_DELETE_AFTER => array(
             //_('Sync user: delete after X months)
             self::LABEL => 'Sync user: delete after X months',
-            //_('Removed users should be deleted after X months')
-            self::DESCRIPTION => 'Removed users should be deleted after X months',
+            //_('Deactivated users should be deleted after X months')
+            self::DESCRIPTION => 'Deactivated users should be deleted after X months',
             self::TYPE => self::TYPE_INT,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -2441,8 +2441,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::SESSIONUSERAGENTVALIDATION => array(
                                    //_('UA Session Validator')
             self::LABEL => 'UA Session Validator',
-                                   //_('Destroy session if the users user agent string changes.')
-            self::DESCRIPTION => 'Destroy session if the users user agent string changes.',
+                                   //_('Destroy session if the user\'s user agent string changes.')
+            self::DESCRIPTION => 'Destroy session if the user\'s user agent string changes.',
             self::TYPE => 'bool',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -2460,10 +2460,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => TRUE,
         ),
         self::REUSEUSERNAME_SAVEUSERNAME => array(
-            //_('Reuse last username logged')
-            self::LABEL => 'Reuse last username logged',
-            //_('Reuse last username logged')            
-            self::DESCRIPTION => 'Reuse last username logged',
+            //_('Reuse username from last login')
+            self::LABEL => 'Reuse username from last login',
+            //_('Reuse username from last login')
+            self::DESCRIPTION => 'Reuse username from last login',
             self::TYPE => 'bool',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -2493,8 +2493,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::PASSWORD_SUPPORT_NTLMV2 => array(
             //_('Support NTLM V2 authentication')
             self::LABEL => 'Support NTLM V2 authentication',
-            //_('Support NTLM V2 authentication and store account password as ntlm v2 hash')
-            self::DESCRIPTION => 'Support NTLM V2 authentication and store account password as ntlm v2 hash',
+            //_('Support NTLM V2 authentication and store account password as NTLM V2 hash')
+            self::DESCRIPTION => 'Support NTLM V2 authentication and store account password as NTLM V2 hash',
             self::TYPE => 'bool',
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE => true,
@@ -2502,8 +2502,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => false
         ),
         self::PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN => array(
-            //_('Update NTLM V2 password has on login')
-            self::LABEL => 'Update NTLM V2 password has on login',
+            //_('Update NTLM V2 password hash on login')
+            self::LABEL => 'Update NTLM V2 password hash on login',
             //_('Update NTLM V2 password has on login')
             self::DESCRIPTION => 'Update NTLM V2 password has on login',
             self::TYPE => 'bool',
@@ -2803,8 +2803,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::WARN_LOGIN_FAILURES => array(
             //_('Warn after X login failures')
             self::LABEL => 'Warn after X login failures',
-            //_('Maximum allowed login failures before writing warn log messages')
-            self::DESCRIPTION => 'Maximum allowed login failures before writing warn log messages',
+            //_('Maximum allowed login failures before writing warning log messages')
+            self::DESCRIPTION => 'Maximum allowed login failures before writing warning log messages',
             self::TYPE => 'int',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -2832,10 +2832,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => TRUE,
         ),
         self::ACCOUNT_DEACTIVATION_NOTIFICATION => array(
-            //_('Account deactivation notfication')
-            self::LABEL => 'Account deactivation notfication',
-            //_('Send E-Mail to user if the account is deactivated or the user tries to login with deactivated account')
-            self::DESCRIPTION => 'Send E-Mail to User if the account is deactivated or the user tries to login with deactivated account',
+            //_('Account deactivation notification')
+            self::LABEL => 'Account deactivation notification',
+            //_('Send an email to the user if their account is deactivated or they attempt to log in with a deactivated account.')
+            self::DESCRIPTION => 'Send an email to the user if their account is deactivated or they attempt to log in with a deactivated account.',
             self::TYPE => 'bool',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -2844,8 +2844,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::ROLE_CHANGE_ALLOWED => array(
                                    //_('Role change allowed')
             self::LABEL => 'Role change allowed',
-                                   //_('Allows to configure which user is allowed to switch to another users account')
-            self::DESCRIPTION => 'Allows to configure which user is allowed to switch to another users account',
+                                   //_('Allows configuration of which user is allowed to switch to another user\'s account')
+            self::DESCRIPTION => 'Allows configuration of which user is allowed to switch to another user\'s account',
             self::TYPE => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE => FALSE,
@@ -2915,8 +2915,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //       tine20://<applicationid>/folders/shared/<containerid>/custom.js
             //_('Custom Javascript includes for Fat-Client')
             self::LABEL => 'Custom Javascript includes for Fat-Client',
-            //_('An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.')
-            self::DESCRIPTION => "An array of javascript files to include for the fat client. This files might be stored outside the docroot of the webserver.",
+            //_('An array of JavaScript files to include for the Fat Client. These files might be stored outside the web server’s document root.')
+            self::DESCRIPTION => "An array of JavaScript files to include for the Fat Client. These files might be stored outside the web server’s document root.",
             self::TYPE => 'array',
             self::DEFAULT_STR => array(),
             self::CLIENTREGISTRYINCLUDE => FALSE,
@@ -3006,10 +3006,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_WEBURL => array(
-            //_('custom weburl')
-            self::LABEL => 'custom weburl',
-            //_('Custom weburl for branding.')
-            self::DESCRIPTION => 'Custom weburl for branding.',
+            //_('Custom Web URL')
+            self::LABEL => 'Custom Web URL',
+            //_('Custom web URL for branding.')
+            self::DESCRIPTION => 'Custom web URL for branding.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://github.com/tine20/tine20',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3017,10 +3017,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_HELPURL => array(
-            //_('custom help url')
-            self::LABEL => 'custom help url',
+            //_('Custom Help URL')
+            self::LABEL => 'Custom Help URL',
             //_('Custom url for help.')
-            self::DESCRIPTION => 'Custom url for help.',
+            self::DESCRIPTION => 'Custom URL for help.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://tine-docu.s3web.rz1.metaways.net/',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3028,10 +3028,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_SHOPURL => array(
-            //_('custom shop url')
-            self::LABEL => 'custom shop url',
-            //_('Custom url for the shop.')
-            self::DESCRIPTION => 'Custom url for the shop.',
+            //_('Custom Shop URL')
+            self::LABEL => 'Custom Shop URL',
+            //_('Custom URL for the shop.')
+            self::DESCRIPTION => 'Custom URL for the shop.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://www.tine-groupware.de',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3039,10 +3039,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_BUGSURL => array(
-            //_('custom bugreport url')
-            self::LABEL => 'custom bugreport url',
-            //_('Custom bugreport url.')
-            self::DESCRIPTION => 'Custom bugreport url.',
+            //_('Custom Bugreport URL')
+            self::LABEL => 'Custom Bugreport URL',
+            //_('Custom bugreport URL.')
+            self::DESCRIPTION => 'Custom bugreport URL.',
             self::TYPE => 'string',
             self::DEFAULT_STR => 'https://api.tine20.net/bugreport.php',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3050,8 +3050,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE
         ),
         self::BRANDING_FAVICON => array(
-            //_('custom favicon paths')
-            self::LABEL => 'custom favicon paths',
+            //_('Custom Favicon Paths')
+            self::LABEL => 'Custom Favicon Paths',
             //_('Paths to custom favicons.')
             self::DESCRIPTION => 'Paths to custom favicons.',
             self::TYPE => 'array',
@@ -3065,10 +3065,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE,
         ),
         self::BRANDING_FAVICON_SVG => array(
-            //_('custom svg favicon paths')
-            self::LABEL => 'custom svg favicon paths',
-            //_('Paths to custom svg favicon.')
-            self::DESCRIPTION => 'Paths to custom svg favicon.',
+            //_('Custom SVG Favicon Paths')
+            self::LABEL => 'Custom SVG Favicon Paths',
+            //_('Paths to custom SVG favicon.')
+            self::DESCRIPTION => 'Paths to custom SVG favicon.',
             self::TYPE => 'string',
             self::DEFAULT_STR => './images/favicon.svg',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3147,10 +3147,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => FALSE,
         ],
         self::WEBSITE_URL => array(
-            //_('custom website url')
-            self::LABEL => 'custom website url',
-            //_('Custom url used for logo on login page.')
-            self::DESCRIPTION => 'Custom url used for logo on login page.',
+            //_('Custom Website URL')
+            self::LABEL => 'Custom Website URL',
+            //_('Custom URL used for logo on login page.')
+            self::DESCRIPTION => 'Custom URL used for logo on login page.',
             self::TYPE => 'string',
             self::DEFAULT_STR => '',
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3160,8 +3160,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::USE_LOGINNAME_AS_FOLDERNAME => array(
         //_('Use login name instead of full name')
             self::LABEL => 'Use login name instead of full name',
-        //_('Use login name instead of full name for webdav.')
-            self::DESCRIPTION => 'Use login name instead of full name for webdav.',
+        //_('Use login name instead of full name for WebDAV.')
+            self::DESCRIPTION => 'Use login name instead of full name for WebDAV.',
             self::TYPE => 'bool',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -3169,10 +3169,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR => FALSE,
         ),
         self::DENY_WEBDAV_CLIENT_LIST  => array(
-            //_('List of WebDav agent strings that will be denied')
-            self::LABEL => 'List of WebDav agent strings that will be denied',
-            //_('List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]')
-            self::DESCRIPTION => 'List of WebDav agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]',
+            //_('List of WebDAV agent strings that will be denied')
+            self::LABEL => 'List of WebDAV agent strings that will be denied',
+            //_('List of WebDAV agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]')
+            self::DESCRIPTION => 'List of WebDAV agent strings that will be denied. Expects a list of regular expressions - like this: ["/iPhone/","/iOS/","/Android/"]',
             self::TYPE => 'array',
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
@@ -3304,8 +3304,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FILESYSTEM_NUMKEEPREVISIONS => array(
                     //_('Filesystem number of revisions')
                     self::LABEL => 'Filesystem number of revisions',
-                    //_('Filesystem number of revisions being kept before they are automatically deleted.')
-                    self::DESCRIPTION => 'Filesystem number of revisions being kept before they are automatically deleted.',
+                    //_('Number of filesystem revisions kept before automatic deletion.')
+                    self::DESCRIPTION => 'Number of filesystem revisions kept before automatic deletion.',
                     self::TYPE => 'integer',
                     self::CLIENTREGISTRYINCLUDE => TRUE,
                     self::SETBYADMINMODULE => FALSE,
@@ -3313,10 +3313,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR => 100,
                 ),
                 self::FILESYSTEM_MONTHKEEPREVISIONS => array(
-                    //_('Filesystem months of revisions')
-                    self::LABEL => 'Filesystem months of revisions',
-                    //_('Filesystem number of months revisions being kept before they are automatically deleted.')
-                    self::DESCRIPTION => 'Filesystem number of months revisions being kept before they are automatically deleted.',
+                    //_('Number of months revisions are kept in the filesystem')
+                    self::LABEL => 'Number of months revisions are kept in the filesystem',
+                    //_('Number of months filesystem revisions are kept before automatic deletion.')
+                    self::DESCRIPTION => 'Number of months filesystem revisions are kept before automatic deletion.',
                     self::TYPE => 'integer',
                     self::CLIENTREGISTRYINCLUDE => TRUE,
                     self::SETBYADMINMODULE => FALSE,
@@ -3370,7 +3370,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FILESYSTEM_PREVIEW_SERVICE_VERSION => array(
                     //_('Class for preview service')
                     self::LABEL => 'Version for preview service',
-                    //_('Class to use, to connect to preview service.')
+                    //_('Class to use to connect to the preview service.')
                     self::DESCRIPTION => 'Version of preview service api.',
                     self::TYPE => 'int',
                     self::CLIENTREGISTRYINCLUDE => FALSE,
@@ -3381,7 +3381,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL => array(
                     //_('Class for preview service')
                     self::LABEL => 'Verify ssl cert',
-                    //_('Class to use, to connect to preview service.')
+                    //_('Class to use to connect to the preview service.')
                     self::DESCRIPTION => 'Verify preview service servers ssl cert',
                     self::TYPE => 'bool',
                     self::CLIENTREGISTRYINCLUDE => false,
@@ -3401,9 +3401,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR => 51904512, // == 49.5 * 1024 * 1024,
                 ),
                 self::FILESYSTEM_PREVIEW_MAX_ERROR_COUNT => array(
-                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    //_('Max per preview service error count, for trying to generate preview.')
                     self::LABEL => 'Max perp review preview service error count, for trying to generate preview.',
-                    //_('Max per preview preview service error count, for trying to generate preview.')
+                    //_('Max per preview service error count, for trying to generate preview.')
                     self::DESCRIPTION => 'Max per preview preview service error count, for trying to generate preview.',
                     self::TYPE => self::TYPE_INT,
                     self::CLIENTREGISTRYINCLUDE => FALSE,
@@ -3618,8 +3618,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 self::QUOTA_SHOW_UI => array(
                     //_('Show UI')
                     self::LABEL => 'Show UI',
-                    //_('Should the quota UI elements be rendered or not.')
-                    self::DESCRIPTION => 'Should the quota UI elements be rendered or not.',
+                    //_('Should the quota UI elements be rendered?')
+                    self::DESCRIPTION => 'Should the quota UI elements be rendered?',
                     self::TYPE => 'bool',
                     self::CLIENTREGISTRYINCLUDE => true,
                     self::SETBYADMINMODULE => true,
@@ -3693,10 +3693,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DEFAULT_STR => 'soft quota notification',
                 ),
                 self::QUOTA_SKIP_IMAP_QUOTA => array(
-                    //_('Skip Imap Quota Notfication')
-                    self::LABEL => 'Skip Imap Quota Notfication',
-                    //_('Skip Imap Quota Notfication')
-                    self::DESCRIPTION => 'Skip Imap Quota Notfication',
+                    //_('Skip Imap Quota Notification')
+                    self::LABEL => 'Skip Imap Quota Notification',
+                    //_('Skip Imap Quota Notification')
+                    self::DESCRIPTION => 'Skip Imap Quota Notification',
                     self::TYPE => 'bool',
                     self::CLIENTREGISTRYINCLUDE => true,
                     self::SETBYADMINMODULE => true,
@@ -3731,8 +3731,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         self::TINE20_URL => [
             //_('Tine20 URL')
             self::LABEL => 'Tine20 URL',
-            //_('The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.')
-            self::DESCRIPTION => 'The full URL including scheme, hostname, optional port and optional uri part under which tine20 is reachable.',
+            //_('The full URL including scheme, hostname, optional port and optional URI part under which tine20 is reachable.')
+            self::DESCRIPTION => 'The full URL including scheme, hostname, optional port and optional URI part under which tine20 is reachable.',
             self::TYPE => 'string',
             self::DEFAULT_STR => null,
             self::CLIENTREGISTRYINCLUDE => true,
@@ -3788,8 +3788,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
         ],
         self::GRAD_DER_VERSTAEDTERUNG => array(
-            //_('Grad der Verstädterung')
-            self::LABEL              => 'Grad der Verstädterung',
+            //_('Degree of Urbanization')
+            self::LABEL              => 'Degree of Urbanization',
             //_('')
             self::DESCRIPTION        => '',
             self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
@@ -3798,9 +3798,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => array(
                 'records' => array(
-                    array('id' => '01',    'value' => 'dicht besiedelt', 'system' => true), //_('dicht besiedelt')
-                    array('id' => '02',    'value' => 'mittlere Besiedlungsdichte', 'system' => true), //_('mittlere Besiedlungsdichte')
-                    array('id' => '03',    'value' => 'gering besiedelt', 'system' => true), //_('gering besiedelt')
+                    array('id' => '01',    'value' => 'densely populated', 'system' => true), //_('densely populated')
+                    array('id' => '02',    'value' => 'intermediate density', 'system' => true), //_('intermediate density')
+                    array('id' => '03',    'value' => 'sparsely populated', 'system' => true), //_('sparsely populated')
                 )
             )
         ),
@@ -3829,7 +3829,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_TELEPHONE, 'value' => 'Telephone', 'is_user_type' => 1,
                         'icon' => 'images/icon-set/icon_phone.svg', 'icon_class' => 'notes_telephoneIcon', 'system' => true], // _('Telephone')
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL, 'value' => 'E-Mail', 'is_user_type' => 1,
-                        'icon' => 'images/icon-set/icon_email.svg', 'icon_class' => 'notes_emailIcon', 'system' => true], // _('E-Mail')
+                        'icon' => 'images/icon-set/icon_email.svg', 'icon_class' => 'notes_emailIcon', 'system' => true], // _('Email')
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED, 'value' => 'Created', 'is_user_type' => 0,
                         'icon' => 'images/icon-set/icon_star_out.svg', 'icon_class' => 'notes_createdIcon', 'system' => true], // _('Created')
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, 'value' => 'Changed', 'is_user_type' => 0,

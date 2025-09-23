@@ -131,7 +131,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                         $totalCount += $duration;
                     }
                     $exception = new Tinebase_Exception_Confirmation(
-                        sprintf($translation->_('There are %s hours have not yet been billed, do you want to make them billable?'), $totalCount)
+                        sprintf($translation->_('There are %s hours that have not yet been billed. Do you want to make them billable?'), $totalCount)
                     );
                     $exception->setInfo($timesheetTitles);
                     //update timesheet should not interrupt the update process of timeaccount
@@ -193,7 +193,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
             if (!$confirmHeader) {
                 $translation = Tinebase_Translation::getTranslation($this->_applicationName);
                 $exception = new Tinebase_Exception_Confirmation(
-                    $translation->_('Timeaccounts are still in use! Are you sure you want to delete them?'));
+                    $translation->_('Time accounts are still in use! Are you sure you want to delete them?'));
 
                 // todo: show more info about in used time accounts ?
 //                $timeAccountTitles = null;

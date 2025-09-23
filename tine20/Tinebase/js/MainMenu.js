@@ -250,7 +250,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         
         this.action_notificationPermissions = new Ext.Action({
             text: i18n._('Allow desktop notifications'),
-            tooltip:  i18n._('Request permissions for webkit desktop notifications.'),
+            tooltip:  i18n._('Request permissions for WebKit desktop notifications.'),
             iconCls: 'action_edit',
             disabled: ! window.Notification || this.systemTrayNotificationsEnabled(),
             handler: this.requestNotificationPermission,
@@ -335,7 +335,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     onLogout: function() {
         if (Tine.Tinebase.registry.get('confirmLogout') != '0') {
-            Ext.MessageBox.confirm(i18n._('Confirm'), i18n._('Are you sure you want to logout?'), function(btn, text) {
+            Ext.MessageBox.confirm(i18n._('Confirm'), i18n._('Are you sure you want to log out?'), function(btn, text) {
                 if (btn == 'yes') {
                     this._doLogout();
                 }

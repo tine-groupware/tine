@@ -112,7 +112,7 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
     
     onOk: function() {
         if (this.win) {
-            this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Changing user account ...')});
+            this.loadMask = new Ext.LoadMask(this.win.getEl(), {msg: i18n._('Changing user account...')});
             this.loadMask.show();
         }
         

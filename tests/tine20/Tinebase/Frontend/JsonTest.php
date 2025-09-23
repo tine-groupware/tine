@@ -830,6 +830,10 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testSearchTwigTemplate(): void
     {
+        if (!Tinebase_Application::getInstance()->isInstalled(GDPR_Config::APP_NAME)) {
+            self::markTestSkipped('GDPR app is not installed');
+        }
+
         $result = $this->_instance->searchTwigTemplates([], []);
 
         $this->assertArrayHasKey('totalcount', $result);

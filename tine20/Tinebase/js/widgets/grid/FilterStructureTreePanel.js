@@ -32,7 +32,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.title = [
             '<span ext:qtip="',
-            Ext.util.Format.htmlEncode(i18n._('Show records that match to one of the following filters')),
+            Ext.util.Format.htmlEncode(i18n._('Show records that match one of the following filters')),
             '">',
             Ext.util.Format.htmlEncode(i18n._('or alternatively')),
             '</span>'
@@ -49,7 +49,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
 //            iconCls: this.filterPanel.activeFilterPanel.app ? this.filterPanel.activeFilterPanel.app.getIconCls() : '',
             expanded: true,
 //            text: i18n._('or alternatively'),
-//            qtip: i18n._('Show records that match to one of the following filters'),
+//            qtip: i18n._('Show records that match one of the following filters'),
             children: [
                 this.createNode(this.filterPanel.activeFilterPanel),
                 {id: 'addFilterPanel', text: i18n._('Add alternative filter'), iconCls: 'action_add', leaf: true}
@@ -62,7 +62,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
                 key:   'Tinebase-MainContextMenu'
             }],
             items: [{
-                text: i18n._('Remove Filter'),
+                text: i18n._('Remove filter'),
                 iconCls: 'action_remove',
                 scope: this,
                 handler: this.onCtxRemove

@@ -99,6 +99,15 @@ class Tinebase_Twig
     {
         $tbConfig = Tinebase_Config::getInstance();
 
+        $account = Tinebase_Core::getUser();
+        try {
+            $contact = $account instanceof Tinebase_Model_User ? Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                $account->getId(),
+                true) : null;
+        } catch (\Exception $e) {
+            $contact = null;
+        }
+        
         $globals = [
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
@@ -110,6 +119,8 @@ class Tinebase_Twig
                 'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
             ],
             'user'              => [
+                'account'           => $account,
+                'contact'           => $contact,
                 'locale'            => Tinebase_Core::getLocale(),
                 'timezone'          => Tinebase_Core::getUserTimezone(),
             ],
@@ -263,8 +274,11 @@ class Tinebase_Twig
             if (!($date instanceof DateTime)) {
                 $date = new Tinebase_DateTime($date, Tinebase_Core::getUserTimezone());
             }
-            
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, $this->_locale, $format);
+        }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('getSize', function ($byte, $force_unit = null) {
+            $result = Tinebase_Helper::formatBytes($byte, $force_unit);
+            return $result;
         }));
 
         $staticData = [];
@@ -331,6 +345,22 @@ class Tinebase_Twig
             }
 
             return $record ? $record->{Tinebase_Record_PropertyLocalization::FLD_TEXT} : '';
+        }));
+        $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('getMimeIconCls', function ($node) {
+            // Map MIME types to icon filenames
+            $nodeType = $node['type'];
+            if ($nodeType === 'folder') {
+                return "mime-icon-folder";
+            } else {
+                $mimeType = $node['contenttype'];
+                return 'mime-content-type-' . preg_replace('/\/.*$/', '', $mimeType) .
+                    ' mime-suffix-' . (preg_match('/\+/', $mimeType) ? preg_replace('/^.*\+/', '', $mimeType) : 'none') .
+                    ' mime-type-' . str_replace(
+                        ['/g', '.', '+'],
+                        ['-slash-', '-dot-', '-plus-'],
+                        $mimeType
+                    );
+            }
         }));
     }
 

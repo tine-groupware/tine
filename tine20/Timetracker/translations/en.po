@@ -13,20 +13,20 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Manage timeaccounts"
-msgstr "Manage timeaccounts"
+msgid "Manage time accounts"
+msgstr "Manage time accounts"
 
-msgid "Add, edit and delete timeaccounts (includes all timesheet grants)"
-msgstr "Add, edit and delete timeaccounts (includes all timesheet grants)"
+msgid "Add, edit and delete time accounts (includes all timesheet permissions)"
+msgstr "Add, edit and delete time accounts (includes all timesheet permissions)"
 
-msgid "Add timeaccounts"
-msgstr "Add timeaccounts"
+msgid "Add time accounts"
+msgstr "Add time accounts"
 
-msgid "Manage shared timeaccount favorites"
-msgstr "Manage shared timeaccount favorites"
+msgid "Manage shared time account favorites"
+msgstr "Manage shared time account favorites"
 
-msgid "Create or update shared timeaccount favorites"
-msgstr "Create or update shared timeaccount favorites"
+msgid "Create or update shared time account favorites"
+msgstr "Create or update shared time account favorites"
 
 msgid "Manage shared timesheet favorites"
 msgstr "Manage shared timesheet favorites"
@@ -37,11 +37,14 @@ msgstr "Create or update shared timesheet favorites"
 msgid "Enabled Features"
 msgstr "Enabled Features"
 
-msgid "Enabled Features in Timetracker Application."
-msgstr "Enabled Features in Timetracker Application."
+msgid "Enabled Features in the Timetracker Application."
+msgstr "Enabled Features in the Timetracker Application."
 
-msgid "Timeaccount Bookmarks"
-msgstr "Timeaccount Bookmarks"
+msgid "Time Account Bookmarks"
+msgstr "Time Account Bookmarks"
+
+msgid "Add time accounts as favorite to speed up timesheet creation."
+msgstr "Add time accounts as favorite to speed up timesheet creation."
 
 msgid "none"
 msgstr "none"
@@ -67,25 +70,18 @@ msgstr "Accepted"
 msgid "Declined"
 msgstr "Declined"
 
-msgid "Add timeaccounts as favorite to speedup timesheet creation.)"
-msgstr "Add timeaccounts as favorite to speedup timesheet creation.)"
+#, python-format, php-format
+msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
+msgstr "There are %s hours that have not yet been billed. Do you want to make them billable?"
 
-msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr "Timeaccounts are still in use! Are you sure you want to delete them?"
+msgid "Time accounts are still in use! Are you sure you want to delete them?"
+msgstr "Time accounts are still in use! Are you sure you want to delete them?"
 
-msgid ""
-"The Invoice you tried to edit is cleared already, change date will rebill "
-"the invoice, do you still want to execute this action?"
-msgstr ""
-"The Invoice you tried to edit is cleared already, change date will rebill "
-"the invoice, do you still want to execute this action?"
+msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
+msgstr "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 
-msgid ""
-"The related Timeaccount is already closed, do you still want to execute this "
-"action?"
-msgstr ""
-"The related Timeaccount is already closed, do you still want to execute this "
-"action?"
+msgid "The related time account is already closed. Do you still want to perform this action?"
+msgstr "The related time account is already closed. Do you still want to perform this action?"
 
 msgid "Add Timesheet"
 msgstr "Add Timesheet"
@@ -116,6 +112,9 @@ msgstr "Factor"
 
 msgid "Budget in hours"
 msgstr "Budget in hours"
+
+msgid "All timesheet durations are aggregated here, no matter if they are billable or not"
+msgstr "All timesheet durations are aggregated here, no matter if they are billable or not"
 
 msgid "Status"
 msgstr "Status"
@@ -158,17 +157,11 @@ msgstr "Select invoice"
 msgid "Update Timesheets?"
 msgstr "Update Timesheets?"
 
-msgid ""
-"Attention: There are timesheets that have not yet been accounted. If you "
-"continue, they will be set to accounted. This action cannot be undone. "
-"Continue anyway?"
-msgstr ""
-"Attention: There are timesheets that have not yet been accounted. If you "
-"continue, they will be set to accounted. This action cannot be undone. "
-"Continue anyway?"
+msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
+msgstr "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
 
-msgid "Timeaccount Favorites"
-msgstr "Timeaccount Favorites"
+msgid "Time Account Favorites"
+msgstr "Time Account Favorites"
 
 #, python-brace-format
 msgid "Delete {0}"
@@ -179,11 +172,11 @@ msgstr[1] "Delete {0}"
 msgid "Favorite"
 msgstr "Favorite"
 
-msgid "Bookmark Timeaccount"
-msgstr "Bookmark Timeaccount"
+msgid "Bookmark Time Account"
+msgstr "Bookmark Time Account"
 
-msgid "Close Timeaccount"
-msgstr "Close Timeaccount"
+msgid "Close Time Account"
+msgstr "Close Time Account"
 
 msgid "Show closed"
 msgstr "Show closed"
@@ -214,19 +207,14 @@ msgid_plural "Timesheets"
 msgstr[0] "Timesheet"
 msgstr[1] "Timesheets"
 
-msgid "End must not before start."
-msgstr "End must not before start."
+msgid "End must not be before start."
+msgstr "End must not be before start."
 
 msgid "Accounting"
 msgstr "Accounting"
 
 msgid "Accounting time"
 msgstr "Accounting time"
-
-msgid "Timeaccount"
-msgid_plural "Timeaccounts"
-msgstr[0] "Timeaccount"
-msgstr[1] "Timeaccounts"
 
 msgid "Failed"
 msgstr "Failed"
@@ -235,22 +223,20 @@ msgstr "Failed"
 msgid "Could not save {0}."
 msgstr "Could not save {0}."
 
-msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr "Booking deadline for this Timeaccount has been exceeded."
+msgid "Booking deadline for this time account has been exceeded."
+msgstr "Booking deadline for this time account has been exceeded."
 
-msgid "Closed Timeaccount Warning!"
-msgstr "Closed Timeaccount Warning!"
+msgid "Closed time account warning!"
+msgstr "Closed time account warning!"
 
-msgid "The selected Time Account is already closed."
-msgstr "The selected Time Account is already closed."
+msgid "The selected time account is already closed."
+msgstr "The selected time account is already closed."
 
-msgid ""
-"The selected Time Account is already closed. Do you wish to continue anyway?"
-msgstr ""
-"The selected Time Account is already closed. Do you wish to continue anyway?"
+msgid "The selected time account is already closed. Do you wish to continue anyway?"
+msgstr "The selected time account is already closed. Do you wish to continue anyway?"
 
-msgid "Workingtime:"
-msgstr "Workingtime:"
+msgid "Working Time:"
+msgstr "Working Time:"
 
 msgid "Turnover:"
 msgstr "Turnover:"
@@ -272,6 +258,9 @@ msgstr "Turnover Target: { target }"
 
 msgid "Turnover Recorded: { recorded }"
 msgstr "Turnover Recorded: { recorded }"
+
+msgid "Turnover Cleared: { cleared }"
+msgstr "Turnover Cleared: { cleared }"
 
 msgid "timeframe"
 msgstr "timeframe"
@@ -307,44 +296,47 @@ msgstr "Export as ODS"
 msgid "Export as CSV"
 msgstr "Export as CSV"
 
-msgid "Export as ..."
-msgstr "Export as ..."
+msgid "Export as..."
+msgstr "Export as..."
 
 msgid "Read Own"
 msgstr "Read Own"
 
-msgid "The grant to read own time sheets in this time account."
-msgstr "The grant to read own time sheets in this time account."
+msgid "Permission to read own timesheets in this time account."
+msgstr "Permission to read own timesheets in this time account."
 
 msgid "Request Own"
 msgstr "Request Own"
 
-msgid "The grant to add own time sheets request in this time account."
-msgstr "The grant to add own time sheets request in this time account."
+msgid "Permission to request own timesheets in this time account."
+msgstr "Permission to request own timesheets in this time account."
 
 msgid "Book Own"
 msgstr "Book Own"
 
-msgid "The grant to add Timesheets to this Timeaccount"
-msgstr "The grant to add Timesheets to this Timeaccount"
+msgid "Permission to add timesheets to this time account."
+msgstr "Permission to add timesheets to this time account."
 
 msgid "View All"
 msgstr "View All"
 
-msgid "The grant to view Timesheets of other users"
-msgstr "The grant to view Timesheets of other users"
+msgid "Permission to view timesheets of other users."
+msgstr "Permission to view timesheets of other users."
 
 msgid "Book All"
 msgstr "Book All"
 
-msgid "The grant to add Timesheets for other users"
-msgstr "The grant to add Timesheets for other users"
+msgid "Permission to add timesheets for other users."
+msgstr "Permission to add timesheets for other users."
 
 msgid "Manage Clearing"
 msgstr "Manage Clearing"
 
-msgid "The grant to manage clearing of Timesheets"
-msgstr "The grant to manage clearing of Timesheets"
+msgid "Permission to manage clearing of Timesheets"
+msgstr "Permission to manage clearing of Timesheets"
+
+msgid "Project time budget in hours"
+msgstr "Project time budget in hours"
 
 msgid "Price"
 msgstr "Price"
@@ -366,6 +358,12 @@ msgstr "Accounting time factor"
 
 msgid "Stream"
 msgstr "Stream"
+
+msgid "Budget level in %"
+msgstr "Budget level in %"
+
+msgid "Budget booked hours"
+msgstr "Budget booked hours"
 
 msgid "hour"
 msgstr "hour"
@@ -391,6 +389,9 @@ msgstr "Project time is cleared"
 msgid "Cleared amount"
 msgstr "Cleared amount"
 
+msgid "Recorded amount"
+msgstr "Recorded amount"
+
 msgid "Date"
 msgstr "Date"
 
@@ -406,17 +407,17 @@ msgstr "Duration"
 msgid "Need for Clarification"
 msgstr "Need for Clarification"
 
-msgid "Projecttime Accounting factor"
-msgstr "Projecttime Accounting factor"
+msgid "Project Time Accounting factor"
+msgstr "Project Time Accounting factor"
 
-msgid "Accounting Projecttime"
-msgstr "Accounting Projecttime"
+msgid "Accounting Project Time"
+msgstr "Accounting Project Time"
 
-msgid "Workingtime is cleared"
-msgstr "Workingtime is cleared"
+msgid "Working time is cleared"
+msgstr "Working time is cleared"
 
-msgid "Workingtime cleared in"
-msgstr "Workingtime cleared in"
+msgid "Working time cleared in"
+msgstr "Working time cleared in"
 
 msgid "Process Status"
 msgstr "Process Status"
@@ -430,12 +431,11 @@ msgstr "Timesheets ODS export configuration"
 msgid "Use this configuration for the timesheet ODS export."
 msgstr "Use this configuration for the timesheet ODS export."
 
-msgid "A Tag which is available in context menu for fast assignment"
-msgstr "A Tag which is available in context menu for fast assignment"
+msgid "A Tag which is available in the context menu for fast assignment"
+msgstr "A Tag which is available in the context menu for fast assignment"
 
-msgid "Quick Tag allows to simply assign a predefined tag by the context menu."
-msgstr ""
-"Quick Tag allows to simply assign a predefined tag by the context menu."
+msgid "Quick Tag allows you to simply assign a predefined tag by the context menu."
+msgstr "Quick Tag allows you to simply assign a predefined tag by the context menu."
 
 msgid "default"
 msgstr "default"
@@ -458,38 +458,14 @@ msgstr "My Timesheets this month"
 msgid "My Timesheets last month"
 msgstr "My Timesheets last month"
 
-msgid "Timeaccounts to bill"
-msgstr "Timeaccounts to bill"
+msgid "Time accounts to bill"
+msgstr "Time accounts to bill"
 
-msgid "Timeaccounts not yet billed"
-msgstr "Timeaccounts not yet billed"
+msgid "Time accounts not yet billed"
+msgstr "Time accounts not yet billed"
 
-msgid "Timeaccounts already billed"
-msgstr "Timeaccounts already billed"
+msgid "Time accounts already billed"
+msgstr "Time accounts already billed"
 
 msgid "Timetracker"
 msgstr "Timetracker"
-
-msgid ""
-"All timesheet durations are aggregated here, no matter if they are billable "
-"or not"
-msgstr ""
-"All timesheet durations are aggregated here, no matter if they are billable "
-"or not"
-
-msgid "Project time budget in hours"
-msgstr "Project time budget in hours"
-
-msgid "Budget level in %"
-msgstr "Budget level in %"
-
-msgid "Budget booked hours"
-msgstr "Budget booked hours"
-
-#, python-format
-msgid ""
-"There are %s hours have not yet been billed, do you want to make them "
-"billable?"
-msgstr ""
-"There are %s hours have not yet been billed, do you want to make them "
-"billable?"

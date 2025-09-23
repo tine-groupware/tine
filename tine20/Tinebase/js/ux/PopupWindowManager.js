@@ -173,7 +173,7 @@ Ext.ux.PopupWindowGroup = function(config) {
 //                front = win;
                 // NOTE: we don't recognise the front window yet
 //                if (Ext.isOpera) {
-//                    Ext.Msg.alert(i18n._("The window you want to work with is backgrounded. Your browser doesn't support to foreground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"))
+//                    Ext.Msg.alert(i18n._("The window you want to work with is in the background. Your browser doesn't support bringing the window to the foreground, so you need to use your operating system's window switching features. Please send complaints to your browser vendor!"))
 //                }
                 //orderWindows();
                 return true;

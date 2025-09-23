@@ -91,7 +91,7 @@ Tine.widgets.exportAction.getExportButton = function(recordClass, exportConfig, 
         menuItems.push(new Tine.widgets.grid.ExportButton(_.assign({
             exportScope: scope,
             recordClass: recordClass,
-            text: i18n._('Export as ...'),
+            text: i18n._('Export as...'),
             iconCls: 'action_export',
             showExportDialog: true,
             exportFunction: exportFunction,

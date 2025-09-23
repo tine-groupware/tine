@@ -23,7 +23,7 @@ if (!window.Promise) {
 
         Ext.Msg.show({
             title:_("Outdated Browser"),
-            msg: _("You need a current Browser to use this program."),
+            msg: _("You need a up-to-date Browser to use this program."),
             buttons: '',
             closable:false,
             icon: Ext.MessageBox.ERROR

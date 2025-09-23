@@ -14,7 +14,7 @@ class Sms extends Generic {
         super(config)
         this.isOTP = true
         this.windowTitle = i18n._('SMS security code required')
-        this.questionText = formatMessage('This area is locked. To unlock it we send a securitycode to via {mfaDevice.device_name}.', this)
+        this.questionText = formatMessage('This area is locked. To unlock it we will send a security code to you via {mfaDevice.device_name}.', this)
         this.passwordFieldLabel = formatMessage('Security code from {mfaDevice.device_name}', this);
         this.additionalFields = [new Ext.Action({
             text: i18n._('Didn\'t receive the SMS?'),
@@ -47,7 +47,7 @@ class Sms extends Generic {
                     Ext.Msg.alert(i18n._('Errors'), i18n._(e.data.message));
                 })
             }
-        }, this, true, i18n._('I didn\'t receive a SMS message.'));
+        }, this, true, i18n._('I didn\'t receive an SMS.'));
     }
     
     async unlock (opts) {

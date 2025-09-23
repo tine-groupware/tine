@@ -17,7 +17,7 @@ class LocalizedLangPicker extends Tine.Tinebase.widgets.keyfield.ComboBox {
         this.plugins = this.plugins || [];
         this.plugins.push(this.triggerPlugin = new FieldTriggerPlugin({
             triggerConfig: {tag: "div", src: Ext.BLANK_IMAGE_URL, cls: "x-form-trigger x-form-trigger-plugin x-form-localized-field tine-grid-cell-localized x-form-localized-picker"},
-            qtip: i18n._('Some fields are  multilingual. Click here to select language to display.'),
+            qtip: i18n._('Some fields are multilingual. Click here to select the language to display.'),
             onTriggerClick: _.bind(this.onTriggerClick, this),
         }));
         Tine.Tinebase.widgets.keyfield.ComboBox.prototype.initComponent.call(this);

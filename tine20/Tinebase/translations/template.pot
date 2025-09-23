@@ -1235,6 +1235,9 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
+msgid "Node name may not be changed in update"
+msgstr ""
+
 msgid "The following files have changed:"
 msgstr ""
 
@@ -4557,15 +4560,6 @@ msgstr ""
 msgid "Tine 2.0 URL"
 msgstr ""
 
-msgid "Hello"
-msgstr ""
-
-msgid "Thank you"
-msgstr ""
-
-msgid "Your %1$s Team"
-msgstr ""
-
 msgid "Shared folders"
 msgstr ""
 
@@ -4579,4 +4573,497 @@ msgid "Neighbours only"
 msgstr ""
 
 msgid "Preview"
+msgstr ""
+
+msgid "Manage Templates"
+msgstr ""
+
+msgid "Use main screen"
+msgstr ""
+
+msgid "App main screen is available in UI"
+msgstr ""
+
+msgid "Manage numberables"
+msgstr ""
+
+msgid "Use the record XProp to save the email user ID"
+msgstr ""
+
+msgid "Remember Popup Size"
+msgstr ""
+
+msgid "Autodiscover email config"
+msgstr ""
+
+msgid "Sites are Addressbook contacts matching the siteFilter config."
+msgstr ""
+
+msgid "The currency defined here is used as the default currency in the customer edit dialog."
+msgstr ""
+
+msgid "Allows changing data after fetching user from sync backend"
+msgstr ""
+
+msgid "Deactivated users should be deleted after X months"
+msgstr ""
+
+msgid "Destroy session if the user's user agent string changes."
+msgstr ""
+
+msgid "Reuse username from last login"
+msgstr ""
+
+msgid "Support NTLM V2 authentication and store account password as NTLM V2 hash"
+msgstr ""
+
+msgid "Update NTLM V2 password hash on login"
+msgstr ""
+
+msgid "Maximum allowed login failures before writing warning log messages"
+msgstr ""
+
+msgid "Account deactivation notification"
+msgstr ""
+
+msgid "Send an email to the user if their account is deactivated or they attempt to log in with a deactivated account."
+msgstr ""
+
+msgid "Allows configuration of which user is allowed to switch to another user's account"
+msgstr ""
+
+msgid "An array of JavaScript files to include for the Fat Client. These files might be stored outside the web server’s document root."
+msgstr ""
+
+msgid "Custom Web URL"
+msgstr ""
+
+msgid "Custom web URL for branding."
+msgstr ""
+
+msgid "Custom Help URL"
+msgstr ""
+
+msgid "Custom Shop URL"
+msgstr ""
+
+msgid "Custom URL for the shop."
+msgstr ""
+
+msgid "Custom Bugreport URL"
+msgstr ""
+
+msgid "Custom bugreport URL."
+msgstr ""
+
+msgid "Custom Favicon Paths"
+msgstr ""
+
+msgid "Custom SVG Favicon Paths"
+msgstr ""
+
+msgid "Paths to custom SVG favicon."
+msgstr ""
+
+msgid "Custom Website URL"
+msgstr ""
+
+msgid "Custom URL used for logo on login page."
+msgstr ""
+
+msgid "Use login name instead of full name for WebDAV."
+msgstr ""
+
+msgid "List of WebDAV agent strings that will be denied"
+msgstr ""
+
+msgid "List of WebDAV agent strings that will be denied. Expects a list of regular expressions - like this: [\"/iPhone/\",\"/iOS/\",\"/Android/\"]"
+msgstr ""
+
+msgid "Number of filesystem revisions kept before automatic deletion."
+msgstr ""
+
+msgid "Number of months revisions are kept in the filesystem"
+msgstr ""
+
+msgid "Number of months filesystem revisions are kept before automatic deletion."
+msgstr ""
+
+msgid "Class to use to connect to the preview service."
+msgstr ""
+
+msgid "Max per preview service error count, for trying to generate preview."
+msgstr ""
+
+msgid "Should the quota UI elements be rendered?"
+msgstr ""
+
+msgid "Skip Imap Quota Notification"
+msgstr ""
+
+msgid "The full URL including scheme, hostname, optional port and optional URI part under which tine20 is reachable."
+msgstr ""
+
+msgid "Degree of Urbanization"
+msgstr ""
+
+msgid "densely populated"
+msgstr ""
+
+msgid "intermediate density"
+msgstr ""
+
+msgid "sparsely populated"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "You are not allowed to delete this container. Please define another container as the default Addressbook for internal contacts!"
+msgstr ""
+
+msgid "This is a system container which cannot be deleted!"
+msgstr ""
+
+msgid "Search for Application..."
+msgstr ""
+
+msgid "Choose MFA Device"
+msgstr ""
+
+msgid "This area is locked. Which device should be used to unlock it?"
+msgstr ""
+
+msgid "Unlocking..."
+msgstr ""
+
+msgid "Restart application to apply the new configuration?"
+msgstr ""
+
+msgid "An error occurred, the program ended abnormally."
+msgstr ""
+
+msgid "Your last action may not have been performed correctly."
+msgstr ""
+
+msgid "Please help improve this software and notify the vendor. Include a brief description of what you were doing when the error occurred."
+msgstr ""
+
+msgid "Your report has been sent. Thanks for your contribution!"
+msgstr ""
+
+msgid "Someone else saved this record while you were editing the data. You need to reload and reapply your changes again."
+msgstr ""
+
+msgid "There were Errors:"
+msgstr ""
+
+msgid "Sorry, some timeout occurred while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Sorry, the Server did not respond with any data. Please reload your browser, try again or contact your administrator."
+msgstr ""
+
+msgid "Sorry, the Server reported a \"memory exhausted\" condition. Please contact your administrator."
+msgstr ""
+
+msgid "Method Not Found / Insufficient Permissions"
+msgstr ""
+
+msgid "You need a up-to-date Browser to use this program."
+msgstr ""
+
+msgid "Your username and/or your password is incorrect!"
+msgstr ""
+
+msgid "You are using an unrecognized browser. This could result in unexpected behavior."
+msgstr ""
+
+#, python-brace-format
+msgid "Your {0} license has expired! Users cannot log in anymore. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+
+msgid "Request permissions for WebKit desktop notifications."
+msgstr ""
+
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sign in you will be asked to enter both your username and password as well as a second factor such as a security code."
+msgstr ""
+
+msgid "Multi-Factor Authentication Device Configuration"
+msgstr ""
+
+msgid "Please note: After saving you cannot view this auto-generated secret key again!"
+msgstr ""
+
+msgid "Generating secret key..."
+msgstr ""
+
+msgid "Existing secret keys can't be viewed. You need to generate a new one if the old one is lost."
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it, you need to provide the secret from your Multi-Factor authentication device {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it, you need to provide the code from your authenticator app {mfaDevice.device_name}."
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it, you need to provide your {mfaDevice.device_name} secret."
+msgstr ""
+
+#, python-brace-format
+msgid "This area is locked. To unlock it we will send a security code to you via {mfaDevice.device_name}."
+msgstr ""
+
+msgid "I didn't receive an SMS."
+msgstr ""
+
+msgid "This area is locked. To unlock it, you need to provide your password."
+msgstr ""
+
+msgid "Please open the following URL in your browser for additional security key options"
+msgstr ""
+
+msgid "Configuring FIDO2 WebAuthn Device..."
+msgstr ""
+
+msgid "Search for Municipality Keys..."
+msgstr ""
+
+msgid "A problem with the translations was detected. Trying to reload the client..."
+msgstr ""
+
+msgid "Not all uploads are finished yet. What would you like to do?"
+msgstr ""
+
+msgid "Could not load image. Please notify your administrator"
+msgstr ""
+
+msgid "Could not upload image. Please notify your administrator"
+msgstr ""
+
+msgid "When a preference is locked, a normal user cannot edit the preference anymore."
+msgstr ""
+
+#, python-brace-format
+msgid "Please sort by \"{0}\""
+msgstr ""
+
+msgid "This file could potentially harm your computer. Therefore it has been quarantined and cannot be edited or downloaded."
+msgstr ""
+
+#, python-brace-format
+msgid "An attempt to open a new window failed. When you click OK, the opening procedure will be tried again. To avoid this message, please deactivate your browser's popup blocker for {0}"
+msgstr ""
+
+#, python-brace-format
+msgid "This Window can be closed now. To avoid this message, please deactivate your browser's popup blocker for {0}"
+msgstr ""
+
+msgid "The window you want to work with is in the background. Your browser doesn't support bringing the window to the foreground, so you need to use your operating system's window switching features. Please send complaints to your browser vendor!"
+msgstr ""
+
+msgid "enter search filter"
+msgstr ""
+
+msgid "Changing user account..."
+msgstr ""
+
+msgid "Search for users..."
+msgstr ""
+
+msgid "Search for groups..."
+msgstr ""
+
+msgid "Search for roles..."
+msgstr ""
+
+msgid "The grant to synchronize records with this container"
+msgstr ""
+
+msgid "The record you are trying to add might already exist."
+msgstr ""
+
+msgid "Below you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look."
+msgstr ""
+
+msgid "Below you find a list of all supported import formats."
+msgstr ""
+
+msgid "Tine 2.0 does not understand all kinds of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "You need to correct the fields marked in red before the configuration can be saved"
+msgstr ""
+
+msgid "Send SMS with new password"
+msgstr ""
+
+msgid "Password has expired in accordance with the password policy and needs to be changed"
+msgstr ""
+
+msgid "Create XProp"
+msgstr ""
+
+msgid "XProp Name"
+msgstr ""
+
+msgid "Please enter the name of the new XProp"
+msgstr ""
+
+msgid "Delete XProp"
+msgstr ""
+
+msgid "Export as..."
+msgstr ""
+
+msgid "Some fields are multilingual. Click here to select the language to display."
+msgstr ""
+
+msgid "Search for records..."
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} could be found. Please try changing your filter criteria or view options."
+msgstr ""
+
+msgid "Could not upload file. File size could be too big. Please notify your Administrator. Max upload size:"
+msgstr ""
+
+msgid "Send via E-Mail"
+msgstr ""
+
+msgid "contains a word starting with"
+msgstr ""
+
+msgid "Search Account..."
+msgstr ""
+
+msgid "Period..."
+msgstr ""
+
+msgid "Show records that match one of the following filters"
+msgstr ""
+
+msgid "Remove filter"
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."
+msgstr ""
+
+#, python-brace-format
+msgid "No {0} could be found. Please try changing your filter criteria, view options, or the module you are searching in."
+msgstr ""
+
+msgid "... this may take a long time!"
+msgstr ""
+
+#, python-brace-format
+msgid "Loading {0}..."
+msgstr ""
+
+msgid "Select { itemName }..."
+msgstr ""
+
+msgid "Defined by..."
+msgstr ""
+
+msgid "Define..."
+msgstr ""
+
+msgid "The record can't be opened. There is no dialog available to edit this record!"
+msgstr ""
+
+#, python-brace-format
+msgid "The {1} \"{2}\" is already used in the field \"{0}\" and can be linked only once!"
+msgstr ""
+
+msgid "Data Source URL"
+msgstr ""
+
+msgid "Client Request ID"
+msgstr ""
+
+msgid "Server Request ID"
+msgstr ""
+
+msgid "Log Time"
+msgstr ""
+
+msgid "Time Difference"
+msgstr ""
+
+msgid "Runtime"
+msgstr ""
+
+msgid "Log Level"
+msgstr ""
+
+msgid "Time based OTP (TOTP) is configured"
+msgstr ""
+
+msgid "Yubico OTP public ID"
+msgstr ""
+
+msgid "Yubico OTP privat ID"
+msgstr ""
+
+msgid "Official Regional Key"
+msgstr ""
+
+msgid "Municipality Name"
+msgstr ""
+
+msgid "Total Population"
+msgstr ""
+
+msgid "Male Population"
+msgstr ""
+
+msgid "Female Population"
+msgstr ""
+
+msgid "Population per Square Kilometer"
+msgstr ""
+
+msgid "Postal Code"
+msgstr ""
+
+msgid "Longitude"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Travel Region"
+msgstr ""
+
+msgid "Territorial Status"
+msgstr ""
+
+msgid "Population Status"
+msgstr ""
+
+msgid "Lock ID"
+msgstr ""
+
+msgid "Hello"
+msgstr ""
+
+msgid "Thank you"
+msgstr ""
+
+msgid "Your %1$s Team"
+msgstr ""
+
+msgid "redirecting..."
 msgstr ""

@@ -27,8 +27,8 @@ class EventManager_Model_TextOption  extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'Text Option ',
-        self::RECORDS_NAME          => 'Text Options', // ngettext('Text Option ', 'Text Options', n)
+        self::RECORD_NAME           => 'Text',
+        self::RECORDS_NAME          => 'Text', // ngettext('Text', 'Text', n)
         self::TITLE_PROPERTY        => self::FLD_TEXT_OPTION,
 
         self::FIELDS => [

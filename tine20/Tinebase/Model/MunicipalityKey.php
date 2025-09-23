@@ -162,7 +162,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             self::FLD_ARS_COMBINED => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 12,
-                self::LABEL => 'Amtlicher Regionalschlüssel', // _('Amtlicher Regionalschlüssel')
+                self::LABEL => 'Official Regional Key', // _('Official Regional Key')
                 self::NULLABLE => false,
                 self::QUERY_FILTER => true,
                 self::VALIDATORS => [
@@ -173,7 +173,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             self::FLD_GEMEINDENAMEN => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
-                self::LABEL => 'Gemeindename', // _('Gemeindename')
+                self::LABEL => 'Municipality Name', // _('Municipality Name')
                 self::QUERY_FILTER => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -182,7 +182,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_FLAECHE => [
                 self::TYPE => self::TYPE_FLOAT,
-                self::LABEL => 'Fläche', // _('Fläche')
+                self::LABEL => 'Area', // _('Area')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -191,7 +191,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BEVOELKERUNG_GESAMT => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Bevölkerung insgesamt', // _('Bevölkerung insgesamt')
+                self::LABEL => 'Total Population', // _('Total Population')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -201,7 +201,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BEVOELKERUNG_MAENNLICH => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Bevölkerung männlich', // _('Bevölkerung männlich')
+                self::LABEL => 'Male Population', // _('Male Population')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -211,7 +211,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BEVOELKERUNG_WEIBLICH => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Bevölkerung weiblich', // _('Bevölkerung weiblich')
+                self::LABEL => 'Female Population', // _('Female Population')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -221,7 +221,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BEVOELKERUNG_JE_KM => [
                 self::TYPE => self::TYPE_INTEGER,
-                self::LABEL => 'Bevölkerung je quadrat km', // _('Bevölkerung je quadrat km')
+                self::LABEL => 'Population per Square Kilometer', // _('Population per Square Kilometer')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -231,7 +231,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_PLZ => [
                 self::TYPE => self::TYPE_STRING,
-                self::LABEL => 'plz', // _('plz')
+                self::LABEL => 'Postal Code', // _('Postal Code')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -240,7 +240,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_LAENGENGRAD => [
                 self::TYPE => self::TYPE_FLOAT,
-                self::LABEL => 'Längengrad', // _('Längengrad')
+                self::LABEL => 'Longitude', // _('Longitude')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -249,7 +249,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             ],
             self::FLD_BREITENGRAD => [
                 self::TYPE => self::TYPE_FLOAT,
-                self::LABEL => 'Breitengrad', // _('Breitengrad')
+                self::LABEL => 'Latitude', // _('Latitude')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -259,7 +259,7 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
             self::FLD_REISEGEBIET => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 10,
-                self::LABEL  => 'Reisegebiet', // _('Reisegebiet')
+                self::LABEL  => 'Travel Region', // _('Travel Region')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -269,20 +269,20 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
                 self::NULLABLE => true,
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL                     => 'Grad der Verstädterung', // _('Grad der Verstädterung')
+                self::LABEL                     => 'Degree of Urbanization', // _('Degree of Urbanization')
                 self::NAME                      => 'gradVerstaedterung',
                 self::ALLOW_CAMEL_CASE          => true,
             ],
             self::FLD_GEBIETSSTAND => [
                 self::TYPE => self::TYPE_DATE,
-                self::LABEL => 'Gebietsstand', // _('Gebietsstand')
+                self::LABEL => 'Territorial Status', // _('Territorial Status')
                 self::NULLABLE => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
             ],
             self::FLD_BEVOELKERUNGSSTAND => [
                 self::TYPE => self::TYPE_DATE,
-                self::LABEL => 'Bevölkerungsstand', // _('Bevölkerungsstand')
+                self::LABEL => 'Population Status', // _('Population Status')
                 self::NULLABLE => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],

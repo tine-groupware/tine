@@ -28,14 +28,24 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
         MatrixSynapseIntegrator_Model_MatrixAccount::MODEL_NAME_PART,
     ];
 
-    public function setRecoveryPassword()
+    public function setRecoveryPassword(string $password): array
     {
-        // TODO implement
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
+            Tinebase_Core::getUser()
+        );
+        $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD} = $password;
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->update($matrixAccount);
+        return $this->getBootstrapdata();
     }
 
-    public function setRecoveryKey()
+    public function setRecoveryKey(string $key): array
     {
-        // TODO implement
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
+            Tinebase_Core::getUser()
+        );
+        $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY} = $key;
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->update($matrixAccount);
+        return $this->getBootstrapdata();
     }
  
     /**
@@ -63,21 +73,32 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
         ];
     }
 
-    public function getBootstrapdata()
+    /**
+     * @return array
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     *
+     * TODO if recovery_password empty generate one
+     */
+    public function getBootstrapdata(): array
     {
         $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser(
             Tinebase_Core::getUser()
         );
-        // TODO if recovery_password empty generate one
 
         $userData = $this->_recordToJson($matrixAccount);
         return [
             'mx_user_id' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID],
-            'recovery_key' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY],
+            'recovery_key' => $matrixAccount->getPasswordFromProperty(
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY
+            ),
             'recovery_password' => $matrixAccount->getPasswordFromProperty(
                 MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD
             ),
-            'session_key' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY],
+            'session_key' => $matrixAccount->getPasswordFromProperty(
+                MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_SESSION_KEY
+            ),
         ];
     }
 }

@@ -37,18 +37,10 @@
       <RouterView />
     </div>
     </main>
-    <footer class="mx-5">
-      <b-row>
-        <b-col cols="8">
-          <a href="http://localhost:4000/EventManager/view/#/event">{{formatMessage('Imprint')}}</a>
-          &#183
-          <a href="http://localhost:4000/EventManager/view/#/event">{{formatMessage('Privacy Notice')}}</a>
-        </b-col>
-        <b-col cols="4" class="text-right">
-          <a href="http://localhost:4000/EventManager/view/#/event">{{formatMessage('to the top')}}</a>
-<!--          <router-link @click.native="$scrollToTop"> todo-->
-        </b-col>
-      </b-row>
+    <footer class="mx-5 text-end">
+      <a href="https://tine.local.tine-dev.de/EventManager/view/#/contact">{{formatMessage('Imprint')}}</a>
+      &#183
+      <a href="https://tine.local.tine-dev.de/EventManager/view/#/contact">{{formatMessage('Privacy Notice')}}</a>
     </footer>
   </div>
 </template>

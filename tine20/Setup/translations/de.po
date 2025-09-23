@@ -69,10 +69,10 @@ msgid "uninstall"
 msgstr "Deinstallieren"
 
 msgid "Are you sure you want to uninstall the application(s)?"
-msgstr ""
+msgstr "Möchten Sie die Anwendung(en) wirklich deinstallieren?"
 
 msgid "This may take a while"
-msgstr "Dies kann eine einige Zeit in Anspruch nehmen"
+msgstr "Dies kann eine gewisse Zeit in Anspruch nehmen"
 
 msgid "Dependency Violation"
 msgstr "Verletzung von Abhängigkeiten"
@@ -81,10 +81,10 @@ msgid "CLI Required"
 msgstr "CLI erforderlich"
 
 msgid "Delete all existing users and groups"
-msgstr "Lösche alle existierenden Benutzer und Gruppen"
+msgstr "Lösche alle existierenden Benutzer*innen und Gruppen"
 
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
-msgstr ""
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP?"
+msgstr "Der Wechsel von SQL nach LDAP wird alle bestehenden Benutzer*innen, Gruppen und Rollen Löschen. Möchten sie den Wechsel wirklich vornehmen?"
 
 msgid "Backend"
 msgstr "Backend"
@@ -93,7 +93,7 @@ msgid "TLS client certificate"
 msgstr "TLS Client-Zertifikat"
 
 msgid "Initial Admin User"
-msgstr "Initialer Admin-Benutzer"
+msgstr "Initialer Admin-Benutzer*in"
 
 msgid "Initial admin login name"
 msgstr "Initialer Admin Loginname"
@@ -108,7 +108,7 @@ msgid "Authentication provider"
 msgstr "Authentifizierungsdienst"
 
 msgid "Try to split username"
-msgstr "Versuche den Benutzernamen zu splitten"
+msgstr "Versuche den Benutzer*innennamen zu splitten"
 
 msgid "Yes"
 msgstr "Ja"
@@ -117,7 +117,7 @@ msgid "No"
 msgstr "Nein"
 
 msgid "Account canonical form"
-msgstr "Kanonische Form der Benutzerkonten"
+msgstr "Kanonische Form der Benutzer*innenkonten"
 
 msgid "Account domain name"
 msgstr "Kontodomänenname"
@@ -165,7 +165,7 @@ msgid "TLS"
 msgstr "TLS"
 
 msgid "Append domain to login name"
-msgstr "Domäne an den Benutzernamen anhängen"
+msgstr "Domäne an den Benutzer*innennamen anhängen"
 
 msgid "Certificate validation"
 msgstr "Zertifikatsvalidierung"
@@ -177,10 +177,10 @@ msgid "CRL directory"
 msgstr "CRL Verzeichnis"
 
 msgid "Accounts storage"
-msgstr "Speicherort der Benutzerkonten"
+msgstr "Speicherort der Benutzer*innenkonten"
 
 msgid "Default user group name"
-msgstr "Standard Benutzer Gruppenname"
+msgstr "Standard Benutzer*innen Gruppenname"
 
 msgid "Default admin group name"
 msgstr "Standard Admin Gruppenname"
@@ -189,13 +189,13 @@ msgid "Login panel"
 msgstr "Anmeldebereich"
 
 msgid "Reuse last username logged"
-msgstr "Den zuletzt benutzten Benutzernamen verwenden"
+msgstr "Den zuletzt benutzten Benutzer*innennamen verwenden"
 
 msgid "Password Settings"
 msgstr "Passworteinstellungen"
 
 msgid "User can change password"
-msgstr "Benutzer kann Passwort ändern"
+msgstr "Benutzer*in kann Passwort ändern"
 
 msgid "Enable password policy"
 msgstr "Passwortrichtlinie aktivieren"
@@ -219,21 +219,21 @@ msgid "Minimum numbers"
 msgstr "Minimale Anzahl Zahlen"
 
 msgid "Change password after ... days"
-msgstr ""
+msgstr "Passwort nach ... Tagen ändern"
 
 msgid "Forbid part of username in password"
-msgstr "Verbiete einen Teil des Benutzernamens im Passwort"
+msgstr "Verbiete einen Teil des Benutzer*innennamens im Passwort"
 
 msgid "Redirect Settings"
-msgstr "Weiterleitungs Einstellungen"
+msgstr "Weiterleitungseinstellungen"
 
-msgid "Redirect Url (redirect to login screen if empty)"
+msgid "Redirect URL (redirect to login screen if empty)"
 msgstr "Weiterleitungs-URL (Weiterleitung zum Login wenn leer)"
 
 msgid "Redirect Always (if No, only redirect after logout)"
-msgstr "Immer Weiterleiten (Wenn Nein: nur nach dem ausloggen weiterleiten)"
+msgstr "Immer Weiterleiten (Wenn nein: nur nach dem ausloggen weiterleiten)"
 
-msgid "Redirect to referring site, if exists"
+msgid "Redirect to the referring site, if exists"
 msgstr "Weiterleitung an die Herkunftsseite, falls eine existiert"
 
 msgid "Password encoding"
@@ -273,10 +273,10 @@ msgid "plain"
 msgstr "plain"
 
 msgid "User DN"
-msgstr "Benutzer DN"
+msgstr "Benutzer*in DN"
 
 msgid "User Filter"
-msgstr "Benutzerfilter"
+msgstr "Benutzer*innenfilter"
 
 msgid "E-Mail Attribute"
 msgstr ""
@@ -285,7 +285,7 @@ msgid "Write Password to SQL backend"
 msgstr ""
 
 msgid "User Search Scope"
-msgstr "Benutzersuche-Bereich"
+msgstr "Benutzer*innensuche-Bereich"
 
 msgid "Groups DN"
 msgstr "Gruppen DN"
@@ -296,31 +296,31 @@ msgstr "Gruppenfilter"
 msgid "Group Search Scope"
 msgstr "Gruppensuche-Bereich"
 
-msgid "Use Rfc 2307 bis"
-msgstr "Benutze RFC2307bis"
+msgid "Use RFC 2307 bis"
+msgstr "Benutze RFC 2307bis"
 
 msgid "Maintain RFC 2307 attributes"
 msgstr "RFC 2307-Attribute beibehalten"
 
-msgid "Min User Id"
-msgstr "Minimale Benutzer Id"
+msgid "Min User ID"
+msgstr "Minimale Benutzer*innen-ID"
 
-msgid "Max User Id"
-msgstr "Maximale Benutzer Id"
+msgid "Max User ID"
+msgstr "Maximale Benutzer*innen-ID"
 
-msgid "Min Group Id"
-msgstr "Minimale Gruppen Id"
+msgid "Min Group ID"
+msgstr "Minimale Gruppen-ID"
 
-msgid "Max Group Id"
-msgstr "Maximale Gruppen Id"
+msgid "Max Group ID"
+msgstr "Maximale Gruppen-ID"
 
 msgid "Group UUID Attribute name"
 msgstr "UUID Attribut von Gruppen"
 
 msgid "User UUID Attribute name"
-msgstr "UUID Attribut von Benutzerkonten"
+msgstr "UUID Attribut von Benutzer*innenkonten"
 
-msgid "Readonly access"
+msgid "Read-only access"
 msgstr "Nur lesender Zugriff"
 
 msgid "Save config and install"
@@ -342,13 +342,13 @@ msgid "Setup Authentication"
 msgstr "Setup Authentifizierung"
 
 msgid "Username"
-msgstr "Benutzername"
+msgstr "Benutzer*innenname"
 
 msgid "Database"
 msgstr "Datenbank"
 
 msgid "User"
-msgstr "Benutzer"
+msgstr "Benutzer*in"
 
 msgid "Prefix"
 msgstr "Prefix"
@@ -384,10 +384,10 @@ msgid "Temporary Files Path"
 msgstr "Pfad für flüchtige Dateien"
 
 msgid "Filestore directory"
-msgstr "Datei-Ablage Verzeichnis"
+msgstr "Dateispeicherverzeichnis"
 
 msgid "Filestore Path"
-msgstr "Datei-Ablage Verzeichnis"
+msgstr "Pfad zum Dateispeicherverzeichnis"
 
 msgid "Addressbook Map panel"
 msgstr "Kartenfenster im Adressbuch"
@@ -409,7 +409,7 @@ msgstr "Konfigurationsdatei herunterladen"
 
 #, python-brace-format
 msgid "This prefix is too long. Please choose a prefix no longer than {0} chars."
-msgstr ""
+msgstr "Dieses Präfix ist zu lang. Bitte wählen Sie ein Präfix mit höchstens {0} Zeichen."
 
 msgid "Standard IMAP"
 msgstr "Standard IMAP"
@@ -427,7 +427,7 @@ msgid "Use system account"
 msgstr "Systemkonto benutzen"
 
 msgid "Use email address as login name"
-msgstr "E-Mail als Benutzername verwenden"
+msgstr "E-Mail-Adresse als Benutzer*innenname verwenden"
 
 msgid "Cyrus Admin"
 msgstr "Cyrus Admin"
@@ -438,8 +438,8 @@ msgstr "Cyrus Admin Passwort"
 msgid "Use proxy auth"
 msgstr "Proxy-Authentifizierung verwenden"
 
-msgid "Smtp"
-msgstr "Smtp"
+msgid "SMTP"
+msgstr "SMTP"
 
 msgid "Authentication"
 msgstr "Authentifizierung"
@@ -456,14 +456,14 @@ msgstr "Primäre Domäne"
 msgid "Secondary Domains (comma separated)"
 msgstr "Sekundäre Domänen (durch Komma getrennt)"
 
-msgid "Aditional Domains (comma separated)"
-msgstr ""
+msgid "Additional Domains (comma separated)"
+msgstr "Zusätzliche Domains (durch Kommas getrennt)"
 
 msgid "Notifications service address"
-msgstr "Notifikationsdienst Emailadresse"
+msgstr "Notifikationsdienst E-Mail-Adresse"
 
 msgid "Notification Username"
-msgstr "Benachrichtigungs-Benutzername"
+msgstr "Benachrichtigungs-Benutzer*innenname"
 
 msgid "Notification Password"
 msgstr "Benachrichtigungs-Passwort"
@@ -474,23 +474,23 @@ msgstr "Lokaler Hostname (oder IP-Adresse) für den Notifikationsdienst"
 msgid "SIEVE"
 msgstr "SIEVE"
 
-msgid "MySql Hostname"
-msgstr "MySql Hostname"
+msgid "MySQL Hostname"
+msgstr "MySQL Hostname"
 
-msgid "MySql Database"
-msgstr "MySql Datenbank"
+msgid "MySQL Database"
+msgstr "MySQL Datenbank"
 
-msgid "MySql User"
-msgstr "MySql Benutzer"
+msgid "MySQL User"
+msgstr "MySQL Benutzer*in"
 
-msgid "MySql Password"
-msgstr "MySql Passwort"
+msgid "MySQL Password"
+msgstr "MySQL Passwort"
 
-msgid "MySql Port"
-msgstr "MySql Port"
+msgid "MySQL Port"
+msgstr "MySQL Port"
 
 msgid "User or UID"
-msgstr "Benutzer oder UID"
+msgstr "Benutzer*in oder UID"
 
 msgid "Group or GID"
 msgstr "Gruppe oder GID"
@@ -529,7 +529,7 @@ msgid "Performing Environment Checks..."
 msgstr "Führe Environment Prüfungen aus..."
 
 #, python-brace-format
-msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgid "No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."
 msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder den/die {1}, in dem/der Sie suchen."
 
 msgid "Check"
@@ -545,7 +545,7 @@ msgid "Run setup tests"
 msgstr "Setup Tests ausführen"
 
 msgid "Ignore setup tests"
-msgstr "Setuptests ignorieren"
+msgstr "Setup tests ignorieren"
 
 msgid "Setup"
 msgstr ""
@@ -563,22 +563,22 @@ msgid "Upload from disk"
 msgstr "Von der Festplatte hochladen"
 
 msgid "Select file containing your Subscription key"
-msgstr "Wählen Sie die Datei, die Ihren Subskription enthält"
+msgstr "Wählen Sie die Datei, die Ihre Subskription enthält"
 
 msgid "No valid Subscription"
-msgstr ""
+msgstr "Keine gültige Subskription"
 
 msgid "Contract ID"
 msgstr "Vertragsnummer"
 
 msgid "Organization"
-msgstr ""
+msgstr "Organisation"
 
 msgid "Activation Key"
-msgstr ""
+msgstr "Aktivierungsschlüssel"
 
 msgid "Maximum Users (0=unlimited)"
-msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+msgstr "Maximale Benutzer*innenzahl (0=unbegrenzt)"
 
 msgid "Valid from"
 msgstr "Gültig ab"
@@ -616,25 +616,77 @@ msgid "Setup Checks"
 msgstr "Setup Tests"
 
 msgid "Config Manager"
-msgstr "Konfigurations-Verwaltung"
+msgstr "Konfigurationsverwaltung"
 
 msgid "Authentication/Accounts"
-msgstr "Authentifizierung/Benutzerkonten"
+msgstr "Authentifizierung/Benutzer*innenkonten"
 
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 msgid "Application Manager"
-msgstr "Anwendungs-Verwaltung"
+msgstr "Anwendungsverwaltung"
 
 msgid "Subscription"
-msgstr ""
+msgstr "Subskription"
 
 msgid "Maximum number of users reached. You might not want to update to this version, as some of the users might no longer be able to log in."
-msgstr ""
+msgstr "Die maximale Anzahl an Benutzer*innen ist erreicht. Ein Update auf diese Version könnte problematisch sein, da sich einige Benutzer*innen möglicherweise nicht mehr einloggen können."
 
 msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users. To continue updating tine, you can skip this check by adding this to your config: \"setupSkipUpdateMaxUserCheck\" => true"
-msgstr ""
+msgstr "Bitte kontaktieren Sie die Metaways Infosystems GmbH, um eine Lizenz zu erwerben, die eine höhere Anzahl an Benutzer*innen unterstützt. Um die Aktualisierung von tine fortzusetzen, können Sie diese Prüfung überspringen, indem Sie Folgendes zu Ihrer Konfiguration hinzufügen: \"setupSkipUpdateMaxUserCheck\" => true"
+
+#~ msgid "Use Rfc 2307 bis"
+#~ msgstr "Benutze RFC 2307bis"
+
+#~ msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?"
+#~ msgstr "Der Wechsel von SQL zu LDAP löscht alle vorhandenen Benutzerkonten, Gruppen und Rollen. Sind Sie sicher, dass Sie das Kontenspeicher-Backend auf LDAP umstellen möchten? "
+
+#~ msgid "Redirect Url (redirect to login screen if empty)"
+#~ msgstr "Weiterleitungs-URL (Weiterleitung zum Login wenn leer)"
+
+#~ msgid "Redirect to referring site, if exists"
+#~ msgstr "Weiterleitung an die Herkunftsseite, falls eine existiert"
+
+#~ msgid "Use Rfc 2307bis"
+#~ msgstr "Benutze RFC 2307bis"
+
+#~ msgid "Min User Id"
+#~ msgstr "Minimale Benutzer Id"
+
+#~ msgid "Max User Id"
+#~ msgstr "Maximale Benutzer Id"
+
+#~ msgid "Min Group Id"
+#~ msgstr "Minimale Gruppen Id"
+
+#~ msgid "Max Group Id"
+#~ msgstr "Maximale Gruppen Id"
+
+#~ msgid "Readonly access"
+#~ msgstr "Nur lesender Zugriff"
+
+#~ msgid "Smtp"
+#~ msgstr "Smtp"
+
+#~ msgid "MySql Hostname"
+#~ msgstr "MySql Hostname"
+
+#~ msgid "MySql Database"
+#~ msgstr "MySql Datenbank"
+
+#~ msgid "MySql User"
+#~ msgstr "MySql Benutzer"
+
+#~ msgid "MySql Password"
+#~ msgstr "MySql Passwort"
+
+#~ msgid "MySql Port"
+#~ msgstr "MySql Port"
+
+#, python-brace-format
+#~ msgid "There could not be found any {0}. Please try to change your filter-criteria, view-options or the {1} you search in."
+#~ msgstr "Keine {0} gefunden. Bitte überprüfen Sie ihre Filterkriterien, Ansichtsoptionen oder den/die {1}, in dem/der Sie suchen."
 
 #~ msgid "Do you really want to uninstall the application(s)?"
 #~ msgstr "Möchten Sie die Anwendung(en) wirklich deinstallieren?"

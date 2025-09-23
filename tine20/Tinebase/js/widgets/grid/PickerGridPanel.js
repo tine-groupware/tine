@@ -751,7 +751,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return me.afterIsRendered()
             .then(function() {
                 if (! me.loadMask) {
-                    me.loadMask = new Ext.LoadMask(me.getEl(), {msg: String.format(i18n._('Loading {0} ...'), me.recordClass.getRecordsName())});
+                    me.loadMask = new Ext.LoadMask(me.getEl(), {msg: String.format(i18n._('Loading {0}...'), me.recordClass.getRecordsName())});
                 }
                 me.loadMask.show.defer(100, me.loadMask);
             });

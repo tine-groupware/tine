@@ -19,6 +19,8 @@ Tine.EventManager.BookedOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
     onBeforeRender: function () {
         this.setSelectionConfigClassListener();
+        let eventId = this.form.openerCt.parentEditDialog.record.data.event_id;
+        this.form.findField('option').additionalFilters = [{field: 'event_id', operator: 'equals', value: eventId}]
         this.form.findField('selection_config_class').hidden = true;
     },
 

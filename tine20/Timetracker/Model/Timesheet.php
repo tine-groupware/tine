@@ -278,7 +278,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'default'               => 0
             ),
             'accounting_time_factor'    => array(
-                'label'                 => 'Projecttime Accounting factor', // _('Projecttime Accounting factor')
+                'label'                 => 'Project Time Accounting factor', // _('Project Time Accounting factor')
                 'inputFilters'          => [
                     Zend_Filter_Callback::class => [['callback' => [self::class, 'filterEmptyNonZero']]]
                 ],
@@ -293,7 +293,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ],
             ),
             'accounting_time'  => array(
-                'label'                 => 'Accounting Projecttime', // _('Accounting Projecttime')
+                'label'                 => 'Accounting Project Time', // _('Accounting Project Time')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',
@@ -307,13 +307,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ],
             ),
             'workingtime_is_cleared'    => array(
-                'label'                 => 'Workingtime is cleared', // _('Workingtime is cleared')
+                'label'                 => 'Working time is cleared', // _('Working time is cleared')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
                 'type'                  => 'boolean',
                 'default'               => 0
             ),
             'workingtime_cleared_in'             => array(
-                'label'                 => 'Workingtime cleared in', // _('Workingtime cleared in')
+                'label'                 => 'Working time cleared in', // _('Working time cleared in')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'shy'                   => true,
                 'nullable'              => true,

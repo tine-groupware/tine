@@ -123,7 +123,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         var AccountsStorage = this.accountsStorageCombo.getValue();
 
         if ((AccountsStorage === 'Ldap' || AccountsStorage === 'ActiveDirectory') && AccountsStorage !== this.originalAccountsStorage) {
-            Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP ?'), function (confirmbtn, value) {
+            Ext.Msg.confirm(this.app.i18n._('Delete all existing users and groups'), this.app.i18n._('Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Are you sure you want to switch the accounts storage backend to LDAP?'), function (confirmbtn, value) {
                 if (confirmbtn === 'yes') {
                     this.doOnChangeAccountsStorage(AccountsStorage);
                 } else {
@@ -564,7 +564,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             },
             items: [{
                 name: 'redirectSettings_redirectUrl',
-                fieldLabel: this.app.i18n._('Redirect Url (redirect to login screen if empty)')
+                fieldLabel: this.app.i18n._('Redirect URL (redirect to login screen if empty)')
             }, 
             Ext.applyIf({
                 name: 'redirectSettings_redirectAlways',
@@ -574,7 +574,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, commonComboConfig), 
             Ext.applyIf({
                 name: 'redirectSettings_redirectToReferrer',
-                fieldLabel: this.app.i18n._('Redirect to referring site, if exists'),
+                fieldLabel: this.app.i18n._('Redirect to the referring site, if exists'),
                 store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '0'
             }, commonComboConfig)]
@@ -689,22 +689,22 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             }, commonComboConfig), 
             Ext.applyIf({
                 name: 'accounts_' + type + ((type === 'Ldap') ? '_useRfc2307bis' : '_useRfc2307'),
-                fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use Rfc 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
+                fieldLabel: (type === 'Ldap') ? this.app.i18n._('Use RFC 2307 bis') : this.app.i18n._('Maintain RFC 2307 attributes'),
                 store: [['1', this.app.i18n._('Yes')], ['0', this.app.i18n._('No')]],
                 value: '0'
             }, commonComboConfig), 
             {
                 name: 'accounts_' + type + '_minUserId',
-                fieldLabel: this.app.i18n._('Min User Id')
+                fieldLabel: this.app.i18n._('Min User ID')
             }, {
                 name: 'accounts_' + type + '_maxUserId',
-                fieldLabel: this.app.i18n._('Max User Id')
+                fieldLabel: this.app.i18n._('Max User ID')
             }, {
                 name: 'accounts_' + type + '_minGroupId',
-                fieldLabel: this.app.i18n._('Min Group Id')
+                fieldLabel: this.app.i18n._('Min Group ID')
             }, {
                 name: 'accounts_' + type + '_maxGroupId',
-                fieldLabel: this.app.i18n._('Max Group Id')
+                fieldLabel: this.app.i18n._('Max Group ID')
             },
             Ext.applyIf({
                 name: 'accounts_' + type + '_groupUUIDAttribute',
@@ -725,7 +725,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
             },
             Ext.applyIf({
                 name: 'accounts_' + type + '_readonly',
-                fieldLabel: this.app.i18n._('Readonly access'),
+                fieldLabel: this.app.i18n._('Read-only access'),
                 store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
                 value: '0'
             }, commonComboConfig)]
