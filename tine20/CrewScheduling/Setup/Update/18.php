@@ -31,6 +31,10 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
             ],
+            self::RELEASE018_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -53,10 +57,6 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
             ],
-            self::RELEASE018_UPDATE006          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update006',
-            ]
         ],
     ];
 
@@ -181,6 +181,8 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
     public function update006(): void
     {
         Setup_SchemaTool::updateSchema([
+            CrewScheduling_Model_Poll::class,
+            CrewScheduling_Model_PollParticipant::class,
             CrewScheduling_Model_PollReply::class,
         ]);
         $this->addApplicationUpdate('CrewScheduling', '18.6', self::RELEASE018_UPDATE006);
