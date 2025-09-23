@@ -1235,9 +1235,6 @@ msgstr "Total: "
 msgid "Data"
 msgstr "Data"
 
-msgid "Node name may not be changed in update"
-msgstr "Node name may not be changed in update"
-
 msgid "The following files have changed:"
 msgstr "The following files have changed:"
 
@@ -4559,6 +4556,15 @@ msgstr "Deactivation date"
 
 msgid "Tine 2.0 URL"
 msgstr "Tine 2.0 URL"
+
+msgid "Hello"
+msgstr "Hello"
+
+msgid "Thank you"
+msgstr "Thank you"
+
+msgid "Your %1$s Team"
+msgstr "Your %1$s Team"
 
 msgid "Shared folders"
 msgstr "Shared folders"

@@ -104,6 +104,7 @@
     "ext-xmlreader": "*",
     "ext-xmlwriter": "*",
     "ext-zip": "*",
+    "antibodies-online/bootstrap-email": "^1.0",
     "benmorel/gsm-charset-converter": "^0.2",
     "clean/phpdoc-md": "^0.19.3",
     "composer/semver": "*",

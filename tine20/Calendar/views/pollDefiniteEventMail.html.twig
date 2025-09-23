@@ -1,5 +1,18 @@
-{{ _('The poll "%1$s" has been closed.') | format(name) }}
-{{ _('The definite event is scheduled for "%1$s"') | format(sstart) }}
+{% extends 'Tinebase/views/emails/base.html.twig' %}
 
-{{ _('You can review the poll results here:') }}
-{{ link }}
+{% block subject %}
+    {{ _('%1$s is scheduled for %2$s') | format(name, sstart) }}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-3">
+        <p class="text-start">
+            {{ _("The poll „%1$s“ has been closed.") | format(name, sstart) }}<br>
+            {{ _("The definite event is scheduled for „%1$s“.") | format(name, sstart) }}<br><br>
+            {{ _('You can review the poll results here:') }}
+        </p>
+    </div>
+    <div class="ax-center my-3">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('My Poll') }}</a>
+    </div>
+{% endblock %}

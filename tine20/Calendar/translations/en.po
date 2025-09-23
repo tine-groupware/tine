@@ -455,14 +455,6 @@ msgstr "Polls for recurring events are not supported"
 msgid "This contact was automatically added by the system as an event attendee."
 msgstr "This contact was automatically added by the system as an event attendee."
 
-#, php-format
-msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr "Attendance Confirmation for Poll \"%1$s\""
-
-#, php-format
-msgid "%1$s is scheduled for %2$s"
-msgstr "%1$s is scheduled for %2$s"
-
 msgid "Different Calendar"
 msgstr "Different Calendar"
 
@@ -1068,6 +1060,12 @@ msgstr "Delete Missing Events"
 msgid "Delete events missing from the import data (future events only)."
 msgstr "Delete events missing from the import data (future events only)."
 
+msgid "Match Attendee"
+msgstr "Match Attendee"
+
+msgid "Match attendee with existing users or contacts."
+msgstr "Match attendee with existing users or contacts."
+
 msgid "Basic Data Only"
 msgstr "Basic Data Only"
 
@@ -1085,6 +1083,45 @@ msgstr "Keep Existing Attendee"
 
 msgid "Do not remove attendees from existing events that are not in the import data."
 msgstr "Do not remove attendees from existing events that are not in the import data."
+
+msgid "Match Organizer"
+msgstr "Match Organizer"
+
+msgid "Match organizer with existing user or contact."
+msgstr "Match organizer with existing user or contact."
+
+msgid "Skip from other internal organizers"
+msgstr "Skip from other internal organizers"
+
+msgid "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
+msgstr "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
+
+msgid "Skip Events if organizer matched an other internal user than the import user."
+msgstr "Skip Events if organizer matched an other internal user than the import user."
+
+msgid "Use own attendee status for other internal organizer events"
+msgstr "Use own attendee status for other internal organizer events"
+
+msgid "Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response."
+msgstr "Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response."
+
+msgid "Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user."
+msgstr "Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user."
+
+msgid "Allow party crushing for other internal organizer events"
+msgstr "Allow party crushing for other internal organizer events"
+
+msgid "Use this when attendee added themselves and organizer did not receive/process/accept response."
+msgstr "Use this when attendee added themselves and organizer did not receive/process/accept response."
+
+msgid "Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user."
+msgstr "Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user."
+
+msgid "Disable external organizer calendar"
+msgstr "Disable external organizer calendar"
+
+msgid "Import events of external organizers directly into the import calendar."
+msgstr "Import events of external organizers directly into the import calendar."
 
 msgid "Force Organizer for new Events"
 msgstr "Force Organizer for new Events"
@@ -2034,20 +2071,32 @@ msgstr "Link"
 msgid "Event details"
 msgstr "Event details"
 
-msgid "Thank you for attending the poll \"%1$s\""
-msgstr "Thank you for attending the poll \"%1$s\""
+msgid "Attendance Confirmation for Poll „%1$s“"
+msgstr "Attendance Confirmation for Poll „%1$s“"
+
+msgid "Thank you for attending the poll „%1$s“"
+msgstr "Thank you for attending the poll „%1$s“"
 
 msgid "To review or edit your status, please use your personal link:"
 msgstr "To review or edit your status, please use your personal link:"
 
-msgid "The poll \"%1$s\" has been closed."
-msgstr "The poll \"%1$s\" has been closed."
+msgid "My Link"
+msgstr "My Link"
 
-msgid "The definite event is scheduled for \"%1$s\""
-msgstr "The definite event is scheduled for \"%1$s\""
+msgid "%1$s is scheduled for %2$s"
+msgstr "%1$s is scheduled for %2$s"
+
+msgid "The poll „%1$s“ has been closed."
+msgstr "The poll „%1$s“ has been closed."
+
+msgid "The definite event is scheduled for „%1$s“."
+msgstr "The definite event is scheduled for „%1$s“."
 
 msgid "You can review the poll results here:"
 msgstr "You can review the poll results here:"
+
+msgid "My Poll"
+msgstr "My Poll"
 
 msgid "Summary - Organizer"
 msgstr "Summary - Organizer"

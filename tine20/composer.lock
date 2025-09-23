@@ -7,6 +7,60 @@
     "content-hash": "9b258eb5f4d9854947ff38f3b60b3d79",
     "packages": [
         {
+            "name": "antibodies-online/bootstrap-email",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antibodies-online/bootstrap-email.git",
+                "reference": "8e30db75159524b337d42c81c8ac28aab513ed27"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antibodies-online/bootstrap-email/zipball/8e30db75159524b337d42c81c8ac28aab513ed27",
+                "reference": "8e30db75159524b337d42c81c8ac28aab513ed27",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": "^7.1 || ^8.0",
+                "scssphp/scssphp": "^v1.5.0",
+                "tijsverkoyen/css-to-inline-styles": "^2.2",
+                "twig/twig": "^v1.0 || ^v2.0 || ^v3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5",
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AntibodiesOnline\\BootstrapEmail\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Benedikt Lenzen",
+                    "email": "benedikt.lenzen@antibodies-online.com"
+                }
+            ],
+            "description": "A PHP port of bootstrap-email ruby package",
+            "keywords": [
+                "bootstrap",
+                "email",
+                "mail",
+                "responsive"
+            ],
+            "support": {
+                "issues": "https://github.com/antibodies-online/bootstrap-email/issues",
+                "source": "https://github.com/antibodies-online/bootstrap-email/tree/v1.0.5"
+            },
+            "time": "2024-06-05T09:17:15+00:00"
+        },
+        {
             "name": "beberlei/assert",
             "version": "v3.3.3",
             "source": {
@@ -7924,6 +7978,86 @@
                 "source": "https://github.com/fruux/sabre-xml"
             },
             "time": "2024-09-06T07:37:46+00:00"
+        },
+        {
+            "name": "scssphp/scssphp",
+            "version": "v1.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/scssphp/scssphp.git",
+                "reference": "63d1157457e5554edf00b0c1fabab4c1511d2520"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/scssphp/scssphp/zipball/63d1157457e5554edf00b0c1fabab4c1511d2520",
+                "reference": "63d1157457e5554edf00b0c1fabab4c1511d2520",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.4",
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.3 || ^9.4",
+                "sass/sass-spec": "*",
+                "squizlabs/php_codesniffer": "~3.5",
+                "symfony/phpunit-bridge": "^5.1",
+                "thoughtbot/bourbon": "^7.0",
+                "twbs/bootstrap": "~5.0",
+                "twbs/bootstrap4": "4.6.1",
+                "zurb/foundation": "~6.7.0"
+            },
+            "suggest": {
+                "ext-iconv": "Can be used as fallback when ext-mbstring is not available",
+                "ext-mbstring": "For best performance, mbstring should be installed as it is faster than ext-iconv"
+            },
+            "bin": [
+                "bin/pscss"
+            ],
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ScssPhp\\ScssPhp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthon Pang",
+                    "email": "apang@softwaredevelopment.ca",
+                    "homepage": "https://github.com/robocoder"
+                },
+                {
+                    "name": "Cédric Morin",
+                    "email": "cedric@yterium.com",
+                    "homepage": "https://github.com/Cerdic"
+                }
+            ],
+            "description": "scssphp is a compiler for SCSS written in PHP.",
+            "homepage": "http://scssphp.github.io/scssphp/",
+            "keywords": [
+                "css",
+                "less",
+                "sass",
+                "scss",
+                "stylesheet"
+            ],
+            "support": {
+                "issues": "https://github.com/scssphp/scssphp/issues",
+                "source": "https://github.com/scssphp/scssphp/tree/v1.13.0"
+            },
+            "time": "2024-08-17T21:02:11+00:00"
         },
         {
             "name": "sentry/sentry",
