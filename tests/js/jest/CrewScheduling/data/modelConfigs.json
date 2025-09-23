@@ -1,0 +1,3411 @@
+{
+  "SchedulingRole": {
+    "containerProperty": "container_id",
+    "extendsContainer": "container_id",
+    "containersName": "Scheduling Roles",
+    "containerName": "Scheduling Role",
+    "grantsModel": "CrewScheduling_Model_SchedulingRoleGrants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "key",
+      "order",
+      "name",
+      "color",
+      "num_required_role_attendee",
+      "shortfall_action",
+      "exceedance_action",
+      "leadtime",
+      "role_attendee_required_groups",
+      "role_attendee_required_groups_operator",
+      "description",
+      "id",
+      "customfields",
+      "container_id",
+      "grants",
+      "account_grants",
+      "tags",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "key": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "order": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "name": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "color": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "num_required_role_attendee": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "shortfall_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "exceedance_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "leadtime": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "role_attendee_required_groups": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "RequiredGroups",
+          "refIdField": "record",
+          "dependentRecords": true,
+          "filtergroup": "CrewScheduling_Model_RequiredGroupsFilter",
+          "controller": "CrewScheduling_Controller_RequiredGroups"
+        }
+      },
+      "role_attendee_required_groups_operator": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "description": {
+        "filter": "Tinebase_Model_Filter_FullText"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_SchedulingRole"
+        }
+      },
+      "customfield": {
+        "filter": "Tinebase_Model_Filter_CustomField",
+        "options": {
+          "idProperty": "cs_scheduling_role.id"
+        }
+      },
+      "container_id": {
+        "filter": "Tinebase_Model_Filter_Container",
+        "options": {
+          "modelName": "CrewScheduling_Model_SchedulingRole"
+        }
+      },
+      "grants": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRoleGrants",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleGrantsFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRoleGrants"
+        }
+      },
+      "tag": {
+        "key": "tag",
+        "filter": "Tinebase_Model_Filter_Tag",
+        "options": {
+          "idProperty": "cs_scheduling_role.id",
+          "applicationName": "CrewScheduling"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "key",
+            "name"
+          ],
+          "modelName": "CrewScheduling_Model_SchedulingRole"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": null,
+    "fields": {
+      "key": {
+        "type": "string",
+        "length": 10,
+        "nullable": false,
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Key",
+        "queryFilter": true,
+        "fieldName": "key",
+        "key": "key"
+      },
+      "order": {
+        "type": "integer",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Sorting Order",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "default": 10,
+        "fieldName": "order",
+        "key": "order"
+      },
+      "name": {
+        "type": "string",
+        "length": 255,
+        "nullable": false,
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Name",
+        "queryFilter": true,
+        "fieldName": "name",
+        "key": "name"
+      },
+      "color": {
+        "type": "hexcolor",
+        "length": 7,
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Color",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "default": "#00FF00",
+        "fieldName": "color",
+        "key": "color"
+      },
+      "num_required_role_attendee": {
+        "type": "integer",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Default Minimal Attendee Role Count",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "default": 1,
+        "fieldName": "num_required_role_attendee",
+        "key": "num_required_role_attendee"
+      },
+      "shortfall_action": {
+        "type": "keyfield",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "none"
+        },
+        "label": "Shortfall Action",
+        "name": "shortfall_actions",
+        "default": "none",
+        "fieldName": "shortfall_action",
+        "key": "shortfall_action",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "none"
+        }
+      },
+      "exceedance_action": {
+        "type": "keyfield",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "none"
+        },
+        "label": "Exceedance Action",
+        "name": "exceedance_actions",
+        "default": "none",
+        "fieldName": "exceedance_action",
+        "key": "exceedance_action",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "none"
+        }
+      },
+      "leadtime": {
+        "type": "integer",
+        "nullable": false,
+        "label": "Leadtime",
+        "description": "Number of days before the actions are finally applied. On the one hand, this is the automatic cancellation and on the other hand the notifications (see grants tab). If appointments are are canceled, the participants are automatically informed of the cancellation.",
+        "default": 7,
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required",
+          "default": 7
+        },
+        "fieldName": "leadtime",
+        "key": "leadtime"
+      },
+      "role_attendee_required_groups": {
+        "type": "records",
+        "nullable": true,
+        "label": "Required Attendee Groups for role",
+        "validators": {
+          "allowEmpty": true
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "uiconfig": {
+          "columns": [
+            "group"
+          ]
+        },
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "RequiredGroups",
+          "refIdField": "record",
+          "dependentRecords": true,
+          "recordClassName": "CrewScheduling_Model_RequiredGroups",
+          "controllerClassName": "CrewScheduling_Controller_RequiredGroups",
+          "filterClassName": "CrewScheduling_Model_RequiredGroupsFilter"
+        },
+        "fieldName": "role_attendee_required_groups",
+        "key": "role_attendee_required_groups"
+      },
+      "role_attendee_required_groups_operator": {
+        "type": "keyfield",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "OR"
+        },
+        "label": "Required Groups Behaviour",
+        "name": "group_operators",
+        "default": "OR",
+        "fieldName": "role_attendee_required_groups_operator",
+        "key": "role_attendee_required_groups_operator",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "OR"
+        }
+      },
+      "description": {
+        "type": "fulltext",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Description",
+        "fieldName": "description",
+        "key": "description"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_SchedulingRole"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "customfields": {
+        "label": "Custom Fields",
+        "shy": true,
+        "sortable": false,
+        "type": "custom",
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "customfields",
+        "key": "customfields"
+      },
+      "container_id": {
+        "nullable": true,
+        "length": 40,
+        "label": "Scheduling Role",
+        "shy": true,
+        "type": "container",
+        "validators": {
+          "allowEmpty": true
+        },
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Container",
+          "options": {
+            "modelName": "CrewScheduling_Model_SchedulingRole"
+          }
+        },
+        "fieldName": "container_id",
+        "key": "container_id"
+      },
+      "grants": {
+        "type": "records",
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRoleGrants",
+          "recordClassName": "CrewScheduling_Model_SchedulingRoleGrants",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRoleGrants",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleGrantsFilter",
+          "dependentRecords": false
+        },
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "grants",
+        "key": "grants"
+      },
+      "account_grants": {
+        "type": "virtual",
+        "fieldName": "account_grants",
+        "key": "account_grants",
+        "modlogOmit": true,
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "tags": {
+        "label": "Tags",
+        "sortable": false,
+        "type": "tag",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "filterDefinition": {
+          "key": "tag",
+          "filter": "Tinebase_Model_Filter_Tag",
+          "options": {
+            "idProperty": "cs_scheduling_role.id",
+            "applicationName": "CrewScheduling"
+          }
+        },
+        "fieldName": "tags",
+        "key": "tags"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": false,
+        "default": "1970-01-01 00:00:00",
+        "converters": [
+          "Tinebase_Model_Converter_DateTimeFakeNull"
+        ],
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "order": 10,
+      "color": "#00FF00",
+      "num_required_role_attendee": 1,
+      "shortfall_action": "none",
+      "exceedance_action": "none",
+      "leadtime": 7,
+      "role_attendee_required_groups_operator": "OR",
+      "seq": 0,
+      "deleted_time": "1970-01-01 00:00:00",
+      "is_deleted": 0
+    },
+    "titleProperty": "name",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": {
+      "searchComboConfig": {
+        "useEditPlugin": false
+      }
+    },
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Scheduling Role",
+    "recordsName": "Scheduling Roles",
+    "appName": "CrewScheduling",
+    "modelName": "SchedulingRole",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": true,
+    "hasSystemCustomFields": null,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "account_grants": {
+        "sortable": false,
+        "key": "account_grants"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "SchedulingRoleGrants": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "record_id",
+      "account_grant",
+      "account_id",
+      "account_type",
+      "account_name",
+      "readGrant",
+      "sendEmailsGrant",
+      "managePollGrant",
+      "assignAttendeeGrant",
+      "adminGrant",
+      "id"
+    ],
+    "filterModel": {
+      "record_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "account_grant": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "account_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "account_type": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "readGrant": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "sendEmailsGrant": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "managePollGrant": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "assignAttendeeGrant": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "adminGrant": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_SchedulingRoleGrants"
+        }
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "account_id"
+          ],
+          "modelName": "CrewScheduling_Model_SchedulingRoleGrants"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "record_id": {
+        "type": "string",
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "record_id",
+        "key": "record_id"
+      },
+      "account_grant": {
+        "type": "string",
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "account_grant",
+        "key": "account_grant"
+      },
+      "account_id": {
+        "type": "string",
+        "validators": {
+          "presence": "required",
+          "allowEmpty": true,
+          "default": "0"
+        },
+        "fieldName": "account_id",
+        "key": "account_id"
+      },
+      "account_type": {
+        "type": "string",
+        "validators": {
+          "0": [
+            "InArray",
+            [
+              "anyone",
+              "user",
+              "group",
+              "role"
+            ]
+          ],
+          "presence": "required"
+        },
+        "fieldName": "account_type",
+        "key": "account_type"
+      },
+      "account_name": {
+        "type": "virtual",
+        "fieldName": "account_name",
+        "key": "account_name",
+        "modlogOmit": true,
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "readGrant": {
+        "type": "boolean",
+        "validators": {
+          "0": {},
+          "default": false,
+          "presence": "required",
+          "allowEmpty": true
+        },
+        "fieldName": "readGrant",
+        "key": "readGrant"
+      },
+      "sendEmailsGrant": {
+        "type": "boolean",
+        "validators": {
+          "0": {},
+          "default": false,
+          "presence": "required",
+          "allowEmpty": true
+        },
+        "label": "Send Emails",
+        "description": "The grant to send emails to role members.",
+        "fieldName": "sendEmailsGrant",
+        "key": "sendEmailsGrant"
+      },
+      "managePollGrant": {
+        "type": "boolean",
+        "validators": {
+          "0": {},
+          "default": false,
+          "presence": "required",
+          "allowEmpty": true
+        },
+        "label": "Manage Polls",
+        "description": "The grant to manage polls and send poll mails to possible attendee and role members.",
+        "fieldName": "managePollGrant",
+        "key": "managePollGrant"
+      },
+      "assignAttendeeGrant": {
+        "type": "boolean",
+        "validators": {
+          "0": {},
+          "default": false,
+          "presence": "required",
+          "allowEmpty": true
+        },
+        "label": "Assign Attendee",
+        "description": "The grant to add attendee of this role to events in Crew Scheduling Application.",
+        "fieldName": "assignAttendeeGrant",
+        "key": "assignAttendeeGrant"
+      },
+      "adminGrant": {
+        "type": "boolean",
+        "validators": {
+          "0": {},
+          "default": false,
+          "presence": "required",
+          "allowEmpty": true
+        },
+        "fieldName": "adminGrant",
+        "key": "adminGrant"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_SchedulingRoleGrants"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      }
+    },
+    "defaultData": [],
+    "titleProperty": "account_id",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Grant",
+    "recordsName": "Grants",
+    "appName": "CrewScheduling",
+    "modelName": "SchedulingRoleGrants",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": null,
+    "hasSystemCustomFields": null,
+    "modlogActive": null,
+    "hasNotes": null,
+    "hasAttachments": null,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "account_name": {
+        "sortable": false,
+        "key": "account_name"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "RequiredGroups": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "group",
+      "record",
+      "id"
+    ],
+    "filterModel": {
+      "group": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Addressbook",
+          "modelName": "List",
+          "filtergroup": "Addressbook_Model_ListFilter",
+          "controller": "Addressbook_Controller_List"
+        }
+      },
+      "record": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRole"
+        }
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_RequiredGroups"
+        }
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "group"
+          ],
+          "modelName": "CrewScheduling_Model_RequiredGroups"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "group": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "List",
+          "recordClassName": "Addressbook_Model_List",
+          "controllerClassName": "Addressbook_Controller_List",
+          "filterClassName": "Addressbook_Model_ListFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Required Group",
+        "queryFilter": true,
+        "fieldName": "group",
+        "key": "group"
+      },
+      "record": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "recordClassName": "CrewScheduling_Model_SchedulingRole",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRole",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Scheduling Role",
+        "disabled": true,
+        "fieldName": "record",
+        "key": "record"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_RequiredGroups"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      }
+    },
+    "defaultData": [],
+    "titleProperty": "group",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Required Group",
+    "recordsName": "Required Groups",
+    "appName": "CrewScheduling",
+    "modelName": "RequiredGroups",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": false,
+    "hasSystemCustomFields": false,
+    "modlogActive": false,
+    "hasNotes": false,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": [],
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "EventTypeConfig": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": {
+      "field": "scheduling_role"
+    },
+    "fieldKeys": [
+      "scheduling_role",
+      "event_type",
+      "num_required_role_attendee",
+      "shortfall_action",
+      "exceedance_action",
+      "role_attendee_required_groups",
+      "role_attendee_required_groups_operator",
+      "same_role_same_attendee",
+      "other_role_same_attendee",
+      "id",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "scheduling_role": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRole"
+        }
+      },
+      "event_type": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "isParent": true,
+          "filtergroup": "Calendar_Model_EventTypeFilter",
+          "controller": "Calendar_Controller_EventType"
+        }
+      },
+      "num_required_role_attendee": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "shortfall_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "exceedance_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "role_attendee_required_groups": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "RequiredGroups",
+          "refIdField": "record",
+          "dependentRecords": true,
+          "filtergroup": "CrewScheduling_Model_RequiredGroupsFilter",
+          "controller": "CrewScheduling_Controller_RequiredGroups"
+        }
+      },
+      "role_attendee_required_groups_operator": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "same_role_same_attendee": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "other_role_same_attendee": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_EventTypeConfig"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "scheduling_role"
+          ],
+          "modelName": "CrewScheduling_Model_EventTypeConfig"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "scheduling_role": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "recordClassName": "CrewScheduling_Model_SchedulingRole",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRole",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Scheduling Role",
+        "queryFilter": true,
+        "fieldName": "scheduling_role",
+        "key": "scheduling_role"
+      },
+      "event_type": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "isParent": true,
+          "recordClassName": "Calendar_Model_EventType",
+          "controllerClassName": "Calendar_Controller_EventType",
+          "filterClassName": "Calendar_Model_EventTypeFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Event Type",
+        "fieldName": "event_type",
+        "key": "event_type"
+      },
+      "num_required_role_attendee": {
+        "type": "integer",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Default Minimal Attendee Role Count",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "uiconfig": {
+          "emptyText": "If not set value from role is taken per default"
+        },
+        "fieldName": "num_required_role_attendee",
+        "key": "num_required_role_attendee"
+      },
+      "shortfall_action": {
+        "type": "keyfield",
+        "nullable": true,
+        "default": null,
+        "validators": {
+          "allowEmpty": true,
+          "default": null
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "label": "Shortfall Action",
+        "name": "shortfall_actions",
+        "uiconfig": {
+          "emptyText": "If not set value from role is taken per default"
+        },
+        "fieldName": "shortfall_action",
+        "key": "shortfall_action",
+        "length": 40
+      },
+      "exceedance_action": {
+        "type": "keyfield",
+        "nullable": true,
+        "default": null,
+        "validators": {
+          "allowEmpty": true,
+          "default": null
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "label": "Exceedance Action",
+        "name": "exceedance_actions",
+        "uiconfig": {
+          "emptyText": "If not set value from role is taken per default"
+        },
+        "fieldName": "exceedance_action",
+        "key": "exceedance_action",
+        "length": 40
+      },
+      "role_attendee_required_groups": {
+        "type": "records",
+        "nullable": true,
+        "label": "Required Attendee Groups for role",
+        "validators": {
+          "allowEmpty": true
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "default": null,
+        "uiconfig": {
+          "columns": [
+            "group"
+          ]
+        },
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "RequiredGroups",
+          "refIdField": "record",
+          "dependentRecords": true,
+          "recordClassName": "CrewScheduling_Model_RequiredGroups",
+          "controllerClassName": "CrewScheduling_Controller_RequiredGroups",
+          "filterClassName": "CrewScheduling_Model_RequiredGroupsFilter"
+        },
+        "fieldName": "role_attendee_required_groups",
+        "key": "role_attendee_required_groups"
+      },
+      "role_attendee_required_groups_operator": {
+        "type": "keyfield",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true,
+          "default": "OR"
+        },
+        "label": "Required Groups Behaviour",
+        "name": "group_operators",
+        "default": null,
+        "fieldName": "role_attendee_required_groups_operator",
+        "key": "role_attendee_required_groups_operator",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "OR"
+        }
+      },
+      "same_role_same_attendee": {
+        "type": "keyfield",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true,
+          "default": "may"
+        },
+        "label": "Behavior if this role is also required from other event types",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "name": "same_role_same_attendee",
+        "fieldName": "same_role_same_attendee",
+        "key": "same_role_same_attendee",
+        "length": 40,
+        "default": "may"
+      },
+      "other_role_same_attendee": {
+        "type": "boolean",
+        "nullable": true,
+        "default": 0,
+        "label": "Participants who occupy this role may also take on other roles in the event.",
+        "fieldName": "other_role_same_attendee",
+        "key": "other_role_same_attendee",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_EventTypeConfig"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "same_role_same_attendee": "may",
+      "other_role_same_attendee": 0,
+      "seq": 0,
+      "is_deleted": 0
+    },
+    "titleProperty": "{{ scheduling_role.name }}",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Scheduling Role Config",
+    "recordsName": "Scheduling Role Configs",
+    "appName": "CrewScheduling",
+    "modelName": "EventTypeConfig",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": true,
+    "hasCustomFields": false,
+    "hasSystemCustomFields": false,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": [],
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "EventRoleConfig": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "cal_event",
+      "role",
+      "event_types",
+      "shortfall_action",
+      "exceedance_action",
+      "same_role_same_attendee",
+      "other_role_same_attendee",
+      "num_required_role_attendee",
+      "id",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "cal_event": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "Event",
+          "isParent": true,
+          "filtergroup": "Calendar_Model_EventFilter",
+          "controller": "Calendar_Controller_Event"
+        }
+      },
+      "role": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRole"
+        }
+      },
+      "event_types": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "storage": "jsonRefId",
+          "filtergroup": "Calendar_Model_EventTypeFilter",
+          "controller": "Calendar_Controller_EventType"
+        }
+      },
+      "shortfall_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "exceedance_action": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "same_role_same_attendee": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "other_role_same_attendee": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "num_required_role_attendee": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_EventRoleConfig"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "role"
+          ],
+          "modelName": "CrewScheduling_Model_EventRoleConfig"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "cal_event": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "Calendar",
+          "modelName": "Event",
+          "isParent": true,
+          "recordClassName": "Calendar_Model_Event",
+          "controllerClassName": "Calendar_Controller_Event",
+          "filterClassName": "Calendar_Model_EventFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Event",
+        "disabled": true,
+        "fieldName": "cal_event",
+        "key": "cal_event"
+      },
+      "role": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "recordClassName": "CrewScheduling_Model_SchedulingRole",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRole",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Scheduling Role",
+        "queryFilter": true,
+        "fieldName": "role",
+        "key": "role"
+      },
+      "event_types": {
+        "type": "records",
+        "nullable": true,
+        "config": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "storage": "jsonRefId",
+          "recordClassName": "Calendar_Model_EventType",
+          "controllerClassName": "Calendar_Controller_EventType",
+          "filterClassName": "Calendar_Model_EventTypeFilter",
+          "dependentRecords": false
+        },
+        "label": "Event Types",
+        "uiconfig": {
+          "hasGridColumn": true
+        },
+        "fieldName": "event_types",
+        "key": "event_types",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "shortfall_action": {
+        "type": "keyfield",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "none"
+        },
+        "label": "Shortfall Action",
+        "name": "shortfall_actions",
+        "default": "none",
+        "fieldName": "shortfall_action",
+        "key": "shortfall_action",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "none"
+        }
+      },
+      "exceedance_action": {
+        "type": "keyfield",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "none"
+        },
+        "label": "Exceedance Action",
+        "name": "exceedance_actions",
+        "default": "none",
+        "fieldName": "exceedance_action",
+        "key": "exceedance_action",
+        "length": 40,
+        "inputFilters": {
+          "Zend_Filter_Empty": "none"
+        }
+      },
+      "same_role_same_attendee": {
+        "type": "keyfield",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true,
+          "default": "may"
+        },
+        "label": "Other event types?",
+        "description": "Behavior if this role is also required from other event types",
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "name": "same_role_same_attendee",
+        "shy": true,
+        "fieldName": "same_role_same_attendee",
+        "key": "same_role_same_attendee",
+        "length": 40,
+        "default": "may"
+      },
+      "other_role_same_attendee": {
+        "type": "boolean",
+        "nullable": true,
+        "default": 0,
+        "uiconfig": {
+          "boxLabel": "Participants who occupy this role may also take on other roles in the event."
+        },
+        "label": "Allow other roles?",
+        "shy": true,
+        "fieldName": "other_role_same_attendee",
+        "key": "other_role_same_attendee",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "num_required_role_attendee": {
+        "type": "integer",
+        "label": "Number of required attendee",
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "default": 1,
+        "uiconfig": {
+          "emptyText": "If not set value from role is taken per default"
+        },
+        "fieldName": "num_required_role_attendee",
+        "key": "num_required_role_attendee"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_EventRoleConfig"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "shortfall_action": "none",
+      "exceedance_action": "none",
+      "same_role_same_attendee": "may",
+      "other_role_same_attendee": 0,
+      "num_required_role_attendee": 1,
+      "seq": 0,
+      "is_deleted": 0
+    },
+    "titleProperty": "role",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Role Configuration",
+    "recordsName": "Role Configurations",
+    "appName": "CrewScheduling",
+    "modelName": "EventRoleConfig",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": true,
+    "hasCustomFields": false,
+    "hasSystemCustomFields": false,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": [],
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": "role"
+  },
+  "AttendeeRole": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": {
+      "field": "role"
+    },
+    "fieldKeys": [
+      "attendee",
+      "role",
+      "event_types",
+      "id"
+    ],
+    "filterModel": {
+      "attendee": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "Attender",
+          "filtergroup": "Calendar_Model_AttenderFilter",
+          "controller": "Calendar_Controller_Attender"
+        }
+      },
+      "role": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRole"
+        }
+      },
+      "event_types": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "storage": "jsonRefId",
+          "filtergroup": "Calendar_Model_EventTypeFilter",
+          "controller": "Calendar_Controller_EventType"
+        }
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_AttendeeRole"
+        }
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "role"
+          ],
+          "modelName": "CrewScheduling_Model_AttendeeRole"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "attendee": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "Calendar",
+          "modelName": "Attender",
+          "recordClassName": "Calendar_Model_Attender",
+          "controllerClassName": "Calendar_Controller_Attender",
+          "filterClassName": "Calendar_Model_AttenderFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Attendee",
+        "disabled": true,
+        "fieldName": "attendee",
+        "key": "attendee"
+      },
+      "role": {
+        "type": "record",
+        "length": 40,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "recordClassName": "CrewScheduling_Model_SchedulingRole",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRole",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "label": "Scheduling Role",
+        "queryFilter": true,
+        "fieldName": "role",
+        "key": "role"
+      },
+      "event_types": {
+        "label": "Event Types",
+        "type": "records",
+        "nullable": true,
+        "config": {
+          "appName": "Calendar",
+          "modelName": "EventType",
+          "storage": "jsonRefId",
+          "recordClassName": "Calendar_Model_EventType",
+          "controllerClassName": "Calendar_Controller_EventType",
+          "filterClassName": "Calendar_Model_EventTypeFilter",
+          "dependentRecords": false
+        },
+        "fieldName": "event_types",
+        "key": "event_types",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_AttendeeRole"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      }
+    },
+    "defaultData": [],
+    "titleProperty": "{{ role.name }}",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Attendee Role",
+    "recordsName": "Attendee Roles",
+    "appName": "CrewScheduling",
+    "modelName": "AttendeeRole",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": false,
+    "hasSystemCustomFields": false,
+    "modlogActive": false,
+    "hasNotes": false,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": [],
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "Poll": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "scheduling_role",
+      "from",
+      "until",
+      "description",
+      "deadline",
+      "site",
+      "id_closed",
+      "participants",
+      "id",
+      "account_grants",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "scheduling_role": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "filtergroup": "CrewScheduling_Model_SchedulingRoleFilter",
+          "controller": "CrewScheduling_Controller_SchedulingRole"
+        }
+      },
+      "from": {
+        "filter": "Tinebase_Model_Filter_Date"
+      },
+      "until": {
+        "filter": "Tinebase_Model_Filter_Date"
+      },
+      "description": {
+        "filter": "Tinebase_Model_Filter_FullText"
+      },
+      "deadline": {
+        "filter": "Tinebase_Model_Filter_Date"
+      },
+      "site": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "filtergroup": "Addressbook_Model_ContactFilter",
+          "controller": "Addressbook_Controller_Contact"
+        }
+      },
+      "id_closed": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "participants": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "PollParticipant",
+          "refIdField": "poll_id",
+          "dependentRecords": true,
+          "filtergroup": "CrewScheduling_Model_PollParticipantFilter",
+          "controller": "CrewScheduling_Controller_PollParticipant"
+        }
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_Poll"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "scheduling_role",
+            "description"
+          ],
+          "modelName": "CrewScheduling_Model_Poll"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "scheduling_role": {
+        "label": "Scheduling Role",
+        "type": "record",
+        "length": 40,
+        "queryFilter": true,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "SchedulingRole",
+          "recordClassName": "CrewScheduling_Model_SchedulingRole",
+          "controllerClassName": "CrewScheduling_Controller_SchedulingRole",
+          "filterClassName": "CrewScheduling_Model_SchedulingRoleFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "uiconfig": {
+          "fieldConfig": {
+            "xtype": "cs-poll-schedulingrolefield"
+          }
+        },
+        "fieldName": "scheduling_role",
+        "key": "scheduling_role"
+      },
+      "from": {
+        "label": "From",
+        "description": "Calendar events from this date on are included in poll.",
+        "type": "date",
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "from",
+        "key": "from"
+      },
+      "until": {
+        "label": "Until",
+        "description": "Calendar events until this date on are included in poll.",
+        "type": "date",
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "until",
+        "key": "until"
+      },
+      "description": {
+        "label": "Description",
+        "type": "fulltext",
+        "queryFilter": true,
+        "nullable": true,
+        "shy": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "description",
+        "key": "description"
+      },
+      "deadline": {
+        "label": "Deadline",
+        "description": "Once given date is passed poll is closed and attendee cannot replay any longer.",
+        "type": "date",
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "deadline",
+        "key": "deadline"
+      },
+      "site": {
+        "label": "Site",
+        "description": "Location of the event.",
+        "type": "record",
+        "validators": {
+          "allowEmpty": true,
+          "presence": "optional"
+        },
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "recordClassName": "Addressbook_Model_Contact",
+          "controllerClassName": "Addressbook_Controller_Contact",
+          "filterClassName": "Addressbook_Model_ContactFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "default": null,
+        "nullable": true,
+        "fieldName": "site",
+        "key": "site"
+      },
+      "id_closed": {
+        "label": "Is Closed",
+        "type": "boolean",
+        "validators": {
+          "allowEmpty": true
+        },
+        "default": 0,
+        "fieldName": "id_closed",
+        "key": "id_closed"
+      },
+      "participants": {
+        "label": "Participants",
+        "type": "records",
+        "validators": {
+          "allowEmpty": true
+        },
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "PollParticipant",
+          "refIdField": "poll_id",
+          "dependentRecords": true,
+          "recordClassName": "CrewScheduling_Model_PollParticipant",
+          "controllerClassName": "CrewScheduling_Controller_PollParticipant",
+          "filterClassName": "CrewScheduling_Model_PollParticipantFilter"
+        },
+        "uiconfig": {
+          "readOnly": true,
+          "fieldConfig": {
+            "xtype": "cs-poll-participantsfield",
+            "height": 300
+          }
+        },
+        "fieldName": "participants",
+        "key": "participants"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_Poll"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "account_grants": {
+        "type": "virtual",
+        "fieldName": "account_grants",
+        "key": "account_grants",
+        "modlogOmit": true,
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": false,
+        "default": "1970-01-01 00:00:00",
+        "converters": [
+          "Tinebase_Model_Converter_DateTimeFakeNull"
+        ],
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "id_closed": 0,
+      "seq": 0,
+      "deleted_time": "1970-01-01 00:00:00",
+      "is_deleted": 0
+    },
+    "titleProperty": "description",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": "scheduling_role",
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Poll",
+    "recordsName": "Polls",
+    "appName": "CrewScheduling",
+    "modelName": "Poll",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": null,
+    "hasSystemCustomFields": null,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": null,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "account_grants": {
+        "sortable": false,
+        "key": "account_grants"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "PollParticipant": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "poll_id",
+      "contact_id",
+      "last_response_time",
+      "notes",
+      "poll_replies",
+      "id",
+      "account_grants",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "poll_id": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "Poll",
+          "filtergroup": "CrewScheduling_Model_PollFilter",
+          "controller": "CrewScheduling_Controller_Poll"
+        }
+      },
+      "contact_id": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "filtergroup": "Addressbook_Model_ContactFilter",
+          "controller": "Addressbook_Controller_Contact"
+        }
+      },
+      "last_response_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "poll_replies": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "dependentRecords": true,
+          "appName": "CrewScheduling",
+          "modelName": "PollReply",
+          "refIdField": "poll_participant_id",
+          "filtergroup": "CrewScheduling_Model_PollReplyFilter",
+          "controller": "CrewScheduling_Controller_PollReply"
+        }
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_PollParticipant"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "poll_id",
+            "contact_id"
+          ],
+          "modelName": "CrewScheduling_Model_PollParticipant"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "poll_id": {
+        "label": "Poll",
+        "type": "record",
+        "queryFilter": true,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "Poll",
+          "recordClassName": "CrewScheduling_Model_Poll",
+          "controllerClassName": "CrewScheduling_Controller_Poll",
+          "filterClassName": "CrewScheduling_Model_PollFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "poll_id",
+        "key": "poll_id"
+      },
+      "contact_id": {
+        "label": "Participant",
+        "type": "record",
+        "queryFilter": true,
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "recordClassName": "Addressbook_Model_Contact",
+          "controllerClassName": "Addressbook_Controller_Contact",
+          "filterClassName": "Addressbook_Model_ContactFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "contact_id",
+        "key": "contact_id"
+      },
+      "last_response_time": {
+        "label": "Response Date",
+        "type": "datetime",
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "last_response_time",
+        "key": "last_response_time"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "poll_replies": {
+        "label": "Reply",
+        "type": "records",
+        "config": {
+          "dependentRecords": true,
+          "appName": "CrewScheduling",
+          "modelName": "PollReply",
+          "refIdField": "poll_participant_id",
+          "recordClassName": "CrewScheduling_Model_PollReply",
+          "controllerClassName": "CrewScheduling_Controller_PollReply",
+          "filterClassName": "CrewScheduling_Model_PollReplyFilter"
+        },
+        "fieldName": "poll_replies",
+        "key": "poll_replies",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_PollParticipant"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "account_grants": {
+        "type": "virtual",
+        "fieldName": "account_grants",
+        "key": "account_grants",
+        "modlogOmit": true,
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": false,
+        "default": "1970-01-01 00:00:00",
+        "converters": [
+          "Tinebase_Model_Converter_DateTimeFakeNull"
+        ],
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "seq": 0,
+      "deleted_time": "1970-01-01 00:00:00",
+      "is_deleted": 0
+    },
+    "titleProperty": "title",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": "poll_id",
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Participant",
+    "recordsName": "Participants",
+    "appName": "CrewScheduling",
+    "modelName": "PollParticipant",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": null,
+    "hasSystemCustomFields": null,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": null,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "account_grants": {
+        "sortable": false,
+        "key": "account_grants"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": "contact_id"
+  },
+  "PollReply": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "poll_participant_id",
+      "event_container_id",
+      "event_id",
+      "event_recur_id",
+      "status",
+      "id",
+      "account_grants",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "poll_participant_id": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "PollParticipant",
+          "isParent": true,
+          "filtergroup": "CrewScheduling_Model_PollParticipantFilter",
+          "controller": "CrewScheduling_Controller_PollParticipant"
+        }
+      },
+      "event_container_id": {
+        "filter": "Tinebase_Model_Filter_Container"
+      },
+      "event_id": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Calendar",
+          "modelName": "Event",
+          "filtergroup": "Calendar_Model_EventFilter",
+          "controller": "Calendar_Controller_Event"
+        }
+      },
+      "event_recur_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "status": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "CrewScheduling_Model_PollReply"
+        }
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "poll_participant_id"
+          ],
+          "modelName": "CrewScheduling_Model_PollReply"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "poll_participant_id": {
+        "label": "Poll Participant",
+        "type": "record",
+        "length": 40,
+        "queryFilter": true,
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "PollParticipant",
+          "isParent": true,
+          "recordClassName": "CrewScheduling_Model_PollParticipant",
+          "controllerClassName": "CrewScheduling_Controller_PollParticipant",
+          "filterClassName": "CrewScheduling_Model_PollParticipantFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "poll_participant_id",
+        "key": "poll_participant_id"
+      },
+      "event_container_id": {
+        "label": "Event Container",
+        "type": "container",
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "event_container_id",
+        "key": "event_container_id"
+      },
+      "event_id": {
+        "label": "Event",
+        "type": "record",
+        "config": {
+          "appName": "Calendar",
+          "modelName": "Event",
+          "recordClassName": "Calendar_Model_Event",
+          "controllerClassName": "Calendar_Controller_Event",
+          "filterClassName": "Calendar_Model_EventFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "validators": {
+          "allowEmpty": false,
+          "presence": "required"
+        },
+        "fieldName": "event_id",
+        "key": "event_id"
+      },
+      "event_recur_id": {
+        "label": "Event Recur Id",
+        "type": "string",
+        "length": 255,
+        "default": "",
+        "fieldName": "event_recur_id",
+        "key": "event_recur_id",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "status": {
+        "type": "string",
+        "length": 40,
+        "default": "NEEDS-ACTION",
+        "inputFilters": {
+          "Zend_Filter_Empty": [
+            "NEEDS-ACTION"
+          ]
+        },
+        "validators": {
+          "0": [
+            "Zend_Validate_InArray",
+            [
+              "NEEDS-ACTION",
+              "ACCEPTED",
+              "DECLINED",
+              "TENTATIVE"
+            ]
+          ],
+          "default": "NEEDS-ACTION"
+        },
+        "fieldName": "status",
+        "key": "status"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "CrewScheduling_Model_PollReply"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "account_grants": {
+        "type": "virtual",
+        "fieldName": "account_grants",
+        "key": "account_grants",
+        "modlogOmit": true,
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": false,
+        "default": "1970-01-01 00:00:00",
+        "converters": [
+          "Tinebase_Model_Converter_DateTimeFakeNull"
+        ],
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "event_recur_id": "",
+      "status": "NEEDS-ACTION",
+      "seq": 0,
+      "deleted_time": "1970-01-01 00:00:00",
+      "is_deleted": 0
+    },
+    "titleProperty": "title",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": "poll_participant_id",
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Poll Reply",
+    "recordsName": "Poll Replies",
+    "appName": "CrewScheduling",
+    "modelName": "PollReply",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": true,
+    "hasCustomFields": null,
+    "hasSystemCustomFields": null,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": null,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "account_grants": {
+        "sortable": false,
+        "key": "account_grants"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  }
+}

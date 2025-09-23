@@ -1,0 +1,153 @@
+/* CrewScheduling/css/eventMembersGrid.css */
+
+/* seems to be a generic ext problem, but as we have a default col plugin in grids we don't have a real prob */
+.cs-event-member-grid .x-grid3-col.x-grid3-cell,
+.cs-event-member-grid .x-grid3-hd.x-grid3-cell {
+    box-sizing: border-box;
+    vertical-align: bottom;
+}
+
+/* https://stackoverflow.com/questions/43675499/css-height-100-not-working-on-td */
+.cs-event-row table.x-grid3-row-table {
+    height: 1px;
+}
+
+td.cs-members-event-wrap .x-grid3-cell-inner {
+    height: 100%;
+    padding: 0;
+}
+
+.cs-event {
+    margin: 3px;
+}
+
+.cs-event .cs-event-date {
+    font-weight: bold;
+}
+
+.cs-event .cs-event-time {
+    margin-left: 5px;
+    font-style: italic;
+}
+
+.cs-event .cs-event-summary {
+    margin-left: 5px;
+    margin-top: 2px;
+}
+
+.cs-members-cell .cs-members {
+    /*border: 2px solid;*/
+    /*border-radius: 2px;*/
+}
+
+.cs-event-CANCELLED {
+    text-decoration: line-through !important;
+    opacity: 0.7;
+}
+
+.cs-members-cell {
+    position: relative;
+}
+
+.cs-members-cell .cs-members {
+    background-position: center;
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-right: 16px;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    height: 100%;
+}
+
+.cs-members-state-not-enough .cs-members {
+    border-color: red;
+}
+
+.cs-members-state-enough .cs-members {
+    border-color: green;
+}
+
+.cs-members-state-more-than-enough .cs-members {
+    border-color: blue;
+}
+
+.cs-member-cell-highlight {
+    background-color: #EBF3FD;
+    border-width: 2px;
+}
+
+.x-grid3-row td.cs-members-event-wrap {
+    background-color: #f0f0f0;
+    border-color: #d0d0d0;
+}
+
+.x-grid3-row td.cs-members-cell-wrap {
+    vertical-align: bottom;
+}
+
+.cs-members-cell .cs-role-number {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    box-sizing: border-box;
+    width: 16px;
+    height: 100%;
+    overflow: hidden;
+    max-height:37px;
+}
+
+.cs-role-number.rs-role-number-readonly .cs-role-number-up,
+.cs-role-number.rs-role-number-readonly .cs-role-number-down {
+    background: none;
+    border: none;
+}
+
+.cs-role-number.rs-role-number-readonly .cs-role-number-required {
+    border-top: 1px solid #7eadd9;
+    border-bottom: 1px solid #7eadd9;
+    max-height: 11px;
+}
+
+.cs-role-number .cs-role-number-up,
+.cs-role-number .cs-role-number-down {
+    background-size: 11px;
+    background-position: 3px 0px;
+    background-repeat: no-repeat;
+    height: 11px;
+    width: 15px;
+}
+
+.cs-role-number .cs-role-number-up {
+    background-image: url('../../images/icon-set/icon_arrow_up.svg');
+    border-right: 1px solid #7eadd9;
+    border-top: 1px solid #7eadd9;
+    border-radius: 2px;
+}
+
+.cs-role-number .cs-role-number-down {
+    background-image: url('../../images/icon-set/icon_arrow_down.svg');
+    border-right: 1px solid #7eadd9;
+    border-bottom: 1px solid #7eadd9;
+    border-radius: 2px;
+}
+
+.cs-role-number .cs-role-number-up:hover,
+.cs-role-number .cs-role-number-down:hover {
+    background-size: 13px;
+    background-position: 2px -1px;
+}
+
+.cs-role-number .cs-role-number-required {
+    margin-bottom: -1px;
+    margin-top: -1px;
+    border-right: 1px solid #7eadd9;
+    padding: 1px 0px 1px 2px;
+    text-align: center;
+}
+
+.cs-event-readonly {
+    opacity: 0.5;
+}
