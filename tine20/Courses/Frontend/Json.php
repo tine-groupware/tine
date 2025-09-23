@@ -282,8 +282,34 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function resetPassword($account, $password, $mustChange)
     {
+        if (!empty(array_diff(Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS},
+                Tinebase_Group::getInstance()->getGroupMemberships(Tinebase_Core::getUser()->getId())))) {
+            throw new Tinebase_Exception_AccessDenied('you are not a member of the teacher group');
+        }
+
+        if (is_array($account)) {
+            if ($account['accountId'] ?? false) {
+                $account = Tinebase_User::getInstance()->getFullUserById($account['accountId']);
+            } else {
+                $account = Tinebase_User::getInstance()->getFullUserByLoginName($account['accountLoginName']);
+            }
+        } else {
+            $account = Tinebase_User::getInstance()->getFullUserById($account);
+        }
+
+        if (!in_array(Courses_Config::getInstance()->{Courses_Config::STUDENTS_GROUP},
+                Tinebase_Group::getInstance()->getGroupMemberships($account->getId()))) {
+            throw new Tinebase_Exception_AccessDenied('account is not a member of the students group');
+        }
+
+        $oldRightsCheck = Admin_Controller_User::getInstance()->doRightChecks(false);
+        $raii = new Tinebase_RAII(fn() => Admin_Controller_User::getInstance()->doRightChecks($oldRightsCheck));
+
         //admin json fe does this too: Tinebase_Core::getLogger()->addReplacement($password);
         $adminJson = new Admin_Frontend_Json();
-        return $adminJson->resetPassword($account, $password, (bool)$mustChange);
+        $result = $adminJson->resetPassword($account, $password, (bool)$mustChange);
+
+        unset($raii);
+        return $result;
     }
 }
