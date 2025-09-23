@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>crewscheduling_compact_pdf</name>
+    <!-- _('Crew Scheduling Compact PDF') -->
+    <label>Crew Scheduling Compact PDF</label>
+    <favorite>true</favorite>
+    <scope>multi</scope>
+    <type>export</type>
+    <order>200</order>
+    <plugin>CrewScheduling_Export_Pdf</plugin>
+    <icon_class>action_exportAsPdf</icon_class>
+    <template>tine20:///Tinebase/folders/shared/export/templates/CrewScheduling/crewscheduling_compact.xlsx</template>
+</config>
+

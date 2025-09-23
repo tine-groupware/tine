@@ -1,0 +1,43 @@
+{#
+Please note: This template gets rendered twice. First time for composing the mail, second time in mass mail processing
+variables for the second run can be preserved in {% verbatim %} blocks
+avialable parameters:
+    app
+    poll
+    contact (second run only)
+#}
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+{% block subject %}
+        {{ formatMessage('Crew Scheduling Poll: "{ roleName }" (closed)', {
+            roleName: poll.scheduling_role.name,
+        }) }}
+{% endblock %}
+
+{% block salutation %}
+    <h5>{{ _('Dear {{ contact.n_fn }},') }}</h5>
+    <hr>
+{% endblock %}
+
+{% block body %}
+    <p class="lead mb-4">
+        {{ formatMessage('The Crew Scheduling poll for the scheduling role { roleName } is closed.', {
+            roleName: poll.scheduling_role.name,
+        }) }}
+    </p>
+    {% if poll.description %}
+        <div class="mt-3 space-y-0">
+            <h6 class="text-muted mt-3">{{ _('Description') }}:</h6>
+            <p class="mt-3">{{ poll.description }}</p>
+        </div>
+    {% endif %}
+    <div class="ax-center my-3">
+        <a class="btn btn-primary p-2" href="{{ poll.getUrl() }}" role="button">{{ formatMessage('See results', {}) }}</a>
+    </div>
+    <p class="mt-3">
+        {{ _('Thank you very much!') }}<br />
+        {{ _('Yours sincerly') }}<br />
+        <br />
+        {{ app.user.contact.n_fn }}
+        <div class="felamimail-body-signature-container" />
+    </p>
+{% endblock %}

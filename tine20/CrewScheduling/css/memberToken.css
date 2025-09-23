@@ -1,0 +1,114 @@
+/* CrewScheduling/css/memberToken.css */
+:root {
+    --cs-poll-impossible: #ff959f;
+    --cs-poll-declined: #ff959f;
+    --cs-poll-tentative: #ffcb2b;
+    --cs-poll-needs-action: #a0adb8;
+    --cs-poll-accepted: #4ddf31;
+}
+
+.dark-mode {
+   --cs-poll-impossible: #f7293c;
+   --cs-poll-declined: #f7293c;
+   --cs-poll-tentative: #9f832c;
+   --cs-poll-needs-action: #a0b2c2;
+   --cs-poll-accepted: #6cba5d;
+}
+.cs-member-token {
+    box-sizing: border-box;
+    border-spacing: 0px;
+    font-size: 11px;
+    /*float: left;*/
+    margin: 2px 0px 0px 2px;
+    padding: 0px 2px;
+    border: 1px solid #b5b8c8;
+    border-radius: 2px;
+    cursor: pointer;
+    height: 22px;
+    display: inline-block;
+}
+
+.cs-member-token tbody {
+    display: inline-table;
+}
+
+.cs-count {
+    margin-bottom: 3px !important;
+    display: inline-block;
+    text-align: center;
+    background-color: #3c3cdf;
+    color: white;
+    border-radius: 7px;
+    min-width: 15px;
+    line-height: 14px;
+}
+
+.cs-member-token .cs-initials {
+    display: none;
+    padding: 1px 1px;
+    text-align: center;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 2px;
+    min-width: 15px;
+    position: relative;
+    top: -2px;
+}
+
+.cs-member-token .cs-name {
+
+}
+
+.cs-members-cell .cs-members .cs-member-token .cs-initials {
+    display: initial;
+
+}
+
+.cs-members-cell .cs-members .cs-member-token .cs-name {
+    display: none;
+}
+
+.cs-member-token .cs-dates .cs-dates-segment {
+    margin-right: 1px;
+    padding: 0px 1px;
+    border: 1px solid #b5b8c8;
+    border-radius: 2px;
+    background: linear-gradient(rgba(235, 243, 253, 1), rgba(255,0,0,0));
+}
+
+.cs-member-token .cs-partners span {
+    width: 16px;
+    background-image: url(../images/icon_heart_full.svg);
+    opacity: 0.7;
+    background-size: 16px 16px;
+}
+
+.cs-member-token .cs-partners {
+    display: block;
+    margin-top: -1px;
+    margin-right: 1px;
+    height: 15px;
+}
+
+.cs-member-token.x-view-selected {
+    background-color: #b8cfee;
+    border-width: 2px;
+    border-color: dodgerblue;
+    height: 22px;
+}
+
+span.cs-role {
+    margin-left: 3px;
+    padding: 0px 1px;
+    border: 1px solid;
+    border-radius: 2px;
+}
+
+.cs-member-token span.cs-role {
+    margin-left: -1px;
+}
+
+.cs-member-token td {
+    vertical-align: middle;
+    margin-left: 2px
+}

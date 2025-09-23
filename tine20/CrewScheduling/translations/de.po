@@ -1,0 +1,595 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2024-01-23 14:02+0100\n"
+"Last-Translator: sstamer <s.stamer@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.0.1\n"
+
+msgid "Manage Scheduling Roles"
+msgstr "Dienstplaungsrollen Verwalten"
+
+msgid "Shortfall Actions"
+msgstr "Defizit Aktionen"
+
+msgid "Possible Shortfall Actions for role."
+msgstr "Mögliche Defizit Aktionen für diese Rolle."
+
+msgid "None"
+msgstr "Keine"
+
+msgid "Forbidden"
+msgstr "Verboten"
+
+msgid "Event tentative"
+msgstr "Termin vorläufig"
+
+msgid "Exceedance Actions"
+msgstr "Überschreitungs Aktionen"
+
+msgid "Possible Exceedance Actions for role."
+msgstr "Mögliche Überschreitungs Aktionen für diese Rolle."
+
+msgid "Same role same attendee"
+msgstr "Selber Rolle selber Teilnehmer"
+
+msgid "Behavior if same role is also required from other event types"
+msgstr "Verhalten wenn die selbe Rolle auch aus anderen Terminarten gefordert wird"
+
+msgid "May be filled with the same attendee"
+msgstr "Darf mit gleichem Teilnehmer besetzt werden"
+
+msgid "Must be filled with the same attendee"
+msgstr "Muss mit gleichem Teilnehmer besetzt werden"
+
+msgid "Must not be filled with the same attendee"
+msgstr "Darf nicht mit gleichem Teilnehmer besetzt werden"
+
+msgid "Group Operators"
+msgstr "Gruppen Operatoren"
+
+msgid "Possible Group Operators."
+msgstr "Mögliche Gruppen Operatoren."
+
+msgid "Participant must be a member of one of the groups"
+msgstr "Teilnehmer muss ein Mitglied einer dieser Gruppen sein"
+
+msgid "Participant must be a member of all of the groups"
+msgstr "Teilnehmer muss ein Mitglied in allen diesen Gruppen sein"
+
+msgid "Scheduling Roles"
+msgstr "Dienstplanungs Rollen"
+
+msgid "Crew Scheduling Compact PDF"
+msgstr "Dienstplanung PDF - Kompakt"
+
+msgid "Crew Scheduling Compact Excel"
+msgstr "Dienstplanung Excel - Kompakt"
+
+msgid "Crew Scheduling PDF"
+msgstr "Dienstplanung PDF"
+
+msgid "Crew Scheduling Excel"
+msgstr "Dienstplanung Excel"
+
+msgid "Canceled"
+msgstr "Abgesagt"
+
+msgid "Poll CSV import"
+msgstr "Umfragen CSV Import"
+
+msgid "Import CSV formated polls from crew scheduling"
+msgstr "Importiere CSV formatierte Umfragen der Dienstplanung"
+
+msgid "Poll participant CSV import"
+msgstr "Umfragen Teilnehmr*innen CSV Import"
+
+msgid "Import CSV formated poll participants from crew scheduling"
+msgstr "Importiere CSV formatierte Umfragen-Teilnehmer*innen der Dienstplanung"
+
+msgid "Poll reply CSV import"
+msgstr "Umfragen Antworten CSV Import"
+
+msgid "Import CSV formated polls replies from crew scheduling"
+msgstr "Importiere CSV formatierte Umfragen-Antworten der Dienstplanung"
+
+msgid "Crew Scheduling Roles"
+msgstr "Dienstplanungs Rollen"
+
+msgid "Choose event types"
+msgstr "Terminart auswählen"
+
+msgid "The crew scheduling config of this event requires different attendee for the listed event types. Please select the event type(s) for this attendee."
+msgstr "Die Dienstplansungs-Konfiguration dieser Veranstaltung erfordert unterschiedliche Teilnehmer für die aufgeführten Terminarten. Bitte wählen Sie die Terminart(en) für diesen Teilnehmer aus."
+
+msgid "Without Event Type"
+msgstr "Ohne Terminart"
+
+msgid "Invalid service assignment"
+msgstr "Ungültige Dienst-Einteilung"
+
+msgid "Assign Services?"
+msgstr "Dienste zuweisen?"
+
+msgid "The person is capable to perform the following services. Which of these should be assigned?"
+msgstr "Die Person ist berechtigt die folgenden Dienste durchzuführen. Welche davon sollen zugewiesen werden?"
+
+msgid "Event Types"
+msgstr "Terminarten"
+
+msgid "Role Config can't be Added"
+msgstr "Rollen-Konfiguration kann nicht hinzugefügt werden"
+
+msgid "without event type"
+msgstr "ohne Terminart"
+
+#, python-brace-format
+msgid "A role config for {role} with event types \"{types}\" already exists."
+msgstr "Für die Terminarten  \"{types}\" existiert bereits eine Rollen-Konfiguration."
+
+msgid "Crewscheduling Roles"
+msgstr "Dienstplanungsrollen"
+
+msgid "Crewscheduling Role Configs"
+msgstr "Dienstplanungsrollen Konfigurationen"
+
+msgid "CrewScheduling"
+msgid_plural "CrewSchedulings"
+msgstr[0] "Dienstplanung"
+msgstr[1] "Dienstplanungen"
+
+msgid "Event"
+msgstr "Termin"
+
+msgid "No events to show yet..."
+msgstr "Noch keine Termine zum Anzeigen vorhanden..."
+
+msgid "The following persons cannot be added to the selected service"
+msgstr "Die folgenden Personen können nicht zu dem ausgewählten Dienst hinzugefügt werden"
+
+msgid "Select Service for { attendeeName }"
+msgstr "Dienste für { attendeeName } auswählen"
+
+msgid "There are different services to perform. Please select which service is to be performed by { attendeeName }."
+msgstr "Es gibt verschiedene Dienste zu erbringen. Bitte wählen Sie aus, welcher Dienst von { attendeeName } ausgeführt werden soll."
+
+msgid "Remove Attendee"
+msgstr "Teilnehmer entfernen"
+
+msgid "Please wait"
+msgstr "Bitte warten"
+
+msgid "Saving event:"
+msgstr "Speicher Termin:"
+
+msgid "Choose Roles"
+msgstr "Rollen wählen"
+
+msgid "Send export via E-Mail to all corresponding group members"
+msgstr "Den Export per E-Mail an die jeweiligen Gruppenmitglieder senden"
+
+msgid "Reload"
+msgstr "Neu laden"
+
+msgid "Reload all data"
+msgstr "Alle Daten neu laden"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Configure data filters"
+msgstr "Daten Filter konfigurieren"
+
+msgid "Polls"
+msgstr "Umfragen"
+
+msgid "Manage Polls"
+msgstr "Umfragen verwalten"
+
+msgid "Show more actions"
+msgstr "Mehr Aktionen anziegen"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Export and optionally send data"
+msgstr "Export und Versandt (optional)"
+
+msgid "Auto Schedule"
+msgstr "Automatische Planung"
+
+msgid "Auto assign attendee for selected / all cells"
+msgstr "Füge für die Auswahl / alle Felder Teilnehmer automatisch hinzu"
+
+msgid "Site"
+msgstr "Standort"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Computing Schedule..."
+msgstr "Berechne Terminplan…"
+
+#, python-brace-format
+msgid "{0} at {1} ({2}/{3})"
+msgstr "{0} an {1} ({2}/{3})"
+
+msgid "Errors"
+msgstr "Fehler"
+
+msgid "Some Events could not be saved. (see red triangles)"
+msgstr "Einige Termine konnten nicht gespeichert werden. (Siehe rote Dreiecke)"
+
+msgid "Dismiss Changes?"
+msgstr "Änderungen verwerfen?"
+
+msgid "You have unsaved changes. Do you really want to continue?"
+msgstr "Sie haben ungesicherte Änderungen. Wollen Sie wirklich fortfahren?"
+
+msgid "Assign Existing Attendee?"
+msgstr "Bestehende Teilnehmende einsetzen?"
+
+msgid "The following persons are attendee in the respective events, but are not yet assigned to services. Please select the services for which these persons are to be assigned."
+msgstr "Die folgenden Personen nehmen zwar am jeweiligen Termin teil, sind aber nicht für Dienste eingeteilt. Bitte wählen sie aus für welche Dienste diese Personen eingeteilt werden sollen."
+
+msgid "Loading Crew Scheduling data..."
+msgstr "Lade Dienstplanungs Daten..."
+
+msgid "Available Attendee"
+msgstr "Verfügbare Teilnehmer"
+
+msgid "Selected Attendee"
+msgstr "Ausgewählte Teilnehmer"
+
+msgid "Select Attendee"
+msgstr "Teilnehmer Auswählen"
+
+msgid "Filter by name"
+msgstr "Nach Namen filtern"
+
+msgid "Filter Attendee"
+msgstr "Teilnehmer filtern"
+
+msgid "No users to display"
+msgstr "Keine Benutzer zum Anzeigen"
+
+msgid "Start drag gesture here to include the following partners:"
+msgstr "Starten Sie hier eine Drag Geste um die folgenden Partner*innen hinzuzufügen:"
+
+msgid "The attendee is not assigned to the event site"
+msgstr "die Person ist nicht dem Standort zugewiesen"
+
+msgid "The person has indicated in a survey that they are not available for this service at this time."
+msgstr "Die Person hat in einer Umfrage angegeben zu diesem Zeitpunkt für diesen Dienst nicht verfügbar zu sein."
+
+msgid "The attendee favorite days do not contain the weekday of the event"
+msgstr "Die Lieblingstage der Person enthalten nicht den Wochentag des Termins"
+
+msgid "The attendee is busy during the event"
+msgstr "Die Person ist während des Termins beschäftigt"
+
+msgid "NOTE: It is allowed to resolve this by splitting up role to perform for different event types with different attendee."
+msgstr "HINWEIS: Es ist möglich, dieses Problem zu lösen, indem Sie die Rolle aufteilen, um sie für verschiedene Terminarten mit verschiedenen Personen auszuführen."
+
+msgid "The person is already assigned to this service."
+msgstr "Die Person ist bereits für diesen Dienst eingeteilt."
+
+msgid "The attendee is already assigned to an other service of the same crew scheduling role. This service does not allow the same person to take another service with the same crew scheduling role."
+msgstr "Die Person ist bereits für einen Dienst mit der gleichen Dinestplanungsrolle eingeteilt. Dieser Dienst läst nicht zu, dass die gleiche Person einen weiteren Dienst mit der gleichen Dinestplanungsrolle besetzt."
+
+msgid "The attendee is already assigned to an other service which does not allow to perform additional services of other crew scheduling roles."
+msgstr "Die Person ist bereits für einen Dienst eingeteilt welche nicht zulässt, dass zusätzlich auch andere Dienste mit anderen Dinestplanungsrollen ausgeführt werden."
+
+msgid "An other attendee already performs a service with the same crew scheduling role and it requires that all services of that role are performed by the same person."
+msgstr "Eine andere Person ist bereits für einen Dienst mit der gleichen Dinestplanungsrolle eingeteilt und er erfordert, dass alle Dienste mit dieser Dinestplanungsrolle durch die selbe Person ausgeführt werden."
+
+msgid "This service requires the same person to perform all services with the same crew scheduling role. However someone else is already assigned to an other service of the same crew scheduling role."
+msgstr "Dieser Dienst erfordert, dass die selbe Person alle Dienste mit der selben Dinestplanungsrolle einnimmt. Eine andere Person ist jedoch bereits für einen Dienst der gleichen Dinestplanungsrolle eingeteilt."
+
+msgid "This service does not allow the same person to take other services with the same crew scheduling role. However the attendee is already assigned to an other service of this crew scheduling role."
+msgstr "Dieser Dienst erlaubt nicht, dass dieselbe Person andere Dienste mit der gleichen Dinestplanungsrolle in einnimmt. Die Person ist jedoch bereits einem anderen Dienst dieser Dinestplanungsrolle zugewiesen."
+
+msgid "This service does not allow the same person to take other services with the other crew scheduling roles. However the attendee is already assigned to an other service with an other crew scheduling role."
+msgstr "Dieser Dienst erlaubt nicht, dass die selbe Person andere Dienste mit anderen Dinestplanungsrolle einnimmt. Die Person ist jedoch bereits für einen anderen Dienst einer anderen Dinestplanungsrolle eingeteilt."
+
+msgid "The required attendee count of this service is already reached and the service configuration does not allow to exceed it."
+msgstr "Die Anzahl der benötigten Teilnehmenden für diesen Dienst ist bereits erreicht und die Diest-Konfiguration erlaubt keine Überschreitung."
+
+msgid "CrewScheduling config of the event"
+msgstr "Dienstplanungs-Konfiguration des Termins"
+
+msgid "Event type config of { eventTypeNames }"
+msgstr "Terminart-Konfiguration für { eventTypeNames }"
+
+msgid "For the role {role.name} attendee for different event types must not be the same (required by { source })."
+msgstr "Für die Rolle {role.name} darf die Person für verschiedene Terminarten nicht dieselbe sein (erforderlich durch { source })."
+
+msgid "For the role {role.name} attendee must be capable to perform for all of the event types **{ eventTypeNames }** (required by { source }). However following criteria are not met:"
+msgstr "Für die Rolle {role.name} muss die Person in der Lage sein, alle folgenden Terminarten durchzuführen: **{ eventTypeNames }** (erforderlich durch { source }). Die folgenden Kriterien sind jedoch nicht erfüllt:"
+
+msgid "For the role {role.name}, attendee is not capable to perform for any of the event types **{ eventTypeNames }**. The following criteria are not met:"
+msgstr "Für die Rolle {role.name} ist die Person für keine der Terminarten **{ eventTypeNames }** berechtigt. Die folgenden Kriterien sind nicht erfüllt:"
+
+msgid "For the role {role.name}, attendee is not capable to perform for the event types **{ eventTypeNames }**."
+msgstr "Für die Rolle {role.name} ist die Person nicht berechtigt, die Terminarten **{ eventTypeNames }** durchzuführen."
+
+msgid "For event type **{ eventType.name }** attendee needs to be member in group { list.name }."
+msgstr "Für Terminart **{ eventType.name }** muss die Person Mitglied der Gruppe { list.name } sein."
+
+msgid "For event type **{ eventType.name }** attendee needs to be member in one of the the following groups: { listNames }."
+msgstr "Für die Terminart **{ eventType.name }** muss die Person Mitglied in einer der folgenden Gruppen sein: { listNames }."
+
+msgid "Availability Poll"
+msgstr "Verfügbarkeitsumfrage"
+
+msgid "Invalid Link"
+msgstr "Ungültiger Link"
+
+msgid "An unexpected error occurred."
+msgstr "Ein unerwarteter Fehler ist aufgetreten."
+
+msgid "Send Mail"
+msgstr "E-Mail senden"
+
+msgid "Compose Mail for all Attendee"
+msgstr "Verfasse eine E-Mail für alle Teilnehmer*innen"
+
+msgid "Open Poll"
+msgstr "Umfrage öffnen"
+
+msgid "Open Poll Page"
+msgstr "Öffne die Umfrage Seite"
+
+msgid "GENDER_Attendee Role"
+msgstr "female"
+
+msgid "Attendee Role"
+msgid_plural "Attendee Roles"
+msgstr[0] "Teilnehmerrolle"
+msgstr[1] "Teilnehmerrollen"
+
+msgid "Attendee"
+msgstr "Teilnehmender"
+
+msgid "Scheduling Role"
+msgid_plural "Scheduling Roles"
+msgstr[0] "Dienstplanungs Rolle"
+msgstr[1] "Dienstplanungs Rollen"
+
+msgid "GENDER_Role Configuration"
+msgstr "female"
+
+msgid "Role Configuration"
+msgid_plural "Role Configurations"
+msgstr[0] "Rollen Config"
+msgstr[1] "Rollen Configs"
+
+msgid "Shortfall Action"
+msgstr "Aktion bei Unterschreitung"
+
+msgid "Exceedance Action"
+msgstr "Aktion bei Überschreitung"
+
+msgid "Other event types?"
+msgstr "Andere Terminarten?"
+
+msgid "Behavior if this role is also required from other event types"
+msgstr "Verhalten wenn diese Rolle auch aus anderen Terminarten gefordert wird"
+
+msgid "Participants who occupy this role may also take on other roles in the event."
+msgstr "Teilnehmer die diese Rolle besetzen dürfen auch noch andere Rollen im Termin einnehmen."
+
+msgid "Allow other roles?"
+msgstr "Andere Rollen zulassen?"
+
+msgid "Number of required attendee"
+msgstr "Anzahl an benötigten Teilnehmenden"
+
+msgid "If not set value from role is taken per default"
+msgstr "Leer gelassen gilt die Einstellung der Planungsrolle"
+
+msgid "GENDER_Scheduling Role Config"
+msgstr "female"
+
+msgid "Scheduling Role Config"
+msgid_plural "Scheduling Role Configs"
+msgstr[0] "Dienstplanungsrollen Konfiguration"
+msgstr[1] "Dienstplanungsrollen Konfigurationen"
+
+msgid "Event Type"
+msgstr "Terminart"
+
+msgid "Default Minimal Attendee Role Count"
+msgstr "Standardmäßige minimale Teilnehmerrollen Anzahl"
+
+msgid "Required Attendee Groups for role"
+msgstr "Erforderliche Teilenhmer-Gruppen für diese Rolle"
+
+msgid "Required Groups Behaviour"
+msgstr "Verhalten der erforderlichen Gruppen"
+
+msgid "GENDER_Participant"
+msgstr "female"
+
+msgid "Participant"
+msgid_plural "Participants"
+msgstr[0] "Teilnehmer*in"
+msgstr[1] "Teilnehmer*innen"
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] "Umfrage"
+msgstr[1] "Umfragen"
+
+msgid "Response Date"
+msgstr "Antwort Datum"
+
+msgid "Notes"
+msgstr "Notizen"
+
+msgid "Replies"
+msgstr "Antworten"
+
+msgid "GENDER_Poll"
+msgstr "female"
+
+msgid "From"
+msgstr "Von"
+
+msgid "Calendar events from this date on are included in poll."
+msgstr "Kalender Termine ab diesem Datum sind in der Umfrage enthalten."
+
+msgid "Until"
+msgstr "Bis"
+
+msgid "Calendar events until this date on are included in poll."
+msgstr "Kalender Termine bis zu diesem Datum sind in der Umfrage enthalten."
+
+msgid "Description"
+msgstr "Beschreibung"
+
+msgid "Deadline"
+msgstr "Frist"
+
+msgid "Once given date is passed poll is closed and attendee cannot replay any longer."
+msgstr "Sobald das angegebene Datum überschritten ist, wird die Umfrage geschlossen und die Teilnehmer*innen können nicht mehr antworten."
+
+msgid "Location of the event."
+msgstr "Terminort"
+
+msgid "Search for sites ... (leave empty for all sites)"
+msgstr "Suche nach Standorten ... (leer lassen für alle Standorte)"
+
+msgid "Is Closed"
+msgstr "Ist geschlossen"
+
+msgid "Reminders"
+msgstr "Erinnerungen"
+
+msgid "Participants"
+msgstr "Teilnehmer*innen"
+
+msgid "GENDER_Poll Reply"
+msgstr "female"
+
+msgid "Poll Reply"
+msgid_plural "Poll Replies"
+msgstr[0] "Umfrage Antwort"
+msgstr[1] "Umfrage Antworten"
+
+msgid "Poll Participant"
+msgstr "Umfrage Teilnehmer*in"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "GENDER_Required Group"
+msgstr "female"
+
+msgid "Required Group"
+msgid_plural "Required Groups"
+msgstr[0] "Erforderliche Gruppe"
+msgstr[1] "Erforderliche Gruppen"
+
+msgid "Send Emails"
+msgstr "Emails versenden."
+
+msgid "The grant to send emails to role members."
+msgstr "Die Berechtigung Mails and Rollenmitglieder zu versenden."
+
+msgid "The grant to create polls and send poll mails to possible attendee and role members."
+msgstr "Die Berechtigung Umfragen zu erstellen und Mails an mögliche Teilnehmer*innen und Rollenmitglieder zu versenden."
+
+msgid "Assign Attendee"
+msgstr "Teilnehmer*innen zufügen"
+
+msgid "The grant to add attendee of this role to events in Crew Scheduling Application."
+msgstr "Die Berechtigung Teilnehmer*innen dieser Rolle zu Terminen in der Dienstplaungs-Anwendung hinzuzufügen"
+
+msgid "Receive Notifications"
+msgstr "Erhalte Benachrichtigungen"
+
+msgid "The grant to receive notifications."
+msgstr "Die Berechtigung Benachrichtigungen zu erhalten."
+
+msgid "The grant to manage the role itself."
+msgstr "Die Berechtigung die Rolle an sich zu verwalten."
+
+msgid "GENDER_Scheduling Role"
+msgstr "female"
+
+msgid "Key"
+msgstr "Schlüssel"
+
+msgid "Sorting Order"
+msgstr "Sortierreihenfolge"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Color"
+msgstr "Farbe"
+
+msgid "Leadtime"
+msgstr "Vorlaufzeit"
+
+msgid "Number of days before the actions are finally applied. On the one hand, this is the automatic cancellation and on the other hand the notifications (see grants tab). If appointments are are canceled, the participants are automatically informed of the cancellation."
+msgstr "Anzahl der Tage, bevor die Aktionen endgültig angewendet werden. Dies ist zum einen die automatische Absage und zum anderen die Benachrichtigungen (siehe Registerkarte Berechtigungen). Wenn Termine abgesagt werden, werden die Teilnehmer automatisch über die Absage informiert."
+
+msgid "Event's role Config"
+msgstr "Rollen-Konfiguration des Termins"
+
+msgid "Account"
+msgstr "Konto"
+
+msgid "Exporttime"
+msgstr "Exportzeit"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Crew Scheduling Poll: \"{ roleName }\" ({ from } - { until })"
+msgstr "Dienstplanungs-Umfrage: \"{ roleName }\" ({ from } - { until })"
+
+msgid "Dear {{ contact.n_fn }},"
+msgstr "Hallo {{ contact.n_fn }},"
+
+msgid "you are invited to take part in a Crew Scheduling poll for the scheduling role { roleName } from { from } until { until }."
+msgstr "du bist eingeladen an einer Dienstplanungs-Umfrage für die Planungsrolle { roleName } vom { from } bis zum { until } teilzunehmen."
+
+msgid "Please take part in the poll and respond by { deadline }."
+msgstr "Bitte nimm an der Umfrage teil und antworte bis zum { deadline }."
+
+msgid "Take part now"
+msgstr "Jetzt teilnehmen"
+
+msgid "Thank you very much!"
+msgstr "Vielen Dank!"
+
+msgid "Yours sincerly"
+msgstr "Mit freundlichen Grüßen"
+
+msgid "Crew Scheduling Poll: \"{ roleName }\" (closed)"
+msgstr "Dienstplanungs-Umfrage: \"{ roleName }\" (beendet)"
+
+msgid "The Crew Scheduling poll for the scheduling role { roleName } is closed."
+msgstr "Die Dienstplanungs-Umfrage für die Planungsrolle { roleName } ist beendet."
+
+msgid "See results"
+msgstr "Ergebnisse ansehen"
+
+#~ msgid "Edit Event Types"
+#~ msgstr "Terminarten bearbeiten"
+
+#~ msgid "Refresh all data"
+#~ msgstr "Alle Daten aktualisieren"
