@@ -124,10 +124,21 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     break
                 case "elementStartupFailure":
                     this.showClient()
-                    if (event.data.failure === 'recoveryKeyIncorrect') {
+                    if (event.data.failure === 'recoveryKeyIncorrect' || event.data.failure === 'recoveryDataInvalid') {
                         await this.promptRecoveryData()
                         break
                     }
+
+                    if (event.data.failure === 'encryptionKeysLost') {
+                        await this.alertUnhandledEncryptionError('Encryption Keys Lost')
+                        break
+                    }
+
+                    if (event.data.failure === 'localUserDoseNotMatch') {
+                        await this.promptClearLocalStorage()
+                        break
+                    }
+
                     break
                 case "elementSendNotification":
                     const notification = new Notification(event.data.notification.title, {
@@ -233,5 +244,40 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.INFO_INSTRUCTION
         })
-    }
+    },
+
+    promptClearLocalStorage: async function() {
+        const [btn] = await Ext.MessageBox.show({
+            title: this.app.formatMessage('Chat storage corrupted', ),
+            msg: this.app.formatMessage('Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?', {
+                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+            }),
+            buttons: Ext.MessageBox.OKCANCEL,
+            icon: Ext.MessageBox.QUESTION_INPUT,
+        });
+        if (btn === 'ok') {
+            await this.clientRPC('clearLocalStorageRequest',)
+            this.clientFrame.dom.src = this.clientFrame.dom.src
+        }
+        await Ext.MessageBox.show({
+            title: this.app.formatMessage('Manual Management Required'),
+            msg: this.app.formatMessage('{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times.', {
+                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+            }),
+            // { brandingTitle } kennt ihren ihre korrekten Wiederherstellungsdaten nicht und kann kann ihre Chats daher nicht entsperren. Sie können versuchen ihre Wiederherstellungsdaten direkt im Chat Programm eingeben. In diesem Fall speichert { brandingTitle } diese Daten nicht und sie müssen sie ggf. mehrfach eingeben.
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.INFO_INSTRUCTION
+        })
+    },
+
+    alertUnhandledEncryptionError: async function(error) {
+        await Ext.MessageBox.show({
+            title: this.app.formatMessage('Unhandled encryption error'),
+            msg: this.app.formatMessage('An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error: ', {
+                brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+            }) + error,
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.ERROR,
+        });
+    },
 });
