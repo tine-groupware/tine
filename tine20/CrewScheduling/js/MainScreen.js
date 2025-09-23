@@ -711,7 +711,9 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             // @TODO find generic conceept e.g. filterToolbar and favorites
             {field: 'event_types', operator: 'definedBy?condition=and&setOperator=oneOf', value: [
                 {field: 'event_type', operator: 'definedBy?condition=and&setOperator=one0f', value: [
-                    {field: 'liturgie', operator: 'equals', value: 1}
+                    {field: 'cs_role_configs', operator: 'definedBy?condition=and&setOperator=one0f', value: [
+                        {field: "id", operator: "not", value: null}
+                    ]}
             ]}]}
         ];
 
