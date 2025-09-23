@@ -2,7 +2,7 @@
 <application>
     <name>Purchasing</name>
     <!-- gettext('Purchasing') -->
-    <version>19.0</version>
+    <version>18.0</version>
     <order>60</order>
     <status>enabled</status>
     <depends>
