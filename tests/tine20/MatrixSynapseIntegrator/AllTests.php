@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0 - http://www.tine20.org
  *
@@ -15,13 +16,14 @@
  */
 class MatrixSynapseIntegrator_AllTests
 {
-    public static function suite ()
+    public static function suite()
     {
         $suite = new PHPUnit\Framework\TestSuite('All MatrixSynapseIntegrator tests');
 
         $suite->addTestSuite(MatrixSynapseIntegrator_Frontend_JsonTest::class);
         $suite->addTestSuite(MatrixSynapseIntegrator_ControllerTests::class);
         $suite->addTestSuite(MatrixSynapseIntegrator_Controller_MatrixAccountTests::class);
+        $suite->addTestSuite(MatrixSynapseIntegrator_Controller_DirectoryTests::class);
 
         return $suite;
     }
