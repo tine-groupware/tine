@@ -2,7 +2,7 @@
 <application>
     <name>CrewScheduling</name>
     <!-- gettext('CrewScheduling') -->
-    <version>18.4</version>
+    <version>19.0</version>
     <status>enabled</status>
     <order>88</order>
     <depends>
