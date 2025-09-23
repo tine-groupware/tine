@@ -1238,9 +1238,6 @@ msgstr "Total: "
 msgid "Data"
 msgstr "Data"
 
-msgid "Node name may not be changed in update"
-msgstr "Node name may not be changed in update"
-
 msgid "The following files have changed:"
 msgstr "The following files have changed:"
 
