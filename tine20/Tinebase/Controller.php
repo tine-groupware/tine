@@ -1568,30 +1568,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * @return \Laminas\Diactoros\Response\HtmlResponse
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function getImprint()
-    {
-        $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/imprint.html.twig');
-        return $html;
-    }
-
-    /**
-     * @return \Laminas\Diactoros\Response\HtmlResponse
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function getTermsOfService()
-    {
-        $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/terms.html.twig');
-        return $html;
-    }
-
-    /**
      * get application metrics
      *
      * @return array
