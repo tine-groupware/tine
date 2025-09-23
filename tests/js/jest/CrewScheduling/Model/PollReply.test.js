@@ -1,6 +1,6 @@
 import PollReply  from 'CrewScheduling/Model/PollReply'
 
-const modelConfigs = require('../../data/modelConfigs.json')
+const modelConfigs = require('../data/modelConfigs.json')
 PollReply.setModelConfiguration(modelConfigs.PollReply)
 
 
