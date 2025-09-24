@@ -426,6 +426,7 @@ php-unit-nogitlabci-tests-built-parallel:
       log update
       su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
       su tine20 -c "php setup.php --config=/etc/tine20 --install EventManager"
+      su tine20 -c "php setup.php --config=/etc/tine20 --install CrewScheduling"
     - |
       log "testing"
       test_phpunit
