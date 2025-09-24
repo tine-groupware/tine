@@ -21,6 +21,8 @@ class EventManager_Setup_Uninitialize extends Setup_Uninitialize
     {
         $container_id = EventManager_Config::getInstance()
             ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
-        Tinebase_Container::getInstance()->deleteContainer($container_id);
+        if ($container_id) {
+            Tinebase_Container::getInstance()->deleteContainer($container_id);
+        }
     }
 }
