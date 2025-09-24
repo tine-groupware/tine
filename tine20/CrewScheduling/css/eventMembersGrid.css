@@ -53,7 +53,7 @@ td.cs-members-event-wrap .x-grid3-cell-inner {
     background-position: center;
     background-size: 22px 22px;
     background-repeat: no-repeat;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     margin-right: 16px;
     box-sizing: border-box;
