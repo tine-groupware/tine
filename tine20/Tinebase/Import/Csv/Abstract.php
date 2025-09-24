@@ -79,6 +79,59 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         }
         
         $this->_setController();
+        
+        if (! isset($this->_options['mapping']) || empty($this->_options['mapping'])) {
+            $this->_setFieldMapping();
+        }
+    }
+    
+    protected function _setFieldMapping(): void
+    {
+        $modelName = $this->_options['model'];
+        $record = new $modelName([], true);
+
+        $extract = Tinebase_Application::extractAppAndModel($modelName);
+        $appName = $extract['appName'];
+        $customFields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($appName, $modelName)->name;
+
+        $fields = [];
+        foreach ($record->getFields() as $key) {
+            if ($key === 'customfields') {
+                foreach ($customFields as $cfName) {
+                    $fields[] = [
+                        'source' => $cfName,
+                        'destination' => $cfName,
+                    ];
+                }
+            } else {
+                $fields[] = [
+                    'source' => $key,
+                    'destination' => $key,
+                ];
+            }
+        }
+
+        if ($record->has('tags')) {
+            $fields[] = [
+                'source' => 'tags',
+                'destination' => 'tags',
+            ];
+        }
+
+        // TODO support skipFields & relations
+        // $fields = array_diff($fields, $this->_skipFields);
+        // $fields = array_merge($fields, $this->_getRelationFields());
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Created mapping from model ' . $this->_options['model'] . ' mapping: '
+                . print_r($fields, true));
+        }
+
+        if (!isset($this->_options['mapping']) || !is_array($this->_options['mapping'])) {
+            $this->_options['mapping'] = [];
+        }
+        $this->_options['mapping']['field'] = $fields;
     }
 
     /**
