@@ -330,7 +330,7 @@ trigger-weekly-release:
 
 mkdocs-deploy:
   stage: deploy
-  image: ${UTIL_REGISTRY}/mkdocs:ci-r1
+  image: ${UTIL_REGISTRY}/mkdocs:1
   needs: []
   script:
     - cd tine20
