@@ -37,7 +37,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
          * set up personas personal container grants:
          * 
          *  jsmith:    anyone freebusyGrant, readGrant, addGrant, editGrant, deleteGrant
-         *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
+         *  pwulf:     anyone readGrant, syncGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
          *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
          *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
          *  rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
@@ -350,7 +350,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      * @param string $searchMethod
      * @throws InvalidArgumentException
      */
-    protected function _assertPrivateEvent($searchMethod = 'search')
+    protected function _assertPrivateEvent($searchMethod = 'search', $action = 'get', $expectResult = true)
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
         
@@ -358,20 +358,40 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             $filterData = array(
                 array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
             );
-            $events = $this->_uit->search(new Calendar_Model_EventFilter($filterData), NULL, FALSE, FALSE);
-            
-            // assert json fe does not add history
-            $json = new Calendar_Frontend_Json();
-            $resolvedEvents = $json->searchEvents($filterData, array());
-            $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
+            $events = $this->_uit->search(new Calendar_Model_EventFilter($filterData), _action: $action);
+
+            if ('get' === $action) {
+                // assert json fe does not add history
+                $json = new Calendar_Frontend_Json();
+                $resolvedEvents = $json->searchEvents($filterData, array());
+                $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
+            }
             
         } else if ($searchMethod === 'getMultiple') {
             $events = $this->_uit->getMultiple(array($persistentEvent->getId()));
         } else {
             throw new InvalidArgumentException('unknown search method: ' . $searchMethod);
         }
-        
-        $this->assertTrue($events[0]->summary == '');
+
+        if ($expectResult) {
+            $this->assertSame(1, $events->count());
+            $this->assertTrue($events[0]->summary == '');
+        } else {
+            $this->assertSame(0, $events->count());
+        }
+    }
+
+    public function testSyncCleanUp(): void
+    {
+        $this->_assertPrivateEvent(action: 'sync');
+    }
+
+    public function testSyncCleanUpNoResults(): void
+    {
+        $preferenceRaii = new Tinebase_RAII(fn() => Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->setValue(Calendar_Preference::SYNC_FREE_BUSY_EVENTS, true));
+        Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->setValue(Calendar_Preference::SYNC_FREE_BUSY_EVENTS, false);
+        $this->_assertPrivateEvent(action: 'sync', expectResult: false);
+        unset($preferenceRaii);
     }
     
     /**
@@ -626,7 +646,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
         ))), true);
         
-        // pwulf:      anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
+        // pwulf:      anyone readGrant, syncGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
         $cal = $this->_getPersonasDefaultCals('pwulf');
         Tinebase_Container::getInstance()->setGrants($cal, new Tinebase_Record_RecordSet($cal->getGrantClass(), array(array(
             'account_id'    => $this->_getPersona('pwulf')->getId(),
@@ -642,6 +662,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             'account_id'    => 0,
             'account_type'  => 'anyone',
             Tinebase_Model_Grants::GRANT_READ     => true,
+            Tinebase_Model_Grants::GRANT_SYNC     => true,
             Tinebase_Model_Grants::GRANT_ADD      => false,
             Tinebase_Model_Grants::GRANT_EDIT     => false,
             Tinebase_Model_Grants::GRANT_DELETE   => false,

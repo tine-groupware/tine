@@ -85,9 +85,6 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         if (is_int($settings['calDavRequestTries'] ?? null)) {
             $this->_requestTries = $settings['calDavRequestTries'];
         }
-        if (isset($settings['allowDuplicateEvents'])) {
-            $this->_allowDuplicateEvents = $settings['allowDuplicateEvents'];
-        }
         if ($settings[self::OPT_EXTERNAL_SEQ_CHECK_BEFORE_UPDATE] ?? false) {
             $this->_doExternalSeqCheckBeforeUpdate = true;
         }

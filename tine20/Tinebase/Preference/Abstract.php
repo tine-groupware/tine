@@ -6,7 +6,7 @@
  * @subpackage  Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        make this a real controller + singleton (create extra sql backend)
  * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request
@@ -312,7 +312,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         
-        if ($result == Tinebase_Model_Preference::DEFAULT_VALUE) {
+        if ($result === Tinebase_Model_Preference::DEFAULT_VALUE) {
             $result = $_default;
         }
 
