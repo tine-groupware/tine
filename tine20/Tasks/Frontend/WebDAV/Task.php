@@ -70,21 +70,14 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     
     /**
      * this function creates a Tasks_Model_Task and stores it in the database
-     * 
-     * @param  Tinebase_Model_Container $container
-     * @param  string $name
-     * @param  resource|string $vobjectData
-     * @param  string $onlyCurrentUserOrganizer
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = 'unused')
+    public static function create(Tinebase_Model_Container $container, string $name, $vobjectData): self
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
         }
         // Converting to UTF-8, if needed
         $vobjectData = Sabre\DAV\StringUtil::ensureUTF8($vobjectData);
-        
-        #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VTODO', 'VFREEBUSY'));
         
         list($backend, $version) = Tasks_Convert_Task_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         try {
@@ -96,32 +89,17 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         }
 
         $task->container_id = $container->getId();
-        $id = $task->getId();
-	if ( $id === null ) {
-            $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-            $task->setId($id);
-        }
         
         self::enforceEventParameters($task);
 
         // check if there is already an existing task with this ID
         // this can happen when the invitation email is faster then the caldav update or
         // or when an task gets moved to another container
-        $filter = new Tasks_Model_TaskFilter(array(
-            array('field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET),
-            array('condition' => 'OR', 'filters' => array(
-                array(
-                    'field'     => 'id',
-                    'operator'  => 'equals',
-                    'value'     => $id
-                ),
-                array(
-                    'field'     => 'uid',
-                    'operator'  => 'equals',
-                    'value'     => $id
-                )
-            ))
-        ));
+        $filter = new Tasks_Model_TaskFilter([
+            ['field' => 'is_deleted',   'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+            ['field' => 'uid',          'operator' => 'equals', 'value' => $task->uid],
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $task->container_id],
+        ]);
         $existingEvent = Tasks_Controller_Task::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
         
         if ($existingEvent === null) {
