@@ -64,15 +64,16 @@ plugins:
   - search
   - awesome-pages
   - i18n:
-      default_language: en
       docs_structure: suffix
+      fallback_to_default: true
       languages:
-        default:
-          name: Default (en)
-          build: true
-        en:
+        - build: true
+          default: true
+          locale: en
           name: English
-          build: true
-        de:
+        - build: true
+          default: false
+          locale: de
           name: Deutsch
-          build: true
+      reconfigure_material: true
+      reconfigure_search: true
