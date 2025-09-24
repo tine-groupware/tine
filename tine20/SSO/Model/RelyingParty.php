@@ -100,6 +100,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
                 self::LABEL                 => 'Logo', // _('Logo')
             ],
             self::FLD_CONFIG_CLASS      => [
+                self::LABEL                 => 'Specific Type', // _('Specific Type')
                 self::TYPE                  => self::TYPE_MODEL,
                 self::FILTER_DEFINITION     => [self::FILTER => Tinebase_Model_Filter_Text::class],
                 self::CONFIG                => [
@@ -118,6 +119,7 @@ class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_CONFIG            => [
+                self::LABEL                 => 'Specific Configuration', // _('Specific Configuration')
                 self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,

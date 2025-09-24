@@ -25,6 +25,9 @@ msgstr ""
 msgid "SAML2 Bindings"
 msgstr ""
 
+msgid "Key rotation enabled"
+msgstr ""
+
 msgid "Relying Parties"
 msgstr ""
 
@@ -104,6 +107,15 @@ msgstr[1] ""
 msgid "Description"
 msgstr ""
 
+msgid "Specific Type"
+msgstr ""
+
+msgid "Specific Configuration"
+msgstr ""
+
+msgid "Domains"
+msgstr ""
+
 msgid "Show on Login Screen"
 msgstr ""
 
@@ -135,6 +147,51 @@ msgid "Update local properties"
 msgstr ""
 
 msgid "Primary group for created local accounts"
+msgstr ""
+
+msgid "Groups to be set for created local accounts"
+msgstr ""
+
+msgid "Groups that deny login for existing local accounts"
+msgstr ""
+
+msgid "Roles that deny login for existing local accounts"
+msgstr ""
+
+msgid "One of these group claims needs to be present"
+msgstr ""
+
+msgid "The name of the \"groups\" claim, defaults to \"groups\""
+msgstr ""
+
+msgid "Create groups locally"
+msgstr ""
+
+msgid "Assign groups locally"
+msgstr ""
+
+msgid "Account Name Prefix"
+msgstr ""
+
+msgid "String prefixed to local account names when created from this IDP"
+msgstr ""
+
+msgid "Group Name Prefix"
+msgstr ""
+
+msgid "String prefixed to local group names when created from this IDP"
+msgstr ""
+
+msgid "Account Display Name Prefix"
+msgstr ""
+
+msgid "String prefixed to local account display names when created from this IDP"
+msgstr ""
+
+msgid "Addressbook Container"
+msgstr ""
+
+msgid "Addressbook container to store newly created account contacts and lists"
 msgstr ""
 
 msgid "OAuth Device Code"

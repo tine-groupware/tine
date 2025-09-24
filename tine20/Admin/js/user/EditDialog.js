@@ -377,7 +377,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Admin.Model.Group
+            fields: Tine.Tinebase.Model.Group
         });
         
         var self = this;
@@ -389,7 +389,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             selectType: 'group',
             selectAnyone: false,
             selectTypeDefault: 'group',
-            groupRecordClass: Tine.Admin.Model.Group,
+            groupRecordClass: Tine.Tinebase.Model.Group,
             getColumnModel: function () {
                 return new Ext.grid.ColumnModel({
                     defaults: { sortable: true },
@@ -1113,7 +1113,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
                         allowBlank: false,
-                        recordClass: Tine.Admin.Model.Group,
+                        recordClass: Tine.Tinebase.Model.Group,
                         listeners: {
                             scope: this,
                             'select': function (combo, record, index) {

@@ -24,8 +24,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     windowNamePrefix: 'groupEditWindow_',
     appName: 'Admin',
-    recordClass: Tine.Admin.Model.Group,
-    recordProxy: Tine.Admin.groupBackend,
+    recordClass: Tine.Tinebase.Model.Group,
+    recordProxy: Tine.Tinebase.groupBackend,
     evalGrants: false,
 
     /**
@@ -151,7 +151,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, new Tine.widgets.activities.ActivitiesTabPanel({
             app: this.appName,
             record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
-            record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+            record_model: this.recordClass.getPhpClassName()
         })];
 
         var adb = Tine.Tinebase.appMgr.get('Addressbook');

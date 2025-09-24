@@ -260,7 +260,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 allowBlank: false
             }],
             setValue: function (data) {
-                var parts = data.split('.'), // e.g Tine.Admin.Model.Group
+                var parts = data.split('.'), // e.g Tine.Tinebase.Model.Group
                     app   = Tine.Tinebase.appMgr.get(parts[1]);
                 
                 // set value for application combo
