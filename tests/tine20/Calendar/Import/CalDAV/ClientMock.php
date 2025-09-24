@@ -261,6 +261,35 @@ END:VEVENT
 END:VCALENDAR',
                     '{DAV:}getetag' => '"bcc36c611f0b60bfee64b4d42e44bb1d"',
                 ),
+            '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/cd701589-4e76-4e87-8aae-1d32a6020159.ics' =>
+                array (
+                    self::calendarDataKey => 'BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Apple Inc.//iCal 5.0.3//EN
+CALSCALE:GREGORIAN
+BEGIN:VTODO
+CREATED:20130701T065959Z
+LAST-MODIFIED:20130701T065959Z
+DTSTAMP:20130701T065959Z
+UID:cd701589-4e76-4e87-8aae-1d32a6020159
+SUMMARY:New Task
+DTSTART;TZID=Europe/Berlin:20130714T120000
+DUE;TZID=Europe/Berlin:20130714T180000
+PERCENT-COMPLETE:10
+STATUS:IN-PROCESS
+PRIORITY:0
+LOCATION:Kiel
+CATEGORIES:CATEGORY 1,CATEGORY 2
+DESCRIPTION:This is a descpription\nwith a linebreak and a \; \, and : a
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER;VALUE=DURATION:-PT1H15M
+DESCRIPTION:Default Mozilla Description
+END:VALARM
+END:VTODO
+END:VCALENDAR',
+                    '{DAV:}getetag' => '"bcc46c611f3b60bfee64b4d42e44bb1d"',
+                ),
         );
     }
         
