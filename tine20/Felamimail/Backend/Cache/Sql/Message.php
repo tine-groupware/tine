@@ -22,6 +22,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_tableName = 'felamimail_cache_message';
+
+    protected const FLAG_TABLE = 'felamimail_cache_msg_flag';
     
     /**
      * Model name
@@ -59,7 +61,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'field'  => 'email',
         ),
         'flags'    => array(
-            'table'         => 'felamimail_cache_msg_flag',
+            'table'         => self::FLAG_TABLE,
             'joinOn'        => 'message_id',
             'field'         => 'flag',
         ),
@@ -316,6 +318,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         );
         
         $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
+
+        // also delete flags from msg_flags table by folder_id
+        $this->_db->delete($this->_tablePrefix . self::FLAG_TABLE, $where);
     }
 
     /**
