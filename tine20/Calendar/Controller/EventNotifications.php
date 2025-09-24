@@ -244,9 +244,12 @@
             case 'deleted':
                 // skip invitations/cancle if event came from external
                 if (! $organizerIsExternal) {
-                    if (!$organizerIsAttender && $organizer->user_id->id !== $_updater->contact_id && $_oldEvent) {
+                    if (!$organizerIsAttender && $organizer->user_id->id !== $_updater->contact_id && ($_oldEvent || $_event->status == 'CANCELLED') ) {
                         // This Event is changed or deleted by someone else (Not Organizer) and teh Organizer is not an Attendee, so we need to let the Organizer know
-                        $updates = $this->_getUpdates($_event, $_oldEvent);
+                        $updates = null;
+                        if ($_oldEvent) {
+                            $updates = $this->_getUpdates($_event, $_oldEvent);
+                        }
                         $this->sendNotificationToAttender($organizer, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL, $updates);
                     }
                     foreach ($_event->attendee as $attender) {
