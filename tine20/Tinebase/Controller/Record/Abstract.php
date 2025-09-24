@@ -223,6 +223,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public const ACTION_ALL = 'all';
     public const ACTION_GET = 'get';
+    public const ACTION_SYNC = 'sync';
     public const ACTION_CREATE = 'create';
     public const ACTION_UPDATE = 'update';
     public const ACTION_DELETE = 'delete';

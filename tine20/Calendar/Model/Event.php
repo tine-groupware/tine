@@ -1025,7 +1025,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function doFreeBusyCleanup()
     {
         if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
-           return FALSE;
+           return false;
         }
 
         $oldAttendee = $this->attendee;
