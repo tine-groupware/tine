@@ -93,7 +93,7 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
                             'backend' => 'Sql',
                             'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME)->getId(),
                             'model' => Tasks_Model_Task::class,
-                        ], true), Tinebase_Container::getInstance()->getGrantsOfContainer($container))->getId();
+                        ], true), Tinebase_Container::getInstance()->getGrantsOfContainer($container, _ignoreAcl: true), _ignoreAcl: true)->getId();
                 }
             }
         }
