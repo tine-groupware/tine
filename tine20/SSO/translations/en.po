@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,6 +25,9 @@ msgstr "SAML2"
 
 msgid "SAML2 Bindings"
 msgstr "SAML2 Bindings"
+
+msgid "Key rotation enabled"
+msgstr "Key rotation enabled"
 
 msgid "Relying Parties"
 msgstr "Relying Parties"
@@ -104,6 +108,15 @@ msgstr[1] "External Identity Providers"
 msgid "Description"
 msgstr "Description"
 
+msgid "Specific Type"
+msgstr "Specific Type"
+
+msgid "Specific Configuration"
+msgstr "Specific Configuration"
+
+msgid "Domains"
+msgstr "Domains"
+
 msgid "Show on Login Screen"
 msgstr "Show on Login Screen"
 
@@ -136,6 +149,51 @@ msgstr "Update local properties"
 
 msgid "Primary group for created local accounts"
 msgstr "Primary group for created local accounts"
+
+msgid "Groups to be set for created local accounts"
+msgstr "Groups to be set for created local accounts"
+
+msgid "Groups that deny login for existing local accounts"
+msgstr "Groups that deny login for existing local accounts"
+
+msgid "Roles that deny login for existing local accounts"
+msgstr "Roles that deny login for existing local accounts"
+
+msgid "One of these group claims needs to be present"
+msgstr "One of these group claims needs to be present"
+
+msgid "The name of the \"groups\" claim, defaults to \"groups\""
+msgstr "The name of the \"groups\" claim, defaults to \"groups\""
+
+msgid "Create groups locally"
+msgstr "Create groups locally"
+
+msgid "Assign groups locally"
+msgstr "Assign groups locally"
+
+msgid "Account Name Prefix"
+msgstr "Account Name Prefix"
+
+msgid "String prefixed to local account names when created from this IDP"
+msgstr "String prefixed to local account names when created from this IDP"
+
+msgid "Group Name Prefix"
+msgstr "Group Name Prefix"
+
+msgid "String prefixed to local group names when created from this IDP"
+msgstr "String prefixed to local group names when created from this IDP"
+
+msgid "Account Display Name Prefix"
+msgstr "Account Display Name Prefix"
+
+msgid "String prefixed to local account display names when created from this IDP"
+msgstr "String prefixed to local account display names when created from this IDP"
+
+msgid "Addressbook Container"
+msgstr "Addressbook Container"
+
+msgid "Addressbook container to store newly created account contacts and lists"
+msgstr "Addressbook container to store newly created account contacts and lists"
 
 msgid "OAuth Device Code"
 msgid_plural "OAuth Device Codes"

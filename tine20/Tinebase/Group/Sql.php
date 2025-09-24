@@ -865,7 +865,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         
         return $result;
     }
-    
+
+    public function getModel(): string
+    {
+        return Tinebase_Model_Group::class;
+    }
+
     /**
      * Get multiple groups
      *

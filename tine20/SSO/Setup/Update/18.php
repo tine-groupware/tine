@@ -19,6 +19,7 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
+    protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -34,6 +35,10 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
             ],
+            self::RELEASE018_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -43,6 +48,10 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE018_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
             self::RELEASE018_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
@@ -96,16 +105,26 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             SSO_Model_RelyingParty::class,
         ]);
-
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
     }
 
     public function update005()
     {
-        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . SSO_Model_Token::TABLE_NAME . ' SET `ttl` = "' . Tinebase_DateTime::now()->addDay(7)->toString() . '" WHERE `ttl` IS NULL' );
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . SSO_Model_Token::TABLE_NAME . ' SET `ttl` = "' . Tinebase_DateTime::now()->addDay(7)->toString() . '" WHERE `ttl` IS NULL');
 
         SSO_Scheduler_Task::addDeleteExpiredTokensTask(Tinebase_Core::getScheduler());
 
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
+    }
+
+
+    public function update006(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            SSO_Model_ExternalIdp::class,
+        ]);
+
+        $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
     }
 }

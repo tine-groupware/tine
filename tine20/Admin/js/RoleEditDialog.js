@@ -265,7 +265,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             title: this.translation.gettext('Members'),
             store: this.membersStore,
             anchor: '100% 100%',
-            groupRecordClass: Tine.Admin.Model.Group,
+            groupRecordClass: Tine.Tinebase.Model.Group,
             selectType: 'both',
             selectAnyone: false,
             selectTypeDefault: 'group',

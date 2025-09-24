@@ -82,6 +82,9 @@ class SSO_Model_ExIdpDomain extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::UI_CONFIG             => [
+                    self::DISABLED              => true,
+                ],
             ],
         ],
     ];
