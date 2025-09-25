@@ -276,7 +276,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         // create resource with acl for sclever
         $resource = $this->_getResource([Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true]);
         $sclever = $this->_getPersona('sclever');
-        $grants = $resource->grants;
+        $grants = $resource->grants->toArray();
         $grants[1] = $this->_getAllCalendarGrants($sclever);
         $grants[1] = array_merge($grants[1], array_fill_keys(Calendar_Model_ResourceGrants::getAllGrants(), true));
         $resource->grants = $grants;
