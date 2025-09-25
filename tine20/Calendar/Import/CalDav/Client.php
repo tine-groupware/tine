@@ -545,7 +545,11 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                         . ' Processing VTODO record: ' . $key);
 
+                    $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
+                    $userAgentRAII = new Tinebase_RAII(fn() => $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent);
+                    $_SERVER['HTTP_USER_AGENT'] = 'CalDavSynchronizer/tine';
                     Tasks_Frontend_WebDAV_Task::create($this->_taskContainer, $name, $data);
+                    unset($userAgentRAII);
                 }
 
                 if (strpos($data, 'BEGIN:VEVENT') === false) {
