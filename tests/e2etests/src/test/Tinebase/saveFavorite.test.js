@@ -43,7 +43,7 @@ describe('Mainpage', () => {
         await expect(page).toClick('.x-tree-node-el.x-tree-node-leaf.x-unselectable.tinebase-westpanel-node-favorite.x-tree-selected', {button:'right'});
         await expect(page).toClick('.x-menu-item-icon.action_edit', {visible: true});
         await page.waitForSelector('.x-window.x-resizable-pinned');
-        await page.screenshot({path: 'screenshots/openFavorite1.png'});
+        await lib.makeScreenshot(page,{path: 'screenshots/openFavorite1.png'});
         await page.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel.x-masked-relative.x-masked');
         await expect(page).toClick('.x-btn-image.action_cancel');
         await page.waitForFunction(() => !document.querySelector('.x-window.x-resizable-pinned'));
