@@ -112,11 +112,16 @@ class Tinebase_Twig
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             'branding'          => [
-                'logo'              => Tinebase_Core::getInstallLogo(),
-                'logoContent'       => Tinebase_Controller::getInstance()->getLogo(),
+                'logo'              => Tinebase_Core::getLogo('b'),
+                'logoContent'       => Tinebase_Controller::getInstance()->getLogo('b'),
                 'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
                 'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
                 'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
+            ],
+            'installation'      => [
+                'logo'              => Tinebase_Core::getLogo('i'),
+                'logoContent'       => Tinebase_Controller::getInstance()->getLogo('i'),
+                'weburl'            => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             ],
             'user'              => [
                 'account'           => $account,

@@ -76,8 +76,8 @@ const extendedDataIntendedPurposes = computed(() => {
     }
     const getStatus = function( record ) {
       if(!(record.withdrawDate || record.agreeDate)) return {
-        status: 'Manage',
-        localizedStatus: formatMessage('Manage'),
+        status: 'Agree',
+        localizedStatus: formatMessage('Agree'),
         statusText: formatMessage('Not decided'),
         cellClass: 'table-warning',
       };

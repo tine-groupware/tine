@@ -13,16 +13,16 @@ $secondary: #8cb8d7;
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 .main-container {
-  margin: 20px 0;
-  max-width: 550px;
+  height: 100vh;
+  max-width: 600px;
   display: flex;
   flex: 1;
   flex-direction: column;
   font-weight: 100;
   text-align: left;
   box-sizing: border-box;
-  overflow-y: auto;
   justify-content: center;
+  padding: 20px;
 
   h1 {
     width: 100%;
