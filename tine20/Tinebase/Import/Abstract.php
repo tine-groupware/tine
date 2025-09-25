@@ -1050,28 +1050,31 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         return $autotags;
     }
-    
+
     /**
      * import record and resolve possible conflicts
-     * 
+     *
      * supports $_resolveStrategy(s): ['mergeTheirs', ('Merge, keeping existing details')],
      *                                ['mergeMine',   ('Merge, keeping my details')],
      *                                ['keep',        ('Keep both records')]
-     * 
+     *
      * @param Tinebase_Record_Interface $record
-     * @param string $resolveStrategy
-     * @param Tinebase_Record_Interface $clientRecord
+     * @param null|string $resolveStrategy
+     * @param null|Tinebase_Record_Interface $clientRecord
      * @return Tinebase_Record_Interface
-     * 
+     * @throws Tinebase_Exception_AccessDenied
+     *
      * @todo we should refactor the merge handling: this function should always get the merged record OR always do the merging itself
      */
-    protected function _importAndResolveConflict(Tinebase_Record_Interface $record, $resolveStrategy = null, $clientRecord = null)
+    protected function _importAndResolveConflict(Tinebase_Record_Interface $record,
+                                                 $resolveStrategy = null,
+                                                 $clientRecord = null)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+        if ($resolveStrategy && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' ResolveStrategy: ' . $resolveStrategy);
         }
-        if ($clientRecord && Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) {
+        if ($clientRecord && Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Client record: ' . print_r($clientRecord->toArray(), TRUE));
         }
@@ -1090,8 +1093,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 }
                 
                 if ($recordToUpdate !== null) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' Merged record: ' . print_r($record->toArray(), TRUE));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE) && $clientRecord) {
+                        Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                            . ' Merged record: ' . print_r($record->toArray(), TRUE));
+                    }
 
                     // skip concurrency check when merging records
                     if ($recordToUpdate->has('seq')) {
