@@ -1,88 +1,144 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
-/**
- * Model of a resource
- * 
- * @package Calendar
- * @property grants
- */
-class Calendar_Model_Resource extends Tinebase_Record_Abstract
+class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
 {
+    public const TABLE_NAME = 'cal_resources';
+    public const MODEL_NAME_PART = 'Resource';
+
+    public const FLD_NAME = 'name';
+    public const FLD_HIERACHY = 'hierarchy';
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_MAX_NUMBER_OF_PEOPLE = 'max_number_of_people';
+    public const FLD_EMAIL = 'email';
+    public const FLD_TYPE = 'type';
+    public const FLD_STATUS = 'status';
+    public const FLD_STATUS_WITH_GRANT = 'status_with_grant';
+    public const FLD_BUSY_TYPE = 'busy_type';
+    public const FLD_SUPRESS_NOTIFICATION = 'suppress_notification';
+    public const FLD_COLOR = 'color';
 
     /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Calendar';
-    
-    /**
-     * validators
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        // tine record fields
-        'id'                   => array('allowEmpty' => true,  'Alnum'),
-        'container_id'         => array('allowEmpty' => true,  'Alnum'),
-        'created_by'           => array('allowEmpty' => true,         ),
-        'creation_time'        => array('allowEmpty' => true          ),
-        'last_modified_by'     => array('allowEmpty' => true          ),
-        'last_modified_time'   => array('allowEmpty' => true          ),
-        'is_deleted'           => array('allowEmpty' => true          ),
-        'deleted_time'         => array('allowEmpty' => true          ),
-        'deleted_by'           => array('allowEmpty' => true          ),
-        'seq'                  => array('allowEmpty' => true,  'Int'  ),
-        // resource specific fields
-        'name'                 => array('allowEmpty' => true          ),
-        'hierarchy'            => array('allowEmpty' => true          ),
-        'description'          => array('allowEmpty' => true          ),
-        'email'                => array('allowEmpty' => true          ),
-        'max_number_of_people' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'type'                 => array('allowEmpty' => false         ),
-        // location and site are virtual fields
-        'location'             => array('allowEmpty' => true          ),
-        'site'                 => array('allowEmpty' => true          ),
-        'status'               => array('allowEmpty' => true          ),
-        'status_with_grant'       => array('allowEmpty' => true          ),
-        'busy_type'            => array('allowEmpty' => true          ),
-        'suppress_notification'=> array('allowEmpty' => true          ),
-        'tags'                 => array('allowEmpty' => true          ),
-        'notes'                => array('allowEmpty' => true          ),
-        'grants'               => array('allowEmpty' => true          ),
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'customfields'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'color'                => array('allowEmpty' => true),
-    );
-    
+    protected static $_modelConfiguration = [
+        self::VERSION                   => 10,
+        self::MODLOG_ACTIVE             => true,
+        self::EXTENDS_CONTAINER         => self::FLD_CONTAINER_ID,
+        self::HAS_RELATIONS             => true,
+        self::HAS_ATTACHMENTS           => true,
+        self::HAS_TAGS                  => true,
+
+        self::APP_NAME                  => Calendar_Config::APP_NAME,
+        self::MODEL_NAME                => self::MODEL_NAME_PART,
+
+        self::RECORD_NAME               => 'Calendar User', // gettext('GENDER_Calendar User')
+        self::RECORDS_NAME              => 'Calendar Users', // ngettext('Calendar User', 'Calendar Users', n)
+
+        self::TABLE                     => [
+            self::NAME                      => self::TABLE_NAME,
+            self::INDEXES                   => [
+                self::FLD_NAME                  => [
+                    self::COLUMNS                   => [self::FLD_NAME],
+                ],
+                self::FLD_EMAIL                 => [
+                    self::COLUMNS                   => [self::FLD_EMAIL],
+                ],
+                self::FLD_STATUS                => [
+                    self::COLUMNS                   => [self::FLD_STATUS],
+                ],
+                self::FLD_SUPRESS_NOTIFICATION  => [
+                    self::COLUMNS                   => [self::FLD_SUPRESS_NOTIFICATION],
+                ],
+            ],
+        ],
+        self::ASSOCIATIONS                  => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                self::FLD_CONTAINER_ID       => [
+                    self::TARGET_ENTITY             => Tinebase_Model_Container::class,
+                    self::FIELD_NAME                => self::FLD_CONTAINER_ID,
+                    self::JOIN_COLUMNS                  => [[
+                        self::NAME                          => self::FLD_CONTAINER_ID,
+                        self::REFERENCED_COLUMN_NAME        => self::ID,
+                    ]],
+                ],
+            ],
+        ],
+
+        self::FIELDS                    => [
+            self::FLD_NAME                  => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+            ],
+            self::FLD_HIERACHY              => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 65535,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_DESCRIPTION           => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_MAX_NUMBER_OF_PEOPLE  => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::UNSIGNED                  => true,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_EMAIL                 => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+
+            ],
+            self::FLD_TYPE                  => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 32,
+                self::DEFAULT_VAL               => 'RESOURCE',
+            ],
+            self::FLD_STATUS                => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 32,
+                self::DEFAULT_VAL               => 'NEEDS-ACTION',
+            ],
+            self::FLD_STATUS_WITH_GRANT     => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 32,
+                self::DEFAULT_VAL               => 'NEEDS-ACTION',
+            ],
+            self::FLD_BUSY_TYPE             => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 32,
+                self::DEFAULT_VAL               => 'BUSY',
+            ],
+            self::FLD_SUPRESS_NOTIFICATION  => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::UNSIGNED                  => true,
+                self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => 0,
+            ],
+            self::FLD_COLOR                 => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 7,
+                self::NULLABLE                  => true,
+            ],
+        ],
+    ];
+
     /**
-     * datetime fields
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var array
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_datetimeFields = array(
-        'creation_time', 
-        'last_modified_time', 
-        'deleted_time', 
-    );
+    protected static $_configurationObject = NULL;
 
     protected static $_relatableConfig = array(
         array('relatedApp' => 'Addressbook', 'relatedModel' => 'Contact', 'config' => array(

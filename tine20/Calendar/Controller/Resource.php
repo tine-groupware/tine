@@ -50,12 +50,12 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      */
     private function __construct()
     {
-        $this->_applicationName = 'Calendar';
-        $this->_modelName       = 'Calendar_Model_Resource';
+        $this->_applicationName = Calendar_Config::APP_NAME;
+        $this->_modelName       = Calendar_Model_Resource::class;
         
         $this->_backend         = new Tinebase_Backend_Sql(array(
             'modelName' => $this->_modelName, 
-            'tableName' => 'cal_resources'
+            'tableName' => Calendar_Model_Resource::TABLE_NAME,
         ));
         $this->_backend->setModlogActive(TRUE);
 
@@ -112,13 +112,17 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
-            if (!is_array($_record->grants) || empty($_record->grants)) {
+            if ((!is_array($_record->grants) && !$_record->grants instanceof Tinebase_Record_RecordSet) || empty($_record->grants)) {
                 $_record->grants = [[
                         'account_id' => '0',
                         'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                     ]];
             }
-            $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants);
+            if (is_arraY($_record->grants)) {
+                $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants);
+            } else {
+                $grants = $_record->grants;
+            }
             unset($_record->grants);
 
             $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId();
@@ -223,9 +227,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
             $grants = $_record->grants;
             unset($_record->grants);
-            if (is_array($grants) && Tinebase_Core::getUser()
+            if ((is_array($grants) || $grants instanceof Tinebase_Record_RecordSet) && Tinebase_Core::getUser()
                     ->hasGrant($container, Calendar_Model_ResourceGrants::RESOURCE_ADMIN)) {
-                Tinebase_Container::getInstance()->setGrants($container, new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $grants), true, false);
+                Tinebase_Container::getInstance()->setGrants($container,  $grants instanceof Tinebase_Record_RecordSet ? $grants : new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $grants), true, false);
             }
 
             $result = parent::update($_record, true, $_updateDeleted);

@@ -15,12 +15,17 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
 {
     protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE018_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE018_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -43,5 +48,22 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.01', self::RELEASE018_UPDATE001);
+    }
+
+    public function update002()
+    {
+        foreach ($this->_backend->getOwnForeignKeys(Calendar_Model_Resource::TABLE_NAME) as $fKey)
+        {
+            $this->_backend->dropForeignKey(Calendar_Model_Resource::TABLE_NAME, $fKey['constraint_name']);
+        }
+        try {
+            $this->_backend->dropIndex(Calendar_Model_Resource::TABLE_NAME, 'tine20_cal_resources::container_id--container::id');
+        } catch(Exception){}
+
+        Setup_SchemaTool::updateSchema([
+            Calendar_Model_Resource::class,
+        ]);
+
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.02', self::RELEASE018_UPDATE002);
     }
 }
