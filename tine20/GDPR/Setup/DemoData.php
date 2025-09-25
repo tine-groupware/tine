@@ -99,6 +99,8 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     protected function _createDataIntendedPurposes()
     {
+        GDPR_Config::getInstance()->set(GDPR_Config::JWT_SECRET, 'jwtSecretCreatedFromGDPRDemoData');
+
         $dip1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(new GDPR_Model_DataIntendedPurpose([
             GDPR_Model_DataIntendedPurpose::FLD_NAME => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
@@ -164,5 +166,6 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         Addressbook_Controller_Contact::getInstance()->update($contact);
+        Addressbook_Config::getInstance()->set(Addressbook_Config::INSTALLATION_REPRESENTATIVE, $contact->getId());
     }
 }

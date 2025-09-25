@@ -16,7 +16,7 @@
 
     <style>
         :root {
-            --header-height: 80px;
+            --header-height: 100px;
             --footer-height: 150px;
             --spacing: 20px;
         }
@@ -57,13 +57,13 @@
         }
 
         .header-section {
-            height: var(--header-height);
+            max-height: var(--header-height);
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             background-color: inherit;
-            padding: 10px 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;

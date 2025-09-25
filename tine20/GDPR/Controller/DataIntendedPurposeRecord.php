@@ -357,8 +357,9 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
         try {
             $result = $this->_decodeJWTData($token);
+            $contact = $this->_getGDPRContact($result);
             $dipId = $result['dipId'] ?? null;
-            $result = array_merge($result, $this->_getDefaultGDPRData(null, $dipId));
+            $result = array_merge($result, $this->_getDefaultGDPRData($contact, $dipId));
 
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(json_encode($result));
@@ -421,9 +422,9 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             }
         }
 
-        try {
-            $locale = $this->_getLocale();
+        $locale = $this->_getLocale();
 
+        try {
             if ($contactId && $contact = Addressbook_Controller_Contact::getInstance()->get($contactId, null, true, false, false)) {
                 $templateContext = array_merge($templateContext, ['contact' => $contact]);
 
@@ -453,12 +454,17 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                     'org_name' => $contact->org_name ?? '',
                 ]);
             }
+        } catch (Exception $e) {
+            $result = array_merge($result, [
+                'error'   => $e->getMessage(),
+            ]);
+        }
 
+        try {
             if ($templateContext['contact']) {
                 $locale = $this->_getLocale($templateContext['contact']->account_id);
             }
 
-            $coreRegistryData = Tinebase_Core::getCoreRegistryData();
             $templates = $this->getViews($locale);
             $templateContext['browserLocale'] = $locale;
 
@@ -479,8 +485,6 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                     'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
                     'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
                 ],
-                'brandingLogo'  =>  $coreRegistryData['brandingLogo'],
-                'installLogo'   => $coreRegistryData['installLogo'],
             ]);
         } catch (Exception $e) {
             $result = array_merge($result, [
@@ -694,7 +698,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 'record' => $contactId,
                 'intendedPurpose' => $dipId,
                 'agreeDate' => Tinebase_DateTime::now(),
-                'agreeComment' => 'Agreed by clicking the encrypted link',
+                'agreeComment' => '',
             ]);
             $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->create($diprData);
         }

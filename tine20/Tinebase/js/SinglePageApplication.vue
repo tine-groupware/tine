@@ -56,14 +56,20 @@ $secondary: #8cb8d7;
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 :root {
-  --header-height: 80px;
+  --header-height: 100px;
   --footer-height: 150px;
+  --spacing: 20px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .route-view {
   min-height: 100vh;
   display: flex;
-  margin: 0 50px;
   padding-top: var(--header-height);
   padding-bottom: var(--footer-height);
   flex: 1;
@@ -80,7 +86,7 @@ $secondary: #8cb8d7;
   left: 0;
   width: 100%;
   background-color: inherit;
-  padding: 10px 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
