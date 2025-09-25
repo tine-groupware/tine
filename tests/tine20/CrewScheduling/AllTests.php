@@ -18,11 +18,12 @@ class CrewScheduling_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit\Framework\TestSuite('All CrewScheduling tests');
-
-        $suite->addTestSuite(CrewScheduling_ControllerTest::class);
-        $suite->addTestSuite(CrewScheduling_Export_XlsxTest::class);
-        $suite->addTestSuite(CrewScheduling_Export_PdfTest::class);
-        $suite->addTestSuite(CrewScheduling_FrontendTest::class);
+        if (Tinebase_Application::getInstance()->isInstalled('CrewScheduling')) {
+            $suite->addTestSuite(CrewScheduling_ControllerTest::class);
+            $suite->addTestSuite(CrewScheduling_Export_XlsxTest::class);
+            $suite->addTestSuite(CrewScheduling_Export_PdfTest::class);
+            $suite->addTestSuite(CrewScheduling_FrontendTest::class);
+        }
 
         return $suite;
     }

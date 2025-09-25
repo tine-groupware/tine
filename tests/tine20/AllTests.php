@@ -26,7 +26,7 @@ class AllTests
         $node_total = isset($_ENV['NODE_TOTAL']) ? intval($_ENV['NODE_TOTAL']):1;
         $node_index = isset($_ENV['NODE_INDEX']) ? intval($_ENV['NODE_INDEX']):1;
 
-        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('tine Groupware All Tests');
 
         $suites = array(
             'Tasks',
@@ -58,6 +58,8 @@ class AllTests
                 'Scheduler' !== $dirIter->getFilename() &&
                 !in_array($dirIter->getFilename(), $suites))
             {
+                // TODO would be good to check here if suite belongs to an app and if app is installed
+
                 $suites[] = $dirIter->getFilename();
             }
         }
