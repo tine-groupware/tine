@@ -639,15 +639,21 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
         $this->_fireChangeListeEvent($updatedRecord, $record, $currentRecord);
+        $this->_handleMailinglistAfterUpdate($updatedRecord, $currentRecord);
+    }
 
+    protected function _handleMailinglistAfterUpdate(Addressbook_Model_List $updatedRecord,
+                                                     Addressbook_Model_List $currentRecord): void
+    {
         if (isset($updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
-                $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
-                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $updatedRecord->email)) {
+            $updatedRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+            preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $updatedRecord->email)) {
 
             if (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
-                    $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
-                    preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
+                $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
 
                 // do diff, check password etc ?
                 if ($updatedRecord->email !== $currentRecord->email) {
@@ -674,8 +680,8 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }, [$updatedRecord]);
 
         } elseif (isset($currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST]) &&
-                $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
-                preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
+            $currentRecord->xprops()[Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] &&
+            preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $currentRecord->email)) {
 
             $account = $this->_getMailAccount($currentRecord);
             if ($account !== null) {
