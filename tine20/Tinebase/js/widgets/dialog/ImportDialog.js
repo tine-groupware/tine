@@ -654,13 +654,15 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             return this.summaryPanel;
         }
         var exceptionExpander = new Ext.ux.grid.RowExpander({
-            tpl : new Ext.XTemplate('{[this.showClientRecord(values)]}', { function(values) {
-                if (values && values.exception && values.exception.clientRecord) {
-                    return Ext.util.Format.htmlEncode(Ext.encode(values.exception.clientRecord));
-                } else {
-                    return i18n._('No Detail Informations');
+            tpl : new Ext.XTemplate('{[this.showClientRecord(values)]}', {
+                showClientRecord: function(values) {
+                    if (values && values.exception && values.exception.clientRecord) {
+                        return Ext.util.Format.htmlEncode(Ext.encode(values.exception.clientRecord));
+                    } else {
+                        return i18n._('No Detail Informations');
+                    }
                 }
-            }})
+            })
         });
         return {
             title: i18n._('Summary'),
@@ -734,7 +736,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     this.importMask.hide();
                     
                     this.fireEvent('finish', this, this.layout.activeItem);
-                    
+
                     if (response.failcount > 0 && Ext.isArray(response.exceptions) && response.exceptions.length > 0) {
                         // show errors and fence finish/back btn
                         this.backButton.setDisabled(true);
@@ -823,7 +825,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             }
             
         this.summaryPanelInfo.update('<div style="padding: 5px;">' + info.join('<br />') + '</div>');
-        
+
         // failures
         if (failcount) {
             this.exceptionStore.filterBy(function(record, id) {
