@@ -63,7 +63,7 @@
     - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
     - |
       if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
-        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/
+        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/
       fi
   artifacts:
     when: always
@@ -94,11 +94,14 @@ js-e2e-tests-source:
   rules:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
       when: never
-    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true" || $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source-save-screenshots/
+    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true" || $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source-save-screenshots/ || $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - !reference [.js-e2e-tests-source, rules]
-js-e2e-tests-source-save-screenshots:
+js-e2e-tests-source-save-screenshots-720p:
   extends: .js-e2e-tests-source
+  variables:
+    TEST_RESOLUTION: '{"width": 1280, "height": 720}'
+    CI_RESOLUTION: '720p'
   artifacts:
     when: always
     reports:
@@ -111,9 +114,14 @@ js-e2e-tests-source-save-screenshots:
   rules:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "sequential"
       when: never
-    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true" && $CI_MERGE_REQUEST_LABELS !~ /js-e2e-tests-source-save-screenshots/
+    - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true" && $CI_MERGE_REQUEST_LABELS !~ /js-e2e-tests-source-save-screenshots/ && $CI_PIPELINE_SOURCE != "schedule"
       when: never
     - !reference [.js-e2e-tests-source, rules]
+js-e2e-tests-source-save-screenshots-1080p:
+  extends: js-e2e-tests-source-save-screenshots-720p
+  variables:
+    TEST_RESOLUTION: '{"width": 1920, "height": 1020}'
+    CI_RESOLUTION: '1080p'
 js-e2e-tests-source-php-version-matrix:
   extends: .js-e2e-tests-source
   parallel:
