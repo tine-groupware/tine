@@ -882,7 +882,27 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $loadedEvent->attendee[0]->status, 'status not set');
         
     }
-    
+
+    public function testCalendarUserFreeBusyUrl(): void
+    {
+        $event = $this->_getEvent(_now: true);
+        $event->attendee = $this->_getAttendee();
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+
+        $freeBusyUrl = Calendar_Controller_FreeBusyUrl::getInstance()->create(new Calendar_Model_FreeBusyUrl([
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_ID => Tinebase_Core::getUser()->getId(),
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS => Tinebase_Model_User::class,
+        ], true));
+
+        $response = Calendar_Controller::getInstance()->publicFreeBusy($freeBusyUrl->getId());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $this->assertStringContainsString('ORGANIZER:' . Tinebase_Core::getUser()->accountEmailAddress, $body);
+        $this->assertStringContainsString('FREEBUSY;FBTYPE=BUSY:' . $event->dtstart->format('Ymd\THis\Z') . '/'
+            . $event->dtend->format('Ymd\THis\Z'), $body);
+    }
+
     public function testAttendeeStatusFilter()
     {
         $event = $this->_getEvent();

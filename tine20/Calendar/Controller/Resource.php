@@ -6,14 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * Calendar Resources Controller
- * 
- * @package Calendar
- * @subpackage  Controller
+ * @extends Tinebase_Controller_Record_Abstract<Calendar_Model_Resource>
  */
 class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 {

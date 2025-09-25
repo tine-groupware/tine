@@ -15,6 +15,30 @@
  */
 class Calendar_Controller_ResourceTest extends Calendar_TestCase
 {
+    public function testResourceFreeBusyUrl(): void
+    {
+        $resource = $this->_getResource();
+        $resource->{Calendar_Model_Resource::FLD_FREE_BUSY_URLS} = new Tinebase_Record_RecordSet(Calendar_Model_FreeBusyUrl::class, [
+            new Calendar_Model_FreeBusyUrl([], true),
+        ]);
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
+        $event = $this->_getEvent(now: true);
+        $event->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id' => $persistentResource->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+        ], true));
+        $event = Calendar_Controller_Event::getInstance()->create($event);
+
+        $response = Calendar_Controller::getInstance()->publicFreeBusy($persistentResource
+            ->{Calendar_Model_Resource::FLD_FREE_BUSY_URLS}->getFirstRecord()->getId());
+        $response->getBody()->rewind();
+        $body = $response->getBody()->getContents();
+
+        $this->assertStringContainsString('ORGANIZER:' . $resource->email, $body);
+        $this->assertStringContainsString('FREEBUSY;FBTYPE=BUSY:' . $event->dtstart->format('Ymd\THis\Z') . '/'
+            . $event->dtend->format('Ymd\THis\Z'), $body);
+    }
+
     public function testCreateResource($grants = null)
     {
         $resource = $this->_getResource($grants);

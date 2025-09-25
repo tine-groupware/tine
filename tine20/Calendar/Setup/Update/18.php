@@ -17,6 +17,7 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -31,6 +32,10 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE018_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -73,5 +78,14 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Calendar_Model_FreeBusyUrl::class,
+        ]);
+
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.04', self::RELEASE018_UPDATE004);
     }
 }
