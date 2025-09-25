@@ -147,6 +147,13 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             $this->sort = (array)$this->sort;
 
             return true;
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' Major DB issue, could not fetch customfields: '
+                    . $zdse->getMessage());
+            }
+            return false;
         } finally {
             --$recursion;
         }
