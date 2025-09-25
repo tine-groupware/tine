@@ -32,37 +32,15 @@ describe('test email rendering', () => {
   })
 
   for (let i=1; i<=4; i++) {
-    test('light mode email '+i, async () => {
+    test('light/dark mode email '+i, async () => {
       await openEmailPreview('Test '+i)
-      await page.screenshot({path: 'screenshots/Felamimail/preview-'+i+'_light.png'})
+      await lib.makeScreenshot(page,{path: 'screenshots/Felamimail/preview-'+i+'.png'})
     })
   }
 
   for (let i=1; i<=4; i++) {
-    test('light mode email '+i+' response', async () => {
-      await openEmailResponse('Test '+i, 'response-'+i+'_light.png')
-    })
-  }
-
-  test('switch to dark mode', async () => {
-    await page.waitForSelector('.tine-bar-item.color-scheme-selector')
-    expect(page).toClick('.tine-bar-item.color-scheme-selector')
-    await page.waitForSelector('.color-scheme-selector__menu')
-    await page.waitForSelector('.color-scheme-selector__menu span', {text: "Dunkler Modus"})
-    expect(page).toClick('span', {text: "Dunkler Modus"})
-    await page.waitForSelector('body.dark-mode')
-  })
-
-  for (let i=1; i<=4; i++) {
-    test('dark mode email ' + i, async () => {
-      await openEmailPreview('Test ' + i)
-      await page.screenshot({path: 'screenshots/Felamimail/preview-' + i + '_dark.png'})
-    })
-  }
-
-  for (let i=1; i<=4; i++) {
-    test('dark mode email '+i+' response', async () => {
-      await openEmailResponse('Test '+i, 'response-'+i+'_dark.png')
+    test('light/dark mode email '+i+' response', async () => {
+      await openEmailResponse('Test '+i, 'response-'+i+'.png')
     })
   }
 
@@ -104,7 +82,7 @@ async function openEmailResponse (title, filename){
   await waitForLoadmask(newPage)
 
   await newPage.waitForSelector('input[name="subject"]')
-  await newPage.screenshot({path: 'screenshots/Felamimail/'+filename})
+  await lib.makeScreenshot(newPage,{path: 'screenshots/Felamimail/'+filename})
   await newPage.close()
 }
 

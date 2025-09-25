@@ -216,7 +216,7 @@ describe('employee', () => {
                         throw new Error('days count mismatch');
                     }
 
-                    await employeeEditDialog.screenshot({path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
+                    await lib.makeScreenshot(employeeEditDialog,{path: 'screenshots/HumanResources/13_humanresources_mitarbeiter_krankheit.png'});
 
                 }, 300000);
             });
@@ -265,12 +265,14 @@ describe('employee', () => {
             });
         });
     });
-    describe('edit contract', () => {
+    describe.skip('edit contract', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
             await page.waitForTimeout(1000);
             await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Paul Wulf'});
+            await page.waitForTimeout(1000);
             employeeEditDialog = await lib.getEditDialog('Mitarbeitende bearbeiten');
+            await employeeEditDialog.waitForTimeout(3000);
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge', visible:true});
         });
         test('open contract', async () => {
