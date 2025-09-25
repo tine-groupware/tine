@@ -9,6 +9,7 @@ Ext.ns('Tine.Filemanager.nodeActions');
 
 require('Filemanager/js/QuickLookPanel');
 require('Filemanager/js/FileSystemLinkDialog');
+const {emptyFn} = require("../../library/ExtJS/src/core/Ext-more");
 
 /**
  * @singleton
@@ -640,16 +641,19 @@ Tine.Filemanager.nodeActions.Publish = {
             });
 
             Tine.Filemanager.downloadLinkRecordBackend.saveRecord(record, {
-                success: function (record) {
+                success: (record) => {
                     Tine.Filemanager.FilePublishedDialog.openWindow({
                         title: selected.data.type === 'folder' ? app.i18n._('Folder has been published successfully') : app.i18n._('File has been published successfully'),
                         record: record,
                         password: password
                     });
+
+                    this.initialConfig.executor(record);
                 }, failure: Tine.Tinebase.ExceptionHandler.handleRequestException, scope: this
             });
         }, this);
     },
+    executor: Ext.emptyFn,
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
         
