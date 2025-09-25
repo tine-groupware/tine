@@ -77,6 +77,10 @@ const fetchData = async () => {
 
   templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
   email.value = responseData.value.email;
+  if (responseData.value.current_contact) {
+    submissionComplete.value = true;
+    contactId.value = responseData.value.current_contact.id;
+  }
 }
 
 onBeforeMount(async () => {

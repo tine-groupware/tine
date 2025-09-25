@@ -9,8 +9,10 @@
             ? formatMessage('I hereby withdraw the following intended purpose for data processing')
             : formatMessage('I hereby accept the following intended purpose for data processing')}}:
           </p>
+          <div v-if="record.__record.name" class="fs-5 ps-1">
+            <p class="fw-bold mb-1"> {{record?.__record.name}}</p>
+          </div>
           <div v-if="record.__record.desc" class="fs-6 ps-1">
-            <p class="fw-bold mb-1"> {{record?.__record.name}}:</p>
             <p>{{ record.__record.desc }}</p>
           </div>
             <div class="mt-3">
