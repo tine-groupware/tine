@@ -1660,6 +1660,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 "email" => $this[$emailField],
                 "email_type_field" => $emailField,
                 "contact_record" => $this->toArray(),
+                //todo: find the use case , in the future , it should be possible to send mass mail to private email
                 "is_private" => $this->isPrivateEmail($this[$emailField], $emailField),
             ];
         }
