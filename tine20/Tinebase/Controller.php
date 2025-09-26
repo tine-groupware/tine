@@ -1671,23 +1671,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $imageBlob = Tinebase_Core::getCache()->load($cacheId);
 
         if (! $imageBlob) {
+            $icon = './images/favicon.png';
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON);
 
             if (!is_array($config)) {
                 $config = [16 => $config];
             }
 
-            // find nearest icon
-            if (array_key_exists($size, $config)) {
-                $icon = $config[$size];
-            } else {
-                foreach ($config as $s => $i) {
-                    if (! is_numeric($s)) continue;
-                    $diffs[$s] = abs($size - $s);
-                }
-                $nearest = array_search(min($diffs), $diffs);
-
-                $icon = $config[$nearest];
+            // find next bigger source icon
+            ksort($config);
+            foreach($config as $s => $icon) {
+                if ($s >= $size) break;
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
