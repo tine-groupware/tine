@@ -19,23 +19,24 @@ class Sales_Import_ProductTest extends TestCase
      */
     protected $_importContainer = null;
 
+    protected $_importDateTime = null;
+
     protected function tearDown(): void
     {
         parent::tearDown();
-        self::clear('Sales', 'Product');
+        self::clear('Sales', 'Product', [['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $this->_importDateTime]]);
     }
 
     public function testImportDemoData()
     {
-        self::clear('Sales', 'Product');
-        $now = Tinebase_DateTime::now();
+        $this->_importDateTime = Tinebase_DateTime::now();
         $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Product', [
             'definition' => 'sales_import_product_csv',
             'file' => 'product.csv',
         ]);
         $importer->importDemodata();
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Sales_Model_Product', [
-            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $this->_importDateTime]
         ]);
         $result = Sales_Controller_Product::getInstance()->search($filter);
         self::assertGreaterThanOrEqual(2, count($result));
