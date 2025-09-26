@@ -130,9 +130,6 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG     => [
                     self::READ_ONLY             => true,
-                    'plugins'                   => [
-                        'ux.fieldclipboardplugin'
-                    ],
                 ]
             ],
         ]
