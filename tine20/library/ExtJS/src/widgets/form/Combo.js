@@ -504,6 +504,7 @@ var combo = new Ext.form.ComboBox({
                     _.delay(() => {
                         // NOTE: we need to wait until quickadd handlers have run :-/
                         this.hasFocus = true;
+                        this.startValue = this.getValue();
                     }, 500);
                 }, 100)
             }, this);

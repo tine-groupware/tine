@@ -40,3 +40,8 @@
 a.x-tree-node-anchor {
     -webkit-touch-callout: none;
 }
+
+.x-form-grow-sizer {
+    padding-bottom: 0;
+    padding-top: 0;
+}

@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import { HTMLProxy, Expression } from "twingEnv.es6";
+import formatAddress from "util/postalAddressFormater";
 /**
  * Render given MailAddresss
  *
@@ -51,51 +53,12 @@ Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Con
  * @singleton
  */
 const addressRenderer = function (v, metadata, record, store, a, b, config) {
-    var template = new Ext.XTemplate(
-        '<tpl for="." class="address">' +
-        '<tpl if="street">{street} <br /></tpl>' +
-        '<tpl if="street2">{street2} <br /></tpl>' +
-        '<tpl if="postalcode">{postalcode}</tpl> <tpl if="locality">{locality}</tpl><br />' +
-        '<tpl if="region">{region} <br /></tpl>' +
-        '<tpl if="country">{country}</tpl>' +
-        '</tpl>');
-    template.compile();
-
-    if (!record) {
-        return template.applyTemplate({
-            street: '',
-            street2: '',
-            postalcode: '',
-            locality: '',
-            region: '',
-            country: ''
-        });
-    }
-
-    var local = Ext.apply({}, config);
-    var keys = Object.keys(local);
-
-    // According to config, resolve the given fields from record
-    keys.forEach(function (key) {
-        var value = null;
-
-        if (!record.data) {
-            value = window.lodash.get(record, local[key]);
-        } else {
-            value = window.lodash.get(record.data, local[key]);
-        }
-
-        local[key] = Tine.Tinebase.EncodingHelper.encode(value);
-
-        // Country code to country name
-        // @todo: Wouldn't it be cool, if this could be managed by the modelconfig as well?
-        if (key === 'country') {
-            var countryRenderer = Tine.widgets.grid.RendererManager.get("Addressbook", "Addressbook_Model_Contact", "country", "displayPanel");
-            local[key] = countryRenderer(local[key]);
-        }
-    });
-
-    return template.applyTemplate(local);
+    return new HTMLProxy(new Promise(async (resolve) => {
+        const data = _.reduce(config, (data, v, k) => Object.assign(data, _.set({}, k, _.get(record?.data, v, ''))), {})
+        const aStruct = await formatAddress(data);
+        _.map(aStruct, Ext.util.Format.htmlEncode)
+        resolve(new Expression(aStruct.map(Ext.util.Format.htmlEncode).join('<br />')));
+    }));
 };
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', addressRenderer, 'displayPanel');

@@ -116,14 +116,8 @@ Ext.form.TextArea = Ext.extend(Ext.form.TextField,  {
             h;
             
         Ext.fly(ts).setWidth(this.el.getWidth());
-        if(v.length < 1){
-            v = "&#160;&#160;";
-        }else{
-            v += this.growAppend;
-            if(Ext.isIE){
-                v = v.replace(/\n/g, '&#160;<br />');
-            }
-        }
+        v = v.replace(/\n$/, '\n&#160;');
+        v += this.growAppend;
         ts.innerHTML = v;
         h = Math.min(this.growMax, Math.max(ts.offsetHeight, this.growMin));
         if(h != this.lastHeight){

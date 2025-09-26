@@ -90,9 +90,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @return array list of countrys
      */
-    public function getCountryList()
+    public function getCountryList($locale = null)
     {
-        return Tinebase_Translation::getCountryList();
+        return Tinebase_Translation::getCountryList($locale ? new Zend_Locale($locale) : null);
     }
 
     /**

@@ -9,6 +9,7 @@
  */
  
 import OrganizerCombo from "./OrganizerCombo";
+import formatAddress from "util/postalAddressFormater";
 
 Ext.ns('Tine.Calendar');
 
@@ -212,14 +213,21 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         recordEditPluginConfig: {allowCreateNew: false,},
                                         listeners: {
                                             scope: this,
-                                            'select': function (combo, rec) {
-                                                this.form.findField('location').setValue(rec.get('n_fn'));
+                                            'select': async function (combo, rec) {
+                                                const aStruct = await formatAddress(rec.getPreferredAddressObject());
+                                                // @TODO - have some fallback for old solution?
+                                                // this.form.findField('location').setValue(rec.get('n_fn'));
+                                                this.form.findField('location').setValue(aStruct.join('\n'));
                                             }
                                         }
                                     }, {
                                         columnWidth: 2/3,
                                         hideLabel: true,
                                         name: 'location',
+                                        xtype: 'textarea',
+                                        grow: true,
+                                        growMin: 18,
+                                        growAppend: '',
                                         requiredGrant: 'editGrant',
                                         maxLength: 255
                                 }], [{
