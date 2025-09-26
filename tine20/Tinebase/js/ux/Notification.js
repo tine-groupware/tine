@@ -41,7 +41,7 @@ Ext.ux.Notification = function(){
                 
             // default behaviour
             } else {
-                Ext.ux.MessageBox.msg(title, text);
+                Ext.ux.MessageBox.msg(title, Ext.util.Format.nl2br(text));
             }
         }
     };

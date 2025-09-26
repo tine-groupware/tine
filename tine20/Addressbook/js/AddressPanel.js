@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import formatAddress from "util/postalAddressFormater";
+
 const getAddressPanels = () => {
     const app = Tine.Tinebase.appMgr.get('Addressbook');
     const recordClass = Tine.Tinebase.data.RecordMgr.get('Addressbook', 'Contact');
@@ -35,6 +37,26 @@ const getAddressPanels = () => {
             title: app.i18n._hidden(field.label),
             name: field.fieldName,
             xtype: 'columnform',
+            listeners: {
+                'render': (cmp) => {
+                    cmp.mon(cmp.getEl(), 'contextmenu', (e) => {
+                        e.stopEvent()
+                        const menu = new Ext.menu.Menu({
+                            items: [{
+                                text: app.i18n._('Copy Postal Address to Clipboard'),
+                                iconCls: 'clipboard',
+                                handler: async () => {
+                                    const aStruct = await formatAddress(cmp.findParentBy(function (c) { return c instanceof Tine.widgets.dialog.EditDialog }).record, field.key + '_')
+                                    navigator.clipboard.writeText(aStruct.join('\n'));
+                                    Ext.ux.Notification.show(i18n._('Copied to clipboard'), window.formatMessage('"{value}" was copied to clipboard', {value: _.map(aStruct, Ext.util.Format.htmlEncode).join('\n')}));
+                                }
+                            }],
+                        });
+
+                        menu.showAt(e.getXY())
+                    })
+                }
+            },
             items: [[{
                 fieldLabel: app.i18n._('Street'),
                 name: `${field.fieldName}_street`,

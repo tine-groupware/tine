@@ -103,7 +103,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                             'postalcode': 'adr_one_postalcode',
                                             'locality': 'adr_one_locality',
                                             'region': 'adr_one_region',
-                                            'country': 'adr_one_countryname'
+                                            'countryname': 'adr_one_countryname'
                                         }, true)
                                     }]
                                 }, {
@@ -180,7 +180,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                             'postalcode': 'adr_two_postalcode',
                                             'locality': 'adr_two_locality',
                                             'region': 'adr_two_region',
-                                            'country': 'adr_two_countryname'
+                                            'countryname': 'adr_two_countryname'
                                         }, true)
                                     }]
                                 }, {

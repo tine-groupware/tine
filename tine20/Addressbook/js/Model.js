@@ -46,6 +46,13 @@ Tine.Addressbook.Model.ContactMixin = {
         };
     },
 
+    getPreferredAddressObject: function() {
+        const prefix = (this.get('preferred_address') || 'adr_one') + '_';
+        return _.reduce(this.data, (a, v, k) => {
+            return Object.assign(a, _.startsWith(k, prefix) ? _.set({}, k.replace(prefix, ''), v) : {});
+        }, {});
+    },
+
     statics: {
     }
 };
