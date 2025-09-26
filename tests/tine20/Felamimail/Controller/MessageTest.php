@@ -1006,7 +1006,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             static::flushMailer();
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
             $messages = static::getMessages();
-            static::assertEquals(1, count($messages), 'expected 1 mails send, private email should be ignored');
+            static::assertEquals(2, count($messages), 'it should be possible to send message to the private email');
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
             Felamimail_Transport::setTestTransport($oldTestTransport);
@@ -1027,6 +1027,13 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
             $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->accountId);
+            $listContainer = $this->_getTestContainer('Addressbook', 'Addressbook_Model_List');
+            $list = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+                'name' => Tinebase_Record_Abstract::generateUID(),
+                'container_id' => $listContainer->getId(),
+            ]));
+            Addressbook_Controller_List::getInstance()->addListMember($list->getId(), [$contact->getId()]);
+
             $massMailingMessage = new Felamimail_Model_Message([
                 'account_id' => $this->_account->getId(),
                 'subject' => 'test GDPR mass mailing',
@@ -1038,6 +1045,14 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "n_fileas" => '',
                         "email_type_field" =>  '',
                         "contact_record" => ''
+                    ],
+                    [
+                        "email" => '',
+                        "name" => $list->name,
+                        "type" =>  $list->type,
+                        "n_fileas" => $list->name,
+                        "email_type_field" =>  '',
+                        "contact_record" => $list->toArray()
                     ],
                     'gdpr@mail.test'
                 ],

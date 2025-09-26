@@ -155,42 +155,60 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $from = $this->_getSenderName($_message, $account);
         $twig->getEnvironment()->addGlobal('sender', $from);
 
-        $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message);
         $recipientTokens = [];
+        $bccEmails = [];
+        $listIds = [];
 
-        foreach ($contacts as $contact) {
-            $recipientTokens = array_merge($recipientTokens, $contact->getRecipientTokens());
+        foreach ($_message->bcc as $bccRecipient) {
+            $email = $bccRecipient['email'] ?? $bccRecipient;
+            $type = $bccRecipient['type'] ?? '';
+
+            // If it's a list/group, collect list ID
+            if (!empty($bccRecipient['contact_record']['id']) && in_array($type, [Addressbook_Model_List::LISTTYPE_LIST, Addressbook_Model_List::LISTTYPE_GROUP])) {
+                $listIds[] = $bccRecipient['contact_record']['id'];
+                continue;
+            }
+
+            // Add regular recipient
+            $bccEmails[] = $email;
+            $recipientTokens[] = isset($bccRecipient['emails']) ? $bccRecipient : [
+                "n_fileas" => $email,
+                "name" => $email,
+                "type" => '',
+                "email" => $email,
+                "email_type_field" => '',
+                "contact_record" => '',
+            ];
         }
 
-        foreach ($_message->bcc as $to) {
-            $emailTo = $to['email'] ?? $to;
-            $tokens = array_filter($recipientTokens, function ($token) use ($emailTo) {
-                return $token['email'] === $emailTo;
-            });
-            if (sizeof($tokens) === 0) {
-                $tokens[] = [
-                    "n_fileas" => $emailTo,
-                    "name" => $emailTo,
-                    "type" => '',
-                    "email" => $emailTo,
-                    "email_type_field" =>  '',
-                    "contact_record" => '',
-                ];
-            }
-            foreach ($tokens as $token) {
-                if (!empty($token['is_private'])) {
-                    continue;
-                }
-                $clonedMessage = clone $_message;
-                $clonedMessage->to = [$token];
-                $clonedMessage->cc = [];
-                $clonedMessage->bcc = [];
-                $clonedMessage->massMailingFlag = false;
+        // Get list members and filter duplicates
+        if (count($listIds) > 0) {
+            $listRecords = Addressbook_Controller_List::getInstance()->getMultiple($listIds);
 
-                $twig->getEnvironment()->addGlobal('recipient', $token['n_fileas']);
-                $this->_runMassMailingPlugins($clonedMessage, $twig);
-                $this->sendMessage($clonedMessage);
+            foreach ($listRecords as $listRecord) {
+                if ($listRecord instanceof Addressbook_Model_List) {
+                    $listToken = $listRecord->getRecipientTokens();
+                    $emails = $listToken[0]['emails'] ?? [];
+
+                    foreach ($emails as $token) {
+                        if (!in_array($token['email'] ?? '', $bccEmails)) {
+                            $recipientTokens[] = $token;
+                        }
+                    }
+                }
             }
+        }
+
+        foreach ($recipientTokens as $token) {
+            $clonedMessage = clone $_message;
+            $clonedMessage->to = [$token];
+            $clonedMessage->cc = [];
+            $clonedMessage->bcc = [];
+            $clonedMessage->massMailingFlag = false;
+
+            $twig->getEnvironment()->addGlobal('recipient', $token['n_fileas']);
+            $this->_runMassMailingPlugins($clonedMessage, $twig);
+            $this->sendMessage($clonedMessage);
         }
     }
 
