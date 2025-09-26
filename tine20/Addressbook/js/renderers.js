@@ -124,35 +124,6 @@ const preferredAddressRender = function (v, metadata, record) {
     return result;
 }
 
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', addressRenderer, 'displayPanel');
-
-/**
- * Render preferred addresss
- *
- * give the preferred address from contact. (street, postalcode and locality)
- * @namespace   Tine.Addressbook
- * @author      Christian Feitl <c.feitl@metaways.de>
- */
-const preferredEmailRender = function (v, metadata, record) {
-    let preferredAddress = !!+_.get(record.data, 'preferred_address') || !!+_.get(record, 'preferred_address'),
-        adr_street = preferredAddress ? 'adr_two_street' : 'adr_one_street',
-        adr_postalcode = preferredAddress ? 'adr_two_postalcode' : 'adr_one_postalcode',
-        adr_locality = preferredAddress ? 'adr_two_locality' : 'adr_one_locality',
-        contact = record.data ? record.data : record,
-        result = ''
-    
-    _.each([adr_street, adr_postalcode, adr_locality], function(value) {
-        if (contact[value] !== null) {
-            result += Ext.util.Format.htmlEncode(_.get(contact, value, ' ')) + ' ';
-        }
-    });
-    
-    return result;
-}
-
-Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'addressblock', preferredEmailRender, 'displayPanel');
-
-
 /**
  * Render given image
  *
@@ -240,7 +211,6 @@ export {
     addressRenderer,
     imageRenderer,
     preferredAddressRender,
-    preferredEmailRender, 
     urlRenderer,
     avatarRenderer,
     listTypeRenderer,
