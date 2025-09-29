@@ -52,14 +52,7 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update002()
     {
-        foreach ($this->_backend->getOwnForeignKeys(Calendar_Model_Resource::TABLE_NAME) as $fKey)
-        {
-            $this->_backend->dropForeignKey(Calendar_Model_Resource::TABLE_NAME, $fKey['constraint_name']);
-        }
-        try {
-            $this->_backend->dropIndex(Calendar_Model_Resource::TABLE_NAME, 'tine20_cal_resources::container_id--container::id');
-        } catch(Exception){}
-
+        Tinebase_TransactionManager::getInstance()->rollBack();
         Setup_SchemaTool::updateSchema([
             Calendar_Model_Resource::class,
         ]);
