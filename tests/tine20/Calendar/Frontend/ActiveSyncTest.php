@@ -1380,6 +1380,23 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         return array($serverId, $updatedSyncrotonEvent);
     }
 
+    public function testCreateEntriesIPhone5thWeek($syncrotonFolder = null)
+    {
+        // ensure folder is default
+        $syncrotonFolder = $syncrotonFolder ? $syncrotonFolder : $this->testCreateFolder();
+        Tinebase_Core::getPreference('Calendar')->setValue(Calendar_Preference::DEFAULTCALENDAR, $syncrotonFolder->serverId);
+
+        // create event with external attendee in default calendar
+        $xml = new SimpleXMLElement(file_get_contents(__DIR__ . '/files/event_with_attendee_5th_week.xml'));
+        $syncrotonEvent = new Syncroton_Model_Event($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now());
+        $serverId = $controller->createEntry($syncrotonFolder->serverId, $syncrotonEvent);
+
+        // assert external attendee is present
+        $syncrotonEventtoUpdate = $controller->getEntry(new Syncroton_Model_SyncCollection(array('collectionId' => $syncrotonFolder->serverId)), $serverId);
+        $this->assertEquals(2, count($syncrotonEventtoUpdate->attendees), 'event: ' . var_export($syncrotonEventtoUpdate->attendees, TRUE));
+    }
+
     /**
      * testUpdateEntriesIPhoneNonDefaultFolder
      *
