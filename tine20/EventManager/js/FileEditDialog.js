@@ -70,15 +70,19 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
         });
 
         this.gridPanel.on('filesSelected', this.onFilesSelected, this);
+        this.gridPanel.on('fileRemoved', this.onFileRemoved, this);
 
         return this.gridPanel;
     },
 
     validateFiles: function (uploadedFiles) {
         if (uploadedFiles.length > 1) {
-            let title = this.app.i18n._('Multiple files not allowed');
-            let message = this.app.i18n._('Please select only one file.');
-            Ext.ux.Notification.show(title, message);
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.WARNING,
+                title: this.app.i18n._('Multiple files not allowed'),
+                msg: this.app.i18n._('Please select only one file.')
+            });
             return false;
         }
 
@@ -92,9 +96,12 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
 
                 if (this.allowedFilesTypes.indexOf(uploadedFileType) === -1) {
                     Tine.log.info(this.app.i18n._('File type not allowed: ') + uploadedFileType);
-                    let title = this.app.i18n._('File type not allowed');
-                    let message = this.app.i18n._('The type of the file "') + fileName + this.app.i18n._('" is not allowed. Please select another file.');
-                    Ext.ux.Notification.show(title, message);
+                    Ext.MessageBox.show({
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.WARNING,
+                        title: this.app.i18n._('File type not allowed'),
+                        msg: this.app.i18n._('The type of the file "') + fileName + this.app.i18n._('" is not allowed. Please select another file.')
+                    });
                     return false;
                 }
             }
@@ -112,6 +119,19 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                 }
             });
             return;
+        }
+    },
+
+    onFileRemoved: function (removedFile) {
+        this.clearFileDataFromRecord();
+    },
+
+    clearFileDataFromRecord: function () {
+        if (this.record) {
+            this.record.set('node_id', null);
+            this.record.set('file_name', null);
+            this.record.set('file_size', null);
+            this.record.set('file_type', null);
         }
     },
 
@@ -140,5 +160,8 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
 
     deleteOldUploadedFile: function (uploadedFile) {
         this.gridPanel.store.remove(uploadedFile);
+        if (this.gridPanel.store.data.items.length === 0) {
+            this.clearFileDataFromRecord();
+        }
     }
 });

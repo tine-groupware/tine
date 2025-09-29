@@ -24,8 +24,8 @@ class EventManager_Model_Selection extends Tinebase_Record_NewAbstract
         self::VERSION                       => 1,
         self::APP_NAME                      => EventManager_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
-        self::RECORD_NAME                   => 'Selection' , // ngettext('Selection', 'Selections', n)
-        self::RECORDS_NAME                  => 'Selections', // gettext('GENDER_Selections')
+        self::RECORD_NAME                   => 'Selection' , // gettext('GENDER_Selection')
+        self::RECORDS_NAME                  => 'Selections', // ngettext('Selection', 'Selections', n)
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
 

@@ -40,7 +40,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION => 1,
-        self::RECORD_NAME               => 'Option',
+        self::RECORD_NAME               => 'Option', // gettext('GENDER_Option')
         self::RECORDS_NAME              => 'Options', // ngettext('Option', 'Options', n)
         self::TITLE_PROPERTY            => self::FLD_NAME_OPTION,
         self::IS_DEPENDENT              => true,
@@ -96,7 +96,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_OPTION_CONFIG_CLASS   => [
-                self::LABEL                     => 'Config Class', // _('Config Class')
+                self::LABEL                     => 'Type', // _('Type')
                 self::TYPE                      => self::TYPE_MODEL,
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS      => [
@@ -124,19 +124,13 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::ALLOW_CAMEL_CASE          => true,
                 self::NULLABLE                  => true,
             ],
-            self::FLD_DISPLAY       => [
-                self::TYPE              => self::TYPE_KEY_FIELD,
-                self::LABEL             => 'Display', // _('Display')
-                self::DEFAULT_VAL       => 1,
-                self::NAME              => EventManager_Config::DISPLAY_TYPE,
+            self::FLD_GROUP         => [
+                self::TYPE              => self::TYPE_STRING_AUTOCOMPLETE,
+                self::LABEL             => 'Group', // _('Group')
                 self::NULLABLE          => true,
-            ],
-            self::FLD_OPTION_REQUIRED       => [
-                self::TYPE                      => self::TYPE_KEY_FIELD,
-                self::LABEL                     => 'Option required', // _('Option required')
-                self::DEFAULT_VAL               => 1,
-                self::NAME                      => EventManager_Config::OPTION_REQUIRED_TYPE,
-                self::NULLABLE                  => true,
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DESCRIPTION       => 'If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name, otherwise leave this field empty',
+                // _('If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name, otherwise leave this field empty')
             ],
             self::FLD_SORTING       => [
                 self::TYPE              => self::TYPE_FLOAT,
@@ -152,15 +146,23 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::NAME              => EventManager_Config::OPTION_LEVEL,
                 self::NULLABLE          => true,
             ],
-            self::FLD_GROUP         => [
-                self::TYPE              => self::TYPE_STRING_AUTOCOMPLETE,
-                self::LABEL             => 'Group', // _('Group')
+            self::FLD_OPTION_REQUIRED       => [
+                self::TYPE                      => self::TYPE_KEY_FIELD,
+                self::LABEL                     => 'Option required', // _('Option required')
+                self::DEFAULT_VAL               => 1,
+                self::NAME                      => EventManager_Config::OPTION_REQUIRED_TYPE,
+                self::NULLABLE                  => true,
+                self::DESCRIPTION               => 'The participant must give an answer',
+                                                // _('The participant must give an answer')
+            ],
+            self::FLD_DISPLAY       => [
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::LABEL             => 'Display on website', // _('Display on website')
+                self::DEFAULT_VAL       => 1,
+                self::NAME              => EventManager_Config::DISPLAY_TYPE,
                 self::NULLABLE          => true,
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DESCRIPTION => 'If you want multiple options as a group 
-                    so that only one option of the group can be chosen, give them the same group name.
-                    Otherwise leave this field empty',
-                // _('If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty')
+                self::DESCRIPTION       => 'You can choose if and how this option is displayed on the website',
+                                        // _('You can choose if and how this option is displayed on the website')
             ],
             self::FLD_OPTION_RULE       => [
                 self::TYPE                  => self::TYPE_RECORDS,

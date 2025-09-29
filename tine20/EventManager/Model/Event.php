@@ -47,7 +47,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION => 1,
-        self::RECORD_NAME               => 'Event',
+        self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
         self::TITLE_PROPERTY            => 'name',
         self::HAS_RELATIONS             => true,
@@ -116,7 +116,8 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_REGISTRATION_POSSIBLE_UNTIL => [
                 self::TYPE                          => self::TYPE_DATE,
-                self::LABEL                         => 'Registration possible until', // _('Registration possible until')
+                self::LABEL                         => 'Registration possible until',
+                                                // _('Registration possible until')
                 self::NULLABLE                      => true,
                 self::VALIDATORS                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS                 => [Zend_Filter_Empty::class => null],
@@ -181,17 +182,6 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
                 self::ALLOW_CAMEL_CASE      => true,
             ],
-            /*self::FLD_DOUBLE_OPT_IN     => [
-                self::TYPE                  => self::TYPE_BOOLEAN,
-                self::DEFAULT_VAL           => false,
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
-                self::ALLOW_CAMEL_CASE      => true,
-                self::UI_CONFIG             => [
-                    self::DISABLED              => true,
-                ]
-            ],*/
             self::FLD_OPTIONS       => [
                 self::TYPE              => self::TYPE_RECORDS,
                 self::QUERY_FILTER      => true,
@@ -211,7 +201,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     self::REF_ID_FIELD              => EventManager_Model_Option::FLD_EVENT_ID,
                     self::APP_NAME                  => EventManager_Config::APP_NAME,
                     self::MODEL_NAME                => EventManager_Model_Option::MODEL_NAME_PART,
-                ]
+                ],
             ],
             self::FLD_REGISTRATIONS     => [
                 self::TYPE                  => self::TYPE_RECORDS,
