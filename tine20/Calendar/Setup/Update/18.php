@@ -47,7 +47,7 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
             Calendar_Model_Event::class,
         ]);
 
-        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.01', self::RELEASE018_UPDATE001);
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
     }
 
     public function update002()
@@ -64,6 +64,6 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
             Calendar_Model_Resource::class,
         ]);
 
-        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.02', self::RELEASE018_UPDATE002);
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.2', self::RELEASE018_UPDATE002);
     }
 }
