@@ -296,8 +296,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     {
         if ($tagName) {
             try {
-                $tag = Tinebase_Tags::getInstance()->getTagByName($tagName);
-                return $tag;
+                return Tinebase_Tags::getInstance()->getTagByName($tagName);
             } catch (Tinebase_Exception_NotFound $tenf) {
             }
         } else {
@@ -317,7 +316,50 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     
         return new Tinebase_Model_Tag($targ);
     }
-    
+
+    /**
+     * create shared tag
+     *
+     * @param array $tagData
+     * @param array|null $context
+     * @param string $user
+     * @return Tinebase_Model_Tag
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _createSharedTag(array $tagData = [],
+                                        array $context = null,
+                                        string $user = 'current'): Tinebase_Model_Tag
+    {
+        $sharedTag = new Tinebase_Model_Tag(array_merge([
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'tagSingle::shared',
+            'description' => 'this is a shared tag',
+            'color' => '#009B31',
+        ], $tagData));
+        $savedSharedTag = Tinebase_Tags::getInstance()->createTag($sharedTag);
+
+        $right = new Tinebase_Model_TagRight(array(
+            'tag_id'        => $savedSharedTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => $user !== 'current' ?
+                Tinebase_FullUser::getInstance()->getFullUserByLoginName($user) :
+                Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true,
+        ));
+        Tinebase_Tags::getInstance()->setRights($right);
+
+        Tinebase_Tags::getInstance()->setContexts($context ?: array('any'), $savedSharedTag);
+
+        $this->assertEquals($sharedTag->name, $savedSharedTag->name);
+
+        return $savedSharedTag;
+    }
+
     /**
      * delete groups and their members
      * 

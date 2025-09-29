@@ -115,6 +115,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             $fields[] = [
                 'source' => 'tags',
                 'destination' => 'tags',
+                'separator' => ', ',
             ];
         }
 

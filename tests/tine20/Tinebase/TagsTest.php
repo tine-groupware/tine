@@ -55,41 +55,6 @@ class Tinebase_TagsTest extends TestCase
     }
 
     /**
-     * create shared tag
-     * 
-     * @param array $tagData
-     * @param array|null $context
-     * @return Tinebase_Model_Tag
-     */
-    protected function _createSharedTag(array $tagData = [], array $context = null, $user = 'current')
-    {
-        $sharedTag = new Tinebase_Model_Tag(array_merge([
-            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => 'tagSingle::shared',
-            'description' => 'this is a shared tag',
-            'color' => '#009B31',
-        ], $tagData));
-        $savedSharedTag = $this->_instance->createTag($sharedTag);
-
-        $right = new Tinebase_Model_TagRight(array(
-            'tag_id'        => $savedSharedTag->getId(),
-            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'account_id'    => $user !== 'current' ?
-                Tinebase_FullUser::getInstance()->getFullUserByLoginName($user) :
-                Tinebase_Core::getUser()->getId(),
-            'view_right'    => true,
-            'use_right'     => true,
-        ));
-        $this->_instance->setRights($right);
-        
-        $this->_instance->setContexts($context ?: array('any'), $savedSharedTag);
-        
-        $this->assertEquals($sharedTag->name, $savedSharedTag->name);
-
-        return $savedSharedTag;
-    }
-
-    /**
      * test resolving tag names to Tinebase_Model_Tag
      */
     public function testResolveTagNames()

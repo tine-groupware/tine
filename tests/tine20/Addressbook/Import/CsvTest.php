@@ -341,7 +341,7 @@ class Addressbook_Import_CsvTest extends ImportTestCase
      */
     protected function _getDefinitionFromFile($filename, $path = null)
     {
-        $filename = ($path ? $path : dirname(__FILE__) . '/files/') . $filename;
+        $filename = ($path ?: dirname(__FILE__) . '/files/') . $filename;
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
         $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile($filename, $applicationId);
         
@@ -535,5 +535,15 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $result = $this->_doImport(array('dryrun' => true), $definition);
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
         return $result['results']->getFirstRecord();
+    }
+
+    public function testImportWithSharedTag()
+    {
+        $sharedTag = $this->_createSharedTag([
+            'name' => 'STB',
+        ]);
+        $contact = $this->_doImportSingleContact('adb_tine_import_csv_allfields.xml', 'adb_all_fields_with_tag.csv');
+        self::assertCount(1, $contact->tags, 'tag not found');
+        self::assertEquals($sharedTag->name, $contact->tags->getFirstRecord()->name, print_r($contact->toArray(), true));
     }
 }

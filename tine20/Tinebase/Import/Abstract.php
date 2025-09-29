@@ -834,9 +834,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         }
-        if($_record->has('tags')){
+        if ($_record->has('tags')){
             $this->_handleTags($_record, $_resolveStrategy);
-        };
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Record to import: ' . print_r($_record->toArray(), true));
