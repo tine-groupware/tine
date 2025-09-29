@@ -708,8 +708,8 @@ class Setup_Controller
                                     Tinebase_TransactionManager::getInstance()->resetTransactions();
                                     Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $pe->getMessage());
                                 }
-                            } else if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
-                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            } else if (Setup_Core::isLogLevel(Zend_Log::INFO)) {
+                                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                                     . ' Update ' . $className . '::' . $functionName . ' already closed the transaction');
                             }
 
@@ -717,7 +717,8 @@ class Setup_Controller
                             try {
                                 Tinebase_TransactionManager::getInstance()->rollBack();
                             } catch (PDOException $pe) {
-                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got PDOException: ' . $pe->getMessage());
+                                Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                    . ' Got PDOException: ' . $pe->getMessage());
                             }
                             Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                             Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
