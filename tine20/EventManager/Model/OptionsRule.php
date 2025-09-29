@@ -30,7 +30,7 @@ class EventManager_Model_OptionsRule extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::RECORD_NAME               => 'Option rule',
+        self::RECORD_NAME               => 'Option rule', // gettext('GENDER_Option rule')
         self::RECORDS_NAME              => 'Option rules', // ngettext('Option rule', 'Option rules', n)
         self::TITLE_PROPERTY            => self::FLD_CRITERIA,
         self::MODLOG_ACTIVE             => false,

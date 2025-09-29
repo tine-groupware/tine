@@ -217,7 +217,7 @@
                   label-cols-lg="3"
                   content-cols-sm
                   content-cols-lg="7"
-                  :label="option.option_config.text"
+                  :label="`${option.name_option}${option.option_config?.text ? ' : ' + option.option_config.text : ''}`"
                   class="mb-3"
                 >
                   <b-form-textarea

@@ -8,6 +8,8 @@
  *
  */
 
+import FieldTriggerPlugin from "ux/form/FieldTriggerPlugin";
+
 Ext.namespace('Tine.EventManager');
 
 Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -18,148 +20,88 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.translation = new Locale.Gettext();
     },
 
-    onAfterRecordLoad: function () {
-        Tine.EventManager.OptionEditDialog.superclass.onAfterRecordLoad.call(this);
-        this.setDisplayListener();
-        this.setOptionRequiredListener();
-        this.checkAndShowRuleButton();
+    onRender: function () {
+        Tine.EventManager.OptionEditDialog.superclass.onRender.apply(this, arguments);
+        this.setupDisplayTrigger();
+        this.setupOptionRequiredTrigger();
     },
 
-    checkAndShowRuleButton: function () {
-        if (this.shouldShowRuleButton()) {
-            this.addRuleEditButton();
-        }
-    },
+    setupDisplayTrigger: function () {
+        const displayField = this.form.findField('display');
+        displayField.on('select', function () {
 
-    shouldShowRuleButton: function () {
-        return this.record && (this.record.get('display') === '2' || this.record.get('option_required') === '3');
-    },
+            if (!displayField.plugins) {
+                displayField.plugins = [];
+            }
 
-    addRuleEditButton: function () {
-        if (this.ruleEditButton) {
-            return;
-        }
-
-        const tabPanel = this.items.first();
-        const optionTab = tabPanel.items.first();
-        const mainPanel = optionTab.items.first();
-        const columnForm = mainPanel.items.first();
-
-        // create and add the button for the option rules
-        this.ruleEditButton = new Ext.form.FieldSet({
-            title: '',
-            border: false,
-            columnWidth: 1,
-            items: [{
-                xtype: 'button',
-                text: this.app.i18n._('Edit Rules'),
-                iconCls: 'action_edit',
-                handler: this.openRuleEditDialog,
-                scope: this,
-                width: 150
-            }]
-        });
-
-        columnForm.add(this.ruleEditButton);
-        this.refreshLayout();
-    },
-
-    removeRuleEditButton: function () {
-        if (this.ruleEditButton) {
-            const tabPanel = this.items.first();
-            const optionTab = tabPanel.items.first();
-            const mainPanel = optionTab.items.first();
-            const columnForm = mainPanel.items.first();
-
-            columnForm.remove(this.ruleEditButton);
-            this.ruleEditButton = null;
-            columnForm.doLayout();
-        }
-    },
-
-    updateRuleButton: function () {
-        if (this.shouldShowRuleButton()) {
-            this.addRuleEditButton();
-        } else {
-            this.removeRuleEditButton();
-        }
-    },
-
-    refreshLayout: function () {
-        const tabPanel = this.items.first();
-        const optionTab = tabPanel.items.first();
-        const mainPanel = optionTab.items.first();
-        const columnForm = mainPanel.items.first();
-
-        columnForm.doLayout();
-        mainPanel.doLayout();
-        optionTab.doLayout();
-        tabPanel.doLayout();
-        this.doLayout();
-    },
-
-    setDisplayListener: function () {
-        this.form.findField('display').on('change', function () {
-            this.updateRuleButton();
-        },this);
-    },
-
-    setOptionRequiredListener: function () {
-        this.form.findField('option_required').on('change', function () {
-            this.updateRuleButton();
-        },this);
-    },
-
-    openRuleEditDialog: function () {
-        // Check if the openWindow method exists, if not create the window manually
-        if (typeof Tine.EventManager.OptionRelationEditDialog.openWindow === 'function') {
-            const ruleEditWindow = Tine.EventManager.OptionRelationEditDialog.openWindow({
-                record: this.record,
-                listeners: {
-                    scope: this,
-                    'update': this.onRuleUpdate
-                }
-            });
-            return ruleEditWindow;
-        } else {
-            // Fallback: create window manually using WindowFactory
-            const ruleEditWindow = Tine.WindowFactory.getWindow({
-                width: 600,
-                height: 500,
-                name: 'OptionRelationEditWindow_' + (this.record.id || 'new'),
-                contentPanelConstructor: 'Tine.EventManager.OptionRelationEditDialog',
-                contentPanelConstructorConfig: {
-                    record: this.record,
-                    listeners: {
-                        scope: this,
-                        'update': this.onRuleUpdate
+            if (displayField.plugins.length > 0) {
+                for (let i = displayField.plugins.length - 1; i >= 0; i--) {
+                    const plugin = displayField.plugins[i];
+                    if (plugin instanceof FieldTriggerPlugin) {
+                        displayField.plugins.splice(i, 1);
                     }
                 }
-            });
-            return ruleEditWindow;
-        }
+            }
+            // remove the action_edit image
+            const actionEditTrigger = document.querySelector('.x-form-trigger.action_edit');
+            if (actionEditTrigger) {
+                actionEditTrigger.remove();
+            }
+
+            if (displayField.getValue() === "2") {
+                const triggerPlugin = new FieldTriggerPlugin({
+                    triggerClass: 'action_edit',
+                    qtip: this.app.i18n._('Edit Rules'),
+                    onTriggerClick: () => {
+                        Tine.EventManager.OptionRelationEditDialog.openWindow({
+                            record: this.record,
+                        });
+                    }
+                });
+
+                displayField.plugins.push(triggerPlugin);
+                triggerPlugin.init(displayField);
+            }
+        },this);
     },
 
-    onRuleUpdate: function (updatedRecordData, mode, dialog) {
-        try {
-            // Parse the JSON data if it's a string
-            const updatedData = typeof updatedRecordData === 'string' ?
-                Ext.util.JSON.decode(updatedRecordData) : updatedRecordData;
+    setupOptionRequiredTrigger: function () {
+        const requiredField = this.form.findField('option_required');
+        requiredField.on('select', function () {
 
-            if (updatedData.option_rule !== undefined) {
-                this.record.set('option_rule', updatedData.option_rule);
-            }
-            if (updatedData.rule_type !== undefined) {
-                this.record.set('rule_type', updatedData.rule_type);
+            if (!requiredField.plugins) {
+                requiredField.plugins = [];
             }
 
-            this.fireEvent('recordUpdate', this, this.record);
-            if (this.actionUpdater) {
-                this.actionUpdater.updateActions([this.record]);
+            if (requiredField.plugins.length > 0) {
+                for (let i = requiredField.plugins.length - 1; i >= 0; i--) {
+                    const plugin = requiredField.plugins[i];
+                    if (plugin instanceof FieldTriggerPlugin) {
+                        requiredField.plugins.splice(i, 1);
+                    }
+                }
             }
-        } catch (e) {
-            Ext.MessageBox.alert(this.translation.gettext('Error'), this.translation.gettext('Failed to update rules: ') + e.message);
-        }
+            // remove the action_edit image
+            const actionEditTrigger = document.querySelector('.x-form-trigger.action_edit');
+            if (actionEditTrigger) {
+                actionEditTrigger.remove();
+            }
+
+            if (requiredField.getValue() === "3") {
+                const triggerPlugin = new FieldTriggerPlugin({
+                    triggerClass: 'action_edit',
+                    qtip: this.app.i18n._('Edit Rules'),
+                    onTriggerClick: () => {
+                        Tine.EventManager.OptionRelationEditDialog.openWindow({
+                            record: this.record,
+                        });
+                    }
+                });
+
+                requiredField.plugins.push(triggerPlugin);
+                triggerPlugin.init(requiredField);
+            }
+        },this);
     },
 
     getFormItems: function () {
@@ -180,29 +122,27 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             activeTab: 0,
             items: [{
                 title: this.app.i18n._('Option'),
-                autoScroll: true,
-                border: false,
                 frame: true,
-                layout: 'vbox',
+                layout: 'form',
+                width: '100%',
                 items: [{
-                    xtype: 'panel',
-                    layout: 'hbox',
-                    align: 'stretch',
-                    items: [{
-                        flex: 1,
-                        xtype: 'columnform',
-                        autoHeight: true,
-                        items: [
-                            [fieldManager('name_option')],
-                            [fieldManager('option_config_class')],
-                            [fieldManager('option_config')],
-                            [fieldManager('group')],
-                            [fieldManager('sorting')],
-                            [fieldManager('level')],
-                            [fieldManager('display')],
-                            [fieldManager('option_required')],
-                        ]
-                    }]
+                    xtype: 'columnform',
+                    labelAlign: 'top',
+                    formDefaults: {
+                        xtype: 'textfield',
+                        anchor: '100%',
+                        columnWidth: 1
+                    },
+                    items: [
+                        [fieldManager('name_option')],
+                        [fieldManager('option_config_class')],
+                        [fieldManager('option_config')],
+                        [fieldManager('group')],
+                        [fieldManager('sorting')],
+                        [fieldManager('level')],
+                        [fieldManager('option_required')],
+                        [fieldManager('display')],
+                    ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,

@@ -178,6 +178,11 @@ msgstr ""
 msgid "Event Information"
 msgstr ""
 
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "The event should end after the start date"
 msgstr ""
 
@@ -267,11 +272,6 @@ msgstr ""
 
 msgid "Manage my registration"
 msgstr ""
-
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "Events"
 msgstr ""
@@ -366,18 +366,15 @@ msgstr ""
 msgid "Edit Rules"
 msgstr ""
 
-msgid "Error"
-msgstr ""
-
-msgid "Failed to update rules: "
-msgstr ""
-
 msgid "Option"
 msgid_plural "Options"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Rules"
+msgstr ""
+
+msgid "GENDER_Appointment"
 msgstr ""
 
 msgid "Appointment"
@@ -397,6 +394,9 @@ msgstr ""
 msgid "End Time"
 msgstr ""
 
+msgid "GENDER_Booked Option"
+msgstr ""
+
 msgid "Booked Option"
 msgid_plural "Booked Options"
 msgstr[0] ""
@@ -408,8 +408,11 @@ msgstr ""
 msgid "Selection Config"
 msgstr ""
 
+msgid "GENDER_Checkbox"
+msgstr ""
+
 msgid "Checkbox"
-msgid_plural "Checkbox"
+msgid_plural "Checkboxes"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -423,6 +426,9 @@ msgid "Booked places"
 msgstr ""
 
 msgid "Available places"
+msgstr ""
+
+msgid "GENDER_Event"
 msgstr ""
 
 msgid "Event"
@@ -454,6 +460,9 @@ msgstr ""
 msgid "Event is live"
 msgstr ""
 
+msgid "GENDER_File"
+msgstr ""
+
 msgid "File"
 msgid_plural "Files"
 msgstr[0] ""
@@ -465,25 +474,31 @@ msgstr ""
 msgid "Participant should upload a file"
 msgstr ""
 
-msgid "Config Class"
+msgid "GENDER_Option"
 msgstr ""
 
 msgid "Config"
 msgstr ""
 
-msgid "Display"
+msgid "Group"
 msgstr ""
 
-msgid "Option required"
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name, otherwise leave this field empty"
 msgstr ""
 
 msgid "Display Sorting"
 msgstr ""
 
-msgid "Group"
+msgid "Option required"
 msgstr ""
 
-msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+msgid "The participant must give an answer"
+msgstr ""
+
+msgid "Display on website"
+msgstr ""
+
+msgid "You can choose if and how this option is displayed on the website"
 msgstr ""
 
 msgid "Option rule"
@@ -491,13 +506,22 @@ msgid_plural "Option rules"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "GENDER_Option rule"
+msgstr ""
+
 msgid "Criteria"
 msgstr ""
 
 msgid "Value"
 msgstr ""
 
+msgid "GENDER_Registration"
+msgstr ""
+
 msgid "Booked options"
+msgstr ""
+
+msgid "GENDER_Selection"
 msgstr ""
 
 msgid "Selection"
@@ -505,13 +529,13 @@ msgid_plural "Selections"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "GENDER_Selections"
-msgstr ""
-
 msgid "Selection Config Class"
 msgstr ""
 
 msgid "Booked"
+msgstr ""
+
+msgid "GENDER_File selection"
 msgstr ""
 
 msgid "File selection"
@@ -525,6 +549,9 @@ msgstr ""
 msgid "Participant uploaded a file"
 msgstr ""
 
+msgid "GENDER_TextInput"
+msgstr ""
+
 msgid "TextInput"
 msgid_plural "TextInputs"
 msgstr[0] ""
@@ -533,24 +560,36 @@ msgstr[1] ""
 msgid "Response"
 msgstr ""
 
+msgid "GENDER_Text Input"
+msgstr ""
+
 msgid "Text Input"
 msgid_plural "Text Input"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "Text"
-msgid_plural "Text"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Reply should only be a number"
 msgstr ""
 
-msgid "Multiple lines reply"
+msgid "Here you can ask the participant for relevant information for the event"
+msgstr ""
+
+msgid "Reply can only be a number"
+msgstr ""
+
+msgid "Multiple lines reply allowed"
 msgstr ""
 
 msgid "Maximal number of characters allowed"
 msgstr ""
+
+msgid "GENDER_Text Output"
+msgstr ""
+
+msgid "Text Output"
+msgid_plural "Text Outputs"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "EventManager"
 msgstr ""

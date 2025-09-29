@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-09-22 10:07+0200\n"
+"PO-Revision-Date: 2025-09-25 11:27+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -173,14 +173,16 @@ msgstr "Optionen"
 msgid "Registrations"
 msgstr "Registrierung"
 
-msgid "Deregistered"
-msgstr "Abgemeldet"
-
 msgid "Sign Up"
 msgstr "Anmelden"
 
 msgid "Event Information"
 msgstr "Eventinformationen"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Anmeldung"
+msgstr[1] "Anmeldungen"
 
 msgid "The event should end after the start date"
 msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
@@ -271,11 +273,6 @@ msgstr "Anmeldeanfrage senden"
 
 msgid "Manage my registration"
 msgstr "Meine Registrierung verwalten"
-
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Anmeldung"
-msgstr[1] "Anmeldungen"
 
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -370,12 +367,6 @@ msgstr "Letzte Änderungszeit"
 msgid "Edit Rules"
 msgstr "Regeln bearbeiten"
 
-msgid "Error"
-msgstr "Fehler"
-
-msgid "Failed to update rules: "
-msgstr "Aktualisierung der Regeln fehlgeschlagen: "
-
 msgid "Option"
 msgid_plural "Options"
 msgstr[0] "Option"
@@ -383,6 +374,9 @@ msgstr[1] "Optionen"
 
 msgid "Rules"
 msgstr "Regeln"
+
+msgid "GENDER_Appointment"
+msgstr "female"
 
 msgid "Appointment"
 msgid_plural "Appointments"
@@ -401,6 +395,9 @@ msgstr "Startzeit"
 msgid "End Time"
 msgstr "Endzeit"
 
+msgid "GENDER_Booked Option"
+msgstr "female"
+
 msgid "Booked Option"
 msgid_plural "Booked Options"
 msgstr[0] "Gebuchte Option"
@@ -412,9 +409,11 @@ msgstr "Veranstaltungsoption"
 msgid "Selection Config"
 msgstr "Auswahlkonfiguration"
 
-#, fuzzy
+msgid "GENDER_Checkbox"
+msgstr "female"
+
 msgid "Checkbox"
-msgid_plural "Checkbox"
+msgid_plural "Checkboxes"
 msgstr[0] "Checkbox"
 msgstr[1] "Checkboxes"
 
@@ -429,6 +428,9 @@ msgstr "Gebuchte Plätze"
 
 msgid "Available places"
 msgstr "Verfügbare Plätze"
+
+msgid "GENDER_Event"
+msgstr "female"
 
 msgid "Event"
 msgid_plural "Events"
@@ -459,6 +461,9 @@ msgstr "Veranstaltungstermine"
 msgid "Event is live"
 msgstr "Veranstaltung ist live"
 
+msgid "GENDER_File"
+msgstr "female"
+
 msgid "File"
 msgid_plural "Files"
 msgstr[0] "Datei"
@@ -470,31 +475,40 @@ msgstr "Nur die Bestätigung der Teilnehmer ist erforderlich (kein Hochladen von
 msgid "Participant should upload a file"
 msgstr "Die Teilnehmer sollten eine Datei hochladen"
 
-msgid "Config Class"
-msgstr "Konfigurationklasse"
+msgid "GENDER_Option"
+msgstr "female"
 
 msgid "Config"
 msgstr "Konfiguration"
 
-msgid "Display"
-msgstr "Anzeigen"
+msgid "Group"
+msgstr "Gruppe"
 
-msgid "Option required"
-msgstr "Option erforderlich"
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name, otherwise leave this field empty"
+msgstr "Wenn Sie mehrere Optionen als Gruppe wünschen, sodass nur eine Option der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
 
 msgid "Display Sorting"
 msgstr "Anzeigesortierung"
 
-msgid "Group"
-msgstr "Gruppe"
+msgid "Option required"
+msgstr "Option erforderlich"
 
-msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
-msgstr "Wenn Sie mehrere Optionen als Gruppe festlegen möchten, sodass nur eine Option aus der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
+msgid "The participant must give an answer"
+msgstr "Der Teilnehmer muss eine Antwort geben"
+
+msgid "Display on website"
+msgstr "Anzeige auf der Website"
+
+msgid "You can choose if and how this option is displayed on the website"
+msgstr "Sie können wählen, ob und wie diese Option auf der Website angezeigt wird"
 
 msgid "Option rule"
 msgid_plural "Option rules"
 msgstr[0] "Optionsregel"
 msgstr[1] "Optionsregeln"
+
+msgid "GENDER_Option rule"
+msgstr "female"
 
 msgid "Criteria"
 msgstr "Kriterium"
@@ -502,22 +516,28 @@ msgstr "Kriterium"
 msgid "Value"
 msgstr "Wert"
 
+msgid "GENDER_Registration"
+msgstr "female"
+
 msgid "Booked options"
 msgstr "Gebuchte Optionen"
+
+msgid "GENDER_Selection"
+msgstr "female"
 
 msgid "Selection"
 msgid_plural "Selections"
 msgstr[0] "Auswahl"
 msgstr[1] "Auswahl"
 
-msgid "GENDER_Selections"
-msgstr "GENDER_Auswahl"
-
 msgid "Selection Config Class"
 msgstr "Auswahlkonfigurationsklasse"
 
 msgid "Booked"
 msgstr "Gebucht"
+
+msgid "GENDER_File selection"
+msgstr "female"
 
 msgid "File selection"
 msgid_plural "File selections"
@@ -530,6 +550,9 @@ msgstr "Der Teilnehmer hat das Dokument zur Kenntnis genommen"
 msgid "Participant uploaded a file"
 msgstr "Teilnehmer hat eine Datei hochgeladen"
 
+msgid "GENDER_TextInput"
+msgstr "female"
+
 msgid "TextInput"
 msgid_plural "TextInputs"
 msgstr[0] "Texteingabe"
@@ -538,25 +561,36 @@ msgstr[1] "Texteingaben"
 msgid "Response"
 msgstr "Antwort"
 
+msgid "GENDER_Text Input"
+msgstr "female"
+
 msgid "Text Input"
 msgid_plural "Text Input"
 msgstr[0] "Texteingabe"
 msgstr[1] "Texteingabe"
 
-#, fuzzy
 msgid "Text"
-msgid_plural "Text"
-msgstr[0] "Text"
-msgstr[1] "Text"
+msgstr "Text"
 
-msgid "Reply should only be a number"
-msgstr "Die Antwort sollte nur eine Zahl sein"
+msgid "Here you can ask the participant for relevant information for the event"
+msgstr "Hier können Sie den Teilnehmer um relevante Informationen für die Veranstaltung bitten"
 
-msgid "Multiple lines reply"
-msgstr "Mehrere Zeilen Antwort"
+msgid "Reply can only be a number"
+msgstr "Die Antwort kann nur eine Zahl sein"
+
+msgid "Multiple lines reply allowed"
+msgstr "Mehrere Zeilen als Antwort zulässig"
 
 msgid "Maximal number of characters allowed"
 msgstr "Maximal zulässige Zeichenanzahl"
+
+msgid "GENDER_Text Output"
+msgstr "female"
+
+msgid "Text Output"
+msgid_plural "Text Outputs"
+msgstr[0] "Textausgabe"
+msgstr[1] "Testausgaben"
 
 msgid "EventManager"
 msgstr "Veranstaltungsmanager"
@@ -632,6 +666,30 @@ msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen
 
 msgid "Confirm E-Mail address"
 msgstr "E-Mail-Adresse bestätigen"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "Failed to update rules: "
+#~ msgstr "Aktualisierung der Regeln fehlgeschlagen: "
+
+#~ msgid "Config Class"
+#~ msgstr "Konfigurationklasse"
+
+#~ msgid "Display"
+#~ msgstr "Anzeigen"
+
+#~ msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+#~ msgstr "Wenn Sie mehrere Optionen als Gruppe festlegen möchten, sodass nur eine Option aus der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
+
+#~ msgid "GENDER_Selections"
+#~ msgstr "GENDER_Auswahl"
+
+#~ msgid "Reply should only be a number"
+#~ msgstr "Die Antwort sollte nur eine Zahl sein"
+
+#~ msgid "Multiple lines reply"
+#~ msgstr "Mehrere Zeilen Antwort"
 
 #~ msgid "To manage your registration, please follow thie link below"
 #~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"

@@ -36,7 +36,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION => 1,
-        self::RECORD_NAME               => 'Registration',
+        self::RECORD_NAME               => 'Registration', // gettext('GENDER_Registration')
         self::RECORDS_NAME              => 'Registrations', // ngettext('Registration', 'Registrations', n)
         self::DEFAULT_SORT_INFO         =>  ['field' => 'name'],
         self::TITLE_PROPERTY            => '{{name.n_fn}}',

@@ -28,4 +28,16 @@ Tine.EventManager.Selections_FileUploadGrid = Ext.extend(Tine.widgets.grid.FileU
             this.store.addUnique(file, 'name');
         }
     },
+
+    onRemove: function () {
+        let sm = this.getSelectionModel();
+        let records = sm.getSelections();
+
+        if (records.length > 0) {
+            records.forEach(record => {
+                this.fireEvent('fileRemoved', record);
+            });
+        }
+        Tine.EventManager.FileUploadGrid.superclass.onRemove.call(this);
+    },
 });

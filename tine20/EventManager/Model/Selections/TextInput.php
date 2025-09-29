@@ -27,7 +27,7 @@ class EventManager_Model_Selections_TextInput extends Tinebase_Record_NewAbstrac
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'TextInput',
+        self::RECORD_NAME           => 'TextInput', // gettext('GENDER_TextInput')
         self::RECORDS_NAME          => 'TextInputs', // ngettext('TextInput', 'TextInputs', n)
         self::TITLE_PROPERTY        => self::FLD_RESPONSE,
 
