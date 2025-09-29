@@ -201,13 +201,13 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         )->getId();
 
         $cf = new Tinebase_Model_CustomField_Config([
-            'name' => 'time Account',
+            'name' => 'timeaccount',
             'application_id' => $taskAppId,
             'model' => Tasks_Model_Task::class,
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::NAME => 'time Account',
+                    TMCC::NAME => 'timeaccount',
                     TMCC::LABEL => 'Time Account', //_('Time Account')
                     TMCC::TYPE => TMCC::TYPE_RECORD,
                     TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,],
