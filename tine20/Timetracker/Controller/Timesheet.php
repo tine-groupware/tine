@@ -160,8 +160,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $start = new DateTime($start_date . ' ' . $start);
             $end = new DateTime($start_date . ' ' . $end);
 
-            if ('00:00:00' === $_record->end_time || '00:00' === $_record->end_time || $end < $start) {
+            if ('00:00:00' === $_record->end_time || '00:00' === $_record->end_time) {
                 $end->modify('+1 days');
+            }
+            if ($end < $start) {
+                throw new Tinebase_Exception_SystemGeneric('start time must be before end time');
             }
 
             $dtDiff = $end->diff($start);
@@ -362,6 +365,45 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         parent::_inspectBeforeCreate($_record);
 
         /** @var Timetracker_Model_Timesheet $_record */
+
+        if ($_record->{Timetracker_Model_Timesheet::FLD_END_DATE} &&
+                $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d') !== $_record->start_date->format('Y-m-d')) {
+            if (strcmp($_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d'), $_record->start_date->format('Y-m-d')) < 1) {
+                Tinebase_Exception::log(new Tinebase_Exception('FE error: End date cannot be before start date'));
+                throw new Tinebase_Exception_SystemGeneric(
+                    /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'End date cannot be before start date'//)
+                );
+            }
+            if (!$_record->start_time || !$_record->end_time) {
+                Tinebase_Exception::log(new Tinebase_Exception('FE error: start time and end time need to be set for multi day'));
+                throw new Tinebase_Exception_SystemGeneric(
+                /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'start time and end time need to be set for multi day'//)
+                );
+            }
+
+
+            $_record->{Timetracker_Model_Timesheet::FLD_CORRELATION_ID} = Tinebase_Record_Abstract::generateUID();
+            $endTime = $_record->end_time;
+            $_record->end_time = '00:00:00';
+            $startDate = $_record->start_date->getClone();
+            $done = false;
+            do {
+                $startDate->addDay(1);
+
+                $newRecord = clone $_record;
+                $newRecord->start_date = $startDate->getClone();
+                $newRecord->end_date = null;
+                $newRecord->start_time = '00:00:00';
+
+                if ($startDate->format('Y-m-d') === $_record->end_date->format('Y-m-d')) {
+                    $newRecord->end_time = $endTime;
+                    $done = true;
+                }
+
+                $this->create($newRecord);
+            } while(false === $done);
+        }
+
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
         $this->_calcAmounts($_record);
@@ -385,6 +427,35 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        if ($_record->{Timetracker_Model_Timesheet::FLD_CORRELATION_ID} = $_oldRecord->{Timetracker_Model_Timesheet::FLD_CORRELATION_ID}) {
+            Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(function($correlationId) {
+                $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+                    [TMFA::FIELD => Timetracker_Model_Timesheet::FLD_CORRELATION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $correlationId],
+                ]), new Tinebase_Model_Pagination(['sort' => 'start_date', 'dir' => 'ASC']));
+                if (($count = $result->count()) < 2) {
+                    return;
+                }
+                if ('00:00:00' !== $result[0]->end_time) {
+                    throw new Tinebase_Exception_SystemGeneric('end time of first in ts series not valid');
+                }
+                if ('00:00:00' !== $result->getLastRecord()->start_time) {
+                    throw new Tinebase_Exception_SystemGeneric('start time of last in ts series not valid');
+                }
+                for ($i = 1; $i < $result->count() - 1; $i++) {
+                    if ('00:00:00' !== $result[$i]->start_time || '00:00:00' !== $result[$i]->end_time) {
+                        throw new Tinebase_Exception_SystemGeneric('start and end time of middle ts of ts series not valid');
+                    }
+                }
+                $date = null;
+                foreach ($result as $ts) {
+                    if (null !== $date && $date->addDay(1)->format('Y-m-d') !== $ts->start_date->format('Y-m-d')) {
+                        throw new Tinebase_Exception_SystemGeneric('all ts in a ts series must be on consecutive dates');
+                    }
+                    $date = $ts->start_date->getClone();
+                }
+            }, [$_record->{Timetracker_Model_Timesheet::FLD_CORRELATION_ID}]);
+        }
 
         /** @var Timetracker_Model_Timesheet $_record */
         $this->_checkDeadline($_record);
