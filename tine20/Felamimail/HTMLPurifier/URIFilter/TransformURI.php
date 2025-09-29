@@ -29,16 +29,13 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
      */
     public function filter(&$uri, $config, $context)
     {
-        $result = TRUE;
         $token = $context->get('CurrentToken', true);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' URI: ' . var_export($uri, TRUE) . ' ' 
             . ' TOKEN: ' . var_export($token, TRUE));
-        
-        if ($uri->host) {
-            $result = $this->_checkExternalUrl($uri, $token);
-        }
-        return $result;
+
+
+        return $this->_checkExternalUrl($uri, $token);
     }
     
     /**
@@ -52,6 +49,11 @@ class Felamimail_HTMLPurifier_URIFilter_TransformURI extends HTMLPurifier_URIFil
      */
     protected function _checkExternalUrl($uri, $token)
     {
+        // remove URIs with no scheme (relative paths like /content/tmp/...)
+        if (empty($uri->host)) {
+            return !empty($uri->scheme);
+        }
+
         $result = in_array($uri->scheme, array('http', 'https', 'mailto'));
         
         // only allow external urls in anchors for the moment
