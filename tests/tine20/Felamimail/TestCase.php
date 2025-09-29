@@ -111,6 +111,11 @@ abstract class Felamimail_TestCase extends TestCase
     protected $_folder = NULL;
 
     /**
+     * @var string
+     */
+    protected $_oldUrl = null;
+
+    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
@@ -148,6 +153,9 @@ abstract class Felamimail_TestCase extends TestCase
         }
 
         $this->_mailDomain = TestServer::getPrimaryMailDomain();
+
+        $this->_oldUrl = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::TINE20_URL, 'https://unittestDomain.test');
     }
 
     /**
@@ -227,6 +235,8 @@ abstract class Felamimail_TestCase extends TestCase
             }
         }
         Felamimail_Controller_Account::getInstance()->doContainerACLChecks($aclCheck);
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::TINE20_URL, $this->_oldUrl);
 
         parent::tearDown();
 
