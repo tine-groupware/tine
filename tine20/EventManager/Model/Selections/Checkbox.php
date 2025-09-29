@@ -27,7 +27,7 @@ class EventManager_Model_Selections_Checkbox extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'Checkbox',
+        self::RECORD_NAME           => 'Checkbox', // gettext('GENDER_Checkbox')
         self::RECORDS_NAME          => 'Checkboxes', // ngettext('Checkbox', 'Checkboxes', n)
         self::TITLE_PROPERTY        => self::FLD_BOOKED,
 

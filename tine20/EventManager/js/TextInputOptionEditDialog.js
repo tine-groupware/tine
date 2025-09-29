@@ -19,14 +19,27 @@ Tine.EventManager.TextInputOptionEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     onAfterRecordLoad: function () {
         Tine.EventManager.TextInputOptionEditDialog.superclass.onAfterRecordLoad.call(this);
         this.setMultiLinesListener();
+        this.setOnlyNumbersListener();
         this.updateMaxCharFieldVisibility();
     },
 
     setMultiLinesListener: function () {
         const multiLinesField = this.form.findField('multiple_lines');
+        const numbersField = this.form.findField('only_numbers');
         if (multiLinesField) {
             multiLinesField.on('check', function (checkbox, checked) {
                 this.toggleMaxCharField(checked);
+                numbersField.setValue(false);
+            }, this);
+        }
+    },
+
+    setOnlyNumbersListener: function () {
+        const multiLinesField = this.form.findField('multiple_lines');
+        const numbersField = this.form.findField('only_numbers');
+        if (numbersField) {
+            numbersField.on('check', function () {
+                multiLinesField.setValue(false);
             }, this);
         }
     },

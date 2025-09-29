@@ -35,7 +35,7 @@ class EventManager_Model_BookedOption extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::TITLE_PROPERTY            => '{{option.option_config_class}}',
 
-        self::RECORD_NAME               => 'Booked Option',
+        self::RECORD_NAME               => 'Booked Option', // gettext('GENDER_Booked Option')
         self::RECORDS_NAME              => 'Booked Options', // ngettext('Booked Option', 'Booked Options', n)
 
         self::FIELDS => [

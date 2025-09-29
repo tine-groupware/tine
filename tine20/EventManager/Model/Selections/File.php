@@ -33,7 +33,7 @@ class EventManager_Model_Selections_File extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'File selection',
+        self::RECORD_NAME           => 'File selection', // gettext('GENDER_File selection')
         self::RECORDS_NAME          => 'File selections', // ngettext('File selection', 'File selections', n)
         self::TITLE_PROPERTY        => self::FLD_FILE_NAME,
 

@@ -30,7 +30,7 @@ class EventManager_Model_TextInputOption extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE         => false,
         self::APP_NAME              => EventManager_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
-        self::RECORD_NAME           => 'Text Input',
+        self::RECORD_NAME           => 'Text Input', // gettext('GENDER_Text Input')
         self::RECORDS_NAME          => 'Text Input', // ngettext('Text Input', 'Text Input', n)
         self::TITLE_PROPERTY        => self::FLD_TEXT,
 
@@ -38,16 +38,17 @@ class EventManager_Model_TextInputOption extends Tinebase_Record_NewAbstract
             self::FLD_TEXT            => [
                 self::LABEL                 => 'Text', // _('Text')
                 self::TYPE                  => self::TYPE_FULLTEXT,
-                self::NULLABLE              => false,
-                self::DESCRIPTION           => 'Here you can ask the participant a question relevant for the event'
+                self::NULLABLE              => true,
+                self::DESCRIPTION           => 'Here you can ask the participant for relevant information for the event'
+                                        // _('Here you can ask the participant for relevant information for the event')
             ],
             self::FLD_ONLY_NUMBERS    => [
-                self::LABEL                 => 'Reply should only be a number', // _('Reply should only be a number')
+                self::LABEL                 => 'Reply can only be a number', // _('Reply can only be a number')
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL           => false,
             ],
             self::FLD_MULTIPLE_LINES  => [
-                self::LABEL                 => 'Multiple lines reply', // _('Multiple lines reply')
+                self::LABEL                 => 'Multiple lines reply allowed', // _('Multiple lines reply allowed')
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL           => false,
             ],
