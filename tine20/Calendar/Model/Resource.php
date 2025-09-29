@@ -25,6 +25,8 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
     public const FLD_BUSY_TYPE = 'busy_type';
     public const FLD_SUPRESS_NOTIFICATION = 'suppress_notification';
     public const FLD_COLOR = 'color';
+    public const FLD_SITE = 'site';
+    public const FLD_LOCATION = 'location';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -38,6 +40,8 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
         self::HAS_RELATIONS             => true,
         self::HAS_ATTACHMENTS           => true,
         self::HAS_TAGS                  => true,
+        self::HAS_NOTES                 => true,
+        self::HAS_CUSTOM_FIELDS         => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
 
         self::APP_NAME                  => Calendar_Config::APP_NAME,
@@ -130,6 +134,12 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 7,
                 self::NULLABLE                  => true,
+            ],
+            self::FLD_LOCATION              => [
+                self::TYPE                      => self::TYPE_VIRTUAL,
+            ],
+            self::FLD_SITE                  => [
+                self::TYPE                      => self::TYPE_VIRTUAL,
             ],
         ],
     ];
