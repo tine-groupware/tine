@@ -38,6 +38,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
         self::HAS_RELATIONS             => true,
         self::HAS_ATTACHMENTS           => true,
         self::HAS_TAGS                  => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
 
         self::APP_NAME                  => Calendar_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
