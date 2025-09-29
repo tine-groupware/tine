@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_tine_import_csv_allfields</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <label>Tine contact CSV import all data</label>
+    <!-- _("Tine contact CSV import all data") -->
+    <description>Import CSV formated contacts from tine address book</description>
+    <!-- _("Import CSV formated contacts from tine address book") -->
+    <extension>csv</extension>
+</config>
