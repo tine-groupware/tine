@@ -71,7 +71,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     /**
      * this function creates a Tasks_Model_Task and stores it in the database
      */
-    public static function create(Tinebase_Model_Container $container, string $name, $vobjectData): self
+    public static function create(Tinebase_Model_Container $container, string $name, $vobjectData, ?string $etag = null): self
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -82,6 +82,9 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         list($backend, $version) = Tasks_Convert_Task_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         try {
             $task = Tasks_Convert_Task_VCalendar_Factory::factory($backend, $version)->toTine20Model($vobjectData);
+            if (null !== $etag && null === $task->etag) {
+                $task->etag = $etag;
+            }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -134,7 +137,9 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing task with id: ' . $existingEvent->getId());
             $vevent = new self($container, $existingEvent);
-            $vevent->put($vobjectData);
+            if (null === $etag || $etag !== $existingEvent->etag) {
+                $vevent->put($vobjectData, $etag);
+            }
         }
         
         return $vevent;
@@ -311,7 +316,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * @param string $cardData
      * @return void
      */
-    public function put($cardData) 
+    public function put($cardData, ?string $etag = null)
     {
         if (get_class($this->_converter) == 'Tasks_Convert_Task_VCalendar_Generic') {
             // TODO generalize this? see \Addressbook_Frontend_WebDAV_Contact::_checkPutPermission
@@ -342,6 +347,9 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         $task = $this->_converter->toTine20Model($vobject, $this->getRecord(), array(
             Tasks_Convert_Task_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
+        if (null !== $etag) {
+            $task->etag = $etag;
+        }
         
         // iCal does send back an old value, because it does not refresh the vcalendar after
         // update. Therefor we must reapply the value of last_modified_time after the convert
