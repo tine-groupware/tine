@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar">
+    <Collections>
+        <Collection>
+            <Class>Calendar</Class>
+            <SyncKey>9</SyncKey>
+            <CollectionId>41</CollectionId>
+            <DeletesAsMoves/>
+            <GetChanges/>
+            <WindowSize>50</WindowSize>
+            <Options><FilterType>5</FilterType></Options>
+            <Commands>
+                <Change>
+                    <ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId>
+                    <ApplicationData>
+                        <Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone>
+                        <Calendar:AllDayEvent>0</Calendar:AllDayEvent>
+                        <Calendar:BusyStatus>2</Calendar:BusyStatus>
+                        <Calendar:DtStamp>20121125T150537Z</Calendar:DtStamp>
+                        <Calendar:EndTime>20121123T160000Z</Calendar:EndTime>
+                        <Calendar:Sensitivity>2</Calendar:Sensitivity>
+                        <Calendar:Subject>Repeat</Calendar:Subject>
+                        <Calendar:StartTime>20121123T130000Z</Calendar:StartTime>
+                        <Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID>
+                        <Calendar:MeetingStatus>1</Calendar:MeetingStatus>
+                        <Calendar:Attendees>
+                            <Calendar:Attendee>
+                                <Calendar:Name>Lars Kneschke</Calendar:Name>
+                                <Calendar:Email>lars@kneschke.de</Calendar:Email>
+                            </Calendar:Attendee>
+                        </Calendar:Attendees>
+                        <Calendar:Recurrence>
+                            <Calendar:Type>3</Calendar:Type>
+                            <Calendar:Interval>1</Calendar:Interval>
+                            <Calendar:DayOfWeek>32</Calendar:DayOfWeek>
+                            <Calendar:WeekOfMonth>5</Calendar:WeekOfMonth>
+                            <Calendar:FirstDayOfWeek>1</Calendar:FirstDayOfWeek>
+                        </Calendar:Recurrence>
+                        <Calendar:Exceptions>
+                            <Calendar:Exception>
+                                <Calendar:Deleted>0</Calendar:Deleted>
+                                <Calendar:ExceptionStartTime>20240628T063000Z</Calendar:ExceptionStartTime>
+                                <Calendar:StartTime>20240628T063000Z</Calendar:StartTime>
+                                <Calendar:EndTime>20240628T080000Z</Calendar:EndTime>
+                                <Calendar:Subject>Frühstück</Calendar:Subject>
+                            </Calendar:Exception>
+                            <Calendar:Exception>
+                                <Calendar:Deleted>1</Calendar:Deleted>
+                                <Calendar:ExceptionStartTime>20130125T130000Z</Calendar:ExceptionStartTime>
+                            </Calendar:Exception>
+                        </Calendar:Exceptions>
+                        <Calendar:Reminder>15</Calendar:Reminder>
+                        <Body xmlns="uri:AirSyncBase"><Type>1</Type><Data>Hello</Data></Body>
+                    </ApplicationData>
+                </Change>
+            </Commands>
+        </Collection>
+    </Collections>
+</Sync>

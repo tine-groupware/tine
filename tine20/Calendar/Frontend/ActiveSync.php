@@ -819,7 +819,11 @@ class Calendar_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implemen
 
                         if ($fifthWeekday) {
                             $foundMatchedException = $recurSet->filter(function($recurrence) use ($exception) {
-                                return $exception->exceptionStartTime->get(Tinebase_Record_Abstract::ISO8601LONG) === $recurrence->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+                                $exceptionStartTime = clone $exception->exceptionStartTime;
+                                if ($exceptionStartTime instanceof DateTime) {
+                                    $exceptionStartTime = new Tinebase_DateTime($exceptionStartTime);
+                                }
+                                return $exceptionStartTime->get(Tinebase_Record_Abstract::ISO8601LONG) === $recurrence->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
                             });
 
                             if (count($foundMatchedException) > 0) {
