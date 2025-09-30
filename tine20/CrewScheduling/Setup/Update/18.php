@@ -121,6 +121,29 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             CrewScheduling_Model_SchedulingRole::class,
         ]);
+        
+        $this->addApplicationUpdate('CrewScheduling', '18.4', self::RELEASE018_UPDATE004);
+    }
+
+    public function update005(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            CrewScheduling_Model_EventRoleConfig::class,
+            CrewScheduling_Model_EventTypeConfig::class,
+        ]);
+        $this->addApplicationUpdate('CrewScheduling', '18.5', self::RELEASE018_UPDATE005);
+    }
+
+    public function update006(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            CrewScheduling_Model_Poll::class,
+            CrewScheduling_Model_PollParticipant::class,
+            CrewScheduling_Model_PollReply::class,
+            CrewScheduling_Model_SchedulingRole::class,
+            CrewScheduling_Model_EventRoleConfig::class,
+            CrewScheduling_Model_EventTypeConfig::class,
+        ]);
 
         $roleCtrl = CrewScheduling_Controller_SchedulingRole::getInstance();
         $oldValue = $roleCtrl->doContainerACLChecks(false);
@@ -166,25 +189,6 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             }
         }
         
-        $this->addApplicationUpdate('CrewScheduling', '18.4', self::RELEASE018_UPDATE004);
-    }
-
-    public function update005(): void
-    {
-        Setup_SchemaTool::updateSchema([
-            CrewScheduling_Model_EventRoleConfig::class,
-            CrewScheduling_Model_EventTypeConfig::class,
-        ]);
-        $this->addApplicationUpdate('CrewScheduling', '18.5', self::RELEASE018_UPDATE005);
-    }
-
-    public function update006(): void
-    {
-        Setup_SchemaTool::updateSchema([
-            CrewScheduling_Model_Poll::class,
-            CrewScheduling_Model_PollParticipant::class,
-            CrewScheduling_Model_PollReply::class,
-        ]);
         $this->addApplicationUpdate('CrewScheduling', '18.6', self::RELEASE018_UPDATE006);
     }
 }
