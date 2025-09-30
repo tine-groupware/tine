@@ -237,4 +237,16 @@ class CrewScheduling_Setup_Initialize extends Setup_Initialize
         ], true);
         Tinebase_CustomField::getInstance()->addCustomField($cf);
     }
+
+    public function _initializePersistentObservers()
+    {
+        $inspectObserver = new Tinebase_Model_PersistentObserver(array(
+            'observable_model'      => Calendar_Model_Event::class,
+            'observable_identifier' => NULL,
+            'observer_model'        => CrewScheduling_Model_EventRoleConfig::class,
+            'observer_identifier'   => 'EventType',
+            'observed_event'        => Calendar_Event_InspectEvent::class
+        ));
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver($inspectObserver);
+    }
 }

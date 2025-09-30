@@ -127,4 +127,20 @@ class CrewScheduling_Model_AttendeeRole extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function getRoleTypesKey()
+    {
+        $expander = new Tinebase_Record_Expander(CrewScheduling_Model_AttendeeRole::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                CrewScheduling_Model_AttendeeRole::FLD_ROLE => [],
+                CrewScheduling_Model_AttendeeRole::FLD_EVENT_TYPES => []
+            ]
+        ]);
+        $expander->expandRecord($this);
+
+
+
+        return $this->{CrewScheduling_Model_AttendeeRole::FLD_ROLE}->{CrewScheduling_Model_SchedulingRole::FLD_KEY} .
+        ':' . implode('&', array_unique($this->{CrewScheduling_Model_AttendeeRole::FLD_EVENT_TYPES}?->sort('short_name')->short_name ?? []));
+    }
 }
