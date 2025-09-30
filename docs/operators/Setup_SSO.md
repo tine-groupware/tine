@@ -27,7 +27,7 @@ To check if you have valid certificates, you can call these URLs:
 
 ### 4) Clear config cache
 
-``` sh title=""
+``` sh title="clearCache"
 --8<-- "scripts/docker-compose/clearCache"
 ```
 

@@ -117,3 +117,13 @@ You can define the timeout (in seconds) of a JSON API method with `@apiTimeout` 
      */
     public function createPaperSlip(string $model, string $documentId): array
 ~~~
+
+Python JSON-RPC Example Script
+------
+
+Python script using 'requests', 'json' and 'http.client' to connect to tine and sync Addressbook
+contacts from tine to Sipgate:
+
+``` python title="./scripts/api/tine-sipgate-sync.py"
+--8<-- "scripts/api/tine-sipgate-sync.py"
+```
