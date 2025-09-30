@@ -249,30 +249,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if ($event->is_deleted) {
             $event->status = Calendar_Model_Event::STATUS_CANCELED;
         }
-        
-        // event organizer
-        $organizer = null;
-        if (!empty($event->organizer)) {
-            $organizerContact = $event->resolveOrganizer();
 
-            if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
-                $organizer = $vevent->add(
-                    'ORGANIZER',
-                    'mailto:' . ($event->organizer_email ?: $organizerContact->email),
-                    array('CN' => ($event->organizer_displayname ?:$organizerContact->n_fileas), 'EMAIL' => ($event->organizer_email ?: $organizerContact->email))
-                );
-            }
-        }
-        if (null === $organizer && Calendar_Model_Event::ORGANIZER_TYPE_EMAIL === $event->organizer_type &&
-                $event->organizer_email) {
-
-            $vevent->add(
-                'ORGANIZER',
-                'mailto:' . $event->organizer_email,
-                array('CN' => ($event->organizer_displayname ?: 'Organizer'), 'EMAIL' => $event->organizer_email)
-            );
-        }
-
+        $this->_addEventOrganizer($vevent, $event);
         $this->_addEventAttendee($vevent, $event);
         
         $optionalProperties = array(
@@ -497,6 +475,35 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         return $filename;
     }
 
+    protected function _addEventOrganizer(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event): void
+    {
+        $mailTo = $cn = null;
+        if (!empty($event->organizer)) {
+            $organizerContact = $event->resolveOrganizer();
+            if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
+                $mailTo = $event->organizer_email ?: $organizerContact->email;
+                $cn = $event->organizer_displayname ?:$organizerContact->n_fileas;
+            }
+        }
+        if (null === $mailTo && Calendar_Model_Event::ORGANIZER_TYPE_EMAIL === $event->organizer_type &&
+            $event->organizer_email
+        ) {
+            $mailTo = $event->organizer_email;
+            $cn = $event->organizer_displayname ?: 'Organizer';
+        }
+
+        if ($mailTo && is_scalar($mailTo) && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $mailTo)) {
+            $vevent->add(
+                'ORGANIZER',
+                'mailto:' . $mailTo,
+                ['CN' => $cn, 'EMAIL' => $mailTo]
+            );
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' No valid organizer email found: ' . $mailTo);
+        }
+    }
+
     /**
      * add event attendee to VEVENT object 
      * 
@@ -516,8 +523,10 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             try {
                 $attendeeEmail = $eventAttendee->getEmail();
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' Attender not found (skipping): ' . $tenf->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' Attender not found (skipping): ' . $tenf->getMessage());
+                }
                 continue;
             }
 
