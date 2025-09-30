@@ -73,6 +73,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
      * @var Tinebase_Backend_Sql_Abstract
      */
     protected $_recordBackend = null;
+
+    protected array $_serverETags = [];
     
     public function __construct(array $settings, $flavor)
     {
@@ -430,6 +432,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     
     protected function _fetchServerEtags(string $calUri, array $calICSs): array
     {
+        $this->_serverETags = [];
         $start = 0;
         $max = count($calICSs);
         
@@ -449,6 +452,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                     $name = end($name);
                     $id = $this->_getEventIdFromName($name);
                     $etags[$key] = array( 'id' => $id, 'etag' => $value['{DAV:}getetag']);
+                    $this->_serverETags[$id] = $value['{DAV:}getetag'];
                 }
             }
         } while($start < $max);
@@ -538,6 +542,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 
                 $name = explode('/', $key);
                 $name = end($name);
+                $id = $this->_getEventIdFromName($name);
 
                 if ($this->_importVTodos && strpos($data, 'BEGIN:VTODO') !== false) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
@@ -546,7 +551,7 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                     $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
                     $userAgentRAII = new Tinebase_RAII(fn() => $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent);
                     $_SERVER['HTTP_USER_AGENT'] = 'CalDavSynchronizer/tine';
-                    Tasks_Frontend_WebDAV_Task::create($this->_taskContainer, $name, $data);
+                    Tasks_Frontend_WebDAV_Task::create($this->_taskContainer, $name, $data, $this->_serverETags[$id] ?? null);
                     unset($userAgentRAII);
                 }
 
@@ -559,7 +564,6 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
                         . ' Processing VEVENT record: ' . $key);
 
-                $id = $this->_getEventIdFromName($name);
                 try {
                     if (isset($this->existingRecordIds[$calUri][$id])) {
                         $webdavFrontend = new $this->webdavFrontend($targetContainer, $this->existingRecordIds[$calUri][$id]);

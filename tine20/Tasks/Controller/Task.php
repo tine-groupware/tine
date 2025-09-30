@@ -255,7 +255,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * @param  Tinebase_Model_Alarm $_alarm
      * @return void
      */
-    public function sendAlarm(Tinebase_Model_Alarm $_alarm) 
+    public function sendAlarm(Tinebase_Model_Alarm $_alarm)
     {
         // save and disable container checks to be able to get all required tasks
         $oldCheckValue = $this->_doContainerACLChecks;
@@ -267,6 +267,11 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
 
         try {
             $task = $this->get($_alarm->record_id);
+
+            if (null !== $task->completed) {
+                // do not send alarms for completed tasks
+                return;
+            }
             
             if ($task->organizer) {
                 $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->organizer, TRUE);
