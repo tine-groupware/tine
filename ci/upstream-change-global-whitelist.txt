@@ -5,3 +5,5 @@ tine20/composer\.json
 tine20/composer\.lock
 tests/tine20/AllTests\.php
 tests/tine20/Tinebase/ApplicationTest\.php
+tine20/images/custom/.*
+tine20/.*/config\.inc\.php
