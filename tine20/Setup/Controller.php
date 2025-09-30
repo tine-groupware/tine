@@ -2389,6 +2389,13 @@ class Setup_Controller
      */
     public function createImportExportDefinitions($_application, $_onlyDefinitions = false)
     {
+        try {
+            $fileSystem = Tinebase_FileSystem::getInstance();
+        } catch (Tinebase_Exception_Backend) {
+            // no filesystem configured - skip template creation/updates
+            $fileSystem = null;
+        }
+
         foreach (array('Import', 'Export') as $type) {
             $path =
                 $this->_baseDir . $_application->name .
@@ -2431,9 +2438,7 @@ class Setup_Controller
                 $this->_baseDir . $_application->name .
                 DIRECTORY_SEPARATOR . $type . DIRECTORY_SEPARATOR . 'templates';
 
-            if (file_exists($path)) {
-                $fileSystem = Tinebase_FileSystem::getInstance();
-
+            if (file_exists($path) && $fileSystem) {
                 $basepath = $fileSystem->getApplicationBasePath(
                     'Tinebase',
                     Tinebase_FileSystem::FOLDER_TYPE_SHARED
