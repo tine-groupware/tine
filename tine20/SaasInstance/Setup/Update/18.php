@@ -13,7 +13,7 @@
  */
 class SaasInstance_Setup_Update_18 extends Setup_Update_Abstract
 {
-    const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
+    protected const RELEASE018_UPDATE000 = __CLASS__ . '::update000';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
