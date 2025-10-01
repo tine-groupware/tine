@@ -143,11 +143,10 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         }
 
         $isPersonalNode = $additionalData['isPersonalNode'] ?? false;
-        $emailQuota = (float) $recordData->email_imap_user['emailMailQuota'];
-
         if ($isPersonalNode && $application === 'Felamimail') {
+            $emailQuota = (float) $recordData->email_imap_user['emailMailQuota'];
             $currentEmailQuota = isset($recordData->email_imap_user)
-                ? round($emailQuota / 1024 / 1024 / 1024.4,2) : 0;
+                ? round($emailQuota / 1024 / 1024 / 1024.4, 2) : 0;
             if ($additionalData['emailMailQuota'] > $recordData->email_imap_user['emailMailQuota']) {
                 $quota = $currentEmailQuota;
                 $throwException = true;
@@ -165,7 +164,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
                 : 0;
             
             if ($recordData['quota'] > $userFSQuota) {
-                $userFSQuota = round($userFSQuota / 1024 / 1024 / 1024.4,2);
+                $userFSQuota = round($userFSQuota / 1024 / 1024 / 1024.4, 2);
                 $quota = $userFSQuota;
                 $throwException = true;
             }
@@ -235,7 +234,11 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $oldUser = $_eventObject->oldAccount;
         $updatedUser = $_eventObject->newAccount;
         
-        if ($updatedUser->type === null || $oldUser->type === null || $updatedUser->type === $oldUser->type) {
+        if (!$oldUser || !$updatedUser
+            || $updatedUser->type === null
+            || $oldUser->type === null
+            || $updatedUser->type === $oldUser->type
+        ) {
             return;
         }
             
