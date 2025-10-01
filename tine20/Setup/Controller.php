@@ -528,7 +528,7 @@ class Setup_Controller
      * @param boolean $getInstalled applications, too
      * @return array appName => setupXML
      */
-    public function getInstallableApplications($getInstalled = false)
+    public function getInstallableApplications($getInstalled = false): array
     {
         // create Tinebase tables first
         $applications = $getInstalled || ! $this->isInstalled('Tinebase')
@@ -539,7 +539,7 @@ class Setup_Controller
             $dirIterator = new DirectoryIterator($this->_baseDir);
         } catch (Exception $e) {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not open base dir: ' . $this->_baseDir);
-            throw new Tinebase_Exception_AccessDenied('Could not open Tine 2.0 root directory.');
+            throw new Tinebase_Exception_AccessDenied('Could not open tine root directory.');
         }
         
         foreach ($dirIterator as $item) {
@@ -547,7 +547,11 @@ class Setup_Controller
             if ($appName[0] != '.' && $appName != 'Tinebase' && $item->isDir()) {
                 $fileName = $this->_baseDir . $appName . '/Setup/setup.xml' ;
                 if (file_exists($fileName) && ($getInstalled || ! $this->isInstalled($appName))) {
-                    $applications[$appName] = $this->getSetupXml($appName);
+                    $setupXml = $this->getSetupXml($appName);
+                    // app can be installed if requested explicitly - otherwise it is skipped here (installOnDemand)
+                    if (!$setupXml->installOnDemand || $setupXml->installOnDemand === "false") {
+                        $applications[$appName] = $setupXml;
+                    }
                 }
             }
         }
@@ -2069,7 +2073,9 @@ class Setup_Controller
         $this->clearCache();
 
         // disable previews during uninstall
-        Tinebase_FileSystem::getInstance()->setPreviewActive(false);
+        if (Tinebase_FileSystem::getInstance()->isPreviewActive()) {
+            Tinebase_FileSystem::getInstance()->setPreviewActive(false);
+        }
 
         // sanitize input
         $_applications = array_unique(array_filter($_applications));
@@ -2091,7 +2097,9 @@ class Setup_Controller
         
         // deactivate foreign key check if all installed apps should be uninstalled
         $deactivatedForeignKeyCheck = false;
-        if (in_array(Tinebase_Config::APP_NAME, $_applications) && get_class($this->_backend) === 'Setup_Backend_Mysql') {
+        if (in_array(Tinebase_Config::APP_NAME, $_applications)
+            && get_class($this->_backend) === 'Setup_Backend_Mysql'
+        ) {
             $this->_backend->setForeignKeyChecks(0);
             $deactivatedForeignKeyCheck = true;
         }

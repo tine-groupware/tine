@@ -8,5 +8,4 @@
     <depends>
         <application>Sales</application>
     </depends>
-    <tables/>
 </application>
