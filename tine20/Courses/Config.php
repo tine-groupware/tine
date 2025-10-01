@@ -192,8 +192,8 @@ class Courses_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => false,
         ),
         self::TEACHER_GROUPS => [
-            'label'                 => 'Teacher groups on import',
-            'description'           => 'Teacher groups on import',
+            'label'                 => 'Teacher groups (array of IDs)',
+            'description'           => 'Teacher groups for import and password changing acl check',
             'type'                  => 'array',
             'clientRegistryInclude' => false,
             'setBySetupModule'      => true,

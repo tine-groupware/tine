@@ -399,23 +399,21 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     $account->accountExpires = $accountExpires;
                     $account->password_must_change = true;
                     $this->userCtrl->updateUser($account);
-                    
+
                     foreach (Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS} ?: [] as $gid) {
                         try {
-                            $gid = Tinebase_Group::getInstance()->getGroupByName($gid)->getId();
+                            $gid = Tinebase_Group::getInstance()->getGroupById($gid)->getId();
                         } catch (Tinebase_Exception_Record_NotDefined $e) {
-                            try {
-                                $gid = Tinebase_Group::getInstance()->getGroupById($gid)->getId();
-                            } catch (Tinebase_Exception_Record_NotDefined $e) {
-                                continue;
-                            }
+                            continue;
                         }
                         Tinebase_Group::getInstance()->addGroupMember($gid, $account->getId());
                     }
 
                     $msg = 'create teacher account: ' . current($accounts)->accountLoginName;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' ' . $msg);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' ' . $msg);
+                    }
                     $this->resultMsg[] = $msg;
                 }
 
