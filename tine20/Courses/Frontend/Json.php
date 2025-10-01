@@ -284,7 +284,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if (!empty(array_diff(Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS},
                 Tinebase_Group::getInstance()->getGroupMemberships(Tinebase_Core::getUser()->getId())))) {
-            throw new Tinebase_Exception_AccessDenied('you are not a member of the teacher group');
+            $translation = Tinebase_Translation::getTranslation(Courses_Config::APP_NAME);
+            throw new Tinebase_Exception_AccessDenied($translation->_('You are not a member of the teacher group'));
         }
 
         if (is_array($account)) {
@@ -299,7 +300,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         if (!in_array(Courses_Config::getInstance()->{Courses_Config::STUDENTS_GROUP},
                 Tinebase_Group::getInstance()->getGroupMemberships($account->getId()))) {
-            throw new Tinebase_Exception_AccessDenied('account is not a member of the students group');
+            $translation = Tinebase_Translation::getTranslation(Courses_Config::APP_NAME);
+            throw new Tinebase_Exception_AccessDenied($translation->_('Account is not a member of the students group'));
         }
 
         $oldRightsCheck = Admin_Controller_User::getInstance()->doRightChecks(false);
