@@ -5,4 +5,5 @@
     <version>19.0</version>
     <order>60</order>
     <status>enabled</status>
+    <!--installOnDemand>true</installOnDemand-->
 </application>
