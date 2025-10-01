@@ -143,9 +143,11 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         }
 
         $isPersonalNode = $additionalData['isPersonalNode'] ?? false;
+        $emailQuota = (float) $recordData->email_imap_user['emailMailQuota'];
 
         if ($isPersonalNode && $application === 'Felamimail') {
-            $currentEmailQuota = isset($recordData->email_imap_user) ? round($recordData->email_imap_user['emailMailQuota'] / 1024 / 1024 / 1024.4,2) : 0;
+            $currentEmailQuota = isset($recordData->email_imap_user)
+                ? round($emailQuota / 1024 / 1024 / 1024.4,2) : 0;
             if ($additionalData['emailMailQuota'] > $recordData->email_imap_user['emailMailQuota']) {
                 $quota = $currentEmailQuota;
                 $throwException = true;
@@ -158,7 +160,9 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             if ($userType === Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER) {
                 $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER);
             }
-            $userFSQuota = isset($user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ? $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] : 0;
+            $userFSQuota = isset($user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
+                ? (float) $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]
+                : 0;
             
             if ($recordData['quota'] > $userFSQuota) {
                 $userFSQuota = round($userFSQuota / 1024 / 1024 / 1024.4,2);
