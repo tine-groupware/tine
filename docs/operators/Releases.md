@@ -10,7 +10,7 @@
 | github release        | as pre release     | no               | as pre release          | as latest  | no        | no                 | no                      |
 | dockerhub tag         | weekly, git tag    | no               | tine version without .11, git tag | latest, tine version without .11, git tag | tine version without .11, git tag | no | no |
 | vpackages             | no                 | no               | no                      | tine20.com/maintance, set current link | tine20.com/maintance | customer repo, set current link, optional | for debug purposes |
-| gitlab packages       | weekly             | monthly          | no                      | tine20.com | no       | customer name / configurable | no            |
+| gitlab packages       | weekly             | monthly          | beta                      | tine20.com | no       | customer name / configurable | no            |
 | customer registry tag | no                 | no               | no                      | no         | no       | git tag, <customer>-<tine version withouth .11>, latest | no |
 | version check         | no                 | no               | no                      | yes        | no       | no                  | no                     |
 | tine edition          | be (but with bete license) | be       | be                      | be         | be       | be                  | -                      |
