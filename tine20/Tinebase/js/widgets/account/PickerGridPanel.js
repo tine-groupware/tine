@@ -310,6 +310,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
                 hidden: true,
                 accountsStore: this.store,
                 recordClass: this.groupRecordClass,
+                recordProxy: this.groupRecordClass === Tine.Tinebase.Model.Group ? Tine.Tinebase.groupBackend : null,
                 newRecordClass: this.recordClass,
                 newRecordDefaults: this.recordDefaults,
                 recordPrefix: this.recordPrefix,
