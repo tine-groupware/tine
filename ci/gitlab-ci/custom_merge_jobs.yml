@@ -10,9 +10,17 @@ merge_be:
       when: on_success
     - when: never
 
-.mergecustom3:
+merge_saas:
   stage: merge3
   extends: .abstract.merge
+  variables:
+    CUSTOMER: saas
+  script:
+    - merge_merge_upwards 2023.11 saas/2023.11
+    - merge_merge_upwards 2024.11 saas/2024.11
+    - merge_merge_upwards saas/2023.11 saas/2024.11
+    - merge_trigger_next
   rules:
-    - if: $AUTO_MERGE == "never"
-      when: never
+    - if: $AUTO_MERGE_CUSTOMER == "true"
+      when: on_success
+    - when: never

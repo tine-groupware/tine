@@ -655,6 +655,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray['emailUser']['emailAliases'] = [
             ['email' => $aliasAddress, 'dispatch_address' => true],
         ];
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $updatedUser = $this->_json->saveUser($userArray);
         self::assertIsArray($updatedUser['emailUser']['emailAliases'],
             'aliases not saved: ' . print_r($updatedUser['emailUser'], true));

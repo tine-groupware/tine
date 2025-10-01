@@ -162,6 +162,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function importUser($_opts)
     {
+        // disable user events to prevent confirmations
+        SaasInstance_Controller::getInstance()->suspendEvents();
+
         parent::_import($_opts);
     }
     
