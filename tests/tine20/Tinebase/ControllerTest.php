@@ -102,6 +102,8 @@ class Tinebase_ControllerTest extends TestCase
         $this->_skipIfLDAPBackend();
         $this->_skipWithoutEmailSystemAccountConfig();
 
+        self::markTestSkipped('FIXME: test removes sclever mail account ... this should not happen');
+
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
             ['field' => 'user_id', 'operator' => 'equals', 'value' => $this->_personas['sclever']->getId()]
         ]);

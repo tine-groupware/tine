@@ -1,6 +1,12 @@
 <?php
 return array (
-    Tinebase_Config::VERSION_CHECK => true,
+    'accountDeletionEventConfiguration' => [
+        Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_CONTAINER => true,
+        Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS => true,
+        Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS => true,
+        Tinebase_Config::ACCOUNT_DELETION_ADDITIONAL_TEXT => ''
+    ],
+    Tinebase_Config::VERSION_CHECK => false,
     'features' => array(
         Tinebase_Config::FEATURE_SHOW_ADVANCED_SEARCH => false,
         Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE => true,

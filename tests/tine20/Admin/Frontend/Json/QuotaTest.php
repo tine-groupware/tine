@@ -42,6 +42,9 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         parent::setUp();
 
         $this->_json = new Admin_Frontend_Json();
+
+        // force save quota with confirm header here,
+        Admin_Controller_Quota::getInstance()->setRequestContext([]);
     }
 
     protected function tearDown(): void
@@ -84,8 +87,24 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $additionalData['totalInByte'] = 1234 * 1024 * 1024;
 
         Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = false;
+
+        try {
+            $this->_json->saveQuota($app, null, $additionalData);
+
+            if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+                self::fail('should throw Tinebase_Exception_Confirmation');
+            }
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('SaasInstance');
+            $translation = str_replace('{0}', $app,
+                $translate->_("Do you want to change your {0} Quota?"));
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+
+        Admin_Controller_Quota::getInstance()->setRequestContext(['confirm' => true]);
         $result = $this->_json->saveQuota($app, null, $additionalData);
-        
+
         $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB};
         static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
         static::assertEquals($totalQuotaConfig,  1234 , true);
@@ -93,7 +112,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $additionalData['totalInByte'] = 5678 * 1024 * 1024;
         Admin_Config::getInstance()->{Admin_Config::QUOTA_ALLOW_TOTALINMB_MANAGEMNET} = true;
         $result = $this->_json->saveQuota($app, null, $additionalData);
-        
+
         $totalQuotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_TOTALINMB};
         static::assertEquals($result[Tinebase_Config::QUOTA_TOTALINMB], $totalQuotaConfig , true);
         static::assertEquals($totalQuotaConfig,  5678 , true);
@@ -113,6 +132,20 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $additionalData['isPersonalNode'] = true;
         $additionalData['accountId'] = $node->name;
 
+        try {
+            $this->_json->saveQuota($application, $node->toArray(), $additionalData);
+            if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+                self::fail('should throw Tinebase_Exception_Confirmation');
+            }
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('SaasInstance');
+            $translation = str_replace('{0}', $application,
+                $translate->_("Do you want to change your {0} Quota?"));
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+
+        Admin_Controller_Quota::getInstance()->setRequestContext(['confirm' => true]);
         $result = $this->_json->saveQuota($application, $node->toArray(), $additionalData);
         $user = Admin_Controller_User::getInstance()->get($additionalData['accountId']);
 
@@ -169,6 +202,20 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $additionalData['emailMailQuota'] = 12345 * 1024 * 1024;
         $additionalData['emailSieveQuota'] = 45678 * 1024 * 1024;
 
+        try {
+            $this->_json->saveQuota($application, $quotaNodeData, $additionalData);
+            if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+                self::fail('should throw Tinebase_Exception_Confirmation');
+            }
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('SaasInstance');
+            $translation = str_replace('{0}', $application,
+                $translate->_("Do you want to change your {0} Quota?"));
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+
+        Admin_Controller_Quota::getInstance()->setRequestContext(['confirm' => true]);
         $result = $this->_json->saveQuota($application, $quotaNodeData, $additionalData);
 
         if (! array_key_exists('email_imap_user', $result)) {
