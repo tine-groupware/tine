@@ -39,6 +39,10 @@ class SaasInstance_ControllerTest extends TestCase
      */
     protected function setUp(): void
     {
+        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance')) {
+            self::markTestSkipped('SaasInstance is not installed.');
+        }
+
         parent::setUp();
 
         $this->_json = new Admin_Frontend_Json();

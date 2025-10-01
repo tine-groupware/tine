@@ -134,7 +134,9 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
 
         try {
             $this->_json->saveQuota($application, $node->toArray(), $additionalData);
-            self::fail('should throw Tinebase_Exception_Confirmation');
+            if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+                self::fail('should throw Tinebase_Exception_Confirmation');
+            }
         } catch (Tinebase_Exception_Confirmation $e) {
             $translate = Tinebase_Translation::getTranslation('SaasInstance');
             $translation = str_replace('{0}', $application,
@@ -202,7 +204,9 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
 
         try {
             $this->_json->saveQuota($application, $quotaNodeData, $additionalData);
-            self::fail('should throw Tinebase_Exception_Confirmation');
+            if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+                self::fail('should throw Tinebase_Exception_Confirmation');
+            }
         } catch (Tinebase_Exception_Confirmation $e) {
             $translate = Tinebase_Translation::getTranslation('SaasInstance');
             $translation = str_replace('{0}', $application,
