@@ -18,7 +18,9 @@
  * @property integer $duration
  * @property Tinebase_DateTime $start_date
  * @property string $start_time
+ * @property Tinebase_DateTime $end_date
  * @property string $end_time
+ * @property string $correlation_id
  * @property string $timeaccount_id
  * @property string $account_id
  * @property string $accounting_time_factor
@@ -29,6 +31,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 
     public const FLD_CLEARED_AMOUNT = 'cleared_amount';
     public const FLD_RECORDED_AMOUNT = 'recorded_amount';
+    public const FLD_END_DATE = 'end_date';
+    public const FLD_CORRELATION_ID = 'correlation_id';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -43,7 +47,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 11,
+        'version'           => 12,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
         'hasRelations'      => true,
@@ -250,6 +254,12 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 //                'shy'                   => true,
 //                'nullable'              => true,
 //            ),
+            'end_date'              => [
+                self::LABEL                 => 'End date', // _('End date')
+                self::TYPE                  => self::TYPE_DATETIME_SEPARATED_DATE,
+                self::DOCTRINE_IGNORE       => true,
+                self::SHY                   => true,
+            ],
             'end_time'            => array(
                 'label'                 => 'End time', // _('End time')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -265,6 +275,15 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'specialType'           => 'minutes',
                 'default'               => '30',
             ),
+            self::FLD_CORRELATION_ID => [
+                self::TYPE              => self::TYPE_STRING,
+                self::LENGTH            => 40,
+                self::NULLABLE          => true,
+                self::SHY               => true,
+                self::UI_CONFIG         => [
+                    self::DISABLED          => true,
+                ],
+            ],
             'description'           => array(
                 'label'                 => 'Description', // _('Description')
                 'type'                  => 'fulltext',
