@@ -1,2 +1,0 @@
-tests/tine20/SaasInstance/.*
-tine20/SaasInstance/.*
