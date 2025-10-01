@@ -4,9 +4,12 @@
  *
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
+use Timetracker_Model_Timesheet as TMS;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Timetracker_Frontent_Json
@@ -95,6 +98,225 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
 
         // cleanup
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    /**
+     * @return Tinebase_Record_RecordSet<Tasks_Model_Task>
+     */
+    public function testCorrelationCreate(): Tinebase_Record_RecordSet
+    {
+        $today = Tinebase_DateTime::today();
+        $timeaccount = $this->_getTimeaccount(['is_billable' => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData = new TMS([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $timeaccountData['id'],
+            'description' => 'test',
+            'start_date' => $today->toString('Y-m-d'),
+            'start_time' => '12:00:00',
+            'end_date' => $today->getClone()->addDay(2)->toString('Y-m-d'),
+            'end_time' => '06:00:00',
+            'duration' => 0,
+        ]);
+        $ts = Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+
+        $this->assertNotNull($correlationId = $ts->{TMS::FLD_CORRELATION_ID});
+        return $this->_assertCorrelationIdResult($correlationId, [
+            ['start_date' => $today->getClone(), 'duration' => 12 * 60],
+            ['start_date' => $today->getClone()->addDay(1), 'duration' => 24 * 60],
+            ['start_date' => $today->getClone()->addDay(2), 'duration' => 6 * 60],
+        ]);
+    }
+
+    public function testCorrelationUpdateFirst(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(fn() => Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(
+            fn() => throw new Tinebase_Exception_MaintenanceMode()
+        ));
+
+        $ts = $result->getFirstRecord();
+        try {
+            $ts->start_time = '11:00:00';
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_MaintenanceMode) {
+        }
+
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date, 'duration' => 13 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(1), 'duration' => 24 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(2), 'duration' => 6 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    public function testCorrelationUpdateLast(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(fn() => Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(
+            fn() => throw new Tinebase_Exception_MaintenanceMode()
+        ));
+
+        $ts = $result->getLastRecord();
+        try {
+            $ts->end_time = '11:00:00';
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_MaintenanceMode) {
+        }
+
+        $ts = $result->getFirstRecord();
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date, 'duration' => 12 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(1), 'duration' => 24 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(2), 'duration' => 11 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    public function testCorrelationUpdateMiddleTimeFail(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+
+        $ts = $result[1];
+        try {
+            $ts->end_time = '11:00:00';
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        }
+
+        $ts = $result->getFirstRecord();
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date, 'duration' => 12 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(1), 'duration' => 11 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(2), 'duration' =>  6 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    public function testCorrelationDateGapFailFront(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+
+        $ts = $result->getFirstRecord();
+        try {
+            $ts->start_date->subDay(1);
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        }
+
+        $ts = $result->getFirstRecord();
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date, 'duration' => 12 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(2), 'duration' => 24 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(3), 'duration' =>  6 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    public function testCorrelationDateGapFailFront1(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+
+        $ts = $result->getFirstRecord();
+        try {
+            $ts->start_date->addDay(5);
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        }
+
+        $ts = $result->getFirstRecord();
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date->getClone()->subDay(4), 'duration' => 24 * 60],
+            ['start_date' => $ts->start_date->getClone()->subDay(3), 'duration' =>  6 * 60],
+            ['start_date' => $ts->start_date, 'duration' => 12 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    public function testCorrelationDateGapFailEnd(): void
+    {
+        $result = $this->testCorrelationCreate();
+
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        Tinebase_TransactionManager::getInstance()->unitTestAddTransactionable(Tinebase_Core::getDb());
+        $transactionReset = new Tinebase_RAII(function () {
+            Tinebase_TransactionManager::getInstance()->unitTestAddTransactionId($this->_transactionId);
+        });
+
+        $ts = $result->getLastRecord();
+        try {
+            $ts->start_date->addDay(1);
+            Timetracker_Controller_Timesheet::getInstance()->update($ts);
+            $this->fail('expect exception');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        }
+
+        $ts = $result->getFirstRecord();
+        $this->_assertCorrelationIdResult($ts->{TMS::FLD_CORRELATION_ID}, [
+            ['start_date' => $ts->start_date, 'duration' => 12 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(1), 'duration' => 24 * 60],
+            ['start_date' => $ts->start_date->getClone()->addDay(3), 'duration' =>  6 * 60],
+        ]);
+        unset($transactionReset);
+    }
+
+    /**
+     * @return Tinebase_Record_RecordSet<Tasks_Model_Task>
+     */
+    protected function _assertCorrelationIdResult(string $correlationId, array $expectations): Tinebase_Record_RecordSet
+    {
+        $result = Timetracker_Controller_Timesheet::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(TMS::class, [
+            [TMFA::FIELD => TMS::FLD_CORRELATION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $correlationId],
+        ]), new Tinebase_Model_Pagination(['sort' => 'start_date', 'dir' => 'ASC']));
+
+        $this->assertSame(count($expectations), $result->count());
+        for ($i = 0; $i < count($expectations); ++$i) {
+            $this->assertSame($expectations[$i]['start_date']->format('Y-m-d'), $result[$i]->start_date->format('Y-m-d'));
+            $this->assertSame($expectations[$i]['duration'], $result[$i]->duration);
+        }
+
+        return $result;
     }
 
     /**

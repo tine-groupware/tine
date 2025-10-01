@@ -274,6 +274,7 @@ class Tinebase_ModelConfiguration_Const {
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_CONTAINER = 'container';
     public const TYPE_DATETIME = 'datetime';
+    public const TYPE_DATETIME_SEPARATED_DATE = 'datetime_separated_date';
     public const TYPE_DATE = 'date';
     public const TYPE_DYNAMIC_RECORD = 'dynamicRecord';
     public const TYPE_FLOAT = 'float';
