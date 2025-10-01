@@ -3,5 +3,5 @@
     <name>SaasInstance</name>
     <version>18.0</version>
     <status>enabled</status>
-    <!--installOnDemand>true</installOnDemand-->
+    <installOnDemand>true</installOnDemand>
 </application>
