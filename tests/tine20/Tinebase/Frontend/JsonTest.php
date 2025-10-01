@@ -1143,13 +1143,21 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testGetTerminationDeadline()
     {
-        $now = Tinebase_DateTime::now()->setTime(0, 0, 0);
-        $expected = new Tinebase_DateTime('2018-10-01 00:00:00');
-        while ($expected < $now) $expected->addYear(1);
-        
-        $result = $this->_instance->getTerminationDeadline('2017-01-01 00:00:00', 12, 12 ,3 ,0, new Tinebase_DateTime('2017-11-1'));
+        $commencement = new Tinebase_DateTime(date('Y-01-01'));
+        $termOfContractInMonths = 12;
+        $automaticContractExtensionInMonths = 12;
+        $cancelationPeriodInMonths = 3;
+        $expectedTerminationDeadline = (clone $commencement)->addYear(2)->subMonth($cancelationPeriodInMonths)->subDay(1);
+
+        $result = $this->_instance->getTerminationDeadline(
+            $commencement,
+            $termOfContractInMonths,
+            $automaticContractExtensionInMonths,
+            $cancelationPeriodInMonths,
+            new Tinebase_DateTime(date('Y-12-30'))
+        );
         self::assertTrue(isset($result['terminationDeadline']));
-        self::assertEquals($expected->toString(), $result['terminationDeadline']);
+        $this->assertEquals($expectedTerminationDeadline, $result['terminationDeadline']);
     }
 
     /******************** protected helper funcs ************************/
