@@ -265,7 +265,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param string $_filter
      * @return int
      */
-    public function getUsersCount($_filter = null)
+    public function getUsersCount($_filter = null): int
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', array('count' => 'COUNT(' . $this->_db->quoteIdentifier('id') . ')'));
@@ -292,7 +292,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
         
-        return $rows[0];
+        return (int) $rows[0];
     }
     
     /**
@@ -1533,9 +1533,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * returns number of current not-disabled, non-system users
      *
-     * @return string
+     * @return int
      */
-    public function countNonSystemUsers()
+    public function countNonSystemUsers(): int
     {
         $systemUsers = Tinebase_User::getSystemUsernames();
         $select = $this->_db->select()
@@ -1544,7 +1544,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED))
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
-        return $this->_db->fetchOne($select);
+        return (int) $this->_db->fetchOne($select);
     }
 
     /**

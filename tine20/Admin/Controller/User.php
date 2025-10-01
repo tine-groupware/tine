@@ -271,7 +271,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             unset($_account->xprops()[Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD]);
             Tinebase_User::getInstance()->updateUserInSqlBackend($_account);
         }
-        
+
         Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . 
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
@@ -823,7 +823,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
     }
-    
+
+    /**
+     * @param array|string $_accountIds
+     * @throws Tinebase_Exception_Confirmation
+     */
     protected function _checkAccountDeletionConfig($_accountIds)
     {
         $context = $this->getRequestContext();
@@ -867,6 +871,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
             $exception->setInfo($userData);
             throw $exception;
+        } else {
+            $this->_handleUserDeleteConfirmation($_accountIds);
         }
 
         return true;
