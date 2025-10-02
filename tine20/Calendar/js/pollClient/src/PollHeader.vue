@@ -1,6 +1,6 @@
 <template>
   <thead v-if="dates.length > 0" :style="`--summary-row-height: ${height}px`">
-    <tr v-if="dates[0].summary" ref="summaryRow">
+    <tr ref="summaryRow">
       <th></th>
       <th v-for="date in dates" :key="date.dtstart" class="title">
         <div class="title">{{ date.summary }}{{!show_site || !date.event_site ? '' : ', ' + date.event_site.n_fn}}</div>
