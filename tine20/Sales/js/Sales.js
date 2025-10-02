@@ -32,6 +32,8 @@ import './DocumentPosition/customerColumn';
 import './EDocument/QuickLookPanel';
 import './numberableStateProvider';
 
+import './Document/PurchaseInvoice/importPurchaseInvoiceAction';
+
 /**
  * address renderer, not a default renderer
  *

@@ -14,5 +14,6 @@ Tine.Purchasing.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     contentTypes: [
         {appName: 'Sales', modelName: 'Supplier', requiredRight: 'manage_suppliers', singularContainerMode: true},
         {appName: 'Sales', modelName: 'PurchaseInvoice', requiredRight: 'manage_purchase_invoices', singularContainerMode: true},
+        {appName: 'Sales', modelName: 'Document_PurchaseInvoice', requiredRight: 'manage_purchase_invoices', singularContainerMode: true},
     ]
 });

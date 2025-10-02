@@ -122,6 +122,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_PURCHASE_INVOICES_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_PurchaseInvoice';
             $this->_configuredModels[] = 'PurchaseInvoice';
+            $this->_configuredModels[] = Sales_Model_PurchasePaymentMeans::MODEL_NAME_PART;
+            $this->_configuredModels[] = Sales_Model_DocumentPosition_PurchaseInvoice::MODEL_NAME_PART;
+            $this->_configuredModels[] = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART;
         }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_OrderConfirmation';
@@ -897,8 +900,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
     public function importPurchaseInvoice(array $fileLocation): array
     {
-        /** @var Tinebase_Model_Tree_FileLocation $fileLocation */
-        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_Tree_FileLocation::class);
+        /** @var Tinebase_Model_FileLocation $fileLocation */
+        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
         $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice($fileLocation);
         return $this->_recordToJson($purchaseInvoice);
     }

@@ -36,7 +36,7 @@
     background-image:url(../../images/icon-set/icon_invoice.svg) !important;
 }
 
-.SalesPurchaseInvoice {
+.SalesDocument_PurchaseInvoice, .SalesPurchaseInvoice {
     background-image:url(../../images/icon-set/icon_purchase_invoice.svg) !important;
 }
 
