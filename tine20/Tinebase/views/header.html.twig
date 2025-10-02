@@ -3,7 +3,7 @@
         <a href="{{ config(constant('Tinebase_Config::BRANDING_WEBURL')) }}">
             <img src="{{ app.installation.logoContent.getBody() | data_uri }}"
                  {# whewn header is used for email template, bootstrap email only compile class and ignore all the custome style#}
-                 class="img-fluid h-12 w-full"
+                 class="max-h-20 min-w-20"
                  {# whewn header is used for base template, class h-16 w-full are ignored #}
                  style="max-width: 100%; max-height: calc(var(--header-height) - (var(--spacing) * 2 ));"
                  alt="Logo" />
