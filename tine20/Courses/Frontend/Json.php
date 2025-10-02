@@ -282,10 +282,18 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function resetPassword($account, $password, $mustChange)
     {
-        if (!empty(array_diff(Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS},
-                Tinebase_Group::getInstance()->getGroupMemberships(Tinebase_Core::getUser()->getId())))) {
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships(Tinebase_Core::getUser()->getId());
+        $teacher = false;
+        foreach(Courses_Config::getInstance()->{Courses_Config::TEACHER_GROUPS} as $teacherGroup) {
+            if (in_array($teacherGroup, $groupMemberships)) {
+                $teacher = true;
+                break;
+            }
+        }
+        if (!$teacher) {
             $translation = Tinebase_Translation::getTranslation(Courses_Config::APP_NAME);
-            throw new Tinebase_Exception_AccessDenied($translation->_('You are not a member of the teacher group'));
+            throw new Tinebase_Exception_AccessDenied($translation->_(
+                'You are not a member of the teacher group'));
         }
 
         if (is_array($account)) {
@@ -307,7 +315,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $oldRightsCheck = Admin_Controller_User::getInstance()->doRightChecks(false);
         $raii = new Tinebase_RAII(fn() => Admin_Controller_User::getInstance()->doRightChecks($oldRightsCheck));
 
-        //admin json fe does this too: Tinebase_Core::getLogger()->addReplacement($password);
+        // admin json fe does this too: Tinebase_Core::getLogger()->addReplacement($password);
         $adminJson = new Admin_Frontend_Json();
         $result = $adminJson->resetPassword($account, $password, (bool)$mustChange);
 
