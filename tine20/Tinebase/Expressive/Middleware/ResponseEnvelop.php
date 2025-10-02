@@ -33,8 +33,10 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' processing...');
+        }
 
         try {
             $response = $delegate->handle($request);
@@ -50,7 +52,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                 }
 
                 if (0 !== $response->getBody()->tell()) {
-                    throw new Tinebase_Exception_UnexpectedValue('response stream not at possition 0');
+                    throw new Tinebase_Exception_UnexpectedValue('response stream not at position 0');
                 }
 
                 // TODO implement stuff here ... really? Why here? Can't we do that in a data resolve middleware?
@@ -63,24 +65,28 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                 ]));
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_NOT_FOUND);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            }
+            $response = new Response('php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_NOT_FOUND);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
-            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_FORBIDDEN);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            }
+            $response = new Response('php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_FORBIDDEN);
         } catch (Tinebase_Exception_Expressive_HttpStatus $teeh) {
             // the exception can use logToSentry and logLevelMethod properties to achieve desired logging
             // default is false (no sentry) and info log level
             Tinebase_Exception::log($teeh);
-            $response = new Response($body = 'php://memory', $teeh->getCode());
+            $response = new Response('php://memory', $teeh->getCode());
         } catch (Tinebase_Exception_RateLimit $ter) {
             Tinebase_Exception::log($ter);
-            $response = new Response($body = 'php://memory', $ter->getCode());
+            $response = new Response('php://memory', $ter->getCode());
         } catch (Exception $e) {
             Tinebase_Exception::log($e, false);
-            $response = new Response($body = 'php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
+            $response = new Response('php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
