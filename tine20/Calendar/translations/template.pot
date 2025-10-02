@@ -455,14 +455,6 @@ msgstr ""
 msgid "This contact was automatically added by the system as an event attendee."
 msgstr ""
 
-#, php-format
-msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr ""
-
-#, php-format
-msgid "%1$s is scheduled for %2$s"
-msgstr ""
-
 msgid "Different Calendar"
 msgstr ""
 
@@ -947,6 +939,9 @@ msgstr ""
 msgid "This event has been canceled."
 msgstr ""
 
+msgid "You are the organizer of this event."
+msgstr ""
+
 msgid "Unsupported message"
 msgstr ""
 
@@ -1068,6 +1063,12 @@ msgstr ""
 msgid "Delete events missing from the import data (future events only)."
 msgstr ""
 
+msgid "Match Attendee"
+msgstr ""
+
+msgid "Match attendee with existing users or contacts."
+msgstr ""
+
 msgid "Basic Data Only"
 msgstr ""
 
@@ -1084,6 +1085,45 @@ msgid "Keep Existing Attendee"
 msgstr ""
 
 msgid "Do not remove attendees from existing events that are not in the import data."
+msgstr ""
+
+msgid "Match Organizer"
+msgstr ""
+
+msgid "Match organizer with existing user or contact."
+msgstr ""
+
+msgid "Skip from other internal organizers"
+msgstr ""
+
+msgid "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
+msgstr ""
+
+msgid "Skip Events if organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Use own attendee status for other internal organizer events"
+msgstr ""
+
+msgid "Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response."
+msgstr ""
+
+msgid "Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Allow party crushing for other internal organizer events"
+msgstr ""
+
+msgid "Use this when attendee added themselves and organizer did not receive/process/accept response."
+msgstr ""
+
+msgid "Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Disable external organizer calendar"
+msgstr ""
+
+msgid "Import events of external organizers directly into the import calendar."
 msgstr ""
 
 msgid "Force Organizer for new Events"
@@ -1468,9 +1508,6 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
-msgid "{headerDate, date, full} {headerDate, time, short}"
-msgstr ""
-
 msgid "By using this service you agree to our terms and conditions"
 msgstr ""
 
@@ -1486,16 +1523,13 @@ msgstr ""
 msgid "If you did not receive the link, please contact the organiser."
 msgstr ""
 
+msgid "Please enter the survey password to continue."
+msgstr ""
+
 msgid "Submit"
 msgstr ""
 
 msgid "Wrong password!"
-msgstr ""
-
-msgid "Please log in"
-msgstr ""
-
-msgid "User name"
 msgstr ""
 
 #, python-brace-format
@@ -1505,10 +1539,16 @@ msgstr ""
 msgid "An unexpected error occurred."
 msgstr ""
 
+msgid "Reload"
+msgstr ""
+
 msgid "Poll"
 msgid_plural "Polls"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "This poll is closed already"
+msgstr ""
 
 msgid "Alternative Dates"
 msgstr ""
@@ -1755,6 +1795,14 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
+msgid "GENDER_Calendar User"
+msgstr ""
+
+msgid "Calendar User"
+msgid_plural "Calendar Users"
+msgstr[0] ""
+msgstr[1] ""
+
 #, python-format, php-format
 msgid "Every %s day"
 msgstr ""
@@ -1922,6 +1970,12 @@ msgstr ""
 msgid "Calendars are always selected, regardless of any filter parameters."
 msgstr ""
 
+msgid "Sync FreeBusy events"
+msgstr ""
+
+msgid "Receive FreeBusy events via CalDAV and ActiveSync."
+msgstr ""
+
 msgid "Never"
 msgstr ""
 
@@ -1981,13 +2035,10 @@ msgid_plural "Relations"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "First name, last name"
-msgstr ""
-
-msgid "Email address"
-msgstr ""
-
 msgid "General terms and conditions"
+msgstr ""
+
+msgid "Password Protected Poll"
 msgstr ""
 
 msgid "Updates from"
@@ -2034,19 +2085,31 @@ msgstr ""
 msgid "Event details"
 msgstr ""
 
-msgid "Thank you for attending the poll \"%1$s\""
+msgid "Attendance Confirmation for Poll „%1$s“"
+msgstr ""
+
+msgid "Thank you for attending the poll „%1$s“"
 msgstr ""
 
 msgid "To review or edit your status, please use your personal link:"
 msgstr ""
 
-msgid "The poll \"%1$s\" has been closed."
+msgid "My Link"
 msgstr ""
 
-msgid "The definite event is scheduled for \"%1$s\""
+msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "The poll „%1$s“ has been closed."
+msgstr ""
+
+msgid "The definite event is scheduled for „%1$s“."
 msgstr ""
 
 msgid "You can review the poll results here:"
+msgstr ""
+
+msgid "My Poll"
 msgstr ""
 
 msgid "Summary - Organizer"
@@ -2077,49 +2140,4 @@ msgid "Sunday"
 msgstr ""
 
 msgid "Monday"
-msgstr ""
-
-msgid "Match Attendee"
-msgstr ""
-
-msgid "Match attendee with existing users or contacts."
-msgstr ""
-
-msgid "Match Organizer"
-msgstr ""
-
-msgid "Match organizer with existing user or contact."
-msgstr ""
-
-msgid "Skip from other internal organizers"
-msgstr ""
-
-msgid "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
-msgstr ""
-
-msgid "Skip Events if organizer matched an other internal user than the import user."
-msgstr ""
-
-msgid "Disable external organizer calendar"
-msgstr ""
-
-msgid "Import events of external organizers directly into the import calendar."
-msgstr ""
-
-msgid "Attendance Confirmation for Poll „%1$s“"
-msgstr ""
-
-msgid "Thank you for attending the poll „%1$s“"
-msgstr ""
-
-msgid "My Link"
-msgstr ""
-
-msgid "The poll „%1$s“ has been closed."
-msgstr ""
-
-msgid "The definite event is scheduled for „%1$s“."
-msgstr ""
-
-msgid "My Poll"
 msgstr ""
