@@ -165,6 +165,8 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-store',
         ]);
+        $poll->setTimezone(Tinebase_Core::getUserTimezone());
+        $events->setTimezone(Tinebase_Core::getUserTimezone());
         $response->getBody()->write(json_encode([
             'poll' => $poll->toArray(), // TODO FIXME should we resolve created_by / last_modified_by? also for public usage?
             'events' => $events->toArray(),
