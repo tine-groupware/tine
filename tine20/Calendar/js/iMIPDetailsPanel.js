@@ -201,34 +201,42 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         Ext.each(this.actions, function(action) {action.setHidden(true)});
         
         // check preconditions
+        this.record = existingEvent && ! preconditions ? existingEvent : event;
+
         if (preconditions) {
-            if (preconditions.hasOwnProperty('EVENTEXISTS')) {
+            const uid = this.record.get('recurid') || this.record.get('uid');
+            const precondition = preconditions[uid] ?? preconditions;
+
+            if (precondition.hasOwnProperty('EVENTEXISTS')) {
                 this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
             }
-            
-            else if (preconditions.hasOwnProperty('ORIGINATOR')) {
+
+            else if (precondition.hasOwnProperty('ORIGINATOR')) {
                 // display spam box -> might be accepted by user?
                 this.iMIPclause.setText(this.app.i18n._("The sender is not authorized to update the event"));
             }
-            
-            else if (preconditions.hasOwnProperty('RECENT')) {
-//            else if (preconditions.hasOwnProperty('TOPROCESS')) {
+
+            else if (precondition.hasOwnProperty('RECENT')) {
                 this.iMIPclause.setText(this.app.i18n._("This message has already been processed."));
             }
-            
-            else if (preconditions.hasOwnProperty('ATTENDEE')) {
+
+            else if (precondition.hasOwnProperty('ATTENDEE')) {
                 // party crush button?
                 this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
             }
 
-            else if (preconditions.hasOwnProperty('NOTDELETED')) {
+            else if (precondition.hasOwnProperty('NOTDELETED')) {
                 this.iMIPclause.setText(this.app.i18n._("This event has been deleted by the organizer"));
             }
 
-            else if (preconditions.hasOwnProperty('NOTCANCELLED')) {
+            else if (precondition.hasOwnProperty('NOTCANCELLED')) {
                 this.iMIPclause.setText(this.app.i18n._("This event has been canceled."));
             }
-            
+
+            else if (precondition.hasOwnProperty('ORGANIZER')) {
+                this.iMIPclause.setText(this.app.i18n._("You are the organizer of this event."));
+            }
+
             else {
                 this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
             }
@@ -273,8 +281,6 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.getLoadMask().hide();
         singleRecordPanel.setVisible(true);
         singleRecordPanel.setHeight(150);
-        
-        this.record = existingEvent && ! preconditions ? existingEvent : event;
         singleRecordPanel.loadRecord(this.record);
     }
 });
