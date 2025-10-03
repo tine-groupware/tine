@@ -45,6 +45,16 @@ class Calendar_Frontend_iMIP
             $_iMIP->ics = $reloadedIMIP->ics;
         }
 
+        $onlyGenerateRaii = null;
+        if ($_iMIP->{Calendar_Model_iMIP::FLD_EDIT_RESPONSE_EMAIL}) {
+            Calendar_Controller_EventNotifications::getInstance()->resetGeneratedEmails();
+            $oldOnlyGenerate = Calendar_Controller_Event::getInstance()->onlyGenerateNotificationsNoSend(true);
+            $onlyGenerateRaii = new Tinebase_RAII(function() use ($oldOnlyGenerate) {
+                Calendar_Controller_EventNotifications::getInstance()->resetGeneratedEmails();
+                Calendar_Controller_Event::getInstance()->onlyGenerateNotificationsNoSend($oldOnlyGenerate);
+            });
+        }
+
         $_iMIP->event = null;
         /** @var Calendar_Model_Event $imipEvent */
         foreach ($_iMIP->getEvents() as $imipEvent) {
@@ -71,6 +81,11 @@ class Calendar_Frontend_iMIP
 
         $_iMIP->existing_events = null;
         $_iMIP->existing_event = null;
+
+        if ($_iMIP->{Calendar_Model_iMIP::FLD_EDIT_RESPONSE_EMAIL}) {
+            $_iMIP->{Calendar_Model_iMIP::FLD_RESPONSE_EMAILS} = Calendar_Controller_EventNotifications::getInstance()->getGeneratedEmails();
+            unset($onlyGenerateRaii);
+        }
     }
     
     /**
