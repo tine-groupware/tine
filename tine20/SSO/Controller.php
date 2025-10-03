@@ -1066,6 +1066,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 }
             } catch (Tinebase_Exception_NotFound) {
 
+                $loginNameClaim = $ssoIdp->{SSO_Model_ExternalIdp::FLD_USERNAME_CLAIM};
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()
@@ -1073,7 +1074,18 @@ class SSO_Controller extends Tinebase_Controller_Event
                     }
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
-                $loginName = substr($data->email, 0, $pos);
+                if ('email:local_part' === $loginNameClaim) {
+                    $loginName = substr($data->email, 0, $pos);
+                } else {
+                    if (!isset($data->{$loginNameClaim}) || strlen((string)$data->{$loginNameClaim}) === 0) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()
+                                ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an ' . $loginNameClaim . ' to work with');
+                        }
+                        return static::publicOidAuthResponseErrorRedirect($authRequest);
+                    }
+                    $loginName = $data->{$loginNameClaim};
+                }
 
                 if ($ssoIdp->{SSO_Model_ExternalIdp::FLD_ALLOW_EXISTING_LOCAL_ACCOUNT}) {
                     try {

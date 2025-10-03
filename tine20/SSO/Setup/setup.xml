@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>SSO</name>
-    <version>18.6</version>
+    <version>18.7</version>
     <order>25</order><!-- we need to install before Felamimail -->
     <status>enabled</status>
 </application>
