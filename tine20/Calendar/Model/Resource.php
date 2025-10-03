@@ -126,7 +126,6 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
             ],
             self::FLD_SUPRESS_NOTIFICATION  => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
-                self::UNSIGNED                  => true,
                 self::NULLABLE                  => true,
                 self::DEFAULT_VAL               => 0,
             ],
