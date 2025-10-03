@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Singleton Trait for Controllers
  *
@@ -6,61 +6,35 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
-/**
- * Singleton Trait for Controllers
- *
- * private static $_instance;
- * public static getInstance();
- * public static destroyInstance();
- * protected function __construct();
- * protected function __clone();
- *
- * @package     Tinebase
- * @subpackage  Controller
- */
 trait Tinebase_Controller_SingletonTrait
 {
-    /**
-     * holds the instance of the singleton
-     *
-     * @var self
-     */
-    private static $_instance = null;
+    private static ?self $_instance = null;
 
-    /**
-     * the singleton pattern
-     *
-     * @return self
-     */
-    public static function getInstance()
+    public static function getInstance(): self
     {
         if (null === self::$_instance) {
-            /* @phpstan-ignore-next-line */
-            self::$_instance = new static();
+            self::$_instance = new self();
         }
 
         return self::$_instance;
     }
 
-    public static function destroyInstance()
+    public static function destroyInstance(): void
     {
         self::$_instance = null;
     }
 
     /**
-     * the constructor
-     *
      * don't use the constructor. use the singleton
      */
     protected function __construct() {}
 
     /**
      * don't clone. Use the singleton.
-     *
      */
-    protected function __clone() {}
+    protected function __clone(): void {}
 }
