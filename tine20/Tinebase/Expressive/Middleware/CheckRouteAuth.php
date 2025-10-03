@@ -44,6 +44,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
 
         Tinebase_Core::startCoreSession();
 
+        $user = null;
         if (!$routeHandler->ignoreMaintenanceMode()) {
             if (Tinebase_Core::inMaintenanceMode() ||
                 Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
@@ -61,6 +62,15 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
 
             $unauthorized = true;
             do {
+                if ($appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+                    if (in_array($routeHandler->getName(), $appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS})) {
+                        $unauthorized = false;
+                        break;
+                    } else {
+                        Tinebase_Core::unsetUser();
+                    }
+                }
+
                 if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
                     foreach ($request->getHeader('Authorization') as $authHeader) {
                         if (str_starts_with($authHeader, 'Bearer ')) {
@@ -132,7 +142,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
                 return new Response('php://memory', 401);
             }
 
-            if (! $user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights_Abstract::RUN)) {
+            if (! $user?->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights_Abstract::RUN)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                     . __LINE__ . ' returning with HTTP 403 forbidden');
 

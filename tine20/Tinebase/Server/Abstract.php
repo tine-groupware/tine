@@ -247,7 +247,15 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     final protected function _handleAppPwdAuth(): void
     {
         $isGetAuth = false;
-        if ($authValue = $this->_request->getHeader('Authorization', null)?->getFieldValue()) {
+        $authValue = $this->_request->getHeader('Authorization', null);
+        if (is_array($authValue)) {
+            reset($authValue);
+            $authValue = current($authValue);
+        }
+        if ($authValue instanceof Laminas\Http\Header\Authorization) {
+            $authValue = $authValue->getFieldValue();
+        }
+        if (is_string($authValue)) {
             if (!str_starts_with((string)$authValue, 'Basic ') || false === ($authValue = base64_decode(substr((string)$authValue, 6), true))
                 || 2 !== count($authValue = explode(':', $authValue, 2))) {
                 return;
