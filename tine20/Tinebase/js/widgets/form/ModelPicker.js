@@ -9,7 +9,7 @@
 Ext.ns('Tine.Tinebase.widgets.form');
 
 Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
-    includeAppName: true,
+    includeAppName: null,
 
     availableModels: null,
 

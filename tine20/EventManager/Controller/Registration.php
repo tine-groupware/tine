@@ -39,6 +39,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+        $this->_duplicateCheckFields = [['event_id','name']];
     }
 
     /**
@@ -138,20 +139,43 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
-        $record = parent::create($_record, $_duplicateCheck);
-        foreach ($record->booked_options as $booked_option) {
-            if ($booked_option->selection_config->booked) {
-                if (
-                     isset($booked_option->option->option_config->available_places)
-                    && isset($booked_option->option->option_config->booked_places)
-                ) {
-                    $booked_option->option->option_config->booked_places++;
-                    $booked_option->option->option_config->available_places--;
-                    EventManager_Controller_Option::getInstance()->update($booked_option->option);
+        try {
+            $record = parent::create($_record, $_duplicateCheck);
+            foreach ($record->booked_options as $booked_option) {
+                if ($booked_option->selection_config->booked) {
+                    if (
+                        isset($booked_option->option->option_config->available_places)
+                        && isset($booked_option->option->option_config->booked_places)
+                    ) {
+                        $booked_option->option->option_config->booked_places++;
+                        $booked_option->option->option_config->available_places--;
+                        EventManager_Controller_Option::getInstance()->update($booked_option->option);
+                    }
                 }
             }
+            return $record;
+        } catch (Tinebase_Exception_Duplicate $e) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($_record->name->email);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                EventManager_Model_Registration::class,
+                [
+                    [
+                        'field' => EventManager_Model_Registration::FLD_EVENT_ID,
+                        'operator' => 'equals',
+                        'value' => $_record->event_id
+                    ],
+                    [
+                        'field' => EventManager_Model_Registration::FLD_NAME,
+                        'operator' => 'equals',
+                        'value' => $contact
+                    ],
+                ],
+            );
+            $registration = $this->getInstance()->search($filter)->getFirstRecord();
+            // important to update id to existing one before the record can be updated
+            $_record->id = $registration->id;
+            return $this->update($_record);
         }
-        return $record;
     }
 
     /**
@@ -406,12 +430,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $ab_contact->container_id = $ab_contact->getContainerId();
                 $contact = Addressbook_Controller_Contact::getInstance()->update($ab_contact);
             }
-            $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION);
-            $attendee = $attendee->records->getById('1');
-            $online = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE);
-            $online = $online->records->getById('1');
-            $waiting_list = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS);
-            $waiting_list = $waiting_list->records->getById('2');
             $options = $request['replies'];
             $booked_option = [];
             foreach ($options as $optionId => $reply) {
@@ -453,12 +471,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     }
                 }
             }
+            $defaultValues = $this->getDefaultRegistrationKeyFields();
             $registration = new EventManager_Model_Registration([
                 'event_id'          => EventManager_Controller_Event::getInstance()->get($event_id),
                 'name'              => $contact,
-                'function'          => $attendee,
-                'source'            => $online,
-                'status'            => $waiting_list,
+                'function'          => $defaultValues['function'],
+                'source'            => $defaultValues['source'],
+                'status'            => $defaultValues['status'],
                 'booked_options'    => $booked_option,
                 'description'       => '',
             ], true);
@@ -678,5 +697,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Not sending notification email to ' . $context['name'] . '. No email address available.');
         }
+    }
+
+    public function getDefaultRegistrationKeyFields()
+    {
+        $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION)->records->getById('1');
+        $online = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE)->records->getById('1');
+        $waiting_list = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS)->records->getById('2');
+        return ['function' => $attendee, 'source' => $online, 'status' => $waiting_list];
     }
 }

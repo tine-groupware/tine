@@ -12,7 +12,7 @@
   <div class="container">
     <div class="title mb-3">{{eventDetails.name}}</div>
     <div v-if="eventDetails.description" style="white-space: pre-wrap;">{{eventDetails.description}}</div>
-    <h5 class="mb-3">{{formatMessage('Information of the event:')}}</h5>
+    <h5 class="my-3">{{formatMessage('Information of the event:')}}</h5>
     <div class="row mb-3" v-if="eventDetails.start && eventDetails.start !== '1.1.1970'">
       <div class="col-4">{{formatMessage('When:')}}</div>
       <div class="col-8">{{eventDetails.start}}</div>
