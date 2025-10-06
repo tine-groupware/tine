@@ -197,6 +197,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::FLD_CONTACT_ID => [],
                 self::FLD_BOILERPLATES => [],
                 self::FLD_VATEX_ID => [],
+                self::FLD_SALES_TAX_BY_RATE => [],
             ]
         ],
 
@@ -481,9 +482,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_SALES_TAX_BY_RATE         => [
                 self::LABEL                         => 'Sales Tax by Rate', //_('Sales Tax by Rate')
-                self::TYPE                          => self::TYPE_JSON,
-                self::NULLABLE                      => true,
-                self::DISABLED                      => true,
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_SalesTax::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID,
+                    /* set by model config hook
+                     * self::ADD_FILTERS                   => [
+                        [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+                    ],
+                    self::FORCE_VALUES                  => [
+                        Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => static::class,
+                    ],*/
+                ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -544,6 +556,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_ID,
+                    /* set by model config hook
+                     * self::ADD_FILTERS                   => [
+                        [TMFA::FIELD => Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+                    ],
+                    self::FORCE_VALUES                  => [
+                        Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_ID => static::class,
+                    ],*/
                 ],
             ],
             self::FLD_PAYMENT_MEANS             => [
@@ -570,6 +589,13 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID,
                     self::EXCLUDE_FROM_DOCUMENT_SEQ     => true,
+                    /* set by model config hook
+                     * self::ADD_FILTERS                   => [
+                        [TMFA::FIELD => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+                    ],
+                    self::FORCE_VALUES                  => [
+                        Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_ID => static::class,
+                    ],*/
                 ],
             ],
             self::FLD_DOCUMENT_SEQ              => [
@@ -610,8 +636,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::FORCE_VALUES] = [
             Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE => static::class,
         ];
+        $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+        ];
         $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::FORCE_VALUES] = [
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+        ];
+        $_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
         ];
     }
 
@@ -887,7 +925,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $this->{self::FLD_POSITIONS_NET_SUM} = 0;
         $this->{self::FLD_POSITIONS_GROSS_SUM} = 0;
         $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
-        $this->{self::FLD_SALES_TAX_BY_RATE} = [];
+        $oldSalesTaxByRate = null;
+        if ($this->{self::FLD_SALES_TAX_BY_RATE} instanceof Tinebase_Record_RecordSet) {
+            $oldSalesTaxByRate = $this->{self::FLD_SALES_TAX_BY_RATE};
+        }
+        $this->{self::FLD_SALES_TAX_BY_RATE} = new Tinebase_Record_RecordSet(Sales_Model_Document_SalesTax::class);
         $this->{self::FLD_NET_SUM} = 0;
         $netSumByTaxRate = [];
         $grossSumByTaxRate = [];
@@ -934,31 +976,39 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         if ($documentPriceType === Sales_Config::PRICE_TYPE_GROSS) {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ?
-                array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate, $netSumByTaxRate) {
+                array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate, $netSumByTaxRate, $oldSalesTaxByRate) {
                     $tax = round($salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
                             $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} )), 2);
-                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                        self::TAX_RATE => $taxRate,
-                        self::TAX_SUM => $tax,
-                        self::NET_SUM => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
-                    ];
+                    $this->{self::FLD_SALES_TAX_BY_RATE}->addRecord($smdst = new Sales_Model_Document_SalesTax([
+                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $taxRate,
+                        Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $tax,
+                        Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
+                        Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => round($netSumByTaxRate[$taxRate] * $discountModifier, 2) + $tax,
+                    ], true));
+                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
+                        $smdst->setId($oldRate->getId());
+                    }
                     return $carry + $tax;
                 }, 0) : 0;
             $this->{self::FLD_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM} - $this->{self::FLD_INVOICE_DISCOUNT_SUM};
             $this->{self::FLD_NET_SUM} = $this->{self::FLD_GROSS_SUM} - $this->{self::FLD_SALES_TAX};
         } else {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
-                array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate) {
+                array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate, $oldSalesTaxByRate) {
                     $tax =
                         round(($netSum = round(($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                             $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}), 2))
                         * $taxRate / 100, 2);
-                    $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                        self::TAX_RATE => $taxRate,
-                        self::TAX_SUM => $tax,
-                        self::NET_SUM => $netSum,
-                    ];
+                    $this->{self::FLD_SALES_TAX_BY_RATE}->addRecord($smdst = new Sales_Model_Document_SalesTax([
+                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $taxRate,
+                        Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $tax,
+                        Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $netSum,
+                        Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $netSum + $tax,
+                    ], true));
+                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
+                        $smdst->setId($oldRate->getId());
+                    }
                     return $carry + $tax;
                 }, 0) : 0;
 

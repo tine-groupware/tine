@@ -195,6 +195,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if ($this->{self::FLD_VATEX_ID} && ! $this->{self::FLD_VATEX_ID} instanceof Sales_Model_EDocument_VATEX) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_VATEX_ID . ' not resolved');
         }
+        if (!$this->{self::FLD_SALES_TAX_BY_RATE} instanceof Tinebase_Record_RecordSet) {
+            throw new Tinebase_Exception_UnexpectedValue(self::FLD_SALES_TAX_BY_RATE . ' not resolved');
+        }
         $pm = $pm->getFirstRecord();
         /** @var Sales_Model_PaymentMeans $pm */
 
@@ -552,33 +555,34 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $pm->toUblInvoice($ublInvoice, $this);
 
         // fix 0 Eur line issue -> no tax rates set
-        if (empty($this->xprops(self::FLD_SALES_TAX_BY_RATE))) {
-            $this->xprops(self::FLD_SALES_TAX_BY_RATE)[] = [
-                self::NET_SUM => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
-                self::TAX_SUM => 0,
-                self::TAX_RATE => $taxId !== 'S' ? 0 : Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
-            ];
+        if (0 === $this->{self::FLD_SALES_TAX_BY_RATE}->count()) {
+            $this->{self::FLD_SALES_TAX_BY_RATE}->addRecord(new Sales_Model_Document_SalesTax([
+                Sales_Model_Document_SalesTax::FLD_TAX_RATE => $taxId !== 'S' ? 0 : Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
+                Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+                Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
+                Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
+            ]));
         }
         $allowances = 0.0;
-        foreach ($this->xprops(self::FLD_SALES_TAX_BY_RATE) as $taxRate) {
+        foreach ($this->{self::FLD_SALES_TAX_BY_RATE} as $taxRate) {
             $taxTotal->addToTaxSubtotal((new \UBL21\Common\CommonAggregateComponents\TaxSubtotal)
-                ->setTaxableAmount((new \UBL21\Common\CommonBasicComponents\TaxableAmount($taxRate[self::NET_SUM]))
+                ->setTaxableAmount((new \UBL21\Common\CommonBasicComponents\TaxableAmount($taxRate->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT}))
                     ->setCurrencyID('EUR')
                 )
-                ->setTaxAmount((new \UBL21\Common\CommonBasicComponents\TaxAmount($taxRate[self::TAX_SUM]))
+                ->setTaxAmount((new \UBL21\Common\CommonBasicComponents\TaxAmount($taxRate->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT}))
                     ->setCurrencyID('EUR')
                 )
                 ->setTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
                     ->setTaxExemptionReasonCode($this->{self::FLD_VATEX_ID} ? new \UBL21\Common\CommonBasicComponents\TaxExemptionReasonCode($this->{self::FLD_VATEX_ID}->{Sales_Model_EDocument_VATEX::FLD_CODE}) : null)
-                    ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
+                    ->setPercent(new \UBL21\Common\CommonBasicComponents\Percent($taxRate->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}))
                     ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                     )
                 )
             );
             if ($this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_TYPE} && $this->{Sales_Model_Document_Invoice::FLD_INVOICE_DISCOUNT_SUM}) {
-                $modifier = $taxRate[self::NET_SUM] / $this->{Sales_Model_Document_Invoice::FLD_NET_SUM};
+                $modifier = $taxRate->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} / $this->{Sales_Model_Document_Invoice::FLD_NET_SUM};
                 $ublInvoice->addToAllowanceCharge((new UBL21\Common\CommonAggregateComponents\AllowanceCharge)
                     ->setChargeIndicator(false)
                     ->setAllowanceChargeReasonCode(new \UBL21\Common\CommonBasicComponents\AllowanceChargeReasonCode(95)) // https://docs.peppol.eu/poacc/billing/3.0/codelist/UNCL5189/
@@ -591,7 +595,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                     ->addToTaxCategory((new \UBL21\Common\CommonAggregateComponents\TaxCategory)
                         ->setID(new \UBL21\Common\CommonBasicComponents\ID($taxId))
-                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($taxRate[self::TAX_RATE]))
+                        ->setPercent('O' === $taxId ? null : new \UBL21\Common\CommonBasicComponents\Percent($taxRate->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}))
                         ->setTaxScheme((new \UBL21\Common\CommonAggregateComponents\TaxScheme)
                             ->setID(new \UBL21\Common\CommonBasicComponents\ID('VAT'))
                         )
