@@ -33,11 +33,18 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                     this.selectedDataIntendedPurpose = record;
                     if (this.selectedDataIntendedPurpose) {
                         this.showDipSelectPicker(this.selectedDataIntendedPurpose);
+                    } else {
+                        this.updateMessageBody();
                     }
                 }
             }
         });
+        this.massmailingInfo = new Ext.form.Label({
+            style: 'padding: 5px; display: block;',
+            text: String.format(this.app.i18n._("Note: mass mail is sent without {0} support"), this.app.getTitle())
+        });
         this.editDialog.messageInfoFormPanel.add(this.manageConsentRecordPicker);
+        this.editDialog.messageInfoFormPanel.add(this.massmailingInfo);
         this.editDialog.switchMassMailingMode = this.switchMassMailingMode.createDelegate(this);
         this.recipientGrid.validateRecipientToken = this.validateRecipientToken.createDelegate(this);
     },
@@ -49,13 +56,13 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.editDialog.massMailingInfoText.setVisible(active);
         this.manageConsentRecordPicker.setVisible(active);
-        this.updateMessageBody(active);
-        
+        this.massmailingInfo.setVisible(active && !!this.dipSelectPicker.ownerCt.sendMassMailWithoutDIP.checked);
         this.recipientGrid.view.refresh();
         this.editDialog.doLayout();
     },
     
-    updateMessageBody(active) {
+    updateMessageBody() {
+        const active = !!this.selectedDataIntendedPurpose && !this.dipSelectPicker.ownerCt.sendMassMailWithoutDIP.checked;
         const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
         const template = Tine.Tinebase.configManager.get('manageConsentEmailTemplate', 'GDPR');
         if (!template) return;
@@ -65,7 +72,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         const format = this.record.get('content_type');
         
         if (format === 'text/plain') {
-            if (active  && !body.includes(translatedTemplate)) {
+            if (active && !body.includes(translatedTemplate)) {
                 this.record.set('body', `${body}\n${translatedTemplate}`);
             }
             if (!active && body.includes(translatedTemplate)) {
@@ -77,10 +84,13 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
             const consentLinkElement = document.createElement('span');
             consentLinkElement.className = 'felamimail-body-manage-consent-link';
             consentLinkElement.innerHTML = translatedTemplate;
+            const matches = this.editDialog.htmlEditor.getDoc().getElementsByClassName(consentLinkElement.className);
+
             if (active) {
-                this.editDialog.appendHtmlNode(consentLinkElement, 'above', 'felamimail-body-signature-current');
+                if (matches.length === 0) {
+                    this.editDialog.appendHtmlNode(consentLinkElement, 'above', 'felamimail-body-signature-current');
+                }
             } else {
-                const matches = this.editDialog.htmlEditor.getDoc().getElementsByClassName(consentLinkElement.className);
                 while (matches.length > 0) matches[0].parentElement.removeChild(matches[0]);
             }
             this.record.set('body', this.editDialog.bodyCards.layout.activeItem.getValue());
@@ -114,7 +124,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
      * @param token
      */
     validateRecipientToken(token) {
-        const defaultTip = String.format(this.app.i18n._('In {0} mass mailing mode, this recipient will be removed, '), this.app.appName);
+        const defaultTip = String.format(this.app.i18n._('In {0} mass mailing mode, this recipient will be removed, '), this.app.getTitle());
         if (!token || !this.recipientGrid.massMailingMode) {
             return  {isValid: true, tip: 'skip checking token'};
         }
@@ -153,7 +163,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
     showDipSelectPicker: function(defaultDataIntendedPurpose = '') {
         const isMassMailingMode = this.editDialog.massMailingMode;
         this.dipSelectPicker = new Tine.Tinebase.dialog.Dialog({
-            windowTitle: this.app.i18n._('Please select a purpose of processing'),
+            windowTitle: this.app.getTitle() + ': ' + this.app.i18n._('Please select a purpose of processing'),
             listeners: {
                 beforeapply: (data) => {
                     if (this.selectedDataIntendedPurpose?.id && !data.recipientMode) {
@@ -162,6 +172,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                     }
                 },
                 apply: async (data) => {
+                    this.updateMessageBody();
                     this.manageConsentRecordPicker.setValue(this.selectedDataIntendedPurpose);
                     if (this.selectedDataIntendedPurpose?.id && data.recipientMode === 'withRecipients') {
                         const { results: tokens } = await Tine.GDPR.getRecipientTokensByIntendedPurpose(this.selectedDataIntendedPurpose?.id)
@@ -200,22 +211,26 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                 items: [
                     {
                         xtype: 'label',
-                        html: "1. " + this.app.i18n._('The recipients will be removed if they have not consented to the selected intended purpose.') + '<br/>'
-                            + "2. " + this.app.i18n._("The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."),
+                        ref: '../../infoText',
+                        html: String.format(this.app.i18n._('{0} mass mail support'), this.app.getTitle()) + '<br/><br/>'
+                            + "1. " + this.app.i18n._('The recipients will be removed if they have not consented to the selected intended purpose.') + '<br/>'
+                            + "2. " + this.app.i18n._("The recipients with 'Must not be contacted' will be removed.") + '<br/>'
+                            + "3. " + this.app.i18n._("The E-Mail gets a sign out link where the recipient can withdraw for the data intended purpose."),
                     },
                     Tine.widgets.form.RecordPickerManager.get('GDPR', 'DataIntendedPurpose',
-                        { 
-                            name: 'dataIntendedPurpose',
-                            anchor: '100%',
-                            value: defaultDataIntendedPurpose,
-                            listeners: {
-                                scope: this,
-                                select: (combo, invoiceRecord, index) => {
-                                    this.selectedDataIntendedPurpose = invoiceRecord;
-                                    this.dipSelectPicker.ownerCt.optionGroup.setDisabled(!this.selectedDataIntendedPurpose);
-                                },
-                            }
-                        }),
+                    {
+                        ref: '../../dipPicker',
+                        name: 'dataIntendedPurpose',
+                        anchor: '100%',
+                        value: defaultDataIntendedPurpose,
+                        listeners: {
+                            scope: this,
+                            select: (combo, invoiceRecord, index) => {
+                                this.selectedDataIntendedPurpose = invoiceRecord;
+                                this.dipSelectPicker.ownerCt.optionGroup.setDisabled(!this.selectedDataIntendedPurpose);
+                            },
+                        }
+                    }),
                     {
                         border: false,
                         layout: 'fit',
@@ -239,7 +254,28 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                                 },
                             ]
                         }]
-                    }
+                    },
+                    {
+                        xtype: 'checkbox',
+                        hideLabel: true,
+                        boxLabel: String.format(this.app.i18n._('Create mass mail without {0} support'), this.app.getTitle()),
+                        ref: '../../sendMassMailWithoutDIP',
+                        checked: false,
+                        listeners: {
+                            check: (cb, checked) => {
+                                if (checked) {
+                                    this.selectedDataIntendedPurpose = '';
+                                }
+                                this.dipSelectPicker.ownerCt.infoText.setDisabled(checked);
+                                this.dipSelectPicker.ownerCt.dipPicker.setDisabled(checked);
+                                this.dipSelectPicker.ownerCt.optionGroup.setDisabled(checked);
+                                this.manageConsentRecordPicker.setVisible(!checked);
+                                this.massmailingInfo.setVisible(checked);
+                                this.recipientGrid.view.refresh();
+                                this.editDialog.doLayout();
+                            }
+                        }
+                    },
                 ]
             }
             ],
@@ -250,7 +286,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                         closeAction: 'close',
                         modal: true,
                         width: 500,
-                        height: 250,
+                        height: 300,
                         layout: 'fit',
                         items: [ this]
                     }, config || {}));

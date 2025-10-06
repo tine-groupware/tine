@@ -67,6 +67,12 @@ msgstr "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environm
 msgid "GDPR template path"
 msgstr "GDPR template path"
 
+msgid "Enable public pages"
+msgstr "Enable public pages"
+
+msgid "Enable public pages like terms and conditions, imprint, representative information."
+msgstr "Enable public pages like terms and conditions, imprint, representative information."
+
 msgid "agree date must not be after withdraw date"
 msgstr "agree date must not be after withdraw date"
 
@@ -132,14 +138,11 @@ msgstr "Description"
 msgid "Status"
 msgstr "Status"
 
-msgid "Manage"
-msgstr "Manage"
+msgid "Agree"
+msgstr "Agree"
 
 msgid "Not decided"
 msgstr "Not decided"
-
-msgid "Agree"
-msgstr "Agree"
 
 msgid "Withdrawal date"
 msgstr "Withdrawal date"
@@ -180,15 +183,15 @@ msgstr "Confirm"
 msgid "Register"
 msgstr "Register"
 
-#, python-brace-format
-msgid "I am not {email}"
-msgstr "I am not {email}"
-
 msgid "Go to my manage consent link"
 msgstr "Go to my manage consent link"
 
 msgid "Processing purpose of this mass mailing"
 msgstr "Processing purpose of this mass mailing"
+
+#, python-brace-format
+msgid "Note: mass mail is sent without {0} support"
+msgstr "Note: mass mail is sent without {0} support"
 
 #, python-brace-format
 msgid "In {0} mass mailing mode, this recipient will be removed, "
@@ -224,11 +227,22 @@ msgstr "Errors"
 msgid "You need to select an option!"
 msgstr "You need to select an option!"
 
+#, python-brace-format
+msgid "Create mass mail without {0} support"
+msgstr "Create mass mail without {0} support"
+
+#, python-brace-format
+msgid "{0} mass mail support"
+msgstr "{0} mass mail support"
+
 msgid "The recipients will be removed if they have not consented to the selected intended purpose."
 msgstr "The recipients will be removed if they have not consented to the selected intended purpose."
 
-msgid "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
-msgstr "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
+msgid "The recipients with 'Must not be contacted' will be removed."
+msgstr "The recipients with 'Must not be contacted' will be removed."
+
+msgid "The E-Mail gets a sign out link where the recipient can withdraw for the data intended purpose."
+msgstr "The E-Mail gets a sign out link where the recipient can withdraw for the data intended purpose."
 
 msgid "Add all contacts having agreed to this purpose"
 msgstr "Add all contacts having agreed to this purpose"
