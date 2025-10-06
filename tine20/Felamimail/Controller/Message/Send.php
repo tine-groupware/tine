@@ -171,7 +171,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
             // Add regular recipient
             $bccEmails[] = $email;
-            $recipientTokens[] = isset($bccRecipient['emails']) ? $bccRecipient : [
+            $recipientTokens[] = isset($bccRecipient['email']) ? $bccRecipient : [
                 "n_fileas" => $email,
                 "name" => $email,
                 "type" => '',
