@@ -107,7 +107,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param  stream|string             $vobjectData
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [], bool $ignoreMove = false)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [], bool $recreateInsteadOfMove = false, bool $noOrganizerMove = false)
     {
         static::$lastEventCreated = null;
 
@@ -178,10 +178,10 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 $event->hasExternalOrganizer(), 'sync', null, true);
         }
 
-        if ($ignoreMove && $existingEvent && $existingEvent->container_id !== $event->container_id) {
+        if ($recreateInsteadOfMove && $existingEvent /*&& !$existingEvent->hasExternalOrganizer()*/ && $existingEvent->container_id !== $event->container_id) {
             $existingEvent = null;
         }
-        
+
         if ($existingEvent === null) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Creating new event');
@@ -267,7 +267,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
             }
 
-            $vevent = new self($container, $existingEvent);
+            /** @phpstan-ignore-next-line */
+            $vevent = new static($container, $existingEvent);
             $vevent->_getConverter()->setOptions($converterOptions);
             $event = static::_allowOnlyAttendeeProperties($existingEvent, $event, $container);
 
@@ -296,7 +297,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
                     Tinebase_Core::getRequest()->getHeaders()->addHeader(new Zend\Http\Header\IfMatch('dummy'));
                 }
-                $vevent->put($vcalendar->serialize());
+                $vevent->put($vcalendar->serialize(), ignoreMove: $noOrganizerMove);
             } finally {
                 $calCtrl->doContainerACLChecks($oldCalenderAcl);
             }
@@ -550,7 +551,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param bool $retry
      * @return string
      */
-    public function put($cardData, $retry = true)
+    public function put($cardData, $retry = true, bool $ignoreMove = false)
     {
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         self::checkWriteAccess($this->_getConverter());
@@ -601,7 +602,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         } elseif (null === $xTine20Container) {
             // target container is not a current displaycontainer and we have admin on origin container or are organizer
             // move to target container
-            if (!$inDisplayContainer && ($currentContainer->account_grants->{Tinebase_Model_Grants::GRANT_ADMIN} ||
+            if (!$inDisplayContainer && !$ignoreMove && ($currentContainer->account_grants->{Tinebase_Model_Grants::GRANT_ADMIN} ||
                     $currentEvent->organizer === Tinebase_Core::getUser()->contact_id ||
                     $currentEvent->organizer === Calendar_Controller_MSEventFacade::getInstance()->getCalendarUser()->user_id)) {
                 $event->container_id = $this->_container->getId();
