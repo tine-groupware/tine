@@ -1042,9 +1042,9 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "email" => $contact->email,
                         "name" => '',
                         "type" =>  '',
-                        "n_fileas" => '',
+                        "n_fileas" => $contact->n_fileas,
                         "email_type_field" =>  '',
-                        "contact_record" => ''
+                        "contact_record" => $contact
                     ],
                     [
                         "email" => '',
@@ -1068,8 +1068,9 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             
             foreach($messages as $message) {
                 $body = $message->getBodytext()->getRawContent();
-                if (str_contains($body, $contact->n_fileas)) {
+                if (in_array($contact->email, $message->getRecipients())) {
                     static::assertStringContainsString($contact->getId(), $body);
+                    static::assertStringContainsString($contact->n_fileas, $body);
                 }
                 static::assertStringContainsString('/GDPR/view/manageConsent', $body);
                 static::assertStringNotContainsString('recipient', $body);
