@@ -229,10 +229,8 @@ class EventManager_ControllerTest extends TestCase
             'adr_one_locality' => 'Test City'
         ]));
 
-        $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE);
-        $event_type = $event_type->records->getById('1');
-        $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS);
-        $event_status = $event_status->records->getById('1');
+        $event_type = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_TYPE)->records->getById('1');
+        $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS)->records->getById('1');
 
         return new EventManager_Model_Event([
             'name'                          => 'phpunit event',
@@ -269,14 +267,11 @@ class EventManager_ControllerTest extends TestCase
             'available_places' => 10,
             'description' => 'description checkbox phpunit',
         ]);
-        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
-        $display = $display->records->getById('1');
-        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
-        $option_required = $option_required->records->getById('2');
-        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
-        $level = $level->records->getById('1');
-        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE);
-        $rule_type = $rule_type->records->getById('1');
+        $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE)->records->getById('1');
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE)
+            ->records->getById('2');
+        $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL)->records->getById('1');
+        $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE)->records->getById('1');
 
         return new EventManager_Model_Option([
             'event_id'                  => $event_id,
@@ -291,7 +286,7 @@ class EventManager_ControllerTest extends TestCase
             'sorting'                   => 1,
             'option_rule'               => [],
             'rule_type'                 => $rule_type,
-        ],true);
+        ], true);
     }
 
     /**
@@ -340,12 +335,7 @@ class EventManager_ControllerTest extends TestCase
      */
     protected function _getRegistration($event_id, $options = null): EventManager_Model_Registration
     {
-        $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION);
-        $attendee = $attendee->records->getById('1');
-        $online = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE);
-        $online = $online->records->getById('1');
-        $waitingList = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS);
-        $waitingList = $waitingList->records->getById('2');
+        $defaultValues = EventManager_Controller_Registration::getInstance()->getDefaultRegistrationKeyFields();
 
         if (is_array($options)) {
             $bookedOption = [];
@@ -355,9 +345,9 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $attendee,
-                'source'                 => $online,
-                'status'                 => $waitingList,
+                'function'               => $defaultValues['function'],
+                'source'                 => $defaultValues['source'],
+                'status'                 => $defaultValues['status'],
                 'booked_options'         => $bookedOption,
                 'description'            => 'description test phpunit registration',
             ], true);
@@ -366,9 +356,9 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $attendee,
-                'source'                 => $online,
-                'status'                 => $waitingList,
+                'function'               => $defaultValues['function'],
+                'source'                 => $defaultValues['source'],
+                'status'                 => $defaultValues['status'],
                 'booked_options'         => [$bookedOption],
                 'description'            => 'description test phpunit registration',
             ], true);
@@ -376,9 +366,9 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $attendee,
-                'source'                 => $online,
-                'status'                 => $waitingList,
+                'function'               => $defaultValues['function'],
+                'source'                 => $defaultValues['source'],
+                'status'                 => $defaultValues['status'],
                 'booked_options'         => [],
                 'description'            => 'description test phpunit registration',
             ], true);
