@@ -20,6 +20,7 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -38,6 +39,10 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE018_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -126,5 +131,14 @@ class SSO_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+    }
+
+    public function update007(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            SSO_Model_ExternalIdp::class,
+        ]);
+
+        $this->addApplicationUpdate(SSO_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
     }
 }
