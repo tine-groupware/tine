@@ -2485,6 +2485,22 @@ abstract class Tinebase_Controller_Record_Abstract
                     $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
                 }
             }
+            foreach ($config->getFields() as $field) {
+                if (TMCC::TYPE_PASSWORD === ($field[TMCC::TYPE] ?? null) &&
+                        'shared' === ($field[TMCC::CONFIG][TMCC::CREDENTIAL_CACHE] ?? null) &&
+                        ($field[TMCC::CONFIG][TMCC::REF_ID_FIELD] ?? null) &&
+                        ($ccId = $_record->{$field[TMCC::CONFIG][TMCC::REF_ID_FIELD]})) {
+                    try {
+                        /** @var Tinebase_Model_CredentialCache $cc */
+                        $cc = Tinebase_Auth_CredentialCache::getInstance()->get($ccId);
+                        $validUntil = Tinebase_DateTime::now()->addMonth(6);
+                        if (!$cc->valid_until || $cc->valid_until > $validUntil) {
+                            $cc->valid_until = $validUntil;
+                            Tinebase_Auth_CredentialCache::getInstance()->update($cc);
+                        }
+                    } catch (Tinebase_Exception_NotFound) {}
+                }
+            }
         }
     }
 
@@ -2532,6 +2548,20 @@ abstract class Tinebase_Controller_Record_Abstract
             if (is_array($config->recordFields)) {
                 foreach ($config->recordFields as $property => $fieldDef) {
                     $this->_undeleteDependentRecords($_record, $property, $fieldDef['config']);
+                }
+            }
+            foreach ($config->getFields() as $field) {
+                if (TMCC::TYPE_PASSWORD === ($field[TMCC::TYPE] ?? null) &&
+                    'shared' === ($field[TMCC::CONFIG][TMCC::CREDENTIAL_CACHE] ?? null) &&
+                    ($field[TMCC::CONFIG][TMCC::REF_ID_FIELD] ?? null) &&
+                    ($ccId = $_record->{$field[TMCC::CONFIG][TMCC::REF_ID_FIELD]})) {
+                    try {
+                        /** @var Tinebase_Model_CredentialCache $cc */
+                        $cc = Tinebase_Auth_CredentialCache::getInstance()->get($ccId);
+                        $validUntil = Tinebase_DateTime::now()->addYear(100);
+                        $cc->valid_until = $validUntil;
+                        Tinebase_Auth_CredentialCache::getInstance()->update($cc);
+                    } catch (Tinebase_Exception_NotFound) {}
                 }
             }
         }
