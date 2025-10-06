@@ -38,6 +38,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
     public const FLD_ALLOW_EXISTING_LOCAL_ACCOUNT = 'allow_existing_local_account';
     public const FLD_ALLOW_REASSIGN_LOCAL_ACCOUNT = 'allow_reassign_local_account';
     public const FLD_ALLOW_CREATE_LOCAL_ACCOUNT = 'allow_create_local_account';
+    public const FLD_USERNAME_CLAIM = 'username_claim';
     public const FLD_ALLOW_LOCAL_LOGIN = 'allow_local_logiin';
     public const FLD_REQUIRE_LOCAL_MFA = 'require_local_mfa';
     public const FLD_UPDATE_LOCAL_PROPERTIES = 'update_local_properties';
@@ -67,7 +68,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 5,
+        self::VERSION => 6,
         self::RECORD_NAME => 'External Identity Provider',
         self::RECORDS_NAME => 'External Identity Providers', // ngettext('External Identity Provider', 'External Identity Providers', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -192,6 +193,12 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL           => true,
                 self::LABEL                 => 'Allow creation of new local accounts', // _('Allow creation of new local accounts')
+            ],
+            self::FLD_USERNAME_CLAIM        => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::DEFAULT_VAL           => 'email:local_part',
+                self::LABEL                  => 'Username claim', // _('Username claim')
             ],
             self::FLD_ALLOW_LOCAL_LOGIN => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
