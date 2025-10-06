@@ -172,6 +172,10 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
             throw new Tinebase_Exception("no response");
         }
 
+        if (404 === (int)($response['statusCode'] ?? null)) {
+            throw new Tinebase_Exception_NotFound('404');
+        }
+
         $result = $this->parseMultiStatus($response['body']);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -439,15 +443,26 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         $max = count($calICSs);
         
         $etags = [];
+        $oldMaxBulk = $this->maxBulkRequest;
         do {
             $requestEnd = '';
             for ($i = $start; $i < $max && $i < ($this->maxBulkRequest+$start); ++$i) {
                 $requestEnd .= '  <a:href>' . $calICSs[$i] . "</a:href>\n";
             }
-            $start = $i;
             $requestEnd .= '</b:calendar-multiget>';
-            $result = $this->calDavRequest('REPORT', $calUri, self::getEventETagsRequest . $requestEnd, 1);
-        
+
+            try {
+                $result = $this->calDavRequest('REPORT', $calUri, self::getEventETagsRequest . $requestEnd, 1);
+            } catch (Tinebase_Exception_NotFound) {
+                $result = [];
+                if ($this->maxBulkRequest > 1) {
+                    $this->maxBulkRequest = floor($this->maxBulkRequest / 2);
+                    continue;
+                }
+            }
+
+            $this->maxBulkRequest = $oldMaxBulk;
+            $start = $i;
             foreach ($result as $key => $value) {
                 if (isset($value['{DAV:}getetag'])) {
                     $name = explode('/', $key);
