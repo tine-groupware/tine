@@ -298,16 +298,17 @@
           <p>{{ formatMessage(modalMessage) }}</p>
           <b-button @click="handleModalClose" variant="primary">OK</b-button>
         </b-modal>
-        <div class="text-end mb-3">
-          <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
-        </div>
       </b-col>
+      <div class="text-end mb-3">
+        <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
+      </div>
     </b-row>
   </b-container>
 </template>
 
 <script setup>
 import {computed, inject, ref} from 'vue';
+import _ from 'lodash';
 import {translationHelper} from "./keys";
 import {useRoute} from 'vue-router';
 import "./Registration.vue";
@@ -389,52 +390,18 @@ const handleTextInputChange = (option, value) => {
 };
 
 const sortOptionsByGroup = computed(() => {
-  let options = eventDetails.value.options;
-  let optionsByGroup = [];
-  options.forEach((option) => {
-    if (option.group) {
-      let existingGroup = optionsByGroup.find((groupOption) => {
-        return groupOption.group === option.group
-      });
-      if (existingGroup) {
-        existingGroup.options.push(option);
-        if (existingGroup.sorting > option.sorting) {
-          existingGroup.sorting = option.sorting; // make sure option collection has the smallest sorting of all contain options
-        }
-        if (existingGroup.level > option.level) {
-          existingGroup.level = option.level; // make sure group title has the smallest level of all contain options
-        }
-      } else {
-        optionsByGroup.push({
-          "group": option.group,
-          "options": [option],
-          "sorting": option.sorting,
-          "level": option.level,
-        });
-      }
-    } else { // options without group have their own empty group and are sort at the end
-      optionsByGroup.push({
-        "group": "",
-        "options": [option],
-        "sorting": option.sorting,
-        "level": option.level,
-      })
-    }
-  });
-  // inner sorting of the options of a group
-  optionsByGroup.forEach((group) => {
-    group.options.sort((option1 , option2) => {
-      let o1 = option1.sorting ? option1.sorting : 1000;
-      let o2 = option2.sorting ? option2.sorting : 1000;
-      return o1 - o2;
-    });
-  })
-  // sorting of the groups
-  return optionsByGroup.sort((group1, group2) => {
-    let g1 = group1.sorting ? group1.sorting : 1000;
-    let g2 = group2.sorting ? group2.sorting : 1000;
-      return g1 - g2;
-  });
+  const options = eventDetails.value.options;
+
+  return _.chain(options)
+    .groupBy(option => option.group || '')
+    .map((groupOptions, groupName) => ({
+      group: groupName,
+      options: _.sortBy(groupOptions, option => option.sorting ?? -1),
+      sorting: groupName === '' ? -1 : _.min(groupOptions.map(opt => opt.sorting ?? Infinity)),
+      level: _.min(groupOptions.map(opt => opt.level))
+    }))
+    .sortBy('sorting')
+    .value();
 });
 
 const visibleOptionsByGroup = computed(() => {
@@ -532,17 +499,11 @@ const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
-  const requiredPersonalFields = [
-    { key: 'n_given', value: contactDetails.value.n_given },
-    { key: 'n_family', value: contactDetails.value.n_family },
-    { key: 'email', value: contactDetails.value.email }
-  ];
-
-  requiredPersonalFields.forEach(field => {
-    if (!field.value || field.value.trim() === '') {
-      errors.push(field.key);
-    }
-  });
+  const requiredFields = ['n_given', 'n_family', 'email'];
+  const missingFields = _.filter(requiredFields, field =>
+    _.isEmpty(_.get(contactDetails.value, field, '').trim())
+  );
+  errors.push(...missingFields);
 
   // check grouped options (only one needs to be filled per group if option is required)
   const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
@@ -726,34 +687,37 @@ const postRegistration = async () => {
   }
 }
 
+const uploadFileForOption = async (eventId, registrationId, optionId, files) => {
+  const formData = new FormData();
+  formData.append('eventId', eventId);
+
+  Array.from(files).forEach(file => {
+    formData.append('files[]', file);
+  });
+
+  const response = await fetch(`/EventManager/files/${eventId}/${optionId}/${registrationId}`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to upload files for option ${optionId}`);
+  }
+};
+
+
 const uploadFiles = async (eventId, registrationId) => {
-  const hasFiles = Object.values(uploadedFiles.value).some(files => files && files.length > 0);
+
+  const uploadPromises = Object.entries(uploadedFiles.value)
+    .filter(([optionId, files]) => files && files.length > 0)
+    .map(([optionId, files]) => uploadFileForOption(eventId, registrationId, optionId, files));
 
   try {
-    for (const [optionId, files] of Object.entries(uploadedFiles.value)) {
-      if (files && files.length > 0) {
-        const formData = new FormData();
-        formData.append('eventId', eventId);
-
-        // Add files for this specific option
-        Array.from(files).forEach((file) => {
-          formData.append('files[]', file);
-        });
-
-        const fileResponse = await fetch(`/EventManager/files/${eventId}/${optionId}/${registrationId}`, {
-          method: 'POST',
-          body: formData
-        });
-
-        const fileData = await fileResponse.json();
-        console.debug('File upload response:', fileData);
-
-      }
-    }
+    await Promise.all(uploadPromises);
   } catch (error) {
     console.error('File upload failed:', error);
   }
-}
+};
 
 function handleFileChange(event, optionId) {
   const files = event.target.files;
@@ -767,24 +731,7 @@ function handleFileChange(event, optionId) {
 }
 
 const clearForm = () => {
-  contactDetails.value = {
-    salutation: '',
-    n_prefix: '',
-    n_given: '',
-    n_middle: '',
-    n_family: '',
-    org_name: '',
-    bday: '',
-    email: '',
-    tel_cell: '',
-    tel_home: '',
-    adr_one_street: '',
-    adr_one_street2: '',
-    adr_one_postalcode: '',
-    adr_one_locality: '',
-    adr_one_region: '',
-    adr_one_countryname: ''
-  };
+  contactDetails.value = _.mapValues(contactDetails.value, () => '');
 
   replies.value = {};
 

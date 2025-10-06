@@ -194,6 +194,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                         EventManager_Model_Option::FLD_NAME_OPTION,
                         EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS,
                         EventManager_Model_Option::FLD_OPTION_CONFIG,
+                        EventManager_Model_Option::FLD_SORTING,
                     ],
                 ],
                 self::CONFIG            => [
@@ -238,6 +239,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     self::COLUMNS           => [
                         EventManager_Model_Appointment::FLD_SESSION_NUMBER,
                         EventManager_Model_Appointment::FLD_SESSION_DATE,
+                        EventManager_Model_Appointment::FLD_START_TIME,
                         EventManager_Model_Appointment::FLD_END_TIME,
                         EventManager_Model_Appointment::FLD_STATUS
                     ],

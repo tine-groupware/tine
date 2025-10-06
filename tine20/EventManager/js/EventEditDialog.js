@@ -100,14 +100,16 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         fieldManager('fee'),
                                         fieldManager('registration_possible_until', {
                                             checkState: function () {
-                                                if (me.form.findField('registration_possible_until').getValue() && (me.form.findField('end').getValue() <= me.form.findField('registration_possible_until').getValue())) {
-                                                    this.setValue('');
-                                                    Ext.MessageBox.show({
-                                                        buttons: Ext.Msg.OK,
-                                                        icon: Ext.MessageBox.WARNING,
-                                                        title: me.app.i18n._('Registration'),
-                                                        msg: me.app.i18n._('One should be able to register before the end date')
-                                                    });
+                                                if (me.form.findField('end').getValue() !== null) {
+                                                    if (me.form.findField('registration_possible_until').getValue() && (me.form.findField('end').getValue() < me.form.findField('registration_possible_until').getValue())) {
+                                                        this.setValue('');
+                                                        Ext.MessageBox.show({
+                                                            buttons: Ext.Msg.OK,
+                                                            icon: Ext.MessageBox.WARNING,
+                                                            title: me.app.i18n._('Registration'),
+                                                            msg: me.app.i18n._('One should be able to register before the end date')
+                                                        });
+                                                    }
                                                 }
                                             }
                                         }),
