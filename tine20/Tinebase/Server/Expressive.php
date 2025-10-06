@@ -85,11 +85,13 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 }
             }
 
-            $this->_disallowAppPwdSessions();
-
             Tinebase_Core::initFramework();
 
             $this->_request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+
+            if (null === Tinebase_Core::getUser() && ($this->_request->getHeader('Authorization') || $this->_request->getQuery('Authorization'))) {
+                $this->_handleAppPwdAuth();
+            }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 .' Is Routing request. uri: ' . $this->_request->getUri()->getPath() . '?'
