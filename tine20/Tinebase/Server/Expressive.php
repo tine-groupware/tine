@@ -26,13 +26,6 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
     public const QUERY_PARAM_DO_EXPRESSIVE = 'doRouting';
 
     /**
-     * the request
-     *
-     * @var \Laminas\Diactoros\Request
-     */
-    protected $_request = NULL;
-
-    /**
      * the request method
      *
      * @var string
@@ -87,7 +80,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
             Tinebase_Core::initFramework();
 
-            $this->_request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+            $this->_request = $request ?: new Tinebase_Http_Request();
 
             if (null === Tinebase_Core::getUser() && ($this->_request->getHeader('Authorization') || $this->_request->getQuery('Authorization'))) {
                 $this->_handleAppPwdAuth();
@@ -105,7 +98,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
             $middleWarePipe->pipe(new Tinebase_Expressive_Middleware_Dispatch());
 
             try {
-                $response = $middleWarePipe->handle($this->_request);
+                $response = $middleWarePipe->handle(Tinebase_Core::getContainer()->get(RequestInterface::class));
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
@@ -123,7 +116,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                         . ' Routing cache not ready - clearing stat cache and trying again'
                         . ' (' . $ee->getMessage() . ')');
                     clearstatcache();
-                    $response = $middleWarePipe->handle($this->_request);
+                    $response = $middleWarePipe->handle(Tinebase_Core::getContainer()->get(RequestInterface::class));
                 } else {
                     throw $ee;
                 }
