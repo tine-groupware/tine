@@ -45,6 +45,27 @@ class Admin_Controller_SchedulerTask extends Tinebase_Controller_Record_Abstract
         $_record->{Admin_Model_SchedulerTask::FLD_IS_SYSTEM} = 0;
     }
 
+    /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Admin_Model_SchedulerTask $_createdRecord
+     * @param   Admin_Model_SchedulerTask $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        if (!$_createdRecord->{Admin_Model_SchedulerTask::FLD_DISABLE_AUTO_SHUFFLE}) {
+            $cron = $_createdRecord->{Admin_Model_SchedulerTask::FLD_CRON};
+            if (preg_match('/^\d+( \* .*)$/', $cron, $m)) {
+                Tinebase_Scheduler::getInstance()->spreadTasks(true);
+            } elseif (preg_match('/^\d+ 0?[0-6]( .*)$/', $cron, $m)) {
+                Tinebase_Scheduler::getInstance()->spreadTasks(false);
+            }
+        }
+    }
+
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);

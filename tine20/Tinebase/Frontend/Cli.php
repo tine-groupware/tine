@@ -444,6 +444,31 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return $result ? 0 : 1;
     }
 
+    public function spreadSchedulerTasks(Zend_Console_Getopt $_opts): int
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['mode'], 'other', false);
+
+        switch ($args['mode']) {
+            case 'hourly':
+                Tinebase_Scheduler::getInstance()->spreadTasks(true);
+                break;
+            case 'daily':
+                Tinebase_Scheduler::getInstance()->spreadTasks(false);
+                break;
+            case 'both':
+                Tinebase_Scheduler::getInstance()->spreadTasks(true);
+                Tinebase_Scheduler::getInstance()->spreadTasks(false);
+                break;
+            default:
+                echo 'mode needs to be [hourly|daily|both]' . PHP_EOL;
+                return 1;
+        }
+
+        return 0;
+    }
+
     /**
      * process given queue job
      *   --jobId the queue job id to execute
