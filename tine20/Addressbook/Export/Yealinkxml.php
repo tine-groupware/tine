@@ -35,22 +35,38 @@ class Addressbook_Export_Yealinkxml extends Tinebase_Export_Abstract
 
     public function generate()
     {
+        $this->_sortInfo = ['container_id'];
+        $this->_groupByProperty = 'container_id';
+        $this->_groupByProcessor = fn(&$val) => $val instanceof Tinebase_Record_Interface ? $val = $val->getId() : null;
+
         $this->_xml = new XMLWriter();
         $this->_xml->openMemory();
         $this->_xml->startDocument();
         $this->_xml->startElement('YealinkIPPhoneBook');
         $this->_xml->startElement('Title');
-        $this->_xml->text('Menu');
+        $this->_xml->text(Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST));
         $this->_xml->endElement(); // Title
-        $this->_xml->startElement('Menu');
-        $this->_xml->startAttribute('Name');
-        $this->_xml->text('SJP');
-        $this->_xml->endAttribute();
 
         $this->_exportRecords();
 
-        $this->_xml->endElement(); // Menu
         $this->_xml->endElement(); // YealinkIPPhoneBook;
+    }
+
+    protected function _startGroup()
+    {
+        parent::_startGroup();
+        $container = Tinebase_Container::getInstance()->getContainerById($this->_lastGroupValue);
+
+        $this->_xml->startElement('Menu');
+        $this->_xml->startAttribute('Name');
+        $this->_xml->text($container->name);
+        $this->_xml->endAttribute();
+    }
+
+    protected function _endGroup()
+    {
+        parent::_endGroup();
+        $this->_xml->endElement(); // Menu
     }
 
     public function write($target = 'php://output')
