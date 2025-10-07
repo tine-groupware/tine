@@ -28,6 +28,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
     public const OPTION_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'allowPartyCrushForSkipInternalOtherOrganizerEvents';
     public const OPTION_IMPORT_VTODOS = 'importVTodos';
     public const OPTION_TASK_CONTAINER = 'taskContainer';
+    public const OPTION_ENFORCE_RECREATE_IN_TARGET_CONTAINER = 'enforceRecreateInTargetContainer';
 
     /**
      * @var Calendar_Controller_Event
@@ -132,6 +133,7 @@ abstract class Calendar_Import_Abstract extends Tinebase_Import_Abstract
         self::OPTION_IMPORT_VTODOS => false,
         self::OPTION_TASK_CONTAINER => null,
         'calDavRequestTries' => null,
+        self::OPTION_ENFORCE_RECREATE_IN_TARGET_CONTAINER => true,
     );
 
     protected function _getCalendarController()

@@ -20,7 +20,15 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
      * @var Calendar_Import_CalDAV_ClientMock
      */
     protected $_uit = null;
-    
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var \Laminas\Http\Headers $headers */
+        $headers = Tinebase_Core::getRequest()->getHeaders();
+        $headers->addHeader(new \Laminas\Http\Header\IfMatch('123'));
+    }
     /**
      * lazy init of uit
      *
@@ -323,6 +331,21 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $this->testImportCalendar();
         $this->setUit();
         $this->testImportCalendar(sharedContainer: false);
+    }
+
+    public function testImportCalendarTwiceNoRecreate(): void
+    {
+        $this->testImportCalendar();
+
+        $this->setUit([
+            Calendar_Import_Abstract::OPTION_ENFORCE_RECREATE_IN_TARGET_CONTAINER => false,
+        ]);
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, false);
+        $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
+        ]));
+        $this->assertSame(0, count($events));
     }
     
     /**
