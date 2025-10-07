@@ -109,9 +109,9 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         foreach ($models as $model) {
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = Tinebase_Core::getApplicationInstance($model);
-            foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
-                        [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE, TMFA::OPERATOR => 'isnull', TMFA::VALUE => true],
-                    ]), _onlyIds: [Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE]) as $id => $json) {
+            foreach ($this->_db->query('SELECT id, ' . Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE . ' FROM ' . SQL_TABLE_PREFIX . $model::TABLE_NAME . ' WHERE ' . Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE . ' is not null')->fetchAll(\PDO::FETCH_COLUMN) as $idJson) {
+                $id = $idJson[0];
+                $json = $idJson[1];
                 if (null !== ($taxRates = json_decode($json, true))) {
                     foreach ($taxRates as $row) {
                         $taxCtrl->create(new Sales_Model_Document_SalesTax([
