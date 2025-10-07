@@ -149,6 +149,8 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
     public const FLD_PRECONDITIONS = 'preconditions';
     public const FLD_PRECONDITIONS_CHECKED = 'preconditionsChecked';
     public const FLD_ATTENDEE_CONTAINERS_AVAILABLE = 'attendeeContainersAvailable';
+    public const FLD_EDIT_RESPONSE_EMAIL = 'editResponseEmail';
+    public const FLD_RESPONSE_EMAILS = 'responseEmails';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -194,6 +196,12 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
             ],
             self::FLD_ATTENDEE_CONTAINERS_AVAILABLE => [
                 self::TYPE                  => self::TYPE_JSON,
+            ],
+            self::FLD_EDIT_RESPONSE_EMAIL   => [
+                self::TYPE                  => self::TYPE_BOOLEAN,
+            ],
+            self::FLD_RESPONSE_EMAILS    => [
+                self::TYPE                  => self::TYPE_RECORDS,
             ],
         ],
     ];
