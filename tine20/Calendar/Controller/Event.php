@@ -91,6 +91,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     protected $_moveExternalOrganizerToContainer = true;
 
+    protected bool $_onlyGenerateNotificationsNoSend = false;
+
     /**
      * @var Calendar_Controller_Event
      */
@@ -143,6 +145,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public static function unsetInstance()
     {
         self::$_instance = null;
+    }
+
+    public function onlyGenerateNotificationsNoSend(?bool $value = null): bool
+    {
+        $oldValue = $this->_onlyGenerateNotificationsNoSend;
+        if (null !== $value) {
+            $this->_onlyGenerateNotificationsNoSend = $value;
+        }
+        return $oldValue;
     }
 
     public function keepAttenderStatus(?bool $value = null): bool
@@ -1912,8 +1923,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // save minutes before / compute it for custom alarms
         $minutesBefore = $_alarm->minutes_before == Tinebase_Model_Alarm::OPTION_CUSTOM 
-            ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60 
-            : $_alarm->minutes_before;
+            ? ($_record->dtstart->getTimestamp() - $_alarm->alarm_time->getTimestamp()) / 60
+            : (int)$_alarm->minutes_before;
         $minutesBefore = round($minutesBefore);
         
         $_alarm->setOption('minutes_before', $minutesBefore);
@@ -3346,12 +3357,19 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
             return;
         }
+        if ($this->_onlyGenerateNotificationsNoSend) {
+            $oldOnlyGenerate = Calendar_Controller_EventNotifications::getInstance()->onlyGenerateNotificationsNoSend(true);
+            $onlyGenerateRaii = new Tinebase_RAII(fn() => Calendar_Controller_EventNotifications::getInstance()->onlyGenerateNotificationsNoSend($oldOnlyGenerate));
+            Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($_event, $_updater, $_action, $_oldEvent);
+            unset($onlyGenerateRaii);
+            return;
+        }
         try {
             Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications',
                 $_event,
                 $_updater,
                 $_action,
-                $_oldEvent ? $_oldEvent : NULL
+                $_oldEvent
             );
         } catch (Tinebase_Exception_Backend_Database $tedb) {
             if ($tedb->getMessage() === 'cant serialize db connection') {

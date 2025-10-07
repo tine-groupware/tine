@@ -68,6 +68,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
     protected bool $_keepExistingAttendee = false;
 
     protected $userName;
+
+    protected $enforceRecreateInTargetContainer = true;
     
     /**
      * record backend
@@ -107,6 +109,10 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($settings[Calendar_Import_Abstract::OPTION_IMPORT_VTODOS] ?? false) {
             $this->_importVTodos = true;
+        }
+        if (!($settings[Calendar_Import_Abstract::OPTION_ENFORCE_RECREATE_IN_TARGET_CONTAINER] ?? true)) {
+            $this->enforceRecreateInTargetContainer = false;
+            $this->webdavFrontend = Calendar_Frontend_WebDAV_Event::class;
         }
         if ($settings[Calendar_Import_Abstract::OPTION_TASK_CONTAINER] ?? false) {
             /** @var Tinebase_Model_Container $container */
@@ -602,7 +608,8 @@ class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
                                 Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID => true,
                                 Calendar_Frontend_WebDAV_Event::ALLOW_EXTERNAL_ORGANIZER_ANYWAY => $this->_skipInternalOtherOrganizer,
                             ],
-                            true,
+                            $this->enforceRecreateInTargetContainer,
+                            !$this->enforceRecreateInTargetContainer
                         ]);
                         // if the event was not created (due to skipInternalOtherOrganizer) we check useOwnAttenderForSkipInternalOtherOrganizer
                         if (null === $webdavFrontend && ($this->_useOwnAttendeeForSkipIOO || $this->_allowPartyCrushForSkipIOO) &&

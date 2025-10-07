@@ -40,7 +40,7 @@ class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Even
      * @param bool $retry
      * @return string
      */
-    public function put($cardData, $retry = true)
+    public function put($cardData, $retry = true, $ignoreMove = false)
     {
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         if ($this->getRecord()->getIdFromProperty('container_id') !== $this->_container->getId()) {
@@ -79,7 +79,7 @@ class Calendar_Frontend_WebDAV_EventImport extends Calendar_Frontend_WebDAV_Even
             } catch (Zend_Db_Statement_Exception $zdbse) {
                 if ($retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
                     Tinebase_TransactionManager::getInstance()->rollBack();
-                    return $this->put($cardData, false);
+                    return $this->put($cardData, false, $ignoreMove);
                 } else {
                     throw $zdbse;
                 }
