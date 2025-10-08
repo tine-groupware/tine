@@ -87,8 +87,18 @@ msgstr "Abgelehnt"
 msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
 msgstr "Es sind noch %s std nicht abgerechnet, wollen Sie diese abrechenbar machen?"
 
+#, python-format, php-format
+msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+msgstr "Es gibt %s noch nicht abgerechnete Stundenzettel, die aktualisiert werden. Wollen Sie fortfahren und die Abrechenbare Zeit neu berechnen?"
+
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Zeitkonten sind noch in Benutzung! Sind Sie sicher, dass Sie sie löschen möchten?"
+
+msgid "End date cannot be before start date"
+msgstr ""
+
+msgid "start time and end time need to be set for multi day"
+msgstr ""
 
 msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 msgstr "Die Rechnung die Sie versucht haben zu bearbeiten ist bereits abgerechnet. Datumsänderungen führen zu erneuter Abrechnung. Wollen Sie diese Aktion wirklich ausführen?"
@@ -410,6 +420,9 @@ msgstr "Datum"
 
 msgid "Start time"
 msgstr "Startzeit"
+
+msgid "End date"
+msgstr ""
 
 msgid "End time"
 msgstr "Endzeit"

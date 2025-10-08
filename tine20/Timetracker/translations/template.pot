@@ -74,7 +74,17 @@ msgstr ""
 msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
 msgstr ""
 
+#, python-format, php-format
+msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+msgstr ""
+
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
+msgstr ""
+
+msgid "End date cannot be before start date"
+msgstr ""
+
+msgid "start time and end time need to be set for multi day"
 msgstr ""
 
 msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
@@ -396,6 +406,9 @@ msgid "Date"
 msgstr ""
 
 msgid "Start time"
+msgstr ""
+
+msgid "End date"
 msgstr ""
 
 msgid "End time"

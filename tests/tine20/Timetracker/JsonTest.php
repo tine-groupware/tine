@@ -373,6 +373,60 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
+     * test update timeaccount accounting time factor
+     *
+     */
+    public function testUpdateTimeaccountAccountingTimeFactor()
+    {
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext([]);
+        $timeaccount = $this->_getTimeaccount(['is_billable'   => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData = new Timetracker_Model_Timesheet([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id'    => $timeaccountData['id'],
+            'is_billable'   => false,
+            'description'   => 'test',
+            'accounting_time_factor' => 1,
+            'start_date'    => Tinebase_DateTime::now()->toString('Y-m-d'),
+            'duration'      => 60,
+        ]);
+        $tsBackend = new Timetracker_Backend_Timesheet();
+        Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+
+        try {
+            $timeaccountData['description'] = "update accounting_time_factor from 1 to 0";
+            $timeaccountData['accounting_time_factor'] = 0;
+            $this->_json->saveTimeaccount($timeaccountData);
+            self::fail('should throw Tinebase_Exception_Confirmation!');
+        } catch (Tinebase_Exception_Confirmation $tec) {
+            $translation = Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME);
+            self::assertEquals(sprintf($translation->_('There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?'), 1), $tec->getMessage());
+        }
+
+        // user timeaccount with the confirmation header
+        $timeaccount = $this->_getTimeaccount(['is_billable'   => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData['timeaccount_id'] = $timeaccountData['id'];
+        Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
+        $timeaccountData['description'] = "update accounting_time_factor from 1 to 0";
+        $timeaccountData['accounting_time_factor'] = 0;
+        $timeaccountUpdated = $this->_json->saveTimeaccount($timeaccountData);
+
+        $this->assertEquals($timeaccountData['accounting_time_factor'], $timeaccountUpdated['accounting_time_factor']);
+
+        // check timesheet
+        $timesheet = $tsBackend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+            ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $timeaccountData['id']],
+        ]))->getFirstRecord();
+        $this->assertEquals(0, $timesheet['accounting_time_factor'], 'timesheet accounting_time_factor should be 0');
+
+        // cleanup
+        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+    }
+
+    /**
      * try to update a Timeaccount - only grants
      */
     public function testUpdateTimeaccountGrants()
