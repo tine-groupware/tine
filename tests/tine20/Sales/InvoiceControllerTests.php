@@ -1829,20 +1829,44 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         
         foreach ($timesheets as $idx => $timeSheet) {
             $timeSheet['is_billable'] = $idx % 2;
-            
-            if ($timeSheet['is_billable']) {
-                $timeSheet->description = 'ts without tag';
+
+            if ($idx === 0) {
+                $timeSheet['is_billable'] = 0;
+                $timeSheet->description = 'none billable ts';
                 $timeSheet->start_time = '10:20:00';
                 $timeSheet->end_time = '12:20:00';
-                if ($idx === 1) {
-                    $filter = new Timetracker_Model_TimesheetFilter([
-                        ['field' => 'id', 'operator' => 'in', 'value' => [$timeSheet->getId()]]
-                    ]);
-                    Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
-                    $timeSheet->description = 'ts with tag';
-                }
+                $this->_timesheetController->update($timeSheet);
             }
-            $this->_timesheetController->update($timeSheet);
+            if ($idx === 1) {
+                $timeSheet['is_billable'] = 1;
+                $timeSheet->description = 'ts with tag and factor is 1';
+                $timeSheet->start_time = '10:20:00';
+                $timeSheet->end_time = '12:20:00';
+                $filter = new Timetracker_Model_TimesheetFilter([
+                    ['field' => 'id', 'operator' => 'in', 'value' => [$timeSheet->getId()]]
+                ]);
+                Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
+                $this->_timesheetController->update($timeSheet);
+            }
+            if ($idx === 2) {
+                $timeSheet['is_billable'] = 1;
+                $timeSheet->description = 'ts without tag and factor is 1';
+                $timeSheet->start_time = '10:20:00';
+                $timeSheet->end_time = '12:20:00';
+                $this->_timesheetController->update($timeSheet);
+            }
+            if ($idx === 3) {
+                $timeSheet['is_billable'] = 1;
+                $timeSheet->description = 'ts with tag and factor is 0';
+                $timeSheet->accounting_time_factor = 0;
+                $timeSheet->start_time = '10:20:00';
+                $timeSheet->end_time = '12:20:00';
+                $filter = new Timetracker_Model_TimesheetFilter([
+                    ['field' => 'id', 'operator' => 'in', 'value' => [$timeSheet->getId()]]
+                ]);
+                Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
+                $this->_timesheetController->update($timeSheet);
+            }
         }
         
         $i = 0;
@@ -1857,7 +1881,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $timesheets = $this->_timesheetController->search($tsFilter);
         static::assertEquals(4, $timesheets->count());
         $billableTimesheets = $timesheets->filter('is_billable', 1);
-        static::assertEquals(2, $billableTimesheets->count());
+        static::assertEquals(3, $billableTimesheets->count());
         $billableTimesheet = $billableTimesheets->getFirstRecord();
         
         $invoice = $this->_invoiceController->get($billableTimesheet['invoice_id']);
@@ -1895,17 +1919,22 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             static::assertEquals($billableTimesheet['description'], $arrayData[4][1]);
             // only export start time when tag Bereitschaft is set
             $array = array_filter($arrayData, function ($data) {
-                return $data[1] === 'ts with tag';
+                return $data[1] === 'ts with tag and factor is 1';
             });
             $tsWithTag = array_pop($array);
             static::assertNotNull($tsWithTag[6]);
             static::assertEquals('Bereitschaft', $tsWithTag[7]);
             $array1 = array_filter($arrayData, function ($data) {
-                return $data[1] === 'ts without tag';
+                return $data[1] === 'ts without tag and factor is 1';
             });
             $tsWithoutTag = array_pop($array1);
             static::assertNull($tsWithoutTag[6]);
             static::assertNull($tsWithoutTag[7]);
+
+            $array1 = array_filter($arrayData, function ($data) {
+                return $data[1] === 'ts with tag and factor is 0';
+            });
+            static::assertEmpty($array1);
         } finally {
             @unlink($xlsx);
         }
