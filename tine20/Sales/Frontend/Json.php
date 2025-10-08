@@ -898,11 +898,18 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
-    public function importPurchaseInvoice(array $fileLocation): array
+    public function isEDocumentFile(array $fileLocation): bool
     {
         /** @var Tinebase_Model_FileLocation $fileLocation */
         $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
-        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice($fileLocation);
+        return Sales_Controller_Document_PurchaseInvoice::getInstance()->isEDocumentFile($fileLocation);
+    }
+
+    public function importPurchaseInvoice(array $fileLocation, bool $importNonXR = false): array
+    {
+        /** @var Tinebase_Model_FileLocation $fileLocation */
+        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
+        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice($fileLocation, $importNonXR);
         return $this->_recordToJson($purchaseInvoice);
     }
 

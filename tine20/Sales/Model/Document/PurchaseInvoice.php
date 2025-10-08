@@ -127,6 +127,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_CURRENCY] = [
             self::LABEL             => 'Dcoument Currency', // _('Document Currency')
             self::TYPE              => self::TYPE_STRING,
+            self::NULLABLE          => true,
         ];
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS][self::CONFIG][self::MODEL_NAME] = Sales_Model_PurchasePaymentMeans::MODEL_NAME_PART;

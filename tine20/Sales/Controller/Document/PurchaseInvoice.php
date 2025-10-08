@@ -120,7 +120,9 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         return $result;
     }
 
-    public function importPurchaseInvoice(Tinebase_Model_FileLocation $fileLocation): Sales_Model_Document_PurchaseInvoice
+    protected const TYPE_UBL = 1;
+    protected const TYPE_CII = 2;
+    protected function _getEDocumentXml(Tinebase_Model_FileLocation $fileLocation, ?string &$content, ?int &$type): ?string
     {
         if (!$fileLocation->isFile()) {
             throw new Tinebase_Exception('fileLocation is not a file');
@@ -133,23 +135,45 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $xmlContent = $content = $fileLocation->getContent();
         if ('xml' !== $locationExt) {
             try {
-                $zugPferd = Sales_EDocument_ZUGFeRD::createFromString($content);
+                $zugPferd = Sales_EDocument_ZUGFeRD::createFromString($xmlContent);
                 $xmlContent = $zugPferd->getXml();
             } catch (Tinebase_Exception_UnexpectedValue $e) {}
         }
 
-        $isUbl = false;
-        $isCII = false;
-        if (false !== strpos($xmlContent, 'urn:oasis:names:specification:ubl:')) {
-            $isUbl = true;
-        } elseif (false !== strpos($xmlContent, 'urn:un:unece:uncefact:data:standard:CrossIndustry')) {
-            $isCII = true;
+        $previousLibXmlError = libxml_use_internal_errors(true);
+        try {
+            libxml_clear_errors();
+            if (! simplexml_load_string($xmlContent, namespace_or_prefix: 'rsm') instanceof \SimpleXMLElement) {
+                return null;
+            }
+        } finally {
+            libxml_use_internal_errors($previousLibXmlError);
+            libxml_clear_errors();
         }
 
-        if ($isCII || $isUbl) {
+        if (false !== strpos($xmlContent, 'urn:oasis:names:specification:ubl:')) {
+            $type = self::TYPE_UBL;
+        } elseif (false !== strpos($xmlContent, 'urn:un:unece:uncefact:data:standard:CrossIndustry')) {
+            $type = self::TYPE_CII;
+        } else {
+            return null;
+        }
+
+        return $xmlContent;
+    }
+
+    public function isEDocumentFile(Tinebase_Model_FileLocation $fileLocation): bool
+    {
+        return null !== $this->_getEDocumentXml($fileLocation, $content, $type);
+    }
+
+    public function importPurchaseInvoice(Tinebase_Model_FileLocation $fileLocation, bool $importNonEDocument = false): Sales_Model_Document_PurchaseInvoice
+    {
+        $xmlContent = $this->_getEDocumentXml($fileLocation, $content, $type);
+        if (null !== $xmlContent) {
             $validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
 
-            if ($isUbl) {
+            if (self::TYPE_UBL === $type) {
                 $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertUbl($xmlContent);
             } else {
                 $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertCii($xmlContent);
@@ -174,8 +198,11 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
                 'name' => 'xrechnung.html',
                 'tempFile' => $viewFh,
             ], true));
-        } else {
+        } elseif ($importNonEDocument) {
             $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice([], true);
+        } else {
+            $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME);
+            throw new Tinebase_Exception_SystemGeneric($t->_('File is not a valid EDocument, do you want to create a purchase invoice anyway?'));
         }
         $contentFh = fopen('php://memory', 'w+');
         fwrite($contentFh, $content);
@@ -184,7 +211,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             $purchaseInvoice->attachments = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class);
         }
         $purchaseInvoice->attachments->addRecord(new Tinebase_Model_Tree_Node([
-            'name' => 'xrechnung.' . $locationExt,
+            'name' => $fileLocation->getName(),
             'tempFile' => $contentFh,
         ], true));
 

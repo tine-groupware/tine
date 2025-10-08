@@ -98,6 +98,31 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         return $xml;
     }
 
+    public function testPurchaseInvoiceFromNonEDocument(): void
+    {
+        $path = Tinebase_FileSystem::getInstance()
+                ->getApplicationBasePath(Filemanager_Config::APP_NAME, Tinebase_FileSystem::FOLDER_TYPE_SHARED) . '/unittest';
+        Tinebase_FileSystem::getInstance()->mkdir($path);
+        fwrite(
+            $fh = Tinebase_FileSystem::getInstance()->fopen($path .  '/test.pdf', 'w'),
+                file_get_contents(__FILE__));
+        Tinebase_FileSystem::getInstance()->fclose($fh);
+
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
+            new Tinebase_Model_FileLocation([
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                Tinebase_Model_FileLocation::FLD_LOCATION =>
+                    new Filemanager_Model_FileLocation([
+                        Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest/test.pdf',
+                    ]),
+            ]), importNonEDocument: true
+        );
+
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT});
+        $this->assertSame(1, $pInvoice->attachments->count());
+    }
+
     public function testReadPdfInvoice(): void
     {
         //$zug = Sales_EDocument_ZUGFeRD::createFromString(file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
@@ -112,13 +137,11 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
 
         $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
             new Tinebase_Model_FileLocation([
-                Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_JsonRecordWrapper([
-                    Tinebase_Model_JsonRecordWrapper::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
-                    Tinebase_Model_JsonRecordWrapper::FLD_RECORD =>
-                        new Filemanager_Model_FileLocation([
-                            Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest/test.pdf',
-                        ]),
-                ])
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                Tinebase_Model_FileLocation::FLD_LOCATION =>
+                    new Filemanager_Model_FileLocation([
+                        Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest/test.pdf',
+                    ]),
             ])
         );
         $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
