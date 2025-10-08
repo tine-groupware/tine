@@ -561,7 +561,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
                 Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
                 Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $taxId !== 'S' ? $this->{self::FLD_NET_SUM} : 0,
-            ]));
+            ], true));
         }
         $allowances = 0.0;
         foreach ($this->{self::FLD_SALES_TAX_BY_RATE} as $taxRate) {
