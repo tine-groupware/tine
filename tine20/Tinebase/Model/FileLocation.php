@@ -38,6 +38,7 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
                 self::TYPE                      => self::TYPE_MODEL,
                 self::CONFIG                    => [
                     self::AVAILABLE_MODELS          => [
+                        Felamimail_Model_AttachmentCache_FileLocation::class,
                         Filemanager_Model_FileLocation::class,
                         Tinebase_Model_FileLocation_RecordAttachment::class,
                         Tinebase_Model_FileLocation_TreeNode::class,
@@ -47,6 +48,7 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                     [Zend_Validate_InArray::class, [
+                        Felamimail_Model_AttachmentCache_FileLocation::class,
                         Filemanager_Model_FileLocation::class,
                         Tinebase_Model_FileLocation_RecordAttachment::class,
                         Tinebase_Model_FileLocation_TreeNode::class,
