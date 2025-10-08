@@ -135,22 +135,19 @@ class Tinebase_FileLocationTest extends TestCase
         } catch (Tinebase_Exception) {}
     }
 
-
-    public function testTreeNode(array $fileLocation = []): void
+    public function testTreeNode(array $fileLocation = [], bool $shared = true): void
     {
         $fs = Tinebase_FileSystem::getInstance();
         $path = $fs->getApplicationBasePath(
                 Tinebase_Application::getInstance()->getApplicationByName(Filemanager_Config::APP_NAME),
-                $fs::FOLDER_TYPE_SHARED
-            ) . '/unittest';
-        $fs->mkdir($path);
+                $shared ? $fs::FOLDER_TYPE_SHARED : $fs::FOLDER_TYPE_PERSONAL
+            ) . ($shared ? '' : '/' . Tinebase_Core::getUser()->getId()) . '/unittest';
+        $fs->createAclNode($path);
 
         $fileLocation = $this->doTestOnJson($fileLocation ?: [
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TreeNode::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TreeNode::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Tinebase_Model_FileLocation_TreeNode::FLD_STAT_PATH => $path,
-                ],
+                Tinebase_Model_FileLocation_TreeNode::FLD_STAT_PATH => $path,
             ],
         ], [
             'checkExists' => [true],
@@ -256,28 +253,39 @@ class Tinebase_FileLocationTest extends TestCase
         $this->assertTrue($fs->fileExists($path . '/dir/file'));
     }
 
+    public function testTreeNodePersonal(): void
+    {
+        $this->testTreeNode(shared: false);
+    }
+
     public function testFM(): void
     {
         $this->testTreeNode([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest',
-                ],
+                Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest',
             ],
         ]);
+    }
+
+    public function testFMPersonal(): void
+    {
+        $this->testTreeNode([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+            Tinebase_Model_FileLocation::FLD_LOCATION => [
+                Filemanager_Model_FileLocation::FLD_FM_PATH => '/personal/' . Tinebase_Core::getUser()->getId() . '/unittest',
+            ],
+        ], shared: false);
     }
 
     public function testRecordAttachment(): void
     {
         $recordId = $this->_originalTestUser->getIdFromProperty('contact_id');
         $fileLocation = $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                ],
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
             ],
         ], [
             'checkExists' => [false],
@@ -354,13 +362,11 @@ class Tinebase_FileLocationTest extends TestCase
         $this->checkGetContent($attachment, 'foo');
 
         $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
                 Tinebase_Model_FileLocation::FLD_LOCATION => [
-                    Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                    Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                        Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                        Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                        Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => 'a',
-                    ],
+                    Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                    Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
+                    Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => 'a',
                 ],
             ], [
             'checkExists' => [true],
@@ -385,12 +391,10 @@ class Tinebase_FileLocationTest extends TestCase
         ]);
 
         $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                ],
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
             ],
         ], [
             'checkExists' => [true],
@@ -400,13 +404,11 @@ class Tinebase_FileLocationTest extends TestCase
         ]);
 
         $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => null,
-                ],
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => null,
             ],
         ], [
             'checkExists' => [true],
@@ -414,13 +416,11 @@ class Tinebase_FileLocationTest extends TestCase
         ]);
 
         $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                    Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => '',
-                ],
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => '',
             ],
         ], [
             'checkExists' => [true],
@@ -430,13 +430,11 @@ class Tinebase_FileLocationTest extends TestCase
         foreach ([' ', ' /', '/ ', ' / '] as $name) {
             try {
                 $this->doTestOnJson([
+                    Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
                     Tinebase_Model_FileLocation::FLD_LOCATION => [
-                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
-                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
-                            Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $name,
-                        ],
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => Addressbook_Model_Contact::class,
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $recordId,
+                        Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $name,
                     ],
                 ], [
                     'checkExists' => [true],
