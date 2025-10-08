@@ -17,6 +17,7 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
     public const MODEL_NAME_PART = 'FileLocation';
 
     public const FLD_LOCATION = 'location';
+    public const FLD_MODEL_NAME = 'model_name';
 
 
     protected static $_modelConfiguration = [
@@ -26,12 +27,33 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
         self::RECORDS_NAME                  => 'File Locations', // gettext('GENDER_File Location')
 
         self::FIELDS                        => [
-            self::FLD_LOCATION              => [
+            self::FLD_LOCATION                  => [
                 self::TYPE                          => self::TYPE_DYNAMIC_RECORD,
                 self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_JsonRecordWrapper::MODEL_NAME_PART,
+                    self::REF_MODEL_FIELD               => self::FLD_MODEL_NAME,
                     self::PERSISTENT                    => true,
+                ],
+            ],
+            self::FLD_MODEL_NAME            => [
+                self::TYPE                      => self::TYPE_MODEL,
+                self::CONFIG                    => [
+                    self::AVAILABLE_MODELS          => [
+                        Filemanager_Model_FileLocation::class,
+                        Tinebase_Model_FileLocation_RecordAttachment::class,
+                        Tinebase_Model_FileLocation_TreeNode::class,
+                    ],
+                ],
+                self::VALIDATORS                    => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
+                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [
+                        Filemanager_Model_FileLocation::class,
+                        Tinebase_Model_FileLocation_RecordAttachment::class,
+                        Tinebase_Model_FileLocation_TreeNode::class,
+                    ]],
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
                 ],
             ],
         ],
@@ -50,6 +72,6 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
             return;
         }
         $this->_init = true;
-        $this->delegator = $this->{self::FLD_LOCATION}->{Tinebase_Model_JsonRecordWrapper::FLD_RECORD};
+        $this->delegator = $this->{self::FLD_LOCATION};
     }
 }
