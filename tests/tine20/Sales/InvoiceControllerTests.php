@@ -2014,15 +2014,26 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
         // @FIXME: not sure about this one??? when is it filled in real world data
         $timesheet->invoice_id = $invoice->getId();
-        
+        $timesheet0 = Timetracker_Controller_Timesheet::getInstance()->create(clone($timesheet));
+
+        $timesheet->description = 'ts without tag and factor is 0';
+        $timesheet->accounting_time_factor = 0;
         $timesheet1 = Timetracker_Controller_Timesheet::getInstance()->create(clone($timesheet));
         
         $timesheet->description = 'ts with tag';
+        $timesheet->accounting_time_factor = 1;
         $timesheet->start_time = '06:00:00';
-        $timesheet2 = Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
+        $timesheet2 = Timetracker_Controller_Timesheet::getInstance()->create(clone($timesheet));
+
+        $timesheet->id = null;
+        $timesheet->description = 'ts with tag and factor is 0';
+        $timesheet->start_time = '07:00:00';
+        $timesheet->end_time = '09:15:00';
+        $timesheet->accounting_time_factor = 0;
+        $timesheet3 = Timetracker_Controller_Timesheet::getInstance()->create(clone($timesheet));
 
         $filter = new Timetracker_Model_TimesheetFilter([
-            ['field' => 'id', 'operator' => 'in', 'value' => [$timesheet2->getId()]]
+            ['field' => 'id', 'operator' => 'in', 'value' => [$timesheet2->getId(), $timesheet3->getId()]]
         ]);
         Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
 
@@ -2064,11 +2075,17 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $xmlBody = $export->getDocument()->asXML();
         $this->assertTrue(file_exists($result));
 
-        $this->assertStringContainsString('ts without tag', $xmlBody, 'timesheet name is not found');
+        $this->assertStringContainsString('ts without tag', $xmlBody, 'timesheet without tag should be exported');
         $this->assertStringNotContainsString('05:00:00', $xmlBody, 'timesheet start time should not be set');
 
-        $this->assertStringContainsString('ts with tag', $xmlBody, 'timesheet name is not found');
+        $this->assertStringNotContainsString('ts without tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should not be exported');
+
+        $this->assertStringContainsString('ts with tag', $xmlBody, 'timesheet with tag should be exported');
         $this->assertStringContainsString('06:00:00', $xmlBody, 'start time with tag should be set');
+
+        $this->assertStringContainsString('ts with tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should be exported');
+        $this->assertStringContainsString('2.25', $xmlBody, 'ts with accounting time factor 0 should export duration as accounting time');
+
         // cleanup / delete file
         unlink($result);
     }
