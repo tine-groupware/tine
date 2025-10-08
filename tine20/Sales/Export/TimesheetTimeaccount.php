@@ -157,21 +157,18 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
 
         foreach ($_records as $record) {
             $hasSumTag = $record->tags->filter('name', static::TAG_SUM)->count() > 0;
+
+            // when ts without tag has factor 0 , we remove it from the invoice export
+            if ($record->accounting_time_factor == 0) {
+                $_records->removeRecord($record);
+                continue;
+            }
+
             if (!$record->tags || !$hasSumTag) {
                 $record->start_time = null;
                 $record->end_time = null;
             }
-            // when ts with sum tag has accounting factor 0 , we use duration as accounting time
-            if ($hasSumTag) {
-                if ($record->accounting_time_factor == 0) {
-                    $record->accounting_time = $record->duration;
-                }
-            } else {
-                // when ts without tag has accounting factor 0 , we remove it from the export
-                if ($record->accounting_time_factor == 0) {
-                    $_records->removeRecord($record);
-                }
-            }
+
             if (!empty($record->start_time)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . 'timesheet has start time : ' . print_r($record, true));
