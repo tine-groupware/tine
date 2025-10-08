@@ -237,8 +237,8 @@ class Calendar_Controller_EventNotifications
             case 'created':
             case 'deleted':
                 // skip invitations/cancle if event came from external
-                if (! $organizerIsExternal) {
-                    if (!$organizerIsAttender && $organizer->user_id->id !== $_updater->contact_id && ($_oldEvent || $_event->status == 'CANCELLED') ) {
+                if (!$organizerIsExternal) {
+                    if (!$organizerIsAttender && $organizer->user_id->id !== $_updater->contact_id && ($_oldEvent || $_event->status == 'CANCELLED')) {
                         // This Event is changed or deleted by someone else (Not Organizer) and teh Organizer is not an Attendee, so we need to let the Organizer know
                         $updates = null;
                         if ($_oldEvent) {
