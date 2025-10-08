@@ -74,8 +74,18 @@ msgstr "Declined"
 msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
 msgstr "There are %s hours that have not yet been billed. Do you want to make them billable?"
 
+#, python-format, php-format
+msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+msgstr "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Time accounts are still in use! Are you sure you want to delete them?"
+
+msgid "End date cannot be before start date"
+msgstr "End date cannot be before start date"
+
+msgid "start time and end time need to be set for multi day"
+msgstr "start time and end time need to be set for multi day"
 
 msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 msgstr "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
@@ -397,6 +407,9 @@ msgstr "Date"
 
 msgid "Start time"
 msgstr "Start time"
+
+msgid "End date"
+msgstr "End date"
 
 msgid "End time"
 msgstr "End time"
