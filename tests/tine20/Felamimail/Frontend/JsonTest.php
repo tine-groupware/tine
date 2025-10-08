@@ -1469,6 +1469,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertStringContainsString($id . '/newline.pdf', $cachedAttachment['attachments'][0]['path']);
         $this->assertEquals(17417, $cachedAttachment['attachments'][0]['size']);
         $this->assertEquals(0, $cachedAttachment['attachments'][0]['preview_status']);
+
+        (new Tinebase_FileLocationTest())->doFelamimailAttachmentCacheTest($id,
+            name: $cachedAttachment['attachments'][0]['name'],
+            content: file_get_contents(dirname(__FILE__, 3) . '/Tinebase/files/multipage-text.pdf'));
     }
 
     public function testAttachmentCacheNode()
@@ -1487,6 +1491,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertStringContainsString($id . '/moz-screenshot-83.png', $cachedAttachment['attachments'][0]['path']);
         $this->assertEquals(25370, $cachedAttachment['attachments'][0]['size']);
         $this->assertEquals(0, $cachedAttachment['attachments'][0]['preview_status']);
+
+        rewind($fullMessage['attachments'][0]['stream']);
+        (new Tinebase_FileLocationTest())->doFelamimailAttachmentCacheTest($id,
+            name: $cachedAttachment['attachments'][0]['name'],
+            content: stream_get_contents($fullMessage['attachments'][0]['stream']));
     }
 
     /**

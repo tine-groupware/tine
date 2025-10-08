@@ -278,6 +278,35 @@ class Tinebase_FileLocationTest extends TestCase
         ], shared: false);
     }
 
+    public function doFelamimailAttachmentCacheTest(string $cacheId, string $name, string $content): void
+    {
+        $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Felamimail_Model_AttachmentCache_FileLocation::class,
+            Tinebase_Model_FileLocation::FLD_LOCATION => [
+                Felamimail_Model_AttachmentCache_FileLocation::FLD_CACHE_ID => $cacheId,
+            ],
+        ], [
+            'checkExists' => [true],
+            'checkIsFile' => [true],
+            'checkIsDirectory' => [false],
+            'checkCanReadData' => [true],
+            'checkCanWriteData' => [false],
+            'checkCanGetChild' => [false],
+            'checkCanListChildren' => [false],
+            'checkCanGetParent' => [false],
+            'checkGetName' => [$name],
+            //'checkGetChild' => ['/a'],
+            //'checkListChildren' => [[]],
+            //'checkGetParent' => [],
+            //'checkFailGetContent' => [],
+            'checkFailWriteContent' => [],
+            'checkFailGetChild' => ['a'],
+            'checkFailGetParent' => [],
+            'checkFailListChildren' => [],
+            'checkGetContent' => [$content],
+        ]);
+    }
+
     public function testRecordAttachment(): void
     {
         $recordId = $this->_originalTestUser->getIdFromProperty('contact_id');
