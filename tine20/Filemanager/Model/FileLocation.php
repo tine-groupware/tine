@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Tinebase
+ * @package     Filemanager
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
