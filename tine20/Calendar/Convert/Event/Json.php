@@ -67,22 +67,25 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
                     $event->rrule_constraints = $event->rrule_constraints->toArray(true);
                 }
             }
-            if (count($candidates) > 0) {
-                $candidate = $candidates->filter('id', $event->base_event_id)->getFirstRecord();
-            } else if (!empty($event->base_event_id)) {
-                try {
-                    $candidate = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
-                            . __LINE__ . ' Skipping candidate (base event id: ' . $event->base_event_id . '): '
-                            . $tead->getMessage());
+            if (!empty($event->base_event_id)) {
+                if (count($candidates) > 0) {
+                    $candidate = $candidates->getById($event->base_event_id);
+                } else {
+                    try {
+                        $candidate = Calendar_Controller_Event::getInstance()->get($event->base_event_id);
+                    } catch (Tinebase_Exception_AccessDenied $tead) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . ' '
+                                . __LINE__ . ' Skipping candidate (base event id: ' . $event->base_event_id . '): '
+                                . $tead->getMessage());
+                        }
+                        $candidate = null;
                     }
                 }
-            }
-            // exceptions need freq on FE to show/hide elements
-            if ($candidate && isset($candidate->rrule->count)) {
-                $event->rrule = $candidate->rrule;
+                // exceptions need freq on FE to show/hide elements
+                if ($candidate && isset($candidate->rrule->count)) {
+                    $event->rrule = $candidate->rrule;
+                }
             }
         }
     }
