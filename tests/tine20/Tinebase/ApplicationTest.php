@@ -517,6 +517,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_EvaluationDimensionItem::class,
                 Tinebase_Model_FileLocation::class,
                 Tinebase_Model_FileLocation_RecordAttachment::class,
+                Tinebase_Model_FileLocation_TempFile::class,
                 Tinebase_Model_FileLocation_TreeNode::class,
                 Tinebase_Model_FilterSyncToken::class,
                 Tinebase_Model_FullUser::class,

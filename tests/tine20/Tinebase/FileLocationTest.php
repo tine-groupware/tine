@@ -30,6 +30,9 @@ class Tinebase_FileLocationTest extends TestCase
     protected function doTestsOnFL(Tinebase_Model_FileLocation_Interface $fileLocation, array $tests): void
     {
         foreach ($tests as $method => $args) {
+            if (!method_exists($this, $method)) {
+                $this->fail('bad test, unknown method: '. $method);
+            }
             if (is_array($args['multi'] ?? null)) {
                 foreach ($args['multi'] as $subArgs) {
                     $this->{$method}($fileLocation, ...$subArgs);
@@ -304,6 +307,63 @@ class Tinebase_FileLocationTest extends TestCase
             'checkFailGetParent' => [],
             'checkFailListChildren' => [],
             'checkGetContent' => [$content],
+        ]);
+    }
+
+    public function testTempFile(): void
+    {
+        $fileLocation = $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TempFile::class,
+            Tinebase_Model_FileLocation::FLD_LOCATION => [
+                Tinebase_Model_FileLocation_TempFile::FLD_NAME => 'test.txt',
+                Tinebase_Model_FileLocation_TempFile::FLD_TYPE => 'text/plain',
+            ],
+        ], [
+            'checkExists' => [false],
+            'checkIsFile' => [true],
+            'checkIsDirectory' => [false],
+            'checkCanReadData' => [false],
+            'checkCanWriteData' => [true],
+            'checkCanGetChild' => [false],
+            'checkCanListChildren' => [false],
+            'checkCanGetParent' => [false],
+            'checkGetName' => ['test.txt'],
+            'checkFailGetContent' => [],
+            'checkWriteContent' => ['data', 4],
+            'checkGetContent' => ['data'],
+            'checkFailGetChild' => [],
+            'checkFailGetParent' => [],
+            'checkFailListChildren' => [],
+        ]);
+
+        $this->assertNotEmpty($fileLocation->{Tinebase_Model_FileLocation::FLD_LOCATION}->{Tinebase_Model_FileLocation_TempFile::FLD_TEMP_FILE_ID});
+
+        $this->doTestsOnFL($fileLocation, [
+            'checkExists' => [true],
+            'checkCanReadData' => [true],
+            'checkWriteContent' => ['unit', 4],
+        ]);
+
+        $this->doTestOnJson([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TempFile::class,
+            Tinebase_Model_FileLocation::FLD_LOCATION => [
+                Tinebase_Model_FileLocation_TempFile::FLD_TEMP_FILE_ID => $fileLocation->{Tinebase_Model_FileLocation::FLD_LOCATION}->{Tinebase_Model_FileLocation_TempFile::FLD_TEMP_FILE_ID},
+            ],
+        ], [
+            'checkExists' => [true],
+            'checkIsFile' => [true],
+            'checkIsDirectory' => [false],
+            'checkCanReadData' => [true],
+            'checkCanWriteData' => [true],
+            'checkCanGetChild' => [false],
+            'checkCanListChildren' => [false],
+            'checkCanGetParent' => [false],
+            'checkGetName' => ['test.txt'],
+            'checkGetContent' => ['unit'],
+            'checkWriteContent' => ['data', 4],
+            'checkFailGetChild' => [],
+            'checkFailGetParent' => [],
+            'checkFailListChildren' => [],
         ]);
     }
 
