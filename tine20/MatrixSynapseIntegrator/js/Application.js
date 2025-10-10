@@ -37,7 +37,7 @@ Tine.MatrixSynapseIntegrator.Application = Ext.extend(Tine.Tinebase.Application,
 
     async onActivate() {
         const chatPanel = this.getMainScreen()
-        chatPanel.showUnavailableAlertIf()
+        chatPanel.onActivate()
     },
     
 });
