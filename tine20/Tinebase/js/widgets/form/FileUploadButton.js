@@ -58,7 +58,8 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
         this.scope = this;
         
         this.browsePlugin = new Ext.ux.file.BrowsePlugin({
-            multiple: this.multiple
+            multiple: this.multiple,
+            allowedTypes: this.allowedTypes
         });
         
         this.plugins = this.plugins || [];
@@ -74,11 +75,6 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
      * @param {Ext.EventObj} event
      */
     onFileSelect: function(fileSelector, event) {
-        if (Ext.isArray(this.allowedTypes) && this.allowedTypes.indexOf(fileSelector.getFileCls()) < 0) {
-            Ext.MessageBox.alert(i18n._('Wrong File Type'), [i18n._('Please select a file with one of the following extensions:'), '<br />', this.allowedTypes].join(''));
-            return;
-        }
-        
         this.upload = new Ext.ux.file.Upload({
             fileSelector: fileSelector,
             uploadTempFileMethod: this.uploadTempFileMethod,

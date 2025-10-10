@@ -95,6 +95,9 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         }
         
         // init locationType plugins
+        if (this.uploadMode && ! _.get(this, 'pluginConfig.upload.uploadMode')) {
+            _.set(this, 'pluginConfig.upload.uploadMode', this.uploadMode)
+        }
         this.locationTypesEnabled = _.filter(this.locationTypesEnabled, (type) => {
             
             if (! Tine.Tinebase.widgets.file.LocationTypePluginFactory.isRegistered(type)) {
@@ -133,8 +136,8 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
         Tine.Tinebase.widgets.file.SelectionDialog.superclass.initComponent.call(this);
     },
     
-    getEventData: function() {
-        const fileList = this.activePlace.getFileList();
+    getEventData: async function() {
+        const fileList = await this.activePlace.getFileList();
         
         _.each(fileList, (file) => {
             _.defaults(file, {
