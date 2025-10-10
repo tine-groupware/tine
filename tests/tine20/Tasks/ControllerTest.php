@@ -365,7 +365,7 @@ class Tasks_ControllerTest extends TestCase
 
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
             ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
-            ['field' => Tasks_Model_Task::FLD_CONTAINER_ID, 'value' => $this->_container->getId()],
+            ['field' => Tasks_Model_Task::FLD_CONTAINER_ID, 'operator' => 'equals', 'value' => $this->_container->getId()],
         ]);
         $searchResult = $this->_controller->search($filter);
 
