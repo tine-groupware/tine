@@ -201,8 +201,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         } elseif ($importNonEDocument) {
             $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice([], true);
         } else {
-            $t = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME);
-            throw new Tinebase_Exception_SystemGeneric($t->_('File is not a valid EDocument, do you want to create a purchase invoice anyway?'));
+            throw new Sales_Exception_NotAnEDocument();
         }
         $contentFh = fopen('php://memory', 'w+');
         fwrite($contentFh, $content);

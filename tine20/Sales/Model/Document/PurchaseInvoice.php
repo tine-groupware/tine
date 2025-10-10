@@ -45,6 +45,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::CREATE_MODULE] = true;
         $_definition[self::RECORD_NAME] = 'Purchase Invoice'; // gettext('GENDER_Purchase Invoice')
         $_definition[self::RECORDS_NAME] = 'Purchase Invoices'; // ngettext('Purchase Invoice', 'Purchase Invoices', n)
+        $_definition[self::TITLE_PROPERTY] = '{{ supplier_id.getTitle() }} {{ dateFormat(date, "date") }}';
 
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
@@ -55,58 +56,46 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] = self::class . '#' . self::FLD_DOCUMENT_NUMBER;
 
-        $_definition[self::FIELDS][self::FLD_SUPPLIER_ID] = [
-            self::LABEL             => 'Supplier', // _('Supplier')
-            self::TYPE              => self::TYPE_RECORD,
-            self::NULLABLE          => true,
-            self::CONFIG            => [
-                self::APP_NAME          => Sales_Config::APP_NAME,
-                self::MODEL_NAME        => 'Supplier',
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_CUSTOMER_ID, [
+            self::FLD_SUPPLIER_ID => [
+                self::LABEL             => 'Supplier', // _('Supplier')
+                self::TYPE              => self::TYPE_RECORD,
+                self::NULLABLE          => true,
+                self::CONFIG            => [
+                    self::APP_NAME          => Sales_Config::APP_NAME,
+                    self::MODEL_NAME        => 'Supplier',
+                ],
             ],
-        ];
+        ]);
+
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_SUPPLIER_ID] = [];
 
-        $_definition[self::FIELDS][self::FLD_DUE_AT] = [
-            self::LABEL             => 'Due at', // _('Due at')
-            self::TYPE              => self::TYPE_DATE,
-            self::NULLABLE          => true,
-        ];
-        $_definition[self::FIELDS][self::FLD_OVER_DUE_AT] = [
-            self::LABEL             => 'Over due at', // _('Over due at')
-            self::TYPE              => self::TYPE_DATE,
-            self::NULLABLE          => true,
-        ];
-        $_definition[self::FIELDS][self::FLD_PAY_AT] = [
-            self::LABEL             => 'Pay at', // _('Pay at')
-            self::TYPE              => self::TYPE_DATE,
-            self::NULLABLE          => true,
-        ];
-        $_definition[self::FIELDS][self::FLD_PAID_AT] = [
-            self::LABEL             => 'Paid at', // _('Paid at')
-            self::TYPE              => self::TYPE_DATE,
-            self::NULLABLE          => true,
-        ];
-        //public const FLD_DUNNINGS = 'dunnings';  recordset mahnungen ?! TODO FIXME
-        $_definition[self::FIELDS][self::FLD_APPROVER] = [
-            self::LABEL             => 'Approver', // _('Approver')
-            self::TYPE              => self::TYPE_RECORD,
-            self::NULLABLE          => true,
-            self::CONFIG            => [
-                self::APP_NAME          => Addressbook_Config::APP_NAME,
-                self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_PAYMENT_TERMS, [
+            self::FLD_DUE_AT => [
+                self::LABEL             => 'Due at', // _('Due at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
             ],
-        ];
+            self::FLD_OVER_DUE_AT => [
+                self::LABEL             => 'Over due at', // _('Over due at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
+            ],
+            self::FLD_PAY_AT => [
+                self::LABEL             => 'Pay at', // _('Pay at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
+            ],
+            self::FLD_PAID_AT => [
+                self::LABEL             => 'Paid at', // _('Paid at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
+            ],
+            //public const FLD_DUNNINGS = 'dunnings';  recordset mahnungen ?! TODO FIXME
+        ]);
 
         unset($_definition[self::FILTER_MODEL][self::FLD_DIVISION_ID]);
         $_definition[self::DELEGATED_ACL_FIELD] = self::FLD_DIVISION_ID;
-        $_definition[self::FIELDS][self::FLD_DIVISION_ID] = [
-            self::LABEL             => 'Division', // _('Division')
-            self::TYPE              => self::TYPE_RECORD,
-            self::CONFIG            => [
-                self::APP_NAME          => Sales_Config::APP_NAME,
-                self::MODEL_NAME        => Sales_Model_Division::MODEL_NAME_PART,
-            ],
-        ];
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DIVISION_ID] = [];
 
         // invoice positions
@@ -121,14 +110,34 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
-            ]
+            ],
+            self::FLD_DIVISION_ID => [
+                self::LABEL             => 'Division', // _('Division')
+                self::TYPE              => self::TYPE_RECORD,
+                self::CONFIG            => [
+                    self::APP_NAME          => Sales_Config::APP_NAME,
+                    self::MODEL_NAME        => Sales_Model_Division::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_APPROVER => [
+                self::LABEL             => 'Approver', // _('Approver')
+                self::TYPE              => self::TYPE_RECORD,
+                self::NULLABLE          => true,
+                self::CONFIG            => [
+                    self::APP_NAME          => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
+                ],
+            ],
         ]);
 
-        $_definition[self::FIELDS][self::FLD_DOCUMENT_CURRENCY] = [
-            self::LABEL             => 'Dcoument Currency', // _('Document Currency')
-            self::TYPE              => self::TYPE_STRING,
-            self::NULLABLE          => true,
-        ];
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_GROSS_SUM, [
+            self::FLD_DOCUMENT_CURRENCY => [
+                self::LABEL             => 'Currency', // _('Currency')
+                self::TYPE              => self::TYPE_STRING,
+                self::SPECIAL_TYPE      => self::SPECIAL_TYPE_CURRENCY,
+                self::NULLABLE          => true,
+            ],
+        ]);
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS][self::CONFIG][self::MODEL_NAME] = Sales_Model_PurchasePaymentMeans::MODEL_NAME_PART;
 
@@ -143,6 +152,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DEBITOR_ID]);
         unset($_definition[self::FIELDS][self::FLD_RECIPIENT_ID]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_RECIPIENT_ID]);
+        unset($_definition[self::FIELDS][self::FLD_DOCUMENT_TITLE]);
 
         // self::CONTACT_ID -> old model: relation, migrate
 
