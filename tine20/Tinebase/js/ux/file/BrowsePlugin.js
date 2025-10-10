@@ -33,6 +33,11 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     multiple: true,
     /**
+     * @cfg {Array} allowedTypes
+     * array with allowed file types (for example: ['jpg', 'gif', 'png']
+     */
+    allowedTypes: null,
+    /**
      * @cfg {Ext.Element} dropEl
      * element used as drop target if enableFileDrop is enabled
      */
@@ -189,6 +194,10 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.input_file.setAttribute('type', 'file');
         this.input_file.setAttribute('style', 'display: none;');
         this.input_file.multiple = this.multiple;
+        if (_.isArray(this.allowedTypes) && this.allowedTypes.length) {
+            this.input_file.setAttribute('accept', _.map(this.allowedTypes, type => type.match(/(^\.|\/)/) ? type : `.${type}`).join(', '));
+        }
+
         // we can not select file and folder at the same time
         this.input_file.webkitdirectory = this.allowFolder;
         this.component.el.dom.appendChild(this.input_file);
@@ -225,7 +234,31 @@ Ext.ux.file.BrowsePlugin.prototype = {
             console.error(e);
         }
 
-        
+        if (this.files.length > 1 && !this.multiple) {
+            await Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO_FAILURE,
+                title: i18n._('Please select only one file'),
+                msg: i18n._('It is not allowed to select more than one file at a time here.')
+            });
+            return;
+        }
+
+
+        if (Ext.isArray(this.allowedTypes) && !_.reduce(this.files, (allowed, file) => {
+            return allowed && _.find(this.allowedTypes, (type) => {
+                return type.match(/\//) ? file.type === type : file.name.match(new RegExp(_.escapeRegExp(type) + '$'))
+            })
+        }, true)) {
+            await Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO_FAILURE,
+                title: i18n._('Wrong File Type'),
+                msg: [i18n._('Please select a file with one of the following extensions:'), '<br />', this.allowedTypes.join(', ')].join('')
+            });
+            return;
+        }
+
         if (!_.isFunction(e.getTarget)) {
             // backwards compatibility
             e.getTarget = function () {
