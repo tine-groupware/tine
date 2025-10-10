@@ -32,6 +32,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         Tine.log.debug('Tine.Calendar.ImportDialog::initComponent');
         Tine.log.debug(this);
 
+        this.allowedFileExtensions = ['ics'];
         Tine.Calendar.ImportDialog.superclass.initComponent.call(this);
     },
 

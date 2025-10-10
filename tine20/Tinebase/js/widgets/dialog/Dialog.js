@@ -106,8 +106,8 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
      */
     getEventData: Ext.emptyFn,
     
-    onButtonCancel: function() {
-        this.fireEvent.apply(this, ['cancel', this.getEventData('cancel')]);
+    onButtonCancel: async function() {
+        this.fireEvent.apply(this, ['cancel', await this.getEventData('cancel')]);
         if (this.window.closeAction !== 'hide') {
             this.purgeListeners();
             this.window.close();
@@ -117,8 +117,8 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
 
     },
 
-    onButtonApply: function() {
-        var eventData = this.getEventData('apply');
+    onButtonApply: async function() {
+        var eventData = await this.getEventData('apply');
         this.fireAsyncEvent.apply(this, ['beforeapply', eventData, this]).then(() => {
             this.fireEvent.apply(this, ['apply', eventData]);
             if (this.window.closeAction !== 'hide') {
