@@ -58,6 +58,17 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         this.loadingIndicator.hide();
     },
 
+    onActivate: async function() {
+        await this.showUnavailableAlertIf()
+        if (this.clientFrame) {
+            // fix ui glitch - element somehow shows half the client only after some time in background
+            this.clientFrame.setHeight(this.el.getHeight()-1)
+            _.delay(() => {
+                this.clientFrame.setHeight(this.el.getHeight())
+            }, 100)
+        }
+    },
+
     showUnavailableAlertIf: async function() {
         await this.initPromise
         if (!this.isAvailable && this.isVisible()) {
