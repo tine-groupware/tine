@@ -111,9 +111,8 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
                     [
                         Tinebase_Model_Filter_FilterGroup::CONDITION => Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
                         Tinebase_Model_Filter_FilterGroup::FILTERS => [
-                            // baaah, this filter actually means: no EVENT_ROLES_CONFIGS set!!!
                             [TMFA::FIELD => CrewScheduling_Config::EVENT_ROLES_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+                                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
                             ]],
                             [TMFA::FIELD => 'event_types', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
                                 [TMFA::FIELD => Calendar_Model_EventTypes::FLD_EVENT_TYPE, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [

@@ -192,6 +192,111 @@ class CrewScheduling_FrontendTest extends TestCase
                 $this->assertArrayNotHasKey('uid', $resultEvent);
             }
         }
+
+        $eventTypeNoCsRole = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'unu',
+            'name' => 'unittest2',
+        ]));
+
+       $result = (new Calendar_Frontend_Json)->searchEventTypes([
+            [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventType->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEventTypes([
+            [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventType->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEventTypes([
+            [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventTypeNoCsRole->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEventTypes([
+            [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventTypeNoCsRole->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+    }
+
+    public function testJsonSearchEventRolesConfig(): void
+    {
+        $schedulingRole = CrewScheduling_Controller_SchedulingRole::getInstance()->create(new CrewScheduling_Model_SchedulingRole([
+            CrewScheduling_Model_SchedulingRole::FLD_NAME => 'unittest',
+            CrewScheduling_Model_SchedulingRole::FLD_KEY => 'key',
+        ]));
+        $container = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $eventWith = $calCtrl->create(new Calendar_Model_Event([
+            'summary'     => 'unittest',
+            'dtstart'     => Tinebase_DateTime::now(),
+            'dtend'       => Tinebase_DateTime::now()->addMinute(15),
+            'container_id' => $container->getId(),
+            CrewScheduling_Config::EVENT_ROLES_CONFIGS => new Tinebase_Record_RecordSet(CrewScheduling_Model_EventRoleConfig::class, [
+                new CrewScheduling_Model_EventRoleConfig([
+                    CrewScheduling_Model_EventRoleConfig::FLD_ROLE => $schedulingRole->getId(),
+                    CrewScheduling_Model_EventRoleConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE => 1,
+                ], true),
+            ]),
+        ], true));
+        $eventWithOut = $calCtrl->create(new Calendar_Model_Event([
+            'summary'     => 'unittest',
+            'dtstart'     => Tinebase_DateTime::now(),
+            'dtend'       => Tinebase_DateTime::now()->addMinute(15),
+            'container_id' => $container->getId(),
+        ], true));
+
+        $result = (new Calendar_Frontend_Json)->searchEvents([
+            [TMFA::FIELD => CrewScheduling_Config::EVENT_ROLES_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventWith->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEvents([
+            [TMFA::FIELD => CrewScheduling_Config::EVENT_ROLES_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventWith->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEvents([
+            [TMFA::FIELD => CrewScheduling_Config::EVENT_ROLES_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventWithOut->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
+
+        $result = (new Calendar_Frontend_Json)->searchEvents([
+            [TMFA::FIELD => CrewScheduling_Config::EVENT_ROLES_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], []);
+        $this->assertSame($eventWithOut->getId(), $result['results'][0]['id']);
+        $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
+        $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
     }
 
     public function testJsonSearchEventsAcls(): void
