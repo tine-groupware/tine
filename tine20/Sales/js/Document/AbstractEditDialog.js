@@ -47,8 +47,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.getForm().findField('date').setValue(new Date().clearTime());
         }
 
-        if (this.record.phantom) {
-            // new documents need to be saved first to get a proforma number
+        if (this.record.phantom || this.record.modified) {
+            // make sure changes are saved even if booking fails
             await this.applyChanges()
         }
 
@@ -56,8 +56,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             try {
                 await this.applyChanges()
             } catch (exception) {
+                this.loadRecord('remote');
                 Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
-                this.getForm().findField(this.statusFieldName).setValue(this.record.modified[this.statusFieldName]);
             }
 
         }, 150);
