@@ -10,6 +10,8 @@
  
 Ext.ns('Tine.Calendar');
 import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
+import formatAddress from "util/postalAddressFormater";
+
 
 /**
  * @namespace Tine.Calendar
@@ -136,8 +138,24 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             recordClass: Tine.Addressbook.Model.Contact,
                             relationType: 'LOCATION',
                             relationDegree: 'child',
-                            ref: '../../../../../location'
+                            ref: '../../../../../location',
+                            listeners: {
+                                scope: this,
+                                'select': async function (combo, rec) {
+                                    const aStruct = await formatAddress(rec.getPreferredAddressObject());
+                                    this.form.findField('location_address').setValue(aStruct.join('\n'));
+                                }
+                            }
                         }, {
+                            fieldLabel: this.app.i18n._('Resource Location Address'),
+                            name: 'location_address',
+                            xtype: 'textarea',
+                            grow: true,
+                            growMin: 18,
+                            growAppend: '',
+                            requiredGrant: 'editGrant',
+                            maxLength: 255
+                         }], [{
                             xtype: 'checkbox',
                             fieldLabel: this.app.i18n._('Suppress notification'),
                             name: 'suppress_notification'
@@ -213,14 +231,15 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Calendar.ResourceEditDialog.superclass.onRecordUpdate.apply(this, arguments);
     },
-    
-    onSiteSelect: function(field, newValue) {
-        
+
+    onSiteSelect: async function(field, newValue) {
+
         if (!this.location.getValue()) {
             this.location.setValue(newValue);
+            const aStruct = await formatAddress(newValue.getPreferredAddressObject());
+            this.form.findField('location_address').setValue(aStruct.join('\n'));
         }
     }
-    
 });
 
 /**

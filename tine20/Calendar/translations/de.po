@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2024-12-10 09:54+0100\n"
+"PO-Revision-Date: 2025-10-10 15:36+0200\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.7\n"
 
 msgid "manage shared calendars"
 msgstr "Gemeinsame Kalender Verwalten"
@@ -1557,7 +1557,7 @@ msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 msgid "Reload"
-msgstr ""
+msgstr "Neu laden"
 
 msgid "Poll"
 msgid_plural "Polls"
@@ -1627,6 +1627,9 @@ msgstr "Standard Teilnehmenden Status mit Status Recht"
 
 msgid "Resource Location"
 msgstr "Ressourcen Ort"
+
+msgid "Resource Location Address"
+msgstr "Ressourcen Ort Adresse"
 
 msgid "Suppress notification"
 msgstr "Benachrichtigungen unterdrücken"
@@ -1817,8 +1820,8 @@ msgstr ""
 
 msgid "Calendar User"
 msgid_plural "Calendar Users"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kalender Benutzer*inne"
+msgstr[1] "Kalender Benutzer*innen"
 
 #, python-format, php-format
 msgid "Every %s day"
