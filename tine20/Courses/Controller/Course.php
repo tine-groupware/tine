@@ -97,7 +97,9 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
      * 
      * @todo this should be moved to normal create/update (inspection) functions
      */
-    public function saveCourseAndGroup(Courses_Model_Course $course, Tinebase_Model_Group $group, $memberData = [])
+    public function saveCourseAndGroup(Courses_Model_Course $course,
+                                       Tinebase_Model_Group $group,
+                                       array $memberData = []): Courses_Model_Course
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
         
@@ -107,41 +109,49 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         $groupNamePrefix = is_array($groupNamePrefix) ? $groupNamePrefix[0] : $groupNamePrefix;
         $group->name = $groupNamePrefix . '-' . $course->name;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Saving course ' . $course->name . ' with group ' . $group->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Saving course ' . $course->name . ' with group ' . $group->name);
+        }
 
         if (empty($group->id)) {
-            $savedGroup         = $this->_groupController->create($group);
-            $course->group_id   = $savedGroup->getId();
-            $savedRecord        = $this->create($course);
+            $savedGroup = $this->_groupController->create($group);
+            $course->group_id = $savedGroup->getId();
+            /** @var Courses_Model_Course $savedRecord */
+            $savedRecord = $this->create($course);
         } else {
-            $savedRecord      = $this->update($course);
-            $currentMembers   = $this->_groupController->getGroupMembers($course->group_id);
-            $newCourseMembers = array_diff((array)$group->members, $currentMembers);
-            if (count($newCourseMembers) > 0) {
-                $this->addCourseMembers($course, $newCourseMembers);
-            }
-        
-            $deletedAccounts  = array_diff($currentMembers, (array)$group->members);
+            /** @var Courses_Model_Course $savedRecord */
+            $savedRecord = $this->update($course);
 
-            // delete members which got removed from course
-            if (!empty($deletedAccounts)) {
-                $this->_userController->delete($deletedAccounts);
+            if (Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+                $currentMembers = $this->_groupController->getGroupMembers($course->group_id);
+                $newCourseMembers = array_diff((array)$group->members, $currentMembers);
+                if (count($newCourseMembers) > 0) {
+                    $this->addCourseMembers($course, $newCourseMembers);
+                }
+                $deletedAccounts = array_diff($currentMembers, (array)$group->members);
+                // delete members which got removed from course
+                if (!empty($deletedAccounts)) {
+                    $this->_userController->delete($deletedAccounts);
+                }
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permission to MANAGE_ACCOUNTS');
             }
         }
-        
-        $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($course->group_id);
-        // add/remove members to/from internet/fileserver group
-        if (! empty($groupMembers)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Found ' . count($groupMembers) . ' group members');
-            $this->_manageAccessGroups($groupMembers, $savedRecord);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' No group members found.');
-        }
 
-        $this->_manageAdditionalGroupMemberships($memberData);
+        if (Tinebase_Core::getUser()->hasRight(Admin_Config::APP_NAME, Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
+            $groupMembers = Tinebase_Group::getInstance()->getGroupMembers($course->group_id);
+            // add/remove members to/from internet/fileserver group
+            if (!empty($groupMembers)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Found ' . count($groupMembers) . ' group members');
+                $this->_manageAccessGroups($groupMembers, $savedRecord);
+            }
+
+            $this->_manageAdditionalGroupMemberships($memberData);
+        } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permission to MANAGE_ACCOUNTS');
+        }
 
         $transaction->release();
         
@@ -169,15 +179,22 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
         }
     
         if (! isset($this->_config->{$configField})) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No config found for ' . $configField);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No config found for ' . $configField);
+            }
             return;
         }
     
         $groupId = $this->_config->{$configField};
-        $secondGroupId = ($accessType === 'internet' && isset($this->_config->{$secondConfigField})) ? $this->_config->{$secondConfigField} : NULL;
+        $secondGroupId = ($accessType === 'internet' && isset($this->_config->{$secondConfigField}))
+            ? $this->_config->{$secondConfigField}
+            : null;
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . " Setting $accessType to " . $course->{$accessType} . " for " . print_r($members, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Setting $accessType to " . $course->{$accessType} . " for " . print_r($members, true));
+        }
     
         // add or remove members to or from internet/fileserver groups
         foreach ($members as $memberId) {
