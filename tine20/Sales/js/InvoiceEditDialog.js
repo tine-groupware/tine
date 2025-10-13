@@ -400,6 +400,39 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.priceNetField.setValue(netPrice);
     },
 
+    onBeforeStatusSelect: async function(statusField, status, idx) {
+        if (await Ext.MessageBox.confirm(
+            this.app.i18n._('Confirm Status Change'),
+            this.app.i18n._('Changing this workflow status might not be revertible. Proceed anyway?')
+        ) !== 'yes') {
+            return false;
+        }
+
+        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.MessageBox.YESNO,
+            title: this.app.formatMessage('Change Document Date?'),
+            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
+        }) === 'yes') {
+            this.getForm().findField('date').setValue(new Date().clearTime());
+        }
+
+        if (this.record.phantom || this.record.modified) {
+            // make sure changes are saved even if booking fails
+            await this.applyChanges()
+        }
+
+        _.delay(async () => {
+            try {
+                await this.applyChanges()
+            } catch (exception) {
+                this.loadRecord('remote');
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            }
+
+        }, 150);
+    },
+
     /**
      * returns dialog
      *
@@ -629,7 +662,11 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     fieldLabel: this.app.i18n._('Cleared'),
                                     name: 'cleared',
                                     allowBlank: false,
-                                    columnWidth: 1/3
+                                    columnWidth: 1/3,
+                                    listeners: {
+                                        scope: this,
+                                        beforeselect: this.onBeforeStatusSelect
+                                    }
                                 }), {
                                     xtype: 'datefield',
                                     name: 'start_date',
