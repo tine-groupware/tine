@@ -20,6 +20,7 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -56,6 +57,10 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE018_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -190,5 +195,11 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
         }
         
         $this->addApplicationUpdate('CrewScheduling', '18.6', self::RELEASE018_UPDATE006);
+    }
+
+    public function update007(): void
+    {
+        (new CrewScheduling_Setup_Initialize)->_initializePersistentObservers();
+        $this->addApplicationUpdate('CrewScheduling', '18.7', self::RELEASE018_UPDATE007);
     }
 }
