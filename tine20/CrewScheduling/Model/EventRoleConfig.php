@@ -31,6 +31,13 @@ class CrewScheduling_Model_EventRoleConfig extends Tinebase_Record_NewAbstract
     const MODEL_NAME_PART = 'EventRoleConfig';
     const TABLE_NAME = 'cs_event_role_cfg';
 
+    const ACTION_ORDER = ['none', 'tentative', 'forbidden'];
+    const ACTION_STATUS_MAP = [
+        'none' => 'CONFIRMED',
+        'tentative' => 'TENTATIVE',
+        'forbidden' => 'CANCELLED',
+    ];
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -177,4 +184,122 @@ class CrewScheduling_Model_EventRoleConfig extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function getRoleTypesKey()
+    {
+        $expander = new Tinebase_Record_Expander(CrewScheduling_Model_EventRoleConfig::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                CrewScheduling_Model_EventRoleConfig::FLD_ROLE => [],
+                CrewScheduling_Model_EventRoleConfig::FLD_EVENT_TYPES => []
+            ]
+        ]);
+        $expander->expandRecord($this);
+
+        return $this->{CrewScheduling_Model_EventRoleConfig::FLD_ROLE}->{CrewScheduling_Model_SchedulingRole::FLD_KEY} .
+            ':' . implode('&', array_unique($this->{CrewScheduling_Model_AttendeeRole::FLD_EVENT_TYPES}?->sort('short_name')->short_name ?? []));
+    }
+
+    /**
+     * @param Calendar_Model_Event $event
+     * @param CrewScheduling_Model_SchedulingRole $role
+     * @return Tinebase_Record_RecordSet
+     */
+    public static function getFromEvent(Calendar_Model_Event $event, CrewScheduling_Model_SchedulingRole $role=null) : Tinebase_Record_RecordSet
+    {
+
+
+        if ($event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS} instanceof Tinebase_Record_RecordSet && $event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS}->count() > 0) {
+            $eRCs = $event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS};
+        } elseif (isset($event->event_types)) {
+            $eRCs = self::createFromEventTypes($event->event_types);
+        } else {
+            $eRCs = new Tinebase_Record_RecordSet(CrewScheduling_Model_EventRoleConfig::class, []);
+        }
+
+        if ($role) {
+            throw new Tinebase_Exception_NotImplemented(__METHOD__);
+        }
+
+        return $eRCs;
+    }
+
+    public static function createFromEventTypes(Tinebase_Record_RecordSet $eventTypes)
+    {
+        $roleConfigs = new Tinebase_Record_RecordSet(CrewScheduling_Model_EventRoleConfig::class, []);
+
+        $expander = new Tinebase_Record_Expander(Calendar_Model_EventTypes::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Calendar_Model_EventTypes::FLD_EVENT_TYPE => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        CrewScheduling_Config::CS_ROLE_CONFIGS => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                CrewScheduling_Model_EventTypeConfig::FLD_SCHEDULING_ROLE => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $expander->expand($eventTypes);
+
+        /** @var  Calendar_Model_EventType $eventType  */
+        foreach ($eventTypes->{Calendar_Model_EventTypes::FLD_EVENT_TYPE} as $eventType) {
+            /** @var CrewScheduling_Model_EventTypeConfig $typeConfig */
+            foreach ($eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS} as $typeConfig) {
+                /** @var CrewScheduling_Model_SchedulingRole $role */
+                $processed = false;
+                $role = $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_SCHEDULING_ROLE};
+
+                // take defaults from role if type specific roleConfig is not set
+                $role = $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_SCHEDULING_ROLE};
+                forEach(['num_required_role_attendee', 'exceedance_action', 'shortfall_action'] as $prop) {
+                    $typeConfig[$prop] = $typeConfig[$prop] ?? $role[$prop];
+                };
+
+                // check if we can add this type into an existing config (same_role_same_attendee: Behavior if this role is also required from other event types)
+                if ($typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_SAME_ROLE_SAME_ATTENDEE} !== CrewScheduling_Config::OPTION_MUST_NOT) {
+                    /** @var CrewScheduling_Model_EventRoleConfig $roleConfig */
+                    if ($roleConfig = $roleConfigs->filter((function (CrewScheduling_Model_EventRoleConfig $item) use ($role) {
+                        return $item->{CrewScheduling_Model_EventRoleConfig::FLD_ROLE}->{CrewScheduling_Model_SchedulingRole::ID} === $role->{CrewScheduling_Model_SchedulingRole::ID} &&
+                            $item->{CrewScheduling_Model_EventTypeConfig::FLD_SAME_ROLE_SAME_ATTENDEE} !== CrewScheduling_Config::OPTION_MUST_NOT;
+                    }))->getFirstRecord()) {
+                        $roleConfig->{CrewScheduling_Model_EventRoleConfig::FLD_EVENT_TYPES}->addRecord($eventType);
+                        self::mergeEventRoleConfig($roleConfig, $typeConfig);
+                        $processed = true;
+                    }
+                }
+                if (!$processed) {
+                    $roleConfigs->addRecord(new CrewScheduling_Model_EventRoleConfig([
+                        CrewScheduling_Model_EventRoleConfig::ID => Tinebase_Record_Abstract::generateUID(),
+                        CrewScheduling_Model_EventRoleConfig::FLD_CAL_EVENT => '...',
+                        CrewScheduling_Model_EventRoleConfig::FLD_ROLE => $role,
+                        CrewScheduling_Model_EventRoleConfig::FLD_EVENT_TYPES => new Tinebase_Record_RecordSet(Calendar_Model_EventType::class, [$eventType]),
+                        CrewScheduling_Model_EventRoleConfig::FLD_EXCEEDANCE_ACTION => $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_EXCEEDANCE_ACTION},
+                        CrewScheduling_Model_EventRoleConfig::FLD_SHORTFALL_ACTION => $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_SHORTFALL_ACTION},
+                        CrewScheduling_Model_EventRoleConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE => $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE},
+                        CrewScheduling_Model_EventRoleConfig::FLD_SAME_ROLE_SAME_ATTENDEE => $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_SAME_ROLE_SAME_ATTENDEE},
+                        CrewScheduling_Model_EventRoleConfig::FLD_OTHER_ROLE_SAME_ATTENDEE => $typeConfig->{CrewScheduling_Model_EventTypeConfig::FLD_OTHER_ROLE_SAME_ATTENDEE},
+                    ]));
+                }
+            }
+        }
+
+        return $roleConfigs;
+    }
+
+    public static function mergeEventRoleConfig(ArrayAccess $roleConfig, ArrayAccess $overWrites) : void
+    {
+        $roleConfig['exceedance_action'] = self::mergeActions($overWrites['exceedance_action'], $roleConfig['exceedance_action']);
+        $roleConfig['shortfall_action'] = self::mergeActions($overWrites['shortfall_action'], $roleConfig['shortfall_action']);
+        $roleConfig['num_required_role_attendee'] = max($roleConfig['num_required_role_attendee'] ?? 1, $overWrites['num_required_role_attendee'] ?? 1);
+        $roleConfig['same_role_same_attendee'] = in_array(CrewScheduling_Config::OPTION_MUST, [$roleConfig['same_role_same_attendee'], $overWrites['same_role_same_attendee']]) ? CrewScheduling_Config::OPTION_MUST : CrewScheduling_Config::OPTION_MAY;
+        $roleConfig['other_role_same_attendee'] = $roleConfig['other_role_same_attendee'] && $overWrites['other_role_same_attendee'];
+    }
+
+    public static function mergeActions() : string
+    {
+        return array_reduce(func_get_args(), function ($merged, $action) {
+            return array_search($action, self::ACTION_ORDER) > array_search($merged, self::ACTION_ORDER) ? $action : $merged;
+        }, 'none' );
+    }
 }

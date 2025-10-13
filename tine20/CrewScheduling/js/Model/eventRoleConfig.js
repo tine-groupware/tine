@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import { map, cloneDeep, each, filter, find, get, reduce, isString, groupBy } from 'lodash';
+import { map, cloneDeep, each, filter, find, get, reduce, isString, groupBy, uniq } from 'lodash';
 import * as async from 'async';
 import { getType, getTypes } from "../Calendar/Model/eventType";
 import { getRole } from "./schedulingRole";
@@ -79,7 +79,7 @@ const getRoleTypesKey = async (item) => {
     const role = isString(d.role) ? (await getRole(d.role)) : (d.role.data || d.role)
     const types = await async.map(d.event_types, async (type) => { return isString(type) ? (await getType(type)) : type})
 
-    return `${role.key}:${map(types, 'short_name').sort().join('&')}`
+    return `${role.key}:${uniq(map(types, 'short_name')).sort().join('&')}`
 }
 
 /**
