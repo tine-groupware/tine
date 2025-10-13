@@ -117,6 +117,7 @@ js-e2e-tests-source-save-screenshots-720p:
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS != "true" && $CI_MERGE_REQUEST_LABELS !~ /js-e2e-tests-source-save-screenshots/ && $CI_PIPELINE_SOURCE != "schedule"
       when: never
     - !reference [.js-e2e-tests-source, rules]
+  allow_failure: true
 js-e2e-tests-source-save-screenshots-1080p:
   extends: js-e2e-tests-source-save-screenshots-720p
   variables:

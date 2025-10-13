@@ -15,8 +15,8 @@ describe('MainScreen', () => {
         try {
             await expect(page).toClick('button', {text: 'Blatt'});
         } catch (e) {
-            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
-            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt'});
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt', visible: true});
         }
         await page.waitForTimeout(1000);
         await lib.makeScreenshot(page
@@ -72,8 +72,8 @@ describe('MainScreen', () => {
         try {
             await expect(page).toClick('button', {text: 'Zeitstrahl'});
         } catch (e) {
-            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
-            await expect(page).toClick('.x-menu-item-text', {text: 'Zeitstrahl'});
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expect(page).toClick('.x-menu-item-text', {text: 'Zeitstrahl', visible: true});
         }
         await page.waitForTimeout(1000);
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/5_kalender_termine_listenansicht.png'});
@@ -153,8 +153,8 @@ describe('context menu', () => {
         try {
             await expect(page).toClick('button', {text: 'Blatt'});
         } catch (e) {
-            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon');
-            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt'});
+            await expect(page).toClick('.x-btn-image.x-toolbar-more-icon',{visible: true});
+            await expect(page).toClick('.x-menu-item-text', {text: 'Blatt', visible: true});
         }
         await page.waitForTimeout(2000);
         await expect(page).toClick('button', {text: 'Woche'});
