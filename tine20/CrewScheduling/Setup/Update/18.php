@@ -150,6 +150,9 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             CrewScheduling_Model_EventTypeConfig::class,
         ]);
 
+        // commit db schema changes before continuing
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
         $roleCtrl = CrewScheduling_Controller_SchedulingRole::getInstance();
         $oldValue = $roleCtrl->doContainerACLChecks(false);
         $setContainerMethod = new ReflectionMethod(CrewScheduling_Controller_SchedulingRole::class,
