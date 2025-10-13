@@ -472,15 +472,17 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             ));
         } else {
             $clone = clone $this;
-            $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
+            $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', [$clone]);
             self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
             $result = $clone->user_id;
-            if ($this->{self::FLD_USER_DISPLAYNAME}) {
-                $result->n_fileas = $this->{self::FLD_USER_DISPLAYNAME};
-                $result->n_fn = $this->{self::FLD_USER_DISPLAYNAME};
-            }
-            if ($this->{self::FLD_USER_EMAIL}) {
-                $result->email = $this->{self::FLD_USER_EMAIL};
+            if ($result instanceof Tinebase_Record_Interface) {
+                if ($this->{self::FLD_USER_DISPLAYNAME}) {
+                    $result->n_fileas = $this->{self::FLD_USER_DISPLAYNAME};
+                    $result->n_fn = $this->{self::FLD_USER_DISPLAYNAME};
+                }
+                if ($this->{self::FLD_USER_EMAIL}) {
+                    $result->email = $this->{self::FLD_USER_EMAIL};
+                }
             }
         }
         
