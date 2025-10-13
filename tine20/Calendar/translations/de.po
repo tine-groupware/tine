@@ -1557,7 +1557,7 @@ msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
 msgid "Reload"
-msgstr ""
+msgstr "Neu laden"
 
 msgid "Poll"
 msgid_plural "Polls"
