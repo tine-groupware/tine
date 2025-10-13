@@ -730,7 +730,7 @@ class Tinebase_EmailUser
         ?string $accountLoginName = null,
         bool $masteruser = false
     ): string {
-        $imapLoginname =  null;
+        $imapLoginname = null;
         if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             // TODO we should handle other system accounts here, too
             $record = Tinebase_User::getInstance()->getFullUserById($account->user_id);
@@ -747,12 +747,17 @@ class Tinebase_EmailUser
 
         if (! $imapLoginname) {
             $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
-            $imapEmailBackend = Tinebase_EmailUser::getInstance();
-            $imapLoginname = $imapEmailBackend->getLoginName(
-                $user->getId(),
-                $accountLoginName ?? $account->email,
-                $account->email
-            );
+            try {
+                $imapEmailBackend = Tinebase_EmailUser::getInstance();
+                $imapLoginname = $imapEmailBackend->getLoginName(
+                    $user->getId(),
+                    $accountLoginName ?? $account->email,
+                    $account->email
+                );
+            } catch (Tinebase_Exception_Backend $teb) {
+                // just use email
+                $imapLoginname = $account->email;
+            }
         }
 
         if ($masteruser) {
