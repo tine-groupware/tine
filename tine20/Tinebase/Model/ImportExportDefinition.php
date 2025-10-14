@@ -167,6 +167,7 @@ class Tinebase_Model_ImportExportDefinition extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Label', // _('Label')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::TYPE => self::TYPE_STRING,
+                self::QUERY_FILTER => true,
             ],
             self::FLDS_DESCRIPTION => [
                 self::LABEL => 'Description', // _('Description')
