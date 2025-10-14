@@ -5,12 +5,12 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
- * foreign id filter
+ * foreign id filter -> varchar(40), no ref_id set!
  * 
  * Expects:
  * - a filtergroup in options->filtergroup
@@ -21,8 +21,6 @@
  *
  * @package     Tinebase
  * @subpackage  Filter
- *
- * TODO make filtergroup optional (can be fetched via controller or model)
  */
 class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecord
 {
@@ -77,47 +75,68 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
      */
     public function appendFilterSql($_select, $_backend)
     {
-        /*if ($this->_doJoin && $this->_filterGroup) {
-        // this also needs to implement NOT logic
+        $not = str_starts_with($this->_operator, 'not');
+        if ($this->_valueIsNull) {
+            $subNot = str_starts_with($this->_orgValue[0][self::OPERATOR] ?? '', 'not');
+            // not nulls
+            if (($not && !$subNot) || (!$not && $subNot)) {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
+                // nulls
+            } else {
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NULL');
+            }
+            return;
+        }
+
+        if ($this->_doJoin && in_array($this->_operator, ['definedBy', 'notDefinedBy'])) {
             $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
             $joinBackend = $this->_getController()->getBackend();
-            /** @var Tinebase_ModelConfiguration $mc *
             $mc = $this->_getController()->getModel()::getConfiguration();
             $db = $_backend->getAdapter();
-            $_select->join(
-                [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
-                $this->_getQuotedFieldName($_backend) . ' = ' .
-                    $db->quoteIdentifier($this->_options['subTablename'] . '.' . ($mc ? $mc->getIdProperty() : 'id')),
-                []
-            );
             Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($groupSelect, $this->_filterGroup, $joinBackend);
-            $groupSelect->appendWhere();
-            return;
-        }*/
 
-        if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
+            if (!$not) {
+                $_select->joinLeft(
+                    [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                    $this->_getQuotedFieldName($_backend) . ' = ' .
+                    $db->quoteIdentifier($this->_options['subTablename'] . '.' . ($mc ? $mc->getIdProperty() : 'id')),
+                    []
+                );
+                $groupSelect->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
+                $groupSelect->appendWhere();
+
+            } else {
+                $groupSql = $groupSelect->getSQL();
+                $_select->joinLeft(
+                    [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                    $this->_getQuotedFieldName($_backend) . ' = ' .
+                    $db->quoteIdentifier($this->_options['subTablename'] . '.' . ($mc ? $mc->getIdProperty() : 'id'))
+                    . ($groupSql ? ' AND (' . $groupSql . ')' : ''),
+                    []
+                );
+                $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
+            }
+
+            return;
+        }
+
+        if (! is_array($this->_foreignIds)) {
             $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
         }
 
-        if (str_starts_with($this->_operator, 'not')) {
-            if ($this->_valueIsNull) {
-                $_select->where($this->_getQuotedFieldName($_backend) . ' IS NOT NULL');
-            } elseif (!empty($this->_foreignIds)) {
-                $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-                $valueIdentifier = $this->_getQuotedFieldName($_backend);
-                $groupSelect->orWhere($valueIdentifier . ' IS NULL');
+        if ($not) {
+            $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
+            $valueIdentifier = $this->_getQuotedFieldName($_backend);
+            $groupSelect->orWhere($valueIdentifier . ' IS NULL');
+            if (!empty($this->_foreignIds)) {
                 $groupSelect->orWhere($valueIdentifier . ' NOT IN (?)', $this->_foreignIds);
-                $groupSelect->appendWhere(Zend_Db_Select::SQL_OR);
             }
+            $groupSelect->appendWhere(Zend_Db_Select::SQL_OR);
         } else {
-            if (!$this->_valueIsNull && empty($this->_foreignIds)) {
+            if (empty($this->_foreignIds)) {
                 $_select->where('1 = 0');
             } else {
-                if (empty($this->_foreignIds)) {
-                    $_select->where($this->_getQuotedFieldName($_backend) . ' IS NULL');
-                } else {
-                    $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', $this->_foreignIds);
-                }
+                $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', $this->_foreignIds);
             }
         }
     }

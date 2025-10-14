@@ -54,3 +54,30 @@ You could also define a custom expander with a given $definition:
 $expander = new Tinebase_Record_Expander($definition);
 $expander->expand(RecordSet);
 ~~~
+
+System Custom Fields
+------
+
+TODO: translate / move to separate file
+
+* Kopieren von GDPR beispielsweise (initialize, ...)
+  * Wichtig auch “isReplica” beachten
+
+* Wo ist der unterschied zu normalen customfields?
+  *	Normal: zentrale tabelle, nicht im model verankert
+  *	Systemcustomfields: werden direkt ins schema eingetragen
+
+* Warum sind die customfields manchmal in einem array “customfields” am record und manchmal als eigene felder
+  *	Serverseitig sind normale customfields in einem array ($record->customfields[‘customfield’])
+  *	Im client kann man auch so direkt auf die felder zugreifen
+  *	Systemcustomfields sind wie normale felder ($record->systemcustomfield)
+
+* Modelconfighook: erlaubt feingranulares überschreiben / manipulieren des models / der felder
+  * So kann man auch die reihenfolge der felder beeinflussen
+
+* Auch UI config updates brauchen update script
+
+* Im Client geht man am besten über den fieldmanager.register, wenn man spezielle felder für z.b. system customfields haben möchte
+
+* Verbesserungsideen
+    *	“owning app” auch in der cf config tabelle? Wäre vorteil für uninit / disabled apps

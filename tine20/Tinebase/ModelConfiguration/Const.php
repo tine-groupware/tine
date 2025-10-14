@@ -79,6 +79,7 @@ class Tinebase_ModelConfiguration_Const {
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
      */
     public const DISABLED = 'disabled';
+    public const DO_JOIN = 'doJoin';
     public const DOCTRINE_IGNORE = 'doctrineIgnore';
     /** use this type for doctrine mapping instead of normal type */
     public const DOCTRINE_MAPPING_TYPE = 'doctrineMapType';
