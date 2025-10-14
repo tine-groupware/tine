@@ -5,14 +5,17 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Tinebase_Model_Filter_ForeignRecord
  * 
  * filters own ids match result of foreign filter
+ * use for RECORD AND RECORDS if ref_id set in config
  * 
  * @package     Tinebase
  * @subpackage  Filter
@@ -65,6 +68,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
     protected $_orgOperator = '';
 
     protected $_doJoin = false;
+
+    protected $_orgValue = null;
 
     /**
      * sets operator
@@ -125,6 +130,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
      */
     public function setValue($_value)
     {
+        $this->_orgValue = $_value;
+
         if ($_value instanceof Tinebase_Record_Interface) {
             $_value = $_value->getId();
         }
@@ -156,10 +163,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             // (not)definedBy filter, value contains the subfilter
             $this->_value = (array)$_value;
             $this->_removePrefixes();
-            if (!$this->_valueIsNull) {
-                $this->_setFilterGroup();
-            }
         }
+
+        $this->_setFilterGroup();
     }
     
     /**
@@ -201,19 +207,38 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         if (isset($this->_options['subTablename'])) {
             $options['tablename'] = $this->_options['subTablename'];
         }
+        $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            $this->_options['filtergroup'],
+            $this->_valueIsNull ? [] : $this->_value,
+            $this->_conditionSubFilter,
+            $options
+        );
+
+        if ($this->_options[TMCC::ADD_FILTERS] ?? false) {
+            if (Tinebase_Model_Filter_FilterGroup::CONDITION_AND !== $this->_filterGroup->getCondition()) {
+                $this->_filterGroup->andWrapItself();
+            }
+            foreach ($this->_options[TMCC::ADD_FILTERS] as $filter) {
+                $this->_filterGroup->addFilter($this->_filterGroup->createFilter($filter));
+            }
+        }
+
         while (isset($this->_options[Tinebase_Record_Abstract::SPECIAL_TYPE]) &&
-                Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $this->_options[Tinebase_Record_Abstract::SPECIAL_TYPE] &&
-                isset($this->_clientOptions['language'])) {
+            Tinebase_Record_Abstract::TYPE_LOCALIZED_STRING === $this->_options[Tinebase_Record_Abstract::SPECIAL_TYPE] &&
+            isset($this->_clientOptions['language'])) {
             foreach ($this->_value as $val) {
                 if (Tinebase_Record_PropertyLocalization::FLD_LANGUAGE === $val['field']) {
                     break 2;
                 }
             }
-            $this->_value[] = [
-                'field' => Tinebase_Record_PropertyLocalization::FLD_LANGUAGE,
-                'operator' => 'equals',
-                'value' => $this->_clientOptions['language']
-            ];
+            if (Tinebase_Model_Filter_FilterGroup::CONDITION_AND !== $this->_filterGroup->getCondition()) {
+                $this->_filterGroup->andWrapItself();
+            }
+            $this->_filterGroup->addFilter($this->_filterGroup->createFilter(
+                Tinebase_Record_PropertyLocalization::FLD_LANGUAGE,
+                'equals',
+                $this->_clientOptions['language']
+            ));
             $modelName = $this->_options[Tinebase_Record_Abstract::APP_NAME] . '_Model_' .
                 $this->_options[Tinebase_Record_Abstract::MODEL_NAME];
             $context = Tinebase_Model_Pagination::getContext();
@@ -232,12 +257,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             }
             break;
         }
-        $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            $this->_options['filtergroup'],
-            $this->_value,
-            $this->_conditionSubFilter,
-            $options
-        );
+
+
     }
     
     /**
@@ -283,7 +304,13 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             $result['id'] = $this->_id;
         }
 
-        if (null !== $this->_filterGroup) {
+        if ($this->_valueIsNull) {
+            $result['value'] = $this->_orgValue;
+            return $result;
+        }
+
+        if (null !== $this->_filterGroup && !($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
+                $this->_operator === 'notin')) {
             $filters = $this->_getForeignFiltersForToArray($_valueToJson);
 
             if ($this->_options && isset($this->_options['isGeneric']) && $this->_options['isGeneric']) {
@@ -303,13 +330,13 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                 }
             } else {
                 if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
-                        $this->_operator === 'notin') {
+                    $this->_operator === 'notin') {
                     $result['value'] = $this->_foreignIds;
                 } else {
                     // (not)definedBy filter, value contains the subfilter
                     $result['value'] = $this->_value;
                     foreach ($result['value'] as $idx => $filterData) {
-                        if (! isset($filterData['field'])) {
+                        if (!isset($filterData['field'])) {
                             continue;
                         }
 
@@ -318,10 +345,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                         }
                     }
                 }
-
             }
         }
-        
         return $result;
     }
 

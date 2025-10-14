@@ -133,6 +133,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_INVOICE_RECIPIENT_ID],
                     ],
+                    self::FILTER_OPTIONS        => [
+                        self::DO_JOIN               => true,
+                    ],
                 ],
             ],
             self::FLD_DELIVERY_RECIPIENT_ID => [

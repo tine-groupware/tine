@@ -4082,7 +4082,7 @@ HumanResources_CliTests.testSetContractsEndDate */
     }
 
     /**
-     * @return string
+     * @return class-string<Tinebase_Record_Interface>
      */
     public function getModel()
     {
