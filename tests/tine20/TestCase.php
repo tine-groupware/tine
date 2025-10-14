@@ -1620,4 +1620,53 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             }
         }
     }
+
+    /**
+     * @return string
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     */
+    protected function _doXlsExport($model = Addressbook_Model_Contact::class, $definition = 'adb_xls', $filter = null, $testRecord = null): PHPExcel
+    {
+        if (null === $filter) {
+            if ($model === Addressbook_Model_Contact::class) {
+                $testContact = new Addressbook_Model_Contact([]);
+                $testContact->n_given = 'Test Contact Name 123';
+                $testContact->n_family = 'Test Name';
+                $testContact->salutation = 'MR';
+                $testContact->tags = [
+                    ['name' => 'tag1'],
+                    ['name' => 'tag2'],
+                ];
+
+                $testContact = Addressbook_Controller_Contact::getInstance()->create($testContact);
+
+                $filter = new Addressbook_Model_ContactFilter([
+                    ['field' => 'n_given', 'operator' => 'equals', 'value' => $testContact->n_given]
+                ]);
+            } else if ($testRecord) {
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+                    ['field' => 'id', 'operator' => 'equals', 'value' => $testRecord->getId()]
+                ]);
+            } else {
+                self::markTestIncomplete('Implement me');
+            }
+        }
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definition);
+        $export = Tinebase_Export::factory($filter, [
+            'definitionId' => $definition->getId(),
+        ]);
+
+        if (!$export instanceof Tinebase_Export_Xls) {
+            throw new Tinebase_Exception_InvalidArgument('only xls export definitions allowed');
+        }
+
+        $xls = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->write($xls);
+
+        $reader = PHPExcel_IOFactory::createReader('Excel2007');
+        return $reader->load($xls);
+    }
 }

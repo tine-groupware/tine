@@ -9,14 +9,9 @@
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Timetracker_Export
  */
-class Timetracker_ExportTest extends Timetracker_AbstractTest
+class Timetracker_Export_ExportTest extends Timetracker_AbstractTest
 {
     /**
      * try to export Timesheets
