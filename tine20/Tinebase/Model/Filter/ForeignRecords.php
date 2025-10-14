@@ -44,14 +44,6 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
         parent::_setOptions($_options);
     }
 
-    public function setValue($_value)
-    {
-        parent::setValue($_value);
-        if ($this->_valueIsNull) {
-            $this->_setFilterGroup();
-        }
-    }
-
     /**
      * appends sql to given select statement
      *
@@ -68,13 +60,20 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
             $db = $_backend->getAdapter();
             $orgField = $this->_field;
             $this->_field = 'id';
-            $not = false;
-            if (str_starts_with($this->_operator, 'not')) {
-                $not = true;
-            }
+            $not = str_starts_with($this->_operator, 'not');
+
             try {
-                if (!$not) {
-                    if ($this->_valueIsNull) {
+                if ($this->_valueIsNull) {
+                    $subNot = str_starts_with($this->_orgValue[0][self::OPERATOR] ?? '', 'not');
+                    if (($not && !$subNot) || (!$not && $subNot)) {
+                        $_select->joinLeft(
+                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
+                            $this->_getQuotedFieldName($_backend) . ' = ' .
+                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
+                            []
+                        );
+                        $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
+                    } else {
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
@@ -82,7 +81,9 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                             []
                         );
                         $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NULL');
-                    } else {
+                    }
+                } else {
+                    if (!$not) {
                         $_select->joinLeft(
                             [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
                             $this->_getQuotedFieldName($_backend) . ' = ' .
@@ -91,16 +92,6 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                         );
                         $groupSelect->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
                         $groupSelect->appendWhere();
-                    }
-                } else {
-                    if ($this->_valueIsNull) {
-                        $_select->joinLeft(
-                            [$this->_options['subTablename'] => $joinBackend->getTablePrefix() . $joinBackend->getTableName()],
-                            $this->_getQuotedFieldName($_backend) . ' = ' .
-                            $db->quoteIdentifier($this->_options['subTablename'] . '.' . $this->_options['refIdField']),
-                            []
-                        );
-                        $_select->where($db->quoteIdentifier($this->_options['subTablename']) . '.id IS NOT NULL');
                     } else {
                         $groupSql = $groupSelect->getSQL();
                         $_select->joinLeft(
@@ -130,8 +121,10 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
         $this->_field = $this->_options['id_field'] ?? 'id';
 
         try {
+            $not = str_starts_with($this->_operator, 'not');
             if ($this->_valueIsNull) {
-                if (str_starts_with($this->_operator, 'not')) {
+                $subNot = str_starts_with($this->_orgValue[0][self::OPERATOR] ?? '', 'not');
+                if (($not && !$subNot) || (!$not && $subNot)) {
                     if (empty($this->_foreignIds)) {
                         $_select->where('1 = 0');
                     } else {
@@ -145,7 +138,19 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
                     }
                 }
             } else {
-                parent::appendFilterSql($_select, $_backend);
+                if ($not) {
+                    if (empty($this->_foreignIds)) {
+                        $_select->where('1 = 1');
+                    } else {
+                        $_select->where($this->_getQuotedFieldName($_backend) . ' NOT IN (?)', $this->_foreignIds);
+                    }
+                } else {
+                    if (empty($this->_foreignIds)) {
+                        $_select->where('1 = 0');
+                    } else {
+                        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', $this->_foreignIds);
+                    }
+                }
             }
         } finally {
             $this->_field = $orgField;

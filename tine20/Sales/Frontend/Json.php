@@ -1036,16 +1036,19 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contractId = $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_CONTRACT_ID);
 
         $orders = Sales_Controller_Document_Order::getInstance()->search(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
-                [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}?->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
-                ]],
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, array_merge([
                 [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY)],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
                 [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_CONTRACT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $contractId],
                 [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
-            ]), null, new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
+            ], $order->{$recipientField} ? [
+                [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
+                ]]] : [
+                    [TMFA::FIELD => $recipientField, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => null],
+                ]
+            )), null, new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$recipientField => []],
             ]))->filter(fn ($rec) => $rec->{$recipientField}?->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
 

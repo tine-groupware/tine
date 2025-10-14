@@ -8,6 +8,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Sales_Model_Document_Order as SMDOrder;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
@@ -1010,6 +1011,244 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]]
             ]));
         $this->assertSame(4, $result->count());
+    }
+
+    public function testForeignIdFilter(): void
+    {
+        $orderCtrl = Sales_Controller_Document_Order::getInstance();
+        $customer = $this->_createCustomer();
+
+        $postal1 = clone $customer->postal;
+        $postal1->{Sales_Model_Address::FLD_POSTALCODE} = 'unittest1';
+
+        $postal2 = clone $customer->postal;
+        $postal2->setId(null);
+        $postal2->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+        $postal2->{Sales_Model_Address::FLD_POSTALCODE} = 'unittest2';
+
+        $postal3 = clone $customer->postal;
+        $postal3->setId(null);
+        $postal3->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+        $postal3->{Sales_Model_Address::FLD_POSTALCODE} = 'unittest3';
+
+        $commonFlds = [
+            SMDOrder::FLD_CUSTOMER_ID => $customer,
+            SMDOrder::FLD_ORDER_STATUS => SMDOrder::STATUS_RECEIVED,
+        ];
+        $orders = [
+            // 0
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            // 1
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal2,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal3,
+            ]), true)),
+            // 2
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            // 3
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal1,
+            ]), true)),
+            // 4
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            // 5
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal1,
+            ]), true)),
+            // 6
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal2,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal3,
+            ]), true)),
+        ];
+
+        $assertFun = function(array $filter, $expectedResult) {
+            $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(SMDOrder::class, $filter));
+            sort($expectedResult);
+            $resultIds = $result->getArrayOfIds();
+            sort($resultIds);
+            $this->assertSame($expectedResult, $resultIds);
+        };
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+        ], [
+            $orders[2]->getId(),
+            $orders[3]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[2]->getId(),
+            $orders[3]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[4]->getId(),
+            $orders[5]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[4]->getId(),
+            $orders[5]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[4]->getId(),
+            $orders[5]->getId(),
+            $orders[6]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+                ]],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+                ]],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+        ], [
+            $orders[4]->getId(),
+            $orders[5]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[4]->getId(),
+            $orders[5]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[2]->getId(),
+            $orders[3]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[2]->getId(),
+            $orders[3]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[0]->getId(),
+            $orders[1]->getId(),
+            $orders[2]->getId(),
+            $orders[3]->getId(),
+            $orders[6]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
+                ]],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
+                ]],
+            ]],
+        ], [
+            $orders[1]->getId(),
+            $orders[6]->getId(),
+        ]);
+
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => Sales_Model_Address::FLD_POSTALCODE, TMFA::OPERATOR => 'equals', TMFA::VALUE => 'unittest1'],
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Sales_Model_Address::FLD_STREET, TMFA::OPERATOR => 'contains', TMFA::VALUE => 'teststreet'],
+                ]],
+            ]],
+        ], [
+            $orders[3]->getId(),
+        ]);
+        $assertFun([
+            [TMFA::FIELD => SMDOrder::FLD_INVOICE_RECIPIENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => Sales_Model_Address::FLD_POSTALCODE, TMFA::OPERATOR => 'equals', TMFA::VALUE => 'unittest1'],
+                [TMFA::FIELD => 'original_id', TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Sales_Model_Address::FLD_STREET, TMFA::OPERATOR => 'contains', TMFA::VALUE => 'teststreet'],
+                ]],
+            ]],
+        ], []);
     }
 
     public function testInvoiceModelPriceCalcultionGrossPrice(): void

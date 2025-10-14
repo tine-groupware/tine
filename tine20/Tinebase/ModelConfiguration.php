@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -889,38 +889,38 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * @var array
      */
     protected $_filterModelMapping = array(
-        'datetime_separated_date' => Tinebase_Model_Filter_Date::class,
-        'datetime_separated_time' => Tinebase_Model_Filter_Date::class,
-        'datetime_separated_tz' => Tinebase_Model_Filter_Text::class,
-        'date'                  => Tinebase_Model_Filter_Date::class,
-        'month'                 => Tinebase_Model_Filter_Month::class,
-        'datetime'              => Tinebase_Model_Filter_DateTime::class,
-        'time'                  => Tinebase_Model_Filter_Time::class,
-        'string'                => Tinebase_Model_Filter_Text::class,
-        'stringAutocomplete'    => Tinebase_Model_Filter_Text::class,
-        'text'                  => Tinebase_Model_Filter_Text::class,
-        'fulltext'              => Tinebase_Model_Filter_FullText::class,
-        self::TYPE_STRICTFULLTEXT        => Tinebase_Model_Filter_StrictFullText::class,
-        'json'                  => Tinebase_Model_Filter_Text::class,
-        'boolean'               => Tinebase_Model_Filter_Bool::class,
-        'integer'               => Tinebase_Model_Filter_Int::class,
-        self::TYPE_BIGINT       => Tinebase_Model_Filter_Int::class,
-        'float'                 => Tinebase_Model_Filter_Float::class,
-        'money'                 => Tinebase_Model_Filter_Float::class,
-        self::TYPE_RECORD                => Tinebase_Model_Filter_ForeignId::class,
-        'records'               => Tinebase_Model_Filter_ForeignRecords::class,
-        'relation'              => Tinebase_Model_Filter_Relation::class,
-        'relations'             => Tinebase_Model_Filter_Relation::class,
-        'keyfield'              => Tinebase_Model_Filter_Text::class,
-        'container'             => Tinebase_Model_Filter_Container::class,
-        'tag'                   => Tinebase_Model_Filter_Tag::class,
-        'user'                  => Tinebase_Model_Filter_User::class,
-        'application'           => Tinebase_Model_Filter_Text::class,
-        'numberableStr'         => Tinebase_Model_Filter_Text::class,
-        'numberableInt'         => Tinebase_Model_Filter_Int::class,
-        'hexcolor'              => Tinebase_Model_Filter_Text::class,
-        self::TYPE_MODEL        => Tinebase_Model_Filter_Text::class,
-        self::TYPE_LANGUAGE     => Tinebase_Model_Filter_Text::class,
+        'datetime_separated_date'   => Tinebase_Model_Filter_Date::class,
+        'datetime_separated_time'   => Tinebase_Model_Filter_Date::class,
+        'datetime_separated_tz'     => Tinebase_Model_Filter_Text::class,
+        'date'                      => Tinebase_Model_Filter_Date::class,
+        'month'                     => Tinebase_Model_Filter_Month::class,
+        'datetime'                  => Tinebase_Model_Filter_DateTime::class,
+        'time'                      => Tinebase_Model_Filter_Time::class,
+        'string'                    => Tinebase_Model_Filter_Text::class,
+        'stringAutocomplete'        => Tinebase_Model_Filter_Text::class,
+        'text'                      => Tinebase_Model_Filter_Text::class,
+        'fulltext'                  => Tinebase_Model_Filter_FullText::class,
+        self::TYPE_STRICTFULLTEXT   => Tinebase_Model_Filter_StrictFullText::class,
+        'json'                      => Tinebase_Model_Filter_Text::class,
+        'boolean'                   => Tinebase_Model_Filter_Bool::class,
+        'integer'                   => Tinebase_Model_Filter_Int::class,
+        self::TYPE_BIGINT           => Tinebase_Model_Filter_Int::class,
+        'float'                     => Tinebase_Model_Filter_Float::class,
+        'money'                     => Tinebase_Model_Filter_Float::class,
+        self::TYPE_RECORD           => Tinebase_Model_Filter_ForeignId::class,
+        'records'                   => Tinebase_Model_Filter_ForeignRecords::class,
+        'relation'                  => Tinebase_Model_Filter_Relation::class,
+        'relations'                 => Tinebase_Model_Filter_Relation::class,
+        'keyfield'                  => Tinebase_Model_Filter_Text::class,
+        'container'                 => Tinebase_Model_Filter_Container::class,
+        'tag'                       => Tinebase_Model_Filter_Tag::class,
+        'user'                      => Tinebase_Model_Filter_User::class,
+        'application'               => Tinebase_Model_Filter_Text::class,
+        'numberableStr'             => Tinebase_Model_Filter_Text::class,
+        'numberableInt'             => Tinebase_Model_Filter_Int::class,
+        'hexcolor'                  => Tinebase_Model_Filter_Text::class,
+        self::TYPE_MODEL            => Tinebase_Model_Filter_Text::class,
+        self::TYPE_LANGUAGE         => Tinebase_Model_Filter_Text::class,
     );
 
     /**
@@ -1331,6 +1331,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 self::CONFIG                => [
                     self::APP_NAME              => $app,
                     self::MODEL_NAME            => $model,
+                    self::FILTER_OPTIONS        => [
+                        self::DO_JOIN               => true,
+                    ],
                 ],
             ];
             if (isset($this->_denormalizationConfig[self::TRACK_CHANGES]) &&
@@ -2137,6 +2140,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                                 self::REF_ID_FIELD          => $fieldDef[self::CONFIG][self::REF_ID_FIELD],
                                 self::CONTROLLER            => $fieldDef[self::CONFIG][self::CONTROLLER_CLASS_NAME],
                                 self::RECORD_CLASS_NAME     => $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME],
+                                self::DO_JOIN               => $fieldDef[self::CONFIG][self::DO_JOIN] ?? false,
+                                self::ADD_FILTERS           => $fieldDef[self::CONFIG][self::ADD_FILTERS] ?? null,
                             ],
                         ];
                         unset($this->_filterModel[$fieldKey]);

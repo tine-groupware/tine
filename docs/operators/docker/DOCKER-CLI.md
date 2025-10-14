@@ -23,3 +23,9 @@ If you don't have a volume, you might want to user "docker cp" to copy the backu
 ~~~
     docker exec --user tine20 -it <tine-web-container> sh -c "php /usr/share/tine20/setup.php --config /etc/tine20 --restore -- db=1 files=1 backupDir=/var/lib/tine20/backup/"
 ~~~
+
+## CLI PASSWORDFILE
+
+~~~
+    docker exec --user tine20 -it <tine-web-container> sh -c "php /usr/share/tine20/tine20.php --config /etc/tine20 --passwordfile=/etc/tine20/pw"
+~~~
