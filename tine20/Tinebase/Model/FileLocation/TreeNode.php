@@ -211,6 +211,8 @@ class Tinebase_Model_FileLocation_TreeNode extends Tinebase_Record_NewAbstract i
             $this->{self::FLD_STAT_PATH} = Tinebase_FileSystem::getInstance()->getPathOfNode($node, true, true);
         } else {
             try {
+                $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->{self::FLD_STAT_PATH});
+                $this->{self::FLD_STAT_PATH} = $path->statpath . (str_ends_with($this->{self::FLD_STAT_PATH}, '/') ? '/' : '');
                 $node = $this->node = Tinebase_FileSystem::getInstance()->stat($this->{self::FLD_STAT_PATH});
                 $this->_name = $node->name;
             } catch (Tinebase_Exception_NotFound) {
