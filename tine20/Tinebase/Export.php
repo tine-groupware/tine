@@ -42,11 +42,11 @@ class Tinebase_Export
      * @param string|array $_options format (as string) or export definition id (array)
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional)
-     * @return Tinebase_Export_Abstract
+     * @return Tinebase_Export_Abstract|Tinebase_Export_AbstractDeprecated
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public static function factory($_filter, $_options, $_controller = NULL, $_additionalOptions = array()) 
+    public static function factory($_filter, $_options, $_controller = null, $_additionalOptions = []): Tinebase_Export_Abstract|Tinebase_Export_AbstractDeprecated
     {
         if (! is_array($_options)) {
             $_options = array(

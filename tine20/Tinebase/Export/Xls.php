@@ -44,8 +44,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_columnCount = 1;
 
-    protected $_cloneRow;
-    protected $_cloneRowStyles = array();
+    protected $_cloneRow = [];
+    protected $_cloneRowStyles = [];
     protected $_cloneRowMergedCells = [];
 
     protected $_cloneGroupStartRowStyles = null;
@@ -208,7 +208,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         $this->_rowCount += 1;
         $this->_columnCount = 1;
 
-        //insert cloned row
+        // insert cloned row
         if ($this->_rowOffset > 0) {
             $newRowOffset = $this->_rowOffset + $this->_rowCount - 1;
             $sheet = $this->_spreadsheet->getActiveSheet();
@@ -217,14 +217,14 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
                 $sheet->insertNewRowBefore($newRowOffset);
             }
 
-            foreach($this->_cloneRow as $newRow) {
+            foreach ($this->_cloneRow as $newRow) {
                 $cell = $sheet->getCell($newRow['column'] . $newRowOffset);
                 $cell->setValue(preg_replace('/\$\{twig:.+?[^%=]\}/', '$0#' . $this->_rowCount, $newRow['value']));
                 $cell->setXfIndex($newRow['XFIndex']);
             }
 
             $rowDimension = $sheet->getRowDimension($newRowOffset);
-            foreach($this->_cloneRowStyles as $func => $value) {
+            foreach ($this->_cloneRowStyles as $func => $value) {
                 call_user_func(array($rowDimension, $func), $value);
             }
 
@@ -282,7 +282,7 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         }
 
         $this->_rowCount += 1;
-        //insert cloned row
+        // insert cloned row
         if ($this->_rowOffset > 0) {
             $newRowOffset = $this->_rowOffset + $this->_rowCount - 1;
             $sheet = $this->_spreadsheet->getActiveSheet();
