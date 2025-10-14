@@ -10,7 +10,7 @@
 <template>
   <div id="root">
     <div class="container">
-      <b-alert class="global-error" variant="danger" :show="globalError.length > 0">{{globalError}}</b-alert>
+      <b-alert class="global-error" variant="danger" v-model="showGlobalError">{{globalError}}</b-alert>
       <p v-if="publicUrl.length > 0"><a :href="publicUrl">{{formatMessage('Switch to public poll')}}</a></p>
       <template v-if="!transferingPoll && !askPassword && showPoll">
         <Poll :poll="{participants: participants, closed: poll.closed}" :events="poll.alternative_dates" :userId="activeAttendee.user_id" :loading="transferingPoll"
@@ -111,6 +111,7 @@ export default {
     return {
       baseUrl: '',
       globalError: '',
+      showGlobalError: false,
       transferingPoll: true,
       showPoll: true,
       poll: {},
@@ -159,6 +160,9 @@ export default {
           }
         })
       }
+    },
+    globalError () {
+      this.showGlobalError = this.globalError.length > 0;
     }
   },
 
@@ -396,7 +400,6 @@ export default {
 
         this.transferingPoll = false
       }).catch(error => {
-        console.log(error)
         if (error.response.status === 401) {
           if (error.response.data.indexOf('authkey mismatch') > -1) {
             this.askPassword = false
@@ -410,6 +413,11 @@ export default {
             }
             this.askPassword = true
           }
+        }
+        else if (error.response.status === 404) {
+          this.globalError = this.formatMessage('Invalid link')
+          this.showPoll = false
+          this.transferingPoll = false
         } else {
           console.log(error)
           console.log(arguments)
