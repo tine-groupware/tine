@@ -271,12 +271,21 @@ class Tinebase_FileLocationTest extends TestCase
         ]);
     }
 
-    public function testFMPersonal(): void
+    public function testFMPersonalId(): void
     {
         $this->testTreeNode([
             Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
             Tinebase_Model_FileLocation::FLD_LOCATION => [
-                Filemanager_Model_FileLocation::FLD_FM_PATH => '/personal/' . Tinebase_Core::getUser()->getId() . '/unittest',
+                Filemanager_Model_FileLocation::FLD_FM_PATH => '/personal/' . Tinebase_Core::getUser()->getId() . '/unittest/',
+            ],
+        ], shared: false);
+    }
+    public function testFMPersonalName(): void
+    {
+        $this->testTreeNode([
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+            Tinebase_Model_FileLocation::FLD_LOCATION => [
+                Filemanager_Model_FileLocation::FLD_FM_PATH => '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/unittest/',
             ],
         ], shared: false);
     }
