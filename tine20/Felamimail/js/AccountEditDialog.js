@@ -748,7 +748,16 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             this.testConnection('SMTP', true, true);
                         },
                         disabled: true
-                    })], [this.aliasesGrid, this.forwardsGrid]
+                    })], [
+                        this.aliasesGrid,
+                        this.forwardsGrid,
+                        {
+                            fieldLabel: this.app.i18n._('Forward Only'),
+                            name: 'emailForwardOnly',
+                            xtype: 'checkbox',
+                            readOnly: false
+                        }
+                    ]
                 ]
             }, {
                 title: this.app.i18n._('Sieve'),
@@ -1253,6 +1262,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (this.record.data?.email_smtp_user?.emailForwards) {
                 this.forwardsGrid.setStoreFromArray(this.record.data.email_smtp_user.emailForwards);
             }
+            this.getForm().findField('emailForwardOnly').setValue(this.record.data.email_smtp_user.emailForwardOnly);
         }
     },
     
@@ -1262,13 +1272,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             // forcing blur of quickadd grids
             this.aliasesGrid.doBlur();
             this.forwardsGrid.doBlur();
-            if (this.record.data?.email_smtp_user?.emailAliases) {
-                this.record.data.email_smtp_user.emailAliases = this.aliasesGrid.getFromStoreAsArray();
+
+            if (this.record.data?.email_smtp_user) {
+                if (this.record.data?.email_smtp_user?.emailAliases) {
+                    this.record.data.email_smtp_user.emailAliases = this.aliasesGrid.getFromStoreAsArray();
+                }
+                if (this.record.data?.email_smtp_user?.emailForwards) {
+                    this.record.data.email_smtp_user.emailForwards = this.forwardsGrid.getFromStoreAsArray();
+                }
+                this.record.data.email_smtp_user.emailForwardOnly = this.getForm().findField('emailForwardOnly').getValue();
             }
-    
-            if (this.record.data?.email_smtp_user?.emailForwards) {
-                this.record.data.email_smtp_user.emailForwards = this.forwardsGrid.getFromStoreAsArray();
-            }
+
             Tine.log.debug('Tine.Felamimail.AccountEditDialog::onRecordUpdate() -> setting aliases and forwards in e-mail record');
             Tine.log.debug(this.record);
         }

@@ -475,6 +475,9 @@ msgstr "Password (optional)"
 msgid "Test SMTP Connection"
 msgstr "Test SMTP Connection"
 
+msgid "Forward Only"
+msgstr "Forward Only"
+
 msgid "Sieve"
 msgstr "Sieve"
 
@@ -1614,6 +1617,14 @@ msgstr "Sieve Port"
 
 msgid "Sieve SSL"
 msgstr "Sieve SSL"
+
+msgid "File Location"
+msgid_plural "File Locations"
+msgstr[0] "File Location"
+msgstr[1] "File Locations"
+
+msgid "GENDER_File Location"
+msgstr "GENDER_File Location"
 
 msgid "Message File Location"
 msgid_plural "Message File Locations"
