@@ -88,6 +88,7 @@ abstract class Timetracker_AbstractTest extends TestCase
     {
         $defaultData = array(
             'title'         => Tinebase_Record_Abstract::generateUID(),
+            'number'        => 'ABCDE-1234',
             'description'   => 'blabla',
         );
 
@@ -161,6 +162,7 @@ abstract class Timetracker_AbstractTest extends TestCase
         if ($_forceCreation) {
             $tsRec = $this->_json->saveTimesheet($ts->toArray());
             $this->_lastCreatedRecord = $tsRec;
+            $ts->setId($tsRec['id']);
         }
 
         return $ts;
