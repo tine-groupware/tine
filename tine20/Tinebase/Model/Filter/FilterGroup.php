@@ -1276,7 +1276,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $_data = [];
         }
 
-        if (! class_exists($modelFilterClass)) {
+        if (! class_exists($modelFilterClass) || !is_subclass_of($modelFilterClass, Tinebase_Model_Filter_FilterGroup::class)) {
             // TODO check if model class exists?
             //if (class_exists($modelName))
 
