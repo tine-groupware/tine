@@ -1383,7 +1383,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
 
-        isValid.then(function () {
+
+        isValid.then(async function () {
+            await me.fireAsyncEvent('beforeapplychanges', me);
+
             if (me.mode !== 'local' && !me.mode.match(/save\(local\)/)) {
                 me.recordProxy.saveRecord(me.record, {
                     scope: me,
