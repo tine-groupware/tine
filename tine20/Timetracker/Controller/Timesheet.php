@@ -365,13 +365,20 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         parent::_inspectBeforeCreate($_record);
 
         /** @var Timetracker_Model_Timesheet $_record */
+        $this->_inspectEndDate($_record);
+        $this->_checkDeadline($_record);
+        $this->_calculateTimes($_record);
+        $this->_calcAmounts($_record);
+    }
 
+    protected function _inspectEndDate(Timetracker_Model_Timesheet $_record): void
+    {
         if ($_record->{Timetracker_Model_Timesheet::FLD_END_DATE} &&
-                $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d') !== $_record->start_date->format('Y-m-d')) {
+            $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d') !== $_record->start_date->format('Y-m-d')) {
             if (strcmp($_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d'), $_record->start_date->format('Y-m-d')) < 1) {
                 Tinebase_Exception::log(new Tinebase_Exception('FE error: End date cannot be before start date'));
                 throw new Tinebase_Exception_SystemGeneric(
-                    /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'End date cannot be before start date'//)
+                /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'End date cannot be before start date'//)
                 );
             }
             if (!$_record->start_time || !$_record->end_time) {
@@ -391,6 +398,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $startDate->addDay(1);
 
                 $newRecord = clone $_record;
+                $newRecord->setId(null);
                 $newRecord->start_date = $startDate->getClone();
                 $newRecord->end_date = null;
                 $newRecord->start_time = '00:00:00';
@@ -403,10 +411,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $this->create($newRecord);
             } while(false === $done);
         }
-
-        $this->_checkDeadline($_record);
-        $this->_calculateTimes($_record);
-        $this->_calcAmounts($_record);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -458,6 +462,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         }
 
         /** @var Timetracker_Model_Timesheet $_record */
+        $this->_inspectEndDate($_record);
         $this->_checkDeadline($_record);
         $this->_calculateTimes($_record);
         $this->_calcAmounts($_record, $_oldRecord);
