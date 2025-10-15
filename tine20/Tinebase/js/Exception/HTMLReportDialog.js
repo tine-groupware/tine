@@ -34,7 +34,7 @@ Tine.Tinebase.Exception.HTMLReportDialog = Ext.extend(Tine.Tinebase.dialog.Dialo
         const iframe = this.el.query('iframe')[0];
         const doc = iframe.contentWindow.document || iframe.contentDocument;
         doc.open();
-        doc.write(JSON.parse(this.exception.response).data.html);
+        doc.write(this.exception.html || JSON.parse(this.exception.response).data.html);
         doc.close();
     }
 });
