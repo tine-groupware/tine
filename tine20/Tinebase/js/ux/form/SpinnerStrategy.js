@@ -215,10 +215,52 @@ Ext.ux.form.Spinner.TimeStrategy = function(config){
     Ext.ux.form.Spinner.TimeStrategy.superclass.constructor.call(this, config);
 };
 
-Ext.extend(Ext.ux.form.Spinner.TimeStrategy, Ext.ux.form.Spinner.DateStrategy, {
+Ext.extend(Ext.ux.form.Spinner.TimeStrategy, Ext.ux.form.Spinner.Strategy, {
     format : "H:i",
     incrementValue : 1,
     incrementConstant : Date.MINUTE,
     alternateIncrementValue : 1,
-    alternateIncrementConstant : Date.HOUR
+    alternateIncrementConstant : Date.HOUR,
+
+    constantMap: {
+        [Date.SECOND]: 1,
+        [Date.MINUTE]: 60,
+        [Date.HOUR]: 3600,
+    },
+
+    spin : function(field, down, alternate){
+        Ext.ux.form.Spinner.DateStrategy.superclass.spin.call(this, field, down, alternate);
+
+        let v = field.getValue() * (field.baseUnit === 'minutes' ? 60 : 1);
+
+        const dir = (down === true) ? -1 : 1 ;
+        const incr = (alternate === true) ? this.alternateIncrementValue : this.incrementValue;
+        const constant = this.constantMap[(alternate === true) ? this.alternateIncrementConstant : this.incrementConstant];
+
+        v = v + dir*incr*constant;
+        v = this.fixBoundries(v);
+
+        const [H,i,s] = Ext.ux.form.DurationSpinner.getTimeParts(v);
+
+        field.setRawValue((v<0 ? '- ' : '') + this.format
+            .replace('H', H)
+            .replace('i', i)
+            .replace('s', s));
+
+    },
+
+    //private
+    fixBoundries : function(v, field){
+        var min = (typeof this.minValue == 'string') ? Ext.ux.form.DurationSpinner.parse(this.minValue, field.baseUnit) : this.minValue ;
+        var max = (typeof this.maxValue == 'string') ? Ext.ux.form.DurationSpinner.parse(this.maxValue, field.baseUnit) : this.maxValue ;
+
+        if(this.minValue != undefined && v < min){
+            v = min;
+        }
+        if(this.maxValue != undefined && v > max){
+            v = max;
+        }
+
+        return v;
+    }
 });
