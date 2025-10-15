@@ -54,11 +54,11 @@ const createAttachedDocument = async (config) => {
         }
     } catch (e) {
         console.error(e)
-        await win.Ext.MessageBox.show({
-            buttons: Ext.Msg.OK,
-            icon: Ext.MessageBox.WARNING,
-            title: app.formatMessage('There where Errors:'),
-            msg: app.formatMessage('Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }', { recordName, typeName, title: config.record.getTitle(), e })
+        record = await record.constructor.getProxy().promiseLoadRecord(record)
+        config.editDialog && config.editDialog.loadRecord ? config.editDialog.loadRecord(record) : null
+        e.message = app.formatMessage('Cannot create { typeName } for { recordName }: { title } ({e.code}) { e.message }', { recordName, typeName, title: config.record.getTitle(), e })
+        win.Tine.Tinebase.ExceptionHandler.handleRequestException(e, async () => {
+            win.close();
         });
     }
 

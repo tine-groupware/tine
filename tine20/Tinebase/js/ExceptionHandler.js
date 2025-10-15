@@ -225,7 +225,7 @@ Tine.Tinebase.ExceptionHandler = function() {
 
             // programm flow with html message
             case 480:
-                Ext.MessageBox.show({
+                Ext.MessageBox.show(Ext.apply(defaults, {
                     buttons: Ext.Msg.OK,
                     icon: Ext.MessageBox.ERROR,
                     title: formatMessage('There were Errors:'),
@@ -238,7 +238,7 @@ Tine.Tinebase.ExceptionHandler = function() {
                             Tine.Tinebase.Exception.HTMLReportDialog.openWindow(exception)
                         }
                     }
-                });
+                }));
                 break;
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
