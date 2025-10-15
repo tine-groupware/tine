@@ -847,15 +847,19 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     }
 
     /**
-     * adds account_grants if configured in model
+     * resolve boolean fields
      *
-     * @param array $resultSet
+     * @param null|array $resultSet
      * @param Tinebase_ModelConfiguration $modelConfiguration
      * @param boolean $multiple
      * @return array
      */
     protected function _resolveBoolFields($resultSet, $modelConfiguration, $multiple)
     {
+        if (! $resultSet) {
+            return [];
+        }
+
         if (! $modelConfiguration) {
             return $resultSet;
         }
