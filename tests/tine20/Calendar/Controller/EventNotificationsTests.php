@@ -100,6 +100,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
 
     public function testResourceBusyNotification()
     {
+        Tinebase_Core::getLogger()->warn(print_r(Calendar_Config::getInstance()->{Calendar_Config::ATTENDEE_ROLES}->toArray()));
+
         $resource = $this->_getResource();
         $resource->busy_type = Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE;
         $resource = Calendar_Controller_Resource::getInstance()->create($resource);
