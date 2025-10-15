@@ -27,7 +27,13 @@ class Tinebase_Model_Converter_CurrentUserIfEmpty implements Tinebase_Model_Conv
     public function convertToData($record, $key, $fieldValue)
     {
         if (is_array($fieldValue)) {
-            return isset($fieldValue['accountId']) ? $fieldValue['accountId'] : null;
+            if (isset($fieldValue['accountId'])) {
+                $fieldValue = $fieldValue['accountId'];
+            } else if (isset($fieldValue['account_id'])) {
+                $fieldValue = $fieldValue['account_id'];
+            } else {
+                $fieldValue = null;
+            }
         }
         return $fieldValue;
     }
