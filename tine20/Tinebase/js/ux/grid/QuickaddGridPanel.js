@@ -282,16 +282,14 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                             quickAddField.clearInvalid();
                         }
                     }
-                    if (this.resetAllOnNew) {
-                        var columns = this.colModel.config;
-                        for (var i = 0, len = columns.length; i < len; i++) {
-                            if (columns[i].quickaddField != undefined) {
-                                if (columns[i].quickaddField.xtype === 'extuxmoneyfield') {
-                                    // prevent 0,00 € in moneyfields
-                                    columns[i].quickaddField.setRawValue('');
-                                } else {
-                                    columns[i].quickaddField.setValue('');
-                                }
+                    var columns = this.colModel.config;
+                    for (var i = 0, len = columns.length; i < len; i++) {
+                        if (columns[i].quickaddField != undefined && (this.resetAllOnNew || columns[i].quickaddField.resetOnNew)) {
+                            if (columns[i].quickaddField.xtype === 'extuxmoneyfield') {
+                                // prevent 0,00 € in moneyfields
+                                columns[i].quickaddField.setRawValue('');
+                            } else {
+                                columns[i].quickaddField.setValue('');
                             }
                         }
                     }
