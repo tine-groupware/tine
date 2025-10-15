@@ -92,7 +92,17 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
             for (var n=0,m=initialRowConfig.length; n<m; n++) {
                 const column = initialRowConfig[n];
                 if (column) {
-                    // @TODO register show/hide listeners to manage col show/hide state
+
+                    ['show', 'hide'].forEach(event => {
+                        if (_.isFunction(column.on)) {
+                            column.on(event, this.manageRowVisibility, this)
+                        } else {
+                            const l = _.get(column, `listeners.${event}`)
+                            _.set(column, `listeners.${event}`, l && l.createInterceptor ?
+                                l.createInterceptor(this.manageRowVisibility) : this.manageRowVisibility, this);
+                        }
+                    })
+
                     rowConfig.hidden = rowConfig.hidden && column.hidden;
                     const cell = this.wrapFormItem(column);
                     rowConfig.items.push(cell);
@@ -103,6 +113,13 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
         this.items = items;
         
         Ext.ux.form.ColumnFormPanel.superclass.initComponent.call(this);
+    },
+
+    manageRowVisibility: function(column) {
+        const row = column.ownerCt.ownerCt;
+        row.setVisible(_.reduce(row.items.items, (accu, wrap) => {
+            return accu || wrap.items.items[0].visible;
+        }), false);
     },
 
     onBeforeAddFromItem: function(column, c, index) {
