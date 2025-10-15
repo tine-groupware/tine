@@ -199,12 +199,15 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 . ' record ID is empty');
         } else {
             try {
-                $record = Tinebase_Core::getApplicationInstance($recordModel)->get($recordId);
-                if ($record instanceof Addressbook_Model_Contact && !Tinebase_Core::getUser()
-                        ->hasGrant($record->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA)) {
-                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Do not fetch record notes because user has no private data grant for adb container');
-                    $recordIdFilter->setValue('');
+                $controller = Tinebase_Core::getApplicationInstance($recordModel);
+                if ($controller instanceof Tinebase_Controller_Record_Abstract) {
+                    $record = $controller->get($recordId);
+                    if ($record instanceof Addressbook_Model_Contact && !Tinebase_Core::getUser()
+                            ->hasGrant($record->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                            . ' Do not fetch record notes because user has no private data grant for adb container');
+                        $recordIdFilter->setValue('');
+                    }
                 }
             } catch (Tinebase_Exception_AccessDenied) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
