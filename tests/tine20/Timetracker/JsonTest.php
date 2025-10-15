@@ -100,6 +100,35 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timeaccountData['id']);
     }
 
+    public function testCorrelationByUpdate(): void
+    {
+        $today = Tinebase_DateTime::today();
+        $timeaccount = $this->_getTimeaccount(['is_billable' => false]);
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $tsData = new TMS([
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $timeaccountData['id'],
+            'description' => 'test',
+            'start_date' => $today->toString('Y-m-d'),
+            'start_time' => '12:00:00',
+            'end_time' => '13:00:00',
+            'duration' => 0,
+        ]);
+        $ts = Timetracker_Controller_Timesheet::getInstance()->create($tsData);
+        $this->assertNull($correlationId = $ts->{TMS::FLD_CORRELATION_ID});
+
+        $ts->end_date = new Tinebase_DateTime($today->getClone()->addDay(2)->toString('Y-m-d'));
+        $ts->end_time = '06:00:00';
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
+
+        $this->assertNotNull($correlationId = $ts->{TMS::FLD_CORRELATION_ID});
+        $this->_assertCorrelationIdResult($correlationId, [
+            ['start_date' => $today->getClone(), 'duration' => 12 * 60],
+            ['start_date' => $today->getClone()->addDay(1), 'duration' => 24 * 60],
+            ['start_date' => $today->getClone()->addDay(2), 'duration' => 6 * 60],
+        ]);
+    }
+
     /**
      * @return Tinebase_Record_RecordSet<Tasks_Model_Task>
      */
