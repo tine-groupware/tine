@@ -54,7 +54,7 @@ class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_ForeignRecord
      */
     protected function _setFilterGroup()
     {
-        if ($this->_valueIsNull) {
+        if ($this->_valueIsNull || !is_array($this->_value)) {
             return null;
         }
         $filters = $this->_getRelationFilters();
