@@ -196,4 +196,16 @@ test_release_update_test_determine_start_version () {
         echo ${RELEASE_UPDATE_TEST_START_REF}
         return
     fi
+
+    if [ -n "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
+        if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
+            git describe --tags --abbrev=0  --match="*${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}*"  origin/${CUSTOMER_MAJOR_COMMIT_REF_NAME}${TINE_VERSION_BE}
+            return
+        fi
+
+        if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BE}" ]; then
+            git describe --tags --abbrev=0 --match="*${CUSTOMER_MAJOR_COMMIT_REF_NAME::-1}*" origin/${CUSTOMER_MAJOR_COMMIT_REF_NAME}${TINE_VERSION_LTS}
+            return
+        fi
+    fi
 }

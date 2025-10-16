@@ -238,6 +238,10 @@ release-update-tests:
     - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $RELEASE_UPDATE_TEST_START_REF
       variables:
         RELEASE_TYPE: customer
+    - changes:
+        paths:
+          - tine20/Setup/**/*
+          - tine20/*/Setup/**/*
 
 prevent-upstream-changes:
   extends: .php-unit-update-tests
