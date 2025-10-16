@@ -182,6 +182,7 @@ RUN apt-mirror activate \
     cron \
     tesseract-ocr \
     tesseract-ocr-deu \
+    tzdata-legacy \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate
 COPY --from=gomplate /bin/gomplate /usr/bin/gomplate
