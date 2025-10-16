@@ -635,9 +635,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             
             if ($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_USER) {
                 // does a resouce with this email address exist?
-                $resource = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
-                    array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
-                )))->getFirstRecord();
+                $oldResourceAcl = Calendar_Controller_Resource::getInstance()->doContainerACLChecks(false);
+                try {
+                    $resource = Calendar_Controller_Resource::getInstance()->search(new Calendar_Model_ResourceFilter(array(
+                        array('field' => 'email', 'operator' => 'equals', 'value' => $newAttendee['email']),
+                    )))->getFirstRecord();
+                } finally {
+                    Calendar_Controller_Resource::getInstance()->doContainerACLChecks($oldResourceAcl);
+                }
 
                 if($resource) {
                     $newAttendee['userType'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
