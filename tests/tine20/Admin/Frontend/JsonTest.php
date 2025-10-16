@@ -1174,6 +1174,9 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $attendeeRoles = $this->testSearchConfigs();
 
         $keyFieldConfig = json_decode($attendeeRoles['value'], true);
+        if (null === $keyFieldConfig) {
+            $keyFieldConfig['records'] = $attendeeRoles['default']['records'] ?? [];
+        }
         $keyFieldConfig['records'][] = array(
             'id'    => 'CHAIR',
             'value' => 'Chair'
