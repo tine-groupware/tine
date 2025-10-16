@@ -229,26 +229,25 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $applications = array_keys($applications);
         } else {
             $applications = array();
-            $applicationNames = explode(',', $_opts->install);
-            if (count($applicationNames) === 1 && strtolower($applicationNames[0]) === 'all') {
-                $applications = $controller->getInstallableApplications();
-                $applications = array_keys($applications);
-            } else {
-                foreach ($applicationNames as $applicationName) {
-                    $applicationName = ucfirst(trim($applicationName));
-                    try {
-                        $controller->getSetupXml($applicationName);
-                        if (
-                            Setup_Controller::getInstance()->isInstalled('Tinebase') &&
-                            Setup_Controller::getInstance()->isInstalled($applicationName)
-                        ) {
-                            echo "Application $applicationName is already installed.\n";
-                        } else {
-                            $applications[] = $applicationName;
-                        }
-                    } catch (Setup_Exception_NotFound $e) {
-                        echo "Application $applicationName not found! Skipped...\n";
+            $applicationNames = explode(',', string: $_opts->install);
+            foreach ($applicationNames as $applicationName) {
+                $applicationName = ucfirst(trim($applicationName));
+                if (strtolower($applicationName) === 'all') {
+                    array_push($applications, ...array_keys($controller->getInstallableApplications()));
+                    continue;
+                }
+                try {
+                    $controller->getSetupXml($applicationName);
+                    if (
+                        Setup_Controller::getInstance()->isInstalled('Tinebase') &&
+                        Setup_Controller::getInstance()->isInstalled($applicationName)
+                    ) {
+                        echo "Application $applicationName is already installed.\n";
+                    } else {
+                        $applications[] = $applicationName;
                     }
+                } catch (Setup_Exception_NotFound $e) {
+                    echo "Application $applicationName not found! Skipped...\n";
                 }
             }
         }
