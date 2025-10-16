@@ -198,7 +198,6 @@ php-unit-all-tests-ldap-source-parallel:
       when: never
     - !reference [.php-unit-all-tests-ldap-source, rules]
 
-
 .php-unit-all-tests-ad-source:
   extends: .abstract_jobs.php_unit_cache
   variables:
@@ -264,6 +263,27 @@ php-unit-all-tests-ad-source-parallel:
     - if: $PHP_UNIT_ALL_TESTS_AD_SOURCE_TYPE != "parallel"
       when: never
     - !reference [.php-unit-all-tests-ad-source, rules]
+
+php-unit-all-tests-saas-source-parallel:
+  extends: .abstract_jobs.php_unit_cache
+  variables:
+    TINE20_APPLICATION_TO_INSTALL: all,SaasInstance
+  needs: []
+  timeout: 45m
+  parallel: 5
+  interruptible: true
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SAAS_SOURCE == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_SAAS_SOURCE== "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_SAAS_SOURCE_MERGE_REQUEST != "false"
+      changes:
+        paths:
+          - "tests/tine20/SaasInstance/**/*"
+          - "tine20/SaasInstance/**/*"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-saas-source/
 
 
 .php-unit-all-tests-built:
