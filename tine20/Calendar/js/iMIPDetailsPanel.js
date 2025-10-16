@@ -202,11 +202,10 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         
         // check preconditions
         this.record = existingEvent && ! preconditions ? existingEvent : event;
+        const uid = this.record.get('recurid') || this.record.get('uid');
 
-        if (preconditions) {
-            const uid = this.record.get('recurid') || this.record.get('uid');
-            const precondition = preconditions[uid] ?? preconditions;
-
+        if (preconditions?.[uid]) {
+            const precondition = preconditions[uid];
             if (precondition.hasOwnProperty('EVENTEXISTS')) {
                 this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
             }
