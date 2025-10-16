@@ -10,6 +10,7 @@ import {get} from "lodash";
 
 Ext.ns('Tine.CrewScheduling');
 
+import omitDeep from 'omit-deep-lodash';
 import * as csRole from './Model/schedulingRole';
 import * as calEventType from './Calendar/Model/eventType';
 import * as async from 'async';
@@ -26,6 +27,7 @@ import './Poll/Participant/PollRepliesField';
 import PollGridDialog from './Poll/GridDialog';
 import './Poll/SchedulingRoleField';
 import {getRoleTypesKey} from "./Model/eventRoleConfig";
+import EventFilterDialog from "./EventFilterDialog";
 
 require('./MemberSelectionPanel');
 require('./EventMembersGrid');
@@ -43,10 +45,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
      * @property {Tine.Tinebase.Application} app
      */
     app: null,
-    /**
-     * @property {Tine.Tinebase.widgets.form.RecordsPickerCombo} siteCombo
-     */
-    siteCombo: null,
+
     /**
      * @property {Ext.ux.form.PeriodPicker} periodPicker
      */
@@ -151,7 +150,6 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
         this.initBaseLayout();
         Tine.CrewScheduling.MainScreen.superclass.initComponent.call(this);
 
-        this.siteCombo.on('change', this.onSiteComboChange, this);
         this.periodPicker.on('change', this.onPeriodChange, this , {buffer: 250});
         this.eventStore.on('load', this.manageButtonApply, this);
         this.eventStore.on('update', this.manageButtonApply, this);
@@ -306,27 +304,6 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                         }))]
                     }],
                 items: [{
-                    fieldLabel: this.app.i18n._('Site'),
-                    ref: '../../siteCombo',
-                    xtype: 'tinerecordspickercombobox',
-                    width: 209, // WTF - 100% is not working
-                    recordClass: Tine.Addressbook.Model.Contact,
-                    resizeable: true,
-                    additionalFilterSpec: {
-                        config: { name: 'siteFilter', appName: 'Addressbook' }
-                    }
-                }/*, { // have liturgical only for the moment
-                    fieldLabel: this.app.i18n._('Event Types'),
-                    ref: '../../eventTypesCombo',
-                    xtype: 'tinerecordspickercombobox',
-                    width: 209, // WTF - 100% is not working
-                    recordClass: 'Calendar.EventTypes',
-                    refIdField: 'record',
-                    searchComboConfig: {useEditPlugin: false},
-                    editDialogConfig: {mode: 'local'},
-                    isMetadataModelFor: 'event_type',
-                    requiredGrant: 'editGrant',
-                }*/, {
                     ref: '../../periodPicker',
                     xtype: 'ux-period-picker',
                     availableRanges: 'day,week,month,quarter'
@@ -405,29 +382,29 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
         })));
     },
 
-    onSiteComboChange: function(combo, value, oldValue) {
-        var _ = window.lodash,
-            me = this;
+    // change from ftb
+    onFilterChange: function(filters, oldFilters) {
+        const me = this;
 
-        if (JSON.stringify(value) == JSON.stringify(oldValue)) return;
+        if (JSON.stringify(omitDeep(filters, 'id', 'label')) === JSON.stringify(omitDeep(oldFilters, 'id', 'label'))) return;
 
         this.ifDismissChanges()
             .then(_.bind(me.showLoadMask, me))
-            .then(_.bind(function() {
-                me.siteCombo.originalValue = me.siteCombo.getValue();
-            }), me)
+            .then(() => {
+                this.membersGrid.store.additionalFilters = filters;
+            })
             .then(_.bind(me.loadRuntimeData, me))
             .then(async () => {
-                const siteRecords = _.map(this.siteCombo.getValue(), (siteData) => {
+                const siteRecords = _.map(_.find(filters, {field: 'event_site'})?.value || [], (siteData) => {
                     return Tine.Tinebase.data.Record.setFromJson(siteData, 'Addressbook.Contact')
                 });
-                // @TODO remove #site on EBHH #1690 cleanup and display site filed if feature is enabled only
-                this.membersGrid.setGrouping(siteRecords.length ? (Tine.Tinebase.featureEnabled('featureSite') ? 'event_site' : '#site') : '', siteRecords);
+
+                this.membersGrid.setGrouping(siteRecords.length ? 'event_site' : '', siteRecords);
             })
             .then(_.bind(me.hideLoadMask, me))
-            .catch(_.bind(function() {
-                me.siteCombo.reset();
-            }), me);
+            .catch(() => {
+                // dismissChanges rejected
+            });
     },
 
     onPeriodChange: function(combo, value, oldValue) {
@@ -453,6 +430,21 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
     manageButtonApply: function() {
         this.buttonApply.setDisabled(!this.eventStore.getModifiedRecords().length);
         this.buttonExport.setDisabled(this.eventStore.getModifiedRecords().length);
+    },
+
+    onButtonFilter: function() {
+        const currentFilters = _.filter(this.membersGrid.store.proxy.jsonReader.jsonData.filter, { condition: 'OR' });
+
+        EventFilterDialog.openWindow({
+            membersGrid: this.membersGrid,
+            filters: currentFilters,
+            listeners: {
+                apply: (data) => {
+                    this.onFilterChange(data.filter, currentFilters);
+                }
+            }
+        })
+
     },
 
     onButtonPolls: function() {
@@ -660,8 +652,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
     },
 
     loadRuntimeData: function() {
-        var _ = window.lodash,
-            me = this;
+        const me = this;
 
         return me.loadCSGroups()
             .then(_.bind(me.loadEvents, me))
@@ -691,51 +682,40 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * load eventStore with all events:
      * - fitting in current period
-     * @TODO - stateful filter for liturgical planning?
-     * @TODO - have favorites here!
-     * - which have a church_event type marked as liturgy
-     * - having a relation to one of the sites / having event_site set to one of the sites
-     * @TODO remove #site on EBHH #1690 cleanup
+     * - exclude private events
+     * - having a as CS requirement (direct eRCs or vis eventTypes) @TODO have a corresponding filter on server side
+     * - additional filters
      *
      * @returns {Promise}
      */
     loadEvents: function() {
-        var me = this,
-            _ = window.lodash,
-            csSiteCf = Tine.widgets.customfields.ConfigManager.getConfig('Calendar', 'Calendar_Model_Event', 'site'),
-            csEventTypeCf = Tine.widgets.customfields.ConfigManager.getConfig('Calendar', 'Calendar_Model_Event', 'church_event_type'),
-            sites = me.siteCombo.getValue() || [];
+        let additionalFilters = this.membersGrid.store.additionalFilters || [];
 
-        me.eventStore.baseParams.filter = [
+        this.buttonFilter.setText(this.buttonFilter.initialConfig.text + (additionalFilters.length && additionalFilters[0].filters[0].filters.length ?
+            `&nbsp;<span class="cs-count" style="background-color: red;">${additionalFilters[0].filters[0].filters.length}</span>` : ''));
+
+        this.eventStore.baseParams.filter = _.concat([
             {field: 'period', operator: 'within', value: this.periodPicker.getValue()},
-            // @TODO find generic conceept e.g. filterToolbar and favorites
+            {field: 'class', operator: 'notin', value: ['PRIVATE']},
             {field: 'event_types', operator: 'definedBy?condition=and&setOperator=oneOf', value: [
                 {field: 'event_type', operator: 'definedBy?condition=and&setOperator=one0f', value: [
                     {field: 'liturgie', operator: 'equals', value: 1}
             ]}]}
-        ];
+        ], additionalFilters);
 
-        if (sites.length) {
-            if (! Tine.Tinebase.featureEnabled('featureSite')) {
-                me.eventStore.baseParams.filter.push(
-                    {field: 'customfield', operator: 'AND', value: {'cfId': csSiteCf.id, value: [
-                                {field: "id", operator: "in", value: _.map(sites, 'id')}]}
-                    });
-            } else {
-                me.eventStore.baseParams.filter.push({field: 'event_site', operator: 'definedBy?condition=and&setOperator=oneOf', value: [
-                    { field: ':id', operator: 'in', value: sites }
-                ]});
-            }
-        }
-
-        return me.eventStore.promiseLoad()
+        return this.eventStore.promiseLoad()
             .then(() => {
                 // hide events user has no readGrant (e.g. freebusy only)
-                me.eventStore.each((r) => {
+                this.eventStore.each((r) => {
                     if (! r.get('readGrant')) {
-                        me.eventStore.remove(r);
+                        this.eventStore.remove(r);
                     }
                 })
+
+                additionalFilters = this.membersGrid.store.additionalFilters = _.filter(this.membersGrid.store.proxy.jsonReader.jsonData.filter, { condition: 'OR' });
+
+                this.buttonFilter.setText(this.buttonFilter.initialConfig.text + (additionalFilters.length && additionalFilters[0].filters[0].filters.length ?
+                    `&nbsp;<span class="cs-count" style="background-color: red;">${additionalFilters[0].filters[0].filters.length}</span>` : ''));
             });
     },
 
@@ -782,10 +762,10 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
      * @returns {Promise}
      */
     loadCSMembers: function(csGroups) {
-        var _ = window.lodash,
-            me = this,
-            members = _.union([].concat.apply([], _.map(me.csGroupsStore.data.items, 'data.members'))),
-            sites = me.siteCombo.getValue() || [];
+
+        const me = this
+        const members = _.union([].concat.apply([], _.map(me.csGroupsStore.data.items, 'data.members')));
+        const sites = _.find(this.membersGrid.store.additionalFilters, {field: 'event_site'})?.value || [];
 
         me.csMembersStore.baseParams.filter = [
             {field: 'type', value: ['user']},

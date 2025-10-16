@@ -72,7 +72,7 @@ class CrewScheduling_Model_SchedulingRoleGrants extends Tinebase_Model_Grants
             self::ASSIGN_ATTENDEE => [
                 self::LABEL         => 'Assign Attendee',  // _('Assign Attendee')
                 // NOTE: CS only - no integration to calendar api's! ignores calendar acls!
-                self::DESCRIPTION   => 'The grant to add attendee of this role to events in Crew Scheduling Application.',  // _('The grant to add attendee of this role to events in Crew Scheduling Application.')
+                self::DESCRIPTION   => 'The grant to assign attendee of this role to events in Crew Scheduling Application.',  // _('The grant to assign attendee of this role to events in Crew Scheduling Application.')
             ],
 //            self::RECEIVE_NOTIFICATIONS => [
 //                self::LABEL         => 'Receive Notifications',  // _('Receive Notifications')

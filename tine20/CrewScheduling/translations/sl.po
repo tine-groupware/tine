@@ -514,7 +514,7 @@ msgstr ""
 msgid "Assign Attendee"
 msgstr ""
 
-msgid "The grant to add attendee of this role to events in Crew Scheduling Application."
+msgid "The grant to assign attendee of this role to events in Crew Scheduling Application."
 msgstr ""
 
 msgid "Receive Notifications"

@@ -102,6 +102,7 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
                 'from' => $from->getClone(),
                 'until' => $until->getClone(),
             ]],
+            [TMFA::FIELD => 'class', TMFA::OPERATOR => 'notin', TMFA::VALUE => ['PRIVATE']],
             [
                 Tinebase_Model_Filter_FilterGroup::CONDITION => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
                 Tinebase_Model_Filter_FilterGroup::FILTERS => [

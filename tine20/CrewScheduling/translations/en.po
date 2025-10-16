@@ -514,8 +514,8 @@ msgstr "The grant to create polls and send poll mails to possible attendee and r
 msgid "Assign Attendee"
 msgstr "Assign Attendee"
 
-msgid "The grant to add attendee of this role to events in Crew Scheduling Application."
-msgstr "The grant to add attendee of this role to events in Crew Scheduling Application."
+msgid "The grant to assign attendee of this role to events in Crew Scheduling Application."
+msgstr "The grant to assign attendee of this role to events in Crew Scheduling Application."
 
 msgid "Receive Notifications"
 msgstr "Receive Notifications"
