@@ -1238,7 +1238,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     // NOTE: mixed into QuickaddGridPanel
     initCheckStates: function() {
         this.getForm().items.each(function(item) {
-            this.relayEvents(item, ['change', 'select']);
+            this.relayEvents(item, ['change', 'select', 'spin']);
             if (item.copyOnSelectProps) {
                 item.on('select', (i, r) => { i.copyOnSelectProps.forEach((p) => {
                     this.getForm().findField(p)?.setValue(r.get(p));
@@ -1248,6 +1248,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});
         this.on('select', this.checkStates, this, {buffer: 100});
+        this.on('spin', this.checkStates, this, {buffer: 100});
     },
     /**
      * update (action updateer) top and bottom toolbars
@@ -1382,7 +1383,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
 
-        isValid.then(function () {
+
+        isValid.then(async function () {
+            await me.fireAsyncEvent('beforeapplychanges', me);
+
             if (me.mode !== 'local' && !me.mode.match(/save\(local\)/)) {
                 me.recordProxy.saveRecord(me.record, {
                     scope: me,

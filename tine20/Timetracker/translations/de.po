@@ -230,6 +230,12 @@ msgid_plural "Timesheets"
 msgstr[0] "Stundenzettel"
 msgstr[1] "Stundenzettel"
 
+msgid "This Item is part of a multi day series of correlated Timesheets."
+msgstr "Dieser Eintrag ist Teil einer mehrtägigen Serie von zusammenhängenden Stundenzetteln."
+
+msgid "Time period overlaps day boundary. When saved, multiple timesheets will be created."
+msgstr "Der Zeitraum überschreitet die Tagesgrenze. Beim Speichern werden mehrere Stundenzettel erstellt."
+
 msgid "End must not be before start."
 msgstr "Das Ende darf nicht vor dem Start liegen."
 

@@ -221,37 +221,6 @@ Ext.override(Ext.tree.AsyncTreeNode, {
 Ext.KeyNav.prototype.forceKeyDown = Ext.isGecko;
 
 /**
- * We need to overwrite to preserve original time information because 
- * Ext.form.TimeField does not support seconds
- * 
- * @param {} time
- * @private
- */
- Ext.form.TimeField.prototype.setValue = function(time){
-    this.fullDateTime = time;
-    Ext.form.TimeField.superclass.setValue.call(this, this.formatDate(this.parseDate(time)));
-};
-/**
- * @private
- */
-Ext.form.TimeField.prototype.getValue = function(){
-    var value =  this.fullDateTime,
-        dtValue = "";
-
-    if (value) {
-        var dtValue = this.parseDate(value);
-        if (Ext.isDate(dtValue)) {
-            dtValue = dtValue.clone();
-            dtValue.toJSON = function () {
-                return this.format('H:i:s');
-            }
-        }
-    }
-
-    return dtValue;
-};
-
-/**
  * check if sort field is in column list to avoid server exceptions
  */
 Ext.grid.GridPanel.prototype.applyState  = Ext.grid.GridPanel.prototype.applyState.createInterceptor(function(state){

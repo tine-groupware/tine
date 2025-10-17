@@ -76,49 +76,12 @@ Ext.ux.form.DurationSpinner = Ext.extend(Ext.ux.form.Spinner,  {
     },
 
     getValue: function() {
-        var value = Ext.ux.form.DurationSpinner.superclass.getValue.call(this),
-            isNegValue = false;
+        let value = Ext.ux.form.DurationSpinner.superclass.getValue.call(this);
 
-        if(value && typeof value == 'string') {
-            value = value.replace(',', '.');
-
-            if(value.match(Ext.ux.form.Spinner.DateStrategy.isNegRe)) {
-                value = value.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
-                isNegValue = true;
-            }
-
-            if (value.search(/:/) != -1) {
-                var parts = value.split(':'),
-                    hours = parseInt(parts[0]),
-                    minutes = parseInt(parts[1]);
-
-                if (0 > hours) {
-                    hours = 0;
-                }
-
-                if (0 > minutes) {
-                    minutes = 0;
-                }
-
-                if (minutes > 0) {
-                    value = hours * 60 + minutes;
-                } else {
-                    value = hours * 60;
-                }
-            } else if (value > 0) {
-                value = value * 60;
-            } else {
-                this.markInvalid(i18n._('Not a valid time'));
-                return;
-            }
-        }
-
-        if (this.baseUnit == 'seconds') {
-            value = value* 60;
-        }
-
-        if (isNegValue) {
-            value = -1 * value;
+        value = Ext.ux.form.DurationSpinner.parse(value, this.baseUnit);
+        if (value === NaN) {
+            this.markInvalid(i18n._('Not a valid time'));
+            return;
         }
 
         this.setValue(value);
@@ -161,4 +124,62 @@ Ext.ux.form.DurationSpinner.durationRenderer = function(value, config) {
     }
     return value;
 };
+
+Ext.ux.form.DurationSpinner.parse = function(value, baseUnit) {
+    var isNegValue = false;
+
+    if(value && typeof value == 'string') {
+        value = value.replace(',', '.');
+
+        if(value.match(Ext.ux.form.Spinner.DateStrategy.isNegRe)) {
+            value = value.replace(Ext.ux.form.Spinner.DateStrategy.isNegRe, '');
+            isNegValue = true;
+        }
+
+        if (value.search(/:/) != -1) {
+            var parts = value.split(':'),
+                hours = parseInt(parts[0]),
+                minutes = parseInt(parts[1]);
+
+            if (0 > hours) {
+                hours = 0;
+            }
+
+            if (0 > minutes) {
+                minutes = 0;
+            }
+
+            if (minutes > 0) {
+                value = hours * 60 + minutes;
+            } else {
+                value = hours * 60;
+            }
+        } else if (value >= 0) {
+            value = value * 60;
+        } else {
+            value = NaN
+        }
+    }
+
+    if (baseUnit === 'seconds') {
+        value = value* 60;
+    }
+
+    if (isNegValue) {
+        value = -1 * value;
+    }
+
+    return value;
+}
+
+Ext.ux.form.DurationSpinner.getTimeParts = function(v) {
+    v = Math.abs(v);
+    const H = Math.floor(v/3600);
+    const i = Math.floor((v-H*3600)/60);
+    const s = v-H*3600-i*60;
+
+    return [String(H).padStart(2, "0"), String(i).padStart(2, "0"), String(s).padStart(2, "0")];
+};
+
+
 Ext.reg('durationspinner', Ext.ux.form.DurationSpinner);
