@@ -23,9 +23,7 @@
     </Poll>
   </div>
   <div v-if="!loading && !poll" class="row">
-    <div v-if="errorStatus === 404" class="col-md-8 col-sm-12">
-      <p>{{formatMessage('Invalid Link')}}</p>
-    </div>
+    <BAlert variant="danger" v-model="showError">{{formatMessage('Invalid Link')}}</BAlert>
   </div>
 </template>
 
@@ -34,9 +32,10 @@ import axios from 'axios'
 import Poll from 'Calendar/js/pollClient/src/Poll.vue';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+import { BAlert } from 'bootstrap-vue-next'
 
 export default {
-  components: {Poll},
+  components: {Poll, BAlert},
   data () {
     return {
       pollId: null,
@@ -65,6 +64,12 @@ export default {
       if (this.pollId !== null) {
         this.loadPoll()
       }
+    }
+  },
+
+  computed: {
+    showError: function () {
+      return this.errorStatus !== null
     }
   },
 
