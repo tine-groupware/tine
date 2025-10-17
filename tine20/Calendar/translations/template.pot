@@ -2141,3 +2141,6 @@ msgstr ""
 
 msgid "Monday"
 msgstr ""
+
+msgid "Invalid link"
+msgstr ""
