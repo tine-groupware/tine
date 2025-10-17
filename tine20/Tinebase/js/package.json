@@ -56,6 +56,7 @@
     "moment": "^2.29.4",
     "npm": "^9.2.0",
     "ol": "^7.2.2",
+    "omit-deep-lodash": "^1.1.7",
     "path-browserify": "^1.0.1",
     "postal": "^2.0.6",
     "postal.federation": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",

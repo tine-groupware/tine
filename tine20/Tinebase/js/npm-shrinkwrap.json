@@ -45,6 +45,7 @@
         "moment": "^2.29.4",
         "npm": "^9.2.0",
         "ol": "^7.2.2",
+        "omit-deep-lodash": "^1.1.7",
         "path-browserify": "^1.0.1",
         "postal": "^2.0.6",
         "postal.federation": "github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
@@ -14569,6 +14570,17 @@
       "dependencies": {
         "@mapbox/mapbox-gl-style-spec": "^13.23.1",
         "mapbox-to-css-font": "^2.4.1"
+      }
+    },
+    "node_modules/omit-deep-lodash": {
+      "version": "1.1.7",
+      "resolved": "https://registry.npmjs.org/omit-deep-lodash/-/omit-deep-lodash-1.1.7.tgz",
+      "integrity": "sha512-9m9gleSMoxq3YO8aCq5pGUrqG9rKF0w/P70JHQ1ymjUQA/3+fVa2Stju9XORJKLmyLYEO3zzX40MJYaYl5Og4w==",
+      "dependencies": {
+        "lodash": "~4.17.21"
+      },
+      "engines": {
+        "node": ">=0.10.0"
       }
     },
     "node_modules/on-finished": {
@@ -29305,6 +29317,14 @@
       "requires": {
         "@mapbox/mapbox-gl-style-spec": "^13.23.1",
         "mapbox-to-css-font": "^2.4.1"
+      }
+    },
+    "omit-deep-lodash": {
+      "version": "1.1.7",
+      "resolved": "https://registry.npmjs.org/omit-deep-lodash/-/omit-deep-lodash-1.1.7.tgz",
+      "integrity": "sha512-9m9gleSMoxq3YO8aCq5pGUrqG9rKF0w/P70JHQ1ymjUQA/3+fVa2Stju9XORJKLmyLYEO3zzX40MJYaYl5Og4w==",
+      "requires": {
+        "lodash": "~4.17.21"
       }
     },
     "on-finished": {
