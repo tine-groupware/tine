@@ -264,12 +264,13 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
 
-        if ((! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_READ) ||
-                ! Tinebase_Core::getUser()->hasGrant($directory, Tinebase_Model_Grants::GRANT_SYNC))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
-                . ' has either not READ or SYNC grants for container ' . $directory->getId());
-            throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+        foreach ($directory instanceof Tinebase_Model_Container ? $directory->getGrantClass()::getRequiredWebDAVAccessGrants() : [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC] as $grant) {
+            if (!Tinebase_Core::getUser()->hasGrant($directory, $grant)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
+                    . ' has no ' . $grant . ' grant for container ' . $directory->getId());
+                throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+            }
         }
 
         if ($directory->has('application_id')) {
@@ -441,7 +442,8 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         $statpath = $path->statpath;
         $statpath .= '/' . $name;
         $node = Tinebase_FileSystem::getInstance()->stat($statpath);
-        if (Tinebase_Core::getUser()->hasGrant($node,Tinebase_Model_Grants::GRANT_READ)) {
+        if (Tinebase_Core::getUser()->hasGrant($node,Tinebase_Model_Grants::GRANT_READ) &&
+                Tinebase_Core::getUser()->hasGrant($node,Tinebase_Model_Grants::GRANT_SYNC)) {
             return $node;
         } else {
             // TODO throw 403?
@@ -524,10 +526,9 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
     {
         $children = array();
         // TODO allow NODES here
-        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(), array(
-            Tinebase_Model_Grants::GRANT_READ,
-            '&' . Tinebase_Model_Grants::GRANT_SYNC
-        ));
+        // well resources are no users so we should be save in that regard
+        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers(Tinebase_Core::getUser(), $this->_getApplicationName(),
+            [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
 
         foreach ($otherUsers as $user) {
             if ($user->contact_id && $user->visibility === Tinebase_Model_User::VISIBILITY_DISPLAYED) {
@@ -570,17 +571,23 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         Tinebase_Core::getUser(),
                         $this->_model,
                         $accountId,
-                        array(
-                            Tinebase_Model_Grants::GRANT_READ,
-                            '&' . Tinebase_Model_Grants::GRANT_SYNC
-                        )
+                        [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]
                     );
                 } else {
                     // NOTE: seems to be the expected behavior for non-delegation clients
-                    $containers = $this->_containerController->getContainerByACL(Tinebase_Core::getUser(), $this->_model, array(
-                        Tinebase_Model_Grants::GRANT_READ,
-                        '&' . Tinebase_Model_Grants::GRANT_SYNC
-                    ));
+                    // FIXME hack for performance reason
+                    $containers = $this->_containerController->getContainerByACL(
+                        Tinebase_Core::getUser(),
+                        $this->_model ?: $this->_getApplicationName(),
+                        Tinebase_Model_Grants::GRANT_SYNC // <- we know that currently "sync" is the intersection of all possibilities ... if that changes, hf
+                    )->filter(function($container) {
+                        foreach($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                            if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    });
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 throw new Sabre\DAV\Exception\NotFound("Could not find path (" . $tead->getMessage() . ")");
@@ -605,14 +612,23 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     protected function _getSharedDirectories()
     {
+        $isFs = $this->_containerController instanceof Tinebase_FileSystem;
         $containers = $this->_containerController->getSharedContainer(
             Tinebase_Core::getUser(),
             $this->_model ?: $this->_getApplicationName(),
-            array(
-                Tinebase_Model_Grants::GRANT_READ,
-                '&' . Tinebase_Model_Grants::GRANT_SYNC
-            )
+            $isFs ? [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]
+                : [Tinebase_Model_Grants::GRANT_SYNC] // <- we know that currently "sync" is the intersection of all possibilities ... if that changes, hf
         );
+        if (!$isFs) {
+            $containers = $containers->filter(function($container) {
+                foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                    if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
 
         return $containers;
     }

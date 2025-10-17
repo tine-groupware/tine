@@ -41,7 +41,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      * @param  Tinebase_Model_Container|Tinebase_Model_Tree_Node    $_container
      * @param  boolean                                              $_useIdAsName
      */
-    public function __construct(protected $_container, $_useIdAsName = false)
+    public function __construct(protected Tinebase_Model_Container|Tinebase_Model_Tree_Node $_container, $_useIdAsName = false)
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
         $this->_useIdAsName = (boolean)$_useIdAsName;
@@ -267,8 +267,21 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('unsupported account type');
             }
-            
-            if($grant[Tinebase_Model_Grants::GRANT_READ] == true) {
+
+            if ($this->_container instanceof Tinebase_Model_Container) {
+                do {
+                    foreach ($this->_container->getGrantClass()::getRequiredWebDAVAccessGrants() as $reqGrant) {
+                        if (!$grant[$reqGrant]) {
+                            break 2;
+                        }
+                    }
+                    $acl[] = array(
+                        'privilege' => '{DAV:}read',
+                        'principal' => $principal,
+                        'protected' => true,
+                    );
+                } while (false);
+            } elseif ($grant[Tinebase_Model_Grants::GRANT_READ] && $grant[Tinebase_Model_Grants::GRANT_SYNC]) {
                 $acl[] = array(
                     'privilege' => '{DAV:}read',
                     'principal' => $principal,
@@ -665,10 +678,18 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     }
 
     /**
-     * @return Tinebase_Model_Container
+     * @return Tinebase_Model_Container|Tinebase_Model_Tree_Node
      */
-    public function getContainer()
+    public function getContainer(): Tinebase_Model_Container|Tinebase_Model_Tree_Node
     {
         return $this->_container;
+    }
+
+    protected function getRequiredAccessGrants(): array
+    {
+        if ($this->_container instanceof Tinebase_Model_Container) {
+            return $this->_container->getGrantClass()::getRequiredWebDAVAccessGrants();
+        }
+        return [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC];
     }
 }

@@ -271,9 +271,9 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         if (!Tinebase_Acl_Roles::getInstance()->hasRight($application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights::RUN)) {
                             continue;
                         }
-                        
+
                         // collect all users which have access to any of the calendars of this user
-                        $sharedContainerSync = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ], false, true);
+                        $sharedContainerSync = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $model, [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
                         
                         if ($sharedContainerSync->count() > 0) {
                             $result = array_merge(
@@ -295,10 +295,10 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         }
                         
                         // collect all users which have access to any of the calendars of this user
-                        $personalContainerSync = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $contact->account_id, Tinebase_Model_Grants::GRANT_SYNC);
+                        $personalContainerSync = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $contact->account_id, [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
                         
                         if ($personalContainerSync->count() > 0) {
-                            $personalContainerRead = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $contact->account_id, Tinebase_Model_Grants::GRANT_READ);
+                            $personalContainerRead = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $model, $contact->account_id, [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
                             
                             $personalContainerIds = array_intersect($personalContainerSync->getArrayOfIds(), $personalContainerRead->getArrayOfIds());
                             
@@ -463,7 +463,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     
                     if (Tinebase_Core::getUser()->hasRight('Calendar', Tinebase_Acl_Rights::RUN)) {
                         // return users only, if they have the sync AND read grant set
-                        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
+                        $otherUsers = Tinebase_Container::getInstance()->getOtherUsers($user, 'Calendar', [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
                         /** @var Tinebase_Model_FullUser $u */
                         foreach ($otherUsers as $u) {
                             if ($u->contact_id) {
@@ -472,7 +472,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                         }
                         
                         // return containers only, if the user has the sync AND read grant set
-                        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, Calendar_Model_Event::class, array(Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_READ), false, true);
+                        $sharedContainers = Tinebase_Container::getInstance()->getSharedContainer($user, Calendar_Model_Event::class, [Tinebase_Model_Grants::GRANT_READ, '&' . Tinebase_Model_Grants::GRANT_SYNC]);
                         
                         if ($sharedContainers->count() > 0) {
                             $result[] = self::PREFIX_USERS . '/' . self::SHARED . '/calendar-proxy-write';

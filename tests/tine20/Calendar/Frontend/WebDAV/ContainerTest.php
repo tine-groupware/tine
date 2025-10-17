@@ -106,7 +106,7 @@ class Calendar_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
         
         $result = $container->getACL();
         
-        static::assertEquals(6, count($result));
+        static::assertEquals(5, count($result));
 
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->objects['initialContainer'], true);
         $grantsClass = $grants->getRecordClassName();
@@ -119,13 +119,14 @@ class Calendar_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
             Tinebase_Model_Grants::GRANT_DELETE   => true,
             Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
+            Tinebase_Model_Grants::GRANT_SYNC     => true,
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         )));
         Tinebase_Container::getInstance()->setGrants($this->objects['initialContainer'], $grants, true);
 
         $result = $container->getACL();
 
-        static::assertEquals(11, count($result));
+        static::assertEquals(10, count($result));
     }
     
     public function testGetIdAsName()

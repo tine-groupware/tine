@@ -147,8 +147,10 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                     } catch (Tinebase_Exception_NotFound) {
                         throw new Sabre\DAV\Exception\NotFound('Directory not found');
                     }
-                    if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                        throw new Sabre\DAV\Exception\NotFound('Directory not found');
+                    foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                        if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                            throw new Sabre\DAV\Exception\NotFound('Directory not found');
+                        }
                     }
                     
                     $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
@@ -180,10 +182,12 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                 } catch (Tinebase_Exception_NotFound) {
                     throw new Sabre\DAV\Exception\NotFound('Directory not found');
                 }
-                if (!Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_READ) || !Tinebase_Core::getUser()->hasGrant($container, Tinebase_Model_Grants::GRANT_SYNC)) {
-                    throw new Sabre\DAV\Exception\NotFound('Directory not found');
+                foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                    if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                        throw new Sabre\DAV\Exception\NotFound('Directory not found');
+                    }
                 }
-                
+
                 $objectClass = $this->_applicationName . '_Frontend_WebDAV_Container';
                 
                 return new $objectClass($container);
@@ -218,11 +222,16 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
                     $containers = Tinebase_Container::getInstance()->getSharedContainer(
                         Tinebase_Core::getUser(),
                         $this->_model,
-                        array(
-                            Tinebase_Model_Grants::GRANT_READ,
-                            Tinebase_Model_Grants::GRANT_SYNC
-                        ), false, true
+                        Tinebase_Model_Grants::GRANT_SYNC// <- we know that currently "sync" is the intersection of all possibilities ... if that changes, hf
                     );
+                    $containers = $containers->filter(function($container) {
+                        foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                            if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    });
                     
                     foreach ($containers as $container) {
                         $children[] = $this->getChild($container);
@@ -236,9 +245,16 @@ abstract class Tinebase_WebDav_Collection_Abstract extends DAV\Collection implem
             # path == Applicationname/personal/accountLoginName
             # return personal folders
             case 3:
-                if ($this->_hasPersonalFolders) { 
-                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_model, Tinebase_Core::getUser(), array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC));
+                if ($this->_hasPersonalFolders) {
+                    $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_model, Tinebase_Core::getUser(),
+                        Tinebase_Model_Grants::GRANT_SYNC // <- we know that currently "sync" is the intersection of all possibilities ... if that changes, hf
+                    );
                     foreach ($containers as $container) {
+                        foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                            if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                                continue 2;
+                            }
+                        }
                         $children[] = $this->getChild($container);
                     }
                 }

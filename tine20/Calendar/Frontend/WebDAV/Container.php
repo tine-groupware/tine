@@ -441,7 +441,8 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             }
             
             $writeAble = $grant[Tinebase_Model_Grants::GRANT_ADMIN] || 
-                         ( $grant[Tinebase_Model_Grants::GRANT_READ] && 
+                         ( $grant[Tinebase_Model_Grants::GRANT_READ] &&
+                           $grant[Tinebase_Model_Grants::GRANT_SYNC] &&
                            $grant[Tinebase_Model_Grants::GRANT_ADD]  && 
                            $grant[Tinebase_Model_Grants::GRANT_EDIT] &&
                            $grant[Tinebase_Model_Grants::GRANT_DELETE] );
