@@ -1,6 +1,6 @@
 <template>
   <thead v-if="dates.length > 0" :style="`--summary-row-height: ${height}px`">
-    <tr ref="summaryRow">
+    <tr ref="summaryRow" v-if="showEventTitles">
       <th></th>
       <th v-for="date in dates" :key="date.dtstart" class="title">
         <div class="title">{{ date.summary }}{{!show_site || !date.event_site ? '' : ', ' + date.event_site.n_fn}}</div>
@@ -17,16 +17,40 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useElementSize } from '@vueuse/core'
-
-const props = defineProps({
-  dates: Array,
-  show_site: {type: Boolean, default: false}
-})
 
 const summaryRow = ref()
 const { height } = useElementSize(summaryRow)
+</script>
+
+<script>
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'PollHeader',
+  props: {
+    dates: Array,
+    show_site: {type: Boolean, default: false}
+  },
+  computed: {
+    showEventTitles () {
+      let anySummary = false
+      let anySite = false
+      for (let i = 0; i < this.dates.length; i++) {
+        let date = this.dates[i]
+        if (date.summary) {
+          anySummary = true
+        }
+        if (date.event_site) {
+          anySite = true
+        }
+      }
+      return anySummary || (this.show_site && anySite);
+    }
+  }
+})
+
 </script>
 
 <style scoped>
