@@ -128,7 +128,7 @@ describe('editDialog', () => {
     });
 
     test('user view', async () => {
-        await newPage.click('.x-form-trigger.x-form-arrow-trigger');
+        await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
         await newPage.waitForTimeout(1000);
         let orga = await newPage.$$('.x-combo-list-item');
         await orga[orga.length - 1].click(); // not good!
@@ -137,7 +137,7 @@ describe('editDialog', () => {
     });
 
     test('save events', async () => {
-        await newPage.click('.x-form-trigger.x-form-arrow-trigger');
+        await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
         await newPage.waitForTimeout(1000);
         let orga = await newPage.$$('.x-combo-list-item');
         await orga[orga.length - 3].click(); // not good!

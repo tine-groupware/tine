@@ -559,6 +559,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // a combo with all attendee + origin/organizer
         this.perspectiveCombo = new Tine.Calendar.PerspectiveCombo({
+            name: 'perspective',
             editDialog: this
         });
 

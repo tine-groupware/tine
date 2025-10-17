@@ -99,6 +99,13 @@ class CrewScheduling_Setup_Initialize extends Setup_Initialize
         $this->_initCustomfields();
     }
 
+    protected function _initializeFeatures()
+    {
+        $enabledFeatures = Calendar_Config::getInstance()->get(Calendar_Config::ENABLED_FEATURES);
+        $enabledFeatures[Calendar_Config::FEATURE_EVENT_TYPE] = true;
+        Calendar_Config::getInstance()->set(Calendar_Config::ENABLED_FEATURES, $enabledFeatures);
+    }
+
     //TODO RE
     //remove these
     public static function getInitialCustomFields()
