@@ -513,8 +513,8 @@ msgstr "Die Berechtigung Umfragen zu erstellen und Mails an mögliche Teilnehmer
 msgid "Assign Attendee"
 msgstr "Teilnehmer*innen zufügen"
 
-msgid "The grant to add attendee of this role to events in Crew Scheduling Application."
-msgstr "Die Berechtigung Teilnehmer*innen dieser Rolle zu Terminen in der Dienstplaungs-Anwendung hinzuzufügen"
+msgid "The grant to assign attendee of this role to events in Crew Scheduling Application."
+msgstr "Die Berechtigung Teilnehmer*innen dieser Rolle zu Terminen in der Dienstplaungs-Anwendung zuzuweisen"
 
 msgid "Receive Notifications"
 msgstr "Erhalte Benachrichtigungen"

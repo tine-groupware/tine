@@ -787,7 +787,7 @@
           "allowEmpty": true
         },
         "label": "Assign Attendee",
-        "description": "The grant to add attendee of this role to events in Crew Scheduling Application.",
+        "description": "The grant to assign attendee of this role to events in Crew Scheduling Application.",
         "fieldName": "assignAttendeeGrant",
         "key": "assignAttendeeGrant"
       },
