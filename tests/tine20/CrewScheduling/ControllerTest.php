@@ -14,6 +14,39 @@
  */
 class CrewScheduling_ControllerTest extends TestCase
 {
+
+    public function testCSEventsFilter()
+    {
+        $this->_setFeatureForTest(Calendar_Config::getInstance(), Calendar_Config::FEATURE_EVENT_TYPE, true);
+        $role = CrewScheduling_Controller_SchedulingRole::getInstance()->create(new CrewScheduling_Model_SchedulingRole([
+            CrewScheduling_Model_SchedulingRole::FLD_KEY => 'CSR',
+            CrewScheduling_Model_SchedulingRole::FLD_NAME => 'CS role',
+        ]));
+        Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'CSE',
+            'name' => 'CS Enabled eventType',
+            'cs_role_configs' => new Tinebase_Record_RecordSet(CrewScheduling_Model_EventTypeConfig::class, [ new CrewScheduling_Model_EventTypeConfig([
+                CrewScheduling_Model_EventTypeConfig::FLD_SCHEDULING_ROLE => $role,
+                CrewScheduling_Model_EventTypeConfig::FLD_EVENT_TYPE => '...',
+            ])])
+        ]));
+        Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'CSD',
+            'name' => 'non CS eventType'
+        ]));
+
+        // search cs enabled eventTypes
+        $eventTypes = Calendar_Controller_EventType::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Calendar_Model_EventType::class, [
+            ['field' => 'cs_role_configs', 'operator' => 'definedBy', 'value' => [
+                ['field' => "id", 'operator' => "not", 'value' => null]
+            ]]
+        ]));
+
+        $this->assertEquals(1, $eventTypes->filter('short_name', 'CSE')->count());
+        $this->assertEquals(0, $eventTypes->filter('short_name', 'CSD')->count());
+    }
+
     public function testCalEventSysCF()
     {
         if (! Tinebase_Application::getInstance()->isInstalled('ChurchEdition')) {
