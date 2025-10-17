@@ -152,13 +152,26 @@ Ext.form.TimeField = Ext.extend(Ext.form.ComboBox, {
     
     // inherited docs
     getValue : function(){
-        var v = Ext.form.TimeField.superclass.getValue.call(this);
-        return this.formatDate(this.parseDate(v)) || '';
+        var value =  this.fullDateTime,
+            dtValue = "";
+
+        if (value) {
+            var dtValue = this.parseDate(value);
+            if (Ext.isDate(dtValue)) {
+                dtValue = dtValue.clone();
+                dtValue.toJSON = function () {
+                    return this.format('H:i:s');
+                }
+            }
+        }
+
+        return dtValue;
     },
 
     // inherited docs
     setValue : function(value){
-        return Ext.form.TimeField.superclass.setValue.call(this, this.formatDate(this.parseDate(value)));
+        this.fullDateTime = value;
+        Ext.form.TimeField.superclass.setValue.call(this, this.formatDate(this.parseDate(value)));
     },
 
     // private overrides

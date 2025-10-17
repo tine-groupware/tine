@@ -186,7 +186,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             && salesApp.featureEnabled('invoicesModule')
             && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices')
             && Tine.Sales.Model.Invoice;
-        
+
+        this.on('beforeapplychanges', this.onBeforeApplyChanges, this);
         Tine.Timetracker.TimesheetEditDialog.superclass.initComponent.call(this);
     },
 
@@ -223,20 +224,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         }
     },
 
-    calculateFactor: function() {
-        if (!this.useMultiple) {
-            var duration = this.getForm().findField('duration').getValue(),
-                accountingTime = this.getForm().findField('accounting_time').getValue(),
-                factor = accountingTime / duration;
-            if (factor != this.factor) {
-                this.factor = factor;
-                this.factorChanged = true;
-            }
-            
-            this.getForm().findField('accounting_time_factor').setValue(factor);
-        }
-    },
-    
     onCheckBillable: function(field, checked) {
         if (!this.useMultiple) {
             if (!checked) {
@@ -262,76 +249,24 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     disableClearedFields: function(disable) {
         this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in')?.setDisabled(disable);
     },
-
-    onDurationChange: function() {
-        this.calculateAccountingTime();
-        // adopt endtime if starttime is set
-        const startTime = this.getForm().findField('start_time').getValue();
-        if (startTime) {
-            const endTimeField = this.getForm().findField('end_time');
-            let endTime = new Date(+startTime + this.getForm().findField('duration').getValue()*60000);
-            if (endTime.getDayOfYear() > startTime.getDayOfYear() && endTime.format('H:i:s') !== '00:00:00') {
-
-                endTime = endTime.clearTime();
-
-                if (!this.endTimeChangeMsg) {
-                    this.endTimeChangeMsg = Ext.Msg.show({
-                        title: i18n._('End Time Change'),
-                        msg: i18n._('End time was shortened as timesheet must not overlap day'),
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.WARNING,
-                        fn: () => {
-                            this.endTimeChangeMsg = null;
-                        }
-                    });
-                }
-            }
-            endTimeField.setValue(endTime.format(endTimeField.format));
-        }
-    },
-    
-    onStartTimeChange: function() {
-        // adopt end_time if duration is set
-        let duration = +this.getForm().findField('duration').getValue()*60000;
-        const startTime = this.getForm().findField('start_time').getValue();
-        if (duration && startTime) {
-            const endTimeField = this.getForm().findField('end_time');
-            let endTime = new Date(+startTime + duration);
-            if (endTime.getDayOfYear() > startTime.getDayOfYear() && endTime.format('H:i:s') !== '00:00:00') {
-
-                endTime = endTime.clearTime();
-                duration = (+endTime - +startTime) / 60000;
-                this.getForm().findField('duration').setValue(duration);
-
-                if (!this.durationChangeMsg) {
-                    this.durationChangeMsg = Ext.Msg.show({
-                        title: i18n._('Duration Change'),
-                        msg: i18n._('Duration was shortened as timesheet must not overlap day'),
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.WARNING,
-                        fn: () => {
-                            this.durationChangeMsg = null;
-                        }
-                    });
-                }
-            }
-            endTimeField.setValue(endTime.format(endTimeField.format));
-        }
-    },
     
     onEndTimeChange: function() {
-        // adopt duration if starttime is set
-        const startTime = this.getForm().findField('start_time').getValue();
-        const endTimeField = this.getForm().findField('end_time');
-        let endTime = this.getForm().findField('end_time').getValue();
-        if (startTime && endTime) {
-            if (endTime.format('H:i:s') === '00:00:00') {
-                // 00:00:00 means end of day
+        let endTime = this.record.get('end_date') ?
+            Date.parseDate(`${this.record.get('end_date').format('Y-m-d')} ${this.getForm().findField('end_time').getValue().format('H:i:s')}`, Date.patterns.ISO8601Long)
+            : this.getForm().findField('end_time').getValue();
+        if (! endTime) return;
+
+        let startTime = this.getForm().findField('start_time').getValue() ? Date.parseDate(`${this.getForm().findField('start_date').getValue().format('Y-m-d')} ${this.getForm().findField('start_time').getValue().format('H:i:s')}`, Date.patterns.ISO8601Long) : null;
+        if (! startTime) {
+            startTime = endTime.clone().add(Date.MINUTE, -1 * this.getForm().findField('duration').getValue());
+            this.getForm().findField('start_time').setValue(startTime.format(this.getForm().findField('start_time').format));
+        } else {
+            if (endTime < startTime) {
                 endTime = endTime.add(Date.DAY, 1);
+                this.record.set('end_date', endTime.clone().clearTime());
             }
-            const duration = (endTime - startTime)/60000;
+            const duration = (+endTime - +startTime)/60000
             this.getForm().findField('duration').setValue(duration);
-            this.calculateAccountingTime();
         }
     },
 
@@ -360,6 +295,58 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         [this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
             item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
         });
+
+        let startTime = this.getForm().findField('start_time').getValue();
+        const duration = this.getForm().findField('duration').getValue();
+
+        if (!startTime && duration > 24*60) {
+            startTime = new Date().clearTime()
+            this.getForm().findField('start_time').setValue(startTime);
+        }
+
+        if (startTime) {
+            const startDate = this.getForm().findField('start_date').getValue();
+            const endTimeField = this.getForm().findField('end_time');
+            let endTime = Date.parseDate(`${startDate.format('Y-m-d')} ${startTime.format('H:i:s')}`, Date.patterns.ISO8601Long).add(Date.MINUTE, duration);
+            this.record.set('end_date', endTime.clone().clearTime())
+            endTimeField.setValue(endTime.format(endTimeField.format));
+        } else {
+            this.record.set('end_date', null);
+            this.getForm().findField('end_time').setValue(null);
+        }
+
+        this.multiDayHint.setVisible(!!this.record.get('correlation_id'));
+
+        this.calculateAccountingTime();
+    },
+
+    onBeforeApplyChanges: async function() {
+        if (this.record.get('correlation_id')) {
+            const changes = this.record.getChanges();
+            const multiApplicableFields = _.difference(Object.keys(changes), ['start_date', 'start_time', 'end_time', 'duration', 'accounting_time']);
+            if (multiApplicableFields.length) {
+                if (await Ext.MessageBox.show({
+                    title: this.app.formatMessage('Change all Correlated Timesheets'),
+                    msg: this.app.formatMessage('Apply these changes to all correlated Timesheets?') + '<br />' + _.map(multiApplicableFields, fieldName => {
+                        return `<b>${this.getForm().findField(fieldName)?.fieldLabel || fieldName}:</b> ${Tine.widgets.grid.RendererManager.get('Timetracker', 'Timesheet', fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL)(changes[fieldName])}`;
+                    }).join('<br />'),
+                    buttons: Ext.MessageBox.YESNO,
+                    icon: Ext.MessageBox.QUESTION
+                }) === 'yes') {
+                    // @TODO add handling for relations (rewrite MultipleEditDialogPlugin and use it)
+                    const { results: timesheets } = await Tine.Timetracker.searchTimesheets([{field: 'correlation_id', operator: 'equals', value: this.record.get('correlation_id')}], {sort: 'start_date', dir: 'ASC'});
+                    await Tine.Tinebase.updateMultipleRecords('Timetracker', 'Timesheet', _.reduce(changes, (a, v, k) => { return _.concat(a, multiApplicableFields.indexOf(k) >= 0 ? {name: k, value: v} : []) }, []), [{field: 'id', operator: 'in', value: _.map(timesheets, 'id')}]);
+
+                    await this.loadRecord('remote')
+                    _.forEach(changes, (v, k) => {
+                        if ( multiApplicableFields.indexOf(k) < 0) {
+                            this.record.set(k, v);
+                        }
+                    })
+                }
+            }
+
+        }
     },
 
     /**
@@ -412,7 +399,33 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             labelSeparator: '',
                             columnWidth: .25
                         },
-                        items: [[
+                        items: [[{
+                            xtype: 'v-alert',
+                            variant: 'info',
+                            columnWidth: 1,
+                            ref: '../../../../../../multiDayHint',
+                            hidden: true,
+                            label: '<a href="#">' + this.app.i18n._('This Item is part of a multi day series of correlated Timesheets.') + '</a>',
+                            listeners: {
+                                render: function (){
+                                    this.getEl().on('click', async e => {
+                                        e.stopEvent();
+                                        const { results: timesheets } = await Tine.Timetracker.searchTimesheets([{field: 'correlation_id', operator: 'equals', value: me.record.get('correlation_id')}], {sort: 'start_date', dir: 'ASC'});
+                                        await Ext.MessageBox.show({
+                                            buttons: Ext.Msg.OK,
+                                            icon: Ext.MessageBox.INFO,
+                                            title: me.app.formatMessage('Ccorrelated Timesheets:'),
+                                            msg: timesheets.reduce((accu, tsData) => {
+                                                const timesheet = Tine.Timetracker.Model.Timesheet.setFromJson(tsData)
+                                                const dateFormat = me.getForm().findField('start_date').format
+                                                return accu.concat(timesheet.id === me.record.id ? [] :
+                                                    `<a href="#" data-record-class="Timetracker_Model_Timesheet" data-record-id="${timesheet.id}">${timesheet.get('start_date').format(dateFormat)}: ${timesheet.getTitle()}</a>`)
+                                            }, []).join('<br />')
+                                        });
+                                    })
+                                }
+                            }
+                        }], [
                             fieldManager('timeaccount_id', {
                                 disabled: !!this.record.get('workingtime_is_cleared'),
                                 columnWidth: 0.75,
@@ -432,20 +445,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 allowBlank: false,
                                 allowNegative: false,
                                 enableKeyEvents: true,
-                                listeners: {
-                                    scope: this,
-                                    blur: this.onDurationChange,
-                                    spin: this.onDurationChange,
-                                }
                             }),
                             fieldManager('start_date', {disabled: !!this.record.get('workingtime_is_cleared')}), 
                             fieldManager('start_time', {
                                 disabled: !!this.record.get('workingtime_is_cleared'),
-                                listeners: {
-                                    scope: this,
-                                    blur: this.onStartTimeChange,
-                                    select: this.onStartTimeChange,
-                                }
                             }),
                             fieldManager('end_time', {
                                 disabled: !!this.record.get('workingtime_is_cleared'),
@@ -453,6 +456,20 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                     scope: this,
                                     blur: this.onEndTimeChange,
                                     select: this.onEndTimeChange,
+                                },
+                                setValue: function(value, field) {
+                                    Ext.form.TimeField.prototype.setValue.apply(this, arguments);
+                                    const startDateField = me.getForm().findField('start_date');
+                                    const dateFormat = startDateField.format;
+                                    const endDate = me.record.get('end_date')
+                                    const endDateString = endDate ? endDate.format(dateFormat) : '';
+                                    if (endDateString && endDateString !== startDateField.getValue().format(dateFormat)) {
+                                        const warn = `<span ext:qtip="${me.app.i18n._('Time period overlaps day boundary. When saved, multiple timesheets will be created.')}" class="x-dialog-warn tine-grid-row-action-icon"}></span>`
+                                        this.setFieldLabel(`${warn} ${this.initialConfig.fieldLabel} (${endDateString})`);
+                                    } else {
+                                        this.setFieldLabel(this.initialConfig.fieldLabel);
+                                    }
+
                                 },
                                 validateValue : function(preventMark) {
                                     let isValid = this.supr().validateValue();
