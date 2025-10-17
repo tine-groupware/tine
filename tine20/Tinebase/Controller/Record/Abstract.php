@@ -2704,7 +2704,10 @@ abstract class Tinebase_Controller_Record_Abstract
             $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
                 $_record->{$mc->delegateAclField} :
                 $ctrl->get($_record->{$mc->delegateAclField}),
-            $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
+            $_action, $_throw, $_errorMessage,
+            $_oldRecord?->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                $_oldRecord?->{$mc->delegateAclField} :
+                ($_oldRecord?->{$mc->delegateAclField} ? $ctrl->get($_oldRecord?->{$mc->delegateAclField}) : null)
         );
     }
 
