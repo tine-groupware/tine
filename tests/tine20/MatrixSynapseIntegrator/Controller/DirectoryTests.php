@@ -43,7 +43,7 @@ class MatrixSynapseIntegrator_Controller_DirectoryTests extends TestCase
     {
         $user = $this->createUser();
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user);
-        $contact->tel_pager = '0123456789';
+        $contact->tel_work = '0123456789';
         Addressbook_Controller_Contact::getInstance()->update($contact);
 
         $userInfo = MatrixSynapseIntegrator_Controller_Directory::getInstance()->getUserInfo($user);
@@ -53,7 +53,7 @@ class MatrixSynapseIntegrator_Controller_DirectoryTests extends TestCase
         self::assertContains('PHPUnit User Tine 2.0', $userInfo);
         self::assertContains($user->accountLoginName, $userInfo);
         self::assertContains($user->accountLoginName . '@mail.test', $userInfo);
-        self::assertContains('+49123456789', $userInfo);
+        self::assertContains('+49123456789', $userInfo, print_r($userInfo, true));
     }
 
     public function testExportDirectory()
