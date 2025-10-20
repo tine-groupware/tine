@@ -140,10 +140,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         // reformat sales_tax_by_rate
         this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
-            return a.concat(Number(rate) ? [{
+            const oldRate = _.find(_.get(this.record, 'modified.sales_tax_by_rate', {}), {tax_rate: Number(rate)}) || {}
+            return a.concat(Number(rate) ? [Object.assign(oldRate, {
                 'tax_rate': Number(rate),
                 'tax_sum': sums['sales_tax_by_rate'][rate]
-            }] : [])
+            })] : [])
         }, Tine.Tinebase.common.assertComparable([])))
 
         this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
