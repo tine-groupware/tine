@@ -192,9 +192,6 @@ class Tinebase_CoreTest extends TestCase
     public function testUniqueKeys()
     {
         $db = Tinebase_Core::getDb();
-        if (! $db instanceof Zend_Db_Adapter_Pdo_Mysql) {
-            static::markTestSkipped('only a mysql test'); // TODO remove this in release 13 once pgsql got dropped
-        }
 
         // TODO we should fix most of them! either the index should not be unique or we need to fix it
         $whiteListed = [
@@ -238,12 +235,10 @@ class Tinebase_CoreTest extends TestCase
             SQL_TABLE_PREFIX . 'role_accounts' => [
                 'account_id',
             ],
-            // this is 2017.11 only, can be ignored
-            SQL_TABLE_PREFIX . 'async_job' => [
-                'name',
-                'seq',
-            ],
             SQL_TABLE_PREFIX . 'cal_event_type' => [
+                'deleted_time',
+            ],
+            SQL_TABLE_PREFIX . 'cs_role_configs' => [
                 'deleted_time',
             ],
         ];
