@@ -216,8 +216,7 @@ release-update-tests:
       log "updating to current version"
       git checkout ${CI_COMMIT_SHA}
       test_composer_install
-      log update
-      su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
+      test_update_tine
   rules:
     - if: $RELEASE_UPDATE_TEST == "false"
       when: never
