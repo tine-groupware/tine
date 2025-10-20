@@ -1,125 +1,107 @@
 
-TINE RELEASENOTES
+TINE RELEASE NOTES
 =====================
                     
-  Release:     Pelle (2024.11)
-  Last change: 2025-02-27
+  Release:     Liva (2025.11)
+  Last change: 2025-10-20
 
 # GENERAL CHANGES (Administrative/Operative)
 
-## PHP 8.3 Support
-
-- PHP 8.3 is now fully supported (with version 2024.11.6)
-
-## PHP 8.2 Support
-
-- PHP 8.2 is now fully supported
-- PHP 8.0 support has been dropped
-
-## Docker Image
-
-- The docker image is now based on ubuntu noble instead of alpine.
-
-## Support for MySQL 5.7 dropped
-## Support for mariadb 10.2 / 10.3 dropped
-## New: mysql 8.0.21 + maria 10.4 minimum requirements
-- JSON_VALUE is a built-in function mariadb, and it has been introduced to mysql start from v8.0.21 (see https://dev.mysql.com/doc/refman/8.0/en/json-search-functions.html#function_json-value)
+## add configurable rate limits for all users, IPs and APIs
 
 # GENERAL CHANGES (User Interface)
 
-## Modal Windows rework / VueJS
-## Application-Dock / Picker
-## Multipicker (used for example in "one of" filter and in group functions)
-## support colorized number fields
-## responsive layout improvements (grid panel)
-## Password reveal field
+## make edit dialogs responsive
+## Login dialog rework
+## Public Pages have been improved
+- generalization
+- download pages
+- consent pages
+- and more
 
-- special note type, is shown in history panel
+## clientside markdown support
 
 # ADMIN / OPERATION
 
-## number range configuration (for example for Sales product numbers)
-## Send Password via SMS
-## Show Mailaccount Sieve-Script
-## Tinebase feature "featureShowAccountEmail" has been removed
-
-It is now possible to configure the account "title" display via TWIG templates.
-See Tinebase_Config::ACCOUNT_TWIG configuration.
+## feature(Admin): twig template ui
+## Scheduler tasks can be edited and disabled
+## disable custom fields
+## log login failures by client
 
 # SSO
 
-## tine can be identity provider
-
+## improved external IDP usage
+## support for more auth workflows (token, device,...)
+- TODO add more info
+- 
 # ADDRESSBOOK
-
-## preferred contact properties (primary mail address, ...)
-## GDPR Consent Client / newsletter
 
 # CALENDAR
 
-## New "Floorplan" feature for booking resources (rooms / tables / ...)
+## "Interoperability" improvements (CalDAV)
+- iMIP-Messages
+- CalDAV-Imports
 
-see https://tine-docu.s3web.rz1.metaways.net/admins/floorplans/
-
-## series events with individual dates
-## Resources-Node in tree
-## configurable event types
-## sync from remote caldav source (via admin scheduler)
+## add weekday filter
+## support for monthly series events for 5th weekday
 
 # EMAIL
 
-## Mass-Mailing
-
-- with GDPR-integration & consent-link creation
-
-## expected answer
-## Sieve custom scripts
+## Extended mass-mailing functionality (see GDPR)
+## E-Mail Templating and nicer Bootstrap-Layouts
+## xoauth2 sasl auth
+## add support for png and gif images to select image
+## Add inserting images to signature editor
 
 # CRM
 
-## "Copy Lead" action in grid panel
-
 # FILEMANAGER / FILESYSTEM
 
-## mount local or remote WebDAV-folders (flysystem)
+## Preview with built-in pdf viewer
 
-i.e. connect multiple tine instances / shared filesystem
+# GDPR
 
-## avscan
-
-### notify avscan positive result to admin role
-
-### notes have been removed
-
-- are no longer created + shown and can be removed via CLI Tinebase.removeAllAvScanNotes
+## manage mailing list subscription / consent by email and consent pages
 
 # SALES
 
-## Divisions / multi-tenancy
-## E-Invoice
-## collective billing / "Sammelrechnung"
-## reverse billing / "Storno-Rechnungen" workflow improvements
-## Reverse-Charge
-## gross prices in products and invoices
-## Evaluation-Dimensions
+## further improvements with Invoices
+- automatic sending process
+- and more
 
 # TASKS
 
-## Delegations / Attendee
-## Templates
-## Subtasks
-## Sources (CRM, Projects)
-## "TODO" Filter
-## create timesheets from tasks
-
 # HUMAN RESOURCES
 
-## yearly turnover
+## make working time/project time attendanceRecorder devices configurable  
 
-# TIMETRACKER
+# TIME TRACKER
 
-## working time + turnover (show employee statistics in tbar)
+## show/edit correlated timesheets (series of multi day timesheets)
+## Customizable XLSX export (twig template)
 
-# PHONE & VOIPMANAGER
+# EVENT MANAGER
 
-- Both applications are discontinued and have been removed. Latest versions are in 2023.11 branch / releases.
+- A new App has been added for managing Events with configurable options and registrations.  
+
+# CREW SCHEDULING
+
+- A new App has been added for managing / scheduling tasks/shifts for a defined set of attendee.   
+
+# SAAS INSTANCE
+
+- A new App has been added for managing tine SaaS-instances with special confirmation dialogs, job logs and more.
+
+# MATRIX SYNAPSE INTEGRATOR
+
+- This app has been rewritten and can now be used to manage matrix accounts on a synapse server that are linked to tine users.
+
+## Matrix Corporal
+- It is also possible to use [Matrix Corporal](https://github.com/devture/matrix-corporal) to define users (and later: rooms)
+
+## Element client integration
+## matrix directory export
+
+# PURCHASES
+
+- Added as new app (moved modules from Sales)
