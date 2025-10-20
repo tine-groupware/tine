@@ -360,6 +360,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             }
         }
 
+        if ($_record->has(Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE)) {
+            $_record->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_SALES_TAX_BY_RATE};
+        }
         $_record->calculatePricesIncludingPositions();
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
