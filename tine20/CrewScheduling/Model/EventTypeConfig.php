@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     CrewScheduling
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -19,18 +19,18 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
 {
-    const FLD_SCHEDULING_ROLE = 'scheduling_role';
-    const FLD_EVENT_TYPE = 'event_type';
-    const FLD_SHORTFALL_ACTION = 'shortfall_action';
-    const FLD_EXCEEDANCE_ACTION = 'exceedance_action';
-    const FLD_NUM_REQUIRED_ROLE_ATTENDEE = 'num_required_role_attendee';
-    const FLD_ROLE_ATTENDEE_REQUIRED_GROUPS = 'role_attendee_required_groups';
-    const FLD_ROLE_ATTENDEE_REQUIRED_GROUPS_OPERATOR = 'role_attendee_required_groups_operator';
-    const FLD_SAME_ROLE_SAME_ATTENDEE = 'same_role_same_attendee';
-    const FLD_OTHER_ROLE_SAME_ATTENDEE = 'other_role_same_attendee';
+    public const FLD_SCHEDULING_ROLE = 'scheduling_role';
+    public const FLD_EVENT_TYPE = 'event_type';
+    public const FLD_SHORTFALL_ACTION = 'shortfall_action';
+    public const FLD_EXCEEDANCE_ACTION = 'exceedance_action';
+    public const FLD_NUM_REQUIRED_ROLE_ATTENDEE = 'num_required_role_attendee';
+    public const FLD_ROLE_ATTENDEE_REQUIRED_GROUPS = 'role_attendee_required_groups';
+    public const FLD_ROLE_ATTENDEE_REQUIRED_GROUPS_OPERATOR = 'role_attendee_required_groups_operator';
+    public const FLD_SAME_ROLE_SAME_ATTENDEE = 'same_role_same_attendee';
+    public const FLD_OTHER_ROLE_SAME_ATTENDEE = 'other_role_same_attendee';
 
-    const MODEL_NAME_PART = 'EventTypeConfig';
-    const TABLE_NAME = 'cs_role_configs';
+    public const MODEL_NAME_PART = 'EventTypeConfig';
+    public const TABLE_NAME = 'cs_role_configs';
 
 
     /**
@@ -39,7 +39,7 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME               => 'Scheduling Role Config',  // gettext('GENDER_Scheduling Role Config')
         self::RECORDS_NAME              => 'Scheduling Role Configs', // ngettext('Scheduling Role Config', 'Scheduling Role Configs', n)
         self::TITLE_PROPERTY            => '{{ scheduling_role.name }}',
@@ -61,15 +61,22 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_SCHEDULING_ROLE],
 
-
         self::TABLE => [
-            self::NAME      => self::TABLE_NAME,
-            self::UNIQUE_CONSTRAINTS   => [
-                self::FLD_SCHEDULING_ROLE       => [
-                    self::COLUMNS           => [self::FLD_SCHEDULING_ROLE, self::FLD_EVENT_TYPE],
+            self::NAME => self::TABLE_NAME,
+            self::UNIQUE_CONSTRAINTS => [
+                self::FLD_SCHEDULING_ROLE => [
+                    self::COLUMNS => [
+                        self::FLD_SCHEDULING_ROLE,
+                        self::FLD_EVENT_TYPE,
+                        self::FLD_DELETED_TIME,
+                    ],
                 ],
-                self::FLD_EVENT_TYPE                => [
-                    self::COLUMNS           => [self::FLD_EVENT_TYPE, self::FLD_SCHEDULING_ROLE],
+                self::FLD_EVENT_TYPE => [
+                    self::COLUMNS => [
+                        self::FLD_EVENT_TYPE,
+                        self::FLD_SCHEDULING_ROLE,
+                        self::FLD_DELETED_TIME,
+                    ],
                 ],
             ]
         ],
@@ -110,6 +117,7 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Scheduling Role', // _('Scheduling Role')
                 self::QUERY_FILTER      => true,
+                self::NULLABLE          => false,
             ],
             self::FLD_EVENT_TYPE            => [
                 self::TYPE              => self::TYPE_RECORD,
@@ -121,6 +129,7 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Event Type', // _('Event Type')
+                self::NULLABLE          => false,
             ],
             self::FLD_NUM_REQUIRED_ROLE_ATTENDEE => [
                 self::TYPE         => self::TYPE_INTEGER,

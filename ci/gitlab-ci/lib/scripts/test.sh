@@ -178,7 +178,7 @@ log() {
     echo -e "\033[0;34m"$@"\033[0m"
 }
 
-test_release_update_test_determine_start_version () {
+test_release_update_test_determine_start_version() {
     # we can automatically determine the start version for main, beta and be. - git describe only works for lts and be, as other branches are "contaminated" with different tags 
     if [ -z "${CUSTOMER_MAJOR_COMMIT_REF_NAME}" ]; then
         if [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_NEXT}" ] || [ "${BASE_MAJOR_COMMIT_REF_NAME}" == "${TINE_VERSION_BETA}" ]; then
@@ -208,4 +208,9 @@ test_release_update_test_determine_start_version () {
             return
         fi
     fi
+}
+
+test_update_tine() {
+    log update
+    su tine20 -c "php setup.php --config=/etc/tine20 --update -v -- strict=1"
 }
