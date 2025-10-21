@@ -988,6 +988,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     ], true));
                     if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
                         $smdst->setId($oldRate->getId());
+                        $smdst->seq = $oldRate->seq;
+                        $smdst->last_modified_time = $oldRate->last_modified_time;
                     }
                     return $carry + $tax;
                 }, 0) : 0;
@@ -1008,6 +1010,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     ], true));
                     if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
                         $smdst->setId($oldRate->getId());
+                        $smdst->seq = $oldRate->seq;
+                        $smdst->last_modified_time = $oldRate->last_modified_time;
                     }
                     return $carry + $tax;
                 }, 0) : 0;
