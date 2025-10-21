@@ -9,7 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
-    Ext.copyTo(this, config, 'useQuickFilter, quickFilterConfig, syncFields');
+    Ext.copyTo(this, config, 'useQuickFilter, quickFilterConfig, syncFields, stateIdSuffix');
 
     // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
@@ -75,6 +75,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     criteriaCount: 0,
 
     useQuickFilter: true,
+    stateIdSuffix: '',
 
     cls: 'tw-ftb-filterpanel',
     layout: 'border',
@@ -178,6 +179,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             if (!this.quickFilterPlugin) {
                 this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
                     syncFields: this.syncFields,
+                    stateIdSuffix: this.stateIdSuffix,
                 }, this.quickFilterConfig));
                 this.quickFilterPlugin.init(filterToolbar, this);
             } else {
@@ -273,7 +275,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
 // save last filter ?
         let prefs;
         if ((prefs = this.filterToolbarConfig.app.getRegistry().get('preferences')) && prefs.get('defaultpersistentfilter') === '_lastusedfilter_') {
-            const lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-lastusedfilter';
+            const lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + this.stateIdSuffix + '-lastusedfilter';
             
             if (Ext.encode(Ext.state.Manager.get(lastFilterStateName)) !== Ext.encode(value)) {
                 Tine.log.debug('Tine.widgets.grid.FilterPanel::setValue save last used filter');

@@ -88,6 +88,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      */
     syncFields: true,
 
+    stateIdSuffix: '',
     
     /**
      * bind value field of ftb.quickFilterRow to sync process
@@ -182,7 +183,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         var stateful = !! this.ftb.recordClass;
         // autogenerate stateId
         if (stateful) {
-            var stateId = this.ftb.recordClass.getMeta('appName') + '-' + this.ftb.recordClass.getMeta('recordName') + '-FilterToolbar-QuickfilterPlugin';
+            var stateId = this.ftb.recordClass.getMeta('appName') + '-' + this.ftb.recordClass.getMeta('recordName') + this.stateIdSuffix + '-FilterToolbar-QuickfilterPlugin';
         }
         
         const ftqfp = this;
