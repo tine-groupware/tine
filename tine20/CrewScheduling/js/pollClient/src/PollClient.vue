@@ -5,6 +5,7 @@
           :userId="participantId"
           :loading="loading"
           :allow-join="false"
+          :additional-data="additionalData"
           @saveReply="saveReply"
           @resetPoll="loadPoll"
           @swapParticipant="swapParticipant"
@@ -15,7 +16,8 @@
             <h1>{{formatMessage('Availability Poll')}}</h1>
             <h2 class="poll-event">
               <span :style="poll.scheduling_role.color ? {color: poll.scheduling_role.color} : {}">{{poll.scheduling_role.name}}</span><span v-if="poll.site && poll.site.n_fn">, </span>
-              <span  v-if="poll.site && poll.site.n_fn" :style="poll.site.color ? {color: '#'+poll.site.color} : {}">{{poll.site.n_fn}}</span>
+              <span v-if="poll.site && poll.site.n_fn" :style="poll.site.color ? {color: '#'+poll.site.color} : {}">{{poll.site.n_fn}}</span>
+              <span v-if="additionalData !== null && additionalData.deadline_message">&nbsp;{{additionalData.deadline_message}}</span>
             </h2>
           </div>
         </div>
@@ -68,6 +70,28 @@ export default {
   },
 
   computed: {
+    additionalData () {
+      if (this.poll === null || !this.poll.deadline || !!this.poll.is_closed) {
+        return null
+      }
+
+      let deadline = new Date(this.poll.deadline)
+      let now = new Date()
+      let diffDays = Math.floor((deadline - now) / (1000 * 60 * 60 * 24))
+
+      if (diffDays <= 0) {
+        return {deadline_message: this.formatMessage('closed')}
+      }
+
+      if (diffDays > 10) {
+        let deadlineString = deadline.toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: '2-digit'})
+        return {
+            deadline_message: this.formatMessage('Answers possible until {deadline}', {deadline: deadlineString})
+          }
+      } else {
+        return {deadline_message: this.formatMessage('Answers possible for {diffDays} more days', {diffDays: diffDays})}
+      }
+    },
     showError: function () {
       return this.errorStatus !== null
     }

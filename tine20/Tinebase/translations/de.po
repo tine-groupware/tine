@@ -5178,3 +5178,9 @@ msgstr "Persönliche"
 
 msgid "Shared"
 msgstr "Gemeinsame"
+
+msgid "Answers possible until {deadline}"
+msgstr "Antworten bis zum {deadline} möglich"
+
+msgid "Answers possible for {diffDays} more days"
+msgstr "Antworten noch {diffDays} Tage möglich"

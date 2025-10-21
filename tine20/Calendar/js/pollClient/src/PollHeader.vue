@@ -4,6 +4,7 @@
       <th></th>
       <th v-for="date in dates" :key="date.dtstart" class="title">
         <div class="title">{{ date.summary }}{{!show_site || !date.event_site ? '' : ', ' + date.event_site.n_fn}}</div>
+        <TTag class="type-tag" v-if="hasTypes" v-for="type in date.event_types" :text="type.event_type.name" :description="type.event_type.description"></TTag>
       </th>
     </tr>
     <tr class="tr-date">
@@ -26,12 +27,16 @@ const { height } = useElementSize(summaryRow)
 
 <script>
 import { defineComponent } from 'vue'
+import TTag from "../../../../Tinebase/js/vue/components/TTag.vue";
 
 export default defineComponent({
   name: 'PollHeader',
   props: {
     dates: Array,
     show_site: {type: Boolean, default: false}
+  },
+  components: {
+    TTag
   },
   computed: {
     showEventTitles () {
@@ -47,6 +52,16 @@ export default defineComponent({
         }
       }
       return anySummary || (this.show_site && anySite);
+    },
+    hasTypes () {
+      let anyType = false
+      for (let i = 0; i < this.dates.length; i++) {
+        let date = this.dates[i]
+        if (date.event_types) {
+          anyType = true
+        }
+      }
+      return anyType
     }
   }
 })
@@ -58,6 +73,7 @@ th {
   border: 1px solid #ccc;
   padding: 5px;
   text-align: center;
+  border-collapse: collapse;
 }
 /* Fixed first column */
 thead th{
@@ -90,5 +106,9 @@ div.title {
 th.title {
   min-height: 100px;
   overflow: visible;
+}
+
+.type-tag {
+  margin: 1px;
 }
 </style>
