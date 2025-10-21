@@ -37,12 +37,15 @@ msgstr ""
 msgid "Manage all working times regardless configured division grants."
 msgstr ""
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr ""
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr ""
 
+#, php-format
 msgid "Clock pause: %1$s"
 msgstr ""
 
@@ -115,6 +118,12 @@ msgstr ""
 msgid "Activate to enable working time tracking and reporting"
 msgstr ""
 
+msgid "Enable Revenue Analytics"
+msgstr ""
+
+msgid "Activate to enable revenue analytics"
+msgstr ""
+
 msgid "Vacation expires"
 msgstr ""
 
@@ -172,12 +181,15 @@ msgstr ""
 msgid "It is not allowed to update a cleared report"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s away"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s is away"
+msgstr ""
+
+msgid "wtr during affected time is already booked, no changes possible anymore"
 msgstr ""
 
 msgid "monthly wt reports can't be created"
@@ -254,15 +266,15 @@ msgstr ""
 msgid "Monthly Report"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%d days"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "+%s (credit)"
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s (dept)"
 msgstr ""
 
@@ -603,6 +615,9 @@ msgstr ""
 msgid "Free Time Planning"
 msgstr ""
 
+msgid "Revenue Analysis"
+msgstr ""
+
 msgid "Human Resources"
 msgid_plural "Human Resources"
 msgstr[0] ""
@@ -618,6 +633,51 @@ msgid "Shared"
 msgstr ""
 
 msgid "Recalculate"
+msgstr ""
+
+msgid "Totals of the selected lines"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
+msgid "Reload all data"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Export all data"
+msgstr ""
+
+msgid "Period"
+msgstr ""
+
+msgid "Turnover Target"
+msgstr ""
+
+msgid "Turnover Recorded"
+msgstr ""
+
+msgid "Turnover Recorded %"
+msgstr ""
+
+msgid "Turnover Cleared"
+msgstr ""
+
+msgid "Turnover Cleared %"
+msgstr ""
+
+msgid "Working Time Target"
+msgstr ""
+
+msgid "Working Time Recorded"
+msgstr ""
+
+msgid "Working Time %"
+msgstr ""
+
+msgid "Loading revenue analysis data..."
 msgstr ""
 
 msgid "Workingtime Tracking"
