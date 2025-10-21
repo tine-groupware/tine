@@ -181,7 +181,7 @@ Ext.ux.WindowFactory.prototype = {
         }
         config.contentPanelConstructed = true;
 
-        windowObj.mainCardPanel = config.popup ? windowObj.popup.Tine.Tinebase.viewport.tineViewportMaincardpanel : windowObj.items.get(0);
+        windowObj.mainCardPanel = config.popup ? _.get(windowObj.popup, 'Tine.Tinebase.viewport.tineViewportMaincardpanel') : windowObj.items.get(0);
         return centerPanel;
     },
     
