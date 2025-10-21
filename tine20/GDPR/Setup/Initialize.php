@@ -20,6 +20,14 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  */
 class GDPR_Setup_Initialize extends Setup_Initialize
 {
+    /**
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     *
+     * @todo use \Setup_Initialize::createCustomFields
+     */
     protected function _initializeCustomFields()
     {
         if (Tinebase_Core::isReplica()) {

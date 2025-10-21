@@ -23,6 +23,8 @@ class GDPR_Setup_Uninitialize extends Setup_Uninitialize
      * @param Tinebase_Model_Application $_applications
      * @param array | null $_options
      * @return void
+     *
+     * @todo use \Setup_Uninitialize::removeCustomFields
      */
     protected function _uninitializeCustomFields(Tinebase_Model_Application $_application, $_options = null)
     {
