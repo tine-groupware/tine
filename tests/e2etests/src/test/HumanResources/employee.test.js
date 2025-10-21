@@ -10,7 +10,7 @@ beforeAll(async () => {
 describe('employee', () => {
     describe('employee grid', () => {
         test('show grid', async () => {
-            await expectPuppeteer(page).toClick('.x-tree-node span', {text: 'Mitarbeitende', visible: true});
+            await expectPuppeteer(page).toClick('.x-tree-node span', {text: 'Mitarbeiter', visible: true});
             await expectPuppeteer(page).toMatchElement('.x-grid3-hd-account_id');
         });
 
