@@ -19,11 +19,11 @@ msgstr "Add Divisions"
 msgid "Add new divisions"
 msgstr "Add new divisions"
 
-msgid "Manage all Employees"
-msgstr "Manage all Employees"
+msgid "Manage all Employee"
+msgstr "Manage all Employee"
 
-msgid "Manage all employees regardless of configured division grants."
-msgstr "Manage all employees regardless of configured division grants."
+msgid "Manage all employee regardless configured division grants."
+msgstr "Manage all employee regardless configured division grants."
 
 msgid "Manage Streams"
 msgstr "Manage Streams"
@@ -34,8 +34,8 @@ msgstr "Show and edit working streams"
 msgid "Manage working times"
 msgstr "Manage working times"
 
-msgid "Manage all working times regardless of configured division grants."
-msgstr "Manage all working times regardless of configured division grants."
+msgid "Manage all working times regardless configured division grants."
+msgstr "Manage all working times regardless configured division grants."
 
 #, php-format
 msgid "Clock in: %1$s"
@@ -79,8 +79,8 @@ msgstr "Declined"
 msgid "Working Time Correction Status"
 msgstr "Working Time Correction Status"
 
-msgid "Default Holiday Calendar"
-msgstr "Default Holiday Calendar"
+msgid "Default Feast Calendar"
+msgstr "Default Feast Calendar"
 
 msgid "Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker"
 msgstr "Here you can define the default public holiday calendar used to set public holidays and other free days in datepicker"
@@ -118,17 +118,11 @@ msgstr "Enable Working Time Tracking"
 msgid "Activate to enable working time tracking and reporting"
 msgstr "Activate to enable working time tracking and reporting"
 
-msgid "Enable Revenue Analytics"
-msgstr "Enable Revenue Analytics"
-
-msgid "Activate to enable revenue analytics"
-msgstr "Activate to enable revenue analytics"
-
 msgid "Vacation expires"
 msgstr "Vacation expires"
 
-msgid "Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD."
-msgstr "Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD."
+msgid "Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD."
+msgstr "Here you can define the day, when the vacation days taken from last year expires, the format is MM-DD."
 
 msgid "Report Templates Node ID"
 msgstr "Report Templates Node ID"
@@ -136,8 +130,8 @@ msgstr "Report Templates Node ID"
 msgid "Timetracker Timeaccount for Workingtime Tracking"
 msgstr "Timetracker Timeaccount for Workingtime Tracking"
 
-msgid "Available Stream Intervals"
-msgstr "Available Stream Intervals"
+msgid "Stream Intervals available"
+msgstr "Stream Intervals available"
 
 msgid "Weekly"
 msgstr "Weekly"
@@ -151,8 +145,8 @@ msgstr "Quarterly"
 msgid "Yearly"
 msgstr "Yearly"
 
-msgid "Available Stream Types"
-msgstr "Available Stream Types"
+msgid "Stream Types available"
+msgstr "Stream Types available"
 
 msgid "Velocity Stream"
 msgstr "Velocity Stream"
@@ -163,14 +157,14 @@ msgstr "Working Stream"
 msgid "Daily Business"
 msgstr "Daily Business"
 
-msgid "Contracts must not overlap"
-msgstr "Contracts must not overlap"
+msgid "Contracts may not overlap"
+msgstr "Contracts may not overlap"
 
 msgid "No valid contract for this date"
 msgstr "No valid contract for this date"
 
-msgid "No valid blpipe for the working time scheme of this contract on this date"
-msgstr "No valid blpipe for the working time scheme of this contract on this date"
+msgid "No valid blpipe for the working time scheme of this contract for this date"
+msgstr "No valid blpipe for the working time scheme of this contract for this date"
 
 msgid "unexpected error: "
 msgstr "unexpected error: "
@@ -192,17 +186,17 @@ msgstr "%s is away"
 msgid "monthly wt reports can't be created"
 msgstr "monthly wt reports can't be created"
 
-msgid "You need to clear the previous month first."
-msgstr "You need to clear the previous month first."
+msgid "previous months need to be cleared first"
+msgstr "previous months need to be cleared first"
 
-msgid "You need to revert the clearing of the previous month first."
-msgstr "You need to revert the clearing of the previous month first."
+msgid "following months need to be uncleared first"
+msgstr "following months need to be uncleared first"
 
 msgid "Wage types"
 msgstr "Wage types"
 
-msgid "Absence types"
-msgstr "Absence types"
+msgid "Free time types"
+msgstr "Free time types"
 
 msgid "Working time scheme"
 msgid_plural "Working time schemes"
@@ -254,6 +248,9 @@ msgstr "Not allowed!"
 msgid "It's only allowed to book remaining vacation days from years in the past!"
 msgstr "It's only allowed to book remaining vacation days from years in the past!"
 
+msgid "Excel current columns"
+msgstr "Excel current columns"
+
 msgid "Monthly Report (Clock Times)"
 msgstr "Monthly Report (Clock Times)"
 
@@ -291,17 +288,17 @@ msgstr "Summary"
 msgid "Vacation"
 msgstr "Vacation"
 
-msgid "Possible vacation days"
-msgstr "Possible vacation days"
+msgid "Possible vaction days"
+msgstr "Possible vaction days"
 
-msgid "Requested vacation days"
-msgstr "Requested vacation days"
+msgid "Requested vaction days"
+msgstr "Requested vaction days"
 
-msgid "Taken vacation days"
-msgstr "Taken vacation days"
+msgid "Taken vaction days"
+msgstr "Taken vaction days"
 
-msgid "Remaining vacation days"
-msgstr "Remaining vacation days"
+msgid "Remaining vaction days"
+msgstr "Remaining vaction days"
 
 msgid "Sickness"
 msgstr "Sickness"
@@ -353,9 +350,7 @@ msgid "Clock in"
 msgstr "Clock in"
 
 msgid "Absence"
-msgid_plural "Absences"
-msgstr[0] "Absence"
-msgstr[1] "Absences"
+msgstr "Absence"
 
 msgid "Clock out"
 msgstr "Clock out"
@@ -372,14 +367,14 @@ msgstr "Info"
 msgid "Create Timesheet"
 msgstr "Create Timesheet"
 
-msgid "Saving data..."
-msgstr "Saving data..."
+msgid "Data saving is performed ..."
+msgstr "Data saving is performed ..."
 
-msgid "Data saved successfully!"
-msgstr "Data saved successfully!"
+msgid "Data saving successful!"
+msgstr "Data saving successful!"
 
-msgid "Loading data..."
-msgstr "Loading data..."
+msgid "Data loading is performed ..."
+msgstr "Data loading is performed ..."
 
 msgid "Away"
 msgstr "Away"
@@ -414,8 +409,8 @@ msgstr "Vacation days of one calendar year"
 msgid "Working Time Schema"
 msgstr "Working Time Schema"
 
-msgid "Working Hours per Week"
-msgstr "Working Hours per Week"
+msgid "Working Hours per week"
+msgstr "Working Hours per week"
 
 msgid "Mon."
 msgstr "Mon."
@@ -444,20 +439,20 @@ msgstr "Additional Parameters"
 msgid "Failed"
 msgstr "Failed"
 
-msgid "Vacation in the same period"
-msgstr "Vacation in the same period"
+msgid "Vacation in same period"
+msgstr "Vacation in same period"
 
-msgid "Some vacation days fall within the period of the contract you added. Once you save this employee, the contract can no longer be changed."
-msgstr "Some vacation days fall within the period of the contract you added. Once you save this employee, the contract can no longer be changed."
+msgid "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
+msgstr "There are some vacation days matching the period of the contract you added. After saving this employee, changing the contract is not possible anymore."
 
-msgid "Prefer working time over project time timesheets on a daily basis."
-msgstr "Prefer working time over project time timesheets on a daily basis."
+msgid "Prefer workingtime over projecttime timesheets on a daily bases."
+msgstr "Prefer workingtime over projecttime timesheets on a daily bases."
 
-msgid "Timesheets generated by the attendance recorders are created on the so-called working time account of the employee's division, whereas project time timesheets are booked to the corresponding project time accounts. An employee's working time for a given day is calculated by summing up all of their timesheets for that day. If both working time and project time are tracked in parallel, this rule gives preference to working time on a daily basis."
-msgstr "Timesheets generated by the attendance recorders are created on the so-called working time account of the employee's division, whereas project time timesheets are booked to the corresponding project time accounts. An employee's working time for a given day is calculated by summing up all of their timesheets for that day. If both working time and project time are tracked in parallel, this rule gives preference to working time on a daily basis."
+msgid "Timesheets generated by the Attendance Recorders are created on the so called workingtime timeaccount of the division of the employee whereas projecttime timesheets are booked on the corrensponding project timeaccounts. Employee workingtime of a day is calculated by summing up all timesheets ot the day from this employee. If workingtime and projecttime is tracked in parallel this rule preferes workingtime on a daily bases."
+msgstr "Timesheets generated by the Attendance Recorders are created on the so called workingtime timeaccount of the division of the employee whereas projecttime timesheets are booked on the corrensponding project timeaccounts. Employee workingtime of a day is calculated by summing up all timesheets ot the day from this employee. If workingtime and projecttime is tracked in parallel this rule preferes workingtime on a daily bases."
 
-msgid "If working time is recorded for a given day, only the working time timesheets for that day will be included in the working time calculation."
-msgstr "If working time is recorded for a given day, only the working time timesheets for that day will be included in the working time calculation."
+msgid "If workingtime is found for a given day only workingtime timesheets of this day will be included into workingtime calculation."
+msgstr "If workingtime is found for a given day only workingtime timesheets of this day will be included into workingtime calculation."
 
 msgid "Calculate all Reports"
 msgstr "Calculate all Reports"
@@ -472,11 +467,11 @@ msgid "Vacation Days"
 msgstr "Vacation Days"
 
 #, python-brace-format
-msgid "No {0} could be found. Please try changing your filter criteria or view options."
-msgstr "No {0} could be found. Please try changing your filter criteria or view options."
+msgid "There could not be found any {0}. Please try to change your filter-criteria or view-options."
+msgstr "There could not be found any {0}. Please try to change your filter-criteria or view-options."
 
-msgid "Could not booked as vacation"
-msgstr "Could not booked as vacation"
+msgid "Could not book as vacation"
+msgstr "Could not book as vacation"
 
 msgid "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
 msgstr "The unexcused sickness days could not be booked as vacation. There are not enough days left!"
@@ -497,8 +492,8 @@ msgid_plural "Employees"
 msgstr[0] "Employee"
 msgstr[1] "Employees"
 
-msgid "Apply contact data to the form"
-msgstr "Apply contact data to the form"
+msgid "Apply contact data on form"
+msgstr "Apply contact data on form"
 
 msgid "Salutation"
 msgstr "Salutation"
@@ -524,6 +519,11 @@ msgstr "Evaluation Dimensions"
 msgid "Enter description"
 msgstr "Enter description"
 
+msgid "Free Time"
+msgid_plural "Free Times"
+msgstr[0] "Free Time"
+msgstr[1] "Free Times"
+
 #, python-brace-format
 msgid "Edit {0} for {1}"
 msgstr "Edit {0} for {1}"
@@ -532,8 +532,8 @@ msgstr "Edit {0} for {1}"
 msgid "Add {0} for {1}"
 msgstr "Add {0} for {1}"
 
-msgid "You have to select at least one day to save this free time entry."
-msgstr "You have to select at least one day to save this free time entry."
+msgid "You have to select at least one day to save this freetime entry."
+msgstr "You have to select at least one day to save this freetime entry."
 
 msgid "No day selected"
 msgstr "No day selected"
@@ -573,24 +573,24 @@ msgstr "Select Days"
 msgid "Remaining vacation"
 msgstr "Remaining vacation"
 
-msgid "Present remaining vacation based on accepted scheduled vacation days, including unexpired vacation days from previous periods."
-msgstr "Present remaining vacation based on accepted scheduled vacation days, including unexpired vacation days from previous periods."
+msgid "Present remaining vacation based on accepted scheduled vacations days including non expired vacations of previous periods"
+msgstr "Present remaining vacation based on accepted scheduled vacations days including non expired vacations of previous periods"
 
 #, python-brace-format
 msgid "{remainingVacation} days"
 msgstr "{remainingVacation} days"
 
-msgid "Loading absence planning data..."
-msgstr "Loading absence planning data..."
+msgid "Loading free time planning data..."
+msgstr "Loading free time planning data..."
 
-msgid "Add Absence"
-msgstr "Add Absence"
+msgid "Add Free Time"
+msgstr "Add Free Time"
 
-msgid "Edit Absence"
-msgstr "Edit Absence"
+msgid "Edit Free Time"
+msgstr "Edit Free Time"
 
-msgid "Delete Absence"
-msgstr "Delete Absence"
+msgid "Delete Free Time"
+msgstr "Delete Free Time"
 
 msgid "Do you really want to delete the selected record?"
 msgid_plural "Do you really want to delete the selected records?"
@@ -603,11 +603,8 @@ msgstr "Confirm"
 msgid "Legend"
 msgstr "Legend"
 
-msgid "Absence Planning"
-msgstr "Absence Planning"
-
-msgid "Revenue Analysis"
-msgstr "Revenue Analysis"
+msgid "Free Time Planning"
+msgstr "Free Time Planning"
 
 msgid "Human Resources"
 msgid_plural "Human Resources"
@@ -626,58 +623,11 @@ msgstr "Shared"
 msgid "Recalculate"
 msgstr "Recalculate"
 
-msgid "Totals of the selected lines"
-msgstr "Totals of the selected lines"
-
-msgid "Reload"
-msgstr "Reload"
-
-msgid "Reload all data"
-msgstr "Reload all data"
-
-msgid "Export"
-msgstr "Export"
-
-msgid "Export all data"
-msgstr "Export all data"
-
-msgid "Period"
-msgstr "Period"
-
-msgid "Turnover Target"
-msgstr "Turnover Target"
-
-msgid "Turnover Recorded"
-msgstr "Turnover Recorded"
-
-msgid "Turnover Recorded %"
-msgstr "Turnover Recorded %"
-
-msgid "Turnover Cleared"
-msgstr "Turnover Cleared"
-
-msgid "Turnover Cleared %"
-msgstr "Turnover Cleared %"
-
-msgid "Working Time Target"
-msgstr "Working Time Target"
-
-msgid "Working Time Recorded"
-msgstr "Working Time Recorded"
-
-msgid "Working Time %"
-msgstr "Working Time %"
-
-msgid "Loading revenue analysis data..."
-msgstr "Loading revenue analysis data..."
-
-msgid "Working Time Tracking"
-msgstr "Working Time Tracking"
+msgid "Workingtime Tracking"
+msgstr "Workingtime Tracking"
 
 msgid "Vacation correction"
-msgid_plural "Vacation corrections"
-msgstr[0] "Vacation correction"
-msgstr[1] "Vacation corrections"
+msgstr "Vacation correction"
 
 msgid "Correction"
 msgstr "Correction"
@@ -702,16 +652,16 @@ msgstr "GENDER_Personal account"
 msgid "Quick search"
 msgstr "Quick search"
 
-msgid "Vacation corrections"
-msgstr "Vacation corrections"
+msgid "Vacation Corrections"
+msgstr "Vacation Corrections"
 
 msgid "Break Time"
 msgid_plural "Break Times"
 msgstr[0] "Break Time"
 msgstr[1] "Break Times"
 
-msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time will be deducted automatically."
-msgstr "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time will be deducted automatically."
+msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
+msgstr "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
 
 msgid "Time worked"
 msgstr "Time worked"
@@ -723,9 +673,6 @@ msgid "Workingtime Converter"
 msgid_plural "Workingtime Converter"
 msgstr[0] "Workingtime Converter"
 msgstr[1] "Workingtime Converter"
-
-msgid "Prefer workingtime over projecttime timesheets on a daily bases."
-msgstr "Prefer workingtime over projecttime timesheets on a daily bases."
 
 msgid "Work Time Limit"
 msgid_plural "Work Time Limits"
@@ -753,14 +700,14 @@ msgstr "Working times"
 msgid "GENDER_Contract"
 msgstr "GENDER_Contract"
 
-msgid "Base Vacation Days"
-msgstr "Base Vacation Days"
+msgid "Vacation Days Base"
+msgstr "Vacation Days Base"
 
-msgid "Weekly working days for vacation"
-msgstr "Weekly working days for vacation"
+msgid "Vacations weekly working days"
+msgstr "Vacations weekly working days"
 
-msgid "Holiday Calendar"
-msgstr "Holiday Calendar"
+msgid "Feast Calendar"
+msgstr "Feast Calendar"
 
 msgid "Yearly turnover goal"
 msgstr "Yearly turnover goal"
@@ -799,8 +746,8 @@ msgstr "Target Working Time"
 msgid "Target Working Time Correction"
 msgstr "Target Working Time Correction"
 
-msgid "Net Break Time"
-msgstr "Net Break Time"
+msgid "Break Time Net"
+msgstr "Break Time Net"
 
 msgid "Break Deduction Time"
 msgstr "Break Deduction Time"
@@ -814,23 +761,23 @@ msgstr "Actual Working Time"
 msgid "Working Time Correction Requests"
 msgstr "Working Time Correction Requests"
 
-msgid "Sum of Accepted Working Time Corrections"
-msgstr "Sum of Accepted Working Time Corrections"
+msgid "Sum Accepted Working Time Correction"
+msgstr "Sum Accepted Working Time Correction"
 
 msgid "Total Working Time"
 msgstr "Total Working Time"
 
-msgid "Working Time Balance for Previous Day"
-msgstr "Working Time Balance for Previous Day"
+msgid "Working Time Balance Previous Day"
+msgstr "Working Time Balance Previous Day"
 
 msgid "Working Time Balance"
 msgstr "Working Time Balance"
 
-msgid "System Note"
-msgstr "System Note"
+msgid "System Remark"
+msgstr "System Remark"
 
-msgid "Note"
-msgstr "Note"
+msgid "Remark"
+msgstr "Remark"
 
 msgid "Is Cleared"
 msgstr "Is Cleared"
@@ -841,68 +788,68 @@ msgstr "Calculation Error"
 msgid "Read own data"
 msgstr "Read own data"
 
-msgid "The permission to read own basic employee data, accounts, absences and working time reports."
-msgstr "The permission to read own basic employee data, accounts, absences and working time reports."
+msgid "The grant to read own basic employee data, accounts, free times and working time reports."
+msgstr "The grant to read own basic employee data, accounts, free times and working time reports."
 
 msgid "Read basic employee"
 msgstr "Read basic employee"
 
-msgid "The permission to read basic employee data for all employees in this division."
-msgstr "The permission to read basic employee data for all employees in this division."
+msgid "The grant to read basic employees data for all employees in this division."
+msgstr "The grant to read basic employees data for all employees in this division."
 
 msgid "Read employee"
 msgstr "Read employee"
 
-msgid "The permission to read complete employee data, accounts, contracts, and absence for all employees in this division."
-msgstr "The permission to read complete employee data, accounts, contracts, and absence for all employees in this division."
+msgid "The grant to read full employees data, accounts, contracts and free times for all employees in this division."
+msgstr "The grant to read full employees data, accounts, contracts and free times for all employees in this division."
 
 msgid "Update employee"
 msgstr "Update employee"
 
-msgid "The permission to update complete employee data, accounts, contracts, and absence for all employees in this division."
-msgstr "The permission to update complete employee data, accounts, contracts, and absence for all employees in this division."
+msgid "The grant to update full employees data, accounts, contracts and free times for all employees in this division."
+msgstr "The grant to update full employees data, accounts, contracts and free times for all employees in this division."
 
 msgid "Read time data"
 msgstr "Read time data"
 
-msgid "The permission to read working time reports for all employees in this division."
-msgstr "The permission to read working time reports for all employees in this division."
+msgid "The grant to read working time reports for all employees in this division."
+msgstr "The grant to read working time reports for all employees in this division."
 
 msgid "Update time data"
 msgstr "Update time data"
 
-msgid "The permission to update working time reports for all employees in this division."
-msgstr "The permission to update working time reports for all employees in this division."
+msgid "The grant to update working time reports for all employees in this division."
+msgstr "The grant to update working time reports for all employees in this division."
 
 msgid "Create own change requests"
 msgstr "Create own change requests"
 
-msgid "The permission to create change requests for own absences and working time reports."
-msgstr "The permission to create change requests for own absences and working time reports."
+msgid "The grant to create own free times and working time reports change requests."
+msgstr "The grant to create own free times and working time reports change requests."
 
 msgid "Read change requests"
 msgstr "Read change requests"
 
-msgid "The permission to read absences and change requests for working time reports for all employees in this division."
-msgstr "The permission to read absences and change requests for working time reports for all employees in this division."
+msgid "The grant to read free times and working time reports change requests for all employees in this division."
+msgstr "The grant to read free times and working time reports change requests for all employees in this division."
 
 msgid "Create change requests"
 msgstr "Create change requests"
 
-msgid "The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
-msgstr "The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+msgid "The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data)."
+msgstr "The grant to create free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data)."
 
 msgid "Update change requests"
 msgstr "Update change requests"
 
-msgid "The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
-msgstr "The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+msgid "The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data)."
+msgstr "The grant to update free times and working time reports change requests for all employees in this division (implies read of basic employee, contract and account data)."
 
 msgid "Admin"
 msgstr "Admin"
 
-msgid "The permission to administrate this division (implies all other grants and the grant to set grants as well)."
-msgstr "The permission to administrate this division (implies all other grants and the grant to set grants as well)."
+msgid "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
+msgstr "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
 
 msgid "GENDER_Division"
 msgstr "GENDER_Division"
@@ -913,8 +860,8 @@ msgstr "Title"
 msgid "Timetracker time account for working time tracking of this division"
 msgstr "Timetracker time account for working time tracking of this division"
 
-msgid "Absence Calendar"
-msgstr "Absence Calendar"
+msgid "Free Time Calendar"
+msgstr "Free Time Calendar"
 
 msgid "GENDER_Employee"
 msgstr "GENDER_Employee"
@@ -934,8 +881,8 @@ msgstr "Germany"
 msgid "Locality"
 msgstr "Locality"
 
-msgid "Postal code"
-msgstr "Postal code"
+msgid "Postalcode"
+msgstr "Postalcode"
 
 msgid "Region"
 msgstr "Region"
@@ -946,8 +893,8 @@ msgstr "Street"
 msgid "Street 2"
 msgstr "Street 2"
 
-msgid "Email"
-msgstr "Email"
+msgid "E-Mail"
+msgstr "E-Mail"
 
 msgid "Telephone Number"
 msgstr "Telephone Number"
@@ -1005,8 +952,8 @@ msgstr[1] "Free Days"
 msgid "GENDER_Free Day"
 msgstr "GENDER_Free Day"
 
-msgid "GENDER_Absence"
-msgstr "GENDER_Absence"
+msgid "GENDER_Free Time"
+msgstr "GENDER_Free Time"
 
 msgid "Absence reason"
 msgid_plural "Absence reasons"
@@ -1048,11 +995,11 @@ msgstr "Allow Booking"
 msgid "Allow Planning"
 msgstr "Allow Planning"
 
-msgid "Enable Absence Time Tracking"
-msgstr "Enable Absence Time Tracking"
+msgid "Enable Freetime Timetracking"
+msgstr "Enable Freetime Timetracking"
 
-msgid "Time Account"
-msgstr "Time Account"
+msgid "Timeaccount"
+msgstr "Timeaccount"
 
 msgid "Color"
 msgstr "Color"
@@ -1082,9 +1029,6 @@ msgstr "Working Time Balance Previous Month"
 
 msgid "Total Working Time Balance"
 msgstr "Total Working Time Balance"
-
-msgid "System Remark"
-msgstr "System Remark"
 
 msgid "GENDER_Modality"
 msgstr "GENDER_Modality"
@@ -1149,14 +1093,19 @@ msgstr "Board Info"
 msgid "Stream Modalities"
 msgstr "Stream Modalities"
 
-msgid "Responsible Persons"
-msgstr "Responsible Persons"
+msgid "Responsibles"
+msgstr "Responsibles"
 
-msgid "Time Accounts"
-msgstr "Time Accounts"
+msgid "Timeaccounts"
+msgstr "Timeaccounts"
 
 msgid "GENDER_Vacation correction"
 msgstr "GENDER_Vacation correction"
+
+msgid "Vacation corrections"
+msgid_plural "Vacation corrections"
+msgstr[0] "Vacation corrections"
+msgstr[1] "Vacation corrections"
 
 msgid "Status"
 msgstr "Status"
@@ -1181,8 +1130,8 @@ msgid_plural "Working Time Calculation Strategies"
 msgstr[0] "Working Time Calculation Strategy"
 msgstr[1] "Working Time Calculation Strategies"
 
-msgid "Fill up to daily target time"
-msgstr "Fill up to daily target time"
+msgid "Fill to daily target time"
+msgstr "Fill to daily target time"
 
 msgid "GENDER_Working time correction"
 msgstr "GENDER_Working time correction"
@@ -1190,11 +1139,11 @@ msgstr "GENDER_Working time correction"
 msgid "[S] Sickness"
 msgstr "[S] Sickness"
 
-msgid "[C] Child Sick"
-msgstr "[C] Child Sick"
+msgid "[C] Sickness of Child"
+msgstr "[C] Sickness of Child"
 
-msgid "[7] Sick pay - Sickness from 7th week on"
-msgstr "[7] Sick pay - Sickness from 7th week on"
+msgid "[7] Sick pay - Sickness from 7nth week on"
+msgstr "[7] Sick pay - Sickness from 7nth week on"
 
 msgid "[V] Vacation"
 msgstr "[V] Vacation"
@@ -1247,6 +1196,346 @@ msgstr "All Divisions"
 msgid "All division records"
 msgstr "All division records"
 
+msgid "Daily WTR Corretions Requested"
+msgstr "Daily WTR Corretions Requested"
+
+msgid "Monthly WTR Corretions Requested"
+msgstr "Monthly WTR Corretions Requested"
+
+msgid "All Free Times"
+msgstr "All Free Times"
+
+msgid "All free time records"
+msgstr "All free time records"
+
+msgid "All Free Times this year"
+msgstr "All Free Times this year"
+
+msgid "All Free Times next year"
+msgstr "All Free Times next year"
+
+msgid "All Free Times requested"
+msgstr "All Free Times requested"
+
+msgid "Full-time 37.5 hours"
+msgstr "Full-time 37.5 hours"
+
+msgid "Part-time 20 hours"
+msgstr "Part-time 20 hours"
+
+msgid "No wage"
+msgstr "No wage"
+
+msgid "Salary"
+msgstr "Salary"
+
+msgid "Business trip"
+msgstr "Business trip"
+
+msgid "Sunday bonus"
+msgstr "Sunday bonus"
+
+msgid "Feast day"
+msgstr "Feast day"
+
+msgid "Feast day bonus"
+msgstr "Feast day bonus"
+
+msgid "Overtime"
+msgstr "Overtime"
+
+msgid "Overtime bonus"
+msgstr "Overtime bonus"
+
+msgid "Late shift bonus"
+msgstr "Late shift bonus"
+
+msgid "Night bonus"
+msgstr "Night bonus"
+
+msgid "Special Vacation"
+msgstr "Special Vacation"
+
+msgid "Unpaid Vacation"
+msgstr "Unpaid Vacation"
+
+msgid "Sick pay - Sickness of Child"
+msgstr "Sick pay - Sickness of Child"
+
+msgid "Sick pay - Sickness from 7nth week on"
+msgstr "Sick pay - Sickness from 7nth week on"
+
+msgid "Break"
+msgstr "Break"
+
+msgid "Stand by"
+msgstr "Stand by"
+
+msgid "Special Payment"
+msgstr "Special Payment"
+
+msgid "[H] Short Business trip"
+msgstr "[H] Short Business trip"
+
+msgid "Enable Revenue Analytics"
+msgstr "Enable Revenue Analytics"
+
+msgid "Activate to enable revenue analytics"
+msgstr "Activate to enable revenue analytics"
+
+msgid "wtr during affected time is already booked, no changes possible anymore"
+msgstr "wtr during affected time is already booked, no changes possible anymore"
+
+msgid "Revenue Analysis"
+msgstr "Revenue Analysis"
+
+msgid "Totals of the selected lines"
+msgstr "Totals of the selected lines"
+
+msgid "Reload"
+msgstr "Reload"
+
+msgid "Reload all data"
+msgstr "Reload all data"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Export all data"
+msgstr "Export all data"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Turnover Target"
+msgstr "Turnover Target"
+
+msgid "Turnover Recorded"
+msgstr "Turnover Recorded"
+
+msgid "Turnover Recorded %"
+msgstr "Turnover Recorded %"
+
+msgid "Turnover Cleared"
+msgstr "Turnover Cleared"
+
+msgid "Turnover Cleared %"
+msgstr "Turnover Cleared %"
+
+msgid "Working Time Target"
+msgstr "Working Time Target"
+
+msgid "Working Time Recorded"
+msgstr "Working Time Recorded"
+
+msgid "Working Time %"
+msgstr "Working Time %"
+
+msgid "Loading revenue analysis data..."
+msgstr "Loading revenue analysis data..."
+
+msgid "Manage all Employees"
+msgstr "Manage all Employees"
+
+msgid "Manage all employees regardless of configured division grants."
+msgstr "Manage all employees regardless of configured division grants."
+
+msgid "Manage all working times regardless of configured division grants."
+msgstr "Manage all working times regardless of configured division grants."
+
+msgid "Default Holiday Calendar"
+msgstr "Default Holiday Calendar"
+
+msgid "Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD."
+msgstr "Here you can define the day when vacation days carried over from last year expire. Please use the format MM-DD."
+
+msgid "Available Stream Intervals"
+msgstr "Available Stream Intervals"
+
+msgid "Available Stream Types"
+msgstr "Available Stream Types"
+
+msgid "Contracts must not overlap"
+msgstr "Contracts must not overlap"
+
+msgid "No valid blpipe for the working time scheme of this contract on this date"
+msgstr "No valid blpipe for the working time scheme of this contract on this date"
+
+msgid "You need to clear the previous month first."
+msgstr "You need to clear the previous month first."
+
+msgid "You need to revert the clearing of the previous month first."
+msgstr "You need to revert the clearing of the previous month first."
+
+msgid "Absence types"
+msgstr "Absence types"
+
+msgid "Possible vacation days"
+msgstr "Possible vacation days"
+
+msgid "Requested vacation days"
+msgstr "Requested vacation days"
+
+msgid "Taken vacation days"
+msgstr "Taken vacation days"
+
+msgid "Remaining vacation days"
+msgstr "Remaining vacation days"
+
+msgid "Saving data..."
+msgstr "Saving data..."
+
+msgid "Data saved successfully!"
+msgstr "Data saved successfully!"
+
+msgid "Loading data..."
+msgstr "Loading data..."
+
+msgid "Working Hours per Week"
+msgstr "Working Hours per Week"
+
+msgid "Vacation in the same period"
+msgstr "Vacation in the same period"
+
+msgid "Some vacation days fall within the period of the contract you added. Once you save this employee, the contract can no longer be changed."
+msgstr "Some vacation days fall within the period of the contract you added. Once you save this employee, the contract can no longer be changed."
+
+msgid "Prefer working time over project time timesheets on a daily basis."
+msgstr "Prefer working time over project time timesheets on a daily basis."
+
+msgid "Timesheets generated by the attendance recorders are created on the so-called working time account of the employee's division, whereas project time timesheets are booked to the corresponding project time accounts. An employee's working time for a given day is calculated by summing up all of their timesheets for that day. If both working time and project time are tracked in parallel, this rule gives preference to working time on a daily basis."
+msgstr "Timesheets generated by the attendance recorders are created on the so-called working time account of the employee's division, whereas project time timesheets are booked to the corresponding project time accounts. An employee's working time for a given day is calculated by summing up all of their timesheets for that day. If both working time and project time are tracked in parallel, this rule gives preference to working time on a daily basis."
+
+msgid "If working time is recorded for a given day, only the working time timesheets for that day will be included in the working time calculation."
+msgstr "If working time is recorded for a given day, only the working time timesheets for that day will be included in the working time calculation."
+
+#, python-brace-format
+msgid "No {0} could be found. Please try changing your filter criteria or view options."
+msgstr "No {0} could be found. Please try changing your filter criteria or view options."
+
+msgid "Could not booked as vacation"
+msgstr "Could not booked as vacation"
+
+msgid "Apply contact data to the form"
+msgstr "Apply contact data to the form"
+
+msgid "You have to select at least one day to save this free time entry."
+msgstr "You have to select at least one day to save this free time entry."
+
+msgid "Present remaining vacation based on accepted scheduled vacation days, including unexpired vacation days from previous periods."
+msgstr "Present remaining vacation based on accepted scheduled vacation days, including unexpired vacation days from previous periods."
+
+msgid "Loading absence planning data..."
+msgstr "Loading absence planning data..."
+
+msgid "Add Absence"
+msgstr "Add Absence"
+
+msgid "Edit Absence"
+msgstr "Edit Absence"
+
+msgid "Delete Absence"
+msgstr "Delete Absence"
+
+msgid "Absence Planning"
+msgstr "Absence Planning"
+
+msgid "Working Time Tracking"
+msgstr "Working Time Tracking"
+
+msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time will be deducted automatically."
+msgstr "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time will be deducted automatically."
+
+msgid "Base Vacation Days"
+msgstr "Base Vacation Days"
+
+msgid "Weekly working days for vacation"
+msgstr "Weekly working days for vacation"
+
+msgid "Holiday Calendar"
+msgstr "Holiday Calendar"
+
+msgid "Net Break Time"
+msgstr "Net Break Time"
+
+msgid "Sum of Accepted Working Time Corrections"
+msgstr "Sum of Accepted Working Time Corrections"
+
+msgid "Working Time Balance for Previous Day"
+msgstr "Working Time Balance for Previous Day"
+
+msgid "System Note"
+msgstr "System Note"
+
+msgid "Note"
+msgstr "Note"
+
+msgid "The permission to read own basic employee data, accounts, absences and working time reports."
+msgstr "The permission to read own basic employee data, accounts, absences and working time reports."
+
+msgid "The permission to read basic employee data for all employees in this division."
+msgstr "The permission to read basic employee data for all employees in this division."
+
+msgid "The permission to read complete employee data, accounts, contracts, and absence for all employees in this division."
+msgstr "The permission to read complete employee data, accounts, contracts, and absence for all employees in this division."
+
+msgid "The permission to update complete employee data, accounts, contracts, and absence for all employees in this division."
+msgstr "The permission to update complete employee data, accounts, contracts, and absence for all employees in this division."
+
+msgid "The permission to read working time reports for all employees in this division."
+msgstr "The permission to read working time reports for all employees in this division."
+
+msgid "The permission to update working time reports for all employees in this division."
+msgstr "The permission to update working time reports for all employees in this division."
+
+msgid "The permission to create change requests for own absences and working time reports."
+msgstr "The permission to create change requests for own absences and working time reports."
+
+msgid "The permission to read absences and change requests for working time reports for all employees in this division."
+msgstr "The permission to read absences and change requests for working time reports for all employees in this division."
+
+msgid "The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+msgstr "The permission to create absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+
+msgid "The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+msgstr "The permission to update absences and change requests for working time reports for all employees in this division (includes permission to read basic employee, contract and account data)."
+
+msgid "The permission to administrate this division (implies all other grants and the grant to set grants as well)."
+msgstr "The permission to administrate this division (implies all other grants and the grant to set grants as well)."
+
+msgid "Absence Calendar"
+msgstr "Absence Calendar"
+
+msgid "Postal code"
+msgstr "Postal code"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "GENDER_Absence"
+msgstr "GENDER_Absence"
+
+msgid "Enable Absence Time Tracking"
+msgstr "Enable Absence Time Tracking"
+
+msgid "Time Account"
+msgstr "Time Account"
+
+msgid "Responsible Persons"
+msgstr "Responsible Persons"
+
+msgid "Time Accounts"
+msgstr "Time Accounts"
+
+msgid "Fill up to daily target time"
+msgstr "Fill up to daily target time"
+
+msgid "[C] Child Sick"
+msgstr "[C] Child Sick"
+
+msgid "[7] Sick pay - Sickness from 7th week on"
+msgstr "[7] Sick pay - Sickness from 7th week on"
+
 msgid "Daily WTR Corrections Requested"
 msgstr "Daily WTR Corrections Requested"
 
@@ -1268,65 +1557,14 @@ msgstr "All absences next year"
 msgid "All absences requested"
 msgstr "All absences requested"
 
-msgid "Full-time 37.5 hours"
-msgstr "Full-time 37.5 hours"
-
-msgid "Part-time 20 hours"
-msgstr "Part-time 20 hours"
-
-msgid "No wage"
-msgstr "No wage"
-
-msgid "Salary"
-msgstr "Salary"
-
-msgid "Business trip"
-msgstr "Business trip"
-
-msgid "Sunday bonus"
-msgstr "Sunday bonus"
-
 msgid "Holiday"
 msgstr "Holiday"
 
 msgid "Holiday bonus"
 msgstr "Holiday bonus"
 
-msgid "Overtime"
-msgstr "Overtime"
-
-msgid "Overtime bonus"
-msgstr "Overtime bonus"
-
-msgid "Late shift bonus"
-msgstr "Late shift bonus"
-
-msgid "Night bonus"
-msgstr "Night bonus"
-
-msgid "Special Vacation"
-msgstr "Special Vacation"
-
-msgid "Unpaid Vacation"
-msgstr "Unpaid Vacation"
-
 msgid "Sick pay - Child Sick"
 msgstr "Sick pay - Child Sick"
 
 msgid "Sick pay - Sickness from 7th week on"
 msgstr "Sick pay - Sickness from 7th week on"
-
-msgid "Break"
-msgstr "Break"
-
-msgid "Stand by"
-msgstr "Stand by"
-
-msgid "Special Payment"
-msgstr "Special Payment"
-
-msgid "[C] Sickness of Child"
-msgstr "[C] Sickness of Child"
-
-msgid "[H] Short Business trip"
-msgstr "[H] Short Business trip"
