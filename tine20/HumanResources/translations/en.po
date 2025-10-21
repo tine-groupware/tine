@@ -37,12 +37,15 @@ msgstr "Manage working times"
 msgid "Manage all working times regardless configured division grants."
 msgstr "Manage all working times regardless configured division grants."
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr "Clock in: %1$s"
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr "Clock out: %1$s"
 
+#, php-format
 msgid "Clock pause: %1$s"
 msgstr "Clock pause: %1$s"
 
@@ -115,6 +118,12 @@ msgstr "Enable Working Time Tracking"
 msgid "Activate to enable working time tracking and reporting"
 msgstr "Activate to enable working time tracking and reporting"
 
+msgid "Enable Revenue Analytics"
+msgstr "Enable Revenue Analytics"
+
+msgid "Activate to enable revenue analytics"
+msgstr "Activate to enable revenue analytics"
+
 msgid "Vacation expires"
 msgstr "Vacation expires"
 
@@ -172,13 +181,16 @@ msgstr "daily wt reports can't be created"
 msgid "It is not allowed to update a cleared report"
 msgstr "It is not allowed to update a cleared report"
 
-#, python-format
+#, python-format, php-format
 msgid "%s away"
 msgstr "%s away"
 
-#, python-format
+#, python-format, php-format
 msgid "%s is away"
 msgstr "%s is away"
+
+msgid "wtr during affected time is already booked, no changes possible anymore"
+msgstr "wtr during affected time is already booked, no changes possible anymore"
 
 msgid "monthly wt reports can't be created"
 msgstr "monthly wt reports can't be created"
@@ -254,15 +266,15 @@ msgstr "Monthly Report (Clock Times)"
 msgid "Monthly Report"
 msgstr "Monthly Report"
 
-#, python-format
+#, python-format, php-format
 msgid "%d days"
 msgstr "%d days"
 
-#, python-format
+#, python-format, php-format
 msgid "+%s (credit)"
 msgstr "+%s (credit)"
 
-#, python-format
+#, python-format, php-format
 msgid "%s (dept)"
 msgstr "%s (dept)"
 
@@ -603,6 +615,9 @@ msgstr "Legend"
 msgid "Free Time Planning"
 msgstr "Free Time Planning"
 
+msgid "Revenue Analysis"
+msgstr "Revenue Analysis"
+
 msgid "Human Resources"
 msgid_plural "Human Resources"
 msgstr[0] "Human Resources"
@@ -619,6 +634,51 @@ msgstr "Shared"
 
 msgid "Recalculate"
 msgstr "Recalculate"
+
+msgid "Totals of the selected lines"
+msgstr "Totals of the selected lines"
+
+msgid "Reload"
+msgstr "Reload"
+
+msgid "Reload all data"
+msgstr "Reload all data"
+
+msgid "Export"
+msgstr "Export"
+
+msgid "Export all data"
+msgstr "Export all data"
+
+msgid "Period"
+msgstr "Period"
+
+msgid "Turnover Target"
+msgstr "Turnover Target"
+
+msgid "Turnover Recorded"
+msgstr "Turnover Recorded"
+
+msgid "Turnover Recorded %"
+msgstr "Turnover Recorded %"
+
+msgid "Turnover Cleared"
+msgstr "Turnover Cleared"
+
+msgid "Turnover Cleared %"
+msgstr "Turnover Cleared %"
+
+msgid "Working Time Target"
+msgstr "Working Time Target"
+
+msgid "Working Time Recorded"
+msgstr "Working Time Recorded"
+
+msgid "Working Time %"
+msgstr "Working Time %"
+
+msgid "Loading revenue analysis data..."
+msgstr "Loading revenue analysis data..."
 
 msgid "Workingtime Tracking"
 msgstr "Workingtime Tracking"

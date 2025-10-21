@@ -246,7 +246,7 @@ class HumanResources_Controller_FreeTime extends Tinebase_Controller_Record_Abst
                     ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
                     ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $record->lastday_date],
                 ])) > 0) {
-            throw new Tinebase_Exception_SystemGeneric('wtr during affected time is already booked, no changes possible anymore');
+            throw new Tinebase_Exception_SystemGeneric('wtr during affected time is already booked, no changes possible anymore'); // _('wtr during affected time is already booked, no changes possible anymore')
         }
 
         unset($dwtrRaii);

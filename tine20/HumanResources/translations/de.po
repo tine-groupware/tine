@@ -28,45 +28,6 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-msgid "Period"
-msgstr "Zeitraum"
-
-msgid "Reload"
-msgstr "Neu Laden"
-
-msgid "Reload all data"
-msgstr "Alle Daten neu laden"
-
-msgid "Export"
-msgstr "Exportieren"
-
-msgid "Export all data"
-msgstr "Alle Daten exportieren"
-
-msgid "Turnover Target"
-msgstr "Umsatzziel"
-
-msgid "Turnover Recorded"
-msgstr "Erfasster Umsatz"
-
-msgid "Turnover Recorded %"
-msgstr "Erfasster Umsatz %"
-
-msgid "Turnover Cleared"
-msgstr "Berechneter Umsatz"
-
-msgid "Turnover Cleared %"
-msgstr "Berechneter Umsatz %"
-
-msgid "Working Time Target"
-msgstr "Arbeitszeit Ziel"
-
-msgid "Working Time Recorded"
-msgstr "Erfasste Arbeitszeit"
-
-msgid "Working Time %"
-msgstr "Arbeitszeit %"
-
 msgid "Add Divisions"
 msgstr "Abteilung hinzufügen"
 
@@ -91,12 +52,15 @@ msgstr "Arbeitszeiten managen"
 msgid "Manage all working times regardless configured division grants."
 msgstr "Allen Arbeitszeiten unabhängig der Abteilungsrechte managen."
 
+#, php-format
 msgid "Clock in: %1$s"
 msgstr "Einstemplen: %1$s"
 
+#, php-format
 msgid "Clock out: %1$s"
 msgstr "Ausstempeln: %1$s"
 
+#, php-format
 msgid "Clock pause: %1$s"
 msgstr "Pause stemplen: %1$s"
 
@@ -169,6 +133,12 @@ msgstr "Aktiviere Arbeitszeit-Erfassung"
 msgid "Activate to enable working time tracking and reporting"
 msgstr "Aktiviere Arbeitszeit-Erfassung und Abrechnung"
 
+msgid "Enable Revenue Analytics"
+msgstr "Umsatzanalyse aktivieren"
+
+msgid "Activate to enable revenue analytics"
+msgstr "Aktivieren, um Umsatzanalysen zu ermöglichen"
+
 msgid "Vacation expires"
 msgstr "Urlaub verfällt"
 
@@ -226,13 +196,16 @@ msgstr "Tägliche Arbeitszeitberichte können nicht manuell erzeugt werden"
 msgid "It is not allowed to update a cleared report"
 msgstr "Abgerechnete Berichte können nicht geändert werden"
 
-#, python-format
+#, python-format, php-format
 msgid "%s away"
 msgstr "%s abwesend"
 
-#, python-format
+#, python-format, php-format
 msgid "%s is away"
 msgstr "%s ist abwesend"
+
+msgid "wtr during affected time is already booked, no changes possible anymore"
+msgstr "Während der betroffenen Zeit ist der Arbeitszeitbericht bereits gebucht, Änderungen sind nicht mehr möglich"
 
 msgid "monthly wt reports can't be created"
 msgstr "Monatliche Arbeitszeitberichte können nicht manuell erzeugt werden"
@@ -308,15 +281,15 @@ msgstr "Monatsbericht (Stempelzeiten)"
 msgid "Monthly Report"
 msgstr "Monatsbericht"
 
-#, python-format
+#, python-format, php-format
 msgid "%d days"
 msgstr "%d Tage"
 
-#, python-format
+#, python-format, php-format
 msgid "+%s (credit)"
 msgstr "+%s (Guthaben)"
 
-#, python-format
+#, python-format, php-format
 msgid "%s (dept)"
 msgstr "%s (Fehlzeit)"
 
@@ -660,9 +633,6 @@ msgstr "Abwesenheitsplanung"
 msgid "Revenue Analysis"
 msgstr "Umsatzanalyse"
 
-msgid "Totals of the selected lines"
-msgstr "Summen der selektierten Zeilen"
-
 msgid "Human Resources"
 msgid_plural "Human Resources"
 msgstr[0] "Human Resources"
@@ -679,6 +649,51 @@ msgstr "Gemeinsam"
 
 msgid "Recalculate"
 msgstr "Neuberechnung"
+
+msgid "Totals of the selected lines"
+msgstr "Summen der selektierten Zeilen"
+
+msgid "Reload"
+msgstr "Neu Laden"
+
+msgid "Reload all data"
+msgstr "Alle Daten neu laden"
+
+msgid "Export"
+msgstr "Exportieren"
+
+msgid "Export all data"
+msgstr "Alle Daten exportieren"
+
+msgid "Period"
+msgstr "Zeitraum"
+
+msgid "Turnover Target"
+msgstr "Umsatzziel"
+
+msgid "Turnover Recorded"
+msgstr "Erfasster Umsatz"
+
+msgid "Turnover Recorded %"
+msgstr "Erfasster Umsatz %"
+
+msgid "Turnover Cleared"
+msgstr "Berechneter Umsatz"
+
+msgid "Turnover Cleared %"
+msgstr "Berechneter Umsatz %"
+
+msgid "Working Time Target"
+msgstr "Arbeitszeit Ziel"
+
+msgid "Working Time Recorded"
+msgstr "Erfasste Arbeitszeit"
+
+msgid "Working Time %"
+msgstr "Arbeitszeit %"
+
+msgid "Loading revenue analysis data..."
+msgstr "Lade Umsatzanalyse Daten..."
 
 msgid "Workingtime Tracking"
 msgstr "Arbeitszeiterfassung"
