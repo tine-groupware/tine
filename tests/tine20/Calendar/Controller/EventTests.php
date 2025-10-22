@@ -2282,6 +2282,52 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
     }
 
+    public function testMultipleEventTypes(): void
+    {
+        $type1 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'un1',
+            'name' => 'unittest1',
+        ]));
+        $type2 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'un2',
+            'name' => 'unittest2',
+        ]));
+        $event = $this->_getEvent();
+        $event->event_types = new Tinebase_Record_RecordSet(Calendar_Model_EventTypes::class, [
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type1->getId()],
+        ], true);
+        $event = $this->_controller->create($event);
+        $this->assertCount(1, $event->event_types);
+        $type1EventTypes = $event->event_types->getFirstRecord();
+
+        $event->event_types = new Tinebase_Record_RecordSet(Calendar_Model_EventTypes::class, [
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type1->getId()],
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type2->getId()],
+        ], true);
+        $event = $this->_controller->update($event);
+        $this->assertCount(2, $event->event_types);
+        $this->assertInstanceOf(Tinebase_Record_Interface::class, $event->event_types->getById($type1EventTypes->getId()));
+        $type2EventTypes = $event->event_types->find(fn($rec) => $rec->getId() !== $type1EventTypes->getId(), null);
+
+        $event->event_types = new Tinebase_Record_RecordSet(Calendar_Model_EventTypes::class, [
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type2->getId()],
+        ], true);
+        $event = $this->_controller->update($event);
+        $this->assertCount(1, $event->event_types);
+        $this->assertFalse($event->event_types->getById($type1EventTypes->getId()));
+        $this->assertInstanceOf(Tinebase_Record_Interface::class, $event->event_types->getById($type2EventTypes->getId()));
+
+        $event->event_types = new Tinebase_Record_RecordSet(Calendar_Model_EventTypes::class, [
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type1->getId()],
+            [\Calendar_Model_EventTypes::FLD_EVENT_TYPE => $type2->getId()],
+        ], true);
+        $event = $this->_controller->update($event);
+        $this->assertCount(2, $event->event_types);
+        // because EventTypes purges on delete!
+        $this->assertFalse($event->event_types->getById($type1EventTypes->getId()));
+        $this->assertInstanceOf(Tinebase_Record_Interface::class, $event->event_types->getById($type2EventTypes->getId()));
+    }
+
     public function testAlarmReSendOnReSchedule()
     {
         $event = $this->_getEvent();

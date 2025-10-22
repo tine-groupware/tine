@@ -123,6 +123,7 @@ class Tinebase_ModelConfiguration_Const {
     public const FLD_CONTAINER_ID = 'container_id';
     public const FLD_DELETED_TIME = 'deleted_time';
     public const FLD_GRANTS = 'grants';
+    public const FLD_IS_DELETED = 'is_deleted';
     public const FLD_LOCALLY_CHANGED = 'locally_changed';
     public const FLD_NOTES = 'notes';
     public const FLD_ORIGINAL_ID = 'original_id';
