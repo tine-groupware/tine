@@ -170,9 +170,9 @@ class Calendar_Frontend_Json_ResourceTest extends Calendar_TestCase
         static::assertEquals(Tinebase_Core::getUser()->getId(), $currentUserGrants->account_id);
         foreach (Calendar_Model_ResourceGrants::getAllGrants() as $grant) {
             if (in_array($grant, $expectedGrants)) {
-                static::assertTrue($currentUserGrants->{$grant});
+                static::assertTrue($currentUserGrants->{$grant}, $grant);
             } else {
-                static::assertFalse($currentUserGrants->{$grant});
+                static::assertFalse($currentUserGrants->{$grant}, $grant);
             }
         }
     }

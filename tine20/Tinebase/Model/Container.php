@@ -435,7 +435,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
     }
 
     /**
-     * @return string
+     * @return class-string<Tinebase_Model_Grants>
      */
     public function getGrantClass()
     {

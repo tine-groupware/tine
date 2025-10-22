@@ -12,6 +12,7 @@
  * @todo        this should be splitted into smaller parts!
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
 use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
@@ -229,6 +230,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public const ACTION_DELETE = 'delete';
     public const ACTION_UNDELETE = 'undelete';
 
+    protected string $_getGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
     protected $_requiredFilterACLupdate  = [Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN];
@@ -2672,7 +2674,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $hasGrant = match ($_action) {
             self::ACTION_GET => Tinebase_Core::getUser()->hasGrant($_record->container_id,
-                Tinebase_Model_Grants::GRANT_READ),
+                $this->_getGrant),
             self::ACTION_CREATE => Tinebase_Core::getUser()->hasGrant($_record->container_id,
                 Tinebase_Model_Grants::GRANT_ADD),
             self::ACTION_UPDATE => Tinebase_Core::getUser()->hasGrant($_record->container_id,
@@ -3467,7 +3469,9 @@ abstract class Tinebase_Controller_Record_Abstract
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
+        /** @var class-string<Tinebase_Record_Interface> $recordClassName */
         $recordClassName = $_fieldConfig['recordClassName'];
+        $recordMC = $recordClassName::getConfiguration();
         $filterClassName = $_fieldConfig['filterClassName'];
         /** @var Tinebase_Record_RecordSet|Tinebase_Record_Interface $existing */
         $existing = new Tinebase_Record_RecordSet($recordClassName);
@@ -3516,9 +3520,31 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
 
+            $uniqueFlds = [];
+            foreach ($recordMC->getTable()[TMCC::UNIQUE_CONSTRAINTS] ?? [] as $uniqueDef) {
+                foreach ($uniqueDef[TMCC::COLUMNS] ?? [] as $column) {
+                    $uniqueFlds[$column] = $column;
+                }
+            }
+
             /** @var Tinebase_Record_Interface $record */
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
+
+                while (empty($record->getId()) && $uniqueFlds) {
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName);
+                    foreach ($uniqueFlds as $uniqueFld) {
+                        if (null === $record->{$uniqueFld}) {
+                            break 2;
+                        }
+                        $filter->addFilter($filter->createFilter($uniqueFld, TMFA::OP_EQUALS, $record->getIdFromProperty($uniqueFld)));
+                    }
+                    if ($recordMC->modlogActive) {
+                        $filter->addFilter($filter->createFilter(TMCC::FLD_IS_DELETED, TMFA::OP_EQUALS, Tinebase_Model_Filter_Bool::VALUE_NOTSET));
+                    }
+                    $record->setId($controller->search($filter)->getFirstRecord()?->getId());
+                    break;
+                }
 
                 $create = false;
                 if (!empty($record->getId())) {

@@ -237,6 +237,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
             }
 
+            // setup Resource Controller
+            $calResourceCtrlRaii = new Tinebase_RAII(fn() => Calendar_Controller_Resource::destroyInstance());
+            Calendar_Controller_Resource::getInstance()->setGetGrant(Calendar_Model_ResourceGrants::GRANT_SYNC);
+
             self::$_server->httpRequest->setBody($this->_body);
 
             // compute base uri
@@ -336,6 +340,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
         }
+        unset($calResourceCtrlRaii);
     }
 
     protected function _sendUnauthorizedHeader()

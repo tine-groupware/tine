@@ -567,4 +567,9 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
        
         return $accounts;
     }
+
+    public static function getRequiredWebDAVAccessGrants(): array
+    {
+        return [self::GRANT_READ, self::GRANT_SYNC];
+    }
 }

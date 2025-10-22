@@ -85,8 +85,12 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
         Tinebase_Model_Application $_application, $_accountId, $_grant)
     {
         $grants = is_array($_grant) ? $_grant : array($_grant);
-        if (count($grants) > 1 || $grants[0] !== Tinebase_Model_Grants::GRANT_READ) {
-            return;
+        if (count($grants) > 1 || ($grants[0] !== Tinebase_Model_Grants::GRANT_READ
+                && $grants[0] !== Tinebase_Model_Grants::GRANT_SYNC)) {
+            if (count($grants) !== 2 || ($grants[0] !== Tinebase_Model_Grants::GRANT_SYNC && $grants[0] !== Tinebase_Model_Grants::GRANT_READ)
+                    || ($grants[1] !== Tinebase_Model_Grants::GRANT_SYNC && $grants[1] !== Tinebase_Model_Grants::GRANT_READ)) {
+                return;
+            }
         }
 
         $db = $_select->getAdapter();
@@ -118,10 +122,12 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
 
     public function setFromArray(array &$_data)
     {
+        // unset all implicit only grants!
         // unset all default grants
         foreach (Tinebase_Model_Grants::getAllGrants() as $key) {
             $_data[$key] = false;
         }
+        $_data[Calendar_Model_ResourceGrants::RESOURCE_SYNC] = false;
 
         // enforce implicit resource grants
         if ($_data[Calendar_Model_ResourceGrants::RESOURCE_ADMIN] ?? false) {
@@ -162,6 +168,7 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
         }
         if ($_data[Calendar_Model_ResourceGrants::EVENTS_SYNC] ?? false) {
             $_data[Tinebase_Model_Grants::GRANT_SYNC] = true;
+            $_data[Calendar_Model_ResourceGrants::RESOURCE_SYNC] = true;
         }
 
         parent::setFromArray($_data);
@@ -175,4 +182,9 @@ class Calendar_Model_ResourceGrants extends Tinebase_Model_Grants
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public static function getRequiredWebDAVAccessGrants(): array
+    {
+        return [self::GRANT_SYNC];
+    }
 }

@@ -91,9 +91,7 @@ class Tasks_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
         
         $result = $container->getACL();
         
-        //var_dump($result);
-        
-        $this->assertEquals(6, count($result));
+        $this->assertEquals(5, count($result));
     }
     
     /**

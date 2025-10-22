@@ -205,8 +205,10 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
-            if (!Tinebase_Core::getUser()->hasGrant($childNode, Tinebase_Model_Grants::GRANT_READ)) {
-                throw new Sabre\DAV\Exception\Forbidden('You do not have access');
+            foreach ($this->getRequiredAccessGrants() as $grant) {
+                if (!Tinebase_Core::getUser()->hasGrant($childNode, $grant)) {
+                    throw new Sabre\DAV\Exception\Forbidden('You do not have access');
+                }
             }
         } catch (Tinebase_Exception_NotFound) {
             throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
@@ -239,8 +241,10 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         // Loop through the directory, and create objects for each node
         foreach ($childNodes as $node) {
             try {
-                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)) {
-                    $children[] = $this->getChild($node->name);
+                foreach ($this->getRequiredAccessGrants() as $grant) {
+                    if (Tinebase_Core::getUser()->hasGrant($node, $grant)) {
+                        $children[] = $this->getChild($node->name);
+                    }
                 }
             } catch (Tinebase_Exception_NotFound) {
                 // skip
