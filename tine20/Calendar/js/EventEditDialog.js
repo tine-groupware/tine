@@ -593,11 +593,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const locationField = this.getForm().findField('location');
         const locationRecordField = this.getForm().findField('location_record');
         const siteField = this.getForm().findField('event_site');
+        const locationAddress = _.get(resource, 'data.user_id.location_address');
 
-        if (! locationField.getValue() || overwrite) {
-            locationField.setValue(
-                this.attendeeGridPanel.renderAttenderResourceName(resource.get('user_id'), {noIcon: true})
-            );
+        if (locationAddress &&(! locationField.getValue() || overwrite)) {
+            locationField.setValue(locationAddress);
         }
 
         var relations = _.get(resource, 'data.user_id.relations'),
@@ -614,6 +613,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         if (Tine.Tinebase.featureEnabled('featureSite') && siteContact && (!siteField.getValue() || overwrite)) {
             siteField.setValue(siteContact)
+        }
+
+        if (_.get(resource, 'data.user_id.location_address'&& (!locationRecordField.getValue() || overwrite))) {
+
         }
     },
 

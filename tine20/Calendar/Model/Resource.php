@@ -27,6 +27,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
     public const FLD_COLOR = 'color';
     public const FLD_SITE = 'site';
     public const FLD_LOCATION = 'location';
+    public const FLD_LOCATION_ADDRESS = 'location_address';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -139,6 +140,13 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
             ],
             self::FLD_SITE                  => [
                 self::TYPE                      => self::TYPE_VIRTUAL,
+            ],
+            self::FLD_LOCATION_ADDRESS      => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
+                self::LENGTH        => 1024,
+                self::NULLABLE      => true,
+                self::QUERY_FILTER  => true,
             ],
         ],
     ];
