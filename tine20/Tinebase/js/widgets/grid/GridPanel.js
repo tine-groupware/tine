@@ -695,7 +695,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 app: this.app,
                 recordClass: this.recordClass,
                 allowSaving: true,
+                stateIdSuffix: this.getStateIdSuffix(),
                 filterModels: filterModels,
+                useQuickFilter: this.hasQuickSearchFilterToolbarPlugin,
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
             }, config));
