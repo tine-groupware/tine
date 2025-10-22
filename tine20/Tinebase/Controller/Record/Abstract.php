@@ -229,6 +229,7 @@ abstract class Tinebase_Controller_Record_Abstract
     public const ACTION_DELETE = 'delete';
     public const ACTION_UNDELETE = 'undelete';
 
+    protected string $_getGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_getMultipleGrant = Tinebase_Model_Grants::GRANT_READ;
     protected $_requiredFilterACLget = [Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_ADMIN];
     protected $_requiredFilterACLupdate  = [Tinebase_Model_Grants::GRANT_EDIT, Tinebase_Model_Grants::GRANT_ADMIN];
@@ -2672,7 +2673,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         $hasGrant = match ($_action) {
             self::ACTION_GET => Tinebase_Core::getUser()->hasGrant($_record->container_id,
-                Tinebase_Model_Grants::GRANT_READ),
+                $this->_getGrant),
             self::ACTION_CREATE => Tinebase_Core::getUser()->hasGrant($_record->container_id,
                 Tinebase_Model_Grants::GRANT_ADD),
             self::ACTION_UPDATE => Tinebase_Core::getUser()->hasGrant($_record->container_id,

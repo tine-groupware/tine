@@ -59,6 +59,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         ));
         $this->_backend->setModlogActive(TRUE);
 
+        $this->_getGrant = Calendar_Model_ResourceGrants::RESOURCE_READ;
         $this->_getMultipleGrant = Calendar_Model_ResourceGrants::RESOURCE_READ;
         $this->_requiredFilterACLget = [Calendar_Model_ResourceGrants::RESOURCE_READ];
         $this->_requiredFilterACLupdate  = [Calendar_Model_ResourceGrants::RESOURCE_EDIT];
@@ -328,7 +329,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
         switch ($_action) {
             case self::ACTION_GET:
-                $hasGrant = $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_READ) ||
+                $hasGrant = $user->hasGrant($_record->container_id, $this->_getGrant) ||
                     $user->hasGrant($_record->container_id, Calendar_Model_ResourceGrants::RESOURCE_ADMIN);
                 break;
             case self::ACTION_CREATE:
@@ -445,5 +446,12 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     public function setRequiredFilterACLget(array $_grants)
     {
         $this->_requiredFilterACLget = $_grants;
+    }
+
+    public function setGetGrant(string $grant): string
+    {
+        $oldGrant = $this->_getGrant;
+        $this->_getGrant = $grant;
+        return $oldGrant;
     }
 }

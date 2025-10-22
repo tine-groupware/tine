@@ -44,8 +44,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         // Loop through the directory, and create objects for each node
         try {
             foreach (Tinebase_FileSystem::getInstance()->scanDir($this->_path) as $node) {
-                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ)
-                    && Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_SYNC)) {
+                if (Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_READ) &&
+                        Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_SYNC)) {
                     $children[] = $this->getChild($node->name);
                 }
             }
