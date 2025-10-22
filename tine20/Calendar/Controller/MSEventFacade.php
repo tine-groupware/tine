@@ -302,7 +302,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if ($this->_assertCalUserAttendee) {
             if ($event->container_id &&
                     ($container = Tinebase_Container::getInstance()->get($event->getIdFromProperty($event::FLD_CONTAINER_ID)))
-                    && ($resourceId = $container->xprops()[Calendar_Config::APP_NAME][Calendar_Model_Resource::MODEL_NAME_PART]['resource_id'])) {
+                    && ($resourceId = ($container->xprops()[Calendar_Config::APP_NAME][Calendar_Model_Resource::MODEL_NAME_PART]['resource_id'] ?? null))) {
                 $event->assertAttendee(new Calendar_Model_Attender([
                     'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
                     'user_id' => $resourceId,
