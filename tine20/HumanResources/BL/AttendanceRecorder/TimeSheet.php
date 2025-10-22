@@ -75,11 +75,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
 
             // read config, not property here!
             if (!$this->_config->{HumanResources_Model_BLAttendanceRecorder_TimeSheetConfig::FLD_STATIC_TA}) {
-                /** @var HumanResources_Model_Employee $employee */
-                $employee = HumanResources_Controller_Employee::getInstance()->search(
-                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
-                        ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId]
-                    ]))->getFirstRecord();
+                $employee = HumanResources_Controller_Employee::getInstance()->getEmployeeByUser($accountId);
                 $this->_staticTA = HumanResources_Controller_WorkingTimeScheme::getInstance()
                     ->getWorkingTimeAccount($employee);
             }

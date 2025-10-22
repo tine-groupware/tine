@@ -1,17 +1,17 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  * 
  * @package     Admin
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test class for Tinebase_Admin
  */
-class Admin_CliTest extends TestCase
+class Admin_Frontend_CliTest extends TestCase
 {
     /**
      * Backend
@@ -459,7 +459,7 @@ class Admin_CliTest extends TestCase
     public function testImportGroups()
     {
         $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array(__DIR__ . '/files/import_groups.csv', 'definition=admin_group_import_csv'));
+        $opts->setArguments([dirname(__DIR__) . '/files/import_groups.csv', 'definition=admin_group_import_csv']);
         
         // start import (dry run)
         ob_start();
@@ -470,11 +470,11 @@ class Admin_CliTest extends TestCase
         $expected = array('men' => 3, 'women' => 2, 'highperformers' => 2, 'lowperformers' => 3);
         $this->_testImportGroupsHelper($expected);
         
-        $opts->setArguments(array(__DIR__ . '/files/import_groups_update.csv', 'definition=admin_group_import_csv'));
+        $opts->setArguments(array(dirname(__DIR__) . '/files/import_groups_update.csv', 'definition=admin_group_import_csv'));
         ob_start();
         $this->_cli->importGroups($opts);
         $out = ob_get_clean();
-        $this->assertTrue($out === '');
+        $this->assertTrue($out === '', $out);
         
         $expected = array('men' => 3, 'women' => 2,  'lowperformers' => 2, 'highperformers' => 3);
         $this->_testImportGroupsHelper($expected);
@@ -491,5 +491,17 @@ class Admin_CliTest extends TestCase
             $this->assertEquals($count, count($members), 'Group ' . $name . ' should have ' . $count . ' members!');
             $this->assertEquals('displayed', $group->visibility, 'Group ' . $name . ' should be visible!');
         }
+    }
+
+    public function testRemoveObsoleteAccounts()
+    {
+        // 'd' + 'v' are optional parameters
+        $opts = new Zend_Console_Getopt('dv');
+        $opts->setArguments(['-d', '-v']);
+
+        ob_start();
+        $this->_cli->removeObsoleteAccounts($opts);
+        $out = ob_get_clean();
+        $this->assertStringStartsWith('Checking user', $out);
     }
 }
