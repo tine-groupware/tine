@@ -145,6 +145,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
                 class="login-input"
                 :bstp-input-field-class="'fs-5 ps-3'"
                 :autocomplete="'current-password'"
+                :darkReverse="false"
               />
             </BFormGroup>
           </Transition>

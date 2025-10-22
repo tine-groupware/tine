@@ -33,15 +33,29 @@
           variant="outline-primary"
           :title="window.formatMessage('Cleartext/Hidden')"
         >
-          <img v-if="_locked" src="images/icon-set/icon_preview.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
-          <img v-else src="images/icon-set/icon_preview_disabled.svg" alt="copy-to-clipboard" :style="{width: '1.5em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
+          <img v-if="_locked"
+               :class="{'dark-reverse': darkReverse}"
+               src="images/icon-set/icon_preview.svg"
+               alt="show password"
+               :style="{width: '1.5em'}"
+               class="enlarge-on-hover shrink-on-click">
+          <img v-else
+               :class="{'dark-reverse': darkReverse}"
+               src="images/icon-set/icon_preview_disabled.svg"
+               alt="hide password"
+               :style="{width: '1.5em'}"
+               class="enlarge-on-hover shrink-on-click">
         </BInputGroupText>
         <BInputGroupText
           v-if="clipboard"
           @click="handleCopy"
           :title="window.formatMessage('Copy to Clipboard')"
         >
-          <img src="images/icon-set/icon_copy_to_clipboard.svg" alt="copy-to-clipboard" :style="{width: '1.4em'}" class="enlarge-on-hover shrink-on-click dark-reverse">
+          <img
+            :class="{'dark-reverse': darkReverse}"
+            src="images/icon-set/icon_copy_to_clipboard.svg"
+            alt="copy-to-clipboard" :style="{width: '1.4em'}"
+            class="enlarge-on-hover shrink-on-click">
         </BInputGroupText>
       </BInputGroupAppend>
     </BInputGroup>
@@ -78,6 +92,8 @@ const props = defineProps({
   // default input attributes
   tabindex: { type: String, default: null },
   name: { type: String, default: null },
+
+  darkReverse: { type: Boolean, default: true }, // dumb-fix @fixme: something more elegant
 })
 
 const emit = defineEmits(['keypress', 'keydown', 'paste', 'update:modelValue'])
