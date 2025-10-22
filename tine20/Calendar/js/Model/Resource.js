@@ -25,6 +25,7 @@ const Resource = Record.create(Record.genericFields.concat([
     {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'status_with_grant', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
     {name: 'busy_type', type: 'keyField', keyFieldConfigName: 'freebusyTypes'},
+    {name: 'location_address'},
     {name: 'suppress_notification', type: 'bool'},
     {name: 'tags'},
     {name: 'notes'},

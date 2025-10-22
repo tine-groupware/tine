@@ -1611,6 +1611,9 @@ msgstr ""
 msgid "Resource Location"
 msgstr ""
 
+msgid "Resource Location Address"
+msgstr ""
+
 msgid "Suppress notification"
 msgstr ""
 

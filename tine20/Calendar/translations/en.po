@@ -1611,6 +1611,9 @@ msgstr "Default attendee status with status grant"
 msgid "Resource Location"
 msgstr "Resource Location"
 
+msgid "Resource Location Address"
+msgstr "Resource Location Address"
+
 msgid "Suppress notification"
 msgstr "Suppress notification"
 
