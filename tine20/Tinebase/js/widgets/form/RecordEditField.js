@@ -94,7 +94,21 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
     getValue : function(){
         return this.recordData;
     },
-    
+
+    processValue : function(value){
+        return this.getValue();
+    },
+
+    validateValue : function(value){
+        const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
+        const isValid = valueRecord ? valueRecord.isValid() : !!this.allowBlank;
+
+        if (! isValid) {
+            this.markInvalid(window.formatMessage('{recordName} is not valid.', {recordName: this.recordClass.getRecordName()}));
+        }
+        return isValid;
+    },
+
     /**
      * clear value
      */

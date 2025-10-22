@@ -418,6 +418,10 @@ const getFieldFromModelConfig = function(fieldDefinition, key) {
                 }
                 break;
         }
+        if (get(fieldDefinition, 'validators.allowEmpty') === false) {
+            field.allowBlank = false;
+        }
+
         // NOTE (from Ext docs): The default value used when a Record is being created by a Reader when the item referenced by the mapping does not exist in the data object (i.e. undefined). (defaults to "")
         // -> applies to existing records (on server). we don't have a concept for new (phantom) records yet!
         if (['attachments', 'records', 'relations', 'alarms', 'notes'].indexOf(fieldDefinition.type) >= 0
