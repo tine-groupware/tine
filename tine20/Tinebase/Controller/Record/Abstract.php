@@ -3550,9 +3550,16 @@ abstract class Tinebase_Controller_Record_Abstract
                 if (!empty($record->getId())) {
                     try {
 
-                        $prevRecord = $controller->get($record->getId());
+                        $prevRecord = $controller->get($record->getId(), _getDeleted: true);
                         if ($prevRecord->{$_fieldConfig['refIdField']} !== $prevRecord->{$_fieldConfig['refIdField']}) {
                             throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+                        }
+
+                        if ($prevRecord->is_deleted) {
+                            $controller->unDelete($prevRecord);
+                            $prevRecord = $controller->get($record->getId());
+                            $record->seq = $prevRecord->seq;
+                            $record->last_modified_time = $prevRecord->last_modified_time;
                         }
 
                         if (!empty($prevRecord->diff($record)->diff)) {
