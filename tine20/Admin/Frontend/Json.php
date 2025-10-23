@@ -1133,13 +1133,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getAllRoleRights()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get all rights of all apps.');
-        
         $result = array();
         
         $applications = Admin_Controller_Application::getInstance()->search(NULL, 'name', 'ASC', NULL, NULL);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($applications->toArray(), TRUE));
         
         foreach ($applications as $application) {
             $appId = $application->getId();
@@ -1150,8 +1146,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
             
             $allAplicationRights = Tinebase_Application::getInstance()->getAllRightDescriptions($appId);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($allAplicationRights, TRUE));
             
             foreach ($allAplicationRights as $right => $description) {
                 $rightsForApplication["children"][] = array(
