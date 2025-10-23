@@ -105,7 +105,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (this.createReversal) {
-            var originalRecord = this.recordProxy.recordReader({responseText: Ext.encode(this.record.data)}); ;
+            var originalRecord = this.recordProxy.recordReader({responseText: Ext.encode(this.record.data)});
 
             this.record.set('cleared', 'TO_CLEAR');
             this.record.set('number', null);
@@ -196,6 +196,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     + ' (' + positionCount + ')');
             }, this);
         }
+        this.createReversal = false;
     },
 
     onAfterRecordLoad: function () {
@@ -424,12 +425,11 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         _.delay(async () => {
             try {
-                await this.applyChanges()
+                await this.applyChanges();
             } catch (exception) {
                 this.loadRecord('remote');
                 Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             }
-
         }, 150);
     },
 
