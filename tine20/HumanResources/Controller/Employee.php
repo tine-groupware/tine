@@ -461,4 +461,15 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
             'start_date'         => $contractData['startDate']
         );
     }
+
+    public function getEmployeeByUser(Tinebase_Model_User|string $user): ?HumanResources_Model_Employee
+    {
+        $accountId = $user instanceof Tinebase_Model_User ? $user->getId() : $user;
+        /** @var HumanResources_Model_Employee $employee */
+        $employee = HumanResources_Controller_Employee::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                ['field' => 'account_id', 'operator' => 'equals', 'value' => $accountId]
+            ]))->getFirstRecord();
+        return $employee;
+    }
 }
