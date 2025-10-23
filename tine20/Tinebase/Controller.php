@@ -1687,6 +1687,106 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return new \Laminas\Diactoros\Response\JsonResponse($data, $code);
     }
 
+    public function reportWebDavIssues(): bool
+    {
+        $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::REPORT_WEBDAV};
+        $reportUsers = [];
+        if (!($affectedUser = $cfg->{Tinebase_Config::REPORT_WEBDAV_AFFECTED_USER}) &&
+                !($reportUsers = $cfg->{Tinebase_Config::REPORT_WEBDAV_USER_LIST})) {
+            return true;
+        }
+
+        if ($affectedUser) {
+            $accountIds = Tinebase_Core::getDb()->query('SELECT DISTINCT ' . Tinebase_Model_WebDavIssue::FLD_ACCOUNT_ID . ' FROM '
+                . SQL_TABLE_PREFIX . Tinebase_Model_WebDavIssue::TABLE_NAME . ' WHERE '
+                . Tinebase_Model_WebDavIssue::FLD_REPORTED . ' = 0')->fetchAll(Zend_Db::FETCH_COLUMN);
+
+            foreach ($accountIds as $accountId) {
+                $this->_reportWebDavIssues(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebDavIssue::class, [
+                    [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_REPORTED, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
+                    [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_ACCOUNT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accountId],
+                ]), array_unique(array_merge($reportUsers ?: [], [$accountId])));
+            }
+        } else {
+            $this->_reportWebDavIssues(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebDavIssue::class, [
+                [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_REPORTED, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
+            ]), $reportUsers);
+        }
+
+        return true;
+    }
+
+    protected function _reportWebDavIssues(Tinebase_Model_Filter_FilterGroup $filter, array $accountIds): void
+    {
+        $start = 0;
+        $limit = 100;
+
+        $exceptions = [];
+        $methods = [];
+        $paths = [];
+
+        $ids = [];
+
+        do {
+            $pagination = new Tinebase_Model_Pagination([
+                'start' => $start,
+                'limit' => $limit,
+            ]);
+            $result = Tinebase_Controller_WebDavIssue::getInstance()->search($filter, $pagination);
+            /** @var Tinebase_Model_WebDavIssue $issue */
+            foreach ($result as $issue) {
+                $ids[] = $issue->getId();
+                $throwable = unserialize($issue->{Tinebase_Model_WebDavIssue::FLD_EXCEPTION});
+                if (!isset($exceptions[get_class($throwable)])) {
+                    $exceptions[get_class($throwable)] = 0;
+                }
+                $exceptions[get_class($throwable)] += 1;
+
+                if (!isset($methods[$issue->{Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD}])) {
+                    $methods[$issue->{Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD}] = 0;
+                }
+                $methods[$issue->{Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD}] += 1;
+
+                if (!isset($paths[$issue->{Tinebase_Model_WebDavIssue::FLD_URI}])) {
+                    $paths[$issue->{Tinebase_Model_WebDavIssue::FLD_URI}] = 0;
+                }
+                $paths[$issue->{Tinebase_Model_WebDavIssue::FLD_URI}] += 1;
+            }
+
+            $start += $limit;
+        } while ($result->count() === $limit);
+
+        if (empty($exceptions)) {
+            return;
+        }
+
+        $accounts = Tinebase_User::getInstance()->getMultiple($accountIds);
+        $subject = 'WebDAV issues notification';
+        $messageBody = "$subject: \n\nExceptions:\n";
+        foreach ($exceptions as $exception => $count) {
+            $messageBody .= "$exception: $count\n";
+        }
+        $messageBody .= "\nMethods:\n";
+
+        foreach ($methods as $method => $count) {
+            $messageBody .= "$method: $count\n";
+        }
+        $messageBody .= "\nPaths:\n";
+
+        foreach ($paths as $path => $count) {
+            $messageBody .= "$path: $count\n";
+        }
+
+        $messageBody = mb_substr($messageBody, 0, 2 * 1024 * 1024); // limit body size to ~2 MB unencoded
+
+        Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $accounts->contact_id, $subject, $messageBody);
+
+        Tinebase_Core::getDb()->query('UPDATE '
+            . SQL_TABLE_PREFIX . Tinebase_Model_WebDavIssue::TABLE_NAME . ' SET '
+            . Tinebase_Model_WebDavIssue::FLD_REPORTED . ' = 1 WHERE `id` IN '
+            . Tinebase_Core::getDb()->quoteInto('(?)', $ids));
+    }
+
     /**
      * @return bool
      */

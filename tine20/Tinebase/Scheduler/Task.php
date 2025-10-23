@@ -513,6 +513,17 @@ class Tinebase_Scheduler_Task
         );
     }
 
+    public static function addReportWebDavIssuesTask(Tinebase_Scheduler $_scheduler)
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'reportWebDavIssues',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_ReportWebDavIssues'
+        );
+    }
+
     /**
      * @param Tinebase_Scheduler $_scheduler
      * @return void
