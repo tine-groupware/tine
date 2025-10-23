@@ -368,9 +368,10 @@ class SSO_PublicAPITest extends TestCase
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
                 SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
                 SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
-                SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL => true,
             ]),
         ]));
+
+        $this->assertTrue($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL});
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
