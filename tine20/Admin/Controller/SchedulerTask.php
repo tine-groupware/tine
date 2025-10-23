@@ -5,7 +5,7 @@
  * @package     Admin
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -27,6 +27,9 @@ class Admin_Controller_SchedulerTask extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
         $this->_modelName = Admin_Model_SchedulerTask::class;
+        $this->_duplicateCheckFields = [
+            Admin_Model_SchedulerTask::FLD_NAME,
+        ];
     }
 
     public function runCustomScheduledTask(string $id): bool
