@@ -147,13 +147,15 @@ class Tinebase_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 stream_copy_to_stream($data, $handle);
             }
 
+            Tinebase_FileSystem::getInstance()->queueAVScan(true);
             Tinebase_FileSystem::getInstance()->fclose($handle);
-
         } catch (Exception $e) {
             if ($deleteFile) {
                 Tinebase_FileSystem::getInstance()->unlink($path);
             }
             throw $e;
+        } finally {
+            Tinebase_FileSystem::getInstance()->queueAVScan(false);
         }
         
         return '"' . Tinebase_FileSystem::getInstance()->getETag($path) . '"';

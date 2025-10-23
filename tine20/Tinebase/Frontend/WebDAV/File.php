@@ -134,11 +134,15 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
 
         // save file object
         try {
+            Tinebase_FileSystem::getInstance()->queueAVScan(true);
+
             if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
                 throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+        } finally {
+            Tinebase_FileSystem::getInstance()->queueAVScan(false);
         }
 
         // refetch data
