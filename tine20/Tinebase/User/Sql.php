@@ -184,7 +184,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $filter . '%');
     }
 
-    public function getUsersIds(?string $_filter): array
+    public function getUsersIds(?string $_filter = null): array
     {
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', ['accountId' => $this->rowNameMapping['accountId']])

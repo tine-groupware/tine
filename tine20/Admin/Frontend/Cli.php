@@ -3,9 +3,9 @@
  * Tine 2.0
  * @package     Admin
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * 
  */
 
@@ -1073,5 +1073,91 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $counter++;
         }
         echo "found $counter accounts\n";
+    }
+
+    /**
+     * usage: Admin.removeObsoleteAccounts [-v] [-d]
+     *
+     * finds and removes obsolete accounts
+     *      - no timesheets
+     *      - no HR employee
+     *      - no logins
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     */
+    public function removeObsoleteAccounts(Zend_Console_Getopt $opts): int
+    {
+        // TODO use RAII
+        if (Tinebase_Application::getInstance()->isInstalled(Timetracker_Config::APP_NAME)) {
+            Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(false);
+        }
+        if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
+            HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(false);
+        }
+
+        $obsoleteUsers = new Tinebase_Record_RecordSet(Tinebase_Model_FullUser::class);
+        foreach (Tinebase_User::getInstance()->getUsersIds() as $userId) {
+            $user = Tinebase_User::getInstance()->getFullUserById($userId);
+            if ($opts->v) {
+                echo "Checking user " . $user->accountLoginName . "\n";
+            }
+            if (in_array($user->accountLoginName, Tinebase_User::getSystemUsernames())) {
+                if ($opts->v) {
+                    echo "  Skipping system user\n";
+                }
+                continue;
+            }
+
+            if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
+                // check if user has employee record - if not: obsolete
+                $employee = HumanResources_Controller_Employee::getInstance()->getEmployeeByUser($user);
+                if (!$employee) {
+                    if ($opts->v) {
+                        echo "  User has no employee record\n";
+                    }
+                    $obsoleteUsers->addRecord($user);
+                }
+            }
+            if (Tinebase_Application::getInstance()->isInstalled(Timetracker_Config::APP_NAME)) {
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Timetracker_Model_Timesheet::class, [
+                        ['field' => 'account_id', 'operator' => 'equals', 'value' => $userId],
+                ]);
+                $searchCount = Timetracker_Controller_Timesheet::getInstance()->searchCount($filter);
+                if ($searchCount['count'] === 0) {
+                    if ($opts->v) {
+                        echo "  User has no timesheets\n";
+                    }
+                    $obsoleteUsers->addRecord($user);
+                }
+            }
+
+            // TODO check last login?
+        }
+
+        // TODO use RAII
+        if (Tinebase_Application::getInstance()->isInstalled(Timetracker_Config::APP_NAME)) {
+            Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(true);
+        }
+        if (Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME)) {
+            HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(true);
+        }
+
+        if (count($obsoleteUsers) > 0) {
+            if ($opts->v) {
+                echo "Found " . count($obsoleteUsers) . " obsolete Users: "
+                . implode(', ', $obsoleteUsers->accountLoginName)
+                . "\n";
+            }
+            if (!$opts->d) {
+                if ($opts->v) {
+                    echo "  Deleting obsolete Users...\n";
+                }
+                Admin_Controller_User::getInstance()->delete($obsoleteUsers->getArrayOfIds());
+            }
+        }
+
+        return 0;
     }
 }

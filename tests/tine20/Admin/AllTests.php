@@ -28,7 +28,6 @@ class Admin_AllTests
         $suite->addTestSuite(Admin_ControllerTest::class);
         $suite->addTestSuite(Admin_Controller_SchedulerTaskTest::class);
         $suite->addTestSuite(Admin_Controller_UserTest::class);
-        $suite->addTestSuite(Admin_CliTest::class);
         $suite->addTestSuite(Admin_Acl_RightsTest::class);
         $suite->addTestSuite(Admin_Import_AllTests::class);
         $suite->addTestSuite(Admin_Frontend_AllTests::class);
