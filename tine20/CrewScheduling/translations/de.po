@@ -588,6 +588,12 @@ msgstr "Die Dienstplanungs-Umfrage für die Planungsrolle { roleName } ist beend
 msgid "See results"
 msgstr "Ergebnisse ansehen"
 
+msgid "You are in admin mode"
+msgstr "Achtung, Sie sind im Admin-Modus"
+
+msgid "Click on the name of a participant to modify their responses."
+msgstr "Klicken Sie auf den Namen eine*r Teilnehmer*in um die Rückmeldung für diese Person zu bearbeiten."
+
 #~ msgid "Edit Event Types"
 #~ msgstr "Terminarten bearbeiten"
 

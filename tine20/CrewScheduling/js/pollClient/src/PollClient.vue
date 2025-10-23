@@ -17,6 +17,10 @@
               <span :style="poll.scheduling_role.color ? {color: poll.scheduling_role.color} : {}">{{poll.scheduling_role.name}}</span><span v-if="poll.site && poll.site.n_fn">, </span>
               <span  v-if="poll.site && poll.site.n_fn" :style="poll.site.color ? {color: '#'+poll.site.color} : {}">{{poll.site.n_fn}}</span>
             </h2>
+            <BAlert variant="warning" v-model="poll.account_grants.managePollGrant">
+              <h4 class="alert-heading">{{ formatMessage('You are in admin mode') }}</h4>
+              <p>{{ formatMessage('Click on the name of a participant to modify their responses.') }}</p>
+            </BAlert>
           </div>
         </div>
       </template>
@@ -154,7 +158,7 @@ export default {
     },
 
     swapParticipant (participant) {
-      if (!window.initialData.participantId) {
+      if (this.poll.account_grants.managePollGrant) {
         this.participantId = participant.id
       }
     }

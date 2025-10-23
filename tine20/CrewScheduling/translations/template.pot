@@ -581,3 +581,9 @@ msgstr ""
 
 msgid "See results"
 msgstr ""
+
+msgid "You are in admin mode"
+msgstr ""
+
+msgid "Click on the name of a participant to modify their responses."
+msgstr ""
