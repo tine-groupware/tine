@@ -41,6 +41,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     preferredAddressPrivateCheckbox: null,
 
     autoShrinkContainerSelector: true,
+    windowWidth: 800,
+    windowHeight: 610,
 
     getFormItems: function () {
         if (Tine.Tinebase.configManager.get('useMapService')) {
@@ -632,24 +634,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         })
     }
 });
-
-/**
- * Opens a new contact edit dialog window
- *
- * @return {Ext.ux.Window}
- */
-Tine.Addressbook.ContactEditDialog.openWindow = function (config) {
-    const id = config.recordId ?? config.record?.id ?? 0;
-    var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 610,
-        name: Tine.Addressbook.ContactEditDialog.prototype.windowNamePrefix + id,
-        contentPanelConstructor: 'Tine.Addressbook.ContactEditDialog',
-        contentPanelConstructorConfig: config
-    });
-    return window;
-};
-
 
 Ext.ux.ItemRegistry.registerItem('Addressbook-Contact-EditDialog-ActivitiesPanel', {
     height: 30,

@@ -474,7 +474,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                             cfg.showFields || edp.showFields,
                                             cfg.hideFields || edp.hideFields
                                         ),
-                                    name: edp.windowNamePrefix + id,
+                                    name: cfg.windowName ?? edp.windowNamePrefix + id + (cfg?.copyRecord ? '-copy-' + Tine.Tinebase.data.Record.generateUID(4) : ''),
                                     asIframe: cfg.asIframe,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
                                     contentPanelConstructorConfig: cfg

@@ -972,7 +972,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     doCopyRecordToReturn: function(record) {
         var recordData = this.getCopyRecordData(record, this.recordClass, this.omitCopyTitle);
-        return new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
+        const recordCopy = new this.recordClass(recordData, Tine.Tinebase.data.Record.generateUID());
+        recordCopy.phantom = true;
+        return recordCopy;
     },
 
     /**

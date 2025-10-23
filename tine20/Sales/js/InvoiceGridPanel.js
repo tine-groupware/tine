@@ -134,7 +134,8 @@ Tine.Sales.InvoiceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             var cfg = {
                 record: record,
-                createReversal: true
+                createReversal: true,
+                windowName: Tine.Sales.InvoiceEditDialog.prototype.windowNamePrefix + record.id + '-reversal'
             };
             
             Tine.Sales.InvoiceEditDialog.openWindow(cfg);
