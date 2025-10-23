@@ -92,6 +92,7 @@ class Tinebase_FileSystem implements
     protected $_notificationActive = false;
 
     protected bool $_doAVScan = true;
+    protected bool $_queueAVScan = false;
 
     /**
      * stat cache
@@ -2559,7 +2560,7 @@ class Tinebase_FileSystem implements
         if ($avscan && $this->_doAVScan) {
             $fileSize = filesize($hashFile);
             $queueSize = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM)->{Tinebase_Config::FILESYSTEM_AVSCAN_QUEUE_FSIZE};
-            if ($fileSize && $fileSize > $queueSize) {
+            if ($fileSize && ($fileSize > $queueSize || $this->_queueAVScan)) {
                 $avResult = new Tinebase_FileSystem_AVScan_Result(Tinebase_FileSystem_AVScan_Result::RESULT_ERROR, 'processing avscan in queue');
                 Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(fn() => Tinebase_ActionQueue::getInstance()->queueAction('Tinebase.avScanHashFile', $hashFile));
             } else {
@@ -3813,6 +3814,15 @@ class Tinebase_FileSystem implements
         $oldValue = $this->_doAVScan;
         if (null !== $value) {
             $this->_doAVScan = $value;
+        }
+        return $oldValue;
+    }
+
+    public function queueAVScan(?bool $value = null): bool
+    {
+        $oldValue = $this->_queueAVScan;
+        if (null !== $value) {
+            $this->_queueAVScan = $value;
         }
         return $oldValue;
     }
