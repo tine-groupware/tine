@@ -175,6 +175,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 }
             }
 
+            Tinebase_FileSystem::getInstance()->queueAVScan(true);
+
             if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
                 throw new Sabre\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
@@ -194,6 +196,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 throw new Sabre\DAV\Exception($e->getMessage());
             }
         } finally {
+            Tinebase_FileSystem::getInstance()->queueAVScan(false);
+
             if ($completeFile) {
                 Tinebase_TempFile::getInstance()->deleteTempFile($completeFile);
             }
