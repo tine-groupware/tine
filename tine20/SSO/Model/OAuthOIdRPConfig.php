@@ -71,8 +71,11 @@ class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
             ],
             self::FLD_IS_CONFIDENTIAL   => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DEFAULT_VAL           => 0,
+                self::INPUT_FILTERS         => [
+                    Tinebase_Record_Filter_NotSetDefault::class => true,
+                ],
+                self::LABEL                 => 'Confidential', // _('Confidential')
+                self::DESCRIPTION           => 'Secret will only be validated for confidential relying parties', // _('Secret will only be validated for confidential relying parties')
             ],
             self::FLD_OAUTH2_GRANTS     => [
                 self::TYPE                  => self::TYPE_RECORDS,
