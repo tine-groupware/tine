@@ -614,10 +614,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         $currentContainer = Tinebase_Container::getInstance()->getContainerById($currentEvent->container_id);
         $currentContainer->resolveGrantsAndPath();
 
-        // no If-Match header -> no moves / displaycontainer changes
-
-        // TODO FIXME !!! this is server code, we need client here...
-
+        // no If-Match header -> only attendee update
         if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
             $event = static::_allowOnlyAttendeeProperties($currentEvent, $event, $this->_container);
 
