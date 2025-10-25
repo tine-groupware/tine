@@ -9,6 +9,9 @@
 import { TwingEnvironment, TwingLoaderArray, TwingFilter, TwingFunction } from 'twing'
 import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
+import { filter, upperFirst, compact } from 'lodash'
+
+const { date: dateFormat } = require('Ext/util/Format')
 
 let twingEnv
 
@@ -171,7 +174,7 @@ const getTwingEnv = function () {
     })
 
     twingEnv.addGlobal('app', {
-      branding: _.filter(Tine.Tinebase.registry.getAll(), function (v, k) { return k.match(/^branding/) }),
+      branding: filter(Tine.Tinebase.registry.getAll(), function (v, k) { return k.match(/^branding/) }),
       user: {
         locale: Tine.Tinebase.registry.get('locale').locale || 'en',
         timezone: Tine.Tinebase.registry.get('timeZone') || 'UTC'
@@ -203,6 +206,13 @@ const getTwingEnv = function () {
     twingEnv.addFunction(new TwingFunction('renderTitle', function (recordData, modelName) {
       const title = Tine.Tinebase.data.Record.setFromJson(recordData, modelName)?.getTitle()
       return Promise.resolve(title.asString())
+    }))
+
+    twingEnv.addFunction(new TwingFunction('dateFormat', function (date, format) {
+      const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long)
+      format = compact((String(format) || 'datetime').split(/(date|time)/i)).map((key) => window.Locale.getTranslationData(upperFirst(key), 'short') || key).join(' ')
+
+      return Promise.resolve(dateFormat(dateObj, format))
     }))
 
     /**
