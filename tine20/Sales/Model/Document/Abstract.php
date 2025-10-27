@@ -920,15 +920,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         // see Tine.Sales.Document_AbstractEditDialog.checkStates
         // Sales/js/Document/AbstractEditDialog.js
 
-        $this->{self::FLD_POSITIONS_NET_SUM} = 0;
-        $this->{self::FLD_POSITIONS_GROSS_SUM} = 0;
-        $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0;
+        $this->{self::FLD_POSITIONS_NET_SUM} = 0.0;
+        $this->{self::FLD_POSITIONS_GROSS_SUM} = 0.0;
+        $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = 0.0;
         $oldSalesTaxByRate = null;
         if ($this->{self::FLD_SALES_TAX_BY_RATE} instanceof Tinebase_Record_RecordSet) {
             $oldSalesTaxByRate = $this->{self::FLD_SALES_TAX_BY_RATE};
         }
         $this->{self::FLD_SALES_TAX_BY_RATE} = new Tinebase_Record_RecordSet(Sales_Model_Document_SalesTax::class);
-        $this->{self::FLD_NET_SUM} = 0;
+        $this->{self::FLD_NET_SUM} = 0.0;
         $netSumByTaxRate = [];
         $grossSumByTaxRate = [];
         $salesTaxByRate = [];
@@ -947,17 +947,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} === Sales_Config::PRICE_TYPE_GROSS ?
                 Sales_Config::PRICE_TYPE_GROSS : Sales_Config::PRICE_TYPE_NET;
 
-            $taxRate = $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} ?: 0;
+            $taxRate = sprintf('%.4f', floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) ?: 0.0);
             if (!isset($salesTaxByRate[$taxRate])) {
-                $salesTaxByRate[$taxRate] = 0;
+                $salesTaxByRate[$taxRate] = 0.0;
             }
             $salesTaxByRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX});
             if (!isset($netSumByTaxRate[$taxRate])) {
-                $netSumByTaxRate[$taxRate] = 0;
+                $netSumByTaxRate[$taxRate] = 0.0;
             }
             $netSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
             if (!isset($grossSumByTaxRate[$taxRate])) {
-                $grossSumByTaxRate[$taxRate] = 0;
+                $grossSumByTaxRate[$taxRate] = 0.0;
             }
             $grossSumByTaxRate[$taxRate] += floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_PRICE});
         }
@@ -975,16 +975,20 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         if ($documentPriceType === Sales_Config::PRICE_TYPE_GROSS) {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} ?
                 array_reduce(array_keys($grossSumByTaxRate), function($carry, $taxRate) use($salesTaxByRate, $netSumByTaxRate, $oldSalesTaxByRate) {
+                    if (0.0 === $netSumByTaxRate[$taxRate]) {
+                        return $carry;
+                    }
+                    $floatTaxRate = floatval($taxRate);
                     $tax = round($salesTaxByRate[$taxRate] * ($discountModifier = ( 1 -
                             $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} /
                             $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM} )), 2);
                     $this->{self::FLD_SALES_TAX_BY_RATE}->addRecord($smdst = new Sales_Model_Document_SalesTax([
-                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $taxRate,
+                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $floatTaxRate,
                         Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $tax,
                         Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => round($netSumByTaxRate[$taxRate] * $discountModifier, 2),
                         Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => round($netSumByTaxRate[$taxRate] * $discountModifier, 2) + $tax,
                     ], true));
-                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
+                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $floatTaxRate))) {
                         $smdst->setId($oldRate->getId());
                         $smdst->seq = $oldRate->seq;
                         $smdst->last_modified_time = $oldRate->last_modified_time;
@@ -996,17 +1000,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         } else {
             $this->{self::FLD_SALES_TAX} = $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM} ?
                 array_reduce(array_keys($netSumByTaxRate), function($carry, $taxRate) use($netSumByTaxRate, $oldSalesTaxByRate) {
+                    if (0.0 === $netSumByTaxRate[$taxRate]) {
+                        return $carry;
+                    }
+                    $floatTaxRate = floatval($taxRate);
                     $tax =
                         round(($netSum = round(($netSumByTaxRate[$taxRate] - $this->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} *
                             $netSumByTaxRate[$taxRate] / $this->{Sales_Model_Document_Abstract::FLD_POSITIONS_NET_SUM}), 2))
-                        * $taxRate / 100, 2);
+                        * $floatTaxRate / 100, 2);
                     $this->{self::FLD_SALES_TAX_BY_RATE}->addRecord($smdst = new Sales_Model_Document_SalesTax([
-                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $taxRate,
+                        Sales_Model_Document_SalesTax::FLD_TAX_RATE => $floatTaxRate,
                         Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $tax,
                         Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $netSum,
                         Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $netSum + $tax,
                     ], true));
-                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $taxRate))) {
+                    if ($oldSalesTaxByRate && ($oldRate = $oldSalesTaxByRate->find(Sales_Model_Document_SalesTax::FLD_TAX_RATE, $floatTaxRate))) {
                         $smdst->setId($oldRate->getId());
                         $smdst->seq = $oldRate->seq;
                         $smdst->last_modified_time = $oldRate->last_modified_time;
