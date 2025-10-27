@@ -77,12 +77,12 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
              * client sends empty request instead empty xml-skeleton -> inject it here
              *(improvement: do not rely on user agent because other clients use windows stuff, too)
              */
-            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PROPFIND') {
-                $content = stream_get_contents($this->_body);
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'PROPFIND') {
+                $content = stream_get_contents($this->_body, 1);
                 rewind($this->_body);
 
 
-                if ($content == '') {
+                if ($content === '') {
                     $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
                     $broken_user_agent_body .= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
                     $broken_user_agent_body .= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
@@ -223,15 +223,11 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 $method = strtoupper($this->_request->getMethod());
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " requestContentType: " . $contentType . ' requestMethod: ' . $method);
 
-                if ('PUT' !== $method && 'PATCH' !== $method) {
-                    // NOTE inputstream can not be rewinded
-                    $debugStream = fopen('php://temp', 'r+');
-                    stream_copy_to_stream($this->_body, $debugStream);
-                    rewind($debugStream);
-                    $this->_body = $debugStream;
-
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . stream_get_contents($this->_body));
+                if ($contentType && (str_starts_with($contentType, 'text/') || str_ends_with($contentType, '/xml'))) {
+                    $content = stream_get_contents($this->_body, 10 * 1024 * 1024);
                     rewind($this->_body);
+
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n" . $content);
                 } else {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV request\n -- BINARY DATA --");
                 }
