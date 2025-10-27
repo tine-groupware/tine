@@ -158,6 +158,84 @@ class CrewScheduling_ControllerTest extends TestCase
         static::assertEquals(2, $searchResult->count());
     }
 
+    public function testNameDuplication(): void
+    {
+        // we want duplicate check, not some random exception
+    }
+
+    public function testEvenTypeReplication(): void
+    {
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+        $schedulingRole = CrewScheduling_Controller_SchedulingRole::getInstance()->create(new CrewScheduling_Model_SchedulingRole([
+            CrewScheduling_Model_SchedulingRole::FLD_KEY => 'key',
+            CrewScheduling_Model_SchedulingRole::FLD_NAME => 'name',
+        ]));
+
+        $eventType = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType([
+            'short_name' => 'unt',
+            'name' => 'unittest',
+            CrewScheduling_Config::CS_ROLE_CONFIGS => new Tinebase_Record_RecordSet(CrewScheduling_Model_EventTypeConfig::class, [
+                new CrewScheduling_Model_EventTypeConfig([
+                    CrewScheduling_Model_EventTypeConfig::FLD_SCHEDULING_ROLE => $schedulingRole,
+                ], true),
+            ]),
+        ]));
+
+        $eventType->color = '#123456';
+        $eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS}->getFirstRecord()
+            ->{CrewScheduling_Model_EventRoleConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE} = 1;
+        $eventType = Calendar_Controller_EventType::getInstance()->update($eventType);
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $this->assertCount(5, $modifications);
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        // create container
+        $modLog = $modifications->getFirstRecord();
+        $modifications->removeRecord($modLog);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$modLog]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+
+        // update container
+        $modLog = $modifications->getFirstRecord();
+        $modifications->removeRecord($modLog);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$modLog]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+
+        // create scheduling role
+        $modLog = $modifications->getFirstRecord();
+        $modifications->removeRecord($modLog);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$modLog]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+
+        // create event type
+        $modLog = $modifications->getFirstRecord();
+        $modifications->removeRecord($modLog);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$modLog]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+
+        $eventType = Calendar_Controller_EventType::getInstance()->get($eventType->getId());
+        $this->assertEmpty($eventType->color);
+        $this->assertCount(1, $eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS});
+        $this->assertEmpty($eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS}->getFirstRecord()
+            ->{CrewScheduling_Model_EventRoleConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE});
+
+        // update event type
+        $modLog = $modifications->getFirstRecord();
+        $modifications->removeRecord($modLog);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet(Tinebase_Model_ModificationLog::class, [$modLog]));
+        static::assertTrue($result, 'applyReplicationModLogs failed');
+        $this->assertCount(0, $modifications);
+
+        $eventType = Calendar_Controller_EventType::getInstance()->get($eventType->getId());
+        $this->assertSame('#123456', $eventType->color);
+        $this->assertCount(1, $eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS});
+        $this->assertSame(1, $eventType->{CrewScheduling_Config::CS_ROLE_CONFIGS}->getFirstRecord()
+            ->{CrewScheduling_Model_EventRoleConfig::FLD_NUM_REQUIRED_ROLE_ATTENDEE});
+    }
+
+
     /**
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Record_DefinitionFailure

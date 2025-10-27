@@ -40,6 +40,21 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
     protected static $_deletingRecordId = null;
 
     /**
+     * get duplicate filter
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return Tinebase_Model_Filter_FilterGroup|null
+     */
+    protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
+    {
+        if (null === ($result = parent::_getDuplicateFilter($_record))) {
+
+        }
+
+        return $result;
+    }
+
+    /**
      * sets personal container id if container id is missing in record - can be overwritten to set a different container
      *
      * @param $_record
@@ -85,15 +100,29 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
         parent::_getRelatedData($record);
     }
 
+    protected bool $_inModLogApply = false;
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $modificationLog): void
+    {
+        $oldModLogApply = $this->_inModLogApply;
+        $this->_inModLogApply = true;
+        try {
+            Tinebase_Timemachine_ModificationLog::defaultApply($modificationLog, $this);
+        } finally {
+            $this->_inModLogApply = $oldModLogApply;
+        }
+    }
+
     /**
      * create container for record
      *
      * @param $record
-     *
-     * @todo    check if container name exists ?
      */
     protected function _createContainer($record)
     {
+        if ($this->_inModLogApply) {
+            return;
+        }
+
         $containerName = $this->_getContainerName($record);
         $newContainer = new Tinebase_Model_Container(array(
             'name' => $containerName,
