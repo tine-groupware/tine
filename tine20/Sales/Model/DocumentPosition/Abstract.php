@@ -419,10 +419,6 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Sales Tax Rate', // _('Sales Tax Rate')
                 self::TYPE                          => self::TYPE_FLOAT,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_PERCENT,
-                self::DEFAULT_VAL_CONFIG            => [
-                    self::APP_NAME  => Tinebase_Config::APP_NAME,
-                    self::CONFIG => Tinebase_Config::SALES_TAX
-                ],
                 self::NULLABLE                      => true,
             ],
             self::FLD_SALES_TAX               => [
@@ -661,11 +657,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 $this->{self::FLD_POSITION_DISCOUNT_SUM} = $discount;
             }
         } else {
-            $discount = 0;
-        }
-
-        if (null === $this->{self::FLD_SALES_TAX_RATE}) {
-            $this->{self::FLD_SALES_TAX_RATE} = Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX};
+            $discount = 0.0;
         }
 
         $total = is_null($this->{self::FLD_POSITION_PRICE}) ? null

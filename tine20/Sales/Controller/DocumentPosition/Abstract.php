@@ -46,6 +46,11 @@ abstract class Sales_Controller_DocumentPosition_Abstract extends Tinebase_Contr
             throw new Tinebase_Exception_Record_Validation(Sales_Model_DocumentPosition_Abstract::FLD_TITLE . ' and ' .
                 Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION . ' can not be both empty at the same time');
         }
+        if ($_record->{Sales_Model_DocumentPosition_Abstract::FLD_PRODUCT_ID} &&
+                $_record->has(Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE) &&
+                null === $_record->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
+            throw new Tinebase_Exception_Record_Validation('product positions need a tax rate set');
+        }
         parent::_inspectBeforeCreate($_record);
     }
 
@@ -59,6 +64,11 @@ abstract class Sales_Controller_DocumentPosition_Abstract extends Tinebase_Contr
                 0 === strlen((string) $_record->{Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION})) {
             throw new Tinebase_Exception_Record_Validation(Sales_Model_DocumentPosition_Abstract::FLD_TITLE . ' and ' .
                 Sales_Model_DocumentPosition_Abstract::FLD_DESCRIPTION . ' can not be both empty at the same time');
+        }
+        if ($_record->{Sales_Model_DocumentPosition_Abstract::FLD_PRODUCT_ID} &&
+                $_record->has(Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE) &&
+                null === $_record->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
+            throw new Tinebase_Exception_Record_Validation('product positions need a tax rate set');
         }
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }

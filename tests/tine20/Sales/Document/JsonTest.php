@@ -224,7 +224,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             SMDOffer::FLD_POSITIONS => [
                 [
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
-                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ]
             ],
         ]);
@@ -462,7 +463,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             SMDOffer::FLD_POSITIONS => [
                 [
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
-                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray()
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ]
             ],
             SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
@@ -535,6 +537,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Offer::FLD_TYPE => Sales_Model_DocumentPosition_Offer::POS_TYPE_PRODUCT,
                     Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE => 100,
                     Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ]
             ],
             SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
@@ -554,6 +557,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             Sales_Model_DocumentPosition_Offer::FLD_TYPE => Sales_Model_DocumentPosition_Offer::POS_TYPE_PRODUCT,
             Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE => 100,
             Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
+            Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
         ];
         $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_DISPATCHED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);

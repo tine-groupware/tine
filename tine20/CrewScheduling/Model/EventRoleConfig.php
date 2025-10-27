@@ -206,11 +206,9 @@ class CrewScheduling_Model_EventRoleConfig extends Tinebase_Record_NewAbstract
      */
     public static function getFromEvent(Calendar_Model_Event $event, CrewScheduling_Model_SchedulingRole $role=null) : Tinebase_Record_RecordSet
     {
-
-
         if ($event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS} instanceof Tinebase_Record_RecordSet && $event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS}->count() > 0) {
             $eRCs = $event->{CrewScheduling_Config::EVENT_ROLES_CONFIGS};
-        } elseif (isset($event->event_types) && $event->event_types !== '') {
+        } elseif (isset($event->event_types) && $event->event_types instanceof Tinebase_Record_RecordSet) {
             $eRCs = self::createFromEventTypes($event->event_types);
         } else {
             $eRCs = new Tinebase_Record_RecordSet(CrewScheduling_Model_EventRoleConfig::class, []);

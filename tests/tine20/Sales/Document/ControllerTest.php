@@ -33,12 +33,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
                 new Sales_Model_DocumentPosition_Order([
                     Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 2',
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ],
         ]));
@@ -82,6 +84,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true)
             ],
         ]));
@@ -98,6 +101,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true)
             ],
         ]));
@@ -175,6 +179,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true)
             ],
         ]));
@@ -364,6 +369,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ])
         ]));
@@ -493,6 +499,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ])
         ]));
@@ -621,6 +628,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ])
         ]));
@@ -773,6 +781,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                     Sales_Model_DocumentPosition_Order::FLD_NOTES => new Tinebase_Record_RecordSet(Tinebase_Model_Note::class, [
                             new Tinebase_Model_Note([
                                 Tinebase_Model_Note::FLD_NOTE_TYPE_ID => Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE,
@@ -889,6 +898,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 2',
@@ -896,6 +906,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ],
         ]));
@@ -1438,12 +1449,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                     Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product1->getId(),
                     Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
                 new Sales_Model_DocumentPosition_Offer([
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'pos 2',
                     Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product2->getId(),
                     Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
                 ], true),
             ],
         ]));
