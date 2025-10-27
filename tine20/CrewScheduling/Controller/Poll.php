@@ -134,7 +134,12 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
 
         $expander = new Tinebase_Record_Expander(Calendar_Model_Event::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'event_site' => []
+                'event_site' => [],
+                'event_types' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'event_type' => []
+                    ]
+                ]
             ],
         ]);
         $expander->expand($result);
