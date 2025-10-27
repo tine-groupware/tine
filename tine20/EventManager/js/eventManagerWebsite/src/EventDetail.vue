@@ -23,7 +23,13 @@
     </div>
     <div class="row mb-3" v-if="eventDetails.appointments && eventDetails.appointments.length > 0">
       <div class="col-4">{{formatMessage('Appointments:')}}</div>
-      <div class="col-8">{{eventDetails.appointments}}</div>
+      <div class="col-8">
+        <div v-for="appointment in eventDetails.appointments" :key="appointment.id" class="mb-3">
+          <div><strong>{{formatMessage('Session')}} {{appointment.session_number}}</strong></div>
+          <div>{{appointment.formattedDate}} | {{appointment.formattedStartTime}} - {{appointment.formattedEndTime}}</div>
+          <div v-if="appointment.description">{{appointment.description}}</div>
+        </div>
+      </div>
     </div>
     <div class="row mb-3" v-if="eventDetails.location && eventDetails.location.adr_one_postalcode">
       <div class="col-4">{{formatMessage('Address:')}}</div>
@@ -242,9 +248,33 @@ async function getEvent() {
     method: 'GET'
   }).then(resp => resp.json())
     .then(data => {
-      data.start = new Date(data.start).toLocaleDateString("de").replaceAll(", 00:00:00", "").replaceAll(", 01:00:00", "");
-      data.end = new Date(data.end).toLocaleDateString("de").replaceAll(", 00:00:00", "").replaceAll(", 01:00:00", "");
-      data.registration_possible_until = new Date(data.registration_possible_until).toLocaleDateString("de").replaceAll(", 00:00:00", "").replaceAll(", 01:00:00", "");
+      const dateFormat = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+
+      data.start = new Date(data.start).toLocaleString("de-DE", dateFormat);
+      data.end = new Date(data.end).toLocaleString("de-DE", dateFormat);
+      data.registration_possible_until = new Date(data.registration_possible_until).toLocaleDateString("de");
+
+      if (data.appointments && data.appointments.length > 0) {
+        data.appointments = data.appointments.map(appointment => {
+          const date = new Date(appointment.session_date).toLocaleDateString("de-DE");
+          const startTime = appointment.start_time.substring(0, 5); // Remove seconds
+          const endTime = appointment.end_time.substring(0, 5); // Remove seconds
+
+          return {
+            ...appointment,
+            formattedDate: date,
+            formattedStartTime: startTime,
+            formattedEndTime: endTime
+          };
+        });
+      }
+
       eventDetails.value = data;
       console.log(data);
     })

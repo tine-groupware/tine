@@ -34,7 +34,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $this->_backend = new Tinebase_Backend_Sql([
             Tinebase_Backend_Sql::MODEL_NAME    => EventManager_Model_Registration::class,
             Tinebase_Backend_Sql::TABLE_NAME    => EventManager_Model_Registration::TABLE_NAME,
-            Tinebase_Backend_Sql::MODLOG_ACTIVE => false
+            Tinebase_Backend_Sql::MODLOG_ACTIVE => true
         ]);
 
         $this->_purgeRecords = false;
@@ -42,31 +42,49 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $this->_duplicateCheckFields = [['event_id','name']];
     }
 
-    /**
-     * inspect creation of one record (after create)
-     *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
-     * @return  void
-     */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
+        $this->_processBookedOptionsAfterCreate($_createdRecord);
         $this->_handleRegistrationFileUpload($_record);
+        $this->_updateParentStatistics($_record);
     }
 
-    /**
-     * inspect update of one record (before update)
-     *
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
-     * @return  void
-     */
     protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
+        $this->_processBookedOptionsAfterUpdate($_updatedRecord, $_oldRecord);
         $this->_handleRegistrationFileUpload($_updatedRecord);
+        if ($_updatedRecord->status === "3") {
+            foreach ($_updatedRecord->booked_options as $bookedOption) {
+                $participantName = $_updatedRecord->name->n_fileas;
+                $this->createDeregisteredFolder($bookedOption, $participantName);
+            }
+        }
+        $this->_updateParentStatistics($_updatedRecord);
+    }
+
+    protected function _inspectAfterDelete($_record)
+    {
+        parent::_inspectAfterDelete($_record);
+        $this->_processBookedOptionsAfterDelete($_record);
+        foreach ($_record->booked_options as $bookedOption) {
+            $participantName = $_record->name->n_fileas;
+            $this->createDeregisteredFolder($bookedOption, $participantName);
+        }
+        $this->_updateParentStatistics($_record);
+    }
+
+    public function _updateParentStatistics(EventManager_Model_Registration $_record)
+    {
+        Tinebase_TransactionManager::getInstance()->registerOnCommitCallback(function($_record) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Updating parent statistics...');
+            }
+            EventManager_Controller_Event::getInstance()->updateStatistics($_record->event_id, $_record->id);
+        }, [$_record]);
     }
 
     public function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)
@@ -76,7 +94,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
 
         foreach ($_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $booked_option) {
-            if (!$booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS} === EventManager_Model_FileOption::class) {
+            if (
+                !$booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                === EventManager_Model_FileOption::class
+            ) {
                 continue;
             }
 
@@ -115,7 +136,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     ->{EventManager_Model_Selections_File::FLD_NODE_ID} = $result->getId();
                 $event = EventManager_Controller_Event::getInstance()->get($event_id);
                 foreach ($event->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
-                    if ($registration->id === $_registration->id) {
+                    if ($registration->getId() === $_registration->getId()) {
                         foreach (
                             $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $booked_option
                         ) {
@@ -130,195 +151,239 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     }
 
     /**
-     * overwrite create function from Tinebase_Controller_Record_Abstract to add custom fields
+     * Updates checkbox option places (booked/available counts)
      *
-     * @param Tinebase_Record_Interface $_record
-     * @param boolean $_duplicateCheck
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
+     * @param EventManager_Model_BookedOption $bookedOption
+     * @param int $increment +1 to book, -1 to unbook
+     * @return void
      */
-    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    protected function _updateCheckboxOptionPlaces(
+        EventManager_Model_BookedOption $bookedOption,
+        int $increment
+    ): void {
+        $option = $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION};
+
+        if (is_string($option)) {
+            $option = EventManager_Controller_Option::getInstance()->get($option);
+        }
+
+        $optionConfig = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG};
+
+        if (
+            !isset($optionConfig->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES})
+            || !isset($optionConfig->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES})
+        ) {
+            return;
+        }
+
+        $optionConfig->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES} += $increment;
+        $optionConfig->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES} -= $increment;
+
+        try {
+            EventManager_Controller_Option::getInstance()->update($option);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tenf->getMessage());
+            }
+        }
+    }
+
+    /**
+     * Processes booked options after registration creation
+     * Books all checkbox options that are marked as booked
+     *
+     * @param EventManager_Model_Registration $registration
+     * @return void
+     */
+    protected function _processBookedOptionsAfterCreate(EventManager_Model_Registration $registration): void
+    {
+        if (!$registration->booked_options) {
+            return;
+        }
+
+        foreach ($registration->booked_options as $bookedOption) {
+            $selectionConfig = $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+
+            if (!$selectionConfig || !isset($selectionConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED})) {
+                continue;
+            }
+
+            if ($selectionConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED}) {
+                $this->_updateCheckboxOptionPlaces($bookedOption, 1);
+            }
+        }
+    }
+
+    /**
+     * Processes booked options after registration update
+     * Handles booking changes, new bookings, and removed bookings
+     *
+     * @param EventManager_Model_Registration $updatedRecord
+     * @param EventManager_Model_Registration $oldRecord
+     * @return void
+     */
+    protected function _processBookedOptionsAfterUpdate(
+        EventManager_Model_Registration $updatedRecord,
+        EventManager_Model_Registration $oldRecord
+    ): void {
+        $newOptions = $updatedRecord->booked_options ?: [];
+        $oldOptions = $oldRecord->booked_options ?: [];
+        $processedOldOptionIds = [];
+
+        foreach ($newOptions as $bookedOption) {
+            $option = $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION};
+            $optionId = is_object($option) ? $option->getId() : $option;
+
+            if (!isset($option->id)) {
+                continue;
+            }
+
+            $selectionConfig = $bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+            if (!$selectionConfig || !isset($selectionConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED})) {
+                continue;
+            }
+
+            $oldBookedOption = $this->_findBookedOptionById($oldOptions, $optionId);
+
+            if ($oldBookedOption) {
+                $processedOldOptionIds[] = $optionId;
+                $this->_handleBookingStatusChange($bookedOption, $oldBookedOption);
+            } else {
+                if ($selectionConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED}) {
+                    $this->_updateCheckboxOptionPlaces($bookedOption, 1);
+                }
+            }
+        }
+
+        foreach ($oldOptions as $oldBookedOption) {
+            $option = $oldBookedOption->{EventManager_Model_BookedOption::FLD_OPTION};
+            $optionId = is_object($option) ? $option->getId() : $option;
+
+            if (!in_array($optionId, $processedOldOptionIds)) {
+                $this->_unbookRemovedOption($optionId);
+            }
+        }
+    }
+
+    /**
+     * Finds a booked option by option ID
+     *
+     * @param Tinebase_Record_RecordSet|array|null $bookedOptions
+     * @param string $optionId
+     * @return EventManager_Model_BookedOption|null
+     */
+    protected function _findBookedOptionById($bookedOptions, string $optionId): ?EventManager_Model_BookedOption
+    {
+        if (!$bookedOptions) {
+            return null;
+        }
+
+        foreach ($bookedOptions as $bookedOption) {
+            $option = $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION};
+            $currentOptionId = is_object($option) ? $option->getId() : $option;
+
+            if ($currentOptionId === $optionId) {
+                return $bookedOption;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Handles booking status changes between old and new booked options
+     *
+     * @param EventManager_Model_BookedOption $newBookedOption
+     * @param EventManager_Model_BookedOption $oldBookedOption
+     * @return void
+     */
+    protected function _handleBookingStatusChange(
+        EventManager_Model_BookedOption $newBookedOption,
+        EventManager_Model_BookedOption $oldBookedOption
+    ): void {
+        $oldConfig = $oldBookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+        $newConfig = $newBookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG};
+
+        if (!$oldConfig || !$newConfig) {
+            return;
+        }
+
+        $oldBooked = $oldConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED};
+        $newBooked = $newConfig->{EventManager_Model_Selections_Checkbox::FLD_BOOKED};
+
+        if ($oldBooked !== $newBooked) {
+            $increment = $newBooked ? 1 : -1;
+            $this->_updateCheckboxOptionPlaces($newBookedOption, $increment);
+        }
+    }
+
+    /**
+     * Unbooks a removed option by ID
+     *
+     * @param string $optionId
+     * @return void
+     */
+    protected function _unbookRemovedOption(string $optionId): void
     {
         try {
-            $record = parent::create($_record, $_duplicateCheck);
-            foreach ($record->booked_options as $booked_option) {
-                if ($booked_option->selection_config->booked) {
-                    if (
-                        isset($booked_option->option->option_config->available_places)
-                        && isset($booked_option->option->option_config->booked_places)
-                    ) {
-                        $booked_option->option->option_config->booked_places++;
-                        $booked_option->option->option_config->available_places--;
-                        EventManager_Controller_Option::getInstance()->update($booked_option->option);
-                    }
-                }
-            }
-            return $record;
-        } catch (Tinebase_Exception_Duplicate $e) {
-            $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($_record->name->email);
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                EventManager_Model_Registration::class,
-                [
-                    [
-                        'field' => EventManager_Model_Registration::FLD_EVENT_ID,
-                        'operator' => 'equals',
-                        'value' => $_record->event_id
-                    ],
-                    [
-                        'field' => EventManager_Model_Registration::FLD_NAME,
-                        'operator' => 'equals',
-                        'value' => $contact
-                    ],
-                ],
-            );
-            $registration = $this->getInstance()->search($filter)->getFirstRecord();
-            // important to update id to existing one before the record can be updated
-            $_record->id = $registration->id;
-            return $this->update($_record);
-        }
-    }
+            $option = EventManager_Controller_Option::getInstance()->get($optionId);
 
-    /**
-     * overwrite create function from Tinebase_Controller_Record_Abstract to update custom fields
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param boolean $_duplicateCheck
-     * @param boolean $_updateDeleted
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     *
-     */
-    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
-    {
-        $record_old = $this->get($_record->getId());
-        $record = parent::update($_record, $_duplicateCheck, $_updateDeleted);
-        $still_existing = [];
-        $already_existing = false;
-        if (!$record->booked_options) {
-            $record->booked_options = [];
-        }
-        foreach ($record->booked_options as $booked_option) {
+            if (empty($option->getData())) {
+                return;
+            }
+
+            $optionConfig = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG};
+
             if (
-                isset($booked_option->option->option_config->available_places)
-                && isset($booked_option->option->option_config->booked_places)
-                && isset($booked_option->id)
-                && isset($booked_option->selection_config)
+                !isset($optionConfig->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES})
+                || !isset($optionConfig->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES})
             ) {
-                // Value of existing booking has changed
-                foreach ($record_old->booked_options as $old_booked_option) {
-                    if ($old_booked_option->id == $booked_option->id) {
-                        $old_booked = $old_booked_option->selection_config->booked;
-                        $booked = $booked_option->selection_config->booked;
-                        if ($booked !== $old_booked) {
-                            if ($booked) {
-                                $booked_option->option->option_config->booked_places++;
-                                $booked_option->option->option_config->available_places--;
-                            } else {
-                                $booked_option->option->option_config->booked_places--;
-                                $booked_option->option->option_config->available_places++;
-                            }
-                            try {
-                                EventManager_Controller_Option::getInstance()->update($booked_option->option);
-                            } catch (Tinebase_Exception_NotFound $tenf) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                                        . ' ' . $tenf->getMessage());
-                                }
-                            }
-                        }
-                        $already_existing = true;
-                        $still_existing[] = $old_booked_option;
-                    }
-                }
-                // New booking was added
-                if (!$already_existing && $booked_option->selection_config->booked) {
-                    if (!is_string($booked_option->option)) {
-                        $booked_option->option->option_config->booked_places++;
-                        $booked_option->option->option_config->available_places--;
-                        try {
-                            EventManager_Controller_Option::getInstance()->update($booked_option->option);
-                        } catch (Tinebase_Exception_NotFound $tenf) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                                    . ' ' . $tenf->getMessage());
-                            }
-                        }
-                    }
-                }
+                return;
+            }
+
+            $optionConfig->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}--;
+            $optionConfig->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}++;
+
+            EventManager_Controller_Option::getInstance()->update($option);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // Option was already deleted (cascade delete from Event) - this is expected
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Option already deleted: ' . $tenf->getMessage());
             }
         }
-
-        // Booked option was deleted
-        foreach ($record_old->booked_options as $old_booked_option) {
-            if (!array_key_exists($old_booked_option->option->id, $still_existing)) {
-                try {
-                    $option = EventManager_Controller_Option::getInstance()->get($old_booked_option->option->id);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                            . ' ' . $tenf->getMessage());
-                    }
-                    continue;
-                }
-                if (
-                    !empty($option->getData())
-                    && isset($option->option_config->available_places)
-                    && isset($option->option_config->booked_places)
-                    && !$already_existing
-                ) {
-                    $option->option_config->booked_places--;
-                    $option->option_config->available_places++;
-                    EventManager_Controller_Option::getInstance()->update($option);
-                }
-            }
-        }
-
-        foreach ($record->booked_options as $booked_option) {
-            if ($record->status === "3") { //status = canceled
-                $participant_name = $record->name->n_fileas;
-                $this->createDeregisteredFolder($booked_option, $participant_name);
-            }
-        }
-
-        return $record;
     }
 
     /**
-     * Deletes a set of records.
+     * Processes booked options after registration deletion
+     * Unbooks all checkbox options
      *
-     * If one of the records could not be deleted, no record is deleted
-     *
-     * @param  array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_ids array of record identifiers
-     * @return Tinebase_Record_RecordSet
-     * @throws Exception
+     * @param EventManager_Model_Registration $record
+     * @return void
      */
-    public function delete($_ids): Tinebase_Record_RecordSet
+    protected function _processBookedOptionsAfterDelete(EventManager_Model_Registration $record): void
     {
-        $records = parent::delete($_ids);
-        foreach ($records as $record) {
-            foreach ($record->booked_options as $booked_option) {
-                if (
-                    isset($booked_option->option->option_config->available_places)
-                    && isset($booked_option->option->option_config->booked_places)
-                ) {
-                    $booked_option->option->option_config->booked_places--;
-                    $booked_option->option->option_config->available_places++;
-                    EventManager_Controller_Option::getInstance()->update($booked_option->option);
-                }
-                $participant_name = $record->name->n_fileas;
-                $this->createDeregisteredFolder($booked_option, $participant_name);
-            }
+        if (!$record->booked_options) {
+            return;
         }
-        return $records;
+
+        foreach ($record->booked_options as $bookedOption) {
+            $this->_updateCheckboxOptionPlaces($bookedOption, -1);
+        }
     }
 
     public function createDeregisteredFolder(
         EventManager_Model_BookedOption $booked_option,
         string $participant_name
     ): void {
-        if (isset($booked_option->selection_config_class)) {
-            if ($booked_option->selection_config_class === 'EventManager_Model_Selections_File') {
-                $node_id = $booked_option->selection_config->node_id;
+        if (isset($booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS})) {
+            if (
+                $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG_CLASS}
+                === 'EventManager_Model_Selections_File'
+            ) {
+                $node_id = $booked_option->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
+                    ->{EventManager_Model_Selections_File::FLD_NODE_ID};
                 if (!empty($node_id)) {
                     $file_system = Tinebase_FileSystem::getInstance();
                     $path_of_node = $file_system->getPathOfNode($node_id, true);
@@ -432,9 +497,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             }
             $options = $request['replies'];
             $booked_option = [];
-            foreach ($options as $optionId => $reply) {
-                $option = EventManager_Controller_Option::getInstance()->get($optionId);
-                if ($option->option_config_class === EventManager_Model_CheckboxOption::class) {
+            foreach ($options as $option_id => $reply) {
+                $option = EventManager_Controller_Option::getInstance()->get($option_id);
+                if (
+                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                    === EventManager_Model_CheckboxOption::class
+                ) {
                     $selection_config = new EventManager_Model_Selections_Checkbox([
                         'booked' => boolval($reply),
                     ], true);
@@ -444,7 +512,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         'selection_config' => $selection_config,
                         'selection_config_class' => EventManager_Model_Selections_Checkbox::class,
                     ], true);
-                } elseif ($option->option_config_class === EventManager_Model_TextInputOption::class) {
+                } elseif (
+                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                    === EventManager_Model_TextInputOption::class
+                ) {
                     $selection_config = new EventManager_Model_Selections_TextInput([
                         'response' => $reply,
                     ], true);
@@ -454,10 +525,17 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         'selection_config' => $selection_config,
                         'selection_config_class' => EventManager_Model_Selections_TextInput::class,
                     ], true);
-                } elseif ($option->option_config_class === EventManager_Model_FileOption::class) {
+                } elseif (
+                    $option->{EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS}
+                    === EventManager_Model_FileOption::class
+                ) {
                     if (
-                        isset($option->option_config->file_acknowledgement)
-                        && $option->option_config->file_acknowledgement
+                        isset(
+                            $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                                ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
+                        )
+                        && $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                            ->{EventManager_Model_FileOption::FLD_FILE_ACKNOWLEDGMENT}
                     ) {
                         $selection_config = new EventManager_Model_Selections_File([
                             'file_acknowledgement' => boolval($reply),
@@ -471,18 +549,32 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     }
                 }
             }
-            $defaultValues = $this->getDefaultRegistrationKeyFields();
+            $default_values = $this->getDefaultRegistrationKeyFields();
             $registration = new EventManager_Model_Registration([
                 'event_id'          => EventManager_Controller_Event::getInstance()->get($event_id),
                 'name'              => $contact,
-                'function'          => $defaultValues['function'],
-                'source'            => $defaultValues['source'],
-                'status'            => $defaultValues['status'],
+                'function'          => $default_values['function'],
+                'source'            => $default_values['source'],
+                'status'            => $default_values['status'],
                 'booked_options'    => $booked_option,
                 'description'       => '',
             ], true);
             $registration = $this->create($registration);
             $response->getBody()->write(json_encode($registration->toArray()));
+
+            if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '2') {
+                $template = 'SendWaitingListEmail';
+            } else {
+                $template = 'SendConfirmationEmail';
+            }
+            $event = EventManager_Controller_Event::getInstance()->get($event_id);
+            $link = '/EventManager/view/#/event/';
+            $this->_sendMessageWithTemplate($template, [
+                'link' => Tinebase_Core::getUrl() . $link,
+                'contact' => $request['contactDetails'],
+                'email' => $request['contactDetails']['email'],
+                'event' => $event,
+            ]);
         } catch (Tinebase_Exception_Record_Validation $terv) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($terv->getMessage()));
@@ -498,7 +590,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $response;
     }
 
-    public function publicApiPostFileToFileManager($event_id, $optionId, $registration_id): \Laminas\Diactoros\Response
+    public function publicApiPostFileToFileManager($event_id, $option_id, $registration_id): \Laminas\Diactoros\Response
     {
         $assertAclUsage = $this->assertPublicUsage();
         header('Content-Type: application/json');
@@ -527,13 +619,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         ], true);
                         $booked_option[] = new EventManager_Model_BookedOption([
                             'event_id' => $event_id,
-                            'option' => $optionId,
+                            'option' => $option_id,
                             'selection_config' => $selection_config,
                             'selection_config_class' => EventManager_Model_Selections_File::class,
                         ], true);
                     }
                 }
-                $registration->booked_options = $booked_option;
+                $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_option;
                 $registration = $this->update($registration);
                 $response->getBody()->write(json_encode($registration->toArray()));
             }
@@ -572,8 +664,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             ], $key, 'HS256');
 
             if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $request['email'])) {
-                $ab_contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
-                if (!empty($ab_contact)) {
+                $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
+                if (!empty($contact)) {
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                         EventManager_Model_Registration::class,
                         [
@@ -585,12 +677,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                             [
                                 'field' => EventManager_Model_Registration::FLD_NAME,
                                 'operator' => 'equals',
-                                'value' => $ab_contact
+                                'value' => $contact
                             ],
                         ],
                     );
                     $register_participant = $this->getInstance()->search($filter)->getFirstRecord();
                     if (!empty($register_participant)) {
+                        $contact = $register_participant;
                         $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
                         $template = 'SendManageRegistrationLink';
                     } else {
@@ -601,10 +694,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
                     $template = 'SendRegistrationLink';
                 }
+                $event = EventManager_Controller_Event::getInstance()->get($event_id);
                 $this->_sendMessageWithTemplate($template, [
                     'link' => Tinebase_Core::getUrl() . $link,
-                    'userName' => $request['name'],
+                    'contact' => $contact,
                     'email' => $request['email'],
+                    'event' => $event,
                 ]);
             }
             $response = new \Laminas\Diactoros\Response();
@@ -701,9 +796,12 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
     public function getDefaultRegistrationKeyFields()
     {
-        $attendee = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_FUNCTION)->records->getById('1');
-        $online = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_SOURCE)->records->getById('1');
-        $waiting_list = EventManager_Config::getInstance()->get(EventManager_Config::REGISTRATION_STATUS)->records->getById('2');
-        return ['function' => $attendee, 'source' => $online, 'status' => $waiting_list];
+        $attendee = EventManager_Config::getInstance()
+            ->get(EventManager_Config::REGISTRATION_FUNCTION)->records->getById('1');
+        $online = EventManager_Config::getInstance()
+            ->get(EventManager_Config::REGISTRATION_SOURCE)->records->getById('1');
+        $confirmed = EventManager_Config::getInstance()
+            ->get(EventManager_Config::REGISTRATION_STATUS)->records->getById('1');
+        return ['function' => $attendee, 'source' => $online, 'status' => $confirmed];
     }
 }

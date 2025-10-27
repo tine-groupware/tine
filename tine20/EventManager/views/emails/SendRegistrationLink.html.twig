@@ -3,6 +3,7 @@ avialable parameters:
     link
     app.branding.title
     contact
+    event
 #}
 
 {% extends 'Tinebase/views/emails/base.html.twig' %}
@@ -13,7 +14,9 @@ avialable parameters:
 
 {% block body %}
     <div class="mt-3 mb-5">
-        <p class="text-start">{{ _('thank you for your registration, to complete the registration, please confirm your e-mail address via this link') }}</p>
+        <p class="text-start">
+            {{ _('Thank you for your registration to the event %1$s.') | format(event.name) }}<br>
+            {{ _('To complete the registration, please confirm your e-mail address via this link') }}</p>
     </div>
     <div class="ax-center my-5">
         <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('Confirm E-Mail address') }}</a>

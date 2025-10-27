@@ -15,9 +15,18 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     initComponent: function () {
         Tine.EventManager.RegistrationEditDialog.superclass.initComponent.call(this);
         this.on('beforerender', this.onBeforeRender, this);
+        this.on('afterlayout', this.onAfterLayout, this);
     },
+
     onBeforeRender: function () {
         this.setSelectionConfigClassListener();
+        const reasonField = this.form.findField('reason_waiting_list');
+        reasonField.hide();
+    },
+
+    onAfterLayout: function () {
+         this.waitingListListener();
+         this.showReasonWaitingList();
     },
 
     setSelectionConfigClassListener: function () {
@@ -31,5 +40,77 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
                 }
             });
         },this);
+    },
+
+    waitingListListener : function () {
+        const total_places = this.form.openerCt.parentEditDialog.record.data.total_places;
+        const available_places = this.form.openerCt.parentEditDialog.record.data.available_places;
+        const registrations = this.form.openerCt.parentEditDialog.record.data.registrations;
+        let registrations_count = 0;
+        registrations.forEach((registration) => {
+            if (registration.status !== "3" && registration.status !== "2") {
+                registrations_count += 1;
+            }
+        })
+        if (available_places <= 0 && total_places <= registrations_count) {
+            const statusField = this.form.findField('status');
+            if (statusField.getValue() !== "3") {
+                statusField.setValue("2");
+            }
+
+            statusField.on('expand', function (combo) {
+                setTimeout(function () {
+                    const listId = combo.list ? combo.list.id : null;
+                    let list = null;
+                    if (listId) {
+                        list = document.getElementById(listId);
+                    } else {
+                        const comboLists = Ext.query('.x-combo-list');
+                        list = comboLists[comboLists.length - 1];
+                    }
+                    if (list) {
+                        const items = Ext.query('.x-combo-list-item', list);
+                        combo.getStore().each(function (record, index) {
+                            if (record.get('id') === '1' && items[index]) {
+                                items[index].style.setProperty('color', '#999', 'important');
+                                items[index].style.setProperty('background-color', '#f0f0f0', 'important');
+                                items[index].style.setProperty('opacity', '0.6', 'important');
+                            }
+                        });
+                    }
+                }, 10);
+            }, this);
+
+            statusField.on('beforeselect', function (combo, record, index) {
+                // prevent selection of value confirmed
+                return record.get(combo.valueField) !== "1";
+            }, this);
+
+            statusField.on('select', function (combo, record, index) {
+                const reasonField = this.form.findField('reason_waiting_list');
+                if (statusField.getValue() !== "2") {
+                    reasonField.setValue("3");
+                    reasonField.hide();
+                } else {
+                    this.showReasonWaitingList();
+                }
+            }, this);
+        }
+    },
+
+    showReasonWaitingList: function () {
+        const registration_deadline = this.form.openerCt.parentEditDialog.record.data.registration_possible_until;
+        const statusField = this.form.findField('status');
+        const reasonField = this.form.findField('reason_waiting_list');
+        if (statusField.getValue() === "2") {
+            reasonField.show();
+            const deadlineTime = new Date(registration_deadline).getTime();
+            const currentTime = Date.now();
+            if (currentTime > deadlineTime) {
+                reasonField.setValue("2");
+            } else {
+                reasonField.setValue("1");
+            }
+        }
     },
 });

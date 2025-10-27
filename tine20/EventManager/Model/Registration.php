@@ -26,6 +26,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
     public const FLD_FUNCTION = 'function';
     public const FLD_SOURCE = 'source';
     public const FLD_STATUS = 'status';
+    public const FLD_REASON_WAITING = 'reason_waiting_list';
     public const FLD_BOOKED_OPTIONS = 'booked_options';
     public const FLD_DESCRIPTION = 'description';
 
@@ -47,7 +48,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
         self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
         self::HAS_NOTES                 => false,
         self::HAS_TAGS                  => false,
-        self::MODLOG_ACTIVE             => false,
+        self::MODLOG_ACTIVE             => true,
         self::HAS_ATTACHMENTS           => false,
 
         self::CREATE_MODULE             => false,
@@ -123,6 +124,15 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::LABEL             => 'Status', // _('Status')
                 self::DEFAULT_VAL       => 1,
                 self::NAME              => EventManager_Config::REGISTRATION_STATUS,
+                self::NULLABLE          => true,
+                self::DESCRIPTION       => 'If the event is full it will not be possible to selected confirmed',
+                // _('If the event is full it will not be possible to selected confirmed')
+            ],
+            self::FLD_REASON_WAITING        => [
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::LABEL             => 'Reason waiting list', // _('Reason waiting list')
+                self::DEFAULT_VAL       => 3,
+                self::NAME              => EventManager_Config::REGISTRATION_WAITING_LIST,
                 self::NULLABLE          => true,
             ],
             self::FLD_BOOKED_OPTIONS    => [

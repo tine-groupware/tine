@@ -22,6 +22,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
 
+    protected static array $updateStatisticsCache = [];
+
     /**
      * the constructor
      *
@@ -41,6 +43,62 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $this->_doContainerACLChecks = false;
     }
 
+    public function updateStatistics(string $event_id, string $registration_id = null): void
+    {
+        $this->_handleDependentRecords = false;
+        try {
+            if (static::$updateStatisticsCache[$event_id] ?? false) {
+                return;
+            }
+            static::$updateStatisticsCache[$event_id] = true;
+
+            Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(fn()
+            => $this->clearUpdateStatisticsCache());
+
+            $event = $this->get($event_id);
+            $registrations = $event->{EventManager_Model_Event::FLD_REGISTRATIONS};
+            $accepted_registrations = [];
+            foreach ($registrations as $registration) {
+                if (
+                    $registration->is_deleted !== 1
+                    && $registration->{EventManager_Model_Registration::FLD_STATUS} !== "3"
+                ) {
+                    $accepted_registrations[] = $registration;
+                }
+            }
+
+            $event->{EventManager_Model_Event::FLD_BOOKED_PLACES} = count($accepted_registrations);
+            $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} =
+                intval($event->{EventManager_Model_Event::FLD_TOTAL_PLACES}) -
+                intval($event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+
+            if ($event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0) {
+                foreach ($registrations as $registration) {
+                    if (
+                        $registration->id === $registration_id
+                        && !($registration->{EventManager_Model_Registration::FLD_STATUS} === "3")
+                    ) {
+                        $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
+                        EventManager_Controller_Registration::getInstance()->update($registration);
+                    }
+                }
+            }
+            $this->update($event);
+        } catch (Tinebase_Exception_NotFound $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . 'Record should not be found when deleted: ' . $e->getMessage());
+            }
+        } finally {
+            $this->_handleDependentRecords = true;
+        }
+    }
+
+    private function clearUpdateStatisticsCache(): void
+    {
+        static::$updateStatisticsCache = [];
+    }
+
     public function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
@@ -49,15 +107,14 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         // - those need to be removed from registrations
         $diff = $currentRecord->{EventManager_Model_Event::FLD_OPTIONS}
             ->diff($updatedRecord->{EventManager_Model_Event::FLD_OPTIONS});
-        foreach ($diff->removed as $removedOption) {
-            foreach ($currentRecord->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
-                foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $bookedOption) {
-                    if (
-                        $removedOption->getId() ===
-                        $bookedOption->{EventManager_Model_BookedOption::FLD_OPTION}->getId()
-                    ) {
+        foreach ($diff->removed as $removed_option) {
+            foreach ($updatedRecord->{EventManager_Model_Event::FLD_REGISTRATIONS} as $registration) {
+                foreach ($registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} as $booked_option) {
+                    $option = $booked_option->{EventManager_Model_BookedOption::FLD_OPTION};
+                    $option_id = is_object($option) ? $option->getId() : $option;
+                    if ($removed_option->getId() === $option_id) {
                         $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}
-                            ->removeRecord($bookedOption);
+                            ->removeRecord($booked_option);
                         EventManager_Controller_Registration::getInstance()->update($registration);
                     }
                 }
@@ -69,9 +126,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     public function publicApiMainScreen()
     {
         $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=EventManager";
-        $jsFiles[] = 'EventManager/js/eventManagerWebsite/src/index.es6.js';
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
+        $js_files[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=EventManager";
+        $js_files[] = 'EventManager/js/eventManagerWebsite/src/index.es6.js';
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($js_files);
     }
 
     public function publicApiSearchEvents()
@@ -97,12 +154,12 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         return $response;
     }
 
-    public function publicApiGetEvent($eventId)
+    public function publicApiGetEvent($event_id)
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
             $response = new \Laminas\Diactoros\Response();
-            $event = $this->get($eventId);
+            $event = $this->get($event_id);
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($event);
 
             $converter = Tinebase_Convert_Factory::factory($event);
@@ -124,7 +181,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         return $response;
     }
 
-    public function publicApiGetEventContactDetails($token, $eventId)
+    public function publicApiGetEventContactDetails($token, $event_id)
     {
         $assertAclUsage = $this->assertPublicUsage();
         try {
@@ -134,9 +191,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 }
                 try {
                     $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
-                    $emailParticipant = $decoded->email ?? '';
-                    $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($emailParticipant);
-                    $registrationId = '';
+                    $email_participant = $decoded->email ?? '';
+                    $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_participant);
+                    $registration_id = '';
 
                     if (!empty($contact)) {
                         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -145,7 +202,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                                 [
                                     'field' => EventManager_Model_Registration::FLD_EVENT_ID,
                                     'operator' => 'equals',
-                                    'value' => $eventId
+                                    'value' => $event_id
                                 ],
                                 [
                                     'field' => EventManager_Model_Registration::FLD_NAME,
@@ -154,25 +211,25 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                                 ],
                             ],
                         );
-                        $registerParticipant = EventManager_Controller_Registration::getInstance()
+                        $register_participant = EventManager_Controller_Registration::getInstance()
                             ->search($filter)->getFirstRecord();
-                        if (!empty($registerParticipant)) {
-                            $registrationId = $registerParticipant->getId();
+                        if (!empty($register_participant)) {
+                            $registration_id = $register_participant->getId();
                         }
-                        $participantData = [$contact->toArray(), $registrationId];
+                        $participant_data = [$contact->toArray(), $registration_id];
                         $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write(json_encode($participantData));
+                        $response->getBody()->write(json_encode($participant_data));
                     }
 
                     if (empty($contact)) {
                         $contact = [
-                            'email' => $emailParticipant,
+                            'email' => $email_participant,
                             'n_given' => $decoded->n_given ?? '',
                             'n_family' => $decoded->n_family ?? '',
                         ];
-                        $participantData = [$contact, $registrationId];
+                        $participant_data = [$contact, $registration_id];
                         $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write(json_encode($participantData));
+                        $response->getBody()->write(json_encode($participant_data));
                     }
                     return $response;
                 } catch (Exception $jwtException) {
