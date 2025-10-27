@@ -131,6 +131,7 @@ class Sales_Document_Abstract extends TestCase
                     Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
                     Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
                 ], true),
             ])
         ]));

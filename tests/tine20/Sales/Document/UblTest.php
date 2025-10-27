@@ -95,6 +95,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 1,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
         ];
         $invoice = $this->_createUblInvoice($positions);
@@ -130,6 +131,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 1,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
         ];
         $customer = $this->_createCustomer(additionalCustomerData: ['discount' => 10]);
@@ -152,6 +154,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 1,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
                 SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01
             ], true),
@@ -161,6 +164,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 5,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
                 SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.1
             ], true)
@@ -280,7 +284,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE => 1,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
-                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01
+                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
             new SMDPI([
                 SMDPI::FLD_TITLE => 'pos 2',
@@ -289,7 +294,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE => 5,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
-                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.1
+                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.1,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true)
         ];
         $invoice = $this->_createUblInvoice($positions);
@@ -311,7 +317,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE => 1,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
-                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01
+                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
             new SMDPI([
                 SMDPI::FLD_TITLE => 'pos 2',
@@ -320,7 +327,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE => 5,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
-                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01
+                SMDPI::FLD_POSITION_DISCOUNT_SUM => 0.01,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true)
         ];
         $invoice = $this->_createUblInvoice($positions, [
@@ -346,6 +354,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 10,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
         ];
         $buyRef = 'buy refüÜß³';
@@ -379,7 +388,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_UNIT_PRICE => 10,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_GROSS,
                 SMDPI::FLD_POSITION_DISCOUNT_TYPE => Sales_Config::INVOICE_DISCOUNT_SUM,
-                SMDPI::FLD_POSITION_DISCOUNT_SUM => 1.01
+                SMDPI::FLD_POSITION_DISCOUNT_SUM => 1.01,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
             new SMDPI([
                 SMDPI::FLD_TITLE => 'pos 2',
@@ -425,6 +435,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                 SMDPI::FLD_QUANTITY => 1,
                 SMDPI::FLD_UNIT_PRICE => 10,
                 SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
             ], true),
         ];
         $invoice = $this->_createUblInvoice($positions, [
