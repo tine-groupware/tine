@@ -25,6 +25,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE009 = self::class . '::update009';
     protected const RELEASE018_UPDATE010 = self::class . '::update010';
     protected const RELEASE018_UPDATE011 = self::class . '::update011';
+    protected const RELEASE018_UPDATE012 = self::class . '::update012';
 
 
     static protected $_allUpdates = [
@@ -72,6 +73,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE018_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -268,5 +273,18 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
+    }
+
+    public function update012(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_WebDavIssue::class,
+        ]);
+
+        Tinebase_Scheduler_Task::addReportWebDavIssuesTask(Tinebase_Scheduler::getInstance());
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.12', self::RELEASE018_UPDATE012);
     }
 }

@@ -576,6 +576,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_User::class,
                 Tinebase_Model_UserPassword::class,
                 Tinebase_Model_WebauthnPublicKey::class,
+                Tinebase_Model_WebDavIssue::class,
                 Tinebase_Model_WebDavLock::class,
                 Tinebase_Model_BankAccount::class,
             ),
