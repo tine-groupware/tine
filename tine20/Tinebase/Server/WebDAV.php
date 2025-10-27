@@ -330,13 +330,42 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     . ' Maintenance mode / session problem: ' . $zse->getMessage());
             }
             @header('HTTP/1.1 503 Service Unavailable');
+            $this->_reportWebDavIssue($zse);
         } catch (Tinebase_Exception_RateLimit $ter) {
             @header('HTTP/1.1 429 Too Many Requests');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
+            $this->_reportWebDavIssue($e);
         }
         unset($calResourceCtrlRaii);
+    }
+
+    protected function _reportWebDavIssue(Throwable $t): void
+    {
+        $cfg = Tinebase_Config::getInstance()->{Tinebase_Config::REPORT_WEBDAV};
+        if (!$cfg->{Tinebase_Config::REPORT_WEBDAV_AFFECTED_USER} &&
+                !$cfg->{Tinebase_Config::REPORT_WEBDAV_USER_LIST}) {
+            return;
+        }
+
+        if (null !== $this->_body) {
+            rewind($this->_body);
+        }
+        $hdrs = $this->_request->getHeaders()->toArray();
+        if (isset($hdrs['authorization'])) {
+            $hdrs['authorization'] = '*****';
+        }
+
+        Tinebase_Controller_WebDavIssue::getInstance()->create(new Tinebase_Model_WebDavIssue([
+            Tinebase_Model_WebDavIssue::FLD_CREATION_TIME => Tinebase_DateTime::now(),
+            Tinebase_Model_WebDavIssue::FLD_EXCEPTION => serialize($t),
+            Tinebase_Model_WebDavIssue::FLD_URI => $this->_request->getUri()->toString(),
+            Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD => strtoupper($this->_request->getMethod()),
+            Tinebase_Model_WebDavIssue::FLD_REQUEST_HEADERS => print_r($hdrs, true),
+            Tinebase_Model_WebDavIssue::FLD_REQUEST_BODY => null !== $this->_body ? stream_get_contents($this->_body, 100 * 1024 * 1024) : null,
+            Tinebase_Model_WebDavIssue::FLD_ACCOUNT_ID => Tinebase_Core::getUser()?->getId(),
+        ]));
     }
 
     protected function _sendUnauthorizedHeader()

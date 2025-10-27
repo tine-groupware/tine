@@ -787,7 +787,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         foreach($diff->modified as $data) {
             $diff = new Tinebase_Record_Diff();
             $diff->id = $data[$idProperty];
-            $diff->diff = $data;
+            $diff->diff = $data['diff'];
             if (false === ($record = $this->getById($diff->getId()))) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Did not find the record supposed to be modified with id: ' . $data[$idProperty]);

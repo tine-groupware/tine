@@ -460,6 +460,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
 
+    public const REPORT_WEBDAV = 'reportWebdav';
+    public const REPORT_WEBDAV_USER_LIST = 'userList';
+    public const REPORT_WEBDAV_AFFECTED_USER = 'affectedUser';
+
     /**
      * uri for sentry service (https://sentry.io)
      *
@@ -1527,6 +1531,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
             ),
         ),
+        self::REPORT_WEBDAV => [
+            self::LABEL => 'Report WebDAV issues', //_('Report WebDAV issues')
+            self::DESCRIPTION => 'Report WebDAV issues',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::CONTENT => [
+                self::REPORT_WEBDAV_AFFECTED_USER => [
+                    self::TYPE => Tinebase_Config::TYPE_BOOL,
+                    self::DEFAULT_STR => false,
+                ],
+                self::REPORT_WEBDAV_USER_LIST => [
+                    self::TYPE => Tinebase_Config::TYPE_ARRAY,
+                    self::DEFAULT_STR => [],
+                ],
+            ],
+            self::DEFAULT_STR => [],
+        ],
         self::REPLICATION_SLAVE => array(
             //_('Replication slave configuration')
             self::LABEL => 'Replication slave configuration',
