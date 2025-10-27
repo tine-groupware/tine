@@ -238,7 +238,8 @@ release-update-tests:
     - if: $PIPELINE_TYPE =~ /release-customer(,|$)/ && $RELEASE_UPDATE_TEST_START_REF
       variables:
         RELEASE_TYPE: customer
-    - changes:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
         paths:
           - tine20/Setup/**/*
           - tine20/*/Setup/**/*
