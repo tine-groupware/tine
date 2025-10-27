@@ -26,6 +26,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const REGISTRATION_FUNCTION = 'registrationFunction';
     public const REGISTRATION_SOURCE = 'registrationSource';
     public const REGISTRATION_STATUS = 'registrationStatus';
+    public const REGISTRATION_WAITING_LIST = 'registrationWaitingList';
     public const APPOINTMENT_STATUS = 'appointmentStatus';
     public const OPTION_LEVEL = 'optionLevel';
     public const DISPLAY_TYPE = 'displayType';
@@ -95,6 +96,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
                     ['id' => 1,      'value' => 'Attendee'], //_('Attendee')
                     ['id' => 2,      'value' => 'Speaker'], //_('Speaker')
                     ['id' => 3,      'value' => 'Moderator'], //_('Moderator')
+                    ['id' => 4,      'value' => 'Employee'], //_('Employee')
                 ],
                 self::DEFAULT_STR => 1
             ]
@@ -128,6 +130,22 @@ class EventManager_Config extends Tinebase_Config_Abstract
                     ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
                 ],
                 self::DEFAULT_STR => 1
+            ]
+        ],
+
+        self::REGISTRATION_WAITING_LIST => [
+            self::LABEL                 => 'Reason Waiting List', //_('Reason Waiting List')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR               => [
+                self::RECORDS  => [
+                    ['id' => 1,      'value' => 'Capacity exceeded'], //_('Capacity exceeded')
+                    ['id' => 2,      'value' => 'Registration deadline passed'], //_('Registration deadline passed')
+                    ['id' => 3,      'value' => 'Other'], //_('Other')
+                ],
+                self::DEFAULT_STR => 3
             ]
         ],
 

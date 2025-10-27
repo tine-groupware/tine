@@ -1,0 +1,28 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+    event
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ _('Waiting List') }}
+{% endblock %}
+
+{% block body %}
+    {% if event != '' %}
+        <div class="mt-3 mb-5">
+            <p class="text-start">
+                {{ _('Thank you for your interest!') }}<br>
+                {{ _('Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you.') | format(event.name) }}<br>
+                {{ _('To find other events or manage your registration, please follow the link below') }}
+            </p>
+        </div>
+    {% endif %}
+    <div class="ax-center my-5">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('Events') }}</a>
+    </div>
+{% endblock %}

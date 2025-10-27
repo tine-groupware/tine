@@ -118,20 +118,40 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS)
             ->records->getById('1');
 
+        //options
+        // checkboxen
         $erwachsene = $this->setOptionConfigCheckboxDemoData(225, 'Übernachtung');
         $kinder17 = $this->setOptionConfigCheckboxDemoData(120, 'Übernachtung');
         $kinder9 = $this->setOptionConfigCheckboxDemoData(90, 'Übernachtung');
         $kinder3 = $this->setOptionConfigCheckboxDemoData(0, 'Übernachtung kostenlos');
+        $fleisch = $this->setOptionConfigCheckboxDemoData(20, 'Rinderroulade');
+        $vegetarisch= $this->setOptionConfigCheckboxDemoData(18, 'Gnocchi mit Pilzen und Spinat');
+        $vegan = $this->setOptionConfigCheckboxDemoData(18, 'Gnocchi mit Pilzen und Spinat');
 
+        // files
+        $fileoption_acknowledgement = $this->setOptionConfigFileDemoData(true);
+        $fileoption_upload = $this->setOptionConfigFileDemoData(false);
+
+        //text input
+        $allergien = $this->setOptionConfigTextInputDemoData('Allergien: ', true, 50);
+
+        //text output
+        $unterscheriben = $this->setOptionConfigTextDemoData('Bitte laden Sie das unterschriebene Dokument hoch');
+
+        // registrations
         $christoph = $this->getContact('Christoph', 'Riethmüller');
         $daniela = $this->getContact('Daniela', 'Braker');
         $heiner = $this->getContact('Heiner', 'Arden');
         $alexandra = $this->getContact('Alexandra', 'Avermiddig');
 
+        //appointments
+        $appointment_status = EventManager_Config::getInstance()->get(EventManager_Config::APPOINTMENT_STATUS)
+            ->records->getById('1');
+
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Familienexerzitien 2025',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-20"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-24"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-20 17:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-24 13:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-21"),
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -142,10 +162,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [
                 [
-                EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
-                EventManager_Model_Option::FLD_OPTION_CONFIG => $erwachsene,
-                EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
-                EventManager_Model_Option::FLD_GROUP => 'Kosten',
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $erwachsene,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Kosten',
                 ],
                 [
                     EventManager_Model_Option::FLD_NAME_OPTION => 'Kinder 10-17 Jahre',
@@ -271,8 +291,8 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Modul 1',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-17"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-18"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-17 18:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-18 18:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-15"),
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -301,8 +321,8 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Modul 2',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-07"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-09"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-07 18:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-09 18:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -330,8 +350,8 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Modul 3',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-17"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-18"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-17 15:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-18 16:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -351,8 +371,8 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
         // event 6
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Gesänge für die Advents- und Weihnachtszeit',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-08"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-08"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-08 10:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-08 17:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-15"),
             EventManager_Model_Event::FLD_LOCATION                      => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -377,8 +397,8 @@ und aus weiteren Materialien vorgestellt.',
         // event 7
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Eingeladen zum Fest des Glaubens',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-20"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-20"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-20 19:30:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-20 21:30:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-11-20"),
             EventManager_Model_Event::FLD_LOCATION                      => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -399,8 +419,8 @@ www.kindergottesdienst-katholisch.de',
         // event 8
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Religiöse Vielfalt in der Kita religionssensibel begegnen',
-            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-08"),
-            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-08"),
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-08 00:00:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-08 23:45:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-15"),
             EventManager_Model_Event::FLD_LOCATION                      => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
@@ -427,7 +447,146 @@ Und das soll Ihnen dieser Kurs auch bieten. Hinzukommt die intensive Auseinander
 die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
         ]));
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 8 test events'
+        // event 9
+        EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
+            EventManager_Model_Event::FLD_NAME                          => 'Katholisch werden',
+            EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-13 09:30:00"),
+            EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-16 19:30:00"),
+            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-10-12"),
+            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_TYPE                          => $event_type,
+            EventManager_Model_Event::FLD_STATUS                        => $event_status,
+            EventManager_Model_Event::FLD_FEE                           => 5,
+            EventManager_Model_Event::FLD_TOTAL_PLACES                  => 20,
+            EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
+            EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
+            EventManager_Model_Event::FLD_OPTIONS                       => [
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $erwachsene,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Kosten',
+                    EventManager_Model_Option::FLD_SORTING => 4,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Kinder 10-17 Jahre',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $kinder17,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Kosten',
+                    EventManager_Model_Option::FLD_SORTING => 3,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Kinder 4-9 Jahre',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $kinder9,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Kosten',
+                    EventManager_Model_Option::FLD_SORTING => 2,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Kinder 0-3 Jahre',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $kinder3,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Kosten',
+                    EventManager_Model_Option::FLD_SORTING => 1,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Einwilligungserklärung',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $fileoption_upload,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
+                    EventManager_Model_Option::FLD_GROUP => '',
+                    EventManager_Model_Option::FLD_SORTING => 6,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Datenschutzerklärung',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $fileoption_acknowledgement,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_FileOption::class,
+                    EventManager_Model_Option::FLD_GROUP => '',
+                    EventManager_Model_Option::FLD_SORTING => 7,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Fleisch',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $fleisch,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Essen',
+                    EventManager_Model_Option::FLD_SORTING => 1,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Vegetarisch',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $vegetarisch,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Essen',
+                    EventManager_Model_Option::FLD_SORTING => 2,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Vegan',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $vegan,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_CheckboxOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Essen',
+                    EventManager_Model_Option::FLD_SORTING => 3,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Allergien',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $allergien,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextInputOption::class,
+                    EventManager_Model_Option::FLD_GROUP => 'Essen',
+                    EventManager_Model_Option::FLD_SORTING => 4,
+                ],
+                [
+                    EventManager_Model_Option::FLD_NAME_OPTION => 'Unterschrift benötigt',
+                    EventManager_Model_Option::FLD_OPTION_CONFIG => $unterscheriben,
+                    EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS => EventManager_Model_TextOption::class,
+                    EventManager_Model_Option::FLD_GROUP => '',
+                    EventManager_Model_Option::FLD_SORTING => 5,
+                ],
+            ],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [
+                [
+                    EventManager_Model_Registration::FLD_NAME => $alexandra,
+                ],
+                [
+                    EventManager_Model_Registration::FLD_NAME => $daniela,
+                ],
+                [
+                    EventManager_Model_Registration::FLD_NAME => $christoph,
+                ],
+            ],
+            EventManager_Model_Event::FLD_APPOINTMENTS                  => [
+                [
+                    EventManager_Model_Appointment::FLD_SESSION_NUMBER => 1,
+                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-13"),
+                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("11:30:00"),
+                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("14:00:00"),
+                    EventManager_Model_Appointment::FLD_STATUS => $appointment_status,
+                    EventManager_Model_Appointment::FLD_DESCRIPTION => 'Was bedeutet es, katholisch zu sein? Wie läuft der Eintritt in die katholische Kirche ab?',
+                ],
+                [
+                    EventManager_Model_Appointment::FLD_SESSION_NUMBER => 2,
+                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-16"),
+                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("17:00:00"),
+                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("20:00:00"),
+                    EventManager_Model_Appointment::FLD_STATUS => $appointment_status,
+                    EventManager_Model_Appointment::FLD_DESCRIPTION => 'Welche Werte, Rituale und Feste prägen den katholischen Glauben? Wie kann ich meinen eigenen Glaubensweg gestalten?',
+                ],
+            ],
+            EventManager_Model_Event::FLD_DESCRIPTION                   => '„Katholisch werden“ ist eine offene Veranstaltung für alle, die sich für den katholischen Glauben interessieren, Fragen zur Kirche haben oder darüber nachdenken, selbst den Schritt in die katholische Gemeinschaft zu gehen. In einer einladenden und respektvollen Atmosphäre bieten wir Raum für Gespräche, Begegnungen und ehrliche Fragen.
+
+Gemeinsam mit Seelsorgerinnen und Seelsorgern, Katechumenatsbegleiterinnen und Menschen, die den Weg des Glaubens bereits gegangen sind, sprechen wir über Themen wie:
+
+Was bedeutet es, katholisch zu sein?
+
+Wie läuft der Eintritt in die katholische Kirche ab?
+
+Welche Werte, Rituale und Feste prägen den katholischen Glauben?
+
+Wie kann ich meinen eigenen Glaubensweg gestalten?
+
+Neben kurzen Impulsen gibt es Austausch in Kleingruppen, Erfahrungsberichte und die Möglichkeit zu persönlichen Gesprächen.
+
+Zielgruppe:
+Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach neugierig sind.',
+        ]));
+
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 9 test events'
             . EventManager_Model_Event::MODEL_NAME_PART);
     }
 
@@ -481,6 +640,46 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
             'booked_places' => '',
             'available_places' => '',
             'description' => $description,
+        ]);
+    }
+
+    protected function setOptionConfigFileDemoData($file_acknowledgement = true): EventManager_Model_FileOption
+    {
+        $path = dirname(__FILE__, 4) .'/tests/tine20/Filemanager/files/test.txt';
+        $tempfile = $this->_getTempFile($path);
+        return new EventManager_Model_FileOption([
+            'node_id' => $tempfile->getId(),
+            'file_name' => $tempfile->name,
+            'file_type' => $tempfile->type,
+            'file_size' => $tempfile->size,
+            'file_acknowledgement' => $file_acknowledgement,
+            'file_upload' => !$file_acknowledgement,
+        ]);
+    }
+
+    protected function _getTempFile($path = null, $filename = 'test.txt', $type = 'text/plain'): Tinebase_Model_TempFile
+    {
+        $tempFileBackend = new Tinebase_TempFile();
+        $handle = fopen($path ?: dirname(__FILE__) . '/Filemanager/files/test.txt', 'r');
+        $tempfile = $tempFileBackend->createTempFileFromStream($handle, $filename, $type);
+        fclose($handle);
+        return $tempfile;
+    }
+
+    protected function setOptionConfigTextInputDemoData($text, $multiple_lines = true, $max_characters = 0): EventManager_Model_TextInputOption
+    {
+        return new EventManager_Model_TextInputOption([
+            'text' => $text,
+            'multiple_lines' => $multiple_lines,
+            'max_characters' => $max_characters,
+            'only_numbers' => !$multiple_lines,
+        ]);
+    }
+
+    protected function setOptionConfigTextDemoData($text): EventManager_Model_TextOption
+    {
+        return new EventManager_Model_TextOption([
+            'text' => $text,
         ]);
     }
 }

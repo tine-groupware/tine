@@ -299,7 +299,12 @@
           <b-button @click="handleModalClose" variant="primary">OK</b-button>
         </b-modal>
       </b-col>
-      <div class="text-end mb-3">
+      <div v-if="isAlreadyRegistered">
+        <div class="text-end mb-3">
+          <b-button class="mt-3" @click="postRegistration">{{formatMessage('Update Registration')}}</b-button>
+        </div>
+      </div>
+      <div v-else class="text-end mb-3">
         <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
       </div>
     </b-row>
@@ -361,6 +366,7 @@ const modalTitle = ref('');
 const modalMessage = ref('');
 const validationErrors = ref([]);
 const isVerifyEmail = ref(false);
+const isAlreadyRegistered = ref(false);
 const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
 const salutations = ref([
   { value: 'MR', text: formatMessage('Mr') },
@@ -852,6 +858,7 @@ async function getEventContactDetails() {
       const registrations = eventDetails._value.registrations || [];
       for(const registration of registrations) {
         if (registration.id === registrationId) {
+          isAlreadyRegistered.value = true;
           const bookedOptions = registration.booked_options || [];
           for(const bookedOption of bookedOptions) {
             const optionId = bookedOption.option.id;

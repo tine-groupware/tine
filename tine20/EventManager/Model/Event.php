@@ -101,14 +101,14 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_START     => [
-                self::TYPE          => self::TYPE_DATE,
+                self::TYPE          => self::TYPE_DATETIME,
                 self::LABEL         => 'Event start', // _('Event start')
                 self::NULLABLE      => true,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
             ],
             self::FLD_END       => [
-                self::TYPE          => self::TYPE_DATE,
+                self::TYPE          => self::TYPE_DATETIME,
                 self::LABEL         => 'Event end', // _('Event end')
                 self::NULLABLE      => true,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -168,19 +168,23 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::TYPE              => self::TYPE_INTEGER,
                 self::LABEL             => 'Booked places', // _('Booked places')
                 self::NULLABLE          => true,
-                self::READ_ONLY         => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
                 self::ALLOW_CAMEL_CASE  => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_AVAILABLE_PLACES  => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::LABEL                 => 'Available places', // _('Available places')
                 self::NULLABLE              => true,
-                self::READ_ONLY             => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
                 self::ALLOW_CAMEL_CASE      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_OPTIONS       => [
                 self::TYPE              => self::TYPE_RECORDS,

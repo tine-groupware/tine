@@ -44,8 +44,11 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        self::assertEquals($option->event_id, $createdOption->event_id);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        self::assertEquals(
+            $option->{EventManager_Model_Option::FLD_EVENT_ID},
+            $created_option->{EventManager_Model_Option::FLD_EVENT_ID}
+        );
     }
 
     /**
@@ -56,8 +59,11 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $registration = $this->_getRegistration($event->getId());
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
-        self::assertEquals($registration->event_id, $createdRegistration->event_id);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
+        self::assertEquals(
+            $registration->{EventManager_Model_Registration::FLD_EVENT_ID},
+            $created_registration->{EventManager_Model_Registration::FLD_EVENT_ID}
+        );
     }
 
     /**
@@ -68,23 +74,30 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
-        self::assertEquals($createdRegistration->event_id, $registration->event_id);
-        self::assertEquals(1, count($createdRegistration->booked_options));
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $created_option);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
+        self::assertEquals(
+            $created_registration->{EventManager_Model_Registration::FLD_EVENT_ID},
+            $registration->{EventManager_Model_Registration::FLD_EVENT_ID}
+        );
+        self::assertEquals(1, count($created_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}));
 
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
-        $event->{EventManager_Model_Event::FLD_OPTIONS}->removeById($createdOption->getId());
+        $event->{EventManager_Model_Event::FLD_OPTIONS}->removeById($created_option->getId());
         EventManager_Controller_Event::getInstance()->update($event);
         try {
-            EventManager_Controller_Option::getInstance()->get($createdOption->getId());
+            EventManager_Controller_Option::getInstance()->get($created_option->getId());
             self::fail('option should be deleted');
         } catch (Tinebase_Exception_NotFound $tenf) {}
         // check if is also deleted in registrations
-        $registrationWithoutBookedOption = EventManager_Controller_Registration::getInstance()->get($registration->getId());
-        Tinebase_Record_Expander::expandRecord($registrationWithoutBookedOption);
-        self::assertEquals(null, $registrationWithoutBookedOption->booked_options->getFirstRecord());
+        $registration_without_booked_option = EventManager_Controller_Registration::getInstance()
+            ->get($registration->getId());
+        Tinebase_Record_Expander::expandRecord($registration_without_booked_option);
+        self::assertEquals(
+            null,
+            $registration_without_booked_option->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->getFirstRecord()
+        );
     }
 
     /**
@@ -95,23 +108,43 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $created_option);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
 
         // check if available places have been reduced by 1 and booked places add 1
-        $updatedOption = EventManager_Controller_Option::getInstance()->get($createdOption->getId());
-        self::assertEquals( $createdOption->option_config->available_places - 1, $updatedOption->option_config->available_places);
-        self::assertEquals( $createdOption->option_config->booked_places + 1, $updatedOption->option_config->booked_places);
+        $updated_option = EventManager_Controller_Option::getInstance()->get($created_option->getId());
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES} - 1,
+            $updated_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}
+        );
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES} + 1,
+            $updated_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}
+        );
 
         // delete booked_options from registration
-        $createdRegistration->booked_options = [];
-        EventManager_Controller_Registration::getInstance()->update($createdRegistration);
+        $created_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = [];
+        EventManager_Controller_Registration::getInstance()->update($created_registration);
 
-        $optionAfterDelete = EventManager_Controller_Option::getInstance()->get($option->getId());
+        $option_after_delete = EventManager_Controller_Option::getInstance()->get($option->getId());
         // check if available places and booked places back to start
-        self::assertEquals($createdOption->option_config->available_places, $optionAfterDelete->option_config->available_places);
-        self::assertEquals($createdOption->option_config->booked_places, $optionAfterDelete->option_config->booked_places);
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES},
+            $option_after_delete->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}
+        );
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES},
+            $option_after_delete->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+            ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}
+        );
     }
 
     /**
@@ -122,17 +155,27 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $created_option);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
 
-        $createdRegistration->booked_options[0]->selection_config->booked = false;
-        EventManager_Controller_Registration::getInstance()->update($createdRegistration);
+        $created_registration->booked_options[0]->selection_config->booked = false;
+        EventManager_Controller_Registration::getInstance()->update($created_registration);
 
         // check if available places have been increased again by 1, since value changed from true -> false
-        $updatedOption = EventManager_Controller_Option::getInstance()->get($option->getId());
-        self::assertEquals($createdOption->option_config->available_places, $updatedOption->option_config->available_places);
-        self::assertEquals($createdOption->option_config->booked_places, $updatedOption->option_config->booked_places);
+        $updated_option = EventManager_Controller_Option::getInstance()->get($option->getId());
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES},
+            $updated_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_AVAILABLE_PLACES}
+        );
+        self::assertEquals(
+            $created_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES},
+            $updated_option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                ->{EventManager_Model_CheckboxOption::FLD_BOOKED_PLACES}
+        );
     }
 
     public function testFileOptionFileUpload()
@@ -140,16 +183,16 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
-        $tempfId = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+        $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
 
         //check that file node is returned
         $node_id = $event->{EventManager_Model_Event::FLD_OPTIONS}->getFirstRecord()
             ->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
-        self::assertNotEquals($tempfId, $node_id);
+        self::assertNotEquals($tempf_id, $node_id);
     }
 
     public function testFileUploadToRegistration()
@@ -157,11 +200,11 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
-        $tempfId = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+        $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $created_option);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
 
         //check that file node is returned
@@ -169,7 +212,7 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->getFirstRecord()
             ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
             ->{EventManager_Model_Selections_File::FLD_NODE_ID};
-        self::assertNotEquals($tempfId, $node_id);
+        self::assertNotEquals($tempf_id, $node_id);
     }
 
     public function testFileUploadToRegistrationAnonymousUser()
@@ -177,15 +220,15 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
-        $tempfId = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+        $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
             ->{EventManager_Model_FileOption::FLD_NODE_ID};
-        $createdOption = EventManager_Controller_Option::getInstance()->create($option);
-        $registration = $this->_getRegistration($event->getId(), $createdOption);
+        $created_option = EventManager_Controller_Option::getInstance()->create($option);
+        $registration = $this->_getRegistration($event->getId(), $created_option);
         //anonymous user
         $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
         Tinebase_Core::setUser($user);
 
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
 
         //check that file node is returned
@@ -193,7 +236,7 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}->getFirstRecord()
             ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
             ->{EventManager_Model_Selections_File::FLD_NODE_ID};
-        self::assertNotEquals($tempfId, $node_id);
+        self::assertNotEquals($tempf_id, $node_id);
     }
 
     public function testMoreThanOneBookedOptionTypeToRegistration()
@@ -201,14 +244,46 @@ class EventManager_ControllerTest extends TestCase
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
         $option1 = $this->_getOption($event->getId());
-        $createdOption1 = EventManager_Controller_Option::getInstance()->create($option1);
+        $created_option1 = EventManager_Controller_Option::getInstance()->create($option1);
         $option2 = $this->_getFileOption($event->getId());
-        $createdOption2 = EventManager_Controller_Option::getInstance()->create($option2);
-        $bookedOptions = [$createdOption1, $createdOption2];
-        $registration = $this->_getRegistration($event->getId(), $bookedOptions);
-        $createdRegistration = EventManager_Controller_Registration::getInstance()->create($registration);
-        self::assertEquals(count($createdRegistration->booked_options), count($bookedOptions));
+        $created_option2 = EventManager_Controller_Option::getInstance()->create($option2);
+        $booked_options = [$created_option1, $created_option2];
+        $registration = $this->_getRegistration($event->getId(), $booked_options);
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
+        self::assertEquals(
+            count($created_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}),
+            count($booked_options)
+        );
     }
+
+
+    public function testAddAndDeleteRegistration()
+    {
+        $this->_testNeedsTransaction(); //registerOnCommitCallback
+
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $booked_places = $created_event->{EventManager_Model_Event::FLD_BOOKED_PLACES};
+        $available_places = $created_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
+        $registration = $this->_getRegistration($event->getId());
+        $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
+        $created_event->{EventManager_Model_Event::FLD_REGISTRATIONS}->addRecord($created_registration);
+        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        self::assertEquals(1, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
+        self::assertEquals($booked_places + 1, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+        self::assertEquals($available_places - 1, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
+
+        $updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}->removeById($registration->getId());
+        EventManager_Controller_Event::getInstance()->update($updated_event);
+        $updated_event = EventManager_Controller_Event::getInstance()->get($updated_event->getId());
+        self::assertEquals(0, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
+        self::assertEquals($booked_places, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+        self::assertEquals($available_places, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
+
+        // Make sure that event is deleted because we don't use the unittest transaction
+        EventManager_Controller_Event::getInstance()->delete($updated_event);
+    }
+
 
     /************ protected helper funcs *************/
 
@@ -220,9 +295,9 @@ class EventManager_ControllerTest extends TestCase
      */
     protected function _getEvent(): EventManager_Model_Event
     {
-        $adbController = Addressbook_Controller_Contact::getInstance();
+        $adb_controller = Addressbook_Controller_Contact::getInstance();
 
-        $contact = $adbController->create(new Addressbook_Model_Contact([
+        $contact = $adb_controller->create(new Addressbook_Model_Contact([
             'n_family' => 'test contact',
             'adr_one_street' => 'test Str. 1',
             'adr_one_postalcode' => '1234',
@@ -234,8 +309,8 @@ class EventManager_ControllerTest extends TestCase
 
         return new EventManager_Model_Event([
             'name'                          => 'phpunit event',
-            'start'                         => new Tinebase_DateTime("2025-05-28"),
-            'end'                           => new Tinebase_DateTime("2025-05-31"),
+            'start'                         => new Tinebase_DateTime("2025-05-28 17:00:00"),
+            'end'                           => new Tinebase_DateTime("2025-05-31 20:30:00"),
             'location'                      => $contact,
             'type'                          => $event_type,
             'status'                        => $event_status,
@@ -335,40 +410,40 @@ class EventManager_ControllerTest extends TestCase
      */
     protected function _getRegistration($event_id, $options = null): EventManager_Model_Registration
     {
-        $defaultValues = EventManager_Controller_Registration::getInstance()->getDefaultRegistrationKeyFields();
+        $default_values = EventManager_Controller_Registration::getInstance()->getDefaultRegistrationKeyFields();
 
         if (is_array($options)) {
-            $bookedOption = [];
+            $booked_option = [];
             foreach ($options as $option) {
-                $bookedOption[] = $this->_getBookedOption($event_id, $option);
+                $booked_option[] = $this->_getBookedOption($event_id, $option);
             }
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $defaultValues['function'],
-                'source'                 => $defaultValues['source'],
-                'status'                 => $defaultValues['status'],
-                'booked_options'         => $bookedOption,
+                'function'               => $default_values['function'],
+                'source'                 => $default_values['source'],
+                'status'                 => $default_values['status'],
+                'booked_options'         => $booked_option,
                 'description'            => 'description test phpunit registration',
             ], true);
         } else if ($options) {
-            $bookedOption = $this->_getBookedOption($event_id, $options);
+            $booked_option = $this->_getBookedOption($event_id, $options);
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $defaultValues['function'],
-                'source'                 => $defaultValues['source'],
-                'status'                 => $defaultValues['status'],
-                'booked_options'         => [$bookedOption],
+                'function'               => $default_values['function'],
+                'source'                 => $default_values['source'],
+                'status'                 => $default_values['status'],
+                'booked_options'         => [$booked_option],
                 'description'            => 'description test phpunit registration',
             ], true);
         } else {
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'name'                   => 'phpunit registration',
-                'function'               => $defaultValues['function'],
-                'source'                 => $defaultValues['source'],
-                'status'                 => $defaultValues['status'],
+                'function'               => $default_values['function'],
+                'source'                 => $default_values['source'],
+                'status'                 => $default_values['status'],
                 'booked_options'         => [],
                 'description'            => 'description test phpunit registration',
             ], true);
@@ -379,10 +454,14 @@ class EventManager_ControllerTest extends TestCase
     {
         if ($option->option_config_class === EventManager_Model_FileOption::class) {
             $selection_config = new EventManager_Model_Selections_File([
-                'node_id'   => $option->option_config->node_id,
-                'file_name' => $option->option_config->file_name,
-                'file_type' => $option->option_config->file_type,
-                'file_size' => $option->option_config->file_size,
+                'node_id'   => $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                    ->{EventManager_Model_FileOption::FLD_NODE_ID},
+                'file_name' => $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                    ->{EventManager_Model_FileOption::FLD_FILE_NAME},
+                'file_type' => $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                    ->{EventManager_Model_FileOption::FLD_FILE_TYPE},
+                'file_size' => $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
+                    ->{EventManager_Model_FileOption::FLD_FILE_SIZE},
             ], true);
             return new EventManager_Model_BookedOption([
                 'event_id' => $event_id,
