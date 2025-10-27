@@ -3,7 +3,7 @@ TINE RELEASE NOTES
 =====================
                     
   Release:     Liva (2025.11)
-  Last change: 2025-10-20
+  Last change: 2025-10-27
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -18,8 +18,10 @@ TINE RELEASE NOTES
 - download pages
 - consent pages
 - and more
+## edit dialog: tab-panel got horizontal scroll-icons
 
 ## clientside markdown support
+- only display, editors do not support md yet
 
 # ADMIN / OPERATION
 
@@ -27,13 +29,14 @@ TINE RELEASE NOTES
 ## Scheduler tasks can be edited and disabled
 ## disable custom fields
 ## log login failures by client
+- each client has its own failure counter
 
 # SSO
 
 ## improved external IDP usage
 ## support for more auth workflows (token, device,...)
-- TODO add more info
-- 
+- for example support for MS authenticator (azure)
+
 # ADDRESSBOOK
 
 # CALENDAR
@@ -44,12 +47,13 @@ TINE RELEASE NOTES
 
 ## add weekday filter
 ## support for monthly series events for 5th weekday
+## send emails only to attendee with a certain status (ACCEPTED, DECLINED ...)
 
 # EMAIL
 
 ## Extended mass-mailing functionality (see GDPR)
 ## E-Mail Templating and nicer Bootstrap-Layouts
-## xoauth2 sasl auth
+## (x)oauth2 sasl auth for IMAP/SMTP servers 
 ## add support for png and gif images to select image
 ## Add inserting images to signature editor
 
@@ -78,7 +82,7 @@ TINE RELEASE NOTES
 # TIME TRACKER
 
 ## show/edit correlated timesheets (series of multi day timesheets)
-## Customizable XLSX export (twig template)
+## Customizable XLSX export (with twig template)
 
 # EVENT MANAGER
 
@@ -87,10 +91,6 @@ TINE RELEASE NOTES
 # CREW SCHEDULING
 
 - A new App has been added for managing / scheduling tasks/shifts for a defined set of attendee.   
-
-# SAAS INSTANCE
-
-- A new App has been added for managing tine SaaS-instances with special confirmation dialogs, job logs and more.
 
 # MATRIX SYNAPSE INTEGRATOR
 
@@ -101,7 +101,13 @@ TINE RELEASE NOTES
 
 ## Element client integration
 ## matrix directory export
+- export tine addressbook to matrix server
 
-# PURCHASES
+# PURCHASING
 
 - Added as new app (moved modules from Sales)
+- consists of Suppliers & PurchaseInvoices
+
+# SAAS INSTANCE
+
+- A new App has been added for managing tine SaaS-instances with special confirmation dialogs, action logs and more.
