@@ -213,6 +213,12 @@ msgstr ""
 msgid "The session should end after it begun. Please change the end time, or it would be deleted"
 msgstr ""
 
+msgid "Waiting List"
+msgstr ""
+
+msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+msgstr ""
+
 msgid "Imprint"
 msgstr ""
 
@@ -295,6 +301,9 @@ msgid "I have read and accept the terms and conditions"
 msgstr ""
 
 msgid "Uploaded file"
+msgstr ""
+
+msgid "Update Registration"
 msgstr ""
 
 msgid "Complete Registration"
@@ -651,6 +660,15 @@ msgstr ""
 msgid "Enter your email address"
 msgstr ""
 
+msgid "Confirmation E-mail"
+msgstr ""
+
+msgid "You are registered for %1$s."
+msgstr ""
+
+msgid "To find other events or manage your registration, please follow the link below"
+msgstr ""
+
 msgid "Manage your registration"
 msgstr ""
 
@@ -660,8 +678,17 @@ msgstr ""
 msgid "Confirm your registration"
 msgstr ""
 
-msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgid "Thank you for your registration to the event %1$s."
+msgstr ""
+
+msgid "To complete the registration, please confirm your e-mail address via this link"
 msgstr ""
 
 msgid "Confirm E-Mail address"
+msgstr ""
+
+msgid "Thank you for your interest!"
+msgstr ""
+
+msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr ""

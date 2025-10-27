@@ -213,6 +213,12 @@ msgstr "The session should start on the same date or after the event started. Pl
 msgid "The session should end after it begun. Please change the end time, or it would be deleted"
 msgstr "The session should end after it begun. Please change the end time, or it would be deleted"
 
+msgid "Waiting List"
+msgstr "Waiting List"
+
+msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+msgstr "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+
 msgid "Imprint"
 msgstr "Imprint"
 
@@ -296,6 +302,9 @@ msgstr "I have read and accept the terms and conditions"
 
 msgid "Uploaded file"
 msgstr "Uploaded file"
+
+msgid "Update Registration"
+msgstr "Update Registration"
 
 msgid "Complete Registration"
 msgstr "Complete Registration"
@@ -651,6 +660,15 @@ msgstr "Enter your last name"
 msgid "Enter your email address"
 msgstr "Enter your email address"
 
+msgid "Confirmation E-mail"
+msgstr "Confirmation E-mail"
+
+msgid "You are registered for %1$s."
+msgstr "You are registered for %1$s."
+
+msgid "To find other events or manage your registration, please follow the link below"
+msgstr "To find other events or manage your registration, please follow the link below"
+
 msgid "Manage your registration"
 msgstr "Manage your registration"
 
@@ -660,8 +678,17 @@ msgstr "To manage your registration, please follow the link below"
 msgid "Confirm your registration"
 msgstr "Confirm your registration"
 
-msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-msgstr "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgid "Thank you for your registration to the event %1$s."
+msgstr "Thank you for your registration to the event %1$s."
+
+msgid "To complete the registration, please confirm your e-mail address via this link"
+msgstr "To complete the registration, please confirm your e-mail address via this link"
 
 msgid "Confirm E-Mail address"
 msgstr "Confirm E-Mail address"
+
+msgid "Thank you for your interest!"
+msgstr "Thank you for your interest!"
+
+msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
+msgstr "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."

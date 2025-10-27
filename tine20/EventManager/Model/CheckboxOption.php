@@ -54,19 +54,23 @@ class EventManager_Model_CheckboxOption  extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::LABEL                 => 'Booked places', // _('Booked places')
                 self::NULLABLE              => true,
-                self::READ_ONLY             => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::ALLOW_CAMEL_CASE      => true,
                 self::DEFAULT_VAL           => 0,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_AVAILABLE_PLACES  => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::LABEL                 => 'Available places', // _('Available places')
                 self::NULLABLE              => true,
-                self::READ_ONLY             => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::ALLOW_CAMEL_CASE      => true,
                 self::DEFAULT_VAL           => 0,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_DESCRIPTION   => [
                 self::LABEL             => 'Description', //_('Description')

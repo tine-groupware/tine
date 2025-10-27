@@ -1,0 +1,20 @@
+{#
+avialable parameters:
+    link
+    app.branding.title
+    contact
+    event
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+    {{ _('Waiting List') }}
+{% endblock %}
+
+
+{% block body %}
+    {{ _('Thank you for your interest!') }}
+    {{ _('Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you.') | format(event.name) }}
+    {{ _('To find other events or manage your registration, please follow the link below') }}
+
+    {{ link }}
+{% endblock %}

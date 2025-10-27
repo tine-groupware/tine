@@ -3,7 +3,7 @@
  *
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Stefanie Stamer <s.stamer@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.leuschel@metaways.de> <t.wulff@metaways.de>
  * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -115,16 +115,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         }),
                                     ],
                                     [
-                                        fieldManager('booked_places', {
-                                            checkState: function () {
-                                                this.setValue(me.form.findField('registrations').getStore().getCount());
-                                            }
-                                        }),
-                                        fieldManager('available_places', {
-                                            checkState: function () {
-                                                this.setValue(me.form.findField('total_places').getValue() - me.form.findField('booked_places').getValue());
-                                            }
-                                        }),
+                                        fieldManager('booked_places'),
+                                        fieldManager('available_places'),
                                         //fieldManager('is_live'),
                                     ]
                                 ]
@@ -164,7 +156,77 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         title: this.app.i18n._('Registrations'),
                         layout: 'fit',
                         items: [
-                            fieldManager('registrations'),
+                            fieldManager('registrations', {
+                                defaultData: function () {
+                                    const available_places = me.form.findField('available_places').getValue();
+                                    return {
+                                        status: available_places <= 0 ? "2" : "1"
+                                    };
+                                },
+                                listeners: {
+                                    render: function (grid) {
+                                        grid.on('beforeedit', function (e) {
+                                            const total_places = me.form.findField('total_places').getValue();
+                                            const available_places = me.form.findField('available_places').getValue();
+                                            const registrations = me.form.findField('registrations').store.data.items;
+                                            let registrations_count = 0;
+                                            registrations.forEach(registration => {
+                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                    registrations_count++;
+                                                }
+                                            });
+                                            const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
+                                            const statusField = editor.field;
+                                            if (statusField && available_places <= 0 && total_places < registrations_count) {
+                                                statusField.on('expand', function (combo) {
+                                                    setTimeout(function () {
+                                                        const listId = combo.list ? combo.list.id : null;
+                                                        let list = null;
+                                                        if (listId) {
+                                                            list = document.getElementById(listId);
+                                                        } else {
+                                                            const comboLists = Ext.query('.x-combo-list');
+                                                            list = comboLists[comboLists.length - 1];
+                                                        }
+                                                        if (list) {
+                                                            const items = Ext.query('.x-combo-list-item', list);
+                                                            combo.getStore().each(function (record, index) {
+                                                                if (record.get('id') === '1' && items[index]) {
+                                                                    items[index].style.setProperty('color', '#999', 'important');
+                                                                    items[index].style.setProperty('background-color', '#f0f0f0', 'important');
+                                                                    items[index].style.setProperty('opacity', '0.6', 'important');
+                                                                }
+                                                            });
+                                                        }
+                                                    }, 10);
+                                                }, this);
+
+                                                statusField.on('beforeselect', function (combo, record, index) {
+                                                    // prevent selection of value confirmed
+                                                    return record.get(combo.valueField) !== "1";
+                                                }, this);
+                                            }
+                                        });
+
+                                        grid.store.on('add', function (store, records, index) {
+                                            const total_places = me.form.findField('total_places').getValue();
+                                            const available_places = me.form.findField('available_places').getValue();
+                                            const registrations = me.form.findField('registrations').store.data.items;
+                                            let registrations_count = 0;
+                                            registrations.forEach(registration => {
+                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                    registrations_count++;
+                                                }
+                                            });
+                                            if (available_places <= 0 && total_places < registrations_count) {
+                                                Ext.each(records, function (record) {
+                                                    record.set('status', "2");
+                                                });
+                                            }
+                                        });
+                                    }
+                                }
+                            }),
                         ]
                     }]
                 },
@@ -223,10 +285,10 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             checkState: function () {
                                 let sessions = me.form.findField('appointments').getValue()
                                 sessions.sort((session1, session2) => {
-                                    if (session1['session_date'] < session2['session_date']) {
+                                    if (session1['start_time'] < session2['start_time']) {
                                         return -1;
                                     }
-                                    if (session1['session_date'] > session2['session_date']) {
+                                    if (session1['start_time'] > session2['start_time']) {
                                         return 1;
                                     }
                                     return 0;
@@ -235,8 +297,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 sessions.forEach((session) => {
                                     session['session_number'] = counter + 1;
                                     counter += 1;
-                                    if (me.form.findField('end').getValue() && session['session_date'] && (me.form.findField('end').getValue() < session['session_date'])) {
-                                        session['session_date'] = me.form.findField('end').getValue();
+                                    if (me.form.findField('end').getValue() && session['start_time'] && (me.form.findField('end').getValue() < session['start_time'])) {
+                                        session['start_time'] = me.form.findField('end').getValue();
                                         Ext.MessageBox.show({
                                             buttons: Ext.Msg.OK,
                                             icon: Ext.MessageBox.WARNING,
@@ -244,8 +306,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             msg: me.app.i18n._('The session should take place before the end date. Please change the date or it would be change automatically')
                                         });
                                     }
-                                    if (session['session_date'] && me.form.findField('start').getValue() && (session['session_date'] < me.form.findField('start').getValue())) {
-                                        session['session_date'] = me.form.findField('start').getValue();
+                                    if (session['start_time'] && me.form.findField('start').getValue() && (session['start_time'] < me.form.findField('start').getValue())) {
+                                        session['start_time'] = me.form.findField('start').getValue();
                                         Ext.MessageBox.show({
                                             buttons: Ext.Msg.OK,
                                             icon: Ext.MessageBox.WARNING,
@@ -274,8 +336,28 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
+    },
+
+    onSaveAndClose: function () {
+        const total_places = this.form.findField('total_places').getValue();
+        const available_places = this.form.findField('available_places').getValue();
+        const registrations = this.form.findField('registrations').store.data.items;
+        let registrations_count = 0;
+        registrations.forEach(registration => {
+            if (registration.data.status !== "3" && registration.data.status !== "2") {
+                registrations_count++;
+            }
+        });
+        if (available_places <= 0 && total_places < registrations_count) {
+            Ext.MessageBox.show({
+                buttons: Ext.Msg.OK,
+                icon: Ext.MessageBox.INFO,
+                title: this.app.i18n._('Wait List'),
+                msg: this.app.i18n._('Since there are no more available places, this registration is on waiting list.'),
+                fn: () => this.supr().onSaveAndClose.apply(this, arguments)
+            });
+        } else {
+            this.supr().onSaveAndClose.apply(this, arguments);
+        }
     }
 });
-
-
-
