@@ -868,7 +868,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 PUT /webdav/Filemanager/shared/unittestdirectory/aTestFile%25.test HTTP/1.1\r
 Host: localhost\r
 Content-Length: 8\r
- Content-Type: application/octet-stream" \r
+Content-Type: application/octet-stream" \r
 User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7\r
 \r
 abcdefgh
