@@ -57,7 +57,8 @@ export default defineComponent({
     events: Array,
     userId: {type: String, default: null},
     loading: Boolean,
-    allowJoin: {type: Boolean, default: true}
+    allowJoin: {type: Boolean, default: true},
+    additionalData: {type: Object, default: null}
   },
   emits: ['saveReply', 'resetPoll', 'swapParticipant', 'addParticipant'],
   data () {
@@ -81,7 +82,7 @@ export default defineComponent({
     this.participants = this.poll?.participants ?? []
   },
   computed: {
-    closed:function () {
+    closed: function () {
       return !!this.poll.id_closed
         || !!this.poll.closed
         || !!this.poll.is_closed

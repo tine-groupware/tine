@@ -5067,3 +5067,9 @@ msgstr ""
 
 msgid "redirecting..."
 msgstr ""
+
+msgid "Answers possible until {deadline}"
+msgstr ""
+
+msgid "Answers possible for {diffDays} more days"
+msgstr ""
