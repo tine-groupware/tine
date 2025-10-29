@@ -1,5 +1,5 @@
 <template>
-  <thead v-if="dates.length > 0" :style="`--summary-row-height: ${height}px`">
+  <thead v-if="dates.length > 0">
     <tr ref="summaryRow" v-if="showEventTitles">
       <th></th>
       <th v-for="date in dates" :key="date.dtstart" class="title">
@@ -16,14 +16,6 @@
     </tr>
   </thead>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { useElementSize } from '@vueuse/core'
-
-const summaryRow = ref()
-const { height } = useElementSize(summaryRow)
-</script>
 
 <script>
 import { defineComponent } from 'vue'
@@ -75,18 +67,10 @@ th {
   text-align: center;
   border-collapse: collapse;
 }
-/* Fixed first column */
 thead th{
-  position: sticky;
-  left: 0;
-  top: 0;
   background: #fff;
   z-index: 2;
   box-shadow: inset 0 0 0 0.5px #ccc;
-}
-
-thead tr.tr-date th{
-  top: var(--summary-row-height);
 }
 
 /* Header cell of the fixed column needs higher z-index */
@@ -101,6 +85,7 @@ div.title {
   max-width: 250px;
   min-width: 150px;
   padding: 15px 10px;
+  margin: auto;
 }
 
 th.title {

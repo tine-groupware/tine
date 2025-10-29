@@ -85,11 +85,12 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: inherit;
+  background-color: white;
   padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  z-index: 10000;
 }
 
 .footer-section {
@@ -106,6 +107,7 @@ html, body {
   justify-content: center;
   overflow: hidden;
   box-sizing: border-box;
+  z-index: 10000;
 }
 
 </style>
