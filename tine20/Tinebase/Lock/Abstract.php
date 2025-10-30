@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Lock
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,31 +17,16 @@
  */
 abstract class Tinebase_Lock_Abstract implements Tinebase_Lock_Interface
 {
-    protected $_lockId;
+    protected string $_lockId;
 
-    /**
-     * @var bool
-     */
-    protected $_isLocked = false;
+    protected bool $_isLocked = false;
 
-    /**
-     * @param string $lockId
-     */
-    public function __construct($_lockId)
+    public function __construct(string $_lockId)
     {
-        $this->_lockId = $_lockId;
-        $this->processLockId();
+        $this->_lockId = sha1($_lockId);
     }
 
-    protected function processLockId()
-    {
-        $this->_lockId = sha1($this->_lockId);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLocked()
+    public function isLocked(): bool
     {
         return $this->_isLocked;
     }
