@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -15,21 +15,18 @@
  */
 class Tinebase_Lock
 {
-    protected static $locks = [];
-    protected static $lastKeepAlive = null;
-
     /**
-     * @var string
+     * @var array<Tinebase_Lock_Interface>
      */
-    protected static $backend = null;
+    protected static array $locks = [];
+    protected static ?int $lastKeepAlive = null;
 
     /**
      * tries to release all locked locks (catches and logs exceptions silently)
      * removes all lock objects
      */
-    public static function clearLocks()
+    public static function clearLocks(): void
     {
-        /** @var Tinebase_Lock_Abstract $lock */
         foreach (static::$locks as $lock) {
             try {
                 if ($lock->isLocked()) {
@@ -43,7 +40,7 @@ class Tinebase_Lock
         static::$locks = [];
     }
 
-    public static function keepLocksAlive()
+    public static function keepLocksAlive(): void
     {
         // only do this once a minute
         if (null !== static::$lastKeepAlive && time() - static::$lastKeepAlive < 60) {
@@ -60,11 +57,7 @@ class Tinebase_Lock
         }
     }
 
-    /**
-     * @param $id
-     * @return Tinebase_Lock_Interface|null
-     */
-    public static function getLock($id)
+    public static function getLock(string $id): Tinebase_Lock_Interface
     {
         $id = static::preFixId($id);
         if (!isset(static::$locks[$id])) {
@@ -73,29 +66,17 @@ class Tinebase_Lock
         return static::$locks[$id];
     }
 
-    /**
-     * @param string $id
-     * @return bool|null bool on success / failure, null if not supported
-     */
-    public static function tryAcquireLock($id)
+    public static function tryAcquireLock(string $id): bool
     {
-        return static::getLock($id)?->tryAcquire();
+        return static::getLock($id)->tryAcquire(0);
     }
 
-    /**
-     * @param string $id
-     * @return bool|null bool on success / failure, null if not supported
-     */
-    public static function acquireLock($id)
+    public static function acquireLock(string $id): bool
     {
-        return static::getLock($id)?->tryAcquire(0);
+        return static::getLock($id)->tryAcquire();
     }
 
-    /**
-     * @param string $id
-     * @return bool
-     */
-    public static function releaseLock($id)
+    public static function releaseLock(string $id): bool
     {
         $id = static::preFixId($id);
         if (isset(static::$locks[$id])) {
@@ -104,20 +85,17 @@ class Tinebase_Lock
         return false;
     }
 
-    public static function preFixId($id)
+    public static function preFixId(string $id): string
     {
         return 'tine20_' . $id;
     }
-    /**
-     * @param string $id
-     * @return Tinebase_Lock_Interface
-     */
-    protected static function getBackend($id)
+
+    protected static function getBackend(string $id): Tinebase_Lock_Interface
     {
         return new Tinebase_Lock_Mysql($id);
     }
 
-    public static function resetKeepAliveTime()
+    public static function resetKeepAliveTime(): void
     {
         static::$lastKeepAlive = null;
     }

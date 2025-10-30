@@ -716,8 +716,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to row lock stuff */
         // we only want to dispatch a specific document once at a time, so we lock manually
-        // TODO FIXME aquire and try are reversed, fix it
-        if (!Tinebase_Core::acquireMultiServerLock($lockId = __METHOD__ . $documentId, false)) {
+        if (!Tinebase_Core::acquireMultiServerLock($lockId = __METHOD__ . $documentId)) {
             throw new Tinebase_Exception_SystemGeneric('an other dispatch is currently running');
         }
         $unlock = new Tinebase_RAII(fn() => Tinebase_Core::releaseMultiServerLock($lockId));
