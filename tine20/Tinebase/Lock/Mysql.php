@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Lock
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -19,10 +19,7 @@
  */
 class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
 {
-    protected static $mysqlLockId = null;
-    protected static $supportsMultipleLocks = false;
-
-    public function keepAlive()
+    public function keepAlive(): void
     {
         if ($this->_isLocked) {
             $db = Tinebase_Core::getDb();
@@ -41,11 +38,8 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
 
     /**
      * blocks indefinetly by default, set timeout to 0 to only try non-blocking
-     *
-     * @param int $timeout
-     * @return bool
      */
-    public function tryAcquire(int $timeout = -1)
+    public function tryAcquire(int $timeout = -1): bool
     {
         if ($this->_isLocked) {
             throw new Tinebase_Exception_Backend('trying to acquire a lock on a locked lock');
@@ -68,7 +62,6 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
                 ($row = $stmt->fetch()) &&
                 $row[0] == 1) {
             $stmt->closeCursor();
-            static::$mysqlLockId = $this->_lockId;
             $this->_isLocked = true;
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 .' Aquired lock: ' . $this->_lockId);
@@ -83,11 +76,7 @@ class Tinebase_Lock_Mysql extends Tinebase_Lock_Abstract
         return false;
     }
 
-    /**
-     * @param string $lockId
-     * @return bool
-     */
-    public function release()
+    public function release(): bool
     {
         if (!$this->_isLocked) {
             throw new Tinebase_Exception_Backend('trying to release an unlocked lock');
