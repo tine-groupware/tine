@@ -191,6 +191,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
                 $this->createOrUpdateList($_group);
             }
 
+            $_group->name = trim($_group->name);
             $this->checkDuplicateName($_group->name);
 
             $group = $groupController->addGroup($_group);
@@ -230,6 +231,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             // update default user group if name has changed
             $oldGroup = Tinebase_Group::getInstance()->getGroupById($_group->getId());
 
+            $_group->name = trim($_group->name);
             if ($oldGroup->name !== $_group->name)
             {
                 $this->checkDuplicateName($_group->name);
