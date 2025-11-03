@@ -229,7 +229,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             const refConfig = _.get(modelConfig, `fields.${this.refIdField}.config`, {});
             const foreignFieldDefinition = _.get(Tine.Tinebase.data.RecordMgr.get(refConfig.appName, refConfig.modelName)?.getModelConfiguration(), `fields.${refConfig.foreignField}`, {});
             const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
-            const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
+            const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON' || _.get(this.config, `storage`) === 'jsonRefId';
             const hasNoAPI = _.isFunction(this.recordClass.getMeta) && !_.get(Tine, `${this.recordClass.getMeta('appName')}.search${_.upperFirst(this.recordClass.getMeta('modelName'))}s`)
 
             this.editDialogConfig.mode = this.editDialogConfig.mode || (hasNoAPI || isJSONStorage || modelConfig?.isDependent || dependentRecords ? 'local' : 'remote');
@@ -442,7 +442,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }
 
-        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (!this.refIdField || this.isMetadataModelFor);
+        const modelConfig = _.isFunction(this.recordClass?.getModelConfiguration) ? this.recordClass.getModelConfiguration() : null;
+        const refConfig = _.get(modelConfig, `fields.${this.refIdField}.config`, {});
+        const foreignFieldDefinition = _.get(Tine.Tinebase.data.RecordMgr.get(refConfig.appName, refConfig.modelName)?.getModelConfiguration(), `fields.${refConfig.foreignField}`, {});
+        const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON' || _.get(this.config, `storage`) === 'jsonRefId';
+
+        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (!this.refIdField || isJSONStorage || this.isMetadataModelFor);
 
         if (this.enableTbar) {
             this.initTbar();

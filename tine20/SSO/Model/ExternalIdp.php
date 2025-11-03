@@ -199,6 +199,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
                 self::LENGTH                => 255,
                 self::DEFAULT_VAL           => 'email:local_part',
                 self::LABEL                  => 'Username claim', // _('Username claim')
+                self::DESCRIPTION            => 'preferred_username, email, email:local_part, ...',
             ],
             self::FLD_ALLOW_LOCAL_LOGIN => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
