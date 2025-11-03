@@ -95,7 +95,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     allowMetadataForEditing: true,
 
     metaDataFields: null,
-    
+
     /**
      * search combo config
      * @cfg {} searchComboConfig
@@ -631,12 +631,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Ext.form.ComboBox} picker
      * @param {Record} recordToAdd
      */
-    onAddRecordFromCombo: function(picker, recordToAdd) {
+    onAddRecordFromCombo: async function(picker, recordToAdd) {
         // sometimes there are no record data given
         if (! recordToAdd) {
-           return;
+            return;
         }
-        
+
         if (this.isMetadataModelFor) {
             var recordData = Object.assign({}, this.recordClass.getDefaultData(), this.getRecordDefaults());
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
@@ -653,17 +653,28 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
             // check if already in
             const probeMetaData = record.get(this.isMetadataModelFor);
-            const existingRecord = this.store.findBy(function (r) {
+            const existingIdx = this.store.findBy(function (r) {
                 const metaData = r.get(this.isMetadataModelFor) ?? '';
                 if ((metaData?.id || metaData) === (probeMetaData?.id || probeMetaData)) {
                     return true;
                 }
             }, this);
-            if (existingRecord === -1 || this.allowDuplicatePicks) {
+            if (existingIdx === -1 || this.allowDuplicatePicks) {
                 if (this.fireEvent('beforeaddrecord', record, this) !== false) {
                     this.store.add([record]);
                     this.fireEvent('add', this, [record]);
                 }
+            } else {
+                await Ext.MessageBox.show({
+                    title: formatMessage('Record already exists'),
+                    msg: formatMessage('The record you selected is already in the list below. Duplicate selections are not allowed here.'),
+                    buttons: Ext.MessageBox.OK,
+                    icon: Ext.MessageBox.INFO_INSTRUCTION
+                });
+                const row = this.getView().getRow(existingIdx);
+                Ext.fly(row).scrollIntoView();
+                Ext.fly(row).highlight();
+
             }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
@@ -684,7 +695,37 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(recordData || {}, this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
         record.phantom = true;
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
-        const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
+        const editDialogConfig = { ... this.editDialogConfig || {} };
+        const mode = editDialogConfig?.mode || editDialogClass.prototype.mode;
+
+        if (this.isMetadataModelFor) {
+            // @TODO apply "our" searchComboConfig
+            // @RETHINK what to do if picker is overwritten?
+            _.set(editDialogConfig, 'plugins', _.concat(_.get(editDialogConfig, 'plugins', []), { init: (editDialog) => {
+                    editDialog.on('afterrender', () => {
+                        const metadataForField = editDialog.getForm().findField(this.isMetadataModelFor)
+                        if (metadataForField) {
+                            metadataForField.on('beforeselect', async (field, record, index) => {
+                                if (! this.allowDuplicatePicks) {
+                                    const existingIdx = this.store.findBy(function (r) {
+                                        return record.id === r.get(this.isMetadataModelFor)?.id;
+                                    }, this);
+
+                                    if (existingIdx >= 0) {
+                                        await editDialog.window.popup.Ext.MessageBox.show({
+                                            title: formatMessage('Record already exists'),
+                                            msg: formatMessage('The record you selected is already in the list. Duplicate selections are not allowed here.'),
+                                            buttons: Ext.MessageBox.OK,
+                                            icon: Ext.MessageBox.INFO_INSTRUCTION
+                                        })
+                                        return false
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }}))
+        }
 
         editDialogClass.openWindow(_.assign({
             openerCt: this,
@@ -695,7 +736,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 scope: this,
                 update: this.onEditDialogRecordUpdate
             }
-        }, this.editDialogConfig || {}));
+        }, editDialogConfig || {}));
     },
 
     getRecordDefaults: function() {
@@ -834,6 +875,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.getData());
                 me.store.getAt(row).commit();
             }
+        } else if (this.isMetadataModelFor) {
+            _.set(editDialogConfig, `fixedFields.${this.isMetadataModelFor}`, '###CURRENT###');
         }
 
         if (this.fireEvent('beforeeditrecord', record, this) === false) return;
@@ -851,7 +894,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }, editDialogConfig));
         }
     },
-    
+
     // recordChange from editDialog
     onEditDialogRecordUpdate: function(updatedRecord) {
         if (!updatedRecord.data) {
@@ -879,3 +922,4 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 });
 
 Ext.reg('wdgt.pickergrid', Tine.widgets.grid.PickerGridPanel);
+
