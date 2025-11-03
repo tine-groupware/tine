@@ -1153,7 +1153,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     {
         try {
             $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
-        } catch (ErrorException) {
+        } catch (Throwable) {
             return false;
         }
         
