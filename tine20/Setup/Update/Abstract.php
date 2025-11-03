@@ -137,7 +137,7 @@ class Setup_Update_Abstract
             return Tinebase_Application::getInstance()->updateApplication($application);
         } else if (version_compare($application->version, $_version) === 0) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . 'Cannot update to equal version: '
+                __METHOD__ . '::' . __LINE__ . ' Cannot update to equal version: '
                 . $_version . ' Version update missing in update script?');
         }
         return $application;
