@@ -87,11 +87,15 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
     public function update003(): void
     {
         $deviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
-        $deviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
-            'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
-            HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system standalone project time',
-            HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system standalone project time',
-        ]));
+        try {
+            $deviceCtrl->create(new HumanResources_Model_AttendanceRecorderDevice([
+                'id' => HumanResources_Model_AttendanceRecorderDevice::SYSTEM_STANDALONE_PROJECT_TIME_ID,
+                HumanResources_Model_AttendanceRecorderDevice::FLD_NAME => 'tine system standalone project time',
+                HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION => 'tine system standalone project time',
+            ]));
+        } catch (Zend_Db_Statement_Exception) {
+            // already there
+        }
 
         $device = $deviceCtrl->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_PROJECT_TIME_ID);
         $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_DESCRIPTION} = 'tine system project time in conjunction with working time';

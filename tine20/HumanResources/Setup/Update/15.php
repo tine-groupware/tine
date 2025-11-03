@@ -196,10 +196,6 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update004()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        $this->getDb()->query('ALTER TABLE ' . SQL_TABLE_PREFIX . HumanResources_Model_FreeTime::TABLE_NAME .
-            ' CHANGE `status` `' . HumanResources_Model_FreeTime::FLD_TYPE_STATUS . '` varchar(40)');
-
         $this->addApplicationUpdate('HumanResources', '15.4', self::RELEASE015_UPDATE004);
     }
 
@@ -277,7 +273,11 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update008()
     {
-        HumanResources_Setup_Initialize::addAttendanceRecorderDevices();
+        try {
+            HumanResources_Setup_Initialize::addAttendanceRecorderDevices();
+        } catch (Zend_Db_Statement_Exception) {
+            // already there
+        }
 
         $this->addApplicationUpdate('HumanResources', '15.8', self::RELEASE015_UPDATE008);
     }
