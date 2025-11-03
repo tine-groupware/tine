@@ -104,7 +104,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         const isValid = valueRecord ? valueRecord.isValid() : !!this.allowBlank;
 
         if (! isValid) {
-            this.markInvalid(window.formatMessage('{recordName} is not valid.', {recordName: this.recordClass.getRecordName()}));
+            this.markInvalid(window.formatMessage('{recordName} is not valid.', {recordName: this.recordClass?.getRecordName() || window.formatMessage('Record')}));
         }
         return isValid;
     },
