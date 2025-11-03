@@ -464,8 +464,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
             'dtstart'      => [
                 self::TYPE          => self::TYPE_DATETIME,
-                self::NULLABLE      => true,
-                self::DEFAULT_VAL   => null,
             ],
             'recurid'      => [
                 self::TYPE          => self::TYPE_STRING,
