@@ -1070,7 +1070,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()
-                            ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
+                            ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with' . print_r($data, true));
                     }
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
@@ -1080,7 +1080,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                     if (!isset($data->{$loginNameClaim}) || strlen((string)$data->{$loginNameClaim}) === 0) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                             Tinebase_Core::getLogger()
-                                ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an ' . $loginNameClaim . ' to work with');
+                                ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an ' . $loginNameClaim . ' to work with' . print_r($data, true));
                         }
                         return static::publicOidAuthResponseErrorRedirect($authRequest);
                     }
@@ -1114,7 +1114,9 @@ class SSO_Controller extends Tinebase_Controller_Event
                             'accountExpires' => NULL,
                             'openid' => $ssoIdp->getId() . ':' . $data->sub,
                             'accountLastName' => $data->name ?? $loginName,
-                            'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?: Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                            'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?
+                                Tinebase_Record_Abstract::convertId($ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT}) :
+                                Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
                             'groups' => is_array($ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT}) ? $ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT} : [],
                             'xprops' => [Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD => true],
                         ]);
