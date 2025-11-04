@@ -106,9 +106,13 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT} = false;
         $imapRaii = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT} = $oldImapValue);
 
-        $list = Addressbook_Controller_List::getInstance()->get(Tinebase_Group::getInstance()->getDefaultGroup()->list_id);
-        $list->email = 'klaustu@test.net';
-        Addressbook_Controller_List::getInstance()->update($list);
+        $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
+            'name' => 'unittest',
+            'email' => 'klaustu@test.net',
+        ]));
+
+        Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $this->_personas['sclever']);
+        Admin_Controller_Group::getInstance()->addGroupMember($group->getId(), $this->_personas['jmcblack']);
 
         unset($imapRaii);
 
@@ -138,10 +142,10 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $this->assertEmpty($event->organizer);
         $this->assertNotEmpty($event->organizer_email);
         $this->assertNotEmpty($event->external_seq);
-        $this->assertSame(count(Tinebase_Group::getInstance()->getGroupMembers($list->group_id)) + 1, $event->attendee->count());
+        $this->assertSame(count(Tinebase_Group::getInstance()->getGroupMembers($group->getId())) + 1, $event->attendee->count());
         $attendees = $event->attendee->filter('user_email', 'klaustu@test.net');
         $this->assertSame(1, $attendees->count());
-        $this->assertNotEmpty($attendees->getFirstRecord()->user_id);
+        $this->assertSame(Addressbook_Controller_List::getInstance()->getBackend()->getByGroupName($group->name, null)?->getId(), $attendees->getFirstRecord()->user_id);
         $this->assertSame(Calendar_Model_Attender::USERTYPE_GROUP, $attendees->getFirstRecord()->user_type);
     }
 
