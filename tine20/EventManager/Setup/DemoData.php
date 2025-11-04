@@ -101,6 +101,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _onCreate()
     {
         $this->_createEvents();
+        $this->_createCustomfields();
     }
 
     protected function _createEvents()
@@ -553,17 +554,17 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [
                 [
                     EventManager_Model_Appointment::FLD_SESSION_NUMBER => 1,
-                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-13"),
-                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("11:30:00"),
-                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("14:00:00"),
+                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-13 00:00:00"),
+                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("2025-10-13 11:30:00"),
+                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("2025-10-13 14:00:00"),
                     EventManager_Model_Appointment::FLD_STATUS => $appointment_status,
                     EventManager_Model_Appointment::FLD_DESCRIPTION => 'Was bedeutet es, katholisch zu sein? Wie läuft der Eintritt in die katholische Kirche ab?',
                 ],
                 [
                     EventManager_Model_Appointment::FLD_SESSION_NUMBER => 2,
-                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-16"),
-                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("17:00:00"),
-                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("20:00:00"),
+                    EventManager_Model_Appointment::FLD_SESSION_DATE => new Tinebase_DateTime("2025-10-16 00:00:00"),
+                    EventManager_Model_Appointment::FLD_START_TIME => new Tinebase_DateTime("2025-10-16 17:00:00"),
+                    EventManager_Model_Appointment::FLD_END_TIME => new Tinebase_DateTime("2025-10-16 20:00:00"),
                     EventManager_Model_Appointment::FLD_STATUS => $appointment_status,
                     EventManager_Model_Appointment::FLD_DESCRIPTION => 'Welche Werte, Rituale und Feste prägen den katholischen Glauben? Wie kann ich meinen eigenen Glaubensweg gestalten?',
                 ],
@@ -681,5 +682,41 @@ Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach 
         return new EventManager_Model_TextOption([
             'text' => $text,
         ]);
+    }
+
+    protected function _createCustomfields()
+    {
+        $customfields = [
+            ['name' => 'cfbool', 'label' => 'Ehrenamtsfonds', 'type' => 'boolean', 'uiconfig' => [
+                'order' => '',
+                'group' => '',
+                'tab' => '']
+            ],
+        ];
+
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_appName)->getId();
+        foreach ($customfields as $customfield) {
+            $cfc = [
+                'name' => $customfield['name'],
+                'application_id' => $appId,
+                'model' => 'EventManager_Model_Event',
+                'definition' => [
+                    'uiconfig' => $customfield['uiconfig'],
+                    'label' => $customfield['label'],
+                    'type' => $customfield['type'],
+                ]
+            ];
+
+            if ($customfield['type'] == 'record') {
+                $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
+            }
+
+            $cf = new Tinebase_Model_CustomField_Config($cfc);
+            try {
+                Tinebase_CustomField::getInstance()->addCustomField($cf);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // already created
+            }
+        }
     }
 }

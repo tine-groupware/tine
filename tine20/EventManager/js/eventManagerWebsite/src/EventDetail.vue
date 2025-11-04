@@ -10,7 +10,7 @@
 
 <template>
   <div class="container">
-    <div class="title mb-3">{{eventDetails.name}}</div>
+    <div class="title my-3">{{eventDetails.name}}</div>
     <div v-if="eventDetails.description" style="white-space: pre-wrap;">{{eventDetails.description}}</div>
     <h5 class="my-3">{{formatMessage('Information of the event:')}}</h5>
     <div class="row mb-3" v-if="eventDetails.start && eventDetails.start !== '1.1.1970'">
@@ -166,8 +166,7 @@ const eventDetails = ref({
 });
 
 const isNameValid = computed(() => {
-  return userFirstName.value.trim().length > 0;
-  return userLastName.value.trim().length > 0;
+  return userFirstName.value.trim().length > 0 && userLastName.value.trim().length > 0;
 });
 
 const isEmailValid = computed(() => {
@@ -220,7 +219,13 @@ const handleEmailSubmit = async () => {
 
     if (response.ok) {
       const responseData = await response.json();
-      console.log('Registration request successful');
+
+      if (responseData[0]) { //if contact is known
+        const baseUrl = window.location.origin;
+        window.location.href = `${baseUrl}${responseData[0]}`;
+        return;
+      }
+
       showEmailModal.value = false;
       modalTitle.value = 'Registration Request Sent';
       modalMessage.value = 'Please check your email and click the confirmation link to complete your registration.';
@@ -229,7 +234,7 @@ const handleEmailSubmit = async () => {
       throw new Error('Registration request failed');
     }
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error(error);
     modalTitle.value = 'Registration Error';
     modalMessage.value = 'There was an error sending your registration request. Please try again later.';
     showModal.value = true;
@@ -256,9 +261,17 @@ async function getEvent() {
         minute: '2-digit'
       };
 
-      data.start = new Date(data.start).toLocaleString("de-DE", dateFormat);
-      data.end = new Date(data.end).toLocaleString("de-DE", dateFormat);
-      data.registration_possible_until = new Date(data.registration_possible_until).toLocaleDateString("de");
+      const formatDate = (date, formatter) => {
+        const d = new Date(date);
+        if (isNaN(d.getTime()) || d.getTime() < 86400000) {
+          return null;
+        }
+        return d.toLocaleString("de-DE", formatter);
+      };
+
+      data.start = formatDate(data.start, dateFormat);
+      data.end = formatDate(data.end, dateFormat);
+      data.registration_possible_until = formatDate(data.registration_possible_until, {day: '2-digit', month: '2-digit', year: 'numeric'});
 
       if (data.appointments && data.appointments.length > 0) {
         data.appointments = data.appointments.map(appointment => {

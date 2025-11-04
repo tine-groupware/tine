@@ -78,7 +78,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::RECORDS  => [
                     ['id' => 1,      'value' => 'Open'], //_('Open')
                     ['id' => 2,      'value' => 'Closed'], //_('Closed')
-                    ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
+                    ['id' => 3,      'value' => 'Cancelled'], //_('Cancelled')
                     ['id' => 4,      'value' => 'Planning'], //_('Planning')
                 ],
                 self::DEFAULT_STR => 1
@@ -127,7 +127,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::RECORDS  => [
                     ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
                     ['id' => 2,      'value' => 'Waiting list'], //_('Waiting list')
-                    ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
+                    ['id' => 3,      'value' => 'Cancelled'], //_('Cancelled')
                 ],
                 self::DEFAULT_STR => 1
             ]
@@ -159,7 +159,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 self::RECORDS  => [
                     ['id' => 1,      'value' => 'Confirmed'], //_('Confirmed')
                     ['id' => 2,      'value' => 'Rescheduled'], //_('Rescheduled')
-                    ['id' => 3,      'value' => 'Canceled'], //_('Canceled')
+                    ['id' => 3,      'value' => 'Cancelled'], //_('Cancelled')
                 ],
                 self::DEFAULT_STR => 1
             ]

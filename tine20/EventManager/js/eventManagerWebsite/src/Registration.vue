@@ -3,7 +3,7 @@
  * Tine 2.0
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 -->
@@ -271,7 +271,7 @@
                       value="true"
                       unchecked-value="false"
                       @click="singleSelection(option)"
-                    >{{formatMessage('I have read and accept the terms and conditions')}}</b-form-checkbox>
+                    >{{formatMessage('I have read the document and accept the terms and conditions')}}</b-form-checkbox>
                   </div>
                   <div v-else-if="option.option_config && option.option_config.file_upload" class="mb-3">
                     <input
@@ -294,25 +294,37 @@
             </div>
           </div>
         </div>
-        <b-modal v-model="showModal" :title="formatMessage(modalTitle)" hide-footer>
-          <p>{{ formatMessage(modalMessage) }}</p>
-          <b-button @click="handleModalClose" variant="primary">OK</b-button>
-        </b-modal>
       </b-col>
+
       <div v-if="isAlreadyRegistered">
         <div class="text-end mb-3">
-          <b-button class="mt-3" @click="postRegistration">{{formatMessage('Update Registration')}}</b-button>
+          <b-button class="m-3" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
+          <b-button class="m-3" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
         </div>
       </div>
+
       <div v-else class="text-end mb-3">
-        <b-button class="mt-3" @click="postRegistration">{{formatMessage('Complete Registration')}}</b-button>
+        <b-button class="mt-3" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
       </div>
     </b-row>
+
+    <b-modal
+      v-model="modal.show"
+      :title="formatMessage(modal.title)"
+      :ok-only="modal.okOnly"
+      :ok-title="formatMessage(modal.okText)"
+      :cancel-title="formatMessage(modal.cancelText)"
+      @ok="handleModalAction"
+      @cancel="handleModalCancel"
+    >
+      <p v-html="modal.message"></p>
+    </b-modal>
+
   </b-container>
 </template>
 
 <script setup>
-import {computed, inject, ref} from 'vue';
+import {computed, inject, ref, reactive} from 'vue';
 import _ from 'lodash';
 import {translationHelper} from "./keys";
 import {useRoute} from 'vue-router';
@@ -320,6 +332,46 @@ import "./Registration.vue";
 
 const formatMessage = inject(translationHelper);
 const route = useRoute();
+
+const modal = reactive({
+  show: false,
+  title: '',
+  message: '',
+  type: 'info',
+  okOnly: true,
+  okText: 'OK',
+  cancelText: 'Cancel',
+  onConfirm: null,
+  onCancel: null
+});
+
+// Modal helper functions
+const showModal = (config) => {
+  modal.title = config.title || '';
+  modal.message = config.message || '';
+  modal.type = config.type || 'info';
+  modal.okOnly = config.okOnly !== false;
+  modal.okText = config.okText || 'OK';
+  modal.cancelText = config.cancelText || 'Cancel';
+  modal.onConfirm = config.onConfirm || null;
+  modal.onCancel = config.onCancel || null;
+  modal.show = true;
+};
+
+const handleModalAction = () => {
+  if (modal.onConfirm) {
+    modal.onConfirm();
+  }
+  modal.show = false;
+};
+
+const handleModalCancel = () => {
+  if (modal.onCancel) {
+    modal.onCancel();
+  }
+  modal.show = false;
+};
+
 const eventDetails = ref({
   name: "",
   start : "",
@@ -361,31 +413,79 @@ const contactDetails = ref({
 
 const replies = ref({});
 const uploadedFiles = ref({});
-const showModal = ref(false);
-const modalTitle = ref('');
-const modalMessage = ref('');
 const validationErrors = ref([]);
 const isVerifyEmail = ref(false);
 const isAlreadyRegistered = ref(false);
 const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
+const isExpired = ref(false);
+const isUpdate = ref(false);
+
 const salutations = ref([
   { value: 'MR', text: formatMessage('Mr') },
   { value: 'MS', text: formatMessage('Ms') },
   { value: 'COMPANY', text: formatMessage('Company') },
   { value: 'PERSON', text: formatMessage('Person') },
-]); //todo: change this to work with values from registry (conny)
-const countries = ref([
-  { value: 'DE', text: formatMessage('Deutschland') }, //todo: change this to work with values from registry (conny)
 ]);
+
+const countries = ref([
+  { value: 'DE', text: formatMessage('Deutschland') },
+]);
+
+function openCancelConfirmation() {
+  showModal({
+    title: 'Cancel Registration',
+    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${eventDetails.value.name}</strong>"`,
+    type: 'confirm',
+    okOnly: false,
+    okText: 'Yes',
+    cancelText: 'No',
+    onConfirm: confirmCancel
+  });
+}
+
+async function confirmCancel() {
+  const token = window.location.href.split('/').pop();
+  let eventId = route.params.id;
+
+  try {
+    const response = await fetch(`/EventManager/deregistration/${eventId}/${token}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Cancellation failed');
+    }
+
+    showModal({
+      title: 'Registration Cancelled',
+      message: 'Your registration has been cancelled successfully.',
+      type: 'success',
+      onConfirm: () => {
+        const baseUrl = window.location.origin;
+        window.location.href = `${baseUrl}/EventManager/view/#/event`;
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    showModal({
+      title: 'Error',
+      message: 'Could not cancel your registration. Please try again later.',
+      type: 'error'
+    });
+  }
+}
 
 const getCharacterCount = (optionId) => {
   return replies.value[optionId] ? replies.value[optionId].length : 0;
 };
 
-// Handle text input changes with validation
 const handleTextInputChange = (option, value) => {
   if (option.option_config.only_numbers) {
-      replies.value[option.id] = value;
+    replies.value[option.id] = value;
   } else {
     if (option.option_config.max_characters && value.length > option.option_config.max_characters) {
       replies.value[option.id] = value.substring(0, option.option_config.max_characters);
@@ -450,9 +550,9 @@ const hasOptionValue = (option) => {
       } else if (option.option_config && option.option_config.file_upload) {
         return uploadedFiles.value[option.id] && uploadedFiles.value[option.id].length > 0;
       }
-      return true; // For other file options (display only)
+      return true;
     case 'EventManager_Model_TextOption':
-      return true; // Text options are display-only
+      return true;
     default:
       return false;
   }
@@ -465,12 +565,13 @@ const isOptionVisible = (option) => {
 
   const ruleType = option.rule_type !== undefined ? Number(option.rule_type) : 1;
 
-  if (ruleType === 1) { // at least one rule must be satisfied
+  if (ruleType === 1) {
     return option.option_rule.some(rule => evaluateRule(rule));
-  } else { // all rules must be satisfied
+  } else {
     return option.option_rule.every(rule => evaluateRule(rule));
   }
 };
+
 const isOptionRequired = (option) => {
   if (!option.option_required) {
     return false;
@@ -541,8 +642,7 @@ const validateRequiredFields = () => {
 };
 
 
-  const evaluateRule = (rule) => {
-
+const evaluateRule = (rule) => {
   const refOptionField = rule.ref_option_field;
   const referencedOption = eventDetails.value.options.find(opt => opt.id === refOptionField);
 
@@ -558,9 +658,7 @@ const validateRequiredFields = () => {
       default:
         return false;
     }
-
   } else {
-
     const requiredValue = rule.value;
     const criteria = rule.criteria !== undefined ? Number(rule.criteria) : 1;
     const currentValue = replies.value[refOptionField];
@@ -605,13 +703,43 @@ const validateRequiredFields = () => {
   }
 };
 
+function checkWaitingList() {
+  if (new Date(eventDetails.value.registration_possible_until).getTime() < new Date().getTime()) {
+    isExpired.value = true;
+  }
+  if (eventDetails.value.available_places <= 0 || isExpired.value) {
+    const expiredMessage = isExpired.value
+      ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
+      : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
+
+    showModal({
+      title: 'Waiting list',
+      message: expiredMessage,
+      type: 'waiting-list',
+      okOnly: false,
+      okText: 'Yes',
+      cancelText: 'No',
+      onConfirm: postRegistration
+    });
+  } else {
+    postRegistration();
+  }
+}
+
+const handlePostRegistration = (update = false) => {
+  isUpdate.value = update;
+  postRegistration();
+};
+
 const postRegistration = async () => {
   validationErrors.value = [];
 
   if (!validateRequiredFields()) {
-    modalTitle.value = 'Validation Error';
-    modalMessage.value = 'Please fill all required fields.';
-    showModal.value = true;
+    showModal({
+      title: 'Validation Error',
+      message: 'Please fill all required fields.',
+      type: 'error'
+    });
     return;
   }
 
@@ -666,7 +794,7 @@ const postRegistration = async () => {
   let registrationId = '';
 
   try {
-    const response = await fetch(`/EventManager/register/${eventId}`, {
+    const response = await fetch(`/EventManager/register/${eventId}/${isUpdate.value}`, {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -675,23 +803,46 @@ const postRegistration = async () => {
       body: JSON.stringify(body)
     }).then(resp => resp.json())
       .then(data => {
-        registrationId = data.id
+        registrationId = data.id;
         console.debug(data);
       });
 
-  await uploadFiles(eventId, registrationId);
+    await uploadFiles(eventId, registrationId);
 
-    modalTitle.value = 'Success';
-    modalMessage.value = 'Registration completed successfully!';
-    showModal.value = true;
+    if (isUpdate) {
+      isUpdate.value = false;
+      showModal({
+        title: 'Update Registration',
+        message: 'Your registration was updated successfully.',
+        type: 'success',
+        onConfirm: () => {
+          clearForm();
+          const baseUrl = window.location.origin;
+          window.location.href = `${baseUrl}/EventManager/view/#/event`;
+        }
+      });
+    } else {
+      showModal({
+        title: 'Success',
+        message: 'Registration completed successfully! You will receive a confirmation e-mail.',
+        type: 'success',
+        onConfirm: () => {
+          clearForm();
+          const baseUrl = window.location.origin;
+          window.location.href = `${baseUrl}/EventManager/view/#/event`;
+        }
+      });
+    }
 
   } catch (error) {
     console.error('Registration request failed:', error);
-    modalTitle.value = 'Error';
-    modalMessage.value = 'Registration failed. Please try again.';
-    showModal.value = true;
+    showModal({
+      title: 'Error',
+      message: 'Registration failed. Please try again.',
+      type: 'error'
+    });
   }
-}
+};
 
 const uploadFileForOption = async (eventId, registrationId, optionId, files) => {
   const formData = new FormData();
@@ -711,9 +862,7 @@ const uploadFileForOption = async (eventId, registrationId, optionId, files) => 
   }
 };
 
-
 const uploadFiles = async (eventId, registrationId) => {
-
   const uploadPromises = Object.entries(uploadedFiles.value)
     .filter(([optionId, files]) => files && files.length > 0)
     .map(([optionId, files]) => uploadFileForOption(eventId, registrationId, optionId, files));
@@ -728,34 +877,24 @@ const uploadFiles = async (eventId, registrationId) => {
 function handleFileChange(event, optionId) {
   const files = event.target.files;
   if (files.length > 0) {
-    console.log(`Selected files for option ${optionId}:`, files);
     uploadedFiles.value[optionId] = files;
   } else {
-    // Clear files if none selected
     delete uploadedFiles.value[optionId];
   }
 }
 
 const clearForm = () => {
   contactDetails.value = _.mapValues(contactDetails.value, () => '');
-
   replies.value = {};
 
   const fileInputs = document.querySelectorAll('input[type="file"]');
   fileInputs.forEach(input => {
     input.value = '';
   });
-}
-
-const handleModalClose = () => {
-  showModal.value = false;
-  if (modalTitle.value === 'Success') {
-    clearForm();
-  }
-}
+};
 
 const maxBirthDate = computed(() => {
-  return new Date().toISOString().split('T')[0]
+  return new Date().toISOString().split('T')[0];
 });
 
 // function to only select one of the checkboxes inside a group
@@ -787,12 +926,13 @@ const download = (data, name, type) => {
     window.URL.revokeObjectURL(url);
   }, 200);
 };
+
 async function downloadFile(nodeId, name, type) {
   await fetch(`/EventManager/getFile/${nodeId}`, {
     method: 'GET'
   }).then(res => res.blob()).then(data => {
-    download(data, name, type)
-  })
+    download(data, name, type);
+  });
 }
 
 async function getEvent() {
@@ -858,7 +998,7 @@ async function getEventContactDetails() {
       const registrations = eventDetails._value.registrations || [];
       for(const registration of registrations) {
         if (registration.id === registrationId) {
-          isAlreadyRegistered.value = true;
+          isAlreadyRegistered.value = registration.status !== '3';
           const bookedOptions = registration.booked_options || [];
           for(const bookedOption of bookedOptions) {
             const optionId = bookedOption.option.id;
