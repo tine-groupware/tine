@@ -91,6 +91,67 @@ class SSO_PublicAPITest extends TestCase
 
     }
 
+    public function testPublicOidAuthResponse(): void
+    {
+        $exIdp = SSO_Controller_ExternalIdp::getInstance()->create(new SSO_Model_ExternalIdp([
+            SSO_Model_ExternalIdp::FLD_NAME => 'unittest',
+            SSO_Model_ExternalIdp::FLD_CONFIG_CLASS => SSO_Model_ExIdp_OIdConfig::class,
+            SSO_Model_ExternalIdp::FLD_CONFIG => [
+                SSO_Model_ExIdp_OIdConfig::FLD_PROVIDER_URL => 'provider_url',
+                SSO_Model_ExIdp_OIdConfig::FLD_ISSUER => 'issuer',
+                SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_ID => 'client_id',
+                SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_SECRET => 'secret',
+            ],
+            SSO_Model_ExternalIdp::FLD_DOMAINS => [
+                [SSO_Model_ExIdpDomain::FLD_DOMAIN => 'unittest1'],
+                [SSO_Model_ExIdpDomain::FLD_DOMAIN => 'unittest2'],
+            ],
+        ], true));
+
+        $raii = new Tinebase_RAII(function() {
+            Tinebase_Auth_Factory::$unitTestInject = null;
+            unset(Tinebase_Session::getSessionNamespace()->sso_idp);
+            Admin_Controller_User::getInstance()->setRequestContext([]);
+        });
+        Tinebase_Auth_Factory::$unitTestInject = new SSO_OICAuthAdapterMock(new SSO_OICClientMock(
+            authenticated: true,
+            verifiedClaims: [],
+            userInfo: (object)[
+                'sub' => 'unittestsub',
+                'email' => 'unittestemail@' . TestServer::getPrimaryMailDomain(),
+                'preferred_username' => 'unittestpreferred',
+            ]
+        ));
+        Tinebase_Session::getSessionNamespace()->sso_idp = $exIdp->getId();
+
+        Tinebase_Core::unsetUser();
+        try {
+            SSO_Controller::publicOidAuthResponse();
+        } catch (Tinebase_Exception_InvalidArgument){}
+        Tinebase_Core::setUser($this->_originalTestUser);
+
+        $user = Tinebase_User::getInstance()->getUserByLoginName('unittestpreferred');
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        Admin_Controller_User::getInstance()->delete($user->getId());
+
+        try {
+            Tinebase_User::getInstance()->getUserByLoginName('unittestpreferred', Tinebase_Model_FullUser::class);
+            $this->fail('account not deleted');
+        } catch (Tinebase_Exception_NotFound){}
+
+        Tinebase_Session::getSessionNamespace()->sso_idp = $exIdp->getId();
+
+        Tinebase_Core::unsetUser();
+        try {
+            SSO_Controller::publicOidAuthResponse();
+        } catch (Tinebase_Exception_InvalidArgument){}
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $user = Tinebase_User::getInstance()->getUserByLoginName('unittestpreferred', Tinebase_Model_FullUser::class);
+        $this->assertSame(Tinebase_Model_User::ACCOUNT_STATUS_ENABLED, $user->accountStatus);
+
+        unset($raii);
+    }
+
     /**
      *
      * @group needsbuild
