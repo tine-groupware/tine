@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -68,7 +68,7 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 6,
+        self::VERSION => 7,
         self::RECORD_NAME => 'External Identity Provider',
         self::RECORDS_NAME => 'External Identity Providers', // ngettext('External Identity Provider', 'External Identity Providers', n)
         self::TITLE_PROPERTY => self::FLD_NAME,
@@ -197,8 +197,9 @@ class SSO_Model_ExternalIdp extends Tinebase_Record_NewAbstract
             self::FLD_USERNAME_CLAIM        => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
-                self::DEFAULT_VAL           => 'email:local_part',
+                self::DEFAULT_VAL           => 'preferred_username',
                 self::LABEL                  => 'Username claim', // _('Username claim')
+                self::DESCRIPTION            => 'preferred_username, email, email:local_part, ...',
             ],
             self::FLD_ALLOW_LOCAL_LOGIN => [
                 self::TYPE                  => self::TYPE_BOOLEAN,

@@ -468,8 +468,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return $response;
         }
 
-        Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
-            ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+        Tinebase_Core::setUser(Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
 
         try {
@@ -1058,6 +1057,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                     $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
                     $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
                     try {
+                        Tinebase_Core::setUser(Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS));
                         $account = Admin_Controller_User::getInstance()->undelete($account);
                     } finally {
                         Admin_Controller_User::getInstance()->doRightChecks($oldValue);
@@ -1070,7 +1070,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()
-                            ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
+                            ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with' . print_r($data, true));
                     }
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
@@ -1080,7 +1080,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                     if (!isset($data->{$loginNameClaim}) || strlen((string)$data->{$loginNameClaim}) === 0) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                             Tinebase_Core::getLogger()
-                                ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an ' . $loginNameClaim . ' to work with');
+                                ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an ' . $loginNameClaim . ' to work with' . print_r($data, true));
                         }
                         return static::publicOidAuthResponseErrorRedirect($authRequest);
                     }
@@ -1092,6 +1092,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         $account = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
                         if (empty($account->openid) || $ssoIdp->{SSO_Model_ExternalIdp::FLD_ALLOW_REASSIGN_LOCAL_ACCOUNT}) {
                             $account->openid = $openid;
+                            Tinebase_Core::setUser(Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS));
                             Tinebase_User::getInstance()->updateUserInSqlBackend($account);
                         } else {
                             $account = null;
@@ -1103,8 +1104,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                     $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
                     $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
                     try {
-                        $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
-                        Tinebase_Core::setUser($user);
+                        Tinebase_Core::setUser(Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS));
 
                         $pw = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
                         $account = new Tinebase_Model_FullUser([
@@ -1114,7 +1114,9 @@ class SSO_Controller extends Tinebase_Controller_Event
                             'accountExpires' => NULL,
                             'openid' => $ssoIdp->getId() . ':' . $data->sub,
                             'accountLastName' => $data->name ?? $loginName,
-                            'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?: Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                            'accountPrimaryGroup' => $ssoIdp->{SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT} ?
+                                $ssoIdp->getIdFromProperty(SSO_Model_ExternalIdp::FLD_PRIMARY_GROUP_NEW_ACCOUNT) :
+                                Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
                             'groups' => is_array($ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT}) ? $ssoIdp->{SSO_Model_ExternalIdp::FLD_GROUPS_NEW_ACCOUNT} : [],
                             'xprops' => [Tinebase_Model_FullUser::XPROP_HAS_RANDOM_PWD => true],
                         ]);
@@ -1199,6 +1201,7 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             try {
                 Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+                Tinebase_Core::unsetUser();
                 if (!Tinebase_Controller::getInstance()->login($account->accountLoginName, '',
                         static::getLoginFakeRequest('/sso/oid/auth/response'),
                         self::OIDC_AUTH_CLIENT_REQUEST_TYPE)) {

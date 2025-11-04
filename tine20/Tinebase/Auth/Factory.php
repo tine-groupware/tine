@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -27,6 +27,10 @@ class Tinebase_Auth_Factory
      */
     static public function factory($_type, $_options = null)
     {
+        if (static::$unitTestInject) {
+            return static::$unitTestInject;
+        }
+
         switch($_type) {
             case Tinebase_Auth::LDAP:
                 $options = array('ldap' => Tinebase_Auth::getBackendConfiguration()); //only pass ldap options without e.g. sql options
@@ -86,4 +90,6 @@ class Tinebase_Auth_Factory
         
         return $instance;
     }
+
+    public static $unitTestInject = null;
 }
