@@ -55,7 +55,7 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetEventContactDetails',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
-            $routeCollector->post('/register/{event_id}', (new Tinebase_Expressive_RouteHandler(
+            $routeCollector->post('/register/{event_id}/{is_update}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Registration::class,
                 'publicApiPostRegistration',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
@@ -70,6 +70,11 @@ class EventManager_Controller extends Tinebase_Controller_Event
             $routeCollector->post('/registration/doubleOptIn/{event_id}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Registration::class,
                 'publicApiPostDoubleOptIn',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+            $routeCollector->post('/deregistration/{event_id}/{token}', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Registration::class,
+                'publicApiPostDeregistration',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
         });

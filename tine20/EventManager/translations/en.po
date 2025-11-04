@@ -34,8 +34,8 @@ msgstr "Open"
 msgid "Closed"
 msgstr "Closed"
 
-msgid "Canceled"
-msgstr "Canceled"
+msgid "Cancelled"
+msgstr "Cancelled"
 
 msgid "Planning"
 msgstr "Planning"
@@ -52,6 +52,9 @@ msgstr "Speaker"
 msgid "Moderator"
 msgstr "Moderator"
 
+msgid "Employee"
+msgstr "Employee"
+
 msgid "Source"
 msgstr "Source"
 
@@ -66,6 +69,18 @@ msgstr "Confirmed"
 
 msgid "Waiting list"
 msgstr "Waiting list"
+
+msgid "Reason Waiting List"
+msgstr "Reason Waiting List"
+
+msgid "Capacity exceeded"
+msgstr "Capacity exceeded"
+
+msgid "Registration deadline passed"
+msgstr "Registration deadline passed"
+
+msgid "Other"
+msgstr "Other"
 
 msgid "Rescheduled"
 msgstr "Rescheduled"
@@ -216,8 +231,8 @@ msgstr "The session should end after it begun. Please change the end time, or it
 msgid "Waiting List"
 msgstr "Waiting List"
 
-msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
-msgstr "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+msgid "Since there are no more available places, this registration is on waiting list."
+msgstr "Since there are no more available places, this registration is on waiting list."
 
 msgid "Imprint"
 msgstr "Imprint"
@@ -236,6 +251,9 @@ msgstr "Until:"
 
 msgid "Appointments:"
 msgstr "Appointments:"
+
+msgid "Session"
+msgstr "Session"
 
 msgid "Address:"
 msgstr "Address:"
@@ -297,8 +315,8 @@ msgstr "characters"
 msgid "Download file"
 msgstr "Download file"
 
-msgid "I have read and accept the terms and conditions"
-msgstr "I have read and accept the terms and conditions"
+msgid "I have read the document and accept the terms and conditions"
+msgstr "I have read the document and accept the terms and conditions"
 
 msgid "Uploaded file"
 msgstr "Uploaded file"
@@ -306,8 +324,11 @@ msgstr "Uploaded file"
 msgid "Update Registration"
 msgstr "Update Registration"
 
-msgid "Complete Registration"
-msgstr "Complete Registration"
+msgid "Cancel Registration"
+msgstr "Cancel Registration"
+
+msgid "Register"
+msgstr "Register"
 
 msgid "Mr"
 msgstr "Mr"
@@ -323,6 +344,21 @@ msgstr "Person"
 
 msgid "Deutschland"
 msgstr "Deutschland"
+
+msgid "Do you really want to cancel your registration for"
+msgstr "Do you really want to cancel your registration for"
+
+msgid "The registration date for"
+msgstr "The registration date for"
+
+msgid "has expired. If you register you will be on our waiting list. Do you still want to register?"
+msgstr "has expired. If you register you will be on our waiting list. Do you still want to register?"
+
+msgid "The event"
+msgstr "The event"
+
+msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
+msgstr "is full. If you register you will be on our waiting list. Do you still want to register?"
 
 msgid "File Acknowledgement"
 msgstr "File Acknowledgement"
@@ -350,6 +386,12 @@ msgstr "\" is not allowed. Please select another file."
 
 msgid "File Configuration"
 msgstr "File Configuration"
+
+msgid "File Required"
+msgstr "File Required"
+
+msgid "Please upload a file or uncheck the file acknowledgement option before saving."
+msgstr "Please upload a file or uncheck the file acknowledgement option before saving."
 
 msgid "Files"
 msgstr "Files"
@@ -527,6 +569,12 @@ msgstr "Value"
 msgid "GENDER_Registration"
 msgstr "GENDER_Registration"
 
+msgid "If the event is full it will not be possible to selected confirmed"
+msgstr "If the event is full it will not be possible to selected confirmed"
+
+msgid "Reason waiting list"
+msgstr "Reason waiting list"
+
 msgid "Booked options"
 msgstr "Booked options"
 
@@ -669,20 +717,26 @@ msgstr "You are registered for %1$s."
 msgid "To find other events or manage your registration, please follow the link below"
 msgstr "To find other events or manage your registration, please follow the link below"
 
-msgid "Manage your registration"
-msgstr "Manage your registration"
+msgid "Deregistration E-mail"
+msgstr "Deregistration E-mail"
 
-msgid "To manage your registration, please follow the link below"
-msgstr "To manage your registration, please follow the link below"
+msgid "Your registration for %1$s has been cancelled successfully."
+msgstr "Your registration for %1$s has been cancelled successfully."
 
-msgid "Confirm your registration"
-msgstr "Confirm your registration"
+msgid "To find other events, please follow the link below"
+msgstr "To find other events, please follow the link below"
 
-msgid "Thank you for your registration to the event %1$s."
-msgstr "Thank you for your registration to the event %1$s."
+msgid "More Events"
+msgstr "More Events"
 
-msgid "To complete the registration, please confirm your e-mail address via this link"
-msgstr "To complete the registration, please confirm your e-mail address via this link"
+msgid "Confirm your E-mail"
+msgstr "Confirm your E-mail"
+
+msgid "Thank you for expressing your interest in the event %1$s."
+msgstr "Thank you for expressing your interest in the event %1$s."
+
+msgid "To complete the registration, please confirm your e-mail address via this link:"
+msgstr "To complete the registration, please confirm your e-mail address via this link:"
 
 msgid "Confirm E-Mail address"
 msgstr "Confirm E-Mail address"

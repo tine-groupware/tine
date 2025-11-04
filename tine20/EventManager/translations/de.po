@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-10-08 16:59+0200\n"
+"PO-Revision-Date: 2025-11-04 11:42+0100\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.7\n"
+"X-Generator: Poedit 3.8\n"
 
 msgid "Type"
 msgstr "Typ"
@@ -38,8 +38,8 @@ msgstr "Offen"
 msgid "Closed"
 msgstr "Geschlossen"
 
-msgid "Canceled"
-msgstr "Abgesagt"
+msgid "Cancelled"
+msgstr "Abgemeldet"
 
 msgid "Planning"
 msgstr "Planung"
@@ -56,6 +56,9 @@ msgstr "Vortragende Person"
 msgid "Moderator"
 msgstr "Moderator*in"
 
+msgid "Employee"
+msgstr "Mitarbeiter*in"
+
 msgid "Source"
 msgstr "Quelle"
 
@@ -70,6 +73,18 @@ msgstr "Bestätigt"
 
 msgid "Waiting list"
 msgstr "Warteliste"
+
+msgid "Reason Waiting List"
+msgstr "Wartelistegrund"
+
+msgid "Capacity exceeded"
+msgstr "Kapazität überschritten"
+
+msgid "Registration deadline passed"
+msgstr "Anmeldefrist abgelaufen"
+
+msgid "Other"
+msgstr "Sonstiges"
 
 msgid "Rescheduled"
 msgstr "Verschoben"
@@ -220,8 +235,8 @@ msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie d
 msgid "Waiting List"
 msgstr "Warteliste"
 
-msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
-msgstr "Da keine Plätze mehr verfügbar sind, werden die neuesten Anmeldungen nach dem Speichern der Änderungen auf die Warteliste verschoben."
+msgid "Since there are no more available places, this registration is on waiting list."
+msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -240,6 +255,9 @@ msgstr "Bis:"
 
 msgid "Appointments:"
 msgstr "Termine:"
+
+msgid "Session"
+msgstr "Sitzung"
 
 msgid "Address:"
 msgstr "Adresse:"
@@ -301,8 +319,8 @@ msgstr "Zeichen"
 msgid "Download file"
 msgstr "Datei herunterladen"
 
-msgid "I have read and accept the terms and conditions"
-msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
+msgid "I have read the document and accept the terms and conditions"
+msgstr "Ich habe das Dokument gelesen und akzeptiere die Bedingungen"
 
 msgid "Uploaded file"
 msgstr "Hochgeladene Datei"
@@ -310,8 +328,11 @@ msgstr "Hochgeladene Datei"
 msgid "Update Registration"
 msgstr "Registrierung aktualisieren"
 
-msgid "Complete Registration"
-msgstr "Registrierung abschließen"
+msgid "Cancel Registration"
+msgstr "Abmeldung"
+
+msgid "Register"
+msgstr "Anmelden"
 
 msgid "Mr"
 msgstr "Herr"
@@ -327,6 +348,21 @@ msgstr "Person"
 
 msgid "Deutschland"
 msgstr "Deutschland"
+
+msgid "Do you really want to cancel your registration for"
+msgstr "Möchten Sie sich wirklich abmelden? Veranstaltung:"
+
+msgid "The registration date for"
+msgstr "Das Anmeldedatum für"
+
+msgid "has expired. If you register you will be on our waiting list. Do you still want to register?"
+msgstr "ist abgelaufen. Wenn Sie sich anmelden, werden Sie auf unsere Warteliste gesetzt. Möchten Sie sich trotzdem anmelden?"
+
+msgid "The event"
+msgstr "Die Veranstaltung"
+
+msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
+msgstr "ist voll. Wenn Sie sich anmelden, werden Sie auf unsere Warteliste gesetzt. Möchten Sie sich trotzdem anmelden?"
 
 msgid "File Acknowledgement"
 msgstr "Bestätigung der Datei"
@@ -354,6 +390,12 @@ msgstr "\" ist nicht zulässig. Bitte wählen Sie eine andere Datei aus."
 
 msgid "File Configuration"
 msgstr "Dateikonfiguration"
+
+msgid "File Required"
+msgstr "Datei erforderlich"
+
+msgid "Please upload a file or uncheck the file acknowledgement option before saving."
+msgstr "Bitte laden Sie eine Datei hoch oder deaktivieren Sie die Option zur Dateibestätigung, bevor Sie speichern."
 
 msgid "Files"
 msgstr "Dateien"
@@ -531,6 +573,12 @@ msgstr "Wert"
 msgid "GENDER_Registration"
 msgstr "female"
 
+msgid "If the event is full it will not be possible to selected confirmed"
+msgstr "Wenn die Veranstaltung ausgebucht ist, kann sie nicht als bestätigt ausgewählt werden"
+
+msgid "Reason waiting list"
+msgstr "Wartelistegrund"
+
 msgid "Booked options"
 msgstr "Gebuchte Optionen"
 
@@ -671,22 +719,28 @@ msgid "You are registered for %1$s."
 msgstr "Sie sind für %1$s registriert."
 
 msgid "To find other events or manage your registration, please follow the link below"
-msgstr "Um weitere Veranstaltungen zu finden oder Ihre Anmeldung zu verwalten, folgen Sie bitte dem unten stehenden Link."
+msgstr "Um weitere Veranstaltungen zu finden oder Ihre Anmeldung zu verwalten, folgen Sie bitte dem unten stehenden Link"
 
-msgid "Manage your registration"
-msgstr "Verwalten Sie Ihre Registrierung"
+msgid "Deregistration E-mail"
+msgstr "Abmeldung E-mail"
 
-msgid "To manage your registration, please follow the link below"
-msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+msgid "Your registration for %1$s has been cancelled successfully."
+msgstr "Ihre Anmeldung für %1$s wurde erfolgreich storniert."
 
-msgid "Confirm your registration"
-msgstr "Bestätigen Sie Ihre Registrierung"
+msgid "To find other events, please follow the link below"
+msgstr "Um weitere Veranstaltungen zu finden, folgen Sie bitte dem unten stehenden Link"
 
-msgid "Thank you for your registration to the event %1$s."
-msgstr "Vielen Dank für Ihre Anmeldung zur Veranstaltung %1$s."
+msgid "More Events"
+msgstr "Weitere Veranstaltungen"
 
-msgid "To complete the registration, please confirm your e-mail address via this link"
-msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgid "Confirm your E-mail"
+msgstr "Bestätigen Sie Ihre E-Mail-Adresse"
+
+msgid "Thank you for expressing your interest in the event %1$s."
+msgstr "Vielen Dank für Ihr Interesse an der Veranstaltung %1$s."
+
+msgid "To complete the registration, please confirm your e-mail address via this link:"
+msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link:"
 
 msgid "Confirm E-Mail address"
 msgstr "E-Mail-Adresse bestätigen"
@@ -696,6 +750,36 @@ msgstr "Vielen Dank für Ihr Interesse!"
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Wait List"
+#~ msgstr "Warteliste"
+
+#~ msgid "Canceled"
+#~ msgstr "Abgesagt"
+
+#~ msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+#~ msgstr "Da keine Plätze mehr verfügbar sind, werden die neuesten Anmeldungen nach dem Speichern der Änderungen auf die Warteliste verschoben."
+
+#~ msgid "I have read and accept the terms and conditions"
+#~ msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
+
+#~ msgid "Complete Registration"
+#~ msgstr "Registrierung abschließen"
+
+#~ msgid "Manage your registration"
+#~ msgstr "Verwalten Sie Ihre Registrierung"
+
+#~ msgid "To manage your registration, please follow the link below"
+#~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+
+#~ msgid "Confirm your registration"
+#~ msgstr "Bestätigen Sie Ihre Registrierung"
+
+#~ msgid "Thank you for your registration to the event %1$s."
+#~ msgstr "Vielen Dank für Ihre Anmeldung zur Veranstaltung %1$s."
+
+#~ msgid "To complete the registration, please confirm your e-mail address via this link"
+#~ msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
 
 #~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
 #~ msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"

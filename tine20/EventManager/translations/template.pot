@@ -34,7 +34,7 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-msgid "Canceled"
+msgid "Cancelled"
 msgstr ""
 
 msgid "Planning"
@@ -52,6 +52,9 @@ msgstr ""
 msgid "Moderator"
 msgstr ""
 
+msgid "Employee"
+msgstr ""
+
 msgid "Source"
 msgstr ""
 
@@ -65,6 +68,18 @@ msgid "Confirmed"
 msgstr ""
 
 msgid "Waiting list"
+msgstr ""
+
+msgid "Reason Waiting List"
+msgstr ""
+
+msgid "Capacity exceeded"
+msgstr ""
+
+msgid "Registration deadline passed"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 msgid "Rescheduled"
@@ -216,7 +231,7 @@ msgstr ""
 msgid "Waiting List"
 msgstr ""
 
-msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+msgid "Since there are no more available places, this registration is on waiting list."
 msgstr ""
 
 msgid "Imprint"
@@ -235,6 +250,9 @@ msgid "Until:"
 msgstr ""
 
 msgid "Appointments:"
+msgstr ""
+
+msgid "Session"
 msgstr ""
 
 msgid "Address:"
@@ -297,7 +315,7 @@ msgstr ""
 msgid "Download file"
 msgstr ""
 
-msgid "I have read and accept the terms and conditions"
+msgid "I have read the document and accept the terms and conditions"
 msgstr ""
 
 msgid "Uploaded file"
@@ -306,7 +324,10 @@ msgstr ""
 msgid "Update Registration"
 msgstr ""
 
-msgid "Complete Registration"
+msgid "Cancel Registration"
+msgstr ""
+
+msgid "Register"
 msgstr ""
 
 msgid "Mr"
@@ -322,6 +343,21 @@ msgid "Person"
 msgstr ""
 
 msgid "Deutschland"
+msgstr ""
+
+msgid "Do you really want to cancel your registration for"
+msgstr ""
+
+msgid "The registration date for"
+msgstr ""
+
+msgid "has expired. If you register you will be on our waiting list. Do you still want to register?"
+msgstr ""
+
+msgid "The event"
+msgstr ""
+
+msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
 msgstr ""
 
 msgid "File Acknowledgement"
@@ -349,6 +385,12 @@ msgid "\" is not allowed. Please select another file."
 msgstr ""
 
 msgid "File Configuration"
+msgstr ""
+
+msgid "File Required"
+msgstr ""
+
+msgid "Please upload a file or uncheck the file acknowledgement option before saving."
 msgstr ""
 
 msgid "Files"
@@ -527,6 +569,12 @@ msgstr ""
 msgid "GENDER_Registration"
 msgstr ""
 
+msgid "If the event is full it will not be possible to selected confirmed"
+msgstr ""
+
+msgid "Reason waiting list"
+msgstr ""
+
 msgid "Booked options"
 msgstr ""
 
@@ -669,19 +717,25 @@ msgstr ""
 msgid "To find other events or manage your registration, please follow the link below"
 msgstr ""
 
-msgid "Manage your registration"
+msgid "Deregistration E-mail"
 msgstr ""
 
-msgid "To manage your registration, please follow the link below"
+msgid "Your registration for %1$s has been cancelled successfully."
 msgstr ""
 
-msgid "Confirm your registration"
+msgid "To find other events, please follow the link below"
 msgstr ""
 
-msgid "Thank you for your registration to the event %1$s."
+msgid "More Events"
 msgstr ""
 
-msgid "To complete the registration, please confirm your e-mail address via this link"
+msgid "Confirm your E-mail"
+msgstr ""
+
+msgid "Thank you for expressing your interest in the event %1$s."
+msgstr ""
+
+msgid "To complete the registration, please confirm your e-mail address via this link:"
 msgstr ""
 
 msgid "Confirm E-Mail address"

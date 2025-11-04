@@ -7,12 +7,12 @@ available parameters:
 #}
 {% extends 'Tinebase/views/emails/base.text.twig' %}
 {% block subject %}
-    {{ _('Confirm your registration') }}
+    {{ _('Confirm your E-mail') }}
 {% endblock %}
 
 {% block body %}
-    {{ _('Thank you for your registration to the event %1$s.') | format(event.name) }}
-    {{ _('To complete the registration, please confirm your e-mail address via this link') }}
+    {{ _('Thank you for expressing your interest in the event %1$s.') | format(event.name) }}
+    {{ _('To complete the registration, please confirm your e-mail address via this link:') }}
 
     {{ link }}
 {% endblock %}

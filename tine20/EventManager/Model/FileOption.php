@@ -40,10 +40,6 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
             self::FLD_NODE_ID                   => [
                 self::LENGTH                        => 40,
                 self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
@@ -51,10 +47,6 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
             self::FLD_FILE_NAME => [
                 self::LENGTH                       => 40,
                 self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                   => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
@@ -68,10 +60,6 @@ class EventManager_Model_FileOption extends Tinebase_Record_NewAbstract
             self::FLD_FILE_TYPE => [
                 self::LENGTH                       => 40,
                 self::TYPE                          => self::TYPE_STRING,
-                self::VALIDATORS                   => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => false,
-                    Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
                 self::UI_CONFIG                     => [
                     self::DISABLED                      => true,
                 ],
