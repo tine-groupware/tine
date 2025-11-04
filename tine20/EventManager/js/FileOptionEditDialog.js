@@ -128,6 +128,28 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         return true;
     },
 
+    validateFileAcknowledgement: function () {
+        const fileAcknowledgementField = this.form.findField('file_acknowledgement');
+        const isFileAcknowledgementChecked = fileAcknowledgementField && fileAcknowledgementField.getValue();
+
+        if (isFileAcknowledgementChecked) {
+            const hasUploadedFile = this.record && this.record.get('node_id');
+            const hasFileInGrid = this.gridPanel && this.gridPanel.store.data.items.length > 0;
+
+            if (!hasUploadedFile && !hasFileInGrid) {
+                Ext.MessageBox.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING,
+                    title: this.app.i18n._('File Required'),
+                    msg: this.app.i18n._('Please upload a file or uncheck the file acknowledgement option before saving.')
+                });
+                return false;
+            }
+        }
+
+        return true;
+    },
+
     onFilesSelected: function () {
         const uploadedFiles = Array.from(this.gridPanel.store.data.items);
         if (!this.validateFiles(uploadedFiles)) {
@@ -166,6 +188,9 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     onApplyChanges: function (button, event, closeWindow) {
+        if (!this.validateFileAcknowledgement()) {
+            return false;
+        }
         let uploadedFiles = this.gridPanel.store.data.items;
         if (uploadedFiles.length > 0 && !this.record.get('node_id')) {
             let completedFiles = uploadedFiles.filter(file => file.get('status') === 'complete');

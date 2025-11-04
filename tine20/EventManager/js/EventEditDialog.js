@@ -3,7 +3,7 @@
  *
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.leuschel@metaways.de> <t.wulff@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -297,8 +297,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 sessions.forEach((session) => {
                                     session['session_number'] = counter + 1;
                                     counter += 1;
-                                    if (me.form.findField('end').getValue() && session['start_time'] && (me.form.findField('end').getValue() < session['start_time'])) {
-                                        session['start_time'] = me.form.findField('end').getValue();
+                                    if (me.form.findField('end').getValue() && session['end_time'] && (me.form.findField('end').getValue() >= session['end_time'])) {
+                                        session['end_time'] = me.form.findField('end').getValue();
                                         Ext.MessageBox.show({
                                             buttons: Ext.Msg.OK,
                                             icon: Ext.MessageBox.WARNING,
@@ -352,7 +352,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
-                title: this.app.i18n._('Wait List'),
+                title: this.app.i18n._('Waiting List'),
                 msg: this.app.i18n._('Since there are no more available places, this registration is on waiting list.'),
                 fn: () => this.supr().onSaveAndClose.apply(this, arguments)
             });

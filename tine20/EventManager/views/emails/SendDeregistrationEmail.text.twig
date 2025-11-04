@@ -1,0 +1,19 @@
+{#
+available parameters:
+    link
+    app.branding.title
+    contact
+    event
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+    {{ _('Deregistration E-mail') }}
+{% endblock %}
+
+
+{% block body %}
+    {{ _('Your registration for %1$s has been cancelled successfully.') | format(event.name) }}
+    {{ _('To find other events, please follow the link below') }}
+
+    {{ link }}
+{% endblock %}
