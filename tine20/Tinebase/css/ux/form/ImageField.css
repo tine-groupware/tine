@@ -2,6 +2,14 @@
     border: 1px solid #B5B8C8;
     background-color: transparent !important;
 }
+.ux-imagefield-wrapper {
+    position: relative;
+}
+
+.ux-imagefield-wrapper img {
+    width: 100%;
+}
+
 .ux-imagefield-button{
      position:absolute;
      top:0px;
@@ -11,4 +19,9 @@
 .ux-imagefield-text{
     position: absolute;
     text-align:center;
+    width:100%;
+    height:100%;
+
+    top: 50% !important;
+    /*left: 50%;*/
 }

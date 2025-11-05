@@ -73,7 +73,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @cfg {Bool} autoShrinkContainerSelector
      * if container selector is shown, setting this to true, shrinks the selector to fit the content.
      */
-    autoShrinkContainerSelector: null,
+    autoShrinkContainerSelector: true,
 
     /**
      * @cfg {Bool} evalGrants
@@ -258,6 +258,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     displayNotes: false,
 
     useMultiple: false,
+
+    responsiveBreakpointOverrides: null,
 
     inheritableStatics: {
         /**
@@ -513,8 +515,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     border: false,
                     frame: true,
                     layout: 'border',
+                    layoutConfig: {
+                        enableResponsive: true,
+                        responsiveBreakpointOverrides: this.getRecordFormItems === Tine.widgets.dialog.EditDialog.prototype.getRecordFormItems
+                            ? [{level: 2, width: 300}]
+                            : this.responsiveBreakpointOverrides,
+                    },
                     defaults: { autoScroll: true },
-                    items: [Ext.applyIf(this.getRecordFormItems(plugin), {
+                    items: [Ext.applyIf(this.getRecordFormItems (plugin), {
                         region: 'center',
                         xtype: 'columnform',
                         labelAlign: 'top',

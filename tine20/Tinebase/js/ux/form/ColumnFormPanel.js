@@ -60,6 +60,12 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
     labelAlign: 'top',
 
     /**
+     * @cfg {Object} columnLayoutConfig
+     * Layout Config overrides to be applied to the underlying column layout
+     */
+    columnLayoutConfig: null,
+
+    /**
      * @private
      */
     initComponent: function() {
@@ -80,6 +86,9 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
                     beforeadd: this.onBeforeAddFromItem
                 }
             };
+
+            if (this.columnLayoutConfig) rowConfig.layoutConfig = this.columnLayoutConfig;
+
             // autoWidth
             if (! this.formDefaults.columnWidth) {
                 const tcw = _.sum(_.map(initialRowConfig, 'columnWidth')) || 0;

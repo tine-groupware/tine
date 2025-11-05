@@ -120,8 +120,7 @@ export default defineComponent({
   }
 
   .table-container {
-    overflow: auto;
-    max-height: 50vh;
+    overflow-x: auto;
   }
 
   .is-closed-message {

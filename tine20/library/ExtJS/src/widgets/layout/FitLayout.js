@@ -43,6 +43,10 @@ Ext.layout.FitLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // private
     onLayout : function(ct, target){
         Ext.layout.FitLayout.superclass.onLayout.call(this, ct, target);
+
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt?.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
+
         if(!ct.collapsed){
             this.setItemSize(this.activeItem || ct.items.itemAt(0), this.getLayoutTargetSize());
         }

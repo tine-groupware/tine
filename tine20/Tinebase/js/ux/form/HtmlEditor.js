@@ -61,6 +61,7 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
                     },
                     overflowText: b.overflowText || b.title
                 };
+                Object.assign(midasCmdButton, b.displayPriority ? {displayPriority: b.displayPriority} : {});
             } else {
                 midasCmdButton = new Ext.Toolbar.Separator();
             }
@@ -182,6 +183,7 @@ Ext.ux.form.HtmlEditor.SelectImage = Ext.extend(Ext.ux.form.HtmlEditor.MidasComm
       this.midasBtns = ['|', {
           enableOnSelection: true,
           cmd: 'selectImage',
+          displayPriority: 100, // @fixme: hard coding not a good idea
           tooltip: {
               title: i18n._('Select Image'),
               text: i18n._('Insert an image with the selected size')
@@ -219,12 +221,14 @@ Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCo
     // private
     midasBtns: ['|', {
         cmd: 'outdent',
+        displayPriority: 80,
         tooltip: {
             title: 'Outdent Text'
         },
         overflowText: 'Outdent Text'
     }, {
         cmd: 'indent',
+        displayPriority: 80,
         tooltip: {
             title: 'Indent Text'
         },
@@ -242,6 +246,7 @@ Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCo
 Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
     midasBtns: ['|', {
         enableOnSelection: true,
+        displayPriority: 70, // @fixme: hard coding not a good idea
         cmd: 'removeFormat',
         tooltip: {
             title: 'Remove Formatting'
@@ -736,6 +741,7 @@ Ext.ux.form.HtmlEditor.PlainText = Ext.extend(Ext.util.Observable, {
         this.cmp.getToolbar().addFill();
         var btn = this.cmp.getToolbar().addButton({
             iconCls: 'x-edit-toggleFormat',
+            displayPriority: 95, // @fixme: hard coded value
             handler: function () {
                 this.cmp.fireEvent('toggleFormat', 'text/plain');
             },

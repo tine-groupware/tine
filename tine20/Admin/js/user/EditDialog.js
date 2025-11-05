@@ -992,6 +992,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 frame: true,
                 layout: 'hfit',
+                layoutConfig: {
+                    enableResponsive: true
+                },
                 plugins: [{
                     ptype: 'ux.itemregistry',
                     key: 'Admin-UserEditDialog-RecordForm'

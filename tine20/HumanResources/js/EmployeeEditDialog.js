@@ -195,6 +195,10 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             border: false,
             frame: true,
             layout: 'border',
+            layoutConfig: {
+                enableResponsive: true,
+                responsiveBreakpointOverrides: [{level: 2, width: 700}]
+            },
             items: [{
                 region: 'center',
                 layout: 'hfit',

@@ -172,10 +172,14 @@ import './DependencyPanel'
             },
             items:[{
                 title: this.app.i18n.n_('Task', 'Tasks', 1),
-                autoScroll: true,
+                // autoScroll: true, // uncomment incase of scroll issues
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 850}]
+                },
                 items: [{
                     region: 'center',
                     xtype: 'columnform',
