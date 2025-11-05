@@ -41,8 +41,6 @@ Ext.ux.ItemRegistry.AUTO_ID = 1;
  * @param {Number} pos (optional)
  */
 Ext.ux.ItemRegistry.registerItem = function(key, item, pos) {
-    var _ = window.lodash;
-
     if (_.isString(key)) {
         if (!Ext.ux.ItemRegistry.itemMap.hasOwnProperty(key)) {
             Ext.ux.ItemRegistry.itemMap[key] = [];
