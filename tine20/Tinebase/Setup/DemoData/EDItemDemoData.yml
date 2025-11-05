@@ -1,0 +1,17 @@
+########################
+# Tine 2.0
+# @package     Admin
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Christian Feitl <c.feitl@metaways.de>
+# @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for Admin module
+# imports users, groups and roles
+########################
+---
+name: EDItemDemoData
+
+files:
+  #$app,$model,$definition,$file
+  - Tinebase/EvaluationDimensionItem/tinebase_import_editem_csv/edItem.csv
