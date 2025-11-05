@@ -1819,10 +1819,12 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             try {
                 // legacy way to find out table name, model conf should bring its table name
                 if (null !== ($appInstance = Tinebase_Core::getApplicationInstance(
-                        $this->_applicationName, $this->_modelName, /* $_ignoreACL */
+                        $this->_applicationName, $this->_modelName,
                         true))
                     && method_exists($appInstance, 'getBackend')
-                    && null !== ($backend = $appInstance->getBackend())) {
+                    && null !== ($backend = $appInstance->getBackend())
+                    && method_exists($backend, 'getTableName')
+                ) {
                     $tableName = $backend->getTableName();
                 }
             } catch (Tinebase_Exception_NotFound) {}
