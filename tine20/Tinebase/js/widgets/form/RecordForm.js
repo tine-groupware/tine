@@ -57,6 +57,9 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
                     tabPanel.add({
                         title: app.i18n._hidden(tabName),
                         layout: 'form',
+                        layoutConfig: {
+                            enableResponsive: true,
+                        },
                         border: true,
                         frame: true,
                         labelAlign: 'top',

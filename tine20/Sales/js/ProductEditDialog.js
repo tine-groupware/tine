@@ -16,6 +16,8 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 800,
     windowHeight: 600,
 
+    responsiveBreakpointOverrides: [{level: 2, width: 700}],
+
     getRecordFormItems: function() {
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {

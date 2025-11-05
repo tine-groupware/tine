@@ -310,6 +310,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         return [{
             region: 'center',
             xtype: 'columnform',
+            columnLayoutConfig: {
+                enableResponsive: true,
+            },
             items: [
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
                 // NOTE: contract_id waits for contract rewrite

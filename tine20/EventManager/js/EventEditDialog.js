@@ -57,6 +57,9 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                },
                 items: [{
                     region: 'center',
                     layout: 'vbox',
@@ -64,7 +67,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [{
                         xtype: 'fieldset',
                         region: 'north',
-                        autoHeight: true,
+                        // autoHeight: true,
                         title: this.app.i18n._('Event Information'),
                         items: [{
                             xtype: 'panel',

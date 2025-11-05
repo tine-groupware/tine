@@ -91,6 +91,9 @@ Tine.HumanResources.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialo
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                },
                 items: [{
                     region: 'center',
                     layout: 'hfit',

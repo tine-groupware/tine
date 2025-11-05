@@ -43,9 +43,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
     extraContextActions: null,
     
     defaultAutoCreate: {tag: 'div', cls: 'ux-imagefield-ct', cn: [
-        {tag: 'img', cls: 'ux-imagefield-img'},
-        {tag: 'div', cls: 'ux-imagefield-button'},
-        {tag: 'div', cls: 'ux-imagefield-text'}
+            {
+                tag: 'div', cls: 'ux-imagefield-wrapper', cn: [
+                    {tag: 'img', cls: 'ux-imagefield-img'},
+                    {tag: 'div', cls: 'ux-imagefield-button'},
+                    {tag: 'div', cls: 'ux-imagefield-text'}
+                ]
+            }
     ]},
     
     handleMouseEvents: true,
@@ -84,13 +88,13 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
-        this.textCt.setSize(this.width, this.height);
+        // this.textCt.setSize(this.width, this.height);
         var clickToEditText = i18n._('Click to edit');
-        var tm = Ext.util.TextMetrics.createInstance(this.textCt);
-        tm.setFixedWidth(this.width);
-        this.textCt.applyStyles({
-            top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'
-        });
+        // var tm = Ext.util.TextMetrics.createInstance(this.textCt);
+        // tm.setFixedWidth(this.width);
+        // this.textCt.applyStyles({
+        //     top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'
+        // });
         this.textCt.insertHtml('afterBegin', clickToEditText);
         
         Ext.apply(this.browsePlugin, {
@@ -148,9 +152,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         img.on('load', function () {
             if (this.value === this.defaultImage) {
                 this.imageCt.setStyle({
-                    position: 'absolute',
-                    top: ((this.height - this.imageCt.getHeight()) /2)+ 'px',
-                    left: ((this.width - this.imageCt.getWidth()) /2) + 'px'
+                    // position: 'absolute',
+                    // top: ((this.height - this.imageCt.getHeight()) /2)+ 'px',
+                    // left: ((this.width - this.imageCt.getWidth()) /2) + 'px'
                 });
             } else {
                 this.imageCt.setStyle({

@@ -291,35 +291,76 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.tbar = new Ext.Toolbar({
             defaults: {height: 43},
-            items: [{
-                xtype: 'buttongroup',
-                columns: 8,
+            enableOverflow: true,
                 items: [
-                    Ext.apply(new Ext.Button(this.action_send), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_cancel), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_searchContacts), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top',
-                        tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
-                    }),
-                    this.action_saveAsDraft,
-                    this.button_toggleReadingConfirmation,
-                    this.button_massMailing,
-                    this.button_fileMessage,
-                    this.action_saveAsTemplate,
-                    this.button_toggleEncrypt,
-                    this.button_ExpectedAnswer,
+                    {
+                        xtype: 'buttongroup',
+                        columns: 4,
+                        items: [
+                            Ext.apply(new Ext.Button(this.action_send), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top'
+                            }),
+                            Ext.apply(new Ext.Button(this.action_cancel), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top'
+                            }),
+                            Ext.apply(new Ext.Button(this.action_searchContacts), {
+                                scale: 'medium',
+                                rowspan: 2,
+                                iconAlign: 'top',
+                                tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
+                            }),
+                        ]
+                    },
+                    '->',
+                    {
+                        xtype: 'buttongroup',
+                        columns: 4,
+                        items: [
+                            this.action_saveAsDraft,
+                            this.button_toggleReadingConfirmation,
+                            this.button_massMailing,
+                            this.button_fileMessage,
+                            this.action_saveAsTemplate,
+                            this.button_toggleEncrypt,
+                            this.button_ExpectedAnswer,
+                        ]
+                    },
                 ]
-            }]
+            // enableOverflow: true,
+            // items: [{
+            //     xtype: 'buttongroup',
+            //     columns: 8,
+            //     items: [
+            //         Ext.apply(new Ext.Button(this.action_send), {
+            //             scale: 'medium',
+            //             rowspan: 2,
+            //             iconAlign: 'top'
+            //         }),
+            //         Ext.apply(new Ext.Button(this.action_cancel), {
+            //             scale: 'medium',
+            //             rowspan: 2,
+            //             iconAlign: 'top'
+            //         }),
+            //         Ext.apply(new Ext.Button(this.action_searchContacts), {
+            //             scale: 'medium',
+            //             rowspan: 2,
+            //             iconAlign: 'top',
+            //             tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
+            //         }),
+            //         '->',
+            //         this.action_saveAsDraft,
+            //         this.button_toggleReadingConfirmation,
+            //         this.button_massMailing,
+            //         this.button_fileMessage,
+            //         this.action_saveAsTemplate,
+            //         this.button_toggleEncrypt,
+            //         this.button_ExpectedAnswer,
+            //     ]
+            // }]
         });
     },
 
@@ -1431,6 +1472,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }, this);
 
             this.btnAddAttachemnt = new Ext.Button(this.action_addAttachment);
+            // this.tbar.items.add(Ext.apply(this.btnAddAttachemnt, {
+            //     scale: 'medium',
+            //     rowspan: 2,
+            //     iconAlign: 'top'
+            // }))
             this.tbar.get(0).insert(2, Ext.apply(this.btnAddAttachemnt, {
                 scale: 'medium',
                 rowspan: 2,

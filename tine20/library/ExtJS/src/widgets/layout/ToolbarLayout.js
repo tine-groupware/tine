@@ -92,7 +92,7 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
     },
 
     fitToSize : function(t){
-        if(this.container.enableOverflow === false){
+        if(this.container.enableOverflow === false && !this.enableResponsive){
             const items = this.container.items.items;
             const w = t.dom.clientWidth;
             const autoShrinkItems = items.filter(el => el.autoShrink);
@@ -144,21 +144,42 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 len = items.length, c,
                 loopWidth = 0;
 
-            for(i = 0; i < len; i++) {
+            const itemsDict = {}
+            for (i=0; i<len; i++){
                 c = items[i];
-                if(!c.isFill){
-                    loopWidth += this.getItemWidth(c);
-                    if(loopWidth > clipWidth){
-                        if(!(c.hidden || c.xtbHidden)){
-                            this.hideItem(c);
+                let totalVisibleWidth = 0;
+                let priority = c.displayPriority ?? 0;
+                if (!c.hasOwnProperty('displayPriority') && c.el?.dom.classList.contains('xtb-sep') && i !== len - 1) {
+                    priority = items[i+1].displayPriority;
+                }
+                if (!itemsDict[priority]) itemsDict[priority] = [];
+                itemsDict[priority].push(c);
+                if (!c?.el?.dom) continue;
+                c.el.dom.style.display = '';
+                const width = c.el.dom.offsetWidth ?? 0;
+                totalVisibleWidth += width;
+            }
+
+            const sortedItems = Object.keys(itemsDict).sort(function(a,b){return b-a});
+
+            for (let i=0; i<sortedItems.length; i++) {
+                const items = itemsDict[sortedItems[i]];
+                for (let j=0; j<items.length; j++){
+                    const c = items[j];
+                    if (!c.isFill) {
+                        loopWidth += this.getItemWidth(items[j]);
+                        if(loopWidth > clipWidth){
+                            if(!(c.hidden || c.xtbHidden)){
+                                this.hideItem(c);
+                            }
+                        }else if(c.xtbHidden){
+                            this.unhideItem(c);
                         }
-                    }else if(c.xtbHidden){
-                        this.unhideItem(c);
                     }
                 }
             }
         }
-        if(this.hiddens){
+        if(this.hiddens && !this.enableResponsive){
             this.initMore();
             if(!this.lastOverflow){
                 this.container.fireEvent('overflowchange', this.container, true);

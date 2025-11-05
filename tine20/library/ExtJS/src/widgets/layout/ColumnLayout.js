@@ -4,6 +4,8 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+import {getLayoutClass} from "../../../../../Tinebase/js/util/responsiveLayout";
+
 /**
  * @class Ext.layout.ColumnLayout
  * @extends Ext.layout.ContainerLayout
@@ -76,6 +78,12 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
     targetCls: 'x-column-layout-ct',
 
+    /**
+     * Responsive level at which the content of the Container are stacked horizontally
+     * @todo better name
+     */
+    responsiveStackLevel: 1,
+
     isValidParent : function(c, target){
         return this.innerCt && c.getPositionEl().dom.parentNode == this.innerCt.dom;
     },
@@ -102,12 +110,19 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
     // private
     onLayout : function(ct, target){
+
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
+
         var cs = ct.items.items, len = cs.length, c, i;
 
         this.renderAll(ct, target);
 
         var size = this.getLayoutTargetSize();
 
+        this.layoutClass = getLayoutClass(size.width, this.responsiveBreakpointOverrides)
+
+        const respFlag = this.layoutClass.level < this.responsiveStackLevel && this.enableResponsive
         if(size.width < 1 && size.height < 1){ // display none?
             return;
         }
@@ -116,14 +131,30 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
             h = size.height,
             pw = w;
 
+        const ctHeights = ct.getHeight()
+
         this.innerCt.setWidth(w);
+        if (respFlag) {
+            ct.__height = ct.__height ?? h
+            ct.setHeight('auto');
+            ct._autoHeight = true
+        } else {
+            if (ct.__height) {
+                ct.setHeight(ct.__height);
+                delete ct.__height
+            }
+            ct._autoHeight = false
+        }
 
         // some columns can be percentages while others are fixed
         // so we need to make 2 passes
-
         for(i = 0; i < len; i++){
             c = cs[i];
             if(!c.columnWidth){
+                if (c.__width && !respFlag) {
+                    c.setWidth(c.__width);
+                    delete c.__width;
+                }
                 pw -= (c.getWidth() + c.getPositionEl().getMargins('lr'));
             }
         }
@@ -132,10 +163,22 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
         for(i = 0; i < len; i++){
             c = cs[i];
-            if(c.columnWidth){
-                c.setSize(Math.floor(c.columnWidth * pw) - c.getPositionEl().getMargins('lr'));
+            if (respFlag && ct._autoHeight) {
+                // for items with fixed width, cache the width for later
+                if (!c.columnWidth && !c.__width) {
+                    c.__width = c.getWidth();
+                }
+                if (c.getWidth() !== w) {
+                    c.setWidth(w);
+                }
+            } else{
+                if(c.columnWidth){
+                    c.setSize(Math.floor(c.columnWidth * pw) - c.getPositionEl().getMargins('lr'));
+                }
             }
         }
+
+        if (ctHeights !== ct.getHeight() && this.enableResponsive) ct.ownerCt?.ownerCt?.doLayout()
 
         // Browsers differ as to when they account for scrollbars.  We need to re-measure to see if the scrollbar
         // spaces were accounted for properly.  If not, re-layout.
