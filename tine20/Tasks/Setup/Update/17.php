@@ -20,11 +20,14 @@ class Tasks_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
+        self::PRIO_TINEBASE_UPDATE     => [
+            // needs to run before \Timetracker_Setup_Update_17::update003
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
+        ],
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE017_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
@@ -54,6 +57,9 @@ class Tasks_Setup_Update_17 extends Setup_Update_Abstract
     public function update001()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->_db->update(SQL_TABLE_PREFIX . 'tasks', ['percent' => 0],
+            $this->_db->quoteIdentifier('percent') . ' IS NULL');
 
         Setup_SchemaTool::updateSchema([
             Tasks_Model_Task::class,
