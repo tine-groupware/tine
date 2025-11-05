@@ -83,6 +83,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             items: [{
                 xtype: 'panel',
                 layout: 'hbox',
+                layoutConfig: {
+                    responsiveStackLevel: 0,
+                },
                 align: 'stretch',
                 plugins: [{
                     ptype: 'ux.itemregistry',
@@ -91,6 +94,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 items: [{
                     flex: 1,
                     xtype: 'columnform',
+                    columnLayoutConfig: {
+                        enableResponsive: true,
+                        responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                    },
                     autoHeight: true,
                     style: 'padding-right: 5px;',
                     items: [

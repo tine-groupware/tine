@@ -100,7 +100,7 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
     NOTE: this value must not be changed during runtime. Doing so can lead to rendering issues.
      */
-    enableResponsive : false,
+    enableResponsive : undefined,
 
     renderOrder: null,
 
@@ -159,10 +159,8 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
     onLayout : function(ct, target){
 
         // if parent responsiveEnabled, make this container also responsiveEnabled
-        if (ct.ownerCt.enableResponsive && !this.hasOwnProperty('enableResponsive')) {
-            this.enableResponsive = ct.ownerCt.enableResponsive;
-            ct.enableResponsive = ct.ownerCt.enableResponsive;
-        }
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         this.layoutClass = getLayoutClass(this.getLayoutTargetSize().width, this.responsiveBreakpointOverrides)
         this.stackEast = this.layoutClass.level <= this.stackEastLevel
@@ -205,8 +203,7 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
                 }
                 c.collapsed = false;
                 if(!c.rendered){
-                    if (!c.hasOwnProperty('enableResponsive') && this.enableResponsive)
-                        c.enableResponsive = this.enableResponsive;
+                    c.enableResponsive = c.enableResponsive ?? this.enableResponsive
                     c.render(target, i);
                     c.getPositionEl().addClass('x-border-panel');
                 }
@@ -248,7 +245,9 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
         if(n && n.isVisible()){
             b = n.getSize();
             m = n.getMargins();
+            n.hideSplitBar = false
             if (this.enableResponsive && this.overflowTarget) {
+                n.hideSplitBar = true
                 if (!n?.__sizeCache) n.__sizeCache = {'b': {...b}, 'm':{...m}, autoHeight: n.panel.autoHeight};
                 n.panel.autoHeight = true;
                 n.el.setStyle('position', 'unset')
@@ -275,7 +274,9 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
         if(s && s.isVisible()){
             b = s.getSize();
             m = s.getMargins();
+            s.hideSplitBar = false
             if (this.enableResponsive && this.overflowTarget) {
+                s.hideSplitBar = true
                 if (!s.__sizeCache) s.__sizeCache = {'b':{...b}, 'm':{...m}, autoHeight: s.panel.autoHeight};
                 s.panel.autoHeight = true;
                 s.el.setStyle('position', 'unset')

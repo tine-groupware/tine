@@ -53,6 +53,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             frame: true,
             layout: 'border',
+            // layoutConfig: {
+            //     enableResponsive: true
+            // },
             items: [{
                 region: 'north',
                 xtype: 'columnform',

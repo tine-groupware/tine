@@ -57,6 +57,10 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                },
                 items: [{
                     region: 'center',
                     xtype: 'columnform',

@@ -100,6 +100,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     border: false,
                     items: [{
                         layout: 'hbox',
+                        layoutConfig: {
+                            enableResponsive: false,
+                        },
                         items: [{
                             margins: '5',
                             width: 100,
@@ -116,6 +119,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         layout: 'hbox',
+                        layoutConfig: {
+                            enableResponsive: false,
+                        },
                             hidden: !this.app.featureEnabled('featureEventType'),
                         items: [{
                             margins: '5',
@@ -136,6 +142,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                                 layout: 'hbox',
+                        layoutConfig: {
+                            enableResponsive: false,
+                        },
                                 hidden: !Tine.Tinebase.featureEnabled('featureSite'),
                                 items: [{
                                     margins: '5',
@@ -162,6 +171,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }]
                     }, {
                         layout: 'hbox',
+                        layoutConfig: {
+                            enableResponsive: false,
+                        },
                         items: [{
                             margins: '5',
                             width: 100,
@@ -173,6 +185,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }, {
                         layout: 'hbox',
                         height: 135,
+                        // autoHeight: true,
                         layoutConfig: {
                             align : 'stretch',
                             pack  : 'start'
@@ -185,6 +198,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             title: this.app.i18n._('Details'),
                             items: [{
                                 xtype: 'columnform',
+                                columnLayoutConfig: {
+                                    enableResponsive: false, // as fields usable also in small devices
+                                },
                                 labelAlign: 'side',
                                 labelWidth: 100,
                                 formDefaults: {

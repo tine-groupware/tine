@@ -52,10 +52,10 @@ Ext.ux.layout.HorizontalFitLayout = Ext.extend(Ext.layout.ContainerLayout, {
      */
     onLayout : function(ct, target){
         Ext.layout.FitLayout.superclass.onLayout.call(this, ct, target);
-        if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
-            ct.enableResponsive = ct.ownerCt?.enableResponsive;
-            this.enableResponsive = ct.ownerCt?.enableResponsive;
-        }
+
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
+
         if(!this.container.collapsed){
             var size = target.getStyleSize();
             size.width = ct.getContentTarget().isScrollable() ? size.width-Ext.getScrollBarWidth() : size.width;

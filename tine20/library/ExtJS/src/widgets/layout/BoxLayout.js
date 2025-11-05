@@ -177,10 +177,8 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
     onLayout : function(ct, target){
         Ext.layout.VBoxLayout.superclass.onLayout.call(this, ct, target);
 
-        if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
-            ct.enableResponsive = ct.ownerCt.enableResponsive;
-            this.enableResponsive = ct.ownerCt.enableResponsive;
-        }
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         var cs = this.getRenderedItems(ct), csLen = cs.length,
             c, i, cm, ch, margin, cl, diff, aw, availHeight,
@@ -280,33 +278,36 @@ Ext.layout.VBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         // Apply heights
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
-            cm = c.margins;
-            t += cm.top;
-            aw = availableWidth;
-            cl = l + cm.left // default left pos
 
-            // Adjust left pos for centering
-            if(this.align == 'center'){
-                if((diff = availableWidth - (c.getWidth() + cm.left + cm.right)) > 0){
-                    cl += (diff/2);
-                    aw -= diff;
+            if (this.enableResponsive && ct.autoHeight) {
+                c.setHeight('auto')
+                c.el.setStyle('position', 'unset');
+            } else {
+                c.el.setStyle('position', '');
+
+                cm = c.margins;
+                t += cm.top;
+                aw = availableWidth;
+                cl = l + cm.left // default left pos
+
+                // Adjust left pos for centering
+                if(this.align == 'center'){
+                    if((diff = availableWidth - (c.getWidth() + cm.left + cm.right)) > 0){
+                        cl += (diff/2);
+                        aw -= diff;
+                    }
                 }
-            }
 
-            c.setPosition(cl, t);
+                c.setPosition(cl, t);
 
-            if (this.enableResponsive) {
-                if(c.autoHeight) c.el.setStyle('position', 'unset');
-                else c.el.setStyle('position', '');
+                if(isStart && c.flex){
+                    ch = Math.max(0, heights[idx++] + (leftOver-- > 0 ? 1 : 0));
+                    c.setSize(aw, ch);
+                }else{
+                    ch = c.getHeight();
+                }
+                t += ch + cm.bottom;
             }
-
-            if(isStart && c.flex){
-                ch = Math.max(0, heights[idx++] + (leftOver-- > 0 ? 1 : 0));
-                c.setSize(aw, ch);
-            }else{
-                ch = c.getHeight();
-            }
-            t += ch + cm.bottom;
         }
         // Putting a box layout into an overflowed container is NOT correct and will make a second layout pass necessary.
         if (i = target.getStyle('overflow') && i != 'hidden' && !this.adjustmentPass) {
@@ -368,13 +369,18 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
      * <tt>flex = undefined</tt> will not be 'flexed' (the initial size will not be changed).
      */
 
+    /**
+     * @todo better name. Responsive level below which the contents are stacked vertically
+     */
+    responsiveStackLevel: 2,
+
     // private
     onLayout : function(ct, target){
         Ext.layout.HBoxLayout.superclass.onLayout.call(this, ct, target);
-        if(!this.hasOwnProperty('enableResponsive') && ct.ownerCt.enableResponsive) {
-            ct.enableResponsive = ct.ownerCt.enableResponsive;
-            this.enableResponsive = ct.ownerCt.enableResponsive;
-        }
+
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
+
         var cs = this.getRenderedItems(ct), csLen = cs.length,
             c, i, cm, cw, ch, diff, availWidth,
             size = this.getLayoutTargetSize(),
@@ -391,6 +397,9 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             totalHeight = 0;
 
         this.layoutClass = getLayoutClass(size.width, this.responsiveBreakpointOverrides)
+        const respFlag = (ct.autoHeight || ct?.ownerCt?.autoHeight)
+            && this.enableResponsive
+            && this.layoutClass.level < this.responsiveStackLevel
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
             // Total of all the flex values
@@ -408,20 +417,36 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
             cm = c.margins;
             // Determine how much width is available to flex
             extraWidth += cw + cm.left + cm.right;
+            let ch;
+            if (respFlag && !c.__height) {
+                c.__height = c.getHeight();
+            } else if (!respFlag) {
+                if (c.__height) {
+                    ch = c.__height;
+                    delete c.__height;
+                } else {
+                    ch = c.getHeight()
+                }
+            }
             // Max height for align
-            maxHeight = Math.max(maxHeight, c.getHeight() + cm.top + cm.bottom);
+            maxHeight = Math.max(maxHeight, ch + cm.top + cm.bottom);
             totalHeight += c.getHeight() + cm.top + cm.bottom;
         }
         // Final avail width calc
         availWidth = Math.max(0, (w - extraWidth - this.padding.left - this.padding.right));
 
         var innerCtHeight = maxHeight + this.padding.top + this.padding.bottom;
-        if (ct.autoHeight
-            && this.enableResponsive
-            && this.layoutClass.level < 2)
-        {
+        if (respFlag) {
+            if(!ct.__height) ct.__height = h
+            ct.setHeight('auto')
             h = 'auto'
             innerCtHeight = 'auto'
+        } else {
+            if (ct.__height) {
+                ct.setHeight(ct.__height);
+                h = ct.__height
+                delete ct.__height;
+            }
         }
         switch(this.align){
             case 'stretch':
@@ -458,16 +483,28 @@ Ext.layout.HBoxLayout = Ext.extend(Ext.layout.BoxLayout, {
         }
         for (i = 0 ; i < csLen; i++) {
             c = cs[i];
-            if (this.enableResponsive && ct.autoHeight && this.layoutClass.level < 2) {
+            if (respFlag) {
                 c.el.setStyle('position', 'unset');
+                // cacheing width beforehand for later
+                if (!c.__width) c.__width = c.getWidth();
                 c.setSize(w, 'auto')
             } else {
+                if (c.__width && !c.flex) {
+                    // NOTE: potential bug if @param: this.pack is anything other than `start`
+                    c.setWidth(c.__width);
+                    delete c.__width;
+                }
                 c.el.setStyle('position', '');
                 cm = c.margins;
                 l += cm.left;
                 c.setPosition(l, t + cm.top);
                 if(isStart && c.flex){
-                    cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
+                    if (c.__width) {
+                        cw = c.__width;
+                        delete c.__width;
+                    } else {
+                        cw = Math.max(0, widths[idx++] + (leftOver-- > 0 ? 1 : 0));
+                    }
                     if(isRestore){
                         restore.push(c.getHeight());
                     }

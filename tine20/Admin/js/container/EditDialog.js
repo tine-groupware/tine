@@ -106,6 +106,10 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     border: false,
                     frame: true,
                     layout: 'border',
+                    layoutConfig: {
+                        // enableResponsive: true,
+                        // @todo: picker grid not yet responsive
+                    },
                     defaults: { autoScroll: true },
                     items: [{
                         region: 'center',

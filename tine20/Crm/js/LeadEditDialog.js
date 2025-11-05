@@ -368,6 +368,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: true,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                },
                 id: 'editCenterPanel',
                 defaults: {
                     border: true,
@@ -376,6 +380,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [{
                     region: 'center',
                     layout: 'border',
+                    layoutConfig: {
+                        // enableResponsive: true,
+                        responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                    },
                     items: [{
                         region: 'north',
                         height: 40,
@@ -411,6 +419,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [{
                             xtype: 'panel',
                             layout:'column',
+                            layoutConfig: {
+                                // enableResponsive: true,
+                                responsiveBreakpointOverrides: [{level: 2, width: 700}]
+                            },
                             height: 120,
                             id: 'lead_combos',
                             anchor:'100%',
