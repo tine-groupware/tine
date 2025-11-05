@@ -106,6 +106,10 @@ anchor: '-50 75%'
     // private
     onLayout : function(ct, target){
         Ext.layout.AnchorLayout.superclass.onLayout.call(this, ct, target);
+        // if parent responsiveEnabled, make this container also responsiveEnabled
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
+
         var size = this.getLayoutTargetSize();
 
         var w = size.width, h = size.height;

@@ -43,6 +43,10 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 border: true,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 650}]
+                },
                 id: 'editCenterPanel',
                 items:[{
                     region: 'center',

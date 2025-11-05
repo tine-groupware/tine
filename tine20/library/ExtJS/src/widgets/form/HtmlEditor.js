@@ -204,8 +204,8 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         var tipsEnabled = Ext.QuickTips && Ext.QuickTips.isEnabled();
 
 
-        function btn(id, toggle, handler){
-            return {
+        function btn(id, toggle, handler, priority=null){
+            const cfg =  {
                 itemId : id,
                 cls : 'x-btn-icon',
                 iconCls: 'x-edit-'+id,
@@ -215,8 +215,18 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                 clickEvent:'mousedown',
                 tooltip: tipsEnabled ? _.get(editor, `buttonTips[${id}]`, undefined) : undefined,
                 overflowText: _.get(editor, `buttonTips[${id}].title`, undefined),
-                tabIndex:-1
+                tabIndex:-1,
             };
+            return priority !== null ? Object.assign(cfg, { displayPriority: priority}) : cfg
+        }
+
+        function btnGrp(btnList, priority=0) {
+            return {
+                xtype: 'buttongroup',
+                cols: btnList.length,
+                displayPriority: priority,
+                items: btnList
+            }
         }
 
 
@@ -226,7 +236,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     tag:'select',
                     cls:'x-font-select',
                     html: this.createFontOptions()
-               }
+               }, displayPriority: 120,
             });
 
             items.push(
@@ -237,19 +247,29 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
 
         if(this.enableFormat){
             items.push(
-                btn('bold'),
-                btn('italic'),
-                btn('underline'),
-                btn('strikeThrough'),
-                btn('formatblockPre', false, this.toggleCodeBlock)
+                btnGrp(
+                    [
+                        btn('bold'),
+                        btn('italic'),
+                        btn('underline'),
+                        btn('strikeThrough'),
+                        btn('formatblockPre', false, this.toggleCodeBlock)
+                    ],
+                    100
+                )
             );
         }
 
         if(this.enableFontSize){
             items.push(
                 '-',
-                btn('increasefontsize', false, this.adjustFont),
-                btn('decreasefontsize', false, this.adjustFont)
+                btnGrp(
+                    [
+                        btn('increasefontsize', false, this.adjustFont),
+                        btn('decreasefontsize', false, this.adjustFont)
+                    ],
+                    90
+                )
             );
         }
 
@@ -262,102 +282,108 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                 'FF99CC', 'FFCC99', 'FFFF99', 'CCFFCC', 'CCFFFF', '99CCFF', 'CC99FF', 'FFFFFF',
                 'FFECF6', 'FFF3E7', 'FFFFE7', 'E2FFE2', 'DCFCFF', 'EDF6FF', 'auto', 'picker'
             ]
-            items.push(
-                '-', {
-                    itemId:'forecolor',
-                    cls:'x-btn-icon',
-                    iconCls: 'x-edit-forecolor',
-                    clickEvent:'mousedown',
-                    tooltip: tipsEnabled ? editor.buttonTips.forecolor || undefined : undefined,
-                    tabIndex:-1,
-                    menu : new Ext.menu.ColorMenu({
-                        allowReselect: true,
-                        focus: Ext.emptyFn,
-                        value:'000000',
-                        colors: colors,
-                        plain:true,
-                        listeners: {
-                            scope: this,
-                            select: function(cp, color){
-                                if (color === null) {
-                                    let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
-                                    if (container.nodeName === '#text') {
-                                        let element = container.parentElement
-                                        this.removeColor(element)
-                                        return
-                                    }
-                                    let all = container.getElementsByTagName('*')
-                                    _.forEach(all, (element) => {
-                                        if (!this.win.getSelection().containsNode(element, true)) {
-                                            return
-                                        }
-                                        this.removeColor(element)
-                                    })
+            const forecolorCfg = {
+                itemId:'forecolor',
+                cls:'x-btn-icon',
+                iconCls: 'x-edit-forecolor',
+                clickEvent:'mousedown',
+                tooltip: tipsEnabled ? editor.buttonTips.forecolor || undefined : undefined,
+                tabIndex:-1,
+                menu : new Ext.menu.ColorMenu({
+                    allowReselect: true,
+                    focus: Ext.emptyFn,
+                    value:'000000',
+                    colors: colors,
+                    plain:true,
+                    listeners: {
+                        scope: this,
+                        select: function(cp, color){
+                            if (color === null) {
+                                let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
+                                if (container.nodeName === '#text') {
+                                    let element = container.parentElement
+                                    this.removeColor(element)
                                     return
                                 }
-                                this.execCmd('forecolor', Ext.isWebKit || Ext.isIE ? '#'+color : color);
+                                let all = container.getElementsByTagName('*')
+                                _.forEach(all, (element) => {
+                                    if (!this.win.getSelection().containsNode(element, true)) {
+                                        return
+                                    }
+                                    this.removeColor(element)
+                                })
+                                return
+                            }
+                            this.execCmd('forecolor', Ext.isWebKit || Ext.isIE ? '#'+color : color);
+                            this.deferFocus();
+                        }
+                    },
+                    clickEvent:'mousedown'
+                })
+            }
+            const backcolorCfg = {
+
+                itemId:'backcolor',
+                cls:'x-btn-icon',
+                iconCls: 'x-edit-backcolor',
+                clickEvent:'mousedown',
+                tooltip: tipsEnabled ? editor.buttonTips.backcolor || undefined : undefined,
+                tabIndex:-1,
+                menu : new Ext.menu.ColorMenu({
+                    focus: Ext.emptyFn,
+                    value:'FFFFFF',
+                    colors: colors,
+                    plain:true,
+                    allowReselect: true,
+                    listeners: {
+                        scope: this,
+                        select: function(cp, color){
+                            if (color === null) {
+                                let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
+                                if (container.nodeName === '#text') {
+                                    let element = container.parentElement
+                                    this.removeBackground(element)
+                                    return
+                                }
+                                let all = container.getElementsByTagName('*')
+                                _.forEach(all, (element) => {
+                                    if (!this.win.getSelection().containsNode(element, true)) {
+                                        return
+                                    }
+                                    this.removeBackground(element)
+                                })
+
+                                return
+                            }
+
+                            if(Ext.isGecko){
+                                this.execCmd('useCSS', false);
+                                this.execCmd('hilitecolor', color);
+                                this.execCmd('useCSS', true);
+                                this.deferFocus();
+                            }else{
+                                this.execCmd(Ext.isOpera ? 'hilitecolor' : 'backcolor', Ext.isWebKit || Ext.isIE ? '#'+color : color);
                                 this.deferFocus();
                             }
-                        },
-                        clickEvent:'mousedown'
-                    })
-                }, {
-                    itemId:'backcolor',
-                    cls:'x-btn-icon',
-                    iconCls: 'x-edit-backcolor',
-                    clickEvent:'mousedown',
-                    tooltip: tipsEnabled ? editor.buttonTips.backcolor || undefined : undefined,
-                    tabIndex:-1,
-                    menu : new Ext.menu.ColorMenu({
-                        focus: Ext.emptyFn,
-                        value:'FFFFFF',
-                        colors: colors,
-                        plain:true,
-                        allowReselect: true,
-                        listeners: {
-                            scope: this,
-                            select: function(cp, color){
-                                if (color === null) {
-                                    let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
-                                    if (container.nodeName === '#text') {
-                                        let element = container.parentElement
-                                        this.removeBackground(element)
-                                        return
-                                    }
-                                    let all = container.getElementsByTagName('*')
-                                    _.forEach(all, (element) => {
-                                        if (!this.win.getSelection().containsNode(element, true)) {
-                                            return
-                                        }
-                                        this.removeBackground(element)
-                                    })
-
-                                    return
-                                }
-
-                                if(Ext.isGecko){
-                                    this.execCmd('useCSS', false);
-                                    this.execCmd('hilitecolor', color);
-                                    this.execCmd('useCSS', true);
-                                    this.deferFocus();
-                                }else{
-                                    this.execCmd(Ext.isOpera ? 'hilitecolor' : 'backcolor', Ext.isWebKit || Ext.isIE ? '#'+color : color);
-                                    this.deferFocus();
-                                }
-                            }
-                        },
-                        clickEvent:'mousedown'
-                    })
-                }
+                        }
+                    },
+                    clickEvent:'mousedown'
+                })
+            }
+            items.push(
+                '-',
+                btnGrp([forecolorCfg, backcolorCfg], 80)
             );
         }
 
         if(this.enableAlignments){
             items.push(
                 '-',
-                btn('justifyleft'),
-                btn('justifycenter'),
-                btn('justifyright')
+                btnGrp([
+                    btn('justifyleft'),
+                    btn('justifycenter'),
+                    btn('justifyright')
+                ], 85),
             );
         }
 
@@ -365,15 +391,17 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             if(this.enableLinks){
                 items.push(
                     '-',
-                    btn('createlink', false, this.createLink)
+                    btn('createlink', false, this.createLink, 95)
                 );
             }
 
             if(this.enableLists){
                 items.push(
                     '-',
-                    btn('insertorderedlist'),
-                    btn('insertunorderedlist')
+                    btnGrp([
+                        btn('insertorderedlist'),
+                        btn('insertunorderedlist')
+                    ], 95)
                 );
             }
             if(this.enableSourceEdit){
@@ -381,7 +409,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     '-',
                     btn('sourceedit', true, function(btn){
                         this.toggleSourceEdit(!this.sourceEditMode);
-                    })
+                    }, 70)
                 );
             }
         }
@@ -389,7 +417,11 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         // build the toolbar
         var tb = new Ext.Toolbar({
             renderTo: this.wrap.dom.firstChild,
-            items: items
+            items: items,
+            layoutConfig: {
+                enableResponsive: true,
+            },
+            enableOverflow: true,
         });
 
         if (fontSelectItem) {
@@ -968,8 +1000,12 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             return;
         }
 
-        var btns = this.tb.items.map,
-            doc = this.getDoc();
+        const btns = Object.entries(this.tb.items.map).reduce((acc, [key, sb]) => {
+            const items = sb.isXType('buttongroup') ? sb.items.map : { [key]: sb };
+            return Object.assign(acc, items);
+        }, {});
+
+        var doc = this.getDoc();
 
         if(this.enableFont && !Ext.isSafari2){
             var name = (doc.queryCommandValue('FontName')||this.defaultFont).toLowerCase().replace(/"/g, '');

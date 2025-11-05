@@ -51,6 +51,9 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                },
                 items: [{
                     region: 'center',
                     xtype: 'columnform',

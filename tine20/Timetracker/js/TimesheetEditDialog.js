@@ -382,9 +382,14 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 border: false,
                 frame: true,
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 600}]
+                },
                 items: [{
                     region: 'center',
                     layout: 'hfit',
+                    autoScroll: true,
                     border: false,
                     items: [{
                         xtype: 'columnform',
@@ -496,6 +501,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     }, {
                         layout: 'hbox',
                         height: 160,
+                        // autoHeight: true,
                         layoutConfig: {
                             align: 'stretch',
                             pack: 'start'
@@ -509,6 +515,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             items: [{
                                 xtype: 'columnform',
                                 labelAlign: 'top',
+                                // autoHeight: true,
+                                columnLayoutConfig: {
+                                    responsiveBreakpointOverrides: [{level: 2, width: 420}],
+                                },
                                 formDefaults: {
                                     xtype: 'textfield',
                                     anchor: '100%',
