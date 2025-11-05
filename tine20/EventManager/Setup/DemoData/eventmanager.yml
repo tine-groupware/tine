@@ -1,0 +1,21 @@
+
+########################
+# Tine 2.0
+# @package     EventManager
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Tonia Wulff <t.leuschel@metaways.de>
+# @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for EventManager module
+########################
+---
+name: cost center items
+
+files:
+  #$app,$model,$definition,$file
+  - Tinebase/EvaluationDimensionItem/tinebase_import_editem_csv/kostenstellen_ebhh.csv
+
+# this set could contain other sets:
+# sets:
+#   - another_set.yml
