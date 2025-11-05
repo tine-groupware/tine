@@ -102,6 +102,8 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
 
     public function testImportWithGroupMatching(): void
     {
+        $this->_skipIfLDAPBackend('Zend_Ldap_Exception: 0x44 (Already exists): adding: cn=unittest,ou=groups,dc=tine,dc=test');
+
         $oldImapValue = Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT};
         Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT} = false;
         $imapRaii = new Tinebase_RAII(fn() => Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT} = $oldImapValue);
