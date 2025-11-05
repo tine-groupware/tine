@@ -1004,6 +1004,127 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $docCtrl::dispatchDocument($documentId, $redispatch);
     }
 
+    public function startBatchProcess(array $instructions, array $initialData): array
+    {
+        if (empty($instructions) || empty($initialData)) {
+            throw new Tinebase_Exception_UnexpectedValue(__METHOD__ . ' requires instructions / initial data');
+        }
+
+        $recordSet = new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobStep::class);
+        $steps = $recordSet;
+        $first = true;
+        foreach ($instructions as $instruction) {
+            switch ($instruction[0] ?? null) {
+                case 'bookDocument':
+                    if (!is_string($instruction[1] ?? null) || !is_subclass_of($instruction[1], Sales_Model_Document_Abstract::class)) {
+                        throw new Tinebase_Exception_UnexpectedValue(($instruction[1] ?? '') . ' is not a subclass of Sales_Model_Document_Abstract');
+                    }
+                    $recordSet->addRecord($step = new Tinebase_Model_BatchJobStep([
+                        Tinebase_Model_BatchJobStep::FLD_CALLABLES => new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobCallable::class, [
+                            new Tinebase_Model_BatchJobCallable([
+                                Tinebase_Model_BatchJobCallable::FLD_CLASS => Sales_Controller::class,
+                                Tinebase_Model_BatchJobCallable::FLD_METHOD => 'bookDocument',
+                                Tinebase_Model_BatchJobCallable::FLD_STATIC => true,
+                                Tinebase_Model_BatchJobCallable::FLD_APPEND_DATA => [$instruction[1]],
+                            ]),
+                        ]),
+                        Tinebase_Model_BatchJobStep::FLD_NEXT_STEPS => ($nextSteps = new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobStep::class)),
+                    ]));
+                    $recordSet = $nextSteps;
+                    if ($first) {
+                        $first = false;
+                        $inData = [];
+                        foreach ($initialData as $data) {
+                            $inData[$data] = [$data];
+                        }
+                        $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
+                    }
+                    break;
+
+                case 'dispatchDocument':
+                    if (!is_string($instruction[1] ?? null) || !is_subclass_of($instruction[1], Sales_Model_Document_Abstract::class)) {
+                        throw new Tinebase_Exception_UnexpectedValue(($instruction[1] ?? '') . ' is not a subclass of Sales_Model_Document_Abstract');
+                    }
+                    $recordSet->addRecord($step = new Tinebase_Model_BatchJobStep([
+                        Tinebase_Model_BatchJobStep::FLD_CALLABLES => new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobCallable::class, [
+                            new Tinebase_Model_BatchJobCallable([
+                                Tinebase_Model_BatchJobCallable::FLD_CLASS => Sales_Controller::class,
+                                Tinebase_Model_BatchJobCallable::FLD_METHOD => 'dispatchDocument',
+                                Tinebase_Model_BatchJobCallable::FLD_STATIC => true,
+                                Tinebase_Model_BatchJobCallable::FLD_APPEND_DATA => [$instruction[1]],
+                            ]),
+                        ]),
+                        Tinebase_Model_BatchJobStep::FLD_NEXT_STEPS => ($nextSteps = new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobStep::class)),
+                    ]));
+                    $recordSet = $nextSteps;
+                    if ($first) {
+                        $first = false;
+                        $inData = [];
+                        foreach ($initialData as $data) {
+                            $inData[$data] = [$data];
+                        }
+                        $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
+                    }
+                    break;
+
+                case 'createFollowupDocument':
+                    if (!is_string($instruction[1] ?? null) || !is_subclass_of($instruction[1], Sales_Model_Document_Abstract::class) ||
+                            !is_string($instruction[2] ?? null) || !is_subclass_of($instruction[2], Sales_Model_Document_Abstract::class)) {
+                        throw new Tinebase_Exception_UnexpectedValue(print_r($instruction, true) . ' is not an array of two subclass of Sales_Model_Document_Abstract');
+                    }
+                    $recordSet->addRecord($step = new Tinebase_Model_BatchJobStep([
+                        Tinebase_Model_BatchJobStep::FLD_CALLABLES => ($callables = new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobCallable::class)),
+                        Tinebase_Model_BatchJobStep::FLD_NEXT_STEPS => ($nextSteps = new Tinebase_Record_RecordSet(Tinebase_Model_BatchJobStep::class)),
+                    ]));
+                    $recordSet = $nextSteps;
+                    if ($first) {
+                        $first = false;
+                        $inData = [];
+                        foreach($initialData as $data) {
+                            $inData[$data] = [[
+                                Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => $instruction[2],
+                                Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [[
+                                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => $instruction[1],
+                                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $data,
+                                ]],
+                            ]];
+                        }
+                        $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
+                    } else {
+                        $callables->addRecord(new Tinebase_Model_BatchJobCallable([
+                            Tinebase_Model_BatchJobCallable::FLD_CLASS => Sales_Controller::class,
+                            Tinebase_Model_BatchJobCallable::FLD_METHOD => 'wrapTransition',
+                            Tinebase_Model_BatchJobCallable::FLD_STATIC => true,
+                            Tinebase_Model_BatchJobCallable::FLD_APPEND_DATA => [[
+                                Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => $instruction[2],
+                                Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [[
+                                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => $instruction[1],
+                                ]],
+                            ]],
+                        ]));
+                    }
+                    $callables->addRecord(new Tinebase_Model_BatchJobCallable([
+                        Tinebase_Model_BatchJobCallable::FLD_CLASS => Sales_Controller::class,
+                        Tinebase_Model_BatchJobCallable::FLD_METHOD => 'createFollowupDocument',
+                        Tinebase_Model_BatchJobCallable::FLD_STATIC => true,
+                    ]));
+                    break;
+
+                default:
+                    throw new Tinebase_Exception_UnexpectedValue(print_r($instruction, true) . ' is not a valid instruction');
+            }
+        }
+
+        $batchJob = new Tinebase_Model_BatchJob([
+            Tinebase_Model_BatchJob::FLD_TITLE      => 'Sales batch process "' . $instructions[0][0] . '" for ' . Tinebase_Core::getUser()->accountDisplayName . ' at ' . Tinebase_DateTime::now()->toString(),
+            Tinebase_Model_BatchJob::FLD_ACCOUNT_ID => Tinebase_Core::getUser(),
+            Tinebase_Model_BatchJob::FLD_STEPS => $steps,
+        ]);
+
+        $batchJob = Tinebase_Controller_BatchJob::getInstance()->create($batchJob);
+        return $batchJob->toArray();
+    }
+
     public function createFollowupDocument(array $documentTransition): array
     {
         $documentTransition = $this->_jsonToRecord($documentTransition, Sales_Model_Document_Transition::class);

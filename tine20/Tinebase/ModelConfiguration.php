@@ -952,6 +952,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      */
     protected $_converterDefaultMapping = array(
         'json'      => [Tinebase_Model_Converter_Json::class],
+        self::TYPE_NATIVE_JSON => [Tinebase_Model_Converter_Json::class],
         self::TYPE_PASSWORD => [Tinebase_Model_Converter_Password::class],
     );
 
@@ -2021,6 +2022,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             }
         }
         switch ($fieldDef[self::TYPE]) {
+            case self::TYPE_NATIVE_JSON:
             case self::TYPE_JSON:
             case self::TYPE_MODEL:
             case 'string':

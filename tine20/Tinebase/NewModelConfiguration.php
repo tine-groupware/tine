@@ -25,10 +25,11 @@ class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
      * @var array
      */
     protected $_converterDefaultMapping = [
-        self::TYPE_JSON      => [Tinebase_Model_Converter_Json::class],
-        self::TYPE_DATE      => [Tinebase_Model_Converter_Date::class],
-        self::TYPE_DATETIME  => [Tinebase_Model_Converter_DateTime::class],
-        self::TYPE_PASSWORD  => [Tinebase_Model_Converter_Password::class],
+        self::TYPE_JSON         => [Tinebase_Model_Converter_Json::class],
+        self::TYPE_NATIVE_JSON  => [Tinebase_Model_Converter_Json::class],
+        self::TYPE_DATE         => [Tinebase_Model_Converter_Date::class],
+        self::TYPE_DATETIME     => [Tinebase_Model_Converter_DateTime::class],
+        self::TYPE_PASSWORD     => [Tinebase_Model_Converter_Password::class],
     ];
 
     /**

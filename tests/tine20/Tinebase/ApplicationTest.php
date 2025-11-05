@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -495,6 +495,10 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AuthTokenChannelConfig::class,
                 Tinebase_Model_BankHoliday::class,
                 Tinebase_Model_BankHolidayCalendar::class,
+                Tinebase_Model_BatchJob::class,
+                Tinebase_Model_BatchJobCallable::class,
+                Tinebase_Model_BatchJobHistory::class,
+                Tinebase_Model_BatchJobStep::class,
                 Tinebase_Model_BLConfig::class,
                 Tinebase_Model_MunicipalityKey::class,
                 Tinebase_Model_Config::class,

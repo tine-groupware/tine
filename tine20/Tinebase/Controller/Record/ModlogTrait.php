@@ -22,7 +22,7 @@ trait Tinebase_Controller_Record_ModlogTrait
     /**
      * application backend class
      *
-     * @var Tinebase_Backend_Sql_Interface
+     * @var Tinebase_Backend_Sql_Abstract
      */
     protected $_backend;
 

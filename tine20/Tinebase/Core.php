@@ -2490,11 +2490,8 @@ class Tinebase_Core
 
     /**
      * acquire a lock to prevent parallel execution in a multi server environment
-     *
-     * @param string $id
-     * @return bool
      */
-    public static function acquireMultiServerLock($id, bool $try = true)
+    public static function acquireMultiServerLock(string $id, bool $try = true): bool
     {
         if ($try) {
             return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
@@ -2503,22 +2500,12 @@ class Tinebase_Core
         }
     }
 
-    /**
-     * release a lock to prevent parallel execution in a multi server environment
-     *
-     * @param string $id
-     * @return bool
-     */
-    public static function releaseMultiServerLock($id)
+    public static function releaseMultiServerLock(string $id): bool
     {
         return Tinebase_Lock::releaseLock($id . '::' . static::getTinebaseId());
     }
 
-    /**
-     * @param string $id
-     * @return Tinebase_Lock_Interface
-     */
-    public static function getMultiServerLock($id)
+    public static function getMultiServerLock(string $id): Tinebase_Lock_Interface
     {
         return Tinebase_Lock::getLock($id . '::' . static::getTinebaseId());
     }

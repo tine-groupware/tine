@@ -30,6 +30,7 @@ abstract class Tinebase_Model_Filter_Abstract
     public const OPTIONS = 'options';
 
     public const OP_EQUALS = 'equals';
+    public const OP_ISNULL = 'isnull';
 
     /**
      * @var array list of allowed operators
