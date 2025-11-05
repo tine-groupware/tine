@@ -342,7 +342,7 @@ Tine.widgets.grid.RendererManager = function() {
             if (renderer && _.get(fieldDefinition, 'uiconfig.translate')) {
                 renderer = _.wrap(renderer, function(func, v) {
                     const app = Tine.Tinebase.appMgr.get(fieldDefinition.owningApp || fieldDefinition.appName || appName);
-                    [, ...args] = arguments
+                    const [, ...args] = arguments;
                     args[0] = v ? app.i18n._hidden(v) : '';
                     return func.apply(this, args);
                 });
