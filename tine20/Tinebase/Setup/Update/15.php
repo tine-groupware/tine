@@ -49,6 +49,12 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE031 = __CLASS__ . '::update031';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_EVERYTHING  => [
+            self::RELEASE015_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
+            ],
+        ],
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
             self::RELEASE015_UPDATE019          => [
                 self::CLASS_CONST                   => self::class,
@@ -60,7 +66,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
-            // as we do a raw query, we dont want that table to be changed before we do our query => prio struct
+            // as we do a raw query, we don't want that table to be changed before we do our query => prio struct
             self::RELEASE015_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
@@ -100,10 +106,6 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE012          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update012',
-            ],
-            self::RELEASE015_UPDATE013          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update013',
             ],
             self::RELEASE015_UPDATE014          => [
                 self::CLASS_CONST                   => self::class,
