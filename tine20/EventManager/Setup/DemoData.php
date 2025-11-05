@@ -106,7 +106,13 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     protected function _createEvents()
     {
-        EventManager_Config::getInstance()->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
+
+        $importer = call_user_func_array($definition->plugin . '::createFromDefinition', array($definition, []));
+        $importer->importFile(__DIR__ . '/DemoData/files/kostenstellen_ebhh.csv');
+
+        EventManager_Config::getInstance()
+            ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
 
         $location = $this->getLocation(
             'Familienferienstätte St. Ursula',
