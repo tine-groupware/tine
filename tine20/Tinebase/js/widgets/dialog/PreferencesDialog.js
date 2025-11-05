@@ -11,6 +11,8 @@
  * @todo        use proxy store?
  */
 
+require('./StateEditField');
+
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
 
 /**

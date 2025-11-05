@@ -89,7 +89,13 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
         if (this.prefStore && this.prefStore.getCount() > 0) {
             Tine.log.debug('Tine.widgets.dialog.PreferencesPanel::initComponent() -> Adding pref items from store:');
             Tine.log.debug(this.prefStore);
-            
+
+            this.plugins = this.plugins || [];
+            this.plugins.push({
+                ptype: 'ux.itemregistry',
+                key:   [this.appName, 'PreferencePanel'].join('-')
+            })
+
             this.items = [];
             this.prefStore.each(function(pref) {
                 // check if options available -> use combobox or textfield
