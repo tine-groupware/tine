@@ -45,7 +45,16 @@ const AceField = Ext.extend(Ext.form.Field, {
         }
         return value;
     },
-    
+
+    validateValue(value){
+        const errors = _.filter(this.ed?.getSession().getAnnotations(), {type: 'error'})
+
+        if (errors.length) {
+            this.markInvalid(errors.map(e => formatMessage('{type} in line {row} column {column}: {text}', e)).join('<br />'));
+        }
+        return !errors.length
+    },
+
     setValue(value) {
         this.supr().setValue.apply(this, arguments);
     
