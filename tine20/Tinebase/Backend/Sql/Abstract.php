@@ -1646,6 +1646,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         return $this->_tablePrefix;
     }
+
+    public function getPrefixedTableName(): string
+    {
+        return $this->_tablePrefix . $this->_tableName;
+    }
     
     /**
      * get table identifier

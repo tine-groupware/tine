@@ -37,6 +37,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_TIME                  => 'time',
         MCC::TYPE_INTEGER               => 'integer',
         MCC::TYPE_BIGINT                => 'bigint',
+        MCC::TYPE_NATIVE_JSON           => 'json',
         MCC::TYPE_NUMBERABLE_INT        => 'integer',
         MCC::TYPE_NUMBERABLE_STRING     => 'string',
         MCC::TYPE_FLOAT                 => 'float',

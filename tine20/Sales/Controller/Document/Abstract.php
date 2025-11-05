@@ -18,6 +18,8 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  *
  * @package     Sales
  * @subpackage  Controller
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Sales_Model_Document_Abstract>
  */
 abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Record_Abstract
 {

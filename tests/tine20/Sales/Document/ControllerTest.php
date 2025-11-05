@@ -1287,7 +1287,91 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(11.9, $invoice->{Sales_Model_Document_Invoice::FLD_GROSS_SUM});
         $this->assertSame(1.9, round($invoice->{Sales_Model_Document_Invoice::FLD_SALES_TAX}, 2));
     }
-    
+
+    public function testBatchJobFail()
+    {
+        $customer = $this->_createCustomer();
+        $product = $this->_createProduct();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Order::class, [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Order::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ])
+        ]));
+
+        $oldUnitTestMode = Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode(true);
+        $unitTestModeRaii = new Tinebase_RAII(fn () => Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode($oldUnitTestMode));
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $batchJob = (new Sales_Frontend_Json())->startBatchProcess([
+                ['createFollowupDocument', Sales_Model_Document_Order::class, Sales_Model_Document_Invoice::class],
+                ['bookDocument', Sales_Model_Document_Invoice::class],
+                ['dispatchDocument', Sales_Model_Document_Invoice::class],
+            ], [$order->getId()]);
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+        $this->assertCount(1, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
+        Tinebase_Controller_BatchJob::getInstance()->spawnBatchJobs();
+        $this->assertCount(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
+        $this->assertSame(1000, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+
+        unset($unitTestModeRaii);
+    }
+
+    public function testBatchJobSucceed()
+    {
+        $customer = $this->_createCustomer();
+        $product = $this->_createProduct();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Order::class, [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Order::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ])
+        ]));
+
+        $oldUnitTestMode = Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode(true);
+        $unitTestModeRaii = new Tinebase_RAII(fn () => Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode($oldUnitTestMode));
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $batchJob = (new Sales_Frontend_Json())->startBatchProcess([
+            ['bookDocument', Sales_Model_Document_Order::class],
+            ['createFollowupDocument', Sales_Model_Document_Order::class, Sales_Model_Document_Invoice::class],
+            ['bookDocument', Sales_Model_Document_Invoice::class],
+            ['dispatchDocument', Sales_Model_Document_Invoice::class],
+        ], [$order->getId()]);
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+        $this->assertCount(1, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
+        $this->assertSame(4, Tinebase_Controller_BatchJob::getInstance()->get($batchJob['id'])->{Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS});
+        Tinebase_Controller_BatchJob::getInstance()->spawnBatchJobs();
+        $this->assertCount(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
+        $this->assertSame(1000, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+
+
+
+        unset($unitTestModeRaii);
+    }
+
     public function testCategoryEvalDimensionCopy()
     {
         $customer = $this->_createCustomer();

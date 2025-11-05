@@ -136,22 +136,22 @@ parameters:
 			path: tine20/Admin/Controller/Config.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:addContainer\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:addContainer\\(\\)\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Container.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getContainerById\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:getContainerById\\(\\)\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Container.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getGrantsOfContainer\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:getGrantsOfContainer\\(\\)\\.$#"
 			count: 2
 			path: tine20/Admin/Controller/Container.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:setGrants\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:setGrants\\(\\)\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/Container.php
 
@@ -186,17 +186,17 @@ parameters:
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
@@ -206,17 +206,17 @@ parameters:
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 
 		-
-			message: "#^Method Tinebase_Backend_Interface\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 
@@ -486,17 +486,17 @@ parameters:
 			path: tine20/Calendar/Controller/Alarm.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:createAttendee\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:createAttendee\\(\\)\\.$#"
 			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:deleteAttendee\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:deleteAttendee\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Event.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:updateAttendee\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:updateAttendee\\(\\)\\.$#"
 			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
@@ -1211,7 +1211,7 @@ parameters:
 			path: tine20/Crm/Controller.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getGroupCountForField\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:getGroupCountForField\\(\\)\\.$#"
 			count: 3
 			path: tine20/Crm/Controller/Lead.php
 
@@ -2376,12 +2376,12 @@ parameters:
 			path: tine20/Inventory/Controller/InventoryItem.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:softDelete\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:softDelete\\(\\)\\.$#"
 			count: 1
 			path: tine20/OnlyOfficeIntegrator/Controller/AccessToken.php
 
 		-
-			message: "#^Result of method Tinebase_Backend_Interface\\:\\:delete\\(\\) \\(void\\) is used\\.$#"
+			message: "#^Result of method Tinebase_Backend_Sql_Abstract\\:\\:delete\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/OnlyOfficeIntegrator/Controller/AccessToken.php
 
@@ -2506,7 +2506,7 @@ parameters:
 			path: tine20/Sales/Controller/Invoice.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getInvoicesWithChangedContract\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:getInvoicesWithChangedContract\\(\\)\\.$#"
 			count: 1
 			path: tine20/Sales/Controller/Invoice.php
 
@@ -6251,7 +6251,7 @@ parameters:
 			path: tine20/UserManual/Controller/ManualContext.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:clearTable\\(\\)\\.$#"
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:clearTable\\(\\)\\.$#"
 			count: 1
 			path: tine20/UserManual/Controller/ManualPage.php
 

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -227,6 +227,64 @@ class Sales_Controller extends Tinebase_Controller_Event
                 }
             }
         }
+    }
+
+    /**
+     * @param string $documentId
+     * @param class-string<Tinebase_Record_Interface> $model
+     */
+    public static function bookDocument(string $documentId, string $model): Tinebase_BatchJob_InOutData
+    {
+        /** @var Sales_Controller_Document_Abstract $docCtrl */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+        $document = $docCtrl->get($documentId);
+        if (!$document->isBooked()) {
+            $document->{$document::getStatusField()} =
+                Sales_Config::getInstance()->{$document::getStatusConfigKey()}->records
+                    ->find(Sales_Model_Document_Status::FLD_BOOKED, true)->getId();
+
+            $docCtrl->update($document);
+        }
+
+        $transaction->release();
+
+        return new Tinebase_BatchJob_InOutData($documentId, [$documentId]);
+    }
+
+    /**
+     * @param string $documentId
+     * @param class-string<Tinebase_Record_Interface> $model
+     */
+    public static function dispatchDocument(string $documentId, string $model): bool
+    {
+        /** @var Sales_Controller_Document_Abstract $docCtrl */
+        $docCtrl = $model::getConfiguration()->getControllerInstance();
+
+        /** NO TRANSACTION ... we are dispatching, by mail etc. it might be very slow, we do not want to lock stuff */
+        if (false === $docCtrl::dispatchDocument($documentId)) {
+            throw new Tinebase_Exception('dispatched failed');
+        }
+
+        return new Tinebase_BatchJob_InOutData($documentId, [$documentId]);
+    }
+
+    public static function wrapTransition(string $documentId, array $transition): Tinebase_BatchJob_InOutData
+    {
+        $transition[Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS][0][Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT] = $documentId;
+        return new Tinebase_BatchJob_InOutData($documentId, [$transition]);
+    }
+
+    public static function createFollowupDocument(array $documentTransition): Tinebase_BatchJob_InOutData
+    {
+        /** @var Sales_Model_Document_Transition $transition */
+        $transition = Tinebase_Convert_Factory::factory(Sales_Model_Document_Transition::class)
+            ->toTine20Model($documentTransition);
+        $document = Sales_Controller_Document_Abstract::executeTransition($transition);
+
+        return new Tinebase_BatchJob_InOutData($document->getId(), [$document->getId()]);
     }
     
     public function getContactDefaultLanguage($contact)

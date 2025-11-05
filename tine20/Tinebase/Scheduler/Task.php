@@ -714,6 +714,17 @@ class Tinebase_Scheduler_Task
             . ' Saved task Tinebase_FileSystem::recalculateRevisionSize and recalculateFolderSize in scheduler.');
     }
 
+    public static function addBatchJobMaintenanceTask(Tinebase_Scheduler $_scheduler)
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller_BatchJob::class,
+            'batchJobMaintenance',
+            self::TASK_TYPE_MINUTELY,
+            $_scheduler,
+            'Tinebase_BatchJobMaintenance'
+        );
+    }
+
     /**
      * add acl tables cleanup task to scheduler
      *
