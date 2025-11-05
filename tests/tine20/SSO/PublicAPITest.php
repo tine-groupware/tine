@@ -93,6 +93,8 @@ class SSO_PublicAPITest extends TestCase
 
     public function testPublicOidAuthResponse(): void
     {
+        $this->_skipIfLDAPBackend('Tinebase_Exception_NotFound: User with accountLoginName = unittestpreferred not found.');
+
         $exIdp = SSO_Controller_ExternalIdp::getInstance()->create(new SSO_Model_ExternalIdp([
             SSO_Model_ExternalIdp::FLD_NAME => 'unittest',
             SSO_Model_ExternalIdp::FLD_CONFIG_CLASS => SSO_Model_ExIdp_OIdConfig::class,
