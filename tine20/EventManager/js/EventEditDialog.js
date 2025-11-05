@@ -8,6 +8,7 @@
  *
  */
 import './filePanel';
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 
 Ext.namespace('Tine.EventManager');
 
@@ -117,13 +118,15 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     [
                                         fieldManager('booked_places'),
                                         fieldManager('available_places'),
-                                        //fieldManager('is_live'),
+                                        [ new EvaluationDimensionForm({
+                                            maxItemsPerRow: 2,
+                                            recordClass: this.recordClass
+                                        })]
                                     ]
                                 ]
                             }]
                         }]
-                    },
-                    {
+                    }, {
                         xtype: 'fieldset',
                         flex: 1,
                         title: this.app.i18n._('Event Options'),
@@ -149,8 +152,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }
                             }),
                         ]
-                    },
-                    {
+                    }, {
                         xtype: 'fieldset',
                         flex: 1,
                         title: this.app.i18n._('Registrations'),

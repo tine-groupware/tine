@@ -97,4 +97,23 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         EventManager_Config::getInstance()
             ->set(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER, $systemContainer->getId());
     }
+
+    protected function _initializeCostCenterCostBearer()
+    {
+        self::initializeCostCenterCostBearer();
+    }
+
+    public static function initializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            EventManager_Model_Event::class,
+        ]);
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            EventManager_Model_Event::class,
+        ]);
+    }
 }
