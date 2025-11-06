@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  * this is 2024.11 (ONLY!)
@@ -40,6 +40,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE019 = self::class . '::update019';
     protected const RELEASE017_UPDATE020 = self::class . '::update020';
     protected const RELEASE017_UPDATE021 = self::class . '::update021';
+    protected const RELEASE017_UPDATE022 = self::class . '::update022';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -473,7 +474,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 );
 
                 if (str_ends_with((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
-                    $bucketKey = substr((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
+                    $bucketKey = substr($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
                         strrpos((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
                     $this->_db->update(
                         SQL_TABLE_PREFIX . 'numberable',
@@ -519,5 +520,18 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.21', self::RELEASE017_UPDATE021);
+    }
+
+    public function update022(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->delete(SQL_TABLE_PREFIX . Tinebase_Model_Alarm::TABLE_NAME, Tinebase_Model_Alarm::FLD_ALARM_TIME . ' IS NULL');
+
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Alarm::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.22', self::RELEASE017_UPDATE022);
     }
 }
