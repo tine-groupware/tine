@@ -361,11 +361,6 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     {
         self::checkWriteAccess($this->_getConverter());
 
-        // when a move occurs, thunderbird first sends to delete command and immediately a put command
-        // we must delay the delete command, otherwise the put command fails
-        sleep(5);
-        
-        // (re) fetch event as tree move does not refresh src node before delete
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
         try {
             $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
