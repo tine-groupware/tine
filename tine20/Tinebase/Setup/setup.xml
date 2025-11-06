@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>17.22</version>
+    <version>18.13</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -233,7 +233,7 @@
         </table>
         <table>
             <name>accounts</name>
-            <version>19</version>
+            <version>20</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -313,8 +313,8 @@
                 </field>
                 <field>
                     <name>login_failures</name>
-                    <type>integer</type>
-                    <default>0</default>
+                    <type>text</type>
+                    <length>4000</length>
                 </field>
                 <field>
                     <name>last_login_failure_at</name>
@@ -2161,7 +2161,7 @@
         </table>
         <table>
             <name>notes</name>
-            <version>4</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2174,6 +2174,12 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>restricted_to</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <default>NULL</default>
                 </field>
                 <field>
                     <name>note</name>

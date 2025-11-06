@@ -422,7 +422,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         foreach ($this->_db->query('SELECT id, bucket_key FROM ' . $backend->getTablePrefix() . $backend->getTableName() .
             ' WHERE model = "MeetingManager_Model_Meeting" AND property = "meeting_number"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             if (empty($row['bucket_key'])) continue;
-            $buckets = explode('#', $row['bucket_key']);
+            $buckets = explode('#', (string) $row['bucket_key']);
             if ('meeting_number' === $buckets[count($buckets)-1]) {
                 continue;
             }
@@ -431,8 +431,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
         foreach ($this->_db->query('select model, property, additional_key, count(*) as c from ' . $backend->getTablePrefix() . $backend->getTableName() . ' group by model, property, additional_key having c > 1')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             foreach ($this->_db->query('select id, bucket_key from ' . $backend->getTablePrefix() . $backend->getTableName() . ' where model = "' . $row['model'] . '" AND property = "' . $row['property'] . '" AND additional_key = "' . $row['additional_key'] . '"')->fetchAll(Zend_Db::FETCH_ASSOC) as $row1) {
-                if (str_starts_with($row1['bucket_key'], $row['model'] . '#' . $row['property'])) {
-                    $this->_db->query('update ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET additional_key = "' . trim(substr($row1['bucket_key'], strlen($row['model'] . '#' . $row['property'])), '#') . '" WHERE id = "' . $row1['id'] . '"');
+                if (str_starts_with((string) $row1['bucket_key'], $row['model'] . '#' . $row['property'])) {
+                    $this->_db->query('update ' . $backend->getTablePrefix() . $backend->getTableName() . ' SET additional_key = "' . trim(substr((string) $row1['bucket_key'], strlen($row['model'] . '#' . $row['property'])), '#') . '" WHERE id = "' . $row1['id'] . '"');
                 }
             }
         }
@@ -473,9 +473,9 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                     $this->_db->quoteInto('bucket = ?', $numCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY})
                 );
 
-                if (str_ends_with($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
+                if (str_ends_with((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX})) {
                     $bucketKey = substr($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, 0,
-                        strrpos($newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
+                        strrpos((string) $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}, '#' . $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX}));
                     $this->_db->update(
                         SQL_TABLE_PREFIX . 'numberable',
                         ['bucket' => $newNumCfg->{Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY}],
