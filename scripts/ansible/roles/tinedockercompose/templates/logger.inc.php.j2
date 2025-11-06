@@ -4,7 +4,7 @@ return [
     'logger' => [
         'active' => true,
         'filename' => 'php://stdout',
-        'priority' => 4,
+        'priority' => {{ tinedockercompose_tineloggerprio }},
         'logruntime' => true,
         'logdifftime' => true,
         'traceQueryOrigins' => true,
