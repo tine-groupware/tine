@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -93,7 +93,7 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION           => 4,
+        self::VERSION           => 5,
         self::IS_DEPENDENT      => true,
         self::RECORD_NAME       => 'Alarm',
         self::RECORDS_NAME      => 'Alarms', // ngettext('Alarm', 'Alarms', n)
@@ -126,7 +126,6 @@ class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_ALARM_TIME    => [
                 self::TYPE              => self::TYPE_DATETIME,
-                self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
             ],
             self::FLD_MINUTES_BEFORE=> [

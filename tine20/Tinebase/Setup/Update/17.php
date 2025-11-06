@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  * this is 2024.11 (ONLY!)
@@ -40,6 +40,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE019 = __CLASS__ . '::update019';
     protected const RELEASE017_UPDATE020 = __CLASS__ . '::update020';
     protected const RELEASE017_UPDATE021 = __CLASS__ . '::update021';
+    protected const RELEASE017_UPDATE022 = self::class . '::update022';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -106,6 +107,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE021 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update021',
+            ],
+            self::RELEASE017_UPDATE022 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update022',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -519,5 +524,18 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.21', self::RELEASE017_UPDATE021);
+    }
+
+    public function update022(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->delete(SQL_TABLE_PREFIX . Tinebase_Model_Alarm::TABLE_NAME, Tinebase_Model_Alarm::FLD_ALARM_TIME . ' IS NULL');
+
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Alarm::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.22', self::RELEASE017_UPDATE022);
     }
 }
