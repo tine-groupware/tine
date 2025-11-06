@@ -149,8 +149,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ),
             ),
             'is_billable'           => array(
-                'label'                 => 'Project time billable', // _('Project time billable')
-                'tooltip'               => 'Project time billable',
+                'label'                 => 'Project time is invoiceable', // _('Project time is invoiceable')
+                'tooltip'               => 'Project time is invoiceable',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
                 'type'                  => 'boolean',
                 'default'               => 1,
@@ -294,7 +294,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 ],
             ),
             'accounting_time'  => array(
-                'label'                 => 'Accounting Project Time', // _('Accounting Project Time')
+                'label'                 => 'Invoiceable time', // _('Invoiceable time')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',

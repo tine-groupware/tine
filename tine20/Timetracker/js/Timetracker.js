@@ -24,6 +24,28 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeacco
     return Ext.util.Format.htmlEncode(record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '');
 });
 
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'accounting_time', function(row, index, record) {
+    let value = record.data.accounting_time;
+
+    if (!value && !record.data.is_billable) {
+        const factor = record.data.accounting_time_factor;
+        const duration = record.data.duration;
+        const roundingMinutes = Tine.Tinebase.configManager.get('accountingTimeRoundingMinutes', 'Timetracker') || 15;
+        const roundingMethod = Tine.Tinebase.configManager.get('accountingTimeRoundingMethod', 'Timetracker') || 'round';
+        value = Math[roundingMethod](factor * duration / roundingMinutes) * roundingMinutes;
+    }
+    value = Tine.Tinebase.common.minutesRenderer(value) ?? '';
+
+    if (!record.data.is_billable) return '<span style="text-decoration: line-through;">' + value + '</span>';
+    return value;
+});
+
+Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'accounting_time_factor', function(row, index, record) {
+    const value = Ext.util.Format.htmlEncode(record.data.accounting_time_factor);
+    if (!record.data.is_billable && value) return '<span style="text-decoration: line-through;">' + value + '</span>';
+    return value;
+});
+
 Tine.widgets.grid.RendererManager.register('Timetracker', 'Timeaccount', 'status', function(row, index, record) {
     return Tine.Tinebase.appMgr.get('Timetracker').i18n._hidden(record.get('status'));
 });
