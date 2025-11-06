@@ -1000,7 +1000,11 @@ Tine.Tinebase.tineInit = {
      */
     initRegistry: async function (forceReload, cb, scope) {
         const registryDB = this.getRegistryDB();
-        const registryData =  await registryDB.getItem('data');
+        let registryData = {};
+        registryData = await registryDB.getItem('data').catch(async (e) => {
+            Tine.log.err('tineInit::initRegistry - could not read registryDB');
+            await this.clearRegistry();
+        })
         Tine.Tinebase.registry = new Ext.util.MixedCollection(false, false, true);
         Tine.Tinebase.registry.addAll(registryData?.Tinebase || {});
         
