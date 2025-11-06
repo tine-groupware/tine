@@ -398,6 +398,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if ($exception instanceof Tinebase_Exception_ProgramFlow) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $exception::class . ' -> ' .
                 $exception->getMessage());
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' .
+                $exception->getTraceAsString());
         } else {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $exception::class . ' -> ' .
                 $exception->getMessage());
