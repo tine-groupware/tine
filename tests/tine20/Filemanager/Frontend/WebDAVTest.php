@@ -875,6 +875,7 @@ abcdefgh
 EOS
         );
 
+        unset($_SERVER['HTTP_USER_AGENT']);
         $_SERVER['REQUEST_METHOD'] = $request->getMethod();
         $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
         $_SERVER['HTTP_DEPTH']     = '0';
@@ -929,6 +930,8 @@ User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15
 EOS
         );
 
+        unset(Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class});
+        unset($_SERVER['HTTP_USER_AGENT']);
         $_SERVER['REQUEST_METHOD'] = $request->getMethod();
         $_SERVER['REQUEST_URI']    = $request->getUri()->getPath();
         $_SERVER['HTTP_DEPTH']     = '0';
