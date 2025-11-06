@@ -16,7 +16,7 @@ available parameters:
     {% if event != '' %}
         <div class="mt-3 mb-5">
             <p class="text-start">
-                {{ _('Your registration for %1$s has been cancelled successfully.') | format(event.name) }}<br>
+                {{ _('Your registration for %1$s has been cancelled successfully.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}<br>
                 {{ _('To find other events, please follow the link below') }}
             </p>
         </div>

@@ -13,7 +13,7 @@ available parameters:
 
 {% block body %}
     {{ _('Thank you for your interest!') }}
-    {{ _('Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you.') | format(event.name) }}
+    {{ _('Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
     {{ _('To find other events or manage your registration, please follow the link below') }}
 
     {{ link }}

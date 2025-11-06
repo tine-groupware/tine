@@ -43,7 +43,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $this->_doContainerACLChecks = false;
     }
 
-    public function updateStatistics(string $event_id, string $registration_id = null): void
+    public function updateStatistics(string $event_id, string $registration_id = null, bool $is_update = false): void
     {
         $this->_handleDependentRecords = false;
         try {
@@ -71,14 +71,30 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} =
                 intval($event->{EventManager_Model_Event::FLD_TOTAL_PLACES}) -
                 intval($event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
+            $today = Tinebase_DateTime::today();
 
-            if ($event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0) {
+            if (
+                $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0
+                || ($event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
+                && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today)
+            ) {
                 foreach ($registrations as $registration) {
                     if (
                         $registration->id === $registration_id
-                        && !($registration->{EventManager_Model_Registration::FLD_STATUS} === "3")
+                        && $registration->{EventManager_Model_Registration::FLD_STATUS} !== "3"
                     ) {
-                        $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
+                        if ($event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 0) {
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
+                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 1;
+                        } elseif ($event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today) {
+                            if (!$is_update) {
+                                $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
+                            }
+                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 2;
+                        } else {
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = 2;
+                            $registration->{EventManager_Model_Registration::FLD_REASON_WAITING} = 3;
+                        }
                         EventManager_Controller_Registration::getInstance()->update($registration);
                     }
                 }
@@ -193,7 +209,6 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
                     $email_participant = $decoded->email ?? '';
                     $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_participant);
-                    $registration_id = '';
 
                     if (!empty($contact)) {
                         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -214,23 +229,20 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                         $register_participant = EventManager_Controller_Registration::getInstance()
                             ->search($filter)->getFirstRecord();
                         if (!empty($register_participant)) {
-                            $registration_id = $register_participant->getId();
+                            $participant_data = [$contact->toArray(), $register_participant->toArray()];
+                        } else {
+                            $participant_data = [$contact->toArray(), ''];
                         }
-                        $participant_data = [$contact->toArray(), $registration_id];
-                        $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write(json_encode($participant_data));
-                    }
-
-                    if (empty($contact)) {
+                    } else {
                         $contact = [
                             'email' => $email_participant,
                             'n_given' => $decoded->n_given ?? '',
                             'n_family' => $decoded->n_family ?? '',
                         ];
-                        $participant_data = [$contact, $registration_id];
-                        $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write(json_encode($participant_data));
+                        $participant_data = [$contact, ''];
                     }
+                    $response = new \Laminas\Diactoros\Response();
+                    $response->getBody()->write(json_encode($participant_data));
                     return $response;
                 } catch (Exception $jwtException) {
                     // Invalid or expired token

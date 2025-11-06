@@ -15,7 +15,7 @@ available parameters:
 {% block body %}
     <div class="mt-3 mb-5">
         <p class="text-start">
-            {{ _('Thank you for expressing your interest in the event %1$s.') | format(event.name) }}<br>
+            {{ _('Thank you for expressing your interest in the event %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}<br>
             {{ _('To complete the registration, please confirm your e-mail address via this link:') }}</p>
     </div>
     <div class="ax-center my-5">

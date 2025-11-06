@@ -287,6 +287,9 @@
                         {{formatMessage('Uploaded file')}}:
                         <span style="color:blue;font-weight:bold;cursor:pointer" @click="downloadFile(uploadedFiles[option.id][0].node_id, uploadedFiles[option.id][0].name, uploadedFiles[option.id][0].file_type)">{{uploadedFiles[option.id][0].name}}</span>
                       </small>
+                      <small class="mx-3">
+                      <span style="color:grey;font-weight:bold;cursor:pointer" @click="deleteFile(option.id)">{{formatMessage('Delete file')}}</span>
+                      </small>
                     </div>
                   </div>
                 </div>
@@ -419,6 +422,7 @@ const isAlreadyRegistered = ref(false);
 const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
 const isExpired = ref(false);
 const isUpdate = ref(false);
+const hasFileChanged = ref(false);
 
 const salutations = ref([
   { value: 'MR', text: formatMessage('Mr') },
@@ -430,6 +434,15 @@ const salutations = ref([
 const countries = ref([
   { value: 'DE', text: formatMessage('Deutschland') },
 ]);
+
+function deleteFile(optionId) {
+  hasFileChanged.value = true;
+  delete uploadedFiles.value[optionId];
+  const fileInput = document.getElementById('file-input');
+  if (fileInput) {
+    fileInput.value = '';
+  }
+}
 
 function openCancelConfirmation() {
   showModal({
@@ -704,10 +717,12 @@ const evaluateRule = (rule) => {
 };
 
 function checkWaitingList() {
-  if (new Date(eventDetails.value.registration_possible_until).getTime() < new Date().getTime()) {
+  const registration_deadline = eventDetails.value.registration_possible_until;
+  const available_places = eventDetails.value.available_places;
+  if ( registration_deadline && new Date(registration_deadline).getTime() < new Date().getTime()) {
     isExpired.value = true;
   }
-  if (eventDetails.value.available_places <= 0 || isExpired.value) {
+  if (available_places && (available_places <= 0 || isExpired.value)) {
     const expiredMessage = isExpired.value
       ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
       : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
@@ -807,9 +822,11 @@ const postRegistration = async () => {
         console.debug(data);
       });
 
-    await uploadFiles(eventId, registrationId);
+    if (hasFileChanged.value) {
+      await uploadFiles(eventId, registrationId);
+    }
 
-    if (isUpdate) {
+    if (isUpdate.value) {
       isUpdate.value = false;
       showModal({
         title: 'Update Registration',
@@ -875,6 +892,7 @@ const uploadFiles = async (eventId, registrationId) => {
 };
 
 function handleFileChange(event, optionId) {
+  hasFileChanged.value = true;
   const files = event.target.files;
   if (files.length > 0) {
     uploadedFiles.value[optionId] = files;
@@ -987,47 +1005,41 @@ async function getEventContactDetails() {
       method: 'GET'
     });
     const data = await resp.json();
-    const [contactData, registrationId] = data;
+    const [contactData, registration] = data;
 
     contactDetails.value = contactData;
     if (contactData.email && contactData.email.trim() !== '') {
       isVerifyEmail.value = true;
     }
 
-    if (registrationId && registrationId !== '') {
-      const registrations = eventDetails._value.registrations || [];
-      for(const registration of registrations) {
-        if (registration.id === registrationId) {
-          isAlreadyRegistered.value = registration.status !== '3';
-          const bookedOptions = registration.booked_options || [];
-          for(const bookedOption of bookedOptions) {
-            const optionId = bookedOption.option.id;
-            if (optionId) {
-              const sc = bookedOption.selection_config;
-              switch (bookedOption.selection_config_class) {
-                case 'EventManager_Model_Selections_Checkbox':
-                  replies.value[optionId] = sc.booked === true || optionId === 'true' ? 'true' : 'false';
-                  break;
+    if (registration && registration !== '') {
+      isAlreadyRegistered.value = registration.status !== '3';
+      const bookedOptions = registration.booked_options || [];
+      for(const bookedOption of bookedOptions) {
+        const optionId = bookedOption.option;
+        if (optionId) {
+          const sc = bookedOption.selection_config;
+          switch (bookedOption.selection_config_class) {
+            case 'EventManager_Model_Selections_Checkbox':
+              replies.value[optionId] = sc.booked === true || optionId === 'true' ? 'true' : 'false';
+              break;
 
-                case 'EventManager_Model_Selections_TextInput':
-                  replies.value[optionId] = sc.response || '';
-                  break;
+            case 'EventManager_Model_Selections_TextInput':
+              replies.value[optionId] = sc.response || '';
+              break;
 
-                case 'EventManager_Model_Selections_File':
-                  if (sc.node_id) {
-                    try {
-                      await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
-                    } catch (error) {
-                      console.error(`Failed to load file for option ${optionId}:`, error);
-                    }
-                  } else {
-                    replies.value[optionId] = sc.file_acknowledgement === true || sc.file_acknowledgement === 'true' ? 'true' : 'false';
-                  }
-                  break;
+            case 'EventManager_Model_Selections_File':
+              if (sc.node_id) {
+                try {
+                  await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
+                } catch (error) {
+                  console.error(`Failed to load file for option ${optionId}:`, error);
+                }
+              } else {
+                replies.value[optionId] = sc.file_acknowledgement === true || sc.file_acknowledgement === 'true' ? 'true' : 'false';
               }
-            }
+              break;
           }
-          break;
         }
       }
     }
