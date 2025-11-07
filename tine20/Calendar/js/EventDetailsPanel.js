@@ -169,7 +169,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                         items: [{
                             flex: 2,
                             layout: 'ux.display',
-                            labelWidth: 60,
+                            labelWidth: 100,
                             autoScroll: true,
                             layoutConfig: {
                                 background: 'solid'
