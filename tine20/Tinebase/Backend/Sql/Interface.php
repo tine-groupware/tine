@@ -25,6 +25,8 @@ interface Tinebase_Backend_Sql_Interface extends Tinebase_Backend_Interface
      */
     public function getTablePrefix();
 
+    public function getPrefixedTableName();
+
     /**
      * get table name
      *
