@@ -355,7 +355,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             return;
         }
 
-        if (Tinebase_Core::getDb()->query('SELECT count(*) FROM ' . Tinebase_Controller_WebDavIssue::getInstance()->getBackend()->getTablePrefix())
+        if (Tinebase_Core::getDb()->query('SELECT count(*) FROM ' . Tinebase_Controller_WebDavIssue::getInstance()->getBackend()->getPrefixedTableName())
                 ->fetchColumn() > 100 * 1000) {
             return;
         }
