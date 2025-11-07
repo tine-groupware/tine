@@ -350,6 +350,16 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             return;
         }
 
+        $uri = $this->_request->getUri()->toString();
+        if (false !== strpos($uri, 'remote.php/dav/avatars/')) {
+            return;
+        }
+
+        if (Tinebase_Core::getDb()->query('SELECT count(*) FROM ' . Tinebase_Controller_WebDavIssue::getInstance()->getBackend()->getTablePrefix())
+                ->fetchColumn() > 100 * 1000) {
+            return;
+        }
+
         if (null !== $this->_body) {
             rewind($this->_body);
         }
@@ -361,7 +371,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
         Tinebase_Controller_WebDavIssue::getInstance()->create(new Tinebase_Model_WebDavIssue([
             Tinebase_Model_WebDavIssue::FLD_CREATION_TIME => Tinebase_DateTime::now(),
             Tinebase_Model_WebDavIssue::FLD_EXCEPTION => serialize($t),
-            Tinebase_Model_WebDavIssue::FLD_URI => $this->_request->getUri()->toString(),
+            Tinebase_Model_WebDavIssue::FLD_URI => $uri,
             Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD => strtoupper($this->_request->getMethod()),
             Tinebase_Model_WebDavIssue::FLD_REQUEST_HEADERS => print_r($hdrs, true),
             Tinebase_Model_WebDavIssue::FLD_REQUEST_BODY => null !== $this->_body ? stream_get_contents($this->_body, 3 * 1024) : null,
