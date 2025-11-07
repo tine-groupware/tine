@@ -7,8 +7,8 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
     labelSeparator: '',
 
     initComponent() {
-        this.fieldLabel = formatMessage('State')
-        this.description = formatMessage('@TODO explain User defined states')
+        this.fieldLabel = formatMessage('Client states')
+        this.description = formatMessage('Client states')
 
         // NOTE: we don't have a complete list of states here... we only "know" the state which are saved so far.
         this.allStates = Ext.state.Manager.getProvider().state
@@ -19,9 +19,32 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
         this.plugins = this.plugins || [];
         this.plugins.push(new FieldTriggerPlugin({
             triggerClass: 'action_edit',
+            qtip: formatMessage('Edit states'),
             onTriggerClick: _.bind(this.openStateGrid, this)
         }));
+        this.plugins.push(new FieldTriggerPlugin({
+            triggerClass: 'action_delete',
+            qtip: formatMessage('Delete All States'),
+            onTriggerClick: _.bind(this.clearAllStates, this)
+        }));
+
+        this.on('render', () => {
+            this.setVisible(!this.ownerCt.adminMode)
+        })
         this.supr().initComponent.call(this)
+    },
+
+    async clearAllStates() {
+        if (await Ext.MessageBox.show({
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.MessageBox.YESNO,
+            title: formatMessage('Delete All States?'),
+            msg: formatMessage('Really delete all client states)'),
+        }) === 'yes') {
+            _.each(this.allStates, (value, key) => {
+                Ext.state.Manager.clear(key)
+            })
+        }
     },
 
     openStateGrid() {
@@ -47,7 +70,7 @@ const StateEditField = Ext.extend(Ext.form.TriggerField, {
                         autoExpandColumn: 'key',
                         columns: [
                             {id:'key',header: 'Key', width: 160, sortable: true, dataIndex: 'key'},
-                            {id: 'actions', renderer: (val) => {
+                            {id: 'actions', header: 'Actions', renderer: (val) => {
                                     return `<div class="tine-row-action-icons" style="width: 58px;">
                                             <div class="tine-recordclass-gridicon action_edit" data-action="edit" ext:qtip="${formatMessage('Edit')}">&nbsp;</div>
                                             <div class="tine-recordclass-gridicon action_delete" data-action="delete" ext:qtip="${formatMessage('Delete')}">&nbsp;</div>

@@ -120,7 +120,7 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
 
         this.stateful = true;
         const stateSuffix = ['Tine.Tinebase.dialog.Dialog', 'Tine.widgets.dialog.EditDialog'].indexOf(this.contentPanelConstructor) < 0 ? this.contentPanelConstructor : this.name
-        this.stateId = 'ux.popupwindow-' + this.contentPanelConstructor;
+        this.stateId = 'ux.popupwindow-' + stateSuffix;
 
         Ext.ux.PopupWindow.superclass.initComponent.call(this);
     },

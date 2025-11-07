@@ -95,6 +95,15 @@ class Tinebase_State
             $this->_backend->delete($recordToDelete->getId());
         }
     }
+
+    public function clearAllStates()
+    {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_STATE)) {
+            throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
+        }
+
+        $this->_backend->deleteByProperty(Tinebase_Core::getUser()->getId(), 'user_id');
+    }
     
     /**
      * saves a single state entry

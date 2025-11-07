@@ -208,7 +208,7 @@ Ext.ux.WindowFactory.prototype = {
             for (let prop in proto) {
                 if (proto.hasOwnProperty(prop)) {
                     const configName = (prop.match(/^window([A-Z].+)/)?.[1] || '').toLowerCase();
-                    if (configName) {
+                    if (configName && !config.hasOwnProperty(configName)) {
                         config[configName] = proto[prop];
                     }
                 }
