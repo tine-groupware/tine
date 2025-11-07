@@ -656,25 +656,26 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP, FALSE, TRUE);
         $event = $_iMIP->getEvent();
 
+        $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
+        $notificationRaii = new Tinebase_RAII(fn() => Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications));
+
         if ($existingEvent) {
             if (! $existingEvent->is_deleted) {
-                if ($event->status == Calendar_Model_Event::STATUS_CANCELED) {
+                if ($event->status === Calendar_Model_Event::STATUS_CANCELED) {
                     // Event cancelled
-                    Calendar_Controller_MSEventFacade::getInstance()->delete($existingEvent->getId());
+                    $existingEvent->status = Calendar_Model_Event::STATUS_CANCELED;
+                    Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
                 } else {
                     // Attendees cancelled
                     Calendar_Controller_MSEventFacade::getInstance()->deleteAttendees($existingEvent, $event);
                 }
             }
-        } else {
-            // create a deleted/cancelled event
-            $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
-
-            $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
-            Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
-
-            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
+        } elseif ($event->status === Calendar_Model_Event::STATUS_CANCELED) {
+            // create a cancelled event
+            Calendar_Controller_MSEventFacade::getInstance()->create($event);
         }
+
+        unset($notificationRaii);
     }
     
     /**

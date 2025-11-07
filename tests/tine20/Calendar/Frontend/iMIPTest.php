@@ -1240,10 +1240,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
 
         $existingEvent = $this->_iMIPFrontend->getExistingEvent($iMIP,true);
         $this->assertNotNull($existingEvent, 'event must not be deleted');
+        $this->assertSame(Calendar_Model_Event::STATUS_CANCELED, $existingEvent->status);
 
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee);
         static::assertNotNull($ownAttender, 'own attender must not be null');
-        static::assertSame(Calendar_Model_Attender::STATUS_DECLINED, $ownAttender->status);
     }
 
     /**
