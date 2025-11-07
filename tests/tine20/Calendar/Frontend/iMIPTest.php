@@ -1481,6 +1481,7 @@ CREATED:20240613T160230Z', $iMIP->ics);
 
         $existingEvent = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord(), true);
         $this->assertNotNull($existingEvent, 'event must not be deleted');
+        $this->assertSame(Calendar_Model_Event::STATUS_CANCELED, $existingEvent->status);
 
         $ownAttender = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee);
         static::assertNotNull($ownAttender, 'own attender must not be null');

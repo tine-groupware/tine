@@ -541,11 +541,11 @@ class Calendar_Frontend_iMIP
             return;
         }
 
+        $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
+        $notificationRaii = new Tinebase_RAII(fn() => Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications));
         if (!$existingEvent) {
             // create a [to be] cancelled event
-            $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
             $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_event);
-            Calendar_Controller_Event::getInstance()->sendNotifications($sendNotifications);
         }
 
         if (! $existingEvent->is_deleted) {
@@ -562,6 +562,8 @@ class Calendar_Frontend_iMIP
                 }
             }
         }
+
+        unset($notificationRaii);
     }
     
     /**
