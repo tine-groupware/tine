@@ -258,7 +258,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return ['success' => true];
     }
-    
+
+    public function clearAllStates()
+    {
+        Tinebase_State::getInstance()->clearAllStates();
+    }
+
     /**
      * retuns all states
      *
