@@ -112,7 +112,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     {
         return $this->_db->table_prefix;
     }
-    
+
+    public function getPrefixedTableName()
+    {
+        return $this->getTablePrefix() . $this->getTableName();
+    }
+
     /**
      * get db adapter
      *
