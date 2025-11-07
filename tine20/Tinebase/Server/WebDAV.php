@@ -309,6 +309,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             self::_checkRateLimit(Tinebase_Server_WebDAV::class, $this->_request->getMethod() . '.' . $_SERVER['REQUEST_URI']);
 
+            self::$_server->on('exception', fn(Throwable $t) => $this->_reportWebDavIssue($t));
             self::$_server->exec();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -363,7 +364,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Model_WebDavIssue::FLD_URI => $this->_request->getUri()->toString(),
             Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD => strtoupper($this->_request->getMethod()),
             Tinebase_Model_WebDavIssue::FLD_REQUEST_HEADERS => print_r($hdrs, true),
-            Tinebase_Model_WebDavIssue::FLD_REQUEST_BODY => null !== $this->_body ? stream_get_contents($this->_body, 100 * 1024 * 1024) : null,
+            Tinebase_Model_WebDavIssue::FLD_REQUEST_BODY => null !== $this->_body ? stream_get_contents($this->_body, 3 * 1024) : null,
             Tinebase_Model_WebDavIssue::FLD_ACCOUNT_ID => Tinebase_Core::getUser()?->getId(),
         ]));
     }
