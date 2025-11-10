@@ -35,22 +35,13 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                . __LINE__ . ' processing...');
+                . __LINE__ . ' Processing...');
         }
 
         try {
             $response = $delegate->handle($request);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' inspecting response...');
-            }
-
             if ($response instanceof Tinebase_Expressive_Response) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' found ' .
-                        Tinebase_Expressive_Response::class);
-                }
-
                 if (0 !== $response->getBody()->tell()) {
                     throw new Tinebase_Exception_UnexpectedValue('response stream not at position 0');
                 }

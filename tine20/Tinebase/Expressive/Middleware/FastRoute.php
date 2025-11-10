@@ -26,7 +26,6 @@ use \Laminas\Diactoros\Response;
  */
 class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
 {
-
     public static function getRouteInfo(ServerRequestInterface $request): array
     {
         $dispatcher = static::_getDispatcher();
@@ -67,32 +66,39 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Processing...');
+        }
 
         $routeInfo = static::getRouteInfo($request);
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning 404 method not found');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                        . __LINE__ . ' returning 404 method not found');
+                }
 
                 // 404 not found
                 return new Response('php://memory', 404);
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning 405 method not allowed');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                        . __LINE__ . ' returning 405 method not allowed');
+                }
 
                 //$allowedMethods = $routeInfo[1];
                 // 405 method not allowed
                 return new Response('php://memory', 405);
             case FastRoute\Dispatcher::FOUND:
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                    . __LINE__ . ' FastRoute dispatching result: ' . print_r($routeInfo, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                        . __LINE__ . ' FastRoute dispatching result: ' . print_r($routeInfo, true));
+                }
 
                 $handler = Tinebase_Expressive_RouteHandler::fromArray($routeInfo[1]);
                 $handler->setVars($routeInfo[2]);
                 return $delegate->handle($request->withAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, $handler));
-                break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('fast route dispatcher returned unexpected route info');
         }

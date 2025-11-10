@@ -513,8 +513,7 @@ class Tinebase_Core
         // setup a temporary user locale. This will be overwritten later but we 
         // need to handle exceptions during initialisation process such as session timeout
         // @todo add fallback locale to config file
-        Tinebase_Core::setLocale('en_US');
-        
+        Tinebase_Core::setLocale('en');
         Tinebase_Core::setupUserLocale();
         
         Tinebase_Core::enableProfiling();
@@ -1344,9 +1343,7 @@ class Tinebase_Core
         } catch (Zend_Session_Exception) {
             $session = null;
         }
-        
-        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$localeString'");
-        
+
         // get locale object from session or ...
         if (   $session !== NULL
             && isset($session->userLocale)
@@ -1355,8 +1352,10 @@ class Tinebase_Core
         ) {
             $locale = $session->userLocale;
 
-            if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " Got locale from session : " . (string)$locale);
+            if (self::isLogLevel(Zend_Log::DEBUG))  {
+                self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Got locale from session : " . $locale);
+            }
 
         // ... create new locale object
         } else {
@@ -1364,17 +1363,18 @@ class Tinebase_Core
                 // check if cookie or pref with language is available
                 if (isset($_COOKIE['TINE20LOCALE'])) {
                     $localeString = $_COOKIE['TINE20LOCALE'];
-                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " Got locale from cookie: '$localeString'");
-                    
+                    if (self::isLogLevel(Zend_Log::DEBUG)) {
+                        self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Got locale from cookie: '$localeString'");
+                    }
                 } elseif (isset($session->currentAccount)) {
                     $localeString = self::getPreference()->getValue(Tinebase_Preference::LOCALE, 'auto');
-                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . " Got locale from preference: '$localeString'");
-                } else {
-                    if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . " Try to detect the locale of the user (browser, environment, default)");
+                    if (self::isLogLevel(Zend_Log::DEBUG)) {
+                        self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Got locale from preference: '$localeString'");
+                    }
                 }
+                // else: Try to detect the locale of the user (browser, environment, default)");
             }
             
             $locale = Tinebase_Translation::getLocale($localeString);
@@ -1386,8 +1386,10 @@ class Tinebase_Core
             
             // check if the detected locale should be saved in preferences
             if ($localeString === 'auto' && is_object(Tinebase_Core::getUser()) && (string)$locale !== 'en') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " Saving locale: " . (string)$locale);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Saving locale in preferences");
+                }
                 self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
             }
         }
@@ -1396,8 +1398,10 @@ class Tinebase_Core
         self::setLocale($locale);
         
         $localeString = (string)$locale;
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) self::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . " Setting user locale: " . $localeString);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            self::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . " Setting user locale: " . $localeString);
+        }
         
         // set correct ctype locale, to make sure that the filesystem functions like basename() are working correctly with utf8 chars
         $ctypeLocale = setlocale(LC_CTYPE, 0);
