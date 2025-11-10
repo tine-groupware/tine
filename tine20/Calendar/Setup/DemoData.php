@@ -24,13 +24,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     private static $_instance = NULL;
 
     /**
-     * 
-     * required apps
-     * @var array
-     */
-    protected static $_requiredApplications = array('Admin');
-    
-    /**
      * models to work on
      * 
      * @var array

@@ -36,7 +36,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      *
      * @var array
      */
-    protected static $_requiredApplications = array('Admin','Addressbook');
+    protected static array $_requiredApplications = array('Admin','Addressbook');
 
     /**
      * models to work on
