@@ -249,7 +249,8 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
                             'accountLoginName' => $member,
                             'accountPrimaryGroup' => 'Users'
                         ));
-                        $user_id = Admin_Controller_User::getInstance()->create($user_Model, 1456, 1456)->getId();
+                        $password = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
+                        $user_id = Admin_Controller_User::getInstance()->create($user_Model, $password, $password)->getId();
 
                         $tine_Container_Data = Tinebase_Container::getInstance()->getAll();
                         foreach ($tine_Container_Data as $container) {

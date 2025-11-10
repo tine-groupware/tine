@@ -76,6 +76,7 @@ class Tinebase_User_PasswordPolicy
      * @param string $password
      * @param Tinebase_Model_FullUser $user
      * @throws Tinebase_Exception_PasswordPolicyViolation
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public static function checkPasswordPolicy($password, Tinebase_Model_FullUser $user)
     {
@@ -83,6 +84,12 @@ class Tinebase_User_PasswordPolicy
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' No password policy enabled');
             return;
+        }
+
+        if (! is_scalar($password)) {
+            throw new Tinebase_Exception_InvalidArgument('Password must be a scalar');
+        } else if (! is_string($password)) {
+            $password = (string) $password;
         }
 
         // we don't count underscores as word chars but as special chars (therefore we can't use \w and \W)
