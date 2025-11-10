@@ -210,12 +210,9 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         // create 2 timeaccounts for each cc
         $taNumber = 1;
         
-        $userGroup = Tinebase_Group::getInstance()->getGroupByName('Users');
+        $userGroup = Tinebase_Group::getInstance()->getDefaultGroup();
         $developmentString = self::$_de ? 'Entwicklung' : 'Development';
-        if (! $userGroup) {
-            die('Could not find userGroup "Users", stopping.');
-        }
-        
+
         $grants = array(array(
             'account_id' => $userGroup->getId(),
             'account_type' => 'group',
