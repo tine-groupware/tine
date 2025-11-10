@@ -442,7 +442,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
         ]))->sort('number');
         $this->_costCenterKeys[] = array();
         
-        foreach($this->_costCenters as $cc) {
+        foreach ($this->_costCenters as $cc) {
             if ($cc->name == 'Marketing') {
                 $this->_marketingCostCenter = $cc;
             }
