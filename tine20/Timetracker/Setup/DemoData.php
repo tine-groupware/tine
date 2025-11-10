@@ -16,12 +16,7 @@
  */
 class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 {
-    /**
-     * required apps
-     * 
-     * @var array
-     */
-    protected static $_requiredApplications = array('Admin', 'Sales', 'HumanResources');
+    protected static array $_optionalApplications = ['Sales', 'HumanResources'];
     
     /**
      * holds the instance of the singleton
