@@ -292,7 +292,7 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 static::$_defaultPassword);
         if (! $password || empty($password)) {
             // set random password
-            $password = Tinebase_Record_Abstract::generateUID(12);
+            $password = Tinebase_User_PasswordPolicy::generatePolicyConformPassword();
             echo "\033[33mUser \"" . $user->accountDisplayName . "\" got a random password: \"" . $password . "\"\033[0m" . PHP_EOL;
         }
         
