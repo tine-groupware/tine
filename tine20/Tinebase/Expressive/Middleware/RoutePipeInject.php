@@ -33,8 +33,10 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Processing...');
+        }
 
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {
@@ -44,8 +46,10 @@ class Tinebase_Expressive_Middleware_RoutePipeInject implements MiddlewareInterf
         if ($routeHandler->hasPipeInject()) {
             $pipeInjectData = $routeHandler->getPipeInject();
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                . __LINE__ . ' injecting: ' . print_r($pipeInjectData, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    . __LINE__ . ' Injecting: ' . print_r($pipeInjectData, true));
+            }
 
             $middleWarePipe = new \Zend\Stratigility\MiddlewarePipe();
 
