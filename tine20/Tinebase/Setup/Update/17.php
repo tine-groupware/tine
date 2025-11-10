@@ -108,6 +108,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update021',
             ],
+            self::RELEASE017_UPDATE022 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update022',
+            ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
             self::RELEASE017_UPDATE000 => [
