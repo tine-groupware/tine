@@ -34,8 +34,10 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Processing...');
+        }
 
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {

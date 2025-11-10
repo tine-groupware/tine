@@ -22,7 +22,6 @@ use \Psr\Http\Message\ServerRequestInterface;
  */
 class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
 {
-
     /**
      * Process an incoming server request and return a response, optionally delegating
      * to the next middleware component to create the response.
@@ -34,8 +33,10 @@ class Tinebase_Expressive_Middleware_Dispatch implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $delegate): ResponseInterface
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-            . __LINE__ . ' processing...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Processing...');
+        }
 
         /** @var Tinebase_Expressive_RouteHandler $routeHandler */
         if (null === ($routeHandler = $request->getAttribute(Tinebase_Expressive_Const::ROUTE_HANDLER, null))) {

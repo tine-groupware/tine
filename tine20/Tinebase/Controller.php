@@ -1527,8 +1527,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
-        $response = new \Laminas\Diactoros\Response\JsonResponse($data);
-        return $response;
+        return new \Laminas\Diactoros\Response\JsonResponse($data);
     }
 
     /**
@@ -1539,8 +1538,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $locale = Tinebase_Core::getLocale();
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
-        return $html;
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
     }
 
     /**
@@ -1551,8 +1549,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $locale = Tinebase_Core::getLocale();
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/imprint.html.twig');
-        return $html;
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/imprint.html.twig');
     }
 
     /**

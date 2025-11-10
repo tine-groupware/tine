@@ -233,10 +233,6 @@ class Tinebase_Translation
     {
         Zend_Locale::$compatibilityMode = false;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " given localeString '$_localeString'");
-        }
         try {
             if ($_localeString === Tinebase_Config::DEFAULT_LOCALE_AUTO) {
                 $_localeString = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE);
@@ -253,11 +249,6 @@ class Tinebase_Translation
             }
             
             if (! in_array($_localeString, $supportedLocales)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " '$locale' is not supported, checking fallback");
-                }
-                
                 // check if we find suitable fallback
                 $language = $locale->getLanguage();
                 switch ($language) {
@@ -270,10 +261,10 @@ class Tinebase_Translation
                         } else {
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . " no suiteable lang fallback found within this locales: "
+                                    . " No suitable lang fallback found within this locales: "
                                     . print_r($supportedLocales, true) );
                             }
-                            throw new Tinebase_Exception_NotFound('No suiteable lang fallback found.');
+                            throw new Tinebase_Exception_NotFound('No suitable lang fallback found.');
                         }
                         break;
                 }
@@ -288,7 +279,7 @@ class Tinebase_Translation
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " selected locale: '$locale'");
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Selected locale: '$locale'");
         }
         return $locale;
     }
