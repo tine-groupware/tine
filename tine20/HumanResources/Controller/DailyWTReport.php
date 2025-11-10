@@ -337,7 +337,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
 
                 if (null === ($contract = $this->_employee->getValidContract($this->_currentDate))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'employee ' .
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Employee ' .
                             $employee->getId() . ' ' . $employee->getTitle() . ' has no valid contract at ' .
                             $this->_currentDate->toString());
 

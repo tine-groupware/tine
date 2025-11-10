@@ -1769,8 +1769,9 @@ fi';
      * and the additional argument "skipAdmin" to force no user/group/role creation
      * 
      * @param Zend_Console_Getopt $_opts
+     * @return int
      */
-    public function createAllDemoData($_opts)
+    public function createAllDemoData($_opts): int
     {
         $this->_checkAdminRight();
         
@@ -1788,7 +1789,12 @@ fi';
                         continue 2;
                     }
                 }
-                $this->_applicationsToWorkOn[$appName] = array('appName' => $appName, 'required' => $required);
+                $optional = $className::getOptionalApplications();
+                $this->_applicationsToWorkOn[$appName] = [
+                    'appName' => $appName,
+                    'required' => $required,
+                    'optional' => $optional,
+                ];
             } else {
                 echo 'DemoData in application "' . $appName . '" not found.' . PHP_EOL . PHP_EOL;
             }
@@ -1823,12 +1829,16 @@ fi';
         }
         $recursiveApps[$app] = true;
 
-        if (isset($cfg['required']) && is_array($cfg['required'])) {
-            foreach($cfg['required'] as $requiredApp) {
-                $this->_createDemoDataRecursive($requiredApp, $this->_applicationsToWorkOn[$requiredApp], $opts);
+        foreach (['required', 'optional'] as $configKey) {
+            if (isset($cfg[$configKey]) && is_array($cfg[$configKey])) {
+                foreach ($cfg[$configKey] as $reqiredApp) {
+                    if (Tinebase_Application::getInstance()->isInstalled($reqiredApp)) {
+                        $this->_createDemoDataRecursive($reqiredApp, $this->_applicationsToWorkOn[$reqiredApp], $opts);
+                    }
+                }
             }
         }
-        
+
         $className = $app . '_Frontend_Cli';
         $classNameDD = $app . '_Setup_DemoData';
         

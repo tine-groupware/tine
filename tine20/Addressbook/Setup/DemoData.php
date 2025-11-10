@@ -34,14 +34,7 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * the addresses got from csv
      */
     protected $_addresses = NULL;
-    
-    /**
-     * required apps
-     * 
-     * @var array
-     */
-    protected static $_requiredApplications = array('Admin');
-    
+
     /**
      * holds indexes of male images in $this->_images
      * 

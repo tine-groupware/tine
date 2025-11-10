@@ -55,8 +55,15 @@ abstract class Tinebase_Setup_DemoData_Abstract
      * 
      * @var array
      */
-    protected static $_requiredApplications;
-    
+    protected static array $_requiredApplications = ['Admin'];
+
+    /**
+     * holds names of optional applications to create demo data before this app
+     *
+     * @var array
+     */
+    protected static array $_optionalApplications = [];
+
     /**
      * holds the costcenter for "development"
      * 
@@ -435,7 +442,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
         ]))->sort('number');
         $this->_costCenterKeys[] = array();
         
-        foreach($this->_costCenters as $cc) {
+        foreach ($this->_costCenters as $cc) {
             if ($cc->name == 'Marketing') {
                 $this->_marketingCostCenter = $cc;
             }
@@ -453,14 +460,21 @@ abstract class Tinebase_Setup_DemoData_Abstract
     }
     
     /**
-     * 
-     * @return multitype:array|null
+     * @return array
      */
-    public static function getRequiredApplications()
+    public static function getRequiredApplications(): array
     {
-        return static::$_requiredApplications ?: array();
+        return static::$_requiredApplications ?: [];
     }
-    
+
+    /**
+     * @return array
+     */
+    public static function getOptionalApplications(): array
+    {
+        return static::$_optionalApplications ?: [];
+    }
+
     /**
      * this is required for other applications needing demo data of this application
      * if this returns true, this demodata has been run already

@@ -45,7 +45,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      * 
      * @var array
      */
-    protected static $_requiredApplications = array('Admin', 'Calendar', 'Sales');
+    protected static array $_requiredApplications = array('Admin', 'Calendar', 'Sales');
     
     /**
      * the start date of contracts costcenters, employees
