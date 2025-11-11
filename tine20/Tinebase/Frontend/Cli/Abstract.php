@@ -297,13 +297,17 @@ class Tinebase_Frontend_Cli_Abstract
             return;
         }
         if ($checkDependencies) {
-            foreach($className::getRequiredApplications() as $appName) {
+            foreach ($className::getRequiredApplications() as $appName) {
                 if (Tinebase_Application::getInstance()->isInstalled($appName)) {
                     $cname = $appName . '_Setup_DemoData';
                     if (class_exists($cname)) {
                         if (! $cname::hasBeenRun()) {
                             $className2 = $appName . '_Frontend_Cli';
                             if (class_exists($className2)) {
+                                if ($className2 === get_class($this)) {
+                                    echo 'Prevent recursive call of self::createDemoData' . PHP_EOL;
+                                    continue;
+                                }
                                 echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
                                 $class = new $className2();
                                 $class->createDemoData($_opts, TRUE);
