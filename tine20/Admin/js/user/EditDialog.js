@@ -1117,6 +1117,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         blurOnSelect: true,
                         allowBlank: false,
                         recordClass: Tine.Tinebase.Model.Group,
+                        recordProxy: Tine.Tinebase.groupBackend,
                         listeners: {
                             scope: this,
                             'select': function (combo, record, index) {
