@@ -99,6 +99,10 @@
   when:
     - tinedockercompose_docservice_version is defined
 
+- include_tasks: backup.yml
+  when:
+    - tinedockercompose_backup_dir is defined
+
 - name: docker compose pull
   ansible.builtin.shell: docker compose pull
   args:
