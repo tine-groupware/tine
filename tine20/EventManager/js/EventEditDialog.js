@@ -97,10 +97,14 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     ], [
                                         fieldManager('location'),
                                         fieldManager('type'),
-                                        fieldManager('total_places'),
+                                        fieldManager('status'),
                                     ],
                                     [
-                                        fieldManager('status'),
+                                        fieldManager('total_places'),
+                                        fieldManager('booked_places'),
+                                        fieldManager('available_places'),
+                                    ],
+                                    [
                                         fieldManager('fee'),
                                         fieldManager('registration_possible_until', {
                                             checkState: function () {
@@ -117,15 +121,11 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 }
                                             }
                                         }),
-                                    ],
-                                    [
-                                        fieldManager('booked_places'),
-                                        fieldManager('available_places'),
                                         [ new EvaluationDimensionForm({
                                             maxItemsPerRow: 2,
                                             recordClass: this.recordClass
                                         })]
-                                    ]
+                                    ],
                                 ]
                             }]
                         }]
@@ -171,8 +171,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 listeners: {
                                     render: function (grid) {
                                         grid.on('beforeedit', function (e) {
-                                            const total_places = me.form.findField('total_places').getValue();
-                                            const available_places = me.form.findField('available_places').getValue();
+                                            const total_places = me.form.findField('total_places').getValue() || 0;
+                                            const available_places = me.form.findField('available_places').getValue() || 0;
                                             const registrations = me.form.findField('registrations').store.data.items;
                                             let registrations_count = 0;
                                             registrations.forEach(registration => {
@@ -182,7 +182,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                             });
                                             const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
                                             const statusField = editor.field;
-                                            if (statusField && available_places <= 0 && total_places < registrations_count) {
+                                            if (statusField && available_places <= 0 && total_places <= registrations_count) {
                                                 statusField.on('expand', function (combo) {
                                                     setTimeout(function () {
                                                         const listId = combo.list ? combo.list.id : null;
@@ -214,8 +214,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         });
 
                                         grid.store.on('add', function (store, records, index) {
-                                            const total_places = me.form.findField('total_places').getValue();
-                                            const available_places = me.form.findField('available_places').getValue();
+                                            const total_places = me.form.findField('total_places').getValue() || 0;
+                                            const available_places = me.form.findField('available_places').getValue() || 0;
                                             const registrations = me.form.findField('registrations').store.data.items;
                                             let registrations_count = 0;
                                             registrations.forEach(registration => {
@@ -223,7 +223,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                     registrations_count++;
                                                 }
                                             });
-                                            if (available_places <= 0 && total_places < registrations_count) {
+                                            if (available_places <= 0 && total_places <= registrations_count) {
                                                 Ext.each(records, function (record) {
                                                     record.set('status', "2");
                                                 });
@@ -344,8 +344,8 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onSaveAndClose: function () {
-        const total_places = this.form.findField('total_places').getValue();
-        const available_places = this.form.findField('available_places').getValue();
+        const total_places = this.form.findField('total_places').getValue() || 0;
+        const available_places = this.form.findField('available_places').getValue() || 0;
         const registrations = this.form.findField('registrations').store.data.items;
         let registrations_count = 0;
         registrations.forEach(registration => {
@@ -358,7 +358,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
                 title: this.app.i18n._('Waiting List'),
-                msg: this.app.i18n._('Since there are no more available places, this registration is on waiting list.'),
+                msg: this.app.i18n._('Since there are no more available places, this registration is on the waiting list.'),
                 fn: () => this.supr().onSaveAndClose.apply(this, arguments)
             });
         } else {

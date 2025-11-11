@@ -12,7 +12,7 @@ available parameters:
 
 
 {% block body %}
-    {{ _('Your registration for %1$s has been cancelled successfully.') | format(event.name) }}
+    {{ _('Your registration for %1$s has been cancelled successfully.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
     {{ _('To find other events, please follow the link below') }}
 
     {{ link }}

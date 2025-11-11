@@ -12,7 +12,7 @@ available parameters:
 
 
 {% block body %}
-    {{ _('You are registered for %1$s.') | format(event.name) }}
+    {{ _('You are registered for %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
     {{ _('To find other events or manage your registration, please follow the link below') }}
 
     {{ link }}

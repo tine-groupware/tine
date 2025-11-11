@@ -5,7 +5,7 @@
  *
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.wulff@metaways.de> <t.leuschel@metaways.de>
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -106,10 +106,24 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     protected function _createEvents()
     {
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
+        $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Tinebase_Model_EvaluationDimensionItem::class,
+            [
+                [
+                    'field' => Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER,
+                    'operator' => 'equals',
+                    'value' => '02100'
+                ],
+            ],
+        );
+        $cost_center_item = Tinebase_Controller_EvaluationDimensionItem::getInstance()
+            ->search($filter)->getFirstRecord();
+        if (!$cost_center_item) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
 
-        $importer = call_user_func_array($definition->plugin . '::createFromDefinition', array($definition, []));
-        $importer->importFile(__DIR__ . '/DemoData/files/kostenstellen_ebhh.csv');
+            $importer = call_user_func_array($definition->plugin . '::createFromDefinition', array($definition, []));
+            $importer->importFile(__DIR__ . '/DemoData/files/kostenstellen_ebhh.csv');
+        }
 
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
@@ -132,7 +146,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $kinder9 = $this->setOptionConfigCheckboxDemoData(90, 'Übernachtung');
         $kinder3 = $this->setOptionConfigCheckboxDemoData(0, 'Übernachtung kostenlos');
         $fleisch = $this->setOptionConfigCheckboxDemoData(20, 'Rinderroulade');
-        $vegetarisch= $this->setOptionConfigCheckboxDemoData(18, 'Gnocchi mit Pilzen und Spinat');
+        $vegetarisch = $this->setOptionConfigCheckboxDemoData(18, 'Gnocchi mit Pilzen und Spinat');
         $vegan = $this->setOptionConfigCheckboxDemoData(18, 'Gnocchi mit Pilzen und Spinat');
 
         // files
@@ -330,7 +344,6 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_NAME                          => 'Modul 2',
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-11-07 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-11-09 18:00:00"),
-            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
@@ -359,7 +372,6 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_NAME                          => 'Modul 3',
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-17 15:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-10-18 16:00:00"),
-            EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => '',
             EventManager_Model_Event::FLD_LOCATION                      => $location,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
