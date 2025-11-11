@@ -121,7 +121,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
             //_('GDPR registration secret string')
             self::LABEL                 => 'GDPR registration secret string',
             //_('The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable.')
-            self::DESCRIPTION           => 'The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable.',
+            self::DESCRIPTION           => 'The GDPR JWT secret string',
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
