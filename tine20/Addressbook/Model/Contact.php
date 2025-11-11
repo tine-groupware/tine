@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -9,7 +8,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -95,6 +94,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
     const MODEL_NAME_PART = 'Contact';
 
+    public const FLD_ICAL_FB_URLS = 'ical_fb_urls';
+
     /**
      * const to describe contact of current account id independent
      *
@@ -150,7 +151,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 27,
+        self::VERSION       => 28,
         'containerName'     => 'Addressbook', // gettext('GENDER_Addressbook')
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'recordName'        => self::MODEL_NAME_PART, // gettext('GENDER_Contact')
@@ -1085,7 +1086,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     ],
                 ]
             ],
-
+            self::FLD_ICAL_FB_URLS => [
+                self::TYPE                  => self::TYPE_RECORDS,
+                self::LABEL                 => 'Calendar Free Busy URLs', // _('Calendar Free Busy URLs')
+                self::NULLABLE              => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_ExternalFreeBusyUrl::MODEL_NAME_PART,
+                    self::STORAGE               => self::TYPE_JSON,
+                ],
+            ],
         ],
 
         self::DB_COLUMNS                => [
