@@ -111,7 +111,7 @@ Ext.layout.ColumnLayout = Ext.extend(Ext.layout.ContainerLayout, {
     // private
     onLayout : function(ct, target){
 
-        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt?.enableResponsive;
         this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         var cs = ct.items.items, len = cs.length, c, i;
