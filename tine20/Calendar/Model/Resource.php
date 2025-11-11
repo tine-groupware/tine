@@ -28,6 +28,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
     public const FLD_SITE = 'site';
     public const FLD_LOCATION = 'location';
     public const FLD_LOCATION_ADDRESS = 'location_address';
+    public const FLD_FREE_BUSY_URLS = 'free_busy_urls';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -50,6 +51,12 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
 
         self::RECORD_NAME               => 'Calendar User', // gettext('GENDER_Calendar User')
         self::RECORDS_NAME              => 'Calendar Users', // ngettext('Calendar User', 'Calendar Users', n)
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_FREE_BUSY_URLS => [],
+            ],
+        ],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -147,6 +154,21 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::LENGTH        => 1024,
                 self::NULLABLE      => true,
                 self::QUERY_FILTER  => true,
+            ],
+            self::FLD_FREE_BUSY_URLS               => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Calendar_Config::APP_NAME,
+                    self::MODEL_NAME                => Calendar_Model_FreeBusyUrl::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS         => true,
+                    self::REF_ID_FIELD              => Calendar_Model_FreeBusyUrl::FLD_OWNER_ID,
+                    self::FORCE_VALUES              => [
+                        Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS => self::class,
+                    ],
+                    self::ADD_FILTERS               => [
+                        ['field' => Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS, 'operator' => 'equals', 'value' => self::class],
+                    ],
+                ],
             ],
         ],
     ];

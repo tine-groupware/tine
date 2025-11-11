@@ -528,7 +528,93 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => false,
                 Tinebase_Expressive_RouteHandler::UNAUTHORIZED_REDIRECT_LOGIN => true,
             ]))->toArray());
+            $routeCollector->get('/freebusy/{urlId}', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicFreeBusy', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
+            ]))->toArray());
         });
+    }
+
+    public function publicFreeBusy(string $urlId): \Psr\Http\Message\ResponseInterface
+    {
+        $freeBusyUrlCtrlRaii = new Tinebase_RAII(Calendar_Controller_FreeBusyUrl::getInstance()->assertPublicUsage());
+        $resourceCtrlRaii = new Tinebase_RAII(Calendar_Controller_Resource::getInstance()->assertPublicUsage());
+
+        $fbUrl = Calendar_Controller_FreeBusyUrl::getInstance()->get($urlId);
+
+        switch ($fbUrl->{Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS}) {
+            case Tinebase_Model_User::class:
+                $oldUser = Tinebase_Core::getUser();
+                $resetUser = new Tinebase_RAII(fn() => $oldUser ? Tinebase_Core::setUser($oldUser) : Tinebase_Core::unsetUser());
+                Tinebase_Core::setUser($user = Tinebase_User::getInstance()->getUserById(
+                    $fbUrl->getIdFromProperty(Calendar_Model_FreeBusyUrl::FLD_OWNER_ID)
+                ));
+
+                $response = $this->_getFBResponse(new Calendar_Model_Attender([
+                    Calendar_Model_Attender::FLD_USER_TYPE => Calendar_Model_Attender::USERTYPE_USER,
+                    Calendar_Model_Attender::FLD_USER_ID => $user->contact_id,
+                ], true), $user->accountEmailAddress);
+
+                unset($resetUser);
+                break;
+            case Calendar_Model_Resource::class:
+                $eventCtrlRaii = new Tinebase_RAII(Calendar_Controller_Event::getInstance()->assertPublicUsage());
+
+                $response = $this->_getFBResponse(new Calendar_Model_Attender([
+                    Calendar_Model_Attender::FLD_USER_TYPE => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                    Calendar_Model_Attender::FLD_USER_ID => $fbUrl->{Calendar_Model_FreeBusyUrl::FLD_OWNER_ID}->getId(),
+                ], true), $fbUrl->{Calendar_Model_FreeBusyUrl::FLD_OWNER_ID}->email); // TODO FIXME email might be empty?
+
+                unset($eventCtrlRaii);
+                break;
+            default:
+                throw new Tinebase_Exception_NotFound('free busy url owner class not supported');
+        }
+
+        unset($resourceCtrlRaii);
+        unset($freeBusyUrlCtrlRaii);
+
+        return $response;
+    }
+
+
+    protected function _getFBResponse(Calendar_Model_Attender $attendee, string $organizer): \Psr\Http\Message\ResponseInterface
+    {
+        $calendarController = Calendar_Controller_Event::getInstance();
+        $allFb = $calendarController->getFreeBusyInfo(new Calendar_Model_EventFilter([[
+            'field' => 'period',
+            'operator' => 'within',
+            'value' => ['from' => $from = Tinebase_DateTime::now(), 'until' => $until = Tinebase_DateTime::now()->addYear(1)],
+        ]]), new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [$attendee]));
+
+        $vcalendar = new \Sabre\VObject\Component\VCalendar();
+        $vcalendar->METHOD = 'PUBLISH'; // @phpstan-ignore-line
+        $vFree = $vcalendar->createComponent('VFREEBUSY', [
+            'DTSTAMP' => Tinebase_DateTime::now(),
+            'DTSTART' => $from->getClone(),
+            'DTEND' => $until->getClone(),
+            'ORGANIZER' => $organizer,
+        ]);
+        $vcalendar->add($vFree);
+
+        /** @var Calendar_Model_FreeBusy $freeBusy */
+        foreach ($allFb as $freeBusy) {
+            if (Calendar_Model_FreeBusy::FREEBUSY_FREE === $freeBusy->type) {
+                continue;
+            }
+            $type = 'BUSY';
+            if (Calendar_Model_FreeBusy::FREEBUSY_BUSY_TENTATIVE === $freeBusy->type) {
+                $type = 'BUSY-TENTATIVE';
+            }
+            $vFree->add('FREEBUSY', $freeBusy->dtstart->format('Ymd\THis\Z') . '/' . $freeBusy->dtend->format('Ymd\THis\Z'), ['FBTYPE' => $type]);
+        }
+
+        $response = new \Laminas\Diactoros\Response(headers: [
+            'Content-Type' => 'text/calendar; charset=utf-8',
+            'Cache-Control' => 'no-store',
+        ]);
+        $response->getBody()->write($vcalendar->serialize());
+        return $response;
     }
 
     public function publicWellKnownCalDav(): \Psr\Http\Message\ResponseInterface

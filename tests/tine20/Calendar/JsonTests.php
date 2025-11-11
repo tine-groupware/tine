@@ -1279,6 +1279,37 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->assertEquals(0, count($searchResultData['results']));
     }
+
+    public function testFreeBusyUrlAcl(): void
+    {
+        $freeBusyUrlAdmin = Calendar_Controller_FreeBusyUrl::getInstance()->create(new Calendar_Model_FreeBusyUrl([
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_ID => Tinebase_Core::getUser()->getId(),
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS => Tinebase_Model_User::class,
+        ], true));
+
+        $resource = $this->_getResource();
+        $resource->{Calendar_Model_Resource::FLD_FREE_BUSY_URLS} = new Tinebase_Record_RecordSet(Calendar_Model_FreeBusyUrl::class, [
+            new Calendar_Model_FreeBusyUrl([], true),
+        ]);
+        $persistentResource = Calendar_Controller_Resource::getInstance()->create($resource);
+        $resourceFBUrl = $persistentResource->{Calendar_Model_Resource::FLD_FREE_BUSY_URLS}->getFirstRecord();
+
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+        $freeBusyUrlJMCB = Calendar_Controller_FreeBusyUrl::getInstance()->create(new Calendar_Model_FreeBusyUrl([
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_ID => Tinebase_Core::getUser()->getId(),
+            Calendar_Model_FreeBusyUrl::FLD_OWNER_CLASS => Tinebase_Model_User::class,
+        ], true));
+
+        $result = $this->_uit->searchFreeBusyUrls([], []);
+        $this->assertCount(1, $result['results']);
+        $this->assertSame($freeBusyUrlJMCB->getId(), $result['results'][0]['id']);
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $result = $this->_uit->searchFreeBusyUrls([], []);
+        $this->assertCount(2, $result['results']);
+        $this->assertTrue(in_array($result['results'][0]['id'], [$freeBusyUrlAdmin->getId(), $resourceFBUrl->getId()]));
+        $this->assertTrue(in_array($result['results'][1]['id'], [$freeBusyUrlAdmin->getId(), $resourceFBUrl->getId()]));
+    }
     
     /**
      * testMeAsAttenderFilter

@@ -12,6 +12,8 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
     protected $_joinAlias = null;
     protected $_refIdField = null;
     protected $_idColumn = null;
+    protected $_refModel = null;
+    protected $_isOptional  = false;
 
     public function appendFilterSql($_select, $_backend)
     {
@@ -21,10 +23,17 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
         $this->init();
 
         $db = $_backend->getAdapter();
-        $_select->join([$this->_joinAlias => $this->_joinTable],
-            $this->_getQuotedFieldName($_backend) . ' = ' . $db->quoteIdentifier(
-                $this->_joinAlias . '.' . $this->_refIdField
-            ) . ' AND ' .  $db->quoteIdentifier($this->_joinAlias . '.is_deleted') . ' = 0', []);
+        if ($this->_isOptional) {
+            $_select->joinLeft([$this->_joinAlias => $this->_joinTable],
+                $this->_getQuotedFieldName($_backend) . ' = ' . $db->quoteIdentifier(
+                    $this->_joinAlias . '.' . $this->_refIdField
+                ) . ' AND ' .  $db->quoteIdentifier($this->_joinAlias . '.is_deleted') . ' = 0', []);
+        } else {
+            $_select->join([$this->_joinAlias => $this->_joinTable],
+                $this->_getQuotedFieldName($_backend) . ' = ' . $db->quoteIdentifier(
+                    $this->_joinAlias . '.' . $this->_refIdField
+                ) . ' AND ' . $db->quoteIdentifier($this->_joinAlias . '.is_deleted') . ' = 0', []);
+        }
         if (empty($_select->getPart(Zend_Db_Select::GROUP))) {
             $_select->group($this->_options['tablename'] . '.' . $this->_idColumn);
         }
@@ -52,7 +61,7 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
         }
         $this->_idColumn = $mc->getIdProperty();
         /** @var Tinebase_Record_Interface $refModel */
-        $refModel = $mc->fields[$this->getField()][Tinebase_ModelConfiguration::CONFIG]
+        $refModel = $this->_refModel ?? $mc->fields[$this->getField()][Tinebase_ModelConfiguration::CONFIG]
             [Tinebase_ModelConfiguration::RECORD_CLASS_NAME];
         $refMC = $refModel::getConfiguration();
         $this->_joinTable = SQL_TABLE_PREFIX . $refMC->getTableName();
@@ -91,6 +100,7 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
         if (!isset($this->_options['modelName'])) {
             throw new Tinebase_Exception_Backend('modelName options is required');
         }
-
+        $this->_refModel = $this->_options['refModel'] ?? null;
+        $this->_isOptional = $this->_options['isOptional'] ?? false;
     }
 }
