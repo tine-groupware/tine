@@ -2177,7 +2177,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 750,
+        width: 800,
         height: 700,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
