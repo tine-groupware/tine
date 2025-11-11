@@ -32,6 +32,13 @@ class Admin_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     }
 
     /**
+     * holds names of required applications to create demo data before this app
+     *
+     * @var array
+     */
+    protected static array $_requiredApplications = [];
+
+    /**
      * this is required for other applications needing demo data of this application
      * if this returns true, this demodata has been run already
      * 
