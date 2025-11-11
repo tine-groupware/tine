@@ -2,9 +2,9 @@
 /**
  * @package     GDPR
  * @subpackage  Config
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -126,6 +126,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
+            self::RANDOMIZEIFEMPTY      => true,
         ],
         self::TEMPLATE_PATH => [
             //_('GDPR template path')
