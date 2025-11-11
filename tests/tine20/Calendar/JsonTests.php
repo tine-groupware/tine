@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -36,7 +36,7 @@ class Calendar_JsonTests extends Calendar_TestCase
      * @see Calendar/Calendar_TestCase::setUp()
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
         
         Calendar_Controller_Event::getInstance()->doContainerACLChecks(true);
@@ -48,7 +48,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
 
     public function tearDown(): void
-{
+    {
         Calendar_Model_Event::resetFreeBusyCleanupCache();
         Calendar_Config::getInstance()->set(Calendar_Config::FREEBUSY_INFO_ALLOWED, $this->_oldFreebusyInfoAllowed);
 
@@ -1013,6 +1013,27 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals('4TH', $newBaseEvent['rrule']['byday'], 'Rrule should have changed');
     }
 
+    public function testGetExternalFreeBusyInfo()
+    {
+        $testDataRaii = new Tinebase_RAII(fn() => Calendar_Frontend_Json::$getExternalFreeBusyInfoTestData = null);
+        Calendar_Frontend_Json::$getExternalFreeBusyInfoTestData = 'BEGIN:VCALENDAR
+BEGIN:VFREEBUSY
+UID:19970901T082949Z-FA43EF@example.com
+ORGANIZER:mailto:jane_doe@example.com
+DTSTART:19971015T050000Z
+DTEND:19981016T050000Z
+FREEBUSY;FBTYPE=BUSY-UNAVAILABLE:19980314T233000Z/19980315T003000Z
+FREEBUSY;FBTYPE=FREE:19980316T153000Z/19980316T163000Z
+FREEBUSY:19980318T030000Z/PT3H
+END:VFREEBUSY
+END:VCALENDAR';
+
+        $result = $this->_uit->getExternalFreeBusyInfo([Addressbook_Model_ExternalFreeBusyUrl::FLD_URL => 'https://']);
+
+        $this->assertSame(3, count($result));
+
+        unset($testDataRaii);
+    }
     /**
      * testUpdateRecurSeriesRruleMonthly2
      *
