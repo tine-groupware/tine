@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -111,18 +111,23 @@ trait Calendar_Convert_Event_VCalendar_AbstractTrait
         return $attendee;
     }
 
-    protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Sabre\VObject\Property $property): void
+    public static function getEmailFromProperty(\Sabre\VObject\Property $property): ?string
     {
         $email = null;
-
         if (!empty($property['EMAIL'])) {
             $email = (string)$property['EMAIL'];
         } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
             $email = $matches['email'];
         }
-        if (($email !== null) && is_string($email)) {
-            $email = trim($email);
+        if (null !== $email && is_string($email)) {
+            return trim($email);
         }
+        return null;
+    }
+
+    protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Sabre\VObject\Property $property): void
+    {
+        $email = static::getEmailFromProperty($property);
 
         if (!empty($email)) {
             // it's not possible to change the organizer by spec
