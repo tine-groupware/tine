@@ -287,12 +287,13 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::LABEL                 => 'EventManager registration secret string',
                                         //_('EventManager registration secret string')
             self::DESCRIPTION           =>
-                'The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable.',
-            //_('The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable.')
+                'The EventManager JWT secret string',
+            //_('The EventManager JWT secret string')
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
+            self::RANDOMIZEIFEMPTY      => true,
         ],
     ];
 
