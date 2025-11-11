@@ -407,12 +407,8 @@ deploy-test-cloud-review:
         RELEASE_TYPE: nightly
 
 teardown-test-cloud-review:
-  extends: deploy-test-cloud-nightly
-  variables:
-    DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
-    DEPLOY_TYPE: "review"
+  extends: deploy-test-cloud-review
   environment:
-    name: review/$CI_COMMIT_REF_NAME
     action: stop
   script:
     - !reference [.lib, script]
