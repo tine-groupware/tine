@@ -3,7 +3,7 @@
  *
  * @package     EventManager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -15,18 +15,16 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     initComponent: function () {
         Tine.EventManager.RegistrationEditDialog.superclass.initComponent.call(this);
         this.on('beforerender', this.onBeforeRender, this);
-        this.on('afterlayout', this.onAfterLayout, this);
+        this.on('afterrender', this.onAfterRender, this);
     },
 
     onBeforeRender: function () {
         this.setSelectionConfigClassListener();
-        const reasonField = this.form.findField('reason_waiting_list');
-        reasonField.hide();
     },
 
-    onAfterLayout: function () {
-         this.waitingListListener();
-         this.showReasonWaitingList();
+    onAfterRender: function () {
+        this.setStatusListener();
+        this.waitingListListener();
     },
 
     setSelectionConfigClassListener: function () {
@@ -40,6 +38,32 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
                 }
             });
         },this);
+    },
+
+    setStatusListener: function () {
+        return this.form.findField('status').on('change', function (combo) {
+            this.showReasonWaitingList();
+        },this);
+    },
+
+    showReasonWaitingList: function () {
+        const registration_deadline = this.form.openerCt.parentEditDialog.record.data.registration_possible_until;
+        const statusField = this.form.findField('status');
+        const reasonField = this.form.findField('reason_waiting_list');
+        if (statusField.getValue() === "2") {
+            const deadlineTime = new Date(registration_deadline).getTime();
+            const currentTime = Date.now();
+            if (currentTime > deadlineTime) {
+                reasonField.setValue("2");
+                reasonField.show();
+            } else {
+                reasonField.setValue("1");
+                reasonField.show();
+            }
+        } else {
+            reasonField.setValue("3");
+            reasonField.hide();
+        }
     },
 
     waitingListListener : function () {
@@ -91,26 +115,11 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
                 if (statusField.getValue() !== "2") {
                     reasonField.setValue("3");
                     reasonField.hide();
+                    this.doLayout();
                 } else {
                     this.showReasonWaitingList();
                 }
             }, this);
-        }
-    },
-
-    showReasonWaitingList: function () {
-        const registration_deadline = this.form.openerCt.parentEditDialog.record.data.registration_possible_until;
-        const statusField = this.form.findField('status');
-        const reasonField = this.form.findField('reason_waiting_list');
-        if (statusField.getValue() === "2") {
-            reasonField.show();
-            const deadlineTime = new Date(registration_deadline).getTime();
-            const currentTime = Date.now();
-            if (currentTime > deadlineTime) {
-                reasonField.setValue("2");
-            } else {
-                reasonField.setValue("1");
-            }
         }
     },
 });

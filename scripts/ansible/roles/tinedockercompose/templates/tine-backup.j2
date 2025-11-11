@@ -1,0 +1,2 @@
+### (week)daily tine backup
+0 4 * * 1-5 cd {{ tinedockercompose_path }} && docker compose exec -u tine20 web sh -c "cd /usr/share/tine20 && setup.php --backup -- db=1 files=1 noTimestamp=1 novalidate=1 backupDir={{ tinedockercompose_backup_dir }}"

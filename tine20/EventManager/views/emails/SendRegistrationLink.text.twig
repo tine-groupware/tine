@@ -11,7 +11,7 @@ available parameters:
 {% endblock %}
 
 {% block body %}
-    {{ _('Thank you for expressing your interest in the event %1$s.') | format(event.name) }}
+    {{ _('Thank you for expressing your interest in the event %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
     {{ _('To complete the registration, please confirm your e-mail address via this link:') }}
 
     {{ link }}

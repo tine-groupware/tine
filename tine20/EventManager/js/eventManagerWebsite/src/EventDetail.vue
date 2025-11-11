@@ -52,7 +52,7 @@
         <div class="mb-3">
           <p>{{ formatMessage('Please enter your details to register for this event:') }}</p>
           <div class="form-group mb-3">
-            <label for="name-input">{{ formatMessage('First Name:') }}</label>
+            <label>{{ formatMessage('First Name:') }}</label>
             <input
               id="name-input"
               v-model="userFirstName"
@@ -67,7 +67,7 @@
             </div>
           </div>
           <div class="form-group mb-3">
-            <label for="name-input">{{ formatMessage('Last Name:') }}</label>
+            <label>{{ formatMessage('Last Name:') }}</label>
             <input
               id="name-input"
               v-model="userLastName"
@@ -82,7 +82,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="email-input">{{ formatMessage('Email Address:') }}</label>
+            <label>{{ formatMessage('Email Address:') }}</label>
             <input
               id="email-input"
               v-model="userEmail"
@@ -176,11 +176,6 @@ const isEmailValid = computed(() => {
 
 const isFormValid = computed(() => {
   return isNameValid.value && isEmailValid.value;
-});
-
-const emailValidation = computed(() => {
-  if (userEmail.value.length === 0) return null;
-  return isEmailValid.value;
 });
 
 const openEmailModal = () => {
