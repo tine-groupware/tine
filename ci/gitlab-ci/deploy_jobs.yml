@@ -151,6 +151,7 @@ release-image-to-mw-registry:
       when: manual
     - !reference [deploy-test-cloud, rules]
     - !reference [deploy-test-cloud-nightly, rules]
+    - !reference [deploy-test-cloud-review, rules]
   timeout: 20m
   interruptible: false
 
@@ -370,6 +371,10 @@ update-version-check:
   stage: deploy
   needs:
     - release-image-to-mw-registry
+  variables:
+    DEPLOYMENT_BASE_DOMAIN: tcloud.tine-dev.de
+  environment:
+    url: $DYNAMIC_ENVIRONMENT_URL
   before_script:
     - apk add coreutils yq mariadb-client
   script:
@@ -377,11 +382,15 @@ update-version-check:
     - test_cloud_deploy
   timeout: 20m
   interruptible: false
+  artifacts:
+    reports:
+      dotenv: deploy.env
 deploy-test-cloud:
   extends: .deploy-test-cloud
   variables:
-    DEPLOYMENT_BASE_DOMAIN: tcloud.tine-dev.de
-    DEPLOYMENT_NAME_RAW: ${MAJOR_COMMIT_REF_NAME} # DEPLOYMENT_NAME = MAJOR_COMMIT_REF_NAME with . and / replaced by -
+    DEPLOY_TYPE: "release"
+  environment:
+    name: $MAJOR_COMMIT_REF_NAME
   rules:
     - if: $PIPELINE_TYPE =~ /release-be(,|$)/
       variables:
@@ -392,30 +401,40 @@ deploy-test-cloud:
 deploy-test-cloud-nightly:
   extends: .deploy-test-cloud
   variables:
-    DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
-    DEPLOYMENT_NAME_RAW: ${CI_ENVIRONMENT_SLUG}  # DEPLOYMENT_NAME = CI_ENVIRONMENT_SLUG (There should be nothing to replace)
+    DEPLOY_TYPE: "nightly"
   environment:
-    name: $CI_COMMIT_REF_NAME
-    url: https://${CI_ENVIRONMENT_SLUG}.${DEPLOYMENT_BASE_DOMAIN}
-    on_stop: teardown-test-cloud-nightly
+    name: nightly/$CI_COMMIT_REF_NAME
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
       variables:
         RELEASE_TYPE: nightly
       when: manual
+    - if: $PIPELINE_TYPE =~ /deploy-test-cloud-nightly(,|$)/
+      variables:
+        RELEASE_TYPE: nightly
+deploy-test-cloud-review:
+  extends: .deploy-test-cloud
+  variables:
+    DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
+    DEPLOY_TYPE: "review"
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: teardown-test-cloud-review
+  rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_COMMIT_REF_NAME =~ /(^tcloud)/
       variables:
         RELEASE_TYPE: nightly
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /tcloud/
       variables:
         RELEASE_TYPE: nightly
-    - if: $PIPELINE_TYPE =~ /deploy-test-cloud-nightly(,|$)/
-      variables:
-        RELEASE_TYPE: nightly
 
-teardown-test-cloud-nightly:
+teardown-test-cloud-review:
   extends: deploy-test-cloud-nightly
+  variables:
+    DEPLOYMENT_BASE_DOMAIN: ci.tine-dev.de
+    DEPLOY_TYPE: "review"
   environment:
+    name: review/$CI_COMMIT_REF_NAME
     action: stop
   script:
     - !reference [.lib, script]
