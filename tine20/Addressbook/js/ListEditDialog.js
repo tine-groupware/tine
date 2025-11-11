@@ -70,6 +70,10 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },{
                 region: 'center',
                 layout: 'border',
+                layoutConfig: {
+                    enableResponsive: true,
+                    responsiveBreakpointOverrides: [{level: 2, width: 600}]
+                },
                 items: [{
                     xtype: 'fieldset',
                     region: 'north',
