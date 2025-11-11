@@ -33,6 +33,12 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     public const OPTION_PARENT_FIELD   = 'parentField'; // for type keyfield
     public const OPTION_TRANSITIONS_CONFIG   = 'transitionsConfig'; // for type keyfield
     public const RECORDS               = 'records';
+    /**
+     * set randomized value if this is empty (on first access)
+     * -> only supports STRING type atm
+     * -> creates a 40 char UUID
+     */
+    public const RANDOMIZEIFEMPTY      = 'randomizeIfEmpty';
     public const RECORD_MODEL          = 'recordModel';
     public const SETBYADMINMODULE      = 'setByAdminModule';
     public const SETBYSETUPMODULE      = 'setBySetupModule';
@@ -239,7 +245,8 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $dbAvailable = 'logger' === $name ? false :
             (('database' === $name || 'caching' === $name) ? Tinebase_Core::hasDb() : true);
 
-        // NOTE: we return here (or in the default handling) if db is not available. That is to prevent db lookup when db is not yet setup
+        // NOTE: we return here (or in the default handling) if db is not available.
+        // That is to prevent db lookup when db is not yet set up
         $configFileSection = $this->getConfigFileSection($name);
         if (null !== $configFileSection) {
             $fileConfigArray = $configFileSection[$name];
@@ -521,8 +528,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         $filename = $this->_getCachedConfigFilename();
         $confdFolder = self::$_configFileData[Tinebase_Config::CONFD_FOLDER];
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating new cached config file: ' . $filename);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Creating new cached config file: ' . $filename);
+        }
 
         if (! is_readable($confdFolder)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -1039,16 +1048,28 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         switch ($definition['type']) {
-            case self::TYPE_INT:        return (int) $_rawData;
-            case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
-            case self::TYPE_RECORD_SET: return new Tinebase_Record_RecordSet(
-                $definition[self::CLASSNAME] ?? throw new Tinebase_Exception('configuration definition error: ' . $parentKey . ' ' . print_r($definition, true)),
-                is_array($_rawData) ? $_rawData : []);
+            case self::TYPE_INT:
+                return (int)$_rawData;
+            case self::TYPE_BOOL:
+                return $_rawData === "true" || (int)$_rawData;
+            case self::TYPE_RECORD_SET:
+                return new Tinebase_Record_RecordSet(
+                    $definition[self::CLASSNAME] ??
+                    throw new Tinebase_Exception('configuration definition error: '
+                        . $parentKey . ' ' . print_r($definition, true)),
+                    is_array($_rawData) ? $_rawData : []);
             case self::TYPE_RECORD:
-            case self::TYPE_STRING:     return (string) $_rawData;
-            case self::TYPE_FLOAT:      return (float) $_rawData;
-            case self::TYPE_ARRAY:      return (array) $_rawData;
-            case self::TYPE_DATETIME:   return new DateTime($_rawData);
+            case self::TYPE_STRING:
+                if (empty($_rawData) && isset($definition[self::RANDOMIZEIFEMPTY]) && $definition[self::RANDOMIZEIFEMPTY]) {
+                    $_rawData = self::_randomizeValue($parent, $parentKey);
+                }
+                return (string)$_rawData;
+            case self::TYPE_FLOAT:
+                return (float)$_rawData;
+            case self::TYPE_ARRAY:
+                return (array)$_rawData;
+            case self::TYPE_DATETIME:
+                return new DateTime($_rawData);
             case self::TYPE_KEYFIELD_CONFIG:
                 if (is_object($_rawData) && $_rawData instanceof Tinebase_Config_KeyField) {
                     return $_rawData;
@@ -1058,12 +1079,25 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 return Tinebase_Config_KeyField::create($_rawData, $options);
             case self::TYPE_MIXED:
                 return $_rawData;
-
-            // TODO this should be an error
-            default:                    return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData, $parent, $parentKey) : $_rawData;
+            default:
+                // TODO this should be an error
+                return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData, $parent, $parentKey) : $_rawData;
         }
     }
-    
+
+    protected static function _randomizeValue(Tinebase_Config_Abstract $config, string $configKey)
+    {
+        $value = Tinebase_Record_Abstract::generateUID();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Randomized config ' . $configKey . ' to ' . $value);
+        }
+
+        $config->set($configKey, $value);
+        return $value;
+    }
+
     /**
      * get definition of given property
      * 

@@ -4,9 +4,9 @@
  *
  * @package      GDPR
  * @subpackage   Controller
- * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license      https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Paul Mehrer <p.mehrer@metaways.de>
- * @copyright    Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -286,11 +286,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 }
             }
 
-            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
-                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
-                Tinebase_Exception::log($e);
-                throw $e;
-            }
+            $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
 
             $token = JWT::encode([
                 'email' => $request['email'],
@@ -597,11 +593,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     {
         $decoded = false;
         try {
-            if (!$key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET}) {
-                $e = new Tinebase_Exception_SystemGeneric('GDPR JWT key is not configured');
-                Tinebase_Exception::log($e);
-                throw $e;
-            }
+            $key = GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET};
 
             $tks = explode('.', $token);
             if (count($tks) !== 3) {

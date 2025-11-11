@@ -4,9 +4,9 @@
  *
  * @package     GDPR
  * @subpackage  Test
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Firebase\JWT\JWT;
@@ -25,7 +25,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
      * set up tests
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
         if (empty(GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET})) {
             GDPR_Config::getInstance()->{GDPR_Config::JWT_SECRET} = 'test';
@@ -525,5 +525,15 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
         $this->assertEquals(1, count($contacts));
         $this->assertArrayHasKey('current_contact', $responseData);
+    }
+
+    public function testRandomizeJWTSecret()
+    {
+        // reset the secret
+        GDPR_Config::getInstance()->set(GDPR_Config::JWT_SECRET, '');
+
+        // access it
+        $key = GDPR_Config::getInstance()->get(GDPR_Config::JWT_SECRET);
+        self::assertNotEmpty($key, 'key should be randomized');
     }
 }
