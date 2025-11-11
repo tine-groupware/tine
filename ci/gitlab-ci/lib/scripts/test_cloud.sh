@@ -1,5 +1,31 @@
+# DEPLOYMENT_NAME should a an dns label
+# DEPLOYMENT_NAME must not excide a specific length. The limiting factor is that the email user name is not allowed
+# to be longer than 80 charts. The email user name contains a 40 char hash and an @ leaving 39 for DEPLOYMENT_NAME and
+# DEPLOYMENT_BASE_DOMAIN (and a dot).
 test_cloud_generate_deployment_name() {
-    echo -n $DEPLOYMENT_NAME_RAW | sed 's/\./-/g' | sed 's/\//-/g'
+    DEPLOYMENT_NAME=$(echo -n $CI_ENVIRONMENT_NAME | sed 's/\./-/g' | sed 's/\//-/g')
+
+    if [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 39 ]]; then
+        echo $DEPLOYMENT_NAME
+        return
+    fi
+
+    # replace nightly- with n-, if it is enough to stay under the limit 
+    if [[ "$DEPLOYMENT_NAME" == "nightly-"* ]] && [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 45 ]]; then
+        echo n${DEPLOYMENT_NAME#"nightly"}
+        return
+    fi
+
+    # replace review- with r-, if it is enough to stay under the limit 
+    if [[ "$DEPLOYMENT_NAME" == "review-"* ]] && [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 44 ]]; then
+        echo r${DEPLOYMENT_NAME#"review"}
+        return
+    fi
+
+    #add hash to prevent name collisions
+    HASH=$(echo -n $DEPLOYMENT_NAME | md5sum | cut -c -4)
+
+    echo $(echo -n $DEPLOYMENT_NAME | cut -c -$((80-41-$(echo -n "-$HASH.$DEPLOYMENT_BASE_DOMAIN" | wc -c))))-$HASH
 }
 
 test_cloud_deploy() {
@@ -8,12 +34,12 @@ test_cloud_deploy() {
 
     echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
 
-    # todo: but later (is not mvp)
-    # if [ "$RELEASE_TYPE" == "nightly" ]; then
-    #     helmfile -f path/to/helmfile.yaml destroy
-    #     # remove jobs 
-    #     # fail for pvc to be deleted
-    # fi
+    if [ "$DEPLOY_TYPE" == "nightly" ]; then
+        test_cloud_teardown
+        if kubectl --context tine20/gitlab-agent:k8s-se01 -n test-tine get pvc tine-$DEPLOYMENT_NAME-tine-data; then
+            kubectl --context tine20/gitlab-agent:k8s-se01 -n test-tine wait pvc tine-$DEPLOYMENT_NAME-tine-data --for=delete --timeout 5m
+        fi
+    fi
 
     # other functions need thees values
     helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
@@ -21,6 +47,8 @@ test_cloud_deploy() {
     test_cloud_setup_database
 
     helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
+
+    echo DYNAMIC_ENVIRONMENT_URL=https://$DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN/ > deploy.env
 }
 
 test_cloud_teardown() {
