@@ -27,6 +27,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const STATUS_APPROVED = 'approved';
     public const STATUS_PAID = 'paid';
     public const FLD_PURCHASE_INVOICE_STATUS = 'purchase_invoice_status';
+    public const FLD_EXTERNAL_INVOICE_NUMBER = 'external_invoice_number';
     public const FLD_SUPPLIER_ID = 'supplier_id';
     public const FLD_DIVISION_ID = 'division_id';
 
@@ -46,6 +47,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Purchase Invoice'; // gettext('GENDER_Purchase Invoice')
         $_definition[self::RECORDS_NAME] = 'Purchase Invoices'; // ngettext('Purchase Invoice', 'Purchase Invoices', n)
         $_definition[self::TITLE_PROPERTY] = '{{ supplier_id.getTitle() }} {{ dateFormat(date, "date") }}';
+        $_definition[self::DEFAULT_SORT_INFO] = [self::FIELD => self::FLD_DOCUMENT_NUMBER];
 
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
@@ -69,6 +71,15 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         ]);
 
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_SUPPLIER_ID] = [];
+
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
+            self::FLD_EXTERNAL_INVOICE_NUMBER => [
+                self::LABEL             => 'External Invoice Number', // _('External Invoice Number')
+                self::TYPE              => self::TYPE_STRING,
+                self::LENGTH            => 255,
+                self::NULLABLE          => true,
+            ],
+        ]);
 
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_PAYMENT_TERMS, [
             self::FLD_DUE_AT => [
@@ -206,7 +217,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $xr = new SimpleXMLElement($xml, namespaceOrPrefix: 'urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1');
 
         if ('' !== (string)$xr->Invoice_number) { // 1
-            $pInvoice->{self::FLD_BUYER_REFERENCE} = (string)$xr->Invoice_number;
+            $pInvoice->{self::FLD_EXTERNAL_INVOICE_NUMBER} = (string)$xr->Invoice_number;
         }
         if ('' !== (string)$xr->Invoice_issue_date) { // 1
             $pInvoice->{self::FLD_DOCUMENT_DATE} = new Tinebase_DateTime((string)$xr->Invoice_issue_date);

@@ -34,6 +34,8 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
     public const GRANT_READ_DOCUMENT_OFFER = Sales_Model_Document_Offer::MODEL_NAME_PART . '_' . self::GRANT_READ;
     public const GRANT_READ_DOCUMENT_ORDER = Sales_Model_Document_Order::MODEL_NAME_PART . '_' . self::GRANT_READ;
     public const GRANT_READ_DOCUMENT_PURCHASE_INVOICE = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART . '_' . self::GRANT_READ;
+    public const GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART . '_' . self::GRANT_EDIT;
+    public const GRANT_APPROVE_DOCUMENT_PURCHASE_INVOICE = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART . '_approveGrant';
 
 
     /**
@@ -62,7 +64,8 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
             self::GRANT_READ_DOCUMENT_INVOICE,
             self::GRANT_ADMIN_DOCUMENT_INVOICE,
             self::GRANT_READ_DOCUMENT_PURCHASE_INVOICE,
-            self::GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE,
+            self::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE,
+            self::GRANT_APPROVE_DOCUMENT_PURCHASE_INVOICE,
             self::GRANT_ADMIN,
         ];
     }
@@ -107,9 +110,13 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
                 self::LABEL         => 'Read Purchase Invoices', // _('Read Purchase Invoices')
                 self::DESCRIPTION   => 'The grant to read the division\'s purchase invoice documents.', // _('The grant to read the division\'s purchase invoice documents.')
             ],
-            self::GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE => [
-                self::LABEL         => 'Admin Purchase Invoices', // _('Admin Purchase Invoices')
-                self::DESCRIPTION   => 'The grant to administrate the division\'s purchase invoice documents.', // _('The grant to administrate the division\'s purchase invoice documents.')
+            self::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE => [
+                self::LABEL         => 'Edit Purchase Invoices', // _('Edit Purchase Invoices')
+                self::DESCRIPTION   => 'The grant to create/edit the division\'s purchase invoice documents.', // _('The grant to create/edit the division\'s purchase invoice documents.')
+            ],
+            self::GRANT_APPROVE_DOCUMENT_PURCHASE_INVOICE => [
+                self::LABEL         => 'Approve Purchase Invoices', // _('Approve Purchase Invoices')
+                self::DESCRIPTION   => 'The grant to approve the division\'s purchase invoice documents.', // _('The grant to approve the division\'s purchase invoice documents.')
             ],
             self::GRANT_READ_DOCUMENT_DELIVERY => [
                 self::LABEL         => 'Read Deliveries', // _('Read Deliveries')

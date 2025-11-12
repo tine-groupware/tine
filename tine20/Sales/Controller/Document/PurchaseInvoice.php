@@ -23,7 +23,9 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
 {
     use Tinebase_Controller_SingletonTrait;
 
-    protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_PURCHASE_INVOICE;
+    public const IS_EDOCUMENT = 'isEDocument';
+
+    protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE;
     protected static $_readGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE;
 
     /**
@@ -46,13 +48,19 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS;
         $this->_documentStatusField = Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS;
-        $this->_oldRecordBookWriteableFields = [ // TODO FIXME!!!
+        $this->_oldRecordBookWriteableFields = [
             'tags', 'attachments', 'relations',
         ];
-        $this->_bookRecordRequiredFields = [ // TODO FIXME !!!
+        $this->_bookRecordRequiredFields = [
             Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS,
         ];
         parent::__construct();
+
+        $this->_getMultipleGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE;
+        $this->_requiredFilterACLget = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLupdate  = [Sales_Model_DivisionGrants::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLsync  = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLexport  = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
     }
 
     /**
@@ -67,10 +75,6 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             $_record->{Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID} = Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION};
         }
         parent::_inspectBeforeCreate($_record);
-
-        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
-        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
-        //$this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
     }
 
     /**
@@ -79,11 +83,13 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        // no move between division
+        $_record->{Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID} = $_oldRecord->{Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID};
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
-        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
-        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
-        //$this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
+        if ($_record->isBooked() && !$_oldRecord->isBooked()) {
+            $this->_checkDelegatedGrant($_record, Sales_Model_DivisionGrants::GRANT_APPROVE_DOCUMENT_PURCHASE_INVOICE, true, 'No Permission.', $_oldRecord);
+        }
     }
 
     protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
@@ -164,14 +170,27 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
 
     public function isEDocumentFile(Tinebase_Model_FileLocation $fileLocation): bool
     {
-        return null !== $this->_getEDocumentXml($fileLocation, $content, $type);
+        $node = null;
+        if ($fileLocation->{Tinebase_Model_FileLocation::FLD_LOCATION} instanceof Tinebase_Model_FileLocation_TreeNode
+                && ($node = $fileLocation->{Tinebase_Model_FileLocation::FLD_LOCATION}->getNode())
+                && ($node->xprops()[self::class][self::IS_EDOCUMENT] ?? null) === $node->hash) {
+            return true;
+        }
+        $result = null !== $this->_getEDocumentXml($fileLocation, $content, $type);
+
+        if ($result && null !== $node) {
+            $node->xprops()[self::class][self::IS_EDOCUMENT] = $node->hash;
+            Tinebase_FileSystem::getInstance()->update($node);
+        }
+
+        return $result;
     }
 
     public function importPurchaseInvoice(Tinebase_Model_FileLocation $fileLocation, bool $importNonEDocument = false): Sales_Model_Document_PurchaseInvoice
     {
         $xmlContent = $this->_getEDocumentXml($fileLocation, $content, $type);
         if (null !== $xmlContent) {
-            $validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
+            //$validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
 
             if (self::TYPE_UBL === $type) {
                 $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertUbl($xmlContent);
@@ -180,7 +199,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             }
 
             $purchaseInvoice = Sales_Model_Document_PurchaseInvoice::fromXR($xmlContent);
-            $view = (new Sales_EDocument_Service_View)->viewXr($xmlContent);
+            /*$view = (new Sales_EDocument_Service_View)->viewXr($xmlContent);
 
             $validationResultFh = fopen('php://memory', 'w+');
             fwrite($validationResultFh, $validationResult['html']);
@@ -197,13 +216,13 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             $purchaseInvoice->attachments->addRecord(new Tinebase_Model_Tree_Node([
                 'name' => 'xrechnung.html',
                 'tempFile' => $viewFh,
-            ], true));
+            ], true));*/
         } elseif ($importNonEDocument) {
             $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice([], true);
         } else {
             throw new Sales_Exception_NotAnEDocument();
         }
-        $contentFh = fopen('php://memory', 'w+');
+        $contentFh = fopen('php://temp', 'w+');
         fwrite($contentFh, $content);
 
         if (!$purchaseInvoice->attachments instanceof Tinebase_Record_RecordSet) {
@@ -214,6 +233,17 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             'tempFile' => $contentFh,
         ], true));
 
-        return $this->create($purchaseInvoice);
+        $purchaseInvoice = $this->create($purchaseInvoice);
+
+        if (null !== $xmlContent) {
+            /** @var Tinebase_Model_Tree_Node $node */
+            $node = $purchaseInvoice->attachments->getFirstRecord();
+            $node->xprops()[self::class][self::IS_EDOCUMENT] = $node->hash;
+            $node = Tinebase_FileSystem::getInstance()->update($node);
+            $purchaseInvoice->attachments->removeById($node->getId());
+            $purchaseInvoice->attachments->addRecord($node);
+        }
+
+        return $purchaseInvoice;
     }
 }
