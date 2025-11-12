@@ -172,6 +172,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * usage: --method Tinebase.clearAllContainerContent [-- date=2025-11-10]
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function clearAllContainerContent(Zend_Console_Getopt $_opts): int
+    {
+        $args = $_opts ? $this->_parseArgs($_opts) : [];
+        $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+        Tinebase_Container::getInstance()->clearAllContainerContent($before);
+        return 0;
+    }
+
+    /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      *  - accepts optional param date=YYYY-MM-DD to delete all modlogs before this date
      *  - accepts optional param instanceseq=NUMBER to delete all modlogs before this instance_seq
@@ -185,7 +200,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
 
-        $args = $_opts ? $this->_parseArgs($_opts, array()) : [];
+        $args = $_opts ? $this->_parseArgs($_opts) : [];
 
         $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
         $beforeSeq = $args['instanceseq'] ?? null;
