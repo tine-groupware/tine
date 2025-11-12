@@ -450,4 +450,14 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
 
         return Tinebase_Model_Grants::class;
     }
+
+    public function hasDisabledOwner(): bool
+    {
+        if (empty($this->owner_id)) {
+            return false;
+        }
+
+        $user = Tinebase_User::getInstance()->getFullUserById($this->owner_id);
+        return $user->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+    }
 }
