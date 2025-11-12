@@ -383,6 +383,35 @@ class Calendar_Frontend_iMIPTest extends TestCase
             $_doAutoProcess);
     }
 
+    public function testExternalInvitationInternalContactEmailChange()
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email' => 'j.loew@caldav.org',
+        ], true));
+        $iMIP = $this->_testExternalImap('invitation_request_external.ics', 5, 'test mit extern');
+
+        $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
+        Calendar_Controller_EventNotificationsTests::flushMailer();
+
+        $updatedEvent = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord(), true);
+        $jloew = $updatedEvent->attendee->find('user_email', 'j.loew@caldav.org');
+        $this->assertNotNull($jloew?->user_id);
+        $this->assertNull($jloew->user_id->account_id);
+
+        $contact->email = 'jlowe@caldav.net';
+        Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        $attendee = Calendar_Model_Attender::getOwnAttender($updatedEvent->attendee);
+        $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        Calendar_Controller_Event::getInstance()->update($updatedEvent);
+
+        $messages = Calendar_Controller_EventNotificationsTests::getMessages();
+        $this->assertCount(1, $messages);
+        $message = $messages[0]->getParts()[0]->getContent();
+
+        $this->assertStringContainsString('j.loew@caldav.org', $message);
+    }
+
     /**
      * testExternalInvitationRequestAutoProcess
      */
