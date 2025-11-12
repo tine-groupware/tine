@@ -30,6 +30,12 @@ class EventManager_Controller extends Tinebase_Controller_Event
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector): void
     {
         $routeCollector->addGroup('/EventManager', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->get('/events/rss', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Frontend_RssFeed::class,
+                'publicApiGetRssFeed',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
+
             $routeCollector->get('/getFile/{node_id}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Registration::class,
                 'publicApiGetFile',
