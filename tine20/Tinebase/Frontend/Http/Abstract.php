@@ -52,11 +52,13 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             $format = strtolower(substr($format, 3));
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . $export::class . ')'
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' (' . $export::class . ')'
                 . ' in format ' . $format .
-            ' / options: ' . print_r($_options, TRUE)
-        );
+                ' / options: ' . print_r($_options, TRUE)
+            );
+        }
 
         $result = $this->_generateExport($export, $_controller, $_filter, $format, $switchFormat, $pdfOutput, $_options);
 

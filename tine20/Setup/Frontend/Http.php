@@ -50,6 +50,7 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function updateApplications()
     {
         Setup_Controller::getInstance()->updateApplications();
+        return $this->mainScreen();
     }
 
     /**
@@ -67,9 +68,13 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', [
-            'lang' => $locale
-        ]);
+        $fallbackHtml = '<html><body><a href="/setup.php?method=Setup.updateApplications">Update tine Groupware</a></body></html>';
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
+            $jsFiles,
+            'Tinebase/views/FATClient.html.twig', [
+                'lang' => $locale
+            ], $fallbackHtml);
     }
     
     /**
