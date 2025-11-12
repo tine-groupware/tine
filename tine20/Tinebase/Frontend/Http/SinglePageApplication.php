@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class Tinebase_Frontend_Http_SinglePageApplication {
 
@@ -17,10 +17,28 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * @param array         $context
      * @return \Laminas\Diactoros\Response\HtmlResponse
      */
-    public static function getClientHTML($entryPoint, $template = 'Tinebase/views/singlePageApplication.html.twig', $context = []): \Laminas\Diactoros\Response\HtmlResponse
+    public static function getClientHTML($entryPoint,
+                                         string $template = 'Tinebase/views/singlePageApplication.html.twig',
+                                         array $context = [],
+                                         ?string $fallbackHtml = null): \Laminas\Diactoros\Response\HtmlResponse
     {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 
+        try {
+            $html = self::_getTwigRenderedClientHTML($entryPoints, $template, $context);
+        } catch (Throwable $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e);
+            }
+            $html = $fallbackHtml ?? 'ERROR: Could not load client tine HTML template.';
+        }
+
+        return new \Laminas\Diactoros\Response\HtmlResponse($html, 200, self::getHeaders());
+    }
+
+    protected static function _getTwigRenderedClientHTML($entryPoints, $template, $context): string
+    {
         $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation($context['application'] ?? 'Tinebase'));
         $twig->getEnvironment()->addFunction(new Twig_SimpleFunction('jsInclude', function ($file) {
             $fileMap = self::getAssetsMap();
@@ -30,16 +48,11 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
             }
 
-            $baseUrl = Tinebase_Core::getUrl(
-                Tinebase_Core::GET_URL_NO_PROTO,
-                Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
-            );
-
             if (TINE20_BUILDTYPE === 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
             }
 
-            return '<script type="text/javascript" src="'/* . $baseUrl . '/'*/ . $file .'"></script>';
+            return '<script type="text/javascript" src="' . $file .'"></script>';
         }, ['is_safe' => ['all']]));
 
         $textTemplate = $twig->load($template);
@@ -71,7 +84,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             'jsFiles' => $entryPoints,
         ];
 
-        return new \Laminas\Diactoros\Response\HtmlResponse($textTemplate->render($context), 200, self::getHeaders());
+        return $textTemplate->render($context);
     }
 
     /**
@@ -136,7 +149,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             $jsonFileUri = $devServerURL . '/' . $jsonFile;
             $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
             if (! $json) {
-                Tinebase_Core::getLogger()->ERR(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
+                Tinebase_Core::getLogger()->err(self::class . '::' . __METHOD__
+                    . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
         } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename()) {
@@ -192,8 +206,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 }
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->NOTICE(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
-            Tinebase_Core::getLogger()->NOTICE(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
+            Tinebase_Core::getLogger()->notice(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
+            Tinebase_Core::getLogger()->notice(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
         }
 
         return sha1(json_encode($map) . TINE20_BUILDTYPE);
