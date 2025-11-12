@@ -69,6 +69,8 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             title: this.app.i18n._('Privacy Agreement'),
             bwrapCfg: {tag: 'pre'},
             autoLoad: {
+                // TODO use new templated privacy policy at Tinebase/views/privacy.html.twig
+                // url: 'privacy-policy',
                 url: 'PRIVACY',
                 isUpload: true,
                 method: 'GET',
