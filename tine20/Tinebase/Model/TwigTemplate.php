@@ -205,4 +205,9 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
         }
         parent::hydrateFromBackend($data);
     }
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }
