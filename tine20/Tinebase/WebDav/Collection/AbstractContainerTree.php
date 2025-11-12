@@ -556,13 +556,18 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
         } elseif ($this->_hasPersonalFolders) {
             if (Tinebase_Helper::array_value(1, $this->_getPathParts()) === '__currentuser__') {
                 $accountId = Tinebase_Core::getUser()->accountId;
-
             } else {
                 try {
                     $accountId = $this->_getUser(Tinebase_Helper::array_value(1, $this->_getPathParts()))->accountId;
                 } catch (Tinebase_Exception_NotFound) {
                     throw new \Sabre\DAV\Exception\NotFound("Path $this->_path not found");
                 }
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Get shared containers for accountId ' . $accountId
+                    . ' in application ' . $this->_getApplicationName());
             }
 
             try {
@@ -581,10 +586,23 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                         $this->_model ?: $this->_getApplicationName(),
                         Tinebase_Model_Grants::GRANT_SYNC // <- we know that currently "sync" is the intersection of all possibilities ... if that changes, hf
                     )->filter(function($container) {
-                        foreach($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
+                        foreach ($container->getGrantClass()::getRequiredWebDAVAccessGrants() as $grant) {
                             if (!Tinebase_Core::getUser()->hasGrant($container, $grant)) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                    Tinebase_Core::getLogger()->debug(
+                                        __METHOD__ . '::' . __LINE__ . ' Removed container due to missing grant');
+                                }
                                 return false;
                             }
+                        }
+                        return true;
+                    })->filter(function($container) {
+                        if ($container instanceof Tinebase_Model_Container && $container->hasDisabledOwner()) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(
+                                    __METHOD__ . '::' . __LINE__ . ' Removed container due to disabled owner');
+                            }
+                            return false;
                         }
                         return true;
                     });
@@ -603,6 +621,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             } catch (\Sabre\DAV\Exception\NotFound) {
                 // ignore containers not found
             }
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($children) . ' containers');
         }
 
         return $children;
@@ -792,8 +815,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
      */
     public function getProperties($requestedProperties) 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($requestedProperties, true));
+        }
         
         $response = array();
         $pathParts = $this->_getPathParts();
@@ -879,8 +904,10 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($response, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . ' ' . print_r($response, true));
+        }
         
         return $response;
     }
