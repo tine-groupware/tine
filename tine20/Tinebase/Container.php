@@ -2584,4 +2584,26 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             $this->getContentBackend()->delete($ids);
         }
     }
+
+    public function clearAllContainerContent(?Tinebase_DateTime $before = null)
+    {
+        $backend = $this->getContentBackend();
+        $table = $backend->getTablePrefix() . $backend->getTableName();
+        $db = $backend->getAdapter();
+        if (!$before) {
+            $db->query("TRUNCATE TABLE " . $table);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()
+                    ->info(__METHOD__ . '::' . __LINE__ . ' Truncated ' . $table . ' table');
+            }
+        } else {
+            $number = $db->delete($table, [
+                $db->quoteInto('time <= ?', $before)
+            ]);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()
+                    ->info(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' records from ' . $table);
+            }
+        }
+    }
 }
