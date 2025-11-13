@@ -968,4 +968,39 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * Set ressource location_Address to location Contact n_fn or site n_fn as fallback for the old handeling
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function setResourcesLocationAddress(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $count = 0;
+        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(false);
+        $adbCtrl = Addressbook_Controller_Contact::getInstance();
+        $resCtrl = Calendar_Controller_Resource::getInstance();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel('Calendar_Model_Resource', [
+
+        ]);
+        $resources = $resCtrl->search($filter,null,true);
+
+        foreach($resources as $resource) {
+            $location = $resource->relations->find('type', 'LOCATION')->related_id;
+            $site = $resource->relations->find('type', 'SITE')->related_id;
+            if (($location || $site) && !$resource->location_address) {
+                $contact = $location ? $adbCtrl->get($location) : $adbCtrl->get($site);
+                $resource->location_address = $contact->n_fn;
+                $resCtrl->update($resource);
+                $count++;
+            }
+        }
+        echo "Changed ressources: " . $count . "\n";
+
+        return 0;
+    }
 }
