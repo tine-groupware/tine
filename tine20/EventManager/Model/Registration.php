@@ -22,7 +22,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Registration';
     public const TABLE_NAME = 'eventmanager_registration';
     public const FLD_EVENT_ID = 'event_id';
-    public const FLD_NAME = 'name';
+    public const FLD_PARTICIPANT = 'participant';
+    public const FLD_REGISTRATOR = 'registrator';
     public const FLD_FUNCTION = 'function';
     public const FLD_SOURCE = 'source';
     public const FLD_STATUS = 'status';
@@ -36,12 +37,12 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME               => 'Registration', // gettext('GENDER_Registration')
         self::RECORDS_NAME              => 'Registrations', // ngettext('Registration', 'Registrations', n)
         self::DEFAULT_SORT_INFO         =>  ['field' => 'name'],
         self::TITLE_PROPERTY            => '{{name.n_fn}}',
-        self::IS_METADATA_MODEL_FOR     => self::FLD_NAME,
+        self::IS_METADATA_MODEL_FOR     => self::FLD_PARTICIPANT,
         self::IS_DEPENDENT              => true,
         self::HAS_RELATIONS             => false,
         self::HAS_CUSTOM_FIELDS         => false,
@@ -65,7 +66,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_NAME => [],
+                self::FLD_PARTICIPANT => [],
                 self::FLD_BOOKED_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_BookedOption::FLD_OPTION => [],
@@ -90,19 +91,30 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::ALLOW_CAMEL_CASE  => true,
                 self::NULLABLE          => true,
             ],
-            self::FLD_NAME          => [
+            self::FLD_PARTICIPANT          => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::QUERY_FILTER      => true,
-                self::LABEL             => 'Name', // _('Name')
+                self::LABEL             => 'Participant', // _('Participant')
                 self::NULLABLE          => true,
-                self::CONFIG            => [
-                    self::APP_NAME          => Addressbook_Config::APP_NAME,
+                self::CONFIG            => [ //TODO Denormalization
+                    self::APP_NAME          => Addressbook_Config::APP_NAME, // EventManager_Modal_Contact
                     self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS        => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+            ],
+            self::FLD_REGISTRATOR          => [
+                self::TYPE              => self::TYPE_RECORD,
+                self::LENGTH            => 40,
+                self::QUERY_FILTER      => true,
+                self::LABEL             => 'Registrator', // _('Registrator')
+                self::NULLABLE          => true,
+                self::CONFIG            => [ //TODO Denormalization
+                    self::APP_NAME          => Addressbook_Config::APP_NAME, // EventManager_Modal_Contact
+                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
             ],
             self::FLD_FUNCTION      => [

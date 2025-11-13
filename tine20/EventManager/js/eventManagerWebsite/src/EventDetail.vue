@@ -2,8 +2,8 @@
 /*
  * Tine 2.0
  *
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 -->
@@ -48,81 +48,38 @@
       <div class="col-8">{{eventDetails.registration_possible_until}}</div>
     </div>
     <div class="mb-3">
-      <b-modal ref="emailModal" v-model="showEmailModal" :title="formatMessage('Event Registration')" @hidden="resetEmailForm" hide-footer>
-        <div class="mb-3">
-          <p>{{ formatMessage('Please enter your details to register for this event:') }}</p>
-          <div class="form-group mb-3">
-            <label>{{ formatMessage('First Name:') }}</label>
-            <input
-              id="name-input"
-              v-model="userFirstName"
-              type="text"
-              class="form-control"
-              :placeholder="formatMessage('Enter your first name')"
-              required
-              @keyup.enter="handleEmailSubmit"
-            />
-            <div v-if="userFirstName && !isNameValid" class="text-danger mt-1">
-              {{ formatMessage('Please enter your first name.') }}
-            </div>
-          </div>
-          <div class="form-group mb-3">
-            <label>{{ formatMessage('Last Name:') }}</label>
-            <input
-              id="name-input"
-              v-model="userLastName"
-              type="text"
-              class="form-control"
-              :placeholder="formatMessage('Enter your last name')"
-              required
-              @keyup.enter="handleEmailSubmit"
-            />
-            <div v-if="userLastName && !isNameValid" class="text-danger mt-1">
-              {{ formatMessage('Please enter your last name.') }}
-            </div>
-          </div>
-          <div class="form-group">
-            <label>{{ formatMessage('Email Address:') }}</label>
-            <input
-              id="email-input"
-              v-model="userEmail"
-              type="email"
-              class="form-control"
-              :placeholder="formatMessage('Enter your email address')"
-              required
-              @keyup.enter="handleEmailSubmit"
-            />
-            <div v-if="userEmail && !isEmailValid" class="text-danger mt-1">
-              {{ formatMessage('Please enter a valid email address.') }}
-            </div>
-          </div>
 
-          <div class="mt-3 d-flex justify-content-end gap-2">
-            <button class="btn btn-secondary" @click="showEmailModal = false">
-              {{ formatMessage('Cancel') }}
-            </button>
-            <button
-              class="btn btn-primary"
-              @click="handleEmailSubmit"
-              :disabled="!isFormValid || isSubmitting"
-            >
-              <span v-if="isSubmitting">{{ formatMessage('Sending...') }}</span>
-              <span v-else>{{ formatMessage('Send Registration Request') }}</span>
-            </button>
-          </div>
+      <b-modal
+        v-model="modal.show"
+        :title="modal.title"
+        :ok-only="modal.okOnly"
+        :ok-title="modal.okText"
+        :cancel-title="modal.cancelText"
+        @ok="handleModalAction"
+        @cancel="handleModalCancel"
+      >
+        <p v-html="modal.message"></p>
+
+        <div v-if="modal.input" class="form-group">
+          <b-form-input
+            v-model="modal.inputValue"
+            type="email"
+            :placeholder="modal.inputPlaceholder"
+            :state="modal.inputError ? false : null"
+            required
+          ></b-form-input>
+          <b-form-invalid-feedback :state="!modal.inputError">
+            {{ modal.inputError }}
+          </b-form-invalid-feedback>
         </div>
       </b-modal>
 
-      <b-modal v-model="showModal" :title="formatMessage(modalTitle)" hide-footer>
-        <p>{{ formatMessage(modalMessage) }}</p>
-        <b-button @click="handleModalClose" variant="primary">OK</b-button>
-      </b-modal>
-      <div class="text-end">
+      <div>
         <b-button @click="openEmailModal" variant="primary">
           {{ formatMessage('Manage my registration') }}
         </b-button>
         <b-button @click="openEmailModal" variant="primary" class="mx-3">
-          {{ formatMessage('Registration') }}
+          {{ formatMessage('Register now') }}
         </b-button>
       </div>
     </div>
@@ -130,21 +87,13 @@
 </template>
 
 <script setup>
-import {inject, ref, computed} from 'vue';
+import {inject, ref, computed, reactive} from 'vue';
 import {translationHelper} from "./keys";
 import {useRoute} from 'vue-router';
 import _ from 'lodash';
 
 const formatMessage = inject(translationHelper);
 const route = useRoute();
-const showModal = ref(false);
-const showEmailModal = ref(false);
-const modalTitle = ref('');
-const modalMessage = ref('');
-const userFirstName = ref('');
-const userLastName = ref('');
-const userEmail = ref('');
-const isSubmitting = ref(false);
 const eventDetails = ref({
   name: "",
   start : "",
@@ -164,39 +113,80 @@ const eventDetails = ref({
   isLive: "",
   registration_possible_until: "",
 });
-
-const isNameValid = computed(() => {
-  return userFirstName.value.trim().length > 0 && userLastName.value.trim().length > 0;
+const modal = reactive({
+  show: false,
+  title: '',
+  message: '',
+  type: 'info',
+  okOnly: true,
+  okText: 'OK',
+  cancelText: 'Cancel',
+  input: false,
+  inputValue: '',
+  inputPlaceholder: '',
+  inputError: '',
+  onConfirm: null,
+  onCancel: null
 });
+
+const showModal = (config) => {
+  modal.title = config.title || '';
+  modal.message = config.message || '';
+  modal.type = config.type || 'info';
+  modal.okOnly = config.okOnly !== false;
+  modal.okText = config.okText || 'OK';
+  modal.cancelText = config.cancelText || formatMessage('Cancel');
+  modal.input = config.input || false;
+  modal.inputValue = config.inputValue || '';
+  modal.inputPlaceholder = config.inputPlaceholder || '';
+  modal.onConfirm = config.onConfirm || null;
+  modal.onCancel = config.onCancel || null;
+  modal.show = true;
+};
+
+const handleModalAction = (bvModalEvent) => {
+  if (modal.input && !isEmailValid.value) {
+    bvModalEvent.preventDefault();
+    modal.inputError = formatMessage('Please enter a valid email address');
+    return;
+  }
+  modal.inputError = '';
+
+  if (modal.onConfirm) {
+    modal.onConfirm(modal.input ? modal.inputValue : undefined);
+  }
+
+  modal.show = false;
+  modal.inputValue = '';
+  modal.inputError = '';
+};
+
+const handleModalCancel = () => {
+  if (modal.onCancel) {
+    modal.onCancel();
+  }
+  modal.show = false;
+  modal.inputValue = '';
+};
 
 const isEmailValid = computed(() => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return userEmail.value.length > 0 && emailRegex.test(userEmail.value);
-});
-
-const isFormValid = computed(() => {
-  return isNameValid.value && isEmailValid.value;
+  return modal.inputValue.length > 0 && emailRegex.test(modal.inputValue);
 });
 
 const openEmailModal = () => {
-  showEmailModal.value = true;
-};
-
-const resetEmailForm = () => {
-  userFirstName.value = '';
-  userLastName.value = '';
-  userEmail.value = '';
-  isSubmitting.value = false;
+  showModal({
+    title: formatMessage('Email Address'),
+    message: formatMessage('Please enter your email address to continue:'),
+    type: 'confirm',
+    okOnly: false,
+    input: true,
+    inputPlaceholder: formatMessage('Enter your email address'),
+    onConfirm: handleEmailSubmit
+  });
 };
 
 const handleEmailSubmit = async () => {
-
-  if (!isEmailValid.value || isSubmitting.value) {
-    return;
-  }
-
-  isSubmitting.value = true;
-
   try {
     const eventId = route.params.id;
     const response = await fetch(`/EventManager/registration/doubleOptIn/${eventId}`, {
@@ -206,9 +196,7 @@ const handleEmailSubmit = async () => {
       },
       body: JSON.stringify({
         eventId: route.params.id,
-        n_given: userFirstName.value,
-        n_family: userLastName.value,
-        email: userEmail.value,
+        email: modal.inputValue,
       })
     });
 
@@ -221,25 +209,24 @@ const handleEmailSubmit = async () => {
         return;
       }
 
-      showEmailModal.value = false;
-      modalTitle.value = 'Registration Request Sent';
-      modalMessage.value = 'Please check your email and click the confirmation link to complete your registration.';
-      showModal.value = true;
+      showModal({
+        title: formatMessage('Registration Request Sent'),
+        message: formatMessage('Please check your email and click the confirmation link to continue.'),
+        type: 'confirm',
+        okOnly: true,
+      });
     } else {
       throw new Error('Registration request failed');
     }
   } catch (error) {
     console.error(error);
-    modalTitle.value = 'Registration Error';
-    modalMessage.value = 'There was an error sending your registration request. Please try again later.';
-    showModal.value = true;
-  } finally {
-    isSubmitting.value = false;
+    showModal({
+      title: formatMessage('Registration Error'),
+      message: formatMessage('There was an error sending your registration request. Please try again later.'),
+      type: 'confirm',
+      okOnly: true,
+    });
   }
-};
-
-const handleModalClose = () => {
-  showModal.value = false;
 };
 
 async function getEvent() {

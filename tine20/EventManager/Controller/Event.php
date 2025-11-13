@@ -220,7 +220,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                                     'value' => $event_id
                                 ],
                                 [
-                                    'field' => EventManager_Model_Registration::FLD_NAME,
+                                    'field' => EventManager_Model_Registration::FLD_PARTICIPANT,
                                     'operator' => 'equals',
                                     'value' => $contact
                                 ],
@@ -236,8 +236,6 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     } else {
                         $contact = [
                             'email' => $email_participant,
-                            'n_given' => $decoded->n_given ?? '',
-                            'n_family' => $decoded->n_family ?? '',
                         ];
                         $participant_data = [$contact, ''];
                     }

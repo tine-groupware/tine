@@ -15,10 +15,15 @@ available parameters:
 {% block body %}
     <div class="mt-3 mb-5">
         <p class="text-start">
-            {{ _('Thank you for expressing your interest in the event %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}<br>
-            {{ _('To complete the registration, please confirm your e-mail address via this link:') }}</p>
+            {{ _('You have received this email because you wish to register for an event or modify your existing registration.')}}<br>
+            {{ _('To continue please confirm your email address by clicking on the button below.')}}</p>
     </div>
     <div class="ax-center my-5">
         <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('Confirm E-Mail address') }}</a>
+    </div>
+    <div class="mt-3 mb-5">
+        <p class="text-start">
+        {{ _('If you did not make this request yourself, you can simply ignore this message — no further action is required.')}}
+        </p>
     </div>
 {% endblock %}
