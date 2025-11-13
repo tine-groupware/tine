@@ -3,28 +3,34 @@ TINE RELEASE NOTES
 =====================
                     
   Release:     Liva (2025.11)
-  Last change: 2025-10-27
+  Last change: 2025-11-13
 
 # GENERAL CHANGES (Administrative/Operative)
 
-## add configurable rate limits for all users, IPs and APIs
+## Added configurable rate limits for all users, IPs and APIs
+## Introduced batch jobs 
+- for example booking multiple invoices in a row
 
 # GENERAL CHANGES (User Interface)
 
-## make edit dialogs responsive
+## Make edit dialogs responsive
 ## Login dialog rework
 ## Public Pages have been improved
 - generalization
 - download pages
 - consent pages
 - and more
-## edit dialog: tab-panel got horizontal scroll-icons
+## Edit dialog: tab-panel got horizontal scroll-icons
 
-## clientside markdown support
+## Clientside markdown support
 - only display, editors do not support md yet
+## State edit UI in preferences
 
 # ADMIN / OPERATION
 
+## Setup: if gui can't be rendered, we show an "update tine" button
+- only the tine update is executed without the js bootstrap
+- see https://github.com/tine-groupware/tine/issues/138
 ## feature(Admin): twig template ui
 ## Scheduler tasks can be edited and disabled
 ## disable custom fields
