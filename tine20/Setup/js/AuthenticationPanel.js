@@ -243,6 +243,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     name: 'authentication_Sql_adminLoginName',
                     fieldLabel: this.app.i18n._('Initial admin login name'),
                     inputType: 'text',
+                    xtype: 'textfield',
                     disabled: !setupRequired
                 }, {
                     name: 'authentication_Sql_adminPassword',
