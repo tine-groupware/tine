@@ -1731,7 +1731,9 @@ class Setup_Controller
      */
     public function saveAcceptedTerms($_data)
     {
-        Tinebase_Config::getInstance()->set(Tinebase_Config::ACCEPTEDTERMSVERSION, $_data);
+        if ($this->isInstalled()) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::ACCEPTEDTERMSVERSION, $_data);
+        } // TODO else do something?
     }
     
     /**
