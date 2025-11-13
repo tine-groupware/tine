@@ -171,8 +171,10 @@ class Tinebase_Model_TwigTemplate extends Tinebase_Record_NewAbstract
             $_data[self::FLD_PATH] = trim(trim($_data[self::FLD_PATH]), '/');
             $pathParts = explode('/', $_data[self::FLD_PATH]);
             $count = count($pathParts);
-            $appid = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
-            $_data[self::FLD_APPLICATION_ID] = $appid;
+            if (Setup_Controller::getInstance()->isInstalled()) {
+                $appid = Tinebase_Application::getInstance()->getApplicationByName($pathParts[0])->getId();
+                $_data[self::FLD_APPLICATION_ID] = $appid;
+            }
             $_data[self::FLD_NAME] = $pathParts[$count - 1];
             if ($count > 3) {
                 $locale = $pathParts[$count - 2];
