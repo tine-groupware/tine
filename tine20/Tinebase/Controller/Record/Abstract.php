@@ -1108,13 +1108,10 @@ abstract class Tinebase_Controller_Record_Abstract
                 /** @var Tinebase_Controller_Record_Abstract $ctrl */
                 $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
                 $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getRelatedData:  false, _getDeleted: true);
+                $record->{TMCC::FLD_ORIGINAL_ID} = $originalRecord->getId();
             } catch (Tinebase_Exception_NotFound) {
-                $record->setId(null);
+                $record->{TMCC::FLD_ORIGINAL_ID} = null;
             }
-        }
-        if (!$record->{TMCC::FLD_ORIGINAL_ID}) {
-            // this may be null, if the denormalized record in fact is not denormalized! it may also be just a local instance
-            $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         }
 
         if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
