@@ -1195,6 +1195,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         parent::prepareForCopy();
 
+        if ($this->{self::FLD_DEBITOR_ID} instanceof Sales_Model_Document_Debitor) {
+            //$this->{self::FLD_DEBITOR_ID}->setId($debId = Tinebase_Record_Abstract::generateUID());
+            foreach (static::getConfiguration()->recordFields as $name => $recordField) {
+                if (Sales_Model_Document_Address::class === $recordField[self::CONFIG][self::RECORD_CLASS_NAME]) {
+                    if ($this->{$name} instanceof Sales_Model_Document_Address) {
+                        $this->{$name}->{Sales_Model_Document_Address::FLD_DEBITOR_ID} = $this->{self::FLD_DEBITOR_ID};
+                    }
+                }
+            }
+        }
+
         $this->isValid();
     }
 
