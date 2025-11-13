@@ -96,8 +96,15 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
      */
     protected function _getDispatcher()
     {
-        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            $enabledApplications = new Tinebase_Record_RecordSet(Tinebase_Model_Application::class);
+        if (! Setup_Controller::getInstance()->isInstalled()) {
+            $enabledApplications = new Tinebase_Record_RecordSet(Tinebase_Model_Application::class, [
+                // we fake Tinebase for the routing cache (RouteMap)
+                [
+                    'name' => 'Tinebase',
+                    'id' => Tinebase_Record_Abstract::generateUID(),
+                    'version' => '0.0',
+                ]
+            ], true);
         } else {
             $enabledApplications = Tinebase_Application::getInstance()->getApplications()
                 ->filter('status', Tinebase_Application::ENABLED);
