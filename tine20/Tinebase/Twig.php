@@ -158,13 +158,21 @@ class Tinebase_Twig
         // Return the first existing path
         foreach ($possiblePaths as $possiblePath) {
             $pathToTest = $possiblePath . '/' . $filename;
-            if ($twigTmpl = Tinebase_Controller_TwigTemplate::getInstance()->getByPath($pathToTest, skipAcl: true)) {
+            try {
+                $twigTmpl = Tinebase_Controller_TwigTemplate::getInstance()->getByPath($pathToTest, skipAcl: true);
+            } catch (Zend_Db_Exception $zde) {
+                // db might not be ready / tine not installed / not updated yet
+                $twigTmpl = null;
+            }
+            if ($twigTmpl) {
                 return $twigTmpl;
             } elseif (file_exists($tineRoot . $pathToTest)) {
                 return new Tinebase_Model_TwigTemplate([
                     Tinebase_Model_TwigTemplate::FLD_PATH => $pathToTest,
                     Tinebase_Model_TwigTemplate::FLD_TWIG_TEMPLATE => file_get_contents($tineRoot . $pathToTest),
-                    'last_modified_time' => ($mtime = filemtime($tineRoot . $pathToTest)) ? new Tinebase_DateTime($mtime) : Tinebase_DateTime::now()->subSecond(1),
+                    'last_modified_time' => ($mtime = filemtime($tineRoot . $pathToTest))
+                        ? new Tinebase_DateTime($mtime)
+                        : Tinebase_DateTime::now()->subSecond(1),
                 ], true);
             }
         }
