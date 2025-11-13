@@ -2,9 +2,9 @@
  * Tine 2.0
  * 
  * @package     Setup
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -91,3 +91,10 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
     }
 });
 
+/**
+ * always show login screen in Setup
+ * @returns {boolean}
+ */
+Tine.Tinebase.tineInit.checkServerUpdateRequired = function () {
+    return false;
+}
