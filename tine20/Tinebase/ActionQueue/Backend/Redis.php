@@ -83,6 +83,12 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
         $this->_options = self::$defaultConfig;
         
         $this->_options = array_merge($this->_options, $options);
+        foreach ($this->_options as $key => $value) {
+            if (empty($value) && isset(self::$defaultConfig[$key])) {
+                // replace empty value with the default - most important for "host" as redis does not like an empty hostname
+                $this->_options[$key] = self::$defaultConfig[$key];
+            }
+        }
 
         $this->_queueStructName  = $this->_options['queueName'] . $this->_options['redisQueueSuffix'];
         $this->_dataStructName   = $this->_options['queueName'] . $this->_options['redisDataSuffix'];
