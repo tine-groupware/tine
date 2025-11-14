@@ -127,16 +127,12 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                     case 'type':
                         $value = $i18n->_($record[$identifier] == 'INVOICE' ? 'invoice' : 'Reversal Invoice');
                         break;
-                    case 'debitor': // TODO FIXME WHAT IS THIS?!?
-                        if (! $addresses) {
-                            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
-                            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $addressIds)));
-                            $addresses = Sales_Controller_Address::getInstance()->search($filter);
+                    case 'debitor':
+                        if (is_string($debitorId = ($record['address_id']['debitor_id'] ?? null))) {
+                            $value = Sales_Controller_Debitor::getInstance()->get($debitorId)->getTitle();
+                        } else {
+                            $value = '';
                         }
-                        
-                        $address = $addresses->filter('id', $record['address_id']['id'])->getFirstRecord();
-
-                        $value = '';
                         break;
                     
                     default:
