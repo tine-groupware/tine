@@ -264,7 +264,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             : [])
     },
 
-    setValue: function(value, editDialog) {
+    setValue: function(value, record) {
         this.reset()
         this.suspendEvents()
         async.forEach(value, async (recordData) => {
@@ -274,7 +274,10 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         })
     },
 
-    setReadOnly: Ext.form.Field.prototype.setReadOnly,
+    setReadOnly : function(readOnly){
+        Ext.form.Field.prototype.setReadOnly.call(this, readOnly)
+        this.props.readOnly = readOnly;
+    },
 
     /* needed for isFormField cycle */
     markInvalid: Ext.form.Field.prototype.markInvalid,
