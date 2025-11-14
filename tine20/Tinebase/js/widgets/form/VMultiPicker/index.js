@@ -261,7 +261,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         return Tine.Tinebase.common.assertComparable(this.props ?
             this.props.records ?
                 // this.props.records
-                _.map(Array.from(this.props.records.values()), val => val.getData())
+                _.map(Array.from(this.props.records.values()), val => JSON.parse(JSON.stringify(val.getData())))
                 : []
             : [])
     },
