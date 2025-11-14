@@ -14,6 +14,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     vueHandle: null,
     vueEventBus: null,
     injectKey: null,
+    readOnly: false,
     props: null,
 
     emptyText: '',
@@ -72,6 +73,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             emptyText: this.emptyText,
             recordRenderer: this.recordRenderer,
             multiLine: this.multiLine,
+            readOnly: this.readOnly,
         })
         if (_.isArray(this.value)) {
             this.setValue(this.value)

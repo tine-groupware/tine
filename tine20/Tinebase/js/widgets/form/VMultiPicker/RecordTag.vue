@@ -19,7 +19,8 @@ const props = defineProps({
   maxDisplayLength: { type: Number, default: 30 },
   minDisplayLength: { type: Number, default: 10 },
   id: { type: String, required: true },
-  showPopover: { type: Boolean, default: false }
+  showPopover: { type: Boolean, default: false },
+  readOnly: { type: Boolean, default: false }
 })
 
 const recordRenderer = inject('recordRenderer')
@@ -27,7 +28,7 @@ const recordRenderer = inject('recordRenderer')
 const emits = defineEmits(['remove'])
 
 const displayTitle = computed(() => {
-  const t = title.value
+  const t = title.value || ''
   return props.truncate
     ? t?.length <= props.minDisplayLength ? t : t.substring(0, props.minDisplayLength).trim()
     : t?.length <= props.maxDisplayLength ? t : t.substring(0, props.maxDisplayLength).trim()
@@ -37,7 +38,7 @@ const title = ref('')
 
 onBeforeMount(async () => {
   let t = props.record ? (recordRenderer ? recordRenderer(props.record, {}) : props.record.getTitle()) : ''
-  if (typeof t !== 'string') t = await t.asString()
+  if (t && typeof t !== 'string') t = await t.asString()
   title.value = t
 })
 
@@ -61,12 +62,12 @@ defineExpose({
       {{showPopover ? displayTitle : title}}
     </div>
     <div
-      v-if="showPopover && title.length > (truncate ? minDisplayLength : maxDisplayLength)"
+      v-if="showPopover && title?.length > (truncate ? minDisplayLength : maxDisplayLength)"
       class="tabler-icons-dots"
     />
-    <div class="remove-record ms-1 tabler-icons-cross" @click.stop="emits('remove')"/>
+    <div v-if="!readOnly" class="remove-record ms-1 tabler-icons-cross" @click.stop="emits('remove')"/>
     <BPopover
-      v-if="showPopover && title.length > (truncate ? minDisplayLength : maxDisplayLength)"
+      v-if="showPopover && title?.length > (truncate ? minDisplayLength : maxDisplayLength)"
       :target="`${id}-record-div`"
       click
       realtime
