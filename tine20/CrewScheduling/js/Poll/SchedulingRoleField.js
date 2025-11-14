@@ -12,8 +12,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
     Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
     const app = Tine.Tinebase.appMgr.get('CrewScheduling')
 
-
-
     const SchedulingRoleField = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
 
         initComponent: function () {
