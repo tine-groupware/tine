@@ -1,4 +1,5 @@
-### (week)daily tine backup
+### (week)daily/weekly tine backup (db daily & files weekly
 ### {{ ansible_managed }}
 # m h dom mon dow user  command
-0 4 * * 1-5 root cd {{ tinedockercompose_path }} && docker compose exec -u tine20 web sh -c "cd /usr/share/tine20 && setup.php --backup -- db=1 files=1 noTimestamp=1 novalidate=1 backupDir={{ tinedockercompose_backup_dir }}"
+0 0 * * 1-5 root cd {{ tinedockercompose_path }} && docker compose exec -u tine20 web sh -c "cd /usr/share/tine20 && setup.php --backup -- db=1 files=0 noTimestamp=1 novalidate=1 backupDir={{ tinedockercompose_backup_dir }}"
+0 1 * * 5 root cd {{ tinedockercompose_path }} && docker compose exec -u tine20 web sh -c "cd /usr/share/tine20 && setup.php --backup -- db=0 files=1 noTimestamp=1 novalidate=1 backupDir={{ tinedockercompose_backup_dir }}"
