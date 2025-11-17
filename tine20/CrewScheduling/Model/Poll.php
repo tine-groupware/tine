@@ -18,7 +18,8 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
     public const FLD_FROM = 'from';
     public const FLD_UNTIL = 'until';
     public const FLD_DESCRIPTION = 'description';
-    public const FLD_SITE = 'site';
+    public const FLD_SITES = 'sites';
+    public const FLD_EVENT_TYPES = 'event_types';
     public const FLD_DEADLINE = 'deadline';
     public const FLD_IS_CLOSED = 'is_closed';
     public const FLD_REMINDERS = 'reminders';
@@ -41,8 +42,8 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
         self::EXPOSE_HTTP_API           => true,
         self::RECORD_NAME               => 'Poll',  // gettext('GENDER_Poll')
         self::RECORDS_NAME              => 'Polls', // ngettext('Poll', 'Polls', n)
-        self::TITLE_PROPERTY            => self::FLD_DESCRIPTION,
-
+        self::TITLE_PROPERTY            => '{% if scheduling_role %}{{ renderTitle(scheduling_role, "CrewScheduling_Model_SchedulingRole") }}{% endif %}{% if from and until %} ({{ from|localizeddate("short", "none", app.request.locale)}} - {{ until|localizeddate("short", "none", app.request.locale) }}){% endif %}',
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_DEADLINE],
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
             self::INDEXES                   => [
@@ -63,21 +64,22 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
                         self::ON_DELETE                     => self::CASCADE,
                     ]],
                 ],
-                self::FLD_SITE                          => [
-                    self::TARGET_ENTITY             => Addressbook_Model_Contact::class,
-                    self::FIELD_NAME                  => self::FLD_SITE,
-                    self::JOIN_COLUMNS                  => [[
-                        self::NAME                          => self::FLD_SITE,
-                        self::REFERENCED_COLUMN_NAME        => self::ID
-                    ]]
-                ]
             ],
         ],
 
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_SCHEDULING_ROLE => [],
-                self::FLD_SITE => [],
+                self::FLD_SITES => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        CrewScheduling_Model_PollSite::FLD_SITE => [],
+                    ],
+                ],
+                self::FLD_EVENT_TYPES => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        CrewScheduling_Model_PollEventType::FLD_EVENT_TYPE => [],
+                    ],
+                ],
                 self::FLD_PARTICIPANTS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         CrewScheduling_Model_PollParticipant::FLD_CONTACT => [],
@@ -104,6 +106,7 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                 => [
                     self::FIELDS_CONFIG             => [
                         'xtype'                         => 'cs-poll-schedulingrolefield',
+                        'fixedIf'                       => '!phantom',
                     ],
                 ],
             ],
@@ -144,21 +147,22 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
-            self::FLD_SITE                   => [
-                self::LABEL                     => 'Site', // _('Site')
-                self::DESCRIPTION               => 'Location of the event.', // _('Location of the event.')
-                self::TYPE                      => self::TYPE_RECORD,
+            self::FLD_SITES                   => [
+                self::LABEL                     => 'Sites', // _('Sites')
+                self::TYPE                      => self::TYPE_RECORDS,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => true,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_OPTIONAL
                 ],
                 self::CONFIG                    => [
-                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS         => true,
+                    self::APP_NAME                  => CrewScheduling_Config::APP_NAME,
+                    self::MODEL_NAME                => CrewScheduling_Model_PollSite::MODEL_NAME_PART,
+                    self::REF_ID_FIELD              => CrewScheduling_Model_PollSite::FLD_POLL,
                 ],
-                self::DEFAULT_VAL               => null,
-                self::NULLABLE                  => true,
                 self::UI_CONFIG     => [
+                    'xtype' => 'tinerecordspickercombobox',
+                    'fixedIf' => '!phantom',
                     'filterOptions' => [
                         'jsConfig'              => ['filtertype' => 'tinebase.site'],
                     ],
@@ -175,6 +179,29 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
                     self::UI_CONFIG_FEATURE     => [
                         self::APP_NAME              => Tinebase_Config::APP_NAME,
                         self::UI_CONFIG_FEATURE     => Tinebase_Config::FEATURE_SITE
+                    ],
+                ],
+            ],
+            self::FLD_EVENT_TYPES            => [
+                self::LABEL                     => 'Event Types', // _('Event Types')
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::DEFAULT_VAL               => null,
+                self::NULLABLE                  => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_OPTIONAL
+                ],
+                self::CONFIG                    => [
+                    self::DEPENDENT_RECORDS         => true,
+                    self::APP_NAME                  => CrewScheduling_Config::APP_NAME,
+                    self::MODEL_NAME                => CrewScheduling_Model_PollEventType::MODEL_NAME_PART,
+                    self::REF_ID_FIELD              => CrewScheduling_Model_PollEventType::FLD_POLL,
+                ],
+                self::UI_CONFIG         => [
+                    'xtype' => 'tinerecordspickercombobox',
+                    'fixedIf' => '!phantom',
+                    'searchComboConfig'     => [
+                        'useEditPlugin'         => false,
                     ],
                 ],
             ],

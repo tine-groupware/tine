@@ -31,6 +31,8 @@ class CrewScheduling_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         CrewScheduling_Model_Poll::MODEL_NAME_PART,
         CrewScheduling_Model_PollParticipant::MODEL_NAME_PART,
         CrewScheduling_Model_PollReply::MODEL_NAME_PART,
+        CrewScheduling_Model_PollSite::MODEL_NAME_PART,
+        CrewScheduling_Model_PollEventType::MODEL_NAME_PART,
     ];
 
     public function __construct()

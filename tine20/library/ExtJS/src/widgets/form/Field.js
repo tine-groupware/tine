@@ -609,11 +609,14 @@ var form = new Ext.form.FormPanel({
      * @param {Mixed} value The value to set
      * @return {Ext.form.Field} this
      */
-    setValue : function(v){
+    setValue : function(v, r){
         this.value = v;
         if(this.rendered && this.el.dom){
             this.el.dom.value = (Ext.isEmpty(v) ? '' : v);
             this.validate();
+        }
+        if (r && this.fixedIf) {
+            this.setReadOnly(_.isFunction(this.fixedIf) ? this.fixedIf(v,r) : (this.fixedIf[0] === '!' ? -1 : 1) *_.get(r, this.fixedIf.replace(/^!/, '')))
         }
         return this;
     },

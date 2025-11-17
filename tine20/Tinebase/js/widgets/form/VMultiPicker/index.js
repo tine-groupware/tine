@@ -14,6 +14,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     vueHandle: null,
     vueEventBus: null,
     injectKey: null,
+    readOnly: false,
     props: null,
 
     emptyText: '',
@@ -72,6 +73,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             emptyText: this.emptyText,
             recordRenderer: this.recordRenderer,
             multiLine: this.multiLine,
+            readOnly: this.readOnly,
         })
         if (_.isArray(this.value)) {
             this.setValue(this.value)
@@ -259,12 +261,12 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         return Tine.Tinebase.common.assertComparable(this.props ?
             this.props.records ?
                 // this.props.records
-                _.map(Array.from(this.props.records.values()), val => val.getData())
+                _.map(Array.from(this.props.records.values()), val => JSON.parse(JSON.stringify(val.getData())))
                 : []
             : [])
     },
 
-    setValue: function(value, editDialog) {
+    setValue: function(value, record) {
         this.reset()
         this.suspendEvents()
         async.forEach(value, async (recordData) => {
@@ -274,7 +276,10 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         })
     },
 
-    setReadOnly: Ext.form.Field.prototype.setReadOnly,
+    setReadOnly : function(readOnly){
+        Ext.form.Field.prototype.setReadOnly.call(this, readOnly)
+        this.props.readOnly = readOnly;
+    },
 
     /* needed for isFormField cycle */
     markInvalid: Ext.form.Field.prototype.markInvalid,
