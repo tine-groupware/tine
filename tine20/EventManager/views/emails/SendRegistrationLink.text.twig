@@ -11,8 +11,10 @@ available parameters:
 {% endblock %}
 
 {% block body %}
-    {{ _('Thank you for expressing your interest in the event %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
-    {{ _('To complete the registration, please confirm your e-mail address via this link:') }}
+    {{ _('You have received this email because you wish to register for an event or modify your existing registration.')}}
+    {{ _('To continue please confirm your email address by clicking on the button below.')}}
 
     {{ link }}
+
+    {{ _('If you did not make this request yourself, you can simply ignore this message — no further action is required.')}}
 {% endblock %}

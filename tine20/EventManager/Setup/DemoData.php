@@ -208,7 +208,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 ],
             ],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $christoph,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $christoph,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
@@ -283,7 +283,7 @@ Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $daniela,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
@@ -324,7 +324,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $daniela,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -353,7 +353,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $daniela,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -381,7 +381,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $daniela,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -402,7 +402,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $heiner,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $heiner,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
@@ -450,7 +450,7 @@ www.kindergottesdienst-katholisch.de',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_NAME => $alexandra,
+                EventManager_Model_Registration::FLD_PARTICIPANT => $alexandra,
             ]],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
@@ -560,13 +560,13 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
             ],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [
                 [
-                    EventManager_Model_Registration::FLD_NAME => $alexandra,
+                    EventManager_Model_Registration::FLD_PARTICIPANT => $alexandra,
                 ],
                 [
-                    EventManager_Model_Registration::FLD_NAME => $daniela,
+                    EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
                 ],
                 [
-                    EventManager_Model_Registration::FLD_NAME => $christoph,
+                    EventManager_Model_Registration::FLD_PARTICIPANT => $christoph,
                 ],
             ],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [

@@ -2,7 +2,7 @@
 /*
  * Tine 2.0
  *
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.leuschel@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
@@ -13,310 +13,339 @@
 
     <b-row class="text-center my-5">
       <b-col>
-        <h1>{{formatMessage('Registration')}}</h1>
+        <h1>{{registrationTitle}}</h1>
+        <h5>{{eventDate}}</h5>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <h4 class="mb-4">Personal Information:</h4>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Salutation')"
-          class="mb-3"
+        <b-alert v-model="showContactAlert" dismissible>
+          {{formatMessage('Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current.')}}<br>
+        </b-alert>
+        <b-alert v-model="showRegisteredContactAlert" variant="success" dismissible>{{formatMessage('You already sign for this event. If you want to register a new person under the same e-mail account click')}}
+          <a
+            href="#"
+            @click.prevent="createNewProfile"
+          >
+            {{ formatMessage('here') }}
+          </a>.
+        </b-alert>
+        <h4
+          v-b-toggle.collapse-1
+          @click="isCollapsedContact = !isCollapsedContact"
+          class="mb-4 collapsible-header"
         >
-          <b-form-select v-model="contactDetails.salutation" :options="salutations"></b-form-select>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Title')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.title"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('First Name') + '*'"
-          class="mb-3"
-        >
-          <b-form-input
-            v-model="contactDetails.n_given"
-            :class="{ 'required-field-error': validationErrors.includes('n_given') }"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Middle Name')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.n_middle"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Last Name') + '*'"
-          class="mb-3"
-        >
-          <b-form-input
-            v-model="contactDetails.n_family"
-            :class="{ 'required-field-error': validationErrors.includes('n_family') }"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Company')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.org_name"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Day of Birth')"
-          class="mb-3"
-        >
-          <b-form-input
-            id="birthday-input"
-            type="date"
-            class="form-registration"
-            v-model="contactDetails.bday"
-            :max="maxBirthDate"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('E-mail') + '*'"
-          class="mb-3"
-        >
-          <b-form-input
-            v-model="contactDetails.email"
-            :class="{ 'required-field-error': validationErrors.includes('email') }"
-            :readonly="isVerifyEmail"
-          ></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Mobile')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.tel_cell"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Telephone')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.tel_home"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Street')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.adr_one_street"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('House Nr.')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.adr_one_street2"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Postal Code')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.adr_one_postalcode"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('City')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.adr_one_locality"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Region')"
-          class="mb-3"
-        >
-          <b-form-input v-model="contactDetails.adr_one_region"></b-form-input>
-        </b-form-group>
-        <b-form-group
-          label-cols-sm="4"
-          label-cols-lg="3"
-          content-cols-sm
-          content-cols-lg="7"
-          :label="formatMessage('Country')"
-          class="mb-3"
-        >
-          <b-form-select v-model="contactDetails.adr_one_countryname" :options="countries"></b-form-select>
-        </b-form-group>
+          Personal Information: <span class="chevron" :class="{ 'rotated': !isCollapsedContact }">▼</span>
+        </h4>
+        <b-collapse visible id="collapse-1">
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Salutation')"
+            class="mb-3"
+          >
+            <b-form-select v-model="contactDetails.salutation" :options="salutations"></b-form-select>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Title')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.title"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('First Name') + '*'"
+            class="mb-3"
+          >
+            <b-form-input
+              v-model="contactDetails.n_given"
+              :class="{ 'required-field-error': validationErrors.includes('n_given') }"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Middle Name')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.n_middle"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Last Name') + '*'"
+            class="mb-3"
+          >
+            <b-form-input
+              v-model="contactDetails.n_family"
+              :class="{ 'required-field-error': validationErrors.includes('n_family') }"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Company')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.org_name"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Day of Birth')"
+            class="mb-3"
+          >
+            <b-form-input
+              id="birthday-input"
+              type="date"
+              class="form-registration"
+              v-model="contactDetails.bday"
+              :max="maxBirthDate"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('E-mail') + '*'"
+            class="mb-3"
+          >
+            <b-form-input
+              v-model="contactDetails.email"
+              :class="{ 'required-field-error': validationErrors.includes('email') }"
+              :readonly="isVerifyEmail"
+            ></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Mobile')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.tel_cell"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Telephone')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.tel_home"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Street')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.adr_one_street"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('House Nr.')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.adr_one_street2"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Postal Code')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.adr_one_postalcode"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('City')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.adr_one_locality"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Region')"
+            class="mb-3"
+          >
+            <b-form-input v-model="contactDetails.adr_one_region"></b-form-input>
+          </b-form-group>
+          <b-form-group
+            label-cols-sm="4"
+            label-cols-lg="3"
+            content-cols-sm
+            content-cols-lg="7"
+            :label="formatMessage('Country')"
+            class="mb-3"
+          >
+            <b-form-select v-model="contactDetails.adr_one_countryname" :options="countries"></b-form-select>
+          </b-form-group>
+        </b-collapse>
       </b-col>
     </b-row>
     <b-row>
       <b-col v-if="eventDetails.options">
-        <h4 class="mb-4">{{formatMessage('Event Specific Information:')}}</h4>
-        <h5>{{eventDetails.name}}</h5>
-        <div v-for="optionGroup in visibleOptionsByGroup" :key="optionGroup.group">
-          <h6>{{optionGroup.group}}</h6>
-          <div :class="{
-          'required-field-error-container': optionGroup.group && optionGroup.group.trim() !== '' && hasGroupValidationError(optionGroup.group)
-          }">
-            <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
-              <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
-                <h6>{{option.name_option}}</h6>
-                <div class="mb-3">{{option.option_config.text_option}}</div>
-              </div>
-              <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="`${option.name_option}${option.option_config?.text ? ' : ' + option.option_config.text : ''}`"
-                  class="mb-3"
-                >
-                  <b-form-textarea
-                    v-if="option.option_config.multiple_lines"
-                    v-model="replies[option.id]"
-                    :maxlength="option.option_config.max_characters || undefined"
-                    :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
-                    rows="4"
-                  ></b-form-textarea>
-                  <b-form-input
-                    v-else
-                    v-model="replies[option.id]"
-                    :type="option.option_config.only_numbers ? 'number' : 'text'"
-                    :maxlength="!option.option_config.only_numbers && option.option_config.max_characters ? option.option_config.max_characters : undefined"
-                    :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
-                    @input="handleTextInputChange(option, $event)"
-                  ></b-form-input>
-                  <small v-if="option.option_config.multiple_lines && option.option_config.max_characters" class="text-muted">
-                    {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
-                  </small>
-                  <small v-else-if="!option.option_config.only_numbers && option.option_config.max_characters" class="text-muted">
-                    {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
-                  </small>
-                </b-form-group>
-              </div>
-              <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'"
-                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
-                <b-form-checkbox
-                  v-model="replies[option.id]"
-                  value="true"
-                  unchecked-value="false"
-                  @click="singleSelection(option)"
-                >
+        <h4
+          v-b-toggle.collapse-2
+          @click="isCollapsedEvent = !isCollapsedEvent"
+          class="mb-4 collapsible-header"
+        >
+          Event Specific Information: <span class="chevron" :class="{ 'rotated': !isCollapsedEvent }">▼</span>
+        </h4>
+        <b-collapse visible id="collapse-2">
+          <h5>{{eventDetails.name}}</h5>
+          <div v-for="optionGroup in visibleOptionsByGroup" :key="optionGroup.group">
+            <h6>{{optionGroup.group}}</h6>
+            <div :class="{
+            'required-field-error-container': optionGroup.group && optionGroup.group.trim() !== '' && hasGroupValidationError(optionGroup.group)
+            }">
+              <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
+                <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
                   <h6>{{option.name_option}}</h6>
-                  <div v-if="option.option_config">
-                    <div v-if="option.option_config.description">{{option.option_config.description}}</div>
-                    <div v-if="option.option_config.price">Price: {{option.option_config.price}}</div>
-                  </div>
-                </b-form-checkbox>
-              </div>
-              <div v-if="option.option_config_class === 'EventManager_Model_FileOption'"
-                   :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
-                <div class="mb-3">
-                  <h6>{{option.name_option}}</h6>
-                  <div v-if="option.option_config && option.option_config.node_id !== ''">
-                    <b-button class="mb-3" @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
-                  </div>
-                  <div class="mb-3" v-if="option.option_config && option.option_config.file_acknowledgement && option.option_config.node_id !== ''">
-                    <b-form-checkbox
+                  <div class="mb-3">{{option.option_config.text_option}}</div>
+                </div>
+                <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
+                  <b-form-group
+                    label-cols-sm="4"
+                    label-cols-lg="3"
+                    content-cols-sm
+                    content-cols-lg="7"
+                    :label="`${option.name_option}${option.option_config?.text ? ' : ' + option.option_config.text : ''}`"
+                    class="mb-3"
+                  >
+                    <b-form-textarea
+                      v-if="option.option_config.multiple_lines"
                       v-model="replies[option.id]"
-                      value="true"
-                      unchecked-value="false"
-                      @click="singleSelection(option)"
-                    >{{formatMessage('I have read the document and accept the terms and conditions')}}</b-form-checkbox>
-                  </div>
-                  <div v-else-if="option.option_config && option.option_config.file_upload" class="mb-3">
-                    <input
-                      id="file-input"
-                      type="file"
-                      class="form-control"
-                      @change="(event) => handleFileChange(event, option.id)"
-                      :accept="acceptedTypes"
-                      :multiple=false
-                    >
-                    <div v-if="uploadedFiles[option.id] && uploadedFiles[option.id].length > 0" class="mt-2">
-                      <small class="text-muted">
-                        {{formatMessage('Uploaded file')}}:
-                        <span style="color:blue;font-weight:bold;cursor:pointer" @click="downloadFile(uploadedFiles[option.id][0].node_id, uploadedFiles[option.id][0].name, uploadedFiles[option.id][0].file_type)">{{uploadedFiles[option.id][0].name}}</span>
-                      </small>
-                      <small class="mx-3">
-                      <span style="color:grey;font-weight:bold;cursor:pointer" @click="deleteFile(option.id)">{{formatMessage('Delete file')}}</span>
-                      </small>
+                      :maxlength="option.option_config.max_characters || undefined"
+                      :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
+                      rows="4"
+                    ></b-form-textarea>
+                    <b-form-input
+                      v-else
+                      v-model="replies[option.id]"
+                      :type="option.option_config.only_numbers ? 'number' : 'text'"
+                      :maxlength="!option.option_config.only_numbers && option.option_config.max_characters ? option.option_config.max_characters : undefined"
+                      :class="{'required-field-error': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}"
+                      @input="handleTextInputChange(option, $event)"
+                    ></b-form-input>
+                    <small v-if="option.option_config.multiple_lines && option.option_config.max_characters" class="text-muted">
+                      {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
+                    </small>
+                    <small v-else-if="!option.option_config.only_numbers && option.option_config.max_characters" class="text-muted">
+                      {{getCharacterCount(option.id)}} / {{option.option_config.max_characters}} {{formatMessage('characters')}}
+                    </small>
+                  </b-form-group>
+                </div>
+                <div class="mb-3" v-if="option.option_config_class === 'EventManager_Model_CheckboxOption'"
+                     :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
+                  <b-form-checkbox
+                    v-model="replies[option.id]"
+                    value="true"
+                    unchecked-value="false"
+                    @click="singleSelection(option)"
+                  >
+                    <h6>{{option.name_option}}</h6>
+                    <div v-if="option.option_config">
+                      <div v-if="option.option_config.description">{{option.option_config.description}}</div>
+                      <div v-if="option.option_config.price">Price: {{option.option_config.price}}</div>
+                    </div>
+                  </b-form-checkbox>
+                </div>
+                <div v-if="option.option_config_class === 'EventManager_Model_FileOption'"
+                     :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
+                  <div class="mb-3">
+                    <h6>{{option.name_option}}</h6>
+                    <div v-if="option.option_config && option.option_config.node_id !== ''">
+                      <b-button class="mb-3" @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
+                    </div>
+                    <div class="mb-3" v-if="option.option_config && option.option_config.file_acknowledgement && option.option_config.node_id !== ''">
+                      <b-form-checkbox
+                        v-model="replies[option.id]"
+                        value="true"
+                        unchecked-value="false"
+                        @click="singleSelection(option)"
+                      >{{formatMessage('I have read the document and accept the terms and conditions')}}</b-form-checkbox>
+                    </div>
+                    <div v-else-if="option.option_config && option.option_config.file_upload" class="mb-3">
+                      <input
+                        id="file-input"
+                        type="file"
+                        class="form-control"
+                        @change="(event) => handleFileChange(event, option.id)"
+                        :accept="acceptedTypes"
+                        :multiple=false
+                      >
+                      <div v-if="uploadedFiles[option.id] && uploadedFiles[option.id].length > 0" class="mt-2">
+                        <small class="text-muted">
+                          {{formatMessage('Uploaded file')}}:
+                          <span style="color:blue;font-weight:bold;cursor:pointer" @click="downloadFile(uploadedFiles[option.id][0].node_id, uploadedFiles[option.id][0].name, uploadedFiles[option.id][0].file_type)">{{uploadedFiles[option.id][0].name}}</span>
+                        </small>
+                        <small class="mx-3">
+                        <span style="color:grey;font-weight:bold;cursor:pointer" @click="deleteFile(option.id)">{{formatMessage('Delete file')}}</span>
+                        </small>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </b-collapse>
       </b-col>
 
       <div v-if="isAlreadyRegistered">
-        <div class="text-end mb-3">
-          <b-button class="m-3" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
-          <b-button class="m-3" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
+        <div class="mb-3">
+          <b-button class="m-3" variant="primary" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
+          <b-button class="m-3" variant="danger" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
         </div>
       </div>
 
-      <div v-else class="text-end mb-3">
+      <div v-else class="mb-3">
         <b-button class="mt-3" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
       </div>
     </b-row>
 
     <b-modal
       v-model="modal.show"
-      :title="formatMessage(modal.title)"
+      :title="modal.title"
       :ok-only="modal.okOnly"
-      :ok-title="formatMessage(modal.okText)"
-      :cancel-title="formatMessage(modal.cancelText)"
+      :ok-title="modal.okText"
+      :ok-variant="modal.dangerButton ? 'danger' : 'primary'"
+      :cancel-title="modal.cancelText"
       @ok="handleModalAction"
       @cancel="handleModalCancel"
     >
@@ -327,7 +356,7 @@
 </template>
 
 <script setup>
-import {computed, inject, ref, reactive} from 'vue';
+import {computed, inject, ref, reactive, watch} from 'vue';
 import _ from 'lodash';
 import {translationHelper} from "./keys";
 import {useRoute} from 'vue-router';
@@ -335,6 +364,19 @@ import "./Registration.vue";
 
 const formatMessage = inject(translationHelper);
 const route = useRoute();
+const isCollapsedContact = ref(false);
+const isCollapsedEvent = ref(false);
+const showContactAlert = ref(false);
+const showRegisteredContactAlert = ref(false);
+const replies = ref({});
+const uploadedFiles = ref({});
+const validationErrors = ref([]);
+const isVerifyEmail = ref(false);
+const isAlreadyRegistered = ref(false);
+const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
+const isExpired = ref(false);
+const isUpdate = ref(false);
+const hasFileChanged = ref(false);
 
 const modal = reactive({
   show: false,
@@ -344,18 +386,19 @@ const modal = reactive({
   okOnly: true,
   okText: 'OK',
   cancelText: 'Cancel',
+  dangerButton: false,
   onConfirm: null,
   onCancel: null
 });
 
-// Modal helper functions
 const showModal = (config) => {
   modal.title = config.title || '';
   modal.message = config.message || '';
   modal.type = config.type || 'info';
   modal.okOnly = config.okOnly !== false;
   modal.okText = config.okText || 'OK';
-  modal.cancelText = config.cancelText || 'Cancel';
+  modal.cancelText = config.cancelText || formatMessage('Cancel');
+  modal.dangerButton = config.dangerButton || false;
   modal.onConfirm = config.onConfirm || null;
   modal.onCancel = config.onCancel || null;
   modal.show = true;
@@ -374,6 +417,14 @@ const handleModalCancel = () => {
   }
   modal.show = false;
 };
+
+const registrationTitle = computed(() =>
+  `${formatMessage('Registration for')} ${eventDetails.value.name}`
+);
+
+const eventDate = computed(() =>
+  `${formatMessage('on the')} ${new Date(eventDetails.value.start).toLocaleDateString()}`
+)
 
 const eventDetails = ref({
   name: "",
@@ -414,16 +465,6 @@ const contactDetails = ref({
   adr_one_countryname : "",
 });
 
-const replies = ref({});
-const uploadedFiles = ref({});
-const validationErrors = ref([]);
-const isVerifyEmail = ref(false);
-const isAlreadyRegistered = ref(false);
-const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
-const isExpired = ref(false);
-const isUpdate = ref(false);
-const hasFileChanged = ref(false);
-
 const salutations = ref([
   { value: 'MR', text: formatMessage('Mr') },
   { value: 'MS', text: formatMessage('Ms') },
@@ -435,6 +476,19 @@ const countries = ref([
   { value: 'DE', text: formatMessage('Deutschland') },
 ]);
 
+watch(contactDetails, (newDetails) => {
+  if (showContactAlert.value === false) {
+    showContactAlert.value = Object.values(newDetails).some(v => v && v.trim() !== "");
+  }
+}, { deep: true });
+
+const deleteUserData = () => {
+  console.log('TODO implement the deletion of contact');
+};
+
+const createNewProfile = () => {
+  console.log('TODO implement creation of profile under contact e-mail account');
+};
 function deleteFile(optionId) {
   hasFileChanged.value = true;
   delete uploadedFiles.value[optionId];
@@ -446,12 +500,12 @@ function deleteFile(optionId) {
 
 function openCancelConfirmation() {
   showModal({
-    title: 'Cancel Registration',
+    title: formatMessage('Cancel Registration'),
     message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${eventDetails.value.name}</strong>"`,
     type: 'confirm',
     okOnly: false,
-    okText: 'Yes',
-    cancelText: 'No',
+    okText: formatMessage('Yes'),
+    cancelText: formatMessage('No'),
     onConfirm: confirmCancel
   });
 }
@@ -474,8 +528,8 @@ async function confirmCancel() {
     }
 
     showModal({
-      title: 'Registration Cancelled',
-      message: 'Your registration has been cancelled successfully.',
+      title: formatMessage('Registration Cancelled'),
+      message: formatMessage('Your registration has been cancelled successfully.'),
       type: 'success',
       onConfirm: () => {
         const baseUrl = window.location.origin;
@@ -485,8 +539,8 @@ async function confirmCancel() {
   } catch (error) {
     console.error(error);
     showModal({
-      title: 'Error',
-      message: 'Could not cancel your registration. Please try again later.',
+      title: formatMessage('Error'),
+      message: formatMessage('Could not cancel your registration. Please try again later.'),
       type: 'error'
     });
   }
@@ -728,12 +782,12 @@ function checkWaitingList() {
       : `${formatMessage('The event')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('is full. If you register you will be on our waiting list. Do you still want to register?')}`;
 
     showModal({
-      title: 'Waiting list',
+      title: formatMessage('Waiting list'),
       message: expiredMessage,
       type: 'waiting-list',
       okOnly: false,
-      okText: 'Yes',
-      cancelText: 'No',
+      okText: formatMessage('Yes'),
+      cancelText: formatMessage('No'),
       onConfirm: postRegistration
     });
   } else {
@@ -751,8 +805,8 @@ const postRegistration = async () => {
 
   if (!validateRequiredFields()) {
     showModal({
-      title: 'Validation Error',
-      message: 'Please fill all required fields.',
+      title: formatMessage('Validation Error'),
+      message: formatMessage('Please fill all required fields.'),
       type: 'error'
     });
     return;
@@ -829,8 +883,8 @@ const postRegistration = async () => {
     if (isUpdate.value) {
       isUpdate.value = false;
       showModal({
-        title: 'Update Registration',
-        message: 'Your registration was updated successfully.',
+        title: formatMessage('Update Registration'),
+        message: formatMessage('Your registration was updated successfully.'),
         type: 'success',
         onConfirm: () => {
           clearForm();
@@ -840,8 +894,8 @@ const postRegistration = async () => {
       });
     } else {
       showModal({
-        title: 'Success',
-        message: 'Registration completed successfully! You will receive a confirmation e-mail.',
+        title: formatMessage('Success'),
+        message: formatMessage('Registration completed successfully! You will receive a confirmation e-mail.'),
         type: 'success',
         onConfirm: () => {
           clearForm();
@@ -854,8 +908,8 @@ const postRegistration = async () => {
   } catch (error) {
     console.error('Registration request failed:', error);
     showModal({
-      title: 'Error',
-      message: 'Registration failed. Please try again.',
+      title: formatMessage('Error'),
+      message: formatMessage('Registration failed. Please try again.'),
       type: 'error'
     });
   }
@@ -1013,6 +1067,7 @@ async function getEventContactDetails() {
     }
 
     if (registration && registration !== '') {
+      showRegisteredContactAlert.value = true;
       isAlreadyRegistered.value = registration.status !== '3';
       const bookedOptions = registration.booked_options || [];
       for(const bookedOption of bookedOptions) {
@@ -1090,14 +1145,36 @@ export default {
   border: 2px solid #dc3545 !important;
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
 }
+
 .required-field-error-container {
   border: 2px solid #dc3545;
   border-radius: 0.375rem;
   padding: 0.5rem;
   background-color: rgba(220, 53, 69, 0.05);
 }
+
 .form-control[readonly] {
   background-color: #f8f9fa;
   opacity: 1;
+}
+
+.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapsible-header:hover {
+  opacity: 0.7;
+}
+
+.chevron {
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+  font-size: 0.8em;
+}
+
+.chevron.rotated {
+  transform: rotate(-180deg);
 }
 </style>
