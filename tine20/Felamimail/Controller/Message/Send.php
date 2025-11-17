@@ -1101,24 +1101,21 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 continue;
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Adding attachment: ' . (is_object($attachment) ? print_r($attachment->toArray(), true) : print_r($attachment, true)));
-            }
-
             $part->setTypeAndDispositionForAttachment($attachment['type'], $attachment['name']);
 
-            if (! empty($attachment['size'])) {
+            if (! empty($attachment['size']) && is_numeric($attachment['size'])) {
                 $totalSize += $attachment['size'];
             }
 
             if ($totalSize > $maxAttachmentSize) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Current attachment size: ' . Tinebase_Helper::convertToMegabytes($totalSize) . ' MB / allowed size: '
+                    . ' Current attachment size: '
+                    . Tinebase_Helper::convertToMegabytes($totalSize) . ' MB / allowed size: '
                     . Tinebase_Helper::convertToMegabytes($maxAttachmentSize) . ' MB');
                 }
-                throw new Felamimail_Exception_IMAP('Maximum attachment size exceeded. Please remove one or more attachments.');
+                throw new Felamimail_Exception_IMAP(
+                    'Maximum attachment size exceeded. Please remove one or more attachments.');
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
