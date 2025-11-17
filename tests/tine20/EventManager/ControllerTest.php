@@ -419,7 +419,7 @@ class EventManager_ControllerTest extends TestCase
             }
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
-                'name'                   => 'phpunit registration',
+                'participant'            => 'phpunit registration',
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -430,7 +430,7 @@ class EventManager_ControllerTest extends TestCase
             $booked_option = $this->_getBookedOption($event_id, $options);
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
-                'name'                   => 'phpunit registration',
+                'participant'            => 'phpunit registration',
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -440,7 +440,7 @@ class EventManager_ControllerTest extends TestCase
         } else {
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
-                'name'                   => 'phpunit registration',
+                'participant'            => 'phpunit registration',
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],

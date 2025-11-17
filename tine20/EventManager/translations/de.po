@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2025-11-04 11:42+0100\n"
+"PO-Revision-Date: 2025-11-17 13:26+0100\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -177,19 +177,25 @@ msgid "Event Folder FileManager Path"
 msgstr "Veranstaltungsordner Dateimanager Pfad"
 
 msgid "EventManager registration secret string"
-msgstr "EventManager-Registrierungs-Geheimstring"
+msgstr "EventManager-Anmeldungen-Geheimstring"
 
-msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
-msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
+msgid "The EventManager JWT secret string"
+msgstr "Veranstaltungsmanager JWT geheim string"
 
 msgid "Options"
 msgstr "Optionen"
 
 msgid "Registrations"
-msgstr "Registrierung"
+msgstr "Anmeldungen"
 
 msgid "Deregistered"
 msgstr "Abgemeldet"
+
+msgid "Event Manager | RSS"
+msgstr "Veranstaltungsmanager | RSS"
+
+msgid "All Events in Event Manager"
+msgstr "Alles Veranstaltungen im Veranstaltungsmanager"
 
 msgid "Sign Up"
 msgstr "Anmelden"
@@ -206,7 +212,7 @@ msgid "The event should end after the start date"
 msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
 
 msgid "One should be able to register before the end date"
-msgstr "Man sollte sich vor dem Enddatum registrieren können"
+msgstr "Man sollte sich vor dem Enddatum anmelden können"
 
 msgid "Event Options"
 msgstr "Eventoptionen"
@@ -235,7 +241,7 @@ msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie d
 msgid "Waiting List"
 msgstr "Warteliste"
 
-msgid "Since there are no more available places, this registration is on waiting list."
+msgid "Since there are no more available places, this registration is on the waiting list."
 msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
 
 msgid "Imprint"
@@ -268,38 +274,38 @@ msgstr "Gebühr:"
 msgid "Registration possible until:"
 msgstr "Anmeldung möglich bis:"
 
-msgid "Please enter your details to register for this event:"
-msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
+msgid "Manage my registration"
+msgstr "Anmeldung bearbeiten"
 
-msgid "First Name:"
-msgstr "Vorname:"
-
-msgid "Please enter your first name."
-msgstr "Bitte geben Sie Ihren Vornamen ein."
-
-msgid "Last Name:"
-msgstr "Nachname:"
-
-msgid "Please enter your last name."
-msgstr "Bitte geben Sie Ihren Nachnamen ein."
-
-msgid "Email Address:"
-msgstr "E-Mail-Adresse:"
-
-msgid "Please enter a valid email address."
-msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+msgid "Register now"
+msgstr "Jetzt anmelden"
 
 msgid "Cancel"
 msgstr "Abbrechen"
 
-msgid "Sending..."
-msgstr "Anfrage senden…"
+msgid "Please enter a valid email address"
+msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein"
 
-msgid "Send Registration Request"
-msgstr "Anmeldeanfrage senden"
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
 
-msgid "Manage my registration"
-msgstr "Meine Registrierung verwalten"
+msgid "Please enter your email address to continue:"
+msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um fortzufahren:"
+
+msgid "Enter your email address"
+msgstr "Geben Sie Ihre E-Mail-Adresse ein"
+
+msgid "Registration Request Sent"
+msgstr "Anmeldeanfrage gesendet"
+
+msgid "Please check your email and click the confirmation link to continue."
+msgstr "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um fortzufahren."
+
+msgid "Registration Error"
+msgstr "Anmeldungsfehler"
+
+msgid "There was an error sending your registration request. Please try again later."
+msgstr "Beim Senden Ihrer Anmeldungsanfrage ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
 
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -310,8 +316,14 @@ msgstr "Mehr Information"
 msgid "Website"
 msgstr "Webseite"
 
-msgid "Event Specific Information:"
-msgstr "Veranstaltungsspezifische Informationen:"
+msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
+msgstr "Willkommen zurück! Wir haben Ihre gespeicherten Daten vorab geladen. Bitte bestätigen oder aktualisieren Sie Ihre Angaben, um Ihr Anmeldung auf dem neuesten Stand zu halten."
+
+msgid "You already sign for this event. If you want to register a new person under the same e-mail account click"
+msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Konto registrieren möchten, klicken Sie bitte "
+
+msgid "here"
+msgstr "hier"
 
 msgid "characters"
 msgstr "Zeichen"
@@ -325,14 +337,23 @@ msgstr "Ich habe das Dokument gelesen und akzeptiere die Bedingungen"
 msgid "Uploaded file"
 msgstr "Hochgeladene Datei"
 
+msgid "Delete file"
+msgstr "Datei entfernen"
+
 msgid "Update Registration"
-msgstr "Registrierung aktualisieren"
+msgstr "Anmeldung aktualisieren"
 
 msgid "Cancel Registration"
 msgstr "Abmeldung"
 
 msgid "Register"
 msgstr "Anmelden"
+
+msgid "Registration for"
+msgstr "Anmeldung für"
+
+msgid "on the"
+msgstr "am"
 
 msgid "Mr"
 msgstr "Herr"
@@ -352,6 +373,18 @@ msgstr "Deutschland"
 msgid "Do you really want to cancel your registration for"
 msgstr "Möchten Sie sich wirklich abmelden? Veranstaltung:"
 
+msgid "Registration Cancelled"
+msgstr "Abmeldung"
+
+msgid "Your registration has been cancelled successfully."
+msgstr "Sie wurden erfolgreich abgemeldet."
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "Could not cancel your registration. Please try again later."
+msgstr "Ihre Anmeldung konnte nicht stoniert werden. Bitte versuchen Sie es später erneut."
+
 msgid "The registration date for"
 msgstr "Das Anmeldedatum für"
 
@@ -363,6 +396,24 @@ msgstr "Die Veranstaltung"
 
 msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
 msgstr "ist voll. Wenn Sie sich anmelden, werden Sie auf unsere Warteliste gesetzt. Möchten Sie sich trotzdem anmelden?"
+
+msgid "Validation Error"
+msgstr "Validierungsfehler"
+
+msgid "Please fill all required fields."
+msgstr "Bitte füllen Sie alle erforderlichen Felder aus."
+
+msgid "Your registration was updated successfully."
+msgstr "Ihre Anmeldung wurde erfolgreich aktualisiert."
+
+msgid "Success"
+msgstr "Erfolg"
+
+msgid "Registration completed successfully! You will receive a confirmation e-mail."
+msgstr "Ihre Anmeldung wurde erfolgreich abgeschlossen! Sie erhalten eine Bestätigungs-E-Mail."
+
+msgid "Registration failed. Please try again."
+msgstr "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
 msgid "File Acknowledgement"
 msgstr "Bestätigung der Datei"
@@ -573,6 +624,12 @@ msgstr "Wert"
 msgid "GENDER_Registration"
 msgstr "female"
 
+msgid "Participant"
+msgstr ""
+
+msgid "Registrator"
+msgstr ""
+
 msgid "If the event is full it will not be possible to selected confirmed"
 msgstr "Wenn die Veranstaltung ausgebucht ist, kann sie nicht als bestätigt ausgewählt werden"
 
@@ -700,18 +757,6 @@ msgstr "Bundesland"
 msgid "Country"
 msgstr "Land"
 
-msgid "Event Registration"
-msgstr "Veranstaltungsanmeldung"
-
-msgid "Enter your first name"
-msgstr "Geben Sie Ihren Vornamen ein"
-
-msgid "Enter your last name"
-msgstr "Geben Sie Ihren Nachnamen ein"
-
-msgid "Enter your email address"
-msgstr "Geben Sie Ihre E-Mail-Adresse ein"
-
 msgid "Confirmation E-mail"
 msgstr "Anmeldebestätigung E-Mail"
 
@@ -736,20 +781,98 @@ msgstr "Weitere Veranstaltungen"
 msgid "Confirm your E-mail"
 msgstr "Bestätigen Sie Ihre E-Mail-Adresse"
 
-msgid "Thank you for expressing your interest in the event %1$s."
-msgstr "Vielen Dank für Ihr Interesse an der Veranstaltung %1$s."
+msgid "You have received this email because you wish to register for an event or modify your existing registration."
+msgstr "Sie haben diese E-Mail erhalten, weil Sie sich für eine Veranstaltung anmelden oder Ihre bestehende Anmeldung anpassen möchten."
 
-msgid "To complete the registration, please confirm your e-mail address via this link:"
-msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link:"
+msgid "To continue please confirm your email address by clicking on the button below."
+msgstr "Um fortzufahren, bestätigen Sie bitte Ihre E-Mail-Adresse, indem Sie den unten stehenden Bestätigungsknopf klicken"
 
 msgid "Confirm E-Mail address"
 msgstr "E-Mail-Adresse bestätigen"
+
+msgid "If you did not make this request yourself, you can simply ignore this message — no further action is required."
+msgstr "Falls Sie diese Anfrage nicht selbst gestellt haben, können Sie diese Nachricht einfach ignorieren – es ist keine weitere Aktion nötig."
 
 msgid "Thank you for your interest!"
 msgstr "Vielen Dank für Ihr Interesse!"
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "If you want to permanently delete your data from our system please click "
+#~ msgstr "Wenn Sie Ihre Daten dauerhaft aus unserem System löschen möchten, klicken Sie bitte "
+
+#~ msgid "Confirm Data Deletion"
+#~ msgstr "Löschen von Daten bestätigen"
+
+#~ msgid "To be able to attend to this event we need to save your information. If you delete your account"
+#~ msgstr "Um an dieser Veranstaltung teilnehmen zu können, müssen wir Ihre Daten speichern. Wenn Sie Ihr Konto löschen,"
+
+#~ msgid "you and all the profiles under this e-mail account will no longer be register for this and other events."
+#~ msgstr "Sie und alle Profile unter diesem E-Mail-Konto werden nicht mehr für diese und andere Veranstaltungen registriert sein."
+
+#~ msgid "Are you sure you want to permanently delete all your data from our system? This action cannot be undone."
+#~ msgstr "Sind Sie sicher, dass Sie alle Ihre Daten dauerhaft aus unserem System löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden."
+
+#~ msgid "Delete"
+#~ msgstr "Löschen"
+
+#~ msgid "Please confirm your email address by clicking on the button below."
+#~ msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den untenstehenden Button klicken."
+
+#~ msgid "You already sign for this event. If you want to register a new person under the same e-mail account click here."
+#~ msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Adresse anmelden möchten, klicken Sie hier."
+
+#~ msgid "Event Specific Information:"
+#~ msgstr "Veranstaltungsspezifische Informationen:"
+
+#~ msgid "Thank you for expressing your interest in the event %1$s."
+#~ msgstr "Vielen Dank für Ihr Interesse an der Veranstaltung %1$s."
+
+#~ msgid "To complete the registration, please confirm your e-mail address via this link:"
+#~ msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link:"
+
+#~ msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+#~ msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
+
+#~ msgid "Since there are no more available places, this registration is on waiting list."
+#~ msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
+
+#~ msgid "Please enter your details to register for this event:"
+#~ msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
+
+#~ msgid "First Name:"
+#~ msgstr "Vorname:"
+
+#~ msgid "Please enter your first name."
+#~ msgstr "Bitte geben Sie Ihren Vornamen ein."
+
+#~ msgid "Last Name:"
+#~ msgstr "Nachname:"
+
+#~ msgid "Please enter your last name."
+#~ msgstr "Bitte geben Sie Ihren Nachnamen ein."
+
+#~ msgid "Email Address:"
+#~ msgstr "E-Mail-Adresse:"
+
+#~ msgid "Please enter a valid email address."
+#~ msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+
+#~ msgid "Sending..."
+#~ msgstr "Anfrage senden…"
+
+#~ msgid "Send Registration Request"
+#~ msgstr "Anmeldeanfrage senden"
+
+#~ msgid "Event Registration"
+#~ msgstr "Veranstaltungsanmeldung"
+
+#~ msgid "Enter your first name"
+#~ msgstr "Geben Sie Ihren Vornamen ein"
+
+#~ msgid "Enter your last name"
+#~ msgstr "Geben Sie Ihren Nachnamen ein"
 
 #~ msgid "Wait List"
 #~ msgstr "Warteliste"
@@ -783,9 +906,6 @@ msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf
 
 #~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
 #~ msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-
-#~ msgid "Error"
-#~ msgstr "Fehler"
 
 #~ msgid "Failed to update rules: "
 #~ msgstr "Aktualisierung der Regeln fehlgeschlagen: "

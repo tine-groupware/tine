@@ -45,7 +45,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
-
+        $this->addRegistrator($_record);
         $this->_processBookedOptionsAfterCreate($_record);
         $this->_handleRegistrationFileUpload($_record);
         $this->_updateParentStatistics($_record);
@@ -54,6 +54,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
+        $this->addRegistrator($_updatedRecord);
         $this->_processBookedOptionsAfterUpdate($_updatedRecord, $_oldRecord);
         $this->_handleRegistrationFileUpload($_updatedRecord);
         if ($_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} === "3") {
@@ -111,6 +112,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
     }
 
+    /**
+     * Add participant as registrator if empty
+     *
+     * @param EventManager_Model_Registration $registration
+     * @return void
+     */
+    protected function addRegistrator(EventManager_Model_Registration $registration): void
+    {
+        if (!$registration->{EventManager_Model_Registration::FLD_REGISTRATOR}) {
+            $registration->{EventManager_Model_Registration::FLD_REGISTRATOR} =
+                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
+        }
+    }
+
     public function _handleRegistrationFileUpload(EventManager_Model_Registration $_registration)
     {
         if (!$_registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS}) {
@@ -146,7 +161,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 $event_id = $_registration->{EventManager_Model_Registration::FLD_EVENT_ID};
 
                 // Build participant-specific folder path
-                $participant_id = $_registration->{EventManager_Model_Registration::FLD_NAME};
+                $participant_id = $_registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
                 $participant_name = $participant_id;
                 try {
                     $participant_name = Addressbook_Controller_Contact::getInstance()->get($participant_id)->n_fileas;
@@ -606,7 +621,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         'value' => $event_id
                     ],
                     [
-                        'field' => EventManager_Model_Registration::FLD_NAME,
+                        'field' => EventManager_Model_Registration::FLD_PARTICIPANT,
                         'operator' => 'equals',
                         'value' => $contact
                     ],
@@ -767,19 +782,23 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
             $token = JWT::encode([
                 'email' => $request['email'],
-                'n_given'  => $request['n_given'],
-                'n_family'  => $request['n_family'],
             ], $key, 'HS256');
 
             if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $request['email'])) {
                 $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($request['email']);
+                $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
+                $template = 'SendRegistrationLink';
+                $event = EventManager_Controller_Event::getInstance()->get($event_id);
                 if (!empty($contact)) {
-                    $link = '/EventManager/view/#/event/' . $request['eventId'] . '/registration/' . $token;
-                    $template = 'SendRegistrationLink';
-                    $event = EventManager_Controller_Event::getInstance()->get($event_id);
                     $this->_sendMessageWithTemplate($template, [
                         'link' => Tinebase_Core::getUrl() . $link,
                         'contact' => $contact,
+                        'email' => $request['email'],
+                        'event' => $event,
+                    ]);
+                } else {
+                    $this->_sendMessageWithTemplate($template, [
+                        'link' => Tinebase_Core::getUrl() . $link,
                         'email' => $request['email'],
                         'event' => $event,
                     ]);
@@ -819,7 +838,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                                     'value' => $event_id
                                 ],
                                 [
-                                    'field' => EventManager_Model_Registration::FLD_NAME,
+                                    'field' => EventManager_Model_Registration::FLD_PARTICIPANT,
                                     'operator' => 'equals',
                                     'value' => $contact
                                 ],

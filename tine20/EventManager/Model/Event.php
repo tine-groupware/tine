@@ -46,7 +46,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
         self::TITLE_PROPERTY            => 'name',
@@ -76,7 +76,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_REGISTRATIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        EventManager_Model_Registration::FLD_NAME      => [],
+                        EventManager_Model_Registration::FLD_PARTICIPANT      => [],
                         EventManager_Model_Registration::FLD_BOOKED_OPTIONS   => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                                 EventManager_Model_BookedOption::FLD_OPTION => []
@@ -217,7 +217,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
                 self::UI_CONFIG             => [
                     self::COLUMNS               => [
-                        EventManager_Model_Registration::FLD_NAME,
+                        EventManager_Model_Registration::FLD_PARTICIPANT,
                         EventManager_Model_Registration::FLD_FUNCTION,
                         EventManager_Model_Registration::FLD_STATUS,
                         EventManager_Model_Registration::FLD_SOURCE,

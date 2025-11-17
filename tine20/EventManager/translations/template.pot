@@ -175,7 +175,7 @@ msgstr ""
 msgid "EventManager registration secret string"
 msgstr ""
 
-msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgid "The EventManager JWT secret string"
 msgstr ""
 
 msgid "Options"
@@ -185,6 +185,12 @@ msgid "Registrations"
 msgstr ""
 
 msgid "Deregistered"
+msgstr ""
+
+msgid "Event Manager | RSS"
+msgstr ""
+
+msgid "All Events in Event Manager"
 msgstr ""
 
 msgid "Sign Up"
@@ -231,7 +237,7 @@ msgstr ""
 msgid "Waiting List"
 msgstr ""
 
-msgid "Since there are no more available places, this registration is on waiting list."
+msgid "Since there are no more available places, this registration is on the waiting list."
 msgstr ""
 
 msgid "Imprint"
@@ -264,37 +270,37 @@ msgstr ""
 msgid "Registration possible until:"
 msgstr ""
 
-msgid "Please enter your details to register for this event:"
+msgid "Manage my registration"
 msgstr ""
 
-msgid "First Name:"
-msgstr ""
-
-msgid "Please enter your first name."
-msgstr ""
-
-msgid "Last Name:"
-msgstr ""
-
-msgid "Please enter your last name."
-msgstr ""
-
-msgid "Email Address:"
-msgstr ""
-
-msgid "Please enter a valid email address."
+msgid "Register now"
 msgstr ""
 
 msgid "Cancel"
 msgstr ""
 
-msgid "Sending..."
+msgid "Please enter a valid email address"
 msgstr ""
 
-msgid "Send Registration Request"
+msgid "Email Address"
 msgstr ""
 
-msgid "Manage my registration"
+msgid "Please enter your email address to continue:"
+msgstr ""
+
+msgid "Enter your email address"
+msgstr ""
+
+msgid "Registration Request Sent"
+msgstr ""
+
+msgid "Please check your email and click the confirmation link to continue."
+msgstr ""
+
+msgid "Registration Error"
+msgstr ""
+
+msgid "There was an error sending your registration request. Please try again later."
 msgstr ""
 
 msgid "Events"
@@ -306,7 +312,13 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-msgid "Event Specific Information:"
+msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
+msgstr ""
+
+msgid "You already sign for this event. If you want to register a new person under the same e-mail account click"
+msgstr ""
+
+msgid "here"
 msgstr ""
 
 msgid "characters"
@@ -321,6 +333,9 @@ msgstr ""
 msgid "Uploaded file"
 msgstr ""
 
+msgid "Delete file"
+msgstr ""
+
 msgid "Update Registration"
 msgstr ""
 
@@ -328,6 +343,12 @@ msgid "Cancel Registration"
 msgstr ""
 
 msgid "Register"
+msgstr ""
+
+msgid "Registration for"
+msgstr ""
+
+msgid "on the"
 msgstr ""
 
 msgid "Mr"
@@ -348,6 +369,18 @@ msgstr ""
 msgid "Do you really want to cancel your registration for"
 msgstr ""
 
+msgid "Registration Cancelled"
+msgstr ""
+
+msgid "Your registration has been cancelled successfully."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Could not cancel your registration. Please try again later."
+msgstr ""
+
 msgid "The registration date for"
 msgstr ""
 
@@ -358,6 +391,24 @@ msgid "The event"
 msgstr ""
 
 msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
+msgstr ""
+
+msgid "Validation Error"
+msgstr ""
+
+msgid "Please fill all required fields."
+msgstr ""
+
+msgid "Your registration was updated successfully."
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Registration completed successfully! You will receive a confirmation e-mail."
+msgstr ""
+
+msgid "Registration failed. Please try again."
 msgstr ""
 
 msgid "File Acknowledgement"
@@ -569,6 +620,12 @@ msgstr ""
 msgid "GENDER_Registration"
 msgstr ""
 
+msgid "Participant"
+msgstr ""
+
+msgid "Registrator"
+msgstr ""
+
 msgid "If the event is full it will not be possible to selected confirmed"
 msgstr ""
 
@@ -696,18 +753,6 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-msgid "Event Registration"
-msgstr ""
-
-msgid "Enter your first name"
-msgstr ""
-
-msgid "Enter your last name"
-msgstr ""
-
-msgid "Enter your email address"
-msgstr ""
-
 msgid "Confirmation E-mail"
 msgstr ""
 
@@ -732,13 +777,16 @@ msgstr ""
 msgid "Confirm your E-mail"
 msgstr ""
 
-msgid "Thank you for expressing your interest in the event %1$s."
+msgid "You have received this email because you wish to register for an event or modify your existing registration."
 msgstr ""
 
-msgid "To complete the registration, please confirm your e-mail address via this link:"
+msgid "To continue please confirm your email address by clicking on the button below."
 msgstr ""
 
 msgid "Confirm E-Mail address"
+msgstr ""
+
+msgid "If you did not make this request yourself, you can simply ignore this message — no further action is required."
 msgstr ""
 
 msgid "Thank you for your interest!"
