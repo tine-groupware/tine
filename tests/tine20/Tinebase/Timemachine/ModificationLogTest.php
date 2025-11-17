@@ -256,6 +256,9 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
                 }
             }
             $this->assertEquals($params['nums'], $diffs->count());
+            if (count($diffs) > 0) {
+                $this->assertEquals(Tinebase_Log_Formatter::getRequestId(), $diffs->getFirstRecord()->request_id);
+            }
         }
     }
 

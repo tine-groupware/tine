@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>19.0</version>
+    <version>19.1</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -1041,7 +1041,7 @@
 
         <table>
             <name>timemachine_modlog</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1126,6 +1126,12 @@
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>request_id</name>
+                    <type>text</type>
+                    <length>6</length>
+                    <notnull>false</notnull>
                 </field>
                 <index>
                     <name>id</name>

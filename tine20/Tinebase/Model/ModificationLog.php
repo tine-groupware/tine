@@ -4,19 +4,21 @@
  * 
  * @package     Tinebase
  * @subpackage  Timemachine 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
 /**
- * Model of an logbook entry
+ * Model of a logbook entry
  * 
  * NOTE: record_type is a free-form field, which could be used by the application
  *       to distinguish different tables, mask multiple keys and so on.
  * NOTE: new_value is redundant, but it makes it a lot more easy to compute records
  *       at a given point in time!
+ *
+ * TODO convert to MCV2
  * 
  * @package Tinebase
  * @subpackage Timemachine
@@ -35,6 +37,7 @@
  * @property string $old_value
  * @property string $new_value
  * @property string $seq
+ * @property string $request_id
  */
 class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
 {
@@ -47,7 +50,7 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
     protected $_identifier = 'id';
     
     /**
-     * Defintion of properties. All properties of record _must_ be declared here!
+     * Definition of properties. All properties of record _must_ be declared here!
      * This validators get used when validating user generated content with Zend_Input_Filter
      *
      * @var array list of zend validator
@@ -67,7 +70,8 @@ class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
         'old_value'            => array('allowEmpty' => true),
         'new_value'            => array('allowEmpty' => true),
         'seq'                  => array('allowEmpty' => true),
-        'client'               => array('allowEmpty' => true)
+        'client'               => array('allowEmpty' => true),
+        'request_id'           => array('allowEmpty' => true),
     );
     
     /**

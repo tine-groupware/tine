@@ -45,5 +45,6 @@ class Tinebase_Model_ModificationLogFilter extends Tinebase_Model_Filter_FilterG
         'seq'                  => array('filter' => 'Tinebase_Model_Filter_Int'),
         'instance_seq'         => array('filter' => 'Tinebase_Model_Filter_Int'),
         'client'               => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'request_id'           => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }
