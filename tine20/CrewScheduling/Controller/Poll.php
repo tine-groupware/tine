@@ -97,7 +97,7 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
         $oldDoAcl = Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
         $aclRaii = new Tinebase_RAII(fn() => Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldDoAcl));
 
-        $result = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
+        $result = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, array_merge([
             [TMFA::FIELD => 'period', TMFA::OPERATOR => 'within', TMFA::VALUE => [
                 'from' => $from->getClone(),
                 'until' => $until->getClone(),
@@ -130,7 +130,18 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
                 Tinebase_Model_Filter_FilterGroup::CONDITION => Tinebase_Model_Filter_FilterGroup::CONDITION_AND,
                 Tinebase_Model_Filter_FilterGroup::FILTERS => $additionalFilters,
             ],
-        ]));
+        ],
+            $poll->{CrewScheduling_Model_Poll::FLD_SITES}->count() ? [
+                [TMFA::FIELD => 'event_site', TMFA::OPERATOR => 'in', TMFA::VALUE => $poll->{CrewScheduling_Model_Poll::FLD_SITES}->getIdFromProperty(CrewScheduling_Model_PollSite::FLD_SITE)]
+            ]: [],
+            $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES}->count() ? [
+                [TMFA::FIELD => 'event_types', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Calendar_Model_EventTypes::FLD_EVENT_TYPE, TMFA::OPERATOR => 'definedBy?condition=and&setOperator=oneOf', TMFA::VALUE => [
+                        [TMFA::FIELD => ':id', TMFA::OPERATOR => 'in', TMFA::VALUE => $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES}->getIdFromProperty(CrewScheduling_Model_PollEventType::FLD_EVENT_TYPE)],
+                    ]]
+                ]]
+            ] : []
+        )));
 
         $expander = new Tinebase_Record_Expander(Calendar_Model_Event::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [

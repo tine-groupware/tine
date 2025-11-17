@@ -15,8 +15,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
 
 
     const ParticipantsField = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
-        // onRowDblClick: () => {},
-        // onRowContextMenu: () => {},
 
         initComponent() {
             this.allowCreateNew = false
@@ -29,16 +27,30 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
             this.getTopToolbar().hide()
             this.getBottomToolbar().hide()
 
-            // const record = editDialog.r
+            // @TODO recheck on open and ask user for add/deletes?
             const roleId = editDialog.getForm().findField('scheduling_role').getValue()
-            if (editDialog.record.phantom && roleId && roleId !== this.roleId) {
-                this.roleId = roleId
+            const sitesIds = _.map(editDialog.getForm().findField('sites').getValue(), 'site_id.id')
+            const eventTypesIds = _.map(editDialog.getForm().findField('event_types').getValue(), 'event_type_id.id')
+            const key = _.compact([roleId].concat(sitesIds).concat(eventTypesIds))
+            if (editDialog.record.phantom && roleId && key !== this.key) {
+                this.key = key
                 this.showLoadMask()
                 const role = await getRole(roleId)
                 const capableContactsMap = await getEventTypeCapableContactsMap(role)
-                // @TODO load all events in period (other filters) and take capable contacts only (mind the site too)!
-                const contactIds = _.uniq(_.reduce(Object.keys(capableContactsMap), (accu, typeId) => { return accu.concat(capableContactsMap[typeId])}, []))
-                const { results: contacts } = await Tine.Addressbook.searchContacts([{ field: 'id', operator: 'in', value: contactIds }])
+                const contactIds = _.uniq(_.reduce(Object.keys(capableContactsMap), (accu, typeId) => {
+                    return accu.concat(eventTypesIds?.length < 1 || eventTypesIds.indexOf(typeId) >= 0 ? capableContactsMap[typeId] : [])
+                }, []))
+                const { results: contacts } = await Tine.Addressbook.searchContacts([
+                    { field: 'id', operator: 'in', value: contactIds },
+                ].concat(sitesIds?.length < 1 ? [] : [ { condition: 'OR', filters: [
+                    // either no site set
+                    { field: 'sites', operator: 'definedBy?condition=and&setOperator=oneOf', value: null },
+                    // or site is one of the selected
+                    { field: 'sites', operator: 'definedBy?condition=and&setOperator=oneOf', value: [
+                        { field: "site", operator: "definedBy?condition=and&setOperator=oneOf", value: [
+                            {field: ':id', operator: 'in', value: sitesIds } ] } ] }
+                    ] }
+                ]))
                 this.store.loadData(_.map(contacts, (contact) => { return {
                     poll_id: editDialog.record.id,
                     contact_id: contact
@@ -46,6 +58,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
                 this.hideLoadMask()
             }
 
+            this.setFieldLabel(this.initialConfig.fieldLabel + ` (${this.store.getCount()})`)
 
         }
     })

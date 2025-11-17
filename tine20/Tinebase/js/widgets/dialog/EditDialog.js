@@ -661,6 +661,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             if (Ext.isFunction(item.checkState)) {
                 item.checkState(this, this.record);
             }
+            if (item.fixedIf && _.isFunction(item.setReadOnly)) {
+                item.setReadOnly(_.isFunction(item.fixedIf) ? item.fixedIf(item.getValue(), this.record) : (item.fixedIf[0] === '!' ? true: false) ^_.get(this.record, item.fixedIf.replace(/^!/, '')))
+            }
             if (item.name) {
                 _.each(this.constructor.getCheckStateProviders?.(item.name), (fn) => {
                     fn.call(item, this, this.record);
@@ -1250,7 +1253,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.relayEvents(item, ['change', 'select', 'spin']);
             if (item.copyOnSelectProps) {
                 item.on('select', (i, r) => { i.copyOnSelectProps.forEach((p) => {
-                    this.getForm().findField(p)?.setValue(r.get(p));
+                    this.getForm().findField(p)?.setValue(r.get(p), r);
                     this.record?.set(p, r.get(p));
                 })})
             }

@@ -857,6 +857,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /* needed for isFormField cycle */
     markInvalid: Ext.form.Field.prototype.markInvalid,
     clearInvalid: Ext.form.Field.prototype.clearInvalid,
+    setFieldLabel: Ext.form.Field.prototype.setFieldLabel,
     getMessageHandler: Ext.form.Field.prototype.getMessageHandler,
     getName: Ext.form.Field.prototype.getName,
     validate: function() { return true; },

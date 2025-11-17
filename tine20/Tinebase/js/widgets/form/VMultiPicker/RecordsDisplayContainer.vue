@@ -9,7 +9,7 @@
 -->
 <template>
   <div class="bootstrap-scope" ref="mainContainer">
-    <div class="main-container w-100 h-100 d-flex" @click="triggerCombo">
+    <div class="main-container w-100 h-100 d-flex" @click="readOnly ? null : triggerCombo()">
       <div
         class="flex-grow-1 d-flex align-items-center mid-container overflow-hidden"
         ref="containerDiv"
@@ -23,6 +23,7 @@
             :record="record"
             :show-popover="true"
             :truncate="truncateTitle"
+            :readOnly="readOnly"
             @remove="removeRecord(record.getId())"
           />
           <div
@@ -34,7 +35,7 @@
           />
         </div>
       </div>
-      <div class="d-flex align-items-center">
+      <div v-if="!readOnly" class="d-flex align-items-center">
         <div class="x-form-trigger x-form-arrow-trigger embedded-icon dark-reverse"></div>
       </div>
     </div>
@@ -77,6 +78,7 @@ const props = defineProps({
   recordRenderer: Function,
   injectKey: String,
   emptyText: String,
+  readOnly: Boolean,
   multiLine: {
     type: Number,
     default: undefined

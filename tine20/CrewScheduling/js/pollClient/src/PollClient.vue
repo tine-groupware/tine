@@ -16,7 +16,7 @@
             <h1>{{formatMessage('Availability Poll')}}</h1>
             <h2 class="poll-event">
               <span :style="poll.scheduling_role.color ? {color: poll.scheduling_role.color} : {}">{{poll.scheduling_role.name}}</span><span v-if="poll.site && poll.site.n_fn">, </span>
-              <span v-if="poll.site && poll.site.n_fn" :style="poll.site.color ? {color: '#'+poll.site.color} : {}">{{poll.site.n_fn}}</span>
+              <span v-if=" poll.sites"> (<span v-for="(pollSite, i) in poll.sites" :style="pollSite.site_id.color ? {color: '#'+pollSite.site_id.color} : {}">{{pollSite.site_id.n_fn}}{{ i < poll.sites.length -1 ? ', ': '' }}</span>)</span>
               <span v-if="additionalData !== null && additionalData.deadline_message">&nbsp;{{additionalData.deadline_message}}</span>
             </h2>
             <BAlert variant="warning" v-model="poll.account_grants.managePollGrant">
