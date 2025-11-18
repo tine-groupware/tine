@@ -74,8 +74,6 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
     public function processIteration($_records)
     {
         $json = new Tinebase_Convert_Json();
-        $addressIds = array_unique($_records->address_id);
-        $addresses = NULL;
         
         $resolved = $json->fromTine20RecordSet($_records);
         
@@ -84,12 +82,13 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
             $row = $this->_activeTable->appendRow();
             
             $customer = '';
+            $customerName = '';
             $contract = '';
-            $debitor  = '';
             
             foreach($record['relations'] as $relation) {
                 if ($relation['related_model'] == 'Sales_Model_Customer') {
                     $customer = $relation['related_record']['number'] . ' - ' . $relation['related_record']['name'];
+                    $customerName = $relation['related_record']['name'] . ', ';
                 } elseif ($relation['related_model'] == 'Sales_Model_Contract') {
                     $contract = $relation['related_record']['number'] . ' - ' . $relation['related_record']['title'];
                 }
@@ -116,7 +115,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         $value = $contract;
                         break;
                     case 'fixed_address':
-                        $value = str_replace("\n", ', ',  $record[$identifier]);
+                        $value = $customerName . ltrim(trim(str_replace("\n", ', ',  $record[$identifier])), ', ');
                         break;
                     case 'date':
                         $value = substr($record[$identifier], 0, 10);
@@ -133,6 +132,10 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         } else {
                             $value = '';
                         }
+                        break;
+                    case 'inventory_change':
+                        $value = $record[$identifier];
+                        $cellType = 'currency';
                         break;
                     
                     default:
