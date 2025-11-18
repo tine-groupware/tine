@@ -1321,6 +1321,17 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ));
         $this->assertSame(0, $result->count());
+
+        Tinebase_PersistentFilter::getInstance()->create(new Tinebase_Model_PersistentFilter([
+            'name' => 'unittest',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId(),
+            'model' => Sales_Model_Customer::class,
+            'filters' => [
+                ['field' => 'document_order', 'operator' => 'definedBy', 'value' => [
+                    ['field' => Sales_Model_Document_Order::FLD_ORDER_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Order::STATUS_RECEIVED],
+                ]],
+            ],
+        ]));
     }
 
     public function testQueryFilter()
