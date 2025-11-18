@@ -191,8 +191,8 @@ COPY --from=gomplate /bin/gomplate /usr/bin/gomplate
 RUN mkdir /usr/local/busybox \
  && busybox --install /usr/local/busybox
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/busybox
-# install latest version of tika 2.9.*. (Expects apache to only serve on version of tika 2.9.*)
-RUN tika_version=$(curl https://dlcdn.apache.org/tika/ | grep -oh '<a href="2.9.[0123456789]*/">' | cut -d '"' -f 2 | cut -d / -f 1) \
+# install latest version of tika (Expects apache to only serve patch version, an old version might be used otherwise)
+RUN tika_version=$(curl https://dlcdn.apache.org/tika/ | grep -oh '<a href="3.2.[0123456789]*/">' | cut -d '"' -f 2 | cut -d / -f 1) \
  && curl https://dlcdn.apache.org/tika/${tika_version}/tika-app-${tika_version}.jar --output /usr/local/bin/tika.jar \
  && echo $(curl https://dlcdn.apache.org/tika/${tika_version}/tika-app-${tika_version}.jar.sha512) /usr/local/bin/tika.jar | sha512sum -c
 RUN addgroup --system -gid 150 tine20 && \
