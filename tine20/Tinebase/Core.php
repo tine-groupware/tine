@@ -246,6 +246,11 @@ class Tinebase_Core
      */
     protected static $_isReplicationSlave = null;
 
+
+    /** @var array<Tinebase_Backend_Sql_Adapter_Pdo_Mysql>  */
+    protected static array $dbConnections = [];
+    protected static bool $unittestSkipReconnect = false;
+
     /******************************* DISPATCH *********************************/
     
     /**
@@ -1260,7 +1265,25 @@ class Tinebase_Core
                     . ' in config.inc.php.');
         }
 
+        self::$dbConnections[] = $db;
         return $db;
+    }
+
+    public static function forceDbReconnect(): void
+    {
+        if (self::$unittestSkipReconnect) {
+            return;
+        }
+        foreach (self::$dbConnections as $dbConn) {
+            if ($dbConn->isConnected()) {
+                $dbConn->closeConnection();
+            }
+        }
+    }
+
+    public static function unittestSkipForceDbReconnect(): void
+    {
+        self::$unittestSkipReconnect = true;
     }
 
     /**

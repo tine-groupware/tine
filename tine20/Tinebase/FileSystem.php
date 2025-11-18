@@ -5010,6 +5010,7 @@ class Tinebase_FileSystem implements
         $fileObjectIds = $this->_fileObjectBackend->getQuarantinedFileObjectIds();
         if (count($fileObjectIds) > 0) {
             try {
+                Tinebase_Core::forceDbReconnect();
                 $this->_sendAvScanNotification($fileObjectIds);
             } catch (Tinebase_Exception_NotFound) {
             }
