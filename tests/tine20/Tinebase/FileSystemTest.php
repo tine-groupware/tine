@@ -1322,6 +1322,7 @@ class Tinebase_FileSystemTest extends TestCase
         
         $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittestFound.txt',
             'shubidubidulala'));
+        Tinebase_Core::unittestSkipForceDbReconnect();
         Tinebase_FileSystem::getInstance()->avScan();
 
         $messages = $this->getMessages();
