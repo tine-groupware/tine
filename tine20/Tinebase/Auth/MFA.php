@@ -66,7 +66,8 @@ final class Tinebase_Auth_MFA
             $result = $this->_adapter->validate($_data, $_userCfg);
             if (!$result && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()
-                    ->info(__METHOD__ . '::' . __LINE__ . ' MFA validation failure for ' . $_userCfg->getTitle());
+                    ->info(__METHOD__ . '::' . __LINE__ . ' MFA validation failure for MFA ID '
+                        . $_userCfg->getId());
             }
             return $result;
         } catch (Tinebase_Exception $e) {
