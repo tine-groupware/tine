@@ -49,9 +49,7 @@ class Sales_Model_Document_CustomerDocumentFilter extends Tinebase_Model_Filter_
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
-        if ($_valueToJson) {
-            $result['value'] = $result['value'][0]['value'];
-        }
+        $result['value'] = $result['value'][0]['value'];
         return $result;
     }
 }
