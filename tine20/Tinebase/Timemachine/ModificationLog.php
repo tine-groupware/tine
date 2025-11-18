@@ -4,9 +4,9 @@
  * 
  * @package     Tinebase
  * @subpackage  Timemachine 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -606,6 +606,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $modification->setId($id);
         $modification->setConvertDates(true);
 
+        if (in_array('request_id', $this->_table->info('cols'))) {
+            $requestId = Tinebase_Log_Formatter::getRequestId();
+            if (!empty($requestId) && $requestId !== '-') {
+                $modification->request_id = $requestId;
+            }
+        }
+
         // mainly if we are applying replication modlogs on the slave, we set the masters instance id here
         if (null !== $this->_externalInstanceId) {
             $modification->instance_id = $this->_externalInstanceId;
@@ -613,10 +620,9 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         $modificationArray = $modification->toArray();
         if (is_array($modificationArray['new_value'])) {
-            throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
+            throw new Tinebase_Exception_Record_Validation("New value is an array! \n"
+                . print_r($modificationArray['new_value'], true));
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . " Inserting modlog: " . print_r($modificationArray, TRUE));
         try {
             $this->_table->insert($modificationArray);
         } catch (Zend_Db_Statement_Exception $zdse) {
