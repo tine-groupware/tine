@@ -125,11 +125,11 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         $value = $i18n->_($record[$identifier] == 'CLEARED' ? 'cleared' : 'to clear');
                         break;
                     case 'type':
-                        $value = $i18n->_($record[$identifier] == 'INVOICE' ? 'invoice' : 'Reversal Invoice');
+                        $value = $i18n->_($record[$identifier] == 'INVOICE' ? 'Invoice' : 'Reversal Invoice');
                         break;
                     case 'debitor':
                         if (is_string($debitorId = ($record['address_id']['debitor_id'] ?? null))) {
-                            $value = Sales_Controller_Debitor::getInstance()->get($debitorId)->getTitle();
+                            $value = Sales_Controller_Debitor::getInstance()->get($debitorId)->{Sales_Model_Debitor::FLD_NUMBER};
                         } else {
                             $value = '';
                         }
