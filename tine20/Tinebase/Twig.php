@@ -366,13 +366,14 @@ class Tinebase_Twig
                 return "mime-icon-folder";
             } else {
                 $mimeType = $node['contenttype'];
-                return 'mime-content-type-' . preg_replace('/\/.*$/', '', $mimeType) .
+                $result = 'mime-icon-file mime-content-type-' . preg_replace('/\/.*$/', '', $mimeType) .
                     ' mime-suffix-' . (preg_match('/\+/', $mimeType) ? preg_replace('/^.*\+/', '', $mimeType) : 'none') .
                     ' mime-type-' . str_replace(
-                        ['/g', '.', '+'],
+                        ['/', '.', '+'],
                         ['-slash-', '-dot-', '-plus-'],
                         $mimeType
                     );
+                return $result;
             }
         }));
     }
