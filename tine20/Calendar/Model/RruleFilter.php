@@ -27,7 +27,7 @@ class Calendar_Model_RruleFilter extends Tinebase_Model_Filter_Text
      */
     public function appendFilterSql($_select, $_backend)
     {
-        if (in_array($this->_operator, ['isnull', 'notnull'], true) || 0 === count($this->getValue())) {
+        if (in_array($this->_operator, ['isnull', 'notnull'], true)) {
             parent::appendFilterSql($_select, $_backend);
             return;
         }
