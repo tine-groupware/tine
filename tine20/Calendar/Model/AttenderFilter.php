@@ -73,7 +73,6 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                         break;
                     default:
                         throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
-                        break;
                 }
         }
         
@@ -114,34 +113,37 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 continue;
             }
 
-            if (in_array($attenderValue['user_type'], array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
-                
+            $userId = $attenderValue['user_id'];
+
+            if (in_array($attenderValue['user_type'], [
+                Calendar_Model_Attender::USERTYPE_USER,
+                Calendar_Model_Attender::USERTYPE_GROUPMEMBER
+            ])) {
                 // @todo user_id might contain filter in the future -> get userids from addressbook controller with contact filter
                 
-                // transform CURRENTCONTACT
-                $attenderValue['user_id'] = $attenderValue['user_id'] == Addressbook_Model_Contact::CURRENTCONTACT ? 
-                    Tinebase_Core::getUser()->contact_id : 
-                    $attenderValue['user_id'];
-                
+                if ($userId === Addressbook_Model_Contact::CURRENTCONTACT) {
+                    $userId = Tinebase_Core::getUser()->contact_id;
+                }
+
                 $attendee = array(
                     array(
                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                        'user_id'   => $attenderValue['user_id']
+                        'user_id'   => $userId
                     )
                 );
                 if (!$isExcept) {
                     $attendee[] = array(
                         'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                        'user_id' => $attenderValue['user_id']
+                        'user_id' => $userId
                     );
                 }
             } else if ($attenderValue['user_type'] == self::USERTYPE_MEMBEROF) {
                 // resolve group members
                 try {
-                    $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
+                    $group = Tinebase_Group::getInstance()->getGroupById($userId);
                 // legacy! should be notfound exception .-/
                 } catch (Tinebase_Exception_Record_NotDefined $e) {
-                    $group = new Tinebase_Model_Group(['list_id' => $attenderValue['user_id']], true);
+                    $group = new Tinebase_Model_Group(['list_id' => $userId], true);
                 }
                 
                 $attendee = array();
@@ -151,6 +153,14 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
                     
                     foreach ($contactList->members as $member) {
+                        if (empty($member)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                    . ' Member USER ID missing - skipping list member');
+                                continue;
+                            }
+                        }
+
                         $attendee[] = array(
                             'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                             'user_id'   => $member
@@ -164,14 +174,16 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     }
                 }
             } else {
-                if (is_object($attenderValue->user_id)) {
+                if (is_object($userId)) {
                     $attenderValue = array(
                         'user_type' => $attenderValue->user_type,
-                        'user_id'   => $attenderValue->user_id->getId()
+                        'user_id'   => $userId->getId()
                     );
-                } else if ($attenderValue->user_type === Calendar_Model_Attender::USERTYPE_ANY && $attenderValue->user_id) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 'Unsupported user type ANY given - switching to USER');
+                } else if ($attenderValue->user_type === Calendar_Model_Attender::USERTYPE_ANY && $userId) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Unsupported user type ANY given - switching to USER');
+                    }
                     // TODO support other types as well, we could check for existing user_id in contact/list/resource/.. backends
                     $attenderValue->user_type = Calendar_Model_Attender::USERTYPE_USER;
                 }
