@@ -47,7 +47,7 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
         Tinebase_Core::startCoreSession();
 
         $user = null;
-        if (!$routeHandler->ignoreMaintenanceMode()) {
+        if (!$routeHandler->ignoreMaintenanceMode() && Setup_Controller::getInstance()->isInstalled()) {
             if (Tinebase_Core::inMaintenanceMode() ||
                 Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
                 if (Tinebase_Core::inMaintenanceModeAll() || !is_object($user = Tinebase_Core::getUser()) ||

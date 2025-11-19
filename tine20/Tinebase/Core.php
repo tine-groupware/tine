@@ -2358,12 +2358,15 @@ class Tinebase_Core
     }
 
     /**
-     * returns true if installation is in maintenance mode
+     * returns true if installation is in maintenance mode or not installed yet
      *
      * @return bool
      */
     public static function inMaintenanceMode()
     {
+        if (!Setup_Controller::getInstance()->isInstalled()) {
+            return false;
+        }
         $config = self::getConfig();
         $mode = $config->{Tinebase_Config::MAINTENANCE_MODE};
         return !( empty($mode) || $mode === 'off');
