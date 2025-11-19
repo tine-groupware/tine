@@ -29,20 +29,24 @@ class Timetracker_Export_ExportTest extends Timetracker_AbstractTest
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // export & check
-        $csvExportClass = new Timetracker_Export_Csv(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
-        $result = $csvExportClass->generate();
-        
-        $this->assertTrue(file_exists($result));
-        
-        $file = implode('', file($result));
-        $this->assertEquals(1, preg_match("/". $timesheetData['description'] ."/", $file), 'no description');
-        $this->assertEquals(1, preg_match("/description/", $file), 'no headline');
-        
-        // cleanup / delete file
-        unlink($result);
-        // cleanup, if the timeaccount is still in use,  need to set confirm request context for delete method
-        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        $fh = $this->_genericCsvExport([
+            'app' => Timetracker_Config::APP_NAME,
+            'definition' => dirname(dirname(dirname(dirname(__DIR__)))) . '/tine20/Timetracker/Export/definitions/ts_default_csv.xml',
+        ], new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+
+        try {
+            rewind($fh);
+
+            $row = fgetcsv($fh, 0, "\t", '"');
+            static::assertTrue(is_array($row), 'could not read csv ');
+            static::assertStringContainsString('Tags', $row[0]);
+
+            $row = fgetcsv($fh, 0, "\t", '"');
+            static::assertTrue(is_array($row), 'could not read csv ');
+            static::assertStringContainsString('blabla', $row[0]);
+        } finally {
+            fclose($fh);
+        }
     }
     
     /**
