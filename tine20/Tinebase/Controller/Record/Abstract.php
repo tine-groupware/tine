@@ -1674,15 +1674,17 @@ abstract class Tinebase_Controller_Record_Abstract
 
                         if (
                             !isset($createdRecords[$recordClassName])
-                            || (isset($createdRecords[$recordClassName])
-                                && $record->{$property} instanceof Tinebase_Record_Interface
-                                && !in_array($record->{$property}->getId(), $createdRecords[$recordClassName])
+                            || ($record->{$property} instanceof Tinebase_Record_Interface
+                               && !in_array($record->{$property}->getId(), $createdRecords[$recordClassName])
                             )
                         ) {
                             // only create records with the same ID and model once
                             $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
 
                             if ($updatedRecord->{$property} && $updatedRecord->{$property} instanceof Tinebase_Record_Interface) {
+                                if (!isset($createdRecords[$recordClassName])) {
+                                    $createdRecords[$recordClassName] = [];
+                                }
                                 $createdRecords[$recordClassName][]
                                     = $updatedRecord->{$property}->getId();
                             }
@@ -1693,7 +1695,6 @@ abstract class Tinebase_Controller_Record_Abstract
                     }
                 }
             }
-
             // unset them all
             $this->_delayedDepRecRaiis = [];
             $ctrls = $this->_delyedDepRecCtrls;
