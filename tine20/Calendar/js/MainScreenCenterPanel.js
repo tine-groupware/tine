@@ -1709,6 +1709,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     }
                 }
             }
+
+            //todo: implement printing for timeline views?
+            this.actions_print.setDisabled(this.activeView.toLowerCase().includes('timeline'));
         }
     },
     
