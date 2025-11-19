@@ -524,6 +524,11 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         Tinebase_Tags::getInstance()->setRights($right);
         Felamimail_Controller_Message_Flags::getInstance()->addFlags([$message], [$tag->getId()]);
 
+        $updatedFolder = $this->_folder;
+        while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
+        }
+
         $result = $json->searchMessages($filter, []);
         $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should have tag');
 
