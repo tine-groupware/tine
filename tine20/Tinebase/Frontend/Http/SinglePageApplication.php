@@ -84,6 +84,14 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             'jsFiles' => $entryPoints,
         ];
 
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        $headers = $request->getHeaders();
+
+        if (isset($headers['x-tine20-render-content-only'])) {
+            return $textTemplate->renderBlock('content', $context);
+        }
+
         return $textTemplate->render($context);
     }
 

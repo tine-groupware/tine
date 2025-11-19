@@ -461,13 +461,17 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if (in_array('Tinebase', $_applications)) {
             if (! isset($_options['acceptedTermsVersion'])) {
+                $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Tinebase'));
+
                 fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/LICENSE'));
                 $licenseAnswer = Tinebase_Server_Cli::promptInput(
                     'I have read the license agreement and accept it (type "yes" to accept)'
                 );
 
+                $textTemplate = $twig->load(Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
+                $content = $textTemplate->renderBlock('content');
 
-                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/PRIVACY'));
+                fwrite(STDOUT, PHP_EOL . strip_tags($content));
                 $privacyAnswer = Tinebase_Server_Cli::promptInput(
                     'I have read the privacy agreement and accept it (type "yes" to accept)'
                 );

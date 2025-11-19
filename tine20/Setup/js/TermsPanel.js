@@ -68,14 +68,16 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             layout: 'fit',
             title: this.app.i18n._('Privacy Agreement'),
             bwrapCfg: {tag: 'pre'},
-            autoLoad: {
-                // TODO use new templated privacy policy at Tinebase/views/privacy.html.twig
-                // url: 'privacy-policy',
-                url: 'PRIVACY',
-                isUpload: true,
-                method: 'GET',
-                callback: function(el, s, response) {
-                    el.update(Ext.util.Format.nl2br(response.responseText));
+            listeners: {
+                afterrender: async function () {
+                    const response = await fetch('privacy-policy', {
+                        headers: {
+                            'x-tine20-render-content-only': true,
+                        },
+                    });
+
+                    const text = await response.text();
+                    this.body.update(Ext.util.Format.nl2br(text));
                 }
             },
             bbar: [acceptField]
