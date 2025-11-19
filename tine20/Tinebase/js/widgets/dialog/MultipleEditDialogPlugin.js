@@ -204,7 +204,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 return true;
             }
             // remove empty text
-            if (ff.hasOwnProperty('emptyText')) {
+            if (ff?.multi && ff.hasOwnProperty('emptyText')) {
                 ff.emptyText = '';
             }
             
@@ -326,14 +326,21 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      */
     createMultiButton: function(formField) {
         var subLeft = 18;
+
         if (formField.isXType('tinerecordpickercombobox')) {
             formField.disableClearer = true;
-            subLeft += 19;
+            subLeft += 17;
+
+            if (formField?.plugins && formField.plugins.length > 0) {
+                formField.plugins.forEach((plugin) => {
+                    if (plugin.allowCreateNew) {
+                        subLeft += 17;
+                    }
+                })
+            }
         } else if (formField.isXType('extuxclearabledatefield')) {
             formField.disableClearer = true;
-            if (!formField.multi) {
-                subLeft += 17;
-            }
+            subLeft += 17;
         } else if (formField.isXType('tine.widget.field.AutoCompleteField')) {
             // is trigger, but without button, so do nothing
         } else if (formField.isXType('trigger')) {
@@ -341,7 +348,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 subLeft += 17;
             }
         } else if (formField.isXType('datetimefield')) {
-            subLeft += 17; 
+            subLeft += 17;
         } else if (formField.isXType('numberfield')) {
             formField.el.dom.style.textAlign = 'left';
         }
@@ -356,12 +363,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             el.removeClass('hidden');
             return;
         }
-        
-        if (formField.isXType('combo') || formField.isXType('extuxclearabledatefield') || formField.isXType('datefield') 
-            || formField.isXType('uxspinner') || formField.isXType('numberfield'))
+
+        if (!formField.multi && (formField.isXType('uxspinner') || formField.isXType('numberfield') || formField.isXType('textfield', true)))
         {
-            const top = formField?.multi ? ';top: 3px' : ';top: 5px';
-            left = left + top;
+            left = left + ';top: 5px';
         }
         
         // create Button
