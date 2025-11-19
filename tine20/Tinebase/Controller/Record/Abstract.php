@@ -1665,17 +1665,35 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
             if (is_array($config->recordFields)) {
+                $createdRecords = [];
                 foreach ($config->recordFields as $property => $fieldDef) {
                     if ($fieldDef[TMCC::CREATE] ?? false) {
                         continue;
                     } elseif ($isCreate) {
-                        $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
+                        $recordClassName = $fieldDef['config'][TMCC::RECORD_CLASS_NAME];
+
+                        if (
+                            !isset($createdRecords[$recordClassName])
+                            || (isset($createdRecords[$recordClassName])
+                                && $record->{$property} instanceof Tinebase_Record_Interface
+                                && !in_array($record->{$property}->getId(), $createdRecords[$recordClassName])
+                            )
+                        ) {
+                            // only create records with the same ID and model once
+                            $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
+
+                            if ($updatedRecord->{$property} && $updatedRecord->{$property} instanceof Tinebase_Record_Interface) {
+                                $createdRecords[$recordClassName][]
+                                    = $updatedRecord->{$property}->getId();
+                            }
+                        }
                     } else {
                         $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
                         $updatedRecord->{$property} = $record->{$property};
                     }
                 }
             }
+
             // unset them all
             $this->_delayedDepRecRaiis = [];
             $ctrls = $this->_delyedDepRecCtrls;
