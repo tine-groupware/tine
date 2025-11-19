@@ -531,23 +531,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Calendar_Model_Attender::enforceListIdForGroups($attendee);
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
-        /*$groups = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
-        $attendee->removeRecords($groups);
-        /** @var Calendar_Model_Attender $group *
-        foreach($groups as $group) {
-            $group = Tinebase_Group::getInstance()->getGroupById($group->user_id);
-
-            // fetch list only if list_id is not NULL, otherwise we get back an empty list object
-            if (!empty($group->list_id)) {
-                $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
-                foreach ($contactList->members as $member) {
-                    $attendee->addRecord(new Calendar_Model_Attender(array(
-                        'user_id' => $member,
-                        'user_type' => Calendar_Model_Attender::USERTYPE_USER
-                    ), true));
-                }
-            }
-        }*/
 
         $conflictCriteria = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
