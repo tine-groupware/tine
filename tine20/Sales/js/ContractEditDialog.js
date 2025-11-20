@@ -299,7 +299,12 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 recordClass: Tine.Addressbook.Model.Contact,
                 relationType: 'CUSTOMER',
                 relationDegree: 'sibling',
-                modelUnique: true
+                modelUnique: true,
+                additionalFilters: [{
+                    field: 'container_id',
+                    operator: 'in',
+                    value: [{path: Tine.Sales.registry.get('config').customerContactPersonFilter.value}]
+                }],
             }, {
                 columnWidth: 1/3,
                 editDialog: this,
@@ -310,7 +315,12 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 recordClass: Tine.Addressbook.Model.Contact,
                 relationType: 'RESPONSIBLE',
                 relationDegree: 'sibling',
-                modelUnique: true
+                modelUnique: true,
+                additionalFilters: [{
+                    field: 'container_id',
+                    operator: 'in',
+                    value: [{path: Tine.Sales.registry.get('config').customerContactPersonFilter.value}]
+                }],
             }], [ new EvaluationDimensionForm({
                 columnWidth: 1,
                 maxItemsPerRow: 3,
