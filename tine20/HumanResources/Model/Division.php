@@ -46,6 +46,7 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract implemen
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_WORKING_TIME_TIMEACCOUNT_ID          => [],
+                self::FLD_FREE_TIME_CAL                        => [],
             ],
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                 Tinebase_Record_Expander::PROPERTY_CLASS_GRANTS         => [],

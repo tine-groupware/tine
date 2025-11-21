@@ -63,7 +63,7 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
 
         $events = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Calendar_Model_Event::class, [
-                ['field' => 'container_id', 'operator' => 'equals', 'value' => $division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL}],
+                ['field' => 'container_id', 'operator' => 'equals', 'value' => $division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL}->getId()],
             ]));
         $this->assertSame(2, $events->count());
 
