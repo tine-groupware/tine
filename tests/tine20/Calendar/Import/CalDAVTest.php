@@ -17,7 +17,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     /**
      * unit in test
      *
-     * @var Calendar_Import_CalDAV_ClientMock
+     * @var Calendar_Backend_CalDav_ClientMock
      */
     protected $_uit = null;
 
@@ -28,11 +28,13 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         /** @var \Laminas\Http\Headers $headers */
         $headers = Tinebase_Core::getRequest()->getHeaders();
         $headers->addHeader(new \Laminas\Http\Header\IfMatch('123'));
+
+        $this->_uit = null;
     }
     /**
      * lazy init of uit
      *
-     * @return Calendar_Import_CalDAV_ClientMock
+     * @return Calendar_Backend_CalDav_ClientMock
      */
     protected function _getUit()
     {
@@ -50,9 +52,9 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
                 'baseUri' => 'localhost',
                 'userName' => Tinebase_Core::getUser()->accountLoginName,
                 'password' => $testCredentials['password'],
-                Calendar_Import_CalDAV_ClientMock::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
+                Calendar_Backend_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
             ], $options);
-        $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic', $this->_personas['sclever']->accountEmailAddress);
+        $this->_uit = new Calendar_Backend_CalDav_ClientMock($caldavClientOptions, 'Generic', $this->_personas['sclever']->accountEmailAddress);
         $this->_uit->setVerifyPeer(false);
         $this->_uit->getDecorator()->initCalendarImport($caldavClientOptions);
     }
@@ -70,7 +72,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
 
         try {
             $import->import();
-        } catch (Tinebase_Exception){}
+        } catch (\Sabre\HTTP\ClientException){}
 
         $taskContainer = Tinebase_Container::getInstance()
             ->getContainerByName(Tasks_Model_Task::class, $importCalendar->name, $importCalendar->type);
@@ -83,7 +85,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     public function testVTodoImportTask(): void
     {
         $this->setUit([
-            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Backend_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
             Calendar_Import_Abstract::OPTION_IMPORT_VTODOS => true,
@@ -119,12 +121,16 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         unset($imapRaii);
 
         $this->setUit([
-            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Backend_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
         ]);
 
         $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);
+
+        /*$syncState = Calendar_Backend_CalDav_SyncState::getSyncStateFromContainer($importCalendar, 'default');
+        $syncState->setSyncTokenSupport(false);
+        $syncState->storeInContainer($importCalendar);*/
 
         $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
 
@@ -154,7 +160,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     public function testImportSkipInternalOtherOrganizer(): void
     {
         $this->setUit([
-            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Backend_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
         ]);
@@ -183,8 +189,8 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     {
         $calCtrl = Calendar_Controller_Event::getInstance();
         $this->setUit([
-            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
-            Calendar_Import_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Backend_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Backend_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
             Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
         ]);
@@ -226,9 +232,9 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     {
         $calCtrl = Calendar_Controller_Event::getInstance();
         $this->setUit([
-            Calendar_Import_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
-            Calendar_Import_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
-            Calendar_Import_CalDav_Client::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Backend_CalDav_Client::OPT_SKIP_INTERNAL_OTHER_ORGANIZER => true,
+            Calendar_Backend_CalDav_Client::OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
+            Calendar_Backend_CalDav_Client::OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS => true,
             Calendar_Import_Abstract::OPTION_MATCH_ORGANIZER => true,
             Calendar_Import_Abstract::OPTION_MATCH_ATTENDEES => true,
         ]);

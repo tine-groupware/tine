@@ -751,6 +751,11 @@ parameters:
 			path: tine20/Calendar/Convert/Event/VCalendar/Thunderbird.php
 
 		-
+			message: "#^Cannot cast Sabre\\\\VObject\\\\Node to string\\.$#"
+			count: 1
+			path: tine20/Calendar/Convert/Event/VCalendar/TineSyncClient.php
+
+		-
 			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$SEQUENCE\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar2/Abstract.php
