@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -248,7 +248,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     /**
      * add one record
      *
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Calendar_Model_Event $_record
      * @param   bool                      $_checkBusyConflicts
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
@@ -267,12 +267,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $declineResources = [];
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
+
             $this->_inspectEvent($_record, $skipEvent);
-            
+
             // we need to resolve groupmembers before free/busy checking
             Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
-            
+
             if ($_checkBusyConflicts) {
                 // ensure that all attendee are free
                 $this->checkBusyConflicts($_record);
@@ -286,8 +286,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
             /** @var Calendar_Model_Event $createdEvent */
             $createdEvent = parent::create($_record);
-            
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Calendar_Exception_InSyncContainer $e) {
+            return $this->_writeSyncContainer($_record, $e->syncContainerConfig);
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
@@ -307,6 +309,32 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         return $createdEvent;
+    }
+
+    protected function _writeSyncContainer(Calendar_Model_Event $event, Calendar_Model_SyncContainerConfig $config): Calendar_Model_Event
+    {
+        Tinebase_Record_Expander::expandRecord($config);
+        $cloudAccount = $config->{Calendar_Model_SyncContainerConfig::FLD_CLOUD_ACCOUNT_ID};
+        if (Tinebase_Model_CloudAccount_CalDAV::class !== $cloudAccount->{Tinebase_Model_CloudAccount::FLD_TYPE}) {
+            throw new Tinebase_Exception_UnexpectedValue('cloud account needs to be of type CalDAV');
+        }
+        /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
+        $cloudConfig = $cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG};
+
+        $client = new Calendar_Backend_CalDav_Client([
+            'baseUri' => $cloudConfig->{Tinebase_Model_CloudAccount_CalDAV::FLD_URL},
+            'userName' => $cloudConfig->{Tinebase_Model_CloudAccount_CalDAV::FLD_USERNAME},
+            'password' => $cloudConfig->getPasswordFromProperty(Tinebase_Model_CloudAccount_CalDAV::FLD_PWD),
+            'authType' => \CURLAUTH_BASIC,
+        ], 'Generic');
+        $client->getDecorator()->initCalendarImport();
+
+        if (null === ($result = $client->writeEvent($config->{Calendar_Model_SyncContainerConfig::FLD_CALENDAR_PATH}, $event))) {
+            // TODO FIXME be verbose
+            throw new Tinebase_Exception();
+        }
+
+        return $result;
     }
 
     /**
@@ -1064,6 +1092,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        } catch (Calendar_Exception_InSyncContainer $e) {
+            return $this->_writeSyncContainer($_record, $e->syncContainerConfig);
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back because: ' . $e);
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -1962,15 +1992,44 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $this->adoptAlarmTime($_record, $_alarm, 'time');
     }
 
+    public const SYNC_CONTAINER = 'syncContainer';
+    protected bool $_skipSyncContainerCheck = false;
+
+    public function skipSyncContainerCheck(?bool $value = null): bool
+    {
+        $oldValue = $this->_skipSyncContainerCheck;
+        if (null !== $value) {
+            $this->_skipSyncContainerCheck = $value;
+        }
+        return $oldValue;
+    }
+
+    protected  function _inspectSyncContainer(Calendar_Model_Event $event, ?Calendar_Model_Event $currentEvent = null): void
+    {
+        if ($this->_skipSyncContainerCheck) {
+            return;
+        }
+
+        $container = $currentEvent?->container_id ?: Tinebase_Container::getInstance()->get($event->container_id);
+        if ($config = ($container->xprops()[self::SYNC_CONTAINER] ?? false)) {
+            $e = new Calendar_Exception_InSyncContainer();
+            $e->syncContainerConfig = new Calendar_Model_SyncContainerConfig($config);
+            throw $e;
+        }
+    }
+
     /**
      * inspect creation of one record (before create)
      *
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Calendar_Model_Event $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $_record = $this->_updateGeoLocations($_record);
+
+        $this->_inspectSyncContainer($_record);
+
         Calendar_Controller_Poll::getInstance()->inspectBeforeCreateEvent($_record);
         parent::_inspectBeforeCreate($_record);
     }
@@ -1985,6 +2044,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $_record = $this->_updateGeoLocations($_record);
+
+        $this->_inspectSyncContainer($_record);
         
         if ($this->_skipRecurAdoptions) {
             return;

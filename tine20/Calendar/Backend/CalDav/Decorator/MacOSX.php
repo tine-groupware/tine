@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
  * @package     Calendar
- * @subpackage  Import
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-class Calendar_Import_CalDav_Decorator_MacOSX extends Calendar_Import_CalDav_Decorator_Abstract
+class Calendar_Backend_CalDav_Decorator_MacOSX extends Calendar_Backend_CalDav_Decorator_Abstract
 {
     public function preparefindAllCalendarsRequest($request)
     {

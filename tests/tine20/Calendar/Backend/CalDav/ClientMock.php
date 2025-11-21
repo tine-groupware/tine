@@ -1,21 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
  * @package     Calendar
- * @subpackage  Import
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
- * Calendar_Import_CalDAV_ClientMock
+ * Calendar_Backend_CalDAV_ClientMock
  * 
  * @package     Calendar
- * @subpackage  Import
+ * @subpackage  Backend
  */
-class Calendar_Import_CalDAV_ClientMock extends Calendar_Import_CalDav_Client
+class Calendar_Backend_CalDav_ClientMock extends Calendar_Backend_CalDav_Client
 {
     /**
      * needs to be overwritten because of the added flavor (osxical)
@@ -499,6 +499,65 @@ END:VCALENDAR',
             '{DAV:}getetag' => '"-1030341843%40citrixonlinecom"',
         );
     }
+
+    public function propFind($url, array $properties, $depth = 0): array
+    {
+        if (['{DAV:}sync-token'] === $properties && 0 === $depth) {
+            return [];
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('request not supported by mock');
+        }
+    }
+
+    public function request($method, $url = '', $body = null, array $headers = [])
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Sending ' . $method . ' request for url ' . $url . ': ' . $body);
+
+        if ('REPORT' === $method && str_starts_with($body, substr(self::reportSyncTokenRequest, 0, strpos(self::reportSyncTokenRequest, '%s')))) {
+            return [
+                'body' => '<?xml version="1.0" encoding="utf-8" ?>
+<d:multistatus xmlns:d="DAV:">
+ <d:response>
+  <d:href>' . $url . '</d:href>
+  <d:propstat>
+   <d:prop>
+    <d:etag>"1234"</d:etag>
+   </d:prop>
+   <d:status>HTTP/1.1 200 OK</d:status>
+  </d:propstat>
+ </d:response>
+ <d:sync-token>data:,9</d:sync-token>
+</d:multistatus>',
+                'headers' => [],
+                'statusCode' => 207,
+            ];
+        } elseif ('PROPFIND' === $method && false !== strpos($body, '<d:sync-token>')) {
+            return [
+                'body' => '<?xml version="1.0" encoding="utf-8" ?>
+<d:multistatus xmlns:d="DAV:">
+    <d:response>
+        <d:href>' . $url . '</d:href>
+        <d:propstat>
+            <d:prop>
+                <d:sync-token>tine:1234</d:sync-token>
+            </d:prop>
+            <d:status>HTTP/1.1 200 OK</d:status>
+        </d:propstat>
+    </d:response>
+</d:multistatus>',
+                'headers' => [],
+                'statusCode' => 207,
+            ];
+        } else {
+            throw new Tinebase_Exception_InvalidArgument('request not supported by mock');
+        }
+        /*return [
+            'body' => $response->getBodyAsString(),
+            'statusCode' => (int) $response->getStatus(),
+            'headers' => array_change_key_case($response->getHeaders()),
+        ];*/
+    }
     
     /**
      * perform mocked calDavRequest
@@ -512,7 +571,7 @@ END:VCALENDAR',
      * @return array
      * @throws Tinebase_Exception
      */
-    public function calDavRequest(string $method, string $uri, string $body, int $depth = 0, int $tries = 10, int $sleep = 30): array
+    public function multiStatusRequest(string $method, string $uri, string $body, int $depth = 0): array
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                  . ' Sending ' . $method . ' request for uri ' . $uri . ': ' . $body);

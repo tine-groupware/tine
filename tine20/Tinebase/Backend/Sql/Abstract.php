@@ -1710,50 +1710,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
-     * checks if there is an event with this id and etag, or an event with the same id
-     *
-     * @param string $id
-     * @param string $etag
-     * @return boolean
-     * @throws Tinebase_Exception_NotFound
+     * return etag set for given container, indexed by external_id
      */
-    public function checkETag($id, $etag, $containerId)
+    public function getEtagsForContainerId(string $containerId, ?string $externalId = null): array
     {
         $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), 'etag');
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId) . ' AND ('
-            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_id') . ' = ? OR ', $id)
-            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_uid') . ' = ?', $id) . ')');
-    
-        $stmt = $select->query();
-        $queryResult = $stmt->fetch(Zend_Db::FETCH_ASSOC);
-        $stmt->closeCursor();
-    
-        if ($queryResult === false) {
-            throw new Tinebase_Exception_NotFound('no record with id ' . $id .' found');
-        }
-    
-        return isset($queryResult['etag']) && $queryResult['etag'] === $etag;
-    }
-    
-    /**
-     * return etag set for given container
-     * 
-     * @param string $containerId
-     * @return mixed
-     */
-    public function getEtagsForContainerId($containerId)
-    {
-        $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array('id', 'external_id', 'etag', 'external_uid'));
+        $select->from($this->_tablePrefix . $this->_tableName, ['id', 'external_id', 'etag']);
         $select->where($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId);
-        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = ?', 0);
+        $select->where($this->_db->quoteIdentifier('external_id') . (null === $externalId ? ' IS NOT NULL' : ' = ?'), $externalId);
+        $select->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
     
-        $stmt = $select->query();
-        $queryResult = $stmt->fetchAll();
-    
-        $result = array();
-        foreach ($queryResult as $row) {
+        $result = [];
+        foreach ($select->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
             $result[$row['external_id']] = $row;
         }
         return $result;

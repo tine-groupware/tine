@@ -29,6 +29,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public const FLD_ESTIMATED_DURATION = 'estimated_duration';
     public const FLD_STATUS = 'status';
     public const FLD_ORGANIZER = 'organizer';
+    public const FLD_EXTERNAL_ID = 'external_id';
     
 
     public const TASK_STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
@@ -49,7 +50,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 13,
+        self::VERSION       => 14,
         'recordName'        => 'Task',  // gettext('GENDER_Task')
         'recordsName'       => 'Tasks', // ngettext('Task', 'Tasks', n)
         'hasRelations'      => true,
@@ -89,6 +90,9 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 ],
                 'etag'       => [
                     self::COLUMNS       => ['etag'],
+                ],
+                self::FLD_EXTERNAL_ID   => [
+                    self::COLUMNS           => [self::FLD_EXTERNAL_ID],
                 ],
             ]
         ],
@@ -309,7 +313,11 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 self::UNSIGNED              => true,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
                 self::NULLABLE              => true,
-            ]
+            ],
+            self::FLD_EXTERNAL_ID       => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::NULLABLE              => true,
+            ],
         ),
     );
 

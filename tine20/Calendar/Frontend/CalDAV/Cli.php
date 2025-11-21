@@ -23,7 +23,7 @@ class Calendar_Frontend_CalDAV_Cli
     protected $_users = array();
 
     /**
-     * @var Calendar_Import_CalDav_Client
+     * @var Calendar_Backend_CalDav_Client
      */
     protected $_caldavClient = null;
 
@@ -42,7 +42,7 @@ class Calendar_Frontend_CalDAV_Cli
     protected $_args;
 
     protected $_numberOfImportRuns = 2;
-    protected $_caldavClientClass = 'Calendar_Import_CalDav_Client';
+    protected $_caldavClientClass = 'Calendar_Backend_CalDav_Client';
     protected $_appName = 'Calendar';
 
     /**
