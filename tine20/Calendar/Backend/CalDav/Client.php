@@ -245,11 +245,11 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
     /**
      * findUserPrincipal
-     * - result ($this->currentUserPrincipal) is cached for 1 week
+     * - result ($this->currentUserPrincipal) is not cached  //for 1 week
      */
     public function findCurrentUserPrincipal(): bool
     {
-        $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->userName);
+        /* $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->userName);
         if (Tinebase_Core::getCache()->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                 . ' Loading user principal from cache');
@@ -257,14 +257,14 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
             if (($this->currentUserPrincipal = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
                 return true;
             }
-        }
+        }*/
 
         $result = $this->multiStatusRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest);
         if (isset($result['{DAV:}current-user-principal']))
         {
             $this->currentUserPrincipal = $result['{DAV:}current-user-principal'];
 
-            Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24*3600*7);
+            //Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24*3600*7);
             return true;
         }
 

@@ -110,4 +110,19 @@ class Tinebase_Model_CloudAccount extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = null;
+
+    public function testAccess(): bool
+    {
+        switch ($this->{self::FLD_TYPE}) {
+            case Tinebase_Model_CloudAccount_CalDAV::class:
+                /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
+                $cloudConfig = $this->{self::FLD_CONFIG};
+                return $cloudConfig->getClient()->findCurrentUserPrincipal() ?: throw new Tinebase_Exception_SystemGeneric('CalDAV access did not work');
+
+            default:
+                throw new Tinebase_Exception_NotImplemented('access test not impltement for type ' . $this->{self::TYPE});
+        }
+
+        //return true;
+    }
 }
