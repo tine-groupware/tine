@@ -218,7 +218,8 @@ Ext.ns('Tine.Felamimail');
         var bodyEl = this.singleRecordPanel.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-preparedPart]')[0],
             detailsPanel = Tine.Felamimail.MimeDisplayManager.create(mainType, {
                 detailsPanel: this,
-                preparedPart: firstPreparedPart
+                preparedPart: firstPreparedPart,
+                messageRecord: this.record,
             });
             
         Ext.fly(bodyEl).update('');

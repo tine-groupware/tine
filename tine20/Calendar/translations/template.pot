@@ -560,6 +560,12 @@ msgstr ""
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr ""
 
+msgid "Myself"
+msgstr ""
+
+msgid "Current"
+msgstr ""
+
 msgid "Add Attendee"
 msgstr ""
 
@@ -900,9 +906,6 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Checking Calendar Data..."
-msgstr ""
-
 msgid "Reply to Recurring Event"
 msgstr ""
 
@@ -915,10 +918,25 @@ msgstr ""
 msgid "Do not respond"
 msgstr ""
 
+msgid "Update Status"
+msgstr ""
+
+msgid "Please select a calendar before update your status"
+msgstr ""
+
+msgid "View and Edit Event In Calendar"
+msgstr ""
+
 msgid "Save"
 msgstr ""
 
 msgid "Save to calendar without responding"
+msgstr ""
+
+msgid "Attention! , this is an invitation for "
+msgstr ""
+
+msgid "Set response for"
 msgstr ""
 
 msgid "The event of this message does not exist"
@@ -936,9 +954,6 @@ msgstr ""
 msgid "This event has been deleted by the organizer"
 msgstr ""
 
-msgid "This event has been canceled."
-msgstr ""
-
 msgid "You are the organizer of this event."
 msgstr ""
 
@@ -948,16 +963,16 @@ msgstr ""
 msgid "This is an event invitation for someone else."
 msgstr ""
 
-msgid "You have already replied to this event invitation."
+msgid "has already replied to this event invitation."
 msgstr ""
 
-msgid "The event got rescheduled. Set your response to:"
-msgstr ""
-
-msgid "You received an event invitation. Set your response to:"
+msgid "The event got rescheduled."
 msgstr ""
 
 msgid "An invited attendee responded to the invitation."
+msgstr ""
+
+msgid "This event has been canceled."
 msgstr ""
 
 msgid "Unsupported method"
@@ -1539,6 +1554,9 @@ msgstr ""
 msgid "An unexpected error occurred."
 msgstr ""
 
+msgid "Invalid link"
+msgstr ""
+
 msgid "Reload"
 msgstr ""
 
@@ -1740,6 +1758,12 @@ msgid "Searching..."
 msgstr ""
 
 msgid "Search Event"
+msgstr ""
+
+msgid "Edit Event invitation"
+msgstr ""
+
+msgid "Please Wait"
 msgstr ""
 
 msgid "Event Weekday"
@@ -2143,7 +2167,4 @@ msgid "Sunday"
 msgstr ""
 
 msgid "Monday"
-msgstr ""
-
-msgid "Invalid link"
 msgstr ""

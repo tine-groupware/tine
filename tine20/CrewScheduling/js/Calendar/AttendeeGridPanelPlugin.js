@@ -17,6 +17,7 @@ import PollReply from "../Model/PollReply";
 
 const plugin = {
     init(gridPanel) {
+        if (!gridPanel?.editDialog) return;
         if (gridPanel.canonicalName !== 'AttendeeGrid') return;
 
         const app = Tine.Tinebase.appMgr.get('CrewScheduling');

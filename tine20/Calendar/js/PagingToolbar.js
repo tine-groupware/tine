@@ -373,8 +373,12 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         let dtStart = _.get(period, 'from', period).clearTime(true);
 
         // const state = Ext.state.Manager.get('cal-pgtb-pp-wkbtn');
-        const state = this.tb.periodBtn.getState();
-        const wkStartDiff = state.startIdx - Tine.Calendar.PagingToolbar.WeekPeriodPicker.Button.prototype.beforeDays;
+        let wkStartDiff = 0;
+        if (this.tb.periodBtn) {
+            const state = this.tb.periodBtn.getState();
+            wkStartDiff = state.startIdx - Tine.Calendar.PagingToolbar.WeekPeriodPicker.Button.prototype.beforeDays;
+        }
+
         const startDay = Ext.DatePicker.prototype.startDay;
         
         // recalculate dtstart according to WeekPeriodPicker.Button
@@ -419,7 +423,10 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker = Ext.extend(Tine.Calendar.PagingTo
         this.update(this.dtStart);
     },
     getPeriod: function() {
-        const state = this.tb.periodBtn.getState();
+        const state = this.tb.periodBtn ? this.tb.periodBtn.getState() : {
+            endIdx: 7,
+            startIdx: 1,
+        };
         // const state = Ext.state.Manager.get('cal-pgtb-pp-wkbtn');
         return {
             from: this.dtStart.clone(),

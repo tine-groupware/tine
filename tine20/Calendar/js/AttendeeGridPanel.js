@@ -733,7 +733,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             schedulingInfo = this.record.getSchedulingData(),
             encodedSchedulingInfo = Ext.encode(schedulingInfo);
 
-        if (encodedSchedulingInfo == this.encodedSchedulingInfo && !force) {
+        if (encodedSchedulingInfo === this.encodedSchedulingInfo && !force) {
             return;
         }
 
@@ -836,6 +836,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderName: function(name, metaData, record) {
+        this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Calendar');
         const type = _.get(record, 'data.user_type', 'user');
         if (name || type === 'email') {
             const fn = this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'];
@@ -895,8 +896,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderGroupmemberName: function(name) {
-        var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName.apply(this, arguments);
-        return name + ' ' + Tine.Tinebase.appMgr.get('Calendar').i18n._('(as a group member)');
+        return Ext.util.Format.htmlEncode(name.n_fileas + ' ' + Tine.Tinebase.appMgr.get('Calendar').i18n._('(as a group member)'));
     },
     
     renderAttenderGroupName: function(name) {

@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
+const {isString} = require("lodash");
 Ext.ns('Tine.Calendar');
 
 /**
@@ -27,6 +28,10 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     attendeeRenderer: function(attendeeData) {
         if (! attendeeData) {
             return i18n._('No Information');
+        }
+
+        if (isString(attendeeData)) {
+            return attendeeData;
         }
         var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(attendeeData);
         
@@ -60,37 +65,38 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     },
     
     summaryRenderer: function(summary) {
-        if (! this.record) {
-            // no record, no summary
+        if (!this.record) {
             return '';
         }
-        
-        var myAttenderRecord = this.record.getMyAttenderRecord(),
-            ret = Tine.Tinebase.common.tagsRenderer(this.record.get('tags')),
-            status = null,
-            recur = null;
-        
-        ret += Ext.util.Format.htmlEncode(this.record.getTitle());
-        
-        if (myAttenderRecord) {
-            status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'));
-        }
-        
+
+        // Extract core data
+        const myAttenderRecord = this.record.getMyAttenderRecord();
+        const tags = Tine.Tinebase.common.tagsRenderer(this.record.get('tags'));
+        const title = Ext.util.Format.htmlEncode(this.record.getTitle());
+
+        // Build main content
+        let result = tags + title;
+
+        // Get status
+        const status = myAttenderRecord
+            ? Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', myAttenderRecord.get('status'))
+            : null;
+
+        // Get recurrence info
+        let recur = null;
         if (this.record.isRecurBase() || this.record.isRecurInstance()) {
-            recur = '<img class="cal-recurring" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('Recurring Event');
+            recur = `<img class="cal-recurring" unselectable="on" src="${Ext.BLANK_IMAGE_URL}">${this.app.i18n._('Recurring Event')}`;
         } else if (this.record.isRecurException()) {
-            recur = '<img class="cal-recurring exception" unselectable="on" src="' + Ext.BLANK_IMAGE_URL + '">' + this.app.i18n._('Recurring Event Exception');
+            recur = `<img class="cal-recurring exception" unselectable="on" src="${Ext.BLANK_IMAGE_URL}">${this.app.i18n._('Recurring Event Exception')}`;
         }
-        
+
+        // Add metadata section if we have status or recurrence info
         if (status || recur) {
-            ret += '&nbsp;&nbsp;&nbsp;(&nbsp;';
-            if(status) ret += status;
-            if(status && recur) ret += '&nbsp;&nbsp;';
-            if(recur) ret += recur;
-            ret += '&nbsp;)';
+            const metadata = [status, recur].filter(Boolean).join('&nbsp;&nbsp;');
+            result += `&nbsp;&nbsp;&nbsp;(&nbsp;${metadata}&nbsp;)`;
         }
-        
-        return ret;
+
+        return result;
     },
     
     /**

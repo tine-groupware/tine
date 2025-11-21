@@ -560,6 +560,12 @@ msgstr "Event not found"
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr "The event was deleted in the meantime or you no longer have access rights to it."
 
+msgid "Myself"
+msgstr "Myself"
+
+msgid "Current"
+msgstr "Current"
+
 msgid "Add Attendee"
 msgstr "Add Attendee"
 
@@ -900,9 +906,6 @@ msgstr "Tags"
 msgid "Location"
 msgstr "Location"
 
-msgid "Checking Calendar Data..."
-msgstr "Checking Calendar Data..."
-
 msgid "Reply to Recurring Event"
 msgstr "Reply to Recurring Event"
 
@@ -915,11 +918,26 @@ msgstr "Respond to the whole series"
 msgid "Do not respond"
 msgstr "Do not respond"
 
+msgid "Update Status"
+msgstr "Update Status"
+
+msgid "Please select a calendar before update your status"
+msgstr "Please select a calendar before update your status"
+
+msgid "View and Edit Event In Calendar"
+msgstr "View and Edit Event In Calendar"
+
 msgid "Save"
 msgstr "Save"
 
 msgid "Save to calendar without responding"
 msgstr "Save to calendar without responding"
+
+msgid "Attention! , this is an invitation for "
+msgstr "Attention! , this is an invitation for "
+
+msgid "Set response for"
+msgstr "Set response for"
 
 msgid "The event of this message does not exist"
 msgstr "The event of this message does not exist"
@@ -936,9 +954,6 @@ msgstr "You are not an attendee of this event"
 msgid "This event has been deleted by the organizer"
 msgstr "This event has been deleted by the organizer"
 
-msgid "This event has been canceled."
-msgstr "This event has been canceled."
-
 msgid "You are the organizer of this event."
 msgstr "You are the organizer of this event."
 
@@ -948,17 +963,17 @@ msgstr "Unsupported message"
 msgid "This is an event invitation for someone else."
 msgstr "This is an event invitation for someone else."
 
-msgid "You have already replied to this event invitation."
-msgstr "You have already replied to this event invitation."
+msgid "has already replied to this event invitation."
+msgstr "has already replied to this event invitation."
 
-msgid "The event got rescheduled. Set your response to:"
-msgstr "The event got rescheduled. Set your response to:"
-
-msgid "You received an event invitation. Set your response to:"
-msgstr "You received an event invitation. Set your response to:"
+msgid "The event got rescheduled."
+msgstr "The event got rescheduled."
 
 msgid "An invited attendee responded to the invitation."
 msgstr "An invited attendee responded to the invitation."
+
+msgid "This event has been canceled."
+msgstr "This event has been canceled."
 
 msgid "Unsupported method"
 msgstr "Unsupported method"
@@ -1539,6 +1554,9 @@ msgstr "Calendar of {name}"
 msgid "An unexpected error occurred."
 msgstr "An unexpected error occurred."
 
+msgid "Invalid link"
+msgstr "Invalid link"
+
 msgid "Reload"
 msgstr "Reload"
 
@@ -1741,6 +1759,12 @@ msgstr "Searching..."
 
 msgid "Search Event"
 msgstr "Search Event"
+
+msgid "Edit Event invitation"
+msgstr "Edit Event invitation"
+
+msgid "Please Wait"
+msgstr "Please Wait"
 
 msgid "Event Weekday"
 msgstr "Event Weekday"
