@@ -359,4 +359,16 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         }
         return $return;
     }
+
+    protected function _getIdFromTitle($title, $controllerClass)
+    {
+        if (!is_string($title) || $title === '') {
+            throw new Exception('title not specified');
+        }
+        $item = $controllerClass::getInstance()->getRecordByTitleProperty(trim($title));
+        if (!$item) {
+            throw new Exception('Could not find ' . $title);
+        }
+        return $item->getId();
+    }
 }

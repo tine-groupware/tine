@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>crewscheduling_poll_event_type_csv</name>
+    <model>CrewScheduling_Model_PollEventType</model>
+    <plugin>CrewScheduling_Import_PollEventType_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <order>1300</order>
+    <favorite>true</favorite>
+    <label>Poll event type CSV import"</label>
+    <!-- _("Poll event type import") -->
+    <description>Import CSV formated poll event types from crew scheduling</description>
+    <!-- _("Import CSV formated poll event types from crew scheduling") -->
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>poll_id</source>
+            <destination>poll_id</destination>
+        </field>
+        <field>
+            <source>event_type_id</source>
+            <destination>event_type_id</destination>
+        </field>
+    </mapping>
+</config>
