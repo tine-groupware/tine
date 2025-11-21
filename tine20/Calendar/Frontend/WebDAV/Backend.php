@@ -154,7 +154,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBack
 
         $events = Calendar_Controller_MSEventFacade::getInstance()->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendarId),
-        )));
+        )), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC);
         
         foreach($events as $event) {
             $calendarObjects[] = $this->_convertCalendarObject($event);

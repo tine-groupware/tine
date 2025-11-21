@@ -303,6 +303,11 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $_SERVER['QUERY_STRING'] = str_replace('frontend=webdav&', '',
                 isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 
+            // check Calendar noSyncDeclinedAttendeeEvents
+            if (Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->getValueForUser(Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV, Tinebase_Core::getUser()->getId())) {
+                Calendar_Controller_Event::getInstance()->doNoSyncDeclinedAttendeeEvents(true);
+            }
+
             self::$_server->exec();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
