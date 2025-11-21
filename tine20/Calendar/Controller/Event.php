@@ -321,12 +321,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
         $cloudConfig = $cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG};
 
-        $client = new Calendar_Backend_CalDav_Client([
-            'baseUri' => $cloudConfig->{Tinebase_Model_CloudAccount_CalDAV::FLD_URL},
-            'userName' => $cloudConfig->{Tinebase_Model_CloudAccount_CalDAV::FLD_USERNAME},
-            'password' => $cloudConfig->getPasswordFromProperty(Tinebase_Model_CloudAccount_CalDAV::FLD_PWD),
-            'authType' => \CURLAUTH_BASIC,
-        ], 'Generic');
+        $client = $cloudConfig->getClient();
         $client->getDecorator()->initCalendarImport();
 
         if (null === ($result = $client->writeEvent($config->{Calendar_Model_SyncContainerConfig::FLD_CALENDAR_PATH}, $event))) {

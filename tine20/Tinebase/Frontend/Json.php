@@ -1543,6 +1543,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $joinedTempFile->toArray();
     }
+
+    public function testCloudAccountAccess(array $data): bool
+    {
+        /** @var Tinebase_Model_CloudAccount $record */
+        $record = $this->_jsonToRecord($data, Tinebase_Model_CloudAccount::class);
+        return $record->testAccess();
+    }
     
     /************************ protected functions ***************************/
     
