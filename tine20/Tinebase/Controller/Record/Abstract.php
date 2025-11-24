@@ -1653,55 +1653,78 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
             if (is_array($config->recordsFields)) {
-                foreach ($config->recordsFields as $property => $fieldDef) {
-                    if ($fieldDef[TMCC::CREATE] ?? false) {
-                        continue;
-                    } elseif ($isCreate) {
-                        $this->_createDependentRecords($updatedRecord, $record, $property, $fieldDef['config']);
-                    } else {
-                        $this->_updateDependentRecords($record, $currentRecord, $property, $fieldDef['config']);
-                        $updatedRecord->{$property} = $record->{$property};
-                    }
-                }
+                $this->_processDependentFields(
+                    $config->recordsFields,
+                    $updatedRecord,
+                    $record,
+                    $currentRecord,
+                    $isCreate,
+                    '_createDependentRecords',
+                    '_updateDependentRecords'
+                );
             }
+
             if (is_array($config->recordFields)) {
-                $createdRecords = [];
-                foreach ($config->recordFields as $property => $fieldDef) {
-                    if ($fieldDef[TMCC::CREATE] ?? false) {
-                        continue;
-                    } elseif ($isCreate) {
-                        $recordClassName = $fieldDef['config'][TMCC::RECORD_CLASS_NAME];
-
-                        if (
-                            !isset($createdRecords[$recordClassName])
-                            || ($record->{$property} instanceof Tinebase_Record_Interface
-                               && !in_array($record->{$property}->getId(), $createdRecords[$recordClassName])
-                            )
-                        ) {
-                            // only create records with the same ID and model once
-                            $this->_createDependentRecord($updatedRecord, $record, $property, $fieldDef['config']);
-
-                            if ($updatedRecord->{$property} && $updatedRecord->{$property} instanceof Tinebase_Record_Interface) {
-                                if (!isset($createdRecords[$recordClassName])) {
-                                    $createdRecords[$recordClassName] = [];
-                                }
-                                $createdRecords[$recordClassName][]
-                                    = $updatedRecord->{$property}->getId();
-                            }
-                        }
-                    } else {
-                        $this->_updateDependentRecord($record, $currentRecord, $property, $fieldDef['config']);
-                        $updatedRecord->{$property} = $record->{$property};
-                    }
-                }
+                $this->_processDependentFields(
+                    $config->recordFields,
+                    $updatedRecord,
+                    $record,
+                    $currentRecord,
+                    $isCreate,
+                    '_createDependentRecord',
+                    '_updateDependentRecord'
+                );
             }
+
             // unset them all
             $this->_delayedDepRecRaiis = [];
             $ctrls = $this->_delyedDepRecCtrls;
             $this->_delyedDepRecCtrls = [];
+
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             foreach ($ctrls as $ctrl) {
                 $ctrl->executeDelayedDependentRecords();
+            }
+        }
+    }
+
+    private function _processDependentFields(
+        $fields,
+        $updatedRecord,
+        $record,
+        $currentRecord,
+        $isCreate,
+        $createMethod,
+        $updateMethod
+    ): void {
+        $createdRecords = [];
+
+        foreach ($fields as $property => $fieldDef) {
+            if ($fieldDef[TMCC::CREATE] ?? false) {
+                continue;
+            }
+
+            if ($isCreate) {
+                $recordClassName = $fieldDef['config'][TMCC::RECORD_CLASS_NAME];
+
+                if (
+                    !isset($createdRecords[$recordClassName])
+                    || ($record->{$property} instanceof Tinebase_Record_Interface
+                        && !in_array($record->{$property}->getId(), $createdRecords[$recordClassName]))
+                ) {
+                    // only create records with the same ID and model once
+                    $this->{$createMethod}($updatedRecord, $record, $property, $fieldDef['config']);
+
+                    if ($updatedRecord->{$property} instanceof Tinebase_Record_Interface) {
+                        if (!isset($createdRecords[$recordClassName])) {
+                            $createdRecords[$recordClassName] = [];
+                        }
+                        $createdRecords[$recordClassName][] = $updatedRecord->{$property}->getId();
+                    }
+                }
+            } else {
+                $this->{$updateMethod}($record, $currentRecord, $property, $fieldDef['config']);
+                $updatedRecord->{$property} = $record->{$property};
             }
         }
     }
