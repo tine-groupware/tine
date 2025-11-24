@@ -88,7 +88,7 @@ test_composer_install() {
         # do not return here, we need to run composer install, so it creates the customapps links for us
     fi
 
-    log "prepearing composer cache ..."
+    log "preparing composer cache ..."
     # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
     export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
     mkdir -p ${COMPOSER_CACHE_DIR}
