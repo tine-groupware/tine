@@ -67,7 +67,7 @@ class EventManager_Frontend_RssFeed
             $converter = Tinebase_Convert_Factory::factory($event);
             $event = $converter->fromTine20Model($event);
             $title = $event['name'];
-            $description = $event['description'];
+            $description = $event['description'] ?? '';
             try {
                 $location = $ab_controller->get($event['location']);
                 $location = implode(', ', array_filter([

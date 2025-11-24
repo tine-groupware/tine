@@ -39,13 +39,23 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
-        $this->_duplicateCheckFields = [['event_id','name']];
+        $this->_duplicateCheckFields = [['event_id','participant']];
+    }
+
+    protected function _inspectBeforeCreate($_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+        $this->addRegistrator($_record);
+    }
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $this->addRegistrator($_record);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
-        $this->addRegistrator($_record);
         $this->_processBookedOptionsAfterCreate($_record);
         $this->_handleRegistrationFileUpload($_record);
         $this->_updateParentStatistics($_record);
@@ -54,7 +64,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     protected function _inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord)
     {
         parent::_inspectAfterUpdate($_updatedRecord, $_record, $_oldRecord);
-        $this->addRegistrator($_updatedRecord);
         $this->_processBookedOptionsAfterUpdate($_updatedRecord, $_oldRecord);
         $this->_handleRegistrationFileUpload($_updatedRecord);
         if ($_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} === "3") {
@@ -640,7 +649,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             } else {
                 $registration = new EventManager_Model_Registration([
                     'event_id'          => EventManager_Controller_Event::getInstance()->get($event_id),
-                    'name'              => $contact,
+                    'participant'       => $contact,
                     'function'          => $default_values['function'],
                     'source'            => $default_values['source'],
                     'status'            => $default_values['status'],
