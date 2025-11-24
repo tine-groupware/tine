@@ -1212,6 +1212,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             if ($value instanceof Tinebase_Record_Interface) {
                 $raw[$key] = $value->getId();
             }
+            if (is_array($value) && isset($value['id'])) {
+                $raw[$key] = $value['id'];
+            }
             if (in_array($key, $readOnlyFields)) {
                 unset($raw[$key]);
             }
