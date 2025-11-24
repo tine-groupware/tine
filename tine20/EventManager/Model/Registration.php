@@ -40,8 +40,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
         self::VERSION => 2,
         self::RECORD_NAME               => 'Registration', // gettext('GENDER_Registration')
         self::RECORDS_NAME              => 'Registrations', // ngettext('Registration', 'Registrations', n)
-        self::DEFAULT_SORT_INFO         =>  ['field' => 'name'],
-        self::TITLE_PROPERTY            => '{{name.n_fn}}',
+        self::DEFAULT_SORT_INFO         =>  ['field' => 'particpant'],
+        self::TITLE_PROPERTY            => '{{participant.n_fn}}',
         self::IS_METADATA_MODEL_FOR     => self::FLD_PARTICIPANT,
         self::IS_DEPENDENT              => true,
         self::HAS_RELATIONS             => false,
