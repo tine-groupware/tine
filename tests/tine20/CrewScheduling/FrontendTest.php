@@ -202,8 +202,9 @@ class CrewScheduling_FrontendTest extends TestCase
             [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
                 [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
             ]],
+            [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => $eventType->getId()],
         ], []);
-        $this->assertSame($eventType->getId(), $result['results'][0]['id']);
+        $this->assertSame($eventType->getId(), $result['results'][0]['id'], print_r($result['results'], true));
         $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
         $this->assertNull($result['filter'][0][TMFA::VALUE][0][TMFA::VALUE]);
 
@@ -211,6 +212,7 @@ class CrewScheduling_FrontendTest extends TestCase
             [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
                 [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
             ]],
+            [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => $eventType->getId()],
         ], []);
         $this->assertSame($eventType->getId(), $result['results'][0]['id']);
         $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
@@ -220,6 +222,7 @@ class CrewScheduling_FrontendTest extends TestCase
             [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
                 [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => null],
             ]],
+            [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => $eventTypeNoCsRole->getId()],
         ], []);
         $this->assertSame($eventTypeNoCsRole->getId(), $result['results'][0]['id']);
         $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
@@ -229,6 +232,7 @@ class CrewScheduling_FrontendTest extends TestCase
             [TMFA::FIELD => CrewScheduling_Config::CS_ROLE_CONFIGS, TMFA::OPERATOR => 'notDefinedBy', TMFA::VALUE => [
                 [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => null],
             ]],
+            [TMFA::FIELD => 'id', TMFA::OPERATOR => 'equals', TMFA::VALUE => $eventTypeNoCsRole->getId()],
         ], []);
         $this->assertSame($eventTypeNoCsRole->getId(), $result['results'][0]['id']);
         $this->assertArrayHasKey(TMFA::VALUE, $result['filter'][0][TMFA::VALUE][0] ?? []);
