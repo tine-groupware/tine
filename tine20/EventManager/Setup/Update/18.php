@@ -126,6 +126,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             EventManager_Model_Event::class,
             EventManager_Model_Registration::class,
         ]);
+        EventManager_Setup_Initialize::getContactEventContainer();
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
     }
