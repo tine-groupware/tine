@@ -121,20 +121,11 @@ msgstr "No preview available yet - Please try again in a few minutes."
 msgid "Node Download Links"
 msgstr "Node Download Links"
 
-msgid "Create Public Link"
-msgstr "Create Public Link"
-
 msgid "Copy Public Link"
 msgstr "Copy Public Link"
 
 msgid "Remove record"
 msgstr "Remove record"
-
-msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
-msgstr "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
-
-msgid "Creating a new Download Link..."
-msgstr "Creating a new Download Link..."
 
 msgid "Deleting Download Links..."
 msgstr "Deleting Download Links..."
@@ -398,6 +389,9 @@ msgstr "Move Items"
 msgid "Preview"
 msgstr "Preview"
 
+msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
+msgstr "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
+
 msgid "Folder has been published successfully"
 msgstr "Folder has been published successfully"
 
@@ -615,3 +609,6 @@ msgstr "File not found!"
 
 msgid "Password required for download"
 msgstr "Password required for download"
+
+msgid "Submit"
+msgstr "Submit"

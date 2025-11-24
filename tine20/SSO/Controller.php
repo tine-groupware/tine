@@ -708,7 +708,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $jsFiles = ['SSO/js/logoutClient.js'];
                 $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
-                return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+                return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, SSO_Config::APP_NAME, context: [
                     'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
                     'lang' => $locale,
                     'initialData' => [
@@ -735,7 +735,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             $jsFiles = ['SSO/js/logoutClient.js'];
             $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
-            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, SSO_Config::APP_NAME, context: [
                 'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
                 'lang' => $locale,
                 'initialData' => [
@@ -890,7 +890,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             'initialData' => $initialData,
         ];
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', $data);
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, SSO_Config::APP_NAME, context: $data);
     }
     
     public static function getOpenIdConnectServer(): SSO_Facade_OpenIdConnect_AuthorizationServer

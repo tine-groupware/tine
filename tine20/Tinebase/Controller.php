@@ -1245,18 +1245,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
                 Tinebase_Expressive_RouteHandler::IGNORE_MAINTENANCE_MODE => true,
             ]))->toArray());
-            $routeCollector->get('/privacy-policy', (new Tinebase_Expressive_RouteHandler(
-                Tinebase_Controller::class, 'getPrivacy', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
-            ]))->toArray());
-            $routeCollector->get('/imprint', (new Tinebase_Expressive_RouteHandler(
-                Tinebase_Controller::class, 'getImprint', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
-            ]))->toArray());
-            $routeCollector->get('/terms', (new Tinebase_Expressive_RouteHandler(
-                Tinebase_Controller::class, 'getTermsOfService', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true,
-            ]))->toArray());
         });
 
         $r->addGroup('/Tinebase', function (\FastRoute\RouteCollector $routeCollector) {
@@ -1528,40 +1516,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         return new \Laminas\Diactoros\Response\JsonResponse($data);
-    }
-
-    /**
-     * @return \Laminas\Diactoros\Response\HtmlResponse
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function getPrivacy()
-    {
-        $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
-    }
-
-    /**
-     * @return \Laminas\Diactoros\Response\HtmlResponse
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function getImprint()
-    {
-        $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/imprint.html.twig');
-    }
-
-    /**
-     * @return \Laminas\Diactoros\Response\HtmlResponse
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    public function getTermsOfService()
-    {
-        $locale = Tinebase_Core::getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME . '/views/terms.html.twig');
-        return $html;
     }
 
     /**

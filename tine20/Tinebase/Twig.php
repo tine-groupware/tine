@@ -107,10 +107,13 @@ class Tinebase_Twig
         } catch (\Exception $e) {
             $contact = null;
         }
-        
+        $enablePublicPages = Tinebase_Application::getInstance()->isInstalled(GDPR_Config::APP_NAME, true) &&
+            GDPR_Config::getInstance()->get(GDPR_Config::ENABLE_PUBLIC_PAGES);
+
         $globals = [
-            Addressbook_Config::INSTALLATION_REPRESENTATIVE => Addressbook_Config::getInstallationRepresentative(),
+            Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages ? Addressbook_Config::getInstallationRepresentative() : null,
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
+            'enablePublicPages' =>  $enablePublicPages,
             'branding'          => [
                 'logo'              => Tinebase_Core::getLogo('b'),
                 'logoContent'       => Tinebase_Controller::getInstance()->getLogo('b'),
@@ -376,6 +379,26 @@ class Tinebase_Twig
                 return $result;
             }
         }));
+        // fixme: we get gdpr unknown jsinclud function error
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('jsInclude', function ($file) {
+            $fileMap = Tinebase_Frontend_Http_SinglePageApplication::getAssetsMap();
+            if (isset($fileMap[$file]['js'])) {
+                $file = $fileMap[$file]['js'];
+            } else {
+                $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+            }
+
+            $baseUrl = Tinebase_Core::getUrl(
+                Tinebase_Core::GET_URL_NO_PROTO,
+                Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
+            );
+
+            if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEBUG') {
+                $file = preg_replace('/\.js$/', '.debug.js', $file);
+            }
+
+            return '<script type="text/javascript" src="'/* . $baseUrl . '/'*/ . $file .'"></script>';
+        }, ['is_safe' => ['all']]));
     }
 
     public function addExtension(Twig_ExtensionInterface $extension)

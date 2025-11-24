@@ -505,8 +505,11 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
 
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
         $jsFiles[] = 'Calendar/js/pollClient/src/index.es6.js';
+        $context = [
+            'requiredPublicPagesConfig' => true,
+        ];
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Calendar_Config::APP_NAME, context: $context);
     }
 
     public function assertPublicUsage()

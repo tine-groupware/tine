@@ -179,7 +179,6 @@ export default {
     this.loadPoll()
 
     document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none'
-    document.getElementsByClassName('tine-viewport-poweredby')[0].style.display = 'none'
 
     let urlParams = window.location.href.substring(window.location.href.indexOf('poll/') + 5).split('/')
 

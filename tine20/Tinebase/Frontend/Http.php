@@ -160,7 +160,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $jsFiles[] = "index.php?method=Tinebase.getCustomJsFiles";
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/FATClient.html.twig', array_merge([
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Tinebase_Config::APP_NAME, 'FATClient.html.twig', array_merge([
             'lang' => $locale
         ], $additionalData));
     }
@@ -525,8 +525,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'path' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
         ];
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
-           'Tinebase/js/postal-xwindow-client.js',
-            'Tinebase/views/XWindowClient.html.twig',
+           ['Tinebase/js/postal-xwindow-client.js'],
+            Tinebase_Config::APP_NAME,
+            'XWindowClient.html.twig',
             $context
         );
     }

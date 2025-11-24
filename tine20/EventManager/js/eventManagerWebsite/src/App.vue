@@ -74,7 +74,6 @@ const input =ref("");
 // websocket still pending, this only hide the loading mask...
 onBeforeMount(async () => {
   document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
-  document.getElementsByClassName('tine-viewport-poweredby')[0].style.display = 'none';
 })
 </script>
 

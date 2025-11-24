@@ -92,7 +92,7 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
     {
         $routeCollector->addGroup('/GDPR', function (\FastRoute\RouteCollector $routeCollector) {
             $routeCollector->get('/view[/{path:.+}]', (new Tinebase_Expressive_RouteHandler(
-                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiMainScreen', [
+                GDPR_Controller::class, 'publicApiMainScreen', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->get('/manageConsent[/{contactId}]', (new Tinebase_Expressive_RouteHandler(
@@ -120,5 +120,41 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
         });
+    }
+
+
+    public function publicApiMainScreen($path = null) {
+        $locale = $this->getLocale();
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=GDPR";
+
+        $allowedPages = [
+            'terms' => 'terms',
+            'privacy-policy' => 'privacy',
+            'imprint' => 'imprint',
+        ];
+        $context = [
+            'lang' => $locale,
+            'requiredPublicPagesConfig' => true,
+        ];
+        // Check if it's a static page
+        if (isset($allowedPages[$path])) {
+            $template = $allowedPages[$path];
+            return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, GDPR_Config::APP_NAME, "$template.html.twig", context: $context);
+        }
+
+        $jsFiles[] = 'GDPR/js/ConsentClient/src/index.es6.js';
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, GDPR_Config::APP_NAME, context: $context);
+    }
+
+    public static function getLocale($userId = null)
+    {
+        if ($userId && $userLocale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $userId))) {
+            return $userLocale;
+        }
+
+        $defaultLocale = Tinebase_Core::getLocale();
+        $array = array_keys($defaultLocale->getBrowser());
+        $browserLocaleString = array_shift($array);
+        return Tinebase_Translation::getLocale($browserLocaleString ?? Tinebase_Core::getLocale());
     }
 }
