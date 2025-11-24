@@ -128,6 +128,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
 
+        $container_id = EventManager_Setup_Initialize::getContactEventContainer()->getId();
+
         $location = $this->getLocation(
             'Familienferienstätte St. Ursula',
             'Ribnitzer Str. 1',
@@ -160,10 +162,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $unterscheriben = $this->setOptionConfigTextDemoData('Bitte laden Sie das unterschriebene Dokument hoch');
 
         // registrations
-        $christoph = $this->getContact('Christoph', 'Riethmüller');
-        $daniela = $this->getContact('Daniela', 'Braker');
-        $heiner = $this->getContact('Heiner', 'Arden');
-        $alexandra = $this->getContact('Alexandra', 'Avermiddig');
+        $christoph = $this->getContact('Christoph', 'Riethmüller', $container_id);
+        $daniela = $this->getContact('Daniela', 'Braker', $container_id);
+        $heiner = $this->getContact('Heiner', 'Arden', $container_id);
+        $alexandra = $this->getContact('Alexandra', 'Avermiddig', $container_id);
 
         //appointments
         $appointment_status = EventManager_Config::getInstance()->get(EventManager_Config::APPOINTMENT_STATUS)
@@ -609,7 +611,7 @@ Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach 
             . EventManager_Model_Event::MODEL_NAME_PART);
     }
 
-    protected function getContact($n_given, $n_family): Addressbook_Model_Contact
+    protected function getContact($n_given, $n_family, $container_id): Addressbook_Model_Contact
     {
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
                 ['field' => 'n_given', 'operator' => 'equals', 'value' => $n_given],
@@ -621,6 +623,7 @@ Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach 
             $contact = $adbController->create(new Addressbook_Model_Contact([
                 'n_given' => $n_given,
                 'n_family' => $n_family,
+                'container_id' => $container_id,
             ]));
         }
         return $contact;

@@ -77,6 +77,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::FLD_REGISTRATIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_Registration::FLD_PARTICIPANT      => [],
+                        EventManager_Model_Registration::FLD_REGISTRATOR      => [],
                         EventManager_Model_Registration::FLD_BOOKED_OPTIONS   => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                                 EventManager_Model_BookedOption::FLD_OPTION => []

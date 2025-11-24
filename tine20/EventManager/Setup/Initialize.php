@@ -127,7 +127,11 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         $containerId = $configInstance->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
 
         if ($containerId) {
-            return Tinebase_Container::getInstance()->getContainerById($containerId);
+            try {
+                return Tinebase_Container::getInstance()->getContainerById($containerId);
+            } catch (Tinebase_Exception_NotFound) {
+                // continue
+            }
         }
 
         if (Tinebase_Core::isReplica()) {
