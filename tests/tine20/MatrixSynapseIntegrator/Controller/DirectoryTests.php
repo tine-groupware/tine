@@ -58,6 +58,8 @@ class MatrixSynapseIntegrator_Controller_DirectoryTests extends TestCase
 
     public function testExportDirectory()
     {
+        $this->_skipIfLDAPBackend('Zend_Ldap_Exception: 0x44 (Already exists; Entry CN=PHPUnit User Tine 2.0...');
+
         $user1 = $this->createUser();
         $user2 = $this->createUser();
 

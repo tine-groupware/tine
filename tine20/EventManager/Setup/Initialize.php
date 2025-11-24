@@ -67,7 +67,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
     protected function _initializeDefaultContainer()
     {
         if (Tinebase_Core::isReplica()) {
-            $this->getContactEventContainer();
+            self::getContactEventContainer();
             return;
         }
 
@@ -121,7 +121,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         ]);
     }
 
-    public function getContactEventContainer()
+    public static function getContactEventContainer()
     {
         $configInstance = EventManager_Config::getInstance();
         $containerId = $configInstance->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);

@@ -26,6 +26,8 @@ class SSO_JsonTest extends TestCase
 
     public function testExternalIdp()
     {
+        $this->_skipIfLDAPBackend('Tinebase_Exception_Record_NotDefined: Group not found (name = Users)');
+
         $savedExtIdp = $this->_getUit()->saveExternalIdp($data = [
             SSO_Model_ExternalIdp::FLD_NAME => 'unittest',
             SSO_Model_ExternalIdp::FLD_CONFIG_CLASS => SSO_Model_ExIdp_OIdConfig::class,
