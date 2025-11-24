@@ -56,6 +56,13 @@
             min-height: 0;
         }
 
+        .error {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .header-section {
             max-height: var(--header-height);
             position: fixed;
@@ -100,8 +107,16 @@
     </div>
     <!-- Main Content - Left Aligned -->
     <div class="content-wrapper">
-        <div class="content">
-            {% block content %}{% endblock %}
+        <div class="content ">
+            {% if not app.enablePublicPages and requiredPublicPagesConfig %}
+                <div class="error">
+                    <h4 class="text-center">{{ _('Feature is not available. Please ask admin to enable public page config') }}</h4>
+                </div>
+            {% else %}
+                {% block content %}
+                    Content Not Found
+                {% endblock %}
+            {% endif %}
         </div>
     </div>
     <!-- Footer Section - Fixed Bottom -->

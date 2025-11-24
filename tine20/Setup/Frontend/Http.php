@@ -72,7 +72,8 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 
         return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
             $jsFiles,
-            'Tinebase/views/FATClient.html.twig', [
+            Tinebase_Config::APP_NAME,
+            'FATClient.html.twig', [
                 'lang' => $locale
             ], $fallbackHtml);
     }

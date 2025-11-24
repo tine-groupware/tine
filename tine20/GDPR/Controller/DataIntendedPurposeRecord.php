@@ -239,14 +239,6 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         return ;
     }
 
-    public function publicApiMainScreen() {
-        $locale = $this->_getLocale();
-        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=GDPR";
-        $jsFiles[] = 'GDPR/js/ConsentClient/src/index.es6.js';
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
-    }
-
-
     /**
      * public Api Get Manage Consent
      *
@@ -418,7 +410,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             }
         }
 
-        $locale = $this->_getLocale();
+        $locale = GDPR_Controller::getLocale();
 
         try {
             if ($contactId && $contact = Addressbook_Controller_Contact::getInstance()->get($contactId, null, true, false, false)) {
@@ -458,7 +450,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
         try {
             if ($templateContext['contact']) {
-                $locale = $this->_getLocale($templateContext['contact']->account_id);
+                $locale = GDPR_Controller::getLocale($templateContext['contact']->account_id);
             }
 
             $templates = $this->getViews($locale);
@@ -570,7 +562,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     protected function _sendMessageWithTemplate($templateFileName, $context = [])
     {
         $userId = $context['contact'] ? $context['contact']->account_id : null;
-        $locale = $this->_getLocale($userId);
+        $locale = GDPR_Controller::getLocale($userId);
 
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(GDPR_Config::APP_NAME));
         $htmlTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/emails/' . $templateFileName. '.html.twig');

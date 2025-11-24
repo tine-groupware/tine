@@ -18,14 +18,16 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * @return \Laminas\Diactoros\Response\HtmlResponse
      */
     public static function getClientHTML($entryPoint,
-                                         string $template = 'Tinebase/views/singlePageApplication.html.twig',
+                                         $appName = 'Tinebase',
+                                         string $template = null,
                                          array $context = [],
                                          ?string $fallbackHtml = null): \Laminas\Diactoros\Response\HtmlResponse
     {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
+        $template = $template ? "$appName/views/$template" : "Tinebase/views/singlePageApplication.html.twig";
 
         try {
-            $html = self::_getTwigRenderedClientHTML($entryPoints, $template, $context);
+            $html = self::_getTwigRenderedClientHTML($entryPoints, $appName, $template, $context);
         } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
                 Tinebase_Core::getLogger()->err(
@@ -37,24 +39,10 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         return new \Laminas\Diactoros\Response\HtmlResponse($html, 200, self::getHeaders());
     }
 
-    protected static function _getTwigRenderedClientHTML($entryPoints, $template, $context): string
+    protected static function _getTwigRenderedClientHTML($entryPoints, $appName, $template, $context): string
     {
-        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation($context['application'] ?? 'Tinebase'));
-        $twig->getEnvironment()->addFunction(new Twig_SimpleFunction('jsInclude', function ($file) {
-            $fileMap = self::getAssetsMap();
-            if (isset($fileMap[$file]['js'])) {
-                $file = $fileMap[$file]['js'];
-            } else {
-                $file .= (strpos($file, '?') ? '&' : '?') . 'version=' . Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
-            }
-
-            if (TINE20_BUILDTYPE === 'DEBUG') {
-                $file = preg_replace('/\.js$/', '.debug.js', $file);
-            }
-
-            return '<script type="text/javascript" src="' . $file .'"></script>';
-        }, ['is_safe' => ['all']]));
-
+        $locale = $context['lang'] ?? Tinebase_Core::getLocale();
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation($appName));
         $textTemplate = $twig->load($template);
 
         if (! array_key_exists('base', $context)) {
@@ -71,6 +59,17 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
         if (!isset($context['initialData'])) {
             $context['initialData'] = [];
+        }
+
+        if (isset($context['requiredPublicPagesConfig'])) {
+            $translation = Tinebase_Translation::getTranslation();
+            $enablePublicPages = Tinebase_Application::getInstance()->isInstalled(GDPR_Config::APP_NAME, true) &&
+                GDPR_Config::getInstance()->get(GDPR_Config::ENABLE_PUBLIC_PAGES);
+
+            //we have some modules use singlePageApplication vue template, some use base twig template, initialData is checked in singlePageApplication vue template only
+            if (!$enablePublicPages) {
+                $context['initialData']['errorMessage'] = $translation->_('Feature is not available. Please ask admin to enable public page config');
+            }
         }
 
         $context['initialData'] = array_merge($context['initialData'], [

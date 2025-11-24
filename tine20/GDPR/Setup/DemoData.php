@@ -99,6 +99,9 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
     protected function _createDataIntendedPurposes()
     {
+        GDPR_Config::getInstance()->set(GDPR_Config::ENABLE_PUBLIC_PAGES, true);
+        GDPR_Config::getInstance()->set(GDPR_Config::JWT_SECRET, '');
+
         $dip1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(new GDPR_Model_DataIntendedPurpose([
             GDPR_Model_DataIntendedPurpose::FLD_NAME => [[
                     GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',

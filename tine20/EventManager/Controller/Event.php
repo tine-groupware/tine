@@ -144,7 +144,10 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $locale = Tinebase_Core::getLocale();
         $js_files[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=EventManager";
         $js_files[] = 'EventManager/js/eventManagerWebsite/src/index.es6.js';
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($js_files);
+        $context = [
+            'requiredPublicPagesConfig' => true,
+        ];
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($js_files, EventManager_Config::APP_NAME, context: $context);
     }
 
     public function publicApiSearchEvents()

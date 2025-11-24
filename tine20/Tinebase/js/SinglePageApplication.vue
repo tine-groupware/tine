@@ -1,10 +1,14 @@
 <template>
   <div :class="[currentRouteClass]">
-    <div class="header-section" v-html="initialData.header"></div>
-    <div class="route-view">
-      <RouterView/>
-    </div>
-    <div class="footer-section" v-html="initialData.footer"></div>
+    <!-- Show normal content if no error -->
+      <div class="header-section" v-html="initialData.header"></div>
+        <div class="route-view">
+          <div v-if="errorMessage" class="text-center">
+            <h4>{{ errorMessage }}</h4>
+          </div>
+          <RouterView v-else/>
+        </div>
+      <div class="footer-section" v-html="initialData.footer"></div>
   </div>
 </template>
 
@@ -13,10 +17,12 @@
 import { computed, onMounted, ref, onBeforeMount, shallowRef } from 'vue';
 
 const initialData = shallowRef({});
-const templates = ref(null);
 const responseData = ref(null);
 import { useRoute } from 'vue-router';
 const route = useRoute();
+const errorMessage = computed(() => {
+    return initialData.value.errorMessage ?? null;
+})
 
 // Compute a class based on the current route
 const currentRouteClass = computed(() => {
@@ -37,16 +43,11 @@ onBeforeMount(async () => {
   try{
     await fetchData();
   } catch(e) {
+    initialData.value = { errorMessage: 'Content not found' };
+    document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
   }
 })
 
-onMounted(() => {
-  const poweredBy = document.getElementsByClassName("tine-viewport-poweredby")[0] ?? null;
-  if (poweredBy) {
-    poweredBy.style.zIndex = 2000;
-    poweredBy.style.position = 'fixed';
-  }
-})
 </script>
 
 <style lang="scss">

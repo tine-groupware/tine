@@ -335,7 +335,6 @@ onMounted(() => {
       currentConfig.value = window.initialData
       currentFloor.value = currentConfig.value.floorplans[0]
       document.getElementsByClassName("tine-viewport-waitcycle")[0].style.display = "none";
-      document.getElementsByClassName("tine-viewport-poweredby")[0].style.position = "fixed";
       const last = document.URL.split('/').pop()
       if(last.includes('-') && new Date(last).toString() !== "Invalid Date") selectedDate.value = last
       clearInterval(waitIRef)
