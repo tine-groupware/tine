@@ -90,27 +90,40 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
-        $tsBackend = new Timetracker_Backend_Timesheet();
+
+        $this->_handleIsBillableConfirmation($_record, $_oldRecord);
+        $this->_handleAccountingTimeFactorConfirmation($_record, $_oldRecord);
+
+        if (!empty($_record->budget) && $_record->budget !== $_oldRecord->budget) {
+            $_record->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($_record->getId());
+            $_record->budget_filled_level = round(($_record->budget_booked_hours / $_record->budget), 2) * 100;
+        }
+    }
+
+    protected function _handleIsBillableConfirmation($_record, $_oldRecord)
+    {
         $context = $this->getRequestContext();
         $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
-        $translation = Tinebase_Translation::getTranslation($this->_applicationName);
-        $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'account_id' => []
-            ]
-        ]);
 
-        if ($_record['is_billable'] && $_record['is_billable'] != $_oldRecord['is_billable']) {
+        if ($_record['is_billable'] != $_oldRecord['is_billable']) {
+            $tsBackend = new Timetracker_Backend_Timesheet();
+            $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    'account_id' => []
+                ]
+            ]);
             $timesheets = $tsBackend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                 ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $_record->getId()],
-                ['field' => 'is_billable', 'operator' => 'equals', 'value' => false],
+                ['field' => 'is_billable', 'operator' => 'equals', 'value' => $_oldRecord['is_billable']],
+                ['field' => 'is_cleared', 'operator' => 'equals', 'value'    => false],
             ]));
 
             if ($timesheets->count() > 0) {
                 if (!$confirmHeader) {
                     $translation = Tinebase_Translation::getTranslation($this->_applicationName);
                     $totalCount = 0;
-                    $timesheetTitles = '<div style="max-height: 300px; overflow-y: auto; padding: 5px;">'; // Start with a container that has scrolling
+                    $timesheetTitles = '<div style="max-height: 200px; overflow-y: auto; margin: 5px;">'; // Start with a container that has scrolling
+
                     $expander->expand(new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, $timesheets));
 
                     foreach ($timesheets as $timesheet) {
@@ -130,10 +143,14 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                               </div>';
                         $totalCount += $duration;
                     }
+                    $timesheetMessage = '<br>' . sprintf($translation->_('There are %s timesheets will be updated.'), $timesheets->count()) . '<br>';
+                    $timesheetMessage .= $timesheetTitles;
+
                     $exception = new Tinebase_Exception_Confirmation(
-                        sprintf($translation->_('There are %s hours that have not yet been billed. Do you want to make them billable?'), $totalCount)
+                        $translation->_('You are about to change the value of the “Timesheets are invoiceable” field. Should this new value also be changed in all timesheets in the timeaccount if they have not yet been cleared?')
                     );
-                    $exception->setInfo($timesheetTitles);
+                    $exception->setTitle($translation->_('Apply to timesheets?'));
+                    $exception->setInfo($timesheetMessage);
                     //update timesheet should not interrupt the update process of timeaccount
                     $exception->setSendRequestOnRejection(true);
                     throw $exception;
@@ -141,24 +158,37 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
 
                 if (filter_var($confirmHeader, FILTER_VALIDATE_BOOLEAN) === true) {
                     $tsBackend->updateMultiple($timesheets->getArrayOfIds(), [
-                        'is_billable' => true,
+                        'is_billable' => $_record['is_billable'],
                     ]);
                 }
             }
         }
+    }
+
+    protected function _handleAccountingTimeFactorConfirmation($_record, $_oldRecord)
+    {
+        $context = $this->getRequestContext();
+        $confirmHeader = $context['confirm'] ?? $context['clientData']['confirm'] ?? null;
 
         if ($_record['accounting_time_factor'] != $_oldRecord['accounting_time_factor']) {
+            $tsBackend = new Timetracker_Backend_Timesheet();
+            $expander = new Tinebase_Record_Expander(Timetracker_Model_Timesheet::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    'account_id' => []
+                ]
+            ]);
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                 ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $_record->getId()],
                 ['field' => 'accounting_time_factor', 'operator' => 'equals', 'value' => $_oldRecord['accounting_time_factor']],
-                ['field'    => 'is_cleared', 'operator' => 'equals', 'value'    => false],
+                ['field' => 'is_cleared', 'operator' => 'equals', 'value'    => false],
             ]);
 
             $timesheets = $tsBackend->search($filter);
 
             if ($timesheets->count() > 0) {
                 if (!$confirmHeader) {
-                    $timesheetTitles = '<div style="max-height: 300px; overflow-y: auto; padding: 5px;">'; // Start with a container that has scrolling
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    $timesheetTitles = '<div style="max-height: 200px; overflow-y: auto; margin: 5px;">'; // Start with a container that has scrolling
                     $expander->expand(new Tinebase_Record_RecordSet(Timetracker_Model_Timesheet::class, $timesheets));
 
                     foreach ($timesheets as $timesheet) {
@@ -178,9 +208,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                           </div>';
                     }
                     $exception = new Tinebase_Exception_Confirmation(
-                        sprintf($translation->_('There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?'), $timesheets->count())
+                        $translation->_('You are about to change the factor for the timeaccount. Should this new factor also be changed in all timesheets for the timeaccount, provided that these have not yet been cleared and the factor has not already been changed manually?')
                     );
-                    $exception->setInfo($timesheetTitles);
+                    $timesheetMessage = '<br>' . sprintf($translation->_('There are %s timesheets will be updated.'), $timesheets->count()) . '<br>';
+                    $timesheetMessage .= $timesheetTitles;
+                    $exception->setTitle($translation->_('Apply to timesheets?'));
+                    $exception->setInfo($timesheetMessage);
                     //todo: force update timeaccount without updateing the following timesheets?
                     $exception->setSendRequestOnRejection(false);
                     throw $exception;
@@ -193,11 +226,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                     }
                 }
             }
-        }
-
-        if (!empty($_record->budget) && $_record->budget !== $_oldRecord->budget) {
-            $_record->budget_booked_hours = Timetracker_Controller_Timeaccount::getInstance()->getBudgetBookedHoursByTimeaccountId($_record->getId());
-            $_record->budget_filled_level = round(($_record->budget_booked_hours / $_record->budget), 2) * 100;
         }
     }
 

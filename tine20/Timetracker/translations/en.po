@@ -71,12 +71,17 @@ msgid "Declined"
 msgstr "Declined"
 
 #, python-format, php-format
-msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
-msgstr "There are %s hours that have not yet been billed. Do you want to make them billable?"
+msgid "There are %s timesheets will be updated."
+msgstr "There are %s timesheets will be updated."
 
-#, python-format, php-format
-msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
-msgstr "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+msgid "You are about to change the value of the “Timesheets are invoiceable” field. Should this new value also be changed in all timesheets in the timeaccount if they have not yet been cleared?"
+msgstr "You are about to change the value of the “Timesheets are invoiceable” field. Should this new value also be changed in all timesheets in the timeaccount if they have not yet been cleared?"
+
+msgid "Apply to timesheets?"
+msgstr "Apply to timesheets?"
+
+msgid "You are about to change the factor for the timeaccount. Should this new factor also be changed in all timesheets for the timeaccount, provided that these have not yet been cleared and the factor has not already been changed manually?"
+msgstr "You are about to change the factor for the timeaccount. Should this new factor also be changed in all timesheets for the timeaccount, provided that these have not yet been cleared and the factor has not already been changed manually?"
 
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Time accounts are still in use! Are you sure you want to delete them?"
@@ -92,6 +97,9 @@ msgstr "The invoice you tried to edit has already been cleared. Changing the dat
 
 msgid "The related time account is already closed. Do you still want to perform this action?"
 msgstr "The related time account is already closed. Do you still want to perform this action?"
+
+msgid "Excel overview"
+msgstr "Excel overview"
 
 msgid "Add Timesheet"
 msgstr "Add Timesheet"
@@ -200,22 +208,22 @@ msgstr "without responsible"
 msgid "Time Account - Status"
 msgstr "Time Account - Status"
 
-msgid "End Time Change"
-msgstr "End Time Change"
+msgid "Change all Correlated Timesheets"
+msgstr "Change all Correlated Timesheets"
 
-msgid "End time was shortened as timesheet must not overlap day"
-msgstr "End time was shortened as timesheet must not overlap day"
-
-msgid "Duration Change"
-msgstr "Duration Change"
-
-msgid "Duration was shortened as timesheet must not overlap day"
-msgstr "Duration was shortened as timesheet must not overlap day"
+msgid "Apply these changes to all correlated Timesheets?"
+msgstr "Apply these changes to all correlated Timesheets?"
 
 msgid "Timesheet"
 msgid_plural "Timesheets"
 msgstr[0] "Timesheet"
 msgstr[1] "Timesheets"
+
+msgid "This Item is part of a multi day series of correlated Timesheets."
+msgstr "This Item is part of a multi day series of correlated Timesheets."
+
+msgid "Ccorrelated Timesheets:"
+msgstr "Ccorrelated Timesheets:"
 
 msgid "End must not be before start."
 msgstr "End must not be before start."

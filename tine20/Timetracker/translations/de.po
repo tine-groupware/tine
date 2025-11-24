@@ -84,12 +84,17 @@ msgid "Declined"
 msgstr "Abgelehnt"
 
 #, python-format, php-format
-msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
-msgstr "Es sind noch %s std nicht abgerechnet, wollen Sie diese abrechenbar machen?"
+msgid "There are %s timesheets will be updated."
+msgstr "%s Stundenzettel werden aktualisiert."
 
-#, python-format, php-format
-msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
-msgstr "Es gibt %s noch nicht abgerechnete Stundenzettel, die aktualisiert werden. Wollen Sie fortfahren und die Abrechenbare Zeit neu berechnen?"
+msgid "You are about to change the value of the “Timesheets are invoiceable” field. Should this new value also be changed in all timesheets in the timeaccount if they have not yet been cleared?"
+msgstr "Sie sind dabei den Wert des Feldes “Stundenzettel sind rechnungsfähig” zu ändern. Soll dieser neue Wert auch in allen Stundenzetteln des Zeitkontos geändert werden sofern diese noch nicht abgerechnet sind?"
+
+msgid "Apply to timesheets?"
+msgstr "Auf Stundenzettel anwenden?"
+
+msgid "You are about to change the factor for the timeaccount. Should this new factor also be changed in all timesheets for the timeaccount, provided that these have not yet been cleared and the factor has not already been changed manually?"
+msgstr "Sie sind dabei den Faktor des Zeitkontos zu ändern. Soll dieser neue Faktor auch in allen Stundenzetteln des Zeitkontos geändert werden sofern diese noch nicht abgerechnet sind und der Faktor nicht bereits manuelle geändert wurde?"
 
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Zeitkonten sind noch in Benutzung! Sind Sie sicher, dass Sie sie löschen möchten?"
@@ -105,6 +110,9 @@ msgstr "Die Rechnung die Sie versucht haben zu bearbeiten ist bereits abgerechne
 
 msgid "The related time account is already closed. Do you still want to perform this action?"
 msgstr "Das verknüpfte Zeitkonto ist bereits geschlossen. Wollen Sie diese Aktion wirklich ausführen?"
+
+msgid "Excel overview"
+msgstr ""
 
 msgid "Add Timesheet"
 msgstr "Stundenzettel hinzufügen"
@@ -213,17 +221,11 @@ msgstr "ohne Verantwortliche*n"
 msgid "Time Account - Status"
 msgstr "Zeitkonto - Status"
 
-msgid "End Time Change"
-msgstr "Ende wurde geändert"
+msgid "Change all Correlated Timesheets"
+msgstr ""
 
-msgid "End time was shortened as timesheet must not overlap day"
-msgstr "Die Endezeit wurde gekürzt, da sich Stundenzettel nicht überschneiden dürfen"
-
-msgid "Duration Change"
-msgstr "Dauer geändert"
-
-msgid "Duration was shortened as timesheet must not overlap day"
-msgstr "Die Dauer wurde gekürzt, da Stundenzettel sich nicht überlappen dürfen"
+msgid "Apply these changes to all correlated Timesheets?"
+msgstr ""
 
 msgid "Timesheet"
 msgid_plural "Timesheets"
@@ -233,8 +235,8 @@ msgstr[1] "Stundenzettel"
 msgid "This Item is part of a multi day series of correlated Timesheets."
 msgstr "Dieser Eintrag ist Teil einer mehrtägigen Serie von zusammenhängenden Stundenzetteln."
 
-msgid "Time period overlaps day boundary. When saved, multiple timesheets will be created."
-msgstr "Der Zeitraum überschreitet die Tagesgrenze. Beim Speichern werden mehrere Stundenzettel erstellt."
+msgid "Ccorrelated Timesheets:"
+msgstr ""
 
 msgid "End must not be before start."
 msgstr "Das Ende darf nicht vor dem Start liegen."
@@ -501,6 +503,32 @@ msgstr "Abgerechnete Zeitkonten"
 
 msgid "Timetracker"
 msgstr "Zeiterfassung"
+
+#~ msgid "You are about to change the factor for the timeaccount. "
+#~ msgstr "Sie sind dabei den Faktor des Zeitkontos zu ändern."
+
+#, python-format, php-format
+#~ msgid "There are %s hours that have not yet been billed. Do you want to make them billable?"
+#~ msgstr "Es sind noch %s std nicht abgerechnet, wollen Sie diese abrechenbar machen?"
+
+#, python-format, php-format
+#~ msgid "There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?"
+#~ msgstr "Es gibt %s noch nicht abgerechnete Stundenzettel, die aktualisiert werden. Wollen Sie fortfahren und die Abrechenbare Zeit neu berechnen?"
+
+#~ msgid "End Time Change"
+#~ msgstr "Ende wurde geändert"
+
+#~ msgid "End time was shortened as timesheet must not overlap day"
+#~ msgstr "Die Endezeit wurde gekürzt, da sich Stundenzettel nicht überschneiden dürfen"
+
+#~ msgid "Duration Change"
+#~ msgstr "Dauer geändert"
+
+#~ msgid "Duration was shortened as timesheet must not overlap day"
+#~ msgstr "Die Dauer wurde gekürzt, da Stundenzettel sich nicht überlappen dürfen"
+
+#~ msgid "Time period overlaps day boundary. When saved, multiple timesheets will be created."
+#~ msgstr "Der Zeitraum überschreitet die Tagesgrenze. Beim Speichern werden mehrere Stundenzettel erstellt."
 
 #~ msgid "Manage timeaccounts"
 #~ msgstr "Zeitkonten verwalten"
