@@ -641,7 +641,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
             }
         }
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Calendar_Config::APP_NAME, context: [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
             'initialData' => [

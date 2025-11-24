@@ -40,6 +40,7 @@ class GDPR_Config extends Tinebase_Config_Abstract
     const JWT_SECRET = 'jwtSecret';
     const TEMPLATE_PATH = 'templatePath';
     const MANAGE_CONSENT_EMAIL_TEMPLATE = 'manageConsentEmailTemplate';
+    const ENABLE_PUBLIC_PAGES = 'enablePublicPages';
 
     /**
      * (non-PHPdoc)
@@ -135,6 +136,15 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'GDPR template path',
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => '',
+        ],
+        self::ENABLE_PUBLIC_PAGES => [
+            //_('Enable public pages')
+            self::LABEL                 => 'Enable public pages',
+            //_('Enable public pages like terms and conditions, imprint, representative information.')
+            self::DESCRIPTION           => 'Enable public pages like terms and conditions, imprint, representative information.',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => false,
         ],
     ];
     

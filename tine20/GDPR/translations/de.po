@@ -73,7 +73,7 @@ msgid "GDPR template path"
 msgstr ""
 
 msgid "Enable public pages"
-msgstr ""
+msgstr "Öffentliche Seiten aktivieren"
 
 msgid "Enable public pages like terms and conditions, imprint, representative information."
 msgstr ""
@@ -233,10 +233,6 @@ msgid "You need to select an option!"
 msgstr "Sie müssen eine Option auswälen"
 
 #, python-brace-format
-msgid "Create mass mail without {0} support"
-msgstr "Serienmail ohne {0} Unterstützung verfassen"
-
-#, python-brace-format
 msgid "{0} mass mail support"
 msgstr "{0} Serienmail Unterstützung"
 
@@ -254,6 +250,10 @@ msgstr "Alle Kontakte, die diesem Verwendungszweck zugestimmt haben, als Empfän
 
 msgid "Compose mass mail without recipients"
 msgstr "Keine Empfänger der Serienmail hinzufügen"
+
+#, python-brace-format
+msgid "Create mass mail without {0} support"
+msgstr "Serienmail ohne {0} Unterstützung verfassen"
 
 msgid "Hide from self registration"
 msgstr "Vor Selbstregistrierung verbergen"
@@ -288,7 +288,7 @@ msgid "GDPR Data Expiry Date"
 msgstr "DSGVO Datenablaufdatum"
 
 msgid "E-Mail"
-msgstr ""
+msgstr "E-Mail"
 
 msgid "E-mail"
 msgstr "E-mail"
@@ -303,7 +303,7 @@ msgid "Organization"
 msgstr "Unternehmen"
 
 msgid "Imprint"
-msgstr "Link-Impressum"
+msgstr "Impressum"
 
 msgid "Registration"
 msgstr "Anmeldung"
@@ -353,6 +353,9 @@ msgstr "Willkommen bei Ihrer Einwilligungsverwaltung."
 msgid "Here you can decide for which purposes we may contact you."
 msgstr "Hier können Sie festlegen, zu welchen Zwecken wir Sie kontaktieren dürfen."
 
+msgid "Privacy Policy"
+msgstr "Datenschutzerklärung"
+
 msgid "Register and we will send you news and information about our services in the future."
 msgstr "Melden Sie sich an, dann senden wir Ihnen künftig Neuigkeiten und Nachrichten rund um unsere Dienstleitungen."
 
@@ -367,6 +370,9 @@ msgstr "Die übermittelte E-Mail-Adresse wird ausschließlich für den gewählte
 
 msgid "You can withdraw your consent or change the use of your data at any time."
 msgstr "Sie können jederzeit Ihre Zustimmung widerrufen oder die Verwendung Ihrer Daten ändern."
+
+msgid "Terms of Service"
+msgstr "Nutzungsbedingungen"
 
 #~ msgid "Manage"
 #~ msgstr "Verwalten"

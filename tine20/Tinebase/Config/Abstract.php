@@ -1060,8 +1060,10 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                     is_array($_rawData) ? $_rawData : []);
             case self::TYPE_RECORD:
             case self::TYPE_STRING:
-                if (empty($_rawData) && isset($definition[self::RANDOMIZEIFEMPTY]) && $definition[self::RANDOMIZEIFEMPTY]) {
-                    $_rawData = self::_randomizeValue($parent, $parentKey);
+                if (isset($definition[self::RANDOMIZEIFEMPTY]) && $definition[self::RANDOMIZEIFEMPTY]) {
+                    if (empty($_rawData)) {
+                        $_rawData = self::_randomizeValue($parent, $parentKey);
+                    }
                 }
                 return (string)$_rawData;
             case self::TYPE_FLOAT:

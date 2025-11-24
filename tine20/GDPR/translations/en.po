@@ -228,10 +228,6 @@ msgid "You need to select an option!"
 msgstr "You need to select an option!"
 
 #, python-brace-format
-msgid "Create mass mail without {0} support"
-msgstr "Create mass mail without {0} support"
-
-#, python-brace-format
 msgid "{0} mass mail support"
 msgstr "{0} mass mail support"
 
@@ -249,6 +245,10 @@ msgstr "Add all contacts having agreed to this purpose"
 
 msgid "Compose mass mail without recipients"
 msgstr "Compose mass mail without recipients"
+
+#, python-brace-format
+msgid "Create mass mail without {0} support"
+msgstr "Create mass mail without {0} support"
 
 msgid "Hide from self registration"
 msgstr "Hide from self registration"
@@ -348,6 +348,9 @@ msgstr "Welcome to your consent management."
 msgid "Here you can decide for which purposes we may contact you."
 msgstr "Here you can decide for which purposes we may contact you."
 
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
 msgid "Register and we will send you news and information about our services in the future."
 msgstr "Register and we will send you news and information about our services in the future."
 
@@ -362,3 +365,6 @@ msgstr "The submitted E-mail address will only be used for the selected purpose.
 
 msgid "You can withdraw your consent or change the use of your data at any time."
 msgstr "You can withdraw your consent or change the use of your data at any time."
+
+msgid "Terms of Service"
+msgstr "Terms of Service"

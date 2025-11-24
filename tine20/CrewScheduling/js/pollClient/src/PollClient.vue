@@ -117,7 +117,6 @@ export default {
         this.participantId = window.initialData.participantId
         clearInterval(waitIRef)
         this.loading = false
-        document.getElementsByClassName("tine-viewport-poweredby")[0].style.position = "fixed";
       } else {
         window.location.reload()
       }

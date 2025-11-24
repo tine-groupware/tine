@@ -1019,6 +1019,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
      */
     public function testGDPRMassMailingMessage()
     {
+        GDPR_Config::getInstance()->set(GDPR_Config::ENABLE_PUBLIC_PAGES, true);
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();

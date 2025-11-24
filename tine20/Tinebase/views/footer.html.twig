@@ -19,22 +19,23 @@
             </div>
         {% endif %}
 
-        <div class="text-muted mb-2 text-sm-start text-truncate">
-            Copyright © 2025 Metaways Infosystems GmbH. All rights reserved.
+        <div class="text-sm text-muted mb-2 text-truncate">
+            Copyright © 2025 {{ app.installationRepresentative.org_name | default('Metaways Infosystems GmbH') }}. All rights reserved.
         </div>
-
         <!-- Links with Bootstrap utilities -->
-        <div class="d-flex flex-wrap justify-content-sm-start align-items-center gap-1">
-            <a href="/terms" class="text-primary">Terms of Service</a>
-            <span class="text-muted mx-1 d-sm-inline">|</span>
-
-            <a href="/privacy-policy" class="text-primary">Privacy Policy</a>
-            <span class="text-muted mx-1 d-sm-inline">|</span>
-
-            <a href="mailto:{{ app.installationRepresentative.email | default('') }}" class="text-primary">Contact Us</a>
-            <span class="text-muted mx-1 d-sm-inline">|</span>
-
-            <a href="/imprint" class="text-primary">Imprint</a>
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <div class="d-flex flex-wrap align-items-center gap-1 w-100">
+                {% if app.enablePublicPages %}
+                    <a href="{{ app.installation.weburl }}/GDPR/view/terms" class="text-sm text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
+                    <span class="text-muted mx-1">|</span>
+                    <a href="{{ app.installation.weburl }}/GDPR/view/privacy-policy" class="text-sm text-primary text-decoration-none">{{ _('Privacy Policy') }}</a>
+                    <span class="text-muted mx-1">|</span>
+                    <a href="mailto:{{ app.installationRepresentative.email | default('') }}" class="text-sm text-primary text-decoration-none">{{ _('Contact Us') }}</a>
+                    <span class="text-muted mx-1">|</span>
+                    <a href="{{ app.installation.weburl }}/GDPR/view/imprint" class="text-sm text-primary text-decoration-none">{{ _('Imprint') }}</a>
+                {% endif %}
+                <span class="text-xs ax-right fs-6 ms-auto">Powered by: <a target="_blank" href="{{ app.branding.weburl }}" title="{{ app.branding.description }}">{{ app.branding.title }}</a></span>
+            </div>
         </div>
     </div>
 </footer>

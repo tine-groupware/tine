@@ -121,19 +121,10 @@ msgstr ""
 msgid "Node Download Links"
 msgstr ""
 
-msgid "Create Public Link"
-msgstr ""
-
 msgid "Copy Public Link"
 msgstr ""
 
 msgid "Remove record"
-msgstr ""
-
-msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
-msgstr ""
-
-msgid "Creating a new Download Link..."
 msgstr ""
 
 msgid "Deleting Download Links..."
@@ -398,6 +389,9 @@ msgstr ""
 msgid "Preview"
 msgstr ""
 
+msgid "Download links can be protected with a password. Without a password, anyone with the link can access the selected files."
+msgstr ""
+
 msgid "Folder has been published successfully"
 msgstr ""
 
@@ -614,4 +608,7 @@ msgid "File not found!"
 msgstr ""
 
 msgid "Password required for download"
+msgstr ""
+
+msgid "Submit"
 msgstr ""

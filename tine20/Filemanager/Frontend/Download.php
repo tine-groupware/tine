@@ -126,12 +126,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
         $locale = Tinebase_Core::getLocale();
         $jsFiles[] = "Filemanager/js/publicDownload/index.js";
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Filemanager";
-        $context['noLoadingAnnimation'] = true;
-        $context['base'] = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
-        $context['application'] = Filemanager_Config::APP_NAME;
+        $context = array_merge($context, [
+            'noLoadingAnnimation' => true,
+            'base'  => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+            'application'   =>  Filemanager_Config::APP_NAME
+        ]);
 
-        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles,
-            Filemanager_Config::APP_NAME . '/views/' . $templateName . '.html.twig',
+        $html = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, Filemanager_Config::APP_NAME,
+            "$templateName.html.twig",
             $context);
         return $html;
     }
