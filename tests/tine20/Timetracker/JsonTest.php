@@ -374,7 +374,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             self::fail('should throw Tinebase_Exception_Confirmation!');
         } catch (Tinebase_Exception_Confirmation $tec) {
             $translation = Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME);
-            self::assertEquals(sprintf($translation->_('There are %s hours that have not yet been billed. Do you want to make them billable?'), 1), $tec->getMessage());
+            self::assertStringContainsString($translation->_('You are about to change the value of the “Timesheets are invoiceable” field. Should this new value also be changed in all timesheets in the timeaccount if they have not yet been cleared?'), $tec->getMessage());
         }
 
         // user timeaccount with the confirmation header
@@ -429,7 +429,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             self::fail('should throw Tinebase_Exception_Confirmation!');
         } catch (Tinebase_Exception_Confirmation $tec) {
             $translation = Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME);
-            self::assertEquals(sprintf($translation->_('There are %s not yet billed timesheets will be updated. Do you want to proceed and recalculate their accounting time?'), 1), $tec->getMessage());
+            self::assertStringContainsString($translation->_('You are about to change the factor for the timeaccount. Should this new factor also be changed in all timesheets for the timeaccount, provided that these have not yet been cleared and the factor has not already been changed manually?'), $tec->getMessage());
         }
 
         // user timeaccount with the confirmation header
@@ -1145,6 +1145,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // update timeaccount -> is_billable = false
         $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
         $ta->is_billable = 0;
+        Timetracker_Controller_Timeaccount::getInstance()->setRequestContext(['confirm' => true]);
         Timetracker_Controller_Timeaccount::getInstance()->update($ta);;
 
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
