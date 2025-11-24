@@ -88,7 +88,8 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to handle ActiveSync request ('
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Starting to handle ActiveSync request ('
                     . 'PID: ' . getmypid() . ')');
             }
 
@@ -98,8 +99,12 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
             $request->setRequestUri($this->_request->getRequestUri());
 
             $syncFrontend = new Syncroton_Server(Tinebase_Core::getUser()->accountId, $request, $this->_body);
-
             $syncFrontend->handle();
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' headers sent: ' . print_r(headers_list(), true));
+            }
 
             Tinebase_Controller::getInstance()->logout();
         } catch (Throwable $e) {
