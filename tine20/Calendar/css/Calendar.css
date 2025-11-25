@@ -350,3 +350,48 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .dark-mode.cal-use-light-colors .cal-yearview-event {
     filter: invert(1) hue-rotate(180deg);
 }
+
+.attendee-text-container {
+    cursor: pointer;
+    display: flex;
+}
+
+.attendee-text-container:hover {
+    border-color: #ccc;
+    background-image: url(../../images/icon-set/icon_arrow_down.svg) !important;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: 12px 12px;
+}
+
+.cal-event-response-panel {
+    display: flex;
+    margin: 5px;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.cal-event-response-panel-group-right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.cal-event-response-panel-group-right .subgroup {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+    margin: 3px 10px;
+}
+
+.cal-event-response-panel td{
+    background-color: inherit;
+}
+

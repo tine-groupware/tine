@@ -824,11 +824,38 @@ class Calendar_Frontend_iMIPTest extends TestCase
         Tinebase_Core::setUser($this->_personas['sclever']);
 
         $this->_iMIPFrontend->process($iMIP, Calendar_Model_Attender::STATUS_TENTATIVE);
-        
+
         $event = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord(), true);
 
         $attender = Calendar_Model_Attender::getOwnAttender($event->attendee);
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status);
+    }
+
+    /**
+     * testInternalInvitationRequestProcess
+     */
+    public function testInternalInvitationRequestProcessUpdateOtherAttendee()
+    {
+        $iMIP = $this->_getiMIP('REQUEST');
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $personalCal = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(),
+            Calendar_Model_Event::class, Tinebase_Core::getUser())->getFirstRecord();
+        Tinebase_Container::getInstance()->addGrants($personalCal, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            $this->_personas['pwulf'], [Tinebase_Model_Grants::GRANT_EDIT]);
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+
+        $this->_iMIPFrontend->prepareComponent($iMIP);
+        $event = $iMIP->getEvents()->getFirstRecord();
+
+        $attender = Calendar_Model_Attender::getAttendeeByEmail($event->attendee, 'sclever@mail.test');
+        $attender->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_iMIPFrontend->process($iMIP, $attender);
+
+        $attender = Calendar_Model_Attender::getAttendeeByEmail($event->attendee, 'sclever@mail.test');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $attender->status);
     }
 
     /**

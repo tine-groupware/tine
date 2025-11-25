@@ -536,6 +536,9 @@ Event.getFilterModel = function() {
 };
 
 Event.datetimeRenderer = function(dt) {
+    if (Ext.isString(dt)) {
+        dt = new Date(dt);
+    }
     const app = Tine.Tinebase.appMgr.get('Calendar');
     if (! dt) return app.i18n._('Unknown date');
     //TODO: return html element and get the format ?

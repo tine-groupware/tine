@@ -370,15 +370,26 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
             if ($this->_aggregatedAttendees[$key] ?? false) {
                 continue;
             }
+            $containers = [];
+
             if (Calendar_Model_Attender::USERTYPE_RESOURCE === $attendee->user_type && $attendee->displaycontainer_id !== null) {
-                $this->_aggregatedAttendees[$key] =
-                    is_string($attendee->displaycontainer_id) ? [$attendee->displaycontainer_id] : $attendee->displaycontainer_id->toArray(); /* @phpstan-ignore-line */
+                if (Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $attendee->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
+                    $container = Tinebase_Container::getInstance()->get($attendee->displaycontainer_id);
+                    $containers = [$container->toArray()];
+                }
             } elseif (Calendar_Model_Attender::USERTYPE_USER === $attendee->user_type && $attendee->user_id instanceof Addressbook_Model_Contact
                     && $attendee->user_id->account_id) {
-                $this->_aggregatedAttendees[$key] = Tinebase_Container::getInstance()->getPersonalContainer(
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(
                     Tinebase_Core::getUser(), Calendar_Model_Event::class, $attendee->user_id->account_id,
-                    Tinebase_Model_Grants::GRANT_ADD)->toArray();
+                    [Tinebase_Model_Grants::GRANT_ADD, Tinebase_Model_Grants::GRANT_EDIT])->toArray();
             }
+
+            foreach ($containers as &$container) {
+                if (is_array($container)) {
+                    $container['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container)->toArray();
+                }
+            }
+            $this->_aggregatedAttendees[$key] = $containers;
         }
     }
 
