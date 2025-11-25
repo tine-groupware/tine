@@ -78,7 +78,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
                 ))
             ));
             /** @var Calendar_Model_Event $object */
-            $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
+            $object = $this->_getController()->search($filter, _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->getFirstRecord();
         
             if ($object == null) {
                 throw new Sabre\DAV\Exception\NotFound('Object not found');
@@ -87,7 +87,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             if (!empty($object->base_event_id) && $object->getId() !== $object->base_event_id &&
                     null !== ($tmp = $this->_getController()->search(new Calendar_Model_EventFilter([
                         ['field' => 'id', 'operator' => 'equals', 'value' => $object->base_event_id]
-                    ]), null, false, false, 'sync')->getFirstRecord()) && $tmp->container_id === $this->_container->getId()) {
+                    ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->getFirstRecord()) && $tmp->container_id === $this->_container->getId()) {
                 throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
@@ -165,7 +165,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
          * we must use action 'sync' and not 'get' as
          * otherwise the calendar also return events the user only can see because of freebusy
          */
-        $objects = $this->_getController()->search($filter, null, false, false, 'sync');
+        $objects = $this->_getController()->search($filter, _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC);
         
         $children = array();
         

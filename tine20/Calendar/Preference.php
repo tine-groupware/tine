@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -91,6 +91,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * timeIncrement
      */
     const DEFAULT_TIMEINCREMENT = 'timeIncrement';
+
+    public const EXCLUDE_CANCELLED_EVENTS_WEBDAV = 'excludeCancelledEventsWebDav';
     
     /**
      * firstdayofweek
@@ -152,6 +154,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::REMOVE_FILTERS_ON_SELECT_CONTAINER,
             self::FIXED_CALENDARS,
             self::SYNC_FREE_BUSY_EVENTS,
+            self::EXCLUDE_CANCELLED_EVENTS_WEBDAV,
         );
         
         if ($cropDays) {
@@ -254,6 +257,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
             self::SYNC_FREE_BUSY_EVENTS => [
                 'label'         => $translate->_('Sync FreeBusy events'),
                 'description'   => $translate->_('Receive FreeBusy events via CalDAV and ActiveSync.'),
+            ],
+            self::EXCLUDE_CANCELLED_EVENTS_WEBDAV => [
+                'label'         => $translate->_('Exclude cancelled events from CalDAV'),
+                'description'   => $translate->_('Do not transfer events via CalDAV where the attendee status of the calendar owner is set to "declined"'),
             ],
         );
         
@@ -396,6 +403,13 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::SEND_NOTIFICATION_OF_OWN_ACTIONS:
+                $preference->value      = 0;
+                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                    </options>';
+                break;
+            case self::EXCLUDE_CANCELLED_EVENTS_WEBDAV:
                 $preference->value      = 0;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>

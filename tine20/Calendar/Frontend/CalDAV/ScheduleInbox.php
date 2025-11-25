@@ -41,11 +41,9 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
      */
     public function getChild($_name)
     {
-        try {
-            $event = $_name instanceof Calendar_Model_Event ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new \Sabre\DAV\Exception\NotFound('Object not found');
-        }
+        $event = $_name instanceof Calendar_Model_Event ? $_name :
+            ($this->_getController()->search(new Calendar_Model_EventFilter([['field' => 'id', 'operator' => 'equals', 'value' => $this->_getIdFromName($_name)]]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->getFirstRecord()
+             ?: throw new \Sabre\DAV\Exception\NotFound('Object not found'));
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
         $displayContainer = $ownAttendee->displaycontainer_id instanceof Tinebase_Model_Container ? 
@@ -99,8 +97,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection imple
 //                 )
 //             ),
 //         ));
-
-//         $objects = $this->_getController()->search($filter);
+//         $objects = $this->_getController()->search($filter, ...sync action);
 //         $ownAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
 //         foreach ($object as $event) {
 //             $ownAttendee->addRecord(Calendar_Model_Attender::getOwnAttender($event->attendee));
