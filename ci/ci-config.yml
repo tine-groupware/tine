@@ -9,6 +9,8 @@ variables:
   # DO NOT CHANGE MANUAL: needs to be, in the main variables section CUSTOMER_MAJOR_COMMIT_REF_NAME and BASE_MAJOR_COMMIT_REF_NAME are not set jet
   MAJOR_COMMIT_REF_NAME: "${CUSTOMER_MAJOR_COMMIT_REF_NAME}${BASE_MAJOR_COMMIT_REF_NAME}"
 
+  RELEASE_UPDATE_TEST_START_REF: "2024.11.17"
+
   # Upstream branch as string. For non custom branches, the branch should be its own UPSTREAM_BRANCH.
   UPSTREAM_BRANCH: '2024.11'
 
