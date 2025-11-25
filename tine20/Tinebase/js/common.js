@@ -613,6 +613,10 @@ const common = {
         return result;
     },
 
+    countryRenderer: function (v) {
+        return Locale.getTranslationData('CountryList', v);
+    },
+
     /**
      * foreign record renderer
      *

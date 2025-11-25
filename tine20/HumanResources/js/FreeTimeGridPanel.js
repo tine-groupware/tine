@@ -10,7 +10,7 @@ Ext.ns('Tine.HumanResources');
 class FreeTimeGridPanel extends Tine.widgets.grid.GridPanel {
     initComponent() {
         // this.evalGrants = false;
-        super.initComponent();
+        FreeTimeGridPanel.superclass.initComponent.call(this);
         this.action_editInNewWindow.actionUpdater = (action, grants, records, isFilterSelect, filteredContainers) => {
             let enabled = records.length === 1
             action.setDisabled(!enabled)

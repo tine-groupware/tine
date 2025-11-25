@@ -3283,7 +3283,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
+msgid_plural "Your view is limited by {0} criteria:"
 msgstr[0] ""
 "one: Màn hình của bạn giới hạn {0} điều kiện:\n"
 "other: Màn hình của bạn giới hạn {0} điều kiện:"

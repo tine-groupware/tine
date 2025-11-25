@@ -114,7 +114,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
             ),
             'countryname' => array(
                 'label'   => 'Country', //_('Country')
-                'default' => 'Germany', // _('Germany')
+                'default' => 'DE',
+                self::SPECIAL_TYPE => self::SPECIAL_TYPE_COUNTRY,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
                 'shy'     => TRUE,

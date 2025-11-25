@@ -335,6 +335,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 'dfcom_id',
                                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
                                 {
+                                    fieldLabel: this.app.i18n._('Transponder'),
                                     allowBlank: true
                                 }
                             )]

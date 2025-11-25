@@ -3320,7 +3320,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
+msgid_plural "Your view is limited by {0} criteria:"
 msgstr[0] "Le filtre actuel utilise {0} critère :"
 msgstr[1] "Le filtre actuel utilise {0} critères :"
 msgstr[2] "Le filtre actuel utilise {0} critères :"
