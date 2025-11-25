@@ -3346,7 +3346,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
+msgid_plural "Your view is limited by {0} criteria:"
 msgstr[0] "Vaše zobrazení je omezeno {0} kritériem:"
 msgstr[1] "Vaše zobrazení je omezeno {0} kritérii:"
 msgstr[2] "Vaše zobrazení je omezeno {0} kritérii:"

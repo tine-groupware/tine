@@ -403,10 +403,6 @@ msgstr "Personalkonten anlegen"
 msgid "Clock in"
 msgstr "Einstempeln"
 
-#, fuzzy
-msgid "Absence"
-msgstr "Abwesenheit"
-
 msgid "Clock out"
 msgstr "Ausstempeln"
 
@@ -1006,6 +1002,12 @@ msgstr "Verträge"
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
+msgid "Project Time Recorder Device"
+msgstr "Projektzeiterfassung mit"
+
+msgid "Working Time Recorder Device"
+msgstr "Arbeitszeiterfassung mit"
+
 msgid "Free Day"
 msgid_plural "Free Days"
 msgstr[0] "Freier Tag"
@@ -1526,6 +1528,11 @@ msgstr "Postleitzahl"
 
 msgid "Email"
 msgstr "E-Mail"
+
+msgid "Absence"
+msgid_plural "Absences"
+msgstr[0] "Abwesenheit"
+msgstr[1] "Abwesenheiten"
 
 msgid "GENDER_Absence"
 msgstr "female"

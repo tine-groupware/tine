@@ -3318,7 +3318,7 @@ msgstr ""
 
 #, python-brace-format
 msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
+msgid_plural "Your view is limited by {0} criteria:"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
