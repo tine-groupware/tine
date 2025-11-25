@@ -193,6 +193,9 @@ Tine.widgets.grid.RendererManager = function() {
                     renderer = this.defaultRenderer;
                     if (fieldDefinition.hasOwnProperty('specialType')) {
                         switch (fieldDefinition.specialType) {
+                            case 'country':
+                                renderer = Tine.Tinebase.common.countryRenderer;
+                                break;
                             case 'currency':
                                 renderer = Tine.Tinebase.common.currencyRenderer;
                                 break;
