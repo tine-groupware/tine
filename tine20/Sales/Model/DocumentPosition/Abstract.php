@@ -584,8 +584,6 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 preg_replace("/^{$translation->_('Reversal')}: /", '', $this->{self::FLD_TITLE});
         }
 
-        $this->__unset($this->getIdProperty());
-
         if (!$this->isProduct()) {
             return;
         }
