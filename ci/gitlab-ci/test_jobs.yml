@@ -242,6 +242,8 @@ release-update-tests:
         paths:
           - tine20/Setup/**/*
           - tine20/*/Setup/**/*
+          - tine20/*/Model/*
+          - tine20/*/Model/**/*
 
 prevent-upstream-changes:
   extends: .php-unit-update-tests
