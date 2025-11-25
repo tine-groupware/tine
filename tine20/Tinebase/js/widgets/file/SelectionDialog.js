@@ -79,7 +79,7 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
     windowNamePrefix: 'Tinebase.widgets.file.SelectionDialog',
     windowWidth: 1024,
     windowHeight: 500,
-    layout: 'border',
+    layout: 'fit',
     border: false,
     
     initComponent: function () {
@@ -271,30 +271,34 @@ Tine.Tinebase.widgets.file.SelectionDialog = Ext.extend(Tine.Tinebase.dialog.Dia
     },
     
     initLayout: function() {
-        this.defaults = {
-            border: false
+        this.items = {
+            border: false,
+            frame: false,
+            layout: 'border',
+            defaults: {
+                border: false
+            },
+            items: [{
+                ref: '../targetForm',
+                region: 'north',
+                layout: 'card',
+                hidden: this.mode === 'source'
+            }, {
+                ref: '../westPanel',
+                region: 'west',
+                width: 150,
+                items: this.getPluginSelectionTree()
+            }, {
+                ref: '../pluginPanel',
+                region: 'center',
+                layout: 'card'
+            }, {
+                ref: '../optionsForm',
+                region: 'south',
+                layout: 'card',
+                hidden: true
+            }]
         };
-        
-        this.items = [{
-            ref: 'targetForm',
-            region: 'north',
-            layout: 'card',
-            hidden: this.mode === 'source'
-        }, {
-            ref: 'westPanel',
-            region: 'west',
-            width: 150,
-            items: this.getPluginSelectionTree()
-        }, {
-            ref: 'pluginPanel',
-            region: 'center',
-            layout: 'card'
-        }, {
-            ref: 'optionsForm',
-            region: 'south',
-            layout: 'card',
-            hidden: true
-        }]; 
     },
 
     getState: function () {

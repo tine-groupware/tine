@@ -159,7 +159,7 @@ Ext.layout.BorderLayout = Ext.extend(Ext.layout.ContainerLayout, {
     onLayout : function(ct, target){
 
         // if parent responsiveEnabled, make this container also responsiveEnabled
-        ct.enableResponsive = this.enableResponsive ?? ct.ownerCt.enableResponsive;
+        ct.enableResponsive = this.enableResponsive ?? ct?.ownerCt?.enableResponsive;
         this.enableResponsive = this.enableResponsive ?? ct.enableResponsive
 
         this.layoutClass = getLayoutClass(this.getLayoutTargetSize().width, this.responsiveBreakpointOverrides)

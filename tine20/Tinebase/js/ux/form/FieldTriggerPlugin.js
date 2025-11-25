@@ -47,7 +47,10 @@ class FieldTriggerPlugin {
                 this.setQtip(this.qtip)
             }
 
-            field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
+            if (this.onTriggerClick) {
+                field.mon(this.#trigger, 'click', this.onTriggerClick, this, {preventDefault:true});
+            }
+
             this.#trigger.addClassOnOver('x-form-trigger-over');
             this.#trigger.addClassOnClick('x-form-trigger-click');
 
