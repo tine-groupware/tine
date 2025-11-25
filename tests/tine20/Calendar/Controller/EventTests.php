@@ -4,9 +4,11 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Calendar_Controller_Event
@@ -203,7 +205,95 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals($resolvableConcurrentEvent1Update->dtstart, $resolvableConcurrentEvent2Update->dtstart);
         $this->assertEquals((string) $resolvableConcurrentEvent1Update->rrule, (string) $resolvableConcurrentEvent2Update->rrule);
     }
-    
+
+    public function testNoDeclinedAttendeeEvents(): void
+    {
+        $resource = Calendar_Controller_Resource::getInstance()->create($this->_getResource());#
+
+        // personal event
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_getPersonasContacts('pwulf')->getId(),
+        ));
+        $event->attendee[] = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+            'user_id'   => $resource->getId(),
+        ));
+
+        $persistentEvent = $this->_controller->create($event);
+
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($persistentEvent->getContainerId());
+        $grants->addRecord(new Calendar_Model_EventPersonalGrants([
+            'account_id' => $this->_personas['pwulf']->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+        ]));
+        Tinebase_Container::getInstance()->setGrants($persistentEvent->getContainerId(), $grants);
+
+        $this->_controller->doNoSyncDeclinedAttendeeEvents(true);
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $resource->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $attender = $persistentEvent->attendee->find('user_id', $this->_getPersonasContacts('pwulf')->getId());
+        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $attender = $persistentEvent->attendee->find('user_id', $this->_getTestUser()->contact_id);
+        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+
+        $this->assertSame(0, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+        $this->assertSame(1, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $resource->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        $attender = $persistentEvent->attendee->find('user_id', $resource->getId());
+        $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+
+        $this->assertSame(0, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $resource->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        Tinebase_Core::setUser($this->_personas['pwulf']);
+        $this->assertSame(0, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+
+        $attender = $persistentEvent->attendee->find('user_id', $this->_getPersonasContacts('pwulf')->getId());
+        $attender->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+
+        $this->assertSame(0, $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getContainerId()],
+        ]), _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC)->count());
+    }
+
     public function testUpdateAttendeeStatus()
     {
         $this->_controller->setCalendarUser(new Calendar_Model_Attender([

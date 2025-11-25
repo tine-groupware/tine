@@ -310,6 +310,12 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::_checkRateLimit(Tinebase_Server_WebDAV::class, $this->_request->getMethod() . '.' . $_SERVER['REQUEST_URI']);
 
             self::$_server->on('exception', fn(Throwable $t) => $this->_reportWebDavIssue($t));
+
+            // check Calendar noSyncDeclinedAttendeeEvents
+            if (Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->getValueForUser(Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV, Tinebase_Core::getUser()->getId())) {
+                Calendar_Controller_Event::getInstance()->doNoSyncDeclinedAttendeeEvents(true);
+            }
+
             self::$_server->exec();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
