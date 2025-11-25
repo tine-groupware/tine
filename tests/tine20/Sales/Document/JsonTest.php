@@ -277,6 +277,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
         $customer = $this->_createCustomer();
         $document[SMDOffer::FLD_CUSTOMER_ID] = $customer->toArray();
+        $document[SMDOffer::FLD_DEBITOR_ID] = null;
         $document = $this->_instance->saveDocument_Offer($document);
 
         $this->assertSame($customer->getId(), $document[SMDOffer::FLD_CUSTOMER_ID]['original_id']);
@@ -362,6 +363,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $customer = $this->_createCustomer();
         $customerData = $customer->toArray();
         $document[SMDOffer::FLD_CUSTOMER_ID] = $customerData;
+        $document[SMDOffer::FLD_DEBITOR_ID] = null;
         $document[SMDOffer::FLD_RECIPIENT_ID] = '';
 
         $updatedDocument = $this->_instance->saveDocument_Offer($document);
