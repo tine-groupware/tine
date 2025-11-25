@@ -522,6 +522,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
+                    'xtype'                             => 'sales-taxbyrate-field'
                 ],
             ],
             self::FLD_GROSS_SUM                 => [

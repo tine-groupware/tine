@@ -125,16 +125,18 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_TAX_AMOUNT                => [
+                self::LABEL                         => 'Tax', // _('Tax')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
+//                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_TAX_RATE                  => [
+                self::LABEL                         => 'Tax Rate', // _('Tax Rate')
                 self::TYPE                          => self::TYPE_FLOAT,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_PERCENT,
                 self::VALIDATORS                    => [
@@ -142,7 +144,7 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
+//                    self::READ_ONLY                     => true,
                 ],
             ],
         ],

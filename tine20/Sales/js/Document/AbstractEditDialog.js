@@ -10,8 +10,11 @@ import FieldTriggerPlugin from "../../../Tinebase/js/ux/form/FieldTriggerPlugin"
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
+import { getSums as getPositionsSums } from  '../DocumentPosition/AbstractGridPanel'
 import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 import PaymentMeansField from './PaymentMeansField'
+import TaxByRateField from "./TaxByRateField";
+import Record from "../../../Tinebase/js/data/Record";
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -70,42 +73,40 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         // default category
         const categoryField = this.getForm().findField('document_category');
-        if (!categoryField.selectedRecord) {
+        if (categoryField && !categoryField.selectedRecord) {
             const category = Tine.Tinebase.data.Record.setFromJson(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'), 'Sales.Document_Category');
             categoryField.setValue(category);
             categoryField.onSelect(category, 0);
         }
 
-        let document_price_type = 'gross';
-        const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
-        const sums = positions.reduce((a, pos) => {
-            document_price_type = document_price_type === 'gross' && pos.unit_price_type === 'gross' ? 'gross' : 'net';
-            a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
-            a['positions_gross_sum'] = (a['positions_gross_sum'] || 0) + (pos['gross_price'] || 0)
-            a['positions_discount_sum'] = (a['positions_discount_sum'] || 0) + (pos['position_discount_sum'] || 0)
-
-            const rate = pos['sales_tax_rate'] || 0
-            a['sales_tax_by_rate'][rate] = (a['sales_tax_by_rate'].hasOwnProperty(rate) ? a['sales_tax_by_rate'][rate] : 0) + (pos['sales_tax'] || 0)
-            a['net_sum_by_tax_rate'][rate] = (a['net_sum_by_tax_rate'].hasOwnProperty(rate) ? a['net_sum_by_tax_rate'][rate] : 0) + (pos['net_price'] || 0)
-            a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['position_price'] || 0)
-
-            return a;
-        }, {
-            positions_net_sum: 0,
-            positions_gross_sum: 0,
-            positions_discount_sum: 0,
-            sales_tax_by_rate: {},
-            net_sum_by_tax_rate: {},
-            gross_sum_by_tax_rate: {}
-        })
+        const possField = this.getForm().findField('positions')
+        const positions = possField.getValue() || []
+        const sums = getPositionsSums(positions)
+        const lastSums = getPositionsSums(possField.lastValue || [])
+        possField.lastValue = _.cloneDeep(positions)
 
         Object.keys(sums).forEach((fld) => {
-            sums[fld] = this.recordClass.toFixed(sums[fld])
-            if (this.recordClass.hasField(fld)) {
+            if (! fld.match(/_sum$/)) return
+
+            if (this.recordClass.hasField(fld) && (this.record.get(fld) || 0) === lastSums[fld]) {
                 this.record.set(fld, sums[fld])
             }
-            this.getForm().findField(fld)?.setValue(sums[fld])
+
+            const field = this.getForm().findField(fld)
+            if (field && (field.getValue() ||0) === lastSums[fld]) {
+                field.setValue(sums[fld], this.record)
+                field.lastValue = lastSums[fld]
+            }
         })
+
+        if (!positions.length && (
+            (this.getForm().findField('positions_gross_sum')?.getValue() && !this.getForm().findField('positions_net_sum')?.getValue()) ||
+            (this.getForm().findField('gross_sum')?.getValue() && !this.getForm().findField('net_sum')?.getValue())) ) {
+
+            this.document_price_type = 'gross';
+        }
+
+        const document_price_type = positions.length ? sums.document_price_type : (this.document_price_type || 'net');
 
         // make sure discount calculations run
         if (this.getForm().findField('invoice_discount_sum')) {
@@ -117,38 +118,101 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.getForm().findField('positions_net_sum')?.setVisible(document_price_type !== 'gross');
         this.getForm().findField('positions_gross_sum')?.setVisible(document_price_type === 'gross');
 
-        if (document_price_type === 'gross') {
-            // sales_tax & sales_tax_by_rate
-            // ok discount is already applied -> lower sales_tax_by_rate by discount rate
-            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
-                sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - this.record.get('invoice_discount_sum') / this.record.get('positions_gross_sum')) || 0
-                return a + sums['sales_tax_by_rate'][rate]
-            }, 0)))
-            this.record.set('net_sum', this.recordClass.toFixed(this.record.get('positions_gross_sum') - this.record.get('invoice_discount_sum') - this.record.get('sales_tax')))
-            this.getForm().findField('net_sum')?.setValue(this.record.get('net_sum'))
-        } else {
-            this.record.set('sales_tax', this.recordClass.toFixed(Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
-                sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - this.record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / this.record.get('positions_net_sum')) || 0)) * rate / 100
-                return a + sums['sales_tax_by_rate'][rate]
-            }, 0)))
+        const autoValues = (record, sums, document_price_type) => {
+            let positions_net_sum, positions_gross_sum, net_sum, sales_tax, sales_tax_by_rate, gross_sum
+            if (document_price_type === 'gross') {
+                if (record.get('positions').length) {
+                    // sales_tax & sales_tax_by_rate
+                    // ok discount is already applied -> lower sales_tax_by_rate by discount rate
+                    sales_tax = this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
+                        sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - record.get('invoice_discount_sum') / record.get('positions_gross_sum')) || 0
+                        return a + sums['sales_tax_by_rate'][rate]
+                    }, 0))
+                } else {
+                    if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
+                        sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
+                        sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100);
+                    }
+                }
 
-            this.record.set('gross_sum', this.recordClass.toFixed(this.recordClass.toFixed(this.record.get('positions_net_sum') - this.record.get('invoice_discount_sum') + this.record.get('sales_tax'))))
-            this.getForm().findField('gross_sum')?.setValue(this.record.get('gross_sum'))
+                positions_net_sum = this.recordClass.toFixed(record.get('positions_gross_sum') - sales_tax);
+                net_sum = this.recordClass.toFixed(positions_net_sum - record.get('invoice_discount_sum'));
+
+            } else {
+                if (record.get('positions').length) {
+                    sales_tax = this.recordClass.toFixed(Object.keys(sums['net_sum_by_tax_rate']).reduce((a, rate) => {
+                        sums['sales_tax_by_rate'][rate] = (sums['net_sum_by_tax_rate'][rate] - record.get('invoice_discount_sum') * ((sums['net_sum_by_tax_rate'][rate] / record.get('positions_net_sum')) || 0)) * rate / 100
+                        return a + sums['sales_tax_by_rate'][rate]
+                    }, 0))
+                } else {
+                    if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
+                        sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
+                        sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
+                    }
+                }
+
+                positions_gross_sum = this.recordClass.toFixed(this.recordClass.toFixed(record.get('positions_net_sum')) + sales_tax);
+                gross_sum = this.recordClass.toFixed(positions_gross_sum - record.get('invoice_discount_sum'));
+            }
+
+            // reformat sales_tax_by_rate
+            if (record.get('positions').length) {
+                sales_tax_by_rate = Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
+                    const oldRate = _.find(_.get(record, 'modified.sales_tax_by_rate', record.get('sales_tax_by_rate')) || [], {tax_rate: Number(rate)}) || {}
+                    return a.concat(Number(rate) ? [Object.assign(oldRate, {
+                        // 'net_amount'
+                        'tax_rate': Number(rate),
+                        'tax_amount': sums['sales_tax_by_rate'][rate]
+                        // 'gross_amount'
+                    })] : [])
+                }, Tine.Tinebase.common.assertComparable([]))
+            } else {
+                // @TODO match old rate
+                sales_tax_by_rate = Tine.Tinebase.common.assertComparable([{
+                    // 'net_amount'
+                    'tax_rate': Number(sales_tax_by_rate),
+                    'tax_amount': sales_tax
+                    // 'gross_amount'
+                }])
+            }
+            sales_tax = _.reduce(sales_tax_by_rate, (a, tax) => a + tax.tax_amount, 0);
+
+            
+            return { positions_net_sum, positions_gross_sum, net_sum, sales_tax, sales_tax_by_rate, gross_sum };
         }
-        this.record.set('invoice_discount_sum', this.recordClass.toFixed(this.record.get('invoice_discount_sum')))
-        this.record.set('net_sum', this.recordClass.toFixed(this.record.get('net_sum')))
 
-        // reformat sales_tax_by_rate
-        this.record.set('sales_tax_by_rate', Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
-            const oldRate = _.find(_.get(this.record, 'modified.sales_tax_by_rate', {}), {tax_rate: Number(rate)}) || {}
-            return a.concat(Number(rate) ? [Object.assign(oldRate, {
-                'tax_rate': Number(rate),
-                'tax_sum': sums['sales_tax_by_rate'][rate]
-            })] : [])
-        }, Tine.Tinebase.common.assertComparable([])))
+        this.lastRecord = this.lastRecord || this.record
+        const { positions_net_sum: last_positions_net_sum, positions_gross_sum: last_positions_gross_sum, net_sum: last_net_sum, sales_tax: last_sales_tax, sales_tax_by_rate: last_sales_tax_by_rate, gross_sum: last_gross_sum } = autoValues(this.lastRecord, lastSums, this.lastRecord.get('positions').length ? lastSums.document_price_type : (this.document_price_type || 'net'));
+        const { positions_net_sum, positions_gross_sum, net_sum, sales_tax, sales_tax_by_rate, gross_sum } = autoValues(this.record, sums, document_price_type);
 
-        this.getForm().findField('sales_tax_by_rate')?.setValue(this.record.get('sales_tax_by_rate'))
-        this.getForm().findField('sales_tax')?.setValue(this.record.get('sales_tax'))
+        if (document_price_type === 'gross') {
+            if ((this.getForm().findField('positions_net_sum')?.getValue() || 0) === (last_positions_net_sum || 0)) {
+                this.record.set('positions_net_sum', positions_net_sum);
+                this.getForm().findField('positions_net_sum')?.setValue(positions_net_sum);
+            }
+            if ((this.getForm().findField('net_sum')?.getValue() || 0) === (last_net_sum || 0)) {
+                this.record.set('net_sum', net_sum);
+                this.getForm().findField('net_sum')?.setValue(net_sum);
+            }
+        }
+        if ((this.getForm().findField('sales_tax')?.getValue() || 0) === (last_sales_tax || 0)) {
+            this.record.set('sales_tax', sales_tax);
+            this.getForm().findField('sales_tax')?.setValue(sales_tax);
+        }
+        if (['null', JSON.stringify(last_sales_tax_by_rate)].indexOf(JSON.stringify(this.getForm().findField('sales_tax_by_rate')?.getValue())) >= 0) {
+            this.record.set('sales_tax_by_rate', sales_tax_by_rate);
+            this.getForm().findField('sales_tax_by_rate')?.setValue(sales_tax_by_rate);
+        }
+        if (document_price_type === 'net') {
+            if ((this.getForm().findField('positions_gross_sum')?.getValue() || 0) === (last_positions_gross_sum || 0)) {
+                this.record.set('positions_gross_sum', positions_gross_sum);
+                this.getForm().findField('positions_gross_sum')?.setValue(positions_gross_sum);
+            }
+            if ((this.getForm().findField('gross_sum')?.getValue() || 0) === (last_gross_sum || 0)) {
+                this.record.set('gross_sum', gross_sum);
+                this.getForm().findField('gross_sum')?.setValue(gross_sum);
+            }
+        }
 
         // handle booked state
         const statusField = this.fields[this.statusFieldName]
@@ -209,6 +273,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
         })
 
+        this.lastRecord = Tine.Tinebase.data.Record.clone(this.record);
     },
 
     getRecordFormItems: function() {
@@ -324,7 +389,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
-                [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
+                [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax_by_rate, fields.gross_sum],
                 [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 2/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]

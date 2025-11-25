@@ -13,4 +13,6 @@ const PurchaseInvoice = Record.create([], {
     modelName: 'Document_PurchaseInvoice'
 })
 
+PurchaseInvoice.toFixed = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed
+
 export default PurchaseInvoice

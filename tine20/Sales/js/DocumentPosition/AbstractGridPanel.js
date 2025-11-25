@@ -10,9 +10,11 @@ import './AbstractEditDialog';
 import DDSortPlugin from 'ux/grid/DDSortPlugin';
 
 const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
+    autoHeight: true,
     quickaddMode: 'sorted',
     autoExpandColumn: 'title',
     quickaddMandatory: 'title',
+    clicksToEdit: 1,
 
     allowCreateNew: true,
     enableBbar: true,
@@ -74,7 +76,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             fieldsToExclude: ['document_id']
         });
 
-        return this.supr().initComponent.call(this);
+        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-EditDialogGridPanel';
+        return AbstractGridPanel.superclass.initComponent.call(this);
     },
 
     // quickadd
@@ -85,7 +88,22 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             let productData = position.get('title');
             const lang = this.lang || this.editDialog.getForm().findField('document_language').getValue();
 
-            if (! _.isString(productData)) { // manual position
+            if (_.isString(productData)) {
+                // manual position
+                if(position.get('type') === 'PRODUCT') {
+                    position.set('quantity', 1)
+                    position.set('unit', 'PIECE')
+                    position.set('unit_price', 0)
+                    position.set('position_price', 0)
+                    position.set('position_discount_type', 'SUM')
+                    position.set('sales_tax_rate', Tine.Tinebase.configManager.get('salesTax'))
+                    position.set('sales_tax', 0)
+                    position.set('gross_price', 0)
+                    position.set('net_price', 0)
+                }
+
+            } else {
+                // product position
                 position.setFromProduct(productData, lang, this.editDialog.record.getData());
             }
 
@@ -179,7 +197,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
             positions.forEach((pos) => { pos.commit() });
             this.applyNumbering();
-            this.fireEvent('change', this)
+
+            this.onAfterEditPosition({record: position}); // manual position from purchasing invoice
+            position.commit();
         });
         return false;
     },
@@ -243,7 +263,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     // inline edit
     onAfterEditPosition(e) {
-        this.colModel.columns.find(c => c.dataIndex === 'position_discount_sum').editor.field.checkState(null, e.record)
+        this.colModel.columns.find(c => c.dataIndex === 'position_discount_sum')?.editor.field.checkState(null, e.record)
 
         e.record.computePrice();
         this.fireEvent('change', this)
@@ -274,8 +294,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
             const col = colMgr(fieldName, { sortable: false });
             if (col && ['document_id'].indexOf(fieldName) < 0) {
-                if (['type', 'pos_number', 'gross_price'].indexOf(fieldName) < 0) {
-                    col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName));
+                if (['type', 'pos_number'].indexOf(fieldName) < 0) {
+                    col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName, { selectOnFocus: true, blurOnSelect: false }));
                 }
                 columns.push(col);
             }
@@ -291,7 +311,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         Object.assign(this.columns.find((c) => c.dataIndex === 'position_discount_sum') || {},{ header: i18n._('Discount') });
         Object.assign(this.columns.find((c) => c.dataIndex === 'gross_price') || {},{ header: i18n._('Total') });
 
-        const colModel = this.supr().getColumnModel.call(this);
+        const colModel = AbstractGridPanel.superclass.getColumnModel.call(this);
 
         return colModel;
     },
@@ -302,7 +322,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.productPicker = this.productPicker || Ext.ComponentMgr.create(fieldMgr('product_id', {
             blurOnSelect: true,
             minListWidth: 500,
-            resizable: true
+            resizable: true,
+            forceSelection: false,
         }))
         return this.productPicker
     },
@@ -375,4 +396,45 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     validate: function() { return true; }
 });
 
+const getSums = function(positions) {
+    const toFixed = Tine.Sales.Model.DocumentPosition_PurchaseInvoice.toFixed
+
+    const sums = positions.reduce((a, pos) => {
+        a.document_price_type = a.document_price_type === 'gross' && pos.unit_price_type === 'gross' ? 'gross' : 'net';
+        a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
+        a['positions_gross_sum'] = (a['positions_gross_sum'] || 0) + (pos['gross_price'] || 0)
+        a['positions_discount_sum'] = (a['positions_discount_sum'] || 0) + (pos['position_discount_sum'] || 0)
+
+        const rate = pos['sales_tax_rate'] || 0
+        a['sales_tax_by_rate'][rate] = (a['sales_tax_by_rate'].hasOwnProperty(rate) ? a['sales_tax_by_rate'][rate] : 0) + (pos['sales_tax'] || 0)
+        a['net_sum_by_tax_rate'][rate] = (a['net_sum_by_tax_rate'].hasOwnProperty(rate) ? a['net_sum_by_tax_rate'][rate] : 0) + (pos['net_price'] || 0)
+        a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['position_price'] || 0)
+
+        return a;
+    }, {
+        positions_net_sum: 0,
+        positions_gross_sum: 0,
+        positions_discount_sum: 0,
+        sales_tax_by_rate: {},
+        net_sum_by_tax_rate: {},
+        gross_sum_by_tax_rate: {},
+        document_price_type: 'gross'
+    })
+
+    if (! positions.length) {
+        sums.document_price_type = 'net'
+    }
+
+    Object.keys(sums).forEach((fld) => {
+        if (fld.match(/_sum$/)){
+            sums[fld] = toFixed(sums[fld])
+        }
+    })
+
+    return sums;
+}
 export default AbstractGridPanel;
+export {
+    AbstractGridPanel,
+    getSums
+}

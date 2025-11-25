@@ -34,6 +34,11 @@ class Sales_Model_DocumentPosition_PurchaseInvoice extends Sales_Model_DocumentP
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART;
+
+        $_definition[self::FIELDS][self::FLD_POSITION_PRICE][self::UI_CONFIG][self::READ_ONLY] = false;
+        $_definition[self::FIELDS][self::FLD_NET_PRICE][self::UI_CONFIG][self::READ_ONLY] = false;
+        $_definition[self::FIELDS][self::FLD_SALES_TAX][self::UI_CONFIG][self::READ_ONLY] = false;
+        $_definition[self::FIELDS][self::FLD_GROSS_PRICE][self::UI_CONFIG][self::READ_ONLY] = false;
     }
 
     /**

@@ -169,6 +169,14 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
         unset($_definition[self::FIELDS][self::FLD_CONTRACT_ID]);
 
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_NET_SUM][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_GROSS_SUM][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_POSITIONS_DISCOUNT_SUM][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_NET_SUM][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_SALES_TAX][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE][self::UI_CONFIG][self::READ_ONLY]);
+        unset($_definition[self::FIELDS][self::FLD_GROSS_SUM][self::UI_CONFIG][self::READ_ONLY]);
+
         // FLD_ATTACHED_DOCUMENTS
         // Zugferd -> paperslip
         // orginal document => edocument (auch für zugferd abspeichern)

@@ -34,5 +34,4 @@ Ext.reg('sales-document-position-invoice-gridpanel', InvoicePositionGridPanel)
 Tine.widgets.form.FieldManager.register('Sales', 'Document_Invoice', 'positions', {
     xtype: 'sales-document-position-invoice-gridpanel',
     recordClass: 'Sales.DocumentPosition_Invoice',
-    height: 650
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG)
