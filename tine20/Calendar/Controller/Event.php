@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Calendar Event Controller
  * 
@@ -90,6 +92,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected $_keepAttenderStatus = false;
 
     protected $_moveExternalOrganizerToContainer = true;
+
+    protected $_noSyncDeclinedAttendeeEvents = false;
 
     /**
      * @var Calendar_Controller_Event
@@ -2532,6 +2536,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $events;
     }
+
+    public function doNoSyncDeclinedAttendeeEvents(?bool $value = null): bool
+    {
+        $oldValue = $this->_noSyncDeclinedAttendeeEvents;
+        if (null !== $value) {
+            $this->_noSyncDeclinedAttendeeEvents = $value;
+        }
+        return $oldValue;
+    }
     
     /**
      * redefine required grants for get actions
@@ -2557,6 +2570,53 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         parent::checkFilterACL($_filter, $_action);
+
+        if ($this->_noSyncDeclinedAttendeeEvents && self::ACTION_SYNC === $_action) {
+            if (!($containerId = $_filter->findFilterWithoutOr('container_id')) || !$containerId instanceof Tinebase_Model_Filter_Container || 1 !== count($containerId->getContainerIds())) {
+                $containerId = null;
+                if (($idFilter = $_filter->findFilterWithoutOr('id')) && $idFilter->getOperator() === Tinebase_Model_Filter_Abstract::OP_EQUALS) {
+                    try {
+                        $containerId = $this->get($idFilter->getValue())->container_id;
+                    } catch (Tinebase_Exception) {}
+                }
+            } else {
+                $containerId = current($containerId->getContainerIds());
+            }
+
+            if ($containerId) {
+                /** @var Tinebase_Model_Container $container */
+                $container = Tinebase_Container::getInstance()->get($containerId);
+                if (Tinebase_Model_Container::TYPE_PERSONAL === $container->type) {
+                    try {
+                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
+                                'user_id' => Tinebase_User::getInstance()->getUserById($container->owner_id)->contact_id,
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            ]],
+                            [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
+                        ]));
+                    } catch (Tinebase_Exception_NotFound) {}
+                } elseif (Tinebase_Model_Container::TYPE_SHARED === $container->type) {
+                    if ($resourceId = ($container->xprops()['Calendar']['Resource']['resource_id'] ?? false)) {
+                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
+                                'user_id' => $resourceId,
+                                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                            ]],
+                            [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
+                        ]));
+                    } else {
+                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
+                                'user_id' => Tinebase_Core::getUser()->contact_id, // TODO FIXME calendar user?!
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            ]],
+                            [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
+                        ]));
+                    }
+                }
+            }
+        }
         
         if ($_action == 'get') {
             $_filter->setRequiredGrants(array(
