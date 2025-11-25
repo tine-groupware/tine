@@ -17,6 +17,7 @@ Ext.ns('Tine.Calendar');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * 
  * @TODO make displaycontainer setting work
+ * todo: extend AttendeeCombo?
  */
 Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
     

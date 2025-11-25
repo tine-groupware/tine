@@ -35,62 +35,56 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      * @type Tine.Calendar.Model.iMIP
      */
     iMIPrecord: null,
-    
-    /**
-     * @property statusActions
-     * @type Array
-     */
-    statusActions:[],
-    
+
+
+    allowViewInCalendar: true,
+
     /**
      * init this component
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-        
-        this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.preparedPart.preparedData);
-        if (! this.iMIPrecord.get('event') || ! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
-            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.preparedPart.preparedData.event)
-            }));
-        }
-        
+
+        this.resolveIMIP(this.messageRecord.get('preparedParts')[0].preparedData);
         this.initIMIPToolbar();
-        
-        this.on('afterrender', this.showIMIP, this);
-        
+
+        this.on('afterrender', async (cmp, ownerCt) => {
+            await this.attendeeCombo.syncStore(this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'));
+            this.showIMIP();
+        });
+        this.on('updateEvent', async (result) => {
+            this.resolveIMIP(result);
+            this.showIMIP();
+        });
+
         Tine.Calendar.iMIPDetailsPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * (re) prepare IMIP
-     */
-    prepareIMIP: function() {
-        this.iMIPclause.setText(this.app.i18n._('Checking Calendar Data...'));
-        
-        Tine.Calendar.iMIPPrepare(this.iMIPrecord.data, function(result, response) {
-            this.preparedPart.preparedData = result;
-            if (response.error) {
-                // give up!
-                this.iMIPrecord.set('preconditions', {'GENERIC': 'generic problem'});
-            } else {
-                this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
-                this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                    responseText: Ext.util.JSON.encode(result.event)
-                }));
-            }
-            
-            this.showIMIP();
-        }, this);
+
+    resolveIMIP(data) {
+        if (data) {
+            this.prepareData = data;
+            this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.prepareData);
+        }
+
+        if (! this.iMIPrecord.get('event') || ! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
+            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.prepareData.event)
+            }));
+        }
+        if (this.iMIPrecord.get('existing_event') && !Ext.isFunction(this.iMIPrecord.get('existing_event').beginEdit)) {
+            this.iMIPrecord.set('existing_event', Tine.Calendar.backend.recordReader({
+                responseText: Ext.util.JSON.encode(this.iMIPrecord.get('existing_event'))
+            }));
+        }
     },
-    
+
     /**
      * process IMIP
-     * 
+     *
      * @param {String} status
      */
-    processIMIP: function(status, range) {
-        if (this.iMIPrecord.get('event').isRecurBase() && status != 'ACCEPTED' && !range) {
+    processIMIP: async function (status, range) {
+        if (this.iMIPrecord.get('event').isRecurBase() && status !== 'ACCEPTED' && !range) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Reply to Recurring Event'),
                 questionText: this.app.i18n._('You are responding to a recurring event. What would you like to do?'),
@@ -100,186 +94,369 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                     {text: this.app.i18n._('Respond to the whole series'), name: 'series'},
                     {text: this.app.i18n._('Do not respond'), name: 'cancel'}
                 ],
-                
-                handler: function(option) {
-                    if (option != 'cancel') {
+                handler: function (option) {
+                    if (option !== 'cancel') {
                         this.processIMIP(status, option);
                     }
                 }
             });
             return;
         }
-        
-        Tine.log.debug('Tine.Calendar.iMIPDetailsPanel::processIMIP status: ' + status);
-        this.getLoadMask().show();
-        
-        Tine.Calendar.iMIPProcess(this.iMIPrecord.data, status, function(result, response) {
-            this.preparedPart.preparedData = result;
-            if (response.error) {
-                // precondition changed?  
-                return this.prepareIMIP();
+
+        if (!this.targetAttendeeRecord) return;
+
+        const attendeeContainers = this.iMIPrecord.get('attendeeContainersAvailable');
+        const userId = this.targetAttendeeRecord.data.user_id?.id ?? this.targetAttendeeRecord.data.user_id;
+        const options = Object.entries(attendeeContainers)
+            .filter(([key]) => key.includes(userId))
+            .flatMap(([, records]) => records.map(record => ({ text: record.name, name: record })));
+
+        if (options.length === 0) return;
+
+        const processUpdate = (selectedOption) => {
+            const targetAttendeeData = {...this.targetAttendeeRecord.data};
+            if (selectedOption) {
+                targetAttendeeData.displaycontainer_id = selectedOption;
             }
-            
-            // load result
-            this.iMIPrecord = new Tine.Calendar.Model.iMIP(result);
-            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(result.event)
-            }));
-            this.showIMIP();
-        }, this);
+            targetAttendeeData.status = status;
+
+            this.getLoadMask().show();
+
+            Tine.Calendar.iMIPProcess(this.iMIPrecord.data, targetAttendeeData, (result, response) => {
+                if (!response.error) {
+                    this.targetAttendeeRecord.set('status', status);
+                    this.targetAttendeeRecord.set('displaycontainer_id', selectedOption);
+                }
+                this.fireEvent('updateEvent', result);
+            }, this);
+        };
+
+        if (this.targetAttendeeRecord.get('status') !== 'NEEDS-ACTION' || options.length === 1) {
+            return processUpdate();
+        }
+
+        Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+            title: this.app.i18n._('Update Status'),
+            questionText: this.app.i18n._('Please select a calendar before update your status'),
+            height: 170,
+            allowCancel: true,
+            scope: this,
+            options: options,
+            handler: function(option) {
+                if (option !== 'cancel') {
+                    processUpdate(option);
+                } else {
+                    this.updateInfo();
+                }
+            }
+        });
     },
-    
+
     /**
      * iMIP action toolbar
      */
     initIMIPToolbar: function() {
-        var singleRecordPanel = this.getSingleRecordPanel();
-        
-        this.actions = [];
-        this.statusActions = [
-            new Ext.Action({
-                text: this.app.i18n._('Save'),
-                handler: this.processIMIP.createDelegate(this, ['NEEDS-ACTION', true]),
-                icon: 'images/icon-set/icon_invite.svg',
-                tooltip: this.app.i18n._('Save to calendar without responding')
-            })
-        ];
+        this.viewInCalendarAction = new Ext.Button(new Ext.Action({
+            handler: () => {
+                Tine.Calendar.ViewInCalendarDialog.openWindow({
+                    record: this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'),
+                    messageRecord: this.messageRecord,
+                    targetAttendeeRecord: this.targetAttendeeRecord,
+                    allowViewInCalendar: false,
+                });
+            },
+            icon: 'images/icon-set/icon_calendar.svg',
+            tooltip: this.app.i18n._('View and Edit Event In Calendar'),
+            hidden: !this.allowViewInCalendar,
+            style: "margin: 0 10px;",
+        }));
 
-        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
-            // NEEDS-ACTION is not appropriate in iMIP context
-            if (status.id == 'NEEDS-ACTION') return;
-
-            this.statusActions.push(new Ext.Action({
-                text: status.get('i18nValue'),
-                handler: this.processIMIP.createDelegate(this, [status.id]),
-                icon: status.get('icon')
-            }));
-        }, this);
-
-        this.actions = this.actions.concat(this.statusActions);
-        
-        // add more actions here (no spam / apply / crush / send event / ...)
-        
-        this.iMIPclause = new Ext.Toolbar.TextItem({
-            text: ''
+        // Create the static text display with hover functionality
+        this.attendeeTextContainer = new Ext.Container({
+            hidden: true,
+            cls: 'attendee-text-container',
+            listeners: {
+                scope: this,
+                render: function(c) {
+                    c.getEl().on({
+                        scope: this,
+                        click: ()=> {
+                            this.activateCombo();
+                        },
+                    });
+                }
+            },
+            items: [
+                this.attendeeLabel = new Ext.Component({
+                    autoEl: {
+                        tag: 'div',
+                        cls: 'xtb-text',
+                        html: 'Select Attendee'
+                    }
+                }),
+            ]
         });
-        this.tbar = this.actionToolbar = new Ext.Toolbar({
-            style: 'overflow: auto;',
-            items: [{
-                    xtype: 'tbitem',
-                    cls: 'CalendarIconCls',
-                    width: 16,
-                    height: 16,
-                    style: 'margin: 3px 5px 2px 5px;'
+
+        // Create the combo (initially hidden)
+        this.attendeeCombo = new Tine.Calendar.AttendeeCombo({
+            eventRecord: this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'),
+            messageRecord: this.messageRecord,
+            defaultValue: 'current',
+            width: 300,
+            listeners: {
+                scope: this,
+                select: (combo, record)=> {
+                    this.updateInfo();
                 },
-                this.iMIPclause,
-                '->'
-            ].concat(this.actions)
+            }
         });
+
+        // Create the static text display with hover functionality
+        this.attendeeComboContainer = new Ext.Container({
+            hidden: true,
+            items: [this.attendeeCombo]
+        });
+
+        // Create a container that will hold both the text and combo
+        this.idPrefix = Ext.id();
+        this.statusActions = [];
+        this.statuses = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus');
+        const existingEvent = this.iMIPrecord.get('existing_event');
+        this.statuses.each((item) => {
+            // hide the save action if event is already in the calendar , usually external invite does not saved
+            if (existingEvent && item.id === 'NEEDS-ACTION') {
+                this.statuses.remove(item);
+            }
+        });
+        this.statuses.each((status) => {
+            this.statusActions.push(new Ext.Button(new Ext.Action({
+                id: this.idPrefix + '-tglbtn-' + status.id,
+                text: status.id === 'NEEDS-ACTION' ? this.app.i18n._('Save') : status.get('i18nValue'),
+                xtype: 'tbbtnlockedtoggle',
+                enableToggle: true,
+                handler: this.processIMIP.createDelegate(this, [status.id]),
+                icon: status.get('icon'),
+                hidden: true,
+                toggleGroup: 'attendee-status-tglgroup',
+                tooltip: status.id === 'NEEDS-ACTION' ? this.app.i18n._('Save to calendar without responding') : status.get('i18nValue'),
+            })));
+        });
+
+        // add more actions here (no spam / apply / crush / send event / ...)
+        this.iMIPclause = new Ext.Toolbar.TextItem({
+            text: '',
+            style: "margin: 5px 10px;",
+        });
+
+        this.descriptionField =  new Ext.form.VueAlert({
+            variant: 'warning',
+            hidden: true,
+            label: this.app.i18n._("Attention! , this is an invitation for ") + this.messageRecord.data['to'][0]['name'],
+        });
+
+        this.tbar = this.actionToolbar = new Ext.Panel({
+            layout: 'fit',
+            border: false,
+            items: [
+                this.descriptionField,
+                {
+                    xtype: 'container',
+                    cls: 'cal-event-response-panel',
+                    items: [
+                        this.iMIPclause,
+                        {
+                            xtype: 'container',
+                            cls: 'cal-event-response-panel-group-right',
+                            items: [
+                                {
+                                    xtype: 'container',
+                                    cls: 'subgroup',
+                                    items: [
+                                        this.attendeeTextContainer,
+                                        this.attendeeComboContainer,
+                                        this.viewInCalendarAction
+                                    ],
+                                },
+                                {
+                                    xtype: 'container',
+                                    cls: 'subgroup',
+                                    items: this.statusActions,
+                                }
+                            ]
+                        }
+                    ]
+                },
+            ]
+        });
+    },
+
+    activateCombo() {
+        this.attendeeTextContainer.hide();
+        this.attendeeComboContainer.show();
+        this.attendeeComboContainer.focus();
+        this.attendeeCombo.onTriggerClick();
+    },
+
+    deactivateCombo() {
+        this.attendeeComboContainer.hide();
+        this.attendeeTextContainer.show();
+
+        if (this.targetAttendeeRecord) {
+            const prefix = this.targetAttendeeRecord.get('status') === 'NEEDS-ACTION' ? this.app.i18n._('Set response for') + ':' : '';
+            const attendeeName = this.targetAttendeeRecord.get('displayText') || this.targetAttendeeRecord.get('user_id').n_fileas || '';
+            this.attendeeLabel.update(`${prefix}<span style="padding: 0 20px;">${attendeeName}</span>`);
+        }
+    },
+
+    getTargetAttendeeRecord() {
+        const selectedAttendeeId = this.attendeeCombo.getValue();
+        if (!selectedAttendeeId) return null;
+
+        this.targetAttendeeRecord = this.attendeeCombo.store.getById(selectedAttendeeId);
+
+        const attendeeContainers = this.iMIPrecord.get('attendeeContainersAvailable');
+        const eventRecord = this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event');
+        if (this.targetAttendeeRecord) {
+            const targetAttendeeDataFromEvent = eventRecord.get('attendee').find((r) => {
+                return r.id === selectedAttendeeId;
+            });
+            const displayContainer = targetAttendeeDataFromEvent.displaycontainer_id;
+
+            if (displayContainer) {
+                this.targetAttendeeRecord.set('displaycontainer_id', displayContainer);
+            } else {
+                Object.entries(attendeeContainers).forEach((key) => {
+                    const user = this.targetAttendeeRecord.get('user_id');
+                    if (user && key[0].includes(user.id)) {
+                        this.targetAttendeeRecord.set('displaycontainer_id', key[1][0]);
+                    }
+                })
+            }
+        }
+
+        return this.targetAttendeeRecord;
     },
 
     /**
      * show/layout iMIP panel
      */
-    showIMIP: function() {
-        var singleRecordPanel = this.getSingleRecordPanel(),
-            preconditions = this.iMIPrecord.get('preconditions'),
-            method = this.iMIPrecord.get('method'),
-            event = this.iMIPrecord.get('event'),
-            existingEvent = this.iMIPrecord.get('existing_event') ? Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.iMIPrecord.get('existing_event'))
-            }) : null,
-            myAttenderRecord = existingEvent ? existingEvent.getMyAttenderRecord() : event.getMyAttenderRecord(),
-            myAttenderstatus = myAttenderRecord ? myAttenderRecord.get('status') : null;
-            
+    showIMIP: function () {
+        this.updateInfo();
+        this.getLoadMask().hide();
+
+        const singleRecordPanel = this.getSingleRecordPanel();
+        singleRecordPanel.setVisible(true);
+        singleRecordPanel.setHeight(200);
+        singleRecordPanel.loadRecord(this.record);
+    },
+
+    updateInfo() {
+        const preconditions = this.iMIPrecord.get('preconditions');
+        const method = this.iMIPrecord.get('method');
+        const event = this.iMIPrecord.get('event');
+        const existingEvent = this.iMIPrecord.get('existing_event');
+        const attenderRecord = this.getTargetAttendeeRecord();
+        this.record = (existingEvent && !preconditions) ? existingEvent : event;
+        const myAttenderRecord = this.record.getMyAttenderRecord();
+        let showActions = false;
+        let text = '';
+
         // show container from existing event if exists
-        if (existingEvent && existingEvent.container_id) {
-            event.set('container_id', existingEvent.container_id);
+        if (existingEvent?.data?.container_id) {
+            event.set('container_id', existingEvent.data.container_id);
         }
-            
-        // reset actions
-        Ext.each(this.actions, function(action) {action.setHidden(true)});
-        
+
+        if (myAttenderRecord && myAttenderRecord.get('user_id').email !== this.messageRecord.data['to'][0]['email']) {
+            this.descriptionField.show();
+        }
+
         // check preconditions
-        this.record = existingEvent && ! preconditions ? existingEvent : event;
         const uid = this.record.get('recurid') || this.record.get('uid');
 
         if (preconditions?.[uid]) {
             const precondition = preconditions[uid];
             if (precondition.hasOwnProperty('EVENTEXISTS')) {
-                this.iMIPclause.setText(this.app.i18n._("The event of this message does not exist"));
+                text = this.app.i18n._("The event of this message does not exist");
             }
-
             else if (precondition.hasOwnProperty('ORIGINATOR')) {
                 // display spam box -> might be accepted by user?
-                this.iMIPclause.setText(this.app.i18n._("The sender is not authorized to update the event"));
+                text = this.app.i18n._("The sender is not authorized to update the event");
             }
-
             else if (precondition.hasOwnProperty('RECENT')) {
-                this.iMIPclause.setText(this.app.i18n._("This message has already been processed."));
+                text = this.app.i18n._("This message has already been processed.");
             }
-
             else if (precondition.hasOwnProperty('ATTENDEE')) {
                 // party crush button?
-                this.iMIPclause.setText(this.app.i18n._("You are not an attendee of this event"));
+                showActions = true;
+                text = this.app.i18n._("You are not an attendee of this event");
             }
-
             else if (precondition.hasOwnProperty('NOTDELETED')) {
-                this.iMIPclause.setText(this.app.i18n._("This event has been deleted by the organizer"));
+                text = this.app.i18n._("This event has been deleted by the organizer");
             }
-
-            else if (precondition.hasOwnProperty('NOTCANCELLED')) {
-                this.iMIPclause.setText(this.app.i18n._("This event has been canceled."));
-            }
-
             else if (precondition.hasOwnProperty('ORGANIZER')) {
-                this.iMIPclause.setText(this.app.i18n._("You are the organizer of this event."));
+                // fixme: check precondition failed, allow it in be ?
+                text = this.app.i18n._("You are the organizer of this event.");
             }
-
             else {
-                this.iMIPclause.setText(this.app.i18n._("Unsupported message"));
+                text = this.app.i18n._("Unsupported message");
             }
-        } 
-        
+        }
         // method specific text / actions
-        else {
+        if (!preconditions?.[uid]) {
+            const attendeeName = (attenderRecord.get('user_id').n_fn ?? attenderRecord.get('user_id').name);
             switch (method) {
                 case 'REQUEST':
-                    if (! myAttenderRecord) {
+                    showActions = true;
+                    if (!myAttenderRecord) {
                         // might happen in shared folders -> we might want to become a party crusher?
-                        this.iMIPclause.setText(this.app.i18n._("This is an event invitation for someone else."));
+                        text = this.app.i18n._("This is an event invitation for someone else.");
                         break;
-                    } else if (existingEvent && myAttenderstatus !== 'NEEDS-ACTION'
-                        && (event.get('external_seq') <= existingEvent.get('external_seq')
-                        || event.get('seq') <= existingEvent.get('seq'))) {
-                        this.iMIPclause.setText(this.app.i18n._("You have already replied to this event invitation."));
-                    } else if (existingEvent && existingEvent.isRescheduled(event)) {
-                        this.iMIPclause.setText(this.app.i18n._('The event got rescheduled. Set your response to:'));
-                    } else {
-                        this.iMIPclause.setText(this.app.i18n._('You received an event invitation. Set your response to:'));
                     }
-                    Ext.each(this.statusActions, function(action) {action.setHidden(false)});
+                    if (existingEvent && attenderRecord.get('status') !== 'NEEDS-ACTION'
+                        && (event.get('external_seq') <= existingEvent.get('external_seq')
+                            || event.get('seq') <= existingEvent.get('seq'))) {
+                        text = attendeeName + ' ' + this.app.i18n._("has already replied to this event invitation.");
+                    }
+                    if (existingEvent && existingEvent.isRescheduled(event)) {
+                        text = this.app.i18n._('The event got rescheduled.');
+                    }
                     break;
-                    
-                    
                 case 'REPLY':
                     // Someone replied => autoprocessing atm.
-                    this.iMIPclause.setText(this.app.i18n._('An invited attendee responded to the invitation.'));
+                    text = this.app.i18n._('An invited attendee responded to the invitation.');
                     break;
-                    
                 case 'CANCEL':
-                    this.iMIPclause.setText(this.app.i18n._('This event has been canceled.'));
+                    text = this.app.i18n._('This event has been canceled.');
+                    this.allowViewInCalendar = false;
                     break;
-
                 default:
-                    this.iMIPclause.setText(this.app.i18n._("Unsupported method"));
+                    text = this.app.i18n._("Unsupported method");
+                    this.allowViewInCalendar = false
                     break;
             }
         }
-        
-        this.getLoadMask().hide();
-        singleRecordPanel.setVisible(true);
-        singleRecordPanel.setHeight(150);
-        singleRecordPanel.loadRecord(this.record);
+
+        this.iMIPclause.setText(text);
+        this.viewInCalendarAction[(!this.allowViewInCalendar || !attenderRecord) ? 'hide' : 'show']();
+
+        if (showActions) {
+            Ext.each(this.statusActions, function (action) {
+                action.show();
+            });
+            this.deactivateCombo();
+            this.actionToolbar.doLayout();
+        }
+
+        this.statuses.each((status) => {
+            const freqBtn = Ext.getCmp(this.idPrefix + '-tglbtn-' + status.id);
+
+            if (freqBtn && attenderRecord) {
+                freqBtn.toggle(status.id === attenderRecord.get('status'));
+            }
+            // hide the save action if event is already in the calendar , usually external invite is not saved
+            if (!attenderRecord) {
+                freqBtn.hide();
+            }
+        })
     }
 });

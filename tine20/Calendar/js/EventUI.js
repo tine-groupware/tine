@@ -140,8 +140,8 @@ Tine.Calendar.EventUI.prototype = {
     render: function(view) {
         this.event.view = view;
 
-        this.attendeeRecord = view.ownerCt && view.ownerCt.attendee ?
-            Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.event.getAttendeeStore(), view.ownerCt.attendee) :
+        this.attendeeRecord = view?.attendeeRecord ? view.attendeeRecord :
+            view.ownerCt && view.ownerCt.attendee ? Tine.Calendar.Model.Attender.getAttendeeStore.getAttenderRecord(this.event.getAttendeeStore(), view.ownerCt.attendee) :
             this.event.getMyAttenderRecord();
 
         this.colorSet = Tine.Calendar.colorMgr.getColor(this.event, this.attendeeRecord);

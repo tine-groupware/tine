@@ -577,6 +577,12 @@ msgstr "Termin nicht gefunden"
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr "Der Termin wurde in der Zwischenzeit gelöscht oder Sie haben kein Recht diesen Termin aufzurufen."
 
+msgid "Myself"
+msgstr "Ich"
+
+msgid "Current"
+msgstr ""
+
 msgid "Add Attendee"
 msgstr "Teilnehmende hinzufügen"
 
@@ -917,9 +923,6 @@ msgstr "Tags"
 msgid "Location"
 msgstr "Lokalität"
 
-msgid "Checking Calendar Data..."
-msgstr "Prüfe Kalenderdaten ..."
-
 msgid "Reply to Recurring Event"
 msgstr "Terminserien Antwort"
 
@@ -932,11 +935,26 @@ msgstr "Auf die komplette Terminserie antwortenAuf die komplette Terminserie ant
 msgid "Do not respond"
 msgstr "Nicht antworten"
 
+msgid "Update Status"
+msgstr "Status aktualisieren"
+
+msgid "Please select a calendar before update your status"
+msgstr "Bitte wählen Sie einen Kalender aus, bevor Sie Ihren Status aktualisieren."
+
+msgid "View and Edit Event In Calendar"
+msgstr "Termin im Kalender anzeigen und bearbeiten"
+
 msgid "Save"
 msgstr "Speichern"
 
 msgid "Save to calendar without responding"
 msgstr "Termin ohne Rückmeldung im Kalender speichern"
+
+msgid "Attention! , this is an invitation for "
+msgstr "Achtung! Dies ist eine Einladung für "
+
+msgid "Set response for"
+msgstr "Antwort für"
 
 msgid "The event of this message does not exist"
 msgstr "Der Termin von dieser Nachricht existiert nicht"
@@ -953,9 +971,6 @@ msgstr "Sie nehmen nicht an diesem Termin teil"
 msgid "This event has been deleted by the organizer"
 msgstr "Der Termin wurde von der Organisator*in gelöscht"
 
-msgid "This event has been canceled."
-msgstr "Dieser Termin wurde abgesagt."
-
 msgid "You are the organizer of this event."
 msgstr "Sie sind der Organisator*in diesem Termin."
 
@@ -965,17 +980,17 @@ msgstr "Nachricht wird nicht unterstützt"
 msgid "This is an event invitation for someone else."
 msgstr "Dies ist eine Einladung für jemand anderen."
 
-msgid "You have already replied to this event invitation."
-msgstr "Sie haben bereits auf diese Einladung geantwortet."
+msgid "has already replied to this event invitation."
+msgstr "hat bereits auf diese Einladung geantwortet."
 
-msgid "The event got rescheduled. Set your response to:"
-msgstr "Der Termin wurde verschoben. Stellen Sie Ihre Antwort auf:"
-
-msgid "You received an event invitation. Set your response to:"
-msgstr "Sie haben eine Einladung zu einem Termin erhalten. Setzen Sie Ihre Antwort auf:"
+msgid "The event got rescheduled."
+msgstr "Das Termin wurde verschoben."
 
 msgid "An invited attendee responded to the invitation."
 msgstr "Eine eingeladene Person hat auf die Einladung geantwortet."
+
+msgid "This event has been canceled."
+msgstr "Dieser Termin wurde abgesagt."
 
 msgid "Unsupported method"
 msgstr "Method wird nicht unterstützt"
@@ -1556,6 +1571,9 @@ msgstr "Kalender von {name}"
 msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
 
+msgid "Invalid link"
+msgstr "Ungültiger Link"
+
 msgid "Reload"
 msgstr "Neu laden"
 
@@ -1758,6 +1776,12 @@ msgstr "Suche ..."
 
 msgid "Search Event"
 msgstr "Suche Termin"
+
+msgid "Edit Event invitation"
+msgstr "Termineinladung bearbeiten"
+
+msgid "Please Wait"
+msgstr ""
 
 msgid "Event Weekday"
 msgstr "Termin Wochentag"
@@ -2145,7 +2169,7 @@ msgid "Summary ⏎ Organizer ⏎ Location"
 msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
 msgid "Me"
-msgstr "Meine"
+msgstr "Ich"
 
 msgid "Intelligent"
 msgstr "Intelligent"
@@ -2161,644 +2185,3 @@ msgstr "Sonntag"
 
 msgid "Monday"
 msgstr "Montag"
-
-msgid "manage shared calendars favorites"
-msgstr "Gemeinsame Kalender-Favoriten verwalten"
-
-msgid "Create or update shared calendars favorites"
-msgstr "Gemeinsame Kalender-Favoriten erstellen oder bearbeiten"
-
-msgid "All Rights to administrate resources"
-msgstr "Alle Rechte um Ressourcen zu Administrieren"
-
-msgid "The Right to manage event types"
-msgstr "Das Recht Terminarten zu verwalten"
-
-msgid "You can not have more than one grants filter"
-msgstr "Es kann nicht mehr als einen Rechtefilter geben"
-
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr "Kalender, die immer angezeigt werden sollen. Ein Beispiel dafür ist ein Schulferien-Kalender."
-
-msgid "Crop calendar view configured start and endtime."
-msgstr "Konfigurierte Start- und Endzeit der begrenzten Kalenderansicht."
-
-msgid "Allow events outside start and endtime."
-msgstr "Erlaube Termin außerhalb der definierten Start- und Endzeit."
-
-msgid "Default View for Events"
-msgstr "Standardansicht für Termine"
-
-msgid "Event Status Available"
-msgstr "Verfügbare Termin Status"
-
-msgid "Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Termin Status. Bitte beachten sie, dass zusätzliche Termin Status andere Kalender-System bei Exports oder Sync beeinträchtigen können."
-
-msgid "Event Classes Available"
-msgstr "Verfügbare Termin Klassifikationen"
-
-msgid "Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Termin Klassifikationen. Bitte beachten sie, dass zusätzliche Termin Klassifikationen andere Kalender-System bei Exports oder Sync beeinträchtigen können."
-
-msgid "Event Transparencies Available"
-msgstr "Verfügbare Termin Durchsichtigkeiten"
-
-msgid "Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Termin Durchsichtigkeiten. Bitte beachten sie, dass zusätzliche Termin Durchsichtigkeiten andere Kalender-System bei Exports oder Sync beeinträchtigen können."
-
-msgid "Attendee Status Available"
-msgstr "Verfügbare Teilnehmer*innen Status"
-
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Teilnehmer*innen Status. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
-
-msgid "Attendee Roles Available"
-msgstr "Verfügbare Teilnehmer*innen Rollen"
-
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Teilnehmer*innen Rollen. Bitte beachten Sie, dass zusätzliche Werte beim Export oder der Synchronisation mit anderen Systemen nicht berücksichtigt werden könnten."
-
-msgid "Resource Types Available"
-msgstr "Verfügbare Ressourcen Typen"
-
-msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
-msgstr "Verfügbare Ressourcen Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
-
-msgid "Free/Busy Types Available"
-msgstr "Verfügbare Frei/Belegt Typen"
-
-msgid "Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
-msgstr "Mögliche Frei/Belegt Typen. Bitte beachten Sie, dass zusätzliche Frei/Belegt Typen eine Auswirkung auf andere Kalendersysteme haben können, in die exportiert oder synchronisiert wird."
-
-msgid "For how long in the past (in months) the events should be synchronized."
-msgstr "Maximales Alter für Termine die synchronisiert werden dürfen (in Monaten)."
-
-msgid "Timeslot for event notifications"
-msgstr "Alter für Termineerinnerungen"
-
-msgid "For how long in the past (in weeks) event notifications should be sent."
-msgstr "Für wie lange in der Vergangenheit (in Wochen) Termin Benachrichtigungen  versendet werden sollen."
-
-msgid "Default filter period (from) for events fetched via JSON API"
-msgstr "Standard Filter Zeitraum (von) für Termine, die über die JSON API geholt werden"
-
-msgid "For how long in the past (in months) the events should be fetched."
-msgstr "Für wie weit in der Vergangenheit (in Monaten) Termine geholt werden sollen."
-
-msgid "Default filter period (until) for events fetched via JSON API"
-msgstr "Standard Filter Zeitraum (bis) für Termine, die über die JSON API geholt werden"
-
-msgid "For how long in the future (in months) the events should be fetched."
-msgstr "Für wie weit in der Zukunft (in Monaten) Termine geholt werden sollen."
-
-msgid "List of floorplans with their ressources configs."
-msgstr "Liste von Lageplänen mit ihren Ressourcen Konfigurationen"
-
-msgid "Adds extended actions to event context menus"
-msgstr "Fügt erweiterte Kalender Kontextmenü Aktionen hinzu"
-
-msgid "Color Events By"
-msgstr "Färbe Termine nach"
-
-msgid "Recur Events Except"
-msgstr "Wiederholen außer"
-
-msgid "Recur Events except on certain dates"
-msgstr "Wiederholen außer an bestimmten Daten"
-
-msgid "Activate Poll for Events"
-msgstr "Aktiviere Terminumfragen"
-
-msgid "Create alternative Events and let users as well as externals vote for the best option."
-msgstr "Anlegen von alternativen Terminen bei denen die Nutzer und Externe über die beste Option abstimmen können."
-
-msgid "Activate Event Types for Events"
-msgstr "Terminarten für Termine aktivieren"
-
-msgid "Activate Event Types for Events."
-msgstr "Terminarten für Termine aktivieren."
-
-msgid "Send notifications to event organiziers of events that are tentative certain days before event is due"
-msgstr "Sende Benachrichtigungen an Termin Organisator*innen, wenn der Termin eine gewisse Anzahl von Tagen vor dem Stattfinden immer noch vorläufig ist"
-
-msgid "How many days before the events due date to start send notifications."
-msgstr "Ab wie viele Tage vor dem Stattfinden eines Termins sollen Benachrichtigungen versendet werden."
-
-msgid "Additional filter to limit events notifications should be send for."
-msgstr "Zusetzliche Filter um zu limitieren, wofür Termin Benachrichtigungen verschickt werden."
-
-msgid "Do not send invitations notifications for alternative events in an active poll."
-msgstr "Keine Einladungen für alternative Termine in Umfragen senden."
-
-msgid "Freebusy Info"
-msgstr "Frei/Belegt Info"
-
-msgid "What data the freebusy grant reveals"
-msgstr "Welche Daten das Frei/Belegt Recht sichtbar macht"
-
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Termin-Erinnerung für \"%1$s\" am %2$s"
-
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Vorläufige Zusage von %1$s für den Termin \"%2$s\" am  %3$s"
-
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Keine Antwort von %1$s für den Termin \"%2$s\" am  %3$s"
-
-msgid "Unknown status update from %1$s for event \"%2$s\" at %3$s"
-msgstr "Unbekannte Status-Aktualisierung von %1$s für Termin „%2$s“ am %3$s"
-
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Geänderte Teilnehmende beim Termin  \"%1$s\" am %2$s"
-
-msgid "Tentative event notification for event \"%1$s\" at %2$s"
-msgstr "Vorläufigkeits Benachrichtigung für den Termin \"%1$s\" am %2$s"
-
-msgid "No RRULE found in base event!"
-msgstr "Keine Wiederholungsregel im Basis-Termin gefunden!"
-
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
-msgstr "Die neue Wiederholungsregel ist nicht erfüllbar. Bitte ändern sie die Regel"
-
-msgid "This contact has been automatically added by the system as a poll attendee"
-msgstr "Dieser Kontakt ist Teilnehmer*in einer Termin-Umfrage und wurde vom System automatisch angelegt"
-
-msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr "Teilnahmebestätigung für die Termin-Umfrage „%1$s“"
-
-msgid "Exdate container move are not allowed"
-msgstr "Verscheiben eines Ausnahmen Containers ist nicht erlaubt"
-
-msgid "The URL you used is invalid. Please use a valid one!"
-msgstr "Die verwendete URL ist ungültig. Bitte verwende eine gültige URL!"
-
-msgid "The right Resource Admin must be set once."
-msgstr "Das Recht Ressourcen-Admin muss einmal gesetzt werden."
-
-msgid "Export event data into ods spreadsheet"
-msgstr "Exportiere Termininformationenin eine ods Tabelle"
-
-msgid "Export multiple calendars to ics files"
-msgstr "Exportiere mehrere Kalender in ics Datei"
-
-msgid "Export visible events to ics file"
-msgstr "Sichtbare Termine in ics Datei exportieren"
-
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
-msgstr "Der Termin wurde in der Zwischenzeit gelöscht oder Sie haben kein Recht diesen Termin aufzurufen."
-
-msgid "Add attendee"
-msgstr "Teilnehmer*in hinzufügen"
-
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "In diesem Kalender wurde der Termin vom Teilnehmer gespeichert"
-
-msgid "Whole Group or each Member of Group"
-msgstr "Die ganze Gruppe oder jedes MItglied der Gruppe"
-
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
-msgstr "Wähle \"Gruppe\" um die komplette Gruppe zu filtern. Wähle \"Mitglied der Gruppe\" um nach jedem Mitglied der Gruppe zu filtern"
-
-msgid "Loading Groupmembers..."
-msgstr "Lade Gruppenmitglieder..."
-
-msgid "Remove Attender"
-msgstr "Teilnehmer*in entfernen"
-
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr "Der Ursprungstermin ist in einem Kalender gespeichert, auf den Sie keinen Zugriff haben."
-
-#, python-brace-format
-msgid "This event is originally stored in {0}"
-msgstr "Der Ursprungstermin ist in {0} gespeichert"
-
-#, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Der Termin wird zusätzlich in Ihrem persönlichen Kalender {0} angezeigt"
-
-msgid "Side bar color"
-msgstr "Farbe der Seitenleiste"
-
-msgid "The summary must not be longer than 255 characters."
-msgstr "Das Thema darf nicht länger als 255 Zeichen sein."
-
-msgid "The summary must have at least 1 character."
-msgstr "Das Thema muss mindestens ein Zeichen lang sein."
-
-msgid "Additional Attendees ..."
-msgstr "Weitere Teilnehmende ..."
-
-msgid "Additional Tags ..."
-msgstr "Zusätzliche Tags ..."
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
-msgstr "Sie sind dabei, den Gesamtterminstatus (nicht nur Ihren eigenen) zu ändern. Wollen sie wirklich den Status für alle Teilnehmer ändern?"
-
-msgid "Enter description"
-msgstr "Bitte geben Sie eine Beschreibung an"
-
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
-msgstr "Änderungen an diesem Termin können Benachrichtigungen senden. Drücken Sie die Taste \"Benachrichtigung werden nicht unterdrückt\", um zu \"Benachrichtigung werden unterdrückt\" zu wechseln."
-
-msgid "End date is not valid"
-msgstr "Endzeitpunkt ist ungültig"
-
-msgid "End date must be after start date"
-msgstr "Der Endzeitpunkt muss nach dem Zeitpunkt des Beginns liegen"
-
-msgid "End time is not allowed to be after the configured time."
-msgstr "Die Endzeit darf nicht hinter der konfigurierten Zeit liegen."
-
-msgid "Start date is not valid"
-msgstr "Zeitpunkt den Beginns ist ungültig"
-
-msgid "Start date is not allowed to be before the configured time."
-msgstr "Das Startdatum darf nicht vor der konfigurierten Zeit liegen."
-
-msgid "has alarm"
-msgstr "hat einen Alarm"
-
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr "Sie antworten auf eine Terminserie. Was möchten sie tun?"
-
-msgid "Respond to whole series"
-msgstr "Auf die komplette Terminserie antworten"
-
-msgid "Save in calendar without response"
-msgstr "Termin ohne Rückmeldung im Kalender speichern"
-
-msgid "The sender is not authorised to update the event"
-msgstr "Der Absendende ist nicht authorisiert den Termin zu aktualisieren"
-
-msgid "This message is already processed"
-msgstr "Diese Nachricht wurde bereits verarbeitet"
-
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
-msgstr "Die Ical Importdefinition wurde erfolgreich erstellt! Bitte warten Sie einige Minuten, bis die Termine vom Cronjob synchronisiert wurden."
-
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr "Tine 2.0 versteht nicht alle Dateien, die Sie möglicherweise hochladen möchten. Eventuell müssen Sie manuell die Datei so anpassen, dass sie von Tine 2.0 verarbeitet werden kann."
-
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
-msgstr "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
-
-msgid "Force Update Existing Events"
-msgstr "Erzwinge Aktualisierung existierender Termine"
-
-msgid "Delete events missing in import data (future only)"
-msgstr "Termine löschen die nicht in den Import-Daten sind (nur zukünftige)"
-
-msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
-msgstr "Nur Basis-Daten (ohne Alarme, Teilnehmende, …) importieren"
-
-msgid "Do not remove attendee of existing events which are not in the import data"
-msgstr "Teilnehmende nicht entfernen wenn sie nicht in den Import-Daten sind"
-
-msgid "Copy Event to clipboard"
-msgstr "Termin in die Zwischenablage kopieren"
-
-msgid "Set as definite event"
-msgstr "Definitiven Termin festlegen"
-
-msgid "Creating event in the past"
-msgstr "Vergangenen Termin anlegen"
-
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Ihre Auswahl enthält auch Wiederholungstermine. Diese müssen extra gelöscht werden!"
-
-msgid "Delete this event only"
-msgstr "Nur diesen Termin löschen"
-
-msgid "Delete whole series"
-msgstr "Komplette Reihe löschen"
-
-msgid "Could not Print"
-msgstr "Konnte nicht drucken"
-
-msgid "The following attendee are busy at the requested time:"
-msgstr "Die folgenden Teilnehmenden sind zur angegebenen Zeit beschäftigt:"
-
-msgid "Last Modified By"
-msgstr "Zuletzt geändert von"
-
-msgid "Created By"
-msgstr "Erstellt von"
-
-msgid "The grant to invite the resource to an event"
-msgstr "Das Recht die Ressource zu einem Termin einzuladen"
-
-msgid "The grant to set the resource attendee status"
-msgstr "Das Recht den Teilnehmenden Status der Ressource zu setzen"
-
-msgid "The grant to receive notifications for this resource"
-msgstr "Das Recht Benachrichtigungen dieser Ressource zu erhalten"
-
-msgid "The grant to read the resource itself"
-msgstr "Das Recht die Ressource als solche zu sehen"
-
-msgid "The grant to edit the resource itself"
-msgstr "Das Recht die Ressource als solche zu bearbeiten"
-
-msgid "The grant to export the resource itself"
-msgstr "Das Recht die Ressource als solche zu exportieren"
-
-msgid "The grant to synchronise the resource itself"
-msgstr "Das Recht die Ressource als solche zu synchronisieren"
-
-msgid "The grant to administrate the resource itself"
-msgstr "Das Recht die Ressource als solche zu administrieren"
-
-msgid "The grant to directly add events into this resource calendar"
-msgstr "Das Recht Termine direkt im Ressourcen-Kalender anzulegen"
-
-msgid "The grant to read events from this resource calendar"
-msgstr "Das Recht Termine aus Ressourcen-Kalender zu lesen"
-
-msgid "The grant to export events from this resource calendar"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
-
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
-msgstr "Das Recht Termine dieses Ressourcen-Kalenders zu Synchronisieren. Benötigt Termin Lese Recht"
-
-msgid "Events Free Busy"
-msgstr "Termine Frei/Belegt Informationen"
-
-msgid "The grant to get free/busy information of events from this resource calendar"
-msgstr "Das Recht Frei/Belegt Informationen von Terminen aus dem Ressourcen-Kalender zu erhalten"
-
-msgid "The grant to edit events directly saved in this resource calendar"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu bearbeiten"
-
-msgid "The grant to delete events directly stored in this resource calendar"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu löschen"
-
-msgid "Free Busy"
-msgstr "Frei Belegt"
-
-msgid "The grant to get free/busy information of events in this calendar"
-msgstr "Das Recht Frei/Belegt Informationen von Terminen diesem Kalender zu erhalten"
-
-msgid "The grant to access events marked as private in this calendar"
-msgstr "Das Recht Terminen aus diesem Kalender zu sehen die als privat markiert sind"
-
-msgid "This is a closed poll. No Attendee can be added."
-msgstr "Dies ist eine geschlossene Umfrage. Es können keine Teilnehmer hinzugefügt werden."
-
-msgid "We have sent it to your E-Mail account again."
-msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."
-
-msgid "Please log in"
-msgstr "Bitte melden Sie sich an"
-
-msgid "User name"
-msgstr "Benutzer*innen Name"
-
-msgid "Create Poll for this Event"
-msgstr "Umfrage zu diesem Termin anlegen"
-
-msgid "Name for poll"
-msgstr "Name der Umfrage"
-
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
-msgstr "Erstellen sie Terminvorschläge und wählen Sie die beste Alternative basierend auf Benutzer-Feedback."
-
-msgid "Set This Date as Definite Event?"
-msgstr "Dieses Datum als definitiven Termin festlegen?"
-
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
-msgstr "E-Mail Adresse der Ressource. Diese wird benötigt um die Ressource auf externen Kalendern und Sync-Devices zu identifizieren. Die E-Mail Adresse muss daher eindeutig sein. Es ist nicht notwendig, dass die Adresse tatsächlich existiert."
-
-msgid "Enter description..."
-msgstr "Bitte geben Sie eine Beschreibung an."
-
-msgid "Rrule"
-msgstr "Wiederholungsregel"
-
-msgid "Recurrances"
-msgstr "Wiederholungen"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Dieser Kontakt wurde automatisch bei der Syncronisation angelegt"
-
-msgid "Url"
-msgstr "Url"
-
-msgid "Recurrance rule"
-msgstr "Wiederholungsregel"
-
-msgid "How to build event titles in web ui."
-msgstr "Wie der Titel in der Web-Anwendung gebildet wird."
-
-msgid "Send Notifications Emails of own Actions"
-msgstr "Sende Benachrichtigungen über eigene Änderungen"
-
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Empfangen von Benachrichtigungen über Änderungen die selbst getätigt wurden"
-
-msgid "Send Notifications Emails of tentative events"
-msgstr "Sende Benachrichtigungen für vorläufige Termine"
-
-msgid "Get notifications emails of tentative events"
-msgstr "Empfangen von Benachrichtigungen über Änderungen bei vorläufigen Terminen"
-
-msgid "Send Alarm Notifications Emails"
-msgstr "Sende E-Mails mit Alarm-Benachrichtigungen"
-
-msgid "Default set Events to privat"
-msgstr "Setze standartmäßig Termine auf privat"
-
-msgid "If enabled every created event is always privat"
-msgstr "Wenn aktiviert, werden neue Termine immer als privat angelegt"
-
-msgid "The calendar for new events if no container is selected"
-msgstr "Der Kalender für neue Termine, wenn kein Container selektiert wurde"
-
-msgid "On Calendar Change will remove all filters"
-msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"
-
-msgid "Calendars always selected regardless of all filter parameters."
-msgstr "Kalender die immer angezeigt werden, unabhängig von den eingestellten Filtern."
-
-msgid "On invitation and cancellation only"
-msgstr "Nur bei Einladung oder Absage"
-
-msgid "On all updates but attendee responses"
-msgstr "Bei allen Änderungen außer Teilnehmer-Anworten"
-
-msgid "I'm organizer"
-msgstr "Ich bin Organisator*in"
-
-msgid "First name, ĺast name"
-msgstr "Vorname, Nachname"
-
-msgid "E-Mail address"
-msgstr "E-Mail Adresse"
-
-msgid "Thank you for attendening the poll \"%1$s\""
-msgstr "Danke für ihre Teilnahme an der Umfrage „%1$s“"
-
-msgid "To review or edit your status please use your personal link:"
-msgstr "Zum Einsehen und Ändern ihres Status verwenden sie bitte ihren persönlichen Link:"
-
-msgid "The poll \"%1$s\" has been closed."
-msgstr "Die Umfrage „%1$s“ wurde beendet."
-
-msgid "The definite event is scheduled for \"%1$s\""
-msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
-
-msgid "First name, last name"
-msgstr "Vorname, Nachname"
-
-msgid "Email address"
-msgstr "E-Mail Adresse"
-
-msgid "Thank you for attending the poll \"%1$s\""
-msgstr "Danke für ihre Teilnahme an der Umfrage „%1$s“"
-
-msgid "Graveyard"
-msgstr "Friedhof"
-
-msgid "Force update of existing events"
-msgstr "Erzwinge Aktualisierung von existierenden Terminen"
-
-msgid "Update whole series"
-msgstr "Die ganze Reihe aktualisieren"
-
-msgid "Attachments"
-msgstr "Anhänge"
-
-msgid "%s away"
-msgstr "%s abwesend"
-
-msgid "%s is away"
-msgstr "%s ist abwesend"
-
-msgid "Disable notification for external organizers"
-msgstr "Deaktiviere Benachrichtigungen für externe Organisatoren"
-
-msgid "Send notifications to every user with edit permissions of the added resources"
-msgstr "Sende Benachrichtigungen zu allen Benutzern mit Bearbeitungsrecht an der Ressource"
-
-msgid "Updates"
-msgstr "Änderungen"
-
-msgid "We have send it to your E-Mail account again."
-msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."
-
-msgid "Plase log in"
-msgstr "Bitte melden Sie sich an"
-
-msgid "Mute Notification"
-msgstr "Benachrichtigungen unterdrücken"
-
-msgid "Color by Organizer Calendar"
-msgstr "Farbe nach Kalender des Organisators"
-
-msgid "The grant to synchronise events from this resource calendar. Needs the grant read events"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren. Benötigt das Recht Termine lesen"
-
-msgid "No"
-msgstr "Nein"
-
-msgid "Yes"
-msgstr "Ja"
-
-msgid "{headerDate, date, full}"
-msgstr "{headerDate, date, full}"
-
-msgid "Container name / New or existing if it already exists you need permissions to add to."
-msgstr "Ein neuer Container Name oder ein bereits Vorhandener für den man über Schreibrechte verfügt."
-
-msgid "or"
-msgstr "oder"
-
-msgid "Is a location"
-msgstr "Ist ein Ort"
-
-msgid "Errors"
-msgstr "Fehler"
-
-msgid "Export as ODS"
-msgstr "Exportieren als ODS"
-
-msgid "Export as ..."
-msgstr "Exportieren als ..."
-
-msgid "If enabled every created event is always privat."
-msgstr "Wenn aktiviert ist jeder neu erstellte Termin privat."
-
-msgid "Search for records ..."
-msgstr "Suche nach Einträgen ..."
-
-msgid "Do not send invitations notifications for alternatie events in an active poll."
-msgstr "Keine Einladungen für alternative Termine in aktiven Terminumfragen"
-
-msgid "Poll Attendance Confirmation"
-msgstr "Terminumfrage Teilnahmebestätigung "
-
-msgid "The grant to access records marked as private in this container"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
-
-msgid "By using this service you agree to our"
-msgstr "Mit der Nutzung dieses Services "
-
-msgid "You can not have more than one calendar filter"
-msgstr "Es kann nicht mehr als einen Kalenderfilter geben"
-
-msgid "from"
-msgstr "von"
-
-msgid "Until"
-msgstr "Bis"
-
-msgid "Changes to this event might send notifications."
-msgstr "Änderungen an diesem Termin könnten Benachrichtigungen verschicken."
-
-msgid "Disable notification for external attendeers"
-msgstr "Deaktiviere Benachrichtigung für externe Teilnehmer"
-
-msgid "use as location"
-msgstr "Ressourcen Lokalität als Terminort übernehmen"
-
-msgid "Attendee status if the user has the status grant"
-msgstr "Teilnehmer Status, wenn der Benutzer über das Status Recht verfügt"
-
-msgid "Reserve Resource: %1$s"
-msgstr "Reserviere Resource: %1$s"
-
-msgid "The container already exists"
-msgstr "Der Container existiert bereits"
-
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status?"
-msgstr "Sie sind dabei, den Termin-Status und nicht nur Ihren eigenen Teilnehmer-Status am Termin zu ändern. Wollen Sie wirklich den Termin-Status ändern? Die Teilnahme von Ihnen und der der anderen Teilnehmenden bleibt unverändert."
-
-msgid "Remote / ICS"
-msgstr "Entfernt / ICS"
-
-msgid "Remote / CalDAV (BETA)"
-msgstr "Entfernt / CalDAV (BETA)"
-
-msgid "Upload"
-msgstr "Hochladen"
-
-msgid "Please select the type of source you want to add to Tine 2.0"
-msgstr "Bitte wählen Sie die Datei, die die Datensätze enthält, die Sie zu Tine 2.0 hinzufügen wollen"
-
-msgid "The grant to respond to event invitations of this resource and to edit events directly saved in this resource calendar"
-msgstr "Das Recht auf Termin-Einladungen dieser Ressource zu antworten und Termine aus dem Ressourcen-Kalender zu bearbeiten"
-
-msgid "The grant to synchronise events from this resource calendar"
-msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren"
-
-msgid "Church"
-msgstr "Kirche"
-
-msgid "Chapel"
-msgstr "Kapelle"
-
-msgid "Search for sites ..."
-msgstr "Suche nach Standorten..."
-
-msgid "Invalid link"
-msgstr "Ungültiger Link"

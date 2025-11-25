@@ -202,8 +202,11 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
      */
     updatePeriod: function(period) {
         this.startDate = period.from.clearTime(true);
-        
-        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
+
+        let tbar = this.findParentBy(function(c) {return c.getTopToolbar?.()});
+        if (tbar) {
+            tbar = tbar.getTopToolbar();
+        }
         if (tbar && tbar.periodPicker) {
             tbar.periodPicker.update(this.startDate);
             this.startDate = tbar.periodPicker.getPeriod().from.clearTime(true);
@@ -429,7 +432,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
                     
                     // don't allow dragging of dirty events
                     // don't allow dragging with missing edit grant
-                    if (! event || event.dirty || this.readOnly || (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
+                    if (! event || event.dirty || this.readOnly || this.view.readOnly || (this.view.denyDragOnMissingEditGrant && ! event.get('editGrant'))) {
                         return;
                     }
                     
@@ -1076,8 +1079,10 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
     },
 
     getPeriod: function() {
-        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()}).getTopToolbar();
-                
+        var tbar = this.findParentBy(function(c) {return c.getTopToolbar()});
+        if (tbar) {
+            tbar = tbar.getTopToolbar();
+        }
         return tbar && tbar.periodPicker ? tbar.periodPicker.getPeriod() : {
             from: this.startDate,
             until: this.startDate.add(Date.DAY, this.numOfDays)

@@ -854,10 +854,12 @@ const common = {
             const { default: linkifyHtml } = require('linkify-html');
             let linkifyed = linkifyHtml(text);
 
-            if (Ext.isFunction(cb)) {
-                cb.call(scope || window, linkifyed);
-            } else {
-                cb.update(linkifyed);
+            if (cb) {
+                if (Ext.isFunction(cb)) {
+                    cb.call(scope || window, linkifyed);
+                } else {
+                    cb.update(linkifyed);
+                }
             }
         }, 'Tinebase/js/linkify');
     },

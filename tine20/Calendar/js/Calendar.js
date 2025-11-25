@@ -60,3 +60,5 @@ require('./RruleFilter');
 require('./WeekdayFilter');
 require('./EventFinderOptionsDialog');
 require('./floorplan/src/openViewBtn');
+require('./ViewInCalendarDialog');
+require('./AttendeeCombo')

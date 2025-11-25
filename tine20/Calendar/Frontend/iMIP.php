@@ -136,16 +136,23 @@ class Calendar_Frontend_iMIP
     protected function _checkPreconditions(Calendar_Model_iMIP $_iMIP, Calendar_Model_Event $_event, bool $_throwException = false, null|string|Calendar_Model_Attender $_status = null): bool
     {
         $key = $_event->getRecurIdOrUid();
+        $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
+
+
         if ($_iMIP->preconditionsChecked[$key] ?? false) {
-            if (empty($_iMIP->preconditions[$key] ?? []) || ! $_throwException) {
+            if (empty($_iMIP->preconditions[$key] ?? []) || !$_throwException) {
                 return true;
             } else {
+                $precondition = $_iMIP->preconditions[$key];
+                // imap process request as non attendee should be possible
+                if ($_status instanceof Calendar_Model_Attender && $method === 'Request' && isset($precondition[Calendar_Model_iMIP::PRECONDITION_ATTENDEE])) {
+                    return true;
+                }
                 throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
             }
         }
-        
-        $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
-        
+
+
         $preconditionMethodName  = '_check'     . $method . 'Preconditions';
         if (method_exists($this, $preconditionMethodName)) {
             $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_event, $_status);
@@ -240,8 +247,11 @@ class Calendar_Frontend_iMIP
     protected function _processRequest(Calendar_Model_iMIP $_iMIP, Calendar_Model_Event $_event, null|string|Calendar_Model_Attender $_status = null): void
     {
         $existingEvent = $_iMIP->getExistingEvent($_event, _getDeleted: true);
+        $displaycontainer_id = null;
+
         if ($_status instanceof Calendar_Model_Attender) {
             $attendee = Calendar_Model_Attender::getAttendee($existingEvent?->attendee ?: $_event->attendee, $_status);
+            $displaycontainer_id = $_status->displaycontainer_id;
             $_status = $_status->status;
         } else {
             $attendee = Calendar_Model_Attender::getOwnAttender($existingEvent?->attendee ?: $_event->attendee) ?:
@@ -259,10 +269,23 @@ class Calendar_Frontend_iMIP
                         . ' Organizer has an account but no event exists!');
                 return;
             }
-            
-            if ($attendee && $_status && $_status != $attendee->status) {
-                $attendee->status = $_status;
-                Calendar_Controller_Event::getInstance()->attenderStatusUpdate($existingEvent, $attendee, $attendee->status_authkey);
+
+            if ($attendee) {
+                $needsUpdate = false;
+
+                if ($_status && $_status != $attendee->status) {
+                    $attendee->status = $_status;
+                    $needsUpdate = true;
+                }
+
+                if ($displaycontainer_id && $displaycontainer_id !== $attendee->displaycontainer_id) {
+                    $attendee->displaycontainer_id = $displaycontainer_id;
+                    $needsUpdate = true;
+                }
+
+                if ($needsUpdate) {
+                    Calendar_Controller_Event::getInstance()->attenderStatusUpdate($existingEvent, $attendee, $attendee->status_authkey);
+                }
             }
         }
         
