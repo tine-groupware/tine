@@ -6,7 +6,7 @@
  * @package     HumanResources
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -20,6 +20,7 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -30,6 +31,10 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE018_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -135,5 +140,13 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
         HumanResources_Scheduler_Task::addAutoCreateAccounts(Tinebase_Core::getScheduler());
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+    }
+
+    public function update007(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Employee::class,
+        ]);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
     }
 }

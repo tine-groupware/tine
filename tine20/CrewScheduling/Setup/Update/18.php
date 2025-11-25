@@ -22,6 +22,7 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -40,6 +41,10 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE018_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -217,5 +222,18 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
             CrewScheduling_Model_EventTypeConfig::class,
         ]);
         $this->addApplicationUpdate('CrewScheduling', '18.8', self::RELEASE018_UPDATE008);
+    }
+
+    public function update009(): void
+    {
+        foreach ($this->_backend->getOwnForeignKeys(CrewScheduling_Model_Poll::TABLE_NAME) as $foreignKey) {
+            $this->_backend->dropForeignKey(CrewScheduling_Model_Poll::TABLE_NAME, $foreignKey['constraint_name']);
+        }
+        Setup_SchemaTool::updateSchema([
+            CrewScheduling_Model_PollEventType::class,
+            CrewScheduling_Model_PollSite::class,
+            CrewScheduling_Model_Poll::class,
+        ]);
+        $this->addApplicationUpdate('CrewScheduling', '18.9', self::RELEASE018_UPDATE009);
     }
 }
