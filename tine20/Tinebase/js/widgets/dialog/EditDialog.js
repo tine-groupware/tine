@@ -533,7 +533,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             columnWidth: 1/2
                         },
                     })].concat(this.getEastPanel())
-                }, _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
+                },
+                // NOTE: this is the "History" panel (_not_ the "Notes" panel)
+                _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     getRecordId: () => {return this.record.id },
                     record_model: this.modelName

@@ -449,7 +449,6 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         });
                     }
 
-                    
                     if (Tine[appName].hasOwnProperty(editDialogName)) {
                         var edp = Tine[appName][editDialogName].prototype;
                         if (containerProperty && edp.showContainerSelector !== false && !modelConfig.extendsContainer) {
@@ -461,7 +460,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                             recordClass:      Tine[appName].Model[modelName],
                             recordProxy:      Tine[appName][recordProxyName],
                             appName:          appName,
-                            windowNamePrefix: modelName + 'EditWindow_'
+                            windowNamePrefix: modelName + 'EditWindow_',
+                            displayNotes:     Tine[appName].Model[modelName].hasField('notes')
                         });
                         if (! Ext.isFunction(Tine[appName][editDialogName].openWindow)) {
                             Tine[appName][editDialogName].openWindow  = function (cfg) {
