@@ -311,49 +311,15 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_tag',
             scope: this
         });
-
-        this.actions_export = new Ext.Action({
-            text: this.app.i18n._('Export Timesheets'),
-            iconCls: 'action_export',
-            scope: this,
-            requiredGrant: 'exportGrant',
-            disabled: true,
-            allowMultiple: true,
-            actionUpdater: this.updateExportAction,
-            menu: {
-                items: [
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as ODS'),
-                        format: 'ods',
-                        iconCls: 'tinebase-action-export-ods',
-                        exportFunction: 'Timetracker.exportTimesheets',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as CSV'),
-                        format: 'csv',
-                        iconCls: 'tinebase-action-export-csv',
-                        exportFunction: 'Timetracker.exportTimesheets',
-                        gridPanel: this
-                    }),
-                    new Tine.widgets.grid.ExportButton({
-                        text: this.app.i18n._('Export as...'),
-                        iconCls: 'tinebase-action-export-xls',
-                        exportFunction: 'Timetracker.exportTimesheets',
-                        showExportDialog: true,
-                        gridPanel: this
-                    })
-                ]
-            }
-        });
         
         // register actions in updater
         this.actionUpdater.addActions([
-            this.actions_export,
             this.actions_massQuickTag
         ]);
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
+
+        this.actions_export.initialConfig.actionUpdater = this.updateExportAction.createDelegate(this);
     },
 
     /**
@@ -452,7 +418,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var items = [
             '-',
             this.actions_massQuickTag,
-            this.actions_export
         ];
         
         return items;
