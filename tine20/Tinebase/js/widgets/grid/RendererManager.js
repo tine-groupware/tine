@@ -158,9 +158,9 @@ Tine.widgets.grid.RendererManager = function() {
                                         const type = record.get(fieldName.replace(/_sum$/, '_type'));
                                         if (type === 'PERCENTAGE') {
                                             value = record.get(fieldDefinition.fieldName.replace(/_sum$/, '_percentage'));
-                                            return !value ? '' : Tine.Tinebase.common.percentRenderer(value, 'float');
+                                            return !value && value !== 0 ? '' : Tine.Tinebase.common.percentRenderer(value, 'float');
                                         } else {
-                                            return !value ? '' : Ext.util.Format.money(value);
+                                            return !value && value !== 0 ? '' : Ext.util.Format.money(value);
                                         }
                                     }
                                 } else {
