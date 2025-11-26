@@ -2,9 +2,12 @@
 <config>
     <model>Timetracker_Model_Timeaccount</model>
     <name>ta_default_ods</name>
+    <label>ODS overview</label>
     <type>export</type>
     <plugin>Timetracker_Export_Ods_Timeaccount</plugin>
+    <icon_class>tinebase-action-export-ods</icon_class>
     <description>default ods timeaccount export definition</description>
+    <favorite>true</favorite>
     <scope>multi</scope>
     <header>1</header>
     <headers>
