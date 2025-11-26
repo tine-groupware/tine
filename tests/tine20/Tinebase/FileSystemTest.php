@@ -1449,11 +1449,46 @@ class Tinebase_FileSystemTest extends TestCase
             static::markTestSkipped('no mail configuration');
         }
 
-        $this->flushMailer();
+        self::flushMailer();
         $this->_controller->notifyQuota();
         $messages = $this->getMessages();
         static::assertEquals(0, count($messages), 'should not have received any notification email');
 
+        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+        $orgQuotaConfig = clone $quotaConfig;
+        $applicationController = Tinebase_Application::getInstance();
+        /** @var Tinebase_Model_Application $tinebaseApplication */
+        $tinebaseApplication = $applicationController->getApplicationByName('Tinebase');
+
+        try {
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
+            $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} = 1;
+            Tinebase_FileSystem_Quota::clearConfigCache();
+
+            //test file system total quota
+            $this->_controller->notifyQuota();
+            $messages = $this->getMessages();
+            $senders = Tinebase_FileSystem::getInstance()->getNotificationSenders(null);
+            $totalCount = 0;
+            foreach ($senders as $sender) {
+                $recipients = Tinebase_FileSystem::getInstance()->getQuotaNotificationRecipients($sender, false);
+                $totalCount += count($recipients);
+            }
+            static::assertGreaterThan(1, $totalCount, 'should have more than 1 recipient');
+            static::assertEquals($totalCount, count($messages), 'should have received ' . $totalCount . ' notification emails');
+            /** @var Tinebase_Mail $message */
+            $message = $messages[0];
+            $body = $message->getBodyText()->getContent();
+            static::assertEquals('Filesystem exceeded quota', $body);
+        } finally {
+            Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $orgQuotaConfig;
+        }
+
+        // test folder quota
+        self::flushMailer();
         /** @var Tinebase_Model_Tree_Node $node */
         $node = $this->_controller->_getTreeNodeBackend()->search(new Tinebase_Model_Tree_Node_Filter(array(
             array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER),
@@ -1463,19 +1498,14 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_controller->update($node);
         $this->_controller->notifyQuota();
         $messages = $this->getMessages();
-        $senders = Tinebase_FileSystem::getInstance()->getNotificationSenders($node);
-        $totalCount = 0;
-        foreach ($senders as $sender) {
-            $recipients = Tinebase_FileSystem::getInstance()->getQuotaNotificationRecipients($sender, false);
-            $totalCount += count($recipients);
-        }
-        
-        static::assertEquals($totalCount, count($messages), 'should have received ' . $totalCount . ' notification emails');
+
+        static::assertEquals(1, count($messages), 'should have received one notification emails');
         /** @var Tinebase_Mail $message */
         $message = $messages[0];
         static::assertEquals('filemanager quota notification', $message->getSubject());
         static::assertEquals($this->_controller->getPathOfNode($node, true) . ' exceeded quota', $message->getBodyText()
             ->getRawContent());
+
     }
 
     public function testFileObjectsCleanup()
