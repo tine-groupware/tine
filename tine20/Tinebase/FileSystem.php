@@ -5205,8 +5205,13 @@ class Tinebase_FileSystem implements
                 $subject = 'filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification';
                 $translatedSubject = $translate->_($subject);
                 $messagePlain = $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota';
-                
-                $recipients = $this->getQuotaNotificationRecipients($sender, $softQuota);
+
+                // only send notification to all user when total quota exceed.
+                if (!$node) {
+                    $recipients = $this->getQuotaNotificationRecipients($sender, $softQuota);
+                } else {
+                    $recipients = [$sender->contact_id];
+                }
                 Tinebase_Notification::getInstance()->send($sender, $recipients, $translatedSubject, $messagePlain, null, null, true);
             }
         } catch (Exception $e) {
@@ -5312,7 +5317,9 @@ class Tinebase_FileSystem implements
     public function getNotificationSenders(?\Tinebase_Model_Tree_Node $node = null)
     {
         if (null === $node || null === $node->acl_node) {
-            $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
+            $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+            $members = Tinebase_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId());
+            $accountIds = $members;
         } else {
             $accountIds = [];
             $acl_node = $node;
@@ -5376,8 +5383,10 @@ class Tinebase_FileSystem implements
    
         if (! $softQuota) {
             $userEmails = [];
-            $ids = Tinebase_User::getInstance()->getActiveUserIds();
-            $users = Tinebase_User::getInstance()->getMultiple(array_unique($ids));
+            //send to administrators only
+            $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+            $members = Tinebase_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId());
+            $users = Tinebase_User::getInstance()->getMultiple(array_unique($members));
             
             foreach ($users as $user) {
                 if (! empty($user['contact_id'])) {
@@ -5386,7 +5395,7 @@ class Tinebase_FileSystem implements
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' sending hard quota notification to all users: ' . print_r($users->accountEmailAddress, true) . PHP_EOL);
+                __METHOD__ . '::' . __LINE__ . ' sending hard quota notification to all admin group users: ' . print_r($users->accountEmailAddress, true) . PHP_EOL);
 
             $contacts = array_merge($additionalContacts, $userEmails);
         }
