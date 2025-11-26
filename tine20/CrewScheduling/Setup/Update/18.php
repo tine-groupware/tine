@@ -25,10 +25,17 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
-        self::PRIO_NORMAL_APP_STRUCTURE => [
+        self::PRIO_TINEBASE_AFTER_STRUCTURE => [
+            // needs to be done early because other update scripts depend on this
             self::RELEASE018_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+        ],
+        self::PRIO_NORMAL_APP_STRUCTURE => [
+            self::RELEASE018_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
             self::RELEASE018_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
@@ -56,17 +63,9 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
-            self::RELEASE018_UPDATE002          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update002',
-            ],
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
-            ],
-            self::RELEASE018_UPDATE004          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update004',
             ],
             self::RELEASE018_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
