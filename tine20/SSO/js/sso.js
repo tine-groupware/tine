@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import '../styles/sso.less'
 import './AdminPanel'
 
 // sso app entry point for tine20 fat-client
