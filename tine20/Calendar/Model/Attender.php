@@ -1299,8 +1299,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 }
                 if (empty($attender->user_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' user_id missing from attender: ' . print_r($attender->toArray(), true));
                     continue;
                 }
@@ -1398,9 +1398,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // already resolved from cache
                     continue;
                 }
+
                 if (empty($attender->user_id) || ! is_scalar($attender->user_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                             . ' user_id missing from attender or not scalar: '
                             . print_r($attender->toArray(), true));
                     continue;
