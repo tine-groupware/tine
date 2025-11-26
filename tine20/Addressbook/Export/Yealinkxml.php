@@ -35,7 +35,7 @@ class Addressbook_Export_Yealinkxml extends Tinebase_Export_Abstract
 
     public function generate()
     {
-        $this->_sortInfo = ['container_id'];
+        $this->_sortInfo = ['sort' => 'container_id'];
         $this->_groupByProperty = 'container_id';
         $this->_groupByProcessor = fn(&$val) => $val instanceof Tinebase_Record_Interface ? $val = $val->getId() : null;
 

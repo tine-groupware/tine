@@ -51,13 +51,6 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
      * @var array
      */
     protected $_foreignTables = array(
-        'is_billable_combined'  => array(
-            'table'         => 'timetracker_timeaccount',
-            'joinOn'        => 'id',
-            'joinId'        => 'timeaccount_id',
-            'select'        => '', // set in contructor
-            'singleValue'   => true,
-        ),
         'is_cleared'   => array(
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
@@ -92,15 +85,11 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         parent::__construct($_dbAdapter, $_options);
 
         $this->_additionalSearchCountCols = array(
-            'is_billable_combined' => null, // taken from _foreignTables
+            'is_billable' => 'is_billable',
             'duration' => 'duration',
             'accounting_time_billable' => null,  // taken from _foreignTables
             Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT => Timetracker_Model_Timesheet::FLD_CLEARED_AMOUNT,
             Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT => Timetracker_Model_Timesheet::FLD_RECORDED_AMOUNT,
-        );
-        
-        $this->_foreignTables['is_billable_combined']['select'] = array(
-            'is_billable_combined'  => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
         );
 
         $this->_foreignTables['accounting_time_billable']['select'] = array(

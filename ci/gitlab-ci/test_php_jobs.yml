@@ -429,12 +429,11 @@ php-unit-nogitlabci-tests-built-parallel:
       log "updating to ${TINE_VERSION_BE}"
       git checkout ${TINE_VERSION_BE}
       test_composer_install
-      log update
       test_update_tine
-      su tine20 -c "php setup.php --config=/etc/tine20 --install UserManual"
-      su tine20 -c "php setup.php --config=/etc/tine20 --uninstall Voipmanager,Phone"
+      su tine20 -c "php setup.php --config=/etc/tine20 --install EventManager"
+      su tine20 -c "php setup.php --config=/etc/tine20 --install CrewScheduling"
     - |
-      if [ "${TINE_VERSION_BETA}" != "" ];then
+      if [ "${TINE_VERSION_BETA}" != "" ] && [ "${TINE_VERSION_BETA}" != "main" ] ;then
         log "updating to ${TINE_VERSION_BETA}"
         git checkout ${TINE_VERSION_BETA}
         test_composer_install
@@ -448,8 +447,6 @@ php-unit-nogitlabci-tests-built-parallel:
       git checkout ${TINE_VERSION_NEXT}
       test_composer_install
       test_update_tine
-      su tine20 -c "php setup.php --config=/etc/tine20 --install EventManager"
-      su tine20 -c "php setup.php --config=/etc/tine20 --install CrewScheduling"
     - |
       log "testing"
       test_phpunit
