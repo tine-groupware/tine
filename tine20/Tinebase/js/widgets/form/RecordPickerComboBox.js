@@ -386,6 +386,27 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         }
     },
 
+    // private
+    // overwritten as prop might be a template or a multiLang field...
+    findRecord : function(prop, value){
+        const titleProp = this.recordClass.getMeta('titleProperty')
+
+        var record;
+        if(this.store?.getCount() > 0){
+            this.store.each(function(r){
+                const text = prop === titleProp ? ((typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle({
+                    language: this.localizedLangPicker?.getValue()
+                })) : r.data[prop];
+                // @TODO what if text is a htmlProxy? -> we should cache getTitle results
+                if(text === value){
+                    record = r;
+                    return false;
+                }
+            });
+        }
+        return record;
+    },
+
     /**
      * set value and prefill store if needed
      *
@@ -409,8 +430,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
                 value = value.get(this.valueField);
             } else if (Ext.isPrimitive(value) && value == this.getValue()) {
-                // value is the current id
-                return this.setValue(this.selectedRecord);
+                if (!this.selectedRecord && !this.forceSelection) {
+                    // value is a raw string, no record exists
+                    return;
+                } else {
+                    // value is the current id
+                    return this.setValue(this.selectedRecord);
+                }
             } else if (value && Ext.isString(value) && !value.match(/^{/) && !value.match(/^current/) && !value.match(/\s/) && !this.store.getById(value) && this.lasyLoading && this.selectedRecord?.getTitle?.() !== value) {
                 // value is an id
                 try {

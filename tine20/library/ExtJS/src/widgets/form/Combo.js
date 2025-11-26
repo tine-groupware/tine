@@ -1021,7 +1021,11 @@ var menu = new Ext.menu.Menu({
      */
     getValue : function(){
         if(this.valueField){
-            return Ext.isDefined(this.value) ? this.value : this.emptyValue;
+            const v = Ext.isDefined(this.value) ? this.value : this.emptyValue;
+            if (!v && !this.forceSelection && this.getRawValue()) {
+                return this.getRawValue();
+            }
+            return v;
         }else{
             return Ext.form.ComboBox.superclass.getValue.call(this);
         }

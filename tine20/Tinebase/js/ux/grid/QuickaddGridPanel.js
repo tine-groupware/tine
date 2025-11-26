@@ -159,6 +159,8 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(this.getCols(), function (column) {
             if (column.quickaddField) {
                 if (this.quickaddMode === 'header') {
+                    column.quickaddField.blurOnSelect = column.quickaddField.hasOwnProperty('blurOnSelect') ? column.quickaddField.blurOnSelect : false;
+                    column.quickaddField.allowBlank = column.quickaddField.hasOwnProperty('allowBlank') ? column.quickaddField.allowBlank : true;
                     column.quickaddField.render(this.getQuickAddWrap(column));
                 } else {
                     const renderer = Ext.isFunction(column.renderer) ? column.renderer : Tine.widgets.grid.RendererManager.prototype.defaultRenderer;
