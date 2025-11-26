@@ -92,6 +92,11 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         }
 
         $task->container_id = $container->getId();
+        $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
+        if (strlen($id) > 40) {
+            $id = sha1($id);
+        }
+        $task->setId($id);
         
         self::enforceEventParameters($task);
 
