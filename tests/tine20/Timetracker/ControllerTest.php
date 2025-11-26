@@ -335,10 +335,10 @@ class Timetracker_ControllerTest extends TestCase
 
         $be = new Timetracker_Backend_Timesheet();
         $result = $be->search($filter)->toArray();
-        $this->assertArrayHasKey('is_billable_combined', $result[0]);
+        $this->assertArrayHasKey('is_billable', $result[0]);
 
         $result = $this->_timesheetController->search($filter)->toArray();
-        $this->assertArrayHasKey('is_billable_combined', $result[0]);
+        $this->assertArrayHasKey('is_billable', $result[0]);
 
         // reset fulltext query filter
         Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}

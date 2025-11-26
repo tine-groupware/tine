@@ -27,7 +27,7 @@
             <field>title</field>
         </column>
         <column>
-            <identifier>is_billable_combined</identifier>
+            <identifier>is_billable</identifier>
             <header>Billable</header>
             <type>boolean</type>
         </column>

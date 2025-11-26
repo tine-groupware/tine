@@ -40,7 +40,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     /**
      * holds the columns that should be selected, required if based on the selected columns a join is triggered
-     * see \Timetracker_Model_Timesheet -> is_billable_combined
+     * see \Timetracker_Model_Timesheet -> is_billable
      * see \Timetracker_JsonTest::testSearchTimesheetsWithCombinedIsBillableAndCleared
      * @var array
      */

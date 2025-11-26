@@ -156,24 +156,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'default'               => 1,
                 'shy'                   => true,
             ),
-            // ts + ta fields combined
-            'is_billable_combined'  => array(
-                'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'type'                  => 'virtual',
-                'config'                => [
-                    'label'                 => 'Project time billable (combined)', // _('Project time billable (combined)')
-                    'tooltip'               => 'Project time billable (combined)',
-                    'type'                  => 'boolean',
-                ],
-                'filterDefinition'      => [
-                    'filter'                => 'Tinebase_Model_Filter_Bool',
-                    'title'                 => 'Billable', // _('Billable')
-                    'options'               => array(
-                        'leftOperand'           => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)',
-                        'requiredCols'          => array('is_billable_combined')
-                    ),
-                ],
-            ),
             'billed_in'             => array(
                 'label'                 => 'Project time cleared in', // _('Project time cleared in')
                 'tooltip'               => 'Project time cleared in',
