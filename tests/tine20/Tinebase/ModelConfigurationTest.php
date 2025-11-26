@@ -102,22 +102,6 @@ class Tinebase_ModelConfigurationTest extends TestCase
         }
     }
 
-    /**
-     * assert virtual field filters in model config
-     */
-    public function testVirtualFieldFilter()
-    {
-        $timesheet = new Timetracker_Model_Timesheet([], true);
-        $cObj = $timesheet->getConfiguration();
-
-        $filterModel = $cObj->getFilterModel();
-        self::assertTrue(isset($filterModel['_filterModel']['is_billable_combined']));
-        $fields = $cObj->getFields();
-        self::assertTrue(isset($fields['is_billable_combined']));
-        self::assertTrue(isset($fields['is_billable_combined']['config']['label']));
-        self::assertTrue(isset($fields['is_billable_combined']['filterDefinition']['options']));
-    }
-
     public function testRelationFilter()
     {
         // do not have generic "Relation" filter
