@@ -96,6 +96,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
 
+        // important! after _inspectDenormalization in parent::_inspectBeforeCreate
+        $this->_inspectCustomerDebitor($_record);
+
         $this->_inspectServicePeriod($_record);
     }
 
@@ -201,6 +204,23 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         if (null === $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} || (null !== $max &&
                 $max->isLater($document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END}))) {
             $document->{Sales_Model_Document_Abstract::FLD_SERVICE_PERIOD_END} = $max;
+        }
+    }
+
+    protected function _inspectCustomerDebitor(Sales_Model_Document_Abstract $document): void
+    {
+        if (!$document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} instanceof Sales_Model_Document_Customer ||
+                !$document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} instanceof Sales_Model_Document_Debitor) {
+            throw new Tinebase_Exception_UnexpectedValue('customer and debitor need to denormalized records');
+        }
+        if (!($orgCustomer = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}) ||
+                !($orgDebitor = $document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID})) {
+            throw new Tinebase_Exception_UnexpectedValue('customer and debitor need to denormalized records with original id');
+        }
+
+        $orgDebitor = Sales_Controller_Debitor::getInstance()->get($orgDebitor, _getDeleted: true);
+        if ($orgDebitor->getIdFromProperty(Sales_Model_Debitor::FLD_CUSTOMER_ID) !== $orgCustomer) {
+            throw new Tinebase_Exception_UnexpectedValue('selected debitor is not of selected customer');
         }
     }
 
@@ -372,6 +392,9 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
         // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeCreate
+        $this->_inspectCustomerDebitor($_record);
 
         $this->_inspectServicePeriod($_record);
     }
