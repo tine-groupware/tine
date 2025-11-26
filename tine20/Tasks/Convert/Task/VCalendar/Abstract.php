@@ -70,8 +70,9 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
         if (!empty($task->originator_tz)) {
             $task->setTimezone($task->originator_tz);
         }
-        
-        $vtodo = $vcalendar->create('VTODO');
+
+        /** @var \Sabre\VObject\Component $vtodo */
+        $vtodo = $vcalendar->create('VTODO', [], false);
         
         $vtodo->add('CREATED', $task->creation_time->getClone()->setTimezone('UTC'));
         
