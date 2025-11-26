@@ -251,6 +251,11 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
             if (null === $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
                 $customer = Sales_Controller_Customer::getInstance()->get($customerId);
+                if (!$customer->{Sales_Model_Customer::FLD_DEBITORS}) {
+                    $customer->{Sales_Model_Customer::FLD_DEBITORS} = new Tinebase_Record_RecordSet(
+                        Sales_Model_Debitor::class
+                    );
+                }
                 $customer->{Sales_Model_Customer::FLD_DEBITORS}->addRecord(new Sales_Model_Debitor([
                     Sales_Model_Debitor::FLD_DIVISION_ID => $divisionId,
                     Sales_Model_Debitor::FLD_NAME => '-',
