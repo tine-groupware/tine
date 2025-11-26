@@ -149,7 +149,7 @@ msgstr ""
 msgid "Responsible Person"
 msgstr ""
 
-msgid "Timesheets are billable"
+msgid "Project time is invoiceable"
 msgstr ""
 
 msgid "Invoice"
@@ -170,6 +170,12 @@ msgid "Description"
 msgstr ""
 
 msgid "Select invoice"
+msgstr ""
+
+msgid "Remove Budget?"
+msgstr ""
+
+msgid "The timeaccount contains a budget. Should this be deleted in the copy?"
 msgstr ""
 
 msgid "Update Timesheets?"
@@ -208,6 +214,12 @@ msgstr ""
 msgid "Time Account - Status"
 msgstr ""
 
+msgid "Mark project time as invoiceable?"
+msgstr ""
+
+msgid "In the timesheet, the value “Project time is invoiceable” is currently set to “No.” Should this be changed to Yes”?"
+msgstr ""
+
 msgid "Change all Correlated Timesheets"
 msgstr ""
 
@@ -231,7 +243,7 @@ msgstr ""
 msgid "Accounting"
 msgstr ""
 
-msgid "Accounting time"
+msgid "Invoiceable time"
 msgstr ""
 
 msgid "Failed"
@@ -359,9 +371,6 @@ msgstr ""
 msgid "Price"
 msgstr ""
 
-msgid "Project time billable"
-msgstr ""
-
 msgid "Project time cleared in"
 msgstr ""
 
@@ -392,7 +401,7 @@ msgstr ""
 msgid "Time Account (Number - Title)"
 msgstr ""
 
-msgid "Project time billable (combined)"
+msgid "Project time is invoiceable (combined)"
 msgstr ""
 
 msgid "Billable"
@@ -429,9 +438,6 @@ msgid "Need for Clarification"
 msgstr ""
 
 msgid "Project Time Accounting factor"
-msgstr ""
-
-msgid "Accounting Project Time"
 msgstr ""
 
 msgid "Working time is cleared"

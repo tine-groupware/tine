@@ -149,8 +149,8 @@ msgstr "Cleared at"
 msgid "Responsible Person"
 msgstr "Responsible Person"
 
-msgid "Timesheets are billable"
-msgstr "Timesheets are billable"
+msgid "Project time is invoiceable"
+msgstr "Project time is invoiceable"
 
 msgid "Invoice"
 msgstr "Invoice"
@@ -171,6 +171,12 @@ msgstr "Description"
 
 msgid "Select invoice"
 msgstr "Select invoice"
+
+msgid "Remove Budget?"
+msgstr "Remove Budget?"
+
+msgid "The timeaccount contains a budget. Should this be deleted in the copy?"
+msgstr "The timeaccount contains a budget. Should this be deleted in the copy?"
 
 msgid "Update Timesheets?"
 msgstr "Update Timesheets?"
@@ -208,6 +214,12 @@ msgstr "without responsible"
 msgid "Time Account - Status"
 msgstr "Time Account - Status"
 
+msgid "Mark project time as invoiceable?"
+msgstr "Mark project time as invoiceable?"
+
+msgid "In the timesheet, the value “Project time is invoiceable” is currently set to “No.” Should this be changed to Yes”?"
+msgstr "In the timesheet, the value “Project time is invoiceable” is currently set to “No.” Should this be changed to Yes”?"
+
 msgid "Change all Correlated Timesheets"
 msgstr "Change all Correlated Timesheets"
 
@@ -231,8 +243,8 @@ msgstr "End must not be before start."
 msgid "Accounting"
 msgstr "Accounting"
 
-msgid "Accounting time"
-msgstr "Accounting time"
+msgid "Invoiceable time"
+msgstr "Invoiceable time"
 
 msgid "Failed"
 msgstr "Failed"
@@ -359,9 +371,6 @@ msgstr "Project time budget in hours"
 msgid "Price"
 msgstr "Price"
 
-msgid "Project time billable"
-msgstr "Project time billable"
-
 msgid "Project time cleared in"
 msgstr "Project time cleared in"
 
@@ -392,8 +401,8 @@ msgstr "Account"
 msgid "Time Account (Number - Title)"
 msgstr "Time Account (Number - Title)"
 
-msgid "Project time billable (combined)"
-msgstr "Project time billable (combined)"
+msgid "Project time is invoiceable (combined)"
+msgstr "Project time is invoiceable (combined)"
 
 msgid "Billable"
 msgstr "Billable"
@@ -430,9 +439,6 @@ msgstr "Need for Clarification"
 
 msgid "Project Time Accounting factor"
 msgstr "Project Time Accounting factor"
-
-msgid "Accounting Project Time"
-msgstr "Accounting Project Time"
 
 msgid "Working time is cleared"
 msgstr "Working time is cleared"

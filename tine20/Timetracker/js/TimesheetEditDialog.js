@@ -65,6 +65,29 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     onTimeaccountSelect: function(field, timeaccount) {
         this.timeAccount = timeaccount;
+
+        if (this.timeAccount) {
+            const isBillable = this.timeAccount.data.is_billable;
+            const isBillableCheckBox = this.getForm().findField('is_billable');
+
+            if (!isBillableCheckBox.checked && isBillable) {
+                Ext.MessageBox.show({
+                    title: this.app.i18n._('Mark project time as invoiceable?'),
+                    msg: this.app.i18n._('In the timesheet, the value “Project time is invoiceable” is currently set to “No.” Should this be changed to Yes”?'),
+                    buttons: Ext.MessageBox.YESNO,
+                    icon: Ext.MessageBox.QUESTION_WARN,
+                    fn: (btn) => {
+                        if (btn === 'yes') {
+                            this.factorChanged = false;
+                        } else {
+                            this.factor = 0;
+                        }
+                        isBillableCheckBox.setValue(btn === 'yes');
+                        this.onCheckBillable(isBillableCheckBox, btn === 'yes');
+                    },
+                });
+            }
+        }
         this.onTimeaccountUpdate();
         // set factor from this.timeAccount except it was manually changed before
         if (this.timeAccount) {
@@ -115,7 +138,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         if (this.timeAccount.data) {
             notBillable = notBillable || this.timeAccount.data.is_billable == "0" || this.timeAccount.get('is_billable') == "0";
-            
+
             // clearable depends on this.timeAccount is_billable as well (changed by ps / 2009-09-01, behaviour was inconsistent)
             notClearable = notClearable || this.timeAccount.data.is_billable == "0" || this.timeAccount.get('is_billable') == "0";
 
@@ -133,7 +156,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             this.getForm().findField('is_billable').setDisabled(notBillable);
             this.disableBillableFields(!this.getForm().findField('is_billable').checked);
             this.getForm().findField('is_cleared').setDisabled(notClearable);
-            this.disableClearedFields(notClearable);
+            this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in')?.setDisabled(notClearable);
         }
         
         if (this.record.id === 0) {
@@ -164,20 +187,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             focusField = this.getForm().findField(focusFieldName);
 
         focusField.focus(true, 250);
-    },
-
-    /**
-     * this gets called when initializing and if cleared checkbox is changed
-     *
-     * @param {} field
-     * @param {} newValue
-     *
-     * @todo    add prompt later?
-     */
-    onClearedUpdate: function(field, checked) {
-        if (!this.useMultiple) {
-            this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in').setDisabled(! checked);
-        }
     },
 
     initComponent: function() {
@@ -215,8 +224,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             const factor = this.getForm().findField('accounting_time_factor').getValue();
             const duration = this.getForm().findField('duration').getValue();
             const accountingTime = Math[roundingMethod](factor * duration / roundingMinutes) * roundingMinutes;
+            const isBillable = this.getForm().findField('is_billable').getValue();
 
-            if (factor !== this.factor) {
+            if (isBillable && factor !== this.factor) {
                 this.factor = factor;
                 this.factorChanged = true;
             }
@@ -226,17 +236,12 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
     onCheckBillable: function(field, checked) {
         if (!this.useMultiple) {
-            if (!checked) {
-                this.disableClearedFields(true);
-                this.getForm().findField('is_cleared').setDisabled(true);
-            } else {
-                if (!this.factorChanged) {
+            if (checked) {
+                if (!this.factorChanged && this.timeAccount) {
                     this.factor = this.timeAccount.data.accounting_time_factor;
                 }
                 this.getForm().findField('accounting_time_factor').setValue(this.factor);
                 this.calculateAccountingTime();
-                this.disableClearedFields(false);
-                this.getForm().findField('is_cleared').setDisabled(false);
             }
         }
         this.disableBillableFields(!checked)
@@ -244,10 +249,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     
     disableBillableFields: function(disable) {
         this.getForm().findField('accounting_time_factor').setDisabled(disable);
-    },
-
-    disableClearedFields: function(disable) {
-        this.getForm().findField(this.useInvoice ? 'invoice_id': 'billed_in')?.setDisabled(disable);
+        this.getForm().findField('accounting_time').setDisabled(disable);
     },
     
     onEndTimeChange: function() {
@@ -533,7 +535,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             check: this.onCheckBillable
                                         }}),
                                     fieldManager('accounting_time_factor', {
-                                        disabled: false,
                                         columnWidth: .1,
                                         decimalSeparator: ',',
                                         fieldLabel: this.app.i18n._('Factor'),
@@ -542,8 +543,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                             change: this.calculateAccountingTime
                                     }}),
                                     fieldManager('accounting_time', {
-                                        disabled: true,
-                                        fieldLabel: this.app.i18n._('Accounting time'),
+                                        readOnly: true,
+                                        fieldLabel: this.app.i18n._('Invoiceable time'),
                                         listeners: {
                                             scope: this
                                         }}),
@@ -551,7 +552,6 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 ], [
                                     fieldManager('is_cleared', {columnWidth: .4, listeners: {
                                         scope: this,
-                                        check: this.onClearedUpdate
                                     }}),
                                     fieldManager(this.useInvoice ? 'invoice_id' : 'billed_in', {columnWidth: .5 }),
                                 ], [

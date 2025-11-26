@@ -29,10 +29,6 @@
     color: gray;
 }
 
-.x-item-disabled * {
-    color: gray !important;
-}
-
 .x-splitbar-proxy {
     background-color: #aaa;
 }
