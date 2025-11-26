@@ -157,9 +157,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
                 }
 
                 if (filter_var($confirmHeader, FILTER_VALIDATE_BOOLEAN) === true) {
-                    $tsBackend->updateMultiple($timesheets->getArrayOfIds(), [
-                        'is_billable' => $_record['is_billable'],
-                    ]);
+                    foreach ($timesheets as $timesheet) {
+                        $timesheet->is_billable = $_record['is_billable'];
+                        Timetracker_Controller_Timesheet::getInstance()->update($timesheet);
+                    }
                 }
             }
         }

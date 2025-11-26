@@ -150,7 +150,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             modelUnique: true
         }, {
             hideLabel: true,
-            boxLabel: this.app.i18n._('Timesheets are billable'),
+            boxLabel: this.app.i18n._('Project time is invoiceable'),
             name: 'is_billable',
             xtype: 'checkbox',
             columnWidth: 1/3
@@ -306,11 +306,28 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }
     },
     
-    doCopyRecord: function() {
+    doCopyRecord: function () {
+        if (this.record.get('budget') && this.record.get('budget') !== 0) {
+            Ext.MessageBox.show({
+                title: this.app.i18n._('Remove Budget?'),
+                msg: this.app.i18n._('The timeaccount contains a budget. Should this be deleted in the copy?'),
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.QUESTION_WARN,
+                fn: (btn) => {
+                    this.record.set('budget_filled_level', null);
+                    this.record.set('budget_booked_hours', null);
+                    if (btn === 'yes') {
+                        this.record.set('budget', null);
+                    }
+                    this.getForm().loadRecord(this.record);
+                },
+            });
+        }
+
         Tine.Timetracker.TimeaccountEditDialog.superclass.doCopyRecord.call(this);
-        
+
         this.record.set('status', 'not yet billed');
-        this.record.set('is_open', 1 );
+        this.record.set('is_open', 1);
     },
     
     onApplyChanges: async function (closeWindow) {
