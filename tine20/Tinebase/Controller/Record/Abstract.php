@@ -1024,7 +1024,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 if ($newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF] &&
                         !$newRecord->{$property} instanceof $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME]) {
                     $model = $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
-                    $newRecord->{$property} = new $model($newRecord->{$property}->toArray());
+                    $newRecord->{$property} = new $model($newRecord->{$property}->toArray(), true);
                 }
                 if (null === $currentRecord) {
                     if (!empty($newRecord->{$property})) {
@@ -1054,7 +1054,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     $model = $definition[TMCC::CONFIG][TMCC::RECORD_CLASS_NAME];
                     $newRecord->{$property} = new Tinebase_Record_RecordSet($model);
                     foreach ($rs as $rec) {
-                        $newRecord->{$property}->addRecord(new $model($rec->toArray()));
+                        $newRecord->{$property}->addRecord(new $model($rec->toArray(), true));
                     }
                 }
                 if (null === $currentRecord) {
