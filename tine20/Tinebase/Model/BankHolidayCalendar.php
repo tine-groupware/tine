@@ -45,6 +45,7 @@ class Tinebase_Model_BankHolidayCalendar extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_BANKHOLIDAYS          => [],
+                self::FLD_TARGET_CAL_ID         => [],
             ],
         ],
 
