@@ -3039,8 +3039,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION => 'FlySystems Local Adapter Base Paths',
                     self::TYPE => self::TYPE_ARRAY,
                     self::CLIENTREGISTRYINCLUDE => false,
-                    self::SETBYADMINMODULE => true,
-                    self::SETBYSETUPMODULE => true,
+                    self::SETBYADMINMODULE => false,
+                    self::SETBYSETUPMODULE => false,
                     self::DEFAULT_STR => [],
                 ],
                 self::FILESYSTEM_MODLOGACTIVE => array(
