@@ -799,6 +799,49 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 throw new Tinebase_Exception_SystemGeneric('No source positions found that could be transitioned');
             }
 
+            $idMap = [];
+            $orphans = [];
+            $sorting = 0;
+            foreach ($this->{self::FLD_POSITIONS} as $position) {
+                $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $sorting;
+                $sorting += 10000;
+                $newId = Tinebase_Record_Abstract::generateUID();
+                $oldId = $position->getId();
+                $position->setId($newId);
+                $idMap[$oldId] = $newId;
+                foreach ($orphans[$newId] ?? [] as $orphan) {
+                    $orphan->{Sales_Model_DocumentPosition_Abstract::FLD_PARENT_ID} = $newId;
+                }
+                if ($parentId = $position->{Sales_Model_DocumentPosition_Abstract::FLD_PARENT_ID}) {
+                    if ($idMap[$parentId] ?? false) {
+                        $position->{Sales_Model_DocumentPosition_Abstract::FLD_PARENT_ID} = $idMap[$parentId];
+                    } else {
+                        $orphans[$parentId][] = $position;
+                    }
+                }
+            }
+            unset($orphans);
+            // need to reindex new ids in the recordset
+            $this->{self::FLD_POSITIONS} = new Tinebase_Record_RecordSet($positionClass, $this->{self::FLD_POSITIONS}->asArray());
+
+            if ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->count() > 1) {
+                $counters = [];
+                foreach ($this->{self::FLD_POSITIONS} as $position) {
+                    $counterKey = $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} . '_'
+                        . ($parentId = $position->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_PARENT_ID));
+                    if (!($counters[$counterKey] ?? false)) {
+                        $counters[$counterKey] = 0;
+                    }
+                    $counter = ++$counters[$counterKey];
+                    $groupPrefix = null;
+                    if (preg_match('/^[a-z-A-Z0-9\[\]_]{1,4}/', (string)$position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING}, $m)) {
+                        $groupPrefix = $m[0];
+                    }
+                    $parentPrefix = $parentId ? $this->{self::FLD_POSITIONS}->getById($parentId)->{Sales_Model_DocumentPosition_Abstract::FLD_POS_NUMBER} : null;
+                    $position->{Sales_Model_DocumentPosition_Abstract::FLD_POS_NUMBER} = (null !== $parentPrefix ? $parentPrefix . '.' : (null !== $groupPrefix ? $groupPrefix . ' ' : '')) . $counter;
+                }
+            }
+
             $this->{self::FLD_PRECURSOR_DOCUMENTS}->addRecord(new Tinebase_Model_DynamicRecordWrapper([
                 Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
