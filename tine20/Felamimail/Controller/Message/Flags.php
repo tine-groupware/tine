@@ -47,9 +47,11 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $this->_modelName = 'Felamimail_Model_Message';
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
 
-        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
-            self::$_allowedFlags['Tine20'] = 'Tine20';
+        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
+        foreach ($supportedMailServers as $data) {
+            self::$_allowedFlags[$data['id']] = $data['id'];
         }
+        self::$_allowedFlags['Tine20'] = 'Tine20';
     }
     
     /**
@@ -373,59 +375,44 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         
         return $folderCounts;
     }
-    
-    /**
-     * set seen flag of message
-     * 
-     * @param Felamimail_Model_Message $_message
-     */
-    public function setSeenFlag(Felamimail_Model_Message $_message)
-    {
-        if (! in_array(Zend_Mail_Storage::FLAG_SEEN, $_message->flags)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Add \Seen flag to msg uid ' . $_message->messageuid);
-            
-            $this->addFlags($_message, Zend_Mail_Storage::FLAG_SEEN);
-            $_message->flags[] = Zend_Mail_Storage::FLAG_SEEN;
-        }        
-    }
 
     /**
-     * tine20FlagEnabled
+     * set custom flag by parsing message DKIM
      *
-     * @param array|Felamimail_Model_Message $message
-     * @return bool
+     * @param Felamimail_Model_Message|array $_message
      */
-    public function tine20FlagEnabled($message = null)
+    public function setSenderFlag(Felamimail_Model_Message|array &$_message, $headers)
     {
-        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_TINE20_FLAG)) {
-            if ($message && isset($message['headers']['user-agent'])) {
-                $userAgentHeader = $message['headers']['user-agent'];
-                $title = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE};
-                foreach((array) $userAgentHeader as $userAgent) {
-                    if (strpos($userAgent, $title) !== false && strpos($userAgent, "tine") !== false) {
-                        return true;
-                    }
+        $flag = null;
+
+        if (isset($headers['user-agent'])) {
+            $title = Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_TITLE};
+            foreach((array) $headers['user-agent'] as $userAgent) {
+                if (strpos($userAgent, $title) !== false && strpos($userAgent, "tine") !== false) {
+                    $flag = 'Tine20';
                 }
             }
         }
 
-        return false;
-    }
+        if (isset($headers['dkim-signature']) && preg_match('/d=([^;]+)/', $headers['dkim-signature'], $matches)) {
+            $domain = trim($matches[1]);
+            $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
 
-    /**
-     * set tine20 flag of message
-     *
-     * @param Felamimail_Model_Message $_message
-     */
-    public function setTine20Flag(Felamimail_Model_Message $_message)
-    {
-        $flags = isset($_message->flags) ? $_message->flags : array();
+            foreach ($supportedMailServers as $server => $data) {
+                if (preg_match("/^$server$/", $domain)) {
+                    $flag = $data['id'];
+                }
+            }
+        }
 
-        if (is_array($flags) && ! in_array("Tine20", $flags)) {
-            $this->addFlags($_message->id, "Tine20");
-            array_push($flags, "Tine20");
-            $_message->flags = $flags;
+        $flags = isset($_message['flags']) ? $_message['flags']: array();
+
+        if ($flag && is_array($flags) && ! in_array($flag, $flags)) {
+            if (isset($_message['id'])) {
+                $this->addFlags($_message['id'], $flag);
+            }
+            $flags[] = $flag;
+            $_message['flags'] = $flags;
         }
     }
 }

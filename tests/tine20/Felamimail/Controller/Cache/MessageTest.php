@@ -545,4 +545,34 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should fetch the tags again');
         $this->assertEquals(1, count($updatedTags), 'tag should be recreated');
     }
+
+    /**
+     * @group noupdate
+     *
+     * @return void
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function testAddMessageCacheWithSenderFlag(): void
+    {
+        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
+        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, [
+            'mail.org'  => [
+                'id' => 'MAILORG',
+                'value' => 'unknown mailserver',
+            ]
+        ]);
+        $message = $this->_emailTestClass->messageTestHelper('24706.eml');
+        $filter = array(array(
+            'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
+        ));
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchMessages($filter, []);
+
+        $this->assertEquals('MAILORG', $result['results'][0]['flags'][1], 'Message should have sender tag');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
+    }
 }

@@ -83,23 +83,20 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      *
      * @returns {String}
      */
-    getTine20Icon: function() {
-        let flagConfigKey = null,
-            email = this.get('from_email');
-        const domainValidation = Tine.Tinebase.common.checkEmailDomain(email);
-        if (domainValidation.isInternalDomain) {
-            flagConfigKey = 'flagIconOwnDomain';
-        } else {
-            let otherDomainRegex = Tine.Tinebase.configManager.get('flagIconOtherDomainRegex', 'Felamimail');
-            if (email.match(otherDomainRegex)) {
-                flagConfigKey = 'flagIconOtherDomain';
-            }
+    getMailSenderIcon: function() {
+        const trustedDomainRegexData = Tine.Tinebase.configManager.get('trustedMailDomains', 'Felamimail');
+        const flags = this.get('flags');
+        let result = null;
+
+        if (trustedDomainRegexData) {
+            Object.entries(trustedDomainRegexData).forEach((data) => {
+                if (flags.includes(data[1].id)) {
+                    result = data[1];
+                }
+            })
         }
-        if (flagConfigKey) {
-            return Tine.Tinebase.configManager.get(flagConfigKey, 'Felamimail');
-        } else {
-            return 'images/favicon.svg';
-        }
+
+        return result;
     },
     
     getFlagIcons() {
@@ -122,8 +119,14 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         if (this.get('content_type') === 'multipart/encrypted') {
             icons.push({name: 'encrypted',src: 'images/icon-set/icon_lock.svg', qtip: app.i18n._('Encrypted Message')});
         }
+
         if (this.hasFlag('Tine20')) {
-            icons.push({name: 'tine20',src: this.getTine20Icon(), qtip: app.i18n._('Tine20')});
+            icons.push({name: 'tine20', src: 'images/favicon.svg', qtip: app.i18n._('Tine20')});
+        }
+
+        const mailServerIcon = this.getMailSenderIcon();
+        if (mailServerIcon) {
+            icons.push({name: mailServerIcon.id, src: mailServerIcon.image, qtip: mailServerIcon.value});
         }
         return icons;
     },
