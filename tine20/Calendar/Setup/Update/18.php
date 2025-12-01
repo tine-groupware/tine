@@ -18,6 +18,7 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -42,6 +43,10 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -87,5 +92,12 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.04', self::RELEASE018_UPDATE004);
+    }
+
+    public function update005()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Calendar_Model_Resource::TABLE_NAME . ' SET location_address = name where location_address IS NULL');
+
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.05', self::RELEASE018_UPDATE005);
     }
 }
