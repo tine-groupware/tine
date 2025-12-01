@@ -76,7 +76,7 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
         return $entries;
     }
 
-    public function getUserInfo($user): array
+    public function getUserInfo(Tinebase_Model_FullUser $user): array
     {
         $userInfo = [];
 
