@@ -36,10 +36,6 @@
             <destination>deadline</destination>
         </field>
         <field>
-            <source>site</source>
-            <destination>site</destination>
-        </field>
-        <field>
             <source>is_closed</source>
             <destination>is_closed</destination>
         </field>

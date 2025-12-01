@@ -16,6 +16,8 @@ files:
     - CrewScheduling/Poll/crewscheduling_poll_csv/crewscheduling_poll.csv
     - CrewScheduling/PollParticipant/crewscheduling_poll_participant_csv/crewscheduling_poll_participant.csv
     - CrewScheduling/PollReply/crewscheduling_poll_reply_csv/crewscheduling_poll_reply.csv
+    - CrewScheduling/PollSite/crewscheduling_poll_site_csv/crewscheduling_poll_site.csv
+    - CrewScheduling/PollEventType/crewscheduling_poll_event_type_csv/crewscheduling_poll_event_type.csv
 
 # this set could contain other sets:
 # sets:

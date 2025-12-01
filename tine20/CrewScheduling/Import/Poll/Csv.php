@@ -21,7 +21,6 @@ class CrewScheduling_Import_Poll_Csv extends \Tinebase_Import_Csv_Abstract
 {
     protected $_additionalOptions = [
         'relativeDates' => ['from', 'until', 'deadline'],
-        'site' => ['site'],
         'role' => ['scheduling_role']
     ];
 
@@ -36,7 +35,6 @@ class CrewScheduling_Import_Poll_Csv extends \Tinebase_Import_Csv_Abstract
         $_data = parent::_doConversions($_data);
 
         $_data = $this->_convertRelativeDates($_data);
-        $_data = $this->_convertSite($_data);
         $_data = $this->_convertRole($_data);
 
         return $_data;
@@ -52,21 +50,6 @@ class CrewScheduling_Import_Poll_Csv extends \Tinebase_Import_Csv_Abstract
             $new = new Tinebase_DateTime();
             $new->modify($_data[$date]);
             $_data[$date] = $new;
-        }
-        return $_data;
-    }
-
-    private function _convertSite(array $_data)
-    {
-        foreach ($this->_additionalOptions['site'] as $site) {
-            if (!isset($_data[$site]) || !is_string($_data[$site]) || $_data[$site] === '') {
-                continue;
-            }
-
-            $siteRecord = \Addressbook_Controller_Contact::getInstance()->getRecordByTitleProperty(trim($_data[$site]));
-            if ($siteRecord) {
-                $_data[$site] = $siteRecord;
-            }
         }
         return $_data;
     }
