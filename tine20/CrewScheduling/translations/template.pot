@@ -591,8 +591,20 @@ msgstr ""
 msgid "Answers possible until {deadline}"
 msgstr ""
 
+msgid "Answers possible for {diffDays} more days"
+msgstr ""
+
 msgid "For {events} between {from} and {until}"
 msgstr ""
 
 msgid "events"
+msgstr ""
+
+msgid "closed"
+msgstr ""
+
+msgid "This poll is closed already"
+msgstr ""
+
+msgid "for"
 msgstr ""
