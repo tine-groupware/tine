@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>crewscheduling_poll_site_csv</name>
+    <model>CrewScheduling_Model_PollSite</model>
+    <plugin>CrewScheduling_Import_PollSite_Csv</plugin>
+    <type>import</type>
+    <headline>1</headline>
+    <dryrun>0</dryrun>
+    <delimiter>,</delimiter>
+    <order>1200</order>
+    <favorite>true</favorite>
+    <label>Poll site CSV import"</label>
+    <!-- _("Poll site import") -->
+    <description>Import CSV formated poll sites from crew scheduling</description>
+    <!-- _("Import CSV formated poll sites from crew scheduling") -->
+    <extension>csv</extension>
+    <mapping>
+        <field>
+            <source>poll_id</source>
+            <destination>poll_id</destination>
+        </field>
+        <field>
+            <source>site_id</source>
+            <destination>site_id</destination>
+        </field>
+    </mapping>
+</config>

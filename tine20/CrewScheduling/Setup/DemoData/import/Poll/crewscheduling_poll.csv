@@ -1,9 +1,9 @@
-"scheduling_role","from","until","description","deadline","site","is_closed"
-"Zelebrant","first day of +2 month","last day of +2 month","Demodata: Zelebrant","+1 month","St. Eins, Standort",0
-"Ministranten","first day of +2 month","last day of +2 month","Demodata: Ministrant","+1 month","St. Eins, Standort",0
-"Lektoren","first day of +2 month","last day of +2 month","Demodata: Lektor","+1 month","St. Eins, Standort",0
-"Lektoren","first day of +1 month","last day of +1 month","Demodata: closed (Lektor)", "-1 month", "St. Eins, Standort", 1
-"Zelebrant","first day of +1 month","last day of +1 month","Demodata: closed (Zelebrant)", "-1 month", "St. Zwei, Standort", 1
-"Ministranten","first day of +1 month","last day of +1 month","Demodata: closed (Ministranten)", "-1 month", "St. Zwei, Standort", 1
-"Blumendienst","first day of +2 month","last day of +2 month","Demodata: Blumendienst","+1 month","St. Eins, Standort",0
-"Leitung","first day of +2 month","last day of +2 month","Demodata: Leitung","+1 month","St. Eins, Standort",0
+"scheduling_role","from","until","description","deadline","is_closed"
+"Zelebrant","first day of +2 month","last day of +2 month","Demodata: Zelebrant","+1 month",0
+"Ministranten","first day of +2 month","last day of +2 month","Demodata: Ministrant","+1 month",0
+"Lektoren","first day of +2 month","last day of +2 month","Demodata: Lektor","+1 month",0
+"Lektoren","first day of +1 month","last day of +1 month","Demodata: closed (Lektor)", "-1 month",1
+"Zelebrant","first day of +1 month","last day of +1 month","Demodata: closed (Zelebrant)", "-1 month",1
+"Ministranten","first day of +1 month","last day of +1 month","Demodata: closed (Ministranten)", "-1 month",1
+"Blumendienst","first day of +2 month","last day of +2 month","Demodata: Blumendienst","+1 month",0
+"Leitung","first day of +2 month","last day of +2 month","Demodata: Leitung","+1 month",0

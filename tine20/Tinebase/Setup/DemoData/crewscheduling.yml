@@ -1,0 +1,18 @@
+########################
+# Tine 2.0
+# @package     ecclesias
+# @subpackage  DemoData
+# @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+# @author      Stefanie Stamer <s.stamer@metaways.de>
+# @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+#
+# demodata for ecclesias
+########################
+---
+
+# this set could contain other sets:
+sets:
+  - Admin/crewscheduling.yml
+  - Addressbook/crewscheduling.yml
+  - Calendar/crewscheduling.yml
+  - CrewScheduling/crewscheduling.yml

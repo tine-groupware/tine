@@ -23,8 +23,6 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
     public const FLD_DEADLINE = 'deadline';
     public const FLD_IS_CLOSED = 'is_closed';
     public const FLD_REMINDERS = 'reminders';
-    public const FLD_PARTICIPANTS = 'participants';
-
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -42,7 +40,7 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
         self::EXPOSE_HTTP_API           => true,
         self::RECORD_NAME               => 'Poll',  // gettext('GENDER_Poll')
         self::RECORDS_NAME              => 'Polls', // ngettext('Poll', 'Polls', n)
-        self::TITLE_PROPERTY            => '{% if scheduling_role %}{{ renderTitle(scheduling_role, "CrewScheduling_Model_SchedulingRole") }}{% endif %}{% if from and until %} ({{ from|localizeddate("short", "none", app.request.locale)}} - {{ until|localizeddate("short", "none", app.request.locale) }}){% endif %}',
+        self::TITLE_PROPERTY            => self::FLD_DESCRIPTION,
         self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_DEADLINE],
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -242,6 +240,8 @@ class CrewScheduling_Model_Poll extends Tinebase_Record_NewAbstract
             ],
         ],
     ];
+
+    public const FLD_PARTICIPANTS = 'participants';
 
     public function getUrl($participant=null) : string
     {
