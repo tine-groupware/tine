@@ -157,7 +157,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             grow: true,
                             growMin: 18,
                             growAppend: '',
-                            requiredGrant: 'editGrant',
+                            requiredGrant: 'resourceEditGrant',
                             maxLength: 255
                          }], [{
                             xtype: 'checkbox',
