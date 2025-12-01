@@ -898,6 +898,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    public function getEDocumentSupplierData(string $purchaseInvoiceId): array
+    {
+        return $this->_recordToJson(
+            Sales_Controller_Document_PurchaseInvoice::getInstance()->getEDocumentSupplier($purchaseInvoiceId)
+        );
+    }
+
     public function isEDocumentFile(array $fileLocation): bool
     {
         /** @var Tinebase_Model_FileLocation $fileLocation */

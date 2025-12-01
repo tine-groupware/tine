@@ -58,15 +58,15 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
 
         $this->_getMultipleGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE;
         $this->_requiredFilterACLget = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
-        $this->_requiredFilterACLupdate  = [Sales_Model_DivisionGrants::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
-        $this->_requiredFilterACLsync  = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
-        $this->_requiredFilterACLexport  = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLupdate = [Sales_Model_DivisionGrants::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLsync = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+        $this->_requiredFilterACLexport = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
     }
 
     /**
      * inspect creation of one record (before create)
      *
-     * @param   Sales_Model_Document_Abstract $_record
+     * @param Sales_Model_Document_Abstract $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
@@ -113,6 +113,11 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
     }
 
     protected function _inspectAddressField($_record, $field)
+    {
+        // we dont do that
+    }
+
+    protected function _inspectCustomerDebitor(Sales_Model_Document_Abstract $document): void
     {
         // we dont do that
     }
@@ -184,6 +189,46 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         }
 
         return $result;
+    }
+
+    public function getEDocumentSupplier(string $purchaseInvoiceId): Sales_Model_Supplier
+    {
+        $pInvoice = $this->get($purchaseInvoiceId);
+
+        $eDocumentNode = null;
+        foreach ($pInvoice->attachments as $attachment) {
+            if ($attachment->xprops()[self::class][self::IS_EDOCUMENT] === $attachment->hash) {
+                $edDocumentNode = $attachment;
+                break;
+            };
+        }
+        if (null === $eDocumentNode) {
+            foreach ($pInvoice->attachments as $attachment) {
+                if ($this->isEDocumentFile(Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $attachment, null))) {
+                    $eDocumentNode = $attachment;
+                    break;
+                }
+            }
+        }
+
+        if (null !== $eDocumentNode) {
+            $xmlContent = $this->_getEDocumentXml(Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $eDocumentNode, null), $content, $type);
+            unset($content);
+            if (null !== $xmlContent) {
+                //$validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
+
+                if (self::TYPE_UBL === $type) {
+                    $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertUbl($xmlContent);
+                } else {
+                    $xmlContent = (new Sales_EDocument_Service_ConvertToXr())->convertCii($xmlContent);
+                }
+                $xr = new SimpleXMLElement($xmlContent, namespaceOrPrefix: 'urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1');
+
+                return Sales_Model_Supplier::fromXRXml($xr->SELLER);
+            }
+        }
+
+        throw new Tinebase_Exception_NotFound('no edocument found on record');
     }
 
     public function importPurchaseInvoice(Tinebase_Model_FileLocation $fileLocation, bool $importNonEDocument = false): Sales_Model_Document_PurchaseInvoice

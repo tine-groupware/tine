@@ -222,7 +222,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         if ('' !== (string)$xr->Invoice_issue_date) { // 1
             $pInvoice->{self::FLD_DOCUMENT_DATE} = new Tinebase_DateTime((string)$xr->Invoice_issue_date);
         }
-        //if ('' !== (string)$xr->Invoice_type_code) {} // 1
+        //if ('' !== (string)$xr->Invoice_type_code) {} // 1 $isStorno ? '384' : '380'
         if ('' !== (string)$xr->Invoice_currency_code) { // 1
             $pInvoice->{self::FLD_DOCUMENT_CURRENCY} = (string)$xr->Invoice_currency_code;
         }
@@ -275,37 +275,25 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
         // 1 SELLER
         $seller = $xr->SELLER;
-        if ('' !== (string)$seller->Seller_name) { // 1
+        $supplier = null;
+        /*if ('' !== (string)$seller->Seller_name) { // 1
             $supplier = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
                 [TMFA::FIELD => 'name', TMFA::OPERATOR => 'contains', TMFA::VALUE => (string)$seller->Seller_name],
             ]))->getFirstRecord();
-            if (null !== $seller) {
+            if (null !== $supplier) {
+                $pInvoice->{self::FLD_SUPPLIER_ID} = $supplier;
+            }
+        }*/
+        if ('' !== (string)$seller->Seller_electronic_address) { // 1
+            $supplier = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
+                [TMFA::FIELD => Sales_Model_Supplier::FLD_ELECTRONIC_ADDRESS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => (string)$seller->Seller_electronic_address],
+            ]))->getFirstRecord();
+            if (null !== $supplier) {
                 $pInvoice->{self::FLD_SUPPLIER_ID} = $supplier;
             }
         }
-        $seller->Seller_trading_name; // 0..1
-        foreach ($seller->Seller_identifier as $tmp) {}; // 0..*
-        $seller->Seller_legal_registration_identifier; // 0..*
-        $seller->Seller_VAT_identifier; // 0..1
-        $seller->Seller_tax_registration_identifier; // 0..1
-        $seller->Seller_additional_legal_information; // 0..1
-        $seller->Seller_electronic_address; // 1
-        
-        // 1 SELLER_POSTAL_ADDRESS
-        $sellerPostalAdr = $seller->SELLER_POSTAL_ADDRESS;
-        $sellerPostalAdr->Seller_address_line_1; // 0..1
-        $sellerPostalAdr->Seller_address_line_2; // 0..1
-        $sellerPostalAdr->Seller_address_line_3; // 0..1
-        $sellerPostalAdr->Seller_city; // 1
-        $sellerPostalAdr->Seller_post_code; // 1
-        $sellerPostalAdr->Seller_country_subdivision; // 0..1
-        $sellerPostalAdr->Seller_country_code; // 1
-        
-        // 1 SELLER_CONTACT
-        $sellerContact = $seller->SELLER_CONTACT;
-        $sellerContact->Seller_contact_point; // 0..1
-        $sellerContact->Seller_contact_telephone_number; // 0..1
-        $sellerContact->Seller_contact_email_address; // 0..1
+        $xrSupplier = Sales_Model_Supplier::fromXRXml($seller);
+
 
         // 1 BUYER
         $buyer = $xr->BUYER;

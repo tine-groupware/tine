@@ -20,6 +20,9 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
 {
     public const TABLE_NAME = 'sales_suppliers';
 
+    public const FLD_EAS_ID = 'eas_id';
+    public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -33,7 +36,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 5,
+        self::VERSION       => 6,
         'recordName'        => 'Supplier', // gettext('GENDER_Supplier')
         'recordsName'       => 'Suppliers', // ngettext('Supplier', 'Suppliers', n)
         'hasRelations'      => TRUE,
@@ -279,6 +282,23 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                     'sortable' => false
                 )           
             ),
+            self::FLD_EAS_ID                => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
+                self::DESCRIPTION               => "The pattern for 'Buyer electronic address (BT-49 [EN 16931]).", //_("The pattern for 'Buyer electronic address (BT-49 [EN 16931]).")
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                => Sales_Model_EDocument_EAS::MODEL_NAME_PART,
+                ],
+            ],
+            self::FLD_ELECTRONIC_ADDRESS    => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LABEL                     => 'Electronic Address', // _('Electronic Address')
+                self::DESCRIPTION               => 'Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).', //_('Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).')
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
         )
     );
     
@@ -311,4 +331,40 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
             'defaultType'  => 'SUPPLIER'
         )
     );
+
+    public static function fromXRXml(SimpleXMLElement $xr): static
+    {
+        $supplier = new static([
+            'name' => (string)$xr->Seller_name, // 1
+            self::FLD_ELECTRONIC_ADDRESS => (string)$xr->Seller_electronic_address, // 1
+        ], true);
+
+
+        $xr->Seller_trading_name; // 0..1
+        foreach ($xr->Seller_identifier as $tmp) {}; // 0..*
+        $xr->Seller_legal_registration_identifier; // 0..*
+        if ($vatId = (string)$xr->Seller_VAT_identifier) { // 0..1
+            $supplier->vatid = $vatId;
+        }
+        $xr->Seller_tax_registration_identifier; // 0..1
+        $xr->Seller_additional_legal_information; // 0..1
+
+        // 1 SELLER_POSTAL_ADDRESS
+        $sellerPostalAdr = $xr->SELLER_POSTAL_ADDRESS;
+        $sellerPostalAdr->Seller_address_line_1; // 0..1
+        $sellerPostalAdr->Seller_address_line_2; // 0..1
+        $sellerPostalAdr->Seller_address_line_3; // 0..1
+        $sellerPostalAdr->Seller_city; // 1
+        $sellerPostalAdr->Seller_post_code; // 1
+        $sellerPostalAdr->Seller_country_subdivision; // 0..1
+        $sellerPostalAdr->Seller_country_code; // 1
+
+        // 1 SELLER_CONTACT
+        $sellerContact = $xr->SELLER_CONTACT;
+        $sellerContact->Seller_contact_point; // 0..1
+        $sellerContact->Seller_contact_telephone_number; // 0..1
+        $sellerContact->Seller_contact_email_address; // 0..1
+
+        return $supplier;
+    }
 }

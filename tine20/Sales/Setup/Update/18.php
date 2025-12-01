@@ -175,6 +175,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             Sales_Model_Document_PurchaseInvoice::class,
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
+            Sales_Model_Supplier::class,
         ]);
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
