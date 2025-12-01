@@ -1,0 +1,380 @@
+{% extends 'Tinebase/views/base.html.twig' %}
+
+{% block custom_style %}
+    .privacy-container {
+    background-color: white;
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 1000px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .intro {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    }
+    h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+    }
+    h3 {
+    margin-top: 2rem;
+    }
+    h4 {
+    margin-top: 1.5rem;
+    }
+    h5 {
+    margin-top: 1.5rem;
+    }
+    p, li {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: justify;
+    }
+    ul {
+    list-style-type: disc;
+    margin-bottom: 1rem;
+    }
+    .contact-info {
+    padding: 0.5rem;
+    }
+    @media (max-width: 768px) {
+    .privacy-container {
+    padding: 20px;
+    margin: 20px;
+    }
+    }
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4 text-center">{{ app.branding.title }} DATENSCHUTZERKLÄRUNG</h1>
+    <p class="mb-4 text-center">Version 3, 21. November 2025</p>
+    <div class="intro">
+        <p>
+            {{ app.branding.title }} nimmt Datenschutz ernst. Gemäß unseren
+            Schlüsselprinzipien von Offenheit, Freiheit, Transparenz und Qualität ist
+            Datenschutz in der Tat eine Kernkomponente und Motivation hinter der
+            {{ app.branding.title }}-Software.
+        </p>
+        <p>
+            Im Gegensatz zu vielen anderen Webdiensten, bei denen die Nutzung der
+            Software durch die Preisgabe persönlicher Informationen und den Verzicht auf
+            Privatsphäre bezahlt wird, gibt die {{ app.branding.title }}-Open-Source-Software
+            ihren Benutzern Freiheit und Privatsphäre zurück.
+        </p>
+        <p>
+            In der folgenden Datenschutzrichtlinie erklären wir, wie {{ app.branding.title }}
+            die Privatsphäre seiner Benutzer beeinflussen kann, und diskutieren Themen,
+            die aus administrativer Sicht zu berücksichtigen sind, um die Privatsphäre
+            der Benutzer sicherzustellen und zu verbessern.
+        </p>
+    </div>
+    <h2>I. Informationen über die Verarbeitung Ihrer Daten gemäß Art. 13 der Datenschutz-Grundverordnung (DS-GVO)</h2>
+    <h3>1. Verantwortlicher und Datenschutzbeauftragter</h3>
+    <p>Verantwortlich für diese Website ist</p>
+    <div class="contact-info">
+        <div>{{ app.installationRepresentative.n_fileas }}</div>
+        {% set address_parts = [
+            app.installationRepresentative.adr_one_street,
+            app.installationRepresentative.adr_one_postalcode,
+            app.installationRepresentative.adr_one_locality
+        ]|filter(v => v is not empty) %}
+        {% if address_parts is not empty %}
+            <div>{{ address_parts|join(', ') }}</div>
+            <div>{{ app.installationRepresentative.email }}</div>
+        {% endif %}
+    </div>
+    <p>Den Datenschutzbeauftragten erreichen Sie per E-Mail unter <b>{{ app.dataProtectionOfficer.email | default('') }}</b></p>
+    {% if app.dataProtectionOfficer.adr_two_street is not empty %}
+        <p>oder über die Adresse</p>
+        <div class="contact-info">
+            {% set address_parts = [
+                app.dataProtectionOfficer.adr_two_street,
+                app.dataProtectionOfficer.adr_two_postalcode,
+                app.dataProtectionOfficer.adr_two_locality
+            ]|filter(v => v is not empty) %}
+            {% if address_parts is not empty %}
+                <div>{{ address_parts|join(', ') }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    <h3>2. Daten, die für die Bereitstellung von {{ app.branding.title }} verarbeitet werden</h3>
+    <h4>a. Welche Daten werden für welchen Zweck verarbeitet?</h4>
+    <h4>i) Datenspeicherung</h4>
+    <h5>(α) Zugriffsprotokolle</h5>
+    <p>
+        Bei jedem Zugriff auf {{ app.branding.title }}, ob angemeldet oder anonym, werden vorübergehend Daten gespeichert, die möglicherweise eine Identifizierung zulassen. Die folgenden Daten werden hierbei erhoben:
+    </p>
+    <div>- Datum und Uhrzeit des Zugriffs</div>
+    <div>- IP-Adresse</div>
+    <div>- Hostname des zugreifenden Rechners</div>
+    <div>- Website, von der aus die Website aufgerufen wurde</div>
+    <div>- Websites, die über die Website aufgerufen werden</div>
+    <div>- Besuchte Seite auf unserer Website</div>
+    <div>- Meldung, ob der Abruf erfolgreich war</div>
+    <div>- Übertragene Datenmenge</div>
+    <div>- Informationen über den Browsertyp und die verwendete Version</div>
+    <div>- Betriebssystem</div>
+    <h5>(β) Datenbank</h5>
+    <p>
+        {{ app.branding.title }} speichert nahezu alle Informationen in den konfigurierten
+        Datenbanken. Diese Datenbanken enthalten persönliche und vertrauliche
+        Daten.
+    </p>
+    <h5>(γ) Sitzungsdateien</h5>
+    <p>
+        {{ app.branding.title }} speichert persönliche Informationen über den Benutzer
+        (Benutzername, vollständiger Name, Verbindungs-IP-Adresse usw.) in der
+        Benutzersitzungsdatei des Web-Servers.
+    </p>
+    <h5>(δ) Caches</h5>
+    <p>
+        {{ app.branding.title }} verwaltet Caches, um die Leistung der Software zu
+        verbessern. Diese Caches können sensible oder persönliche Daten enthalten.
+    </p>
+    <h5>(ε) Protokolldateien</h5>
+    <p>
+        {{ app.branding.title }} ist in der Lage, Protokolldateien zu schreiben, die
+        Informationen über den Betrieb auf verschiedenen Ebenen enthalten. Je nach
+        Ebene können diese Informationen sensible oder persönliche Daten enthalten.
+        Dies ist insbesondere bei den Protokollebenen DEBUG und INFO der Fall.
+    </p>
+    <h5>(ζ) Fehlermeldungen</h5>
+    <p>
+        Wenn {{ app.branding.title }} einen Ausnahmezustand der Software erkennt, werden
+        Informationen über den Ausnahmezustand in den Protokolldateien und an den
+        Benutzer gemeldet. Diese Informationen enthalten einen sogenannten
+        'Stack-Trace' des Punktes, an dem der Ausnahmezustand erkannt wurde. Diese
+        Stack-Traces sind äußerst nützlich, um die Quelle des Ausnahmezustands zu
+        verfolgen, z. B. Fehler oder Fehlkonfigurationen des Systems, können aber
+        auch sensible oder persönliche Daten des aktuellen Benutzers enthalten.
+    </p>
+    <h5>(η) Benutzerclient-Sitzungsdaten</h5>
+    <p>
+        Die {{ app.branding.title }}-Clientsoftware ist eine JavaScript-Software, die im
+        Browser des Benutzers läuft. Während einer Benutzersitzung hält dieser
+        Client verschiedene Caches und lokale Speicher von Datenobjekten, die
+        persönliche oder sensible Daten enthalten können. Daher muss das
+        Computersystem, auf dem die Clientsoftware läuft, in jeder Form vor
+        unberechtigtem Zugriff geschützt werden. Die Vernichtung dieser
+        clientseitigen Daten sollte beim Beenden des Benutzeragenten erfolgen.
+        Details dieses Vernichtungsprozesses unterliegen den jeweiligen
+        Datenschutzrichtlinien des Benutzeragenten des Clients.
+    </p>
+    <p>
+        Die vorübergehende Speicherung der Daten ist für den Ablauf eines Websitebesuchs erforderlich, um eine Auslieferung der Website zu ermöglichen und {{ app.branding.title }} nutzen zu können. Eine weitere Speicherung erfolgt, um die Funktionsfähigkeit der Websites und Anwendungen sowie die Sicherheit der informationstechnischen Systeme sicherzustellen. In diesen Zwecken liegt auch unser berechtigtes Interesse an der Datenverarbeitung.
+    </p>
+    <h4>ii) Datenübertragung mit Diensten des Anbieters</h4>
+    <h5>(a) Fehlerberichte</h5>
+    <p>
+        Wenn {{ app.branding.title }} einen Ausnahmezustand der Software erkennt, werden
+        Informationen über den Ausnahmezustand dem Benutzer in Form eines
+        "Fehlerberichtsformulars" gemeldet. In diesem Formular kann der Benutzer
+        eine Beschreibung dessen hinzufügen, was er tat, als der Fehler auftrat,
+        und darüber hinaus Kontaktinformationen für weitere Anfragen hinzufügen.
+        Übermittlungen dieses Formulars werden als 'Fehlerberichte' an den
+        Softwareanbieter gesendet und sind äußerst nützlich, um Fehler und
+        Ausnahmequellen innerhalb der Software zu finden. Die Berechtigung zum
+        Senden von Fehlerberichten kann als 'Rollenrecht' im
+        {{ app.branding.title }}-Rollenverwaltungsmodul festgelegt werden. Zusätzlich zur
+        Beschreibung und optionalen Kontaktinformationen enthalten diese
+        Fehlerberichte die Version der {{ app.branding.title }}-Installation und, falls
+        konfiguriert, den Stack-Trace des Ausnahmezustands sowie Informationen über
+        die Anfrage und Antwort der Transaktion, die zum Ausnahmezustand führte.
+        Aufgrund der Natur der Datenübertragung sind der Referrer, der
+        Benutzeragent und die IP-Adresse des Benutzers in der Übermittlung
+        enthalten.
+    </p>
+    <h5>(b) Versionsprüfungen</h5>
+    <p>
+        {{ app.branding.title }} bietet die Möglichkeit, auf Updates zu prüfen und den
+        Benutzer zu informieren, wenn neue Versionen oder kritische Updates der
+        Software verfügbar sind. Die Berechtigung zur Prüfung auf neue Versionen
+        kann als 'Rollenrecht' im {{ app.branding.title }}-Rollenverwaltungsmodul
+        festgelegt werden. Die Anfrage nach neuen Versionen enthält die aktuelle
+        Version der {{ app.branding.title }}-Installation. Aufgrund der Natur der
+        Datenübertragung sind der Referrer, der Benutzeragent und die IP-Adresse
+        des Benutzers in der Anfrage enthalten.
+    </p>
+    <h5>(c) Umfrageangebote</h5>
+    <p>
+        Um die Benutzerfreundlichkeit von {{ app.branding.title }} konsequent zu
+        verbessern, bietet der Softwareanbieter Benutzerumfragen an, bei denen
+        Benutzer direkt Feedback geben und helfen können, die Software an ihre
+        eigenen Bedürfnisse anzupassen. Um zu prüfen, ob eine neue Umfrage zur
+        Teilnahme verfügbar ist, muss eine Anfrage an eine fremde Website gestellt
+        werden. Um diese Anfrage zu unterdrücken, kann die Konfiguration
+        'denySurveys' in der Konfigurationsdatei config.inc.php gesetzt werden.
+        Aufgrund der Natur der Datenübertragung sind der Referrer, der
+        Benutzeragent und die IP-Adresse des Benutzers in der Anfrage enthalten.
+    </p>
+    <h5>(d) Verwendung übertragener Daten</h5>
+    <p>
+        Der {{ app.branding.title }}-Softwareanbieter verarbeitet und speichert
+        übermittelte Daten ausschließlich zum Zweck der Analyse und Behebung
+        technischer Probleme sowie zur Gewinnung statistischer Daten über die
+        Verbreitung der {{ app.branding.title }}-Softwaresuite. In seltenen Fällen können
+        übermittelte Fehlerberichte gemäß Absatz (i) persönliche oder sensible
+        Daten enthalten. Der Softwareanbieter garantiert, solche Daten mit
+        absoluter Diskretion zu behandeln und niemals systematisch zu sammeln, zu
+        analysieren oder zu veröffentlichen. Fehlerberichtsdaten werden in einer
+        zugriffskontrollierten und privaten Datenbank aufbewahrt und gelöscht,
+        sobald das technische Problem behoben ist.
+    </p>
+    <h4>iii) Datenübertragung mit Drittanbieterdiensten</h4>
+    <h5>(α) Mailsysteme von Drittanbietern</h5>
+    <p>
+        Der {{ app.branding.title }}-E-Mail-Client kann so konfiguriert werden, dass er
+        auf Mailsysteme von Drittanbietern zugreift. {{ app.branding.title }} hat keinen
+        Einfluss auf die Datenverarbeitung und Datenschutzauswirkungen im
+        Zusammenhang mit den Richtlinien der Drittanbieter-Dienstleister. Zusätzlich
+        zu den persönlichen oder sensiblen Daten, die mit dem Drittanbieterdienst
+        gespeichert und ausgetauscht werden, enthalten Verbindungen zu
+        Mailservices von Drittanbietern aufgrund der Natur der Datenübertragung
+        auch die IP-Adresse des {{ app.branding.title }}-Serversystems oder des vorgelagerten
+        Sicherheitssystems. Die Berechtigung für Benutzer, ihre eigenen
+        Mailservices zu definieren, einschließlich Diensten von Drittanbietern, kann
+        als 'Rollenrecht' im {{ app.branding.title }}-Rollenverwaltungsmodul festgelegt
+        werden. Überlegungen zur Berechtigung zum Verbinden von Mailsystemen von
+        Drittanbietern sollten administrative Aufgaben beinhalten, um eine
+        verschlüsselte Netzwerkkommunikation zu diesen Systemen sicherzustellen.
+    </p>
+    <h5>(β) Verwendung von Sync-Diensten</h5>
+    <p>
+        {{ app.branding.title }} bietet verschiedene Sync-Dienste zur Datensynchronisation mit
+        persönlichen Computern und mobilen Geräten. Die Sync-Dienste respektieren Zugriffsrechte und
+        Benutzerdatenberechtigungen des Benutzers, für den sich das Gerät
+        authentifiziert. {{ app.branding.title }} hat keinen Einfluss auf die
+        Datenverarbeitung und Datenschutzauswirkungen der Sync-Clients. Die
+        Berechtigung zur Nutzung der Sync-Dienste kann als 'Rollenrecht' im
+        {{ app.branding.title }}-Rollenverwaltungsmodul festgelegt werden. Überlegungen zur
+        Berechtigung zum Synchronisieren von Daten über die Sync-Dienste
+        sollten administrative Aufgaben beinhalten, um eine verschlüsselte
+        Netzwerkkommunikation zwischen den zugehörigen Systemen sicherzustellen.
+    </p>
+    <h5>(γ) Dienstnutzer von Drittanbietern</h5>
+    <p>
+        {{ app.branding.title }} verfügt über eine Vielzahl von Schnittstellen und APIs,
+        die den Datenaustausch mit authentifizierten Benutzern ermöglichen. Diese
+        Schnittstellen und APIs respektieren Zugriffsrechte und
+        Benutzerdatenberechtigungen des Benutzers, für den der Dienstnutzer
+        authentifiziert ist. {{ app.branding.title }} hat keinen Einfluss auf die
+        Datenverarbeitung und Datenschutzauswirkungen von Dienstnutzern von
+        Drittanbietern. Überlegungen zum Anbieten des {{ app.branding.title }}-Dienstes in
+        einem öffentlichen Netzwerk sollten administrative Aufgaben beinhalten, um
+        eine verschlüsselte Netzwerkkommunikation zwischen allen zugehörigen
+        Systemen sicherzustellen.
+    </p>
+    <h5>(δ) Geo-Dienste</h5>
+    <p>
+        {{ app.branding.title }} verwendet Dienste basierend auf den von openStreetMap.org angebotenen Daten.
+        OpenStreetMap.org ist eine Community, die sich der Kartierung und geolokationsbezogenen Themen widmet.
+        Aufgrund der Natur von Webdiensten muss {{ app.branding.title }} persönliche Daten als
+        Eingabeparameter senden, um Karten oder Geolocations abzurufen. Je nach Konfiguration von {{ app.branding.title }} können Geo-Dienste
+        auf einer lokalen Kopie der Daten bereitgestellt werden oder es können externe Dienste verwendet werden. Im Zweifelsfall fragen Sie
+        Ihren Administrator.
+    </p>
+    <h5>(ε) Chat-Dienst</h5>
+    <p>
+        Der {{ app.branding.title }}-Chat-Client kann so konfiguriert werden, dass er auf Matrix- und/oder Element-Chat-Systeme von
+        Drittanbietern zugreift. {{ app.branding.title }} hat keinen Einfluss auf die Datenverarbeitung
+        und Datenschutzauswirkungen im Zusammenhang mit den Richtlinien der Drittanbieter-
+        Dienstleister. Zusätzlich zu den persönlichen oder sensiblen Daten, die
+        mit dem Drittanbieterdienst gespeichert und ausgetauscht werden, enthalten Verbindungen zu
+        Chat-Diensten von Drittanbietern aufgrund der Natur der Datenübertragung
+        auch die IP-Adresse des {{ app.branding.title }}-Serversystems oder des vorgelagerten Sicherheitssystems.
+    </p>
+    <h5>(ζ) Vorschau-Dienst</h5>
+    <p>
+        {{ app.branding.title }} verwendet einen Dienst, um Vorschaubilder von benutzerbereitgestellten Dateien im Dateimanager
+        und Anhängen anzuzeigen. Je nach Konfiguration von {{ app.branding.title }} kann der Vorschau-Dienst
+        lokal bereitgestellt werden oder es können externe Dienste verwendet werden. Im Zweifelsfall fragen Sie Ihren Administrator.
+    </p>
+    <h5>(η) OnlyOffice-Dienst</h5>
+    <p>
+        {{ app.branding.title }} verwendet die Online-Dokumenteneditoren von OnlyOffice, um Benutzern die Möglichkeit zu bieten,
+        Dokumente direkt in {{ app.branding.title }} zu bearbeiten, ohne sie zuerst herunterladen und nach
+        dem Bearbeitungsprozess wieder hochladen zu müssen. Je nach Konfiguration von {{ app.branding.title }} kann der Dokumentendienst
+        lokal bereitgestellt werden oder es können externe Dienste verwendet werden. Im Zweifelsfall fragen Sie Ihren Administrator.
+    </p>
+    <h5>(θ) Antivirus-Dienst</h5>
+    <p>
+        {{ app.branding.title }} verwendet einen Virenscandienst, um benutzerbereitgestellte Dateien im Dateimanager
+        und Anhänge zu überprüfen. Je nach Konfiguration von {{ app.branding.title }} kann der Antivirus-Dienst
+        lokal bereitgestellt werden oder es können externe Dienste verwendet werden. Im Zweifelsfall fragen Sie Ihren Administrator.
+    </p>
+    <h5>(ι) E-Dokument-Dienste</h5>
+    <p>
+        {{ app.branding.title }} verwendet Dienste für elektronische Finanzdokumente wie XRechnung und andere Formate.
+        Je nach Konfiguration von {{ app.branding.title }} können die elektronischen Dokumentendienste
+        lokal bereitgestellt werden oder es können externe Dienste verwendet werden. Im Zweifelsfall fragen Sie Ihren Administrator.
+    </p>
+    <h4>b. Auf welcher Rechtsgrundlage werden diese Daten verarbeitet?</h4>
+    <p>
+        Die Daten werden auf der Grundlage des Art. 6 Abs. 1 Buchstabe f DS-GVO verarbeitet.
+    </p>
+    <h4>c. Wie lange werden die Daten gespeichert?</h4>
+    <p>
+        Die Daten werden gelöscht, sobald sie für die Erreichung des Zwecks ihrer Erhebung nicht mehr erforderlich sind. Bei der
+        Bereitstellung der Website ist dies der Fall, wenn die jeweilige Sitzung beendet ist. Die Protokolldateien werden {{ app.logRetentionPeriod }}
+        direkt und ausschließlich für Administratoren zugänglich aufbewahrt. Danach sind sie nur noch indirekt über die
+        Rekonstruktion von Sicherungsbändern verfügbar und werden nach {{ app.backupRetebtuibPeriod }} endgültig gelöscht.
+    </p>
+    {% if app.hostingProvider is not empty %}
+        <h4>d. Gibt es neben dem Verantwortlichen weitere Empfänger der personenbezogenen Daten?</h4>
+        <p>Diese {{ app.branding.title }}-Instanz wird gehostet von</p>
+        <div class="contact-info">
+            <div>{{ app.hostingProvider.n_fileas }}</div>
+            {% set address_parts = [
+                app.hostingProvider.adr_two_street,
+                app.hostingProvider.adr_two_postalcode,
+                app.hostingProvider.adr_two_locality
+            ]|filter(v => v is not empty) %}
+            {% if address_parts is not empty %}
+                <div>{{ address_parts|join(', ') }}</div>
+            {% endif %}
+            <div>{{ app.hostingProvider.email }}</div>
+        </div>
+        <p>Der Hoster empfängt die oben genannten Daten als Auftragsverarbeiter.</p>
+    {% endif %}
+    <h3>3. Betroffenenrechte</h3>
+    <h4>a. Recht auf Auskunft</h4>
+    <p>
+        Sie können Auskunft nach Art. 15 DS-GVO über Ihre personenbezogenen Daten verlangen, die wir verarbeiten.
+    </p>
+    <h4>b. Recht auf Widerspruch</h4>
+    <p>
+        Sie haben ein Recht auf Widerspruch aus besonderen Gründen (siehe unter Punkt II).
+    </p>
+    <h4>c. Recht auf Berichtigung</h4>
+    <p>
+        Sollten die Sie betreffenden Angaben nicht (mehr) zutreffend sein, können Sie nach Art. 16 DS-GVO eine Berichtigung verlangen.
+        Sollten Ihre Daten unvollständig sein, können Sie eine Vervollständigung verlangen.
+    </p>
+    <h4>d. Recht auf Löschung</h4>
+    <p>
+        Sie können nach Art. 17 DS-GVO die Löschung Ihrer personenbezogenen Daten verlangen.
+    </p>
+    <h4>e. Recht auf Einschränkung der Verarbeitung</h4>
+    <p>
+        Sie haben nach Art. 18 DS-GVO das Recht, eine Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+    </p>
+    <h4>f. Recht auf Beschwerde</h4>
+    <p>
+        Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen Datenschutzrecht verstößt, haben Sie nach Art. 77 Abs. 1 DS-GVO das Recht, sich bei einer Datenschutzaufsichtsbehörde eigener Wahl zu beschweren. Hierzu gehört auch die für den Verantwortlichen zuständige Datenschutzaufsichtsbehörde:
+        {% if app.dataProtectionAuthority is not empty %}
+            {{ app.dataProtectionAuthority.org_name }} , <a href="{{ app.dataProtectionAuthority.url }}"> {{ app.dataProtectionAuthority.url }}</a>
+        {% endif %}
+    </p>
+    <h4>g. Recht auf Datenübertragbarkeit</h4>
+    <p>
+        Für den Fall, dass die Voraussetzungen des Art. 20 Abs. 1 DS-GVO vorliegen, steht Ihnen das Recht zu, sich Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an Dritte aushändigen zu lassen. Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Protokolldateien sind für den Betrieb der Website zwingend erforderlich. Sie beruhen daher nicht auf einer Einwilligung nach Art. 6 Abs. 1 Buchstabe a DS-GVO oder auf einem Vertrag nach Art. 6 Abs. 1 Buchstabe b DS-GVO, sondern sind nach Art. 6 Abs. 1 Buchstabe f DS-GVO gerechtfertigt. Die Voraussetzungen des Art. 20 Abs. 1 DS-GVO sind demnach insoweit nicht erfüllt.
+    </p>
+    <h2>II. Widerspruchsrecht gemäß Art. 21 Abs. 1 DS-GVO</h2>
+    <p>
+        Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Ihrer
+        personenbezogenen Daten, die aufgrund von Artikel 6 Abs. 1 Buchstabe f DS-GVO erfolgt, Widerspruch einzulegen. Der Verantwortliche verarbeitet die personenbezogenen Daten dann nicht mehr, es sei denn, er kann zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die die Interessen, Rechte und Freiheiten
+        der betroffenen Person überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen. Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Protokolldateien sind für den Betrieb der Website zwingend erforderlich.
+    </p>
+{% endblock %}

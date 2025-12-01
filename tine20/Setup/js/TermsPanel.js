@@ -67,7 +67,7 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
             autoScroll: true,
             layout: 'fit',
             title: this.app.i18n._('Privacy Agreement'),
-            bwrapCfg: {tag: 'pre'},
+            bodyStyle: 'padding: 15px',
             listeners: {
                 afterrender: async function () {
                     const response = await fetch('GDPR/view/privacy-policy', {

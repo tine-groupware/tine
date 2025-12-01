@@ -43,7 +43,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $locale = $context['lang'] ?? Tinebase_Core::getLocale();
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation($appName));
-        $textTemplate = $twig->load($template);
+        $textTemplate = $twig->load($template, $locale);
 
         if (! array_key_exists('base', $context)) {
             /** @var \Psr\Http\Message\ServerRequestInterface $request */
