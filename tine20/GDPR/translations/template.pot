@@ -67,10 +67,52 @@ msgstr ""
 msgid "GDPR template path"
 msgstr ""
 
+msgid "Data protection officer"
+msgstr ""
+
+msgid "Contact of the responsible data protection officer."
+msgstr ""
+
+msgid "Data protection authority"
+msgstr ""
+
+msgid "Data protection authority."
+msgstr ""
+
+msgid "Contact of the hosting provider (if installation is not hosted in-house)"
+msgstr ""
+
+msgid "Retention period for log files"
+msgstr ""
+
+msgid "Retention period for log files in hours."
+msgstr ""
+
+msgid "Backup retention period"
+msgstr ""
+
+msgid "Backup retention period in days."
+msgstr ""
+
 msgid "Enable public pages"
 msgstr ""
 
 msgid "Enable public pages like terms and conditions, imprint, representative information."
+msgstr ""
+
+msgid "Legally responsible"
+msgstr ""
+
+msgid "Legal person responsible for this installation"
+msgstr ""
+
+msgid "Commercial registry"
+msgstr ""
+
+msgid "Competent commercial register and commercial register number"
+msgstr ""
+
+msgid "Vat Id"
 msgstr ""
 
 msgid "agree date must not be after withdraw date"
@@ -346,9 +388,6 @@ msgid "Welcome to your consent management."
 msgstr ""
 
 msgid "Here you can decide for which purposes we may contact you."
-msgstr ""
-
-msgid "Privacy Policy"
 msgstr ""
 
 msgid "Register and we will send you news and information about our services in the future."

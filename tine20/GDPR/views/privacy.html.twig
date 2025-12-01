@@ -1,186 +1,381 @@
 {% extends 'Tinebase/views/base.html.twig' %}
 
+{% block custom_style %}
+    .privacy-container {
+    background-color: white;
+    padding: 40px;
+    margin: 40px auto;
+    max-width: 1000px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .intro {
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    }
+    h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #dee2e6;
+    }
+    h3 {
+    margin-top: 2rem;
+    }
+    h4 {
+    margin-top: 1.5rem;
+    }
+    h5 {
+    margin-top: 1.5rem;
+    }
+    p, li {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    text-align: justify;
+    }
+    ul {
+    list-style-type: disc;
+    margin-bottom: 1rem;
+    }
+    .contact-info {
+    padding: 0.5rem;
+    }
+    @media (max-width: 768px) {
+    .privacy-container {
+    padding: 20px;
+    margin: 20px;
+    }
+    }
+{% endblock %}
+
 {% block content %}
+    <h1 class="mb-4 text-center">{{ app.branding.title }} PRIVACY POLICY</h1>
+    <p class="mb-4 text-center">Version 3, 21 November 2025</p>
+    <div class="intro">
+        <p>
+            {{ app.branding.title }} takes privacy seriously.  According to our key principles of
+            openness, freedom, transparency and quality, privacy is in fact a core
+            component and motivation behind the {{ app.branding.title }} software.
+        </p>
+        <p>
+            In Contrast to many other web services where using the software is paid
+            by the disposal of personal information and the abundance of privacy the
+            {{ app.branding.title }} open source software gives back freedom and privacy to its
+            users.
+        </p>
+        <p>
+            In the following privacy policy we explain how {{ app.branding.title }} may impact its
+            users privacy and discuss topics to consider from administrative side to
+            ensure and enhance the users privacy.
+        </p>
+    </div>
+    <h2>I. Information about the processing of your data in accordance with Art. 13 of the General Data Protection Regulation (GDPR)</h2>
+    <h3>1. Responsible party and data protection officer</h3>
+    <p>The responsible party for this site is</p>
+    <div class="contact-info">
+        <div>{{ app.installationRepresentative.n_fileas }}</div>
+        {% set address_parts = [
+            app.installationRepresentative.adr_one_street,
+            app.installationRepresentative.adr_one_postalcode,
+            app.installationRepresentative.adr_one_locality
+        ]|filter(v => v is not empty) %}
+        {% if address_parts is not empty %}
+            <div>{{ address_parts|join(', ') }}</div>
+            <div>{{ app.installationRepresentative.email }}</div>
+        {% endif %}
+    </div>
+    <p>You can contact the data protection officer by email at <b>{{ app.dataProtectionOfficer.email | default('') }}</b></p>
+    {% if app.dataProtectionOfficer.adr_two_street is not empty %}
+        <p>or at the address</p>
+        <div class="contact-info">
+            {% set address_parts = [
+                app.dataProtectionOfficer.adr_two_street,
+                app.dataProtectionOfficer.adr_two_postalcode,
+                app.dataProtectionOfficer.adr_two_locality
+            ]|filter(v => v is not empty) %}
+            {% if address_parts is not empty %}
+                <div>{{ address_parts|join(', ') }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+    <h3>2. Data processed for the provision of {{ app.branding.title }}</h3>
+    <h4>a. What data is processed for what purpose?</h4>
+    <h4>i) Data storage</h4>
+    <h5>(α) Access Logs</h5>
+    <p>
+        Each time you access {{ app.branding.title }}, whether logged in or anonymous,  data that may allow identification is
+        temporarily stored. The following data is collected:
+    </p>
+    <div>-  Date and time of access</div>
+    <div>-  IP address</div>
+    <div>-  Host name of the accessing computer</div>
+    <div>-  Site from which the site was accessed</div>
+    <div>-  Sites accessed via the site</div>
+    <div>-  Page visited on our site</div>
+    <div>-  Notification of whether the request was successful</div>
+    <div>-  Amount of data transferred</div>
+    <div>-  Information about the browser type and version used</div>
+    <div>-  Operating system</div>
+    <h5>(β) Database</h5>
+    <p>
+        {{ app.branding.title }} stores almost any information which is entered in databases. These databases contain personal
+        and confidential data.
+    </p>
+    <h5>(γ) Session Files</h5>
+    <p>
+        {{ app.branding.title }} stores personal information about the user (username,
+        fullname, connection IP-Address etc.) in the users session file of the
+        web-server.
+    </p>
+    <h5>(δ) Caches</h5>
+    <p>
+        {{ app.branding.title }} maintains caches to improve the performance of the software.
+        These caches may contain sensitive or personal data.
+    </p>
+    <h5>(ε) Logfiles</h5>
+    <p>
+        {{ app.branding.title }} is capable to write logfiles containing information of
+        operation in different levels. Depending on the level this information
+        may contain sensitive or personal data.  This is particularly the case
+        for the log levels DEBUG and INFO.
+    </p>
+    <h5>(ζ) Error Messages</h5>
+    <p>
+        If {{ app.branding.title }} detects an exceptional state of the software, information
+        about the exceptional state are reported in the logfiles and to the
+        user. This information contain a so called 'stack trace' of the point
+        where the exceptional state got detected. This stack traces are
+        extremely useful to track the source of the exceptional state, e.g. bugs
+        or misconfigurations of the system, but also may contain sensitive or
+        personal data of the current user.
+    </p>
+    <h5>(η) User Client Session Data</h5>
+    <p>
+        The {{ app.branding.title }} client software is a javascript software which runs in the
+        browser of the user. During a users session, this client holds various
+        caches and local stores of data objects which may contain personal or
+        sensitive data. Therefore the computer system the client software runs
+        on is to be protected against unauthorized access in any form.
+        Destruction of these client side data should take place at quitting time
+        of the user agent. Details of this destruction process are subject of
+        the particular privacy policies of the clients user agent.
+    </p>
+    <p>
+        The storage of data is necessary for the process of visiting a site in order to enable the site to be delivered and
+        {{ app.branding.title }} to be used. It takes place to ensure the functionality of the sites and applications and the
+        security of the information technology systems. These purposes also constitute our legitimate interest in data processing.
+    </p>
+    <h4>ii) Data transfer with vendor services</h4>
 
+    <h5>(a) Bug Reports</h5>
+    <p>
+        If {{ app.branding.title }} detects an exceptional state of the software, informations
+        about the exceptional state are reported to the user containing a "Bug
+        Reporting Form". In this form the user can add a description of what he
+        did when the error occurred and moreover add contact information for
+        further inquiries. Submissions of this form are send as 'Bug Reports' to
+        the software vendor and are extremely useful to find bugs and exception
+        sources within the software. The permission to send Bug Reports can be
+        set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
+        Additionally to the description and optional contact information, these
+        Bug Reports contain the version of the {{ app.branding.title }} installation and, if
+        configured, the stack trace of the exceptional state as well as
+        informations about the request and response of the transaction which
+        lead to the exceptional state. Due to the nature of data transmission,
+        the referrer, user agent and IP address of the user are included in the
+        submission.
+    </p>
+    <h5>(b) Version Checks</h5>
+    <p>
+        {{ app.branding.title }} offers the possibility to check for updates and inform the
+        user if new versions or critical updates of the software are available.
+        The permission to check for new versions can be set as 'Role Right' in
+        the {{ app.branding.title }} Role Administration module. The request for new versions
+        contain the current version of the {{ app.branding.title }} installation.  Due to the
+        nature of data transmission, the referrer, user agent and IP address of
+        the user are included in the request.
+    </p>
+    <h5>(c) Survey Offerings</h5>
+    <p>
+        To consequently improve the usability of the {{ app.branding.title }} the software
+        vendor offers user surveys where users directly can give feedback and
+        help to improve the software to their own needs. To check if a new
+        survey for participation is available a request to a foreign site has
+        to be made. To suppress this request, the configuration 'denySurveys'
+        can be set in the  config.inc.php config file. Due to the nature of data
+        transmission, the referrer, user agent and IP address of the user are
+        included in the request.
+    </p>
+    <h5>(d) Usage of Transfered Data</h5>
+    <p>
+        The {{ app.branding.title }} software vendor process and stores transmitted data
+        exclusively for the purpose of analyzing and resolving technical
+        problems as well as gaining statistical data about the propagation of
+        the {{ app.branding.title }} software suite. In rare cases transmitted bug reports might
+        contain personal or sensitive data according to paragraph (i). The
+        software vendor guarantees to handle such data with absolute discretion
+        and never to systematically collect, analyze or publish such data. Bug
+        reports data are kept in an access controlled and private database and
+        deleted as soon as the technical problem is resolved.
+    </p>
+    <h4>iii) Data transfer with third party services</h4>
 
-<pre>
-                      {{ app.branding.title }} PRIVACY POLICY
-                    Version 2, 28 November 2009
+    <h5>(α) Third Party Mail Systems</h5>
+    <p>
+        The {{ app.branding.title }} email client can be configured to access mail systems of
+        third party providers. {{ app.branding.title }} has no influence of the data handling
+        and privacy implications related to the policies of the third party
+        service vendors. In addition to the personal or sensitive data stored
+        and exchanged with the third party service connections to third party
+        mail services also contain the IP-Address of the {{ app.branding.title }} server system
+        or upstream security system due to the nature of data transmission. The
+        permission for users to define their own mail services, including third
+        party services, can be set as a 'Role Right' in the {{ app.branding.title }} Role
+        Administration module. Considerations about the permission to connect
+        third party mail systems should imply administrative tasks to ensure
+        encrypted network communication to these systems.
+    </p>
+    <h5>(β) Using of Sync Services</h5>
+    <p>
+        {{ app.branding.title }} offers different sync services for data synchronization with
+        personal computers and mobile devices. The sync services respects access rights and user
+        data grants of the user the device authenticates for. {{ app.branding.title }} has no
+        influence of the data handling and privacy implications of the
+        sync clients. The permission to use the sync service can be
+        set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
+        Considerations about the permission to synchronize data using the
+        sync services should imply administrative tasks to ensure encrypted
+        network communication between the related systems.
+    </p>
+    <h5>(γ) Third Party Service Consumers</h5>
+    <p>
+        {{ app.branding.title }} comes with a variety of interfaces and API's, allowing the
+        exchange of data with authenticated users. Those interfaces and API's
+        respects access rights and user data grants of the user the service
+        consumer is authenticated for. {{ app.branding.title }} has no influence of the data
+        handling and privacy implications of third party service consumers.
+        Considerations about offering the {{ app.branding.title }} service in a public network
+        should imply administrative tasks to ensure encrypted network
+        communication between all related systems.
+    </p>
+    <h5>(δ) Geo Services</h5>
+    <p>
+        {{ app.branding.title }} uses services based on the data offered by openStreetMap.org.
+        OpenStreetMap.org is a community dedicated to mapping and geolocation
+        related topics. As of the nature of web-services, {{ app.branding.title }} needs to
+        send personal data to service as input parameters for retrieving
+        maps or geolocations. Depending on the configuration of {{ app.branding.title }}, geo services
+        might be provided on a local copy of the data or external services might be used. In doubt ask
+        your administrator.
+    </p>
+    <h5>(ε) Chat Service</h5>
+    <p>
+        {{ app.branding.title }} chat client can be configured to access matrix and/or element chat systems of
+        third party providers. {{ app.branding.title }} has no influence of the data handling
+        and privacy implications related to the policies of the third party
+        service vendors. In addition to the personal or sensitive data stored
+        and exchanged with the third party service connections to third party
+        chat services also contain the IP-Address of the {{ app.branding.title }} server system
+        or upstream security system due to the nature of data transmission.
+    </p>
+    <h5>(ζ) Preview Service</h5>
+    <p>
+        {{ app.branding.title }} uses an service to show preview images of user provided files in Filemanager
+        and attachments. Depending on the configuration of {{ app.branding.title }}, the preview service
+        might be provided locally or an external services might be used. In doubt ask your administrator.
+    </p>
+    <h5>(η) OnlyOffice Service</h5>
+    <p>
+        {{ app.branding.title }} uses the online document editors of OnlyOffice to provide users the possibility
+        to edit documents directly in {{ app.branding.title }} without the need to Download them first and upload
+        them after the process of editing. Depending on the configuration of {{ app.branding.title }}, the document service
+        might be provided locally or an external services might be used. In doubt ask your administrator.
+    </p>
+    <h5>(θ) Anti-Virus Service</h5>
+    <p>
+        {{ app.branding.title }} uses a virus scanning service to check user provided files in Filemanager
+        and attachments. Depending on the configuration of {{ app.branding.title }}, the anti-virus service
+        might be provided locally or an external services might be used. In doubt ask your administrator.
+    </p>
+    <h5>(ι) EDocument Services</h5>
+    <p>
+        {{ app.branding.title }} uses services to deal with electronic finance documents like XRechnung and other formats.
+        Depending on the configuration of {{ app.branding.title }}, the electronic document services
+        might be provided locally or an external services might be used. In doubt ask your administrator.
+    </p>
+    <h4>b. On what legal basis is this data processed?</h4>
+    <p>
+        The data is processed on the basis of Art. 6 (1) (f) GDPR.
+    </p>
+    <h4>c. How long is the data stored?</h4>
+    <p>
+        The data is deleted as soon as it is no longer necessary for the purpose for which it was collected. In the case of the
+        provision of the site, this is the case when the respective session has ended. The log files are stored {{ app.logRetentionPeriod }}
+        and are accessible directly and exclusively to administrators. After that, they are only indirectly available via the
+        reconstruction of backup tapes and are permanently deleted after {{ app.backupRetebtuibPeriod }}.
+    </p>
 
-
-{{ app.branding.title }} takes privacy seriously.  According to our key principles of
-openness, freedom, transparency and quality, privacy is in fact a core
-component and motivation behind the {{ app.branding.title }} software.
-
-In Contrast to many other web services where using the software is paid
-by the disposal of personal information and the abundance of privacy the
-{{ app.branding.title }} open source software gives back freedom and privacy to its
-users.
-
-In the following privacy policy we explain how {{ app.branding.title }} may impact its
-users privacy and discuss topics to consider from administrative side to
-ensure and enhance the users privacy.
-
-
-SECTION I: DATA STORAGE
-
-(a) Related Software Products
-{{ app.branding.title }} is a software which runs in conjunction with various related
-software products such as Web-Servers, Database-Servers, Directory-
-Servers, SMTP- and IMAP-Servers and others.  All these related software
-products may store personal and sensitive data which could impact the
-privacy of {{ app.branding.title }} users in various ways. In first place the logfiles
-of these related software products must be considered, as they may
-contain personal or confidential data. For further impacts on the users
-privacy the user manuals of the related software products have to be
-consulted.
-
-(b) Database
-{{ app.branding.title }} stores almost any information in the configured databases.
-These databases contain personal and confidential data. As such these
-databases are to be protected against any form of unauthorized access.
-More details about securing the database can be found in the vendors
-users manual.
-
-(c) Session Files
-{{ app.branding.title }} stores personal information about the user (username,
-fullname, connection IP-Address etc.) in the users session file of the
-web-server. These session files have to be protected against any form of
-unauthorized access. In the {{ app.branding.title }} setup process the path where this
-session files are saved can be configured.
-
-(d) Caches
-{{ app.branding.title }} maintains caches to improve the performance of the software.
-These caches may contain sensitive or personal data.  Therefore the
-caches have to be protected against unauthorized access in any form. In
-the {{ app.branding.title }} setup process the path where cache files are saved can be
-configured.
-
-(e) Logfiles
-{{ app.branding.title }} is capable to write logfiles containing information of
-operation in different levels. Depending on the level this information
-may contain sensitive or personal data.  This is particularly the case
-for the log levels DEBUG and INFO.  Therefore the logfiles have to be
-protected against unauthorized access in any form.  In the {{ app.branding.title }}
-setup process the path where logfiles are saved and the log level can be
-configured.
-
-(f) Error Messages
-If {{ app.branding.title }} detects an exceptional state of the software, informations
-about the exceptional state are reported in the logfiles and to the
-user. This information contain a so called 'stack trace' of the point
-where the exceptional state got detected. This stack traces are
-extremely useful to track the source of the exceptional state, e.g. bugs
-or misconfigurations of the system, but also may contain sensitive or
-personal data of the current user.  To suppress the stack traces in the
-error messages the configuration 'suppressExceptionTraces' can be set in
-the installations config.inc.php.
-
-(g) User Client Session Data
-The {{ app.branding.title }} client software is a javascript software which runs in the
-browser of the user. During a users session, this client holds various
-caches and local stores of data objects which may contain personal or
-sensitive data. Therefore the computer system the client software runs
-on is to be protected against unauthorized access in any form.
-Destruction of these client side data should take place at quitting time
-of the user agent. Details of this destruction process are subject of
-the particular privacy policies of the clients user agent.
-
-
-SECTION II: DATA TRANSFER WITH VENDORS SERVICES
-
-(a) Bug Reports
-If {{ app.branding.title }} detects an exceptional state of the software, informations
-about the exceptional state are reported to the user containing a "Bug
-Reporting Form". In this form the user can add a description of what he
-did when the error occurred and moreover add contact information for
-further inquiries. Submissions of this form are send as 'Bug Reports' to
-the software vendor and are extremely useful to find bugs and exception
-sources within the software. The permission to send Bug Reports can be
-set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
-Additionally to the description and optional contact information, these
-Bug Reports contain the version of the {{ app.branding.title }} installation and, if
-configured, the stack trace of the exceptional state as well as
-informations about the request and response of the transaction which
-lead to the exceptional state. Due to the nature of data transmission,
-the referrer, user agent and IP address of the user are included in the
-submission.
-
-(b) Version Checks
-{{ app.branding.title }} offers the possibility to check for updates and inform the
-user if new versions or critical updates of the software are available.
-The permission to check for new versions can be set as 'Role Right' in
-the {{ app.branding.title }} Role Administration module. The request for new versions
-contain the current version of the {{ app.branding.title }} installation.  Due to the
-nature of data transmission, the referrer, user agent and IP address of
-the user are included in the request.
-
-(c) Survey Offerings
-To consequently improve the usability of the {{ app.branding.title }} the software
-vendor offers user surveys where users directly can give feedback and
-help to improve the software to their own needs. To check if a new
-survey for participation is available a request to a foreign website has
-to be made. To suppress this request, the configuration 'denySurveys'
-can be set in the  config.inc.php config file. Due to the nature of data
-transmission, the referrer, user agent and IP address of the user are
-included in the request.
-
-(d) Usage of Transfered Data
-The {{ app.branding.title }} software vendor process and stores transmitted data
-exclusively for the purpose of analyzing and resolving technical
-problems as well as gaining statistical data about the propagation of
-the {{ app.branding.title }} software suite. In rare cases transmitted bug reports might
-contain personal or sensitive data according to paragraph (a). The
-software vendor guarantees to handle such data with absolute discretion
-and never to systematically collect, analyze or publish such data. Bug
-reports data are kept in an access controlled and private database and
-deleted as soon as the technical problem is resolved.
-
-
-SECTION III: DATA TRANSFER WITH THRID PARTY SERVICES
-
-(a) Third Party Mail Systems
-The {{ app.branding.title }} email client can be configured to access mail systems of
-third party providers. {{ app.branding.title }} has no influence of the data handling
-and privacy implications related to the policies of the third party
-service vendors. In addition to the personal or sensitive data stored
-and exchanged with the third party service connections to third party
-mail services also contain the IP-Address of the {{ app.branding.title }} server system
-or upstream security system due to the nature of data transmission. The
-permission for users to define their own mail services, including third
-party services, can be set as a 'Role Right' in the {{ app.branding.title }} Role
-Administration module. Considerations about the permission to connect
-third party mail systems should imply administrative tasks to ensure
-encrypted network communication to these systems.
-
-(b) Using of ActiveSync services
-{{ app.branding.title }} offers an ActiveSync module for data synchronization with
-mobile devices. The ActiveSync module respects access rights and user
-data grants of the user the device authenticates for. {{ app.branding.title }} has no
-influence of the data handling and privacy implications of the
-ActiveSync clients. The permission to use the ActiveSync service can be
-set as a 'Role Right' in the {{ app.branding.title }} Role Administration module.
-Considerations about the permission to synchronize data using the
-ActiveSync service should imply administrative tasks to ensure encrypted
-network communication between the related systems.
-
-(c) Third Party Service Consumers
-{{ app.branding.title }} comes with a variety of interfaces and API's, allowing the
-exchange of data with authenticated users. Those interfaces and API's
-respects access rights and user data grants of the user the service
-consumer is authenticated for. {{ app.branding.title }} has no influence of the data
-handling and privacy implications of third party service consumers.
-Considerations about offering the {{ app.branding.title }} service in a public network
-should imply administrative tasks to ensure encrypted network
-communication between all related systems.
-
-(d) OpenStreetMap.org services
-{{ app.branding.title }} uses a number of services offered by openStreetMap.org.
-OpenStreetMap.org is a community dedicated to mapping and geolocation
-related topics. As of the nature of web-services, {{ app.branding.title }} needs to
-send personal data to openstreetmap.org as input parameters for retrieving
-maps or geolocations. To disable communications and features based on
-this services, you need to set the configuration option 'useMapService' to
-false in the installations config.inc.php.
-</pre>
+    {% if app.hostingProvider is not empty %}
+        <h4>d. Are there other recipients of the personal data besides the controller?</h4>
+        <p>This {{ app.branding.title }} instance is hosted by</p>
+        <div class="contact-info">
+            <div>{{ app.hostingProvider.n_fileas }}</div>
+            {% set address_parts = [
+                app.hostingProvider.adr_two_street,
+                app.hostingProvider.adr_two_postalcode,
+                app.hostingProvider.adr_two_locality
+            ]|filter(v => v is not empty) %}
+            {% if address_parts is not empty %}
+                <div>{{ address_parts|join(', ') }}</div>
+            {% endif %}
+            <div>{{ app.hostingProvider.email }}</div>
+        </div>
+        <p>The host receives the above-mentioned data as a processor.</p>
+    {% endif %}
+    <h3>3. Rights of data subjects</h3>
+    <h4>a. Right to information</h4>
+    <p>
+        You may request information about your personal data that we process in accordance with Art. 15 GDPR.
+    </p>
+    <h4>b. Right to object</h4>
+    <p>
+        You have the right to object for specific reasons (see point II).
+    </p>
+    <h4>c. Right to rectification</h4>
+    <p>
+        If the information concerning you is no longer accurate, you can request rectification in accordance with Art. 16 GDPR.
+        If your data is incomplete, you can request that it be completed.
+    </p>
+    <h4>d. Right to erasure</h4>
+    <p>
+        You can request the erasure of your personal data in accordance with Art. 17 GDPR.
+    </p>
+    <h4>e. Right to restriction of processing</h4>
+    <p>
+        Pursuant to Art. 18 GDPR, you have the right to request a restriction on the processing of your personal data.
+    </p>
+    <h4>f. Right to lodge a complaint</h4>
+    <p>
+        If you believe that the processing of your personal data violates data protection law, you have the right to lodge a
+        complaint with a data protection supervisory authority of your choice pursuant to Art. 77 (1) GDPR. This includes the
+        data protection supervisory authority responsible for the controller:
+        {% if app.dataProtectionAuthority is not empty %}
+            {{ app.dataProtectionAuthority.org_name }} , <a href="{{ app.dataProtectionAuthority.url }}"> {{ app.dataProtectionAuthority.url }}</a>
+        {% endif %}
+    </p>
+    <h4>g. Right to data portability</h4>
+    <p>
+        If the requirements of Art. 20 (1) GDPR are met, you have the right to have data that we process automatically on the
+        basis of your consent or in fulfillment of a contract handed over to you or to third parties. The collection of data for
+        the provision of the site and the storage of log files are essential for the operation of the site. They are
+        therefore not based on consent pursuant to Art. 6 (1) (a) GDPR or on a contract pursuant to Art. 6 (1) (b) GDPR, but are
+        justified pursuant to Art. 6 (1) (f) GDPR. The requirements of Art. 20 (1) GDPR are therefore not met in this respect.
+    </p>
+    <h2>II. Right to object pursuant to Art. 21 (1) GDPR</h2>
+    <p>
+        You have the right to object at any time, on grounds relating to your particular situation, to the processing of your
+        personal data based on Article 6 (1) (f) GDPR. The controller will then no longer process the personal data unless it
+        can demonstrate compelling legitimate grounds for the processing which override the interests, rights, and freedoms of
+        the data subject, or the processing serves to assert, exercise, or defend legal claims. The collection of data for the
+        provision of the site and the storage of log files are essential for the operation of the site.
+    </p>
 {% endblock %}

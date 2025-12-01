@@ -113,7 +113,7 @@ class Tinebase_Twig
         $globals = [
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages ? Addressbook_Config::getInstallationRepresentative() : null,
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
-            'enablePublicPages' =>  $enablePublicPages,
+            GDPR_Config::ENABLE_PUBLIC_PAGES =>  $enablePublicPages,
             'branding'          => [
                 'logo'              => Tinebase_Core::getLogo('b'),
                 'logoContent'       => Tinebase_Controller::getInstance()->getLogo('b'),
@@ -134,6 +134,30 @@ class Tinebase_Twig
             ],
             'currencySymbol'    => Tinebase_Core::getDefaultCurrencySymbol(),
         ];
+
+       if ($enablePublicPages) {
+           $publicInfo = GDPR_Config::getInstance()->get(GDPR_Config::PUBLIC_INFO)->toArray();
+           $contactIdKeys = [
+               GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_OFFICER,
+               GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_AUTHORITY,
+               GDPR_Config::PUBLIC_INFO_HOSTING_PROVIDER,
+               GDPR_Config::PUBLIC_INFO_INSTALLATION_RESPONSIBLE,
+           ];
+           foreach ($contactIdKeys as $idKey) {
+               if (!empty($publicInfo[$idKey])) {
+                   try {
+                       $publicInfo[$idKey] = Addressbook_Controller_Contact::getInstance()->get($publicInfo[$idKey], _getRelatedData: false, _aclProtect: false);
+                   } catch (Tinebase_Exception $e) {
+                       if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                           Tinebase_Core::getLogger()->notice(
+                               __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                       }
+                   }
+               }
+           }
+           $globals = array_merge($globals, $publicInfo);
+       }
+
         $this->_twigEnvironment->addGlobal('app', $globals);
     }
 

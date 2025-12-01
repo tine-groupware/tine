@@ -72,11 +72,53 @@ msgstr ""
 msgid "GDPR template path"
 msgstr ""
 
+msgid "Data protection officer"
+msgstr "Datenschutzbeauftragter"
+
+msgid "Contact of the responsible data protection officer."
+msgstr "Kontakt des verantwortlichen Datenschutzbeauftragten."
+
+msgid "Data protection authority"
+msgstr "Datenschutzaufsichtsbehörde"
+
+msgid "Data protection authority."
+msgstr "Kontakt der zuständigen Aufsichtsbehörde."
+
+msgid "Contact of the hosting provider (if installation is not hosted in-house)"
+msgstr "Kontakt des Hosting-Anbieters (wenn Installation nicht selbst betrieben wird)"
+
+msgid "Retention period for log files"
+msgstr "Vorhaltezeit von Protokolldateien"
+
+msgid "Retention period for log files in hours."
+msgstr "Vorhaltezeit von Protokolldateien in Stunden"
+
+msgid "Backup retention period"
+msgstr "Vorhaltezeit von Datensicherungen"
+
+msgid "Backup retention period in days."
+msgstr "Vorhaltezeit von Datensicherungen in Tagen."
+
 msgid "Enable public pages"
 msgstr "Öffentliche Seiten aktivieren"
 
 msgid "Enable public pages like terms and conditions, imprint, representative information."
 msgstr ""
+
+msgid "Legally responsible"
+msgstr "Rechtlich Verantwortlicher"
+
+msgid "Legal person responsible for this installation"
+msgstr "Rechtlicher Installationsverantwortlicher (z.B. gemäß § 18 Abs. 2 MStV)"
+
+msgid "Commercial registry"
+msgstr "Handelsregister"
+
+msgid "Competent commercial register and commercial register number"
+msgstr "Zuständiges Handelsregister und Handelsregisternummer"
+
+msgid "Vat Id"
+msgstr "Umsatzsteuer Id"
 
 msgid "agree date must not be after withdraw date"
 msgstr "Das Zustimmungsdatum darf nicht nach dem Widerrufsdatum liegen"
@@ -353,9 +395,6 @@ msgstr "Willkommen bei Ihrer Einwilligungsverwaltung."
 msgid "Here you can decide for which purposes we may contact you."
 msgstr "Hier können Sie festlegen, zu welchen Zwecken wir Sie kontaktieren dürfen."
 
-msgid "Privacy Policy"
-msgstr "Datenschutzerklärung"
-
 msgid "Register and we will send you news and information about our services in the future."
 msgstr "Melden Sie sich an, dann senden wir Ihnen künftig Neuigkeiten und Nachrichten rund um unsere Dienstleitungen."
 
@@ -373,6 +412,9 @@ msgstr "Sie können jederzeit Ihre Zustimmung widerrufen oder die Verwendung Ihr
 
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
+
+#~ msgid "Privacy Policy"
+#~ msgstr "Datenschutzerklärung"
 
 #~ msgid "Manage"
 #~ msgstr "Verwalten"
