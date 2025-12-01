@@ -148,6 +148,7 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 2 test '
             . GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART);
+
         $user = Tinebase_Core::getUser();
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'n_fileas',      'operator' => 'equals', 'value' => $user->accountDisplayName),
@@ -167,6 +168,56 @@ class GDPR_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         Addressbook_Controller_Contact::getInstance()->update($contact);
-        Addressbook_Config::getInstance()->set(Addressbook_Config::INSTALLATION_REPRESENTATIVE, $contact->getId());
+
+        $publicInfo = GDPR_Config::getInstance()->get(GDPR_Config::PUBLIC_INFO);
+        $sharedContainer = Tinebase_Container::getInstance()
+            ->getSharedContainer(Tinebase_Core::getUser(), Addressbook_Model_Contact::class, Tinebase_Model_Grants::GRANT_READ, TRUE)
+            ->getFirstRecord();
+        $installationRepresentative = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email'         => 'installation.representative@mail.test',
+            'container_id'  => $sharedContainer,
+            'tel_work'         => '000000000',
+            'tel_fax'         => '111111111',
+            'n_fn'          =>  'Test Installation Representative',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 14',
+        ]), false);
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::INSTALLATION_REPRESENTATIVE, $installationRepresentative->getId());
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_OFFICER} = $installationRepresentative->getId();
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_HOSTING_PROVIDER} = $installationRepresentative->getId();
+
+        $dataProtectionAuthority = Addressbook_Controller_Contact::getInstance()->create( new Addressbook_Model_Contact([
+            'email'         => 'installation.dataprotectionauthority@mail.test',
+            'container_id'  => $sharedContainer,
+            'org_name' => 'Test Data Protection Authority',
+            'url'   =>  'https://data.protection.authority.test.de',
+            'tel_work'         => '2222222222',
+            'tel_fax'         => '3333333333',
+            'n_fn'          =>  'Test Data Protection Authority',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 24',
+        ]), false);
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_AUTHORITY} = $dataProtectionAuthority->getId();
+
+        $installationResponsible = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email'         => 'installation.responsible@mail.test',
+            'container_id'  => $sharedContainer,
+            'tel_work'         => '0123456789',
+            'tel_fax'         => '0123456789999',
+            'n_fn'          =>  'Test Installation Responsible Person',
+            'adr_one_postalcode'    => '24xxx',
+            'adr_one_region'        => 'Hamburg',
+            'adr_one_street'        => 'Pickhuben 4',
+        ]), false);
+
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_INSTALLATION_RESPONSIBLE} = $installationResponsible->getId();
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_LOG_RETENTION_PERIOD} = '12 hours';
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_BACKUP_RETENTION_PERIOD} = '3 weeks';
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_COMMERCIAL_REGISTRY} = 'Hamburg unter HRB 456789';
+        $publicInfo->{GDPR_Config::PUBLIC_INFO_VAT_ID} = 'DE 123456789';
+        GDPR_Config::getInstance()->set(GDPR_Config::PUBLIC_INFO, $publicInfo);
     }
 }
