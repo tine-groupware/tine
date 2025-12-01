@@ -35,7 +35,7 @@
 
 <script>
 import axios from 'axios'
-import Poll from 'Calendar/js/pollClient/src/Poll.vue';
+import { Poll } from 'Calendar/js/pollClient/src';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import { BAlert } from 'bootstrap-vue-next'
