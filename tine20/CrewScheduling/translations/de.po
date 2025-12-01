@@ -594,6 +594,15 @@ msgstr "Achtung, Sie sind im Admin-Modus"
 msgid "Click on the name of a participant to modify their responses."
 msgstr "Klicken Sie auf den Namen eine*r Teilnehmer*in um die Rückmeldung für diese Person zu bearbeiten."
 
+msgid "Answers possible until {deadline}"
+msgstr "Antworten bis zum {deadline} möglich"
+
+msgid "For {events} between {from} and {until}"
+msgstr "Für {events} zwischen {from} und {until}"
+
+msgid "events"
+msgstr "Veranstaltungen"
+
 #~ msgid "Edit Event Types"
 #~ msgstr "Terminarten bearbeiten"
 

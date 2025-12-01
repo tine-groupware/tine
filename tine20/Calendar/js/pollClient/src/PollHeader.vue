@@ -10,8 +10,8 @@
     <tr class="tr-date">
       <th></th>
       <th v-for="date in dates" :key="date.dtstart">
-        <span class="date">{{ new Date(date.dtstart).toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: '2-digit'}) }}</span><br />
-        <span class="date">{{ new Date(date.dtstart).toLocaleTimeString(undefined, {hour: '2-digit', minute:'2-digit'}) }}</span><br />
+        <span class="date">{{ format_date(date.dtstart, 'short') }}</span><br />
+        <span class="date">{{ format_time(date.dtstart, 'short') }}</span><br />
       </th>
     </tr>
   </thead>
@@ -20,9 +20,11 @@
 <script>
 import { defineComponent } from 'vue'
 import TTag from "../../../../Tinebase/js/vue/components/TTag.vue";
+import { format_date, format_time } from 'Tinebase/js/util/datetimeformat';
 
 export default defineComponent({
   name: 'PollHeader',
+  methods: {format_date, format_time},
   props: {
     dates: Array,
     show_site: {type: Boolean, default: false}

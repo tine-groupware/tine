@@ -14,11 +14,12 @@
         <div class="row" v-if="poll">
           <div class="col-md-8 col-sm-12">
             <h1>{{formatMessage('Availability Poll')}}</h1>
-            <h2 class="poll-event">
+            <h3 class="poll-event" v-if="additionalData !== null && additionalData.period_message">{{additionalData.period_message}}</h3>
+            <h3 class="poll-event">
               <span :style="poll.scheduling_role.color ? {color: poll.scheduling_role.color} : {}">{{poll.scheduling_role.name}}</span><span v-if="poll.site && poll.site.n_fn">, </span>
-              <span v-if=" poll.sites"> (<span v-for="(pollSite, i) in poll.sites" :style="pollSite.site_id.color ? {color: '#'+pollSite.site_id.color} : {}">{{pollSite.site_id.n_fn}}{{ i < poll.sites.length -1 ? ', ': '' }}</span>)</span>
+              <span v-if="poll.sites && poll.sites.length > 0"> (<span v-for="(pollSite, i) in poll.sites" :style="pollSite.site_id.color ? {color: '#'+pollSite.site_id.color} : {}">{{pollSite.site_id.n_fn}}{{ i < poll.sites.length -1 ? ', ': '' }}</span>)</span>
               <span v-if="additionalData !== null && additionalData.deadline_message">&nbsp;{{additionalData.deadline_message}}</span>
-            </h2>
+            </h3>
             <BAlert variant="warning" v-model="poll.account_grants.managePollGrant">
               <h4 class="alert-heading">{{ formatMessage('You are in admin mode') }}</h4>
               <p>{{ formatMessage('Click on the name of a participant to modify their responses.') }}</p>
@@ -39,6 +40,7 @@ import { Poll } from 'Calendar/js/pollClient/src';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import { BAlert } from 'bootstrap-vue-next'
+import { format_date } from 'Tinebase/js/util/datetimeformat'
 
 export default {
   components: {Poll, BAlert},
@@ -75,26 +77,19 @@ export default {
 
   computed: {
     additionalData () {
-      if (this.poll === null || !this.poll.deadline || !!this.poll.is_closed) {
+      if (this.poll === null) {
         return null
       }
-
-      let deadline = new Date(this.poll.deadline)
-      let now = new Date()
-      let diffDays = Math.floor((deadline - now) / (1000 * 60 * 60 * 24))
-
-      if (diffDays <= 0) {
-        return {deadline_message: this.formatMessage('closed')}
+      let data = {}
+      if (!!this.poll.deadline || !this.poll.is_closed) {
+        data.deadline_message = this.getDeadlineMessage()
       }
 
-      if (diffDays > 10) {
-        let deadlineString = deadline.toLocaleDateString(undefined, {day: '2-digit', month: '2-digit', year: '2-digit'})
-        return {
-            deadline_message: this.formatMessage('Answers possible until {deadline}', {deadline: deadlineString})
-          }
-      } else {
-        return {deadline_message: this.formatMessage('Answers possible for {diffDays} more days', {diffDays: diffDays})}
+      if (!!this.poll.from && !!this.poll.until) {
+        data.period_message = this.getPeriodMessage()
       }
+
+      return data
     },
     showError: function () {
       return this.errorStatus !== null
@@ -184,11 +179,51 @@ export default {
       if (this.poll.account_grants.managePollGrant) {
         this.participantId = participant.id
       }
+    },
+
+    getDeadlineMessage () {
+      let deadline = new Date(this.poll.deadline)
+      let now = new Date()
+      let diffDays = Math.floor((deadline - now) / (1000 * 60 * 60 * 24))
+
+      if (diffDays <= 0) {
+        return this.formatMessage('closed')
+      }
+
+      if (diffDays > 10) {
+        let deadlineString = format_date(deadline, 'numeric')
+        return this.formatMessage('Answers possible until {deadline}', {deadline: deadlineString})
+      } else {
+        return this.formatMessage('Answers possible for {diffDays} more days', {diffDays: diffDays})
+      }
+    },
+
+    getPeriodMessage() {
+      let from = format_date(this.poll.from, 'numeric')
+      let until = format_date(this.poll.until, 'numeric')
+
+      let events = this.formatMessage('events')
+      if (this.poll.event_types && this.poll.event_types.length > 0) {
+        let eventNames = []
+        this.poll.event_types.every(function (type) {
+          eventNames.push(type.event_type_id.name)
+        })
+        events = eventNames.join(', ')
+      }
+
+      return this.formatMessage('For {events} between {from} and {until}', {from: from, until: until, events: events})
     }
   }
 }
 </script>
 
 <style>
-
+  h3.poll-event {
+    font-size: 1.25rem;
+    font-weight: normal;
+  }
+  h2.poll-event {
+    font-size: 1.5rem;
+    font-weight: normal;
+  }
 </style>

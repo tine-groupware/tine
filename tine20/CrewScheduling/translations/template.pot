@@ -587,3 +587,12 @@ msgstr ""
 
 msgid "Click on the name of a participant to modify their responses."
 msgstr ""
+
+msgid "Answers possible until {deadline}"
+msgstr ""
+
+msgid "For {events} between {from} and {until}"
+msgstr ""
+
+msgid "events"
+msgstr ""
