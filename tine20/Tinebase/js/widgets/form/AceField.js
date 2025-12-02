@@ -7,7 +7,7 @@
  */
 
 Ext.ns('Tine.Tinebase.widgets.form');
-const supportedTypes = ['json', 'xml', 'twig', 'sieve']
+const supportedTypes = ['json', 'xml', 'twig', 'text']
 
 const AceField = Ext.extend(Ext.form.Field, {
     defaultAutoCreate: {tag: 'div'},
