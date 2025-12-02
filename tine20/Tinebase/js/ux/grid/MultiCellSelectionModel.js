@@ -431,8 +431,11 @@ Ext.extend(Ext.ux.grid.MultiCellSelectionModel, Ext.grid.AbstractSelectionModel,
             this.lastActive = [rowIndex, columnIndex];
             view.focusCell(rowIndex, columnIndex);
         }else{
+            if (!e.ctrlKey && this.getSelections().length > 1) {
+                this.clearSelections();
+            }
             var isSelected = this.isSelected([rowIndex, columnIndex]);
-            if(e.ctrlKey && isSelected){
+            if(isSelected){
                 this.deselectCell([rowIndex, columnIndex]);
             }else if(!isSelected || this.getCount() > 1){
                 this.selectCell([rowIndex, columnIndex], e.ctrlKey || e.shiftKey);
