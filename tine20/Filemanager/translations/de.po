@@ -29,11 +29,14 @@ msgstr "Gemeinsame Ordner verwalten"
 msgid "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
 msgstr "Erlaube das Erstellen und Verschieben neuer Unterordner im gemeinsamen Ordner. Sowohl das Löschen als auch das Umbenennen von Ordnern erfordert Admin-Rechte."
 
-msgid "Manage anonymous download links"
-msgstr "Anonyme Download Links verwalten"
+msgid "The right to create download links if the user also has the Publish grant."
+msgstr "Das Recht Download-Links zu erzeugen wenn die Benutzer*in auch die Veröffentlichen Berechtigung hat."
 
 msgid "Allow viewing, adding and deleting download links"
 msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
+
+msgid "The right to manage download links, regardless of the publishing grant."
+msgstr "Das Recht Download-Links zu Verwalten, unabhängig der Veröffentlichen Berechtigung."
 
 msgid "Manage shared filemanager favorites"
 msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
@@ -622,3 +625,6 @@ msgstr "Zum Herunterladen Passwort eingeben"
 
 msgid "Submit"
 msgstr "Abschicken"
+
+#~ msgid "Manage anonymous download links"
+#~ msgstr "Anonyme Download Links verwalten"

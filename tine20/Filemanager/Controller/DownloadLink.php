@@ -112,9 +112,17 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
     {
         switch ($_action) {
             case 'create':
+                $hasCreateRight = $this->checkRight(Filemanager_Acl_Rights::CREATE_DOWNLOADLINKS, false);
+                $hasManageRight = $this->checkRight(Filemanager_Acl_Rights::MANAGE_DOWNLOADLINKS, false);
+                if (!$hasCreateRight && !$hasManageRight) {
+                    throw new Tinebase_Exception_AccessDenied(
+                        "You are not allowed to create download link in Filemanager!"
+                    );
+                }
+                break;
             case 'update':
             case 'delete':
-                $this->checkRight('MANAGE_DOWNLOADLINKS');
+                $this->checkRight(Filemanager_Acl_Rights::MANAGE_DOWNLOADLINKS);
                 break;
             default;
             break;

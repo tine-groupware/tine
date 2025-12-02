@@ -19,11 +19,14 @@ msgstr "Manage shared folders"
 msgid "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
 msgstr "Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node."
 
-msgid "Manage anonymous download links"
-msgstr "Manage anonymous download links"
+msgid "The right to create download links if the user also has the Publish grant."
+msgstr "The right to create download links if the user also has the Publish grant."
 
 msgid "Allow viewing, adding and deleting download links"
 msgstr "Allow viewing, adding and deleting download links"
+
+msgid "The right to manage download links, regardless of the publishing grant."
+msgstr "The right to manage download links, regardless of the publishing grant."
 
 msgid "Manage shared filemanager favorites"
 msgstr "Manage shared filemanager favorites"
