@@ -409,15 +409,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return false;
         }
 
-        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
-            icon: Ext.MessageBox.QUESTION,
-            buttons: Ext.MessageBox.YESNO,
-            title: this.app.formatMessage('Change Document Date?'),
-            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
-        }) === 'yes') {
-            this.getForm().findField('date').setValue(new Date().clearTime());
-        }
-
         if (this.record.phantom || this.record.modified) {
             // make sure changes are saved even if booking fails
             await this.applyChanges()
