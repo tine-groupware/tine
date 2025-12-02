@@ -31,6 +31,9 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
      */
     protected $_spreadsheet;
 
+    protected $_xslxFiles = [];
+    protected $_overwriteContentTypes = [];
+
     /**
      * format strings
      *
@@ -59,6 +62,8 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected $_findCellCacheOff = false;
 
+    protected $_overwriteDrawing = false;
+
     /**
      * the constructor
      *
@@ -77,6 +82,10 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             $this->_excelVersion = 'Xlsx';
         } else {
             $this->_excelVersion = $this->_config->writer;
+        }
+
+        if (!empty($this->_config->overwriteDrawings)) {
+            $this->_overwriteDrawing = true;
         }
     }
 
@@ -164,7 +173,46 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
         /** @noinspection PhpUndefinedMethodInspection */
         $xlswriter->setPreCalculateFormulas(FALSE);
 
-        $xlswriter->save($_target);
+        \PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels::$keepOrgDrawingRelPath = true;
+
+        if ($this->_xslxFiles) {
+            $tempfile = Tinebase_TempFile::getTempPath();
+            $xlswriter->save($tempfile);
+            $zip = new ZipArchive();
+            $zip->open($tempfile);
+            $contentTypes = null;
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $filename = $zip->getNameIndex($i);
+                if (str_starts_with($filename, 'xl/charts/') || str_starts_with($filename, 'xl/drawings/')) {
+                    $zip->deleteIndex($i);
+                } elseif ('[content_types].xml' === strtolower($filename)) {
+                    $contentTypes = $zip->getFromIndex($i);
+                    $contentTypes = preg_replace('#<Override[^>]+PartName="/?(xl/(charts|drawings)/[^"]+)[^>]+>#i', '', $contentTypes);
+                    $overwrite = '';
+                    foreach ($this->_overwriteContentTypes as $newOverwrite) {
+                        $overwrite .= $newOverwrite;
+                    }
+                    $overwrite .= '</Types>';
+                    $contentTypes = str_replace('</Types>', $overwrite, $contentTypes);
+                    $zip->deleteIndex($i);
+                }
+            }
+            if (null !== $contentTypes) {
+                $zip->addFromString('[Content_Types].xml', $contentTypes);
+            }
+            foreach ($this->_xslxFiles as $file => $content) {
+                $zip->addFromString($file, $content);
+            }
+            $zip->close();
+
+            if (!is_resource($_target)) {
+                $_target = fopen($_target, 'wb');
+            }
+
+            fwrite($_target, file_get_contents($tempfile));
+        } else {
+            $xlswriter->save($_target);
+        }
     }
 
     /**
@@ -330,10 +378,27 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
             }
 
             if (! $this->_config->reader || 'autodetection' === $this->_config->reader) {
-                $this->_spreadsheet = IOFactory::load($tmpFile);
+                $this->_spreadsheet = IOFactory::load($tmpFile, PhpOffice\PhpSpreadsheet\Reader\IReader::LOAD_WITH_CHARTS);
             } else {
                 $reader = IOFactory::createReader($this->_config->reader);
-                $this->_spreadsheet = $reader->load($tmpFile);
+                $this->_spreadsheet = $reader->load($tmpFile, PhpOffice\PhpSpreadsheet\Reader\IReader::LOAD_WITH_CHARTS);
+            }
+
+            if ($this->_overwriteDrawing) {
+                $zip = new ZipArchive();
+                $zip->open($tmpFile);
+                for ($i = 0; $i < $zip->numFiles; $i++) {
+                    $filename = $zip->getNameIndex($i);
+                    if (str_starts_with($filename, 'xl/charts/') || str_starts_with($filename, 'xl/drawings/')) {
+                        $this->_xslxFiles[$filename] = $zip->getFromIndex($i);
+                    } elseif ('[content_types].xml' === strtolower($filename)) {
+                        $contentTypes = $zip->getFromIndex($i);
+                        preg_match_all('#<Override[^>]+PartName="/?(xl/(charts|drawings)/[^"]+)[^>]+>#i', $contentTypes, $matches, PREG_SET_ORDER);
+                        foreach ($matches as $match) {
+                            $this->_overwriteContentTypes[$match[1]] = $match[0];
+                        }
+                    }
+                }
             }
             
             $activeSheet = $this->_config->sheet ?? 0;

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6f557f439efc51b4b77baadb4b6e144",
+    "content-hash": "5832c1f20355998dce1fd23ca7bf2445",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6426,11 +6426,11 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.24.1pl3",
+            "version": "1.24.1pl4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PhpSpreadsheet.git",
-                "reference": "cb0fe7836404920d02e4a4610baf98a67debebac"
+                "reference": "edb56c1b8c4b9cde2fb36a8b1a1847b496081232"
             },
             "require": {
                 "ext-ctype": "*",
@@ -6535,7 +6535,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2022-10-18T07:51:42+00:00"
+            "time": "2025-12-02T16:45:35+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -16677,7 +16677,7 @@
         },
         {
             "package": "phpoffice/phpspreadsheet",
-            "version": "1.24.1.0-patch3",
+            "version": "1.24.1.0-patch4",
             "alias": "1.24.1",
             "alias_normalized": "1.24.1.0"
         },
@@ -16720,7 +16720,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1",
         "ext-spl": "8.1",
