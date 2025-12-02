@@ -46,7 +46,7 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
     let dialog = new Tine.Tinebase.dialog.Dialog({
       items: [{
         xtype: 'tw-acefield',
-        mode: 'sieve',
+        mode: 'text',
         fieldLabel: 'custom script',
         id: 'sieve_custom_script',
         allowBlank: true,
