@@ -522,7 +522,7 @@ abstract class Setup_Backend_Abstract implements Setup_Backend_Interface
      * @param $options
      * @throws Setup_Backend_Exception_NotImplemented
      */
-    public function backup($options)
+    public function backup($options): void
     {
         throw new Setup_Backend_Exception_NotImplemented('backup not yet implemented');
     }

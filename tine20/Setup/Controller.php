@@ -2947,6 +2947,7 @@ class Setup_Controller
      *      'db'         => bool   // backup database
      *      'files'      => bool   // backup files
      *      'novalidate' => bool   // do not validate sql backup
+     *      'skipComments' => bool   // --skip-comments in mysqldump (hostname, version etc.)
      *      'structTables' => array // additional struct only tables (data backup is omitted)
      *    )
      */
@@ -2999,6 +3000,7 @@ class Setup_Controller
                 'backupDir'         => $backupDir,
                 'structTables'      => $structTables,
                 'novalidate'        => isset($options['novalidate']) && $options['novalidate'],
+                'skipComments'      => isset($options['skipComments']) && $options['skipComments'],
             );
 
             Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using options: ' . print_r($backupOptions, true));
