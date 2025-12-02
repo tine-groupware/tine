@@ -475,8 +475,9 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * Backup Database
      *
      * @param array $option
+     * @throws Tinebase_Exception_Backend
      */
-    public function backup($option)
+    public function backup($option): void
     {
         $backupDir = $option['backupDir'];
 
@@ -504,14 +505,17 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             $cmd = ($structDump !== false ? '{ ' : '')
                 . 'mysqldump --defaults-extra-file=' . $mycnf
                 . ' ' . $ignoreTables
+                . (($option['skipComments']) ? ' --skip-comments' : '')
                 . ' --single-transaction --max_allowed_packet=512M'
                 . ' --opt --no-tablespaces --default-character-set=utf8mb4'
                 . ' ' . escapeshellarg($dbName)
                 . ($structDump !== false ? '; ' . $structDump . '; }' : '')
                 . ' | bzip2 > ' . $backupDir . '/tine20_mysql.sql.bz2';
 
-            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' backup cmd: ' . $cmd);
+            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Setup_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Backup cmd: ' . $cmd);
+            }
 
             exec($cmd);
         } finally {
