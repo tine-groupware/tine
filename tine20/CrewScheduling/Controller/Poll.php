@@ -131,10 +131,10 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
                 Tinebase_Model_Filter_FilterGroup::FILTERS => $additionalFilters,
             ],
         ],
-            $poll->{CrewScheduling_Model_Poll::FLD_SITES}->count() ? [
+            $poll->{CrewScheduling_Model_Poll::FLD_SITES} !== null && $poll->{CrewScheduling_Model_Poll::FLD_SITES}->count() ? [
                 [TMFA::FIELD => 'event_site', TMFA::OPERATOR => 'in', TMFA::VALUE => $poll->{CrewScheduling_Model_Poll::FLD_SITES}->getIdFromProperty(CrewScheduling_Model_PollSite::FLD_SITE)]
             ]: [],
-            $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES}->count() ? [
+            $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES} !== null && $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES}->count() ? [
                 [TMFA::FIELD => 'event_types', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
                     [TMFA::FIELD => Calendar_Model_EventTypes::FLD_EVENT_TYPE, TMFA::OPERATOR => 'definedBy?condition=and&setOperator=oneOf', TMFA::VALUE => [
                         [TMFA::FIELD => ':id', TMFA::OPERATOR => 'in', TMFA::VALUE => $poll->{CrewScheduling_Model_Poll::FLD_EVENT_TYPES}->getIdFromProperty(CrewScheduling_Model_PollEventType::FLD_EVENT_TYPE)],
