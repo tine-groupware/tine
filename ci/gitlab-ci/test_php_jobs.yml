@@ -57,7 +57,7 @@ php-unit-all-tests-source-matrix:
     matrix:
       - DATABASE_IMAGE:
           - "mysql:8.0"
-          - "mariadb:12.2"
+          - "mariadb:12.2-rc"
           - "mariadb:11.8"
           - "mariadb:10.11"
           - "mariadb:10.6" # tine cloud version
