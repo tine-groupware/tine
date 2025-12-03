@@ -53,6 +53,7 @@ php-unit-all-tests-source-matrix:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests
   parallel:
     matrix:
       - DATABASE_IMAGE:

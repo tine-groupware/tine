@@ -855,6 +855,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * @return void
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_SystemGeneric
+     *
      */
     public function testPutWithUrlencode()
     {
@@ -955,12 +956,13 @@ EOS
         }
 
         $responseDoc = new DOMDocument();
-        $responseDoc->loadXML(Tinebase_Server_WebDAV::getResponse()->getBody());
+        $body = Tinebase_Server_WebDAV::getResponse()->getBody();
+        self::assertNotNull($body);
+        $responseDoc->loadXML($body);
         $xpath = new DomXPath($responseDoc);
         $nodes = $xpath->query('//d:prop/d:lockdiscovery/d:activelock/d:locktoken/d:href');
         static::assertEquals(1, $nodes->length, $responseDoc->saveXML());
         $lockToken = $nodes->item(0)->textContent;
-
 
         $request = Tinebase_Http_Request::fromString(<<<EOS
 DELETE /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
