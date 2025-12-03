@@ -182,7 +182,7 @@ class TestServer
      * @param string $additionalParams
      * @return string
      */
-    public static function assembleCliCommand($command = "", $addCredentials = FALSE, $additionalParams = null)
+    public static function assembleCliCommand($command = "", $addCredentials = FALSE, $additionalParams = null): string
     {
         //$backtrace = debug_backtrace();
         //return $backtrace[1]['class'];
@@ -210,11 +210,12 @@ class TestServer
             '/--debug\s*/',
             '/--filter(\s+|=)\S+/',
             '/ \S+Tests{0,1}/',
-            '/--configuration \S+/',
-            '/--exclude-group \S+/',
-            '/--coverage-\S+ \S+/',
+            '/--configuration(\s+|=)\S+/',
+            '/--exclude-group(\s+|=)\S+/',
+            '/--coverage-\S+(\s+|=)\S+/',
             '/-c \S+/',
-            '/--log-junit \S+/'
+            '/--log-junit \S+/',
+            '/-d pcov.directory(\s+|=)\S+ /',
         ), array(
             'php',
             '',
@@ -242,7 +243,7 @@ class TestServer
             $cmd .= " -- " . $additionalParams;
         }
         
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled commmand: ' . $cmd);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Assembled command: ' . $cmd);
         
         return $cmd;
     }

@@ -45,7 +45,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * 
      * @var array
      */
-    protected $_groupIdsToDelete = array();
+    protected $_groupIdsToDelete = [];
     
     /**
      * remove group members, too when deleting groups

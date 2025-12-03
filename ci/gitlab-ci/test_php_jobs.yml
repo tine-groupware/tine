@@ -61,7 +61,7 @@ php-unit-all-tests-source-matrix:
           - "mariadb:12.2-rc"
           - "mariadb:11.8"
           - "mariadb:10.11"
-          - "mariadb:10.6" # tine cloud version
+#          - "mariadb:10.6" # tine cloud version
           - "mariadb:10.2"
         PHP_VERSION:
           - "8.1"

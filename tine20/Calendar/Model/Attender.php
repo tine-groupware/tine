@@ -891,7 +891,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
 
         // flatten user_ids (not groups for group/list handling bellow)
-        foreach($_attendee as $attendee) {
+        foreach ($_attendee as $attendee) {
             if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Interface) {
                 $attendee->user_id = $attendee->user_id->getId();
             }
