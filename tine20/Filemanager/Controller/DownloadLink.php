@@ -246,7 +246,7 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             $node = $this->getNode($download, $splittedPath);
         }
 
-        $basePath = $download->getDownloadUrl() . '/';
+        $basePath = $download->getDownloadUrl();
         if (count($splittedPath) > 0) {
             $basePath .= implode('/', Filemanager_Frontend_Download::urlEncodeArray($splittedPath)) . '/';
         }
