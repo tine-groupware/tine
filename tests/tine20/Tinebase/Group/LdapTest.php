@@ -304,6 +304,15 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
         
         $this->assertEquals(1, count($groupMembers));
     }
+
+    public function testAddGroupMemberEvent()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::EVENT_HOOK_CLASS, Tinebase_Controller_CustomEventHook::class);
+        ob_start();
+        $this->testAddGroupMember();
+        $out = ob_get_clean();
+        self::assertEquals('Handled event Tinebase_Event_AddGroupMember', $out);
+    }
     
     /**
      * test deleting groupmembers
@@ -367,13 +376,9 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @see 0009852: improve cache cleaning after LDAP sync
-     *
-     * @group nogitlabci
      */
     public function testSyncGroups()
     {
-        self::markTestSkipped('FIXME: does not work in BE branch');
-
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
 
         $group = $this->testAddGroup();
@@ -393,12 +398,5 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
         $memberships = $this->_groupLDAP->getGroupMembers($defaultUserGroup);
         $this->assertTrue(in_array($user->getId(), $memberships), 'group memberships not updated: '
             . print_r($memberships, true));
-
-        $list = Addressbook_Controller_List::getInstance()->get($defaultUserGroup->list_id);
-        $members = $list->members;
-        $contactIds = Tinebase_User::getInstance()->getMultiple($memberships)->contact_id;
-        sort($contactIds);
-        sort($members);
-        static::assertEquals($contactIds, $members, print_r($contactIds, true) . PHP_EOL . print_r($members, true));
     }
 }

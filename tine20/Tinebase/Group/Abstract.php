@@ -68,7 +68,6 @@ abstract class Tinebase_Group_Abstract
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
      */
     abstract public function removeGroupMember($_groupId, $_accountId);
     

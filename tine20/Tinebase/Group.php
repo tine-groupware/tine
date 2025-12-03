@@ -220,8 +220,10 @@ class Tinebase_Group
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                .' Set new group memberships: ' . print_r($membershipsSyncBackend, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    .' Set new group memberships: ' . print_r($membershipsSyncBackend, TRUE));
+            }
 
             $groupIds = $groupBackend->setGroupMembershipsInSqlBackend($user, $membershipsSyncBackend);
             self::syncListsOfUserContact($groupIds, $user->contact_id);
