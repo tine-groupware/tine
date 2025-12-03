@@ -3287,14 +3287,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         ));
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         
-        foreach($events as $event) {
+        foreach ($events as $event) {
             try {
                 if (! $event->rrule) {
-                    // update non recurring futrue events
+                    // update non recurring future events
                     Calendar_Model_Attender::resolveGroupMembers($event->attendee);
                     $this->update($event);
                 } else {
-                    // update thisandfuture for recurring events
+                    // update this-and-future for recurring events
                     $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $this->getRecurExceptions($event), Tinebase_DateTime::now());
                     if ($nextOccurrence) {
                         Calendar_Model_Attender::resolveGroupMembers($nextOccurrence->attendee);

@@ -339,11 +339,6 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
         $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current groupmemberships: ' . print_r($groupMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' new groupmemberships: ' . print_r($_groupIds, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' added groupmemberships: ' . print_r($addGroupMemberships, true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' removed groupmemberships: ' . print_r($removeGroupMemberships, true));
-        
         foreach ($addGroupMemberships as $groupId) {
             $this->addGroupMemberInSqlBackend($groupId, $userId);
         }
@@ -364,7 +359,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     }
     
     /**
-     * add a new groupmember to a group
+     * add a new group member to a group
      *
      * @param  string  $_groupId
      * @param  string  $_accountId
@@ -382,8 +377,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 throw $zdse;
             }
         }
+
     }
-    
+
     /**
      * add a new groupmember to a group
      *
@@ -435,7 +431,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
                 $this->groupsTable->update(['seq' => $group->seq + 1], $where);
             }
         }
-        
+
+        $event = new Tinebase_Event_AddGroupMember();
+        $event->groupId = $_groupId;
+        $event->userId  = $_accountId;
+        Tinebase_Event::fireEvent($event);
     }
     
     /**
@@ -450,7 +450,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $this->removeGroupMemberInSyncBackend($_groupId, $_accountId);
         }
         
-        return $this->removeGroupMemberFromSqlBackend($_groupId, $_accountId);
+        $this->removeGroupMemberFromSqlBackend($_groupId, $_accountId);
     }
     
     /**
@@ -490,6 +490,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
             $this->groupsTable->update(['seq' => $group->seq + 1], $where);
         }
+
+        $event = new Tinebase_Event_RemoveGroupMember();
+        $event->groupId = $_groupId;
+        $event->userId  = $_accountId;
+        Tinebase_Event::fireEvent($event);
     }
     
     /**
