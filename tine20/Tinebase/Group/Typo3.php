@@ -70,7 +70,6 @@ class Tinebase_Group_Typo3 extends Tinebase_Group_Sql
      *
      * @param int $_groupId
      * @param int $_accountId
-     * @return unknown
      */
     public function removeGroupMember($_groupId, $_accountId)
     {
