@@ -87,11 +87,13 @@ class Filemanager_Model_DownloadLink extends Tinebase_Record_Abstract
     {
         $baseURL = Filemanager_Config::getInstance()->get(
             Filemanager_Config::PUBLIC_DOWNLOAD_URL,
-            Tinebase_Core::getUrl() . '/download'
+            Tinebase_Core::getUrl()
         );
-        $downloadURL = $baseURL . '/' . $action . '/' . $this->getId();
-
-        return $downloadURL;
+        if ($baseURL !== 'http://' && $baseURL !== 'https://') {
+            $baseURL = trim($baseURL, '/');
+        }
+        $baseURL .= '/download';
+        return $baseURL . '/' . $action . '/' . $this->getId();
     }
     
     /**
