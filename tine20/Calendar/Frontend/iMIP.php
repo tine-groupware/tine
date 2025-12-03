@@ -365,16 +365,33 @@ class Calendar_Frontend_iMIP
 
     /**
      * find existing event by uid
+     *
+     * @param Calendar_Model_iMIP $_iMIP
+     * @param bool $_refetch
+     * @param bool $_getDeleted
+     * @return Calendar_Model_Event|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_NotDefined
      */
-    public function getExistingEvent(Calendar_Model_iMIP $_iMIP, bool $_refetch = false, bool $_getDeleted = false): ?Calendar_Model_Event
+    public function getExistingEvent(Calendar_Model_iMIP $_iMIP,
+                                     bool $_refetch = false,
+                                     bool $_getDeleted = false): ?Calendar_Model_Event
     {
         if ($_refetch || ! $_iMIP->existing_event instanceof Calendar_Model_Event)
         {
             $iMIPEvent = $_iMIP->getEvent();
-            $event = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($iMIPEvent->uid,
-                $iMIPEvent->hasExternalOrganizer(), 'get', Tinebase_Model_Grants::GRANT_READ, $_getDeleted);
-            if (null !== $event) {
-                Calendar_Model_Attender::resolveAttendee($event['attendee'], true, $event);
+            if ($iMIPEvent->uid) {
+                $event = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($iMIPEvent->uid,
+                    $iMIPEvent->hasExternalOrganizer(), 'get', Tinebase_Model_Grants::GRANT_READ, $_getDeleted);
+                if (null !== $event) {
+                    Calendar_Model_Attender::resolveAttendee($event['attendee'], true, $event);
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Event has no UID: ' . $iMIPEvent->getId());
+                }
+                $event = null;
             }
             $_iMIP->existing_event = $event;
         }
@@ -402,8 +419,10 @@ class Calendar_Frontend_iMIP
             if (! $existingEvent) {
                 // organizer has an account but no event exists, it seems that event was created from a non-caldav client
                 // do not send notifications in this case + create event in context of organizer
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Organizer has an account but no event exists!');
+                }
                 return; // not clear how to create in the organizers context...
                 $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(FALSE);
                 $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->create($_iMIP->getEvent());
