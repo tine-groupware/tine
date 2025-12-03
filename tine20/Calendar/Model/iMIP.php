@@ -292,16 +292,34 @@ class Calendar_Model_iMIP extends Tinebase_Record_NewAbstract
     }
 
 
-    public function getExistingEvent(Calendar_Model_Event $_event, bool $_refetch = false, bool $_getDeleted = false): ?Calendar_Model_Event
+    /**
+     * @param Calendar_Model_Event $_event
+     * @param bool $_refetch
+     * @param bool $_getDeleted
+     * @return Calendar_Model_Event|null
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getExistingEvent(Calendar_Model_Event $_event,
+                                     bool $_refetch = false,
+                                     bool $_getDeleted = false): ?Calendar_Model_Event
     {
         $recurIdOrUid = $_event->getRecurIdOrUid();
         if ($_refetch || !array_key_exists($recurIdOrUid, $this->existing_events ?? [])) {
-            $event = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($_event->uid,
-                $recurIdOrUid !== $_event->uid ? $recurIdOrUid : null,
-                Tinebase_Controller_Record_Abstract::ACTION_GET, Tinebase_Model_Grants::GRANT_READ, $_getDeleted);
+            if ($_event->uid) {
+                $event = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID($_event->uid,
+                    $recurIdOrUid !== $_event->uid ? $recurIdOrUid : null,
+                    Tinebase_Controller_Record_Abstract::ACTION_GET, Tinebase_Model_Grants::GRANT_READ,
+                    $_getDeleted);
 
-            if (null !== $event) {
-                Calendar_Model_Attender::resolveAttendee($event->attendee, true, $event);
+                if (null !== $event) {
+                    Calendar_Model_Attender::resolveAttendee($event->attendee, true, $event);
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Event has no UID: ' . $_event->getId());
+                }
+                $event = null;
             }
 
             $this->xprops('existing_events')[$recurIdOrUid] = $event;
