@@ -42,36 +42,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Crm_Controller_Lead::getInstance(), 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
     }
-
-    /**
-     * do search count request only when resultset is equal
-     * to $pagination->limit or we are not on the first page
-     *
-     * @param $filter
-     * @param $pagination
-     * @param Tinebase_Controller_SearchInterface $controller the record controller
-     * @param $totalCountMethod
-     * @param integer $resultCount
-     * @return array
-     */
-    protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
-    {
-        if ($controller instanceof Crm_Controller_Lead) {
-            $result = $controller->searchCount($filter);
-
-            $totalresult = [];
-
-            // add totalcounts of leadstates/leadsources/leadtypes
-            $totalresult['totalleadstates'] = $result['leadstates'];
-            $totalresult['totalleadsources'] = $result['leadsources'];
-            $totalresult['totalleadtypes'] = $result['leadtypes'];
-            $totalresult['totalcount'] = $result['totalcount'];
-
-            return $totalresult;
-        } else {
-            return parent:: _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount);
-        }
-    }
     
     /**
      * Return a single record

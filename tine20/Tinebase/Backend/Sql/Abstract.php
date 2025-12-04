@@ -643,8 +643,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             quoteIdentifier($this->_defaultCountCol);
         
         $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
-        foreach ($this->_additionalSearchCountCols as $column => $select) {
-            $searchCountCols['sum_' . $column] = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
+        foreach ($this->_additionalSearchCountCols as $column => $sum) {
+            if (!$sum instanceof Zend_Db_Expr) {
+                $sum = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
+            }
+            $searchCountCols['sum_' . $column] = $sum;
         }
         
         [$subSelectColumns] = $this->_getColumnsToFetch(self::IDCOL, $_filter);

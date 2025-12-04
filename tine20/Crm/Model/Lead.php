@@ -4,9 +4,9 @@
  * 
  * @package     Crm
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -14,7 +14,11 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 
 class Crm_Model_Lead extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'Lead';
+    public const MODEL_NAME_PART = 'Lead';
+
+    public const FLD_TURNOVER = 'turnover';
+    public const FLD_PROBABLE_TURNOVER = 'probableTurnover';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -153,13 +157,16 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_FULLTEXT,
                 self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ],
-            'turnover'            => [
+            self::FLD_TURNOVER => [
                 self::TYPE                  => self::TYPE_FLOAT,
                 self::NULLABLE              => true,
-                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
+                self::VALIDATORS            => array(
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => 0),
                 self::INPUT_FILTERS          => [Zend_Filter_Empty::class => null],
             ],
-            'probableTurnover'            => [
+            // virtual field, calculated with turnover * probability
+            self::FLD_PROBABLE_TURNOVER => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ],

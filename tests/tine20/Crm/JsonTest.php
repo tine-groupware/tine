@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  * 
  * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -105,7 +105,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($getLead['id'], $savedLead['id']);
         $this->assertEquals($getLead['notes'][0]['note'], 'phpunit test note');
         $this->assertTrue($searchLeads['totalcount'] > 0, print_r($searchLeads, true));
-        $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);
         $this->assertEquals($getLead['description'], $searchLeads['results'][0]['description']);
         $this->assertEquals(200, $searchLeads['results'][0]['turnover'], 'turnover has not been calculated using product prices');
         $this->assertEquals($searchLeads['results'][0]['turnover']*$getLead['probability']/100, $searchLeads['results'][0]['probableTurnover']);
@@ -619,24 +618,33 @@ class Crm_JsonTest extends Crm_AbstractTest
     public function testSearchMyLeads()
     {
         $this->saveLead();
-        $filter = new Tinebase_Model_PersistentFilterFilter(array(
-            array(
+        $filter = new Tinebase_Model_PersistentFilterFilter([
+            [
                 'field' => 'name',
                 'operator' => 'equals',
                 'value' => 'my leads'
-            ),
-            array(
+            ], [
                 'field' => 'application_id',
                 'operator' => 'equals',
                 'value' => Tinebase_Application::getInstance()->getApplicationById('Crm')->getId()
-            ),
-        ));
+            ],
+        ]);
 
         $myLeadsPFilter = Tinebase_PersistentFilter::getInstance()->search($filter)->getFirstRecord();
         $leadFilters = $myLeadsPFilter->filters->toArray();
         self::assertCount(1, $leadFilters);
-        $result = $this->_getUit()->searchLeads($leadFilters, []);
+        $result = $this->_getUit()->searchLeads($leadFilters, ['limit' => 1]);
         self::assertGreaterThanOrEqual(1, $result['totalcount']);
         self::assertCount(1, $result['filter']);
+
+        self::assertArrayHasKey('total', $result);
+        foreach ([
+            'sum_' . Crm_Model_Lead::FLD_PROBABLE_TURNOVER => 140,
+            'sum_' . Crm_Model_Lead::FLD_TURNOVER => 200
+        ] as $sumField => $expectedValue) {
+            self::assertArrayHasKey($sumField, $result['total'], print_r($result['total'], true));
+            $this->assertEquals($expectedValue, $result['total'][$sumField], ' mismatch '
+                . print_r($result['total'], true));
+        }
     }
 }

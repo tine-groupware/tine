@@ -155,7 +155,7 @@ class Crm_AbstractTest extends TestCase
             $tags = array();
         }
 
-        return new Crm_Model_Lead(array(
+        return new Crm_Model_Lead([
             'lead_name'     => $name,
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
@@ -164,14 +164,14 @@ class Crm_AbstractTest extends TestCase
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,
-            'turnover'      => 200,
+            Crm_Model_Lead::FLD_TURNOVER => 200,
             'probability'   => 70,
             'end_scheduled' => NULL,
             'mute'          => $mute,
             'tags'          => $tags,
             'customfields'  => $cfs,
             'attachments'   => [],
-        ));
+        ]);
     }
 
 

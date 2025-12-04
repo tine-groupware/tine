@@ -80,7 +80,7 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
      * @param array $_options (optional)
      * @throws Tinebase_Exception_Backend_Database
      */
-    public function __construct($_dbAdapter = NULL, $_options = array())
+    public function __construct($_dbAdapter = null, $_options = array())
     {
         parent::__construct($_dbAdapter, $_options);
 
@@ -93,7 +93,10 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_Abstract
         );
 
         $this->_foreignTables['accounting_time_billable']['select'] = array(
-            'accounting_time_billable' => new Zend_Db_Expr('(' . $this->_db->quoteIdentifier('accounting_time') . '*' . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*' . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
+            'accounting_time_billable' => new Zend_Db_Expr('('
+                . $this->_db->quoteIdentifier('accounting_time') . '*'
+                . $this->_db->quoteIdentifier('timetracker_timesheet.is_billable') . '*'
+                . $this->_db->quoteIdentifier('timetracker_timeaccount.is_billable') . ')')
         );
     }
 }

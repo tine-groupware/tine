@@ -27,7 +27,7 @@
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
-    const MODEL_NAME_PART = 'Timesheet';
+    public const MODEL_NAME_PART = 'Timesheet';
 
     public const FLD_CLEARED_AMOUNT = 'cleared_amount';
     public const FLD_RECORDED_AMOUNT = 'recorded_amount';

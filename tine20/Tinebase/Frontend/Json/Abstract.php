@@ -301,17 +301,29 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $this->_setRequestContext($controller);
         }
 
-         if (   $totalCountMethod === self::TOTALCOUNT_CONTROLLER
+        if ($totalCountMethod === self::TOTALCOUNT_CONTROLLER
             && $pagination->limit
             && ($pagination->start != 0 || $resultCount == $pagination->limit)
-         ) {
-             $totalCount = $controller->searchCount($filter);
-         } else {
-             $totalCount = $resultCount;
-         }
-         return [
-             'totalcount' => $totalCount
-         ];
+        ) {
+            $totalCount = $controller->searchCount($filter);
+        } else {
+            $totalCount = $resultCount;
+        }
+        $result = [];
+        if (is_array($totalCount)) {
+            $result['total'] = [];
+            foreach ($totalCount as $key => $value) {
+                if ($key === 'count') {
+                    $result['totalcount'] = $value;
+                } else {
+                    $result['total'][$key] = $value;
+                }
+            }
+        } else {
+            $result['totalcount'] = $totalCount;
+        }
+
+        return $result;
     }
 
     /**

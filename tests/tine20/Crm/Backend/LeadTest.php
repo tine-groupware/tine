@@ -135,13 +135,13 @@ class Crm_Backend_LeadTest extends TestCase
      */
     public function testGetCountOfLeads()
     {
-        $lead = $this->testCreateLead();
+        $this->testCreateLead();
         
         $filter = $this->_getFilter(TRUE);
         
         $count = $this->_backend->searchCount($filter);
         
-        $this->assertEquals(1, $count);
+        $this->assertEquals(1, $count['count']);
     }
     
     /**
