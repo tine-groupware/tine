@@ -64,22 +64,24 @@ Tine.SSO.AdminPanel.openWindow = function (config) {
     });
 };
 
-Tine.Admin.registerItem({
-    text: 'SSO', // _('SSO')
-    pos: 1000,
-    dataPanelType: null,
-    children: [{
-        text: 'Relying Parties', // _('Relying Parties')
-        iconCls: 'SSORelyingParty',
-        dataPanelType: 'Tine.SSO.RelyingPartyGridPanel',
-        disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
-        leaf: true,
-    },{
-        text: 'External Identity Providers', // _('External Identity Providers')
-        iconCls: 'SSOExternalIdp',
-        dataPanelType: 'Tine.SSO.ExternalIdpGridPanel',
-        disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
-        leaf: true,
-    }],
-    leaf: false,
-});
+if (Tine.Admin) {
+    Tine.Admin.registerItem({
+        text: 'SSO', // _('SSO')
+        pos: 1000,
+        dataPanelType: null,
+        children: [{
+            text: 'Relying Parties', // _('Relying Parties')
+            iconCls: 'SSORelyingParty',
+            dataPanelType: 'Tine.SSO.RelyingPartyGridPanel',
+            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+            leaf: true,
+        }, {
+            text: 'External Identity Providers', // _('External Identity Providers')
+            iconCls: 'SSOExternalIdp',
+            dataPanelType: 'Tine.SSO.ExternalIdpGridPanel',
+            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+            leaf: true,
+        }],
+        leaf: false,
+    });
+};
