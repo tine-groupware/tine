@@ -21,6 +21,8 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDa
 
     public function testExpandProperty()
     {
+        $this->_skipIfLDAPBackend('group itself (not shown by client) is missing');
+
         $list = Tinebase_Group::getInstance()->getGroupById(Tinebase_Core::getUser()->accountPrimaryGroup);
 
         $body = '<?xml version="1.0" encoding="UTF-8"?>
