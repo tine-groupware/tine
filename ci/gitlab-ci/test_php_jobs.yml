@@ -57,7 +57,7 @@ php-unit-all-tests-source-matrix:
   parallel:
     matrix:
       - DATABASE_IMAGE:
-          - "mysql:8.0"
+          - "dockerregistry.metaways.net/tine20/tine20/mysql:8.0.21"
           - "mariadb:12.2-rc"
           - "mariadb:11.8"
           - "mariadb:10.11"
