@@ -28,7 +28,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE012 = self::class . '::update012';
     protected const RELEASE018_UPDATE013 = self::class . '::update013';
     protected const RELEASE018_UPDATE014 = self::class . '::update014';
-
+    protected const RELEASE018_UPDATE015 = self::class . '::update015';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -97,6 +97,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+            self::RELEASE018_UPDATE015          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update015',
             ],
         ],
     ];
@@ -319,5 +323,24 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.14', self::RELEASE018_UPDATE014);
+    }
+
+    public function update015(): void
+    {
+        if (!Tinebase_Core::isReplica()) {
+            $cfc = new Tinebase_CustomField_Config();
+            $cfc->setAllCFs();
+            $result = $cfc->search(new Tinebase_Model_CustomField_ConfigFilter([
+                ['field' => 'name', 'operator' => 'startswith', 'value' => 'eval_dim_'],
+            ], '', ['ignoreAcl' => true]));
+
+            foreach ($result as $cFConfig) {
+                $definition = $cFConfig->definition;
+                $definition[Tinebase_Model_CustomField_Config::DEF_FIELD][Tinebase_ModelConfiguration_Const::OWNING_APP] = Tinebase_Config::APP_NAME;
+                $cFConfig->definition = $definition;
+                Tinebase_CustomField::getInstance()->updateCustomField($cFConfig);
+            }
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
     }
 }
