@@ -597,11 +597,23 @@ msgstr "Klicken Sie auf den Namen eine*r Teilnehmer*in um die Rückmeldung für 
 msgid "Answers possible until {deadline}"
 msgstr "Antworten bis zum {deadline} möglich"
 
+msgid "Answers possible for {diffDays} more days"
+msgstr "Antworten noch {diffDays} Tage möglich"
+
 msgid "For {events} between {from} and {until}"
 msgstr "Für {events} zwischen {from} und {until}"
 
 msgid "events"
 msgstr "Veranstaltungen"
+
+msgid "closed"
+msgstr "geschlossen"
+
+msgid "This poll is closed already"
+msgstr "Diese Umfrage ist bereits abgeschlossen"
+
+msgid "for"
+msgstr "für"
 
 #~ msgid "Edit Event Types"
 #~ msgstr "Terminarten bearbeiten"

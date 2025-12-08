@@ -57,19 +57,20 @@ export default defineComponent({
 
 <style scoped>
 .needs-action {
-  background-color: #A0A0A0;
+  background-color: #FFF;
+  border: 1px solid #ccc;
   background-image: url('../../../../images/icon-set/icon_invite.svg');
 }
 .accepted {
-  background-color: #90ff90;
+  background-color: #b0d8d2;
   background-image: url('../../../../images/icon-set/icon_calendar_attendee_accepted.svg');
 }
 .declined {
-  background-color: #ffa0a0;
+  background-color: #eaa1c3;
   background-image: url('../../../../images/icon-set/icon_calendar_attendee_cancle.svg');
 }
 .tentative {
-  background-color: #ffff90;
+  background-color: #fef3cf;
   background-image: url('../../../../images/icon-set/icon_calendar_attendee_tentative.svg');
 }
 
