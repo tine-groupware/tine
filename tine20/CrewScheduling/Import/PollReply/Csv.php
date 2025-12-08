@@ -42,7 +42,7 @@ class CrewScheduling_Import_PollReply_Csv extends Tinebase_Import_Csv_Abstract
         if (count($parts) !== 3) {
             throw new Exception('bad id format: ' . $_data['event_ref']);
         }
-        $dtstart = new Tinebase_DateTime(null, 'UTC');
+        $dtstart = new Tinebase_DateTime(null, 'Europe/Berlin');
         $dtstart->modify($parts[1]);
 
         $timeParts = explode(':', $parts[2]);
