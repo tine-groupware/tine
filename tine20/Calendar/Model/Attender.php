@@ -1,9 +1,9 @@
 <?php
 /**
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -911,25 +911,36 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             } elseif ($groupAttender->user_id instanceof Tinebase_Model_Group &&
                     !empty($groupAttender->user_id->list_id)) {
                 $groupAttender->user_id = $listId = $groupAttender->user_id->list_id;
-            } elseif ($groupAttender->user_id !== NULL) {
+            } elseif ($groupAttender->user_id !== null) {
                 try {
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    // let's try group
-                    try {
-                        $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
-                        if (!empty($group->list_id)) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                                . ' FIXME: deprecated use of group id');
-                            $groupAttender->user_id = $listId = $group->list_id;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                    }
+                    if (is_scalar($groupAttender->user_id)) {
+                        // let's try group
+                        try {
+                            $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
+                            if (!empty($group->list_id)) {
+                                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                    . ' FIXME: deprecated use of group id');
+                                $groupAttender->user_id = $listId = $group->list_id;
+                            }
+                        } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__
+                                . ' ' . $ternd->getMessage());
                         }
-                    } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__
-                            . ' ' . $ternd->getMessage());
+                    } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' Got invalid user id for group attender');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ . ' ' . print_r($groupAttender->user_id, true));
+                        }
                     }
                 }
             } else {
