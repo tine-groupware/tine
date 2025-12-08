@@ -52,6 +52,8 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
             )))
         );
 
+        $this->_assertContactMatrixId($matrixAccount);
+
         // assert corporal policy json
         $backend = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getCorporalBackend();
         $policy = $backend->getPushedPolicy();
@@ -138,5 +140,33 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete([$user->getId()]);
         $this->_assertInactiveUserInPolicy();
+    }
+
+    public function testSetMatrixIdInContacts()
+    {
+        // create MatrixAccount
+        $user = $this->testCreateUser();
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser($user);
+        // unset contact cf
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+            $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID});
+        $contact->{MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_MATRIX_ID} = '';
+        Addressbook_Controller_Contact::getInstance()->update($contact);
+
+        // run function
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setMatrixIdInContacts();
+
+        // check contact cf
+        $this->_assertContactMatrixId($matrixAccount);
+    }
+
+    protected function _assertContactMatrixId(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount)
+    {
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+            $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID});
+
+        self::assertEquals($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID},
+            $contact->{MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_MATRIX_ID},
+            'contact matrix id mismatch');
     }
 }

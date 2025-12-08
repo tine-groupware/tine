@@ -1,13 +1,15 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
   * 
  * @package     Setup
  * @subpackage  Initialize
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Class to handle application initialization
@@ -154,7 +156,7 @@ class Setup_Initialize
         foreach ($roleRights as $roleName => $rights) {
             try {
                 $role = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
-            } catch(Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound $tenf) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
                 continue;
             }
@@ -214,16 +216,33 @@ class Setup_Initialize
             $appId = Tinebase_Application::getInstance()->getApplicationByName($appModel['app'])->getId();
 
             foreach ($appModel['cfields'] as $customfield) {
-                $cfc = array(
+                if (Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+                    $appId,
+                    $customfield['name'],
+                    $appModel['model'])
+                ) {
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Custom field already exists: '
+                        . $customfield['name'] . ' (' . $appModel['model'] . ')');
+                    continue;
+                }
+
+                $definition = array_intersect_key($customfield, array_flip([
+                    TMCC::UI_CONFIG,
+                    TMCC::LABEL,
+                    TMCC::CONFIG,
+                    TMCC::TYPE,
+                    TMCC::SPECIAL_TYPE,
+                    TMCC::INPUT_FILTERS,
+                    Tinebase_Model_CustomField_Config::DEF_FIELD,
+                    Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS,
+                ]));
+                $cfc = [
                     'name' => $customfield['name'],
                     'application_id' => $appId,
                     'model' => $appModel['model'],
-                    'definition' => array(
-                        'uiconfig' => $customfield['uiconfig'],
-                        'label' => $customfield['label'],
-                        'type' => $customfield['type'],
-                    )
-                );
+                    'is_system' => $customfield['is_system'] ?? 0,
+                    'definition' => $definition,
+                ];
 
                 if ($customfield['type'] == 'record') {
                     $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
@@ -239,7 +258,17 @@ class Setup_Initialize
                 }
 
                 $cf = new Tinebase_Model_CustomField_Config($cfc);
-                Tinebase_CustomField::getInstance()->addCustomField($cf);
+                try {
+                    Tinebase_CustomField::getInstance()->addCustomField($cf);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                        Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Custom field already exists: '
+                            . $customfield['name'] . ' (' . $appModel['model'] . '): ' . $zdse->getMessage());
+                    } else {
+                        throw $zdse;
+                    }
+                }
             }
         }
     }

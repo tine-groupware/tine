@@ -1203,7 +1203,15 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     static public function getManageAccountFields()
     {
-        return self::$_manageAccountsFields;
+        $additionalFields = [];
+
+        if (Tinebase_Application::getInstance()->isInstalled('MatrixSynapseIntegrator')) {
+            // system custom field matrix id (see \MatrixSynapseIntegrator_Setup_Initialize::$customfields)
+            // TODO make this "hook-able"
+            $additionalFields[] = MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_MATRIX_ID;
+        }
+
+        return array_merge(self::$_manageAccountsFields, $additionalFields);
     }
 
     /**

@@ -92,7 +92,6 @@ class Setup_Uninitialize
      */
     public static function removeCustomFields(array $customFields, Tinebase_Model_Application $_application)
     {
-        
         foreach ($customFields as $appModel) {
             // Tinebase_Application doesn't know about us anymore, we are basically already uninstalled
             if ($_application->name === $appModel['app']) {

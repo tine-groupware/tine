@@ -60,8 +60,10 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             || !$this->_doContainerACLChecks
             || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS)
         ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' ACL / right checks disabled for ' . $_filter->getModelName() . '.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ACL / right checks disabled for ' . $_filter->getModelName() . '.');
+            }
             return;
         }
 
@@ -258,6 +260,10 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $_createdRecord */
         $this->_pushToCorporal($_createdRecord);
+
+        if (!empty($_createdRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID})) {
+            $this->setContactMatrixId($_createdRecord);
+        }
     }
 
     /**
@@ -274,6 +280,11 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $updatedRecord */
         $this->_pushToCorporal($updatedRecord);
+
+        if ($currentRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} !==
+            $updatedRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}) {
+            $this->setContactMatrixId($updatedRecord);
+        }
     }
 
     /**
@@ -295,5 +306,39 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     {
         $account = $this->getMatrixAccountForUser(Tinebase_Core::getUser());
         return $this->getSynapseBackend()->login($account);
+    }
+
+    /**
+     * copy matrix-id from user matrix accounts to cf
+     *
+     * @return void
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function setMatrixIdInContacts(): void
+    {
+        foreach ($this->getAll() as $matrixAccount) {
+            $this->setContactMatrixId($matrixAccount);
+        }
+    }
+
+    public function setContactMatrixId(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): void
+    {
+        $aclCheck = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        try {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
+                $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID});
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $e->getMessage());
+            }
+            return;
+        }
+        $contact->{MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_MATRIX_ID} =
+            $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+        Addressbook_Controller_Contact::getInstance()->update($contact);
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($aclCheck);
     }
 }
