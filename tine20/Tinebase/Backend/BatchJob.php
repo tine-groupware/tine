@@ -85,6 +85,7 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
                 Tinebase_Model_BatchJob::FLD_RUNNING_PROC,
             ])
             ->where('`id` = ' . $db->quote($id) . ' AND '
+                . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_STATUS) . ' = ' . Tinebase_Model_BatchJob::STATUS_RUNNING . ' AND '
                 . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_MAX_CONCURRENT) . ' > '
                 . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_NUM_PROC))
             ->forUpdate();
@@ -99,6 +100,12 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
         }
 
         if (null === ($batchStep = ($batchStepBackend = new Tinebase_Backend_BatchJobStep())->getStepToExecute($id))) {
+            if (empty($runningProcs)) {
+                $db->update($this->getPrefixedTableName(), [
+                    Tinebase_Model_BatchJob::FLD_STATUS => Tinebase_Model_BatchJob::STATUS_DONE,
+                ], '`id` = ' . $db->quote($id));
+                $transaction->release();
+            }
             return false;
         }
 

@@ -38,7 +38,7 @@ class Tinebase_Backend_BatchJobStep extends Tinebase_Backend_Sql
                 new Zend_Db_Expr('JSON_EXTRACT(' . Tinebase_Model_BatchJobStep::FLD_IN_DATA . ', CONCAT("$.", JSON_EXTRACT(' . Tinebase_Model_BatchJobStep::FLD_TO_PROCESS . ', "$[0]"))) AS ' . Tinebase_Model_BatchJobStep::FLD_IN_DATA),
             ])
             ->where($db->quoteIdentifier(Tinebase_Model_BatchJobStep::FLD_BATCH_JOB_ID) . ' = ' . $db->quote($batchJobId)
-                . ' AND ' . $db->quoteIdentifier(Tinebase_Model_BatchJobStep::FLD_TO_PROCESS) . ' <> "[]"'
+                . ' AND JSON_LENGTH(' . $db->quoteIdentifier(Tinebase_Model_BatchJobStep::FLD_TO_PROCESS) . ', "$[0]") = 1'
             )->limit(1)->order(new Zend_Db_Expr('rand()'));
 
         if (false === ($step = $db->fetchRow($select, fetchMode: Zend_Db::FETCH_ASSOC))) {
