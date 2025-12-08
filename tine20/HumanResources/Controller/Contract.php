@@ -327,7 +327,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                 }
             } catch (Tinebase_Exception_NotFound $e) {
                 // new inline defined schema
-                $recordWts->setId(null);
+                if ($recordWts instanceof Tinebase_Record_Interface) {
+                    $recordWts->setId(null);
+                }
             }
         }
 
