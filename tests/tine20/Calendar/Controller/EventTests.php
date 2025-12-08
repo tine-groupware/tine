@@ -956,7 +956,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertSame(2, $event->attendee->count(), 'expect 2 attendees on event: '
             . print_r($event->attendee->toArray(), true));
 
-        $user2 = $this->_createTestUser();
+        $user2 = $this->_createTestUser([
+            'accountLastName' => 'the second',
+        ]);
         $admGrpCtrl->addGroupMember($group->getId(), $user2->getId());
         Calendar_Model_Attender::clearCache();
         $event = $this->_controller->get($event->getId());
