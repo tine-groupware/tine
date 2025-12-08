@@ -8,6 +8,8 @@
     <icon_class>tinebase-action-export-ods</icon_class>
     <template>timesheet_export_default.ots</template>
     <description>default ods timesheet export definition</description>
+    <!--if set to 1, the timesheets with accounting_time_factor = 0 will be removed-->
+    <skipZeroFactorTS>0</skipZeroFactorTS>
     <favorite>true</favorite>
     <scope>multi</scope>
     <header>1</header>
