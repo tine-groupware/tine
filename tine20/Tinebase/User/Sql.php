@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  * 
@@ -445,7 +444,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         $accessLog = Tinebase_User::getAccessLog();
         $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
-        $command = 'JSON_VALUE(' . $this->rowNameMapping['loginFailures'] . ', ' . $this->_db->quote("$.$clientType") . ')';
+        $command = 'JSON_VALUE(' . $this->rowNameMapping['loginFailures'] . ', \'$.' . $this->quoteJsonPathIdentifier($clientType) . '\')';
         $interval = $this->_dbCommand->getDynamicInterval(
             'SECOND',
             '1',
@@ -1801,10 +1800,10 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accessLog = Tinebase_User::getAccessLog();
         $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
         $field = $this->rowNameMapping['loginFailures'];
-        $valueCommand = "COALESCE(JSON_VALUE($field," .  $this->_db->quote("$.$clientType") . '), 0) + 1';
+        $valueCommand = "COALESCE(JSON_VALUE($field, '$." .  $this->quoteJsonPathIdentifier($clientType) . "'), 0) + 1";
         $loginCommand = "CASE WHEN JSON_VALID($field) " .
-            "THEN JSON_SET($field," .  $this->_db->quote("$.$clientType") . ', ' . $valueCommand . ') ' .
-            'ELSE JSON_OBJECT(' . $this->_db->quote($clientType) . ', 1) ' .
+            "THEN JSON_SET($field, '$." . $this->quoteJsonPathIdentifier($clientType) . "', " . $valueCommand . ') ' .
+            'ELSE JSON_OBJECT(' . $this->quoteJsonPathIdentifier($clientType) . ', 1) ' .
             'END';
         return new Zend_Db_Expr($loginCommand);
     }
@@ -1815,9 +1814,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
         $field = $this->rowNameMapping['loginFailures'];
         $loginCommand = "CASE WHEN JSON_VALID($field) " .
-            "THEN JSON_SET($field," .  $this->_db->quote("$.$clientType") . ', 0) ' .
-            'ELSE JSON_OBJECT(' . $this->_db->quote($clientType) . ', 0) ' .
+            "THEN JSON_SET($field, '$." .  $this->quoteJsonPathIdentifier($clientType) . "', 0) " .
+            'ELSE JSON_OBJECT(' . $this->quoteJsonPathIdentifier($clientType) . ', 0) ' .
             'END';
         return new Zend_Db_Expr($loginCommand);
+    }
+
+    /** this is required for mysql8 support */
+    protected function quoteJsonPathIdentifier(string $identifier): string
+    {
+        return '"' . trim($this->_db->quote($identifier), '\'"') . '"';
     }
 }

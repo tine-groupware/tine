@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5832c1f20355998dce1fd23ca7bf2445",
+    "content-hash": "7ab578540fbbce9b2e2c1e0e1a9b2d8f",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -984,11 +984,11 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.13.3pl1",
+            "version": "2.13.3pl2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/dbal.git",
-                "reference": "a9698aeafe02550d2f2dcb6428e6075639ec8742"
+                "reference": "1152fdcc1add6eb683c566c691c239cb271c3b83"
             },
             "require": {
                 "doctrine/cache": "^1.0|^2.0",
@@ -1069,7 +1069,7 @@
                 "sqlserver",
                 "sqlsrv"
             ],
-            "time": "2021-09-13T11:35:49+00:00"
+            "time": "2025-12-04T14:05:27+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -16665,7 +16665,7 @@
     "aliases": [
         {
             "package": "doctrine/dbal",
-            "version": "2.13.3.0-patch1",
+            "version": "2.13.3.0-patch2",
             "alias": "2.13.3",
             "alias_normalized": "2.13.3.0"
         },
