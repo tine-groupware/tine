@@ -276,6 +276,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             $this->_addHRWorkingTimeInfo($_filter, $result);
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($result, true));
+        }
         return $result;
     }
 
