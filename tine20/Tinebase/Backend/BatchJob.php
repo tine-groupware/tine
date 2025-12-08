@@ -103,6 +103,7 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
             if (empty($runningProcs)) {
                 $db->update($this->getPrefixedTableName(), [
                     Tinebase_Model_BatchJob::FLD_STATUS => Tinebase_Model_BatchJob::STATUS_DONE,
+                    Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE => Tinebase_DateTime::now()->toString(),
                 ], '`id` = ' . $db->quote($id));
                 $transaction->release();
             }
@@ -139,8 +140,6 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
             /** @var Tinebase_Model_BatchJobCallable $callable */
             foreach ($batchStep->{Tinebase_Model_BatchJobStep::FLD_CALLABLES} as $callable) {
                 $inData = $callable->doCall($inData);
-                $inData = call_user_func_array($callable, $inData->getData());
-                /** @var Tinebase_BatchJob_InOutData $inData */
             }
             $outData = $inData;
         } catch (Throwable $e) {
@@ -154,12 +153,17 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
         }
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        Tinebase_BroadcastHub::getInstance()->pushAfterCommit(Tinebase_Controller_Record_Abstract::ACTION_UPDATE, Tinebase_Model_BatchJob::class, $id, null);
+
         $select = ($db = $this->getAdapter())->select()
             ->from($this->getPrefixedTableName(), [
                 Tinebase_Model_BatchJob::FLD_NUM_PROC,
                 Tinebase_Model_BatchJob::FLD_RUNNING_PROC,
-                Tinebase_Model_BatchJob::FLD_TICKS,
+                Tinebase_Model_BatchJob::FLD_TICKS_FAILED,
+                Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED,
                 Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS,
+                Tinebase_Model_BatchJob::FLD_STATUS,
+                Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE,
             ])
             ->where('`id` = ' . $db->quote($id))
             ->forUpdate();
@@ -177,20 +181,35 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
 
                 // add outData to step children in_data/to_process
                 $batchStepBackend->addInData($batchStep->getId(), $outData);
+                $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED] += 1;
+            } else {
+                $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED] += $batchStep->{Tinebase_Model_BatchJobStep::FLD_TICKS};
             }
 
             $runningProcs = json_decode($batchJobData[Tinebase_Model_BatchJob::FLD_RUNNING_PROC] ?: '[]', true);
             if ($runningProcs[$lockId] ?? false) {
                 unset($runningProcs[$lockId]);
-                if (0 === ($numProcs = count($runningProcs)) && !$batchStepBackend->hasWorkToDo($id)) {
-                    $this->markDone($id);
-                } else {
-                    $db->update($this->getPrefixedTableName(), [
-                        Tinebase_Model_BatchJob::FLD_RUNNING_PROC => json_encode($runningProcs),
-                        Tinebase_Model_BatchJob::FLD_NUM_PROC => $numProcs,
-                        Tinebase_Model_BatchJob::FLD_TICKS => min($batchJobData[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS], $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS] + (null === $outData ? $batchStep->{Tinebase_Model_BatchJobStep::FLD_TICKS} : 1)),
-                    ], '`id` = ' . $db->quote($id));
+                if (0 === ($numProcs = count($runningProcs)) && Tinebase_Model_BatchJob::STATUS_RUNNING === $batchJobData[Tinebase_Model_BatchJob::FLD_STATUS]
+                        && !$batchStepBackend->hasWorkToDo($id)) {
+                    $batchJobData[Tinebase_Model_BatchJob::FLD_STATUS] = Tinebase_Model_BatchJob::STATUS_DONE;
+                    $batchJobData[Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE] = Tinebase_DateTime::now()->toString();
+                    $expectedFailed = $batchJobData[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS] - $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED];
+                    if ($expectedFailed !== $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED]) {
+                        $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED] = $expectedFailed;
+                        Tinebase_Exception::log(
+                            new Tinebase_Exception(__METHOD__ . '::' . __LINE__ . ' ticks dont sum up, adjusting expected failed')
+                        );
+                    }
                 }
+
+                $db->update($this->getPrefixedTableName(), [
+                    Tinebase_Model_BatchJob::FLD_RUNNING_PROC => json_encode($runningProcs),
+                    Tinebase_Model_BatchJob::FLD_NUM_PROC => $numProcs,
+                    Tinebase_Model_BatchJob::FLD_STATUS => $batchJobData[Tinebase_Model_BatchJob::FLD_STATUS],
+                    Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE => $batchJobData[Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE],
+                    Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED => $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED],
+                    Tinebase_Model_BatchJob::FLD_TICKS_FAILED => $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED],
+                ], '`id` = ' . $db->quote($id));
             }
         }
         $transaction->release();
@@ -200,17 +219,7 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
         return true;
     }
 
-    protected function markDone(string $id): void
-    {
-        ($db = $this->getAdapter())->update($this->getPrefixedTableName(), [
-            Tinebase_Model_BatchJob::FLD_RUNNING_PROC => '[]',
-            Tinebase_Model_BatchJob::FLD_NUM_PROC => 0,
-            Tinebase_Model_BatchJob::FLD_STATUS => Tinebase_Model_BatchJob::STATUS_DONE,
-            Tinebase_Model_BatchJob::FLD_TICKS => new Zend_Db_Expr(Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS),
-        ], '`id` = ' . $db->quote($id));
-    }
-
-    public function getProgress(string $id): int
+    public function getProgress(string $id): array
     {
         if (!static::$inUnittest && Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
             throw new Tinebase_Exception(__METHOD__ . ' must not have open transactions');
@@ -218,13 +227,14 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
 
         $select = ($db = $this->getAdapter())->select()
             ->from($this->getPrefixedTableName(), [
-                Tinebase_Model_BatchJob::FLD_TICKS,
                 Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS,
+                Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED,
+                Tinebase_Model_BatchJob::FLD_TICKS_FAILED,
             ])
             ->where('`id` = ' . $db->quote($id));
         $data = $db->fetchRow($select, fetchMode: Zend_Db::FETCH_ASSOC);
 
-        return $data ? $data[Tinebase_Model_BatchJob::FLD_TICKS] / ($data[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS] ?: 1) * 1000 : 0;
+        return $data ?: [];
     }
 
     public function checkDone(): void
@@ -246,15 +256,32 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
 
             $select = ($db = $this->getAdapter())->select()
                 ->from($this->getPrefixedTableName(), [
-                    Tinebase_Model_BatchJob::FLD_NUM_PROC,
+                    Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS,
+                    Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED,
+                    Tinebase_Model_BatchJob::FLD_TICKS_FAILED,
                 ])
                 ->where('`id` = ' . $db->quote($row['id']) . ' AND '
-                    . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_STATUS) . ' = ' . Tinebase_Model_BatchJob::STATUS_RUNNING)
+                    . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_STATUS) . ' = ' . Tinebase_Model_BatchJob::STATUS_RUNNING
+                    . ' AND ' . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_NUM_PROC) . ' = 0')
                 ->forUpdate();
 
             if (($batchJobData = $db->fetchRow($select, fetchMode: Zend_Db::FETCH_ASSOC)) &&
-                    0 === $batchJobData[Tinebase_Model_BatchJob::FLD_NUM_PROC] && !$batchStepBackend->hasWorkToDo($row['id'])) {
-                $this->markDone($row['id']);
+                    !$batchStepBackend->hasWorkToDo($row['id'])) {
+
+                $expectedFailed = $batchJobData[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS] - $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED];
+                if ($expectedFailed !== $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED]) {
+                    $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED] = $expectedFailed;
+                    Tinebase_Exception::log(
+                        new Tinebase_Exception(__METHOD__ . '::' . __LINE__ . ' ticks dont sum up, adjusting expected failed')
+                    );
+                }
+
+                $db->update($this->getPrefixedTableName(), [
+                    Tinebase_Model_BatchJob::FLD_STATUS => Tinebase_Model_BatchJob::STATUS_DONE,
+                    Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE => Tinebase_DateTime::now()->toString(),
+                    Tinebase_Model_BatchJob::FLD_TICKS_FAILED => $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED],
+                ], '`id` = ' . $db->quote($row['id']));
+                Tinebase_BroadcastHub::getInstance()->pushAfterCommit(Tinebase_Controller_Record_Abstract::ACTION_UPDATE, Tinebase_Model_BatchJob::class, $row['id'], null);
             }
 
             $transaction->release();
@@ -282,7 +309,8 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
                     Tinebase_Model_BatchJob::FLD_NUM_PROC,
                     Tinebase_Model_BatchJob::FLD_RUNNING_PROC,
                     Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS,
-                    Tinebase_Model_BatchJob::FLD_TICKS,
+                    Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED,
+                    Tinebase_Model_BatchJob::FLD_TICKS_FAILED,
                 ])
                 ->where('`id` = ' . $db->quote($row['id']) . ' AND '
                     . $db->quoteIdentifier(Tinebase_Model_BatchJob::FLD_STATUS) . ' = ' . Tinebase_Model_BatchJob::STATUS_RUNNING
@@ -307,7 +335,7 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
                     ]));
 
                     $batchStep = $batchStepBackend->get($stepId);
-                    $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS] += $batchStep->{Tinebase_Model_BatchJobStep::FLD_TICKS};
+                    $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED] += $batchStep->{Tinebase_Model_BatchJobStep::FLD_TICKS};
 
                     Tinebase_Core::releaseMultiServerLock($procId);
                 }
@@ -317,8 +345,9 @@ class Tinebase_Backend_BatchJob extends Tinebase_Backend_Sql
                     $db->update($this->getPrefixedTableName(), [
                         Tinebase_Model_BatchJob::FLD_RUNNING_PROC => json_encode($runningProcs),
                         Tinebase_Model_BatchJob::FLD_NUM_PROC => count($runningProcs),
-                        Tinebase_Model_BatchJob::FLD_TICKS => max(0, min($batchJobData[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS], $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS])),
+                        Tinebase_Model_BatchJob::FLD_TICKS_FAILED => max(0, min($batchJobData[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS] - $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED], $batchJobData[Tinebase_Model_BatchJob::FLD_TICKS_FAILED])),
                     ], '`id` = ' . $db->quote($row['id']));
+                    Tinebase_BroadcastHub::getInstance()->pushAfterCommit(Tinebase_Controller_Record_Abstract::ACTION_UPDATE, Tinebase_Model_BatchJob::class, $row['id'], null);
                 }
             }
 

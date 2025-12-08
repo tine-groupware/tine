@@ -39,6 +39,20 @@ class Tinebase_Controller_BatchJob extends Tinebase_Controller_Record_Abstract
         // default => $this->_purgeRecords = true;
         $this->_omitModLog = true;
         $this->_handleDependentRecords = false;
+        $this->_doContainerACLChecks = false;
+    }
+
+    public function getProgress(string $id): array
+    {
+        return $this->_backend->getProgress($id);
+    }
+
+    public function clearOldBatchJobs(): bool
+    {
+        $this->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_BatchJob::class, [
+            [TMFA::FIELD => Tinebase_Model_BatchJob::FLD_LAST_STATUS_UPDATE, TMFA::OPERATOR => 'before', TMFA::VALUE => Tinebase_DateTime::now()->subMonth(3)],
+        ]));
+        return true;
     }
 
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
@@ -60,7 +74,8 @@ class Tinebase_Controller_BatchJob extends Tinebase_Controller_Record_Abstract
         }
 
         unset($_record->{Tinebase_Model_BatchJob::FLD_NUM_PROC});
-        unset($_record->{Tinebase_Model_BatchJob::FLD_TICKS});
+        unset($_record->{Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED});
+        unset($_record->{Tinebase_Model_BatchJob::FLD_TICKS_FAILED});
         unset($_record->{Tinebase_Model_BatchJob::FLD_RUNNING_PROC});
 
         $expectedTicks = 0;
@@ -104,8 +119,12 @@ class Tinebase_Controller_BatchJob extends Tinebase_Controller_Record_Abstract
         }
 
         if ($_record->{Tinebase_Model_BatchJob::FLD_STATUS} !== $_oldRecord->{Tinebase_Model_BatchJob::FLD_STATUS} &&
-                !in_array($_record->{Tinebase_Model_BatchJob::FLD_STATUS}, [Tinebase_Model_BatchJob::STATUS_RUNNING, Tinebase_Model_BatchJob::STATUS_PAUSED], true)) {
-            throw new Tinebase_Exception_Record_Validation(Tinebase_Model_BatchJob::FLD_STATUS . ' must be running or paused');
+                Tinebase_Model_BatchJob::STATUS_CANCELLED === $_oldRecord->{Tinebase_Model_BatchJob::FLD_STATUS}) {
+            throw new Tinebase_Exception_Record_Validation(Tinebase_Model_BatchJob::FLD_STATUS . ' can\'t be changed once canceled');
+        }
+        if ($_record->{Tinebase_Model_BatchJob::FLD_STATUS} !== $_oldRecord->{Tinebase_Model_BatchJob::FLD_STATUS} &&
+                !in_array($_record->{Tinebase_Model_BatchJob::FLD_STATUS}, [Tinebase_Model_BatchJob::STATUS_RUNNING, Tinebase_Model_BatchJob::STATUS_PAUSED, Tinebase_Model_BatchJob::STATUS_CANCELLED], true)) {
+            throw new Tinebase_Exception_Record_Validation(Tinebase_Model_BatchJob::FLD_STATUS . ' must be running, paused or canceled');
         }
         if ((int)$_record->{Tinebase_Model_BatchJob::FLD_MAX_CONCURRENT} !== $_oldRecord->{Tinebase_Model_BatchJob::FLD_MAX_CONCURRENT} &&
                 (int)$_record->{Tinebase_Model_BatchJob::FLD_MAX_CONCURRENT} < 1) {
@@ -163,6 +182,5 @@ class Tinebase_Controller_BatchJob extends Tinebase_Controller_Record_Abstract
         return $oldValue;
     }
 
-    protected static ?Tinebase_Model_BatchJob $currentBatchJob = null;
     protected bool $unitTestMode = false;
 }

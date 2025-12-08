@@ -29,6 +29,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE013 = self::class . '::update013';
     protected const RELEASE018_UPDATE014 = self::class . '::update014';
     protected const RELEASE018_UPDATE015 = self::class . '::update015';
+    protected const RELEASE018_UPDATE016 = self::class . '::update016';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -77,6 +78,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE014          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update014',
+            ],
+            self::RELEASE018_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -342,5 +347,18 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
+    }
+
+    public function update016(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Tinebase_Scheduler_Task::addBatchJobCleanupTask(Tinebase_Core::getScheduler());
+
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_BatchJob::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.16', self::RELEASE018_UPDATE016);
     }
 }

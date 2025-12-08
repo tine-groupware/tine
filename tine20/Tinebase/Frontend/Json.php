@@ -1388,6 +1388,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $userProfile->setTimezone(Tinebase_Core::getUserTimezone());
         return $userProfile->toArray();
     }
+
+    public function getBatchJobProgress(string $jobId): array
+    {
+        return Tinebase_Controller_BatchJob::getInstance()->getProgress($jobId);
+    }
     
     /**
      * dummy function to measure speed of framework initialization

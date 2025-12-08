@@ -422,6 +422,17 @@ class Tinebase_Scheduler_Task
             'Tinebase_CacheCleanup'
         );
     }
+
+    public static function addBatchJobCleanupTask(Tinebase_Scheduler $_scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller_BatchJob::class,
+            'clearOldBatchJobs',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_BatchJobCleanup'
+        );
+    }
     
     /**
      * add sessions cleanup task to scheduler

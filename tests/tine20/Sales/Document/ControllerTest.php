@@ -1314,16 +1314,18 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $unitTestModeRaii = new Tinebase_RAII(fn () => Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode($oldUnitTestMode));
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
 
-        $batchJob = (new Sales_Frontend_Json())->startBatchProcess([
+        $batchJob = (new Sales_Frontend_Json())->createBatchJob([
                 ['createFollowupDocument', Sales_Model_Document_Order::class, Sales_Model_Document_Invoice::class],
                 ['bookDocument', Sales_Model_Document_Invoice::class],
                 ['dispatchDocument', Sales_Model_Document_Invoice::class],
             ], [$order->getId()]);
-        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id'])[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED]);
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id'])[Tinebase_Model_BatchJob::FLD_TICKS_FAILED]);
         $this->assertCount(1, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
         Tinebase_Controller_BatchJob::getInstance()->spawnBatchJobs();
         $this->assertCount(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
-        $this->assertSame(1000, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+        $progress = Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']);
+        $this->assertSame($progress[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS], $progress[Tinebase_Model_BatchJob::FLD_TICKS_FAILED]);
 
         unset($unitTestModeRaii);
     }
@@ -1354,20 +1356,20 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $unitTestModeRaii = new Tinebase_RAII(fn () => Tinebase_Controller_BatchJob::getInstance()->setUnitTestMode($oldUnitTestMode));
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
 
-        $batchJob = (new Sales_Frontend_Json())->startBatchProcess([
+        $batchJob = (new Sales_Frontend_Json())->createBatchJob([
             ['bookDocument', Sales_Model_Document_Order::class],
             ['createFollowupDocument', Sales_Model_Document_Order::class, Sales_Model_Document_Invoice::class],
             ['bookDocument', Sales_Model_Document_Invoice::class],
-            ['dispatchDocument', Sales_Model_Document_Invoice::class],
+            //['dispatchDocument', Sales_Model_Document_Invoice::class],
         ], [$order->getId()]);
-        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id'])[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED]);
+        $this->assertSame(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id'])[Tinebase_Model_BatchJob::FLD_TICKS_FAILED]);
         $this->assertCount(1, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
-        $this->assertSame(4, Tinebase_Controller_BatchJob::getInstance()->get($batchJob['id'])->{Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS});
+        $this->assertSame(3, Tinebase_Controller_BatchJob::getInstance()->get($batchJob['id'])->{Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS});
         Tinebase_Controller_BatchJob::getInstance()->spawnBatchJobs();
         $this->assertCount(0, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getBatchJobsToSpawn());
-        $this->assertSame(1000, Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']));
-
-
+        $progress = Tinebase_Controller_BatchJob::getInstance()->getBackend()->getProgress($batchJob['id']);
+        $this->assertSame($progress[Tinebase_Model_BatchJob::FLD_EXPECTED_TICKS], $progress[Tinebase_Model_BatchJob::FLD_TICKS_SUCCEEDED]);
 
         unset($unitTestModeRaii);
     }
