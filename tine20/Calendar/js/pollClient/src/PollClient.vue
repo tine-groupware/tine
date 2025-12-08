@@ -14,29 +14,26 @@
       <p v-if="publicUrl.length > 0"><a :href="publicUrl">{{formatMessage('Switch to public poll')}}</a></p>
       <template v-if="!transferingPoll && !askPassword && showPoll">
         <Poll :poll="{participants: participants, closed: poll.closed}" :events="poll.alternative_dates" :userId="activeAttendee.user_id" :loading="transferingPoll"
-              @saveReply="onApplyChanges" @resetPoll="loadPoll" @addParticipant="addParticipant">
+              @saveReply="onApplyChanges" @addParticipant="addParticipant">
 
           <template v-slot:header>
-            <div class="col-md-8 col-sm-12">
-              <h1 class="poll-event">{{poll.event_summary}}</h1>
-              <h2 class="poll-name" v-if="poll.name && poll.name.length > 0">{{poll.name}}</h2>
-            </div>
-            <div class="col-md-4 col-sm-12 text-end">
-              <a :href="poll.config.brandingWeburl">
-                <img style="max-width: 300px; max-height: 80px" :src="`${window.location.origin}/${poll.config.installLogo}`" :alt="poll.config.brandingTitle"/>
-              </a>
-            </div>
-            <div class="row greetings">
-              <div class="col-md-6 col-sm-12 greetings-text">
-                <p>
-                  <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
-                  <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
-                  <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
-                </p>
+            <div class="poll-info">
+              <div class="col-md-8 col-sm-12">
+                <h1 class="poll-event">{{poll.event_summary}}</h1>
+                <h2 class="poll-name" v-if="poll.name && poll.name.length > 0">{{poll.name}}</h2>
               </div>
-              <div class="col-md-6 col-sm-12 text-end">
-                <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
-                <b-btn v-else @click="redirectToTine" variant="primary">{{formatMessage('Login')}}</b-btn>
+              <div class="row greetings">
+                <div class="col-md-6 col-sm-12 greetings-text">
+                  <p>
+                    <span v-if="activeAttendee.id !== null">{{formatMessage('Welcome {name}', {name: activeAttendee.name})}}</span>
+                    <span v-if="poll.config.is_anonymous && poll.locked === '1'"><br />{{formatMessage('This poll is closed. No attendees can be added.')}}</span>
+                    <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is already closed.')}}</span>
+                  </p>
+                </div>
+                <div class="col-md-6 col-sm-12 text-end">
+                  <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
+                  <b-btn v-else @click="redirectToTine" variant="primary">{{formatMessage('Login')}}</b-btn>
+                </div>
               </div>
             </div>
           </template>
@@ -519,6 +516,14 @@ export default {
   color: #555;
 }
 
+div.container {
+  max-width: 90%;
+}
+
+.poll-info {
+  width: 100%;
+}
+
 h1 {
   font-size: 2rem;
   color: #000;
@@ -529,22 +534,8 @@ h2 {
   color: #222;
 }
 
-button {
-  background-color: #DCE8F5;
-  color: #222;
-  border: 1px solid #008CC9;
-}
-
-button:hover {
-  background-color: #FFF;
-  color: #222;
-  border: 1px solid #008CC9;
-}
-
-button:active {
-  background-color: #DCE8F5;
-  color: #222;
-  border: 2px solid #008CC9;
+button.btn {
+  background-color: #0a62a4;
 }
 
 .greetings {

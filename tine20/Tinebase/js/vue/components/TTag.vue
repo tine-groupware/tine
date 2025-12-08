@@ -8,21 +8,30 @@
  */
 -->
 <template>
-  <div class="tag">
+  <div class="tag" :style="{backgroundColor: (tagColor ?? '#3a8acc')}" :class="getColorClass">
     <span v-if="show" class="text" :class="{'text-margin': showClose}" :title="description">{{text}}</span>
     <span v-if="showClose" class="close" @click="closeEvent">&#128473;</span>
   </div>
 </template>
 <script>
+import { contrastColors } from 'Tinebase/js/util/contrastColors'
+
 export default {
   name: 'TTag',
   props: {
     text: String,
     show: { type: Boolean, default: true },
     showClose: { type: Boolean, default: false },
-    description: { type: String, default: '' }
+    description: { type: String, default: '' },
+    tagColor: { type: String, default: null }
   },
   emits: ['close'],
+  computed: {
+    getColorClass () {
+      const brightness = contrastColors.getBrightness(this.tagColor)
+      return brightness > 127 ? 'dark' : 'bright'
+    }
+  },
   methods: {
     closeEvent () {
       if (this.showClose) {
@@ -39,20 +48,21 @@ export default {
   padding: 1px 0.6rem;
   border-radius: 0.6rem;
   height: 1.2rem;
-  background: #3a8acc;
   position: relative;
 }
+
 .text {
   display: block;
-  color: #fff;
   font-size: 0.75rem;
   left: 0.2rem;
   top: 0.1rem;
   cursor: default;
 }
+
 .text-margin {
   margin-right: 0.8rem;
 }
+
 .close {
   display: block;
   position: absolute;
@@ -67,5 +77,13 @@ export default {
   font-size: 0.5rem;
   margin: 0;
   cursor: pointer;
+}
+
+.dark {
+  color: var(--bs-heading-color);
+}
+
+.bright {
+  color: var(--bs-light);
 }
 </style>

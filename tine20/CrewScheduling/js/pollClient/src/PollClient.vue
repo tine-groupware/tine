@@ -11,15 +11,10 @@
           @swapParticipant="swapParticipant"
     >
       <template v-slot:header>
-        <div class="row" v-if="poll">
-          <div class="col-md-8 col-sm-12">
-            <h1>{{formatMessage('Availability Poll')}}</h1>
-            <h3 class="poll-event" v-if="additionalData !== null && additionalData.period_message">{{additionalData.period_message}}</h3>
-            <h3 class="poll-event">
-              <span :style="poll.scheduling_role.color ? {color: poll.scheduling_role.color} : {}">{{poll.scheduling_role.name}}</span><span v-if="poll.site && poll.site.n_fn">, </span>
-              <span v-if="poll.sites && poll.sites.length > 0"> (<span v-for="(pollSite, i) in poll.sites" :style="pollSite.site_id.color ? {color: '#'+pollSite.site_id.color} : {}">{{pollSite.site_id.n_fn}}{{ i < poll.sites.length -1 ? ', ': '' }}</span>)</span>
-              <span v-if="additionalData !== null && additionalData.deadline_message">&nbsp;{{additionalData.deadline_message}}</span>
-            </h3>
+        <div v-if="poll">
+          <div class="poll-info">
+            <h1><span class="title">{{formatMessage('Availability Poll')}}</span> <span class="site-list">{{ getEventTypeList() }}</span></h1>
+            <h3 class="poll-details" v-if="additionalData !== null && additionalData.period_message">{{additionalData.period_message}}</h3>
             <BAlert variant="warning" v-model="poll.account_grants.managePollGrant">
               <h4 class="alert-heading">{{ formatMessage('You are in admin mode') }}</h4>
               <p>{{ formatMessage('Click on the name of a participant to modify their responses.') }}</p>
@@ -198,32 +193,68 @@ export default {
       }
     },
 
-    getPeriodMessage() {
+    getPeriodMessage () {
       let from = format_date(this.poll.from, 'numeric')
       let until = format_date(this.poll.until, 'numeric')
 
-      let events = this.formatMessage('events')
-      if (this.poll.event_types && this.poll.event_types.length > 0) {
-        let eventNames = []
-        this.poll.event_types.every(function (type) {
-          eventNames.push(type.event_type_id.name)
+      let sites = ''
+      if (this.poll.sites && this.poll.sites.length > 0) {
+        let siteNames = []
+        this.poll.sites.every(function (site) {
+          siteNames.push(site.site_id.n_fn)
         })
-        events = eventNames.join(', ')
+        sites = ', ' + siteNames.join(', ')
       }
 
-      return this.formatMessage('For {events} between {from} and {until}', {from: from, until: until, events: events})
+      return this.formatMessage('{from} - {until}', {from: from, until: until}) + sites
+    },
+
+    getEventTypeList () {
+      if (this.poll.event_types && this.poll.event_types.length > 0) {
+        let typeNames = []
+        this.poll.event_types.every(function (type) {
+          typeNames.push(type.event_type_id.name)
+        })
+        return this.formatMessage('for') + ' ' + typeNames.join(', ')
+      }
+      return ''
     }
   }
 }
 </script>
 
 <style>
-  h3.poll-event {
+  div.container {
+    max-width: 90%;
+  }
+
+  h3.poll-details {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  h2.poll-event {
     font-size: 1.25rem;
     font-weight: normal;
   }
-  h2.poll-event {
-    font-size: 1.5rem;
+
+  h1 {
+    font-size: 1.75rem;
     font-weight: normal;
+  }
+  h1 span.site-list {
+    font-size: 1.5rem;
+  }
+
+  h1 span.title {
+    font-weight: bold;
+  }
+
+  .poll-info {
+    width: 100%;
+  }
+
+  div.alert p {
+    margin-bottom: 0;
   }
 </style>

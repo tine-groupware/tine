@@ -82,7 +82,7 @@ export default defineComponent({
 }
 td {
   padding: 0;
-  border: 1px solid #ccc;
+  border: none;
   height: inherit;
 }
 
@@ -91,15 +91,18 @@ td:first-child {
   left: 0;
   background: #fff;
   z-index: 1;
-  box-shadow: inset -1px 0 0 #ccc;
 }
 tr {
   height: 4em;
 }
 tr.active {
   font-weight: bold;
-  border: 2px solid #000;
 }
+
+table.poll tr.active {
+  box-shadow: 0 0 0 1px #000;
+}
+
 tr.inactive {
   font-weight: normal;
 }
