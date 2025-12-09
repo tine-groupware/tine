@@ -187,7 +187,10 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 record: exportJob
             });
         } else {
-            if (this.definition && this.definition.plugin_options_json && !this.definition.plugin_options_json.target) {
+            if (this.definition
+                && this.definition.plugin_options_json
+                && !this.definition.plugin_options_json.target
+                && !this.definition.plugin_options_json.skipLocation) {
                 const locationOptions = [
                     {text: i18n._('Download'), name: 'download'},
                     {text: i18n._('Filemanager'), name: 'filesystem'}
