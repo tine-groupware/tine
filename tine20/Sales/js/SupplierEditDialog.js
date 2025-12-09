@@ -194,13 +194,23 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     listeners: {
                                         scope: this,
                                         select: this.onSelectContactPerson
-                                    }
+                                    },
+                                    additionalFilters: [{
+                                        field: 'container_id',
+                                        operator: 'in',
+                                        value: [{path: Tine.Sales.registry.get('config').customerContactPersonFilter.value}]
+                                    }],
                             }), Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                                     columnWidth: 1/2,
                                     blurOnSelect: true,
                                     name: 'cpintern_id',
                                     allowBlank: true,
-                                    fieldLabel: this.app.i18n._('Contact Person (internal)')
+                                    fieldLabel: this.app.i18n._('Contact Person (internal)'),
+                                    additionalFilters: [{
+                                        field: 'container_id',
+                                        operator: 'in',
+                                        value: [{path: Tine.Sales.registry.get('config').customerContactPersonFilter.value}]
+                                    }],
                                 })
                         ]]
                     }]
