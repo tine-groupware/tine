@@ -416,7 +416,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter): int
     {
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
 
@@ -444,11 +444,21 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         $this->_addFilter($select, $clonedFilters);
 
-        $result = $this->_db->fetchOne($select);
-        
-        return $result;
+        return (int)$this->_db->fetchOne($select);
     }
-    
+
+    /**
+     * Return array with total count of search with $_filter and additional sum / search count columns
+     *  defined by $this->_additionalSearchCountCols
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array with ['totalcount' => x, 'sum_col1' => y, ...]
+     */
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter): array
+    {
+        throw new Tinebase_Exception_NotImplemented();
+    }
+
     /**
      * Updates existing entry
      *

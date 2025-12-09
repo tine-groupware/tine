@@ -153,7 +153,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @param string $_action for right/acl check
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get'): int
     {
         $this->checkFilterACL($_filter, $_action);
         return $this->_backend->searchCount($_filter);

@@ -135,7 +135,7 @@ class Crm_Backend_LeadTest extends TestCase
      */
     public function testGetCountOfLeads()
     {
-        $lead = $this->testCreateLead();
+        $this->testCreateLead();
         
         $filter = $this->_getFilter(TRUE);
         

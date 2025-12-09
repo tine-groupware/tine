@@ -116,7 +116,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @var array
      */
-    protected $_additionalSearchCountCols = array();
+    protected $_additionalSearchCountCols = [];
     
     /**
      * default secondary sort criteria
@@ -633,39 +633,58 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int|array
+     * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter): int
     {
         $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
 
-        $defaultCountCol = $this->_defaultCountCol == self::ALLCOL ?  self::ALLCOL : $this->_db->
-            quoteIdentifier($this->_defaultCountCol);
+        $defaultCountCol = $this->_defaultCountCol == self::ALLCOL
+            ? self::ALLCOL
+            : $this->_db->quoteIdentifier($this->_defaultCountCol);
         
         $searchCountCols = array('count' => 'COUNT(' . $defaultCountCol . ')');
-        foreach ($this->_additionalSearchCountCols as $column => $select) {
-            $searchCountCols['sum_' . $column] = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
-        }
-        
         [$subSelectColumns] = $this->_getColumnsToFetch(self::IDCOL, $_filter);
-        if (!empty($this->_additionalSearchCountCols)) {
-            $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
-        }
-        
+
         $subSelect = $this->_getSelect($subSelectColumns, $getDeleted);
         $this->_addFilter($subSelect, $_filter);
         
         $countSelect = $this->_db->select()->from($subSelect, $searchCountCols);
-        
-        if (!empty($this->_additionalSearchCountCols)) {
-            $result = $this->_db->fetchRow($countSelect);
-        } else {
-            $result = (int)$this->_db->fetchOne($countSelect);
-        }
-        
-        return $result;
+        return (int)$this->_db->fetchOne($countSelect);
     }
-    
+
+    /**
+     * Return array with total count of search with $_filter and additional sum / search count columns
+     *  defined by $this->_additionalSearchCountCols
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array with ['totalcount' => x, 'sum_col1' => y, ...]
+     */
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter): array
+    {
+        $getDeleted = !!$_filter && $_filter->getFilter('is_deleted');
+
+        $defaultCountCol = $this->_defaultCountCol == self::ALLCOL
+            ?  self::ALLCOL
+            : $this->_db->quoteIdentifier($this->_defaultCountCol);
+
+        $searchCountCols = array('totalcount' => 'COUNT(' . $defaultCountCol . ')');
+        foreach ($this->_additionalSearchCountCols as $column => $sum) {
+            if (!$sum instanceof Zend_Db_Expr) {
+                $sum = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
+            }
+            $searchCountCols['sum_' . $column] = $sum;
+        }
+        [$subSelectColumns] = $this->_getColumnsToFetch(self::IDCOL, $_filter);
+        $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
+
+        $subSelect = $this->_getSelect($subSelectColumns, $getDeleted);
+        $this->_addFilter($subSelect, $_filter);
+
+        $countSelect = $this->_db->select()->from($subSelect, $searchCountCols);
+        return $this->_db->fetchRow($countSelect);
+    }
+
     /**
      * returns columns to fetch in first query and if an id/value pair is requested 
      * 

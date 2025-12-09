@@ -71,7 +71,13 @@ class Tinebase_Controller_Group implements Tinebase_Controller_Record_Interface,
         throw new Tinebase_Exception_NotImplemented();
     }
 
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get'): int
+    {
+        throw new Tinebase_Exception_NotImplemented();
+    }
+
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter,
+                                   string $_action = Tinebase_Controller_Record_Abstract::ACTION_GET): array
     {
         throw new Tinebase_Exception_NotImplemented();
     }

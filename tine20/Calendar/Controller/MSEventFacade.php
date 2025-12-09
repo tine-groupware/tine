@@ -231,13 +231,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      * @param string $_action for right/acl check
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get') 
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get'): int
     {
         $eventIds = $this->getExdateResolvedEvents($_filter, $_action);
         
-        return count ($eventIds);
+        return count($eventIds);
     }
-    
+
     /**
      * fetches all events and sorts exceptions into exdate prop for given filter
      * 

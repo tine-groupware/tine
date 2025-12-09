@@ -307,7 +307,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _getSearchTotalCount($filter, $pagination, $controller, $totalCountMethod, $resultCount)
     {
         if ($controller instanceof Timetracker_Controller_Timesheet) {
-            $result = $controller->searchCount($filter);
+            $result = $controller->searchCountSum($filter);
 
             $totalresult = [];
 
@@ -315,7 +315,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $totalresult['totalcountbillable'] = $result['sum_is_billable'];
             $totalresult['totalsum'] = $result['sum_duration'];
             $totalresult['totalsumbillable'] = $result['sum_accounting_time_billable'];
-            $totalresult['totalcount'] = $result['count'];
+            $totalresult['totalcount'] = $result['totalcount'];
             $totalresult['clearedAmount'] = (int)$result['sum_cleared_amount'];
             $totalresult['recordedAmount'] = (int)$result['sum_recorded_amount'];
             if (isset($result['turnOverGoal'])) {

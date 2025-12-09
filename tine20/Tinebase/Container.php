@@ -161,11 +161,24 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @return int
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get'): int
     {
         $this->_addSearchAclFilter($_filter);
-
         return parent::searchCount($_filter);
+    }
+
+    /**
+     * Return array with total count of search with $_filter and additional sum / search count columns
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
+     * @return array
+     */
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter,
+                                   string $_action = Tinebase_Controller_Record_Abstract::ACTION_GET): array
+    {
+        $this->_addSearchAclFilter($_filter);
+        return parent::searchCountSum($_filter);
     }
 
     /**

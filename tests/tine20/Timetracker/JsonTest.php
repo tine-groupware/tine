@@ -25,7 +25,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         // switch back to admin user
         if ($this->_testUser) {
             Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);

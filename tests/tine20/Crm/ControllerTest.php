@@ -29,32 +29,15 @@ class Crm_ControllerTest extends Crm_AbstractTest
     protected $_testContainer;
     
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
-     */
-    protected $backupGlobals = false;
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Crm Controller Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
-
-    /**
      * Sets up the fixture.
      * This method is called before a test is executed.
      *
      * @access protected
      */
     protected function setUp(): void
-{
-        $GLOBALS['Crm_ControllerTest'] = (isset($GLOBALS['Crm_ControllerTest']) || array_key_exists('Crm_ControllerTest', $GLOBALS)) ? $GLOBALS['Crm_ControllerTest'] : array();
-        
+    {
+        parent::setUp();
+
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             Crm_Model_Lead::class,
@@ -62,7 +45,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
             Tinebase_Model_Grants::GRANT_EDIT
         );
         
-        if($personalContainer->count() === 0) {
+        if ($personalContainer->count() === 0) {
             $this->_testContainer = Tinebase_Container::getInstance()->addPersonalContainer(Zend_Registry::get('currentAccount')->accountId, 'Crm', 'PHPUNIT');
         } else {
             $this->_testContainer = $personalContainer[0];
@@ -122,7 +105,6 @@ class Crm_ControllerTest extends Crm_AbstractTest
             'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
-            //'id'                    => 120,
             'note'                  => 'Bla Bla Bla',
             'container_id'                 => $addressbookContainer->id,
             'role'                  => 'Role',
@@ -175,35 +157,21 @@ class Crm_ControllerTest extends Crm_AbstractTest
     }
 
     /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown(): void
-    {
-    }
-
-    /**
      * try to add a lead
      *
      */
     public function testAddLead()
     {
-        $translate = Tinebase_Translation::getTranslation('Tinebase');
+        $translate = Tinebase_Translation::getTranslation();
         
         $lead = $this->_objects['initialLead'];
         $lead->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->_objects['note']));
         $lead = Crm_Controller_Lead::getInstance()->create($lead);
-        // TODO remove this nonsense
-        $GLOBALS['Addressbook_ControllerTest']['leadId'] = $lead->getId();
-        
-        $this->assertEquals($GLOBALS['Addressbook_ControllerTest']['leadId'], $lead->id);
+
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
         
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord('Crm_Model_Lead', $lead->getId());
         
-        //print_r($notes->toArray());
         foreach ($notes as $note) {
             if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED) {
                 $translatedMessage = $translate->_('created') . ' ' . $translate->_('by') . ' ';
@@ -212,6 +180,8 @@ class Crm_ControllerTest extends Crm_AbstractTest
                 $this->assertEquals($this->_objects['note']->note, $note->note);
             }
         }
+
+        return $lead;
     }
     
     /**
@@ -220,9 +190,9 @@ class Crm_ControllerTest extends Crm_AbstractTest
      */
     public function testGetLead()
     {
-        $lead = Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
+        $lead = $this->testAddLead();
+        $lead = Crm_Controller_Lead::getInstance()->get($lead->getId());
         
-        $this->assertEquals($GLOBALS['Addressbook_ControllerTest']['leadId'], $lead->id);
         $this->assertEquals($this->_objects['initialLead']->description, $lead->description);
     }
     
@@ -233,10 +203,10 @@ class Crm_ControllerTest extends Crm_AbstractTest
      */
     public function testUpdateLead()
     {
-        $this->_objects['updatedLead']->id = $GLOBALS['Addressbook_ControllerTest']['leadId'];
+        $lead = $this->testAddLead();
+        $this->_objects['updatedLead']->id = $lead->getId();
         $lead = Crm_Controller_Lead::getInstance()->update($this->_objects['updatedLead']);
         
-        $this->assertEquals($GLOBALS['Addressbook_ControllerTest']['leadId'], $lead->id);
         $this->assertEquals($this->_objects['updatedLead']->description, $lead->description);
     }
 
@@ -246,14 +216,14 @@ class Crm_ControllerTest extends Crm_AbstractTest
      */
     public function testGetAllLeads()
     {
+        $this->testAddLead();
         $filter = $this->_getFilter();
         
         $leads = Crm_Controller_Lead::getInstance()->search($filter);
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
         
         $this->assertEquals(1, count($leads), 'count mismatch');
-        $this->assertEquals($count['totalcount'], count($leads), 'wrong totalcount');
-        $this->assertEquals(1, $count['leadstates'][1], 'leadstates count mismatch');
+        $this->assertEquals($count, count($leads), 'wrong totalcount');
         $this->assertTrue($leads instanceof Tinebase_Record_RecordSet, 'wrong type');
     }
     
@@ -279,11 +249,11 @@ class Crm_ControllerTest extends Crm_AbstractTest
         $task = Tasks_Controller_Task::getInstance()->create($this->_objects['task']);
         
         // link task
-        $lead = Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
+        $lead = $this->testAddLead();
         $lead->relations = array(array(
             'own_model'              => 'Crm_Model_Lead',
             'own_backend'            => 'Sql',
-            'own_id'                 => $GLOBALS['Addressbook_ControllerTest']['leadId'],
+            'own_id'                 => $lead->getId(),
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Tasks_Model_Task',
             'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
@@ -293,9 +263,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
         $lead = Crm_Controller_Lead::getInstance()->update($lead);
         
         // check linked tasks
-        $updatedLead = Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
-        
-        //print_r($updatedLead->toArray());
+        $updatedLead = Crm_Controller_Lead::getInstance()->get($lead->getId());
         
         $this->assertGreaterThan(0, count($updatedLead->relations));
         $this->assertEquals($task->getId(), $updatedLead->relations[0]->related_id);
@@ -325,17 +293,18 @@ class Crm_ControllerTest extends Crm_AbstractTest
      */
     public function testDeleteLead()
     {
-        Crm_Controller_Lead::getInstance()->delete($GLOBALS['Addressbook_ControllerTest']['leadId']);
+        $lead = $this->testAddLead();
+        Crm_Controller_Lead::getInstance()->delete($lead->getId());
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();
-        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $GLOBALS['Addressbook_ControllerTest']['leadId']);
+        $backend->purgeAllRelations('Crm_Model_Lead', 'Sql', $lead->getId());
 
         // delete contact
         Addressbook_Controller_Contact::getInstance()->delete($this->_objects['user']->getId());
         
         $this->expectException('Tinebase_Exception_NotFound');
-        Crm_Controller_Lead::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['leadId']);
+        Crm_Controller_Lead::getInstance()->get($lead->getId());
     }
     
     /**

@@ -256,22 +256,35 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 } else if ($_throwException) {
                     throw new Timetracker_Exception_Deadline();
                 }
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Valid date: ' . $startDate . ' >= ' . $date);
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Valid date: ' . $startDate . ' >= ' . $date);
             }
         }
     }
     
     /****************************** overwritten functions ************************/    
 
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET): array
     {
-        $result = parent::searchCount($_filter, $_action);
+        $result = parent::searchCountSum($_filter, $_action);
 
-        if (class_exists('HumanResources_Config') && Tinebase_Application::getInstance()->isInstalled(HumanResources_Config::APP_NAME, true)
-                    && ($periodFilter = $_filter->findFilterWithoutOr('start_date'))
-                    && ($aFilter = $_filter->findFilterWithoutOr('account_id')) && $aFilter->getOperator() === TMFA::OP_EQUALS
-                    && ($accountId = $aFilter->toArray()['value'] ?? null)) {
+        if (class_exists('HumanResources_Config')
+            && Tinebase_Application::getInstance()->isInstalled(
+                HumanResources_Config::APP_NAME, true)
+        ) {
+            $this->_addHRWorkingTimeInfo($_filter, $result);
+        }
+
+        return $result;
+    }
+
+    protected function _addHRWorkingTimeInfo(Tinebase_Model_Filter_FilterGroup $_filter, array &$result)
+    {
+        if (($periodFilter = $_filter->findFilterWithoutOr('start_date'))
+            && ($aFilter = $_filter->findFilterWithoutOr('account_id')) && $aFilter->getOperator() === TMFA::OP_EQUALS
+            && ($accountId = $aFilter->toArray()['value'] ?? null)) {
+
             $oldEmployeeAcl = HumanResources_Controller_Employee::getInstance()->doContainerACLChecks(false);
             try {
                 $employee = HumanResources_Controller_Employee::getInstance()->search(
@@ -282,7 +295,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 HumanResources_Controller_Employee::getInstance()->doContainerACLChecks($oldEmployeeAcl);
             }
 
-            // ATTENTION employee has been retrieved without ACL check, this code here only used the employee id. Do not use employee data unless checking ACL first!
+            // ATTENTION employee has been retrieved without ACL check, this code here only used the employee id.
+            // Do not use employee data unless checking ACL first!
             if ($employee) {
                 /** @var Tinebase_Model_Filter_Date $periodFilter */
                 try {
@@ -308,7 +322,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         ->getClone();
 
                     $multiplier = 0.0;
-                    for (;(int)$f->format('Y') < (int)$u->format('Y'); $f->addYear(1)) {
+                    for (; (int)$f->format('Y') < (int)$u->format('Y'); $f->addYear(1)) {
                         $daysOfYear = $f->format('L') === '1' ? 366 : 365;
                         $multiplier += ($daysOfYear - (int)$f->format('z')) / $daysOfYear;
                         $f->setDate((int)$f->format('Y'), 1, 1);
@@ -322,8 +336,6 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 $result['workingTimeTarget'] = $this->_getDailyWorkingTimeTarget($employee, $from, $until);
             }
         }
-
-        return $result;
     }
 
     protected function _getDailyWorkingTimeTarget($employee, $from, $until): int
