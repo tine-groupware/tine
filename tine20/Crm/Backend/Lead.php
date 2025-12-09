@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Crm
  * @subpackage  Backend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * 
  */
 
@@ -46,40 +46,20 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
      */
     protected $_defaultCountCol = 'id';
 
-    /**
-     * getGroupCountForField
-     * 
-     * @param $_filter
-     * @param $_field
-     * @return integer
-     * 
-     * @todo generalize
-     */
-    public function getGroupCountForField($_filter, $_field)
+    public function __construct($_dbAdapter = NULL, $_options = array())
     {
-        $select = $this->_db->select();
-        
-        if ($this->_modlogActive) {
-            // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');
-        }
-        
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array(
-            $_field             => $_field,
-            'count'             => 'COUNT(' . $this->_db->quoteIdentifier($_field) . ')',
-        ));
-        $select->group($_field);
-        $this->_addFilter($select, $_filter);
-        
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        parent::__construct($_dbAdapter, $_options);
 
-        $result = array();
-        foreach ($rows as $row) {
-            $result[$row[$_field]] = $row['count'];
-        }
-        
-        return $result;
+        $this->_additionalSearchCountCols = [
+            Crm_Model_Lead::FLD_TURNOVER => Crm_Model_Lead::FLD_TURNOVER,
+            Crm_Model_Lead::FLD_PROBABLE_TURNOVER => new Zend_Db_Expr('SUM('
+                . $this->_db->quoteIdentifier('turnover')
+                . '*' . $this->_db->quoteIdentifier('probability')
+                . '*0.01' . ')'
+            ),
+            // only needed by \Tinebase_Backend_Sql_Abstract::searchCount, for the sub-select query
+            'probability' => 'probability',
+        ];
     }
 
     /**
@@ -89,12 +69,15 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    protected function _getSelect($_cols = '*', $_getDeleted = false)
     {
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         // return probableTurnover (turnover * probability)
-        if ($_cols == '*' || array_key_exists('probableTurnover', (array)$_cols)) {
+        if ($_cols === '*'
+            // TODO find out why we could need this -> we get duplicate columns if we keep this ...
+            // || array_key_exists('probableTurnover', (array)$_cols)
+        ) {
             $select->columns(
                 array('probableTurnover' => '(' . $this->_db->quoteIdentifier($this->_tableName . '.turnover') 
                     . '*' . $this->_db->quoteIdentifier($this->_tableName . '.probability') . '*0.01)'

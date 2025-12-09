@@ -1125,7 +1125,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         ['field' => 'account_id', 'operator' => 'equals', 'value' => $userId],
                 ]);
                 $searchCount = Timetracker_Controller_Timesheet::getInstance()->searchCount($filter);
-                if ($searchCount['count'] === 0) {
+                if ($searchCount === 0) {
                     if ($opts->v) {
                         echo "  User has no timesheets\n";
                     }

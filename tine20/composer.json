@@ -250,8 +250,8 @@
     "rector": "vendor/bin/rector --config=.rector/rector.php"
   },
   "support": {
-    "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
-    "source": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM"
+    "issues": "https://github.com/tine-groupware/tine/issues",
+    "source": "https://github.com/tine-groupware/tine"
   },
   "minimum-stability": "RC"
 }

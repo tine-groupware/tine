@@ -1004,7 +1004,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $docCtrl::dispatchDocument($documentId, $redispatch);
     }
 
-    public function startBatchProcess(array $instructions, array $initialData): array
+    public function createBatchJob(array $instructions, array $initialData): array
     {
         if (empty($instructions) || empty($initialData)) {
             throw new Tinebase_Exception_UnexpectedValue(__METHOD__ . ' requires instructions / initial data');
@@ -1035,7 +1035,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $first = false;
                         $inData = [];
                         foreach ($initialData as $data) {
-                            $inData[$data] = [$data];
+                            $inData['_' . $data] = json_encode([$data]);
                         }
                         $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
                     }
@@ -1061,7 +1061,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $first = false;
                         $inData = [];
                         foreach ($initialData as $data) {
-                            $inData[$data] = [$data];
+                            $inData['_' . $data] = json_encode([$data]);
                         }
                         $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
                     }
@@ -1081,13 +1081,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $first = false;
                         $inData = [];
                         foreach($initialData as $data) {
-                            $inData[$data] = [[
+                            $inData['_' . $data] = json_encode([[
                                 Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => $instruction[2],
                                 Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [[
                                     Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => $instruction[1],
                                     Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $data,
                                 ]],
-                            ]];
+                            ]]);
                         }
                         $step->{Tinebase_Model_BatchJobStep::FLD_IN_DATA} = $inData;
                     } else {

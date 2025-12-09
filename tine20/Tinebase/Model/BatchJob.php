@@ -24,6 +24,7 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
     public const STATUS_RUNNING = 0;
     public const STATUS_PAUSED = 1;
     public const STATUS_DONE = 2;
+    public const STATUS_CANCELLED = 3;
 
 
     public const FLD_TITLE = 'title';
@@ -34,7 +35,9 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
     public const FLD_RUNNING_PROC = 'running_proc';
     public const FLD_STEPS = 'steps';
     public const FLD_EXPECTED_TICKS = 'expected_ticks';
-    public const FLD_TICKS = 'ticks';
+    public const FLD_TICKS_SUCCEEDED = 'ticks_succeeded';
+    public const FLD_TICKS_FAILED = 'ticks_failed';
+    public const FLD_LAST_STATUS_UPDATE = 'last_status_update';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -42,7 +45,7 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => false,
@@ -77,7 +80,11 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_INTEGER,
                 self::DEFAULT_VAL               => 0,
             ],
-            self::FLD_TICKS                 => [
+            self::FLD_TICKS_SUCCEEDED       => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 0,
+            ],
+            self::FLD_TICKS_FAILED          => [
                 self::TYPE                      => self::TYPE_INTEGER,
                 self::DEFAULT_VAL               => 0,
             ],
@@ -94,7 +101,7 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_USER,
                 self::LENGTH                    => 40,
             ],
-            self::FLD_STEPS             => [
+            self::FLD_STEPS                 => [
                 self::TYPE                      => self::TYPE_RECORDS,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
@@ -102,6 +109,10 @@ class Tinebase_Model_BatchJob extends Tinebase_Record_NewAbstract
                     self::REF_ID_FIELD              => Tinebase_Model_BatchJobStep::FLD_BATCH_JOB_ID,
                     self::DEPENDENT_RECORDS         => true,
                 ],
+            ],
+            self::FLD_LAST_STATUS_UPDATE    => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::NULLABLE                  => true,
             ],
         ],
     ];

@@ -235,6 +235,8 @@ class Sales_Controller extends Tinebase_Controller_Event
      */
     public static function bookDocument(string $documentId, string $model): Tinebase_BatchJob_InOutData
     {
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        
         /** @var Sales_Controller_Document_Abstract $docCtrl */
         $docCtrl = $model::getConfiguration()->getControllerInstance();
 
@@ -260,6 +262,8 @@ class Sales_Controller extends Tinebase_Controller_Event
      */
     public static function dispatchDocument(string $documentId, string $model): bool
     {
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         /** @var Sales_Controller_Document_Abstract $docCtrl */
         $docCtrl = $model::getConfiguration()->getControllerInstance();
 
@@ -279,6 +283,8 @@ class Sales_Controller extends Tinebase_Controller_Event
 
     public static function createFollowupDocument(array $documentTransition): Tinebase_BatchJob_InOutData
     {
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         /** @var Sales_Model_Document_Transition $transition */
         $transition = Tinebase_Convert_Factory::factory(Sales_Model_Document_Transition::class)
             ->toTine20Model($documentTransition);
