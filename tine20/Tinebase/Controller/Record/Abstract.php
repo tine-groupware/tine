@@ -373,9 +373,14 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action for right/acl check
-     * @return int|array
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET): int
     {
         $this->_checkRight($_action);
         $this->checkFilterACL($_filter, $_action);
@@ -385,9 +390,37 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Got ' . (is_array($count) ? print_r($count, 1) : $count) . ' search count');
+                . ' Got ' . $count . ' search count');
         }
         
+        return $count;
+    }
+
+    /**
+     * Return array with total count of search with $_filter and additional sum / search count columns
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
+     * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter, string $_action = self::ACTION_GET): array
+    {
+        $this->_checkRight($_action);
+        $this->checkFilterACL($_filter, $_action);
+        $this->_addDefaultFilter($_filter);
+
+        $count = $this->_backend->searchCountSum($_filter);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Got ' . print_r($count, true));
+        }
+
         return $count;
     }
 

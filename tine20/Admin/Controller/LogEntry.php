@@ -104,11 +104,24 @@ class Admin_Controller_LogEntry extends Tinebase_Controller_Record_Abstract
      * @param string $_action for right/acl check
      * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get'): int
     {
         $this->_checkRight('get');
 
         return $this->_backend->searchCount($_filter, $_action);
+    }
+
+    /**
+     * Return array with total count of search with $_filter and additional sum / search count columns
+     *
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
+     * @return array
+     */
+    public function searchCountSum(Tinebase_Model_Filter_FilterGroup $_filter,
+                                   string $_action = Tinebase_Controller_Record_Abstract::ACTION_GET): array
+    {
+        return ['totalcount' => $this->searchCount($_filter, $_action)];
     }
 
     /**

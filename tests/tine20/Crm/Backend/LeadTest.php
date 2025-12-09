@@ -141,7 +141,7 @@ class Crm_Backend_LeadTest extends TestCase
         
         $count = $this->_backend->searchCount($filter);
         
-        $this->assertEquals(1, $count['count']);
+        $this->assertEquals(1, $count);
     }
     
     /**

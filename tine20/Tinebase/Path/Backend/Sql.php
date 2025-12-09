@@ -369,9 +369,9 @@ class Tinebase_Path_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * Gets total count of search with $_filter
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int|array
+     * @return int
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter): int
     {
         return $this->search($_filter)->count();
     }

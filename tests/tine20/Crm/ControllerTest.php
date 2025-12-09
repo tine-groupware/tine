@@ -223,7 +223,7 @@ class Crm_ControllerTest extends Crm_AbstractTest
         $count = Crm_Controller_Lead::getInstance()->searchCount($filter);
         
         $this->assertEquals(1, count($leads), 'count mismatch');
-        $this->assertEquals($count['count'], count($leads), 'wrong totalcount');
+        $this->assertEquals($count, count($leads), 'wrong totalcount');
         $this->assertTrue($leads instanceof Tinebase_Record_RecordSet, 'wrong type');
     }
     

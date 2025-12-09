@@ -305,7 +305,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             && $pagination->limit
             && ($pagination->start != 0 || $resultCount == $pagination->limit)
         ) {
-            $totalCount = $controller->searchCount($filter);
+            $totalCount = $controller->searchCountSum($filter);
         } else {
             $totalCount = $resultCount;
         }
@@ -313,7 +313,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         if (is_array($totalCount)) {
             $result['total'] = [];
             foreach ($totalCount as $key => $value) {
-                if ($key === 'count') {
+                if ($key === 'count' || $key === 'totalcount') {
                     $result['totalcount'] = $value;
                 } else {
                     $result['total'][$key] = $value;
