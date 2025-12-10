@@ -43,8 +43,19 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter = null, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
+        if (isset($_additionalOptions['definitionId'])) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
+            if ($definition->filter) {
+                $filters = $definition->getFilter()->getFilterObjects();
+                foreach ($filters as $filter) {
+                    $_filter->addFilter($filter);
+                }
+                $this->_filter = $_filter;
+            }
+        }
+
         $this->_prefKey = Timetracker_Preference::TSODSEXPORTCONFIG;
         $this->_defaultExportname = 'ts_default_ods';
         
@@ -70,19 +81,19 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
         }
 
         foreach ($_records as $record) {
+            // when a tag name in template field clearValueIfTagNotSet is set, we empty the start_time and end_time
             if ($tag && (!$record->tags || ($record->tags->filter('name', $tag)->count() === 0))) {
                 $record->start_time = null;
                 $record->end_time = null;
             }
-            // when ts with sum tag has accounting factor 0 , we use duration as accounting time
-            if ($record->tags->filter('name', Sales_Export_TimesheetTimeaccount::TAG_SUM)->count() > 0) {
-                if ($record->accounting_time_factor == 0) {
-                    $record->accounting_time = $record->duration;
-                }
-            } else {
-                // when ts without tag has accounting factor 0 , we remove it from the export
-                if ($record->accounting_time_factor == 0) {
+
+            // when template field skipZeroFactorTS is enabled and accounting factor is 0 , we remove it from the export
+            if ($record->accounting_time_factor == 0) {
+                if ($this->_config->skipZeroFactorTS) {
                     $_records->removeRecord($record);
+                } else {
+                    //todo: remove it if it si not needed
+                    //$record->accounting_time = $record->duration;
                 }
             }
 
@@ -131,5 +142,10 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
     protected function _getDataTableName()
     {
         return 'Timesheets';
+    }
+
+    public function skipZeroFactorTS($skip)
+    {
+        $this->_config->__set('skipZeroFactorTS', boolval($skip));
     }
 }
