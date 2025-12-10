@@ -163,14 +163,16 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
             }
             $this->_foreignIds = $this->_valueIsNull ? null : (array) $_value;
             $this->_value = null;
+            if ($this->_valueIsNull) {
+                $this->_setFilterGroup();
+            }
 
         } else {
             // (not)definedBy filter, value contains the subfilter
             $this->_value = (array)$_value;
             $this->_removePrefixes();
+            $this->_setFilterGroup();
         }
-
-        $this->_setFilterGroup();
     }
     
     /**
