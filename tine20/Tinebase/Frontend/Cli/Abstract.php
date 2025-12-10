@@ -297,7 +297,9 @@ class Tinebase_Frontend_Cli_Abstract
             return;
         }
         if ($checkDependencies) {
-            foreach ($className::getRequiredApplications() as $appName) {
+            foreach (array_merge($className::getRequiredApplications(), $className::getOptionalApplications())
+                     as $appName
+            ) {
                 if (Tinebase_Application::getInstance()->isInstalled($appName)) {
                     $cname = $appName . '_Setup_DemoData';
                     if (class_exists($cname)) {
@@ -308,7 +310,7 @@ class Tinebase_Frontend_Cli_Abstract
                                     echo 'Prevent recursive call of self::createDemoData' . PHP_EOL;
                                     continue;
                                 }
-                                echo 'Creating required DemoData of application "' . $appName . '"...' . PHP_EOL;
+                                echo 'Creating DemoData of application "' . $appName . '"...' . PHP_EOL;
                                 $class = new $className2();
                                 $class->createDemoData($_opts, TRUE);
                             }

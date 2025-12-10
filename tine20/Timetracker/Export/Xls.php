@@ -30,6 +30,20 @@ class Timetracker_Export_Xls extends Tinebase_Export_Xls
      */
     protected $_defaultExportname = 'ts_overview_xls';
 
+    /**
+     * holds search sums twig context
+     *
+     * available properties:
+     * [sum_is_billable]
+     * [sum_duration]
+     * [sum_accounting_time_billable]
+     * [sum_cleared_amount]
+     * [sum_recorded_amount]
+     * [turnOverGoal]
+     * [workingTimeTarget]
+     *
+     * @var null
+     */
     protected $_searchCountSum = null;
 
     protected function _onBeforeExportRecords()
@@ -41,7 +55,7 @@ class Timetracker_Export_Xls extends Tinebase_Export_Xls
     protected function _getTwigContext(array $context)
     {
         $context = parent::_getTwigContext($context);
-        $context['_searchCountSum'] = $this->_searchCountSum;
+        $context['searchCountSum'] = $this->_searchCountSum;
         return $context;
     }
 }
