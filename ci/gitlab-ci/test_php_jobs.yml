@@ -28,6 +28,7 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests,nodockerci,nosequential
   after_script:
     - |
       if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
@@ -403,7 +404,7 @@ php-unit-nogitlabci-tests-built-parallel:
     NODE_TOTAL: 1
     NODE_INDEX: 1
     ARG_TEST: AllTests.php
-    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests,nodockerci,noupdate
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,ServerTests,nodockerci,noupdate,nosequential
   needs: []
   stage: test
   timeout: 2h

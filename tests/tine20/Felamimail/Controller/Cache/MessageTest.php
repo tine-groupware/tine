@@ -486,6 +486,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
 
     /**
      * @group noupdate
+     * @group nosequential
      *
      * @return void
      * @throws Felamimail_Exception
@@ -496,8 +497,6 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      */
     public function testTagFlagCachePersistence(): void
     {
-        self::markTestSkipped('fails in sequential test mode...');
-
         $this->_testNeedsTransaction();
         // Get test message
         $message = $this->_emailTestClass->messageTestHelper('multipart_alternative.eml');
@@ -535,8 +534,12 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $this->assertEquals(1, count($result['results'][0]['tags']), 'Message should have tag');
 
         // Clear message from cache (simulates what happens during cache refresh)
-        Felamimail_Controller_Cache_Message::getInstance()->clear($message->folder_id);
-        $this->_controller->updateCache($message->folder_id, 30, 1);
+        $updatedFolder = Felamimail_Controller_Cache_Message::getInstance()->clear($message->folder_id);
+
+        while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
+            $updatedFolder = $this->_controller->updateCache($message->folder_id, 30, 1);
+        }
+
         $result = $json->searchMessages($filter, []);
         $updatedTags = Tinebase_Tags::getInstance()->searchTagsByForeignFilter(new Felamimail_Model_MessageFilter([
             ['field' => 'id', 'operator' => 'in', 'value' => [$result['results'][0]['id']]],
