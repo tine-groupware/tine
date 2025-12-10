@@ -30,18 +30,18 @@ class Timetracker_Export_Xls extends Tinebase_Export_Xls
      */
     protected $_defaultExportname = 'ts_overview_xls';
 
-    protected $_searchCount = null;
+    protected $_searchCountSum = null;
 
     protected function _onBeforeExportRecords()
     {
         parent::_onBeforeExportRecords();
-        $this->_searchCount = $this->_controller->searchCount($this->_filter);
+        $this->_searchCountSum = $this->_controller->searchCountSum($this->_filter);
     }
 
     protected function _getTwigContext(array $context)
     {
         $context = parent::_getTwigContext($context);
-        $context['searchCount'] = $this->_searchCount;
+        $context['_searchCountSum'] = $this->_searchCountSum;
         return $context;
     }
 }
