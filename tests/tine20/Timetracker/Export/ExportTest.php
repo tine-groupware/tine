@@ -59,6 +59,59 @@ class Timetracker_Export_ExportTest extends Timetracker_AbstractTest
     }
 
     /**
+     * try to export Timesheets (as ods)
+     */
+    public function testExportTimesheetsOdsSkipZeroFactorTS()
+    {
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_default_ods');
+
+        // create
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+
+        $this->_deleteTimeSheets[] = $timesheetData['id'];
+        $this->_deleteTimeAccounts[] = $timesheetData['timeaccount_id']['id'];
+
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        // export & check
+        $odsExportClass = Tinebase_Export::factory(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()), ['format' => 'ods']);
+        $result = $odsExportClass->generate();
+
+        $xmlBody = $odsExportClass->getDocument()->asXML();
+        $dom = new DOMDocument();
+        $dom->loadXML($xmlBody);
+        $xpath = new DOMXPath($dom);
+        $allRows = $xpath->query('//table:table-row');
+        $tableData = [];
+        foreach ($allRows as $row) {
+            $rowData = [];
+            $cells = $xpath->query('.//table:table-cell', $row);
+            foreach ($cells as $cell) {
+                $rowData[] = $cell->textContent;
+            }
+            $tableData[] = $rowData;
+        }
+        $this->assertEquals(3, $allRows->length, '1 timesheet should be exported');
+
+        $timesheet = Timetracker_Controller_Timesheet::getInstance()->get($timesheetData['id']);
+        $timesheet->accounting_time_factor = 0;
+        $timesheet = Timetracker_Controller_Timesheet::getInstance()->update($timesheet);
+
+        $odsExportClass->skipZeroFactorTS(true);
+        $result = $odsExportClass->generate();
+        $xmlBody = $odsExportClass->getDocument()->asXML();
+        $dom = new DOMDocument();
+        $dom->loadXML($xmlBody);
+        $xpath = new DOMXPath($dom);
+        $allRows = $xpath->query('//table:table-row');
+        $this->assertEquals(2, $allRows->length, '0 timesheet should be exported');
+
+        unlink($result);
+    }
+
+    /**
      * try to export Timesheets (as ods) with definition id
      */
     public function testExportTimesheetsOdsWithDefId()

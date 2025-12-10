@@ -6,6 +6,8 @@
     <plugin>Timetracker_Export_Ods_Timesheet</plugin>
     <description>standard rechnungs export</description>
     <customFields>1</customFields>
+    <!--if set to 1, the timesheets with accounting_time_factor = 0 will be removed-->
+    <skipZeroFactorTS>0</skipZeroFactorTS>
     <header>1</header>
     <headers>
         <header>{date}</header>

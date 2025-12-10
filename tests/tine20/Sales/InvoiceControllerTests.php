@@ -2107,13 +2107,20 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertStringContainsString('ts without tag', $xmlBody, 'timesheet without tag should be exported');
         $this->assertStringNotContainsString('05:00:00', $xmlBody, 'timesheet start time should not be set');
 
-        $this->assertStringNotContainsString('ts without tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should not be exported');
-
         $this->assertStringContainsString('ts with tag', $xmlBody, 'timesheet with tag should be exported');
         $this->assertStringContainsString('06:00:00', $xmlBody, 'start time with tag should be set');
 
+        // test skipZeroFactorTS = 0
+        $this->assertStringContainsString('ts without tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should be exported');
         $this->assertStringContainsString('ts with tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should be exported');
-        $this->assertStringContainsString('2.25', $xmlBody, 'ts with accounting time factor 0 should export duration as accounting time');
+
+        // test skipZeroFactorTS = 1
+        $export->skipZeroFactorTS(true);
+        $result = $export->generate();
+        $xmlBody = $export->getDocument()->asXML();
+
+        $this->assertStringNotContainsString('ts without tag and factor is 0', $xmlBody, 'ts with accounting time factor 0 should not be exported');
+        $this->assertStringNotContainsString('ts with tag and factor is 0', $xmlBody, 'ts with tag and accounting time factor 0 should be exported');
 
         // cleanup / delete file
         unlink($result);
