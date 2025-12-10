@@ -2,9 +2,9 @@
  * Tine 2.0
  * 
  * @package     Crm
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -19,10 +19,10 @@ Ext.namespace('Tine.Crm');
  * <p>Lead Grid Details Panel</p>
  * <p>
  * </p>
- * 
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     
@@ -112,10 +112,95 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
             fields: ['id', 'label', 'total'],
             id: 'id'
         });
-        
+
+        this.defaultTpl = new Ext.XTemplate(
+            '<div class="preview-panel-timesheet-nobreak">',
+            '<!-- Preview timeframe -->',
+            '<div class="preview-panel preview-panel-timesheet-left">',
+            '<div class="bordercorner_1"></div>',
+            '<div class="bordercorner_2"></div>',
+            '<div class="bordercorner_3"></div>',
+            '<div class="bordercorner_4"></div>',
+            '<div class="preview-panel-declaration">' /*+ this.app.i18n._('timeframe')*/ + '</div>',
+            '<div class="preview-panel-timesheet-leftside preview-panel-left">',
+            '<span class="preview-panel-bold">',
+            /*'First Entry'*/'<br/>',
+            /*'Last Entry*/'<br/>',
+            /*'Duration*/'<br/>',
+            '<br/>',
+            '</span>',
+            '</div>',
+            '<div class="preview-panel-timesheet-rightside preview-panel-left">',
+            '<span class="preview-panel-nonbold">',
+            '<br/>',
+            '<br/>',
+            '<br/>',
+            '<br/>',
+            '</span>',
+            '</div>',
+            '</div>',
+            '<!-- Preview summary -->',
+            '<div class="preview-panel-timesheet-right">',
+            '<div class="bordercorner_gray_1"></div>',
+            '<div class="bordercorner_gray_2"></div>',
+            '<div class="bordercorner_gray_3"></div>',
+            '<div class="bordercorner_gray_4"></div>',
+            '<div class="preview-panel-declaration">'/* + this.app.i18n._('summary')*/ + '</div>',
+            '<div class="preview-panel-timesheet-leftside preview-panel-left">',
+            '<span class="preview-panel-bold">',
+            this.app.i18n._('Total Leads') + '<br/>',
+            this.app.i18n._('Total Turnover') + '<br/>',
+            this.app.i18n._('Total Probable Turnover') + '<br/>',
+            '</span>',
+            '</div>',
+            '<div class="preview-panel-timesheet-rightside preview-panel-left">',
+            '<span class="preview-panel-nonbold">',
+            '{count}<br/>',
+            '{turnover}<br/>',
+            '{probableturnover}<br/>',
+            '</span>',
+            '</div>',
+            '</div>',
+            '</div>'
+        );
+
         this.supr().initComponent.call(this);
     },
-    
+
+    showDefault: function(body) {
+
+        var data = {
+            count: this.gridpanel.store.proxy.jsonReader.jsonData?.totalcount ?? 0,
+            turnover: Ext.util.Format.money(
+                this.gridpanel.store.proxy.jsonReader.jsonData?.total.sum_turnover ?? 0
+            ),
+            probableturnover: Ext.util.Format.money(
+                this.gridpanel.store.proxy.jsonReader.jsonData?.total.sum_probableTurnover ?? 0
+            ),
+        };
+
+        if (body) {
+            this.defaultTpl.overwrite(body, data);
+        }
+    },
+
+    showMulti: function(sm, body) {
+
+        var data = {
+            count: sm.getCount(),
+            turnover: 0,
+            probableturnover: 0
+        };
+        sm.each(function(record){
+            data.turnover = data.turnover + parseFloat(record.data.turnover ?? 0);
+            data.probableturnover = data.probableturnover + parseFloat(record.data.probableTurnover ?? 0);
+        });
+        data.turnover = Ext.util.Format.money(data.turnover);
+        data.probableturnover = Ext.util.Format.money(data.probableturnover);
+
+        this.defaultTpl.overwrite(body, data);
+    },
+
     /**
      * default panel w.o. data
      * 
@@ -281,22 +366,5 @@ Tine.Crm.LeadGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
      */
     updateDetails: function(record, body) {
         this.getSingleRecordPanel().loadRecord.defer(100, this.getSingleRecordPanel(), [record]);
-    },
-    
-    /**
-     * show default panel
-     * 
-     * @param {Mixed} body
-     */
-    showDefault: function(body) {
-    },
-    
-    /**
-     * show template for multiple rows
-     * 
-     * @param {Ext.grid.RowSelectionModel} sm
-     * @param {Mixed} body
-     */
-    showMulti: function(sm, body) {
     }
 });

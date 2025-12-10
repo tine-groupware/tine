@@ -33,15 +33,18 @@ class Crm_NotificationsTests extends Crm_AbstractTest
     }
 
     /**
-     * @param false $addCf
-     * @param bool $addTags
-     * @param false $mute
+     * get lead
+     *
+     * @param boolean $addCf
+     * @param boolean $addTags
+     * @param boolean $mute
      * @param string $name
+     * @param ?string $containerId
      * @return Crm_Model_Lead
      */
-    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit')
+    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit', $containerId = null)
     {
-        return parent::_getLead($addCf, $addTags, $mute, 'PHPUnit LEAD ' . Tinebase_Record_Abstract::generateUID(10));
+        return parent::_getLead($addCf, $addTags, $mute, 'PHPUnit LEAD ' . Tinebase_Record_Abstract::generateUID(10), $containerId);
     }
 
     /**

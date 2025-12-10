@@ -38,9 +38,15 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $paging
      * @return array
      */
-    public function searchLeads($filter, $paging)
+    public function searchLeads($filter, $paging): array
     {
-        return $this->_search($filter, $paging, Crm_Controller_Lead::getInstance(), 'Crm_Model_LeadFilter', array('Addressbook_Model_Contact', 'Sales_Model_Product'));
+        return $this->_search($filter,
+            $paging,
+            Crm_Controller_Lead::getInstance(),
+            Crm_Model_LeadFilter::class,
+            [Addressbook_Model_Contact::class, Sales_Model_Product::class],
+            self::TOTALCOUNT_CONTROLLER_SUM
+        );
     }
     
     /**

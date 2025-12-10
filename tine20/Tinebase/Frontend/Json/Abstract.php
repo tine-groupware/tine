@@ -25,9 +25,15 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     public const TOTALCOUNT_CONTROLLER  = 'controller';
 
     /**
+     * always get count with searchCountSum() from controller
+     */
+    public const TOTALCOUNT_CONTROLLER_SUM = 'controller_sum';
+
+    /**
      * get totalcount by just counting resultset
      */
     public const TOTALCOUNT_COUNTRESULT = 'countresult';
+
 
     public const REQUEST_CONTEXT_EXPANDER = 'expander';
 
@@ -301,9 +307,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $this->_setRequestContext($controller);
         }
 
-        if ($totalCountMethod === self::TOTALCOUNT_CONTROLLER
+        if ($totalCountMethod === self::TOTALCOUNT_CONTROLLER_SUM
+            || ($totalCountMethod === self::TOTALCOUNT_CONTROLLER
             && $pagination->limit
-            && ($pagination->start != 0 || $resultCount == $pagination->limit)
+            && ($pagination->start != 0 || $resultCount == $pagination->limit))
         ) {
             $totalCount = $controller->searchCountSum($filter);
         } else {

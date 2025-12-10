@@ -669,14 +669,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             : $this->_db->quoteIdentifier($this->_defaultCountCol);
 
         $searchCountCols = array('totalcount' => 'COUNT(' . $defaultCountCol . ')');
+        $sumSubselectCols = [];
         foreach ($this->_additionalSearchCountCols as $column => $sum) {
             if (!$sum instanceof Zend_Db_Expr) {
                 $sum = new Zend_Db_Expr('SUM(' . $this->_db->quoteIdentifier($column) . ')');
+                $sumSubselectCols[] = $column;
             }
             $searchCountCols['sum_' . $column] = $sum;
         }
         [$subSelectColumns] = $this->_getColumnsToFetch(self::IDCOL, $_filter);
-        $subSelectColumns = array_merge($subSelectColumns, $this->_additionalSearchCountCols);
+        $subSelectColumns = array_merge($subSelectColumns, $sumSubselectCols);
 
         $subSelect = $this->_getSelect($subSelectColumns, $getDeleted);
         $this->_addFilter($subSelect, $_filter);
