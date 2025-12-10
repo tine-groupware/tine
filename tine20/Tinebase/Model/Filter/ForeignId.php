@@ -88,7 +88,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
             return;
         }
 
-        if ($this->_doJoin && in_array($this->_operator, ['definedBy', 'notDefinedBy'])) {
+        if ($this->_doJoin && $this->_filterGroup) {
             $groupSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
             $joinBackend = $this->_getController()->getBackend();
             $mc = $this->_getController()->getModel()::getConfiguration();
@@ -120,7 +120,7 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_ForeignRecor
             return;
         }
 
-        if (! is_array($this->_foreignIds)) {
+        if ($this->_filterGroup) {
             $this->_foreignIds = $this->_getController()->search($this->_filterGroup, null, false, true);
         }
 
