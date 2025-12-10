@@ -157,11 +157,13 @@ class Crm_JsonTest extends Crm_AbstractTest
     
     /**
      * @param boolean $addCf
+     * @param string $name
+     * @param ?string $containerId
      * @return array
      */
-    public function saveLead($addCf = false)
+    public function saveLead($addCf = false, $name = 'PHPUnit LEAD', $containerId = null): array
     {
-        $leadData = $this->_getLeadArrayWithRelations($addCf);
+        $leadData = $this->_getLeadArrayWithRelations($addCf, name: $name, containerId: $containerId);
         return $this->_getUit()->saveLead($leadData);
     }
     
@@ -636,12 +638,29 @@ class Crm_JsonTest extends Crm_AbstractTest
         $result = $this->_getUit()->searchLeads($leadFilters, ['limit' => 1]);
         self::assertGreaterThanOrEqual(1, $result['totalcount']);
         self::assertCount(1, $result['filter']);
+    }
+
+    public function testSearchCountSum()
+    {
+        $container = $this->_getTestContainer('Crm', Crm_Model_Lead::class)->getId();
+        $this->saveLead(name: 'first lead', containerId: $container);
+        $this->saveLead(name: 'another lead', containerId: $container);
+        $filter = [
+            [
+                'field' => 'container_id',
+                'operator' => 'equals',
+                'value' => $container
+            ]
+        ];
+
+        $result = $this->_getUit()->searchLeads($filter, []);
+        self::assertGreaterThanOrEqual(2, $result['totalcount']);
 
         self::assertArrayHasKey('total', $result);
         foreach ([
-            'sum_' . Crm_Model_Lead::FLD_PROBABLE_TURNOVER => 140,
-            'sum_' . Crm_Model_Lead::FLD_TURNOVER => 200
-        ] as $sumField => $expectedValue) {
+                     'sum_' . Crm_Model_Lead::FLD_PROBABLE_TURNOVER => 280,
+                     'sum_' . Crm_Model_Lead::FLD_TURNOVER => 400
+                 ] as $sumField => $expectedValue) {
             self::assertArrayHasKey($sumField, $result['total'], print_r($result['total'], true));
             $this->assertEquals($expectedValue, $result['total'][$sumField], ' mismatch '
                 . print_r($result['total'], true));

@@ -126,9 +126,10 @@ class Crm_AbstractTest extends TestCase
      * @param boolean $addTags
      * @param boolean $mute
      * @param string $name
+     * @param ?string $containerId
      * @return Crm_Model_Lead
      */
-    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
+    protected function _getLead($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD', $containerId = null)
     {
         if ($addCf) {
             $cfc = Tinebase_CustomFieldTest::getCustomField(array(
@@ -160,7 +161,7 @@ class Crm_AbstractTest extends TestCase
             'leadstate_id'  => 1,
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
-            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
+            'container_id'  => $containerId ?? Tinebase_Container::getInstance()->getDefaultContainer(Crm_Model_Lead::class)->getId(),
             'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,
@@ -180,13 +181,14 @@ class Crm_AbstractTest extends TestCase
      * @param boolean $addTags
      * @param boolean $mute
      * @param string $name
+     * @param ?string $containerId
      * @return array
      */
-    protected function _getLeadArrayWithRelations($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD')
+    protected function _getLeadArrayWithRelations($addCf = false, $addTags = true, $mute = false, $name = 'PHPUnit LEAD', $containerId = null)
     {
         $contact    = $this->_getCreatedContact();
         $task       = $this->_getCreatedTask();
-        $lead       = $this->_getLead($addCf, $addTags, $mute, $name);
+        $lead       = $this->_getLead($addCf, $addTags, $mute, $name, $containerId);
         $product    = Sales_Controller_Product::getInstance()->create($this->_getProduct());
         $responsible = Addressbook_Controller_Contact::getInstance()->getContactByUserId(
             Tinebase_Core::getUser()->getId()
