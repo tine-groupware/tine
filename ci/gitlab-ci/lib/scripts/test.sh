@@ -100,7 +100,9 @@ test_composer_install() {
     COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
     popd
 
-    if [ ! -d $VENDOR_CACHE_DIR ]; then
+    # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
+    # Unless the pipeline is rerun for the same commit.
+    if [ ! -d $VENDOR_CACHE_DIR ] && [ "${CI_IS_CUSTOMAPP}" != "true" ]; then
         log "storing vendor dir as cache"
         cp -r ${TINE20ROOT}/tine20/vendor $VENDOR_CACHE_DIR || log "storing vendor dir failed. continuing"
     fi

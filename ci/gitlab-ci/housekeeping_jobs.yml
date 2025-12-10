@@ -36,6 +36,7 @@ cache-cleanup:
     - cache_cleanup_vendor_dir_cache
     - cache_cleanup_npm_dir_cache
     - cache_cleanup_phpstan_cache
+    - metrics_lifetime
     - test -f /custom-cache/metrics.sh && /custom-cache/metrics.sh || echo "no metrics script"
   interruptible: false
   rules:
