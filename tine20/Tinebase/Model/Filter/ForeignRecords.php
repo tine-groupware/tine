@@ -111,7 +111,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
             return;
         }
 
-        if (! is_array($this->_foreignIds) && null !== $this->_filterGroup) {
+        if (null !== $this->_filterGroup) {
             $this->_foreignIds = array_keys($this->_getController()
                 ->search($this->_filterGroup, null, false, $this->_options['refIdField']));
         }
