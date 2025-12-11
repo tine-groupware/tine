@@ -32,7 +32,7 @@ class CrewScheduling_Export_PdfMock extends CrewScheduling_Export_Pdf
      */
     public function __construct(
         Tinebase_Model_Filter_FilterGroup $_filter,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?Tinebase_Controller_Record_Interface $_controller = null,
         $_additionalOptions = array()
     ) {
         parent::__construct($_filter, $_controller, $_additionalOptions);

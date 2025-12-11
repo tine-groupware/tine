@@ -14,10 +14,10 @@ class Setup_Backend_Schema_TableTest extends Setup_Backend_AbstractTest
         $table = $this->_table;
         $this->assertTrue($table->isValid(), 'Test if a valid field is correctly marked as valid');
         $this->assertTrue($table->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
-        
+
         $table->setName(str_pad('A', 24, 'a'));
         $this->assertFalse($table->isValid(), 'Test if a too long field name is invalid');
-        
+
         $this->expectException('Setup_Exception_InvalidSchema');
         $table->isValid(true); //Test if the parameter throwException works as expected
     }

@@ -43,7 +43,7 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      * @param Tinebase_Controller_Record_Interface $_controller (optional)
      * @param array $_additionalOptions (optional) additional options
      */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter = null, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(?Tinebase_Model_Filter_FilterGroup $_filter = null, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         if (isset($_additionalOptions['definitionId'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);

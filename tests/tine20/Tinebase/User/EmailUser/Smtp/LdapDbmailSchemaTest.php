@@ -162,9 +162,9 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends \PHPUnit\Framewo
     {
         // add smtp user
         $user = $this->testAddUser();
-        
+
         $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
-        
+
         //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
 }

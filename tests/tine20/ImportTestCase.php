@@ -71,7 +71,7 @@ abstract class ImportTestCase extends TestCase
      * @throws Tinebase_Exception_NotFound
      * @return array
      */
-    protected function _doImport(array $_options = array(), $_definition = null, Tinebase_Model_Filter_FilterGroup $_exportFilter = null, $clientRecordData = [], $replacements = null)
+    protected function _doImport(array $_options = array(), $_definition = null, ?Tinebase_Model_Filter_FilterGroup $_exportFilter = null, $clientRecordData = [], $replacements = null)
     {
         if ((! $this->_importerClassName || ! $this->_modelName) && ! $_definition) {
             throw new Tinebase_Exception_NotFound('No import class or model name given');

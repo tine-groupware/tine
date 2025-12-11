@@ -820,7 +820,7 @@ class Courses_JsonTest extends TestCase
      * @param boolean $removeGroupList
      * @return array course data
      */
-    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition = NULL, $_useJsonImportFn = FALSE, $removeGroupList = FALSE)
+    protected function _importHelper($_filename, ?Tinebase_Model_ImportExportDefinition $_definition = NULL, $_useJsonImportFn = FALSE, $removeGroupList = FALSE)
     {
         $definition = ($_definition !== NULL) ? $_definition : $this->_getCourseImportDefinition();
         

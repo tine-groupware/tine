@@ -331,7 +331,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @throws Tinebase_Exception_Record_Validation
      */
     protected function _createSharedTag(array $tagData = [],
-                                        array $context = null,
+                                        ?array $context = null,
                                         string $user = 'current'): Tinebase_Model_Tag
     {
         $sharedTag = new Tinebase_Model_Tag(array_merge([
@@ -1437,7 +1437,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return $content;
     }
 
-    protected function _genericCsvExport(array $config, Tinebase_Model_Filter_FilterGroup $filter = null)
+    protected function _genericCsvExport(array $config, ?Tinebase_Model_Filter_FilterGroup $filter = null)
     {
         if (isset($config['definitionName'])) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($config['definitionName']);
