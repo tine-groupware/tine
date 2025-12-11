@@ -166,7 +166,7 @@ class ActiveSync_TimezoneConverterTest extends \PHPUnit\Framework\TestCase
             $result = $this->_uit->getListOfTimezones($packedTimezoneInfo);
             $this->assertTrue((isset($result[$timezoneIdentifier]) || array_key_exists($timezoneIdentifier, $result)));
             $this->assertEquals($timezoneAbbr, $result[$timezoneIdentifier]);
-            
+
 //            $result = $this->_uit->getTimezoneForPackedTimezoneInfo($packedTimezoneInfo);
 //            $this->assertEquals($timezoneIdentifier, $result);
         }

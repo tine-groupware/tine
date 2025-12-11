@@ -201,7 +201,7 @@ class Inventory_Import_CsvTest extends \PHPUnit\Framework\TestCase
      * @param Inventory_Model_InventoryItemFilter $_exportFilter
      * @return array
      */
-    protected function _doImport(array $_options, $_definition, Inventory_Model_InventoryItemFilter $_exportFilter = NULL)
+    protected function _doImport(array $_options, $_definition, ?Inventory_Model_InventoryItemFilter $_exportFilter = NULL)
     {
         $definition = ($_definition instanceof Tinebase_Model_ImportExportDefinition) ? $_definition : Tinebase_ImportExportDefinition::getInstance()->getByName($_definition);
         $this->_instance = Inventory_Import_Csv::createFromDefinition($definition, $_options);

@@ -62,7 +62,7 @@ class SSO_Facade_OAuth2_BearerTokenValidator implements AuthorizationValidatorIn
      * @param AccessTokenRepositoryInterface $accessTokenRepository
      * @param \DateInterval|null $jwtValidAtDateLeeway
      */
-    public function __construct(AccessTokenRepositoryInterface $accessTokenRepository, SSO_Facade_OpenIdConnect_UserRepository $userRep, \DateInterval $jwtValidAtDateLeeway = null)
+    public function __construct(AccessTokenRepositoryInterface $accessTokenRepository, SSO_Facade_OpenIdConnect_UserRepository $userRep, ?\DateInterval $jwtValidAtDateLeeway = null)
     {
         $this->accessTokenRepository = $accessTokenRepository;
         $this->jwtValidAtDateLeeway = $jwtValidAtDateLeeway;

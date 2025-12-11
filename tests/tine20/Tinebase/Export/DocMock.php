@@ -19,8 +19,8 @@ class Tinebase_Export_DocMock
      * @param array $_additionalOptions (optional) additional options
      */
     public function __construct(
-        Tinebase_Model_Filter_FilterGroup $_filter = null,
-        Tinebase_Controller_Record_Interface $_controller = null,
+        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+        ?Tinebase_Controller_Record_Interface $_controller = null,
         array $_additionalOptions = [],
         $_previewService = null
     ) {}

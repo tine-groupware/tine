@@ -513,9 +513,9 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
 
         $body = $this->_getController()->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account, true);
-        
+
         $this->assertStringContainsString('würde', $body);
-        
+
         // @todo check for seen flag
     }
     
@@ -769,7 +769,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     public function testGetCompleteMessageDifferentEncoding()
     {
         $cachedMessage = $this->messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
-        
+
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
         $this->assertEquals('text/plain', $message->content_type);
         $this->assertStringContainsString('Umlaute UTF8 Text + ISO-8859-15 Signatur', $message->subject);

@@ -17,7 +17,7 @@ class Setup_Backend_Schema_IndexTest extends Setup_Backend_AbstractTest
                         <name>a</name>
                     </field>
                 </index>";
-        
+
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
 
         $this->assertTrue($index->isValid(), 'Test if a valid field is correctly marked as valid');
@@ -30,7 +30,7 @@ class Setup_Backend_Schema_IndexTest extends Setup_Backend_AbstractTest
                         <name>" . str_pad('A', 23, 'a') . "</name>
                     </field>
                 </index>";
-        
+
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
         $this->asserttrue($index->isValid(), 'Test if the maximum field name length is still valid');
 
@@ -44,11 +44,11 @@ class Setup_Backend_Schema_IndexTest extends Setup_Backend_AbstractTest
                         <name>" . str_pad('A', 23, 'a') . "</name>
                     </field>
                 </index>";
-        
+
         $index = Setup_Backend_Schema_Index_Factory::factory('Xml', $string);
-        
+
         $this->assertFalse($index->isValid(), 'Test if a too long field name is invalid');
-        
+
         $this->expectException('Setup_Exception_InvalidSchema');
         $index->isValid(true); //Test if the parameter throwException works as expected
     }

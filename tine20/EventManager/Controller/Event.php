@@ -43,7 +43,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $this->_doContainerACLChecks = false;
     }
 
-    public function updateStatistics(string $event_id, string $registration_id = null, bool $is_update = false): void
+    public function updateStatistics(string $event_id, ?string $registration_id = null, bool $is_update = false): void
     {
         $this->_handleDependentRecords = false;
         try {

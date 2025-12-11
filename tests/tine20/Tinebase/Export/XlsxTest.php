@@ -136,13 +136,13 @@ class Tinebase_Export_XlsxTest extends TestCase
 
         $reader = IOFactory::createReader('Xlsx');
         $doc = $reader->load($tmpFile);
-        
+
         // CZ is enough for contact, but to allow growth DZ is on the safe side
         $arrayData = $doc->getActiveSheet()->rangeToArray('A3:DZ3');
-        
+
         // Testing twig date format
         static::assertEquals('Jan 2, 2000', $arrayData[0][0]);
-        
+
         // @todo test all other twig functions here! :-)
     }
 

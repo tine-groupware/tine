@@ -181,22 +181,22 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent(TRUE);
         $event->attendee = $this->_getPersonaAttendee('pwulf, sclever');
-        
+
         $tempFileBackend = new Tinebase_TempFile();
         $tempFile = $tempFileBackend->createTempFile(dirname(dirname(dirname(__FILE__))) . '/Filemanager/files/test.txt');
         $event->attachments = array(array('tempFile' => array('id' => $tempFile->getId())));
-        
+
         self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
-        
+
         $messages = self::getMessages();
-        
+
         $this->assertEquals(2, count($messages));
         $parts = $messages[0]->getParts();
         $this->assertEquals(2, count($parts));
         $fileAttachment = $parts[1];
         $this->assertEquals('text/plain; name="=?utf-8?Q?tempfile.tmp?="', $fileAttachment->type);
-        
+
         $this->_assertMail('pwulf', 'SENT-BY="mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '":mailto:', 'ics');
         $this->_assertMail('pwulf', 'RSVP=TRUE;EMAIL=' . $this->_personas['pwulf']->accountEmailAddress, 'ics');
         $this->_assertMail('pwulf', 'RSVP=FALSE;EMAIL=' . $this->_personas['sclever']->accountEmailAddress, 'ics');

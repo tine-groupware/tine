@@ -21,13 +21,13 @@ class Setup_Backend_Schema_FieldTest extends Setup_Backend_AbstractTest
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->assertTrue($field->isValid(), 'Test if a valid field is correctly marked as valid');
         $this->assertTrue($field->isValid(true), 'Test if no Exception is thrown on validating a valid field is correctly marked as valid');
-        
+
         $field->setName(str_pad('A', 23, 'a'));
         $this->asserttrue($field->isValid(), 'Test if the maximum field name length is still valid');
-        
+
         $field->setName(str_pad('A', 24, 'a'));
         $this->assertFalse($field->isValid(), 'Test if a too long field name is invalid');
-        
+
         $this->expectException('Setup_Exception_InvalidSchema');
         $field->isValid(true); //Test if the parameter throwException works as expected
     }

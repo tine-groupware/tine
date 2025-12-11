@@ -154,20 +154,20 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
-        
+
         $this->assertSame(207, $this->response->status);
-        
+
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
         //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
         $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
-        
+
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-read-for');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
-        
+
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cs:calendar-proxy-write-for');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
@@ -206,9 +206,9 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
-        
+
         $this->assertSame(207, $this->response->status);
-        
+
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
         //$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
@@ -216,11 +216,11 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
         $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
         $xpath->registerNamespace('cs',  'http://calendarserver.org/ns/');
         $xpath->registerNamespace('d',  'DAV');
-        
+
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-home-set');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
-        
+
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/d:principal-URL');
         $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
         #$this->assertEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());

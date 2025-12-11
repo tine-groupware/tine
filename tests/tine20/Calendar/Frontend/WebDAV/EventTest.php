@@ -709,9 +709,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     public function testGetRepeatingVCalendar()
     {
         $event = $this->testCreateRepeatingEvent();
-    
+
         $event = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], $event->getRecord()->getId());
-        
+
         $vcalendar = stream_get_contents($event->get());
         #var_dump($vcalendar);
         $this->assertStringContainsString('SUMMARY:New Event', $vcalendar);

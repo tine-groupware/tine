@@ -228,10 +228,10 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $firstInstanceException = $events->getFirstRecord();
         $location = 'At Home';
         $firstInstanceException->location = $location;
-    
+
         $result = $this->_controller->update($firstInstanceException, FALSE, Calendar_Model_Event::RANGE_ALL);
         $this->assertEquals($result->location, $location);
-        
+
         // @todo check other instances?
     }
     
