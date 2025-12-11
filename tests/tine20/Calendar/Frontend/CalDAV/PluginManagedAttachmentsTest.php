@@ -186,7 +186,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
-        
+
         $request = new Sabre\HTTP\Request('POST', '/calendars/' .
             Tinebase_Core::getUser()->contact_id . '/'.
             $event->getRecord()->container_id . '/' .
@@ -195,10 +195,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
             'CONTENT-DISPOSITION' => 'attachment;filename=agenda.txt',
             'DEPTH'     => '0',
         ]);
-        
+
         $agenda = 'GODDBYE WORLD';
         $request->setBody($agenda);
-        
+
         $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
          $this->assertStringNotContainsString($attachmentNode->hash, $vcalendar, 'old managed-id');

@@ -20,7 +20,7 @@ class Tinebase_Record_GetPathPartDelegator implements Tinebase_Record_Abstract_G
      * @param Tinebase_Record_Interface|null $_child
      * @return string
      */
-    public function getPathPart(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_parent = null, Tinebase_Record_Interface $_child = null)
+    public function getPathPart(Tinebase_Record_Interface $_record, ?Tinebase_Record_Interface $_parent = null, ?Tinebase_Record_Interface $_child = null)
     {
         return 'shooShoo';
     }

@@ -20,7 +20,7 @@ class Tasks_JsonTest extends TestCase
      * @var Tasks_Frontend_Json
      */
     protected $_backend;
-    
+
     /**
      * smtp config array
      * 
@@ -51,7 +51,7 @@ class Tasks_JsonTest extends TestCase
     protected function setUp(): void
 {
         parent::setUp();
-        
+
         $this->_backend = new Tasks_Frontend_Json();
         $this->_smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
         $this->_smtpTransport = Tinebase_Smtp::getDefaultTransport();
@@ -74,7 +74,7 @@ class Tasks_JsonTest extends TestCase
 
         parent::tearDown();
     }
-    
+
     /**
      * test creation of a task
      *
@@ -83,17 +83,17 @@ class Tasks_JsonTest extends TestCase
     {
         $task = $this->_getTask();
         $returned = $this->_backend->saveTask($task->toArray());
-        
+
         $this->assertEquals($task['summary'], $returned['summary']);
         $this->assertNotNull($returned['id']);
-        
+
         // test getTask($contextId) as well
         $returnedGet = $this->_backend->getTask($returned['id']);
         $this->assertEquals($task['summary'], $returnedGet['summary']);
-        
+
         $returnedGet = $this->_backend->getTask($returned['id'], '0', '');
         $this->assertEquals($task['summary'], $returnedGet['summary']);
-        
+
         $this->_backend->deleteTasks(array($returned['id']));
     }
 
@@ -230,9 +230,9 @@ class Tasks_JsonTest extends TestCase
             'alarm_time'        => Tinebase_DateTime::now(),
             'minutes_before'    => 'custom',
         ));
-        
+
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
-        
+
         $this->_checkAlarm($persistentTaskData);
     }
 
@@ -253,13 +253,13 @@ class Tasks_JsonTest extends TestCase
     public function testCreateTaskWithAlarm()
     {
         $task = $this->_getTaskWithAlarm();
-        
+
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
-        
+
         $this->_checkAlarm($loadedTaskData);
         $this->_sendAlarm();
-        
+
         // check alarm status
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedTaskData['alarms'][0]['sent_status']);
@@ -323,7 +323,7 @@ class Tasks_JsonTest extends TestCase
         $request = new Zend_Controller_Request_Http();
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
-        
+
         $task = new Tinebase_Scheduler_Task();
         $task->setMonths("Jan-Dec");
         $task->setWeekdays("Sun-Sat");
@@ -333,7 +333,7 @@ class Tasks_JsonTest extends TestCase
         $task->setRequest($request);
         return $task;
     }
-    
+
     /**
      * check alarm of task
      * 
@@ -347,7 +347,7 @@ class Tasks_JsonTest extends TestCase
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $_taskData['alarms'][0]['sent_status']);
         $this->assertTrue((isset($_taskData['alarms'][0]['minutes_before']) || array_key_exists('minutes_before', $_taskData['alarms'][0])), 'minutes_before is missing');
     }
-    
+
     /**
      * test create task with automatic alarm
      *
@@ -355,7 +355,7 @@ class Tasks_JsonTest extends TestCase
     public function testCreateTaskWithAutomaticAlarm()
     {
         $task = $this->_getTask();
-        
+
         // set config for automatic alarms
         Tasks_Config::getInstance()->set(
             Tinebase_Config::AUTOMATICALARM,
@@ -364,10 +364,10 @@ class Tasks_JsonTest extends TestCase
                 //0           // 0 minutes before
             )
         );
-        
+
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
-        
+
         // check if alarms are created / returned
         $this->assertGreaterThan(0, count($loadedTaskData['alarms']));
         $this->assertEquals('Tasks_Model_Task', $loadedTaskData['alarms'][0]['model']);
@@ -382,7 +382,7 @@ class Tasks_JsonTest extends TestCase
         );
         $this->_backend->deleteTasks($persistentTaskData['id']);
     }
-    
+
     /**
      * test update of a task
      *
@@ -390,14 +390,14 @@ class Tasks_JsonTest extends TestCase
     public function testUpdateTask()
     {
         $task = $this->_getTask();
-        
+
         $returned = $this->_backend->saveTask($task->toArray());
         $returned['summary'] = 'new summary';
-        
+
         $updated = $this->_backend->saveTask($returned);
         $this->assertEquals($returned['summary'], $updated['summary']);
         $this->assertNotNull($updated['id']);
-                
+
         $this->_backend->deleteTasks(array($returned['id']));
     }
 
@@ -430,7 +430,7 @@ class Tasks_JsonTest extends TestCase
         $this->assertCount(1, $tasks['filter'] ?? []);
         $this->assertSame('OR', $tasks['filter'][0]['condition'] ?? 'not set');
     }
-    
+
     /**
      * try to search for tasks
      *
@@ -442,10 +442,10 @@ class Tasks_JsonTest extends TestCase
         // create task
         $task = $this->_getTask();
         $task = $this->_backend->saveTask($task->toArray());
-        
+
         // search tasks
         $tasks = $this->_backend->searchTasks($filter = $this->_getFilter(), $this->_getPaging());
-        
+
         // check
         $count = $tasks['totalcount'];
         $this->assertGreaterThan(0, $count);
@@ -461,7 +461,7 @@ class Tasks_JsonTest extends TestCase
             ]],
         ], $this->_getPaging());
         $this->assertSame($filter, $tasks['filter']);
-        
+
         // delete task
         $this->_backend->deleteTasks(array($task['id']));
 
@@ -469,7 +469,7 @@ class Tasks_JsonTest extends TestCase
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals($count - 1, $tasks['totalcount']);
     }
-    
+
     /**
      * test create default container
      *
@@ -479,16 +479,16 @@ class Tasks_JsonTest extends TestCase
         $application = 'Tasks';
         $task = $this->_getTask();
         $returned = $this->_backend->saveTask($task->toArray());
-        
+
         $test_container = $this->_backend->getDefaultContainer();
         $this->assertEquals($returned['container_id']['type'], 'personal');
-        
+
         $application_id_1 = $test_container['application_id'];
         $application_id_2 = Tinebase_Application::getInstance()->getApplicationByName($application)->toArray();
         $application_id_2 = $application_id_2['id'];
-        
+
         $this->assertEquals($application_id_1, $application_id_2);
-        
+
         $this->_backend->deleteTasks(array($returned['id']));
     }
 
@@ -500,13 +500,13 @@ class Tasks_JsonTest extends TestCase
     {
         $organizer = $this->_createUser();
         $organizerId = $organizer->getId();
-        
+
         $task = $this->_getTask();
-        
+
         $task->organizer = $organizer;
         $returned = $this->_backend->saveTask($task->toArray());
         $taskId = $returned['id'];
-        
+
         // check search tasks- organizer exists
         $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
         $this->assertEquals(1, $tasks['totalcount'], 'more (or less) than one tasks found');
@@ -531,7 +531,7 @@ class Tasks_JsonTest extends TestCase
         $task = $this->_backend->getTask($taskId);
         $this->assertEquals($expectedDisplayName, $task['organizer']['accountDisplayName']);
     }
-    
+
     /**
      * Create and save dummy user object
      * 
@@ -553,10 +553,10 @@ class Tasks_JsonTest extends TestCase
             ));
             $user = Tinebase_User::getInstance()->addUser($user);
         }
-        
+
         return $user;
     }
-       
+
     /**
      * get task record
      *
@@ -591,7 +591,7 @@ class Tasks_JsonTest extends TestCase
         $task->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array($alarmData), TRUE);
         return $task;
     }
-    
+
     /**
      * get filter for task search
      *
@@ -606,7 +606,7 @@ class Tasks_JsonTest extends TestCase
             array('field' => 'due'         , 'operator' => 'within',      'value' => 'dayThis'),
         );
     }
-    
+
     /**
      * get default paging
      *

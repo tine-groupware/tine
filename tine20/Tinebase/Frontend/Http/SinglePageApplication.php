@@ -19,7 +19,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      */
     public static function getClientHTML($entryPoint,
                                          $appName = 'Tinebase',
-                                         string $template = null,
+                                         ?string $template = null,
                                          array $context = [],
                                          ?string $fallbackHtml = null): \Laminas\Diactoros\Response\HtmlResponse
     {

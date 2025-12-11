@@ -88,10 +88,10 @@ class Setup_Backend_OracleTest extends Setup_Backend_AbstractTest
                     <length>25</length>
                     <notnull>true</notnull>
                 </field>";
-        
+
         $field = Setup_Backend_Schema_Field_Factory::factory('Xml', $string);
         $this->expectException('Setup_Backend_Exception_NotImplemented');
-        
+
         $this->_backend->addCol($this->_table->name, $field, 1); //Cannot use 3rd parameter $_position in Oracle 
     }
 

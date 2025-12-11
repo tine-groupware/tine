@@ -23,7 +23,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest extends \PHPUnit\
      * @var array test objects
      */
     protected $objects = array();
-    
+
     /**
      * Runs the test methods of this class.
      *
@@ -55,7 +55,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest extends \PHPUnit\
     protected function tearDown(): void
 {
     }
-    
+
     /**
      * test converting vcard from sogo connector to Addressbook_Model_Contact 
      * 
@@ -64,11 +64,11 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest extends \PHPUnit\
     public function testConvertToTine20Model()
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../../Import/files/WebDAVCollaborator.vcf', 'r');
-        
+
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR);
-        
+
         $contact = $converter->toTine20Model($vcardStream);
-        
+
         $this->assertEquals('DEUTSCHLAND',        $contact->adr_one_countryname);
         $this->assertEquals('businesscity',       $contact->adr_one_locality);
         $this->assertEquals('45734',              $contact->adr_one_postalcode);
@@ -101,22 +101,22 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest extends \PHPUnit\
 //         $this->assertEquals('Titel',                   $contact->title);
         $this->assertEquals('websi.te',           $contact->url);
 //         $this->assertEquals('http://www.tine20.org',   $contact->url_home);
-        
+
         return $contact;
     }
 
 //     public function testConvertToVCard()
 //     {
 //         $contact = $this->testConvertToTine20Model();
-        
+
 //         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
-        
+
 //         $vcard = $converter->fromTine20Model($contact)->serialize();
-        
+
 //         // required fields
 //         $this->assertStringContainsString('VERSION:3.0', $vcard, $vcard);
 //         $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0//EN', $vcard, $vcard);
-        
+
 //         // @todo can not test for folded lines
 //         $this->assertStringContainsString('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
 //         $this->assertStringContainsString('ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B', $vcard, $vcard);

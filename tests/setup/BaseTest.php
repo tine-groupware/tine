@@ -28,7 +28,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * 
      * @return object [instance of the proxy class] 
      */
-    public function getProxy($_className, array $_params = null)
+    public function getProxy($_className, ?array $_params = null)
     {
         $proxyClassName = "{$_className}Proxy";
      

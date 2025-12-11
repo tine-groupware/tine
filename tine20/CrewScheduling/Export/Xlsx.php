@@ -56,7 +56,7 @@ class CrewScheduling_Export_Xlsx extends Tinebase_Export_Xls
      * @param array $_additionalOptions (optional) additional options
      */
     /** @phpstan-ignore-next-line */
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
     {
         if (isset($_additionalOptions['sendEmail'])) {
             $this->_sendEmail = (bool)$_additionalOptions['sendEmail'];

@@ -31,9 +31,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        
+
         $this->_instance = new Tinebase_Frontend_Json();
-        
+
         $this->_objects['record'] = array(
             'id'        => 1,
             'model'     => 'Addressbook_Model_Contact',
@@ -57,18 +57,18 @@ class Tinebase_Frontend_JsonTest extends TestCase
             'record_backend'    => $this->_objects['record']['backend'],
         ));
     }
-    
+
     /**
      * tear down
      */
     public function tearDown(): void
     {
         parent::tearDown();
-        
+
         // reset tz in core
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, Tinebase_Core::getPreference()->getValue(Tinebase_Preference::TIMEZONE));
     }
-    
+
     /**
      * try to add a note type
      */
@@ -93,9 +93,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
             'value' => $contact->getId()
         ));
         $paging = array();
-        
+
         $notes = $this->_instance->searchNotes($filter, $paging);
-        
+
         $this->assertGreaterThan(0, $notes['totalcount']);
         $found = false;
         foreach ($notes['results'] as $note) {
@@ -104,7 +104,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             }
         }
         $this->assertTrue($found, 'note not found in notes: ' . print_r($notes['results'], true));
-        
+
         // delete note
         Tinebase_Notes::getInstance()->deleteNotesOfRecord(
             $this->_objects['record']['model'],
@@ -112,14 +112,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
             $contact->getId()
         );
     }
-    
+
     /**
      * try to delete role and then search
      */
     public function testSearchRoles()
     {
         $role = Tinebase_Acl_Roles::getInstance()->createRole($this->_objects['role']);
-        
+
         $filter = array(array(
             'field'     => 'query',
             'operator'     => 'contains',
@@ -129,16 +129,16 @@ class Tinebase_Frontend_JsonTest extends TestCase
             'start'    => 0,
             'limit'    => 1
         );
-        
+
         $roles = $this->_instance->searchRoles($filter, $paging);
-        
+
         $this->assertGreaterThan(0, $roles['totalcount']);
         $this->assertEquals($this->_objects['role']->name, $roles['results'][0]['name']);
-        
+
         // delete role
         Tinebase_Acl_Roles::getInstance()->deleteRoles($role->id);
     }
-    
+
     /**
      * test getCountryList
      *
@@ -310,7 +310,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             Tinebase_Model_Tree_FileLocation::FLD_NODE_ID   => 'shooo',
         ]);
     }
-    
+
     /**
      * test get translations
      *
@@ -320,7 +320,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $list = $this->_instance->getAvailableTranslations();
         $this->assertTrue(count($list['results']) > 3);
     }
-    
+
     /**
      * tests locale fallback
      */
@@ -329,28 +329,28 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // de_LU -> de
         $this->_instance->setLocale('de_LU', FALSE, FALSE);
         $this->assertEquals('de', (string)Zend_Registry::get('locale'), 'Fallback to generic german did not succeed');
-        
+
         $this->_instance->setLocale('zh', FALSE, FALSE);
         $this->assertEquals('zh_CN', (string)Zend_Registry::get('locale'), 'Fallback to simplified chinese did not succeed');
-        
+
         $this->_instance->setLocale('foo_bar', FALSE, FALSE);
         $this->assertEquals('en', (string)Zend_Registry::get('locale'), 'Exception fallback to english did not succeed');
     }
-    
+
     /**
      * test set locale and save it in db
      */
     public function testSetLocaleAsPreference()
     {
         $oldPreference = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
-        
+
         $locale = 'de';
         $result = $this->_instance->setLocale($locale, TRUE, FALSE);
-        
+
         // get config setting from db
         $preference = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
         $this->assertEquals($locale, $preference, "Didn't get right locale preference.");
-        
+
         // restore old setting
         Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = $oldPreference;
     }
@@ -361,17 +361,17 @@ class Tinebase_Frontend_JsonTest extends TestCase
     public function testSetTimezoneAsPreference()
     {
         $oldPreference = Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE};
-        
+
         $timezone = 'America/Vancouver';
         $result = $this->_instance->setTimezone($timezone, true);
-        
+
         // check json result
         $this->assertEquals($timezone, $result);
-        
+
         // get config setting from db
         $preference = Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE};
         $this->assertEquals($timezone, $preference, "Didn't get right timezone preference.");
-        
+
         // restore old settings
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $oldPreference);
         Tinebase_Core::getPreference()->{Tinebase_Preference::TIMEZONE} = $oldPreference;
@@ -396,11 +396,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
     {
         // search prefs
         $result = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
-        
+
         // check results
         $this->assertTrue(isset($result['results']));
         $this->assertGreaterThan(2, $result['totalcount']);
-        
+
         //check locale/timezones options
         foreach ($result['results'] as $pref) {
             switch($pref['name']) {
@@ -426,14 +426,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);
-        
+
         // search prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
-        
+
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertGreaterThan(3, $results['totalcount']);
-        
+
         foreach ($results['results'] as $result) {
             if ($result['name'] == 'defaultapp') {
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
@@ -444,10 +444,10 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
         }
-        
+
         Tinebase_Core::getPreference()->delete($pref);
     }
-    
+
     /**
      * search preferences of another user
      *
@@ -460,11 +460,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $pref->account_id   = '2';
         $pref->account_type = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
         $pref = Tinebase_Core::getPreference()->create($pref);
-        
+
         // search prefs
         $filters = $this->_getPreferenceFilter(TRUE, FALSE, '2');
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $filters);
-        
+
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertEquals(1, $results['totalcount']);
@@ -472,7 +472,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
         $filters = $this->_getPreferenceFilter(false, FALSE, $sclever->getId());
         $results1 = $this->_instance->searchPreferencesForApplication('ActiveSync', $filters, $sclever->getId());
-        
+
         $filters = $this->_getPreferenceFilter(false, FALSE, Tinebase_Core::getUser()->getId());
         $results2 = $this->_instance->searchPreferencesForApplication('ActiveSync', $filters, Tinebase_Core::getUser()->getId());
 
@@ -496,7 +496,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         Tinebase_Core::getPreference()->create($pref);
 
         $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
-        
+
         // search prefs
         $filters =  array(
             array(
@@ -508,7 +508,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 )
             )
         );
-        
+
         $results = $this->_instance->searchPreferencesForApplication('Addressbook', $filters);
 
         // check results
@@ -525,9 +525,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         $this->assertEquals( 'user', $results['results'][0]['account_type']);
     }
-    
-    
-    
+
+
+
     /**
      * save preferences for user
      *
@@ -539,11 +539,11 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         // search saved prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE));
-        
+
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertGreaterThan(2, $results['totalcount']);
-        
+
         foreach ($results['results'] as $result) {
             $this->assertTrue(is_array($result['options']), 'options missing');
             switch ($result['name']) {
@@ -556,7 +556,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 case 'defaultapp':
                     $this->assertEquals('Timetracker', $result['value']);                    
                     break;
-                
+
             }
             $savedPrefData['Tinebase'][$result['name']] = array('value' => $result['value']);
         }
@@ -604,7 +604,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             self::assertEquals("No permission to edit other user preferences !", $e->getMessage());
         }
     }
-    
+
     /**
      * get locale pref
      */
@@ -616,9 +616,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 $locale = $result;
             }
         }
-        
+
         $this->assertTrue(isset($locale));
-        
+
         return $locale;
     }
 
@@ -632,7 +632,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $locale = $this->_getLocalePref();
         $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
         $afj->savePreferences($prefData);
-        
+
         // check as admin
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE, TRUE));
         foreach ($results['results'] as $pref) {
@@ -649,7 +649,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $locale['type'], 'pref should be of type admin: ' . print_r($locale, TRUE));
         $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $locale['value'], 'pref should be default value: ' . print_r($locale, TRUE));
     }
-    
+
     /**
      * save state and load it with registry data
      */
@@ -659,16 +659,16 @@ class Tinebase_Frontend_JsonTest extends TestCase
             'bla'   => 'blubb',
             'zzing' => 'zzang'
         );
-        
+
         foreach ($testData as $key => $value) {
             Tinebase_State::getInstance()->setState($key, $value);
         }
-        
+
         $stateInfo = Tinebase_State::getInstance()->loadStateInfo();
-        
+
         $this->assertEquals($testData, $stateInfo);
     }
-    
+
     /**
      * test get all registry data
      *
@@ -694,16 +694,16 @@ class Tinebase_Frontend_JsonTest extends TestCase
             $registryData['Tinebase']['userContact']
         );
         self::assertEquals(TRUE, $registryData['Tinebase']['config']['changepw']['value'], 'changepw should be TRUE');
-        
+
         Tinebase_Config::getInstance()->set('changepw', 0);
         $registryData = $this->_instance->getAllRegistryData();
         $changepwValue = $registryData['Tinebase']['config']['changepw']['value'];
         self::assertEquals(FALSE, $changepwValue, 'changepw should be (bool) false');
         self::assertTrue(is_bool($changepwValue), 'changepw should be (bool) false: ' . var_export($changepwValue, TRUE));
-        
+
         $userApps = $registryData['Tinebase']['userApplications'];
         self::assertEquals('Tinebase', $userApps[0]['name'], 'first app should be Tinebase: ' . print_r($userApps, TRUE));
-        
+
         $locale = Tinebase_Core::getLocale();
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         self::assertEquals($symbols['decimal'], $registryData['Tinebase']['decimalSeparator']);
@@ -787,13 +787,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
     public function testGetAllPersistentFilters()
     {
         $registryData = $this->_instance->getAllRegistryData();
-        
+
         $filterData = $registryData['Tinebase']['persistentFilters'];
         $this->assertTrue($filterData['totalcount'] > 10);
         $this->assertTrue(isset($filterData['results'][0]['grants']), 'grants are missing');
         $grants = $filterData['results'][0]['grants'];
         $this->assertTrue($grants[0]['readGrant']);
-        
+
         // check if accounts are resolved
         $this->assertTrue(is_array($grants[0]['account_name']), 'account should be resolved: ' . print_r($grants[0], true));
     }
@@ -878,7 +878,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertNotSame($twig['path'], $twig2['path']);
         $this->assertSame('de', $twig2[Tinebase_Model_TwigTemplate::FLD_LOCALE] ?? '');
     }
-    
+
     /**
      * testGetUserProfile
      */
@@ -894,21 +894,21 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue(is_array($profile['readableFields']));
         $this->assertTrue((isset($profile['updateableFields']) || array_key_exists('updateableFields', $profile)));
         $this->assertTrue(is_array($profile['updateableFields']));
-        
+
         // try to get user profile of different user
         $this->expectException('Tinebase_Exception_AccessDenied');
-        
+
         $sclever = Tinebase_Helper::array_value('sclever',Zend_Registry::get('personas'));
         $this->_instance->getUserProfile($sclever->getId());
     }
-    
+
     /**
      * testGetUserProfileConfig
      */
     public function testGetUserProfileConfig()
     {
         $config = $this->_instance->getUserProfileConfig();
-        
+
         $this->assertTrue(is_array($config));
         $this->assertTrue((isset($config['possibleFields']) || array_key_exists('possibleFields', $config)));
         $this->assertTrue(is_array($config['possibleFields']));
@@ -917,24 +917,24 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $this->assertTrue((isset($config['updateableFields']) || array_key_exists('updateableFields', $config)));
         $this->assertTrue(is_array($config['updateableFields']));
     }
-    
+
     /**
      * testSetUserProfileConfig
      */
     public function testSetUserProfileConfig()
     {
         $config = $this->_instance->getUserProfileConfig();
-        
+
         $idx = array_search('n_prefix', $config['readableFields']);
         if ($idx !== false) {
             unset ($config['readableFields'][$idx]);
         }
-        
+
         $idx = array_search('tel_home', $config['updateableFields']);
         if ($idx !== false) {
             unset ($config['updateableFields'][$idx]);
         }
-        
+
         $this->_instance->setUserProfileConfig($config);
     }
 
@@ -1030,7 +1030,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             Tinebase_Model_Tree_FileLocation::FLD_FM_PATH => '/shared/unittest',
         ]))->toArray());
     }
-    
+
     /**
      * testupdateUserProfile
      */
@@ -1039,7 +1039,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         \Tinebase_Frontend_JsonTest::testSetUserProfileConfig();
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $profileData = $profile['userProfile'];
-        
+
         $this->assertFalse(array_search('n_prefix', $profileData));
 
         $profileData['n_family'] = $profileData['n_family'] . '_ut';
@@ -1051,7 +1051,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         } catch (Exception $e) {
             self::fail($e . ' profileData: ' . print_r($profileData, true));
         }
-        
+
         $updatedProfile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $updatedProfileData = $updatedProfile['userProfile'];
         $this->assertNotSame('mustnotchange', $updatedProfileData['tel_home']);
@@ -1077,7 +1077,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         /** @var Tinebase_Model_ModificationLog $contactModLog */
         $this->assertLessThan(3, abs($contactModLog->modification_time->getTimestamp() - $userModLog->modification_time->getTimestamp()));
     }
-    
+
     /**
      * testGetSaveApplicationConfig
      */
@@ -1085,17 +1085,17 @@ class Tinebase_Frontend_JsonTest extends TestCase
     {
         $config = $this->_instance->getConfig('Admin');
         $this->assertGreaterThan(0, count($config));
-        
+
         $data = array(
             'id'        => 'Admin',
             'settings'  => Admin_Controller::getInstance()->getConfigSettings(),
         );
-        
+
         $newConfig = $this->_instance->saveConfig($data);
-        
+
         $this->assertEquals($config, $newConfig);
     }
-    
+
     /**
      * testChangeUserAccount
      * 
@@ -1107,21 +1107,21 @@ class Tinebase_Frontend_JsonTest extends TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::ROLE_CHANGE_ALLOWED, new Tinebase_Config_Struct(array(
             Tinebase_Core::getUser()->accountLoginName => array('sclever')
         )));
-        
+
         $sclever = $this->_personas['sclever'];
         $result = $this->_instance->changeUserAccount('sclever');
-        
+
         $this->assertEquals(array('success' => true), $result);
-        
+
         // make sure, we are sclever
         $this->assertEquals('sclever', Tinebase_Core::getUser()->accountLoginName);
         $this->assertEquals('sclever', Tinebase_Session::getSessionNamespace()->currentAccount->accountLoginName);
-        
+
         // reset to original user
         Tinebase_Controller::getInstance()->initUser($this->_originalTestUser, /* $fixCookieHeader = */ false);
         Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
     }
-    
+
     /**
      * testOmitPersonalTagsOnSearch
      * 
@@ -1131,7 +1131,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
     {
         $personalTag = $this->_getTag(Tinebase_Model_Tag::TYPE_PERSONAL);
         Tinebase_Tags::getInstance()->createTag($personalTag);
-        
+
         $this->_removeRoleRight('Addressbook', Tinebase_Acl_Rights::USE_PERSONAL_TAGS);
         $filter = array(
             'application' => 'Addressbook',
@@ -1139,7 +1139,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             'type' => Tinebase_Model_Tag::TYPE_PERSONAL
         );
         $result = $this->_instance->searchTags($filter, array());
-        
+
         $this->assertEquals(0, $result['totalCount']);
     }
 
@@ -1163,7 +1163,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
     }
 
     /******************** protected helper funcs ************************/
-    
+
     /**
      * get preference filter
      *
@@ -1175,7 +1175,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
         if ($_userId === NULL) {
             $_userId = Tinebase_Core::getUser()->getId();
         }
-        
+
         $result = array(
             array(
                 'field' => 'account',
@@ -1196,7 +1196,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
                 'value' => 'defaultapp'
             );
         }
-        
+
         return $result;
     }
 
@@ -1228,7 +1228,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             )
         );
     }
-    
+
     /**
      * get preference with options
      *

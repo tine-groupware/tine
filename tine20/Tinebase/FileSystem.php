@@ -784,7 +784,7 @@ class Tinebase_FileSystem implements
      */
     public function updateFileObject(Tinebase_Model_Tree_Node $_parentNode,
                                      Tinebase_Model_Tree_Node $_node,
-                                     Tinebase_Model_Tree_FileObject $_fileObject = null,
+                                     ?Tinebase_Model_Tree_FileObject $_fileObject = null,
                                      $_hash = null,
                                      $_hashFile = null,
                                      $_avResult = null): Tinebase_Model_Tree_FileObject
