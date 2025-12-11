@@ -4071,7 +4071,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         '_Controller_' .
                         $definition[Tinebase_Config::OPTIONS][Tinebase_Config::MODEL_NAME];
                     if (class_exists($ctrlName)) {
-                        $val = $ctrlName::getInstance()->get($val);
+                        $aclProtect = true;
+                        if (isset($definition[Tinebase_Config::EXPOSETOTEMPLATE]) &&
+                            $definition[Tinebase_Config::EXPOSETOTEMPLATE] === true) {
+                            $aclProtect = false;
+                            if (method_exists($ctrlName, 'doContainerACLChecks')) {
+                                try {
+                                    $ctrlName::getInstance()->doContainerACLChecks(false);
+                                } catch (Exception $e) {
+                                    Tinebase_Exception::log($e);
+                                }
+                            }
+                        }
+                        $val = $ctrlName::getInstance()->get($val, _aclProtect: $aclProtect);
                     }
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {

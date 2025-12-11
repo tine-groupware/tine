@@ -34,23 +34,18 @@
             <div>E-Mail: {{ attribute(app.installationRepresentative, app.installationRepresentative.preferred_email) }}</div>
         </div>
     {% endif %}
+    <h6>Registered in the commercial register at {{ config(constant('GDPR_Config::COMMERCIAL_REGISTRY'), 'GDPR') }}</h6>
+    <h6>VAT ID according to § 27 UStG: {{ config(constant('GDPR_Config::VAT_ID'), 'GDPR') }}</h6>
 
-    {% if app.commercialRegistry is not empty -%}
-        <h6>Registered in the commercial register at {{ app.commercialRegistry }}</h6>
-    {% endif %}
-
-    {% if app.vatId is not empty -%}
-        <h6>VAT ID according to § 27 UStG: {{ app.vatId }}</h6>
-    {% endif %}
-
-    {% if app.installationResponsible is not empty -%}
+    {% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
+    {% if installationResponsible is not empty -%}
         <h6>Responsible person according to § 18 Para. 2 MStV</h6>
         <div class="contact-info">
-            <div>{{ app.installationResponsible.n_fileas }}</div>
-            <div>{{ app.installationResponsible.adr_one_street }}</div>
+            <div>{{ installationResponsible.n_fileas }}</div>
+            <div>{{ installationResponsible.adr_one_street }}</div>
             {% set address_parts = [
-                app.installationResponsible.adr_one_postalcode,
-                app.installationResponsible.adr_one_locality
+                installationResponsible.adr_one_postalcode,
+                installationResponsible.adr_one_locality
             ]|filter(v => v is not empty) %}
 
             {% if address_parts is not empty %}
