@@ -86,7 +86,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     getTine20Icon: function() {
         let flagConfigKey = null,
             email = this.get('from_email');
-        if (Tine.Tinebase.common.checkEmailDomain(email)) {
+        const domainValidation = Tine.Tinebase.common.checkEmailDomain(email);
+        if (domainValidation.isInternalDomain) {
             flagConfigKey = 'flagIconOwnDomain';
         } else {
             let otherDomainRegex = Tine.Tinebase.configManager.get('flagIconOtherDomainRegex', 'Felamimail');

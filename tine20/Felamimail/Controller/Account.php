@@ -1840,7 +1840,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (empty($_account->accountEmailAddress)
             || !Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
             || !Tinebase_Config::getInstance()->{Tinebase_Config::IMAP}->{Tinebase_Config::IMAP_USE_SYSTEM_ACCOUNT}
-            || !Tinebase_EmailUser::checkDomain($_account->accountEmailAddress)
+            || !Tinebase_EmailUser::checkAllowedDomain($_account->accountEmailAddress)
         ) {
             return null;
         }

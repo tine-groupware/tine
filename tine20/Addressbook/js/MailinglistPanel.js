@@ -49,14 +49,25 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             xtype: 'mirrortextfield',
             name: 'email',
             maxLength: 128,
-            disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
-            allowBlank: false,
-            hidden: true,
+            allowBlank: true,
             checkState: function (editDialog, record) {
                 this.validate();
             },
-            validator: function (value) {
-                return Tine.Tinebase.common.checkEmailDomain(value);
+            validator: (value) => {
+                const hasManageInternalDomainGrant = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
+                const domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
+
+                if (!hasManageInternalDomainGrant && domainValidation.isInternalDomain) {
+                    return this.app.i18n._('You do not have the grant to enter internal domain');
+                }
+
+                const errorMessage = this.validateMailingList(value);
+                if (errorMessage) {
+                    domainValidation.isValid = false;
+                    domainValidation.errorMessage = errorMessage;
+                }
+
+                return domainValidation.isValid || domainValidation.errorMessage;
             },
         });
 
@@ -125,10 +136,6 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         });
         this.replyToComboBox.setVisible(checked);
         this.replyToComboBox.setDisabled(!checked);
-        
-        this.emailField.setVisible(checked);
-        this.emailField.setDisabled(!checked);
-        this.emailField.validate();
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
@@ -151,14 +158,14 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             const containerData = _.get(record, record.constructor.getMeta('grantsPath'));
             const containerGrant =  !containerData ? false : containerData[this.requiredGrant];
             const hasRequiredGrant = !editDialog.evalGrants || containerGrant;
-            
             this.onMailinglistCheck(null, this.isMailingList);
+            this.emailField.validate();
             this.setReadOnly(!hasRequiredGrant || !hasRight);
         });
     },
     
     setReadOnly(readOnly, includeMain = true) {
-        if (includeMain) this.isMailinglistCheckbox.setDisabled(readOnly);
+        if (includeMain) this.isMailinglistCheckbox.setReadOnly(readOnly);
         this.onMailinglistCheck(null, !readOnly && this.isMailinglistCheckbox?.checked);
     },
     
@@ -177,6 +184,44 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         xprops.sieveReplyTo = this.replyToComboBox.getValue();
         record.set('xprops', xprops);
         this.listRecord.set('xprops', xprops);
-        if (!isMailingList) this.listRecord.set('email', '');
+    },
+
+    validateMailingList: function (value) {
+        const domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
+        this.isMailinglistCheckbox.setDisabled(domainValidation.isValid && !domainValidation.isInternalDomain);
+
+        if (!this.isMailinglistCheckbox.checked) {
+            if (domainValidation.isInternalDomain) {
+                if (!this.alertedDomains) {
+                    this.alertedDomains = [];
+                }
+
+                const title = this.app.i18n._('Email distribution list function required');
+                const text = this.app.i18n._('E-Mail accounts for the domain of the specified email address are automatically managed by this installation. ' +
+                    'You can only use addresses from this domain here if the “Mailing list” support is enabled for this group.');
+
+                if(!this.alertedDomains.includes(value)) {
+                    this.alertedDomains.push(value);
+                    Ext.MessageBox.alert(title,
+                        text + '<br><br>' +
+                        this.app.i18n._('Would you like to enable this function now?'),
+                    (btn) => {
+                        if (btn === 'ok') {
+                            this.isMailinglistCheckbox.setValue(true);
+                        }
+                    });
+                }
+                return title + '<br><br>' + text;
+            }
+        } else {
+            if (!value) {
+                return this.app.i18n._('E-Mail can not be empty when mailing list is enabled');
+            }
+            if (!domainValidation.isInternalDomain) {
+                this.isMailinglistCheckbox.setValue(false);
+            }
+        }
+
+        return null;
     }
 });

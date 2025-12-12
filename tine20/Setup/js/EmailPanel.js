@@ -342,10 +342,15 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Secondary Domains (comma separated)'),
                     xtype: 'textfield'
                 }, {
-                    name: 'smtp_additionaldomains',
-                    fieldLabel: this.app.i18n._('Additional Domains (comma separated)'),
+                    name: 'smtp_additionalexternaldomains',
+                    fieldLabel: this.app.i18n._('Additional External Domains (comma separated)'),
                     xtype: 'textfield'
                 }, {
+                    name: 'smtp_allowAnyExternalDomains',
+                    fieldLabel: this.app.i18n._('Allow any external domains'),
+                    checked: false,
+                    xtype: 'checkbox'
+                },{
                     name: 'smtp_from',
                     fieldLabel: this.app.i18n._('Notifications service address'),
                     xtype: 'textfield'

@@ -1182,6 +1182,12 @@ msgstr "Status %s ist ungültig."
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder ungütig"
 
+msgid "Invalid E-Mail : "
+msgstr "Ungültige E-Mail"
+
+msgid "Domain can not be empty"
+msgstr "Die Domain darf nicht leer sein."
+
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
@@ -1490,6 +1496,12 @@ msgstr "Bestätigen"
 
 msgid "Restart application to apply the new configuration?"
 msgstr "Möchten Sie die Anwendung zum Anwenden der neuen Konfiguration neu starten?"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+
+msgid "Allowed Domains"
+msgstr "Erlaubte Domains"
 
 #, python-brace-format
 msgid "All {0}"
@@ -4109,6 +4121,31 @@ msgid_plural "Business Logic Pipeline Items"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "GENDER_CalDAV"
+msgstr ""
+
+msgid "CalDAV"
+msgid_plural "CalDAVs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "URL"
+msgstr ""
+
+msgid "GENDER_Cloud Account"
+msgstr ""
+
+msgid "Cloud Account"
+msgid_plural "Cloud Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Owner"
+msgstr "Besitzer*in"
+
+msgid "Cloud Account Type"
+msgstr ""
+
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] "Datensatzname"
@@ -4122,9 +4159,6 @@ msgstr "Neues Auto"
 
 msgid "Hierarchy"
 msgstr "Hierarchie"
-
-msgid "Owner"
-msgstr "Besitzer*in"
 
 msgid "UUID"
 msgstr "UUID"
@@ -4677,6 +4711,9 @@ msgstr "Nur Nachbarn"
 
 msgid "Preview"
 msgstr "Vorschau"
+
+#~ msgid "Invalid Email : "
+#~ msgstr "Ungültige"
 
 #~ msgid "Use Mainscreen"
 #~ msgstr "Hauptfenster benutzen"

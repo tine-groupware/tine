@@ -285,28 +285,15 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     isValid: function() {
         return  Tine.Admin.UserEditDialog.superclass.isValid.call(this).then((result) => {
             let errorMessages = '';
-            
-            if (Tine.Tinebase.registry.get('manageSmtpEmailUser') && ! Tine.Tinebase.registry.get('allowExternalEmail')) {
-                const emailValue = this.getForm().findField('accountEmailAddress').getValue();
-                if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
-                    let errorMessage = this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.") + '<br>';
-                    errorMessage += '<br>' + this.app.i18n._("Allowed Domains") + ': <br>';
-                    
-                    const allowDomains = Tine.Tinebase.common.getAllowedDomains();
 
-                    _.each(allowDomains, (domain) => {
-                        if (domain !== '') {
-                            errorMessage += '<b> - ' + domain + '</b><br>';
-                        }
-                    })
-                    
-                    errorMessages += errorMessage;
-                    
-                    this.getForm().markInvalid([{
-                        id: 'accountEmailAddress',
-                        msg: errorMessage
-                    }]);
-                }
+            const emailValue = this.getForm().findField('accountEmailAddress').getValue();
+            const domainValidation = Tine.Tinebase.common.checkEmailDomain(emailValue);
+            if (!domainValidation.isValid) {
+                errorMessages = domainValidation.errorMessage;
+                this.getForm().markInvalid([{
+                    id: 'accountEmailAddress',
+                    msg: errorMessages
+                }]);
             }
 
             if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featurePreventSpecialCharInLoginName')) {

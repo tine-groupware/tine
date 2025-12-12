@@ -661,6 +661,7 @@ Ext.form.MessageTargets = {
         clear: function(field){
             field.el?.removeClass(field.invalidClass);
             if (field?.dom?.dom) field.el.dom.qtip = '';
+            if (field?.el?.dom?.qtip) field.el.dom.qtip = '';
             if (field?.el?.dom?.qclass) field.el.dom.qclass = '';
         }
     },
