@@ -142,7 +142,7 @@
     "pear/pear-core-minimal": "^1.10",
     "php-http/curl-client": "^2.1",
     "phpoffice/phpexcel": "1.8.2pl8 as 1.8.2",
-    "phpoffice/phpspreadsheet": "1.24.1pl4 as 1.24.1",
+    "phpoffice/phpspreadsheet": "1.24.1pl5 as 1.24.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
     "ramsey/collection": "^1.2",
@@ -238,7 +238,10 @@
       "digitalrevolution/php-codesniffer-baseline": true,
       "php-http/discovery": true
     },
-    "autoloader-suffix": "stable"
+    "autoloader-suffix": "stable",
+    "audit": {
+      "block-insecure": false
+    }
   },
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
