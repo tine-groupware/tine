@@ -93,9 +93,7 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
             }
             $targetRaii = new Tinebase_RAII(function() use($_target) { fclose($_target); });
         }
-        $options = new \ZipStream\Option\Archive();
-        $options->setOutputStream($_target);
-        $zip = new ZipStream($this->getDownloadFilename(), $options);
+        $zip = new ZipStream(outputName: $this->getDownloadFilename(), outputStream: $_target, sendHttpHeaders: false);
 
         /** @var self $export */
         foreach ($this->_multiExports as $export) {
