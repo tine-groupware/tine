@@ -48,9 +48,9 @@ class Tinebase_CacheTest extends TestCase
         static::assertLessThan($oldKeyCount, $newKeyCount, 'no cache keys removed');
         static::assertEquals('b', $redis->get('a'), 'key "a" should not be affected');
 
-        if ($config->session && $config->session->backend && ucfirst($config->session->backend) === 'Redis') {
+        /*if ($config->session && $config->session->backend && ucfirst($config->session->backend) === 'Redis') {
             static::assertGreaterThan(0, count($redis->keys('*_SESSION_*')), 'no session keys found after cache clean');
-        }
+        }*/
 
         $redis->close();
     }

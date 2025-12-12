@@ -13,8 +13,10 @@ define('PATH_TO_TEST_DIR', dirname(__FILE__));
 error_reporting(E_ALL);
 restore_error_handler();
 
+Zend_Session::$_unitTestEnabled = true;
+
 // disable sending cookies
 Zend_Session::setOptions(array(
     'use_cookies'      => 0,
-    'use_only_cookies' => 0
+    //'use_only_cookies' => 0
 ));
