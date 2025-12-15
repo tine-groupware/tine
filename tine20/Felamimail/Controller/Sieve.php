@@ -639,7 +639,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
             if (Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_REDIRECT_ONLY_INTERNAL}) {
                 foreach ($redirectEmails as $email) {
-                    if (false === Tinebase_EmailUser::checkDomain($email)) {
+                    if (false === Tinebase_EmailUser::checkAllowedDomain($email)) {
                         throw new Felamimail_Exception_Sieve($translate->_('Redirects to external email domains are not allowed.'));
                     }
                 }

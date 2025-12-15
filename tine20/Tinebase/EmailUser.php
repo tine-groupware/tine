@@ -366,7 +366,7 @@ class Tinebase_EmailUser
         }
 
         if ($convertDomainsToUnicode) {
-            foreach (['primarydomain', 'secondarydomains', 'additionaldomains'] as $domainKey) {
+            foreach (['primarydomain', 'secondarydomains', 'additionalexternaldomains'] as $domainKey) {
                 if (isset(self::$_configs[$_configType][$domainKey])) {
                     $domains = explode(',', (string) self::$_configs[$_configType][$domainKey]);
                     foreach ($domains as $idx => $domain) {
@@ -441,7 +441,7 @@ class Tinebase_EmailUser
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
         }
 
-        $allowedDomains = array();
+        $allowedDomains = [];
         if (! empty($config['primarydomain'])) {
             $allowedDomains = array($config['primarydomain']);
             if (! empty($config['secondarydomains'])) {
@@ -459,21 +459,21 @@ class Tinebase_EmailUser
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', (string) $config['secondarydomains']));
             }
             if ($_includeAdditional) {
-                $allowedDomains = array_merge($allowedDomains, self::getAdditionalDomains($config));
+                $allowedDomains = array_merge($allowedDomains, self::getAdditionalExternalDomains($config));
             }
         }
         return $allowedDomains;
     }
 
-    public static function getAdditionalDomains($config = null)
+    public static function getAdditionalExternalDomains($config = null)
     {
         if ($config === null) {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
         }
 
         $result = [];
-        if (! empty($config['additionaldomains'])) {
-            $result = preg_split('/\s*,\s*/', (string) $config['additionaldomains']);
+        if (! empty($config['additionalexternaldomains'])) {
+            $result = preg_split('/\s*,\s*/', (string) $config['additionalexternaldomains']);
         }
         return $result;
     }
@@ -484,16 +484,16 @@ class Tinebase_EmailUser
      * @param string $_email
      * @param boolean $_throwException
      * @param array $_allowedDomains
-     * @param boolean $_includeAdditional
+     * @param boolean $_includeExternalDomains
      * @return boolean
      * @throws Tinebas_Exception_SystemGeneric
      * @throws Tinebase_Exception_EmailInAddionalDomains
      */
-    public static function checkDomain(
+    public static function checkAllowedDomain(
         $_email,
         $_throwException = false,
         $_allowedDomains = null,
-        $_includeAdditional = false
+        $_includeExternalDomains = false
     ): bool
     {
         if (!Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
@@ -503,51 +503,82 @@ class Tinebase_EmailUser
         }
 
         $result = true;
-        $allowedDomains = $_allowedDomains ?: self::getAllowedDomains(null, $_includeAdditional);
+        $allowedDomains = $_allowedDomains ?: self::getAllowedDomains(_includeAdditional: $_includeExternalDomains);
 
-        if (! empty($_email) && ! empty($allowedDomains)) {
-            if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(
-                        __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email
-                    );
-                }
-                $domain = null;
-            } else {
-                [, $domain] = explode('@', $_email, 2);
+        if (empty($_email) || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email
+                );
             }
+            return false;
+        }
 
-            if (! in_array($domain, $allowedDomains)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                    Tinebase_Core::getLogger()->warn(
-                        __METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!'
-                    );
-                }
+        [, $domain] = explode('@', $_email, 2);
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, true)
-                    );
-                }
+        $isExternal = self::isExternalDomain($_email);
+        $allowAnyExternalDomains = Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->allowAnyExternalDomains;
 
-                if ($_throwException) {
-                    if (! $_includeAdditional && in_array($domain, self::getAdditionalDomains())) {
-                        throw new Tinebase_Exception_EmailInAdditionalDomains();
-                    } else {
-                        $translation = Tinebase_Translation::getTranslation('Tinebase');
-                        throw new Tinebase_Exception_SystemGeneric(str_replace(
-                            ['{0}', '{1}'],
-                            [$_email, implode(',', $allowedDomains)],
-                            $translation->_('Email address {0} not in allowed domains [{1}] or invalid')
-                        ));
-                    }
-                } else {
-                    $result = false;
-                }
+        if ($allowAnyExternalDomains === null) {
+            // todo: allowExternalEmail is deprecated , we should only check allowAnyExternalDomains
+            $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
+            $allowExternalEmail = ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail;
+            $allowAnyExternalDomains = $allowExternalEmail;
+        }
+
+        if ($isExternal && $allowAnyExternalDomains) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Allowed all external domains, skip!'
+                );
+            }
+            return true;
+        }
+
+        if (!empty($allowedDomains) && !in_array($domain, $allowedDomains)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $domain . ' is not in allowed domains! Allowed domains: ' . print_r($allowedDomains, true)
+                );
+            }
+            $result = false;
+        }
+
+        if (!$result && $_throwException) {
+            if (!$_includeExternalDomains && $isExternal) {
+                throw new Tinebase_Exception_EmailInAdditionalDomains();
+            } else {
+                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                throw new Tinebase_Exception_SystemGeneric(str_replace(
+                    ['{0}', '{1}'],
+                    [$_email, implode(',', $allowedDomains)],
+                    $translation->_('Email address {0} not in allowed domains [{1}] or invalid')
+                ));
             }
         }
 
         return $result;
+    }
+
+    /**
+     * check if email address is in allowed domains
+     *
+     * @return boolean
+     */
+    public static function isExternalDomain($_email): bool
+    {
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
+
+        if (empty($_email) || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Invalid E-Mail : ' . $_email));
+        }
+
+        [, $domain] = explode('@', $_email, 2);
+
+        if (!$domain) {
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Domain can not be empty'));
+        }
+        return !in_array($domain, self::getAllowedDomains());
     }
 
     /**

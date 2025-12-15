@@ -335,11 +335,14 @@ msgstr "Importiere CSV-formatierte Kontakte aus einem Exchange-/ Outlook-Adressb
 msgid "Contact CSV import from Outlook address book"
 msgstr "CSV-Kontaktimport aus dem Outlook-Adressbuch"
 
-msgid "Tine contact CSV import"
-msgstr "Tine Kontakt CSV-Import"
+msgid "Tine contact CSV import all data"
+msgstr ""
 
 msgid "Import CSV formated contacts from tine address book"
 msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
+
+msgid "Tine contact CSV import"
+msgstr "Tine Kontakt CSV-Import"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importliste (###CURRENTDATE###)"
@@ -380,6 +383,16 @@ msgstr "Das Recht auf private Informationen des Kontaktes zuzugreifen"
 
 msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
+
+msgid "Copy Postal Address to Clipboard"
+msgstr ""
+
+msgid "Copied to clipboard"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr ""
 
 msgid "Street"
 msgstr "Straße"
@@ -621,6 +634,13 @@ msgstr "Suche nach Kontakten ..."
 msgid "Group Information"
 msgstr "Gruppeninformationen"
 
+msgid "You do not have the grant to manage mailing list with internal domain"
+msgstr "Sie haben keine Berechtigung, die Verteilerliste mit interner Domain zu verwalten."
+
+#, python-brace-format
+msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+msgstr "Die Verteilerliste mit der Adresse {0} wird in einem externen Prozess verwaltet. Die Änderung der Gruppenmitglieder hier hat keine Auswirkungen auf die Empfänger dieser Verteilerliste"
+
 msgid "List type"
 msgstr "Listen Typ"
 
@@ -666,6 +686,9 @@ msgstr "E-Mail-Verteiler"
 msgid "This group is a mailing list"
 msgstr "Diese Gruppe ist ein E-Mail-Verteiler"
 
+msgid "You do not have the grant to enter internal domain"
+msgstr "Sie haben keine Berechtigung, interne Domänen einzugeben"
+
 msgid "Reply to"
 msgstr "Antwortmails an"
 
@@ -689,6 +712,18 @@ msgstr "Nur E-Mails von Gruppenmitgliedern weiterleiten"
 
 msgid "Only forward to system email accounts"
 msgstr "E-Mails nur an Nutzer mit Systemkonto verteilen"
+
+msgid "Email distribution list function required"
+msgstr "E-Mail-Verteiler Funktion benötigt"
+
+msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+msgstr "E-Mail Konten der Domain der angegebene E-Mail Adresse werden automatisch durch diese Installation verwaltet. Sie können Adressen dieser Domain hier nur verwenden wenn die “E-Mail-Verteiler” Funktion für diese Gruppe aktiviert ist."
+
+msgid "Would you like to enable this function now?"
+msgstr "Soll diese Funktion nun aktiviert werden?"
+
+msgid "E-Mail can not be empty when mailing list is enabled"
+msgstr "Die E-Mail-Adresse darf nicht leer sein, wenn die E-Mail-Verteiler aktiviert ist."
 
 msgid "Company address"
 msgstr "Firmenadresse"
@@ -812,6 +847,9 @@ msgstr ""
 msgid "Label"
 msgstr "Bezeichner"
 
+msgid "Calendar Free Busy URLs"
+msgstr ""
+
 msgid "GENDER_Address"
 msgstr "female"
 
@@ -881,6 +919,11 @@ msgid "Site"
 msgid_plural "Sites"
 msgstr[0] "Standort"
 msgstr[1] "Standorte"
+
+msgid "External FreeBusy Url"
+msgid_plural "External FreeBusy Urls"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "GENDER_Group"
 msgstr "female"
@@ -1036,3 +1079,9 @@ msgstr ""
 
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr ""
+
+#~ msgid "Please enable \"This group is a mailing list\" in mailing list panel."
+#~ msgstr "Bitte aktivieren Sie \"Diese Gruppe ist ein E-Mail-Verteiler\" im E-Mail-Verteiler Karteireiter"
+
+#~ msgid "Invalid"
+#~ msgstr "Ungültig"

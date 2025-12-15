@@ -1165,6 +1165,12 @@ msgstr "Status %s is not valid."
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
 msgstr "Email address {0} not in allowed domains [{1}] or invalid"
 
+msgid "Invalid E-Mail : "
+msgstr "Invalid E-Mail : "
+
+msgid "Domain can not be empty"
+msgstr "Domain can not be empty"
+
 msgid "Email account already exists"
 msgstr "Email account already exists"
 
@@ -1473,6 +1479,12 @@ msgstr "Confirm"
 
 msgid "Restart application to apply the new configuration?"
 msgstr "Restart application to apply the new configuration?"
+
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domain is not allowed. Check your SMTP domain configuration."
+
+msgid "Allowed Domains"
+msgstr "Allowed Domains"
 
 #, python-brace-format
 msgid "All {0}"
@@ -4091,6 +4103,31 @@ msgid_plural "Business Logic Pipeline Items"
 msgstr[0] "Business Logic Pipeline Item"
 msgstr[1] "Business Logic Pipeline Items"
 
+msgid "GENDER_CalDAV"
+msgstr "GENDER_CalDAV"
+
+msgid "CalDAV"
+msgid_plural "CalDAVs"
+msgstr[0] "CalDAV"
+msgstr[1] "CalDAVs"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "GENDER_Cloud Account"
+msgstr "GENDER_Cloud Account"
+
+msgid "Cloud Account"
+msgid_plural "Cloud Accounts"
+msgstr[0] "Cloud Account"
+msgstr[1] "Cloud Accounts"
+
+msgid "Owner"
+msgstr "Owner"
+
+msgid "Cloud Account Type"
+msgstr "Cloud Account Type"
+
 msgid "Record Name"
 msgid_plural "Records Name"
 msgstr[0] "Record Name"
@@ -4104,9 +4141,6 @@ msgstr "New Car"
 
 msgid "Hierarchy"
 msgstr "Hierarchy"
-
-msgid "Owner"
-msgstr "Owner"
 
 msgid "UUID"
 msgstr "UUID"

@@ -541,7 +541,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
 
         // prevent changing of email if it does not match configured domains
-        Tinebase_EmailUser::checkDomain($_group->email, true);
+        Tinebase_EmailUser::checkAllowedDomain($_group->email, true, _includeExternalDomains: true);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new group ' . $_group->name 
@@ -607,7 +607,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function updateGroupInSqlBackend(Tinebase_Model_Group $_group, $_getDeleted = false)
     {
         // prevent changing of email if it does not match configured domains
-        Tinebase_EmailUser::checkDomain($_group->email, true);
+        Tinebase_EmailUser::checkAllowedDomain($_group->email, true, _includeExternalDomains: true);
 
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
 

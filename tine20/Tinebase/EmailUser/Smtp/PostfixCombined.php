@@ -426,7 +426,7 @@ class Tinebase_EmailUser_Smtp_PostfixCombined extends Tinebase_EmailUser_Sql imp
      */
     protected function _checkDomain($_email, $_throwException = false)
     {
-        return Tinebase_EmailUser::checkDomain($_email, $_throwException, $this->_config['alloweddomains']);
+        return Tinebase_EmailUser::checkAllowedDomain($_email, $_throwException, $this->_config['alloweddomains'], _includeExternalDomains: true);
     }
     
     /**

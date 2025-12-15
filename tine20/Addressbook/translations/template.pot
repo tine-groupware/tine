@@ -323,10 +323,13 @@ msgstr ""
 msgid "Contact CSV import from Outlook address book"
 msgstr ""
 
-msgid "Tine contact CSV import"
+msgid "Tine contact CSV import all data"
 msgstr ""
 
 msgid "Import CSV formated contacts from tine address book"
+msgstr ""
+
+msgid "Tine contact CSV import"
 msgstr ""
 
 msgid "Import list (###CURRENTDATE###)"
@@ -367,6 +370,16 @@ msgid "The grant to access contacts private information"
 msgstr ""
 
 msgid "Preferred Address"
+msgstr ""
+
+msgid "Copy Postal Address to Clipboard"
+msgstr ""
+
+msgid "Copied to clipboard"
+msgstr ""
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
 msgstr ""
 
 msgid "Street"
@@ -609,6 +622,13 @@ msgstr ""
 msgid "Group Information"
 msgstr ""
 
+msgid "You do not have the grant to manage mailing list with internal domain"
+msgstr ""
+
+#, python-brace-format
+msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+msgstr ""
+
 msgid "List type"
 msgstr ""
 
@@ -654,6 +674,9 @@ msgstr ""
 msgid "This group is a mailing list"
 msgstr ""
 
+msgid "You do not have the grant to enter internal domain"
+msgstr ""
+
 msgid "Reply to"
 msgstr ""
 
@@ -676,6 +699,18 @@ msgid "Only forward member mails"
 msgstr ""
 
 msgid "Only forward to system email accounts"
+msgstr ""
+
+msgid "Email distribution list function required"
+msgstr ""
+
+msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+msgstr ""
+
+msgid "Would you like to enable this function now?"
+msgstr ""
+
+msgid "E-Mail can not be empty when mailing list is enabled"
 msgstr ""
 
 msgid "Company address"
@@ -800,6 +835,9 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
+msgid "Calendar Free Busy URLs"
+msgstr ""
+
 msgid "GENDER_Address"
 msgstr ""
 
@@ -867,6 +905,11 @@ msgstr[1] ""
 
 msgid "Site"
 msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "External FreeBusy Url"
+msgid_plural "External FreeBusy Urls"
 msgstr[0] ""
 msgstr[1] ""
 

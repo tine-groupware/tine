@@ -74,6 +74,7 @@ Ext.ux.form.MirrorTextFieldManager = function() {
     function MirrorField(field, newValue, oldValue) {
         var m = MirrorTextFields[field.name];
         for(var i = 0, l = m.length; i < l; i++){
+            m[i].value = newValue;
             m[i].setRawValue(newValue);
         }
         return true;

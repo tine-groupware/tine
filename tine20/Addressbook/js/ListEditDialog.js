@@ -61,12 +61,20 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 responsiveBreakpointOverrides: [{level: 2, width: 600}]
             },
             items: [{
-                height: 30,
+                autoHeight: true,
                 region: 'north',
-                items: new Ext.form.VueAlert({
-                    text: '.',
-                    ref: '../../../sysGroupNote'
-                })
+                items: [
+                    new Ext.form.VueAlert({
+                        hidden: true,
+                        ref: '../../../sysGroupNote'
+                    }),
+                    {
+                        xtype: 'v-alert',
+                        variant: 'warning',
+                        hidden: true,
+                        ref: '../../../externalDomainInfo'
+                    },
+                ]
             },{
                 region: 'center',
                 layout: 'border',
@@ -100,25 +108,31 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('E-Mail'),
                                 name: 'email',
                                 maxLength: 255,
-                                allowBlank: false,
-                                checkState: function (editDialog, field) {
-                                    if (editDialog?.mailingListPanel) {
-                                        const checked = editDialog.mailingListPanel.isMailinglistCheckbox.checked;
-                                        const field = editDialog.getForm().findField('email');
-                                        field[checked ? 'show' : 'hide']();
-                                        editDialog.doLayout();
-                                        field.validate();
-                                    }
+                                checkState: (editDialog, record) => {
+                                    this.form.findField('email').validate();
                                 },
-                                validator: function (value) {
-                                    const editDialog = this.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
-                                    if (editDialog?.mailingListPanel?.isMailinglistCheckbox?.checked) {
-                                        if (!value) return false;
-                                        return Tine.Tinebase.common.checkEmailDomain(value);
+                                validator: (value) => {
+                                    const hasManageInternalDomainGrant = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
+                                    let domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
+
+                                    if (!hasManageInternalDomainGrant && domainValidation.isInternalDomain) {
+                                        return this.app.i18n._('You do not have the grant to manage mailing list with internal domain');
                                     }
-                                    return true;
+
+                                    this.externalDomainInfo.setVisible(value && domainValidation.isValid && !domainValidation.isInternalDomain);
+                                    this.externalDomainInfo.setText(String.format(this.app.i18n._('Mailinglist with address {0} is managed in an external process. ' +
+                                        'Changing group members here will not change the recipients of that list.'), value));
+
+                                    if (this.mailingListPanel) {
+                                        const errorMessage = this.mailingListPanel.validateMailingList(value);
+                                        if (errorMessage) {
+                                            domainValidation.isValid = false;
+                                            domainValidation.errorMessage = errorMessage;
+                                        }
+                                    }
+
+                                    return domainValidation.isValid || domainValidation.errorMessage;
                                 },
-                                disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 columnWidth: 0.75,
                                 fieldLabel: this.app.i18n._('List type'),
@@ -130,7 +144,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }), {
                                 columnWidth: 0.25,
                                 xtype: 'checkbox',
-                                fieldLabel: this.app.i18n._('System accounts only'),
+                                boxLabel: this.app.i18n._('System accounts only'),
                                 name: 'account_only',
                                 anchor: '100%',
                                 disabled: true

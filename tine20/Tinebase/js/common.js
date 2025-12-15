@@ -1004,42 +1004,76 @@ const common = {
      * check valid email domain (if email domain is set in config)
      *
      * @param {String} email
-     * @return {Boolean}
      */
     checkEmailDomain: function(email) {
-        const allowedDomains = this.getAllowedDomains();
-
-        if (! email || ! allowedDomains) {
-            if (! email) {
-                Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no mail given');
-            }
-            return true;
+        const result = {
+            isValid: true,
+            errorMessage: false,
+            isInternalDomain: false,
         }
 
-        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
+        if (!email || !Tine.Tinebase.registry.get('primarydomain')) {
+            return result;
+        }
 
-        const emailDomain = email.split('@')[1];
-        return (allowedDomains.indexOf(emailDomain) !== -1);
+        const matchedDomainType = this.getMatchedEmailDomainType(email);
+        const isInternalDomain = ['primarydomain', 'secondarydomains'].includes(matchedDomainType);
+        const isExternalDomain = ['additionalexternaldomains', 'custom'].includes(matchedDomainType);
+        const allowAnyExternalDomains = Tine.Tinebase.registry.get('allowAnyExternalDomains');
+        const manageSmtpEmailUser = Tine.Tinebase.registry.get('manageSmtpEmailUser');
+
+        result.isInternalDomain = isInternalDomain;
+        result.isValid = isInternalDomain || (manageSmtpEmailUser && isExternalDomain && (allowAnyExternalDomains || matchedDomainType === 'additionalexternaldomains'));
+
+        if (!result.isValid) {
+            result.errorMessage = i18n._("Domain is not allowed. Check your SMTP domain configuration.") + '<br>';
+            result.errorMessage += '<br>' + i18n._("Allowed Domains") + ': <br>';
+
+            const allowDomains = Tine.Tinebase.common.getAllowedDomains();
+            Object.values(allowDomains).flat().forEach((domain) => {
+                if (domain !== '') {
+                    result.errorMessage += '- ' + domain + '<br>';
+                }
+            })
+        }
+
+        return result;
+    },
+
+    getMatchedEmailDomainType(email) {
+        if (!email) return false;
+        const emailData = email.split('@');
+        if (!emailData[1]) return false;
+
+        const domain = emailData[1];
+        const domainRegex = '[a-z0-9-\\.]+\\.[a-z]{2,63}';
+        const emailRegex = new RegExp(`^([a-z0-9_+\\-\\.&]+@${domainRegex})$`, 'i');
+        let matchedDomainType = emailRegex.test(email) ? 'custom' : false;
+
+        const allowedDomains = this.getAllowedDomains();
+        Object.entries(allowedDomains).forEach(([key, domains]) => {
+            if (domains.includes(domain)) {
+                matchedDomainType = key;
+            }
+        });
+        return matchedDomainType;
     },
 
     getAllowedDomains: function() {
-        if (! Tine.Tinebase.registry.get('primarydomain')) {
-            Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found');
-            return null;
-        }
+        const allowedDomains = {
+            primarydomain: [],
+            secondarydomains: [],
+            additionalexternaldomains: []
+        };
 
-        let allowedDomains = [Tine.Tinebase.registry.get('primarydomain')];
-
-        if (Ext.isString(Tine.Tinebase.registry.get('secondarydomains'))) {
-            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
-        }
-
-        if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
-            allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
-        }
-
-        Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
-        Tine.log.debug(allowedDomains);
+        Object.keys(allowedDomains).forEach(type => {
+            const domains = Tine.Tinebase.registry.get(type);
+            if (Ext.isString(domains)) {
+                allowedDomains[type] = domains.split(',')
+                    .map(d => d.trim())
+                    .filter(d => d.length > 0);
+            }
+        });
 
         return allowedDomains;
     },
