@@ -285,17 +285,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if (!empty($_password) && !empty($smsPhoneNumber)) {
             $smsPhoneNumber = rawurldecode($smsPhoneNumber);
             $mobilePhoneNumber = Addressbook_Model_Contact::normalizeTelephoneNum($smsPhoneNumber);
-            $smsAdapterConfigs = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}
-                ?->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS};
-
-            if (!$smsAdapterConfigs || count($smsAdapterConfigs) === 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' sms adapter configs is not found , skip sending new password message');
-                return;
-            }
-
-            $smsAdapterClass = $smsAdapterConfigs->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS};
-            $smsAdapterConfig = $smsAdapterConfigs->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG};
 
             $template = $customTemplate ? rawurldecode($customTemplate) : Tinebase_Config::getInstance()->{Tinebase_Config::SMS}
                         ->{Tinebase_Config::SMS_MESSAGE_TEMPLATES}->get(Tinebase_Config::SMS_NEW_PASSWORD_TEMPLATE);
@@ -307,19 +296,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                     })
             ]);
 
-            $message = $twig->load(__METHOD__ . 'password')->render(array_merge($smsAdapterConfig->getTwigContext(), [
+            $message = $twig->load(__METHOD__ . 'password')->render([
                 'password'  => $_password,
                 'user'      => $_account->accountDisplayName,
                 'contact'   => $_account->contact_id
-            ]));
+            ]);
 
             $message = str_replace("\n", '\n', $message);
 
             $smsSendConfig = new Tinebase_Model_Sms_SendConfig([
                 Tinebase_Model_Sms_SendConfig::FLD_MESSAGE => $message,
                 Tinebase_Model_Sms_SendConfig::FLD_RECIPIENT_NUMBER => $mobilePhoneNumber,
-                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CLASS => $smsAdapterClass,
-                Tinebase_Model_Sms_SendConfig::FLD_ADAPTER_CONFIG => $smsAdapterConfig,
             ]);
 
             try {

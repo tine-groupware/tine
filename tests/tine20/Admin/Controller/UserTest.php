@@ -342,11 +342,6 @@ class Admin_Controller_UserTest extends TestCase
         $oldContactId = $user->contact_id;
         $user->contact_id = $newContact->getId();
 
-        Admin_Controller_User::getInstance()->setRequestContext([
-            'sms-phone-number' => '01234567890',
-            'sms-new-password-template' => 'Your new {{ app.branding.title }} unit test password is: {{ password }}'
-        ]);
-
         $user = Admin_Controller_User::getInstance()->update($user, $pw, $pw);
         static::assertEquals($newContact->getId(), $user->contact_id);
         
