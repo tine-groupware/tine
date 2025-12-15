@@ -8,6 +8,9 @@
  *
  */
  
+import {mailAddressRenderer} from "./renderers";
+import { HTMLProxy, Expression } from "twingEnv.es6";
+
 Ext.ns('Tine.Addressbook');
 
 /**
@@ -92,3 +95,13 @@ Tine.Addressbook.ListGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPane
         );
     }
 });
+
+Tine.widgets.grid.RendererManager.register('Addressbook', 'List', 'members', (values, meta, record) => {
+    return new HTMLProxy(new Promise(async (resolve) => {
+        if (!record.contactNames) {
+            const list = await Tine.Addressbook.getList(record.id);
+            record.contactNames = await Promise.all(_.map(list.members, contactData => Tine.Addressbook.Model.Contact.setFromJson(contactData).getTitle().asString()));
+        }
+        resolve(new Expression(record.contactNames.map(Ext.util.Format.htmlEncode).join('<br />')));
+    }));
+}, 'displayPanel');
