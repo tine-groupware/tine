@@ -30,6 +30,8 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE014 = self::class . '::update014';
     protected const RELEASE018_UPDATE015 = self::class . '::update015';
     protected const RELEASE018_UPDATE016 = self::class . '::update016';
+    protected const RELEASE018_UPDATE017 = self::class . '::update017';
+
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -106,6 +108,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE015          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update015',
+            ],
+            self::RELEASE018_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
     ];
@@ -360,5 +366,27 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.16', self::RELEASE018_UPDATE016);
+    }
+
+    public function update017(): void
+    {
+        $smtpconfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $oldsmtpconfig = clone($smtpconfig);
+        $imapconfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $oldimapconfig = clone($imapconfig);
+
+        if ($oldimapconfig->allowExternalEmail) {
+            $smtpconfig->allowAnyExternalDomains = true;
+            unset($imapconfig['allowExternalEmail']);
+        }
+        if (!empty($oldsmtpconfig->additionaldomains)) {
+            $smtpconfig->additionalexternaldomains = $oldsmtpconfig->additionaldomains;
+            unset($smtpconfig['additionaldomains']);
+        }
+
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpconfig);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapconfig);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.17', self::RELEASE018_UPDATE017);
     }
 }

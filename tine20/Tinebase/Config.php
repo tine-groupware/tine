@@ -1375,7 +1375,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * backend (string) - see Tinebase_EmailUser::$_supportedBackends
          * verifyPeer (bool)
          * "allowOverwrite": false (bool)
-         * "allowExternalEmail": false (bool)
+         * "allowExternalEmail": false (bool) // deprecated, please use smtp.allowAnyExternalDomains instead
          *
          * TODO make this a structured config with subconfig keys
          */
@@ -1400,7 +1400,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "auth":"none" (string)
          * "primarydomain":"mail.test" (string)
          * "secondarydomains":"second.test,third.test" (string - comma separated) - secondarydomains that are handled by tine & allowed in tine user email addresses
-         * "additionaldomains":"another.test,onemore.test" (string - comma separated) - additional domains that are allowed in tine user email addresses (but not handled by tine)
+         * "additionalexternaldomains":"another.test,onemore.test" (string - comma separated) - additional domains that are allowed in tine user email addresses (but not handled by tine)
          * "instanceName":"tine.test" (string)
          * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "destinationisusername": false (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createAliasDestinations)
@@ -1408,6 +1408,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
          * "preventSecondaryDomainUsername": true
+         * "allowAnyExternalDomains": false
          *
          * TODO make this a structured config with subconfig keys
          */

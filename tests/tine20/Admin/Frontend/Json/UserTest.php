@@ -552,7 +552,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
 
-        $smtpConfig->additionaldomains = Tinebase_Helper::convertDomainToPunycode($domain);
+        $smtpConfig->additionalexternaldomains = Tinebase_Helper::convertDomainToPunycode($domain);
         Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
 
         $user = $this->_createTestUser();
@@ -574,9 +574,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $this->_skipWithoutEmailSystemAccountConfig();
         $this->_skipIfLDAPBackend();
 
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-        $imapConfig->allowExternalEmail = true;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConfig->allowAnyExternalDomains = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
 
         $user = $this->_createTestUser([
             'accountEmailAddress' => 'address@some.external.domain'
@@ -600,9 +600,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     {
         $this->_skipWithoutEmailSystemAccountConfig();
 
-        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-        $imapConfig->allowExternalEmail = true;
-        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConfig->allowAnyExternalDomains = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
 
         $user = $this->_createTestUser();
         $userArray = $user->toArray();
@@ -629,7 +629,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         Tinebase_EmailUser::clearCaches();
         $tbJson = new Tinebase_Frontend_Json();
         $registry = $tbJson->getRegistryData();
-        self::assertEquals($umlautDomain, $registry['additionaldomains']);
+        self::assertEquals($umlautDomain, $registry['additionalexternaldomains']);
     }
 
     /**

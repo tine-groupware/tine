@@ -323,11 +323,14 @@ msgstr "Import CSV formated contacts from Exchange / Outlook address book"
 msgid "Contact CSV import from Outlook address book"
 msgstr "Contact CSV import from Outlook address book"
 
-msgid "Tine contact CSV import"
-msgstr "Tine contact CSV import"
+msgid "Tine contact CSV import all data"
+msgstr "Tine contact CSV import all data"
 
 msgid "Import CSV formated contacts from tine address book"
 msgstr "Import CSV formated contacts from tine address book"
+
+msgid "Tine contact CSV import"
+msgstr "Tine contact CSV import"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Import list (###CURRENTDATE###)"
@@ -368,6 +371,16 @@ msgstr "The grant to access contacts private information"
 
 msgid "Preferred Address"
 msgstr "Preferred Address"
+
+msgid "Copy Postal Address to Clipboard"
+msgstr "Copy Postal Address to Clipboard"
+
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr "\"{value}\" was copied to clipboard"
 
 msgid "Street"
 msgstr "Street"
@@ -609,6 +622,13 @@ msgstr "Search for Contacts ..."
 msgid "Group Information"
 msgstr "Group Information"
 
+msgid "You do not have the grant to manage mailing list with internal domain"
+msgstr "You do not have the grant to manage mailing list with internal domain"
+
+#, python-brace-format
+msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+msgstr "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+
 msgid "List type"
 msgstr "List type"
 
@@ -654,6 +674,9 @@ msgstr "Mailing List"
 msgid "This group is a mailing list"
 msgstr "This group is a mailing list"
 
+msgid "You do not have the grant to enter internal domain"
+msgstr "You do not have the grant to enter internal domain"
+
 msgid "Reply to"
 msgstr "Reply to"
 
@@ -677,6 +700,18 @@ msgstr "Only forward member mails"
 
 msgid "Only forward to system email accounts"
 msgstr "Only forward to system email accounts"
+
+msgid "Email distribution list function required"
+msgstr "Email distribution list function required"
+
+msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+msgstr "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+
+msgid "Would you like to enable this function now?"
+msgstr "Would you like to enable this function now?"
+
+msgid "E-Mail can not be empty when mailing list is enabled"
+msgstr "E-Mail can not be empty when mailing list is enabled"
 
 msgid "Company address"
 msgstr "Company address"
@@ -800,6 +835,9 @@ msgstr "syncBackendIds"
 msgid "Label"
 msgstr "Label"
 
+msgid "Calendar Free Busy URLs"
+msgstr "Calendar Free Busy URLs"
+
 msgid "GENDER_Address"
 msgstr "GENDER_Address"
 
@@ -869,6 +907,11 @@ msgid "Site"
 msgid_plural "Sites"
 msgstr[0] "Site"
 msgstr[1] "Sites"
+
+msgid "External FreeBusy Url"
+msgid_plural "External FreeBusy Urls"
+msgstr[0] "External FreeBusy Url"
+msgstr[1] "External FreeBusy Urls"
 
 msgid "GENDER_Group"
 msgstr "GENDER_Group"

@@ -597,7 +597,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        Tinebase_EmailUser::checkDomain($email);
+        Tinebase_EmailUser::checkAllowedDomain($email);
     }
 
     protected function _createMailAccount(Addressbook_Model_List $_list)

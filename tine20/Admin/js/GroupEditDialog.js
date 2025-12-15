@@ -129,8 +129,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     validator: function (value) {
                         const editDialog = this.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
                         if (editDialog?.record?.data?.xprops?.useAsMailinglist) {
-                            if (!value) return false;
-                            return Tine.Tinebase.common.checkEmailDomain(value);
+                            const domainValidation = Tine.Tinebase.common.checkEmailDomain(value);
+                            return value && domainValidation.isInternalDomain;
                         }
                         return true;
                     },
@@ -194,12 +194,13 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Boolean}
      */
     isValid: function() {
-        var result = Tine.Admin.Groups.EditDialog.superclass.isValid.call(this);
-        var emailValue = this.getForm().findField('email').getValue();
-        if (!Tine.Tinebase.common.checkEmailDomain(emailValue)) {
+        const result = Tine.Admin.Groups.EditDialog.superclass.isValid.call(this);
+        const emailValue = this.getForm().findField('email').getValue();
+        const domainValidation = Tine.Tinebase.common.checkEmailDomain(emailValue);
+        if (!domainValidation.isValid) {
             this.getForm().markInvalid([{
                 id: 'email',
-                msg: this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.")
+                msg: domainValidation.errorMessage
             }]);
             return false;
         }

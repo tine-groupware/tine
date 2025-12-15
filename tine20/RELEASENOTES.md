@@ -37,6 +37,10 @@ TINE RELEASE NOTES
 ## log login failures by client
 - each client has its own failure counter
 
+## IMAP config allowExternalEmail has been refactored to SMTP allowAnyExternalDomains
+- imap.allowExternalEmail -> smtp.allowAnyExternalDomains
+- smtp.additionaldomains -> smtp.additionalexternaldomains
+
 # SSO
 
 ## improved external IDP usage
