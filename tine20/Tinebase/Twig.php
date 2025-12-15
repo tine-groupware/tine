@@ -110,6 +110,10 @@ class Tinebase_Twig
         $enablePublicPages = Tinebase_Application::getInstance()->isInstalled(GDPR_Config::APP_NAME, true) &&
             GDPR_Config::getInstance()->get(GDPR_Config::ENABLE_PUBLIC_PAGES);
 
+        if ($enablePublicPages) {
+            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        }
+
         $globals = [
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages ? Addressbook_Config::getInstallationRepresentative() : null,
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
@@ -134,29 +138,6 @@ class Tinebase_Twig
             ],
             'currencySymbol'    => Tinebase_Core::getDefaultCurrencySymbol(),
         ];
-
-       if ($enablePublicPages) {
-           $publicInfo = GDPR_Config::getInstance()->get(GDPR_Config::PUBLIC_INFO)->toArray();
-           $contactIdKeys = [
-               GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_OFFICER,
-               GDPR_Config::PUBLIC_INFO_DATA_PROTECTION_AUTHORITY,
-               GDPR_Config::PUBLIC_INFO_HOSTING_PROVIDER,
-               GDPR_Config::PUBLIC_INFO_INSTALLATION_RESPONSIBLE,
-           ];
-           foreach ($contactIdKeys as $idKey) {
-               if (!empty($publicInfo[$idKey])) {
-                   try {
-                       $publicInfo[$idKey] = Addressbook_Controller_Contact::getInstance()->get($publicInfo[$idKey], _getRelatedData: false, _aclProtect: false);
-                   } catch (Tinebase_Exception $e) {
-                       if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                           Tinebase_Core::getLogger()->notice(
-                               __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                       }
-                   }
-               }
-           }
-           $globals = array_merge($globals, $publicInfo);
-       }
 
         $this->_twigEnvironment->addGlobal('app', $globals);
     }
@@ -245,24 +226,25 @@ class Tinebase_Twig
      */
     protected function _addTwigFunctions()
     {
-        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('config', function ($key, $app='') {
-            // $app is not using the factory properly, this always results in TB Config.
-            // we do not fix this! This function is deprecated and should be removed and not be used at all
-            $config = Tinebase_Config::getInstance();
-            if ($app) {
-                if (! ($config->getProperties()[$app]['clientRegistryInclude'] ?? false)) {
-                    throw new Tinebase_Exception($app . ' doesn\'t have clientRegistryInclude set, not allowed!');
-                }
-                if (! ($config->getProperties()[$app][$key]['clientRegistryInclude'] ?? false)) {
-                    throw new Tinebase_Exception($app . '.' . $key .' doesn\'t have clientRegistryInclude set, not allowed!');
-                }
-                $config = $config->{$app};
-            } else {
-                if (! ($config->getProperties()[$key]['clientRegistryInclude'] ?? false)) {
-                    throw new Tinebase_Exception($key . ' doesn\'t have clientRegistryInclude set, not allowed!');
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('config', function ($key, $app = 'Tinebase') {
+            $result = null;
+            $config = Tinebase_Config_Abstract::factory($app);
+            $isAppInstalled = Tinebase_Application::getInstance()->isInstalled($app, true);
+
+            if ($config && $isAppInstalled) {
+                $definition = $config->getProperties()[$key];
+                if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === true ||
+                    isset($definition['exposeToTemplate']) && $definition['exposeToTemplate'] === true
+                ) {
+                    try {
+                        $result = Tinebase_Config::resolveRecordValue($config->{$key}, $definition);
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                    }
                 }
             }
-            return $config->{$key};
+
+            return $result;
         }));
 
         $locale = $this->_locale;

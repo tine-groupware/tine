@@ -83,14 +83,17 @@
             <div>{{ app.installationRepresentative.email }}</div>
         {% endif %}
     </div>
-    <p>You can contact the data protection officer by email at <b>{{ app.dataProtectionOfficer.email | default('') }}</b></p>
-    {% if app.dataProtectionOfficer.adr_two_street is not empty %}
+    {% set dataProtectionOfficer = config(constant('GDPR_Config::DATA_PROTECTION_OFFICER'), 'GDPR') %}
+    {% if dataProtectionOfficer is not empty %}
+    <p>You can contact the data protection officer by email at <b>{{ dataProtectionOfficer.email }}</b></p>
+    {% endif %}
+    {% if dataProtectionOfficer.adr_two_street is not empty %}
         <p>or at the address</p>
         <div class="contact-info">
             {% set address_parts = [
-                app.dataProtectionOfficer.adr_two_street,
-                app.dataProtectionOfficer.adr_two_postalcode,
-                app.dataProtectionOfficer.adr_two_locality
+                dataProtectionOfficer.adr_two_street,
+                dataProtectionOfficer.adr_two_postalcode,
+                dataProtectionOfficer.adr_two_locality
             ]|filter(v => v is not empty) %}
             {% if address_parts is not empty %}
                 <div>{{ address_parts|join(', ') }}</div>
@@ -309,25 +312,25 @@
     <h4>c. How long is the data stored?</h4>
     <p>
         The data is deleted as soon as it is no longer necessary for the purpose for which it was collected. In the case of the
-        provision of the site, this is the case when the respective session has ended. The log files are stored {{ app.logRetentionPeriod }}
+        provision of the site, this is the case when the respective session has ended. The log files are stored {{ config(constant('GDPR_Config::LOG_RETENTION_PERIOD'), 'GDPR') }} hours
         and are accessible directly and exclusively to administrators. After that, they are only indirectly available via the
-        reconstruction of backup tapes and are permanently deleted after {{ app.backupRetebtuibPeriod }}.
+        reconstruction of backup tapes and are permanently deleted after {{ config(constant('GDPR_Config::BACKUP_RETENTION_PERIOD'), 'GDPR') }} days.
     </p>
-
-    {% if app.hostingProvider is not empty %}
+    {% set hostingProvider = config(constant('GDPR_Config::HOSTING_PROVIDER'), 'GDPR') %}
+    {% if hostingProvider is not empty %}
         <h4>d. Are there other recipients of the personal data besides the controller?</h4>
         <p>This {{ app.branding.title }} instance is hosted by</p>
         <div class="contact-info">
-            <div>{{ app.hostingProvider.n_fileas }}</div>
+            <div>{{ hostingProvider.n_fileas }}</div>
             {% set address_parts = [
-                app.hostingProvider.adr_two_street,
-                app.hostingProvider.adr_two_postalcode,
-                app.hostingProvider.adr_two_locality
+                hostingProvider.adr_two_street,
+                hostingProvider.adr_two_postalcode,
+                hostingProvider.adr_two_locality
             ]|filter(v => v is not empty) %}
             {% if address_parts is not empty %}
                 <div>{{ address_parts|join(', ') }}</div>
             {% endif %}
-            <div>{{ app.hostingProvider.email }}</div>
+            <div>{{ hostingProvider.email }}</div>
         </div>
         <p>The host receives the above-mentioned data as a processor.</p>
     {% endif %}
@@ -358,8 +361,9 @@
         If you believe that the processing of your personal data violates data protection law, you have the right to lodge a
         complaint with a data protection supervisory authority of your choice pursuant to Art. 77 (1) GDPR. This includes the
         data protection supervisory authority responsible for the controller:
-        {% if app.dataProtectionAuthority is not empty %}
-            {{ app.dataProtectionAuthority.org_name }} , <a href="{{ app.dataProtectionAuthority.url }}"> {{ app.dataProtectionAuthority.url }}</a>
+        {% set dataProtectionAuthority = config(constant('GDPR_Config::DATA_PROTECTION_AUTHORITY'), 'GDPR') %}
+        {% if dataProtectionAuthority is not empty %}
+            {{ dataProtectionAuthority.org_name }} , <a href="{{ dataProtectionAuthority.url }}"> {{ dataProtectionAuthority.url }}</a>
         {% endif %}
     </p>
     <h4>g. Right to data portability</h4>

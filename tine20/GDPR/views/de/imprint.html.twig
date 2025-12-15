@@ -35,22 +35,18 @@
     </div>
 {% endif %}
 
-{% if app.commercialRegistry is not empty -%}
-    <h6>Eingetragen in das Handelsregister beim Amtsgericht {{ app.commercialRegistry }}</h6>
-{% endif %}
+<h6>Eingetragen in das Handelsregister beim Amtsgericht {{ config(constant('GDPR_Config::COMMERCIAL_REGISTRY'), 'GDPR') }}</h6>
+<h6>USt.-Id.-Nr. gemäß § 27 UStG: {{ config(constant('GDPR_Config::VAT_ID'), 'GDPR') }}</h6>
 
-{% if app.vatId is not empty -%}
-    <h6>USt.-Id.-Nr. gemäß § 27 UStG: {{ app.vatId }}</h6>
-{% endif %}
-
-{% if app.installationResponsible is not empty -%}
+{% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
+{% if installationResponsible is not empty -%}
     <h6>Verantwortlicher gemäß § 18 Abs. 2 MStV</h6>
     <div class="contact-info">
-        <div>{{ app.installationResponsible.n_fileas }}</div>
-        <div>{{ app.installationResponsible.adr_one_street }}</div>
+        <div>{{ installationResponsible.n_fileas }}</div>
+        <div>{{ installationResponsible.adr_one_street }}</div>
         {% set address_parts = [
-            app.installationResponsible.adr_one_postalcode,
-            app.installationResponsible.adr_one_locality
+            installationResponsible.adr_one_postalcode,
+            installationResponsible.adr_one_locality
         ]|filter(v => v is not empty) %}
 
         {% if address_parts is not empty %}
