@@ -85,14 +85,17 @@
             <div>{{ app.installationRepresentative.email }}</div>
         {% endif %}
     </div>
-    <p>Den Datenschutzbeauftragten erreichen Sie per E-Mail unter <b>{{ app.dataProtectionOfficer.email | default('') }}</b></p>
-    {% if app.dataProtectionOfficer.adr_two_street is not empty %}
+    {% set dataProtectionOfficer = config(constant('GDPR_Config::DATA_PROTECTION_OFFICER'), 'GDPR') %}
+    {% if dataProtectionOfficer is not empty %}
+    <p>Den Datenschutzbeauftragten erreichen Sie per E-Mail unter <b>{{ dataProtectionOfficer.email | default('') }}</b></p>
+    {% endif %}
+    {% if dataProtectionOfficer.adr_two_street is not empty %}
         <p>oder über die Adresse</p>
         <div class="contact-info">
             {% set address_parts = [
-                app.dataProtectionOfficer.adr_two_street,
-                app.dataProtectionOfficer.adr_two_postalcode,
-                app.dataProtectionOfficer.adr_two_locality
+                dataProtectionOfficer.adr_two_street,
+                dataProtectionOfficer.adr_two_postalcode,
+                dataProtectionOfficer.adr_two_locality
             ]|filter(v => v is not empty) %}
             {% if address_parts is not empty %}
                 <div>{{ address_parts|join(', ') }}</div>
@@ -317,24 +320,25 @@
     <h4>c. Wie lange werden die Daten gespeichert?</h4>
     <p>
         Die Daten werden gelöscht, sobald sie für die Erreichung des Zwecks ihrer Erhebung nicht mehr erforderlich sind. Bei der
-        Bereitstellung der Website ist dies der Fall, wenn die jeweilige Sitzung beendet ist. Die Protokolldateien werden {{ app.logRetentionPeriod }}
+        Bereitstellung der Website ist dies der Fall, wenn die jeweilige Sitzung beendet ist. Die Protokolldateien werden {{ config(constant('GDPR_Config::LOG_RETENTION_PERIOD'), 'GDPR') }} stunden
         direkt und ausschließlich für Administratoren zugänglich aufbewahrt. Danach sind sie nur noch indirekt über die
-        Rekonstruktion von Sicherungsbändern verfügbar und werden nach {{ app.backupRetebtuibPeriod }} endgültig gelöscht.
+        Rekonstruktion von Sicherungsbändern verfügbar und werden nach {{ config(constant('GDPR_Config::BACKUP_RETENTION_PERIOD'), 'GDPR') }} Tage endgültig gelöscht.
     </p>
-    {% if app.hostingProvider is not empty %}
+    {% set hostingProvider = config(constant('GDPR_Config::HOSTING_PROVIDER'), 'GDPR') %}
+    {% if hostingProvider is not empty %}
         <h4>d. Gibt es neben dem Verantwortlichen weitere Empfänger der personenbezogenen Daten?</h4>
         <p>Diese {{ app.branding.title }}-Instanz wird gehostet von</p>
         <div class="contact-info">
-            <div>{{ app.hostingProvider.n_fileas }}</div>
+            <div>{{ hostingProvider.n_fileas }}</div>
             {% set address_parts = [
-                app.hostingProvider.adr_two_street,
-                app.hostingProvider.adr_two_postalcode,
-                app.hostingProvider.adr_two_locality
+                hostingProvider.adr_two_street,
+                hostingProvider.adr_two_postalcode,
+                hostingProvider.adr_two_locality
             ]|filter(v => v is not empty) %}
             {% if address_parts is not empty %}
                 <div>{{ address_parts|join(', ') }}</div>
             {% endif %}
-            <div>{{ app.hostingProvider.email }}</div>
+            <div>{{ hostingProvider.email }}</div>
         </div>
         <p>Der Hoster empfängt die oben genannten Daten als Auftragsverarbeiter.</p>
     {% endif %}
@@ -363,8 +367,9 @@
     <h4>f. Recht auf Beschwerde</h4>
     <p>
         Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen Datenschutzrecht verstößt, haben Sie nach Art. 77 Abs. 1 DS-GVO das Recht, sich bei einer Datenschutzaufsichtsbehörde eigener Wahl zu beschweren. Hierzu gehört auch die für den Verantwortlichen zuständige Datenschutzaufsichtsbehörde:
-        {% if app.dataProtectionAuthority is not empty %}
-            {{ app.dataProtectionAuthority.org_name }} , <a href="{{ app.dataProtectionAuthority.url }}"> {{ app.dataProtectionAuthority.url }}</a>
+        {% set dataProtectionAuthority = config(constant('GDPR_Config::DATA_PROTECTION_AUTHORITY'), 'GDPR') %}
+        {% if dataProtectionAuthority is not empty %}
+            {{ dataProtectionAuthority.org_name }} , <a href="{{ dataProtectionAuthority.url }}"> {{ dataProtectionAuthority.url }}</a>
         {% endif %}
     </p>
     <h4>g. Recht auf Datenübertragbarkeit</h4>

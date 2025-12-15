@@ -28,6 +28,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
     public const CONTENT_CLASS         = 'contentClass';
     public const DEFAULT_STR           = 'default';
     public const DESCRIPTION           = 'description';
+    public const EXPOSETOTEMPLATE      = 'exposeToTemplate';
     public const LABEL                 = 'label';
     public const OPTIONS               = 'options';
     public const OPTION_PARENT_FIELD   = 'parentField'; // for type keyfield

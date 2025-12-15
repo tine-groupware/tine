@@ -41,15 +41,14 @@ class GDPR_Config extends Tinebase_Config_Abstract
     const TEMPLATE_PATH = 'templatePath';
     const MANAGE_CONSENT_EMAIL_TEMPLATE = 'manageConsentEmailTemplate';
     const ENABLE_PUBLIC_PAGES = 'enablePublicPages';
-    const PUBLIC_INFO = 'publicInfo';
-    const PUBLIC_INFO_DATA_PROTECTION_OFFICER = 'dataProtectionOfficer';
-    const PUBLIC_INFO_DATA_PROTECTION_AUTHORITY = 'dataProtectionAuthority';
-    const PUBLIC_INFO_HOSTING_PROVIDER = 'hostingProvider';
-    const PUBLIC_INFO_INSTALLATION_RESPONSIBLE = 'installationResponsible';
-    const PUBLIC_INFO_LOG_RETENTION_PERIOD = 'logRetentionPeriod';
-    const PUBLIC_INFO_BACKUP_RETENTION_PERIOD = 'backupRetebtuibPeriod';
-    const PUBLIC_INFO_COMMERCIAL_REGISTRY = 'commercialRegistry';
-    const PUBLIC_INFO_VAT_ID = 'vatId';
+    const DATA_PROTECTION_OFFICER = 'dataProtectionOfficer';
+    const DATA_PROTECTION_AUTHORITY = 'dataProtectionAuthority';
+    const HOSTING_PROVIDER = 'hostingProvider';
+    const INSTALLATION_RESPONSIBLE = 'installationResponsible';
+    const LOG_RETENTION_PERIOD = 'logRetentionPeriod';
+    const BACKUP_RETENTION_PERIOD = 'backupRetebtuibPeriod';
+    const COMMERCIAL_REGISTRY = 'commercialRegistry';
+    const VAT_ID = 'vatId';
 
 
     /**
@@ -156,65 +155,81 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => false,
         ],
-        self::PUBLIC_INFO => [
-            self::LABEL => 'Report WebDAV issues', //_('Report WebDAV issues')
-            self::DESCRIPTION => 'Report WebDAV issues',
-            self::TYPE => self::TYPE_OBJECT,
-            self::CLASSNAME => Tinebase_Config_Struct::class,
-            self::CLIENTREGISTRYINCLUDE => false,
-            self::SETBYADMINMODULE => true,
-            self::SETBYSETUPMODULE => true,
-            self::CONTENT => [
-                self::PUBLIC_INFO_DATA_PROTECTION_OFFICER => [
-                    self::LABEL                 => 'Data protection officer', //_('Data protection officer')
-                    self::DESCRIPTION           => 'Contact of the responsible data protection officer.', //_('Contact of the responsible data protection officer.')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_DATA_PROTECTION_AUTHORITY => [
-                    self::LABEL                 => 'Data protection authority', //_('Data protection authority')
-                    self::DESCRIPTION           => 'Data protection authority.', //_('Data protection authority.')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_HOSTING_PROVIDER => [
-                    self::LABEL                 => 'Hosting provider', //_('Subscription container ID')
-                    self::DESCRIPTION           => 'Contact of the hosting provider (if installation is not hosted in-house)', //_('Contact of the hosting provider (if installation is not hosted in-house)')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_INSTALLATION_RESPONSIBLE => [
-                    self::LABEL                 => 'Legally responsible', //_('Legally responsible')
-                    self::DESCRIPTION           => 'Legal person responsible for this installation', //_('Legal person responsible for this installation')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_LOG_RETENTION_PERIOD => [
-                    self::LABEL                 => 'Retention period for log files', //_('Retention period for log files')
-                    self::DESCRIPTION           => 'Retention period for log files in hours.', //_('Retention period for log files in hours.')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_BACKUP_RETENTION_PERIOD => [
-                    self::LABEL                 => 'Backup retention period', //_('Backup retention period')
-                    self::DESCRIPTION           => 'Backup retention period in days.', //_('Backup retention period in days.')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_COMMERCIAL_REGISTRY  => [
-                    self::LABEL                 => 'Commercial registry', //_('Commercial registry')
-                    self::DESCRIPTION           => 'Competent commercial register and commercial register number', //_('Competent commercial register and commercial register number')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
-                self::PUBLIC_INFO_VAT_ID => [
-                    self::LABEL                 => 'Vat Id', //_('Vat Id')
-                    self::DESCRIPTION           => 'Vat Id', //_('Vat Id')
-                    self::TYPE                  => self::TYPE_STRING,
-                    self::DEFAULT_STR           => '',
-                ],
+        self::DATA_PROTECTION_OFFICER => [
+            self::LABEL                 => 'Data protection officer', //_('Data protection officer')
+            self::DESCRIPTION           => 'Contact of the responsible data protection officer.', //_('Contact of the responsible data protection officer.')
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Addressbook_Config::APP_NAME,
+                self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
             ],
-            self::DEFAULT_STR => [],
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE => true,
+        ],
+        self::DATA_PROTECTION_AUTHORITY => [
+            self::LABEL                 => 'Data protection authority', //_('Data protection authority')
+            self::DESCRIPTION           => 'Data protection authority.', //_('Data protection authority.')
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Addressbook_Config::APP_NAME,
+                self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
+            ],
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE => true,
+        ],
+        self::HOSTING_PROVIDER => [
+            self::LABEL                 => 'Hosting provider', //_('Hosting provider')
+            self::DESCRIPTION           => 'Contact of the hosting provider (if installation is not hosted in-house)', //_('Contact of the hosting provider (if installation is not hosted in-house)')
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Addressbook_Config::APP_NAME,
+                self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
+            ],
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
+        ],
+        self::INSTALLATION_RESPONSIBLE => [
+            self::LABEL                 => 'Legally responsible', //_('Legally responsible')
+            self::DESCRIPTION           => 'Legal person responsible for this installation', //_('Legal person responsible for this installation')
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Addressbook_Config::APP_NAME,
+                self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
+            ],
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
+        ],
+        self::LOG_RETENTION_PERIOD => [
+            self::LABEL                 => 'Retention period for log files', //_('Retention period for log files')
+            self::DESCRIPTION           => 'Retention period for log files in hours.', //_('Retention period for log files in hours.')
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 24,
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
+        ],
+        self::BACKUP_RETENTION_PERIOD => [
+            self::LABEL                 => 'Backup retention period', //_('Backup retention period')
+            self::DESCRIPTION           => 'Backup retention period in days.', //_('Backup retention period in days.')
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 21,
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
+        ],
+        self::COMMERCIAL_REGISTRY  => [
+            self::LABEL                 => 'Commercial registry', //_('Commercial registry')
+            self::DESCRIPTION           => 'Competent commercial register and commercial register number', //_('Competent commercial register and commercial register number')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
+        ],
+        self::VAT_ID => [
+            self::LABEL                 => 'Vat Id', //_('Vat Id')
+            self::DESCRIPTION           => 'Vat Id', //_('Vat Id')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '',
+            self::SETBYADMINMODULE      => true,
+            self::EXPOSETOTEMPLATE      => true,
         ],
     ];
     
