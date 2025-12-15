@@ -29,6 +29,10 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     /**
      * @static string
      */
+    const CREATE_DOWNLOADLINKS = 'create_downloadlinks';
+    /**
+     * @static string
+     */
     const MANAGE_DOWNLOADLINKS = 'manage_downloadlinks';
 
     /**
@@ -110,8 +114,12 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('Manage shared folders'),
                 'description'   => $translate->_('Allow creating and moving new subfolders under the shared root folder. Deleting and renaming actions require admin permissions on the respective node.'),
             ),
+            self::CREATE_DOWNLOADLINKS  => array(
+                'text'          => $translate->_('The right to create download links if the user also has the Publish grant.'),
+                'description'   => $translate->_('Allow viewing, adding and deleting download links'),
+            ),
             self::MANAGE_DOWNLOADLINKS  => array(
-                'text'          => $translate->_('Manage anonymous download links'),
+                'text'          => $translate->_('The right to manage download links, regardless of the publishing grant.'),
                 'description'   => $translate->_('Allow viewing, adding and deleting download links'),
             ),
             self::MANAGE_SHARED_NODE_FAVORITES => array(
