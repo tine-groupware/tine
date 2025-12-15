@@ -202,11 +202,11 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
 
                 if(!this.alertedDomains.includes(value)) {
                     this.alertedDomains.push(value);
-                    Ext.MessageBox.alert(title,
+                    Ext.MessageBox.confirm(title,
                         text + '<br><br>' +
                         this.app.i18n._('Would you like to enable this function now?'),
                     (btn) => {
-                        if (btn === 'ok') {
+                        if (btn === 'yes') {
                             this.isMailinglistCheckbox.setValue(true);
                         }
                     });
