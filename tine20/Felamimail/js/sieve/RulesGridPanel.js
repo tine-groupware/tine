@@ -11,6 +11,8 @@
 Ext.ns('Tine.Felamimail.sieve');
 
 require('./EditSieveScriptWindow');
+import DDSortPlugin from 'ux/grid/DDSortPlugin';
+
 
 /**
  * @namespace Tine.Felamimail
@@ -48,11 +50,15 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     newRecordIcon: 'action_new_rule',
     editDialogClass: Tine.Felamimail.sieve.RuleEditDialog,
     stateful: false,
-    
+    gridConfig: {
+        enableDragDrop: true,
+        ddGroup: 'sieveRulesDDGroup',
+    },
+
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.initColumns();
-        
+
         this.editDialogConfig = {
             account: this.account
         };
@@ -63,9 +69,13 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             app: this.app
         })
 
+        this.plugins = [new DDSortPlugin({
+            ddSortCol: 'id',
+        })];
+
         this.supr().initComponent.call(this);
     },
-    
+
     /**
      * Return CSS class to apply to rows depending on enabled status
      * 

@@ -25,7 +25,7 @@ Ext.extend(DDSortPlugin, Ext.util.Observable, {
 
     async init(gridPanel) {
         const me = this;
-        this.grid = gridPanel;
+        this.grid = gridPanel?.grid ?? gridPanel;
         this.store = this.grid.store;
         await this.grid.afterIsRendered();
 
