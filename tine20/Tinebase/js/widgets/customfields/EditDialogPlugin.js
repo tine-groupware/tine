@@ -6,12 +6,16 @@
  * @copyright   Copyright (c) 2007-2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+
 Ext.ns('Tine.widgets.customfields');
+require('./FieldWrapper');
 
 Tine.widgets.customfields.EditDialogPlugin = function (config) {
     Ext.apply(this, config);
     this.tabPanelPosition = 20;
 };
+
+Tine.widgets.customfields.EditDialogPlugin._isModelInitialized = {};
 
 Tine.widgets.customfields.EditDialogPlugin.prototype = {
     /**
@@ -120,6 +124,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             modelName = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
             allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName);
 
+        if (Tine.widgets.customfields.EditDialogPlugin._isModelInitialized[modelName]) return;
+
         _.each(allCfConfigs, _.bind(function (fields) {
             const key = _.get(fields, 'data.definition.uiconfig.key');
             if(key) {
@@ -134,12 +140,19 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                         anchor:'100% 100%',
                     });
                 }
-                const field = Tine.widgets.customfields.Field.get(this.app, fields, config, this.editDialog);
+                const wrapperConfig = {
+                    xtype: 'customfieldwrapper',
+                    config: config,
+                    fields: fields,
+                    app:    this.app,
+                };
 
                 Ext.ux.ItemRegistry.registerItem(key, (key.match(/eastPanel$/) ?
-                    {layout: 'form', items: field, title: field.fieldLabel} : field),pos ? pos : '0/0');
+                    {layout: 'form', items: wrapperConfig, title: _.get(fields, 'data.definition.label')} : wrapperConfig),pos ? pos : '0/0');
             }
         }, this));
+
+        Tine.widgets.customfields.EditDialogPlugin._isModelInitialized[modelName] = true;
     },
 
     /**
