@@ -76,7 +76,6 @@ class CrewScheduling_Controller_EventRoleConfig extends Tinebase_Controller_Reco
         }
     }
 
-    // @TODO: what about recur events?
     public function manageEventStatus(Calendar_Model_Event $event) : Calendar_Model_Event
     {
         if ($event->rrule) return $event;

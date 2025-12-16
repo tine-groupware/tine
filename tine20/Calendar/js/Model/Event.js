@@ -70,6 +70,7 @@ const Event = Record.create(Record.genericFields.concat([
     { name: 'exdate' },
     //{ name: 'exrule' },
     //{ name: 'rdate' },
+    { name: 'xprops' },
     { name: 'rrule' },
     { name: 'poll_id' },
     { name: 'mute' },

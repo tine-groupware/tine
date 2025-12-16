@@ -56,6 +56,11 @@ class CrewScheduling_Model_EventRoleConfigTest extends CrewScheduling_TestCase
         $event = Calendar_Controller_Event::getInstance()->createRecurException($event);
         $this->assertEquals('TENTATIVE', $event->status);
 
+        // test manual cancel of events
+        $event->status = 'CANCELLED';
+        $event = Calendar_Controller_Event::getInstance()->update($event);
+        $this->assertEquals('CANCELLED', $event->status);
+
         // regular recurring must not be touched
         $baseEvent = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($event);
         $events = new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$baseEvent]);
