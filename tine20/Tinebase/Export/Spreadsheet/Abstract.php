@@ -142,7 +142,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
 
         $decimalFormatter = new NumberFormatter($this->_locale->toString(), NumberFormatter::DECIMAL);
 
-        switch($_field->type) {
+        switch ($_field->type) {
             case 'datetime':
             case 'date':
                 $result = ($_record->{$_field->identifier} instanceof DateTime) ? $_record->{$_field->identifier}->toString('Y-m-d\TH:i:s') : $_record->{$_field->identifier};
@@ -182,6 +182,10 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 $result = $this->_addNotes($_record);
                 break;
             default:
+                if (isset($_field->roundTo)) {
+                    $_record->{$_field->identifier} = ceil($_record->{$_field->identifier} / $_field->roundTo) * $_field->roundTo;
+                }
+
                 if (in_array($_field->identifier, $this->_getCustomFieldNames())) {
                     // add custom fields
                     if (isset($_record->customfields[$_field->identifier])) {
