@@ -1778,7 +1778,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $emailNode->name = 'Emails';
                     $emailNode->path = $emailVirtualPath;
                     $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                    $emailNode->quota = $imapUsageQuota['mailQuota'];
+                    $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
                     $emailNode->size = $imapUsageQuota['mailSize'];
                     $emailNode->revision_size = $emailNode->size;
                     $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
@@ -1828,7 +1828,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node = new Tinebase_Model_Tree_Node(array(), true);
                 $node->parent_id = $parent_id;
                 $node->name = $domain;
-                $node->quota = $usageQuota['mailQuota'];
+                $node->quota = $usageQuota['mailQuota'] * 1024 * 1024;
                 $node->size = $usageQuota['mailSize'];
                 $node->revision_size = $usageQuota['mailSize'];
                 $node->setId(md5($domain));
