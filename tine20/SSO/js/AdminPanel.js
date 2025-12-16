@@ -64,7 +64,7 @@ Tine.SSO.AdminPanel.openWindow = function (config) {
     });
 };
 
-if (Tine.Admin) {
+if (Tine.Admin && Ext.isFunction(Tine.Admin.registerItem)) {
     Tine.Admin.registerItem({
         text: 'SSO', // _('SSO')
         pos: 1000,
