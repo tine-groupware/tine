@@ -9,6 +9,12 @@ Some common tine-docker CLI commands
     docker exec --user tine20 -it <tine-web-container> sh -c "php /usr/share/tine20/setup.php --config /etc/tine20 --update -v"
 ~~~
 
+## INSTALL AN APP
+
+~~~
+    docker exec --user tine20 -it <tine-web-container> sh -c "php /usr/share/tine20/setup.php --config /etc/tine20 --install HumanResources"
+~~~
+
 ## BACKUP / RESTORE
 
 1) Recommended: create a volume for the tine backups - for persisting on the host or moving to another host.
