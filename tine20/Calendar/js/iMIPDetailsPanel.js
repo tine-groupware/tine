@@ -49,7 +49,8 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.initIMIPToolbar();
 
         this.on('afterrender', async (cmp, ownerCt) => {
-            await this.attendeeCombo.syncStore(this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'));
+            const attendeeList = this.getAttendeeList();
+            await this.attendeeCombo.syncStore(attendeeList);
             this.showIMIP();
         });
         this.on('updateEvent', async (result) => {
@@ -248,10 +249,9 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             style: "margin: 5px 10px;",
         });
 
-        this.descriptionField =  new Ext.form.VueAlert({
+        this.descriptionField = new Ext.form.VueAlert({
             variant: 'warning',
             hidden: true,
-            label: this.app.i18n._("Attention! , this is an invitation for ") + this.messageRecord.data['to'][0]['name'],
         });
 
         this.tbar = this.actionToolbar = new Ext.Panel({
@@ -315,15 +315,15 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.targetAttendeeRecord = this.attendeeCombo.store.getById(selectedAttendeeId);
 
         const attendeeContainers = this.iMIPrecord.get('attendeeContainersAvailable');
-        const eventRecord = this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event');
+        const attendeeList = this.getAttendeeList();
+
         if (this.targetAttendeeRecord) {
-            const targetAttendeeDataFromEvent = eventRecord.get('attendee').find((r) => {
+            const targetAttendeeDataFromEvent = attendeeList.find((r) => {
                 return r.id === selectedAttendeeId;
             });
-            const displayContainer = targetAttendeeDataFromEvent.displaycontainer_id;
 
-            if (displayContainer) {
-                this.targetAttendeeRecord.set('displaycontainer_id', displayContainer);
+            if (targetAttendeeDataFromEvent?.displaycontainer_id) {
+                this.targetAttendeeRecord.set('displaycontainer_id', targetAttendeeDataFromEvent.displaycontainer_id);
             } else {
                 Object.entries(attendeeContainers).forEach((key) => {
                     const user = this.targetAttendeeRecord.get('user_id');
@@ -335,6 +335,20 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         }
 
         return this.targetAttendeeRecord;
+    },
+
+    getAttendeeList() {
+        const existingEvent = this.iMIPrecord.get('existing_event');
+        const event = this.iMIPrecord.get('event');
+        if (existingEvent && existingEvent.get('attendee').length > 0) {
+            return existingEvent.get('attendee');
+        }
+
+        const myAttender = event.getMyAttenderRecord().data;
+        if (myAttender?.user_id?.id) {
+            myAttender.id = myAttender.user_id.id;
+        }
+        return myAttender ? [myAttender] : [];
     },
 
     /**
@@ -355,9 +369,9 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         const method = this.iMIPrecord.get('method');
         const event = this.iMIPrecord.get('event');
         const existingEvent = this.iMIPrecord.get('existing_event');
-        const attenderRecord = this.getTargetAttendeeRecord();
+        let attenderRecord = this.getTargetAttendeeRecord();
         this.record = (existingEvent && !preconditions) ? existingEvent : event;
-        const myAttenderRecord = this.record.getMyAttenderRecord();
+        const myAttenderRecord = existingEvent ? existingEvent.getMyAttenderRecord() : event.getMyAttenderRecord();
         let showActions = false;
         let text = '';
 
@@ -366,8 +380,15 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             event.set('container_id', existingEvent.data.container_id);
         }
 
-        if (myAttenderRecord && myAttenderRecord.get('user_id').email !== this.messageRecord.data['to'][0]['email']) {
-            this.descriptionField.show();
+        if (!attenderRecord) {
+            attenderRecord = myAttenderRecord;
+        }
+        if (myAttenderRecord) {
+            const isInRecipientList = this.messageRecord.data['to'].find((to) => {return myAttenderRecord.get('user_id').email === to.email});
+            if (!isInRecipientList) {
+                this.descriptionField.setText(this.app.i18n._("Attention! , this is an invitation for ") + this.messageRecord.data['to'][0]['name']);
+                this.descriptionField.show();
+            }
         }
 
         // check preconditions
@@ -387,7 +408,9 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             }
             else if (precondition.hasOwnProperty('ATTENDEE')) {
                 // party crush button?
-                showActions = true;
+                if (myAttenderRecord) {
+                    showActions = true;
+                }
                 text = this.app.i18n._("You are not an attendee of this event");
             }
             else if (precondition.hasOwnProperty('NOTDELETED')) {
@@ -403,18 +426,21 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         }
         // method specific text / actions
         if (!preconditions?.[uid]) {
-            const attendeeName = (attenderRecord.get('user_id').n_fn ?? attenderRecord.get('user_id').name);
             switch (method) {
                 case 'REQUEST':
-                    showActions = true;
+                    if (attenderRecord) {
+                        showActions = true;
+                    }
+
                     if (!myAttenderRecord) {
                         // might happen in shared folders -> we might want to become a party crusher?
                         text = this.app.i18n._("This is an event invitation for someone else.");
                         break;
                     }
-                    if (existingEvent && attenderRecord.get('status') !== 'NEEDS-ACTION'
+                    if (existingEvent && attenderRecord && attenderRecord.get('status') !== 'NEEDS-ACTION'
                         && (event.get('external_seq') <= existingEvent.get('external_seq')
                             || event.get('seq') <= existingEvent.get('seq'))) {
+                        const attendeeName = (attenderRecord.get('user_id').n_fn ?? attenderRecord.get('user_id').name);
                         text = attendeeName + ' ' + this.app.i18n._("has already replied to this event invitation.");
                     }
                     if (existingEvent && existingEvent.isRescheduled(event)) {
