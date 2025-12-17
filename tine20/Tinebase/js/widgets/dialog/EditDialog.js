@@ -516,10 +516,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     frame: true,
                     layout: 'border',
                     layoutConfig: {
-                        enableResponsive: true,
-                        responsiveBreakpointOverrides: this.getRecordFormItems === Tine.widgets.dialog.EditDialog.prototype.getRecordFormItems
-                            ? [{level: 2, width: 300}]
-                            : this.responsiveBreakpointOverrides,
+                        enableResponsive: this.layoutConfig?.hasOwnProperty?.('enableResponsive')
+                            ? this.layoutConfig.enableResponsive
+                            : true,
+                        responsiveBreakpointOverrides: this.layoutConfig?.hasOwnProperty?.('responsiveBreakpointOverrides')
+                            ? this.layoutConfig.responsiveBreakpointOverrides
+                            : (this.getRecordFormItems === Tine.widgets.dialog.EditDialog.prototype.getRecordFormItems
+                                ? [{level: 2, width: 300}]
+                                : this.responsiveBreakpointOverrides),
                     },
                     defaults: { autoScroll: true },
                     items: [Ext.applyIf(this.getRecordFormItems (plugin), {
