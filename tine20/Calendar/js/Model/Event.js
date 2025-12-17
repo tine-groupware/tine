@@ -536,7 +536,7 @@ Event.getFilterModel = function() {
 };
 
 Event.datetimeRenderer = function(dt) {
-    if (Ext.isString(dt)) {
+    if (dt && Ext.isString(dt)) {
         dt = new Date(dt);
     }
     const app = Tine.Tinebase.appMgr.get('Calendar');
