@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -55,6 +55,11 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Offer::FLD_REVERSAL_STATUS,
             Sales_Model_Document_Offer::FLD_PAYMENT_MEANS,
             Sales_Model_Document_Offer::FLD_DISPATCH_HISTORY,
+            Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,
+            Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE,
+            Sales_Model_Document_Abstract::FLD_PROJECT_REFERENCE,
+            Sales_Model_Document_Abstract::FLD_CONTACT_ID,
+            Sales_Model_Document_Abstract::FLD_CONTRACT_NUMBER,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
