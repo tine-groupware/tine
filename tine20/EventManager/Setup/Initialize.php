@@ -31,7 +31,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
     {
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
         $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
-        $path = '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
+        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
 
         EventManager_Config::getInstance()
             ->set(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH, $path);
@@ -91,10 +91,11 @@ class EventManager_Setup_Initialize extends Setup_Initialize
                 Tinebase_Model_Grants::GRANT_ADMIN => true
             ],
         ]);
+        $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
         $systemContainer = Tinebase_Container::getInstance()->createSystemContainer(
             Addressbook_Config::APP_NAME,
             Addressbook_Model_Contact::class,
-            'Event Contacts',
+            $translate->_('Event Contacts'),
             grants: $grants
         );
         // config must be set after, since it belongs to EventManager and not Addressbook
