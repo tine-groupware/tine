@@ -561,7 +561,9 @@ const common = {
      * @return {string}
      */
     booleanRenderer: function (value) {
-        var translationString = String.format("{0}",(Boolean(value) && value !== "0") ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
+        const translationString = String.format("{0}",(Boolean(value) && value !== "0")
+            ? Locale.getTranslationData('Question', 'yes')
+            : Locale.getTranslationData('Question', 'no'));
 
         return translationString.substr(0, translationString.indexOf(':'));
     },
