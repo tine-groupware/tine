@@ -51,6 +51,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_DOCUMENT_TITLE = 'document_title';
     public const FLD_DOCUMENT_DATE = 'date'; // Belegdatum,  defaults empty, today when booked and not set differently
     public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
+    public const FLD_CONTRACT_NUMBER = 'contract_number';
 
     public const FLD_POSITIONS = 'positions'; // virtuell recordSet
     public const FLD_POSITIONS_NET_SUM = 'positions_net_sum';
@@ -341,6 +342,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
+            ],
+            self::FLD_CONTRACT_NUMBER        => [
+                self::LABEL                         => 'Contract Number', //_('Contract Number')
+                // self::DESCRIPTION                   => 'An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).', // _('An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+                self::SHY                           => true,
             ],
             self::FLD_CUSTOMER_ID       => [
                 self::TYPE                  => self::TYPE_RECORD,

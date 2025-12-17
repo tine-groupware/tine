@@ -42,7 +42,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Delivery'; // gettext('GENDER_Delivery')
         $_definition[self::RECORDS_NAME] = 'Deliveries'; // ngettext('Delivery', 'Deliveries', n)
 
-        $_definition[self::VERSION] = 2;
+        $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
