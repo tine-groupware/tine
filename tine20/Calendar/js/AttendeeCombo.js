@@ -47,40 +47,41 @@ Tine.Calendar.AttendeeCombo = Ext.extend(Ext.form.ComboBox, {
         this.currentAccount = Tine.Tinebase.registry.get('currentAccount');
     },
     
-    syncStore: async function(eventRecord) {
+    syncStore: async function(attendeeData) {
         this.store.removeAll();
 
-        const attendeePromise = eventRecord.data.attendee.asyncForEach(async (attendee) => {
+        const attendeePromise = attendeeData.asyncForEach(async (attendee) => {
             if (!attendee?.user_id) return null;
 
             const attendeeRecord = new Tine.Calendar.Model.Attender(attendee, 'new-' + Ext.id());
             let suffix = '';//Tine.Calendar.Model.Attender.getRecordName();
             const displaycontainer = attendeeRecord.get('displaycontainer_id');
             const userType = attendeeRecord.get('user_type');
+            const isCurrent = attendeeRecord.get('user_id').email === this.currentAccount.accountEmailAddress;
 
-            if (!displaycontainer || userType === 'group') {
-                return null;
+            if (userType === 'group') return null;
+
+            if (displaycontainer) {
+                const grants = displaycontainer.account_grants;
+                let hasRequireGrant = grants && !!grants.editGrant;
+
+                if (userType === 'resource' && grants) {
+                    suffix = this.app.i18n._('Resource');
+                    hasRequireGrant = !!grants.resourceStatusGrant;
+                }
+                if (!hasRequireGrant) {
+                    return null;
+                }
+            } else {
+                if (!isCurrent) return null;
             }
 
-            const grants = displaycontainer.account_grants;
-            let hasRequireGrant = !!grants.editGrant;
-
-            if (userType === 'resource') {
-                suffix = this.app.i18n._('Resource');
-                hasRequireGrant = !!grants.resourceStatusGrant;
-            }
-            if (!hasRequireGrant) {
-                return null;
-            }
             // Determine suffix based on attendee role
             if (this.organizer.email === attendeeRecord.get('user_id').email) {
                 suffix = this.app.i18n._('Organizer');
             }
             if (attendee.user_id.id === this.currentAccount.contact_id) {
                 suffix = this.app.i18n._('Me');
-            }
-            if (attendee.user_id.id === this.messageRecord.data['to'][0]['email']) {
-                suffix = this.app.i18n._('Current');
             }
 
             const displayName = await Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName(attendeeRecord.get('user_id'), {noIcon: true}, attendeeRecord).asString();
@@ -89,11 +90,11 @@ Tine.Calendar.AttendeeCombo = Ext.extend(Ext.form.ComboBox, {
             attendeeRecord.id = attendee.id;
 
             // Check if this is the origin record
-            if (this.defaultValue === 'current' && attendeeRecord.get('user_id').email === this.messageRecord.data['to'][0]['email']) {
+            if (this.defaultValue === 'current' && isCurrent) {
                 this.originRecord = attendeeRecord;
                 this.defaultValue = attendeeRecord.id;
             }
-            if (attendee.status_authkey) {
+            if (attendee.status_authkey || isCurrent) {
                 this.store.add(attendeeRecord);
             }
             return attendeeRecord;
