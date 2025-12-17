@@ -45,13 +45,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation($appName));
         $textTemplate = $twig->load($template, $locale);
 
-        if (! array_key_exists('base', $context)) {
-            /** @var \Psr\Http\Message\ServerRequestInterface $request */
-            $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
-            $depth = substr_count(preg_replace('/^\//', '', $request->getUri()->getPath()), '/');
-            if ($depth > 0) {
-                $context['base'] = str_repeat('../', $depth);
-            }
+        if (! array_key_exists('base', $context) && $base = self::_getBase()) {
+            $context['base'] = $base;
         }
 
         $headerTemplate = $twig->load('Tinebase/views/header.html.twig');
@@ -92,6 +87,26 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         }
 
         return $textTemplate->render($context);
+    }
+
+    protected static function _getBase(): ?string
+    {
+        $result = null;
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        $depth = substr_count(preg_replace('/^\//', '', $request->getUri()->getPath()), '/');
+        if ($depth > 0) {
+            $result = str_repeat('../', $depth);
+        }
+
+        // add subdir path if present
+        $tineurlPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
+        if (!empty($tineurlPath) && $tineurlPath !== DIRECTORY_SEPARATOR) {
+            $result = $tineurlPath . DIRECTORY_SEPARATOR . $result;
+        }
+
+        return $result;
     }
 
     /**
