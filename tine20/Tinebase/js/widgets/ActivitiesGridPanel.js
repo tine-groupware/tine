@@ -81,7 +81,6 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.initColumnModel();
         this.initSelectionModel();
 
-        //Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.registerSkipItem(this);
         this.editDialog.on('load', this.onLoadRecord, this);
         this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
@@ -105,7 +104,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         const columns = [
             { id: 'note_type_id', header: i18n._('Type'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')},
             { id: 'note', header: i18n._('Note'), renderer: this.renderMultipleLines },
-            { id: 'restricted_to', header: i18n._('Private'), renderer: Tine.Tinebase.common.booleanRenderer },
+            { id: 'restricted_to', header: i18n._('Private'), renderer: this.restrictedToRenderer },
             { id: 'created_by', header: i18n._('Created By'), renderer: Tine.Tinebase.common.usernameRenderer },
             { id: 'creation_time', header: i18n._('Creation Time'), renderer: Tine.Tinebase.common.dateTimeRenderer }
         ];
@@ -119,7 +118,18 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @returns {string}
      */
     renderMultipleLines: function (value) {
-        return '<div style="white-space:normal !important;">' + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value)) + '</div>';
+        return '<div style="white-space:normal !important;">'
+            + Ext.util.Format.nl2br(Ext.util.Format.htmlEncode(value))
+            + '</div>';
+    },
+
+    restrictedToRenderer: function (value) {
+        if (!value || value == '') {
+            value = false;
+        } else {
+            value = true;
+        }
+        return Tine.Tinebase.common.booleanRenderer(value);
     },
 
     /**
@@ -335,7 +345,8 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
 
         var buttons = [];
-        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('dialogactionsOrderStyle') === 'Windows') {
+        if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')
+            && Tine.Tinebase.registry.get('preferences').get('dialogactionsOrderStyle') === 'Windows') {
             buttons.push(this.okAction, this.cancelAction);
         }
         else {
@@ -397,7 +408,10 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         if (text && typeId  && recordId === undefined) {
             const newNote = new Tine.Tinebase.Model.Note({
                 note_type_id: typeId,
-                restricted_to: restrictedTo ? this.currentAccount.accountId : null,
+                // FIXME: restrictedTo contains the combobox _label_ - maybe a problem of the store definition?
+                restricted_to: restrictedTo && restrictedTo !== i18n._('for all')
+                    ? this.currentAccount.accountId
+                    : null,
                 note: text,
                 creation_time: new Date(),
                 created_by: this.currentAccount.accountId,
