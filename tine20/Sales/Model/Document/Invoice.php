@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -50,7 +50,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Invoice'; // gettext('GENDER_Invoice')
         $_definition[self::RECORDS_NAME] = 'Invoices'; // ngettext('Invoice', 'Invoices', n)
 
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
@@ -429,6 +429,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $ublInvoice->setContractDocumentReference([
                 (new \UBL21\Common\CommonAggregateComponents\ContractDocumentReference)
                     ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_ID}->number))
+            ]);
+        } elseif ($this->{self::FLD_CONTRACT_NUMBER}) {
+            $ublInvoice->setContractDocumentReference([
+                (new \UBL21\Common\CommonAggregateComponents\ContractDocumentReference)
+                    ->setID(new \UBL21\Common\CommonBasicComponents\ID($this->{self::FLD_CONTRACT_NUMBER}))
             ]);
         }
         // BT-13: Purchase order reference
