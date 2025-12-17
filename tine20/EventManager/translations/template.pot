@@ -705,6 +705,9 @@ msgid_plural "Text Outputs"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Event Contacts"
+msgstr ""
+
 msgid "EventManager"
 msgstr ""
 
