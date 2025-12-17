@@ -8096,7 +8096,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/simplesamlphp.git",
-                "reference": "55870a0a82d0525e74d90e90b3ce9a0145f39f1a"
+                "reference": "4ab437280704b02c1d09698c8958d50a10a92147"
             },
             "require": {
                 "beste/clock": "~3.0",
@@ -8169,7 +8169,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2025-12-15T15:11:04+00:00"
+            "time": "2026-01-12T10:47:21+00:00"
         },
         {
             "name": "simplesamlphp/xml-common",

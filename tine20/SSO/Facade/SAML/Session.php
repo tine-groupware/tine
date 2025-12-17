@@ -11,10 +11,15 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-class SSO_Facade_SAML_Session
+class SSO_Facade_SAML_Session extends \SimpleSAML\Session
 {
     protected $data = [];
     protected $spEntityId;
+
+    protected array $logoutMsgs = [];
+
+    public function __construct()
+    {}
 
     public function setSPEntityId($spEntityId)
     {
@@ -38,7 +43,7 @@ class SSO_Facade_SAML_Session
      *
      * @return array|null  The current persistent authentication state, or null if not authenticated.
      */
-    public function getAuthState($authority)
+    public function getAuthState(string $authority): ?array
     {
         $this->_getData();
         return isset($this->data[$authority][$this->spEntityId]) ? $this->data[$authority][$this->spEntityId] : null;
@@ -50,15 +55,20 @@ class SSO_Facade_SAML_Session
         return null;
     }
 
-    public function doLogout($authority): array
+    public function getLastLogoutMessages(): array
+    {
+        return $this->logoutMsgs;
+    }
+
+    public function doLogout(string $authority): void
     {
         if (Tinebase_Session::isStarted()) {
             $this->_getData();
         }
 
-        $messages = [];
+        $this->logoutMsgs = [];
         if (! isset($this->data[$authority])) {
-            return $messages;
+            return;
         }
         if (is_array($this->data[$authority])) {
             foreach ($this->data[$authority] as $spEntityId => $data) {
@@ -73,14 +83,11 @@ class SSO_Facade_SAML_Session
                     );
                     if (is_object($dstCfg->getConfigItem('SingleLogoutService')) && !empty($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'))) {
                         $lr->setDestination($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'));
-                        $binding = $dstCfg->getConfigItem('SingleLogoutService')->getString('Binding', SSO_Config::SAML2_BINDINGS_REDIRECT);
+                        $binding = $dstCfg->getConfigItem('SingleLogoutService')->getOptionalString('Binding', SSO_Config::SAML2_BINDINGS_REDIRECT);
                         $nameId = new SAML2\XML\saml\NameID();
                         $nameId->setValue(Tinebase_Core::getUser()->accountLoginName);
                         $lr->setNameId($nameId);
-                        if (!isset($messages[$binding])) {
-                            $messages[$binding] = [];
-                        }
-                        $messages[$binding][] = $lr;
+                        $this->logoutMsgs[$binding][] = $lr;
                     }
 
                 } catch (Exception $e) {
@@ -97,11 +104,9 @@ class SSO_Facade_SAML_Session
             // TODO if this is a problem, we need to make sure that other requests don't close the session before logout
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
         }
-
-        return $messages;
     }
 
-    public function doLogin($authority, $data)
+    public function doLogin(string $authority, array $data = []): void
     {
         if ($data === null) {
             $data = [];
@@ -124,25 +129,34 @@ class SSO_Facade_SAML_Session
         Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
     }
 
-    public function setData() {}
-    public function getData() {}
-    public function deleteData() {}
-    public function getTrackID() {}
+    public function setData(string $type, string $id, mixed $data, int|string|null $timeout = null): void {}
+    public function getData(string $type, ?string $id, bool $allowExpired = true): mixed
+    {
+        return null;
+    }
+    public function deleteData(string $type, string $id): void
+    {}
+    public function getTrackID(): string
+    {
+        return '';
+    }
 
     // TODO fixme these two we probably want to implement...
-    public function terminateAssociation() {}
-    public function addAssociation() {}
+    public function terminateAssociation(string $idp, string $associationId): void
+    {}
+    public function addAssociation(string $idp, array $association): void
+    {}
 
-    public function getAuthData($authority, $index)
+    public function getAuthData(string $authority, string $name): mixed
     {
         $this->_getData();
-        if (isset($this->data[$authority][$this->spEntityId][$index])) {
-            return $this->data[$authority][$this->spEntityId][$index];
+        if (isset($this->data[$authority][$this->spEntityId][$name])) {
+            return $this->data[$authority][$this->spEntityId][$name];
         }
         return null;
     }
 
-    public function isValid($authority)
+    public function isValid(string $authority): bool
     {
         $this->_getData();
         return isset($this->data[$authority]);
