@@ -235,6 +235,16 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $documentPriceType = Sales_Config::PRICE_TYPE_GROSS;
         }
 
+        (new Tinebase_Record_Expander(self::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [],
+                    ],
+                ],
+            ]
+        ]))->expand(new Tinebase_Record_RecordSet(self::class, [$this]));
+
         if (null !== $this->{self::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL, 1)) {
             $isStorno = true;
             if (!$this->{self::FLD_PRECURSOR_DOCUMENTS} instanceof Tinebase_Record_RecordSet || $this->{self::FLD_PRECURSOR_DOCUMENTS}->count() === 0) {
