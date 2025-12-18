@@ -166,13 +166,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     detailsPanel: null,
     /**
+     * @cfg {Array} actionToolbarItems
+     * additional action toolbar items
+     */
+    actionToolbarItems: null,
+    /**
      * @cfg {Array} i18nDeleteQuestion 
-     * spechialised strings for deleteQuestion
+     * specialised strings for deleteQuestion
      */
     i18nDeleteQuestion: null,
     /**
      * @cfg {String} i18nAddRecordAction 
-     * spechialised strings for add action button
+     * specialised strings for add action button
      */
     i18nAddActionText: null,
     /**
