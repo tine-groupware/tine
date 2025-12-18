@@ -95,7 +95,9 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
-        $depth = substr_count(preg_replace('/^\//', '', $request->getUri()->getPath()), '/');
+        $requestPath = $request->getUri()->getPath();
+        $requestPath = rtrim($requestPath, '/');
+        $depth = substr_count(preg_replace('/^\//', '', $requestPath), '/');
         if ($depth > 0) {
             $result = str_repeat('../', $depth);
         }
@@ -104,6 +106,11 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $tineurlPath = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH);
         if (!empty($tineurlPath) && $tineurlPath !== DIRECTORY_SEPARATOR) {
             $result = $tineurlPath . DIRECTORY_SEPARATOR . $result;
+        }
+
+        if ($result) {
+            // finally remove duplicate slashes
+            $result = str_replace('//', '/', $result);
         }
 
         return $result;
