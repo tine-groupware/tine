@@ -6,38 +6,38 @@ if ( ! (is_array($conf) && key_exists('database', $conf) && is_array($conf['data
     return;
 }
 
-if ( ! key_exists('adapter', $conf['database'])) {
-    return;
-}
-
-$type = "";
-
-switch ($conf['database']['adapter']) {
-    case 'pdo_mysql':
-        $type = 'mysql';
-        break;
-    default:
-        return;
-}
-
-if ( ! ( key_exists('dbname', $conf['database'])
-     &&  key_exists('host', $conf['database'])
+if ( ! ( key_exists('adapter', $conf['database'])
+     &&  key_exists('dbname', $conf['database'])
+     &&  ( key_exists('host', $conf['database'])
+           || key_exists('unix_socket', $conf['database']) )
      &&  key_exists('username', $conf['database'])
      &&  key_exists('password', $conf['database'])
 )) {
     return;
 }
 
-$host = $conf['database']['host'];
+$type = "";
+$host = empty($conf['database']['host']) ? $conf['database']['unix_socket']:$conf['database']['host'];
 $dbname = $conf['database']['dbname'];
 $user = $conf['database']['username'];
 $pass = $conf['database']['password'];
+
+switch ($conf['database']['adapter']) {
+    case 'pdo_mysql':
+        $type = 'mysql:host';
+        if ( empty($conf['database']['host']) ) {
+            $type = 'mysql:unix_socket';
+	}
+        break;
+    default:
+        return;
+}
 
 $timeout = intval(getenv('WAIT_FOR_DB_TIMEOUT') ?: '60');
 
 for ($i = 0; $i < $timeout; $i++) {
     try {
-        new PDO("$type:host=$host;dbname=$dbname", $user, $pass);
+        new PDO("$type=$host;dbname=$dbname", $user, $pass);
         print("DB available\n");
         return;
     } catch (PDOException $e) {
