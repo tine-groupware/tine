@@ -1,5 +1,5 @@
 upstream phpfpm {
-    {{ if (ne (getenv "TINE20_PREFERSOCKET" "") "") }}
+    {{ if (ne (getenv "TINE20_PREFERSOCKETS" "") "") }}
     server  unix:/run/php-fpm.sock weight=1;
     {{ else }}
     server  127.0.0.1:9000  fail_timeout=10s;
