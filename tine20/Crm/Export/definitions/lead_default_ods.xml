@@ -5,6 +5,9 @@
     <type>export</type>
     <plugin>Crm_Export_Ods</plugin>
     <template>crm_lead_export.ods</template>
+    <favorite>true</favorite>
+    <!-- template can also be put in the tine Filemanager like this: -->
+    <!-- <template>tine20:///Filemanager/folders/shared/Vorlagen/crm_lead_export.ods</template> -->
     <description>default ods lead export definition</description>
     <columns>
         <column>
