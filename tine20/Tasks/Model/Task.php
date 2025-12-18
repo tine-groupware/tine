@@ -143,7 +143,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'queryFilter'       => true,
             ),
             'description'       => array(
-                'label'             => 'Description', //_('Description')
+                'label'             => 'Notes', //_('Notes')
                 'type'              => 'fulltext',
                 self::NULLABLE      => true,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
