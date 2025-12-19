@@ -147,8 +147,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                     app:    this.app,
                 };
 
-                Ext.ux.ItemRegistry.registerItem(key, (key.match(/eastPanel$/) ?
-                    {layout: 'form', items: wrapperConfig, title: _.get(fields, 'data.definition.label')} : wrapperConfig),pos ? pos : '0/0');
+                Ext.ux.ItemRegistry.registerItem(key,
+                    {layout: 'form', items: wrapperConfig, title: _.get(fields, 'data.definition.label')},pos ? pos : '0/0');
             }
         }, this));
 
