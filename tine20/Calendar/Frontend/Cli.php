@@ -1003,4 +1003,50 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return 0;
     }
+
+    /**
+     * add scheduled imports for public (school) holidays
+     *
+     * php tine20.php --method=Calendar.addScheduledHolidayImport name=Bayern iso=DE-BY
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function addScheduledHolidayImport(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($_opts, ['name', 'iso']);
+
+        $translate = Tinebase_Translation::getTranslation(Calendar_Config::APP_NAME);
+        foreach (['SchoolHolidays', 'PublicHolidays'] as $type) {
+            Admin_Controller_SchedulerTask::getInstance()->create(
+                new Admin_Model_SchedulerTask([
+                    Admin_Model_SchedulerTask::FLD_NAME => $type . ' Import ' . $data['name'],
+                    Admin_Model_SchedulerTask::FLD_CRON => '23 4 28 * *',
+                    Admin_Model_SchedulerTask::FLD_CONFIG_CLASS => Admin_Model_SchedulerTask_Import::class,
+                    Admin_Model_SchedulerTask::FLD_CONFIG => [
+                        Admin_Model_SchedulerTask_Import::FLD_PLUGIN_CLASS => Calendar_Import_OpenHolidaysApi::class,
+                        Admin_Model_SchedulerTask_Import::FLD_OPTIONS => [
+                            Calendar_Import_OpenHolidaysApi::OPT_SOURCE => $type,
+                            Calendar_Import_OpenHolidaysApi::OPT_SUBDIVISION => $data['iso'],
+                            Calendar_Import_OpenHolidaysApi::OPT_CALENDAR_NAME =>
+                                $translate->_('Holidays') . ' ' . $data['name'],
+                        ],
+                    ],
+                    Admin_Model_SchedulerTask::FLD_APPLICATION_ID => Tinebase_Application::getInstance()
+                        ->getApplicationByName(Calendar_Config::APP_NAME)->getId()
+                ])
+            );
+        }
+
+        echo "Added scheduled imports for: " . $data['name'] . " (" . $data['iso'] . ")\n";
+
+        return 0;
+    }
 }
