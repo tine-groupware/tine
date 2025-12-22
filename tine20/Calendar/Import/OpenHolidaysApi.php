@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Calendar
  * @subpackage  Import
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -59,15 +59,28 @@ class Calendar_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
      * do something before the import
      *
      * @param mixed $_resource
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
     protected function _beforeImport($_resource = NULL)
     {
         // https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom=2023-01-01&validTo=2023-12-31&subdivisionCode=DE-BY
-        $apiData = file_get_contents(
-            'https://openholidaysapi.org/' . $this->_options[self::OPT_SOURCE] . '?countryIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY]) .
-            '&languageIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY]) . '&validFrom=' .
-            urlencode($this->_options[self::OPT_FROM]) . '&validTo=' .urlencode($this->_options[self::OPT_TO]) .
-            (!empty($this->_options[self::OPT_SUBDIVISION]) ? '&subdivisionCode=' . $this->_options[self::OPT_SUBDIVISION] : '')
+        $apiData = Tinebase_Helper::getFileOrUriContents(
+            'https://openholidaysapi.org/'
+            . $this->_options[self::OPT_SOURCE]
+            . '?countryIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY])
+            . '&languageIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY])
+            . '&validFrom=' . urlencode($this->_options[self::OPT_FROM])
+            . '&validTo=' .urlencode($this->_options[self::OPT_TO])
+            . (!empty($this->_options[self::OPT_SUBDIVISION])
+                ? '&subdivisionCode=' . $this->_options[self::OPT_SUBDIVISION]
+                : '')
         );
         if (! $apiData) {
             throw new Tinebase_Exception_Backend('Could not load data from openholidaysapi.org');
@@ -87,17 +100,23 @@ class Calendar_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
             }
 
             try {
-                $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $this->_options[self::OPT_CALENDAR_NAME], Tinebase_Model_Container::TYPE_SHARED);
+                $container = Tinebase_Container::getInstance()->getContainerByName(
+                    Calendar_Model_Event::class,
+                    $this->_options[self::OPT_CALENDAR_NAME],
+                    Tinebase_Model_Container::TYPE_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' No container found. Creating a new one ' . $this->_options[self::OPT_CALENDAR_NAME]);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No container found. Creating a new one ' . $this->_options[self::OPT_CALENDAR_NAME]);
+                }
 
                 $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                     'name'              => $this->_options[self::OPT_CALENDAR_NAME],
                     'color'             => '#333399',
                     'type'              => Tinebase_Model_Container::TYPE_SHARED,
                     'backend'           => Tinebase_User::SQL,
-                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(
+                        'Calendar')->getId(),
                     'model'             => 'Calendar_Model_Event',
                 )), NULL, TRUE);
             }
@@ -155,6 +174,7 @@ class Calendar_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
             return $defaultValue;
         }
 
-        throw new Tinebase_Exception_NotFound($searchKey . ' => ' . $searchValue . ' for ' . $returnKey . ' in ' . print_r($data, true) . ' not found');
+        throw new Tinebase_Exception_NotFound($searchKey . ' => ' . $searchValue . ' for '
+            . $returnKey . ' in ' . print_r($data, true) . ' not found');
     }
 }
