@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -120,5 +120,20 @@ class Calendar_Frontend_CliTest extends Calendar_TestCase
         // 4 events + 1 time in header
         self::assertEquals(5, substr_count($ics, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
             'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
+    }
+
+    public function testAddScheduledHolidayImport()
+    {
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments([
+            'name=Bayern',
+            'iso=DE-BY',
+        ]);
+
+        ob_start();
+        $this->_cli->addScheduledHolidayImport($opts);
+        $out = ob_get_clean();
+
+        self::assertStringContainsString('Added scheduled imports for: Bayern (DE-BY)', $out);
     }
 }
