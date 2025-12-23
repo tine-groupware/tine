@@ -145,17 +145,17 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO
             $result['NameIDFormat'] = $this->{self::FLD_NAME_ID_FORMAT};
         }
         if (!empty($this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION})) {
-            $result['AssertionConsumerService']['Location'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION};
+            $result['AssertionConsumerService'][0]['Location'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION};
         }
         if (!empty($this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING})) {
-            $result['AssertionConsumerService']['Binding'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING};
+            $result['AssertionConsumerService'][0]['Binding'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_BINDING};
         }
 
         if (!empty($this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION})) {
-            $result['SingleLogoutService']['Location'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION};
+            $result['SingleLogoutService'][0]['Location'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_LOCATION};
         }
         if (!empty($this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING})) {
-            $result['SingleLogoutService']['Binding'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING};
+            $result['SingleLogoutService'][0]['Binding'] = $this->{self::FLD_SINGLE_LOGOUT_SERVICE_BINDING};
         }
 
         return $result;

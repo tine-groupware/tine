@@ -701,6 +701,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         
         $addedEntries       = array_diff($allServerEntries, $allClientEntries);
         $deletedEntries     = array_diff($allClientEntries, $allServerEntries);
+        /** @phpstan-ignore-next-line  */
         $changedEntries     = $this->getChangedEntries($folder->serverId, $syncState->lastsync);
         
         return count($addedEntries) + count($deletedEntries) + count($changedEntries);
