@@ -553,7 +553,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $order = Sales_Controller_OrderConfirmation::getInstance()->get($order);
             $orderNumber = preg_replace(['/AB-V-/', '/(\d)-\d+$/'], ['AB-', '$1'], trim($order->number));
-            $numberFilter->setValue($order->$orderNumber);
+            $numberFilter->setValue($orderNumber);
             if (Sales_Controller_Document_Order::getInstance()->searchCount($orderFilter) > 0) {
                 $transaction->release();
                 continue;
