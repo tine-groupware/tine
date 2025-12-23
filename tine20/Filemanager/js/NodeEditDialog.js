@@ -51,6 +51,8 @@ Tine.Filemanager.NodeEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Filemanager.NodeEditDialog.superclass.initComponent.call(this);
     },
 
+    setRouteLink: Ext.emptyFn,
+
     /**
      * folder or file?
      */
