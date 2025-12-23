@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Tinebase');
@@ -95,10 +95,10 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
             const publicKeyData = {
                 id: publicKeyCredential.id,
                 type: publicKeyCredential.type,
-                rawId: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.rawId)),
+                rawId: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.rawId), { pad: false }),
                 response: {
-                    clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON)),
-                    attestationObject: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.attestationObject))
+                    clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON), { pad: false }),
+                    attestationObject: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.attestationObject), { pad: false })
                 }
             }
             
