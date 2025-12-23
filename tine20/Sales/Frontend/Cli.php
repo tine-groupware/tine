@@ -504,6 +504,97 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
 
+    public function migrateOfferOrderToDocuments(/*Zend_Console_Getopt $_opts*/): int
+    {
+        $offers = Sales_Controller_Offer::getInstance()->search(null, null, false, true);
+        $offerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Offer::class);
+        $offerFilter->addFilter(
+            $numberFilter = $offerFilter->createFilter(Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, 'equals', '')
+        );
+
+        $offerMap = [];
+        foreach ($offers as $offer) {
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+            $offer = Sales_Controller_Offer::getInstance()->get($offer);
+            $numberFilter->setValue($offer->number);
+            if ($result = Sales_Controller_Document_Offer::getInstance()->search($offerFilter, _onlyIds: true)) {
+                $transaction->release();
+                $offerMap[$offer->getId()] = current($result);
+                continue;
+            }
+
+            $customer = $offer->relations->find('related_model', Sales_Model_Customer::class)?->related_record;
+
+            $newOffer = new Sales_Model_Document_Offer([
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE => $offer->creation_time,
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER => $offer->number,
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE => $offer->title,
+                Sales_Model_Document_Abstract::FLD_DESCRIPTION => $offer->description,
+                Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $offer->attachments,
+            ]);
+
+            $newOffer = Sales_Controller_Document_Offer::getInstance()->create($newOffer);
+            $offerMap[$offer->getId()] = $newOffer->getId();
+
+            $transaction->release();
+        }
+
+
+        $orders = Sales_Controller_OrderConfirmation::getInstance()->search(null, null, false, true);
+        $orderFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class);
+        $orderFilter->addFilter(
+            $numberFilter = $offerFilter->createFilter(Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, 'equals', '')
+        );
+
+        foreach ($orders as $order) {
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+            $order = Sales_Controller_OrderConfirmation::getInstance()->get($order);
+            $orderNumber = preg_replace(['/AB-V-/', '/(\d)-\d+$/'], ['AB-', '$1'], trim($order->number));
+            $numberFilter->setValue($order->$orderNumber);
+            if (Sales_Controller_Document_Order::getInstance()->searchCount($orderFilter) > 0) {
+                $transaction->release();
+                continue;
+            }
+
+            $customer = null;
+            if ($offer = $order->relations->find('related_model', Sales_Model_Offer::class)?->related_record) {
+                $customer = Tinebase_Relations::getInstance()
+                    ->getRelations(Sales_Model_Offer::class, 'Sql', $offer->getId(), _relatedModels: [Sales_Model_Customer::class])
+                    ->find('related_model', Sales_Model_Customer::class)?->related_record;
+            }
+            if (($contract = $order->relations->find('related_model', Sales_Model_Contract::class)?->related_record) && null === $customer) {
+                $customer = Tinebase_Relations::getInstance()
+                    ->getRelations(Sales_Model_Contract::class, 'Sql', $contract->getId(), _relatedModels: [Sales_Model_Customer::class])
+                    ->find('related_model', Sales_Model_Customer::class)?->related_record;
+            }
+
+            $newOrder = new Sales_Model_Document_Order([
+                Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, $offer && isset($offerMap[$offer->getId()]) ? [
+                    new Tinebase_Model_DynamicRecordWrapper([
+                        Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Offer::class,
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => $offerMap[$offer->getId()],
+                    ])
+                ] : []),
+                Sales_Model_Document_Abstract::FLD_CONTRACT_ID => $contract?->getId(),
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE => $order->creation_time,
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER => $orderNumber,
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE => $order->title,
+                Sales_Model_Document_Abstract::FLD_DESCRIPTION => $order->description,
+                Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $order->attachments,
+            ]);
+
+            Sales_Controller_Document_Order::getInstance()->create($newOrder);
+
+            $transaction->release();
+        }
+
+        return 0;
+    }
+
     public function createBoilerplatesIfEmpty()
     {
         if (Sales_Controller_Boilerplate::getInstance()->getAll()->count() > 0) {
