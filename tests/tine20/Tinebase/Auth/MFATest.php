@@ -402,6 +402,23 @@ class Tinebase_Auth_MFATest extends TestCase
 
     public function testGenericSmsAdapter()
     {
+        Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS} = [
+            Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS => [
+                [
+                    Tinebase_Model_Sms_AdapterConfig::FLD_NAME => 'sms1',
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG => [
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => 'https://shoo.tld/restapi/message',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_BODY => '{"encoding":"auto","body":"{{ message }}","originator":"{{ app.branding.title }}","recipients":["{{ cellphonenumber }}"],"route":"2345"}',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_METHOD => 'POST',
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_HEADERS => [
+                            'Auth-Bearer' => 'unittesttokenshaaaaalalala'
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
         $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
             Tinebase_Model_MFA_UserConfig::class, [[
             Tinebase_Model_MFA_UserConfig::FLD_ID => 'userunittest',
