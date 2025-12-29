@@ -79,15 +79,20 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             exit;
         }
 
+        $configData = null;
+
         if (! Setup_Core::configFileExists()) {
             $data = Zend_Json::decode($data, Zend_Json::TYPE_ARRAY);
-            
             $tmpFile = tempnam(Tinebase_Core::getTempDir(), 'tine20_');
             Setup_Controller::getInstance()->writeConfigToFile($data, TRUE, $tmpFile);
-            
             $configData = file_get_contents($tmpFile);
             unlink($tmpFile);
-            
+        } else if (Setup_Core::isRegistered(Setup_Core::USER)) {
+            $configFilePath = Setup_Core::getConfigFilePath();
+            $configData = file_get_contents($configFilePath);
+        }
+
+        if ($configData) {
             header("Pragma: public");
             header("Cache-Control: max-age=0");
             header("Content-Disposition: attachment; filename=config.inc.php");
