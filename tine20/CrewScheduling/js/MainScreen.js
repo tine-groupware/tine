@@ -395,9 +395,10 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             })
             .then(_.bind(me.loadRuntimeData, me))
             .then(async () => {
-                const siteRecords = _.map(_.find(filters, {field: 'event_site'})?.value || [], (siteData) => {
+                const siteFilter = _.get(_.find(_.get(filters, '[0].filters[0].filters'), {field: 'event_site'}), 'value[0]');
+                const siteRecords = siteFilter && siteFilter.field === ':id' && siteFilter.operator === 'in' ? _.map(siteFilter.value, (siteData) => {
                     return Tine.Tinebase.data.Record.setFromJson(siteData, 'Addressbook.Contact')
-                });
+                }) : [];
 
                 this.membersGrid.setGrouping(siteRecords.length ? 'event_site' : '', siteRecords);
             })
