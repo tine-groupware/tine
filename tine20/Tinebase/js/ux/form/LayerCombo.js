@@ -137,7 +137,14 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @private
      */
     doQuery: Ext.emptyFn,
-    
+
+    setReadOnly: function(readOnly) {
+        Ext.ux.form.LayerCombo.superclass.setReadOnly.apply(this, arguments);
+        this.getInnerForm()?.items?.each?.((item) => {
+            item?.setReadOnly?.(readOnly);
+        })
+    },
+
     /**
      * Expands the dropdown layer if it is currently hidden. Fires the {@link #expand} event on completion.
      */
@@ -404,7 +411,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
      * @private
      */
     onTriggerClick : function(){
-        if (this.readOnly || this.disabled){
+        if (this.disabled){
             return;
         }
         if(this.isExpanded()){

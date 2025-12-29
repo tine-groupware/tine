@@ -104,7 +104,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.quickaddHandlers = {
             scope: this,
             blur: function(field){
-                this.doBlur.defer(250, this);
+                this.doBlur.defer(250, this, [field]);
             },
             specialkey: function(f, e){
                 var key = e.getKey();
@@ -141,6 +141,21 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.processAdd(column.quickaddField);
                 this.relayEvents(column.quickaddField, ['change', 'select']);
             }
+
+            const defaults = {
+                blurOnSelect: false,
+                allowBlank: true,
+                nullable: true,
+                selectOnFocus: true,
+                emptyText: formatMessage('Enter {label}...', column)
+            };
+
+            ['quickaddField', 'editor'].forEach((c) => {
+                _.each(defaults, (v, k) => {
+                    const field = _.get(column, c) || {}
+                    field[k] = field.hasOwnProperty(k) ? field[k] : v
+                })
+            })
         });
     },
 
@@ -159,8 +174,6 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(this.getCols(), function (column) {
             if (column.quickaddField) {
                 if (this.quickaddMode === 'header') {
-                    column.quickaddField.blurOnSelect = column.quickaddField.hasOwnProperty('blurOnSelect') ? column.quickaddField.blurOnSelect : false;
-                    column.quickaddField.allowBlank = column.quickaddField.hasOwnProperty('allowBlank') ? column.quickaddField.allowBlank : true;
                     column.quickaddField.render(this.getQuickAddWrap(column));
                 } else {
                     const renderer = Ext.isFunction(column.renderer) ? column.renderer : Tine.widgets.grid.RendererManager.prototype.defaultRenderer;
@@ -170,11 +183,15 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         //     field: column.quickaddField
                         // });
                         // if (! column.quickaddField.rendered)
+
                         _.defer(() => {
                             const cell = me.getView().getCell(row, col).firstElementChild;
                             cell.innerHTML = '';
+
                             if (! column.quickaddField.rendered) {
                                 column.quickaddField.render(cell);
+                                // prevent need to double activate editor
+                                column.quickaddField.getEl().on('mousedown', (e) => e.stopEvent())
                             } else {
                                 Ext.fly(cell).appendChild(column.quickaddField.wrap ? column.quickaddField.wrap : column.quickaddField.el);
                                 _.defer(() => { column.quickaddField.setWidth(Ext.fly(cell).getWidth()-4); })
@@ -249,7 +266,20 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * @private
      */
-    doBlur: function(){
+    doBlur: function(field){
+
+        if (this.quickaddMode !== 'header') {
+            // NOTE: quickadd field !== editor field, -> we are not in inline grid editing but in our own "renderer" implementation...
+            let colIdx = _.findIndex(this.colModel.columns, {quickaddField: field})
+            if (colIdx >= 0) {
+                for (colIdx++; colIdx<this.colModel.columns.length; colIdx++) {
+                    const col = this.colModel.columns[colIdx];
+                    if (!col.hidden && col.quickaddField) {
+                        col.quickaddField.focus();
+                    }
+                }
+            }
+        }
 
         // check if all quickadd fields are blured, validate them if required
         var focusedOrInvalid;
@@ -258,6 +288,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 focusedOrInvalid = true;
             }
         }, this);
+
 
         // only fire a new record if no quickaddField is focused
         if (!focusedOrInvalid) {
@@ -293,6 +324,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                             } else {
                                 columns[i].quickaddField.setValue('');
                             }
+                            columns[i].quickaddField.applyEmptyText?.();
                         }
                     }
                 }
