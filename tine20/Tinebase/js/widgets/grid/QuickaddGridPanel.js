@@ -213,7 +213,18 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         });
 
         if (this.fireEvent('beforeaddrecord', newRecord, this) !== false) {
-            this.store.insert(0 , [newRecord]);
+            if (this.quickaddMode === 'sorted' || this.addPosition === 'sorted') {
+                this.store.remove(this.quickaddRecord)
+                this.store.addSorted(newRecord)
+                this.store.add([this.quickaddRecord])
+            } else {
+                const idx = this.addPosition === 'last' || this.quickaddMode === 'inline' ? (this.store.getCount() - this.quickaddMode !== 'header' ? 1 : 0) : 0
+                this.store.insert(idx, [newRecord]);
+            }
+            // fluent add
+            _.delay(() => {
+                _.find(this.colModel.columns, {dataIndex: this.quickaddMandatory})?.quickaddField.focus();
+            }, 100)
         }
 
         return true;
@@ -244,7 +255,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             this.store.addSorted(record);
         });
-
+        if (this.quickaddMode !== 'header' && this.quickaddRecord) {
+            this.store.insert(this.store.getCount(), [this.quickaddRecord])
+        }
         this.actionUpdater.updateActions(this.getSelectionModel());
     },
 
@@ -257,6 +270,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         const result = Tine.Tinebase.common.assertComparable([]);
         const data = this.store.snapshot || this.store;
         data.each(function(record) {
+            if (record === this.quickaddRecord) return;
             var data = record.data;
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
                 delete data.id;
