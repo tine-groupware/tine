@@ -266,7 +266,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             : [])
     },
 
-    setValue: function(value, record) {
+    setValue: function(value) {
         this.reset()
         this.suspendEvents()
         async.forEach(value, async (recordData) => {

@@ -50,6 +50,8 @@ Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
      * @cfg {String} invalidClass The CSS class to use when marking a field invalid (defaults to 'x-form-invalid')
      */
     invalidClass : 'x-form-invalid',
+
+    dirtyClass: 'x-grid3-dirty-cell',
     /**
      * @cfg {String} invalidText The error text to use when marking a field invalid and no message is provided
      * (defaults to 'The value in this field is invalid')
@@ -378,6 +380,13 @@ var form = new Ext.form.FormPanel({
         if(this.validationEvent !== false && (this.validateOnBlur || this.validationEvent == 'blur')){
             this.validate();
         }
+
+        if (this.isDirty()) {
+            this.markDirty()
+        } else {
+            this.clearDirty()
+        }
+
         var v = this.getValue();
         if(String(v) !== String(this.startValue)){
             this.fireEvent('change', this, v, this.startValue);
@@ -445,6 +454,16 @@ var form = new Ext.form.FormPanel({
      */
     getActiveError : function(){
         return this.activeError || '';
+    },
+
+    markDirty: function() {
+        if(!this.rendered ) return;
+        this.el.addClass(this.dirtyClass);
+
+    },
+    clearDirty: function() {
+        if(!this.rendered ) return;
+        this.el.removeClass(this.dirtyClass);
     },
 
     /**
@@ -607,16 +626,30 @@ var form = new Ext.form.FormPanel({
     /**
      * Sets a data value into the field and validates it.  To set the value directly without validation see {@link #setRawValue}.
      * @param {Mixed} value The value to set
+     * @param {Mixed} record The record if appropriate
+     * @param {Mixed} reset reset originalValue
      * @return {Ext.form.Field} this
      */
-    setValue : function(v, r){
+    setValue : function(v, record, reset){
         this.value = v;
         if(this.rendered && this.el.dom){
             this.el.dom.value = (Ext.isEmpty(v) ? '' : v);
             this.validate();
         }
-        if (r && this.fixedIf) {
-            this.setReadOnly(_.isFunction(this.fixedIf) ? this.fixedIf(v,r) : (this.fixedIf[0] === '!' ? -1 : 1) *_.get(r, this.fixedIf.replace(/^!/, '')))
+        if (record && this.fixedIf) {
+            this.setReadOnly(_.isFunction(this.fixedIf) ? this.fixedIf(v,record) : (this.fixedIf[0] === '!' ? -1 : 1) *_.get(record, this.fixedIf.replace(/^!/, '')))
+        }
+        if (reset) {
+            this.originalValue = v;
+        }
+
+        return this;
+    },
+
+    // set value only if field is unmodified
+    setValueIf(v,record, reset) {
+        if (! this.isDirty()) {
+            this.setValue(v, record, reset!==false);
         }
         return this;
     },

@@ -135,7 +135,7 @@ anchor: '-50 75%'
         var cs = this.getRenderedItems(ct), len = cs.length, i, c, a, cw, ch, el, vs;
         for(i = 0; i < len; i++){
             c = cs[i];
-            c.autoHeight = ct.autoHeight;
+            c.autoHeight = c.autoHeight || ct.autoHeight;
             el = c.getPositionEl();
             if(c.anchor){
                 a = c.anchorSpec;

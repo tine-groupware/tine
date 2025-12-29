@@ -139,8 +139,9 @@ td.x-grid3-hd-over .x-grid3-hd-inner, td.sort-desc .x-grid3-hd-inner, td.sort-as
     color:#15428b !important;
 }
 
+/*.x-form-element .x-form-text.x-form.field.x-grid3-dirty-cell,*/
 .x-grid3-dirty-cell {
-    background-image:url(../images/default/grid/dirty.gif);
+    background-image:url(../images/default/grid/dirty.gif) !important;
 }
 
 .x-grid3-topbar, .x-grid3-bottombar{
