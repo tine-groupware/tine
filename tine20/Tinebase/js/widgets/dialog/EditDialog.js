@@ -445,6 +445,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         Tine.widgets.dialog.EditDialog.superclass.initComponent.call(this);
+        this.getForm().trackResetOnLoad = true;
 
         // set fields readOnly if set
         this.fixFields();
