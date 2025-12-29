@@ -1185,7 +1185,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         (_.get(this.record, `${grantsPath}.${f.requiredGrant}`) || _.get(this.record, `${grantsPath}.adminGrant`));
                 }
 
-                _.isFunction(f.setReadOnly) ? f.setReadOnly(!hasRequiredGrants) : f.setDisabled(!hasRequiredGrants);
+                _.isFunction(f.setReadOnly) ? f.setReadOnly(!hasRequiredGrants || f.initialConfig.readOnly) : f.setDisabled(!hasRequiredGrants || f.initialConfig.disabled);
             }, this);
         }
 
