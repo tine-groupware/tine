@@ -38,6 +38,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const FLD_DUNNINGS = 'dunnings'; // recordset mahnungen ?! TODO FIXME
     public const FLD_APPROVER = 'approver';
     public const FLD_DOCUMENT_CURRENCY = 'document_currency';
+    public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
 
     public static function inheritModelConfigHook(array &$_definition)
     {
@@ -151,6 +152,23 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         ]);
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS][self::CONFIG][self::MODEL_NAME] = Sales_Model_PurchasePaymentMeans::MODEL_NAME_PART;
+
+        $_definition[self::FIELDS][self::FLD_PAYMENT_REMINDERS] = [
+            self::LABEL             => 'Payment Reminders', // _('Payment Reminders')
+            self::TYPE              => self::TYPE_RECORDS,
+            self::CONFIG            => [
+                self::APP_NAME          => Sales_Config::APP_NAME,
+                self::MODEL_NAME        => Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
+                self::DEPENDENT_RECORDS => true,
+                self::REF_ID_FIELD      => Sales_Model_Document_PaymentReminder::FLD_DOCUMENT_ID,
+                self::FORCE_VALUES      => [
+                    Sales_Model_Document_PaymentReminder::FLD_DOCUMENT_TYPE => static::class,
+                ],
+                self::ADD_FILTERS       => [
+                    [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+                ],
+            ],
+        ];
 
         unset($_definition[self::FIELDS][self::FLD_DOCUMENT_LANGUAGE]);
         unset($_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY]);

@@ -12,6 +12,7 @@
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\BaseTypesHandler;
 use GoetasWebservices\Xsd\XsdToPhpRuntime\Jms\Handler\XmlSchemaDateHandler;
 use JMS\Serializer\Handler\HandlerRegistryInterface;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Invoice Document Model
@@ -30,6 +31,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const FLD_IS_SHARED = 'is_shared';
 
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
+
+    public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
 
     /**
      * invoice status
@@ -113,6 +116,23 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::LABEL                 => 'Shared Document', //_('Shared Document')
             self::DEFAULT_VAL           => false,
             self::SHY                   => true,
+        ];
+
+        $_definition[self::FIELDS][self::FLD_PAYMENT_REMINDERS] = [
+            self::LABEL             => 'Payment Reminders', // _('Payment Reminders')
+            self::TYPE              => self::TYPE_RECORDS,
+            self::CONFIG            => [
+                self::APP_NAME          => Sales_Config::APP_NAME,
+                self::MODEL_NAME        => Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
+                self::DEPENDENT_RECORDS => true,
+                self::REF_ID_FIELD      => Sales_Model_Document_PaymentReminder::FLD_DOCUMENT_ID,
+                self::FORCE_VALUES      => [
+                    Sales_Model_Document_PaymentReminder::FLD_DOCUMENT_TYPE => static::class,
+                ],
+                self::ADD_FILTERS       => [
+                    [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+                ],
+            ],
         ];
     }
 

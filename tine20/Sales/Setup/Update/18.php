@@ -173,6 +173,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_PaymentReminder::class,
             Sales_Model_Document_PurchaseInvoice::class,
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
             Sales_Model_Supplier::class,
@@ -180,14 +181,13 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
+        $zzzId = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getByCode('ZZZ')->getId();
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
         foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll() as $oldPI) {
             $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
 
             // dunned_at
             // payment_method
-            // discount
-            // price_gross2
 
             $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
                 Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER => $oldPI->number,
@@ -195,13 +195,13 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                     ($oldPI->is_approved ? Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED : Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED),
                 Sales_Model_Document_PurchaseInvoice::FLD_DESCRIPTION => $oldPI->description,
                 Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $oldPI->date,
-                //Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_in, // TODO FIXME?
                 Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAY_AT => $oldPI->pay_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAID_AT => $oldPI->payed_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_OVER_DUE_AT => $oldPI->overdue_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_NET_SUM => $oldPI->price_net,
-                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross,
+                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_NET_SUM => $oldPI->price_net,
+                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross + $oldPI->price_gross2,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX => $oldPI->price_tax,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [[
                     Sales_Model_Document_PurchaseInvoice::TAX_RATE => $oldPI->sales_tax,
@@ -211,6 +211,20 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
                 Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER'),
                 Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER'),
+                Sales_Model_Document_PurchaseInvoice::FLD_XPROPS => ['migration_src_id' => $oldPI->getId()],
+                Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PurchasePaymentMeans::class, [
+                    new Sales_Model_PurchasePaymentMeans([
+                        Sales_Model_PurchasePaymentMeans::FLD_PAYMENT_MEANS_CODE => $zzzId,
+                        Sales_Model_PurchasePaymentMeans::FLD_PAYMENT_MEANS_TEXT => $oldPI->payment_method,
+                    ]),
+                ]),
+                Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_REMINDERS => new Tinebase_Record_RecordSet(Sales_Model_Document_PaymentReminder::class, $oldPI->dunned_at ? [
+                    new Sales_Model_Document_PaymentReminder([
+                        Sales_Model_Document_PaymentReminder::FLD_DATE => $oldPI->dunned_at,
+                        Sales_Model_Document_PaymentReminder::FLD_FEE => 0.0,
+                        Sales_Model_Document_PaymentReminder::FLD_OUTSTANDING_AMOUNT => $oldPI->price_total,
+                    ], true),
+                ] : []),
             ]));
         }
 

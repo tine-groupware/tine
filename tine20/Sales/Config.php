@@ -52,6 +52,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     const DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE = 'defaultDebitorEDocumentDispatchType';
     const DEFAULT_EDOCUMENT_DISPATCH_DOCUMENT_TYPES = 'defaultEDocumentDispatchDocumentTypes';
 
+    const PAYMENT_REMINDER_LEVEL = 'paymentReminderLevel';
+
     /**
      * How should the contract number be created
      * @var string
@@ -1305,6 +1307,20 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ['id' => 'OWN', 'value' => 'Own', 'system' => true], // _('Own')
                 ],
                 self::DEFAULT_STR => 'NONE',
+            ],
+        ],
+        self::PAYMENT_REMINDER_LEVEL => [
+            self::LABEL                 => 'Payment Reminder Levels', //_('Payment Reminder Levels')
+            self::DESCRIPTION           => 'Payment Reminder Levels',
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'FIRST', 'value' => 'First Reminder', 'system' => true], // _('First Reminder')
+                    ['id' => 'SECOND', 'value' => 'Second Reminder', 'system' => true], // _('Second Reminder')
+                    ['id' => 'THIRD', 'value' => 'Third Reminder', 'system' => true], // _('Third Reminder')
+                ],
+                self::DEFAULT_STR => 'FIRST',
             ],
         ],
         self::PRODUCT_NUMBER_GENERATION => array(
