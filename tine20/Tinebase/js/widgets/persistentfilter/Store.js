@@ -45,8 +45,7 @@ Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
                 listeners: {
                     add: (store, records, idx) => {
                         let filters = Tine.Tinebase.registry.get('persistentFilters');
-                        _.set(filters, 'results', _.concat(_.get(filters, 'results'), _.map(records,
-                            'data')));
+                        _.set(filters, 'results', _.concat(_.get(filters, 'results'), _.cloneDeep(_.map(records, 'data'))));
                         _.set(filters, 'totalcount', _.get(filters, 'totalcount') +1);
 
                         Tine.Tinebase.registry.set("persistentFilters", filters);
