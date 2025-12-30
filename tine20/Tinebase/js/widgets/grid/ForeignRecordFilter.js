@@ -154,6 +154,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             if(def.generic !== false) {
                 operators.push({
                     operator: {
+                        isRegisteredOperator: true,
                         linkType: def.linkType,
                         foreignRecordClass: foreignRecordClass,
                         filterName: def.filterName
@@ -354,11 +355,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             me = this,
             value = filter.get('value'),
             operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
-            isRegisteredOperator = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', false);
-        
-        if (isRegisteredOperator || ['equals', 'not', 'in', 'notin', 'allOf'].indexOf(operator) >= 0) {
+            def = _.get(_.find(this.operatorStore.data.items, function (o) {
+                return String(_.get(o, 'data.operator')) === String(operator);
+            }), 'data.operator', {});
+
+        if (_.get(def, 'isRegisteredOperator') || ['equals', 'not', 'in', 'notin', 'allOf'].indexOf(operator) >= 0) {
             // NOTE: if setValue got called in the valueField internally, value is arguments[1] (createCallback)
-            return filter.formFields.value.origSetValue(arguments.length ? arguments[1] : value);
+            return filter.formFields.value?.origSetValue(arguments.length ? arguments[1] : value);
         }
         
         // generic: choose right operator : appname -> generic filters have no subfilters an if one day, no left hand once!
@@ -684,7 +687,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         var _ = window.lodash,
             me = this,
             operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
+            def = _.get(_.find(this.operatorStore.data.items, function (o) {
+                return String(_.get(o, 'data.operator')) === String(operator);
+            }), 'data.operator', {}),
             value;
+
+        if ( _.get(def, 'isRegisteredOperator')) {
+            operator = 'equals';
+        }
 
         switch(operator) {
             case 'equals':
@@ -693,7 +703,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             case 'notin':
             case 'allOf':
                 //@TODO find it
-                var pickerRecordClass = this.foreignRecordClass;
+                var pickerRecordClass = this.foreignRecordClass || def.foreignRecordClass;
                 if (this.foreignRefIdField && !this.denormalizationRecordClass) {
                     // many 2 many relation
                     var foreignRecordConfig = _.get(this.foreignRecordClass.getModelConfiguration(), 'fields.' + this.foreignRefIdField + '.config');
@@ -722,14 +732,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 break;
 
             default:
-                var def = _.get(_.find(this.operators, function(o) { return _.get(o, 'operator.filterName') == operator;}), 'operator', {}),
-                    backup = _.reduce(_.keys(def), function(bkup, key) {
-                        return _.set(bkup, key, me[key]);
-                    }, {}),
-                    valueType = _.get(def, 'valueType');
-
                 // cope with operator registry values
-                if ( valueType) {
+                if ( _.get(def, 'valueType') ) {
+                    const backup = _.reduce(_.keys(def), function(bkup, key) {
+                        return _.set(bkup, key, me[key]);
+                    }, {});
                     _.assign(me, def);
                     value = Tine.widgets.grid.FilterModel.prototype.valueRenderer.call(me, filter, el);
                     _.assign(me, backup);
@@ -807,7 +814,7 @@ Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry = function() {
             if (! operators[key]) {
                 operators[key] = [];
             }
-            
+
             operators[key].push(operator);
         },
         
