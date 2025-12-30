@@ -16,6 +16,9 @@
  */
 class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'InvoicePosition';
+    public const TABLE_NAME = 'sales_invoice_positions';
+
     const TYPE_TOTAL = 'total';
     const TYPE_INCLUSIVE = 'inclusive';
     const TYPE_EXCEEDING = 'exceeding';
@@ -33,22 +36,43 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 3,
+        self::APP_NAME      => Sales_Config::APP_NAME,
+        self::MODEL_NAME    => self::MODEL_NAME_PART,
+
         'recordName'        => 'Invoice Position',
         'recordsName'       => 'Invoice Positions', // ngettext('Invoice Position', 'Invoice Positions', n)
-        'hasRelations'      => FALSE,
-        'hasCustomFields'   => FALSE,
-        'hasNotes'          => FALSE,
-        'hasTags'           => FALSE,
-        'modlogActive'      => FALSE,
-        'hasAttachments'    => FALSE,
-        'createModule'      => FALSE,
-        'containerProperty' => NULL,
-    
         'titleProperty'     => 'title',
-        'appName'           => 'Sales',
-        'modelName'         => 'InvoicePosition',
+
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
+
+        self::TABLE         => [
+            self::NAME          => self::TABLE_NAME,
+            self::INDEXES       => [
+                'invoice_id' => [
+                    self::COLUMNS       => ['invoice_id'],
+                ],
+            ]
+        ],
 
         'fields'            => array(
+            'invoice_id' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'label' => NULL,
+                'type'  => 'record',
+                self::LENGTH => 40,
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Invoice',
+                    'idProperty'  => 'id',
+                    'isParent'    => true
+                )
+            ),
+            'accountable_id' => array(
+                'label'   => NULL,
+                'type'    => 'string',
+                self::LENGTH => 40,
+            ),
             'model' => array(
                 'label'   => 'Type', // _('Type')
                 'type'    => 'string',
@@ -66,38 +90,27 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
                     ]],
                 ],
             ),
-            'invoice_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label' => NULL,
-                'type'  => 'record',
-                'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'Invoice',
-                    'idProperty'  => 'id',
-                    'isParent'    => TRUE
-                )
-            ),
             'title' => array(
                 'label'   => 'Title', // _('Title')
                 'type'    => 'string',
-                'queryFilter' => TRUE,
-            ),
-            'accountable_id' => array(
-                'label'   => NULL,
-                'type'    => 'string',
+                'queryFilter' => true,
             ),
             'month' => array(
                 'label'   => 'Month', // _('Month')
-                'type'    => 'month',
+                'type'    => self::TYPE_STRING,
+                self::LENGTH => 7,
             ),
             'unit' => array(
                 'label'   => 'Unit', // _('Unit')
                 'type'    => 'string',
+                self::LENGTH => 128,
             ),
             'quantity' => array(
                 'label' => 'Quantity', //_('Quantity')
                 'type'  => 'float',
                 'summaryType' => 'sum',
+                self::DEFAULT_VAL => 1.0,
+                self::UNSIGNED => true,
             ),
         )
     );
