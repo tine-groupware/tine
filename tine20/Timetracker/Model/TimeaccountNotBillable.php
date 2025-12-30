@@ -84,11 +84,11 @@ class Timetracker_Model_TimeaccountNotBillable extends Timetracker_Model_Timeacc
      *
      * @param Tinebase_DateTime $date
      * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract)
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Document_Invoice $invoice, Sales_Model_Contract $contract)
     {
         if (intval($this->budget) > 0) {
 

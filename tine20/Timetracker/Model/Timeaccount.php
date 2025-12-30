@@ -751,9 +751,9 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
     /**
      * set each billable of this accountable billed
      *
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      */
-    public function clearBillables(Sales_Model_Invoice $invoice)
+    public function clearBillables(Sales_Model_Document_Invoice $invoice)
     {
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         $this->_disableTimesheetChecks($tsController);
@@ -785,6 +785,38 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
         $this->_enableTimesheetChecks($tsController);
     }
 
+    public function unClearBillables(Sales_Model_Document_Invoice $invoice)
+    {
+        $tsController = Timetracker_Controller_Timesheet::getInstance();
+        $this->_disableTimesheetChecks($tsController);
+
+        $filter = new Timetracker_Model_TimesheetFilter(array(), 'AND');
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'is_cleared', 'operator' => 'equals', 'value' => 1)));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+
+        // if this timeaccount has a budget, close and bill this and set cleared at date
+        if (intval($this->budget) > 0) {
+
+            if ($this->invoice_id !== $invoice->getId()) {
+                return;
+            }
+
+            $this->is_open    = 1;
+            $this->status     = self::STATUS_TO_BILL;
+            $this->cleared_at = null;
+
+            Timetracker_Controller_Timeaccount::getInstance()->update($this);
+            // also clear all timesheets belonging to this invoice and timeaccount
+            $tsController->updateMultiple($filter, array('is_cleared' => 0));
+        } else {
+            // otherwise clear all timesheets of this invoice
+            $tsController->updateMultiple($filter, array('is_cleared' => 0));
+        }
+
+        $this->_enableTimesheetChecks($tsController);
+    }
+
     protected function _cleanToBillWithInvoiceId()
     {
         $this->invoice_id = null;
@@ -809,11 +841,11 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      *
      * @param Tinebase_DateTime $date
      * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract)
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Document_Invoice $invoice, Sales_Model_Contract $contract)
     {
         if (intval($this->budget) > 0) {
 

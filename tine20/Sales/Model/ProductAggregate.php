@@ -291,12 +291,17 @@ class Sales_Model_ProductAggregate extends Sales_Model_Accountable_Abstract
      /**
       * set each billable of this accountable billed
       *
-      * @param Sales_Model_Invoice $invoice
+      * @param Sales_Model_Document_Invoice $invoice
       */
-     public function clearBillables(Sales_Model_Invoice $invoice)
+     public function clearBillables(Sales_Model_Document_Invoice $invoice)
      {
          // nothing to do. ProductAggregates are always billed
      }
+
+    public function unClearBillables(Sales_Model_Document_Invoice $invoice)
+    {
+        // nothing to do. ProductAggregates are always billed
+    }
      
      /**
       * returns the unit of this billable

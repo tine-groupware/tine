@@ -9,7 +9,7 @@
   -->
 
 <config>
-    <model>Sales_Model_Invoice</model>
+    <model>Sales_Model_Document_Invoice</model>
     <name>invoice_timesheet_xlsx</name>
     <type>export</type>
     <!-- _('Invoice Timesheet') -->

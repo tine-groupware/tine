@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -20,9 +20,10 @@ interface Sales_Model_Accountable_Interface
     /**
      * set each billable of this accountable billed
      * 
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      */
-    public function clearBillables(Sales_Model_Invoice $invoice);
+    public function clearBillables(Sales_Model_Document_Invoice $invoice);
+    public function unClearBillables(Sales_Model_Document_Invoice $invoice);
     
     /**
      * if the model does not have its own last_autobill property, this is volatile and controlled by the contract
@@ -79,11 +80,11 @@ interface Sales_Model_Accountable_Interface
      *
      * @param Tinebase_DateTime $date
      * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract);
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Document_Invoice $invoice, Sales_Model_Contract $contract);
     
     /**
      * returns the name of the billable controller

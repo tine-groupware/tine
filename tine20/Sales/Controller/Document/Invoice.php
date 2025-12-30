@@ -11,11 +11,17 @@
  *
  */
 
+use Sales_Model_Document_Invoice as SMD_Invoice;
+use Tinebase_Model_Filter_Abstract as TMFA;
+use Tinebase_Model_Filter_FilterGroup as TMFFG;
+
 /**
  * Invoice Document controller class for Sales application
  *
  * @package     Sales
  * @subpackage  Controller
+ *
+ * @extends Sales_Controller_Document_Abstract<Sales_Model_Document_Invoice>
  */
 class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstract
 {
@@ -33,11 +39,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
     protected function __construct()
     {
         $this->_applicationName = Sales_Config::APP_NAME;
-        $this->_backend = new Tinebase_Backend_Sql([
-            Tinebase_Backend_Sql_Abstract::MODEL_NAME => Sales_Model_Document_Invoice::class,
-            Tinebase_Backend_Sql_Abstract::TABLE_NAME => Sales_Model_Document_Invoice::TABLE_NAME,
-            Tinebase_Backend_Sql_Abstract::MODLOG_ACTIVE => true,
-        ]);
+        $this->_backend = new Sales_Backend_Document_Invoice();
         $this->_modelName = Sales_Model_Document_Invoice::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
@@ -97,12 +99,71 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
     }
 
+    /**
+     * @param SMD_Invoice $_record
+     * @param SMD_Invoice $_oldRecord
+     * @return void
+     * @throws Tinebase_Exception_Record_Validation
+     */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
         if (!$_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
             $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} = $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
+        }
+
+        $newlyReversed = Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED === $_record->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} &&
+            Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED !== $_oldRecord->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS};
+
+        if (null === $_record->relations && ($newlyReversed || $_record->isBooked() !== $_oldRecord->isBooked())) {
+            $_record->relations = Tinebase_Relations::getInstance()->getRelations(get_class($_record), 'Sql', $_record->getId());
+        }
+
+        if (!$newlyReversed && $_record->isBooked() && !$_oldRecord->isBooked()) {
+            if (! empty($_record->relations)) {
+                foreach($_record->relations as $relation) {
+                    if (in_array('Sales_Model_Accountable_Interface', class_implements($relation['related_model']))) {
+
+                        if (is_array($relation['related_record'])) {
+                            $rr = new $relation['related_model']($relation['related_record']);
+                        } else {
+                            $rr = $relation['related_record'];
+                        }
+
+                        /** @var Tinebase_Record_Interface&Sales_Model_Accountable_Interface $rr */
+                        $rr->clearBillables($_record);
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing billables ' . print_r($rr->toArray(), true));
+                        }
+                    }
+                }
+            }
+        } elseif ($newlyReversed || (!$_record->isBooked() && $_oldRecord->isBooked())) {
+            if (! empty($_record->relations)) {
+                foreach($_record->relations as $relation) {
+                    if (in_array('Sales_Model_Accountable_Interface', class_implements($relation['related_model']))) {
+
+                        if (is_array($relation['related_record'])) {
+                            $rr = new $relation['related_model']($relation['related_record']);
+                        } else {
+                            $rr = $relation['related_record'];
+                        }
+
+                        /** @var Tinebase_Record_Interface&Sales_Model_Accountable_Interface $rr */
+                        $rr->unClearBillables($_record);
+
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' UnClearing billables ' . print_r($rr->toArray(), true));
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($newlyReversed) {
+            $this->unrollInvoice(new Tinebase_Record_RecordSet($this->_modelName, [$_record]));
         }
     }
 
@@ -115,6 +176,165 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $_record->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true);
         }
     }
+
+    protected function _inspectDelete(array $_ids)
+    {
+        $_ids = parent::_inspectDelete($_ids);
+        $invoices = $this->_backend->getMultiple($_ids);
+        $this->unrollInvoice($invoices);
+        return $invoices;
+    }
+
+    /**
+     * @param Tinebase_Record_RecordSet<SMD_Invoice> $invoices
+     */
+    protected function unrollInvoice(Tinebase_Record_RecordSet $invoices): void
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' unrollInvoices ' . print_r($invoices->getArrayOfIds(), true));
+        }
+
+        $_cachedProducts = new Tinebase_Record_RecordSet(Sales_Model_Product::class);
+        $_ids = $invoices->getArrayOfIds();
+
+        foreach ($invoices as $invoice) {
+            if (null === $invoice->{SMD_Invoice::FLD_AUTO_INVOICE_BILLING_DATE}) {
+                continue;
+            }
+            // find invoices after this one:
+            if ($invoice->{SMD_Invoice::FLD_CONTRACT_ID}) {
+                foreach ($this->search(TMFFG::getFilterForModel($this->_modelName, [
+                    [TMFA::FIELD => SMD_Invoice::FLD_CONTRACT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $invoice->{SMD_Invoice::FLD_CONTRACT_ID}],
+                    [TMFA::FIELD => SMD_Invoice::FLD_AUTO_INVOICE_BILLING_DATE, TMFA::OPERATOR => 'after', TMFA::VALUE => $invoice->{SMD_Invoice::FLD_AUTO_INVOICE_BILLING_DATE}],
+                    [TMFA::FIELD => SMD_Invoice::FLD_REVERSED_STATUS, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED],
+                    [TMFA::FIELD => SMD_Invoice::FLD_REVERSAL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
+                ]), _onlyIds: true) as $futureId) {
+                    if (!$invoices->offsetExists($futureId)) {
+                        throw new Sales_Exception_DeletePreviousInvoice();
+                    }
+                }
+            }
+
+            // remove invoice_id from billables
+            $filter = new Sales_Model_InvoicePositionFilter(array());
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'document_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+            $invoicePositions = Sales_Controller_InvoicePosition::getInstance()->search($filter);
+
+            $allModels = array_unique($invoicePositions->model);
+
+            foreach ($allModels as $model) {
+
+                if ($model == 'Sales_Model_ProductAggregate') {
+                    continue;
+                }
+
+                $billableControllerName = $model::getBillableControllerName();
+                $billableFilterName = $model::getBillableFilterName();
+
+                $filterInstance = new $billableFilterName(array());
+                $filterInstance->addFilter(new Tinebase_Model_Filter_Text(
+                    array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())
+                ));
+
+
+                // TODO move this to Timetracker (as on delete hook/fn)
+                if ($model == 'Timetracker_Model_Timeaccount') {
+                    // prevent throwing of Tinebase_Exception_Confirmation for closed accounts (see \Timetracker_Controller_Timesheet::_checkGrant)
+                    $billableControllerName::getInstance()->setRequestContext([
+                        'skipClosedCheck' => true,
+                    ]);
+                    $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                    $billableControllerName::getInstance()->setRequestContext([]);
+
+                    // set invoice ids of the timeaccounts
+                    $filterInstance = new Timetracker_Model_TimeaccountFilter(array());
+                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'status', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::STATUS_BILLED)));
+                    $filterInstance->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'cleared_at', 'operator' => 'isnull', 'value' => '')));
+
+                    Timetracker_Controller_Timeaccount::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL, 'status' => Timetracker_Model_Timeaccount::STATUS_TO_BILL));
+                } else {
+                    $billableControllerName::getInstance()->updateMultiple($filterInstance, array('invoice_id' => NULL));
+                }
+            }
+
+            // set last_autobill a period back
+            if ($invoice->{SMD_Invoice::FLD_CONTRACT_ID}) {
+                $contract = Sales_Controller_Contract::getInstance()->get($invoice->getIdFromProperty(SMD_Invoice::FLD_CONTRACT_ID));
+                //find the month of each productAggregate we have to set it back to
+                $undoProductAggregates = [];
+                $paController = Sales_Controller_ProductAggregate::getInstance();
+
+                foreach ($invoicePositions as $inPos) {
+                    if ($inPos->model != 'Sales_Model_ProductAggregate')
+                        continue;
+
+                    //if we didnt find a month for the productAggreagte yet or if the month found is greater than the one we have at hands
+                    if (!isset($undoProductAggregates[$inPos->accountable_id]) || strcmp($undoProductAggregates[$inPos->accountable_id], $inPos->month) > 0) {
+                        $undoProductAggregates[$inPos->accountable_id] = $inPos->month;
+                    }
+                }
+
+                $isLastInvoice = false;
+                if (0 === $this->_backend->searchCount(TMFFG::getFilterForModel($this->_modelName,
+                        [
+                            [TMFA::FIELD => SMD_Invoice::FLD_CONTRACT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $invoice->getIdFromProperty(SMD_Invoice::FLD_CONTRACT_ID)],
+                            [TMFA::FIELD => SMD_Invoice::ID, TMFA::OPERATOR => 'notin', TMFA::VALUE => $_ids],
+                            [TMFA::FIELD => SMD_Invoice::FLD_REVERSED_STATUS, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED],
+                            [TMFA::FIELD => SMD_Invoice::FLD_REVERSAL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
+                        ]
+                    ))) {
+                    $isLastInvoice = true;
+                }
+
+                $filter = new Sales_Model_ProductAggregateFilter(array());
+                $filter->addFilter(new Tinebase_Model_Filter_Text(
+                    array('field' => 'contract_id', 'operator' => 'equals', 'value' => $invoice->getIdFromProperty(SMD_Invoice::FLD_CONTRACT_ID))
+                ));
+
+                foreach (Sales_Controller_ProductAggregate::getInstance()->search($filter) as $productAggregate) {
+
+                    if (!$productAggregate->last_autobill)
+                        continue;
+                    if ($isLastInvoice) {
+                        $productAggregate->last_autobill = NULL;
+                    } elseif (!isset($undoProductAggregates[$productAggregate->id])) {
+                        $product = $_cachedProducts->getById($productAggregate->product_id);
+                        if (!$product) {
+                            $product = Sales_Controller_Product::getInstance()->get($productAggregate->product_id);
+                            $_cachedProducts->addRecord($product);
+                        }
+
+                        // $product->accountable == 'Sales_Model_Product'
+                        if ($invoice->{SMD_Invoice::FLD_AUTO_INVOICE_BILLING_DATE}->isLater($productAggregate->last_autobill)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping PA: ' . $invoice->{SMD_Invoice::FLD_AUTO_INVOICE_BILLING_DATE}->toString() . ' ' . $productAggregate->last_autobill->toString());
+                            }
+                            continue;
+                        }
+
+                        $productAggregate->last_autobill->subMonth($productAggregate->interval);
+                    } else {
+
+                        $productAggregate->last_autobill = new Tinebase_DateTime($undoProductAggregates[$productAggregate->id] . '-01 00:00:00', 'UTC');
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' new last autobill: ' . $productAggregate->last_autobill->toString());
+                        }
+                        if ($productAggregate->billing_point == 'begin') {
+                            $productAggregate->last_autobill->subMonth($productAggregate->interval);
+                        }
+                        if ($productAggregate->start_date && $productAggregate->last_autobill < $productAggregate->start_date) {
+                            if ($productAggregate->last_autobill < $productAggregate->start_date || ($productAggregate->billing_point == 'end' && $productAggregate->last_autobill == $productAggregate->start_date)) {
+                                $productAggregate->last_autobill = NULL;
+                            }
+                        }
+                    }
+                    $paController->update($productAggregate);
+                }
+            }
+        }
+    }
+
     /**
      * @param Sales_Model_Document_Invoice $_record
      * @param Sales_Model_Document_Invoice|null $_oldRecord
@@ -249,7 +469,6 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
 
             Tinebase_TransactionManager::getInstance()->rollBack();
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
-            /** @var Sales_Model_Invoice $record */
             $record = $this->get($record->getId());
 
             if ($stream) {

@@ -332,29 +332,24 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return false;
         }
 
-        $c = Sales_Controller_Invoice::getInstance();
+        $c = Sales_Controller_Document_Invoice::getInstance();
         
-        $f = new Sales_Model_InvoiceFilter(array(
+        $f = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Invoice::class, [
                 array('field' => 'is_auto', 'operator' => 'equals', 'value' => TRUE),
-                array('field' => 'cleared', 'operator' => 'not', 'value' => 'CLEARED'),
-        ), 'AND');
+                array('field' => Sales_Model_Document_Invoice::FLD_INVOICE_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Invoice::STATUS_PROFORMA),
+        ]);
         
         if ($contract) {
-            $subf = new Tinebase_Model_Filter_ExplicitRelatedRecord(array('field' => 'contract', 'operator' => 'AND', 'value' => array(array(
-                    'field' =>  ':id', 'operator' => 'equals', 'value' => $contract->getId()
-            )), 'options' => array(
-                'controller'        => 'Sales_Controller_Contract',
-                'filtergroup'       => 'Sales_Model_ContractFilter',
-                'own_filtergroup'   => 'Sales_Model_InvoiceFilter',
-                'own_controller'    => 'Sales_Controller_Invoice',
-                'related_model'     => 'Sales_Model_Contract',
-            )));
-            $f->addFilter($subf);
+            $f->addFilter($f->createFilter(
+                Sales_Model_Document_Invoice::FLD_CONTRACT_ID,
+                'equals',
+                $contract->getId(),
+            ));
         }
         
-        $p = new Tinebase_Model_Pagination(array('sort' => 'start_date', 'dir' => 'DESC'));
+        $p = new Tinebase_Model_Pagination(array('sort' => Sales_Model_Document_Invoice::FLD_DOCUMENT_DATE, 'dir' => 'DESC'));
 
-        $invoiceIds = $c->search($f, $p, /* $_getRelations = */ false, /* only ids */ true);
+        $invoiceIds = $c->search($f, $p, _onlyIds: true);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' About to delete ' . count($invoiceIds) .' uncleared invoices ...');
@@ -393,19 +388,6 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         Sales_Controller_Contract::getInstance()->transferBillingInformation(TRUE);
-    }
-    
-    /**
-     * sets start date and last_auobill by existing invoice positions / normalizes last_autobill
-     */
-    public function updateLastAutobillOfProductAggregates()
-    {
-        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' updateLastAutobillOfProductAggregates ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
-            return false;
-        }
-
-        Sales_Controller_Contract::getInstance()->updateLastAutobillOfProductAggregates();
     }
 
     /**
