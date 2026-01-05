@@ -53,10 +53,10 @@ abstract class Tinebase_Record_Expander_Abstract
                 try {
                     $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($this->_model, $definition, $prop,
                         $this->_rootExpander);
-                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                } catch (Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotImplemented $te) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
-                            . $teia->getMessage());
+                            . $te->getMessage());
                     }
                 }
             }
