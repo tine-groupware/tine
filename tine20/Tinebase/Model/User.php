@@ -200,8 +200,10 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         $bypassFilter = $this->bypassFilters;
         $this->bypassFilters = true;
 
-        if (isset($_data['accountEmailAddress'])) {
-            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode(mb_strtolower(trim((string) $_data['accountEmailAddress'])));
+        if (isset($_data['accountEmailAddress']) && !empty($_data['accountEmailAddress'])) {
+            $_data['accountEmailAddress'] = Tinebase_Helper::convertDomainToPunycode(
+                mb_strtolower(trim((string) $_data['accountEmailAddress']))
+            );
         }
 
         parent::setFromArray($_data);
