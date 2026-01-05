@@ -49,6 +49,11 @@
       </div>
     </template>
     <template #footer>
+      <div class="mb-2">
+        <BFormCheckbox  v-model="doNotShowAgain" v-if="doNotShowAgainCBBoxVisibility">
+          {{ window.i18n._('Do not show this message again') }}
+        </BFormCheckbox>
+      </div>
       <div>
         <BButton class="mx-1 x-tool-close vue-button" v-for="button in buttonToShow" @click="button.clickHandler"
                  :key="button.name" :class="button.class">{{ button.name }}
@@ -62,8 +67,9 @@
 // TODO: change the progressBar according to `props.opt.waitConfig` if available
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
+/* eslint-disable */
 import {computed, inject, nextTick, onBeforeMount, ref, watch} from "vue"
-import PersonaContainer from "../../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue";
+import PersonaContainer from "../PersonaContainer/PersonaContainer.vue";
 
 import { createFocusTrap } from "focus-trap";
 
@@ -75,6 +81,8 @@ const inputField = ref();
 const textAreaElVisiblity = ref(false);
 const textAreaField = ref();
 const progressBarVisibility = ref(false);
+const doNotShowAgainCBBoxVisibility = ref(false);
+const doNotShowAgain = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
 
@@ -96,6 +104,7 @@ const init = async function () {
   }
   textElValue.value = props.opt.value;
   progressBarVisibility.value = props.opt.progress === true || props.opt.wait === true;
+  doNotShowAgainCBBoxVisibility.value = props.opt.stateId !== null;
 
   _.delay(() => {
     if(textAreaElVisiblity.value) textAreaField.value.focus()
@@ -137,12 +146,21 @@ const msgClickHandler = (e) => {
 
 const buttonToShow = computed(() => {
   if (props.opt.buttons) {
+    let stateIdData = null;
+
+    if (doNotShowAgain.value) {
+      stateIdData = {
+        doNotShowAgain: true
+      };
+    }
+
     return buttonOrder.filter( el => Object.keys(props.opt.buttons).includes(el)).map(buttonName => {
       return {
         clickHandler: () => {
           ExtEventBus.emit("buttonClicked", {
             buttonName,
             textElValue: textElValue.value,
+            dialogStateIdData: stateIdData
           })
         },
         name: props.otherConfigs.buttonText[buttonName],

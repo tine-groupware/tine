@@ -1644,6 +1644,9 @@ msgstr ""
 msgid "Do you want to copy the HTML content with styles?"
 msgstr ""
 
+msgid "Hint: You can paste content without formatting by pressing Ctrl + Shift + V"
+msgstr ""
+
 msgid "Outdated Browser"
 msgstr ""
 
@@ -2381,6 +2384,9 @@ msgid "Related to"
 msgstr ""
 
 msgid "enter search filter"
+msgstr ""
+
+msgid "Do not show this message again"
 msgstr ""
 
 msgid "Leave site?"
