@@ -1111,9 +1111,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 })();
 
                 if (! this.el.findParent('.x-window')) {
-                    if (_.get(Tine.Tinebase.router.routes, `${this.appName}.${this.recordClass.getMeta('recordName')}`)) {
-                        Tine.Tinebase.router.setRoute(`${this.appName}/${this.recordClass.getMeta('recordName')}/${this.record.get(this.recordClass.getMeta('idProperty'))}`);
-                    }
+                    this.setRouteLink();
                 }
             }
         }
@@ -1123,6 +1121,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         this.fireEvent('load', this, this.record, ticketFn);
         wrapTicket();
+    },
+
+    setRouteLink() {
+        const recordId = this.record.get(this.recordClass.getMeta('idProperty'));
+        if (Ext.isString(recordId) && ! recordId.match('^[0-9a-f-]{40,}$')) return;
+        Tine.Tinebase.router.on([`/${this.appName}/${this.recordClass.getMeta('modelName')}/(.*)`], () => {});
+        Tine.Tinebase.router.setRoute(`${this.appName}/${this.recordClass.getMeta('modelName')}/${recordId}`);
     },
 
     /**

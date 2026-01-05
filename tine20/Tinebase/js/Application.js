@@ -203,18 +203,48 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
     },
 
-    initRoutes: function() {
-        var route, action;
+    initRoutes: function(appName = null, routes = null) {
+        let route, action;
+        appName = appName ?? this.appName;
+        routes = routes ?? this.routes;
 
-        if (this.routes) {
-            for (route in this.routes) {
-                if (this.routes.hasOwnProperty(route)) {
-                    action = this.routes[route];
+        if (window.isMainWindow) {
+            const models = {
+                ...(Tine[appName]?.registry?.get('models') || {}),
+                ...(Tine[appName]?.Model || {})
+            };
+            Object.entries(models).forEach((model) => {
+                const modelName = model[0];
+                if (!Tine[appName].hasOwnProperty(`${modelName}EditDialog`)) return;
+
+                Tine.Tinebase.router.on([`/${appName}/${modelName}/(.*)`], async (id) => {
+                    try {
+                        const result = await Tine[appName][`get${modelName}`](id);
+                        const record = Tine.Tinebase.data.Record.setFromJson(result, Tine[appName].Model[modelName]);
+                        const cp = this.getMainScreen().getCenterPanel();
+                        cp.onEditInNewWindow.call(cp, {actionType: 'edit'}, record);
+                    } catch (error) {
+                        Ext.Msg.show({
+                            title: 'Error',
+                            msg: error.message,
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    }
+                    window.location = window.location.href.replace(`/${modelName}/${id}`, '');
+                });
+            });
+        }
+
+        if (routes) {
+            for (route in routes) {
+                if (routes.hasOwnProperty(route)) {
+                    action = routes[route];
                     if (Ext.isString(action) && Ext.isFunction(this[action])) {
                         action = this[action].createDelegate(this);
                     }
-                    if (route[0] != '/') {
-                        route = '/' + this.appName + '/' + route;
+                    if (route[0] !== '/') {
+                        route = '/' + appName + '/' + route;
                     }
                     Tine.Tinebase.router.on(route, action);
                 }
@@ -222,10 +252,9 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
         }
         
         // default mainscreen route
-        if (!this.routes || !this.routes['']) {
-            var me = this;
-            Tine.Tinebase.router.on('/' + this.appName, function() {
-                Tine.Tinebase.MainScreenPanel.show(me);
+        if ((!routes || !routes['']) && window.isMainWindow) {
+            Tine.Tinebase.router.on('/' + appName, () => {
+                Tine.Tinebase.MainScreenPanel.show(this);
             });
         }
     },
