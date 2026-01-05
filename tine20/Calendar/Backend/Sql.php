@@ -186,8 +186,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function search(?\Tinebase_Model_Filter_FilterGroup $_filter = NULL, ?\Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Searching events ...');
-        
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
@@ -232,7 +230,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         };
         $_filter->filterWalk($func);
 
-        
         // clone the filter, as the filter is also used in the json frontend
         // and the calendar filter is used in the UI to
         $clonedFilters = clone $_filter;
@@ -255,18 +252,23 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $parent->addFilter($tempFilter);
         }
 
-        
         $this->_addFilter($select, $clonedFilters);
         
         $select->group($this->_tableName . '.' . 'id');
 
+        if (in_array($_pagination->sort, $this->_getIgnoreSortColumns())) {
+            // TODO generalize this?
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skip invalid sort field: ' . $_pagination->sort);
+            }
+            $_pagination->sort = null;
+        }
+
         $_pagination->appendPaginationSql($select, $getDeleted);
         
         $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                . ' Event base rows fetched: ' . count($rows) . ' select: ' . $select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         $result = $this->_rawDataToRecordSet($rows);
 
@@ -1191,5 +1193,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         }
 
         return $row;
+    }
+
+    /**
+     * @return array
+     */
+    protected function _getIgnoreSortColumns()
+    {
+        return ['attendee'];
     }
 }
