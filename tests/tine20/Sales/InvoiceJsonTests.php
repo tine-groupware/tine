@@ -342,17 +342,18 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $invoiceId = $invoices['results'][0]['id'];
         $this->assertEquals(0,$invoice['price_net']);
 
+        $expectedMonth = Tinebase_DateTime::now()->subYear(1)->format('Y') . '-05';
         Timetracker_Controller_Timesheet::destroyInstance();
         $tsController = Timetracker_Controller_Timesheet::getInstance();
         $timesheets = $tsController->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                     ['field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId],
                     ['field' => 'start_time', 'operator' => 'equals', 'value' => '09:20:00'],
-                    ['field' => 'start_date', 'operator' => 'equals', 'value' => '2024-05-08'],
+                    ['field' => 'start_date', 'operator' => 'equals', 'value' => $expectedMonth . '-08'],
                 ]
             ));
 
-        foreach($timesheets as $timesheet) {
+        foreach ($timesheets as $timesheet) {
             $this->assertTrue(in_array($timesheet->invoice_id, $invoiceIds), 'the invoice id must be set!');
             $this->assertEquals(1, $timesheet->is_cleared);
         }
@@ -360,7 +361,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $invoice = $this->_uit->getInvoice($invoiceId);
         $this->assertEquals(1, count($invoice['positions']));
         $position = $invoice['positions'][0];
-        $this->assertEquals('2024-05', $position['month']);
+        $this->assertEquals($expectedMonth, $position['month']);
         $this->assertEquals(7.0, $position['quantity']);
 
         //test update ts date after status set to is_cleared
@@ -378,7 +379,7 @@ class Sales_InvoiceJsonTests extends Sales_InvoiceTestCase
         $this->assertEquals(1, count($invoice['positions']));
         $position = $invoice['positions'][0];
 
-        $this->assertEquals('2024-05', $position['month']);
+        $this->assertEquals($expectedMonth, $position['month']);
         $this->assertEquals(10.0, $position['quantity']);
     }
 

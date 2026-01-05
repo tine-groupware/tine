@@ -728,8 +728,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                     $sortCol = (substr_count((string) $sort, $this->_tableName) === 0) ? $this->_tableName . '.' .
                         $sort : $sort;
                     if ($schema && substr_count((string) $sortCol, $this->_tableName) && !in_array($sort, array_keys($schema))) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__ . ' skip invalid sort field: ' . $sort);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(
+                                __METHOD__ . '::' . __LINE__ . ' Skip invalid sort field: ' . $sort);
+                        }
                     } else {
                         $colsToFetch[$sort] = $sortCol;
                     }
@@ -1675,7 +1677,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         return $this->_tablePrefix . $this->_tableName;
     }
-    
+
     /**
      * get table identifier
      * 
