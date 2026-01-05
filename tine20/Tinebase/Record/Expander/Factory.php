@@ -42,7 +42,7 @@ class Tinebase_Record_Expander_Factory
                 null, $_property, $_definition, $_rootExpander);
         }
         if (null === ($propModel = $mc->getFieldModel($_property)) ) {
-            throw new Tinebase_Exception_NotImplemented($_model . '::' . $_property . ' has a unknown model');
+            throw new Tinebase_Exception_NotImplemented($_model . '::' . $_property . ' has an unknown model');
         }
 
         $prio = null;
