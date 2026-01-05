@@ -78,7 +78,8 @@ Ext.MessageBox = function(){
         waitConfig: null,
         width: 600,
         skinColor: '#FFFFFF',
-        bodyCls: ""
+        bodyCls: "",
+        stateId: null,
     })
 
     // modal container config
@@ -95,8 +96,11 @@ Ext.MessageBox = function(){
     // end vue properties
 
     // private
-    const handleButton = function({buttonName, textElValue} = arg){
+    const handleButton = function({buttonName, textElValue, dialogStateIdData} = arg){
         handleHide()
+        if (opt.stateId && dialogStateIdData) {
+            Ext.state.Manager.set(opt.stateId, dialogStateIdData);
+        }
         Ext.callback(opt.fn, opt.scope||window, [buttonName, textElValue, opt], 1);
     }
     
@@ -247,7 +251,7 @@ Ext.Msg.show({
             options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
             synchronousVisibilityState = !__HIDDEN
             Ext.getBody().mask("Loading");
-            const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
+            const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox" */ 'ux/vue/VueMessageBox/index.js')
 
             // initializing vue stuff
             if(!initialized){
@@ -278,6 +282,7 @@ Ext.Msg.show({
                     }
                 });
 
+                vueHandle.config.globalProperties.window = window;
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
                 vueHandle.use(BootstrapVueNext)
@@ -424,9 +429,14 @@ Ext.MessageBox.ERROR
          * @param {String} msg The message box body text
          * @param {Function} fn (optional) The callback function invoked after the message box is closed
          * @param {Object} scope (optional) The scope (<code>this</code> reference) in which the callback is executed. Defaults to the browser wnidow.
+         * @param stateId
          * @return {Ext.MessageBox} this
          */
-        confirm : function(title, msg, fn, scope){
+        confirm : function(title, msg, fn, scope, stateId = null){
+            if (stateId) {
+                const state = Ext.state.Manager.get(stateId);
+                if (state?.doNotShowAgain) return Promise.resolve('yes');
+            }
             return this.show({
                 title : title,
                 msg : msg,
@@ -434,7 +444,8 @@ Ext.MessageBox.ERROR
                 fn: fn,
                 scope : scope,
                 icon: this.QUESTION,
-                minWidth: this.minWidth
+                minWidth: this.minWidth,
+                stateId: stateId
             });
         },
 

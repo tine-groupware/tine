@@ -67,9 +67,15 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
         if (htmlText) {
             try {
                 const app = Tine.Tinebase.appMgr.get('Tinebase');
+                let msg = app.i18n._('Do you want to copy the HTML content with styles?') +
+                    `<br><br>`
+                    + `<br><i>` + app.i18n._('Hint: You can paste content without formatting by pressing Ctrl + Shift + V') + `<i>`;
                 if (await Ext.MessageBox.confirm(
                     app.i18n._('Confirm'),
-                    app.i18n._('Do you want to copy the HTML content with styles?'),
+                    msg,
+                    null,
+                    null,
+                    'Confirm-Dialog-copyTextWithHTMLFormat'
                 ) === 'yes') {
                     const html = await Tine.Tinebase.purifyHTML(htmlText);
                     result = {
