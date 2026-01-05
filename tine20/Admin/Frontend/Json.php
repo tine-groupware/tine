@@ -6,9 +6,9 @@
  *
  * @package     Admin
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * 
  * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -1771,15 +1771,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $records->addRecord($node);
             
             $isFelamimailInstalled = Tinebase_Application::getInstance()->isInstalled('Felamimail');
-            if ($isFelamimailInstalled) {
-                $imapBackend = null;
-                try {
-                    $imapBackend = Tinebase_EmailUser::getInstance();
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                }
-                if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            if ($isFelamimailInstalled && Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+                $imapBackend = Tinebase_EmailUser::getInstance();
+                if ($imapBackend instanceof Tinebase_EmailUser_Sql) {
                     $emailPath = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Felamimail');
-
                     /** @var Tinebase_Model_Tree_Node $emailNode */
                     $emailNode = clone $records->getFirstRecord();
                     $emailNode->setId(trim($emailPath, '/'));
