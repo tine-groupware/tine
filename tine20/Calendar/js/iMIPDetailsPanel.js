@@ -65,17 +65,23 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         if (data) {
             this.prepareData = data;
             this.iMIPrecord = new Tine.Calendar.Model.iMIP(this.prepareData);
+
+            if (!this.iMIPrecord.get('event')) {
+                this.iMIPrecord.set('event', this.prepareData.event);
+            }
         }
 
-        if (! this.iMIPrecord.get('event') || ! Ext.isFunction(this.iMIPrecord.get('event').beginEdit)) {
-            this.iMIPrecord.set('event', Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.prepareData.event)
-            }));
-        }
-        if (this.iMIPrecord.get('existing_event') && !Ext.isFunction(this.iMIPrecord.get('existing_event').beginEdit)) {
-            this.iMIPrecord.set('existing_event', Tine.Calendar.backend.recordReader({
-                responseText: Ext.util.JSON.encode(this.iMIPrecord.get('existing_event'))
-            }));
+        this.hasExistingEvent = !!this.iMIPrecord.get('existing_event');
+        const preconditions = this.iMIPrecord.get('preconditions');
+        const eventData = (this.hasExistingEvent && !preconditions) ? this.iMIPrecord.get('existing_event') : this.iMIPrecord.get('event');
+
+        this.record = Tine.Calendar.backend.recordReader({
+            responseText: Ext.util.JSON.encode(eventData)
+        });
+        // show container from existing event if exists
+        const containerId = this.iMIPrecord.get('existing_event')?.container_id;
+        if (this.hasExistingEvent && containerId) {
+            this.record.set('container_id', containerId);
         }
     },
 
@@ -85,7 +91,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
      * @param {String} status
      */
     processIMIP: async function (status, range) {
-        if (this.iMIPrecord.get('event').isRecurBase() && status !== 'ACCEPTED' && !range) {
+        if (this.record.isRecurBase() && status !== 'ACCEPTED' && !range) {
             Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Reply to Recurring Event'),
                 questionText: this.app.i18n._('You are responding to a recurring event. What would you like to do?'),
@@ -160,7 +166,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.viewInCalendarAction = new Ext.Button(new Ext.Action({
             handler: () => {
                 Tine.Calendar.ViewInCalendarDialog.openWindow({
-                    record: this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'),
+                    record: this.record,
                     messageRecord: this.messageRecord,
                     targetAttendeeRecord: this.targetAttendeeRecord,
                     allowViewInCalendar: false,
@@ -200,7 +206,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
 
         // Create the combo (initially hidden)
         this.attendeeCombo = new Tine.Calendar.AttendeeCombo({
-            eventRecord: this.iMIPrecord.get('existing_event') ?? this.iMIPrecord.get('event'),
+            eventRecord: this.record,
             messageRecord: this.messageRecord,
             defaultValue: 'current',
             width: 300,
@@ -222,10 +228,9 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.idPrefix = Ext.id();
         this.statusActions = [];
         this.statuses = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus');
-        const existingEvent = this.iMIPrecord.get('existing_event');
         this.statuses.each((item) => {
             // hide the save action if event is already in the calendar , usually external invite does not saved
-            if (existingEvent && item.id === 'NEEDS-ACTION') {
+            if (this.hasExistingEvent && item.id === 'NEEDS-ACTION') {
                 this.statuses.remove(item);
             }
         });
@@ -338,13 +343,11 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     },
 
     getAttendeeList() {
-        const existingEvent = this.iMIPrecord.get('existing_event');
-        const event = this.iMIPrecord.get('event');
-        if (existingEvent && existingEvent.get('attendee').length > 0) {
-            return existingEvent.get('attendee');
+        if (this.record.get('attendee')) {
+            return this.record.get('attendee');
         }
 
-        const myAttender = event.getMyAttenderRecord().data;
+        const myAttender = this.record.getMyAttenderRecord().data;
         if (myAttender?.user_id?.id) {
             myAttender.id = myAttender.user_id.id;
         }
@@ -367,22 +370,11 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
     updateInfo() {
         const preconditions = this.iMIPrecord.get('preconditions');
         const method = this.iMIPrecord.get('method');
-        const event = this.iMIPrecord.get('event');
-        const existingEvent = this.iMIPrecord.get('existing_event');
-        let attenderRecord = this.getTargetAttendeeRecord();
-        this.record = (existingEvent && !preconditions) ? existingEvent : event;
-        const myAttenderRecord = existingEvent ? existingEvent.getMyAttenderRecord() : event.getMyAttenderRecord();
+        const myAttenderRecord = this.record.getMyAttenderRecord();
+        const attenderRecord = this.getTargetAttendeeRecord() ?? myAttenderRecord;
         let showActions = false;
         let text = '';
 
-        // show container from existing event if exists
-        if (existingEvent?.data?.container_id) {
-            event.set('container_id', existingEvent.data.container_id);
-        }
-
-        if (!attenderRecord) {
-            attenderRecord = myAttenderRecord;
-        }
         if (myAttenderRecord) {
             const isInRecipientList = this.messageRecord.data['to'].find((to) => {return myAttenderRecord.get('user_id').email === to.email});
             if (!isInRecipientList) {
@@ -437,14 +429,23 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                         text = this.app.i18n._("This is an event invitation for someone else.");
                         break;
                     }
-                    if (existingEvent && attenderRecord && attenderRecord.get('status') !== 'NEEDS-ACTION'
-                        && (event.get('external_seq') <= existingEvent.get('external_seq')
-                            || event.get('seq') <= existingEvent.get('seq'))) {
-                        const attendeeName = (attenderRecord.get('user_id').n_fn ?? attenderRecord.get('user_id').name);
-                        text = attendeeName + ' ' + this.app.i18n._("has already replied to this event invitation.");
-                    }
-                    if (existingEvent && existingEvent.isRescheduled(event)) {
-                        text = this.app.i18n._('The event got rescheduled.');
+
+                    if (this.hasExistingEvent) {
+                        const event = Tine.Calendar.backend.recordReader({
+                            responseText: Ext.util.JSON.encode(this.iMIPrecord.get('event'))
+                        });
+                        const existingEvent = Tine.Calendar.backend.recordReader({
+                            responseText: Ext.util.JSON.encode(this.iMIPrecord.get('existing_event'))
+                        });
+                        if (attenderRecord && attenderRecord.get('status') !== 'NEEDS-ACTION'
+                            && (event.get('external_seq') <= existingEvent.get('external_seq')
+                                || event.get('seq') <= existingEvent.get('seq'))) {
+                            const attendeeName = (attenderRecord.get('user_id').n_fn ?? attenderRecord.get('user_id').name);
+                            text = attendeeName + ' ' + this.app.i18n._("has already replied to this event invitation.");
+                        }
+                        if (existingEvent.isRescheduled(event)) {
+                            text = this.app.i18n._('The event got rescheduled.');
+                        }
                     }
                     break;
                 case 'REPLY':
@@ -485,4 +486,15 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             }
         })
     }
+
 });
+Promise.all([Tine.Tinebase.appMgr.isInitialised('Felamimail'),
+    Tine.Tinebase.ApplicationStarter.isInitialised()]).then(() => {
+
+    if (Tine.Felamimail.MimeDisplayManager) {
+        Tine.Felamimail.MimeDisplayManager.register('text/calendar', Tine.Calendar.iMIPDetailsPanel);
+    }
+})
+
+
+
