@@ -101,7 +101,7 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
 
             try {
                 $response = $middleWarePipe->handle(Tinebase_Core::getContainer()->get(RequestInterface::class));
-            } catch (Tinebase_Exception_NotFound $tenf) {
+            } catch (Tinebase_Exception_NotFound|ReflectionException $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(
                         __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
