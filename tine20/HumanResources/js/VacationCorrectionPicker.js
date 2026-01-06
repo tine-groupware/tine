@@ -64,7 +64,9 @@ class VacationCorrectionPicker extends Tine.widgets.grid.PickerGridPanel {
 
     onEditDialogRecordUpdate(updatedRecord) {
         super.onEditDialogRecordUpdate(updatedRecord);
-        this.editDialog.loadRecord('remote');
+        this.editDialog.loadRecord('remote').then(() => {
+            this.getSelectionModel().clearSelections(false);
+        });
     }
 }
 Ext.reg('HumanResources.VacationCorrectionPicker', VacationCorrectionPicker);
