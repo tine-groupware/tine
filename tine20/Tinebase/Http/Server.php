@@ -118,7 +118,6 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
 
                     $func_args = $method->getParameters();
                     $calling_args = $this->_getCallingArgs($func_args, $request);
-                    // TODO fix "undefined" getName()
                     $methodName = $method->getName();
 
                     if ($method instanceof Zend_Server_Reflection_Method) {
@@ -373,7 +372,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      * Lowercase's a string by reference
      * -> moved here from Zend_Server_Abstract because it is marked as deprecated there
      * 
-     * @param  string $string value
+     * @param  string $value value
      * @return string Lower cased string
      */
     public static function lowerCase(&$value)

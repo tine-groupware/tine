@@ -3,6 +3,9 @@ includes:
 parameters:
     bootstrapFiles:
         - ci/phpstan/bootstrap.php
+    ignoreErrors:
+        # TODO maybe fix in Zend Framework? those classes make heavy use of __call() ...
+        - '#Call to an undefined method Zend_Server_Reflection_[a-zA-Z0-9\\_]+#'
     universalObjectCratesClasses:
       - Tinebase_Config_Abstract
       - Tinebase_Config_Struct
