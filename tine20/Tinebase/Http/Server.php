@@ -118,6 +118,8 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
 
                     $func_args = $method->getParameters();
                     $calling_args = $this->_getCallingArgs($func_args, $request);
+                    // TODO fix "undefined" getName()
+                    $methodName = $method->getName();
 
                     if ($method instanceof Zend_Server_Reflection_Method) {
                         // Get class
@@ -127,7 +129,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                             // for some reason, invokeArgs() does not work the same as 
                             // invoke(), and expects the first argument to be an object. 
                             // So, using a callback if the method is static.
-                            $result = call_user_func_array(array($class, $method->getName()), $calling_args);
+                            return call_user_func_array(array($class, $methodName), $calling_args);
                         }
 
                         // Object methods
@@ -138,14 +140,26 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                                 $object = $method->getDeclaringClass()->newInstance();
                             }
                         } catch (Exception) {
-                            throw new Zend_Json_Server_Exception('Error instantiating class ' . $class . ' to invoke method ' . $method->getName(), 500);
+                            throw new Zend_Json_Server_Exception('Error instantiating class ' . $class
+                                . ' to invoke method ' . $methodName, 500);
                         }
 
-                        // the called function generates the needed output
-                        return $method->invokeArgs($object, $calling_args);
+                        try {
+                            // the called function generates the needed output
+                            return $method->invokeArgs($object, $calling_args);
+                        } catch (Error $e) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                                Tinebase_Core::getLogger()->err(
+                                    __METHOD__ . '::' . __LINE__
+                                    . ' Error calling ' . $class . '::' . $methodName
+                                    . ' with params ' . print_r($calling_args, true)
+                                );
+                            }
+                            throw $e;
+                        }
                     } else {
                         // the called function generates the needed output
-                        return call_user_func_array($method->getName(), $calling_args);
+                        return call_user_func_array($methodName, $calling_args);
                     }
 
                 } else if ($method instanceof Zend_Server_Method_Definition) {
