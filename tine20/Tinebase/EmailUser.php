@@ -206,13 +206,19 @@ class Tinebase_EmailUser
      *
      * @param string $configType
      * @return Tinebase_User_Plugin_Abstract
+     * @throws Tinebase_Exception_Backend
      */
     public static function getInstance($configType = Tinebase_Config::IMAP)
     {
         $type = self::getConfiguredBackend($configType);
 
         if (!isset(self::$_backends[$type])) {
-            self::$_backends[$type] = self::factory($type);
+            try {
+                self::$_backends[$type] = self::factory($type);
+            } catch (Exception $e) {
+                throw new Tinebase_Exception_Backend('Could not create email user backend (' . $type . '): '
+                    . $e->getMessage());
+            }
         }
 
         return self::$_backends[$type];
@@ -327,7 +333,12 @@ class Tinebase_EmailUser
         if (! self::manages(Tinebase_Config::SMTP)) {
             return false;
         }
-        $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        try {
+            $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
+            return false;
+        }
         return $plugin->supportsAliasesDispatchFlag();
     }
 
@@ -711,7 +722,12 @@ class Tinebase_EmailUser
             return false;
         }
 
-        $imapEmailBackend = Tinebase_EmailUser::getInstance();
+        try {
+            $imapEmailBackend = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
+            return false;
+        }
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
                 $imapEmailBackend->checkMasterUserTable();
