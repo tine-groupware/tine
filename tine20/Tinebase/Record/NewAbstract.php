@@ -133,7 +133,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
 
         $this->bypassFilters = (bool)$_bypassFilters;
 
-        if (is_array($_data)) {
+        if (is_array($_data) && !empty($_data)) {
             if (static::$inJson) {
                 $this->setFromJson($_data);
             } else {
@@ -398,7 +398,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     /**
      * sets the record related properties from user generated input.
      *
-     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     * Input-filtering and validation by Zend_Filter_Input can be enabled and disabled
      *
      * @param array $_data the new data to set
      * @throws Tinebase_Exception_InvalidArgument

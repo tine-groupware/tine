@@ -660,7 +660,6 @@ Tine.Tinebase.tineInit = {
                         keepRegistry: false,
                         clearCache: true
                     });
-
                 });
             }
             Tine.Tinebase.tineInit.showLoginBox(function(response){
@@ -1404,7 +1403,16 @@ Tine.Tinebase.tineInit = {
      * add provider to Ext.Direct based on Tine servicemap
      */
     initExtDirect: function () {
-        var sam = Tine.Tinebase.registry.get('serviceMap');
+        const sam = Tine.Tinebase.registry.get('serviceMap');
+
+        if (!sam) {
+            // TODO improve this by clearing the cookie and return to the login screen
+            Ext.MessageBox.alert(
+                formatMessage('Could not load service map'),
+                formatMessage('You might have to clear the session/cookies and do the login again')
+            );
+            return;
+        }
 
         Ext.Direct.addProvider(Ext.apply(sam, {
             'type'     : 'jsonrpcprovider',
