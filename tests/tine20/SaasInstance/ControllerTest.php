@@ -245,7 +245,7 @@ class SaasInstance_ControllerTest extends TestCase
             $totalCount = $totalCount + count($recipients);
         }
         
-        static::assertEquals($totalCount, count($messages));
+        static::assertEquals($totalCount, count($messages), print_r($messages, true));
 
         $actionLogs = Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_EMAIL_NOTIFICATION, count($senders));
 
