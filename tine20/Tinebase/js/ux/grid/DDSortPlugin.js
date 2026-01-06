@@ -160,18 +160,23 @@ Ext.extend(DDSortPlugin, Ext.util.Observable, {
     },
 
     applySorting: function(records, ref, edge) {
+        // Sort records by ddSortCol before processing
+        records = [].concat(records).sort((a, b) => {
+            return a.get(this.ddSortCol) - b.get(this.ddSortCol);
+        });
         const refIdx = this.store.indexOf(ref);
         const refSortVal = ref.get(this.ddSortCol);
         const sign = edge === 'above' ? -1 : +1;
         const neighbour = this.store.getAt(refIdx+sign);
-        const sortdiff = neighbour ? Math.round(Math.abs(refSortVal-neighbour.get(this.ddSortCol)) / (records.length+1)) : this.sortInc;
-        [].concat(records)[sign < 0 ? 'reverse' : 'unique']().forEach((record, idx) => {
-            record.set(this.ddSortCol, refSortVal+(idx+1)*sign*sortdiff);
+        const sortDiff = neighbour ? Math.round(Math.abs(refSortVal - neighbour.get(this.ddSortCol)) / (records.length + 1) * 100) / 100 : this.sortInc;
+
+        records[sign < 0 ? 'reverse' : 'unique']().forEach((record, idx) => {
+            const newId = refSortVal + (idx + 1) * sign * sortDiff;
+            record.set(this.ddSortCol, newId);
         });
     },
 
     onAfterSort: Ext.emptyFn
-
 });
 
 export default DDSortPlugin;
