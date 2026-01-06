@@ -153,8 +153,10 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-            __METHOD__ . '::' . __LINE__ . ' ' . $sentAlarms . ' alarms sent (limit: ' . $limit . ').');
+        if ($sentAlarms > 0 && Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $sentAlarms . ' alarms sent (limit: ' . $limit . ').');
+        }
 
         return true;
     }
