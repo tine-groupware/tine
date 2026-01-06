@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  * 
  * @package     Calendar
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://wwws.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -406,7 +406,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         return $result;
     }
-    
+
     /**
      * Search for events matching given arguments
      *
@@ -414,14 +414,19 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $paging
      * @param boolean $addFixedCalendars
      * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function searchEvents($filter, $paging, $addFixedCalendars = true)
+    public function searchEvents($filter, $paging, $addFixedCalendars = true): array
     {
         $controller = Calendar_Controller_Event::getInstance();
         
         $decodedPagination = $this->_prepareParameter($paging);
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
-        $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
+        /** @var Calendar_Model_EventFilter $filter */
+        $filter = $this->_decodeFilter($filter, Calendar_Model_EventFilter::class);
         $clientFilter = $filter;
 
         if ($addFixedCalendars) {
@@ -429,6 +434,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $fixedCalendarIds = Calendar_Controller_Event::getInstance()->getFixedCalendarIds();
             $useFixedCalendars = is_array($fixedCalendarIds) && !empty($fixedCalendarIds);
         } else {
+            $fixedCalendarIds = [];
             $useFixedCalendars = false;
         }
         
@@ -446,7 +452,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // add fixed calendar on demand
         if ($useFixedCalendars) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
-            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendarIds));
+            $fixed->addFilter(new Tinebase_Model_Filter_Text(
+                'container_id',
+                'in',
+                $fixedCalendarIds)
+            );
             
             $fixed->addFilter($periodFilter);
             
@@ -458,9 +468,10 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter->addFilterGroup($og);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' events filter: ' . print_r($filter->toArray(), true));
-
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' events filter: ' . print_r($filter->toArray(), true));
+        }
 
         // get weekday filter here and remove it from filters so it's not evaluated in the sql...
         $weekdayFilters = $filter->getFilter('weekday', true, true);
@@ -473,27 +484,29 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
 
-        $records = $controller->search($filter, $pagination, FALSE);
+        $records = $controller->search($filter, $pagination);
 
         $result = $this->_multipleRecordsToJson($records, $clientFilter, $pagination);
 
-        //if we have a weekday filter remove all non-matching events here
+        // if we have a weekday filter remove all non-matching events here
         if (count($weekdayFilters) > 0) {
             $startsOnDays = [];
             $endsOnDays = [];
             $filteredResults = [];
 
-            foreach ($weekdayFilters as $filter) {
-                $wkdayIds = array_values(array_map('strval', array_filter($filter->getValue())));
-
-                if ($filter->getOperator() === 'startson') {
-                    $startsOnDays = array_merge($startsOnDays, $wkdayIds);
-                } elseif ($filter->getOperator() === 'endson') {
-                    $endsOnDays = array_merge($endsOnDays, $wkdayIds);
+            foreach ($weekdayFilters as $weekdayFilter) {
+                $value = $weekdayFilter->getValue();
+                if (is_array($value)) {
+                    $wkdayIds = array_values(array_map('strval', array_filter($value)));
+                    if ($weekdayFilter->getOperator() === 'startson') {
+                        $startsOnDays = array_merge($startsOnDays, $wkdayIds);
+                    } elseif ($weekdayFilter->getOperator() === 'endson') {
+                        $endsOnDays = array_merge($endsOnDays, $wkdayIds);
+                    }
                 }
             }
 
-            foreach ($result as $idx => $recordData) {
+            foreach ($result as $recordData) {
                 $dtstart = new Tinebase_DateTime($recordData['dtstart']);
                 $dtend = new Tinebase_DateTime($recordData['dtend']);
                 $recordStartDay = $dtstart->format('w');
