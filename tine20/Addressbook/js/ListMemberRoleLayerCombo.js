@@ -10,12 +10,13 @@ Ext.ns('Tine.Addressbook');
 
 /**
  * config grid panel
+ * @TODO isn't this a standard recordsPicker?
  *
  * @namespace   Tine.Addressbook
  * @class       Tine.Addressbook.ListMemberRoleLayerCombo
  * @extends     Tine.widgets.grid.LayerCombo
  */
-Tine.Addressbook.ListMemberRoleLayerCombo = Ext.extend(Tine.widgets.grid.PickerGridLayerCombo, {
+Tine.Addressbook.ListMemberRoleLayerCombo = Ext.extend(Tine.Tinebase.widgets.form.VMultiPicker, {
 
     /**
      * @cfg contact record
