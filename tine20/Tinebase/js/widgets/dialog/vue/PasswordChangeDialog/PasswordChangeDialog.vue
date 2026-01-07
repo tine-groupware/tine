@@ -16,6 +16,7 @@
       :label="String.format(window.i18n._('Old {0}'), passwordLabel)"
       :clipboard="false"
       ref="oldPasswordField"
+      v-if="askOldPassword"
     />
     <PasswordField
       id="newPassword"
@@ -39,7 +40,8 @@ import { ref, computed } from 'vue'
 // eslint-disable-next-line
 const props = defineProps({
   passwordLabel: { type: String, default: 'Password' },
-  dialogText: { type: String, default: null }
+  dialogText: { type: String, default: null },
+  askOldPassword: { type: Boolean, default: true }
 })
 
 const oldPasswordField = ref()
@@ -48,7 +50,7 @@ const newPasswordSecondTimeField = ref()
 
 const getValue = () => {
   return {
-    oldPassword: oldPasswordField.value.getValue(),
+    oldPassword: props.askOldPassword ? oldPasswordField.value.getValue() : '',
     newPassword: newPasswordField.value.getValue(),
     newPasswordSecondTime: newPasswordSecondTimeField.value.getValue()
   }
