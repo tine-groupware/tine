@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Tinebase
  * @subpackage  Json
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 class Tinebase_Frontend_JsonTest extends TestCase
@@ -141,11 +141,14 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     /**
      * test getCountryList
-     *
      */
     public function testGetCountryList()
     {
         $list = $this->_instance->getCountryList();
+        $this->assertTrue(count($list['results']) > 200);
+
+        // test with bogus locale
+        $list = $this->_instance->getCountryList('root');
         $this->assertTrue(count($list['results']) > 200);
     }
 
@@ -1262,7 +1265,6 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testSearchPaths()
     {
-        $result = null;
         try {
             $result = $this->_instance->searchPaths([
                 ['field' => 'shadow_path', 'operator' => 'contains', 'value' => $this->_personas['sclever']->contact_id],
@@ -1329,20 +1331,4 @@ class Tinebase_Frontend_JsonTest extends TestCase
         // the empty filter gets removed
         static::assertEquals(1, count($result['filter']));
     }
-
-    /**
-     * this test doesnt test anything really useful
-     * it heavily depends on config and fails on github (because of config)
-     * just read it, either param null and result should be success?... if anything this test shows that the api is broken
-    public function testChangePasswordWithNullValues()
-    {
-        $this->_skipIfLDAPBackend();
-
-        $credentials = TestServer::getInstance()->getTestCredentials();
-        $result = $this->_instance->changePassword($credentials['password'], null);
-        self::assertEquals(['success' => 1], $result);
-        $result = $this->_instance->changePassword( null, $credentials['password']);
-        self::assertEquals(['success' => 1], $result);
-    }
-     * */
 }
