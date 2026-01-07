@@ -109,8 +109,24 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         this.getForm().loadRecord(this.record);
 
         this.conditionsPanel.conjunctionOperator = this.record.get('conjunction') == 'anyof' ? 'or' : 'and';
-        
+
+        this.supr().onRecordLoad.apply(this, arguments);
+
         this.hideLoadMask();
+    },
+
+    /**
+     * get data to copy record
+     *
+     * @param {Tine.Tinebase.data.Record} record
+     * @param recordClass
+     * @param {Boolean} omitCopyTitle
+     */
+    getCopyRecordData: function (record, recordClass, omitCopyTitle) {
+        const copiedId = record.get('id') + 0.01;
+        const recordData = this.supr().getCopyRecordData.apply(this, arguments);
+        recordData['id'] = copiedId;
+        return recordData;
     },
     
     /**
@@ -124,6 +140,10 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var argumentFieldName = 'action_argument_' + this.actionTypeCombo.getValue(),
             argumentField = this.getForm().findField(argumentFieldName),
             argumentValue = (argumentField !== null) ? argumentField.getValue() : '';
+
+        if (!argumentValue && this.record.get('action_argument')) {
+            argumentValue = this.record.get('action_argument');
+        }
 
         // add additional action arguments
         if (argumentFieldName === 'action_argument_redirect') {
