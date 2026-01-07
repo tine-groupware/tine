@@ -74,12 +74,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      *
      */
     public const WINDOW_TYPE = 'windowtype';
-    
-    /**
-     * show logout confirmation
-     *
-     */
-    public const CONFIRM_LOGOUT = 'confirmLogout';
 
     /**
      * advanced search through relations and so on
@@ -105,7 +99,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 self::LOCALE,
                 self::DEFAULT_APP,
                 self::WINDOW_TYPE,
-                self::CONFIRM_LOGOUT,
                 self::PAGE_SIZE,
                 self::GRID_STRIPE_ROWS,
                 self::GRID_LOAD_MASK,
@@ -163,10 +156,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             self::WINDOW_TYPE  => array(
                 'label'         => $translate->_('Window Type'),
                 'description'   => $translate->_('You can choose between modal windows or normal browser popup windows.'),
-            ),
-            self::CONFIRM_LOGOUT  => array(
-                'label'         => $translate->_('Confirm Logout'),
-                'description'   => $translate->_('Show confirmation dialog on logout.'),
             ),
             self::ADVANCED_SEARCH => array(
                 'label'         => $translate->_('Enable advanced search'),
@@ -280,13 +269,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                             <label>Overlay windows</label>
                             <value>Ext</value>
                         </option>
-                    </options>';
-                break;
-            case self::CONFIRM_LOGOUT:
-                $preference->value      = 1;
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
                     </options>';
                 break;
             case self::ADVANCED_SEARCH:
