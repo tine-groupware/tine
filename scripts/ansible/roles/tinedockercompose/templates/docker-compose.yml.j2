@@ -239,5 +239,13 @@ volumes:
 
 networks:
   external_network:
+{% if tinedockercompose_network_mtu is defined %}
+    driver_opts:
+      com.docker.network.driver.mtu: {{ tinedockercompose_network_mtu }}
+{% endif %}
   internal_network:
+{% if tinedockercompose_network_mtu is defined %}
+    driver_opts:
+      com.docker.network.driver.mtu: {{ tinedockercompose_network_mtu }}
+{% endif %}
     internal: true
