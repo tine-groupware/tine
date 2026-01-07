@@ -60,6 +60,10 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
 
     onActivate: async function() {
         await this.showUnavailableAlertIf()
+        this.onClientResize()
+    },
+
+    onClientResize: function() {
         if (this.clientFrame) {
             // fix ui glitch - element somehow shows half the client only after some time in background
             this.clientFrame.setHeight(this.el.getHeight()-1)
@@ -109,6 +113,7 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
             }
         })
 
+        this.on('resize', this.onClientResize, this)
 
         window.addEventListener("message", async (event) => {
             // note: elementRequestCredentials is only send by element, if it requires credentials and can not bootstrap from local storage
