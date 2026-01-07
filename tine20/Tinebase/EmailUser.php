@@ -530,13 +530,6 @@ class Tinebase_EmailUser
         $isExternal = self::isExternalDomain($_email);
         $allowAnyExternalDomains = Tinebase_Config::getInstance()->{Tinebase_Config::SMTP}->allowAnyExternalDomains;
 
-        if ($allowAnyExternalDomains === null) {
-            // todo: allowExternalEmail is deprecated , we should only check allowAnyExternalDomains
-            $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
-            $allowExternalEmail = ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail;
-            $allowAnyExternalDomains = $allowExternalEmail;
-        }
-
         if ($isExternal && $allowAnyExternalDomains) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(

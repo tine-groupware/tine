@@ -7,4 +7,8 @@ TINE RELEASE NOTES
 
 # GENERAL CHANGES (Administrative/Operative)
 
+## IMAP config allowExternalEmail has been refactored to SMTP allowAnyExternalDomains
+- imap.allowExternalEmail -> smtp.allowAnyExternalDomains
+- smtp.additionaldomains -> smtp.additionalexternaldomains
+
 ## PHP 8.2 Support has been dropped
