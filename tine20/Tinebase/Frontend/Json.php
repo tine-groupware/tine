@@ -94,7 +94,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getCountryList($locale = null)
     {
-        return Tinebase_Translation::getCountryList($locale ? new Zend_Locale($locale) : null);
+        try {
+            $result = Tinebase_Translation::getCountryList($locale ? new Zend_Locale($locale) : null);
+        } catch (Symfony\Component\Intl\Exception\MissingResourceException $mre) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Error: "' . $mre->getMessage()
+                    . '" -> Switching to default locale');
+            }
+            $result = Tinebase_Translation::getCountryList();
+        }
+        return $result;
     }
 
     /**
