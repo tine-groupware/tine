@@ -976,7 +976,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
         $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
-        $allowExternalEmail = ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail;
 
         $smtpConfig = $manageSmtpEmailUser
             ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
@@ -1009,8 +1008,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => $smtpConfig['primarydomain'] ?? '',
             'secondarydomains' => $smtpConfig['secondarydomains'] ?? '',
             'additionalexternaldomains' => $smtpConfig['additionalexternaldomains'] ?? '',
-            // imap.allowExternalEmail is deprecated, please use smtp.allowAnyExternalDomains instead
-            'allowAnyExternalDomains'   => $smtpConfig['allowAnyExternalDomains'] ?? $allowExternalEmail,
+            'allowAnyExternalDomains'   => $smtpConfig['allowAnyExternalDomains'],
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
             'hasSmsAdapters'   => count($smsAdapterConfig) > 0,
         );
