@@ -334,6 +334,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             'change'
         );
 
+        this.fieldDefaults = Ext.applyIf(this.fieldDefaults || {}, {
+            showDirtyUI: true
+        });
+
         if (Ext.isString(this.modelConfig)) {
             this.modelConfig = Ext.decode(this.modelConfig);
         }

@@ -52,6 +52,8 @@ Ext.form.Field = Ext.extend(Ext.BoxComponent,  {
     invalidClass : 'x-form-invalid',
 
     dirtyClass: 'x-grid3-dirty-cell',
+    showDirtyUI: false,
+
     /**
      * @cfg {String} invalidText The error text to use when marking a field invalid and no message is provided
      * (defaults to 'The value in this field is invalid')
@@ -381,7 +383,7 @@ var form = new Ext.form.FormPanel({
             this.validate();
         }
 
-        if (this.isDirty()) {
+        if (this.showDirtyUI && this.isDirty()) {
             this.markDirty()
         } else {
             this.clearDirty()
