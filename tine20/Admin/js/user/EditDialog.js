@@ -1003,6 +1003,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         listeners: {
                             scope: this,
                             keyup: this.suggestNameBasedProps,
+                            paste: this.suggestNameBasedProps,
                             render: function (field) {
                                 field.focus(false, 250);
                                 field.selectText();
@@ -1016,7 +1017,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         enableKeyEvents: true,
                         listeners: {
                             scope: this,
-                            keyup: this.suggestNameBasedProps
+                            keyup: this.suggestNameBasedProps,
+                            paste: this.suggestNameBasedProps,
                         }
                     }], [{
                         fieldLabel: this.app.i18n.gettext('Display name'),
@@ -1252,8 +1254,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return config;
     },
 
-    suggestNameBasedProps: function(field, e) {
+    suggestNameBasedProps: function(refField, e) {
         // suggest for new users only!
+        let value = refField.getRawValue();
+        if (e.type === 'paste') {
+            const clipboardData = e.browserEvent.clipboardData;
+            value = clipboardData.getData('Text');
+        }
         if (this.record.phantom) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
             Object.keys(Tine.Tinebase.configManager.get('accountTwig')).asyncForEach(async (fieldName) => {
@@ -1265,6 +1272,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // suggest for unchanged fields only
                 if (field && (!field.suggestedValue || field.getValue() === field.suggestedValue)) {
                     this.onRecordUpdate();
+                    this.record.data[refField.name] = value;
                     // @FIXME twing can't cope with null values yet, remove this once twing fixed it
                     const accountData = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
                     const suggestion = await this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
