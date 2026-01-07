@@ -162,6 +162,48 @@ RUN apt-mirror activate \
 
 
 
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.5
+ARG APT_MIRROR=""
+COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
+COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
+RUN apt-mirror activate \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    software-properties-common \
+    gnupg2 \
+    apt-transport-https \
+    lsb-release \
+    ca-certificates \
+ && add-apt-repository ppa:ondrej/php \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
+    php8.5 \
+    php8.5-apcu \
+    php8.5-bcmath \
+    php8.5-curl \
+    php8.5-fpm \
+    php8.5-gd \
+    php8.5-igbinary \
+    php8.5-imagick \
+    php8.5-intl \
+    php8.5-ldap \
+    php8.5-mbstring \
+    php8.5-mysql \
+    php8.5-phpdbg \
+    php8.5-redis \
+    php8.5-soap \
+    php8.5-xml \
+    php8.5-yaml \
+    php8.5-zip \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt-mirror deactivate \
+ && ln -s /etc/php/8.5 /etc/php/default \
+ && ln -s /usr/sbin/php-fpm8.5 /usr/sbin/php-fpm \
+ && echo "php8.5" > /etc/php/container-php-package-name
+
+
+
+
 FROM ${DOCKER_HUB_PROXY}hairyhenderson/gomplate:stable-alpine as gomplate
 
 FROM ${PHP_IMAGE} as base
