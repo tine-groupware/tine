@@ -66,6 +66,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DivisionBankAccount::MODEL_NAME_PART,
         Sales_Model_DivisionGrants::MODEL_NAME_PART,
         Sales_Model_Document_Category::MODEL_NAME_PART,
+        Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
         Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
         Sales_Model_EDocument_EAS::MODEL_NAME_PART,
         Sales_Model_EDocument_PaymentMeansCode::MODEL_NAME_PART,

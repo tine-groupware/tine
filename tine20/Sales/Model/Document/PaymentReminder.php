@@ -38,6 +38,8 @@ class Sales_Model_Document_PaymentReminder extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::IS_DEPENDENT                  => true,
 
+        self::TITLE_PROPERTY                => "{{ date |localizeddate('short', 'none', app.request.locale) }} - {{ outstanding_amount }}",
+
         //self::EXPOSE_JSON_API               => true,
         //self::CREATE_MODULE                 => true,
 
@@ -114,10 +116,12 @@ class Sales_Model_Document_PaymentReminder extends Tinebase_Record_NewAbstract
             ],
             self::FLD_LEVEL                     => [
                 self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::LABEL                         => 'Level', // _('Level')
                 self::NAME                          => Sales_Config::PAYMENT_REMINDER_LEVEL,
             ],
             self::FLD_OUTSTANDING_AMOUNT        => [
                 self::TYPE                          => self::TYPE_MONEY,
+                self::LABEL                         => 'Outstanding amount', // _('Outstanding amount')
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
