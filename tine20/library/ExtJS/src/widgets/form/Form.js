@@ -79,8 +79,10 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
      * the form's {@link #monitorValid valid state monitor task} to enable/disable those Buttons depending on
      * the form's valid/invalid state.</p>
      */
-
-
+    /**
+     * @cfg {Object} fieldDefaults
+     * An object of defaults to be applied to field
+     */
     /**
      * @cfg {Number} minButtonWidth Minimum width of all buttons in pixels (defaults to <tt>75</tt>).
      */
@@ -156,6 +158,7 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
         var formPanel = this;
         var fn = function(c){
             if(formPanel.isField(c)){
+                Ext.apply(c, this.fieldDefaults)
                 f.add(c);
             }else if(c.findBy && c != formPanel){
                 formPanel.applySettings(c);
@@ -246,6 +249,7 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
     processAdd : function(c){
         // If a single form Field, add it
         if(this.isField(c)){
+            Ext.apply(c, this.fieldDefaults)
             this.form.add(c);
         // If a Container, add any Fields it might contain
         }else if(c.findBy){
