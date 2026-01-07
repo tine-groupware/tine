@@ -92,7 +92,12 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
     },
 
     fitToSize : function(t){
-        if(this.container.enableOverflow === false && !this.enableResponsive){
+        // 2026-01-06 - cw - this is not used right?
+        // but it prevents more buttons.
+        // one problem is, that setWidth does not shrink buttons
+        // it might be an idea to shorten/extend the text (char by char)
+        // we might support a shortText or remove text and have tip only
+        if(false && this.container.enableOverflow === false && !this.enableResponsive){
             const items = this.container.items.items;
             const w = t.dom.clientWidth;
             const autoShrinkItems = items.filter(el => el.autoShrink);
