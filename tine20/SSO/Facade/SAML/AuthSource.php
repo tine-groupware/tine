@@ -13,10 +13,6 @@
 
 class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
 {
-    /*
-     * public function initLogin(string|array $return, ?string $errorURL = null, array $params = []): Response
-    {
-     */
     /**
      * Log out from this authentication source.
      *
@@ -45,12 +41,12 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
      * @param array &$state Information about the current authentication.
      * @return void
      */
-    public function reauthenticate(array &$state): void
+    public function reauthenticate(array &$state)
     {
-        $this->authenticate(\Symfony\Component\HttpFoundation\Request::createFromGlobals(), $state);
+        $this->authenticate($state);
     }
 
-    public function authenticate(Request|\Symfony\Component\HttpFoundation\Request $request, &$state): ?\Symfony\Component\HttpFoundation\Response
+    public function authenticate(&$state)
     {
         // we need to make sure the state has not set any exception handlers!
         // we want the exceptions we throw, to be thrown all the way back to tine20 code to catch it!
@@ -115,7 +111,5 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
         if (isset($state['SPMetadata']['customHooks']['postAuthenticate']) && is_readable($state['SPMetadata']['customHooks']['postAuthenticate'])) {
             require $state['SPMetadata']['customHooks']['postAuthenticate'];
         }
-
-        return null;
     }
 }

@@ -11,15 +11,10 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-class SSO_Facade_SAML_Session extends \SimpleSAML\Session
+class SSO_Facade_SAML_Session
 {
     protected $data = [];
     protected $spEntityId;
-
-    protected array $logoutMsgs = [];
-
-    public function __construct()
-    {}
 
     public function setSPEntityId($spEntityId)
     {
@@ -43,7 +38,7 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
      *
      * @return array|null  The current persistent authentication state, or null if not authenticated.
      */
-    public function getAuthState($authority): array|null
+    public function getAuthState($authority)
     {
         $this->_getData();
         return isset($this->data[$authority][$this->spEntityId]) ? $this->data[$authority][$this->spEntityId] : null;
@@ -55,20 +50,15 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
         return null;
     }
 
-    public function getLastLogoutMessages(): array
-    {
-        return $this->logoutMsgs;
-    }
-
-    public function doLogout($authority): void
+    public function doLogout($authority): array
     {
         if (Tinebase_Session::isStarted()) {
             $this->_getData();
         }
 
-        $this->logoutMsgs = [];
+        $messages = [];
         if (! isset($this->data[$authority])) {
-            return;
+            return $messages;
         }
         if (is_array($this->data[$authority])) {
             foreach ($this->data[$authority] as $spEntityId => $data) {
@@ -77,17 +67,20 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
 
                 try {
                     $lr = \SimpleSAML\Module\saml\Message::buildLogoutRequest(
-                        \SimpleSAML\IdP::getById(\SimpleSAML\Configuration::getConfig(), 'saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID})->getConfig(),
-                        ($dstCfg = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler(\SimpleSAML\Configuration::getConfig())
+                        \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID})->getConfig(),
+                        ($dstCfg = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler()
                             ->getMetaDataConfig($spEntityId, 'saml20-sp-remote'))
                     );
                     if (is_object($dstCfg->getConfigItem('SingleLogoutService')) && !empty($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'))) {
                         $lr->setDestination($dstCfg->getConfigItem('SingleLogoutService')->getString('Location'));
-                        $binding = $dstCfg->getConfigItem('SingleLogoutService')->getOptionalString('Binding', SSO_Config::SAML2_BINDINGS_REDIRECT);
+                        $binding = $dstCfg->getConfigItem('SingleLogoutService')->getString('Binding', SSO_Config::SAML2_BINDINGS_REDIRECT);
                         $nameId = new SAML2\XML\saml\NameID();
                         $nameId->setValue(Tinebase_Core::getUser()->accountLoginName);
                         $lr->setNameId($nameId);
-                        $this->logoutMsgs[$binding][] = $lr;
+                        if (!isset($messages[$binding])) {
+                            $messages[$binding] = [];
+                        }
+                        $messages[$binding][] = $lr;
                     }
 
                 } catch (Exception $e) {
@@ -105,10 +98,10 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage());
         }
 
-        return;
+        return $messages;
     }
 
-    public function doLogin(string $authority, array $data = []): void
+    public function doLogin($authority, $data)
     {
         if ($data === null) {
             $data = [];
@@ -131,25 +124,16 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
         Tinebase_Session::getSessionNamespace(self::class)->data = $this->data;
     }
 
-    public function setData(string $type, string $id, mixed $data, int|string|null $timeout = null): void {}
-    public function getData(string $type, ?string $id, bool $allowExpired = true): mixed
-    {
-        return null;
-    }
-    public function deleteData(string $type, string $id): void
-    {}
-    public function getTrackID(): string
-    {
-        return '';
-    }
+    public function setData() {}
+    public function getData() {}
+    public function deleteData() {}
+    public function getTrackID() {}
 
     // TODO fixme these two we probably want to implement...
-    public function terminateAssociation(string $idp, string $associationId): void
-    {}
-    public function addAssociation(string $idp, array $association): void
-    {}
+    public function terminateAssociation() {}
+    public function addAssociation() {}
 
-    public function getAuthData($authority, $index): mixed
+    public function getAuthData($authority, $index)
     {
         $this->_getData();
         if (isset($this->data[$authority][$this->spEntityId][$index])) {
@@ -158,7 +142,7 @@ class SSO_Facade_SAML_Session extends \SimpleSAML\Session
         return null;
     }
 
-    public function isValid($authority): bool
+    public function isValid($authority)
     {
         $this->_getData();
         return isset($this->data[$authority]);
