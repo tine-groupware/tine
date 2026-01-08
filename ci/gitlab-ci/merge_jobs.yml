@@ -36,8 +36,6 @@ merge:
   extends: .abstract.merge
   script:
     - merge_merge_upwards $TINE_VERSION_LTS $TINE_VERSION_BE
-    - merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_BETA
-    - merge_merge_upwards $TINE_VERSION_BETA $TINE_VERSION_NEXT
     - |
       if [ "${TINE_VERSION_BETA}" != "" ];then
         merge_merge_upwards $TINE_VERSION_BE $TINE_VERSION_BETA
