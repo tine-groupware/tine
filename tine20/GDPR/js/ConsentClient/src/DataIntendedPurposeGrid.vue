@@ -74,14 +74,14 @@ const extendedDataIntendedPurposes = computed(() => {
         ..._DEF_VAL
       }
     }
-    const getStatus = function( record ) {
-      if(!(record.withdrawDate || record.agreeDate)) return {
+    const getStatus = function (record) {
+      if (!(record.withdrawDate || record.agreeDate)) return {
         status: 'Agree',
         localizedStatus: formatMessage('Agree'),
         statusText: formatMessage('Not decided'),
         cellClass: 'table-warning',
       };
-      if(isExpired(record.withdrawDate)) {
+      if (isExpired(record.withdrawDate)) {
         return {
           status: 'Agree',
           localizedStatus: formatMessage('Agree'),
@@ -99,7 +99,12 @@ const extendedDataIntendedPurposes = computed(() => {
     };
 
     const def_lang = props.consentConfig?.locale.locale;
-    const getItem = (array, locale) => _.find(array, (item) => item.language === locale) || null
+    const getItem = (array, locale) => {
+      return _.find(array, (item) => item.language === locale)
+        || _.find(array, (item) => item.language === 'en')
+        || null;
+    }
+
     _purposeRecord.__record = {
       name: getItem(_purposeRecord.intendedPurpose.name, def_lang)?.text,
       desc: getItem(_purposeRecord.intendedPurpose.description, def_lang)?.text,

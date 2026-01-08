@@ -7,14 +7,14 @@ available parameters:
 {% extends 'Tinebase/views/emails/base.text.twig' %}
 {% block subject %}
     {% if dip != '' %}
-{{ _('Confirm your E-mail address') }}
+{{ 'Confirm your E-mail address' }}
     {% else -%}
-{{ _('Confirm your registration') }}
+{{ 'Confirm your registration' }}
     {% endif %}
 {% endblock %}
 
 {% block body %}
-{{ _('thank you for your registration, to complete the registration, please confirm your e-mail address via this link') }}
+{{ 'thank you for your registration, to complete the registration, please confirm your e-mail address via this link' }}
 
 {{ link }}
 {% endblock %}
