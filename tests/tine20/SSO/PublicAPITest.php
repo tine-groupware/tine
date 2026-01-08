@@ -193,8 +193,6 @@ class SSO_PublicAPITest extends TestCase
 
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_SERVER['QUERY_STRING'] = 'SAMLRequest='.urlencode($msgStr);
-        $_SERVER['REQUEST_URI'] = 'https://localhost:8443/sso/saml2/';
-        $_SERVER['SERVER_NAME'] = 'localhost';
         $_GET['SAMLRequest'] = $msgStr;
 
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,

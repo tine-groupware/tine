@@ -14,7 +14,7 @@
 class SSO_Facade_SAML_AuthSourceFactory implements \SimpleSAML\Auth\SourceFactory
 {
 
-    public function create(array $info, array $config): \SimpleSAML\Auth\Source
+    public function create(array $info, array $config)
     {
         // TODO: Implement create() method.
         return new SSO_Facade_SAML_AuthSource($info, $config);

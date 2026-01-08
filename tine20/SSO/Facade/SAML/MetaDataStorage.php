@@ -14,7 +14,7 @@
 class SSO_Facade_SAML_MetaDataStorage extends \SimpleSAML\Metadata\MetaDataStorageSource
 {
 
-    public function getMetaData($index, $set): ?array
+    public function getMetaData($index, $set)
     {
         static $cache = [];
 

@@ -689,8 +689,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $registryData = $this->_instance->getAllRegistryData();
         $currentUser = Tinebase_Core::getUser();
 
-        self::assertTrue(isset($registryData['Tinebase']['currentAccount']), 'currentAccount is missing: '
-            . print_r($registryData['Tinebase'], true));
+        self::assertTrue(isset($registryData['Tinebase']), 'Tinebase registry data missing');
+        self::assertTrue(isset($registryData['Tinebase']['currentAccount']),
+            'currentAccount is missing from Tinebase registry');
         self::assertEquals($currentUser->toArray(), $registryData['Tinebase']['currentAccount']);
         self::assertEquals(
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(),
