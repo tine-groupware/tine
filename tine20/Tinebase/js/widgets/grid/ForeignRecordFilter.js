@@ -366,7 +366,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             me = this,
             value = filter.get('value'),
             operator = filter.get('operator') || filter.formFields.operator.origGetValue(),
-            def = _.get(_.find(this.operatorStore.data.items, function (o) {
+            def = _.get(_.find(this.operatorStore?.data.items, function (o) {
                 return String(_.get(o, 'data.operator')) === String(operator);
             }), 'data.operator', {});
 
@@ -706,7 +706,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         var _ = window.lodash,
             me = this,
             operator = filter.get('operator') ? filter.get('operator') : this.defaultOperator,
-            def = _.get(_.find(this.operatorStore.data.items, function (o) {
+            def = _.get(_.find(this.operatorStore?.data.items, function (o) {
                 return String(_.get(o, 'data.operator')) === String(operator);
             }), 'data.operator', {}),
             value;
