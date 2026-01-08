@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 import Abstract from './Abstract'
@@ -35,12 +35,12 @@ class WebAuthn extends Abstract {
             const publicKeyData = {
                 id: publicKeyCredential.id,
                 type: publicKeyCredential.type,
-                rawId: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.rawId), { pad: false }),
+                rawId: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.rawId)),
                 response: {
-                    clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON), { pad: false }),
-                    authenticatorData: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.authenticatorData), { pad: false }),
-                    signature: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.signature), { pad: false }),
-                    userHandle: rfc4648.base64url.stringify(Uint8Array.from(accountid, c => c.charCodeAt(0)), { pad: false })
+                    clientDataJSON: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.clientDataJSON)),
+                    authenticatorData: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.authenticatorData)),
+                    signature: rfc4648.base64url.stringify(new Uint8Array(publicKeyCredential.response.signature)),
+                    userHandle: rfc4648.base64url.stringify(Uint8Array.from(accountid, c => c.charCodeAt(0)))
                 }
             }
 
