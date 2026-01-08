@@ -403,6 +403,7 @@ php-unit-nogitlabci-tests-built-parallel:
     - |
       log "updating to ${TINE_VERSION_BE}"
       git checkout ${TINE_VERSION_BE}
+      git describe
       test_composer_install
       log update
       su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
@@ -412,6 +413,7 @@ php-unit-nogitlabci-tests-built-parallel:
       if [ "${TINE_VERSION_BETA}" != "" ] && [ "${TINE_VERSION_BETA}" != "main" ] ;then
         log "updating to ${TINE_VERSION_BETA}"
         git checkout ${TINE_VERSION_BETA}
+        git describe
         test_composer_install
         log update
         su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
@@ -422,6 +424,7 @@ php-unit-nogitlabci-tests-built-parallel:
     - |
       log "updating to ${TINE_VERSION_NEXT}"
       git checkout ${TINE_VERSION_NEXT}
+      git describe
       test_composer_install
       log update
       su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
