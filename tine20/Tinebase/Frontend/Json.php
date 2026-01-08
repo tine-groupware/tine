@@ -1019,7 +1019,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => $smtpConfig['primarydomain'] ?? '',
             'secondarydomains' => $smtpConfig['secondarydomains'] ?? '',
             'additionalexternaldomains' => $smtpConfig['additionalexternaldomains'] ?? '',
-            'allowAnyExternalDomains'   => $smtpConfig['allowAnyExternalDomains'],
+            'allowAnyExternalDomains'   => $smtpConfig['allowAnyExternalDomains'] ?? false,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
             'hasSmsAdapters'   => count($smsAdapterConfig) > 0,
         );
@@ -1078,8 +1078,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['Tinebase'] = $this->getRegistryData();
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Total registry size: ' . strlen(json_encode($registryData)));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Total registry size: ' . strlen(json_encode($registryData)));
+        }
 
         return $registryData;
     }
