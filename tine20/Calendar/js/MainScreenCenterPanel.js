@@ -1646,6 +1646,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (this.rendered) {
+            // update filter panel
+            if(this.filterToolbar) {
+                this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
+            }
+
             // update container tree
             Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getContainerTreePanel().getFilterPlugin().setValue(store.proxy.jsonReader.jsonData.filter);
             
