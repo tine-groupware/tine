@@ -110,6 +110,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         this.defaultFilters = [
             {field: 'attender', operator: 'in', value: [Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                user_type: 'user',
                 user_id: Tine.Tinebase.registry.get('currentAccount')
             })]},
             {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
