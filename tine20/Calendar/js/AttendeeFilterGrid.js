@@ -37,7 +37,8 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         });
 
         this.viewConfig = {
-            scrollOffset: 0
+            scrollOffset: 0,
+            markDirty: false
         };
         
         this.selModel = new Ext.grid.RowSelectionModel({singleSelect: true});
@@ -254,7 +255,7 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
      * @param {Array} filters
      */
     extractFilter: function(filters) {
-        let attendeeFilters = null;
+        let attendeeFilters = filters;
         // use first OR panel in case of filterPanel
         Ext.each(filters, function(filterData) {
             if (filterData.condition && filterData.condition == 'OR') {
