@@ -246,7 +246,9 @@ release-update-tests:
           - tine20/*/Model/**/*
 
 prevent-upstream-changes:
-  extends: .php-unit-update-tests
+  image: ${TEST_IMAGE}
+  stage: test
+  before_script: []
   script:
     - !reference [.lib, script]
     - git fetch --unshallow || true
@@ -259,10 +261,10 @@ prevent-upstream-changes:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-upstream-changes/
       allow_failure: true
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  artifacts: null
 
 prevent-wrong-branch:
   image: alpine
+  stage: test
   script:
     - |
       if [[ "$MAJOR_COMMIT_REF_NAME" != "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]]; then
