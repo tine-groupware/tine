@@ -455,7 +455,7 @@ php-unit-nogitlabci-tests-built-parallel:
 
 php-unit-update-tests:
   variables:
-    PHP_VERSION: "8.1"
+    PHP_VERSION: "8.3"
     DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
   extends: .php-unit-update-tests
   rules:
