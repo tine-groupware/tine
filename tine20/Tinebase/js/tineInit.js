@@ -1267,7 +1267,6 @@ Tine.Tinebase.tineInit = {
 
         switch (key) {
             case 'windowtype':
-            case 'confirmLogout':
             case 'timezone':
             case 'locale':
                 Tine.log.info('tineInit::onPreferenceChange - reload mainscreen');

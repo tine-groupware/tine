@@ -1010,7 +1010,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'manageImapEmailUser' => $manageImapEmailUser,
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
             'mustchangepw' => $user->mustChangePassword(),
-            'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
             'advancedSearch' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, 0),
             'persistentFilters' => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),

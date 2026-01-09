@@ -321,14 +321,14 @@ Tine.Tinebase.TineBar = Ext.extend(Ext.BoxComponent, {
      * the logout button handler function
      * @private
      */
-    onLogout: function() {
-        if (Tine.Tinebase.registry.get('confirmLogout') != '0') {
-            Ext.MessageBox.confirm(i18n._('Confirm'), i18n._('Are you sure you want to log out?'), function(btn, text) {
-                if (btn == 'yes') {
-                    this._doLogout();
-                }
-            }, this);
-        } else {
+    onLogout: async function () {
+        if (await Ext.MessageBox.confirm(
+            i18n._('Confirm'),
+            i18n._('Are you sure you want to log out?'),
+            null,
+            null,
+            'Confirm-Dialog-logout'
+        ) === 'yes') {
             this._doLogout();
         }
     },
