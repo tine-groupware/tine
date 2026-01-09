@@ -182,6 +182,10 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
             throw new Tinebase_Exception_NotFound('404');
         }
 
+        if (401 === (int)($response['statusCode'] ?? null)) {
+            throw new Tinebase_Exception_Unauthorized('401');
+        }
+
         $result = $this->parseMultiStatus($response['body']);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -292,10 +296,10 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
             return true;
         }
 
-        $result = $this->multiStatusRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
+        $result = $this->multiStatusRequest('PROPFIND', $this->currentUserPrincipal[0]['value'], self::findCalendarHomeSetRequest);
 
         if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'])) {
-            $this->calendarHomeSet = rtrim($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'], '/') . '/';
+            $this->calendarHomeSet = rtrim($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'][0]['value'], '/') . '/';
             Tinebase_Core::getCache()->save($this->calendarHomeSet, $cacheId, array(), /* 1 week */ 24*3600*7);
             return true;
         }

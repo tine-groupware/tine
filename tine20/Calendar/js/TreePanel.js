@@ -200,6 +200,25 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         this.contextMenuUserFolder.add(this.action_manageFreeBusyUrls);
         this.contextMenuSingleContainerProperties.add(this.action_manageFreeBusyUrls);
+
+        this.action_addExternalCalendar = new Ext.Action({
+            iconCls: 'cloud-share',
+            // hidden: true,
+            text: this.app.i18n._('Add External Calendar'),
+            handler: function() {
+                Tine.Calendar.SyncContainerConfigEditDialog.openWindow({
+                    // fixedFields: {
+                    //     role: '###CURRENT###'
+                    // }
+                })
+                // search my cloud-accounts of type caldav
+                // if no could-account -> user needs to add one
+                // if one -> autoselect
+
+            },
+            scope: this
+        });
+        this.contextMenuUserFolder.add(this.action_addExternalCalendar);
     },
 
     onContextMenu: function(node, event) {

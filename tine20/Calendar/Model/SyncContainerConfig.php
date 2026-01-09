@@ -22,8 +22,11 @@ class Calendar_Model_SyncContainerConfig extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::APP_NAME                      => Sales_Config::APP_NAME,
+        self::APP_NAME                      => Calendar_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
+
+        self::RECORD_NAME                  => 'External Calendar', // gettext('GENDER_External Calendar')
+        self::RECORDS_NAME                 => 'External Calendars', // ngettext('External Calendar', 'External Calendars', n)
 
         self::JSON_EXPANDER                 => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -33,13 +36,18 @@ class Calendar_Model_SyncContainerConfig extends Tinebase_Record_NewAbstract
 
         self::FIELDS                        => [
             self::FLD_CLOUD_ACCOUNT_ID          => [
+                self::LABEL                         => 'Cloud Account', // _('Cloud Account')
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                    => Tinebase_Model_CloudAccount::MODEL_NAME_PART,
                 ],
+                self::UI_CONFIG                     => [
+                    'useEditPlugin'                     => true,
+                ],
             ],
             self::FLD_CALENDAR_PATH              => [
+                self::LABEL                         => 'Calendar Path', // _('Calendar Path')
                 self::TYPE                          => self::TYPE_STRING,
             ],
         ],

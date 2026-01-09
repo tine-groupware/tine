@@ -91,6 +91,7 @@ class Tinebase_Model_CloudAccount extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CONFIG                => [
                 self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::LABEL                     => 'Config', // _('Config')
                 self::CONFIG                    => [
                     self::REF_MODEL_FIELD           => self::FLD_TYPE,
                     self::PERSISTENT                => true,
@@ -117,7 +118,8 @@ class Tinebase_Model_CloudAccount extends Tinebase_Record_NewAbstract
             case Tinebase_Model_CloudAccount_CalDAV::class:
                 /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
                 $cloudConfig = $this->{self::FLD_CONFIG};
-                return $cloudConfig->getClient()->findCurrentUserPrincipal() ?: throw new Tinebase_Exception_SystemGeneric('CalDAV access did not work');
+//                if (!$cloudConfig)
+                return $cloudConfig?->getClient()->findCurrentUserPrincipal() ?: throw new Tinebase_Exception_SystemGeneric('CalDAV access did not work');
 
             default:
                 throw new Tinebase_Exception_NotImplemented('access test not impltement for type ' . $this->{self::TYPE});
