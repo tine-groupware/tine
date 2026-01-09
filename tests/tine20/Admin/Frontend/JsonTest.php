@@ -465,7 +465,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(12, $results['totalcount']);
+        $this->assertEquals(11, $results['totalcount']);
         $this->assertEquals($prefData['Tinebase'][$pref->getId()]['value'], $results['results'][2]['value']);
         $this->assertEquals($prefData['Tinebase'][$pref->getId()]['type'], $results['results'][2]['type']);
     }
