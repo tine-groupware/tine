@@ -561,9 +561,15 @@ class SSO_Controller extends Tinebase_Controller_Event
             'SingleSignOnService'   => [[
                 'Binding'  => Constants::BINDING_HTTP_REDIRECT,
                 'Location' => $serverUrl . '/sso/saml2/redirect/signon',
+            ], [
+                'Binding'  => Constants::BINDING_HTTP_POST,
+                'Location' => $serverUrl . '/sso/saml2/redirect/signon',
             ]],
             'SingleLogoutService'   => [[
                 'Binding'  => Constants::BINDING_HTTP_REDIRECT,
+                'Location' => $serverUrl . '/sso/saml2/redirect/logout',
+            ], [
+                'Binding'  => Constants::BINDING_HTTP_POST,
                 'Location' => $serverUrl . '/sso/saml2/redirect/logout',
             ]],
             'certData'              => $certInfo['certData'],
