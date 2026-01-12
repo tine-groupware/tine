@@ -12,7 +12,7 @@ require('./ImageRenderer');
 require('./jsonRenderer');
 
 import {supportedTypes as supportedACETypes} from "../form/AceField";
-import getACERenderer from './ACERenderer'
+import getACERenderer from './ACERenderer';
 
 /**
  * central renderer manager
@@ -213,7 +213,12 @@ Tine.widgets.grid.RendererManager = function() {
                     if (fieldDefinition.hasOwnProperty('specialType')) {
                         if (supportedACETypes.indexOf(fieldDefinition.specialType) >= 0) {
                             renderer = getACERenderer(fieldDefinition.specialType);
+                        } else if (fieldDefinition.specialType === 'markdown') {
+                            renderer = Tine.Tinebase.common.markdownRenderer;
                         }
+                    }
+                    if (fieldName === 'description') {
+                        renderer = Tine.Tinebase.common.markdownRenderer;
                     }
                     break;
                 case 'user':

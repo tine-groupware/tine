@@ -106,6 +106,7 @@ const config = {
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: Object.assign({
     "^Ext(.*)$": "<rootDir>../../library/ExtJS/src$1",
+  '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
   }, fs.readdirSync(appsDir).reduce((accu, baseName) => {
     if (fs.existsSync(`${appsDir}/${baseName}/js`)) {
       accu[`^${baseName}/(.*)`] = `${appsDir}/${baseName}/js/$1`

@@ -12,6 +12,8 @@
 
 const { isObject, isArray, map, isString, get, escapeRegExp, each, find, compact, cloneDeep } = require('lodash')
 const { htmlEncode, htmlDecode, date: dateFormat, number, round, capitalize} = require('Ext/util/Format')
+const { parse, parsePurified, parseInline, parseInlinePurified } = require('util/markdown')
+
 /**
  * static common helpers
  */
@@ -334,6 +336,39 @@ const common = {
         }
 
         return result;
+    },
+
+    /**
+     * markdown renderer - fulltext, special type
+     * @param {String} v The string to format.
+     * @param {Object} metadata Grid metadata object
+     * @param {Object} record Grid record
+     * @return {String} The formatted string.
+     */
+    markdownRenderer: function(v, metadata, record) {
+        if ([null, undefined].indexOf(v) >= 0) {
+            return '';
+        }
+
+        const cellId = `markdown-cell-${Ext.id()}`;
+        const initialContent = `<div id="${cellId}" class="tb-markdown-loading">${Ext.util.Format.htmlEncode(v)}</div>`;
+
+        parsePurified(v).then(html => {
+            const element = document.getElementById(cellId);
+            if (element) {
+                element.className = 'tb-markdown-rendered';
+                element.innerHTML = html;
+            }
+        }).catch(err => {
+            console.error('Markdown rendering error:', err);
+            const element = document.getElementById(cellId);
+            if (element) {
+                element.className = 'tb-markdown-error';
+                element.innerHTML = Ext.util.Format.htmlEncode(v);
+            }
+        });
+
+        return initialContent;
     },
 
     /**
