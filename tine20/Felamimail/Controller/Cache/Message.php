@@ -927,14 +927,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 __METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
             return false;
         }
-        
+
         $messageToCache = $this->_createMessageToCache($_message, $_folder);
-        
+
         if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY)) {
             $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
             $messageToCache->is_spam_suspicions = $strategy->apply($messageToCache);
         }
-        
+
         $cachedMessage = $this->addMessageToCache($messageToCache);
 
         if ($cachedMessage && isset($_message['header']['in-reply-to'])) {
@@ -945,10 +945,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
 
         if ($cachedMessage !== false) {
-            if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
-                Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($cachedMessage);
-            }
-
+            Felamimail_Controller_Message_Flags::getInstance()->setSenderFlag($cachedMessage, $_message['header']);
             $this->_saveMessageInTinebaseCache($cachedMessage, $_folder, $_message);
             
             if ($_updateFolderCounter == true) {
