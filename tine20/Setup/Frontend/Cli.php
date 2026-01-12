@@ -468,7 +468,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     'I have read the license agreement and accept it (type "yes" to accept)'
                 );
 
-                $textTemplate = $twig->load(Tinebase_Config::APP_NAME . '/views/privacy.html.twig');
+                $textTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/privacy.html.twig');
                 $content = $textTemplate->renderBlock('content');
 
                 fwrite(STDOUT, PHP_EOL . strip_tags($content));
