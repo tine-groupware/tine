@@ -29,6 +29,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
+        Calendar_Model_FreeBusyUrl::MODEL_NAME_PART,
         'Poll',
         'EventType',
         'EventTypes'

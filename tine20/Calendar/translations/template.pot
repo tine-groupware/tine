@@ -521,6 +521,9 @@ msgstr ""
 msgid "Export target"
 msgstr ""
 
+msgid "Holidays"
+msgstr ""
+
 msgid "Import iCal-files"
 msgstr ""
 
@@ -560,10 +563,7 @@ msgstr ""
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr ""
 
-msgid "Myself"
-msgstr ""
-
-msgid "Current"
+msgid "Me"
 msgstr ""
 
 msgid "Add Attendee"
@@ -872,6 +872,15 @@ msgstr ""
 msgid "Floorplan"
 msgstr ""
 
+msgid "Create individual Free/Busy URLs"
+msgstr ""
+
+msgid "In { brandingTitle } you can create individual Free/Busy URLs for each person you want to share your free/busy information with."
+msgstr ""
+
+msgid "Access to your free/busy information is revoked by just deleting the Free/Busy URL for that person."
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
@@ -933,10 +942,10 @@ msgstr ""
 msgid "Save to calendar without responding"
 msgstr ""
 
-msgid "Attention! , this is an invitation for "
+msgid "Set response for"
 msgstr ""
 
-msgid "Set response for"
+msgid "Attention! , this is an invitation for "
 msgstr ""
 
 msgid "The event of this message does not exist"
@@ -1623,6 +1632,9 @@ msgstr ""
 msgid "The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address."
 msgstr ""
 
+msgid "Publish Free/Busy Information..."
+msgstr ""
+
 msgid "Default attendee status with status grant"
 msgstr ""
 
@@ -1811,6 +1823,20 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Short Name"
+msgstr ""
+
+msgid "GENDER_FreeBusy Url"
+msgstr ""
+
+msgid "FreeBusy Url"
+msgid_plural "FreeBusy Urls"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share this URL with the person you want to give access to your free/busy information."
+msgstr ""
+
+msgid "Make a note of who you created this URL for so that you can delete it without hesitation if necessary."
 msgstr ""
 
 msgid "GENDER_Poll"
@@ -2003,6 +2029,12 @@ msgstr ""
 msgid "Receive FreeBusy events via CalDAV and ActiveSync."
 msgstr ""
 
+msgid "Exclude cancelled events from CalDAV"
+msgstr ""
+
+msgid "Do not transfer events via CalDAV where the attendee status of the calendar owner is set to \"declined\""
+msgstr ""
+
 msgid "Never"
 msgstr ""
 
@@ -2149,9 +2181,6 @@ msgid "Summary - Location"
 msgstr ""
 
 msgid "Summary ⏎ Organizer ⏎ Location"
-msgstr ""
-
-msgid "Me"
 msgstr ""
 
 msgid "Intelligent"

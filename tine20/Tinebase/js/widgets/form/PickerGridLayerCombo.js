@@ -19,6 +19,7 @@ const PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
             autoHeight: false,
             height: 140
         }))
+        this.gridPanel.setHeight(140)
 
         PickerGridLayerCombo.superclass.initComponent.call(this)
     },
@@ -44,7 +45,7 @@ const PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     async valueToString(value) {
-        return (await Promise.all(_.map(this.currentValue, d => this.recordClass.setFromJson(d).getTitle().asString()))).join(', ')
+        return (await Promise.all(_.map(this.currentValue, d => this.gridPanel.recordClass.setFromJson(d).getTitle().asString()))).join(', ')
     },
 })
 

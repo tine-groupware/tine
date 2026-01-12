@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -521,6 +522,9 @@ msgstr "Calendars to export"
 msgid "Export target"
 msgstr "Export target"
 
+msgid "Holidays"
+msgstr "Holidays"
+
 msgid "Import iCal-files"
 msgstr "Import iCal-files"
 
@@ -560,11 +564,8 @@ msgstr "Event not found"
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr "The event was deleted in the meantime or you no longer have access rights to it."
 
-msgid "Myself"
-msgstr "Myself"
-
-msgid "Current"
-msgstr "Current"
+msgid "Me"
+msgstr "Me"
 
 msgid "Add Attendee"
 msgstr "Add Attendee"
@@ -872,6 +873,15 @@ msgstr "The resource {name} on floor {floorName} is reserved for selected date: 
 msgid "Floorplan"
 msgstr "Floorplan"
 
+msgid "Create individual Free/Busy URLs"
+msgstr "Create individual Free/Busy URLs"
+
+msgid "In { brandingTitle } you can create individual Free/Busy URLs for each person you want to share your free/busy information with."
+msgstr "In { brandingTitle } you can create individual Free/Busy URLs for each person you want to share your free/busy information with."
+
+msgid "Access to your free/busy information is revoked by just deleting the Free/Busy URL for that person."
+msgstr "Access to your free/busy information is revoked by just deleting the Free/Busy URL for that person."
+
 msgid "Back"
 msgstr "Back"
 
@@ -933,11 +943,11 @@ msgstr "Save"
 msgid "Save to calendar without responding"
 msgstr "Save to calendar without responding"
 
-msgid "Attention! , this is an invitation for "
-msgstr "Attention! , this is an invitation for "
-
 msgid "Set response for"
 msgstr "Set response for"
+
+msgid "Attention! , this is an invitation for "
+msgstr "Attention! , this is an invitation for "
 
 msgid "The event of this message does not exist"
 msgstr "The event of this message does not exist"
@@ -1623,6 +1633,9 @@ msgstr "Week {0} :"
 msgid "The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address."
 msgstr "The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address."
 
+msgid "Publish Free/Busy Information..."
+msgstr "Publish Free/Busy Information..."
+
 msgid "Default attendee status with status grant"
 msgstr "Default attendee status with status grant"
 
@@ -1812,6 +1825,20 @@ msgstr[1] "Event Types"
 
 msgid "Short Name"
 msgstr "Short Name"
+
+msgid "GENDER_FreeBusy Url"
+msgstr "GENDER_FreeBusy Url"
+
+msgid "FreeBusy Url"
+msgid_plural "FreeBusy Urls"
+msgstr[0] "FreeBusy Url"
+msgstr[1] "FreeBusy Urls"
+
+msgid "Share this URL with the person you want to give access to your free/busy information."
+msgstr "Share this URL with the person you want to give access to your free/busy information."
+
+msgid "Make a note of who you created this URL for so that you can delete it without hesitation if necessary."
+msgstr "Make a note of who you created this URL for so that you can delete it without hesitation if necessary."
 
 msgid "GENDER_Poll"
 msgstr "GENDER_Poll"
@@ -2003,6 +2030,12 @@ msgstr "Sync FreeBusy events"
 msgid "Receive FreeBusy events via CalDAV and ActiveSync."
 msgstr "Receive FreeBusy events via CalDAV and ActiveSync."
 
+msgid "Exclude cancelled events from CalDAV"
+msgstr "Exclude cancelled events from CalDAV"
+
+msgid "Do not transfer events via CalDAV where the attendee status of the calendar owner is set to \"declined\""
+msgstr "Do not transfer events via CalDAV where the attendee status of the calendar owner is set to \"declined\""
+
 msgid "Never"
 msgstr "Never"
 
@@ -2150,9 +2183,6 @@ msgstr "Summary - Location"
 
 msgid "Summary ⏎ Organizer ⏎ Location"
 msgstr "Summary ⏎ Organizer ⏎ Location"
-
-msgid "Me"
-msgstr "Me"
 
 msgid "Intelligent"
 msgstr "Intelligent"

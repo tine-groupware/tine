@@ -1510,7 +1510,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         options.params = options.params || {};
         // always start with an empty filter set!
         // this is important for paging and sort header!
-        options.params.filter = [];
+        options.params.filter = this.filterToolbar ? [] : (_.isArray(this.defaultFilters) ? [... this.defaultFilters] : []);
 
         if (! options.removeStrategy || options.removeStrategy !== 'keepBuffered') {
             this.editBuffer = [];

@@ -49,11 +49,22 @@ class Calendar_Model_FreeBusyUrl extends Tinebase_Record_NewAbstract
         self::FIELDS                    => [
             self::FLD_URL                   => [
                 self::TYPE                      => self::TYPE_STRING,
+                self::SPECIAL_TYPE              => self::SPECIAL_TYPE_URL,
+                self::LABEL                     => 'URL', // _('URL')
+                self::DESCRIPTION               => 'Share this URL with the person you want to give access to your free/busy information.', // _('Share this URL with the person you want to give access to your free/busy information.')
                 self::DOCTRINE_IGNORE           => true,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+                ]
             ],
             self::FLD_DESCRIPTION           => [
                 self::TYPE                      => self::TYPE_TEXT,
+                self::LABEL                     => 'Description', // _('Description')
+                self::SHY                       => false,
                 self::NULLABLE                  => true,
+                self::UI_CONFIG                 => [
+                    'emptyText'                     => 'Make a note of who you created this URL for so that you can delete it without hesitation if necessary.', // _('Make a note of who you created this URL for so that you can delete it without hesitation if necessary.')
+                ]
             ],
             self::FLD_OWNER_CLASS           => [
                 self::TYPE                      => self::TYPE_MODEL,
