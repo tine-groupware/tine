@@ -565,8 +565,8 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         $locale = GDPR_Controller::getLocale($userId);
 
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(GDPR_Config::APP_NAME));
-        $htmlTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/emails/' . $templateFileName. '.html.twig');
-        $textTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/emails/' . $templateFileName. '.text.twig');
+        $htmlTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/emails/' . $templateFileName. '.html.twig', $locale);
+        $textTemplate = $twig->load(GDPR_Config::APP_NAME . '/views/emails/' . $templateFileName. '.text.twig', $locale);
 
         $html = $htmlTemplate->render($context);
         $text = $textTemplate->render($context);
@@ -688,19 +688,6 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         }
         return $dipr;
     }
-
-    protected function _getLocale($userId = null)
-    {
-        if ($userId && $userLocale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $userId))) {
-            return $userLocale;
-        }
-
-        $defaultLocale = Tinebase_Core::getLocale();
-        $array = array_keys($defaultLocale->getBrowser());
-        $browserLocaleString = array_shift($array);
-        return Tinebase_Translation::getLocale($browserLocaleString ?? Tinebase_Core::getLocale());
-    }
-
 
     public static function getViews($locale = null)
     {

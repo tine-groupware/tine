@@ -2,6 +2,7 @@
     <BModal v-model="modalTrigger" :title="dialogTitle"
         :noCloseOnBackdrop="true"
         :noCloseOnEsc="true"
+            centered
     >
         <!-- :footerClass="consentStatus === 'UNDECIDED' ? 'justify-content-end': 'justify-content-between'" -->
         <template #default v-if="record">
