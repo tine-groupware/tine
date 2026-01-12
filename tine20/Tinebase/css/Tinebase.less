@@ -639,6 +639,68 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     line-height: 16px;
 }
 
+/* ----- markdown renderer ----------------------------------------------------*/
+
+.tb-markdown-loading {
+  color: #666;
+  font-style: italic;
+}
+
+.tb-markdown-rendered {
+  li {
+    list-style-type: disc;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  strong {
+    font-weight: bold;
+  }
+}
+
+.tb-markdown-error {
+  color: #666;
+  border-left: 2px solid #ff0000;
+  padding-left: 4px;
+}
+
+.x-grid3-cell-inner .tb-markdown-loading,
+.x-grid3-cell-inner .tb-markdown-rendered,
+.x-grid3-cell-inner .tb-markdown-error {
+  display: block;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.x-grid3-cell-inner .tb-markdown-rendered p {
+  margin: 2px 0;
+}
+
+.x-grid3-cell-inner .tb-markdown-rendered p:first-child {
+  margin-top: 0;
+}
+
+.x-grid3-cell-inner .tb-markdown-rendered p:last-child {
+  margin-bottom: 0;
+}
+
+.x-grid3-cell-inner .tb-markdown-rendered {
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dark-mode .tb-markdown-loading {
+  color: #999;
+}
+
+.dark-mode .tb-markdown-error {
+  border-left-color: #ff6666;
+  color: #999;
+}
+
 /* ----- account renderer ------------------------------------------------------------*/
 .renderer {
     width: 16px;
