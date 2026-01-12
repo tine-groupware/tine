@@ -39,6 +39,7 @@ class Sales_Model_Document_PaymentReminder extends Tinebase_Record_NewAbstract
         self::IS_DEPENDENT                  => true,
 
         self::TITLE_PROPERTY                => "{{ date |localizeddate('short', 'none', app.request.locale) }} - {{ outstanding_amount }}",
+        self::DEFAULT_SORT_INFO             => [self::FIELD => self::FLD_DATE],
 
         //self::EXPOSE_JSON_API               => true,
         //self::CREATE_MODULE                 => true,

@@ -39,6 +39,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const FLD_APPROVER = 'approver';
     public const FLD_DOCUMENT_CURRENCY = 'document_currency';
     public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
+    public const FLD_PAYMENT_MEANS_USED = 'payment_means_used';
 
     public static function inheritModelConfigHook(array &$_definition)
     {
@@ -167,6 +168,17 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::ADD_FILTERS       => [
                     [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
                 ],
+            ],
+        ];
+
+        $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS_USED] = [
+            self::LABEL             => 'Payment Means Used',
+            self::TYPE              => self::TYPE_DYNAMIC_RECORD,
+            self::NULLABLE          => true,
+            self::CONFIG            => [
+                self::APP_NAME          => Sales_Config::APP_NAME,
+                self::MODEL_NAME        => Sales_Model_PaymentMeans::MODEL_NAME_PART,
+                self::PERSISTENT        => true,
             ],
         ];
 
