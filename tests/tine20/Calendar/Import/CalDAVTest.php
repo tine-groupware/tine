@@ -59,6 +59,12 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
         $this->_uit->getDecorator()->initCalendarImport($caldavClientOptions);
     }
 
+    public function testGetAllCalendars(): void
+    {
+        $result = $this->_getUit()->findAllCollections();
+        $this->assertSame(2, $result->count());
+    }
+
     public function testVTodoImportCreateSharedContainer(): void
     {
         $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, true);

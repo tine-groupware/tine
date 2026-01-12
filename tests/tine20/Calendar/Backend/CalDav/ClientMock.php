@@ -17,22 +17,6 @@
  */
 class Calendar_Backend_CalDav_ClientMock extends Calendar_Backend_CalDav_Client
 {
-    /**
-     * needs to be overwritten because of the added flavor (osxical)
-     * 
-     * @var string
-     */
-    const findAllCalendarsRequest = '<?xml version="1.0"?>
-<d:propfind xmlns:d="DAV:">
-  <d:prop>
-    <d:resourcetype/>
-    <d:acl/>
-    <d:displayname/>
-    <x:supported-calendar-component-set xmlns:x="urn:ietf:params:xml:ns:caldav"/>
-  <osxical:calendar-color xmlns:osxical="http://apple.com/ns/ical/"/></d:prop>
-</d:propfind>
-';
-    
     protected $_currentUserPrincipalResponse = array(
         '{DAV:}current-user-principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/'
     );
