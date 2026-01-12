@@ -142,7 +142,7 @@ class Tinebase_Twig
         $this->_twigEnvironment->addGlobal('app', $globals);
     }
 
-    public static function getTemplateContent(string $path, string $locale): ?Tinebase_Model_TwigTemplate
+    public static function getTemplateContent(string $path, string $locale):  ?Tinebase_Model_TwigTemplate
     {
         $path = ltrim($path, '/');
         $filename = basename($path);
@@ -276,7 +276,10 @@ class Tinebase_Twig
             function ($str) use($locale, $translate) {
                 $translatedStr = $translate->translate($str, $locale);
                 if ($translatedStr == $str) {
-                    $translatedStr = Tinebase_Translation::getTranslation('Tinebase', $locale)->translate($str, $locale);
+                    $TBTranslatedStr = Tinebase_Translation::getTranslation('Tinebase', $locale)->translate($str, $locale);
+                    if (!empty($TBTranslatedStr)) {
+                        $translatedStr = $TBTranslatedStr;
+                    }
                 }
 
                 return $translatedStr;
