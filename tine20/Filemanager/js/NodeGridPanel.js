@@ -813,7 +813,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         // if state change -> reload
-        if (this.action_dataSafe.items.length && isLocked === this.action_dataSafe.items[0].pressed) {
+        if (this.action_dataSafe.items.length && e && isLocked === this.action_dataSafe.items[0].pressed) {
             _.defer(() => {
                 this.redirectToParent = true;
                 this.loadGridData({
