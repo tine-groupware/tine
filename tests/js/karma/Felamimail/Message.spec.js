@@ -64,27 +64,27 @@ describe('Message', () => {
     const recordFromMyDomain = new Tine.Felamimail.Model.Message({
       from_email: 'somemail@example.org'
     })
-    expect(recordFromMyDomain.getTine20Icon()).to.equal('mydomain.icon')
+    expect(recordFromMyDomain.getMailSenderIcon()).to.equal('mydomain.icon')
   })
 
   it('returns correct flag icon for mydomain (secondary)', () => {
     const recordFromMySecondaryDomain = new Tine.Felamimail.Model.Message({
       from_email: 'somemail@example.net'
     })
-    expect(recordFromMySecondaryDomain.getTine20Icon()).to.equal('mydomain.icon')
+    expect(recordFromMySecondaryDomain.getMailSenderIcon()).to.equal('mydomain.icon')
   })
 
   it('returns correct flag icon for otherdomain', () => {
     const recordFromOtherDomain = new Tine.Felamimail.Model.Message({
       from_email: 'somemail@somedomain.org'
     })
-    expect(recordFromOtherDomain.getTine20Icon()).to.equal('otherdomain.icon')
+    expect(recordFromOtherDomain.getMailSenderIcon()).to.equal('otherdomain.icon')
   })
 
   it('returns correct flag icon for other tine20 client', () => {
     const recordFromOtherDomain = new Tine.Felamimail.Model.Message({
       from_email: 'somemail@somedomain.com'
     })
-    expect(recordFromOtherDomain.getTine20Icon()).to.equal('images/favicon.svg')
+    expect(recordFromOtherDomain.getMailSenderIcon()).to.equal('images/favicon.svg')
   })
 })

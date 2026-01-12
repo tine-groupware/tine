@@ -201,13 +201,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message $_id
-     * @param string $_partId
+     * @param null $_partId
      * @param string $mimeType
-     * @param boolean $_setSeen
      * @return Felamimail_Model_Message
-     * @throws Exception
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getCompleteMessage($_id, $_partId = NULL, $mimeType = 'configured', $_setSeen = FALSE)
+    public function getCompleteMessage($_id, $_partId = NULL, $mimeType = 'configured')
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -226,17 +228,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $message = $this->_getCompleteMessageContent($message, $account, $_partId, $mimeType);
 
-        if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($message)) {
-            Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($message);
-        }
-
         if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY)) {
             $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
             $message->is_spam_suspicions = $strategy->apply($message);
-        }
-
-        if ($_setSeen) {
-            Felamimail_Controller_Message_Flags::getInstance()->setSeenFlag($message);
         }
 
         $this->prepareAndProcessParts($message, $account);

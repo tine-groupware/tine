@@ -53,14 +53,6 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const FEATURE_AUTOSAVE_DRAFTS = 'autoSaveDrafts';
 
     /**
-     * Tine 2.0 flag feature
-     *
-     * @var string
-     * @see 0010576: show a tine20 icon on each message which was written in tine20
-     */
-    const FEATURE_TINE20_FLAG = 'tine20Flag';
-
-    /**
      * allow only send password download link as attachment
      */
     const FEATURE_ONLY_PW_DOWNLOAD_LINK = 'onlyPwDownloadLink';
@@ -199,6 +191,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const MAIL_ACCOUNT_TYPE = 'mailAccountType';
 
     const SIEVE_NOTIFICATION_MOVE_STATUS = 'sieveNotificationMoveStatus';
+
+    const TRUSTED_MAIL_DOMAINS = 'trustedMailDomains';
 
     /**
      * (non-PHPdoc)
@@ -381,14 +375,6 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::TYPE                  => self::TYPE_BOOL,
                     self::DEFAULT_STR           => false,
                 ],
-                self::FEATURE_TINE20_FLAG   => [
-                    self::LABEL                 => 'Tine 2.0 Flag',
-                    //_('Tine 2.0 Flag')
-                    self::DESCRIPTION           => 'Add a Tine 2.0 flag to sent messages',
-                    //_('Add a Tine 2.0 flag to sent messages')
-                    self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => true,
-                ],
                 self::FEATURE_SHOW_REPLY_TO   => [
                     self::LABEL                 => 'Show Reply-To',
                     //_('Show Reply-To')
@@ -568,6 +554,23 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO,
             ],
         ],
+        self::TRUSTED_MAIL_DOMAINS => array(
+            //_('Trusted Mail Servers (via DKIM)')
+            self::LABEL                 => 'Trusted Mail Servers (via DKIM)',
+            // _('Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid.')
+            self::DESCRIPTION           => 'Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid.',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                'metaways\.(de|net)'   => [
+                    'id' => 'Metaways',
+                    'value' => 'Metaways Infosystems GmbH',
+                    'image' => 'images/favicon.png',
+                ],
+            ],
+        ),
     );
 
     /**
