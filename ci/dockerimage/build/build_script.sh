@@ -139,8 +139,8 @@ function cleanupTinebase() {
   # save langStats
   (mv ${TINE20ROOT}/tine20/langstatistics.json ${TINE20ROOT}/tine20/Tinebase/translations/langstatistics.json)
 
+  # cleanup node_modules and some stuff of htmlpurifier
   rm -rf ${TINE20ROOT}/tine20/Tinebase/js/node_modules
-  rm -rf ${TINE20ROOT}/tine20/vendor/phpdocumentor
   rm -rf ${TINE20ROOT}/tine20/vendor/ezyang/htmlpurifier/{art,benchmarks,extras,maintenance,smoketests}
 
   find ${TINE20ROOT}/tine20/vendor -name .gitignore -type f -print0 | xargs -0 rm -rf
