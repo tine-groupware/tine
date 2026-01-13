@@ -350,7 +350,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
 
     /**
-     * get user by given property
+     * get user by login name
      *
      * @param   string $_property
      * @param   string $_accountId
@@ -364,13 +364,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             throw new Tinebase_Exception_NotFound("can't get user by property $_property. property not supported by ldap backend.");
         }
 
-        // TODO this seems not to be correct - only do this in certain cases?
         if ('accountId' === $_property && ! $_accountId instanceof Tinebase_Model_FullUser) {
-            try {
-                $_accountId = $this->getFullUserById($_accountId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                // user might not exist, yet (i.e. was just added via \Tinebase_User_ActiveDirectory::addUserToSyncBackend)
-            }
+            $_accountId = $this->getFullUserById($_accountId);
         }
         $ldapEntry = $this->_getLdapEntry($_property, $_accountId);
         

@@ -163,18 +163,18 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
         if ($this->_writeGroupsIds) {
             $_user->xprops()[static::class]['syncId'] = $userId;
+        } else {
+            $_user->setId($userId);
         }
 
         // add user to primary group and set primary group
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->
-            {Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID}
-            ?: $_user->accountPrimaryGroup, $userId, false);
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID} ?: $_user->accountPrimaryGroup, $_user, false);
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
 
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
 
         if ($_user->accountId && Tinebase_Config::getInstance()->
             {Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::PWD_CANT_CHANGE}
