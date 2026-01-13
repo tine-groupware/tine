@@ -10,6 +10,7 @@
  */
 
 use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Timezones;
 use Symfony\Component\Intl\Currencies;
 use Symfony\Component\Intl\Locales;
 
@@ -28,6 +29,13 @@ class Tinebase_Translation
      * @var array
      */
     protected static $_countryLists = array();
+
+    /**
+     * Lazy loading for {@see getTimezoneList()}
+     *
+     * @var array
+     */
+    protected static $_timezoneLists = array();
     
     /**
      * cached instances of Zend_Translate
@@ -151,6 +159,35 @@ class Tinebase_Translation
         }
 
         return array('results' => self::$_countryLists[$language]);
+    }
+
+    /**
+     * get list of translated timezone names
+     *
+     * @param ?Zend_Locale $locale
+     * @return array list of countrys
+     */
+    public static function getTimezoneList(?Zend_Locale $locale = null)
+    {
+        $locale = $locale ?: Tinebase_Core::getLocale();
+        $language = $locale->getLanguage();
+
+        //try lazy loading of translated timezone list
+        if (empty(self::$_timezoneLists[$language])) {
+            $timezones = Timezones::getNames($locale);
+            asort($timezones);
+            $results = [];
+            foreach($timezones as $shortName => $translatedName) {
+                $results[] = array(
+                    'shortName'         => $shortName,
+                    'translatedName'    => $translatedName
+                );
+            }
+
+            self::$_timezoneLists[$language] = $results;
+        }
+
+        return array('results' => self::$_timezoneLists[$language]);
     }
 
     /**

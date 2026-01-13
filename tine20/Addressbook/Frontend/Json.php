@@ -46,6 +46,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Addressbook_Model_List::MODEL_NAME_PART,
         Addressbook_Model_ListRole::MODEL_NAME_PART,
         Addressbook_Model_ContactSite::MODEL_NAME_PART,
+        Addressbook_Model_ExternalFreeBusyUrl::MODEL_NAME_PART,
     ];
 
     /**

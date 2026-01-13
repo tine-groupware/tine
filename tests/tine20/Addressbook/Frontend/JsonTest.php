@@ -602,7 +602,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // check invalid data
         $changes = array(
-            array('name' => 'tz', 'value' => 'looooongtextwithmorethaneightcharacters'),
+            array('name' => 'tz', 'value' => str_repeat("~", 50)),
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
 

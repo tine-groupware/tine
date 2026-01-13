@@ -119,6 +119,10 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
             }
         }
 
+        if (!this.noCollapseCount) {
+            this.collapsed = false;
+        }
+
         Ext.form.FieldSet.superclass.onRender.call(this, ct, position);
 
         if(this.checkboxToggle){
@@ -128,6 +132,14 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
             this.checkbox = this.header.insertFirst(o);
             this.checkbox.dom.checked = !this.collapsed;
             this.mon(this.checkbox, 'click', this.onCheckClick, this);
+        }
+    },
+
+    afterRender: function(container) {
+        Ext.form.FieldSet.superclass.afterRender.call(this, container);
+        if (this.initialConfig.collapsed && !this.collapsed) {
+            // make sure collapseCount works
+            this.collapse.defer(100, this, false)
         }
     },
 

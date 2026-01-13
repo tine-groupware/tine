@@ -1270,7 +1270,7 @@ var menu = new Ext.menu.Menu({
                     if(forceAll){
                         this.store.clearFilter();
                     }else{
-                        this.store.filter(this.displayField, q);
+                        this.store.filter(this.displayField, q, this.filterAnyMatch);
                     }
                     this.onLoad();
                 }else{
