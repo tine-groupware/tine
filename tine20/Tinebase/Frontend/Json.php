@@ -1674,10 +1674,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (!Tinebase_Session::isStarted()) {
             Tinebase_Core::startCoreSession();
         }
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions(
-            Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig(),
-            true
-        )->jsonSerialize();
+        return json_decode(Tinebase_Auth_Webauthn::serializePublicKeyCredentialRequestOptions(
+            Tinebase_Auth_Webauthn::getWebAuthnRequestOptions(
+                Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig(),
+                true
+        )), true);
     }
 
 
@@ -1704,10 +1705,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
         $config = Tinebase_Auth_MFA::getInstance($configId)->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, true, $account, $mfaId)->jsonSerialize();
+        return json_decode(Tinebase_Auth_Webauthn::serializePublicKeyCredentialRequestOptions(
+            Tinebase_Auth_Webauthn::getWebAuthnRequestOptions($config, true, $account, $mfaId)
+        ), true);
     }
 
-    public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null)
+    public function getWebAuthnRegisterPublicKeyOptionsForMFA(string $mfaId, ?string $accountId = null): array
     {
         if (null !== $accountId && Tinebase_Core::getUser()->accountId !== $accountId) {
             if (!Tinebase_Core::getUser()->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::ADMIN)) {
@@ -1721,7 +1724,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         /** @var Tinebase_Model_MFA_WebAuthnConfig $config */
         $config = Tinebase_Auth_MFA::getInstance($mfaId)->getAdapter()->getConfig();
 
-        return Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user, $config)->jsonSerialize();
+        return json_decode(Tinebase_Auth_Webauthn::serializePublicKeyCredentialCreationOptions(
+            Tinebase_Auth_Webauthn::getWebAuthnCreationOptions(true, $user, $config)
+        ), true);
     }
 
     /**
