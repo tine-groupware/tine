@@ -44,12 +44,16 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = rtrim($uri, '/');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $parsedBody = $request->getParsedBody();
+            if ($parsedBody['password'] ?? false) {
+                $parsedBody['password'] = '*****';
+            }
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . " FastRoute dispatching:\n" . $request->getMethod() . ' '
                 . $uri . array_reduce(array_keys($request->getHeaders()), fn($headers, $name) => $headers .= PHP_EOL
                     . $name . ': ' . ('authorization' === strtolower((string) $name)
                         ? '*****' : $request->getHeaderLine($name)), ''
-                ) . PHP_EOL . ' Parsed Body: ' . print_r($request->getParsedBody(), true));
+                ) . PHP_EOL . ' Parsed Body: ' . print_r($parsedBody, true));
         }
 
         return $dispatcher->dispatch($request->getMethod(), $uri);
