@@ -3721,8 +3721,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _deleteDependentRecords($_record, $_property, $_fieldConfig)
     {
-        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords'] ||
-                (isset($_fieldConfig[TMCC::STORAGE]) && $_fieldConfig[TMCC::STORAGE] === TMCC::TYPE_JSON)) {
+        if (!($_fieldConfig[TMCC::DEPENDENT_RECORDS] ?? false) || ($_fieldConfig[TMCC::STORAGE] ?? null) === TMCC::TYPE_JSON) {
             return;
         }
 
@@ -3791,11 +3790,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _undeleteDependentRecords($_record, $_property, $_fieldConfig)
     {
-        if (! isset($_fieldConfig['dependentRecords']) || ! $_fieldConfig['dependentRecords']) {
+        if (!($_fieldConfig[TMCC::DEPENDENT_RECORDS] ?? false) || ($_fieldConfig[TMCC::STORAGE] ?? null) === TMCC::TYPE_JSON) {
             return;
         }
 
-        if (! isset ($_fieldConfig['refIdField'])) {
+        if (!($_fieldConfig[TMCC::REF_ID_FIELD] ?? false)) {
             throw new Tinebase_Exception_Record_DefinitionFailure('If a record is dependent, a refIdField has to be defined!');
         }
 
