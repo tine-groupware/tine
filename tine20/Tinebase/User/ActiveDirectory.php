@@ -163,6 +163,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
         if ($this->_writeGroupsIds) {
             $_user->xprops()[static::class]['syncId'] = $userId;
+        } else {
+            $_user->setId($userId);
         }
 
         // add user to primary group and set primary group
