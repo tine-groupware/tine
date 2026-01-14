@@ -234,7 +234,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             console.error(e);
         }
 
-        if (this.files.length > 1 && !this.multiple) {
+        if (this.files && this.files.length > 1 && !this.multiple) {
             await Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO_FAILURE,
