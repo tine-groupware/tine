@@ -252,17 +252,17 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * initialize grid panel hooks
      */
     initGridPanelHooks: function() {
-        var adbHook = new Tine.Felamimail.GridPanelHook({
+        new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Addressbook',
             modelName: 'Contact'
         });
-        var adbHook = new Tine.Felamimail.GridPanelHook({
+        new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Addressbook',
             modelName: 'List'
         });
-        var crmHook = new Tine.Felamimail.GridPanelHook({
+        new Tine.Felamimail.GridPanelHook({
             app: this,
             foreignAppName: 'Crm',
             contactInRelation: true,
@@ -270,6 +270,14 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             modelName: 'Lead',
             subjectField: 'lead_name'
         });
+
+        this.initCalendarHook();
+    },
+
+    initCalendarHook: function() {
+        if (!Tine.Tinebase.common.hasRight('run', 'Calendar')) {
+            return;
+        }
 
         let eventRecords = null;
         const actionUpdater = function(action, grants, records) {
