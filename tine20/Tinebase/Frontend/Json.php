@@ -1568,6 +1568,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $record = $this->_jsonToRecord($data, Tinebase_Model_CloudAccount::class);
         return $record->testAccess();
     }
+
+    public function getCloudAccountWebDAVCollections(string $cloudAccountId): array
+    {
+        $cloudAccount = Tinebase_Controller_CloudAccount::getInstance()->get($cloudAccountId);
+        if (!$cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG} instanceof Tinebase_Model_CloudAccount_CalDAV) {
+            throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation()->_('CloudAccount is not a CalDAV account'));
+        }
+
+        /** @var Calendar_Backend_CalDav_Client $calDavClient */
+        $calDavClient = $cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG}->getClient();
+        if ($result = $calDavClient->findAllCollections()) {
+            return $this->_multipleRecordsToJson($result);
+        }
+        return [];
+    }
     
     /************************ protected functions ***************************/
     

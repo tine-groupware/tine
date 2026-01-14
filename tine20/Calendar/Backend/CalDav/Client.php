@@ -303,6 +303,47 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' couldn\'t find calendar homeset');
         return false;
     }
+
+    public function findAllCollections(): ?Tinebase_Record_RecordSet
+    {
+        if (null === $this->calendarHomeSet && ! $this->findCalendarHomeSet()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
+                . ' No calendar home set found for user ' . $this->userName);
+            return null;
+        }
+
+        $collections = new Tinebase_Record_RecordSet(Tinebase_Model_WebDAV_Collection::class);
+        foreach($this->multiStatusRequest('PROPFIND', $this->calendarHomeSet, self::findAllCalendarsRequest, 1) as $url => $result) {
+            if (!($compSet = $result['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] ?? null) instanceof \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet) {
+                continue;
+            }
+            if (in_array('VEVENT', $compSet->getValue())) {
+                $type = 'VEVENT';
+            } elseif (in_array('VTODO', $compSet->getValue())) {
+                $type = 'VTODO';
+            } else {
+                continue;
+            }
+
+            if ($result['{DAV:}acl'] instanceof Sabre\DAVACL\Xml\Property\Acl) {
+                foreach ($result['{DAV:}acl']->getPrivileges() as $acl) {
+                    // $acl['principal'] === '{DAV:}authenticated' || $this->currentUserPrincipal === $acl['principal'];
+                    // what about groups? roles?
+                    $acl['privilege'];
+                }
+            }
+
+            $collections->addRecord(new Tinebase_Model_WebDAV_Collection([
+                Tinebase_Model_WebDAV_Collection::FLD_URI => $url,
+                Tinebase_Model_WebDAV_Collection::FLD_NAME => $result['{DAV:}displayname'] ?? null,
+                Tinebase_Model_WebDAV_Collection::FLD_COLOR => $result['{http://apple.com/ns/ical/}calendar-color'] ?? null,
+                Tinebase_Model_WebDAV_Collection::FLD_TYPE => $type,
+                //Tinebase_Model_WebDAV_Collection::FLD_ACL => '',
+            ]));
+        }
+
+        return $collections;
+    }
     
     public function findAllCalendarICSs(string $uri): bool
     {
@@ -789,6 +830,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
     <d:acl />
     <d:displayname />
     <x:supported-calendar-component-set xmlns:x="urn:ietf:params:xml:ns:caldav"/>
+    <calendar-color xmlns="http://apple.com/ns/ical/"/>
   </d:prop>
 </d:propfind>';
 
