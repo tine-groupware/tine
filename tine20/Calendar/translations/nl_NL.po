@@ -30,49 +30,49 @@ msgstr "beheer gedeelde kalenders"
 msgid "Create new shared calendars"
 msgstr "Maak nieuwe gedeelde kalenders aan"
 
-msgid "manage shared calendars favorites"
-msgstr "Beheer favorieten gedeele kalenders"
+msgid "manage shared calendar favorites"
+msgstr ""
 
-msgid "Create or update shared calendars favorites"
-msgstr "Maak of update favorieten gedeelde kalenders"
+msgid "Create or update shared calendar favorites"
+msgstr ""
 
 msgid "manage resources"
 msgstr "beheer bronnen"
 
-msgid "All Rights to administrate resources"
-msgstr "Alle rechten voor administratieve bronnen"
+msgid "Full rights to administrate resources"
+msgstr ""
 
 msgid "manage event types"
 msgstr ""
 
-msgid "The Right to manage event types"
+msgid "Right to manage event types"
 msgstr ""
 
-msgid "You can not have more than one grants filter"
+msgid "You can only apply one grants filter at a time."
 msgstr ""
 
 msgid "Fixed Calendars"
 msgstr "Vaste kalenders"
 
-msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr "Kalenders altijd geselecteerd ongeacht alle filterparameters. Een geldige use case zou kunnen zijn om de weergave van een bepaalde vakantie kalender dwingen."
+msgid "Calendars always selected regardless of all filter parameters. A valid use case could be to force the display of an certain holiday calendar."
+msgstr ""
 
 msgid "Crop Days"
 msgstr ""
 
-msgid "Crop calendar view configured start and endtime."
+msgid "Crop the calendar view to the configured start and end time."
 msgstr ""
 
 msgid "Crop Days Limit Override"
 msgstr ""
 
-msgid "Allow events outside start and endtime."
+msgid "Allow events outside the defined start and end times."
 msgstr ""
 
 msgid "Week View Mouse Wheel Increment"
 msgstr ""
 
-msgid "Default View for Events"
+msgid "Default View for the Events"
 msgstr ""
 
 msgid "Attendee"
@@ -83,10 +83,10 @@ msgstr[1] ""
 msgid "Organizer"
 msgstr "Organisator"
 
-msgid "Event Status Available"
+msgid "Available Event Statuses"
 msgstr ""
 
-msgid "Possible event status. Please note that additional event status might impact other calendar systems on export or synchronisation."
+msgid "Available Event Statuses. Please note that additional event statuses may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Confirmed"
@@ -98,10 +98,10 @@ msgstr "Onder voorbehoud"
 msgid "Canceled"
 msgstr ""
 
-msgid "Event Classes Available"
+msgid "Available Event Classes"
 msgstr ""
 
-msgid "Possible event classes. Please note that additional event classes might impact other calendar systems on export or synchronisation."
+msgid "Available Event Classes. Please note that additional event classes may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Public"
@@ -113,10 +113,10 @@ msgstr "Prive"
 msgid "Confidential"
 msgstr ""
 
-msgid "Event Transparencies Available"
+msgid "Available Event Transparencies"
 msgstr ""
 
-msgid "Possible event transparencies. Please note that additional event transparencies might impact other calendar systems on export or synchronisation."
+msgid "Available Event Transparencies. Please note that additional event transparencies may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Transparent"
@@ -125,10 +125,10 @@ msgstr ""
 msgid "Opaque"
 msgstr ""
 
-msgid "Attendee Status Available"
-msgstr "Status van genodigde aanwezig"
+msgid "Available Attendee Statuses"
+msgstr ""
 
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or synchronisation."
+msgid "Available Event Attendee Statuses. Please note that additional attendee statuses may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "No response"
@@ -140,10 +140,10 @@ msgstr "Geaccepteerd"
 msgid "Declined"
 msgstr "Afgewezen"
 
-msgid "Attendee Roles Available"
+msgid "Available Attendee Roles"
 msgstr ""
 
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or synchronisation."
+msgid "Available Event Attendee Roles. Please note that additional attendee roles may impact other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Required"
@@ -155,10 +155,10 @@ msgstr "Optioneel"
 msgid "Organizer has implicit edit grant"
 msgstr ""
 
-msgid "Resource Types Available"
+msgid "Available Resource Types"
 msgstr ""
 
-msgid "Possible resource types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
+msgid "Available Resource Types. Please note that adding custom resource types may affect compatibility with other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Resource"
@@ -199,10 +199,13 @@ msgstr ""
 msgid "Travel"
 msgstr ""
 
-msgid "Free/Busy Types Available"
+msgid "Trailer"
 msgstr ""
 
-msgid "Possible free/busy types. Please note that additional free/busy types might impact other calendar systems on export or synchronisation."
+msgid "Available Free/Busy Types"
+msgstr ""
+
+msgid "Available Free/Busy Types. Please note that adding custom types may affect compatibility with other calendar systems during export or synchronization."
 msgstr ""
 
 msgid "Free"
@@ -217,28 +220,28 @@ msgstr ""
 msgid "Filter timeslot for CalDAV events"
 msgstr ""
 
-msgid "For how long in the past (in months) the events should be synchronized."
-msgstr "Hoever terug in het verleden (in maanden) moeten de evenementen gesynchroniseerd worden."
+msgid "How many months in the past the events should be synchronized."
+msgstr ""
 
 msgid "Filter timeslot for CalDAV events with SyncToken"
 msgstr ""
 
-msgid "Timeslot for event notifications"
+msgid "Timeslot for the Event Notifications"
 msgstr ""
 
-msgid "For how long in the past (in weeks) event notifications should be sent."
+msgid "How many weeks in the past event notifications should be sent."
 msgstr ""
 
-msgid "Default filter period (from) for events fetched via JSON API"
+msgid "Default filter start date for the events fetched via JSON API"
 msgstr ""
 
-msgid "For how long in the past (in months) the events should be fetched."
+msgid "How many months in the past the events should be fetched."
 msgstr ""
 
-msgid "Default filter period (until) for events fetched via JSON API"
+msgid "Default filter end date for the events fetched via JSON API"
 msgstr ""
 
-msgid "For how long in the future (in months) the events should be fetched."
+msgid "For how many months in the future the events should be fetched."
 msgstr ""
 
 msgid "Disable iMIP for external organizers"
@@ -256,7 +259,7 @@ msgstr ""
 msgid "Floorplans"
 msgstr ""
 
-msgid "List of floorplans with their ressources configs."
+msgid "List of floorplans with their resource configurations."
 msgstr ""
 
 msgid "Enabled Features"
@@ -280,31 +283,31 @@ msgstr ""
 msgid "Calendar Extended Context Menu Actions"
 msgstr ""
 
-msgid "Adds extended actions to event context menus"
+msgid "Adds extended actions to the event context menus"
 msgstr ""
 
-msgid "Color Events By"
+msgid "Color Events by"
 msgstr ""
 
 msgid "Choose event color by different criteria"
 msgstr ""
 
-msgid "Recur Events Except"
+msgid "Recurring Events Except"
 msgstr ""
 
-msgid "Recur Events except on certain dates"
+msgid "Recurring events, except on certain dates."
 msgstr ""
 
-msgid "Activate Poll for Events"
+msgid "Activate Poll for the Events"
 msgstr ""
 
-msgid "Create alternative Events and let users as well as externals vote for the best option."
+msgid "Create alternative events and allow users as well as externals to vote for the best option."
 msgstr ""
 
-msgid "Activate Event Types for Events"
+msgid "Activate Event Types for the Events"
 msgstr ""
 
-msgid "Activate Event Types for Events."
+msgid "Activate Event Types for the Events."
 msgstr ""
 
 msgid "Event Notification Confirmation"
@@ -313,7 +316,7 @@ msgstr ""
 msgid "Send Tentative Notifications"
 msgstr ""
 
-msgid "Send notifications to event organiziers of events that are tentative certain days before event is due"
+msgid "Send notifications to event organizers of tentative events a certain number of days before the event is due."
 msgstr ""
 
 msgid "Enabled"
@@ -322,28 +325,28 @@ msgstr ""
 msgid "Days Before Due Date"
 msgstr ""
 
-msgid "How many days before the events due date to start send notifications."
+msgid "How many days before the event's due date should notifications be sent."
 msgstr ""
 
 msgid "Additional Filter"
 msgstr ""
 
-msgid "Additional filter to limit events notifications should be send for."
+msgid "Additional filter to limit which events notifications should be sent for."
 msgstr ""
 
 msgid "Mute Event Notifications for Polls"
 msgstr ""
 
-msgid "Do not send invitations notifications for alternative events in an active poll."
+msgid "Do not send invitation notifications for alternative events in an active poll."
 msgstr ""
 
 msgid "GTCs for polls"
 msgstr ""
 
-msgid "Freebusy Info"
+msgid "Free/Busy Info"
 msgstr ""
 
-msgid "What data the freebusy grant reveals"
+msgid "What data the free/busy grant reveals"
 msgstr ""
 
 msgid "only date & time"
@@ -356,6 +359,9 @@ msgid "and resources"
 msgstr ""
 
 msgid "and calendar"
+msgstr ""
+
+msgid "and classification"
 msgstr ""
 
 msgid "and other attendees"
@@ -376,43 +382,60 @@ msgstr ""
 msgid "Assign organizer meeting status on editGrant"
 msgstr ""
 
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Alarm voor evenement \"1$s\" op %2$s"
+#, php-format
+msgid "Alarm for the event \"%1$s\" at %2$s"
+msgstr ""
 
+#, php-format
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Uitnodiging evenement \"%1$s\" op %2$s"
 
+#, php-format
 msgid "Resource \"%1$s\" was booked for \"%2$s\" at %3$s"
 msgstr ""
 
+#, php-format
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Evenement \"%1$s\" op %2$s is afgelast"
 
+#, php-format
 msgid "Event \"%1$s\" has been rescheduled from %2$s to %3$s"
 msgstr "Evenement \"%1$s\" is verzet naar %2$s tot %3$s"
 
+#, php-format
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Evenement \"%1$s\" op %2$s is aangepast"
 
+#, php-format
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s heeft evenement \"%2$s\" op %3$s geaccepteerd "
 
+#, php-format
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s heeft evenement \"%2$s\" op %3$s afgewezen"
 
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "%1$s is er misschien tijdens evenement \"%2$s\" op %3$s "
-
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Geen reactie van %1$s voor evenement \"%2$s\" op %3$s"
-
-msgid "Unknown status update from %1$s for event \"%2$s\" at %3$s"
+#, php-format
+msgid "Tentative response from %1$s for the event \"%2$s\" at %3$s"
 msgstr ""
 
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Genodigde aanpassingen voor event \"%1$s\" at %2$s"
+#, php-format
+msgid "No response from %1$s for the event \"%2$s\" at %3$s"
+msgstr ""
 
-msgid "Tentative event notification for event \"%1$s\" at %2$s"
+#, php-format
+msgid "Unknown status update from %1$s for the event \"%2$s\" at %3$s"
+msgstr ""
+
+#, php-format
+msgid "Attendee changes for the event \"%1$s\" at %2$s"
+msgstr ""
+
+#, php-format
+msgid "Tentative event notification for the event \"%1$s\" at %2$s"
+msgstr ""
+
+#, php-format
+msgid "Proposed changes for event \"%1$s\" at %2$s declined"
 msgstr ""
 
 msgid "Unknown action"
@@ -421,13 +444,13 @@ msgstr ""
 msgid "Resource Management"
 msgstr ""
 
-msgid "No RRULE found in base event!"
+msgid "No RRULE found in the base event!"
 msgstr ""
 
-msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule"
+msgid "The new recurrence rule is unpredictable. Please choose a valid recurrence rule."
 msgstr ""
 
-#, python-format
+#, python-format, php-format
 msgid "%s's personal calendar"
 msgstr "%s's persoonlijke agenda"
 
@@ -440,31 +463,25 @@ msgstr ""
 msgid "Polls for recurring events are not supported"
 msgstr ""
 
-msgid "This contact has been automatically added by the system as a poll attendee"
-msgstr ""
-
-msgid "Attendance Confirmation for Poll \"%1$s\""
-msgstr ""
-
-msgid "%1$s is scheduled for %2$s"
+msgid "This contact was automatically added by the system as an event attendee."
 msgstr ""
 
 msgid "Different Calendar"
 msgstr ""
 
-msgid "Exdate container move are not allowed"
+msgid "Moving the EXDATE container is not allowed."
 msgstr ""
 
 msgid "Invalid URL given"
 msgstr "Ongeldige URL opgegeven"
 
-msgid "The URL you used is invalid. Please use a valid one!"
-msgstr "De URL die u gebruikt is niet geldig. Kies een geldige!"
+msgid "The URL you provided is invalid. Please use a valid one!"
+msgstr ""
 
 msgid "Failed"
 msgstr ""
 
-msgid "The right Resource Admin must be set once."
+msgid "The correct Resource Admin must be set once."
 msgstr ""
 
 msgid "Word event sheet"
@@ -479,19 +496,19 @@ msgstr ""
 msgid "OpenDocument all data"
 msgstr ""
 
-msgid "Export event data into ods spreadsheet"
+msgid "Export event data to an ODS spreadsheet"
 msgstr ""
 
 msgid "VCalendar Report"
 msgstr ""
 
-msgid "Export multiple calendars to ics files"
+msgid "Export multiple calendars to ICS files"
 msgstr ""
 
 msgid "VCalendar/ICS"
 msgstr ""
 
-msgid "Export visible events to ics file"
+msgid "Export visible events to ICS file"
 msgstr ""
 
 msgid "Resource CSV"
@@ -513,6 +530,9 @@ msgid "Calendars to export"
 msgstr ""
 
 msgid "Export target"
+msgstr ""
+
+msgid "Holidays"
 msgstr ""
 
 msgid "Import iCal-files"
@@ -551,11 +571,14 @@ msgstr[1] "Agenda's"
 msgid "Event not found"
 msgstr ""
 
-msgid "The Event was deleted in the meantime or you don't have access rights to it."
+msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr ""
 
-msgid "Add attendee"
-msgstr "Voeg genodigde toe"
+msgid "Me"
+msgstr ""
+
+msgid "Add Attendee"
+msgstr ""
 
 msgid "Sort Attendee"
 msgstr "Sorteer genodigde"
@@ -581,8 +604,8 @@ msgstr "Groep"
 msgid "Member of group"
 msgstr "Groepslid"
 
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Dit is de kalender waar de genodigde het evenement heeft opgeslagen"
+msgid "This is the calendar where the attendee saved the event."
+msgstr ""
 
 msgid "Type"
 msgstr "Type"
@@ -596,20 +619,20 @@ msgstr "Naam"
 msgid "Availability of Attendee"
 msgstr ""
 
-msgid "Whole Group or each Member of Group"
+msgid "Whole group or each group member"
 msgstr ""
 
-msgid "Choose \"Group\" to filter for the whole group itself. Choose \"Member of Group\" to filter for each member of the group"
+msgid "Choose \"Group\" to filter by the group as a whole. Choose \"Member of Group\" to filter by each group member."
 msgstr ""
 
 msgid "Member of Group"
 msgstr ""
 
-msgid "Loading Groupmembers..."
+msgid "Loading Group Members..."
 msgstr ""
 
-msgid "Remove Attender"
-msgstr "Verwijder genodigde"
+msgid "Remove Attendee"
+msgstr ""
 
 msgid "Use as event location"
 msgstr ""
@@ -639,16 +662,16 @@ msgstr "(als een groepslid)"
 msgid "External Attendee"
 msgstr "Externe genodigde "
 
-msgid "This event is originally stored in a calendar you don't have access to."
-msgstr "Dit evenement is geplaatst in een agenda waar je geen toegang tot hebt."
+msgid "The original event is stored in a calendar you don't have access to."
+msgstr ""
 
 #, python-brace-format
-msgid "This event is originally stored in {0}"
-msgstr "Dit evenement is geplaatst in {0}"
+msgid "The original event is stored in {0}"
+msgstr ""
 
 #, python-brace-format
-msgid "This event is additionally displayed in your personal calendar {0}"
-msgstr "Dit evenement wordt bovendien weergegeven in uw persoonlijke kalender {0}"
+msgid "This event also appears in your personal calendar {0}"
+msgstr ""
 
 msgid "Originally"
 msgstr "Origineel"
@@ -656,7 +679,13 @@ msgstr "Origineel"
 msgid "Colors"
 msgstr ""
 
-msgid "Side bar color"
+msgid "Use Light-Mode Colors"
+msgstr ""
+
+msgid "In dark mode event colors are inverted for better readability. If you want to see the original colors of light mode check this option."
+msgstr ""
+
+msgid "Sidebar Color"
 msgstr ""
 
 msgid "Color by Calendar"
@@ -696,11 +725,11 @@ msgstr "Begin tijd"
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, de {1}. van {2}"
 
-msgid "The summary must not be longer than 255 characters."
-msgstr "De samenvatting mag niet langer dan 255 tekens"
+msgid "The summary must not exceed 255 characters."
+msgstr ""
 
-msgid "The summary must have at least 1 character."
-msgstr "De samenvatting moet minimaal uit 1 teken bestaan."
+msgid "The summary must contain at least 1 character."
+msgstr ""
 
 msgid "Summary too Long"
 msgstr "Samenvatting te lang"
@@ -711,7 +740,7 @@ msgstr "Samenvatting te kort"
 msgid "Attendee/Resources"
 msgstr ""
 
-msgid "Additional Attendees ..."
+msgid "Additional Attendees..."
 msgstr ""
 
 msgid "Cancel"
@@ -720,14 +749,14 @@ msgstr ""
 msgid "Ok"
 msgstr ""
 
-msgid "Additional Tags ..."
+msgid "Additional Tags..."
 msgstr ""
 
-msgid "recurring event"
-msgstr "Terugkerend evenement"
+msgid "Recurring Event"
+msgstr ""
 
-msgid "recurring event exception"
-msgstr "uitzondering op terugkerend evenement"
+msgid "Recurring Event Exception"
+msgstr ""
 
 msgid "End Time"
 msgstr "Eind tijd"
@@ -741,12 +770,10 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-msgid "Event Type"
-msgid_plural "Event Types"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Site"
+msgstr ""
+
+msgid "Search for sites..."
 msgstr ""
 
 msgid "View"
@@ -761,10 +788,10 @@ msgstr "Gehele dag"
 msgid "Saved in"
 msgstr "Opgeslagen in"
 
-msgid "Update Status for all Attendee?"
+msgid "Update status for all attendees?"
 msgstr ""
 
-msgid "You are about to change the status of the event itself and not just your own status. Do you really want to change the event status for all attendee?"
+msgid "You are about to change the status of the event itself, not just your own. Do you really want to change the event status for all attendees?"
 msgstr ""
 
 msgid "non-blocking"
@@ -773,8 +800,8 @@ msgstr "Niet-blokkerend"
 msgid "Description"
 msgstr "Beschrijving"
 
-msgid "Enter description"
-msgstr "Voer omschrijving in"
+msgid "Enter a description"
+msgstr ""
 
 msgid "Notifications are disabled"
 msgstr ""
@@ -791,23 +818,23 @@ msgstr ""
 msgid "Send Notification?"
 msgstr ""
 
-msgid "Changes to this event might send notifications. Press the button \"Notifcation are enabled\" to switch to \"Notification are disabled\""
+msgid "Changes to this event may trigger notifications. Click the button labeled \"Notifications are enabled\" to switch to \"Notifications are disabled\"."
 msgstr ""
 
-msgid "End date is not valid"
-msgstr "Eind datum is niet mogelijk"
+msgid "The end date is not valid"
+msgstr ""
 
-msgid "End date must be after start date"
-msgstr "Eind datum moet na begin datum vallen"
+msgid "The end date must be after the start date"
+msgstr ""
 
-msgid "End time is not allowed to be after the configured time."
-msgstr "Eindtijd mag niet na de geconfigureerde tijd zijn."
+msgid "The end time cannot be later than the configured time."
+msgstr ""
 
-msgid "Start date is not valid"
-msgstr "Begin datum is niet mogelijk"
+msgid "The start date is not valid"
+msgstr ""
 
-msgid "Start date is not allowed to be before the configured time."
-msgstr "Startdatum mag niet voor de geconfigureerde tijd zijn."
+msgid "The start date cannot be earlier than the configured time."
+msgstr ""
 
 msgid "Event finder options"
 msgstr ""
@@ -815,8 +842,14 @@ msgstr ""
 msgid "private classification"
 msgstr "privé klassificatie"
 
-msgid "has alarm"
-msgstr "heeft alarm"
+msgid "recurring event"
+msgstr "Terugkerend evenement"
+
+msgid "recurring event exception"
+msgstr "uitzondering op terugkerend evenement"
+
+msgid "has an alarm"
+msgstr ""
 
 msgid "has attachments"
 msgstr "heeft bijlagen"
@@ -836,7 +869,27 @@ msgstr ""
 msgid "Resource: {name} reserved by you"
 msgstr ""
 
+msgid "Do you want to delete your reservation ?"
+msgstr ""
+
+#, python-brace-format
+msgid "Resource: {name} already reserved"
+msgstr ""
+
+#, python-brace-format
+msgid "The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}."
+msgstr ""
+
 msgid "Floorplan"
+msgstr ""
+
+msgid "Create individual Free/Busy URLs"
+msgstr ""
+
+msgid "In { brandingTitle } you can create individual Free/Busy URLs for each person you want to share your free/busy information with."
+msgstr ""
+
+msgid "Access to your free/busy information is revoked by just deleting the Free/Busy URL for that person."
 msgstr ""
 
 msgid "Back"
@@ -873,35 +926,47 @@ msgstr "Tags"
 msgid "Location"
 msgstr "Locatie"
 
-msgid "Checking Calendar Data..."
-msgstr "Controleren van kalender data..."
-
 msgid "Reply to Recurring Event"
 msgstr "Antwoorden op terugkerend evenement"
 
-msgid "You are responding to an recurring event. What would you like to do?"
-msgstr "U beantwoordt een terugkerend evenement. Wat wilt u doen?"
+msgid "You are responding to a recurring event. What would you like to do?"
+msgstr ""
 
-msgid "Respond to whole series"
-msgstr "Beantwoord de gehele serie"
+msgid "Respond to the whole series"
+msgstr ""
 
 msgid "Do not respond"
 msgstr "Niet antwoorden"
 
+msgid "Update Status"
+msgstr ""
+
+msgid "Please select a calendar before update your status"
+msgstr ""
+
+msgid "View and Edit Event In Calendar"
+msgstr ""
+
 msgid "Save"
 msgstr ""
 
-msgid "Save in calendar without response"
+msgid "Save to calendar without responding"
+msgstr ""
+
+msgid "Set response for"
+msgstr ""
+
+msgid "Attention! , this is an invitation for "
 msgstr ""
 
 msgid "The event of this message does not exist"
 msgstr "Het evenement van dit bericht bestaat niet"
 
-msgid "The sender is not authorised to update the event"
-msgstr "De afzender is niet geautoriseerd om het evenement aan te passen"
+msgid "The sender is not authorized to update the event"
+msgstr ""
 
-msgid "This message is already processed"
-msgstr "Dit bericht is al verwerkt"
+msgid "This message has already been processed."
+msgstr ""
 
 msgid "You are not an attendee of this event"
 msgstr "Je bent geen genodigde voor dit evenement"
@@ -909,7 +974,7 @@ msgstr "Je bent geen genodigde voor dit evenement"
 msgid "This event has been deleted by the organizer"
 msgstr ""
 
-msgid "This event has been canceled."
+msgid "You are the organizer of this event."
 msgstr ""
 
 msgid "Unsupported message"
@@ -918,17 +983,17 @@ msgstr "Niet ondersteund bericht"
 msgid "This is an event invitation for someone else."
 msgstr "Dit is een evenementen uitnodiging voor iemand anders"
 
-msgid "You have already replied to this event invitation."
-msgstr "U heeft deze uitnodiging al beantwoord."
-
-msgid "The event got rescheduled. Set your response to:"
+msgid "has already replied to this event invitation."
 msgstr ""
 
-msgid "You received an event invitation. Set your response to:"
-msgstr "U heeft een uitnodiging ontvangen. Zet het antwoord op:"
+msgid "The event got rescheduled."
+msgstr ""
 
 msgid "An invited attendee responded to the invitation."
 msgstr "Een genodigde beantwoordde de uitnodiging."
+
+msgid "This event has been canceled."
+msgstr ""
 
 msgid "Unsupported method"
 msgstr "Niet ondersteunde methode"
@@ -936,8 +1001,8 @@ msgstr "Niet ondersteunde methode"
 msgid "Import Definition Success!"
 msgstr "Import van definitie gelukt!"
 
-msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
-msgstr "De geimporteerde iCal definitie is succesvol! Wacht een paar minuten tot de gebeurtenissen worden gesynchroniseerd door de cronjob."
+msgid "The iCal import definition has been created successfully! Please wait a few minutes for the events to be synced by the cron job."
+msgstr ""
 
 msgid "Choose Import File"
 msgstr "Kies import bestand"
@@ -985,10 +1050,10 @@ msgstr ""
 msgid "What should the file you upload look like?"
 msgstr "Hoe moet het bestand dat u upload eruit zien?"
 
-msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
-msgstr "Tine 2.0 snapt niet alle bestanden die u upload. U moet handmatig de bestanden aanpassen, zodat Tine 2.0 ze kan verwerken."
+msgid "tine (Groupware) does not support all types of files you may want to upload. You will need to manually adjust your file so that tine (Groupware) can process it."
+msgstr ""
 
-msgid "Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like."
+msgid "Below is a list of all supported import formats, along with a sample file showing how Tine 2.0 expects your file to be structured."
 msgstr ""
 
 msgid "Please select the import format of the file you want to upload"
@@ -1021,7 +1086,7 @@ msgstr ""
 msgid "Update already existing events"
 msgstr ""
 
-msgid "Force Update Existing Events"
+msgid "Force Update for Existing Events"
 msgstr ""
 
 msgid "Update exiting events even if imported sequence number isn't higher"
@@ -1030,13 +1095,19 @@ msgstr ""
 msgid "Delete Missing Events"
 msgstr ""
 
-msgid "Delete events missing in import data (future only)"
+msgid "Delete events missing from the import data (future events only)."
+msgstr ""
+
+msgid "Match Attendee"
+msgstr ""
+
+msgid "Match attendee with existing users or contacts."
 msgstr ""
 
 msgid "Basic Data Only"
 msgstr ""
 
-msgid "Import basic data only (i.e. without attendee, alarms, uid, ...)"
+msgid "Import only basic data (i.e., without attendees, alarms, UID, ...)."
 msgstr ""
 
 msgid "Add Attendee to Import Data"
@@ -1048,7 +1119,46 @@ msgstr ""
 msgid "Keep Existing Attendee"
 msgstr ""
 
-msgid "Do not remove attendee of existing events which are not in the import data"
+msgid "Do not remove attendees from existing events that are not in the import data."
+msgstr ""
+
+msgid "Match Organizer"
+msgstr ""
+
+msgid "Match organizer with existing user or contact."
+msgstr ""
+
+msgid "Skip from other internal organizers"
+msgstr ""
+
+msgid "Use this when events of other internal organizers are already present in this installation or get imported with an other job."
+msgstr ""
+
+msgid "Skip Events if organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Use own attendee status for other internal organizer events"
+msgstr ""
+
+msgid "Use this when status in the attendees calendar is more accurate, e.g. because organizer did not receive/process response."
+msgstr ""
+
+msgid "Use attendee status of import user if event already exists, import user is attendee of import event and existing event and organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Allow party crushing for other internal organizer events"
+msgstr ""
+
+msgid "Use this when attendee added themselves and organizer did not receive/process/accept response."
+msgstr ""
+
+msgid "Add attendee of import user if event already exists, import user is attendee of import event but not in existing event and organizer matched an other internal user than the import user."
+msgstr ""
+
+msgid "Disable external organizer calendar"
+msgstr ""
+
+msgid "Import events of external organizers directly into the import calendar."
 msgstr ""
 
 msgid "Force Organizer for new Events"
@@ -1064,8 +1174,8 @@ msgstr "Laden van de evenementen. Moment..."
 msgid "Cut event"
 msgstr "Knip evenement"
 
-msgid "Copy Event to clipboard"
-msgstr "Kopieer evenement naar clipboard"
+msgid "Copy the event to the clipboard"
+msgstr ""
 
 msgid "Stop cut / copy & paste"
 msgstr "Stop knip/kopie & plakken"
@@ -1107,7 +1217,7 @@ msgstr "Importeer evenement"
 msgid "Paste event \"{0}\""
 msgstr "Plak evenement \"{0}\""
 
-msgid "Set as definite event"
+msgid "Set as a definite event"
 msgstr ""
 
 msgid "Set my response"
@@ -1129,8 +1239,8 @@ msgstr "Pas dit evenement aan"
 msgid "Do not update this event"
 msgstr "Pas dit evenement niet aan"
 
-msgid "Creating event in the past"
-msgstr "Aanmaken van evenement in het verleden"
+msgid "Creating an event in the past"
+msgstr ""
 
 msgid "Create this event"
 msgstr "Maak dit evenement aan"
@@ -1153,20 +1263,20 @@ msgstr "Update evenement"
 msgid "Please Change Selection"
 msgstr "Pas uw selectie aan"
 
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr "Uw selectie bevat terugkerende evenementen. Terugkerende evenementen moeten separaat verwijderd worden!"
+msgid "Your selection contains recurring events. Recurring events must be deleted separately!"
+msgstr ""
 
 msgid "Delete Event"
 msgstr "Verwijder evenement"
 
-msgid "Delete this event only"
-msgstr "Verwijder alleen dit evenement"
+msgid "Delete only this event"
+msgstr ""
 
 msgid "Delete this and all future events"
 msgstr "Verwijder dit en alle toekomstige evenementen"
 
-msgid "Delete whole series"
-msgstr "Verwijder gehele serie"
+msgid "Delete the whole series"
+msgstr ""
 
 msgid "Delete nothing"
 msgstr "Verwijder niks"
@@ -1177,8 +1287,8 @@ msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Weet u zeker dat dit evenement verwijderd moet worden?"
 msgstr[1] "Weet u zeker dat de {0} geselecteerde evenementen verwijderd moeten worden?"
 
-msgid "Could not Print"
-msgstr "Kan niet printen"
+msgid "Could Not Print"
+msgstr ""
 
 msgid "Sorry, your current view does not support printing."
 msgstr "De huidige view ondersteunt geen printen"
@@ -1186,8 +1296,8 @@ msgstr "De huidige view ondersteunt geen printen"
 msgid "Scheduling Conflict"
 msgstr "Schedule conflict"
 
-msgid "The following attendee are busy at the requested time:"
-msgstr "De volgende genodigde zijn druk op het voorgestelde tijdstip:"
+msgid "The following attendees are busy at the requested time:"
+msgstr ""
 
 msgid "Ignore Conflict"
 msgstr "Negeer conflict"
@@ -1197,6 +1307,14 @@ msgstr "Bewerk evenement"
 
 msgid "Cancel this action"
 msgstr "Breek deze actie af"
+
+msgid "Update Status for all Attendee?"
+msgstr ""
+
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Genodigde"
+msgstr[1] "Genodigden"
 
 msgid "Event"
 msgid_plural "Events"
@@ -1242,13 +1360,13 @@ msgstr ""
 msgid "Last Modified Time"
 msgstr ""
 
-msgid "Last Modified By"
+msgid "Last Modified by"
 msgstr ""
 
 msgid "Creation Time"
 msgstr ""
 
-msgid "Created By"
+msgid "Created by"
 msgstr ""
 
 msgid "Unknown date"
@@ -1267,10 +1385,106 @@ msgstr "Evenementen (als organisator)"
 msgid "Event attendee"
 msgstr "Genodigde voor evenement"
 
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Genodigde"
-msgstr[1] "Genodigden"
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Invite Resource"
+msgstr ""
+
+msgid "The permission to invite the resource to an event"
+msgstr ""
+
+msgid "Resource status"
+msgstr ""
+
+msgid "The permission to set the resource attendee status"
+msgstr ""
+
+msgid "Resource notification"
+msgstr ""
+
+msgid "The permission to receive notifications for this resource"
+msgstr ""
+
+msgid "Read Resource"
+msgstr ""
+
+msgid "The permission to read the resource itself"
+msgstr ""
+
+msgid "The permission to edit the resource itself"
+msgstr ""
+
+msgid "Export Resource"
+msgstr ""
+
+msgid "The permission to export the resource itself"
+msgstr ""
+
+msgid "Sync Resource"
+msgstr ""
+
+msgid "The permission to synchronise the resource itself"
+msgstr ""
+
+msgid "Resource Admin"
+msgstr ""
+
+msgid "The permission to administrate the resource itself"
+msgstr ""
+
+msgid "Add Events"
+msgstr ""
+
+msgid "The permission to directly add events to this resource calendar"
+msgstr ""
+
+msgid "Read Events"
+msgstr ""
+
+msgid "The permission to read events from this resource calendar"
+msgstr ""
+
+msgid "Export Events"
+msgstr "Exporteer evenement"
+
+msgid "The permission to export events from this resource calendar"
+msgstr ""
+
+msgid "Sync Events"
+msgstr ""
+
+msgid "The permission to synchronise events from this resource calendar. A Read Events grant is required."
+msgstr ""
+
+msgid "Events Free/Busy"
+msgstr ""
+
+msgid "The permission to get free/busy information of events from this resource calendar"
+msgstr ""
+
+msgid "Edit Events"
+msgstr ""
+
+msgid "The permission to edit events directly saved in this resource calendar"
+msgstr ""
+
+msgid "Delete Events"
+msgstr ""
+
+msgid "The permission to delete events directly stored in this resource calendar"
+msgstr ""
+
+msgid "Free/Busy"
+msgstr ""
+
+msgid "The permission to get free/busy information of events in this calendar"
+msgstr ""
+
+msgid "The permission to access events marked as private in this calendar"
+msgstr ""
 
 msgid "Calendar Hierarchy/Name"
 msgstr ""
@@ -1285,107 +1499,6 @@ msgid "Default attendee status"
 msgstr ""
 
 msgid "Busy Type"
-msgstr ""
-
-msgid "Resource Grant"
-msgid_plural "Resource Grants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Invite Resource"
-msgstr ""
-
-msgid "The grant to invite the resource to an event"
-msgstr ""
-
-msgid "Resource status"
-msgstr ""
-
-msgid "The grant to set the resource attendee status"
-msgstr ""
-
-msgid "Resource notification"
-msgstr ""
-
-msgid "The grant to receive notifications for this resource"
-msgstr ""
-
-msgid "Read Resource"
-msgstr ""
-
-msgid "The grant to read the resource itself"
-msgstr ""
-
-msgid "The grant to edit the resource itself"
-msgstr ""
-
-msgid "Export Resource"
-msgstr ""
-
-msgid "The grant to export the resource itself"
-msgstr ""
-
-msgid "Sync Resource"
-msgstr ""
-
-msgid "The grant to synchronise the resource itself"
-msgstr ""
-
-msgid "Resource Admin"
-msgstr ""
-
-msgid "The grant to administrate the resource itself"
-msgstr ""
-
-msgid "Add Events"
-msgstr ""
-
-msgid "The grant to directly add events into this resource calendar"
-msgstr ""
-
-msgid "Read Events"
-msgstr ""
-
-msgid "The grant to read events from this resource calendar"
-msgstr ""
-
-msgid "Export Events"
-msgstr "Exporteer evenement"
-
-msgid "The grant to export events from this resource calendar"
-msgstr ""
-
-msgid "Sync Events"
-msgstr ""
-
-msgid "The grant to synchronise events from this resource calendar. Need Read Events Grant"
-msgstr ""
-
-msgid "Events Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events from this resource calendar"
-msgstr ""
-
-msgid "Edit Events"
-msgstr ""
-
-msgid "The grant to edit events directly saved in this resource calendar"
-msgstr ""
-
-msgid "Delete Events"
-msgstr ""
-
-msgid "The grant to delete events directly stored in this resource calendar"
-msgstr ""
-
-msgid "Free Busy"
-msgstr ""
-
-msgid "The grant to get free/busy information of events in this calendar"
-msgstr ""
-
-msgid "The grant to access events marked as private in this calendar"
 msgstr ""
 
 msgid "WK"
@@ -1417,10 +1530,10 @@ msgstr ""
 msgid "Welcome {name}"
 msgstr ""
 
-msgid "This is a closed poll. No Attendee can be added."
+msgid "This poll is closed. No attendees can be added."
 msgstr ""
 
-msgid "This poll is closed already"
+msgid "This poll is already closed."
 msgstr ""
 
 #, python-brace-format
@@ -1428,9 +1541,6 @@ msgid "I am not {name}"
 msgstr ""
 
 msgid "Login"
-msgstr ""
-
-msgid "{headerDate, date, full} {headerDate, time, short}"
 msgstr ""
 
 msgid "By using this service you agree to our terms and conditions"
@@ -1442,22 +1552,19 @@ msgstr ""
 msgid "Use your personal link please."
 msgstr ""
 
-msgid "We have sent it to your E-Mail account again."
+msgid "We have sent it to your email address again."
 msgstr ""
 
 msgid "If you did not receive the link, please contact the organiser."
+msgstr ""
+
+msgid "Please enter the survey password to continue."
 msgstr ""
 
 msgid "Submit"
 msgstr ""
 
 msgid "Wrong password!"
-msgstr ""
-
-msgid "Please log in"
-msgstr ""
-
-msgid "User name"
 msgstr ""
 
 #, python-brace-format
@@ -1467,21 +1574,30 @@ msgstr ""
 msgid "An unexpected error occurred."
 msgstr ""
 
+msgid "Invalid link"
+msgstr ""
+
+msgid "Reload"
+msgstr ""
+
 msgid "Poll"
 msgid_plural "Polls"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "This poll is closed already"
+msgstr ""
+
 msgid "Alternative Dates"
 msgstr ""
 
-msgid "Create Poll for this Event"
+msgid "Create a Poll for this Event"
 msgstr ""
 
-msgid "Name for poll"
+msgid "Poll Name"
 msgstr ""
 
-msgid "Create scheduling suggestions and pick the best alternative based on user feedback."
+msgid "Create scheduling suggestions and choose the best option based on user feedback."
 msgstr ""
 
 msgid "Share the link below to poll for attendee status feedback."
@@ -1514,7 +1630,7 @@ msgstr ""
 msgid "Setting definite event"
 msgstr ""
 
-msgid "Set This Date as Definite Event?"
+msgid "Set this date as the definite event?"
 msgstr ""
 
 msgid "Do you want to close the poll and remove all other alternatives?"
@@ -1524,7 +1640,10 @@ msgstr ""
 msgid "Week {0} :"
 msgstr "Week {0} :"
 
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
+msgid "The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address."
+msgstr ""
+
+msgid "Publish Free/Busy Information..."
 msgstr ""
 
 msgid "Default attendee status with status grant"
@@ -1533,14 +1652,14 @@ msgstr ""
 msgid "Resource Location"
 msgstr ""
 
+msgid "Resource Location Address"
+msgstr ""
+
 msgid "Suppress notification"
 msgstr ""
 
 msgid "Color"
 msgstr ""
-
-msgid "Enter description..."
-msgstr "Voer omschrijving in..."
 
 msgid "Grants"
 msgstr "Rechten"
@@ -1554,7 +1673,7 @@ msgstr ""
 msgid "No Access"
 msgstr ""
 
-msgid "Rrule"
+msgid "RRULE"
 msgstr ""
 
 msgid "Daily"
@@ -1569,8 +1688,8 @@ msgstr "Maandelijks"
 msgid "Yearly"
 msgstr "Jaarlijks"
 
-msgid "Recurrances"
-msgstr "Herhalingen"
+msgid "Recurrences"
+msgstr ""
 
 msgid "No recurring rule defined"
 msgstr "Geen terugkerende regel gedefinieerd"
@@ -1636,6 +1755,9 @@ msgstr "derde"
 msgid "fourth"
 msgstr "vierde"
 
+msgid "fifth"
+msgstr "vijfde"
+
 msgid "last"
 msgstr "laatste"
 
@@ -1645,6 +1767,9 @@ msgstr "Elke {0} jaar"
 
 msgid "of"
 msgstr " "
+
+msgid "Individual Dates"
+msgstr ""
 
 msgid "Date"
 msgstr ""
@@ -1658,6 +1783,15 @@ msgstr "Zoeken..."
 msgid "Search Event"
 msgstr "Zoek evenement"
 
+msgid "Edit Event invitation"
+msgstr ""
+
+msgid "Please Wait"
+msgstr ""
+
+msgid "Event Weekday"
+msgstr ""
+
 msgid "Mini Calendar"
 msgstr "Kleine agenda"
 
@@ -1666,9 +1800,6 @@ msgstr ""
 
 msgid "unknown"
 msgstr "onbekend"
-
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Dit contact is automatisch toegevoegd door het systeen als een gebeurtenis genodigde."
 
 msgid "The email address has been shortened:"
 msgstr "Dit email adres is ingekort:"
@@ -1685,11 +1816,8 @@ msgstr ""
 msgid "Priority"
 msgstr "Prioriteit"
 
-msgid "Url"
-msgstr "Url"
-
-msgid "Recurrance rule"
-msgstr "Herhalings regel"
+msgid "Recurrence Rule"
+msgstr ""
 
 msgid "Is all day event"
 msgstr "Hele dag afspraak"
@@ -1697,7 +1825,32 @@ msgstr "Hele dag afspraak"
 msgid "Organizer timezone"
 msgstr "Tijdzone origanisator"
 
+msgid "GENDER_Event Type"
+msgstr ""
+
+msgid "Event Type"
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Short Name"
+msgstr ""
+
+msgid "GENDER_FreeBusy Url"
+msgstr ""
+
+msgid "FreeBusy Url"
+msgid_plural "FreeBusy Urls"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Share this URL with the person you want to give access to your free/busy information."
+msgstr ""
+
+msgid "Make a note of who you created this URL for so that you can delete it without hesitation if necessary."
+msgstr ""
+
+msgid "GENDER_Poll"
 msgstr ""
 
 msgid "Locked"
@@ -1706,11 +1859,19 @@ msgstr ""
 msgid "Closed"
 msgstr ""
 
-#, python-format
+msgid "GENDER_Calendar User"
+msgstr ""
+
+msgid "Calendar User"
+msgid_plural "Calendar Users"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format, php-format
 msgid "Every %s day"
 msgstr "Elke %s dag"
 
-#, python-format
+#, python-format, php-format
 msgid "Every %s week on"
 msgstr "Elke %s week op"
 
@@ -1720,29 +1881,32 @@ msgstr "Wekelijks op"
 msgid "and"
 msgstr "en"
 
+#, php-format
 msgid "Every %1$s month on the %2$s %3$s"
 msgstr "Elke %1$s maand op de %2$s %3$s"
 
+#, php-format
 msgid "Monthly every %1$s %2$s"
 msgstr "Maandelijks elke %1$s %2$s"
 
+#, php-format
 msgid "Every %1$s month on the %2$s"
 msgstr "Elke %1$s maand op de %2$s"
 
+#, php-format
 msgid "Monthly on the %1$s"
 msgstr "Maandelijks op de %1$s"
 
+#, php-format
 msgid "Yearly every %1$s %2$s of %3$s"
 msgstr "Jaarlijks elke %1$s %2$s van %3$s"
 
+#, php-format
 msgid "Yearly on the %1$s of %2$s"
 msgstr "Jaarlijks op de %1$s van %2$s"
 
 msgid "second to last"
 msgstr "tweede tot laatste"
-
-msgid "fifth"
-msgstr "vijfde"
 
 msgid "st"
 msgstr "e"
@@ -1792,7 +1956,7 @@ msgstr "De standaard favoriet die bij het opstarten van agenda wordt geladen"
 msgid "Web Event Title Template"
 msgstr ""
 
-msgid "How to build event titles in web ui."
+msgid "How to build event titles in web UI."
 msgstr ""
 
 msgid "Get Notification Emails"
@@ -1801,19 +1965,19 @@ msgstr "Stuur e-mail melding"
 msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr "Het niveau van de acties die u wilt worden geïnformeerd. Houd er rekening mee dat de organisatoren meldingen krijgt voor alle updates, waaronder genodigde antwoorden, tenzij deze voorkeur is ingesteld op \"Never \""
 
-msgid "Send Notifications Emails of own Actions"
-msgstr "Stuur Email meldingen van eigen acties"
-
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Email meldingen krijgen voor acties die u zelf heeft gedaan"
-
-msgid "Send Notifications Emails of tentative events"
+msgid "Send notification emails for your own actions."
 msgstr ""
 
-msgid "Get notifications emails of tentative events"
+msgid "Get notification emails for actions you did yourself"
 msgstr ""
 
-msgid "Send Alarm Notifications Emails"
+msgid "Send notification emails of tentative events"
+msgstr ""
+
+msgid "Get notification emails of tentative events"
+msgstr ""
+
+msgid "Send Alarm Notification Emails"
 msgstr ""
 
 msgid "Get event alarms via email"
@@ -1843,10 +2007,10 @@ msgstr ""
 msgid "Increment of event time steps"
 msgstr ""
 
-msgid "Default set Events to privat"
+msgid "Default set events to privat"
 msgstr ""
 
-msgid "If enabled every created event is always privat"
+msgid "If enabled, every created event is always private."
 msgstr ""
 
 msgid "First Day of Week"
@@ -1858,29 +2022,41 @@ msgstr ""
 msgid "Default calendar strategy"
 msgstr ""
 
-msgid "The calendar for new events if no container is selected"
+msgid "The calendar for new events, if no container is selected."
 msgstr ""
 
 msgid "Remove all filters on change selection"
 msgstr ""
 
-msgid "On Calendar Change will remove all filters"
+msgid "Changing the calendar will remove all filters."
 msgstr ""
 
-msgid "Calendars always selected regardless of all filter parameters."
+msgid "Calendars are always selected, regardless of any filter parameters."
+msgstr ""
+
+msgid "Sync FreeBusy events"
+msgstr ""
+
+msgid "Receive FreeBusy events via CalDAV and ActiveSync."
+msgstr ""
+
+msgid "Exclude cancelled events from CalDAV"
+msgstr ""
+
+msgid "Do not transfer events via CalDAV where the attendee status of the calendar owner is set to \"declined\""
 msgstr ""
 
 msgid "Never"
 msgstr "Nooit"
 
-msgid "On invitation and cancellation only"
-msgstr "Op uitnodiging en annulering alleen"
+msgid "Only on invitation and cancellation."
+msgstr ""
 
 msgid "On time changes"
 msgstr "Op tijd veranderingen"
 
-msgid "On all updates but attendee responses"
-msgstr "Op alle updates, maar genodigde reacties"
+msgid "On all updates, except attendee responses."
+msgstr ""
 
 msgid "On attendee responses too"
 msgstr "Reactie genodigden"
@@ -1900,8 +2076,8 @@ msgstr "Afgewezen evenementen"
 msgid "Events I have declined"
 msgstr "Evenementen die ik heb afgewezen"
 
-msgid "I'm organizer"
-msgstr "Ik ben organisator"
+msgid "I'm an organizer"
+msgstr ""
 
 msgid "Events I'm the organizer of"
 msgstr "Evenement waar ik de organisator van ben"
@@ -1929,13 +2105,10 @@ msgid_plural "Relations"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "First name, ĺast name"
-msgstr ""
-
-msgid "E-Mail address"
-msgstr ""
-
 msgid "General terms and conditions"
+msgstr ""
+
+msgid "Password Protected Poll"
 msgstr ""
 
 msgid "Updates from"
@@ -1944,27 +2117,35 @@ msgstr ""
 msgid "This is an event series exception."
 msgstr "Dit is een serie-gebeurtenis uitzondering."
 
+#, php-format
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
 msgstr "%1$s veranderd van \"%2$s\" naar \"%3$s\""
 
+#, php-format
 msgid "%1$s has been invited"
 msgstr "%1$s is uitgenodigd"
 
+#, php-format
 msgid "%1$s has been removed"
 msgstr "%1$s is verwijderd"
 
+#, php-format
 msgid "%1$s accepted invitation"
 msgstr "%1$s uitnodiging geaccepteerd"
 
+#, php-format
 msgid "%1$s declined invitation"
 msgstr "%1$s uitnodiging afgewezen"
 
+#, php-format
 msgid "Tentative response from %1$s"
 msgstr "%1$s heeft onder voorbehoud gereageerd"
 
+#, php-format
 msgid "No response from %1$s"
 msgstr "Geen reactie van %1$s"
 
+#, php-format
 msgid "\"%2$s\" response from %1$s"
 msgstr "\"%2$s\" reactie van %1$s"
 
@@ -1974,17 +2155,214 @@ msgstr ""
 msgid "Event details"
 msgstr "Details evenement"
 
-msgid "Thank you for attendening the poll \"%1$s\""
+msgid "Attendance Confirmation for Poll „%1$s“"
 msgstr ""
 
-msgid "To review or edit your status please use your personal link:"
+msgid "Thank you for attending the poll „%1$s“"
 msgstr ""
 
-msgid "The poll \"%1$s\" has been closed."
+msgid "To review or edit your status, please use your personal link:"
 msgstr ""
 
-msgid "The definite event is scheduled for \"%1$s\""
+msgid "My Link"
+msgstr ""
+
+msgid "%1$s is scheduled for %2$s"
+msgstr ""
+
+msgid "The poll „%1$s“ has been closed."
+msgstr ""
+
+msgid "The definite event is scheduled for „%1$s“."
 msgstr ""
 
 msgid "You can review the poll results here:"
 msgstr ""
+
+msgid "My Poll"
+msgstr ""
+
+msgid "Summary - Organizer"
+msgstr ""
+
+msgid "Summary ⏎ Description"
+msgstr ""
+
+msgid "Summary - Location"
+msgstr ""
+
+msgid "Summary ⏎ Organizer ⏎ Location"
+msgstr ""
+
+msgid "Intelligent"
+msgstr ""
+
+msgid "Calendar owner"
+msgstr ""
+
+msgid "Filtered attendee"
+msgstr ""
+
+msgid "Sunday"
+msgstr ""
+
+msgid "Monday"
+msgstr ""
+
+#~ msgid "manage shared calendars favorites"
+#~ msgstr "Beheer favorieten gedeele kalenders"
+
+#~ msgid "Create or update shared calendars favorites"
+#~ msgstr "Maak of update favorieten gedeelde kalenders"
+
+#~ msgid "All Rights to administrate resources"
+#~ msgstr "Alle rechten voor administratieve bronnen"
+
+#~ msgid "Calendars always selected regardless of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+#~ msgstr "Kalenders altijd geselecteerd ongeacht alle filterparameters. Een geldige use case zou kunnen zijn om de weergave van een bepaalde vakantie kalender dwingen."
+
+#~ msgid "Attendee Status Available"
+#~ msgstr "Status van genodigde aanwezig"
+
+#~ msgid "For how long in the past (in months) the events should be synchronized."
+#~ msgstr "Hoever terug in het verleden (in maanden) moeten de evenementen gesynchroniseerd worden."
+
+#~ msgid "Alarm for event \"%1$s\" at %2$s"
+#~ msgstr "Alarm voor evenement \"1$s\" op %2$s"
+
+#~ msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+#~ msgstr "%1$s is er misschien tijdens evenement \"%2$s\" op %3$s "
+
+#~ msgid "No response from %1$s for event \"%2$s\" at %3$s"
+#~ msgstr "Geen reactie van %1$s voor evenement \"%2$s\" op %3$s"
+
+#~ msgid "Attendee changes for event \"%1$s\" at %2$s"
+#~ msgstr "Genodigde aanpassingen voor event \"%1$s\" at %2$s"
+
+#~ msgid "The URL you used is invalid. Please use a valid one!"
+#~ msgstr "De URL die u gebruikt is niet geldig. Kies een geldige!"
+
+#~ msgid "Add attendee"
+#~ msgstr "Voeg genodigde toe"
+
+#~ msgid "This is the calendar where the attender has saved this event in"
+#~ msgstr "Dit is de kalender waar de genodigde het evenement heeft opgeslagen"
+
+#~ msgid "Remove Attender"
+#~ msgstr "Verwijder genodigde"
+
+#~ msgid "This event is originally stored in a calendar you don't have access to."
+#~ msgstr "Dit evenement is geplaatst in een agenda waar je geen toegang tot hebt."
+
+#, python-brace-format
+#~ msgid "This event is originally stored in {0}"
+#~ msgstr "Dit evenement is geplaatst in {0}"
+
+#, python-brace-format
+#~ msgid "This event is additionally displayed in your personal calendar {0}"
+#~ msgstr "Dit evenement wordt bovendien weergegeven in uw persoonlijke kalender {0}"
+
+#~ msgid "The summary must not be longer than 255 characters."
+#~ msgstr "De samenvatting mag niet langer dan 255 tekens"
+
+#~ msgid "The summary must have at least 1 character."
+#~ msgstr "De samenvatting moet minimaal uit 1 teken bestaan."
+
+#~ msgid "Enter description"
+#~ msgstr "Voer omschrijving in"
+
+#~ msgid "End date is not valid"
+#~ msgstr "Eind datum is niet mogelijk"
+
+#~ msgid "End date must be after start date"
+#~ msgstr "Eind datum moet na begin datum vallen"
+
+#~ msgid "End time is not allowed to be after the configured time."
+#~ msgstr "Eindtijd mag niet na de geconfigureerde tijd zijn."
+
+#~ msgid "Start date is not valid"
+#~ msgstr "Begin datum is niet mogelijk"
+
+#~ msgid "Start date is not allowed to be before the configured time."
+#~ msgstr "Startdatum mag niet voor de geconfigureerde tijd zijn."
+
+#~ msgid "has alarm"
+#~ msgstr "heeft alarm"
+
+#~ msgid "Checking Calendar Data..."
+#~ msgstr "Controleren van kalender data..."
+
+#~ msgid "You are responding to an recurring event. What would you like to do?"
+#~ msgstr "U beantwoordt een terugkerend evenement. Wat wilt u doen?"
+
+#~ msgid "Respond to whole series"
+#~ msgstr "Beantwoord de gehele serie"
+
+#~ msgid "The sender is not authorised to update the event"
+#~ msgstr "De afzender is niet geautoriseerd om het evenement aan te passen"
+
+#~ msgid "This message is already processed"
+#~ msgstr "Dit bericht is al verwerkt"
+
+#~ msgid "You have already replied to this event invitation."
+#~ msgstr "U heeft deze uitnodiging al beantwoord."
+
+#~ msgid "You received an event invitation. Set your response to:"
+#~ msgstr "U heeft een uitnodiging ontvangen. Zet het antwoord op:"
+
+#~ msgid "The Ical Import definition has been created successfully! Please wait some minutes to get the events synced by the cronjob."
+#~ msgstr "De geimporteerde iCal definitie is succesvol! Wacht een paar minuten tot de gebeurtenissen worden gesynchroniseerd door de cronjob."
+
+#~ msgid "Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it."
+#~ msgstr "Tine 2.0 snapt niet alle bestanden die u upload. U moet handmatig de bestanden aanpassen, zodat Tine 2.0 ze kan verwerken."
+
+#~ msgid "Copy Event to clipboard"
+#~ msgstr "Kopieer evenement naar clipboard"
+
+#~ msgid "Creating event in the past"
+#~ msgstr "Aanmaken van evenement in het verleden"
+
+#~ msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+#~ msgstr "Uw selectie bevat terugkerende evenementen. Terugkerende evenementen moeten separaat verwijderd worden!"
+
+#~ msgid "Delete this event only"
+#~ msgstr "Verwijder alleen dit evenement"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Verwijder gehele serie"
+
+#~ msgid "Could not Print"
+#~ msgstr "Kan niet printen"
+
+#~ msgid "The following attendee are busy at the requested time:"
+#~ msgstr "De volgende genodigde zijn druk op het voorgestelde tijdstip:"
+
+#~ msgid "Enter description..."
+#~ msgstr "Voer omschrijving in..."
+
+#~ msgid "Recurrances"
+#~ msgstr "Herhalingen"
+
+#~ msgid "This contact has been automatically added by the system as an event attender"
+#~ msgstr "Dit contact is automatisch toegevoegd door het systeen als een gebeurtenis genodigde."
+
+#~ msgid "Url"
+#~ msgstr "Url"
+
+#~ msgid "Recurrance rule"
+#~ msgstr "Herhalings regel"
+
+#~ msgid "Send Notifications Emails of own Actions"
+#~ msgstr "Stuur Email meldingen van eigen acties"
+
+#~ msgid "Get notifications emails for actions you did yourself"
+#~ msgstr "Email meldingen krijgen voor acties die u zelf heeft gedaan"
+
+#~ msgid "On invitation and cancellation only"
+#~ msgstr "Op uitnodiging en annulering alleen"
+
+#~ msgid "On all updates but attendee responses"
+#~ msgstr "Op alle updates, maar genodigde reacties"
+
+#~ msgid "I'm organizer"
+#~ msgstr "Ik ben organisator"

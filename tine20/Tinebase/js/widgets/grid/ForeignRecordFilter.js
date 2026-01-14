@@ -218,7 +218,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.ownRecordClass && this.foreignRecordClass) {
             if (!this.independentRecords && _.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
                 const dataFields = _.difference(this.foreignRecordClass.getDataFields(), [_.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.refIdField')]);
-                if (dataFields.length === 1) {
+                if (dataFields.length === 1 && this.foreignRecordClass.getField(dataFields[0])?.type === 'record') {
                     // cross-records: skip cross-record level completely, have all operators
                     this.crossRecordClass = this.foreignRecordClass;
                     this.crossRecordForeignField = dataFields[0];

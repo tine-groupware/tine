@@ -393,7 +393,25 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 items: [
                     contactNorthPanel,
                     contactCenterPanel,
-                    this.postalAddressesTabPanel
+                    this.postalAddressesTabPanel,
+                    {
+                        xtype: 'fieldset',
+                        title: this.app.i18n._('Additional properties'),
+                        collapsible: true,
+                        collapsed: true,
+                        labelAlign: 'top',
+                        defaults: { anchor: '100%' },
+                        deferLayout: false,
+                        items: [
+                            this.fieldManager('n_suffix'),
+                            this.fieldManager('role'),
+                            this.fieldManager('room'),
+                            this.fieldManager('tz'),
+                            this.fieldManager('assistent'),
+                            this.fieldManager('ical_fb_urls'),
+                            this.fieldManager('pubkey'),
+                        ]
+                    }
                 ]
             }, contactEastPanel]
         };

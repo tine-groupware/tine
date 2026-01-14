@@ -5,6 +5,8 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import TimezoneCombo from "../TimezoneCombo";
+
 Ext.ns('Tine.widgets.form');
 
 import 'widgets/form/AceField';
@@ -14,6 +16,7 @@ import 'widgets/form/RecordEditField';
 import 'widgets/form/LocalizedField';
 import 'widgets/form/UrlField';
 import 'widgets/form/EmailField';
+import 'widgets/TimezoneCombo';
 import {supportedTypes as supportedACETypes} from "./AceField";
 
 /**
@@ -44,6 +47,7 @@ Tine.widgets.form.FieldManager = function() {
             password: 'tw-passwordTriggerField',
             country: 'widget-countrycombo',
             currency: 'widget-currencycombo',
+            timezone: 'widget-timezonecombo',
             url: 'urlfield',
             email: 'tw-emailField',
             application: 'tw-app-picker'
