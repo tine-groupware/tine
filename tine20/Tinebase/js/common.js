@@ -237,24 +237,30 @@ const common = {
     /**
      * format byte values
      * @param {String} value
-     * @param {Boolean} forceUnit
+     * @param {String} forceUnit
      * @param {Integer} decimals
      * @param {Boolean} useDecimalValues
      */
     byteFormatter: function(value, forceUnit, decimals, useDecimalValues) {
         value = parseInt(value, 10);
         decimals = Ext.isNumber(decimals) ? decimals : 2;
-        var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator'),
-            suffix = useDecimalValues ?
-                ['Bytes', 'Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] :
-                ['Bytes', 'Bytes', 'kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'] ,
-            divisor = useDecimalValues ? 1000 : 1024;
+        const decimalUnits = ['Bytes', 'Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const binaryUnits = ['Bytes', 'Bytes', 'kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+        const decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
+
+        if (decimalUnits.includes(forceUnit)) {
+            useDecimalValues = true;
+        }
+
+        const suffix = useDecimalValues ? decimalUnits : binaryUnits;
+        const divisor = useDecimalValues ? 1000 : 1024;
+        let i = 0;
 
         if (forceUnit) {
-            var i = suffix.indexOf(forceUnit);
-            i = (i == -1) ? 0 : i;
+            i = suffix.indexOf(forceUnit);
+            i = (i === -1) ? 0 : i;
         } else {
-            for (var i=0,j; i<suffix.length; i++) {
+            for (; i<suffix.length; i++) {
                 if (value < Math.pow(divisor, i)) break;
             }
         }
