@@ -27,8 +27,11 @@ class Addressbook_Model_ExternalFreeBusyUrl extends Tinebase_Record_NewAbstract
         self::APP_NAME                  => Addressbook_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
 
+        self::TITLE_PROPERTY            => self::FLD_URL,
+
         self::FIELDS                    => [
             self::FLD_URL                   => [
+                self::LABEL                     => 'External FreeBusy Url', // _('External FreeBusy Url')
                 self::TYPE                      => self::TYPE_STRING,
             ],
         ],

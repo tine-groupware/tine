@@ -8,9 +8,12 @@
  *
  */
  
+import FreeBusyUrl from "./Model/FreeBusyUrl";
+
 Ext.ns('Tine.Calendar');
 import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
 import formatAddress from "util/postalAddressFormater";
+import FreeBusyUrlGridDialog from "./freeBusyUrl/GridDialog";
 
 
 /**
@@ -95,6 +98,28 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: true,
                         columnWidth: 1,
                         name: 'hierarchy'
+                    }], [{
+                        xtype: 'numberfield',
+                        fieldLabel: this.app.i18n._('Maximum number of attendee'),
+                        allowNegative: false,
+                        allowBlank: true,
+                        name: 'max_number_of_people'
+                    }, new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Calendar',
+                        keyFieldName: 'freebusyTypes',
+                        fieldLabel: this.app.i18n._('Busy Type'),
+                        name: 'busy_type'
+                    }), {
+                        xtype: 'button',
+                        text: this.app.i18n._('Share Free/Busy Information ...'),
+                        style: 'margin-top: 16px;',
+                        disabled: this.record.phantom,
+                        scope: this,
+                        handler: function() {
+                            FreeBusyUrlGridDialog.openWindow({
+                                resourceId: this.record.id,
+                            })
+                        },
                     }], [
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Calendar',
@@ -108,18 +133,7 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Default attendee status with status grant'),
                             name: 'status_with_grant',
                             value: 'NEEDS-ACTION'
-                    }), new Tine.Tinebase.widgets.keyfield.ComboBox({
-                            app: 'Calendar',
-                            keyFieldName: 'freebusyTypes',
-                            fieldLabel: this.app.i18n._('Busy Type'),
-                            name: 'busy_type'
-                        }), {
-                            xtype: 'numberfield',
-                            fieldLabel: this.app.i18n._('Maximum number of attendee'),
-                            allowNegative: false,
-                            allowBlank: true,
-                            name: 'max_number_of_people'
-                        }], [{
+                    })], [{
                             xtype: 'tinerelationpickercombo',
                             fieldLabel: this.app.i18n._('Site'),
                             editDialog: this,

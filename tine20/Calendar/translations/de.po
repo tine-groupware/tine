@@ -538,6 +538,9 @@ msgstr "Zu exportierende Kalender"
 msgid "Export target"
 msgstr "Exportziel"
 
+msgid "Holidays"
+msgstr "Ferien"
+
 msgid "Import iCal-files"
 msgstr "Importiere iCal-Dateien"
 
@@ -577,11 +580,8 @@ msgstr "Termin nicht gefunden"
 msgid "The event was deleted in the meantime or you no longer have access rights to it."
 msgstr "Der Termin wurde in der Zwischenzeit gelöscht oder Sie haben kein Recht diesen Termin aufzurufen."
 
-msgid "Myself"
+msgid "Me"
 msgstr "Ich"
-
-msgid "Current"
-msgstr ""
 
 msgid "Add Attendee"
 msgstr "Teilnehmende hinzufügen"
@@ -889,6 +889,15 @@ msgstr "Die Resource {name} im Stock {floorName} ist bereits am {date} von {name
 msgid "Floorplan"
 msgstr "Lageplan"
 
+msgid "Create individual Free/Busy URLs"
+msgstr "Individuelle Frei/Belegt URLs erstellen"
+
+msgid "In { brandingTitle } you can create individual Free/Busy URLs for each person you want to share your free/busy information with."
+msgstr "In { brandingTitle } können Sie individuelle Frei/Belegt-URLs für jede Person erstellen, mit der Sie Ihre Frei/Belegt-Informationen teilen möchten."
+
+msgid "Access to your free/busy information is revoked by just deleting the Free/Busy URL for that person."
+msgstr "Der Zugriff auf Ihre Frei/Belegt-Informationen wird durch einfaches Löschen der Frei/Belegt-URL für diese Person widerrufen."
+
 msgid "Back"
 msgstr "Zurück"
 
@@ -950,11 +959,11 @@ msgstr "Speichern"
 msgid "Save to calendar without responding"
 msgstr "Termin ohne Rückmeldung im Kalender speichern"
 
-msgid "Attention! , this is an invitation for "
-msgstr "Achtung! Dies ist eine Einladung für "
-
 msgid "Set response for"
 msgstr "Antwort für"
+
+msgid "Attention! , this is an invitation for "
+msgstr "Achtung! Dies ist eine Einladung für "
 
 msgid "The event of this message does not exist"
 msgstr "Der Termin von dieser Nachricht existiert nicht"
@@ -1640,6 +1649,9 @@ msgstr "Woche {0} :"
 msgid "The email address of the resource is required to identify it in external calendar applications and synchronized devices. Therefore, the email address must be unique. However, it does not need to be a valid, existing address."
 msgstr "Die E-Mail Adresse der Ressource. Diese wird benötigt um die Ressource auf externen Kalendern und Sync-Devices zu identifizieren. Die E-Mail Adresse muss daher eindeutig sein. Es ist nicht notwendig, dass die Adresse tatsächlich existiert."
 
+msgid "Share Free/Busy Information ..."
+msgstr "Frei/Belegt Informationen teilen ..."
+
 msgid "Default attendee status with status grant"
 msgstr "Standard Teilnehmenden Status mit Status Recht"
 
@@ -1830,6 +1842,20 @@ msgstr[1] "Terminarten"
 msgid "Short Name"
 msgstr "Kurzname"
 
+msgid "GENDER_FreeBusy Url"
+msgstr "female"
+
+msgid "FreeBusy Url"
+msgid_plural "FreeBusy Urls"
+msgstr[0] "Frei Belegt URL"
+msgstr[1] "Frei Belegt URLs"
+
+msgid "Share this URL with the person you want to give access to your free/busy information."
+msgstr "Teilen sie diese URL mit der Person der sie Zugriff auf ihre Frei/Belegt Informationen geben möchten."
+
+msgid "Make a note of who you created this URL for so that you can delete it without hesitation if necessary."
+msgstr "Notieren sie sich für wen sie diese URL erzeugt haben, so dass sie diese im Bedarfsfall bedenkenlos wieder löschen können."
+
 msgid "GENDER_Poll"
 msgstr "female"
 
@@ -1840,11 +1866,11 @@ msgid "Closed"
 msgstr "Beendet"
 
 msgid "GENDER_Calendar User"
-msgstr ""
+msgstr "female"
 
 msgid "Calendar User"
 msgid_plural "Calendar Users"
-msgstr[0] "Kalender Benutzer*inne"
+msgstr[0] "Kalender Benutzer*in"
 msgstr[1] "Kalender Benutzer*innen"
 
 #, python-format, php-format
@@ -2020,6 +2046,12 @@ msgstr ""
 msgid "Receive FreeBusy events via CalDAV and ActiveSync."
 msgstr ""
 
+msgid "Exclude cancelled events from CalDAV"
+msgstr ""
+
+msgid "Do not transfer events via CalDAV where the attendee status of the calendar owner is set to \"declined\""
+msgstr ""
+
 msgid "Never"
 msgstr "Nie"
 
@@ -2168,9 +2200,6 @@ msgstr "Thema - Lokalität"
 msgid "Summary ⏎ Organizer ⏎ Location"
 msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
-msgid "Me"
-msgstr "Ich"
-
 msgid "Intelligent"
 msgstr "Intelligent"
 
@@ -2185,3 +2214,6 @@ msgstr "Sonntag"
 
 msgid "Monday"
 msgstr "Montag"
+
+#~ msgid "Myself"
+#~ msgstr "Ich"

@@ -781,6 +781,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'pubkey'                        => [
                 self::TYPE                      => self::TYPE_TEXT,
+                self::LABEL                     => 'Public Key', // _('Public Key')
                 self::LENGTH                    => 2147483647, // mysql longtext, really?!?
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -951,12 +952,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'tz'                            => [
                 self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 8,
+                self::LENGTH                    => 40,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Timezone', // _('Timezone')
+                self::SPECIAL_TYPE              => self::SPECIAL_TYPE_TIMEZONE,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    ['StringLength', ['max' => 8]],
+                    ['StringLength', ['max' => 40]],
                 ],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
@@ -1092,8 +1094,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
                 self::CONFIG                => [
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::DEPENDENT_RECORDS     => true,
                     self::MODEL_NAME            => Addressbook_Model_ExternalFreeBusyUrl::MODEL_NAME_PART,
                     self::STORAGE               => self::TYPE_JSON,
+                ],
+                self::UI_CONFIG             => [
+                    'xtype'                     => 'wdgt.pickergrid-layercombo',
                 ],
             ],
         ],

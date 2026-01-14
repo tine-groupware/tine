@@ -88,8 +88,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get list of translated country names
      * 
-     * Wrapper for {@see Tinebase_Core::getCountrylist}
-     * 
      * @return array list of countrys
      */
     public function getCountryList($locale = null)
@@ -104,6 +102,27 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     . '" -> Switching to default locale');
             }
             $result = Tinebase_Translation::getCountryList();
+        }
+        return $result;
+    }
+
+    /**
+     * get list of translated timezone names
+     *
+     * @return array list of timezones
+     */
+    public function getTimezoneList($locale = null)
+    {
+        try {
+            $result = Tinebase_Translation::getTimezoneList($locale ? new Zend_Locale($locale) : null);
+        } catch (Symfony\Component\Intl\Exception\MissingResourceException $mre) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Error: "' . $mre->getMessage()
+                    . '" -> Switching to default locale');
+            }
+            $result = Tinebase_Translation::getTimezoneList();
         }
         return $result;
     }

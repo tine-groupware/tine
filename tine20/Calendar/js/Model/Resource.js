@@ -33,7 +33,8 @@ const Resource = Record.create(Record.genericFields.concat([
     { name: 'attachments'},
     { name: 'relations',   omitDuplicateResolving: true},
     { name: 'customfields', omitDuplicateResolving: true},
-    {name: 'color'}
+    { name: 'color'},
+    { name: 'free_busy_urls' }
 ]), {
     appName: 'Calendar',
     modelName: 'Resource',

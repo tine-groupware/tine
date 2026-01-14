@@ -471,7 +471,16 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
 
         return this;
     },
-    
+
+    initValue : function(){
+        Ext.ux.form.LayerCombo.superclass.initValue.apply(this, arguments);
+
+        if([undefined, null].indexOf(this.currentValue) < 0){
+            this.setValue(this.currentValue);
+        }
+        this.originalValue = this.getValue();
+    },
+
     /**
      * sets values to innerForm
      */

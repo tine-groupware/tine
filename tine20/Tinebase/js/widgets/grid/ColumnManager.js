@@ -76,7 +76,7 @@ Tine.widgets.grid.ColumnManager = function() {
                     return null;
                 }
 
-                if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0) {
+                if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0 && (!fieldDefinition.hasOwnProperty('shy') && fieldDefinition.shy === false)) {
                     config.hidden = true;
                 }
                 if (fieldDefinition.type === 'records') {
