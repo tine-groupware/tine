@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>metacrm_lead</name>
-            <version>11</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -45,6 +45,7 @@
                 <field>
                     <name>description</name>
                     <type>text</type>
+                    <length>65535</length>
                 </field>
                 <field>
                     <name>turnover</name>
