@@ -1617,7 +1617,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                 }
             }
 
-            $attachmentName = str_replace('/', '-', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
+            $attachmentName = str_replace('/', '_', $customer->getTitle() . '_' . $invoice->number . '-xrechnung.xml');
             Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($invoice, $attachmentName, $stream);
             Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
         } catch (Tinebase_Exception_HtmlReport $e) {
