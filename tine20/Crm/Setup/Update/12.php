@@ -47,7 +47,6 @@ class Crm_Setup_Update_12 extends Setup_Update_Abstract
             $this->setTableVersion('metacrm_lead', 11);
         }
 
-        $this->setTableVersion('metacrm_lead', 12.2);
         $this->addApplicationUpdate('Crm', '12.2', self::RELEASE012_UPDATE002);
     }
 }
