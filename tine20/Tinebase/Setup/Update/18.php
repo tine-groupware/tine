@@ -5,8 +5,8 @@
  *
  * @package     Tinebase
  * @subpackage  Setup
- * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -31,7 +31,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE015 = self::class . '::update015';
     protected const RELEASE018_UPDATE016 = self::class . '::update016';
     protected const RELEASE018_UPDATE017 = self::class . '::update017';
-
+    protected const RELEASE018_UPDATE018 = self::class . '::update018';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -112,6 +112,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE016          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update016',
+            ],
+            self::RELEASE018_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
             ],
         ],
     ];
@@ -387,6 +391,18 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpconfig);
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapconfig);
 
-        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.17', self::RELEASE018_UPDATE017);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.17',
+            self::RELEASE018_UPDATE017);
+    }
+
+    public function update018(): void
+    {
+        $db = Tinebase_Core::getDb();
+        // disable scheduler tasks without valid app (because app might have been removed / cleanup failed / ...)
+        $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'scheduler_task') . ' SET ' .
+            'active = 0 WHERE application_id = ""');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.18',
+            self::RELEASE018_UPDATE018);
     }
 }
