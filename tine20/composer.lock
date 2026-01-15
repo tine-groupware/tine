@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c883fdc2402e0f73ae37964868df36d8",
+    "content-hash": "e110ecc615a1729e4f05a1c92f111083",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -15239,7 +15239,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15264,5 +15264,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
