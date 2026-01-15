@@ -1,0 +1,43 @@
+X-Tine20TestMessage: dkim_email.eml
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=example.com; s=default; t=1737000000;
+ bh=frcCV1k9oG9oKj3dpUqdJg1PxRT2RSN/XKdLCPjaYaY=;
+ h=From:To:Subject:Date:Message-ID;
+ b=dGhpcyBpcyBhIHRlc3Qgc2lnbmF0dXJlIGZvciBkZW1vbnN0cmF0aW9uIHB1cnBvc2VzIG9ubHkgYW5kIHdpbGwgbm90IHZhbGlkYXRlIGNvcnJlY3RseSBiZWNhdXNlIGl0IGlzIG5vdCBhIHJlYWwgY3J5cHRvZ3JhcGhpYyBzaWduYXR1cmU=
+Return-Path: <sender@example.com>
+Received: from mail.example.com (mail.example.com [192.0.2.1])
+ by mx.recipient.com (Postfix) with ESMTP id 12345ABCDE
+ for <recipient@recipient.com>; Mon, 15 Jan 2026 12:00:00 +0000 (UTC)
+From: sender@example.com
+To: recipient@recipient.com
+Subject: Test Email with DKIM Signature
+Date: Mon, 15 Jan 2026 12:00:00 +0000
+Message-ID: <20260115120000.12345@example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+This is a test email with a DKIM signature.
+
+DNS TXT Record for: default._domainkey.example.com
+v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDCFENGw33yGihy92pDjZQhl75C
+miGePmsXfnHvCDlLgYmCk6sXCEPV6s1fI0LzY7+Jl5jZbCmjFOLs6K3Jxw0mQRjC
+uXa6nQkGLbUZpvVNr/0Qq3E6D8KLvjMXHBGpvCxBmz8MQLVYt6bVZV7iHJq1qmQQ
+LZxvDmSvfVjUxLN5GQIDAQAB
+
+Private Key (RSA 1024-bit - for reference only):
+-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQDCFENGw33yGihy92pDjZQhl75CmiGePmsXfnHvCDlLgYmCk6sX
+CEPV6s1fI0LzY7+Jl5jZbCmjFOLs6K3Jxw0mQRjCuXa6nQkGLbUZpvVNr/0Qq3E6
+D8KLvjMXHBGpvCxBmz8MQLVYt6bVZV7iHJq1qmQQLZxvDmSvfVjUxLN5GQIDAQAB
+AoGBAILnKfZAEYdBBSVhYUCWJ2K4JEYYqxCkqjLc6h8eOT8qVp7e7WZqMxhHxHCL
+1oCCWnEBFrLPUb7qBfvgJm6GhtLhQZC5mPUCr8AZNcLbMhxQFBwTEHQVZOGJWmMU
+HDvDGBMnKCzSYrHtNMKP9sQ8M5C7iD+qW7bHnBjlhqQzEaLBAkEA8f1sFLDfQEYq
+vCFrKDpCkZbCCUVqxLj2xFVAkTPFXQGnCQWPCKVYBqvPk/fVLLXHjqCVANLJmCWq
+MDKXWs3WQQJBAM3yEbpx9qCfCrLe+l8PjNkC1eKBDmKnOgSMKpqNXqQJMHBqBh2P
+NQCnxZ9fWdJCqLb0vCYqVkqQGJBc5N1dMgkCQQDJfRx1TqFYMkqC3jWsYj0aFf0A
+bFDYQWQwHkBvPqKFVjZLkPZVGYqCMNKCKlxYqJKpqHjh0wfLDJVxNYCNHBABAkBH
+K5F1lJdMqYLqXdYqH/vJmvQ1QYGfKQcPLlQKQnLJAqKhPj8TbA7NqzFYnCqS/Fwm
+HYqbVHCNqHCZlp2aHXaJAkBJZLqYLXWqUNBQlLUZCiJHvxLNqKnPvMxQqCULMpLx
+tHkJkWHqQKVnZvPqKWqVNXLqGCnHqVqLqQqCZHqLqQ==
+-----END RSA PRIVATE KEY-----
