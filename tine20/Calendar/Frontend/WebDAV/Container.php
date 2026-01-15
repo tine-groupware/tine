@@ -341,6 +341,9 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         $filter = new $filterClass($filterArray);
     
         $this->_calendarQueryCache = $this->getChildren($filter);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got all children');
         
         return array_keys($this->_calendarQueryCache);
     }

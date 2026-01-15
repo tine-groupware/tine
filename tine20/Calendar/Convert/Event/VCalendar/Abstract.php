@@ -132,6 +132,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                                         ?Tinebase_Model_Filter_FilterGroup $_filter = null,
                                         ?Tinebase_Model_Pagination $_pagination = null)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' start serializing');
+
         $vcalendar = $this->createVCalendar($_records->getFirstRecord());
 
         foreach ($_records as $record) {
@@ -139,6 +142,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
         
         $this->_afterFromTine20Model($vcalendar);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' done serializing');
         
         return $vcalendar;
     }
