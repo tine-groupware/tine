@@ -104,3 +104,4 @@ and follow the instructions of the repo.
 - Apache to version 2.4
 - Nginx to version 1.26
 - Redis to version 7.0
+- Valkey to version 9.0
