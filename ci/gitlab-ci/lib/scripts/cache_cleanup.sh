@@ -61,7 +61,7 @@ function cache_cleanup_phpstan_cache () {
     done
 }
 
-function metrics_lifetime_atomic_dir_cache() {
+function cache_cleanup_metrics_lifetime_atomic_dir_cache() {
     dirs=$(find . -type d -path './*' -prune -print)
 
     now=$(date +%s)
@@ -81,7 +81,11 @@ function metrics_lifetime_atomic_dir_cache() {
     done
 }
 
-function metrics_lifetime() {
+function cache_cleanup_metrics_lifetime() {
+    set +x
+
+    echo path lastused modified
+
     dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
     for dir in $dirs; do
         if ! [ -d $dir/phpstan-cache/v2/ ]; then
@@ -89,13 +93,14 @@ function metrics_lifetime() {
         fi
 
         cd $dir/phpstan-cache/v2/
-        atomic_dir_cache_info
+        cache_cleanup_metrics_lifetime_atomic_dir_cache
     done
 
     cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
-    atomic_dir_cache_info
+    cache_cleanup_metrics_lifetime_atomic_dir_cache
 
     cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
 
-    atomic_dir_cache_info
+    cache_cleanup_metrics_lifetime_atomic_dir_cache
+    set -x
 }
