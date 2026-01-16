@@ -567,7 +567,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 'metaways\.(de|net)'   => [
                     'id' => 'Metaways',
                     'value' => 'Metaways Infosystems GmbH',
-                    'image' => 'images/favicon.png',
+                    'image' => 'images/icon-set/icon_flag_mw.png',
                 ],
             ],
         ),
