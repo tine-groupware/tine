@@ -189,7 +189,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             }
             foreach ($recurSets as $recurSet) {
                 foreach ($recurSet as $event) {
-                    if ($event->isRecurInstance()) {
+                    if (!$event->getId() || $event->isRecurInstance()) {
                         $event->setId(Tinebase_Record_Abstract::generateUID());
                     }
                     $events->addRecord($event);
@@ -197,7 +197,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
             }
             foreach ($events as $event) {
                 if ($event->exdate && count($event->exdate) > 0) {
-                    $events->mergeById($event->exdate);
+                    foreach ($event->exdate as $exdate) {
+                        if (!$exdate->getId()) {
+                            $exdate->setId(Tinebase_Record_Abstract::generateUID());
+                        }
+                        $events->addRecord($exdate);
+                    }
                     $event->exdate->removeAll();
                 }
             }
