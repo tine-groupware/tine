@@ -167,9 +167,9 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function removeAll()
     {
-        foreach ($this->_listOfRecords as $record) {
-            $this->removeRecord($record);
-        }
+        $this->_listOfRecords = [];
+        $this->_idMap = [];
+        $this->_idLess = [];
     }
     
     /**
