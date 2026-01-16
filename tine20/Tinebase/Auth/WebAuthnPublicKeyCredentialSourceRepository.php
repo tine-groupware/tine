@@ -60,10 +60,10 @@ class Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository
             Tinebase_Controller_WebauthnPublicKey::getInstance()->create(new Tinebase_Model_WebauthnPublicKey([
                 Tinebase_Model_WebauthnPublicKey::FLD_ACCOUNT_ID => $publicKeyCredentialSource->userHandle,
                 Tinebase_Model_WebauthnPublicKey::FLD_KEY_ID => $credId,
-                Tinebase_Model_WebauthnPublicKey::FLD_DATA => Tinebase_Auth_Webauthn::serializePublicKeyCredentialSource($publicKeyCredentialSource),
+                Tinebase_Model_WebauthnPublicKey::FLD_DATA => json_decode(Tinebase_Auth_Webauthn::serializePublicKeyCredentialSource($publicKeyCredentialSource), true),
             ]));
         } else {
-            $webauthnPublicKey->{Tinebase_Model_WebauthnPublicKey::FLD_DATA} = Tinebase_Auth_Webauthn::serializePublicKeyCredentialSource($publicKeyCredentialSource);
+            $webauthnPublicKey->{Tinebase_Model_WebauthnPublicKey::FLD_DATA} = json_decode(Tinebase_Auth_Webauthn::serializePublicKeyCredentialSource($publicKeyCredentialSource), true);
             $unsetUser = false;
             try {
                 if (!Tinebase_Core::getUser()) {
