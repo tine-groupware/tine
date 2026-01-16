@@ -32,6 +32,15 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
      */
     protected $_calendarQueryCache = null;
 
+    protected $_getChildrenExpandLimit = null;
+
+
+    protected function _getIdFromName(string $_name): string
+    {
+        $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
+        return ($len = strlen($id)) > 40 ? ($len < 47 && str_starts_with($id, 'fakeid') ? $id : sha1($id)) : $id;
+    }
+
     /**
      * (non-PHPdoc)
      * @see Sabre\DAV\Collection::getChild()
@@ -42,12 +51,12 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         // check if child exists in calendarQuery cache
         if ($this->_calendarQueryCache &&
-            isset($this->_calendarQueryCache[$eventId])) {
+            isset($this->_calendarQueryCache[($eventIdIcs = $eventId . $this->_suffix)])) {
             
-            $child = $this->_calendarQueryCache[$eventId];
+            $child = $this->_calendarQueryCache[$eventIdIcs];
             
             // remove entries from cache / they will not be used anymore
-            unset($this->_calendarQueryCache[$eventId]);
+            unset($this->_calendarQueryCache[$eventIdIcs]);
             if (empty($this->_calendarQueryCache)) {
                 $this->_calendarQueryCache = null;
             }
@@ -165,11 +174,59 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
          * we must use action 'sync' and not 'get' as
          * otherwise the calendar also return events the user only can see because of freebusy
          */
-        $objects = $this->_getController()->search($filter, _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC);
+        /** @var Tinebase_Record_RecordSet<Calendar_Model_Event> $events */
+        $events = $this->_getController()->search($filter, _action: Tinebase_Controller_Record_Abstract::ACTION_SYNC);
+        $children = [];
+
+        if ($this->_getChildrenExpandLimit?->expand) {
+            $start = new Tinebase_DateTime($this->_getChildrenExpandLimit->expand['start']);
+            $end = new Tinebase_DateTime($this->_getChildrenExpandLimit->expand['end']);
+            $recurSets = [];
+            foreach ($events as $object) {
+                if ($object->rrule) {
+                    $recurSets[] = Calendar_Model_Rrule::computeRecurrenceSet($object, $object->exdate, $start, $end);
+                }
+            }
+            foreach ($recurSets as $recurSet) {
+                foreach ($recurSet as $event) {
+                    if ($event->isRecurInstance()) {
+                        $event->setId(Tinebase_Record_Abstract::generateUID());
+                    }
+                    $events->addRecord($event);
+                }
+            }
+            foreach ($events as $event) {
+                if ($event->exdate && count($event->exdate) > 0) {
+                    $events->mergeById($event->exdate);
+                    $event->exdate->removeAll();
+                }
+            }
+            foreach ($events as $event) {
+                if ($event->dtend < $start || $event->dtstart > $end) {
+                    $events->removeById($event->getId());
+                }
+            }
+        }
+
+        /** TODO needs to be implemented better, recuring events that have no exception inside limit but have regular recur instance inside limit need to be delivered
+        if ($this->_getChildrenExpandLimit?->limitRecurrenceSet) {
+            $start = new Tinebase_DateTime($this->_getChildrenExpandLimit->limitRecurrenceSet['start']);
+            $end = new Tinebase_DateTime($this->_getChildrenExpandLimit->limitRecurrenceSet['end']);
+            foreach ($events as $event) {
+                if ($event->exdate && count($event->exdate) > 0) {
+                    foreach ($event->exdate as $exdate) {
+                        if ($exdate->dtend < $start || $exdate->dtstart > $end) {
+                            $event->exdate->removeById($exdate->getId());
+                        }
+                    }
+                }
+                if ((!$event->exdate || 0 === count($event->exdate)) && $event->dtend < $start || $event->dtstart > $end) {
+                    $events->removeById($event->getId());
+                }
+            }
+        }*/
         
-        $children = array();
-        
-        foreach ($objects as $object) {
+        foreach ($events as $object) {
             $children[$object->getId() . $this->_suffix] = $this->getChild($object);
         }
         
@@ -261,7 +318,7 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filters ' . print_r($filters, true));
-        
+
         $filterArray = array(array(
             'field'    => 'container_id',
             'operator' => 'equals',
@@ -339,8 +396,13 @@ class Calendar_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstr
         
         $filterClass = $this->_application->name . '_Model_' . $this->_model . 'Filter';
         $filter = new $filterClass($filterArray);
-    
-        $this->_calendarQueryCache = $this->getChildren($filter);
+
+        try {
+            $this->_getChildrenExpandLimit = Calendar_Frontend_CalDAV_FixMultiGet404Plugin::$currentCalendarQueryReportRequest;
+            $this->_calendarQueryCache = $this->getChildren($filter);
+        } finally {
+            $this->_getChildrenExpandLimit = null;
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got all children');

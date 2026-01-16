@@ -525,7 +525,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
      * @param  string  $_name  the name for example vcard.vcf
      * @return string
      */
-    protected function _getIdFromName($_name)
+    protected function _getIdFromName(string $_name): string
     {
         $id = ($pos = strrpos($_name, '.')) === false ? $_name : substr($_name, 0, $pos);
         $id = strlen((string)$id) > 40 ? sha1($id) : $id;

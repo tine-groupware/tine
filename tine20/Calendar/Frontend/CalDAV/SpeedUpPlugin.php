@@ -97,6 +97,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends \Sabre\DAV\ServerPlugin
 
         /** @var Calendar_Frontend_WebDAV_Container $node */
         $node = $this->server->tree->getNodeForPath($this->server->getRequestUri());
+        Calendar_Frontend_CalDAV_FixMultiGet404Plugin::$currentCalendarQueryReportRequest = null;
         $node->calendarQuery($filters);
     }
 }

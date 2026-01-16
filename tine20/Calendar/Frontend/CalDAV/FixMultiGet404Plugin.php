@@ -1,4 +1,10 @@
 <?php
+
+use Sabre\CalDAV\CalendarQueryValidator;
+use Sabre\CalDAV\ICalendarObject;
+use Sabre\CalDAV\ICalendarObjectContainer;
+use Sabre\DAV\Exception\BadRequest;
+
 /**
  * Tine 2.0
  *
@@ -12,6 +18,8 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
 {
     protected $_fakeEvent = null;
     protected $_calBackend = null;
+
+    public static $currentCalendarQueryReportRequest = null;
 
     /**
      * This function handles the calendar-multiget REPORT.
@@ -233,5 +241,98 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
         }
 
         return self::CALENDAR_ROOT . '/' . $parts[$count-1];
+    }
+
+    /**
+     * This function handles the calendar-query REPORT.
+     *
+     * This report is used by clients to request calendar objects based on
+     * complex conditions.
+     *
+     * @param Calendar_Frontend_CalDAV_CalendarQueryReport $report
+     */
+    public function calendarQueryReport($report)
+    {
+        static::$currentCalendarQueryReportRequest = $report;
+
+        $path = $this->server->getRequestUri();
+
+        // we dont support that $needsJson = 'application/calendar+json' === $report->contentType;
+        if ('application/calendar+json' === $report->contentType) {
+            throw new BadRequest('application/calendar+json is not supported');
+        }
+
+        $node = $this->server->tree->getNodeForPath($path);
+        $depth = $this->server->getHTTPDepth(0);
+
+        // The default result is an empty array
+        $result = [];
+
+        // The calendarobject was requested directly. In this case we handle
+        // this locally.
+        if (0 === $depth && $node instanceof ICalendarObject) {
+
+            $parentPath = explode('/', $path);
+            array_pop($parentPath);
+            $parentPath = join('/', $parentPath);
+            $parentNode = $this->server->tree->getNodeForPath($parentPath);
+            if ($parentNode instanceof ICalendarObjectContainer && ($nodePaths = $parentNode->calendarQuery($report->filters)) &&
+                    in_array($node->getName(), $nodePaths)) {
+
+                $properties = $this->server->getPropertiesForPath(
+                    $path,
+                    $report->properties,
+                    0
+                );
+
+                // This array should have only 1 element, the first calendar
+                // object.
+                $properties = current($properties);
+
+                $result = [$properties];
+            }
+        }
+
+        if ($node instanceof ICalendarObjectContainer && 0 === $depth) {
+            if (0 === strpos((string) $this->server->httpRequest->getHeader('User-Agent'), 'MSFT-')) {
+                // Microsoft clients incorrectly supplied depth as 0, when it actually
+                // should have set depth to 1. We're implementing a workaround here
+                // to deal with this.
+                //
+                // This targets at least the following clients:
+                //   Windows 10
+                //   Windows Phone 8, 10
+                $depth = 1;
+            } else {
+                throw new BadRequest('A calendar-query REPORT on a calendar with a Depth: 0 is undefined. Set Depth to 1');
+            }
+        }
+
+        // If we're dealing with a calendar, the calendar itself is responsible
+        // for the calendar-query.
+        if ($node instanceof ICalendarObjectContainer && 1 === $depth) {
+            $nodePaths = $node->calendarQuery($report->filters);
+
+            foreach ($nodePaths as $path) {
+                list($properties) =
+                    $this->server->getPropertiesForPath($this->server->getRequestUri().'/'.$path, $report->properties);
+
+                $result[] = $properties;
+            }
+        }
+
+        $prefer = $this->server->getHTTPPrefer();
+
+        $this->server->httpResponse->setStatus(207);
+        $this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
+        $this->server->httpResponse->setHeader('Vary', 'Brief,Prefer');
+        $this->server->httpResponse->setBody($this->server->generateMultiStatus($result, 'minimal' === $prefer['return']));
+    }
+
+    public function initialize(\Sabre\DAV\Server $server)
+    {
+        parent::initialize($server);
+
+        $server->xml->elementMap['{'.self::NS_CALDAV.'}calendar-query'] = Calendar_Frontend_CalDAV_CalendarQueryReport::class;
     }
 }
