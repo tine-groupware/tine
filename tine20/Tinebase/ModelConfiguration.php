@@ -1576,29 +1576,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 $this->_copyOmitFields[] = $fieldKey;
             }
 
-            // set default value
-            if (isset($fieldDef['defaultValConfig'])) {
-                $config = Tinebase_Config::getAppConfig($fieldDef['defaultValConfig']['appName']);
-                $fieldDef['default'] = $config->get($fieldDef['defaultValConfig']['config']);
-            }
             // TODO: implement complex default values (maybe use defaultConfig for this?)
             if (isset($fieldDef['default'])) {
-//                 // allows dynamic default values
-//                 if (is_array($fieldDef['default'])) {
-//                     switch ($fieldDef[self::TYPE]) {
-//                         case 'time':
-//                         case 'date':
-//                         case 'datetime':
-//                         default:
-//                             throw new Tinebase_Exception_NotImplemented($_message);
-//                     }
-//                 } else {
                     $this->_defaultData[$fieldKey] = $fieldDef['default'];
             }
-
-            // TODO: Split this up in multiple functions
-            // TODO: Refactor: key 'tag' should be 'tags' in filter definition / quick hack
-            // also see ticket 8944 (https://forge.tine20.org/mantisbt/view.php?id=8944)
             
             $this->_setFieldFilterModel($fieldDef, $fieldKey);
 
