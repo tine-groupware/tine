@@ -60,7 +60,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.window.setTitle(this.app.i18n._('Add New Customer'));
             } else {
                 this.window.setTitle(String.format(this.app.i18n._('Edit Customer "{0}"'), this.record.getTitle()));
-                this.getForm().findField('number').disable();
             }
         }
     },
