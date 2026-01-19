@@ -16,12 +16,14 @@ const FORMAT_MESSAGE_KEY = Symbol.for('formatMessage');
 const TINE_TEXT_DOMAIN_KEY = Symbol.for('TineDomainKey');
 
 // This helper is used in the index.js file
-export function initComponent(comp, domainName) {
+export function initComponent(comp, domainName)
+{
     comp[TINE_TEXT_DOMAIN_KEY] = domainName;
     return comp;
 }
 
-function setupTranslations(textdomain) {
+function setupTranslations(textdomain)
+{
     _.each(Tine.__translationData.msgs, function (msgs, category) {
         Locale.Gettext.prototype._msgs[category] = new Locale.Gettext.PO(msgs);
     });
@@ -36,12 +38,22 @@ function setupTranslations(textdomain) {
     return gettext;
 }
 
-function configureApp(app, textdomain) {
+function configureApp(app, textdomain)
+{
     const gettext = setupTranslations(textdomain);
+    // Create the main formatMessage that tries to get instance but falls back gracefully
+    const mainFormatMessage = function (template) {
+        let domainToUse = textdomain;
 
-    app.config.globalProperties.formatMessage = function (template) {
-        const instance = getCurrentInstance();
-        const domainToUse = instance.type?.[TINE_TEXT_DOMAIN_KEY] || textdomain;
+        try {
+            const instance = getCurrentInstance();
+            if (instance && instance.type?.[TINE_TEXT_DOMAIN_KEY]) {
+                domainToUse = instance.type[TINE_TEXT_DOMAIN_KEY];
+            }
+        } catch (e) {
+            // No instance available, use default textdomain
+        }
+
         gettext.textdomain(domainToUse);
         let msg = gettext.getmsg(domainToUse, gettext.category);
         let translatedTemplate = null;
@@ -57,20 +69,22 @@ function configureApp(app, textdomain) {
         return FormatMessage.apply(FormatMessage, arguments);
     };
 
-    _.assign(app.config.globalProperties.formatMessage, FormatMessage);
-    app.config.globalProperties.fmHidden = app.config.globalProperties.formatMessage;
+    _.assign(mainFormatMessage, FormatMessage);
+
+    app.config.globalProperties.formatMessage = mainFormatMessage;
+    app.config.globalProperties.fmHidden = mainFormatMessage;
     app.config.globalProperties.window = window;
 
-    // Use the passed injection key
     app.provide(FORMAT_MESSAGE_KEY, {
-        formatMessage: app.config.globalProperties.formatMessage,
-        fmHidden: app.config.globalProperties.formatMessage
+        formatMessage: mainFormatMessage,
+        fmHidden: mainFormatMessage
     });
 
     return FORMAT_MESSAGE_KEY;
 }
 
-export function createTineApp(AppComponent, options = {}) {
+export function createTineApp(AppComponent, options = {})
+{
     const {
         textdomain = 'Tinebase', // Default value, can be overridden
         routes = [],
