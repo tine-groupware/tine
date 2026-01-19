@@ -148,4 +148,21 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
     {
         $this->_config->__set('skipZeroFactorTS', boolval($skip));
     }
+
+    /**
+     * return download filename
+     * @param string $_appName
+     * @param string $_format
+     * @return string
+     */
+    public function getDownloadFilename($_appName = null, $_format = null)
+    {
+        $records = $this->_resolvedRecords['timeaccounts'];
+        if ($records && count($records) === 1) {
+            $timeaccount = $records->getFirstRecord();
+            $suffix =  $timeaccount->number ?? '';
+            return parent::getDownloadFilename($_appName .'_' . str_replace(' ', '_', $suffix), $_format);
+        }
+        return parent::getDownloadFilename($_appName, $_format);
+    }
 }

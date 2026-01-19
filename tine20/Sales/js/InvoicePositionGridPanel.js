@@ -94,12 +94,18 @@ Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * the export handler
      */
     onExport: function() {
+        const selection = [];
+        const selectedRows = this.grid.getSelectionModel().getSelections();
+        for (let i = 0; i < selectedRows.length; ++i) {
+            selection.push(selectedRows[i].get('accountable_id'));
+        }
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: 'Sales.exportInvoicePositions',
                 requestType: 'HTTP',
                 invoiceId: this.invoiceId,
-                accountable: this.accountable
+                accountable: this.accountable,
+                recordIds: selection
             }
         }).start();
     },
