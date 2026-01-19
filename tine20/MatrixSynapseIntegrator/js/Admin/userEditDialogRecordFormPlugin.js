@@ -31,8 +31,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
                     const matrixDomain = Tine.Tinebase.configManager.get('matrixDomain', 'MatrixSynapseIntegrator');
                     const userId = this.editDialog.record.phantom ? '@{user.id}' : this.editDialog.record.id;
                     return {
-                        matrix_id: `@${userId}:${matrixDomain}`
+                        matrix_id: `@${userId}:${matrixDomain}`,
+                        account_id: userId
                     };
+                },
+                validateValue : function(value) {
+                    return true;
                 }
             })
 
