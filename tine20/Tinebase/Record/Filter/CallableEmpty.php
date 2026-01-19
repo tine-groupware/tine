@@ -9,7 +9,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-class Tinebase_Record_Filter_CallableEmpty implements Zend_Filter_Interface
+class Tinebase_Record_Filter_CallableEmpty implements Tinebase_Record_Filter_DefaultValue
 {
     public function __construct(protected $replacement)
     {}
@@ -26,5 +26,10 @@ class Tinebase_Record_Filter_CallableEmpty implements Zend_Filter_Interface
             return call_user_func_array(array_shift($tmp), $tmp);
         }
         return $this->replacement;
+    }
+
+    public function applyDefault(string $property, Tinebase_Record_Interface $record): mixed
+    {
+        return $this->getReplacement();
     }
 }

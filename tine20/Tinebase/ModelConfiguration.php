@@ -1659,6 +1659,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     }
                 }
                 $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_CallableEmpty($defaultValue);
+                $this->_defaultData[$fieldKey] = $defaultValue;
             }
 
             $this->_addToModlogOmit($fieldDef, $fieldKey);
