@@ -19,9 +19,11 @@ function prevent_upstream_change() {
         return
     fi
 
+    echo -e "\033[0;31m"
     echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
     echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
     echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
+    echo -n -e "\033[0m"
     echo Changes:
     echo "$changes"
 
