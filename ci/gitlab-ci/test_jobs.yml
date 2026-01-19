@@ -215,6 +215,8 @@ release-update-tests:
     - |
       log "updating to current version"
       git checkout ${CI_COMMIT_SHA}
+      log "remove vendor - fixing composer bug 2025.11 -> main"
+      rm -rf ${TINE20ROOT}/tine20/vendor
       test_composer_install
       test_update_tine
   rules:
