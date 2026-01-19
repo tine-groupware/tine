@@ -174,6 +174,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.blurOnSelect = true;
                     }
                     break;
+                case 'bigint':
                 case 'integer':
                     field.xtype = 'numberfield';
                     field.allowDecimals = false;
@@ -195,7 +196,12 @@ Tine.widgets.form.FieldManager = function() {
                         field.baseUnit = 'minutes';
                         field.allowNegative = false;
                     }
-
+                    
+                    if (fieldDefinition.specialType && fieldDefinition.specialType === 'bytes1000') {
+                        field.xtype = 'extuxbytesfield';
+                        field.forceUnit = _.get(fieldDefinition, 'uiconfig.forceUnit', null);
+                    }
+                    
                     if (fieldDefinition.max) {
                         field.maxValue = fieldDefinition.max;
                     }

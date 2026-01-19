@@ -127,13 +127,15 @@ Tine.widgets.grid.RendererManager = function() {
                         renderer = null;
                     }
                     break;
+                case 'bigint':
                 case 'integer':
                 case 'float':
                     if (fieldDefinition.hasOwnProperty('specialType')) {
                         switch (fieldDefinition.specialType) {
                             case 'bytes1000':
                                 renderer = function (value, cell, record) {
-                                    return Tine.Tinebase.common.byteRenderer(value, cell, record, 2, true);
+                                    const forceUnit = _.get(fieldDefinition, 'uiconfig.forceUnit', null);
+                                    return Tine.Tinebase.common.byteFormatter(parseInt(value), forceUnit, 2, true);
                                 };
                                 break;
                             case 'bytes':
