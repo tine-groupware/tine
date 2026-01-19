@@ -31,7 +31,22 @@ const TaxByRateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         }
         this.recordClass = Tine.Tinebase.data.RecordMgr.get('Sales.Document_SalesTax')
 
+        this.on('afteredit', this.onAfterEditSalesTax, this);
+
         TaxByRateGridPanel.superclass.initComponent.call(this)
+    },
+
+    onAfterEditSalesTax(e) {
+        console.error(e)
+        const originalValues = {... e.record.data}
+
+        originalValues[e.field] = e.originalValue
+
+        if (e.field === 'tax_rate') {
+            const tax_amount = originalValues.tax_amount / originalValues.tax_rate * e.value;
+            e.record.set('tax_amount', tax_amount);
+
+        }
     },
 
     initActionsAndToolbars() {

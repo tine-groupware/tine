@@ -118,11 +118,14 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         // invoice status
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_PURCHASE_INVOICE_STATUS => [
-                self::LABEL => 'Status', // _('Status')
-                self::TYPE => self::TYPE_KEY_FIELD,
-                self::NAME => Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS,
-                self::LENGTH => 255,
-                self::NULLABLE => true,
+                self::LABEL             => 'Status', // _('Status')
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::NAME              => Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS,
+                self::CONFIG            => [
+                    self::OWNING_APP    => Sales_Config::APP_NAME,
+                ],
+                self::LENGTH            => 255,
+                self::NULLABLE          => true,
             ],
             self::FLD_DIVISION_ID => [
                 self::LABEL             => 'Division', // _('Division')
@@ -173,12 +176,12 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS_USED] = [
             self::LABEL             => 'Payment Means Used',
-            self::TYPE              => self::TYPE_DYNAMIC_RECORD,
+            self::TYPE              => self::TYPE_KEY_FIELD,
+            self::NAME              => Sales_Config::PAYMENT_METHODS,
             self::NULLABLE          => true,
+            self::LENGTH            => 255,
             self::CONFIG            => [
-                self::APP_NAME          => Sales_Config::APP_NAME,
-                self::MODEL_NAME        => Sales_Model_PaymentMeans::MODEL_NAME_PART,
-                self::PERSISTENT        => true,
+                self::OWNING_APP    => Sales_Config::APP_NAME,
             ],
         ];
 

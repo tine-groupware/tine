@@ -102,6 +102,8 @@ const PositionGridPanel = Ext.extend(AbstractGridPanel, {
                     }
             }
         }
+
+        this.fireEvent('change', this)
     }
 })
 Ext.reg('sales-document-position-purchase-invoice-gridpanel', PositionGridPanel)

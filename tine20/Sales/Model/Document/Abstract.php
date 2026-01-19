@@ -407,6 +407,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
             self::FLD_POSITIONS                 => [
                 // needs to be set by concret implementation
+                // @TODO - no filter w.o. label... but simple operations do not work like:
+                //         invoices with posings having tax_rate 0 (including null)...
+//                self::LABEL                         => 'Positions',
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,

@@ -181,7 +181,6 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
-        $zzzId = Sales_Controller_EDocument_PaymentMeansCode::getInstance()->getByCode('ZZZ')->getId();
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
         foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll() as $oldPI) {
             $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
@@ -213,12 +212,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER'),
                 Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER'),
                 Sales_Model_Document_PurchaseInvoice::FLD_XPROPS => ['migration_src_id' => $oldPI->getId()],
-                Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PurchasePaymentMeans::class, [
-                    new Sales_Model_PurchasePaymentMeans([
-                        Sales_Model_PurchasePaymentMeans::FLD_PAYMENT_MEANS_CODE => $zzzId,
-                        Sales_Model_PurchasePaymentMeans::FLD_PAYMENT_MEANS_TEXT => $oldPI->payment_method,
-                    ]),
-                ]),
+                Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS_USED  => $oldPI->payment_method,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_REMINDERS => new Tinebase_Record_RecordSet(Sales_Model_Document_PaymentReminder::class, $oldPI->dunned_at ? [
                     new Sales_Model_Document_PaymentReminder([
                         Sales_Model_Document_PaymentReminder::FLD_DATE => $oldPI->dunned_at,

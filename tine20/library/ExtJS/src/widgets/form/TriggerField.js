@@ -127,6 +127,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
 
     updateEditState: function(){
         if(this.rendered){
+            if (! this.trigger) return _.defer(() => this.updateEditState())
             if (this.readOnly) {
                 this.el.dom.readOnly = true;
                 this.el.addClass('x-trigger-noedit');

@@ -21,7 +21,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowHeight: 1300,
 
     statusFieldName: null,
-    
+    forceAutoValues: true,
+
     initComponent() {
         Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
@@ -131,7 +132,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
                         sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
-                        sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100);
+                        sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
+                        if(this.forceAutoValues || ! sales_tax) {
+                            sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100)
+                        }
                     }
                 }
 
@@ -147,7 +151,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
                         sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
-                        sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
+                        sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
+                        if(this.forceAutoValues || ! sales_tax) {
+                            sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
+                        }
                     }
                 }
 
@@ -186,29 +193,29 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const { positions_net_sum, positions_gross_sum, net_sum, sales_tax, sales_tax_by_rate, gross_sum } = autoValues(this.record, sums, document_price_type);
 
         if (document_price_type === 'gross') {
-            if ((this.getForm().findField('positions_net_sum')?.getValue() || 0) === (last_positions_net_sum || 0)) {
+            if (this.forceAutoValues || (this.getForm().findField('positions_net_sum')?.getValue() || 0) === (last_positions_net_sum || 0)) {
                 this.record.set('positions_net_sum', positions_net_sum);
                 this.getForm().findField('positions_net_sum')?.setValue(positions_net_sum);
             }
-            if ((this.getForm().findField('net_sum')?.getValue() || 0) === (last_net_sum || 0)) {
+            if (this.forceAutoValues || (this.getForm().findField('net_sum')?.getValue() || 0) === (last_net_sum || 0)) {
                 this.record.set('net_sum', net_sum);
                 this.getForm().findField('net_sum')?.setValue(net_sum);
             }
         }
-        if ((this.getForm().findField('sales_tax')?.getValue() || 0) === (last_sales_tax || 0)) {
+        if (this.forceAutoValues || (this.getForm().findField('sales_tax')?.getValue() || 0) === (last_sales_tax || 0)) {
             this.record.set('sales_tax', sales_tax);
             this.getForm().findField('sales_tax')?.setValue(sales_tax);
         }
-        if (['null', JSON.stringify(last_sales_tax_by_rate)].indexOf(JSON.stringify(this.getForm().findField('sales_tax_by_rate')?.getValue())) >= 0) {
+        if (this.forceAutoValues || ['null', JSON.stringify(last_sales_tax_by_rate)].indexOf(JSON.stringify(this.getForm().findField('sales_tax_by_rate')?.getValue())) >= 0) {
             this.record.set('sales_tax_by_rate', sales_tax_by_rate);
             this.getForm().findField('sales_tax_by_rate')?.setValue(sales_tax_by_rate);
         }
         if (document_price_type === 'net') {
-            if ((this.getForm().findField('positions_gross_sum')?.getValue() || 0) === (last_positions_gross_sum || 0)) {
+            if (this.forceAutoValues || (this.getForm().findField('positions_gross_sum')?.getValue() || 0) === (last_positions_gross_sum || 0)) {
                 this.record.set('positions_gross_sum', positions_gross_sum);
                 this.getForm().findField('positions_gross_sum')?.setValue(positions_gross_sum);
             }
-            if ((this.getForm().findField('gross_sum')?.getValue() || 0) === (last_gross_sum || 0)) {
+            if (this.forceAutoValues || (this.getForm().findField('gross_sum')?.getValue() || 0) === (last_gross_sum || 0)) {
                 this.record.set('gross_sum', gross_sum);
                 this.getForm().findField('gross_sum')?.setValue(gross_sum);
             }
@@ -217,13 +224,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         // handle booked state
         const statusField = this.fields[this.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
-        this.getForm().items.each((field) => {
-            if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-                && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
-                field.setReadOnly(booked);
-            }
-        });
+        if (booked) { // there is no transition booked -> unbooked
+            this.getForm().items.each((field) => {
+                if (_.get(field, 'initialConfig.readOnly')) return;
+                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+                    && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
+                    field.setReadOnly(booked);
+                }
+            });
+        }
 
         // check service period contains all positions
         let servicePeriodAdopted = false

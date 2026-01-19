@@ -21,6 +21,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
 
     recordClass: 'Sales.Document_PurchaseInvoice',
     statusFieldName: 'purchase_invoice_status',
+    forceAutoValues: false,
 
     checkStates () {
         Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.checkStates.apply(this, arguments)
@@ -49,7 +50,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax_by_rate, fields.gross_sum],
-                [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 2/5})],
+                [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, fields.payment_means_used, { ...placeholder }],
                 // [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]

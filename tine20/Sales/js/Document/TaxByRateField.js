@@ -30,9 +30,6 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
         return this.gridPanel
     },
 
-    // enable readonly layer
-    updateEditState() {},
-
     setFormValue(value) {
         this.gridPanel.setStoreFromArray(_.filter(value, tax => tax.tax_amount > 0) || [])
     },
@@ -42,7 +39,8 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     setValue(value, editDialog) {
-        TaxByRateField.superclass.setValue.apply(this, arguments)
+        value = _.cloneDeep(value)
+        TaxByRateField.superclass.setValue.call(this, value, editDialog)
         // @TODO take currency from record/document
         this.setRawValue(this.valueToString(value))
     },
@@ -52,10 +50,22 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     processValue(value) {
-        if (String(value).match(/[0-9.,]+/)) {
-            this.currentValue = value = [{tax_amount: parseFloat(String(value).replace(',', '.')), tax_rate: Tine.Tinebase.configManager.get('salesTax')}]
+        value = (String(value).match(/^[0-9,. ]+%$/) ? `${this.currentValue.length === 1 ? this.currentValue[0].tax_amount/this.currentValue[0].tax_rate * parseFloat(String(value).replace(',', '.').replace('%', '')) : 0} (${value})` : value) || 0;
+        value = _.reduce(_.compact(String(value).split(/%\),?/)), (a, v) => {
+            let [t,r] = String(v).split(/[^0-9,.]+\(/)
+            return a.concat({tax_rate: parseFloat(String(r).replace(',', '.')) || Tine.Tinebase.configManager.get('salesTax'), tax_amount: parseFloat(String(t).replace(',', '.')) || 0})
+        }, [])
+
+        if (value?.length !== this.currentValue?.length || _.reduce(value, (a,v) => {
+            const existing = _.find(this.currentValue, {tax_rate: v.tax_rate})
+            return a || !existing || Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(existing.tax_amount) !== v.tax_amount
+        }, false)) {
+            const oldValue = this.currentValue
+            this.currentValue = value
             this.gridPanel.setStoreFromArray(value)
+            this.fireEvent('change', this, value, oldValue)
         }
+
         this.setRawValue(this.valueToString(value))
     },
 })
