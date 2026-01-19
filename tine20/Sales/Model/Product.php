@@ -221,10 +221,6 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Sales Tax Rate', //_('Sales Tax Rate')
                 self::TYPE => self::TYPE_FLOAT,
                 self::SPECIAL_TYPE => self::SPECIAL_TYPE_PERCENT,
-                self::DEFAULT_VAL_CONFIG => [
-                    self::APP_NAME  => Tinebase_Config::APP_NAME,
-                    self::CONFIG => Tinebase_Config::SALES_TAX
-                ],
                 self::NULLABLE => true,
             ],
             self::FLD_MANUFACTURER => [

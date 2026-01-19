@@ -61,10 +61,6 @@ class Tinebase_ModelConfiguration_Const {
      * evaluated from doctrine only! has nothing to do with record validation default or empty value
      */
     public const DEFAULT_VAL = 'default';
-    /**
-     * config for default value
-     */
-    public const DEFAULT_VAL_CONFIG = 'defaultValConfig';
     public const DEGREE = 'degree';
     public const DELEGATED_ACL_FIELD = 'delegateAclField';
     public const DENORMALIZATION_CONFIG = 'denormalizationConfig';
