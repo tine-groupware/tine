@@ -1042,6 +1042,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'allowAnyExternalDomains'   => $smtpConfig['allowAnyExternalDomains'] ?? $allowExternalEmail,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
             'hasSmsAdapters'   => count($smsAdapterConfig) > 0,
+            'writePwToSql'  =>  Tinebase_User::getBackendConfiguration('writePwToSql'),
         );
 
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
