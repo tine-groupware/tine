@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e110ecc615a1729e4f05a1c92f111083",
+    "content-hash": "368d4c5f1c4730d7073ed89ca276f2d1",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -7954,17 +7954,11 @@
         },
         {
             "name": "simplesamlphp/assert",
-            "version": "v1.9.1",
+            "version": "v1.9.1pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/simplesamlphp/assert.git",
-                "reference": "d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/assert/zipball/d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3",
-                "reference": "d0e7b9c12e4f613c6f32e1242cc08838cdeb39d3",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/ssamlassert.git",
+                "reference": "b81433d48fc57344f71ac026653bc0c263cea593"
             },
             "require": {
                 "ext-date": "*",
@@ -7990,7 +7984,12 @@
                     "SimpleSAML\\Assert\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "SimpleSAML\\Test\\Assert\\": "tests/Assert/",
+                    "SimpleSAML\\Test\\Utils\\": "tests/Utils/"
+                }
+            },
             "license": [
                 "LGPL-2.1-or-later"
             ],
@@ -8005,11 +8004,7 @@
                 }
             ],
             "description": "A wrapper around webmozart/assert to make it useful beyond checking method arguments",
-            "support": {
-                "issues": "https://github.com/simplesamlphp/assert/issues",
-                "source": "https://github.com/simplesamlphp/assert/tree/v1.9.1"
-            },
-            "time": "2025-10-20T22:29:33+00:00"
+            "time": "2026-01-20T13:34:38+00:00"
         },
         {
             "name": "simplesamlphp/saml2",
@@ -8149,11 +8144,11 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "dev-puresaml2-2.5",
+            "version": "v2.5.0pl2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/simplesamlphp.git",
-                "reference": "4ab437280704b02c1d09698c8958d50a10a92147"
+                "reference": "93d28097555d69b0f5a24edea073fb75d48a8d95"
             },
             "require": {
                 "beste/clock": "~3.0",
@@ -8170,7 +8165,7 @@
                 "ext-zlib": "*",
                 "php": "^8.2",
                 "robrichards/xmlseclibs": "~3.1",
-                "simplesamlphp/assert": "~1.9",
+                "simplesamlphp/assert": "v1.9.1pl1 as v1.9.1",
                 "simplesamlphp/saml2": "~6.0",
                 "simplesamlphp/saml2-legacy": "~4.19",
                 "simplesamlphp/xml-common": "^2.4",
@@ -8226,7 +8221,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2026-01-12T10:47:21+00:00"
+            "time": "2026-01-20T13:38:29+00:00"
         },
         {
             "name": "simplesamlphp/xml-common",
@@ -15245,8 +15240,14 @@
             "alias_normalized": "1.24.1.0"
         },
         {
+            "package": "simplesamlphp/assert",
+            "version": "1.9.1.0-patch1",
+            "alias": "v1.9.1",
+            "alias_normalized": "1.9.1.0"
+        },
+        {
             "package": "simplesamlphp/simplesamlphp",
-            "version": "dev-puresaml2-2.5",
+            "version": "2.5.0.0-patch2",
             "alias": "v2.5.0",
             "alias_normalized": "2.5.0.0"
         },
@@ -15266,7 +15267,6 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "simplesamlphp/simplesamlphp": 20,
         "simplesamlphp/xml-common": 20,
         "validator/livr": 20
     },
@@ -15321,5 +15321,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

@@ -90,6 +90,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/ssamlassert.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/http-foundation.git"
     }
   ],
@@ -159,7 +163,8 @@
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
     "sentry/sentry": "^3",
-    "simplesamlphp/simplesamlphp": "dev-puresaml2-2.5 as v2.5.0",
+    "simplesamlphp/simplesamlphp": "v2.5.0pl2 as v2.5.0",
+    "simplesamlphp/assert": "v1.9.1pl1 as v1.9.1",
     "simplesamlphp/xml-common": "dev-master as v2.4.3",
     "spomky-labs/base64url": "^2.0",
     "spomky-labs/otphp": "^10.0",
