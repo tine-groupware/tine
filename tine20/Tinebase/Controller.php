@@ -1872,9 +1872,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         if (! in_array($colorSchema, ['light', 'dark'])) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Unknown colorSchema: ' . $colorSchema
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Unknown colorSchema: ' . $colorSchema
                     . ' Using default "light"');
+            }
             $colorSchema = 'light';
         }
 
@@ -1883,6 +1885,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         if (!$imageBlob) {
             $path = Tinebase_Core::getLogo($type, $colorSchema, $mime === 'image/svg+xml');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Fetching image blob from ' . $path);
+            }
             $blob = Tinebase_Helper::getFileOrUriContents($path);
 
             if ($mime === 'image/svg+xml' && str_starts_with((string) $blob, '<?xml')) {
@@ -2207,8 +2213,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         /** @var \Laminas\Diactoros\Request $request */
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
         $body = Tinebase_Helper::mbConvertTo((string)$request->getBody());
-        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' request body: ' . $body);
+        }
         $reqXml = simplexml_load_string($body);
         $view = new Zend_View();
         $view->setScriptPath(__DIR__ . '/views/autodiscover');
