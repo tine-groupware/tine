@@ -256,6 +256,7 @@ prevent-upstream-changes:
     - git fetch --unshallow || true
     - prevent_upstream_change
   rules:
+    # only run fot customer branches
     - if: $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
       when: never
     - if: $PREVENT_UPSTREAM_CHANGES == "false"
