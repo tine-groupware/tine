@@ -147,7 +147,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         $filters = new Tinebase_Model_ContainerFilter([
             ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()
                 ->getApplicationByName(Addressbook_Config::APP_NAME)->getId()],
-            ['field' => 'model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class],
+            ['field' => 'model', 'operator' => 'equals', 'value' => EventManager_Model_Register_Contact::class],
             ['field' => 'name', 'operator' => 'equals', 'value' => 'Event Contacts'],
             ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
         ]);

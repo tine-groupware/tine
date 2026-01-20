@@ -134,15 +134,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
 
             if ($_record->is_system) {
                 Tinebase_Application::getInstance()->getApplicationById($_record->application_id);
-                /** @var Tinebase_Record_Interface $model */
-                $model = $_record->model;
-                // clear the MC cache
-                $model::resetConfiguration();
 
                 $mappingDrv = new Tinebase_Record_DoctrineMappingDriver();
+                $model = $_record->model;
                 if ($mappingDrv->isTransient($model)) {
                     $subModels = array_filter(Tinebase_Application::getInstance()->getInheritedModels([$model]), fn($val) => $mappingDrv->isTransient($val));
-                    Setup_SchemaTool::updateSchema(array_merge([$model], $subModels, $schemaUpdateModels));
+                    $models = array_merge([$_record->model], $subModels, $schemaUpdateModels);
+                    /** @var Tinebase_Record_Interface $model */
+                    foreach ($models as $model) {
+                        // clear the MC cache
+                        $model::resetConfiguration();
+                    }
+                    Setup_SchemaTool::updateSchema($models);
                 }
             }
 
@@ -242,7 +245,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string                            $_requiredGrant (read grant by default)
      * @param bool                              $_getSystemCFs (false by default)
      * @param bool                              $_ignoreAcl (default false)
-     * @return Tinebase_Record_RecordSet|Tinebase_Model_CustomField_Config of Tinebase_Model_CustomField_Config records
+     * @return Tinebase_Record_RecordSet<Tinebase_Model_CustomField_Config>
      */
     public function getCustomFieldsForApplication($_applicationId,
                                                   $_modelName = NULL,

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Event controller
  *
@@ -11,12 +11,15 @@
  */
 
 use Firebase\JWT\JWT;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Event controller
  *
  * @package     EventManager
  * @subpackage  Controller
+ *
+ * @template T of Tinebase_Record_Interface
  */
 class EventManager_Controller_Registration extends Tinebase_Controller_Record_Abstract
 {
@@ -39,18 +42,33 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
-        $this->_duplicateCheckFields = [['event_id','participant']];
+        $this->_duplicateCheckOnUpdate = true;
     }
 
-    protected function _inspectBeforeCreate($_record)
+    protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
     {
-        parent::_inspectBeforeCreate($_record);
-        $this->addRegistrator($_record);
-    }
-    protected function _inspectBeforeUpdate($_record, $_oldRecord)
-    {
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
-        $this->addRegistrator($_record);
+        return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+            [
+                TMFA::FIELD => EventManager_Model_Registration::FLD_EVENT_ID,
+                TMFA::OPERATOR => TMFA::OP_EQUALS,
+                TMFA::VALUE => $_record->getIdFromProperty(EventManager_Model_Registration::FLD_EVENT_ID)
+            ],
+            [
+                TMFA::FIELD => EventManager_Model_Registration::FLD_PARTICIPANT,
+                TMFA::OPERATOR => 'definedBy',
+                TMFA::VALUE => [
+                    [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
+                        TMFA::OPERATOR => TMFA::OP_EQUALS,
+                        TMFA::VALUE => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
+                            ->{EventManager_Model_Registration::FLD_ORIGINAL_ID}
+                    ],
+                    [TMFA::FIELD => EventManager_Model_Register_Contact::ID,
+                        TMFA::OPERATOR => TMFA::OPERATOR_NOT,
+                        TMFA::VALUE => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}->getId()
+                    ],
+                ]
+            ],
+        ]);
     }
 
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
@@ -92,6 +110,48 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $this->_updateParentStatistics($_record);
     }
 
+    /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @return  T
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    {
+        try {
+            return parent::create($_record, $_duplicateCheck);
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('It is not possible to add the same participant multiple times')
+            );
+        }
+    }
+
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @param   boolean $_duplicateCheck
+     * @param   boolean $_updateDeleted
+     * @return  T
+     * @throws  Tinebase_Exception_AccessDenied
+     *
+     */
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
+    {
+        try {
+            return parent::update($_record, $_duplicateCheck, $_updateDeleted);
+        } catch (Tinebase_Exception_Duplicate $ted) {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('It is not possible to add the same participant multiple times')
+            );
+        }
+    }
+
     public function _updateParentStatistics(EventManager_Model_Registration $_record, bool $is_update = false)
     {
         if ($is_update) { // relevant for waiting list
@@ -118,20 +178,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 },
                 [$_record]
             );
-        }
-    }
-
-    /**
-     * Add participant as registrator if empty
-     *
-     * @param EventManager_Model_Registration $registration
-     * @return void
-     */
-    protected function addRegistrator(EventManager_Model_Registration $registration): void
-    {
-        if (!$registration->{EventManager_Model_Registration::FLD_REGISTRATOR}) {
-            $registration->{EventManager_Model_Registration::FLD_REGISTRATOR} =
-                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
         }
     }
 

@@ -91,6 +91,11 @@ class MatrixSynapseIntegrator_Controller_Directory extends Tinebase_Controller_R
 
         $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user);
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' ' . print_r($contact->toArray(), true));
+        }
+
         foreach (self::INCLUDED_CONTACT_FIELDS as $field) {
             $value = $contact->{$field};
             if ($value === null) {

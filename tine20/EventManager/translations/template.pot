@@ -181,6 +181,9 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
+msgid "It is not possible to add the same participant multiple times"
+msgstr ""
+
 msgid "Registrations"
 msgstr ""
 
@@ -624,6 +627,9 @@ msgid "Participant"
 msgstr ""
 
 msgid "Registrator"
+msgstr ""
+
+msgid "Only change this field if someone else is responsible for the registration of the participant"
 msgstr ""
 
 msgid "If the event is full it will not be possible to selected confirmed"
