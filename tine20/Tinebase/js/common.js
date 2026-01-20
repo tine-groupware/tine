@@ -347,23 +347,40 @@ const common = {
     /**
      * markdown renderer - fulltext, special type
      * @param {String} v The string to format.
-     * @param {Object} metadata Grid metadata object
+     * @param {Object} metaData Grid metadata object
      * @param {Object} record Grid record
      * @return {String} The formatted string.
      */
-    markdownRenderer: function(v, metadata, record) {
+    markdownRenderer: function(v, metaData, record) {
         if ([null, undefined].indexOf(v) >= 0) {
             return '';
         }
 
         const cellId = `markdown-cell-${Ext.id()}`;
+        const maxHeight = metaData.maxRowHeight || 'none';
         const initialContent = `<div id="${cellId}" class="tb-markdown-loading">${Ext.util.Format.htmlEncode(v)}</div>`;
 
         parsePurified(v).then(html => {
             const element = document.getElementById(cellId);
             if (element) {
-                element.className = 'tb-markdown-rendered';
+                if (maxHeight === 'none') {
+                    element.style.maxHeight = 'none';
+                    element.style.overflow = 'visible';
+                    element.style.whiteSpace = 'normal';
+                } else {
+                    element.style.maxHeight = maxHeight;
+                    element.style.overflow = 'hidden';
+                    element.style.whiteSpace = 'nowrap';
+                    element.style.textOverflow = 'ellipsis';
+                }
+
                 element.innerHTML = html;
+
+                if (maxHeight !== 'none') {
+                    element.querySelectorAll('*').forEach(child => {
+                        child.style.display = 'inline';
+                    });
+                }
             }
         }).catch(err => {
             console.error('Markdown rendering error:', err);

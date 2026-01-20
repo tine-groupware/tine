@@ -211,14 +211,24 @@ Tine.widgets.grid.RendererManager = function() {
                     break;
                 case 'text':
                 case 'fulltext':
-                    renderer = this.defaultRenderer;
+                    renderer = function (value, metaData, record) {
+                        if (metaData && metaData.showFullText) {
+                            return Tine.Tinebase.common.markdownRenderer(value, metaData, record);
+                        } else {
+                            return Tine.widgets.grid.RendererManager.defaultRenderer(value);
+                        }
+                    };
+
                     if (fieldDefinition.hasOwnProperty('specialType')) {
                         if (supportedACETypes.indexOf(fieldDefinition.specialType) >= 0) {
                             renderer = getACERenderer(fieldDefinition.specialType);
                         } else if (fieldDefinition.specialType === 'markdown') {
                             renderer = Tine.Tinebase.common.markdownRenderer;
                         }
+                    } else if (fieldName === 'description') {
+                        renderer = Tine.Tinebase.common.markdownRenderer;
                     }
+
                     break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;
@@ -321,7 +331,8 @@ Tine.widgets.grid.RendererManager = function() {
                     renderer = function renderer(value, metaData, record, rowIndex, colIndex, store) {
                         const lang = store?.localizedLang || keyFieldDef.default
                         const localized = _.find(value, { language: lang })
-                        const text = Ext.util.Format.htmlEncode(_.get(localized, 'text', ''));
+                        let text = Tine.Tinebase.common.markdownRenderer(_.get(localized, 'text', ''), metaData, record);
+
                         const langCode = lang.toUpperCase();
                         const qtip = i18n._('This is a multilingual field:') + '<br />' + _.reduce(value, (text, localized) => {
                             return text + '<br />' + translationList[localized.language] + ': ' + Ext.util.Format.htmlEncode(localized.text)

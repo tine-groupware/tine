@@ -3571,6 +3571,9 @@ msgstr ""
 msgid "No {0} to display"
 msgstr ""
 
+msgid "show full text"
+msgstr ""
+
 msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
 msgstr ""
 
