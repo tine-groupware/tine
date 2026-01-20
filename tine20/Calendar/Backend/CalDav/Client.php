@@ -318,23 +318,46 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
         $collections = new Tinebase_Record_RecordSet(Tinebase_Model_WebDAV_Collection::class);
         foreach($this->multiStatusRequest('PROPFIND', $this->calendarHomeSet, self::findAllCalendarsRequest, 1) as $url => $result) {
-            if (!($compSet = $result['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] ?? null) instanceof \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet) {
-                continue;
+            $type = null;
+            foreach ($result['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] ?? [] as $component) {
+                if ('{urn:ietf:params:xml:ns:caldav}comp' === $component['name']) {
+                    foreach ($component['attributes'] ?? [] as $key => $value) {
+                        if ('name' !== $key) {
+                            continue;
+                        }
+                        if ('VEVENT' === $value) {
+                            $type = $value;
+                            break 2;
+                        } elseif ('VTODO' === $value) {
+                            $type = $value;
+                        }
+                    }
+                }
             }
-            if (in_array('VEVENT', $compSet->getValue())) {
-                $type = 'VEVENT';
-            } elseif (in_array('VTODO', $compSet->getValue())) {
-                $type = 'VTODO';
-            } else {
+            if (null === $type) {
                 continue;
             }
 
-            if ($result['{DAV:}acl'] instanceof Sabre\DAVACL\Xml\Property\Acl) {
-                foreach ($result['{DAV:}acl']->getPrivileges() as $acl) {
+            foreach ($result['{DAV:}acl'] ?? [] as $acl) {
+                if ('{DAV:}ace' !== ($acl['name'] ?? null)) {
+                    continue;
+                }
+
                     // $acl['principal'] === '{DAV:}authenticated' || $this->currentUserPrincipal === $acl['principal'];
                     // what about groups? roles?
-                    $acl['privilege'];
-                }
+                    $principal = null;
+                    $grant = null;
+                    foreach ($acl['value'] ?? [] as $ace) {
+                        if ('{DAV:}principal' === ($ace['name'] ?? null)) {
+                            $principal = $ace['value'][0]['value'] ?? null;
+                        } elseif ('{DAV:}grant' === ($ace['name'] ?? null)) {
+                            $grant = $ace['value'][0]['value'][0]['name'] ?? null;
+                        }
+                    }
+                    if (null !== $principal && null !== $grant) {
+                        // ? and now?
+                    }
+
             }
 
             $collections->addRecord(new Tinebase_Model_WebDAV_Collection([

@@ -206,6 +206,10 @@ trait Tinebase_Record_AbstractTrait
             throw new Tinebase_Exception_Record_DefinitionFailure($field . ' is missing ' . self::REF_ID_FIELD);
         }
 
+        if (is_string($pwd = $this->{$field}) && strlen($pwd) > 0) {
+            return $pwd;
+        }
+
         if (!($ccId = $this->{$fieldConf[self::CONFIG][self::REF_ID_FIELD]})) {
             return null;
         }
