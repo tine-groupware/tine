@@ -114,20 +114,38 @@ class Tinebase_Twig
             Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
         }
 
+        $logoContent = [
+            'b' => null,
+            'i' => null,
+        ];
+        foreach (array_keys($logoContent) as $logoType) {
+            try {
+                $logoContent[$logoType] = Tinebase_Controller::getInstance()->getLogo($logoType);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Tinebase_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                        . ' ' . ($logoType === 'i' ? 'Installation' : 'Branding') .  ' logo broken');
+                }
+                $response = new \Laminas\Diactoros\Response();
+                $logoContent[$logoType] = $response;
+                Tinebase_Exception::log($e);
+            }
+        }
+
         $globals = [
             Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages ? Addressbook_Config::getInstallationRepresentative() : null,
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             GDPR_Config::ENABLE_PUBLIC_PAGES =>  $enablePublicPages,
             'branding'          => [
-                'logo'              => Tinebase_Core::getLogo('b'),
-                'logoContent'       => Tinebase_Controller::getInstance()->getLogo('b'),
+                'logo'              => Tinebase_Core::getLogo(),
+                'logoContent'       => $logoContent['b'],
                 'title'             => $tbConfig->{Tinebase_Config::BRANDING_TITLE},
                 'description'       => $tbConfig->{Tinebase_Config::BRANDING_DESCRIPTION},
                 'weburl'            => $tbConfig->{Tinebase_Config::BRANDING_WEBURL},
             ],
             'installation'      => [
                 'logo'              => Tinebase_Core::getLogo('i'),
-                'logoContent'       => Tinebase_Controller::getInstance()->getLogo('i'),
+                'logoContent'       => $logoContent['i'],
                 'weburl'            => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             ],
             'user'              => [
