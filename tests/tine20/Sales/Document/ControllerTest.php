@@ -1578,6 +1578,63 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         return $order;
     }
 
+    public function testSalesTaxValidation(): void
+    {
+        try {
+            new Sales_Model_Document_SalesTax([
+                Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
+                Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => 'a',
+                Sales_Model_Document_SalesTax::FLD_TAX_RATE => null,
+                Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+                Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 1,
+                Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 1,
+            ]);
+            $this->fail('expect record validation to fail');
+        } catch (Tinebase_Exception_Record_Validation $e) {
+            $this->assertSame('Some fields (tax_rate) have invalid content (Sales_Model_Document_SalesTax)', $e->getMessage());
+        }
+
+        $st = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => 'a',
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => 0,
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 1,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 1,
+        ]);
+        $this->assertSame(0.0, $st->{Sales_Model_Document_SalesTax::FLD_TAX_RATE});
+
+        $st = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => 'a',
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => 0.0,
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 1,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 1,
+        ]);
+        $this->assertSame(0.0, $st->{Sales_Model_Document_SalesTax::FLD_TAX_RATE});
+
+        $st = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => 'a',
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => '0',
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 1,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 1,
+        ]);
+        $this->assertSame(0.0, $st->{Sales_Model_Document_SalesTax::FLD_TAX_RATE});
+
+        $st = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => Sales_Model_Document_Order::class,
+            Sales_Model_Document_SalesTax::FLD_DOCUMENT_ID => 'a',
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => '0.0',
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 1,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 1,
+        ]);
+        $this->assertSame(0.0, $st->{Sales_Model_Document_SalesTax::FLD_TAX_RATE});
+    }
+
     public function testPositionRemoval()
     {
         $order = $this->testTransitionOfferOrder();

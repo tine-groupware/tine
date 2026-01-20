@@ -204,9 +204,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross + $oldPI->price_gross2,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX => $oldPI->price_tax,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [[
-                    Sales_Model_Document_PurchaseInvoice::TAX_RATE => $oldPI->sales_tax,
-                    Sales_Model_Document_PurchaseInvoice::TAX_SUM => $oldPI->price_tax,
-                    Sales_Model_Document_PurchaseInvoice::NET_SUM => $oldPI->price_net,
+                    Sales_Model_Document_SalesTax::FLD_TAX_RATE => $oldPI->sales_tax ?? 0,
+                    Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $oldPI->price_tax,
+                    Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $oldPI->price_net,
+                    Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross + $oldPI->price_gross2,
                 ]],
                 Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
                 Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER'),

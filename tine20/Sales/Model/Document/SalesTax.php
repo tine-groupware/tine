@@ -139,9 +139,12 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Tax Rate', // _('Tax Rate')
                 self::TYPE                          => self::TYPE_FLOAT,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_PERCENT,
+                self::INPUT_FILTERS                 => [
+                    Tinebase_Record_Filter_NumericFloat::class => [-1]
+                ],
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Tinebase_Record_Validator_GreaterOrEqualThan::class, 0.0],
                 ],
                 self::UI_CONFIG                     => [
 //                    self::READ_ONLY                     => true,
@@ -156,4 +159,23 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    protected static function _getFilter($field = null)
+    {
+        if (null === $field || self::FLD_TAX_RATE === $field) {
+            $mc = self::getConfiguration();
+            $orgValidators = $validators = $mc->validators;
+            $refProp = new ReflectionProperty($mc, '_validators');
+            $refProp->setAccessible(true);
+            $validators[self::FLD_TAX_RATE][] = new Zend_Validate_NotEmpty(0);
+            try {
+                $refProp->setValue($mc, $validators);
+                return parent::_getFilter($field);
+            } finally {
+                $refProp->setValue($mc, $orgValidators);
+            }
+        }
+
+        return parent::_getFilter($field);
+    }
 }
