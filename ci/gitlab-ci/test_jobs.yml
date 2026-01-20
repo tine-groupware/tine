@@ -263,6 +263,21 @@ prevent-upstream-changes:
       allow_failure: true
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+prevent-wrong-update-script-changes:
+  image: ${TEST_IMAGE}
+  stage: test
+  before_script: []
+  script:
+    - !reference [.lib, script]
+    - git fetch origin
+    - prevent_wrong_update_script_changes
+  rules:
+    - if: $PREVENT_WRONG_UPDATE_SCRIPT_CHANGES == "false"
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-wrong-update-script-changes/
+      allow_failure: true
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 prevent-wrong-branch:
   image: alpine
   stage: test
