@@ -546,6 +546,11 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Collecting saml2 metadata');
+        }
+
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
         static::initSAMLServer();

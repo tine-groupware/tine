@@ -220,6 +220,11 @@ class Tinebase_Expressive_RouteHandler
 
         Tinebase_Server_Expressive::checkRateLimit($this->_class . '.' . $this->_method);
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                . __LINE__ . ' Calling: ' . print_r($callable, true));
+        }
+
         return call_user_func_array($callable, $orderedParams);
     }
 
