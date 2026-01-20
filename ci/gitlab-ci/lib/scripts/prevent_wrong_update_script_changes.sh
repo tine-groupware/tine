@@ -1,7 +1,21 @@
 prevent_wrong_update_script_changes() {
-    branchVersion=$(echo "$BASE_MAJOR_COMMIT_REF_NAME" | grep -Po 20..)
     wrong=""
     unset failed
+
+    if [[ "$BASE_MAJOR_COMMIT_REF_NAME" != "main" ]]; then
+        if ! branchVersion=$(echo "$BASE_MAJOR_COMMIT_REF_NAME" | grep -Po 20..); then
+            echo -e -n "\033[1;31m"
+            echo Error: Can not determine branch version. BASE_MAJOR_COMMIT_REF_NAME=$BASE_MAJOR_COMMIT_REF_NAME
+            echo -n -e "\033[0m"
+            return 1
+        fi
+    else
+        if [[ "$TINE_VERSION_BETA" != "" ]]; then
+            branchVersion=$(($(echo "$TINE_VERSION_BETA" | grep -Po 20..) + 1 ))
+        else
+            branchVersion=$(($(echo "$TINE_VERSION_BE" | grep -Po 20..) + 1 ))
+        fi
+    fi
 
     for f in $(find tine20/*/Setup/Update/*.php); do
         if ! versionLine=$(cat $f | grep -P '^ \* this ist? 20..\.11 \(ONLY!\)$'); then
