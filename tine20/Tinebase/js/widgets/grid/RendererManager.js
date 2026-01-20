@@ -219,9 +219,6 @@ Tine.widgets.grid.RendererManager = function() {
                             renderer = Tine.Tinebase.common.markdownRenderer;
                         }
                     }
-                    if (fieldName === 'description') {
-                        renderer = Tine.Tinebase.common.markdownRenderer;
-                    }
                     break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;
