@@ -45,7 +45,7 @@ class Tinebase_Model_WebDAV_Collection extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
             ],
             self::FLD_ACL                   => [
-                self::TYPE                      => self::TYPE_INTEGER,
+                self::TYPE                      => self::TYPE_JSON,
             ],
         ],
     ];

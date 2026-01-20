@@ -338,26 +338,11 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 continue;
             }
 
-            foreach ($result['{DAV:}acl'] ?? [] as $acl) {
-                if ('{DAV:}ace' !== ($acl['name'] ?? null)) {
-                    continue;
+            $acls = [];
+            foreach ($result['{DAV:}current-user-privilege-set'] ?? [] as $acl) {
+                if ('{DAV:}privilege' === $acl['name'] && ($acl['value'][0]['name'] ?? null)) {
+                    $acls[] = $acl['value'][0]['name'];
                 }
-
-                    // $acl['principal'] === '{DAV:}authenticated' || $this->currentUserPrincipal === $acl['principal'];
-                    // what about groups? roles?
-                    $principal = null;
-                    $grant = null;
-                    foreach ($acl['value'] ?? [] as $ace) {
-                        if ('{DAV:}principal' === ($ace['name'] ?? null)) {
-                            $principal = $ace['value'][0]['value'] ?? null;
-                        } elseif ('{DAV:}grant' === ($ace['name'] ?? null)) {
-                            $grant = $ace['value'][0]['value'][0]['name'] ?? null;
-                        }
-                    }
-                    if (null !== $principal && null !== $grant) {
-                        // ? and now?
-                    }
-
             }
 
             $collections->addRecord(new Tinebase_Model_WebDAV_Collection([
@@ -365,7 +350,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 Tinebase_Model_WebDAV_Collection::FLD_NAME => $result['{DAV:}displayname'] ?? null,
                 Tinebase_Model_WebDAV_Collection::FLD_COLOR => $result['{http://apple.com/ns/ical/}calendar-color'] ?? null,
                 Tinebase_Model_WebDAV_Collection::FLD_TYPE => $type,
-                //Tinebase_Model_WebDAV_Collection::FLD_ACL => '',
+                Tinebase_Model_WebDAV_Collection::FLD_ACL => $acls,
             ]));
         }
 
@@ -861,7 +846,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 <d:propfind xmlns:d="DAV:">
   <d:prop>
     <d:resourcetype />
-    <d:acl />
+    <d:current-user-privilege-set />
     <d:displayname />
     <x:supported-calendar-component-set xmlns:x="urn:ietf:params:xml:ns:caldav"/>
     <calendar-color xmlns="http://apple.com/ns/ical/"/>
