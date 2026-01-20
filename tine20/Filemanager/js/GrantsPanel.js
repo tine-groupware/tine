@@ -32,7 +32,6 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
         this.hasOwnGrantsCheckbox = new Ext.form.Checkbox({
-            readOnly: true,
             boxLabel: this.app.i18n._('This folder has its own permissions'),
             listeners: {scope: this, check: this.onOwnGrantsCheck}
         });
@@ -48,7 +47,6 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             text: this.app.i18n._("Permissions of a folder also apply recursively to all subfolders unless they have their own permissions.")
         });
         this.pinProtectionCheckbox = new Ext.form.Checkbox({
-            readOnly: true,
             hidden: ! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName).length,
             boxLabel: this.app.i18n._('This folder is part of the data vault')
         });
@@ -110,16 +108,14 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
         const hasRequiredGrant = !evalGrants || _.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant);
         const ownGrantsReadOnly = (record.get('type') !== 'folder' ||
             !_.get(record, 'data.account_grants.adminGrant', false) ||
-            path.match(/^\/personal(\/[^/]+){0,2}\/$/) ||
-            path.match(/^\/shared(\/[^/]+){0,1}\/$/)) ?? false;
-    
+            path.match(/^\/personal(\/[^/]+){0,2}\/$/) !== null ||
+            path.match(/^\/shared(\/[^/]+){0,1}\/$/) !== null);
+
         const pinProtectionReadOnly = record.get('type') !== 'folder' || !record.data?.account_grants?.adminGrant;
         this.aclNodeOwnGrants = record.get('grants');
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
-        this.hasOwnGrantsCheckbox.setReadOnly(ownGrantsReadOnly);
         this.pinProtectionCheckbox.setValue(!!record.get('pin_protected_node'));
-        this.pinProtectionCheckbox.setReadOnly(pinProtectionReadOnly);
-    
+
         this.grantsGrid.useGrant('admin', !!String(record.get('path')).match(/^\/shared/));
         this.grantsGrid.getStore().loadData({results: record.data.grants});
         
@@ -139,13 +135,17 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             await Tine.Filemanager.getNode(defaultInheritAclNode).then((result) => {
                 this.inheriteAclNodeRecord = Tine.Tinebase.data.Record.setFromJson(result, Tine.Filemanager.Model.Node);
             });
+        }
+
+        this.afterIsRendered().then(() => {
+            this.hasOwnGrantsCheckbox.setDisabled(ownGrantsReadOnly);
+            this.pinProtectionCheckbox.setDisabled(pinProtectionReadOnly);
+            this.setReadOnly(!hasRequiredGrant);
+            this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
             if (!hasOwnGrants) {
                 this.renderAclNodePathInfo(true);
             }
-        }
-        
-        this.setReadOnly(!hasRequiredGrant);
-        this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
+        })
     },
     
     renderAclNodePathInfo(checked) {
