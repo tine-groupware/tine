@@ -181,6 +181,9 @@ msgstr "The EventManager JWT secret string"
 msgid "Options"
 msgstr "Options"
 
+msgid "It is not possible to add the same participant multiple times"
+msgstr "It is not possible to add the same participant multiple times"
+
 msgid "Registrations"
 msgstr "Registrations"
 
@@ -625,6 +628,9 @@ msgstr "Participant"
 
 msgid "Registrator"
 msgstr "Registrator"
+
+msgid "Only change this field if someone else is responsible for the registration of the participant"
+msgstr "Only change this field if someone else is responsible for the registration of the participant"
 
 msgid "If the event is full it will not be possible to selected confirmed"
 msgstr "If the event is full it will not be possible to selected confirmed"

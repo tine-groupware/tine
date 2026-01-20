@@ -13,6 +13,7 @@
  */
 
 use Addressbook_Model_ContactProperties_Definition as AMCPD;
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * @property    string $account_id                 id of associated user
@@ -816,6 +817,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Salutation', // _('Salutation')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NAME                      => Addressbook_Config::CONTACT_SALUTATION,
+                self::CONFIG                    => [
+                    self::APPLICATION               => Addressbook_Config::APP_NAME,
+                ],
                 self::UI_CONFIG                 => [
                     'group'                         => 'Name',
                 ],
@@ -941,6 +945,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 128,
                 self::LABEL                     => 'Type', // _('Type')
                 self::SYSTEM                    => true,
+                self::CONFIG                    => [
+                    self::APPLICATION               => Addressbook_Config::APP_NAME,
+                ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,

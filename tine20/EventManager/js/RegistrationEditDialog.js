@@ -25,6 +25,7 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     onAfterRender: function () {
         this.setStatusListener();
         this.waitingListListener();
+        this.setParticipantListener();
     },
 
     setSelectionConfigClassListener: function () {
@@ -38,6 +39,12 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
                 }
             });
         },this);
+    },
+
+    setParticipantListener: function () {
+        this.form.findField('participant').on('select', function (combo, record, index) {
+            this.form.findField('registrator').setValue(combo.getValue());
+        }, this);
     },
 
     setStatusListener: function () {

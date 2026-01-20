@@ -1,15 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
  * @package     EventManager
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Model
@@ -40,19 +40,11 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
         self::VERSION => 2,
         self::RECORD_NAME               => 'Registration', // gettext('GENDER_Registration')
         self::RECORDS_NAME              => 'Registrations', // ngettext('Registration', 'Registrations', n)
-        self::DEFAULT_SORT_INFO         =>  ['field' => 'particpant'],
+        self::DEFAULT_SORT_INFO         =>  ['field' => 'participant'],
         self::TITLE_PROPERTY            => '{{participant.n_fn}}',
-        self::IS_METADATA_MODEL_FOR     => self::FLD_PARTICIPANT,
         self::IS_DEPENDENT              => true,
-        self::HAS_RELATIONS             => false,
-        self::HAS_CUSTOM_FIELDS         => false,
         self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
-        self::HAS_NOTES                 => false,
-        self::HAS_TAGS                  => false,
         self::MODLOG_ACTIVE             => true,
-        self::HAS_ATTACHMENTS           => false,
-
-        self::CREATE_MODULE             => false,
 
         self::EXPOSE_HTTP_API           => true,
         self::EXPOSE_JSON_API           => true,
@@ -67,6 +59,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_PARTICIPANT => [],
+                self::FLD_REGISTRATOR => [],
                 self::FLD_BOOKED_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_BookedOption::FLD_OPTION => [],
@@ -81,41 +74,56 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::TYPE              => self::TYPE_RECORD,
                 self::VALIDATORS        => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::CONFIG            => [
-                    self::APP_NAME                  => EventManager_Config::APP_NAME,
-                    self::MODEL_NAME                => EventManager_Model_Event::MODEL_NAME_PART,
+                    self::APP_NAME          => EventManager_Config::APP_NAME,
+                    self::MODEL_NAME        => EventManager_Model_Event::MODEL_NAME_PART,
                 ],
                 self::DISABLED          => true,
                 self::ALLOW_CAMEL_CASE  => true,
-                self::NULLABLE          => true,
             ],
             self::FLD_PARTICIPANT          => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Participant', // _('Participant')
-                self::NULLABLE          => true,
-                self::CONFIG            => [ //TODO Denormalization
-                    self::APP_NAME          => Addressbook_Config::APP_NAME, // EventManager_Modal_Contact
-                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
+                self::CONFIG            => [
+                    self::APP_NAME          => EventManager_Config::APP_NAME,
+                    self::MODEL_NAME        => EventManager_Model_Register_Contact::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS => true,
+                    self::REF_ID_FIELD      => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                    self::ADD_FILTERS       => [
+                        [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::FLD_PARTICIPANT],
+                    ],
+                    self::FORCE_VALUES      => [
+                        EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE => self::FLD_PARTICIPANT,
+                    ],
                 ],
                 self::VALIDATORS        => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_REGISTRATOR          => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
-                self::QUERY_FILTER      => true,
                 self::LABEL             => 'Registrator', // _('Registrator')
-                self::NULLABLE          => true,
-                self::CONFIG            => [ //TODO Denormalization
-                    self::APP_NAME          => Addressbook_Config::APP_NAME, // EventManager_Modal_Contact
-                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
+                self::CONFIG            => [
+                    self::APP_NAME          => EventManager_Config::APP_NAME,
+                    self::MODEL_NAME        => EventManager_Model_Register_Contact::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS => true,
+                    self::REF_ID_FIELD      => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                    self::ADD_FILTERS       => [
+                        [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::FLD_REGISTRATOR],
+                    ],
+                    self::FORCE_VALUES      => [
+                        EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE => self::FLD_REGISTRATOR,
+                    ],
                 ],
+                self::VALIDATORS        => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::DESCRIPTION       => 'Only change this field if someone else is responsible for the registration of the participant',
+                // _('Only change this field if someone else is responsible for the registration of the participant')
             ],
             self::FLD_FUNCTION      => [
                 self::TYPE              => self::TYPE_KEY_FIELD,
@@ -155,7 +163,6 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => EventManager_Model_BookedOption::MODEL_NAME_PART,
                     self::STORAGE               => self::TYPE_JSON,
                 ],
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::NULLABLE              => true,
                 self::UI_CONFIG             => [
                     self::COLUMNS               => [
@@ -175,7 +182,6 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_TEXT,
                 self::LENGTH                => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
                 self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
             ],
         ]

@@ -5,8 +5,8 @@
  *
  * @package     EventManager
  * @subpackage  Setup
- * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL3
+ * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -22,6 +22,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
 
 
     protected static $_allUpdates = [
@@ -36,6 +37,10 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE018_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
+            ],
             self::RELEASE018_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
@@ -144,5 +149,16 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.8', self::RELEASE018_UPDATE008);
+    }
+
+    public function update009()
+    {
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Registration::class,
+            EventManager_Model_Register_Contact::class,
+            EventManager_Model_Register_ContactPropertiesAddress::class,
+        ]);
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.9', self::RELEASE018_UPDATE009);
     }
 }
