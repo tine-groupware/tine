@@ -155,6 +155,7 @@ class Tinebase_ModelConfiguration_Const {
     public const ID_GENERATOR_TYPE = 'idGeneratorType';
     public const IGNORE_ACL = 'ignoreACL';
     public const INDEXES = 'indexes';
+    public const INHERIT_PARENT_SYSTEM_CUSTOM_FIELDS = 'inheritParentSystemCustomFields';
     public const INPUT_FILTERS = 'inputFilters';
     public const IS_DEPENDENT = 'isDependent';
     /**

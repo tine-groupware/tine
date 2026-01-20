@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,8 +16,7 @@ use Addressbook_Model_ContactProperties_Definition as AMCPD;
 /**
  * ContactProperties Address controller class for Addressbook application
  *
- * @package     Sales
- * @subpackage  Controller
+ * @extends Tinebase_Controller_Record_Abstract<Addressbook_Model_ContactProperties_Definition>
  */
 class Addressbook_Controller_ContactProperties_Definition extends Tinebase_Controller_Record_Abstract
 {

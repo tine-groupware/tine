@@ -1564,7 +1564,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         foreach ($phoneDefs as $phoneDef) {
             $telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
         }
-        Addressbook_Model_Contact::setTelefoneFields($telFields);
 
         $filterModel = $mc->filterModel;
         $filterModel['telephone'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($telFields);
@@ -1584,7 +1583,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS][] = $emailField;
             }
         }
-        Addressbook_Model_Contact::setEmailFields($emailFields);
         $mc->setFilterModel($filterModel);
 
         $additionalAdrFields = Addressbook_Model_Contact::getAdditionalAddressFields();
@@ -1593,7 +1591,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         foreach ($adrDefs as $adrDef) {
             $additionalAdrFields[$adrDef->{AMCPD::FLD_NAME}] = $adrDef->{AMCPD::FLD_NAME};
         }
-        Addressbook_Model_Contact::setAdditionalAddressFields($additionalAdrFields);
+
+        if (Addressbook_Config::APP_NAME === $mc->getAppName()) {
+            Addressbook_Model_Contact::setTelefoneFields($telFields);
+            Addressbook_Model_Contact::setEmailFields($emailFields);
+            Addressbook_Model_Contact::setAdditionalAddressFields($additionalAdrFields);
+        }
 
         $expanderDef = $mc->jsonExpander;
         foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $val) {

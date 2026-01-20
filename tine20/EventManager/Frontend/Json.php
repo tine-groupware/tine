@@ -33,6 +33,7 @@ class EventManager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         EventManager_Model_Selections_TextInput::MODEL_NAME_PART,
         EventManager_Model_Selections_File::MODEL_NAME_PART,
         EventManager_Model_OptionsRule::MODEL_NAME_PART,
+        EventManager_Model_Register_Contact::MODEL_NAME_PART,
     ];
     
     /**
