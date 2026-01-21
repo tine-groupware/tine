@@ -4088,8 +4088,12 @@ HumanResources_CliTests.testSetContractsEndDate */
         return $node;
     }
 
-    protected function _setFileMessageNote($record, $node)
+    protected function _setFileMessageNote(Tinebase_Record_Interface $record, Tinebase_Model_Tree_Node $node): void
     {
+        if (!$record->has('notes')) {
+            return;
+        }
+
         $translation = Tinebase_Translation::getTranslation();
         $noteText = str_replace(
             ['{0}'],
