@@ -70,6 +70,6 @@ class Addressbook_Setup_Update_18 extends Setup_Update_Abstract
             Addressbook_Model_Contact::class,
         ]);
 
-        $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE002);
+        $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '18.3', self::RELEASE018_UPDATE003);
     }
 }
