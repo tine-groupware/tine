@@ -88,8 +88,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->_updateAllAccountsWithAccountEmail($_opts);
         } elseif (isset($_opts->sync_passwords_from_ldap)) {
             $this->_syncPasswords($_opts);
-        } elseif (isset($_opts->egw14import)) {
-            $this->_egw14Import($_opts);
         } elseif (isset($_opts->check_requirements)) {
             $result = $this->_checkRequirements();
         } elseif (isset($_opts->setconfig)) {
@@ -124,10 +122,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->_mysqlClient($_opts);
         } elseif (isset($_opts->setpassword)) {
             $this->_setPassword($_opts);
-        } elseif (isset($_opts->pgsqlMigration)) {
-            $this->_pgsqlMigration($_opts);
-        } elseif (isset($_opts->upgradeMysql564)) {
-            $this->_upgradeMysql564();
         } elseif (isset($_opts->migrateUtf8mb4)) {
             $this->_migrateUtf8mb4();
         } elseif (isset($_opts->config_from_env)) {
@@ -273,179 +267,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "No applications found to install.\n";
         }
         return 0;
-    }
-
-    protected function _pgsqlMigration(Zend_Console_Getopt $_opts)
-    {
-        // TODO ask for cleanup? make cleanup?
-        // TODO check maintenance mode, its needs to be on!
-        // TODO check action queue is empty
-        // known issues:
-        // path!
-        // [r?]trim unique keys, if there was something trimmed, remember, second+ time add _ or something
-
-        $noBackupTables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
-
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        if (!isset($options['mysqlConfigFile'])) {
-            echo 'option mysqlConfigFile is mandatory';
-            return;
-        }
-
-        // get pgsql DB:
-        if (!($pgsqlDb = Setup_Core::getDb()) instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            echo 'pgsql migration only works for pgsql installations';
-            return;
-        }
-
-        // reset DB:
-        $mysqlConfigFile = $options['mysqlConfigFile'];
-        if (!is_file($mysqlConfigFile)) {
-            echo $mysqlConfigFile . ' is not a readable file (--mysqlConfigFile option)';
-            return;
-        }
-        if (!($dbConfig = include $mysqlConfigFile) || !is_array($dbConfig)) {
-            echo 'bad mysql config file: ' . $mysqlConfigFile;
-            return;
-        }
-
-        if (isset($dbConfig['password']) && !empty($dbConfig['password'])) {
-            Setup_Core::getLogger()->getFormatter()->addReplacement($dbConfig['password']);
-        }
-        if (!($mysqlDB = Tinebase_Core::createAndConfigureDbAdapter($dbConfig)) instanceof  Zend_Db_Adapter_Pdo_Mysql) {
-            $dbConfig['password'] = '*****';
-            echo 'provided database config is not a working mysql config: ' . print_r($dbConfig, true);
-            return;
-        }
-        // place table prefix into the concrete adapter
-        $mysqlDB->table_prefix = $pgsqlDb->table_prefix;
-
-        // set the mysql DB as our current DB
-        Zend_Db_Table_Abstract::setDefaultAdapter($mysqlDB);
-        Setup_Core::set(Setup_Core::DB, $mysqlDB);
-
-        // some cache busting
-        Setup_Core::set(Setup_Core::CONFIG, null);
-        Tinebase_Config::destroyInstance();
-        Tinebase_Application::getInstance()->clearCache();
-        Tinebase_Application::destroyInstance();
-        Tinebase_Container::getInstance()->resetClassCache();
-        Tinebase_Container::destroyInstance();
-        Setup_Controller::destroyInstance();
-        Setup_Backend_Factory::clearCache();
-        Tinebase_User::destroyInstance();
-        Setup_Core::set(Setup_Core::USER, 'setupuser');
-        Addressbook_Controller_Contact::destroyInstance();
-        $dbConfig['driver'] = 'pdo_mysql';
-        $dbConfig['user']   = $dbConfig['username'];
-        Setup_SchemaTool::setDBParams($dbConfig);
-
-        $newOpts = new Zend_Console_Getopt(['install' => []], [
-            '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
-        ]);
-        $this->_install($newOpts);
-
-        $blackListedTables = [];
-        $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-        $pgsqlTables = $pgsqlDb->query('SELECT table_name FROM information_schema.tables WHERE table_schema = '
-            . '\'public\' AND table_type= \'BASE TABLE\'')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-
-        // set foreign key checks off
-        $mysqlDB->query('SET foreign_key_checks = 0');
-        $mysqlDB->query('SET unique_checks = 0');
-        $mysqlDB->query('SET autocommit = 0');
-
-        // truncate
-        foreach ($mysqlTables as $table) {
-            $mysqlDB->query('TRUNCATE TABLE ' . $mysqlDB->quoteIdentifier($table));
-        }
-
-        $mysqlDB->query('COMMIT');
-        // set foreign key checks off
-        $mysqlDB->query('SET foreign_key_checks = 0');
-        $mysqlDB->query('SET unique_checks = 0');
-        $mysqlDB->query('SET autocommit = 0');
-
-        foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
-            if (in_array($table, $noBackupTables)) {
-                continue;
-            }
-            if (!in_array($table, $pgsqlTables)) {
-                continue;
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Migrating table ' . $table . ' ...');
-            }
-
-            $start = 0;
-            $limit = 50;
-            $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
-            $primaries = [];
-            $columns = [];
-            $selectColumns = [];
-            foreach ($tableDscr as $col => $desc) {
-                if ($desc['PRIMARY']) {
-                    $primaries[] = $col;
-                }
-                $columns[] = $mysqlDB->quoteIdentifier($col);
-                $selectColumns[] = $col;
-            }
-            $insertQuery = 'INSERT INTO ' . $mysqlDB->quoteIdentifier($table) . ' (' . join(', ', $columns) .
-                ') VALUES ';
-            $select = $pgsqlDb->select()->from($table, $selectColumns)->order($primaries);
-
-            $rowcount = 0;
-            while (true) {
-                $select->limit($limit, $start);
-                if (empty($data = $select->query()->fetchAll(Zend_Db::FETCH_NUM))) {
-                    break;
-                }
-                $start += $limit;
-                $first = true;
-                $query = $insertQuery;
-                foreach ($data as $idx => $row) {
-                    $query .= ($first === true ? '' : '), ') . '(';
-                    $firstRow = true;
-                    foreach ($row as $value) {
-                        $query .= ($firstRow === true ? '' : ', ') .
-                            (null === $value ? 'null' : $mysqlDB->quote($value));
-                        $firstRow = false;
-                    }
-                    $first = false;
-                    $rowcount++;
-                }
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ' . $query);
-                }
-
-                $mysqlDB->query($query . ')');
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' ... done. Migrated ' . $rowcount . ' rows.');
-            }
-        }
-
-        $mysqlDB->query('COMMIT');
-        $mysqlDB->query('SET foreign_key_checks = 1');
-        $mysqlDB->query('SET unique_checks = 1');
-    }
-
-    protected function _upgradeMysql564()
-    {
-        echo 'starting upgrade ...' . PHP_EOL;
-
-        $failures = Setup_Controller::getInstance()->upgradeMysql564();
-        if (count($failures) > 0) {
-            echo PHP_EOL . 'failures:' . PHP_EOL . join(PHP_EOL, $failures);
-        }
-
-        echo PHP_EOL . 'done' . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -960,42 +781,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _syncPasswords(Zend_Console_Getopt $_opts)
     {
         Tinebase_User::syncLdapPasswords();
-    }
-
-    /**
-     * import from egw14
-     *
-     * @param Zend_Console_Getopt $_opts
-     */
-    protected function _egw14Import(Zend_Console_Getopt $_opts)
-    {
-        $args = $_opts->getRemainingArgs();
-
-        if (count($args) < 1 || ! is_readable($args[0])) {
-            echo "can not open config file \n";
-            echo "see tine20.org/wiki/EGW_Migration_Howto for details \n\n";
-            echo "usage: ./setup.php --egw14import /path/to/config.ini " .
-                "(see Tinebase/Setup/Import/Egw14/config.ini)\n\n";
-            exit(1);
-        }
-
-        try {
-            $config = new Zend_Config(array(), true);
-            $config->merge(new Zend_Config_Ini($args[0]));
-            $config = $config->merge($config->all);
-        } catch (Zend_Config_Exception $e) {
-            fwrite(STDERR, "Error while parsing config file($args[0]) " .  $e->getMessage() . PHP_EOL);
-            exit(1);
-        }
-
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $logger = new Zend_Log($writer);
-
-        $filter = new Zend_Log_Filter_Priority((int) $config->loglevel);
-        $logger->addFilter($filter);
-
-        $importer = new Tinebase_Setup_Import_Egw14($config, $logger);
-        $importer->import();
     }
 
     /**

@@ -61,9 +61,6 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                     'syncaccountstatus'     => 'Only usable with sync_accounts_from_ldap. Synchronizes current account status from LDAP',
                     'syncontactphoto'       => 'Only usable with sync_accounts_from_ldap. Always syncs contact photo from ldap',
                 'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
-                'egw14import'               => 'Import user and groups from egw14
-                         Examples: 
-                          setup.php --egw14import /path/to/config.ini',
                 'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
                 'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications',
                 'updateAllAccountsWithAccountEmail' => 'create/update email users with current account
@@ -93,19 +90,13 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'setpassword'               => 'set system user password
                         Examples:
                            setup.php --setpassword -- username=myusername password=myrandompw',
-                'pgsqlMigration'            => 'migrate from pgsql to mysql
-                        Examples:
-                            setup.php --pgsqlMigration -- mysqlConfigFile=/path/to/config/file',
-                'upgradeMysql564'           => 'update database to use features of MySQL 5.6.4+
-                        Examples:
-                            setup.php --upgradeMysql564',
                 'migrateUtf8mb4'            => 'update database to use MySQL utf8mb4
                         Examples:
                             setup.php --migrateUtf8mb4',
                 'maintenance_mode'          => 'set systems maintenance mode state
                         Examples:
                            setup.php --maintenance_mode -- mode=[on|off] apps=[OnlyOfficeIntegrator,Felamimail,etc.] flags=[skipApps,onlyApps,allowAdminLogin]',
-                'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<propertiy>',
+                'config_from_env'           => 'generates config from environment variables like TINE20__<application>_<property>',
                 'is_installed'           => 'Checks if tine20 is installed, otherwise returns 1.',
                 'add_auth_token'        => 'Add a new token to table tine20_auth_token
                         Examples:
@@ -128,8 +119,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->version) &&
             empty($opts->sync_accounts_from_ldap) &&
             empty($opts->sync_passwords_from_ldap) && 
-            empty($opts->egw14import) && 
-            empty($opts->check_requirements) && 
+            empty($opts->check_requirements) &&
             empty($opts->reset_demodata) &&
             empty($opts->updateAllImportExportDefinitions) &&
             empty($opts->updateAllAccountsWithAccountEmail) &&
@@ -146,9 +136,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->deleteLicense) &&
             empty($opts->setpassword) &&
             empty($opts->getconfig) &&
-            empty($opts->upgradeMysql564) &&
             empty($opts->migrateUtf8mb4) &&
-            empty($opts->pgsqlMigration) &&
             empty($opts->maintenance_mode) &&
             empty($opts->config_from_env) &&
             empty($opts->is_installed) &&
