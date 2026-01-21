@@ -223,4 +223,19 @@ trait Tinebase_Record_AbstractTrait
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
         return $cc->password;
     }
+
+    /**
+     * @template T of Tinebase_Record_Interface
+     * @param array $path
+     * @param class-string<T> $model
+     * @return T|null
+     */
+    public function getRecordFromXProps(array $path, string $model): ?Tinebase_Record_Interface
+    {
+        $data = array_reduce($path, fn($carry, $pathPart) => $carry[$pathPart] ?? null, $this->xprops());
+        if (is_array($data)) {
+            return new $model($data);
+        }
+        return null;
+    }
 }

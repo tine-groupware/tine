@@ -1,9 +1,9 @@
 <?php
 /**
- * tine Groupware
+ * Tine 2.0
  * 
  * @package     Calendar
- * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
@@ -540,21 +540,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
 
     /**
-     * returns free/busy information for given period and given attendee
-     *
-     * @param Calendar_Model_EventFilter $_periods
-     * @param Tinebase_Record_RecordSet $_attendee
-     * @param array $_ignoreUIDs
-     * @return Tinebase_Record_RecordSet<Calendar_Model_FreeBusy>
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Tinebase_Exception_Record_Validation
-     *
+     * returns freebusy information for given period and given attendee
+     * 
      * @todo merge overlapping events to one freebusy entry
-     *
+     * 
+     * @param  Calendar_Model_EventFilter                           $_periods
+     * @param  Tinebase_Record_RecordSet                            $_attendee
+     * @param  array                                                $_ignoreUIDs
+     * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
      */
-    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = []): Tinebase_Record_RecordSet
+    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
     {
         $fbInfoSet = new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
         
@@ -563,11 +558,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Calendar_Model_Attender::enforceListIdForGroups($attendee);
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                . ' getConflictingPeriods for attendee: ' . print_r($attendee->toArray(), true));
-        }
 
         $conflictCriteria = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
@@ -579,9 +569,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // create a typemap
         $typeMap = array();
         foreach ($attendee as $attender) {
-            if (empty($attender['user_id'])) {
-                continue;
-            }
             if (! isset($typeMap[$attender['user_type']])) {
                 $typeMap[$attender['user_type']] = array();
             }
@@ -590,12 +577,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
+            . ' value: ' . print_r($typeMap, true));
 
         // fetch resources to get freebusy type
         // NOTE: we could add busy_type to attendee later
         if (isset($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE])) {
-            $resources = Calendar_Controller_Resource::getInstance()->getMultiple(
-                array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
+            $resources = Calendar_Controller_Resource::getInstance()->getMultiple(array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
         }
 
         $processedEventIds = array();
@@ -2021,10 +2009,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return;
         }
 
+        /** @var Tinebase_Model_Container $container */
         $container = $currentEvent?->container_id ?: Tinebase_Container::getInstance()->get($event->container_id);
-        if ($config = ($container->xprops()[self::SYNC_CONTAINER] ?? false)) {
+        if ($config = $container->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
             $e = new Calendar_Exception_InSyncContainer();
-            $e->syncContainerConfig = new Calendar_Model_SyncContainerConfig($config);
+            $e->syncContainerConfig = $config;
             throw $e;
         }
     }
@@ -3450,7 +3439,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, Tinebase_Core::getUser(), 'alarm', NULL, array('alarm' => $_alarm));
     }
-    
+
+    public function syncCloudAccountContainers(): bool
+    {
+        $cloudAccountContainers = Tinebase_Container::getInstance()->_backend->search(new Tinebase_Model_ContainerFilter([
+            [TMFA::FIELD => 'application_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()],
+            [TMFA::FIELD => 'xprops', TMFA::OPERATOR => 'contains', TMFA::VALUE => '"' . self::SYNC_CONTAINER . '"' ],
+        ]));
+
+        return true;
+    }
+
     /**
      * send notifications 
      * 
@@ -3866,6 +3865,33 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
         } else {
             parent::deleteContainerContents($_container, $_ignoreAcl, $_filter);
+        }
+    }
+
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
+    {
+        if ($_eventObject instanceof Tinebase_Event_Container_BeforeCreate &&
+                $syncConfig = $_eventObject->container->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
+            $syncConfig->readValuesFromRemote();
+            $_eventObject->container->xprops()[self::SYNC_CONTAINER] = $syncConfig->toArray();
+        }
+
+
+        if ($_eventObject instanceof Tinebase_Event_Record_BeforeUpdate && $_eventObject->observable instanceof Tinebase_Model_Container
+                && $syncConfig = $_eventObject->observable->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
+
+            // if container name or container colour deviates from external values we need to make sure to set the overwritten flag
+            if (!$syncConfig->{Calendar_Model_SyncContainerConfig::FLD_CONTAINER_NAME_LOCALLY_OVERWRITTEN} &&
+                    $_eventObject->observable->name !== $syncConfig->{Calendar_Model_SyncContainerConfig::FLD_EXTERNAL_CONTAINER_NAME}) {
+                $syncConfig->{Calendar_Model_SyncContainerConfig::FLD_CONTAINER_NAME_LOCALLY_OVERWRITTEN} = true;
+            }
+            if (!$syncConfig->{Calendar_Model_SyncContainerConfig::FLD_CONTAINER_COLOR_LOCALLY_OVERWRITTEN} &&
+                    $_eventObject->observable->color !== $syncConfig->{Calendar_Model_SyncContainerConfig::FLD_EXTERNAL_CONTAINER_COLOR}) {
+                $syncConfig->{Calendar_Model_SyncContainerConfig::FLD_CONTAINER_COLOR_LOCALLY_OVERWRITTEN} = true;
+            }
+            if ($syncConfig->isDirty()) {
+                $_eventObject->observable->xprops()[self::SYNC_CONTAINER] = $syncConfig->toArray();
+            }
         }
     }
 }

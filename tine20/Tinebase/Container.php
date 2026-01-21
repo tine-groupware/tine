@@ -2273,6 +2273,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 Tinebase_Controller_Record_Abstract::ACTION_UPDATE, $oldContainer);
         }
 
+        if ($_fireEvent) {
+            $event = new Tinebase_Event_Record_BeforeUpdate();
+            $event->observable = $_record;
+            $event->oldRecord = $oldContainer;
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        }
+
         try {
             $result = parent::update($_record);
         } catch (Zend_Db_Statement_Exception $zdse) {
@@ -2293,6 +2300,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         if ($_fireEvent) {
             $event = new Tinebase_Event_Record_Update();
             $event->observable = $result;
+            $event->oldRecord = $oldContainer;
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         }
 

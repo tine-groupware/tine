@@ -73,6 +73,24 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
     protected ?Calendar_Convert_Event_VCalendar_Abstract $_converter = null;
     protected array $settings;
+
+    public const PROPERTY_CALENDAR_COLOR = 'calendar-color';
+    public const PROPERTY_CURRENT_USER_PRIVILEGE_SET = 'current-user-privilege-set';
+    public const PROPERTY_DISPLAY_NAME = 'displayname';
+    public const PROPERTY_OWNER = 'owner';
+
+    protected static array $properties = [
+        self::PROPERTY_CALENDAR_COLOR => '<calendar-color xmlns="http://apple.com/ns/ical/" />',
+        self::PROPERTY_CURRENT_USER_PRIVILEGE_SET => '<d:current-user-privilege-set />',
+        self::PROPERTY_DISPLAY_NAME => '<d:displayname />',
+        self::PROPERTY_OWNER => '<d:owner />',
+    ];
+    protected static array $propertiesClark = [
+        self::PROPERTY_CALENDAR_COLOR => '{http://apple.com/ns/ical/}calendar-color',
+        self::PROPERTY_CURRENT_USER_PRIVILEGE_SET => '{DAV:}current-user-privilege-set',
+        self::PROPERTY_DISPLAY_NAME => '{DAV:}displayname',
+        self::PROPERTY_OWNER => '{DAV:}owner',
+    ];
     
     public function __construct(array $settings, string $flavor)
     {
@@ -245,6 +263,25 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         }
 
         return $result;
+    }
+
+    public function getCollectionInfos(string $uri, array $properties): array
+    {
+        $propertiesXml = '';
+        foreach ($properties as $property) {
+            if (static::$properties[$property] ?? false) {
+                $propertiesXml .= static::$properties[$property] . PHP_EOL;
+            }
+        }
+        $result = $this->multiStatusRequest('PROPFIND', $uri, '<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:">
+  <d:prop>
+' . $propertiesXml . '
+  </d:prop>
+</d:propfind>');
+
+
+        return [];
     }
 
     /**
