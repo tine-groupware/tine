@@ -1,7 +1,6 @@
-version: '2'
 services:
   db:
-    image: mariadb:10.9.8
+    image: mariadb:11.8
     command: --max-allowed-packet=209715210
     restart: always
     environment:
@@ -19,7 +18,7 @@ services:
       - internal_network
 
   web:
-    image: tinegroupware/tine:2024
+    image: tinegroupware/tine:2025
     restart: always
     depends_on:
       - db
@@ -74,7 +73,7 @@ services:
 #      - "traefik.http.services.web.loadbalancer.server.port=80"
 
   cache:
-    image: redis:6.0.16
+    image: valkey/valkey:9.0
     restart: always
     networks:
       - internal_network
@@ -97,6 +96,7 @@ services:
       DEBUG_DEFAULT_LOGGING: "on"
       DEBUG_LOG_TO_FILE: "off"
       DEBUG_LOG_FILE: ../../stdout.log
+      ENABLE_MULTITENANCY_MODE: false
 
 ### other optional services
 
@@ -159,7 +159,7 @@ services:
 #      - internal_network
 
 #  traefik:
-#    image: "traefik:v2.6"
+#    image: "traefik:v3.6"
 #    restart: always
 #    container_name: "traefik"
 #    command:

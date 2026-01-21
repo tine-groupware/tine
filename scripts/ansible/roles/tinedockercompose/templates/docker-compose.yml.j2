@@ -111,7 +111,7 @@ services:
 
 {% if tinedockercompose_redis_service is defined and tinedockercompose_redis_service|bool %}
   cache:
-    image: redis:{{ tinedockercompose_redis_version }}
+    image: {{ tinedockercompose_redis_image }}
     restart: always
     networks:
       - internal_network
