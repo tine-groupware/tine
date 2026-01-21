@@ -36,7 +36,7 @@ docker compose up
 Wait for the database to become available. If it is, the web container will log `web_1    | DB available`. Now open another terminal and start the tine installer. There you need to accept the tine-license and Privacy policy and you will be able to set the initial admin password.
 
 ```
-docker compose exec web tine20_install
+docker compose exec web su tine20 bash -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --install"
 ```
 
 Your tine-groupware is now reachable at http://127.0.0.1:4000.

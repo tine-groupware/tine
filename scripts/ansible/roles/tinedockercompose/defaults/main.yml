@@ -1,5 +1,5 @@
 ---
-tinedockercompose_tine_image: "tinegroupware/tine:2024"
+tinedockercompose_tine_image: "tinegroupware/tine:2025"
 tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
 tinedockercompose_tinesetuphtpasswd: "setup:$$apr1$$JhCtViTh$$k15DH.HvNR5hZ66Ew5aTH/" #setuppw
@@ -28,7 +28,7 @@ tinedockercompose_redis_hostname: "cache"
 
 tinedockercompose_db_service: true
 tinedockercompose_db_host: "db"
-tinedockercompose_db_image: "mariadb:10.9.8"
+tinedockercompose_db_image: "mariadb:11.8"
 tinedockercompose_db_command: "--max-allowed-packet=209715210"
 tinedockercompose_db_path: "/srv/tine/db"
 tinedockercompose_db_name: "tine"
@@ -45,7 +45,7 @@ tinedockercompose_documentserver_secret: "change_me_also_define_in_tine_cfg"
 tinedockercompose_documentserver_publicurl: "http://localhost:4020/"
 tinedockercompose_documentserver_serverurl: true
 
-tinedockercompose_redis_version: "6.0.16"
+tinedockercompose_redis_image: "valkey/valkey:9.0"
 
 tinedockercompose_broadcasthub: false
 tinedockercompose_edocument_service: false
