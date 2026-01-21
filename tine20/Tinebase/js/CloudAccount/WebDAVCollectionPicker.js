@@ -11,20 +11,25 @@ const WebDAVCollectionPicker = Ext.extend(Ext.form.ComboBox, {
 
 
     collectionName: 'Collection',
+    type: 'VEVENT',
 
-
-    displayField:'name',
-    valueField:'id',
+    displayField: 'name',
+    valueField: 'uri',
     forceSelection: true,
     mode: 'local',
     triggerAction: 'all',
-    selectOnFocus:true,
+    selectOnFocus: true,
     filterAnyMatch: true,
+    tpl: '<tpl for="."><div class="x-combo-list-item">' +
+        '<span style="color:{color};" class="dark-reverse">&nbsp;◉&nbsp;</span>' +
+        '<span>{name}</span>' +
+        // '<span>{acl}</span>' +
+    '</div></tpl>',
 
     /**
      * @private
      */
-    initComponent: function() {
+    initComponent: function () {
         this.store = new Ext.data.JsonStore({
             root: 'results',
             id: 'shortName',
@@ -36,12 +41,12 @@ const WebDAVCollectionPicker = Ext.extend(Ext.form.ComboBox, {
             }
         });
 
-        this.emptyText = window.formatMessage('Select a { collectionName }...', { collectionName: this.collectionName });
+        this.emptyText = window.formatMessage('Select a { collectionName }...', {collectionName: this.collectionName});
 
         WebDAVCollectionPicker.superclass.initComponent.call(this);
     },
 
-    doQuery: async function(q, forceAll) {
+    doQuery: async function (q, forceAll) {
         try {
             const editDialog = this.findParentBy(function (c) {
                 return c instanceof Tine.widgets.dialog.EditDialog
@@ -49,8 +54,10 @@ const WebDAVCollectionPicker = Ext.extend(Ext.form.ComboBox, {
             const cloudAccount = editDialog.getForm().findField('cloud_account_id').selectedRecord?.id
 
             const result = await Tine.Tinebase.getCloudAccountWebDAVCollections(cloudAccount)
-            console.error(result)
-        } catch(e) {
+
+            this.store.loadData(_.filter(result, {type: this.type}))
+
+        } catch (e) {
 
         } finally {
 
