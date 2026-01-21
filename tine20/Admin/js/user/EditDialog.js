@@ -960,7 +960,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hideLabel: true,
             xtype: 'checkbox',
             boxLabel: this.app.i18n.gettext('Password Must Change'),
-            hidden: this.ldapBackend,
+            hidden: this.ldapBackend && !Tine.Tinebase.registry.get('writePwToSql'),
             ctCls: 'admin-checkbox',
             fieldClass: 'admin-checkbox-box',
             name: 'password_must_change',
