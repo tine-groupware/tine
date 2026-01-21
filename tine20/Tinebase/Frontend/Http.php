@@ -181,7 +181,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         // production
-        $filesToWatch = $this->_getFilesToWatch('lang', array($app));
+        $filesToWatch = $this->_getFilesToWatch('lang', array($app), $locale);
         $this->_deliverChangedFiles('lang', $filesToWatch);
     }
 
@@ -258,7 +258,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @throws Exception
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getFilesToWatch($_fileType, $apps = array())
+    protected function _getFilesToWatch($_fileType, $apps = array(), $locale = null)
     {
         $requiredApplications = array('Setup', 'Tinebase', 'Admin', 'Addressbook');
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
@@ -279,9 +279,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     $filesToWatch[] = "{$application}/js/{$application}";
                     break;
                 case 'lang':
-                    $fileName = "{$application}/js/{$application}-lang-" . Tinebase_Core::getLocale()
+                    $lang = $locale ?? Tinebase_Core::getLocale();
+                    $fileName = "{$application}/js/{$application}-lang-" . $lang
                         . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
-                    $lang = Tinebase_Core::getLocale();
                     $customPath = Tinebase_Config::getInstance()->translations;
                     $basePath = ! empty($customPath) && is_readable("$customPath/$lang/$fileName")
                         ? "$customPath/$lang"
