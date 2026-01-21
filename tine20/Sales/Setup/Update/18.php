@@ -189,7 +189,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             // payment_method
 
             $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
-                Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER => $oldPI->number,
+                Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => $oldPI->number,
                 Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => $oldPI->is_payed ? Sales_Model_Document_PurchaseInvoice::STATUS_PAID :
                     ($oldPI->is_approved ? Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED : Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED),
                 Sales_Model_Document_PurchaseInvoice::FLD_DESCRIPTION => $oldPI->description,
@@ -198,9 +198,13 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_PAY_AT => $oldPI->pay_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAID_AT => $oldPI->payed_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_OVER_DUE_AT => $oldPI->overdue_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_CURRENCY => 'EUR',
+                Sales_Model_Document_PurchaseInvoice::FLD_INVOICE_DISCOUNT_PERCENTAGE => 0,
+                Sales_Model_Document_PurchaseInvoice::FLD_INVOICE_DISCOUNT_SUM => 0,
                 Sales_Model_Document_PurchaseInvoice::FLD_NET_SUM => $oldPI->price_net,
                 Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_NET_SUM => $oldPI->price_net,
                 Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross + $oldPI->price_gross2,
+                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_DISCOUNT_SUM => 0,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX => $oldPI->price_tax,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [[
                     Sales_Model_Document_SalesTax::FLD_TAX_RATE => $oldPI->sales_tax ?? 0,
@@ -209,8 +213,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                     Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross + $oldPI->price_gross2,
                 ]],
                 Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
-                Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER'),
-                Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER'),
+                Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER')?->related_record,
+                Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER')?->related_record,
                 Sales_Model_Document_PurchaseInvoice::FLD_XPROPS => ['migration_src_id' => $oldPI->getId()],
                 Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS_USED  => $oldPI->payment_method,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_REMINDERS => new Tinebase_Record_RecordSet(Sales_Model_Document_PaymentReminder::class, $oldPI->dunned_at ? [

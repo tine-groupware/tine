@@ -145,6 +145,8 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 ],
             ],
         ]);
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_APPROVER] = [];
+
 
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_GROSS_SUM, [
             self::FLD_DOCUMENT_CURRENCY => [
