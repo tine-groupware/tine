@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bad57108207723416646f20a9af11347",
+    "content-hash": "37c2b0c2525186910c47441ed3fe29d5",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6302,63 +6302,6 @@
                 "source": "https://github.com/PHPSocialNetwork/riak-php-client/tree/develop"
             },
             "time": "2017-11-23T21:33:15+00:00"
-        },
-        {
-            "name": "phpmailer/dkimvalidator",
-            "version": "v0.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPMailer/DKIMValidator.git",
-                "reference": "ce691bdbb8a2f122cdfa315169bc0e1cd1965b77"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/DKIMValidator/zipball/ce691bdbb8a2f122cdfa315169bc0e1cd1965b77",
-                "reference": "ce691bdbb8a2f122cdfa315169bc0e1cd1965b77",
-                "shasum": ""
-            },
-            "require": {
-                "ext-hash": "*",
-                "ext-mbstring": "*",
-                "ext-openssl": "*",
-                "php": ">=7.2.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.15",
-                "nunomaduro/phpinsights": "^v1.9.0",
-                "phpunit/phpunit": "8.4.1",
-                "roave/security-advisories": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PHPMailer\\DKIMValidator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "angrychimp",
-                    "email": "rk@angrychimp.net"
-                },
-                {
-                    "name": "Teon d.o.o. - Bostjan Skufca",
-                    "email": "bostjan@teon.si"
-                },
-                {
-                    "name": "Marcus Bointon",
-                    "email": "phpmailer@synchromedia.co.uk"
-                }
-            ],
-            "description": "A DKIM signature validator in PHP.",
-            "support": {
-                "issues": "https://github.com/PHPMailer/DKIMValidator/issues",
-                "source": "https://github.com/PHPMailer/DKIMValidator/tree/v0.3.1"
-            },
-            "time": "2025-10-09T12:29:49+00:00"
         },
         {
             "name": "phpmailer/phpmailer",
@@ -16788,7 +16731,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-  "platform-dev": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.1",
         "ext-spl": "8.1",

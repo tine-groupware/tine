@@ -558,21 +558,21 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      */
     public function testAddMessageCacheWithSenderFlag(): void
     {
-        $this->markTestSkipped('validator needs to have the valid dns public key ...');
         $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        $supportedMailServers['example.com'] = [
-            'id' => 'MAILORG',
-            'value' => 'unknown mailserver',
-        ];
-        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
-        $message = $this->_emailTestClass->messageTestHelper('dkim_email.eml');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, [
+            'mail.org'  => [
+                'id' => 'MAILORG',
+                'value' => 'unknown mailserver',
+            ]
+        ]);
+        $message = $this->_emailTestClass->messageTestHelper('24706.eml');
         $filter = array(array(
             'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
         ));
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchMessages($filter, []);
 
-        $this->assertEquals('MAILORG', $result['results'][0]['flags'][1], 'Message should have sender flag');
+        $this->assertEquals('MAILORG', $result['results'][0]['flags'][1], 'Message should have sender tag');
         Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
     }
 }
