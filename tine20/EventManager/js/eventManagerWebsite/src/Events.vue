@@ -2,77 +2,159 @@
 /*
  * Tine 2.0
  *
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 -->
 
 <template>
-  <b-container>
+  <b-container fluid class="events-container">
 
     <b-row class="text-center my-5">
       <b-col>
-        <h1>{{formatMessage('Events')}}</h1>
+        <h1 class="page-title">{{formatMessage('Events')}}</h1>
       </b-col>
     </b-row>
 
-    <b-row>
-      <b-card-group deck>
-        <BCard
-          v-for="event in events"
-          :title= event.name
-          tag="article"
-          style="max-width: 20rem; min-width: 18rem"
-        >
-          <BCardText>
-            <div v-if="event.description && event.description.length<127">{{event.description}}</div>
-            <div v-else>{{event.description && event.description.substring(0,127)+"..."}}</div>
-          </BCardText>
-          <b-button :to="{ path: '/event/'+ event.id }" variant="primary">{{formatMessage('More Information')}}</b-button>
-        </BCard>
-      </b-card-group>
+    <b-row class="justify-content-center">
+      <b-col lg="10" xl="8">
+        <div class="events-list">
+          <BCard
+            v-for="event in events"
+            :key="event.id"
+            :title="event.name"
+            tag="article"
+            class="event-card mb-4"
+          >
+            <BCardText>
+              <div v-if="event.description && event.description.length<255">{{event.description}}</div>
+              <div v-else>{{event.description && event.description.substring(0,255)+"..."}}</div>
+            </BCardText>
+            <b-button :to="{ path: '/event/'+ event.id }" class="info-button">
+              {{formatMessage('More Information')}}
+            </b-button>
+          </BCard>
+        </div>
+      </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script setup>
-import {inject} from 'vue';
-import {translationHelper} from "./keys";
-const formatMessage = inject(translationHelper);
-</script>
 
-<script>
-export default {
-  name: "Events"
-}
-
-import {
-  ref,
-  computed
-} from 'vue';
+import {ref, onBeforeMount} from 'vue';
+import {useFormatMessage} from './index.es6';
+const { formatMessage } = useFormatMessage();
 
 const events = ref(null);
+
 async function fetchData() {
-  await fetch(`/EventManager/view/search/event`, {
-    method: 'GET'
-  }).then(resp => resp.json())
-    .then(data => {
-      console.log(data);
-      events.value = data;
-    })
+  try {
+    const resp = await fetch(`/EventManager/events`, {
+      method: 'GET'
+    });
+    events.value = await resp.json();
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
 }
 
-/*const filteredEvents = computed(() => {
-  return events.value.filter((event) => {
-    return event.name.toLowerCase().indexOf(input.value.toLowerCase()) !== -1;
-  });
-})*/
-
-fetchData();
+const loading = ref(true);
+onBeforeMount(async () => {
+  loading.value = true;
+  try {
+    await fetchData();
+  } catch (e) {}
+  document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
+  loading.value = false;
+})
 
 </script>
 
 <style scoped lang="scss">
+.events-container {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+  padding: 3rem 0;
+  width: 100%;
+}
 
+.page-title {
+  font-weight: 700;
+  color: #2c3e50;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.event-card {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  background: white;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  :deep .card-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 0.75rem;
+  }
+
+  :deep .card-body {
+    padding: 1.5rem;
+  }
+
+  :deep .card-text {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+  }
+}
+
+:deep .info-button {
+  font-weight: 500;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #2c3e50 !important;
+  border: 2px solid #2c3e50 !important;
+  background-color: transparent !important;
+
+  &:hover {
+    transform: scale(1.05);
+    background-color: #2c3e50 !important;
+    border-color: #2c3e50 !important;
+    color: white !important;
+    box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .event-card {
+    :deep .card-title {
+      font-size: 1.25rem;
+    }
+  }
+}
 </style>

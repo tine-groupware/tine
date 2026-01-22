@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  *
@@ -6,7 +9,7 @@
  * @subpackage  Config
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -38,6 +41,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
 
     public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';
     public const JWT_SECRET = 'jwtSecret';
+    public const EVENT_REGISTER_OTHERS = 'eventRegisterOthers';
 
 
 
@@ -294,6 +298,22 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
             self::RANDOMIZEIFEMPTY      => true,
+        ],
+        self::EVENT_REGISTER_OTHERS => [
+            self::LABEL                 => 'Participants are allowed to register',
+            //_('Participants are allowed to register')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                 => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR              => [
+                self::RECORDS  => [
+                    ['id' => 1,      'value' => 'Anyone'], //_('Anyone')
+                    ['id' => 2,      'value' => 'Only themselves'], //_('Only themselves')
+                    ['id' => 3,      'value' => 'Dependants'], //_('Dependants')
+                ],
+                self::DEFAULT_STR => 1
+            ]
         ],
     ];
 

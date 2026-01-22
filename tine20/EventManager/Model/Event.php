@@ -1,18 +1,21 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  *
  * @package     EventManager
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
  */
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 /**
- * Model for metadata of files
+ * Model
  *
  * @package     EventManager
  * @subpackage  Model
@@ -29,13 +32,12 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_TOTAL_PLACES = 'total_places';
     public const FLD_BOOKED_PLACES = 'booked_places';
     public const FLD_AVAILABLE_PLACES = 'available_places';
-    public const FLD_DOUBLE_OPT_IN = 'double_opt_in';
     public const FLD_OPTIONS = 'options';
     public const FLD_REGISTRATIONS = 'registrations';
     public const FLD_APPOINTMENTS = 'appointments';
     public const FLD_DESCRIPTION = 'description';
-    public const FLD_IS_LIVE = 'is_live';
     public const FLD_REGISTRATION_POSSIBLE_UNTIL = 'registration_possible_until';
+    public const FLD_REGISTER_OTHERS = 'register_others';
 
     const MODEL_NAME_PART = 'Event';
     const TABLE_NAME = 'eventmanager_event';
@@ -77,7 +79,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::FLD_REGISTRATIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_Registration::FLD_PARTICIPANT      => [],
-                        EventManager_Model_Registration::FLD_REGISTRATOR      => [],
+                        EventManager_Model_Registration::FLD_REGISTRANT      => [],
                         EventManager_Model_Registration::FLD_BOOKED_OPTIONS   => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                                 EventManager_Model_BookedOption::FLD_OPTION => []
@@ -264,15 +266,14 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
             ],
-            /*self::FLD_IS_LIVE       => [
-                self::TYPE              => self::TYPE_BOOLEAN,
-                self::LABEL             => 'Event is live', // _('Event is live')
+            self::FLD_REGISTER_OTHERS     => [
+                self::LABEL                 => 'Participants are allowed to register',
+                // _('Participants are allowed to register')
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::DEFAULT_VAL       => 1,
+                self::NAME              => EventManager_Config::EVENT_REGISTER_OTHERS,
                 self::NULLABLE          => true,
-                self::DEFAULT_VAL       => false,
-                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
-                self::ALLOW_CAMEL_CASE  => true,
-            ],*/
+            ],
         ]
     ];
 

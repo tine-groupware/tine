@@ -2,9 +2,9 @@
  * Tine 2.0
  *
  * @package     EventManager
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -20,6 +20,7 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
     },
 
     getFormItems: function () {
+        const me = this;
         const fieldManager = _.bind(
             Tine.widgets.form.FieldManager.get,
             Tine.widgets.form.FieldManager,
@@ -35,19 +36,33 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
             activeTab: 0,
             items: [{
                 xtype: 'fieldset',
-                title: this.app.i18n._('File Acknowledgement'),
+                title: this.app.i18n._('File Acknowledgement or Upload'),
                 items: [
-                    fieldManager('file_acknowledgement'),
+                    fieldManager('file_acknowledgement', {
+                        listeners: {
+                            check: function (checkbox, checked) {
+                                if (checked) {
+                                    me.form.findField('file_upload').setValue(false);
+                                    me.getFileUploadGrid().hide();
+                                }
+                            }
+                        }
+                    }),
+                    fieldManager('file_upload', {
+                        listeners: {
+                            check: function (checkbox, checked) {
+                                if (checked) {
+                                    me.form.findField('file_acknowledgement').setValue(false);
+                                    me.getFileUploadGrid().show();
+                                } else {
+                                    me.getFileUploadGrid().hide();
+                                }
+                            }
+                        }
+                    }),
+                    me.getFileUploadGrid().hide()
                 ]
-            },{
-                xtype: 'fieldset',
-                title: this.app.i18n._('File Upload'),
-                layout: 'fit',
-                items: [
-                    this.getFileUploadGrid()
-                ]
-            }
-            ]
+            }]
         }
     },
 
@@ -147,7 +162,32 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
         }
     },
 
+    validateFileUpload: function () {
+        const fileUploadField = this.form.findField('file_upload');
+        const isFileUploadChecked = fileUploadField && fileUploadField.getValue();
+
+        if (isFileUploadChecked) {
+            const hasUploadedFile = this.record && this.record.get('node_id');
+            const hasFileInGrid = this.gridPanel && this.gridPanel.store.data.items.length > 0;
+
+            if (!hasUploadedFile && !hasFileInGrid) {
+                Ext.MessageBox.show({
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING,
+                    title: this.app.i18n._('File Required'),
+                    msg: this.app.i18n._('Please upload a file before saving.')
+                });
+                return false;
+            }
+        }
+
+        return true;
+    },
+
     onApplyChanges: function (button, event, closeWindow) {
+        if (!this.validateFileUpload()) {
+            return false;
+        }
         let uploadedFiles = this.gridPanel.store.data.items;
         if (uploadedFiles.length > 0 && !this.record.get('node_id')) {
             let completedFiles = uploadedFiles.filter(file => file.get('status') === 'complete');

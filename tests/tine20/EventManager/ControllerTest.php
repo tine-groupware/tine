@@ -3,9 +3,9 @@
  * Tine 2.0 - http://www.tine20.org
  *
  * @package     EventManagers
- * @license     http://www.gnu.org/licenses/agpl.html
+ * @license     https://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  *
  */
 
@@ -82,13 +82,13 @@ class EventManager_ControllerTest extends TestCase
         $updatedEvent = EventManager_Controller_Event::getInstance()->get($event->getId());
         self::assertCount(1, $updatedEvent->{EventManager_Model_Event::FLD_REGISTRATIONS});
         $registration = $updatedEvent->{EventManager_Model_Event::FLD_REGISTRATIONS}->getFirstRecord();
-        self::assertNotNull($registration->{EventManager_Model_Registration::FLD_REGISTRATOR});
+        self::assertNotNull($registration->{EventManager_Model_Registration::FLD_REGISTRANT});
     }
 
     /**
-     * try to add a registrator to a registration different from participant
+     * try to add a registrant to a registration different from participant
      */
-    public function testAddRegistratorToRegistration()
+    public function testAddRegistrantToRegistration()
     {
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
@@ -97,13 +97,13 @@ class EventManager_ControllerTest extends TestCase
             new Tinebase_Record_RecordSet(EventManager_Model_Registration::class, [$registration]);
         self::assertNotEquals(
             $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}->n_family,
-            $registration->{EventManager_Model_Registration::FLD_REGISTRATOR}->n_family
+            $registration->{EventManager_Model_Registration::FLD_REGISTRANT}->n_family
         );
         $event = EventManager_Controller_Event::getInstance()->update($event);
         $registration = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}[0];
         self::assertNotEquals(
             $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}->n_family,
-            $registration->{EventManager_Model_Registration::FLD_REGISTRATOR}->n_family
+            $registration->{EventManager_Model_Registration::FLD_REGISTRANT}->n_family
         );
     }
 
@@ -449,7 +449,7 @@ class EventManager_ControllerTest extends TestCase
      *
      * @return EventManager_Model_Registration
      */
-    protected function _getRegistration($event_id, $options = null, $has_other_registrator = false): EventManager_Model_Registration
+    protected function _getRegistration($event_id, $options = null, $has_other_registrant = false): EventManager_Model_Registration
     {
         $container_id = EventManager_Setup_Initialize::getContactEventContainer()->getId();
         $adb_controller = Addressbook_Controller_Contact::getInstance();
@@ -460,16 +460,16 @@ class EventManager_ControllerTest extends TestCase
             'adr_one_locality' => 'Test City',
             'container_id' => $container_id,
         ]));
-        if ($has_other_registrator) {
-            $registrator = $adb_controller->create(new Addressbook_Model_Contact([
-                'n_family' => 'registrator test',
+        if ($has_other_registrant) {
+            $registrant = $adb_controller->create(new Addressbook_Model_Contact([
+                'n_family' => 'registrant test',
                 'adr_one_street' => 'test Str. 2',
                 'adr_one_postalcode' => '5678',
                 'adr_one_locality' => 'Test City',
                 'container_id' => $container_id,
             ]));
         } else {
-            $registrator = $participant;
+            $registrant = $participant;
         }
         $default_values = EventManager_Controller_Registration::getInstance()->getDefaultRegistrationKeyFields();
 
@@ -481,7 +481,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrator'            => $registrator,
+                'registrant'            => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -493,7 +493,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrator'            => $registrator,
+                'registrant'            => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -504,7 +504,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrator'            => $registrator,
+                'registrant'            => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],

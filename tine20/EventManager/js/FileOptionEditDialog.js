@@ -2,9 +2,9 @@
  * Tine 2.0
  *
  * @package     EventManager
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -56,16 +56,9 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             }
                         }
                     }),
+                    me.getFileUploadGrid()
                 ]
-            },{
-                xtype: 'fieldset',
-                title: this.app.i18n._('File Upload'),
-                layout: 'fit',
-                items: [
-                    this.getFileUploadGrid()
-                ]
-            }
-            ]
+            }]
         }
     },
 
@@ -85,6 +78,7 @@ Tine.EventManager.FileOptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             showProgress: true,
             i18nFileString: null,
             fileSelectionDialog: null,
+            height: 100,
         });
 
         this.gridPanel.on('filesSelected', this.onFilesSelected, this);

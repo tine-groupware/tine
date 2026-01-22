@@ -1,12 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  * 
  * @package     EventManager
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
