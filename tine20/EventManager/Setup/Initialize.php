@@ -64,13 +64,17 @@ class EventManager_Setup_Initialize extends Setup_Initialize
             // This is fine
         };
     }
-    protected function _initializeDefaultContainer()
+    protected function _initializeDefaultContainer(): Tinebase_Model_Container
     {
         if (Tinebase_Core::isReplica()) {
-            self::getContactEventContainer();
-            return;
+            return self::getContactEventContainer();
         }
 
+        return self::_createContactEventContainer();
+    }
+
+    protected static function _createContactEventContainer(): Tinebase_Model_Container
+    {
         $groupsBackend = Tinebase_Group::getInstance();
         $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [
             [
@@ -101,6 +105,8 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         // config must be set after, since it belongs to EventManager and not Addressbook
         EventManager_Config::getInstance()
             ->set(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER, $systemContainer->getId());
+
+        return $systemContainer;
     }
 
     protected function _initializeCostCenterCostBearer()
@@ -122,7 +128,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         ]);
     }
 
-    public static function getContactEventContainer()
+    public static function getContactEventContainer(): Tinebase_Model_Container
     {
         $configInstance = EventManager_Config::getInstance();
         $containerId = $configInstance->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
@@ -159,7 +165,10 @@ class EventManager_Setup_Initialize extends Setup_Initialize
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                     ' Event Contacts container not found');
             }
-            return null;
+            if (Tinebase_Core::isReplica()) {
+                throw new Tinebase_Exception_NotFound('Event Contacts container not found');
+            }
+            return self::_createContactEventContainer();
         }
 
         $container = $containers->getFirstRecord();
