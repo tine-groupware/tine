@@ -287,7 +287,7 @@ class Tinebase_Record_PersistentObserver
         $where =
             $this->_db->quoteIdentifier('observable_model') .      ' = ' . $this->_db->quote($_observable::class) . ' AND (' .
             $this->_db->quoteIdentifier('observable_identifier') . ' = ' . $this->_db->quote((string)$_observable->getId()) . ' OR ' .
-            $this->_db->quoteIdentifier('observable_identifier') . ' IS NULL ) AND ' .
+            $this->_db->quoteIdentifier('observable_identifier') . ' = "" ) AND ' .
             $this->_db->quoteIdentifier('observed_event') .        ' = ' . $this->_db->quote((string)$_event)
         ;
 
