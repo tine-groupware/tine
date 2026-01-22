@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Felamimail
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -309,7 +309,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     protected function _createSharedEmailUserAndCredentials(Felamimail_Model_Account $_record)
     {
         if (empty($_record->email)) {
-            throw new Tinebase_Exception_Record_Validation('Shared account needs email address');
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Shared account needs email address'));
         }
 
         $translation = Tinebase_Translation::getTranslation($this->_applicationName);
