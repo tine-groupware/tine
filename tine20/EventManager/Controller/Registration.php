@@ -593,8 +593,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     $contact_data = array_map(function ($value) {
                         return $value;
                     }, $request['contactDetails']);
-                    $contact_data['container_id'] = EventManager_Config::getInstance()
-                        ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+                    $contact_data['container_id'] = EventManager_Setup_Initialize::getContactEventContainer()->getId();
 
                     $contact = new Addressbook_Model_Contact($contact_data);
                     $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
