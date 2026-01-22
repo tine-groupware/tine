@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use PHPMailer\DKIMValidator\Validator;
-
 /**
  * message flags controller for Felamimail
  *
@@ -396,22 +394,15 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             }
         }
 
-        try {
-            $mailAsString = $this->getMessageRawContent($_message);
-            $dkimValidator = new Validator($mailAsString);
+        if (isset($headers['dkim-signature']) && preg_match('/d=([^;]+)/', $headers['dkim-signature'], $matches)) {
+            $domain = trim($matches[1]);
+            $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
 
-            if ($dkimValidator->validateBoolean()) {
-                [, $domain] = explode('@', $_message->from_email, 2);
-                $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-                foreach ($supportedMailServers as $server => $data) {
-                    if (preg_match("/^$server$/", $domain)) {
-                        $flag = $data['id'];
-                    }
+            foreach ($supportedMailServers as $server => $data) {
+                if (preg_match("/^$server$/", $domain)) {
+                    $flag = $data['id'];
                 }
             }
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' exception: ' . $e->getMessage());
         }
 
         $flags = isset($_message['flags']) ? $_message['flags']: array();
