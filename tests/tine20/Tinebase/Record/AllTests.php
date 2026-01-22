@@ -24,10 +24,12 @@ class Tinebase_Record_AllTests
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Record Tests');
 
-        $suite->addTestSuite(Tinebase_Record_RecordTest::class);
-        $suite->addTestSuite(Tinebase_Record_RecordSetTest::class);
-        $suite->addTestSuite(Tinebase_Record_PathTest::class);
         $suite->addTestSuite(Tinebase_Record_ExpanderTest::class);
+        $suite->addTestSuite(Tinebase_Record_PathTest::class);
+        $suite->addTestSuite(Tinebase_Record_PersistentObserverTest::class);
+        $suite->addTestSuite(Tinebase_Record_RecordSetTest::class);
+        $suite->addTestSuite(Tinebase_Record_RecordTest::class);
+
 
         return $suite;
     }

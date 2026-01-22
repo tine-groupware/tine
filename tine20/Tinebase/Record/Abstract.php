@@ -759,6 +759,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             $defaultFilter = [];
             foreach ($filters as $property => $f) {
                 foreach (is_array($f) ? $f : [$f] as $filter) {
+                    if (is_array($filter) && ($filter[0] ?? false) && is_subclass_of($filter[0], Tinebase_Record_Filter_DefaultValue::class)) {
+                        $className = array_shift($filter);
+                        $filter = new $className(...$filter);
+                    }
                     if ($filter instanceof Tinebase_Record_Filter_DefaultValue) {
                         $defaultFilter[$property] = $filter;
                         continue 2;

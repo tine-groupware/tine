@@ -778,7 +778,7 @@
 
         <table>
             <name>record_observer</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -795,7 +795,7 @@
                     <name>observable_identifier</name>
                     <type>text</type>
                     <length>40</length>
-                    <notnull>false</notnull>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>observer_model</name>
