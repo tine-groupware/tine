@@ -32,6 +32,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE016 = self::class . '::update016';
     protected const RELEASE018_UPDATE017 = self::class . '::update017';
     protected const RELEASE018_UPDATE018 = self::class . '::update018';
+    protected const RELEASE018_UPDATE019 = self::class . '::update019';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -84,6 +85,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE016          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update016',
+            ],
+            self::RELEASE018_UPDATE019          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update019',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -404,5 +409,25 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.18',
             self::RELEASE018_UPDATE018);
+    }
+    public function update019(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->getTableVersion('record_observer') < 7) {
+            $this->setTableVersion('record_observer', 7);
+        }
+
+        ($db = $this->getDb())->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'record_observer') . ' SET observable_identifier = "" WHERE observable_identifier IS NULL');
+
+        $this->_backend->alterCol('record_observer', new Setup_Backend_Schema_Field_Xml('
+            <field>
+                    <name>observable_identifier</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>'));
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.19', self::RELEASE018_UPDATE019);
     }
 }
