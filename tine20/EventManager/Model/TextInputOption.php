@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * @package     EventManager
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -38,6 +41,7 @@ class EventManager_Model_TextInputOption extends Tinebase_Record_NewAbstract
             self::FLD_TEXT            => [
                 self::LABEL                 => 'Text', // _('Text')
                 self::TYPE                  => self::TYPE_FULLTEXT,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_MARKDOWN,
                 self::NULLABLE              => true,
                 self::DESCRIPTION           => 'Here you can ask the participant for relevant information for the event'
                                         // _('Here you can ask the participant for relevant information for the event')

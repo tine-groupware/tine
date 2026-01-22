@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * @package     EventManager
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -35,6 +38,7 @@ class EventManager_Model_Selections_TextInput extends Tinebase_Record_NewAbstrac
             self::FLD_RESPONSE     => [
                 self::LABEL                 => 'Response', // _('Response')
                 self::TYPE                  => self::TYPE_FULLTEXT,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_MARKDOWN,
                 self::DEFAULT_VAL           => false,
                 self::NULLABLE              => true,
             ]

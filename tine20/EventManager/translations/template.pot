@@ -178,6 +178,18 @@ msgstr ""
 msgid "The EventManager JWT secret string"
 msgstr ""
 
+msgid "Participants are allowed to register"
+msgstr ""
+
+msgid "Anyone"
+msgstr ""
+
+msgid "Only themselves"
+msgstr ""
+
+msgid "Dependants"
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -240,13 +252,87 @@ msgstr ""
 msgid "Waiting List"
 msgstr ""
 
-msgid "Since there are no more available places, this registration is on the waiting list."
+msgid "This event is fully booked. The person you are registering will be placed on the waiting list."
 msgstr ""
 
-msgid "Imprint"
+msgid "Manage Your Registrations"
 msgstr ""
 
-msgid "Privacy Notice"
+msgid "My Events"
+msgstr ""
+
+msgid "Register Again"
+msgstr ""
+
+msgid "Update"
+msgstr ""
+
+msgid "Cancel Registration"
+msgstr ""
+
+msgid "You don’t have any registrations for yourself yet — get started by creating one!"
+msgstr ""
+
+msgid "Users you registered"
+msgstr ""
+
+msgid "Create a new registration"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Please select an event first"
+msgstr ""
+
+msgid "New participant"
+msgstr ""
+
+msgid "Please select an event"
+msgstr ""
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "TBD"
+msgstr ""
+
+msgid "New Registration"
+msgstr ""
+
+msgid "Please select an event to register under this email address:"
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Please select an event."
+msgstr ""
+
+msgid "Do you really want to cancel your registration for"
+msgstr ""
+
+msgid "Registration Cancelled"
+msgstr ""
+
+msgid "Your registration has been cancelled successfully."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "Could not cancel your registration. Please try again later."
+msgstr ""
+
+msgid "Contact"
 msgstr ""
 
 msgid "Information of the event:"
@@ -279,9 +365,6 @@ msgstr ""
 msgid "Register now"
 msgstr ""
 
-msgid "Cancel"
-msgstr ""
-
 msgid "Please enter a valid email address"
 msgstr ""
 
@@ -294,7 +377,7 @@ msgstr ""
 msgid "Enter your email address"
 msgstr ""
 
-msgid "Registration Request Sent"
+msgid "Confirmation E-Mail Sent"
 msgstr ""
 
 msgid "Please check your email and click the confirmation link to continue."
@@ -312,16 +395,37 @@ msgstr ""
 msgid "More Information"
 msgstr ""
 
-msgid "Website"
+msgid "Church Service"
+msgstr ""
+
+msgid "Voluntary Service"
+msgstr ""
+
+msgid "Children"
+msgstr ""
+
+msgid "Choir"
+msgstr ""
+
+msgid "My Registrations"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Imprint"
+msgstr ""
+
+msgid "Privacy Notice"
 msgstr ""
 
 msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
 msgstr ""
 
-msgid "You already sign for this event. If you want to register a new person under the same e-mail account click"
+msgid "Participant Information:"
 msgstr ""
 
-msgid "here"
+msgid "Event Information:"
 msgstr ""
 
 msgid "characters"
@@ -339,10 +443,13 @@ msgstr ""
 msgid "Delete file"
 msgstr ""
 
-msgid "Update Registration"
+msgid "I am completing the registration form for another person"
 msgstr ""
 
-msgid "Cancel Registration"
+msgid "Registrant Information:"
+msgstr ""
+
+msgid "Update Registration"
 msgstr ""
 
 msgid "Register"
@@ -369,19 +476,13 @@ msgstr ""
 msgid "Deutschland"
 msgstr ""
 
-msgid "Do you really want to cancel your registration for"
+msgid "Validation Error"
 msgstr ""
 
-msgid "Registration Cancelled"
+msgid "Please enter a valid email address."
 msgstr ""
 
-msgid "Your registration has been cancelled successfully."
-msgstr ""
-
-msgid "Error"
-msgstr ""
-
-msgid "Could not cancel your registration. Please try again later."
+msgid "Please fill all required fields."
 msgstr ""
 
 msgid "The registration date for"
@@ -396,12 +497,6 @@ msgstr ""
 msgid "is full. If you register you will be on our waiting list. Do you still want to register?"
 msgstr ""
 
-msgid "Validation Error"
-msgstr ""
-
-msgid "Please fill all required fields."
-msgstr ""
-
 msgid "Your registration was updated successfully."
 msgstr ""
 
@@ -414,10 +509,7 @@ msgstr ""
 msgid "Registration failed. Please try again."
 msgstr ""
 
-msgid "File Acknowledgement"
-msgstr ""
-
-msgid "File Upload"
+msgid "File Acknowledgement or Upload"
 msgstr ""
 
 msgid "Multiple files not allowed"
@@ -438,10 +530,13 @@ msgstr ""
 msgid "\" is not allowed. Please select another file."
 msgstr ""
 
-msgid "File Configuration"
+msgid "File Required"
 msgstr ""
 
-msgid "File Required"
+msgid "Please upload a file before saving."
+msgstr ""
+
+msgid "File Configuration"
 msgstr ""
 
 msgid "Please upload a file or uncheck the file acknowledgement option before saving."
@@ -479,6 +574,12 @@ msgstr[1] ""
 msgid "Rules"
 msgstr ""
 
+msgid "Missing Participant"
+msgstr ""
+
+msgid "Please select a participant first"
+msgstr ""
+
 msgid "GENDER_Appointment"
 msgstr ""
 
@@ -488,9 +589,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Session number"
-msgstr ""
-
-msgid "Date"
 msgstr ""
 
 msgid "Start Time"
@@ -536,11 +634,6 @@ msgstr ""
 msgid "GENDER_Event"
 msgstr ""
 
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
 msgid "Event start"
 msgstr ""
 
@@ -560,9 +653,6 @@ msgid "Event Registrations"
 msgstr ""
 
 msgid "Event Appointments"
-msgstr ""
-
-msgid "Event is live"
 msgstr ""
 
 msgid "GENDER_File"
@@ -626,7 +716,10 @@ msgstr ""
 msgid "Participant"
 msgstr ""
 
-msgid "Registrator"
+msgid "This participant has been registered by another person"
+msgstr ""
+
+msgid "Registrant"
 msgstr ""
 
 msgid "Only change this field if someone else is responsible for the registration of the participant"
@@ -715,6 +808,18 @@ msgid "Event Contacts"
 msgstr ""
 
 msgid "EventManager"
+msgstr ""
+
+msgid "Topics"
+msgstr ""
+
+msgid "Select an Event"
+msgstr ""
+
+msgid "Select a Person"
+msgstr ""
+
+msgid "Select a Participant"
 msgstr ""
 
 msgid "Salutation"

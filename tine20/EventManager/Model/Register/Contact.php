@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 /**
- * class to hold Participant and Registrator Contact data
+ * class to hold Participant and Registrant Contact data
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -9,7 +9,7 @@
  */
 
 /**
- * class to hold Participant and Registrator Contact data
+ * class to hold Participant and Registrant Contact data
  *
  * @package     EventManager
  */
@@ -65,7 +65,7 @@ class EventManager_Model_Register_Contact extends Addressbook_Model_Contact
                 Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 [Zend_Validate_InArray::class, [
                     EventManager_Model_Registration::FLD_PARTICIPANT,
-                    EventManager_Model_Registration::FLD_REGISTRATOR,
+                    EventManager_Model_Registration::FLD_REGISTRANT,
                 ]],
             ],
         ];

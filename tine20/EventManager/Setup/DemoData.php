@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  *
  * @package     EventManager
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -156,16 +158,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $fileoption_upload = $this->setOptionConfigFileDemoData(false);
 
         //text input
-        $allergien = $this->setOptionConfigTextInputDemoData('Allergien: ', true, 50);
+        $allergien = $this->setOptionConfigTextInputDemoData(null, true, 50);
 
         //text output
         $unterscheriben = $this->setOptionConfigTextDemoData('Bitte laden Sie das unterschriebene Dokument hoch');
-
-        // registrations
-        $christoph = $this->getContact('Christoph', 'Riethmüller', $container_id);
-        $daniela = $this->getContact('Daniela', 'Braker', $container_id);
-        $heiner = $this->getContact('Heiner', 'Arden', $container_id);
-        $alexandra = $this->getContact('Alexandra', 'Avermiddig', $container_id);
 
         //appointments
         $appointment_status = EventManager_Config::getInstance()->get(EventManager_Config::APPOINTMENT_STATUS)
@@ -209,10 +205,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     EventManager_Model_Option::FLD_GROUP => 'Kosten',
                 ],
             ],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $christoph,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $christoph,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
 HIER EINIGE STICHWORTE, WAS SIE ERWARTET
@@ -285,10 +278,7 @@ Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $daniela,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
 
@@ -327,10 +317,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $daniela,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
         ]));
@@ -357,10 +344,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $daniela,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
         ]));
@@ -386,10 +370,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $daniela,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
         ]));
@@ -408,10 +389,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $heiner,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $heiner,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
 Für die Advents- und Weihnachtszeit werden Wechselgesänge aus dem Gebet- und Gesangbuch GOTTESLOB erarbeitet und Gestaltungsmöglichkeiten aus dem 
@@ -457,10 +435,7 @@ www.kindergottesdienst-katholisch.de',
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [[
-                EventManager_Model_Registration::FLD_PARTICIPANT => $alexandra,
-                EventManager_Model_Registration::FLD_REGISTRATOR => $alexandra,
-            ]],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
 Uns begegnen Familien in verschiedenen Beziehungsformen, aus unterschiedlichen Milieus und aus unterschiedlichen Religionen.
@@ -567,20 +542,7 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
                     EventManager_Model_Option::FLD_SORTING => 5,
                 ],
             ],
-            EventManager_Model_Event::FLD_REGISTRATIONS                 => [
-                [
-                    EventManager_Model_Registration::FLD_PARTICIPANT => $alexandra,
-                    EventManager_Model_Registration::FLD_REGISTRATOR => $heiner,
-                ],
-                [
-                    EventManager_Model_Registration::FLD_PARTICIPANT => $daniela,
-                    EventManager_Model_Registration::FLD_REGISTRATOR => $heiner,
-                ],
-                [
-                    EventManager_Model_Registration::FLD_PARTICIPANT => $christoph,
-                    EventManager_Model_Registration::FLD_REGISTRATOR => $heiner,
-                ],
-            ],
+            EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [
                 [
                     EventManager_Model_Appointment::FLD_SESSION_NUMBER => 1,
@@ -619,24 +581,6 @@ Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach 
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 9 test events'
             . EventManager_Model_Event::MODEL_NAME_PART);
-    }
-
-    protected function getContact($n_given, $n_family, $container_id): Addressbook_Model_Contact
-    {
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
-                ['field' => 'n_given', 'operator' => 'equals', 'value' => $n_given],
-                ['field' => 'n_family', 'operator' => 'equals', 'value' => $n_family],
-            ]);
-        $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-        if (!$contact) {
-            $adbController = Addressbook_Controller_Contact::getInstance();
-            $contact = $adbController->create(new Addressbook_Model_Contact([
-                'n_given' => $n_given,
-                'n_family' => $n_family,
-                'container_id' => $container_id,
-            ]));
-        }
-        return $contact;
     }
 
     protected function getLocation(
