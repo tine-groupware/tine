@@ -43,7 +43,7 @@ Tine.Calendar.ViewInCalendarDialog = Ext.extend(Ext.Panel, {
         this.pagingToolbar = new Tine.Calendar.PagingToolbar({
             view: 'week',
             store: this.store,
-            dtStart: new Date().clearTime(),
+            dtStart: this.record.get('dtstart'),
             showReloadBtn: true,
             showTodayBtn: false,
             listeners: {
