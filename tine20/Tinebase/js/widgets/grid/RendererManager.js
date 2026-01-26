@@ -156,18 +156,18 @@ Tine.widgets.grid.RendererManager = function() {
                                 break;
                             case 'discount':
                                 if (fieldDefinition.singleField) {
-                                    renderer = function (value, cell, record) {
+                                    renderer = function (value, metaData, record) {
                                         const type = record.get(fieldName.replace(/_sum$/, '_type'));
                                         if (type === 'PERCENTAGE') {
                                             value = record.get(fieldDefinition.fieldName.replace(/_sum$/, '_percentage'));
                                             return !value && value !== 0 ? '' : Tine.Tinebase.common.percentRenderer(value, 'float');
                                         } else {
-                                            return !value && value !== 0 ? '' : Ext.util.Format.money(value);
+                                            return !value && value !== 0 ? '' : Ext.util.Format.money(value, metaData);
                                         }
                                     }
                                 } else {
-                                    renderer = function (value, cell, record) {
-                                        return !value ? '' : Ext.util.Format.money(value);
+                                    renderer = function (value, metaData, record) {
+                                        return !value ? '' : Ext.util.Format.money(value, metaData);
                                     }
                                 }
                                 break;
@@ -252,8 +252,8 @@ Tine.widgets.grid.RendererManager = function() {
                     renderer = Tine.Tinebase.common.booleanRenderer;
                     break;
                 case 'money':
-                    renderer = function (value, cell, record) {
-                        return Ext.util.Format.money(value, {zeroMoney: fieldDefinition?.specialType === 'zeroMoney'}, fieldDefinition.nullable);
+                    renderer = function (value, metaData, record) {
+                        return Ext.util.Format.money(value, Object.assign({zeroMoney: fieldDefinition?.specialType === 'zeroMoney'}, metaData), fieldDefinition.nullable);
                     };
                     break;
                 case 'attachments':
@@ -391,7 +391,15 @@ Tine.widgets.grid.RendererManager = function() {
                 renderer = Tine.widgets.customfields.Renderer.get(appName, cfConfig);
             }
 
-            return renderer ? renderer : this.defaultRenderer;
+            // finally apply generic wrap for dynamic metadata provider
+            const wrap = _.wrap(renderer ? renderer : this.defaultRenderer, function(func, value, metaData, record, rowIndex, colIndex, store) {
+                if (_.isFunction(wrap.transformMetaData)) {
+                    metaData = wrap.transformMetaData(value, metaData, record, rowIndex, colIndex, store);
+                }
+                return func(value, metaData, record, rowIndex, colIndex, store);
+            });
+
+            return wrap
         },
 
         /**
