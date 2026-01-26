@@ -1,9 +1,9 @@
 /*
  * Tine 2.0
  *
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 

@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  *
  * @package     EventManager
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Tonia Leuschel <t.leuschel@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.leuschel@metaways.de>
  */
 
 class EventManager_Model_Selection extends Tinebase_Record_NewAbstract

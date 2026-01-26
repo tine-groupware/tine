@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * Tine 2.0
  *
  * @package     EventManager
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -23,7 +26,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
     public const TABLE_NAME = 'eventmanager_registration';
     public const FLD_EVENT_ID = 'event_id';
     public const FLD_PARTICIPANT = 'participant';
-    public const FLD_REGISTRATOR = 'registrator';
+    public const FLD_HAS_REGISTRANT = 'has_registrant';
+    public const FLD_REGISTRANT = 'registrant';
     public const FLD_FUNCTION = 'function';
     public const FLD_SOURCE = 'source';
     public const FLD_STATUS = 'status';
@@ -59,7 +63,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_PARTICIPANT => [],
-                self::FLD_REGISTRATOR => [],
+                self::FLD_REGISTRANT => [],
                 self::FLD_BOOKED_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_BookedOption::FLD_OPTION => [],
@@ -103,19 +107,29 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
-            self::FLD_REGISTRATOR          => [
+            self::FLD_HAS_REGISTRANT     => [
+                self::LABEL                 => 'This participant has been registered by another person',
+                // _('This participant has been registered by another person')
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
+                self::NULLABLE              => true,
+            ],
+            self::FLD_REGISTRANT          => [
                 self::TYPE              => self::TYPE_RECORD,
-                self::LABEL             => 'Registrator', // _('Registrator')
+                self::LABEL             => 'Registrant', // _('Registrant')
                 self::CONFIG            => [
                     self::APP_NAME          => EventManager_Config::APP_NAME,
                     self::MODEL_NAME        => EventManager_Model_Register_Contact::MODEL_NAME_PART,
                     self::DEPENDENT_RECORDS => true,
                     self::REF_ID_FIELD      => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
                     self::ADD_FILTERS       => [
-                        [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::FLD_REGISTRATOR],
+                        [
+                            TMFA::FIELD => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                            TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::FLD_REGISTRANT
+                        ],
                     ],
                     self::FORCE_VALUES      => [
-                        EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE => self::FLD_REGISTRATOR,
+                        EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE => self::FLD_REGISTRANT,
                     ],
                 ],
                 self::VALIDATORS        => [

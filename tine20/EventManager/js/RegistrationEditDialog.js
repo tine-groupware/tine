@@ -2,9 +2,9 @@
  * Tine 2.0
  *
  * @package     EventManager
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -20,12 +20,36 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
     onBeforeRender: function () {
         this.setSelectionConfigClassListener();
+        this.showReasonWaitingList();
     },
 
     onAfterRender: function () {
+        (function () {
+            const registrantField = this.form.findField('registrant');
+            const hasRegistrantField = this.form.findField('has_registrant');
+            const participantField = this.form.findField('participant');
+
+            if (!hasRegistrantField.getValue()) {
+                registrantField.hide();
+                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() !== participantField.getValue()) {
+                    registrantField.show();
+                }
+            } else {
+                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() === participantField.getValue()) {
+                    registrantField.hide();
+                }
+            }
+        }).defer(100, this);
+
         this.setStatusListener();
         this.waitingListListener();
         this.setParticipantListener();
+        this.hasRegistrantListener();
+        let registerOthers = this.form.openerCt.parentEditDialog.record.data.register_others;
+        if (registerOthers === '2') {
+            const hasRegistrantField = this.form.findField('has_registrant');
+            hasRegistrantField.hide();
+        }
     },
 
     setSelectionConfigClassListener: function () {
@@ -43,7 +67,7 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
     setParticipantListener: function () {
         this.form.findField('participant').on('select', function (combo, record, index) {
-            this.form.findField('registrator').setValue(combo.getValue());
+            this.form.findField('registrant').setValue(combo.getValue());
         }, this);
     },
 
@@ -62,10 +86,14 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             const currentTime = Date.now();
             if (currentTime > deadlineTime) {
                 reasonField.setValue("2");
-                reasonField.show();
             } else {
                 reasonField.setValue("1");
-                reasonField.show();
+            }
+            reasonField.show();
+
+            if (reasonField.wrap) {
+                reasonField.wrap.setWidth('auto');
+                reasonField.wrap.setDisplayed(true);
             }
         } else {
             reasonField.setValue("3");
@@ -129,4 +157,65 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             }, this);
         }
     },
+
+    hasRegistrantListener : function () {
+        const hasRegistrantField = this.form.findField('has_registrant');
+        const registrantField = this.form.findField('registrant');
+        const participantField = this.form.findField('participant');
+
+        hasRegistrantField.on('change', function (checkbox, checked) {
+            if (checked) {
+                if (!participantField.getValue()) {
+                    Ext.MessageBox.show({
+                        buttons: Ext.Msg.OK,
+                        icon: Ext.MessageBox.WARNING,
+                        title: this.app.i18n._('Missing Participant'),
+                        msg: this.app.i18n._('Please select a participant first')
+                    });
+                    checkbox.setValue(false);
+                    return;
+                }
+                registrantField.show();
+                if (registrantField.wrap) {
+                    registrantField.wrap.setWidth('auto');
+                    registrantField.wrap.setDisplayed(true);
+                }
+
+                const value = participantField.getValue();
+                registrantField.setValue(value);
+
+                if (registrantField.el && registrantField.el.dom) {
+                    registrantField.el.dom.style.height = 'auto';
+                    registrantField.el.dom.style.minHeight = '18px';
+                }
+            } else {
+                registrantField.setValue(participantField.getValue());
+                registrantField.hide();
+            }
+
+            this.doLayout();
+        },this);
+    },
+
+    onSaveAndClose: function () {
+        const hasRegistrantField = this.form.findField('has_registrant');
+        const registrantField = this.form.findField('registrant');
+        const participantField = this.form.findField('participant');
+
+        if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() === participantField.getValue()) {
+            registrantField.hide();
+            hasRegistrantField.setValue(false);
+        }
+
+        if (!hasRegistrantField.getValue()) {
+            if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() !== participantField.getValue()) {
+                registrantField.setValue(participantField.getValue());
+                hasRegistrantField.setValue(true);
+            } else {
+                registrantField.hide();
+            }
+        }
+
+        this.supr().onSaveAndClose.apply(this, arguments);
+    }
 });

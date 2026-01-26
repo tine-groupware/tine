@@ -2,9 +2,9 @@
  * Tine 2.0
  *
  * @package     EventManager
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 import './filePanel';
@@ -121,11 +121,12 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 }
                                             }
                                         }),
-                                        [ new EvaluationDimensionForm({
-                                            maxItemsPerRow: 2,
-                                            recordClass: this.recordClass
-                                        })]
+                                        fieldManager('register_others'),
                                     ],
+                                    [ new EvaluationDimensionForm({
+                                        maxItemsPerRow: 2,
+                                        recordClass: this.recordClass
+                                    })]
                                 ]
                             }]
                         }]
@@ -353,12 +354,12 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 registrations_count++;
             }
         });
-        if (available_places <= 0 && total_places < registrations_count) {
+        if (available_places <= 0 && total_places <= registrations_count) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
                 title: this.app.i18n._('Waiting List'),
-                msg: this.app.i18n._('Since there are no more available places, this registration is on the waiting list.'),
+                msg: this.app.i18n._('This event is fully booked. The person you are registering will be placed on the waiting list.'),
                 fn: () => this.supr().onSaveAndClose.apply(this, arguments)
             });
         } else {

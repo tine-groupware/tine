@@ -23,6 +23,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
+    protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
 
 
     protected static $_allUpdates = [
@@ -37,6 +38,10 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE018_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
             self::RELEASE018_UPDATE009          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
@@ -160,5 +165,14 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.9', self::RELEASE018_UPDATE009);
+    }
+
+    public function update010()
+    {
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Event::class,
+        ]);
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
     }
 }
