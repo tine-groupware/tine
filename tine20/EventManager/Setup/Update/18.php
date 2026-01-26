@@ -6,7 +6,7 @@
  * @package     EventManager
  * @subpackage  Setup
  * @license     https://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -171,6 +171,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             EventManager_Model_Event::class,
+            EventManager_Model_Registration::class,
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
