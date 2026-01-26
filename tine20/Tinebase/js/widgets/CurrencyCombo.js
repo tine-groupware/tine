@@ -18,7 +18,7 @@ Ext.ns('Tine.widgets');
  */
 Tine.widgets.CurrencyCombo = Ext.extend(Ext.form.ComboBox, {
     fieldLabel: 'Currency',
-    displayField:'shortName',
+    displayField:'translatedName',
     valueField:'shortName',
     typeAhead: true,
     forceSelection: true,

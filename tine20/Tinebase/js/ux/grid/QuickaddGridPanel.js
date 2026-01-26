@@ -103,6 +103,9 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // init handlers
         this.quickaddHandlers = {
             scope: this,
+            focus: function(field) {
+                field.originalValue = field.getValue();
+            },
             blur: function(field){
                 this.doBlur.defer(250, this, [field]);
             },
@@ -192,6 +195,21 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                                 column.quickaddField.render(cell);
                                 // prevent need to double activate editor
                                 column.quickaddField.getEl().on('mousedown', (e) => e.stopEvent())
+                                column.quickaddField.on('specialkey', function (field, e) {
+                                    if (e.getKey() === e.TAB) {
+                                        let colIdx = _.findIndex(this.colModel.columns, {quickaddField: field})
+                                        while(true) {
+                                            colIdx = e.shiftKey ? colIdx-1 : colIdx+1;
+                                            if (colIdx < 0 || colIdx >= this.colModel.columns.length) break;
+                                            const col = this.colModel.columns[colIdx];
+                                            if (!col.hidden && col.quickaddField) {
+                                                col.quickaddField.focus();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }, me)
+
                             } else {
                                 Ext.fly(cell).appendChild(column.quickaddField.wrap ? column.quickaddField.wrap : column.quickaddField.el);
                                 _.defer(() => { column.quickaddField.setWidth(Ext.fly(cell).getWidth()-4); })
@@ -267,19 +285,13 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     doBlur: function(field){
-
-        if (this.quickaddMode !== 'header') {
-            // NOTE: quickadd field !== editor field, -> we are not in inline grid editing but in our own "renderer" implementation...
-            let colIdx = _.findIndex(this.colModel.columns, {quickaddField: field})
-            if (colIdx >= 0) {
-                for (colIdx++; colIdx<this.colModel.columns.length; colIdx++) {
-                    const col = this.colModel.columns[colIdx];
-                    if (!col.hidden && col.quickaddField) {
-                        col.quickaddField.focus();
-                    }
-                }
-            }
-        }
+        // this.fireEvent('afterEditQuickAdd', {
+        //     field: field.fieldName,
+        //     grid: this,
+        //     record: this.quickaddRecord,
+        //     value: field.getValue(),
+        //     originalValue: field.originalValue
+        //  })
 
         // check if all quickadd fields are blured, validate them if required
         var focusedOrInvalid;

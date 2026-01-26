@@ -50,7 +50,8 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
         this.autoConfig(record);
 
         if (this.type_field && this.record.get(this.type_field) && this.singleField) {
-            this.suffix = ' ' + (this.record.get(this.type_field) === 'PERCENTAGE' ? '%' : Tine.Tinebase.registry.get('currencySymbol'));
+            this.suffix = ' ' + (this.record.get(this.type_field) === 'PERCENTAGE' ? '%' :
+                (!_.isNull(this.currencySymbol) ? this.currencySymbol : Tine.Tinebase.registry.get('currencySymbol')));
             // this.decimalPrecision = this.suffix === ' %' ? 0 : 2;
             // in single field mode we show percentage here
             if (this.record.get(this.type_field) === 'PERCENTAGE') {

@@ -125,7 +125,8 @@ Ext.util.Format = Ext.apply(Ext.util.Format, {
         if (['', null, undefined].indexOf(v) >= 0 && nullable) {
             return '';
         }
-        let currencySymbol = Tine.Tinebase.registry.get('currencySymbol');
+        const currencySymbol = metadata?.hasOwnProperty('currencySymbol') ? metadata.currencySymbol
+            : Tine.Tinebase.registry.get('currencySymbol');
 
         if (!_.isNumber(v)) {
             v = Number(v);
