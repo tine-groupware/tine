@@ -16,12 +16,24 @@ Ext.ns('Ext.ux', 'Ext.ux.form');
  */
 Ext.ux.form.MoneyField = Ext.extend(Ext.ux.form.NumberField, {
 
-   initComponent: function() {
-        this.suffix = ' ' + Tine.Tinebase.registry.get('currencySymbol');
+    currencySymbol: null,
+
+    initComponent: function() {
+        this.setCurrencySymbol(this.currencySymbol ?? Tine.Tinebase.registry.get('currencySymbol'));
         this.decimalPrecision = 2;
         this.decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
 
        Ext.ux.form.MoneyField.superclass.initComponent.apply(this, arguments);
+    },
+
+    setCurrencySymbol: function(currencySymbol) {
+        if (currencySymbol !== this.currencySymbol) {
+            this.currencySymbol = currencySymbol;
+            this.suffix = this.currencySymbol ? ` ${this.currencySymbol}` : '';
+            if (this.rendered) {
+                this.setValue(this.getValue());
+            }
+        }
     }
 });
 
