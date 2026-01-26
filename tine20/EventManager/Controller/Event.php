@@ -46,6 +46,21 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $this->_doContainerACLChecks = false;
     }
 
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+        if ($_record->{EventManager_Model_Event::FLD_TOTAL_PLACES}) {
+            $_record->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} =
+                $_record->{EventManager_Model_Event::FLD_TOTAL_PLACES};
+        }
+    }
+
     public function updateStatistics(string $event_id, ?string $registration_id = null, bool $is_update = false): void
     {
         $this->_handleDependentRecords = false;

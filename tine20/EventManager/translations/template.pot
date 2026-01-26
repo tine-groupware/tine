@@ -906,5 +906,8 @@ msgstr ""
 msgid "Thank you for your interest!"
 msgstr ""
 
+msgid "The registration date for the event %1$s is overdue. We add you to our waiting list. If a space opens we will inform you."
+msgstr ""
+
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr ""

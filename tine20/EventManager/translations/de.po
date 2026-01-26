@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-01-22 13:49+0100\n"
+"PO-Revision-Date: 2026-01-26 12:45+0100\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -727,7 +727,7 @@ msgid "Registrant"
 msgstr "Anmeldende Person"
 
 msgid "Only change this field if someone else is responsible for the registration of the participant"
-msgstr ""
+msgstr "Ändern Sie dieses Feld nur, wenn eine andere Person für die Anmeldung die teilnehmende Person verantwortlich ist."
 
 msgid "If the event is full it will not be possible to selected confirmed"
 msgstr "Wenn die Veranstaltung ausgebucht ist, kann sie nicht als bestätigt ausgewählt werden"
@@ -909,6 +909,9 @@ msgstr "Falls Sie diese Anfrage nicht selbst gestellt haben, können Sie diese N
 
 msgid "Thank you for your interest!"
 msgstr "Vielen Dank für Ihr Interesse!"
+
+msgid "The registration date for the event %1$s is overdue. We add you to our waiting list. If a space opens we will inform you."
+msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."

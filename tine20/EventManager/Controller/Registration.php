@@ -173,10 +173,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $today = Tinebase_DateTime::today();
         if (
             $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 1
-            || ($event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
-                && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today)
         ) {
             $template = 'SendWaitingListEmail';
+        } elseif (
+            $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
+            && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today
+        ) {
+            $template = 'SendWaitingListAfterRegDayEmail';
         } else {
             $template = 'SendConfirmationEmail';
         }
