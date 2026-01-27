@@ -274,8 +274,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $invoice = $allInvoices->getFirstRecord();
         $invoice->cleared = 'CLEARED';
 
-        $oldSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC};
-        Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'http://unittest:3000/ubl';
+        $oldSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL};
+        Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL} = 'http://unittest:3000/';
 
         Sales_EDocument_Service_Validate::$zendHttpClientAdapter = new Zend_Http_Client_Adapter_Test();
         Sales_EDocument_Service_Validate::$zendHttpClientAdapter->setResponse(new Zend_Http_Response(200, [],
@@ -285,7 +285,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $invoice = $this->_invoiceController->update($invoice);
         } finally {
             Sales_EDocument_Service_Validate::$zendHttpClientAdapter = null;
-            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = $oldSvc;
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL} = $oldSvc;
         }
 
         $this->assertSame(1, $invoice->attachments->count());
