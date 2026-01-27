@@ -394,15 +394,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             }
         }
 
-        if (isset($headers['dkim-signature']) && preg_match('/d=([^;]+)/', $headers['dkim-signature'], $matches)) {
-            $domain = trim($matches[1]);
-            $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-
-            foreach ($supportedMailServers as $server => $data) {
-                if (preg_match("/^$server$/", $domain)) {
-                    $flag = $data['id'];
-                }
-            }
+        if (isset($headers['dkim-signature'])) {
+            $flag = $this->_getDkimFlag((array) $headers['dkim-signature']);
         }
 
         $flags = isset($_message['flags']) ? $_message['flags']: array();
@@ -414,5 +407,25 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             $flags[] = $flag;
             $_message['flags'] = $flags;
         }
+    }
+
+    protected function _getDkimFlag(array $dkimHeaders): ?string
+    {
+        $result = null;
+        foreach ($dkimHeaders as $dkimHeader) {
+            if (preg_match('/d=([^;]+)/', $dkimHeader, $matches)) {
+                $domain = trim($matches[1]);
+                $supportedMailServers = Felamimail_Config::getInstance()->get(
+                    Felamimail_Config::TRUSTED_MAIL_DOMAINS);
+
+                foreach ($supportedMailServers as $server => $data) {
+                    if (preg_match("/^$server$/", $domain)) {
+                        $result = $data['id'];
+                        break 2;
+                    }
+                }
+            }
+        }
+        return $result;
     }
 }
