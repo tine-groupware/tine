@@ -27,7 +27,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
         // add boilerplate panel/management
-        this.items.get(0).insert(1, new BoilerplatePanel({}));
+        if (this.recordClass.hasField('boilerplates')) {
+            this.items.get(0).insert(1, new BoilerplatePanel({}));
+        }
 
         // status handling
         this.fields[this.statusFieldName].on('beforeselect', this.onBeforeStatusSelect, this)
@@ -80,6 +82,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             categoryField.onSelect(category, 0);
         }
 
+        const currencyField = this.getForm().findField('document_currency');
+        if (currencyField) {
+            const currency = currencyField.store.getById(currencyField.getValue());
+            const currencySymbol = currency ? currency.get('symbol') || currency.get('shortName') : (currencyField.getValue() || '')
+            this.getForm().items.each(field => {
+                _.isFunction(field?.setCurrencySymbol) ? field.setCurrencySymbol(currencySymbol) : null
+            })
+        }
+
         const possField = this.getForm().findField('positions')
         const positions = possField.getValue() || []
         const sums = getPositionsSums(positions)
@@ -126,7 +137,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     // sales_tax & sales_tax_by_rate
                     // ok discount is already applied -> lower sales_tax_by_rate by discount rate
                     sales_tax = this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
-                        sums['sales_tax_by_rate'][rate] = sums['sales_tax_by_rate'][rate] * (1 - record.get('invoice_discount_sum') / record.get('positions_gross_sum')) || 0
+                        const factor = (1 - record.get('invoice_discount_sum') / record.get('positions_gross_sum')) || 0
+                        ['sales_tax_by_rate', 'net_sum_by_tax_rate', 'gross_sum_by_tax_rate'].forEach(key => sums[key][rate] = sums[key][rate] * factor)
                         return a + sums['sales_tax_by_rate'][rate]
                     }, 0))
                 } else {
@@ -167,20 +179,20 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 sales_tax_by_rate = Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
                     const oldRate = _.find(_.get(record, 'modified.sales_tax_by_rate', record.get('sales_tax_by_rate')) || [], {tax_rate: Number(rate)}) || {}
                     return a.concat(Number(rate) ? [Object.assign(oldRate, {
-                        // 'net_amount'
+                        'net_amount': sums['net_sum_by_tax_rate'][rate],
                         'tax_rate': Number(rate),
-                        'tax_amount': sums['sales_tax_by_rate'][rate]
-                        // 'gross_amount'
+                        'tax_amount': sums['sales_tax_by_rate'][rate],
+                        'gross_amount': sums['gross_sum_by_tax_rate'][rate]
                     })] : [])
                 }, Tine.Tinebase.common.assertComparable([]))
             } else {
                 // @TODO match old rate
-                sales_tax_by_rate = Tine.Tinebase.common.assertComparable([{
-                    // 'net_amount'
-                    'tax_rate': Number(sales_tax_by_rate),
-                    'tax_amount': sales_tax
-                    // 'gross_amount'
-                }])
+                const tax_rate = Number(sales_tax_by_rate)
+                const tax_amount = sales_tax
+                const net_amount = this.recordClass.toFixed(tax_amount / tax_rate * 100)
+                const gross_amount = this.recordClass.toFixed(net_amount + tax_amount)
+
+                sales_tax_by_rate = Tine.Tinebase.common.assertComparable([{ net_amount, tax_rate, tax_amount, gross_amount }])
             }
             sales_tax = _.reduce(sales_tax_by_rate, (a, tax) => a + tax.tax_amount, 0);
 

@@ -105,23 +105,31 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_GROSS_AMOUNT              => [
+                self::LABEL                         => 'Gross amount', // _('Gross amount')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
+//                    self::READ_ONLY                     => true,
+                    self::COLUMN_CONFIG                 => [
+                        'width'                             => 100
+                    ],
                 ],
             ],
             self::FLD_NET_AMOUNT                => [
+                self::LABEL                         => 'Net amount', // _('Net amount')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-                    self::READ_ONLY                     => true,
+//                    self::READ_ONLY                     => true,
+                    self::COLUMN_CONFIG                 => [
+                        'width'                             => 100
+                    ],
                 ],
             ],
             self::FLD_TAX_AMOUNT                => [

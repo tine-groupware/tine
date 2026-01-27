@@ -49,6 +49,8 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             // disable fields unless product is chosen
             field.setDisabled(this.fixedFields.get(field.name) ||
                 (isEmptyProduct && ['type', 'product_id'].indexOf(field.name) < 0));
+
+            this.currencySymbol && _.isFunction(field.setCurrencySymbol) ? field.setCurrencySymbol(this.currencySymbol) : null;
         });
         if (isProductType) {
             this.record.computePrice();
@@ -75,5 +77,9 @@ Tine.Sales.DocumentPosition_InvoiceEditDialog = Ext.extend(Tine.Sales.AbstractEd
 });
 
 Tine.Sales.DocumentPosition_DeliveryEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
+
+});
+
+Tine.Sales.DocumentPosition_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.AbstractEditDialog, {
 
 });

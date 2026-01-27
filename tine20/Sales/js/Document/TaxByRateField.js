@@ -8,7 +8,7 @@
 import TaxByRateGridPanel from "./TaxByRateGridPanel";
 
 const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
-    minLayerWidth: 200,
+    minLayerWidth: 400,
     validationEvent: 'blur',
 
     // triggerClass: 'sales-tax-by-rate-trigger',
@@ -31,7 +31,7 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     setFormValue(value) {
-        this.gridPanel.setStoreFromArray(_.filter(value, tax => tax.tax_amount > 0) || [])
+        this.gridPanel.setStoreFromArray(value || [])
     },
 
     getFormValue() {
@@ -45,15 +45,29 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
         this.setRawValue(this.valueToString(value))
     },
 
+    setCurrencySymbol: function(currencySymbol) {
+        if (currencySymbol !== this.currencySymbol) {
+            this.currencySymbol = currencySymbol
+            this.gridPanel.setCurrencySymbol(currencySymbol)
+            this.setRawValue(this.valueToString(this.currentValue))
+        }
+    },
+
     valueToString(value) {
-        return _.map(_.filter(value, tax => tax.tax_rate > 0), tax => `${Ext.util.Format.money(tax.tax_amount)} (${tax.tax_rate}%)`).join(', ')
+        return _.map(_.filter(value, tax => tax.tax_rate > 0), tax => `${Ext.util.Format.money(tax.tax_amount, {currencySymbol: this.currencySymbol})} (${tax.tax_rate}%)`).join(', ')
     },
 
     processValue(value) {
         value = (String(value).match(/^[0-9,. ]+%$/) ? `${this.currentValue.length === 1 ? this.currentValue[0].tax_amount/this.currentValue[0].tax_rate * parseFloat(String(value).replace(',', '.').replace('%', '')) : 0} (${value})` : value) || 0;
         value = _.reduce(_.compact(String(value).split(/%\),?/)), (a, v) => {
             let [t,r] = String(v).split(/[^0-9,.]+\(/)
-            return a.concat({tax_rate: parseFloat(String(r).replace(',', '.')) || Tine.Tinebase.configManager.get('salesTax'), tax_amount: parseFloat(String(t).replace(',', '.')) || 0})
+
+            const tax_rate = parseFloat(String(r).replace(',', '.')) || Tine.Tinebase.configManager.get('salesTax')
+            const tax_amount = parseFloat(String(t).replace(',', '.')) || 0
+            const net_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(tax_amount / tax_rate * 100)
+            const gross_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(net_amount + tax_amount)
+
+            return a.concat({ net_amount, tax_rate, tax_amount, gross_amount })
         }, [])
 
         if (value?.length !== this.currentValue?.length || _.reduce(value, (a,v) => {

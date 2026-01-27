@@ -154,6 +154,12 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::TYPE              => self::TYPE_STRING,
                 self::SPECIAL_TYPE      => self::SPECIAL_TYPE_CURRENCY,
                 self::NULLABLE          => true,
+                self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                        self::CONFIG                    => Tinebase_Config::DEFAULT_CURRENCY,
+                    ],
+                ],
             ],
         ]);
 

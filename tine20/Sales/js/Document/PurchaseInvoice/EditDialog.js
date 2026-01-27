@@ -31,6 +31,24 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
 
     getRecordFormItems: function() {
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
+            switch (fieldName) {
+                case 'supplier_id':
+                    config.listeners = config.listeners || {};
+                    config.listeners.select = (combo, record, index) => {
+                        fields['credit_term']?.setValue(record.get('credit_term'))
+                        fields['document_currency'].setValue(record.get('currency') || fields['document_currency'].getValue())
+                        // fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
+                        // if (record.get('discount')) {
+                        //     fields['invoice_discount_type'].setValue('PERCENTAGE')
+                        //     fields['invoice_discount_percentage'].setValue(record.get('discount'))
+                        // }
+                        const vatProcedure = record.get('vat_procedure')
+                        if (vatProcedure) {
+                            fields['vat_procedure']?.setValue(vatProcedure)
+                        }
+                    }
+                    break;
+            }
         })
 
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
@@ -41,9 +59,10 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 enableResponsive: true,
             },
             items: [
-                [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
+                [fields.document_number, fields.external_invoice_number, placeholder, placeholder, fields.document_currency],
+                [ Object.assign(fields[this.statusFieldName], {columnWidth: 2/5}), fields.approver, placeholder, placeholder],
                 // NOTE: contract_id waits for contract rewrite
-                [/*fields.contract_id, */ _.assign(fields.supplier_id, {columnWidth: 2/5}), _.assign(fields.recipient_id, {columnWidth: 3/5})],
+                [/*fields.contract_id, */ _.assign(fields.supplier_id, {columnWidth: 2/5}), _.assign({ ...placeholder }, {columnWidth: 3/5})],
                 _.assign([ _.assign(fields.buyer_reference, {columnWidth: 2/5}), fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
                 [fields.service_period_start, fields.service_period_end, _.assign({ ...placeholder } , {columnWidth: 2/5}), fields.date],
                 [{ xtype: 'sales-document-position-purchase-invoice-gridpanel', lang: 'de' }],

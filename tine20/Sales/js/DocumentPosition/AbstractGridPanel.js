@@ -384,8 +384,27 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
             Object.assign(this.editDialogConfig, {
                 documentEditDialog: editDialog,
-                localizedLangPicker: editDialog.fields.document_language
+                localizedLangPicker: editDialog.fields.document_language,
             })
+        }
+    },
+
+    setCurrencySymbol: function(currencySymbol) {
+        if (currencySymbol !== this.currencySymbol) {
+            this.currencySymbol = currencySymbol;
+            _.each(this.colModel.config, col => {
+                const fieldConfig = this.recordClass.getModelConfiguration().fields[col.dataIndex]
+                if (fieldConfig.type === 'money') {
+                    col.renderer.transformMetaData = (value, metaData) => {
+                        metaData.currencySymbol = currencySymbol
+                        return metaData
+                    }
+                    col.editor?.field?.setCurrencySymbol?.(currencySymbol);
+                    col.quickaddField?.setCurrencySymbol?.(currencySymbol);
+                    Object.assign(this.editDialogConfig, { currencySymbol });
+                }
+            })
+            this.getView().refresh();
         }
     },
     /* needed for isFormField cycle */
@@ -408,7 +427,7 @@ const getSums = function(positions) {
         const rate = pos['sales_tax_rate'] || 0
         a['sales_tax_by_rate'][rate] = (a['sales_tax_by_rate'].hasOwnProperty(rate) ? a['sales_tax_by_rate'][rate] : 0) + (pos['sales_tax'] || 0)
         a['net_sum_by_tax_rate'][rate] = (a['net_sum_by_tax_rate'].hasOwnProperty(rate) ? a['net_sum_by_tax_rate'][rate] : 0) + (pos['net_price'] || 0)
-        a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['position_price'] || 0)
+        a['gross_sum_by_tax_rate'][rate] = (a['gross_sum_by_tax_rate'].hasOwnProperty(rate) ? a['gross_sum_by_tax_rate'][rate] : 0) + (pos['gross_price'] || 0)
 
         return a;
     }, {
