@@ -36,6 +36,7 @@ class Calendar_Model_SyncContainerConfig extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Calendar_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
+
         self::RECORD_NAME                  => 'External Calendar', // gettext('GENDER_External Calendar')
         self::RECORDS_NAME                 => 'External Calendars', // ngettext('External Calendar', 'External Calendars', n)
 
@@ -61,26 +62,35 @@ class Calendar_Model_SyncContainerConfig extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Calendar Path', // _('Calendar Path')
                 self::TYPE                          => self::TYPE_STRING,
             ],
-            self::FLD_EXTERNAL_OWNER            => [
-                self::TYPE                          => self::TYPE_STRING,
-            ],
-            self::FLD_EXTERNAL_OWNER_LOCALLY_OVERWRITTEN => [
-                self::TYPE                          => self::TYPE_BOOLEAN,
-            ],
             self::FLD_EXTERNAL_CONTAINER_NAME   => [
+                self::LABEL                         => 'Calendar Name', // _('Calendar Name')
                 self::TYPE                          => self::TYPE_STRING,
             ],
             self::FLD_CONTAINER_NAME_LOCALLY_OVERWRITTEN => [
+                self::LABEL                         => 'Overwrite Calendar Name', // _('Overwrite Calendar Name')
                 self::TYPE                          => self::TYPE_BOOLEAN,
             ],
             self::FLD_EXTERNAL_CONTAINER_COLOR => [
+                self::LABEL                         => 'Color', // _('Color')
                 self::TYPE                          => self::TYPE_HEX_COLOR,
             ],
             self::FLD_CONTAINER_COLOR_LOCALLY_OVERWRITTEN => [
+                self::LABEL                         => 'Overwrite Color', // _('Overwrite Color')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+            ],
+            self::FLD_EXTERNAL_OWNER            => [
+                self::LABEL                         => 'Owner Email', // _('Owner Email')
+                self::TYPE                          => self::TYPE_STRING,
+            ],
+            self::FLD_EXTERNAL_OWNER_LOCALLY_OVERWRITTEN => [
+                self::LABEL                         => 'Overwrite Owner Email', // _('Overwrite Owner Email')
                 self::TYPE                          => self::TYPE_BOOLEAN,
             ],
             self::FLD_OWN_PRIVILEGE_SET         => [
                 self::TYPE                           => self::TYPE_JSON,
+                self::UI_CONFIG                      => [
+                    self::READ_ONLY                      => true,
+                ],
             ],
             self::FLD_LAST_SUCCESSFUL_SYNC      => [
                 self::TYPE                          => self::TYPE_DATETIME,
