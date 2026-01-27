@@ -506,6 +506,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             foreach ($matchingData as $needle) {
                 if (str_contains($file, (string) $needle)) {
                     ++$matches;
+                } else {
+                    [$needleKey] = explode('-', $needle, 2);
+                    if (preg_match('/' . preg_quote($needleKey, '/') . '-[^\-]+--/', $file)) {
+                        continue 2;
+                    }
                 }
             }
             if ($matches > $maxMatches) {
