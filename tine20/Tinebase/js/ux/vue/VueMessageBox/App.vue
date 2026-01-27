@@ -49,15 +49,15 @@
       </div>
     </template>
     <template #footer>
-      <div class="mb-2">
-        <BFormCheckbox  v-model="doNotShowAgain" v-if="doNotShowAgainCBBoxVisibility">
+      <div class="d-flex flex-row justify-content-between align-items-center w-100">
+        <BFormCheckbox v-model="doNotShowAgain" v-if="doNotShowAgainCBBoxVisibility">
           {{ window.i18n._('Do not show this message again') }}
         </BFormCheckbox>
-      </div>
-      <div>
-        <BButton class="mx-1 x-tool-close vue-button" v-for="button in buttonToShow" @click="button.clickHandler"
-                 :key="button.name" :class="button.class">{{ button.name }}
-        </BButton>
+        <div class="ms-auto">
+          <BButton class="mx-1 x-tool-close vue-button" v-for="button in buttonToShow" @click="button.clickHandler"
+                   :key="button.name" :class="button.class">{{ button.name }}
+          </BButton>
+        </div>
       </div>
     </template>
   </BModal>
