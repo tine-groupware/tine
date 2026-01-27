@@ -245,6 +245,9 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
                 try {
                     Tinebase_CustomField::getInstance()->deleteCustomField($_modification->record_id);
                 } catch (Exception $e) {
+                    if ($e instanceof Tinebase_Exception) {
+                        $e->setLogToSentry(false);
+                    }
                     Tinebase_Exception::log($e);
                 }
                 break;
