@@ -1367,7 +1367,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * domain (string)
          * instanceName (string)
          * useEmailAsUsername (bool) - default: false
-         * preventSecondaryDomainUsername (bool) - default: false
+         * "preventSecondaryDomainUsername": false (boolean) - false be default (see \Tinebase_User_Plugin_Abstract::getLoginName)
          * host (string)
          * port (integer)
          * ssl (bool)
@@ -1401,12 +1401,12 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "secondarydomains":"second.test,third.test" (string - comma separated) - secondarydomains that are handled by tine & allowed in tine user email addresses
          * "additionalexternaldomains":"another.test,onemore.test" (string - comma separated) - additional domains that are allowed in tine user email addresses (but not handled by tine)
          * "instanceName":"tine.test" (string)
-         * "accountnamedestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
+         * "accountnamedestination": true (boolean) - true by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
          * "destinationisusername": false (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createAliasDestinations)
          * "checkduplicatealias": true (boolean) - true by default (see \Tinebase_EmailUser_Smtp_Postfix::_checkIfDestinationExists)
          * "from":"notifications@tine.test" (string) - notification sender address
          * "allowOverwrite": false (bool)
-         * "preventSecondaryDomainUsername": true
+         * "preventSecondaryDomainUsername": false (boolean) - false be default (see \Tinebase_User_Plugin_Abstract::getLoginName)
          * "allowAnyExternalDomains": false
          *
          * TODO make this a structured config with subconfig keys

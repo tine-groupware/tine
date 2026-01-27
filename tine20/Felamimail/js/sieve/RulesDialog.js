@@ -129,7 +129,8 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onApplyChanges: function(closeWindow) {
         var rules = [];
-        this.rulesGrid.store.each(function(record) {
+        this.rulesGrid.store.each(function(record, idx) {
+            record.set('id', idx + 1);
             rules.push(record.data);
         });
         
