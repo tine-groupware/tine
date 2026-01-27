@@ -1,0 +1,5 @@
+number,title,description,status,is_open,budget
+EO-231,Proben,Abrechnug fürs Üben,abgerechnet,1,500
+KV-02,Kartenverkauf,Kartenverkauf der Elbphilharmonie,noch nicht abgerechnet,1,100
+HF-225,Hofstab,Stunden des Hofstabes am Schönbrunnener Schloss,noch nicht abgerechnet,1,100
+EO-232,Proben,Abrechnug fürs Üben,abzurechnen,1,500

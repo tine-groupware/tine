@@ -3,9 +3,9 @@
  * class to hold Timesheet data
  * 
  * @package     Timetracker
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * 
  */
 
@@ -50,6 +50,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'version'           => 12,
         'recordName'        => 'Timesheet',
         'recordsName'       => 'Timesheets', // ngettext('Timesheet', 'Timesheets', n)
+        self::EXPOSE_JSON_API => true,
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,

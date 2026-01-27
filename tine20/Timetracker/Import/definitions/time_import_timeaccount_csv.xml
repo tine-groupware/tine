@@ -8,6 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <extension>csv</extension>
+    <example>Timetracker/Import/examples/import_timeaccount_example.csv</example>
     <mapping>
         <field>
             <source>title</source>

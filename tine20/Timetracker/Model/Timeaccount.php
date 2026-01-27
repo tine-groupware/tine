@@ -4,10 +4,9 @@
  * 
  * @package     Timetracker
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -50,27 +49,29 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 15,
-        'containerName'     => 'Time Account',
-        'containersName'    => 'Time Accounts',
-        'recordName'        => 'Time Account',
-        'recordsName'       => 'Time Accounts', // ngettext('Time Account', 'Time Accounts', n)
-        'hasRelations'      => TRUE,
-        'copyRelations'     => FALSE,
-        'hasCustomFields'   => TRUE,
-        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
-        'hasNotes'          => TRUE,
-        'hasTags'           => TRUE,
-        'modlogActive'      => TRUE,
-        'hasAttachments'    => TRUE,
-        'createModule'      => TRUE,
-        'containerProperty' => 'container_id',
-        self::EXTENDS_CONTAINER         => self::FLD_CONTAINER_ID,
-        'grantsModel'       => 'Timetracker_Model_TimeaccountGrants',
-        'multipleEdit'      => TRUE,
-        'requiredRight'     => 'manage',
+        'version' => 15,
+        'recordName' => 'Time Account',
+        'recordsName' => 'Time Accounts', // ngettext('Time Account', 'Time Accounts', n)
+        self::EXPOSE_JSON_API => true,
+        'createModule' => true,
 
-        // because of the titleProperty misuse below, default sort must! to be set for Pagination to work (for virtual relation fields...)
+        'hasRelations' => true,
+        'copyRelations' => false,
+        'hasCustomFields' => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
+        'hasNotes' => true,
+        'hasTags' => true,
+        'hasAttachments' => true,
+        'modlogActive' => true,
+
+        'containerProperty' => 'container_id',
+        self::EXTENDS_CONTAINER => self::FLD_CONTAINER_ID,
+        'grantsModel' => 'Timetracker_Model_TimeaccountGrants',
+        'multipleEdit' => true,
+        'requiredRight' => 'manage',
+
+        // because of the titleProperty misuse below, default sort must!
+        // to be set for Pagination to work (for virtual relation fields...)
         self::DEFAULT_SORT_INFO => ['field' => 'title'],
         'titleProperty'     => '{{number}} - {{title}}{% if not is_open %} (closed) {% endif %}',
         'appName'           => Timetracker_Config::APP_NAME,
@@ -149,22 +150,22 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'title'             => array(
                 'label'                 => 'Title', //_('Title')
                 'duplicateCheckGroup'   => 'title',
-                'queryFilter'           => TRUE,
-                'showInDetailsPanel'    => TRUE,
+                'queryFilter'           => true,
+                'showInDetailsPanel'    => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
             ),
             'number'            => array(
                 'label'                 => 'Number', //_('Number')
                 'duplicateCheckGroup'   => 'number',
-                'queryFilter'           => TRUE,
-                'showInDetailsPanel'    => TRUE,
+                'queryFilter'           => true,
+                'showInDetailsPanel'    => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'nullable'              => true,
             ),
             'description'       => array(
                 'label'                 => 'Description', // _('Description')
                 'type'                  => 'fulltext',
-                'showInDetailsPanel'    => TRUE,
+                'showInDetailsPanel'    => true,
                 'queryFilter'           => true,
                 'nullable'              => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -178,7 +179,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'nullable'              => true,
             ),
             'budget_unit'       => array(
-                'shy'                   => TRUE,
+                'shy'                   => true,
                 'default'               => 'hours',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'hours'),
             ),
@@ -186,13 +187,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'price' => array(
                 'type'         => 'money',
                 'nullable'     => true,
-                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'validators'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'label'        => 'Price', // _('Price')
                 'inputFilters' => array('Zend_Filter_Empty' => NULL),
             ),
             // @TODO price_unit -> move this to Sales contracts/positions
             'price_unit'        => array(
-                'shy'                   => TRUE,
+                'shy'                   => true,
                 'nullable'              => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
@@ -211,7 +212,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             'is_billable'       => array(
                 'label'                 => 'Project time is invoiceable', // _('Project time is invoiceable')
                 'type'                  => 'boolean',
-                'default'               => TRUE,
+                'default'               => true,
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
             ),
             'billed_in'         => array(
@@ -241,7 +242,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'copyOmit'              => true,
             ),
             'status'            => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NOT_YET_BILLED),
                 'nullable' => true,
                 'default' => self::STATUS_NOT_YET_BILLED,
                 'copyOmit'              => true,
@@ -257,7 +258,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'copyOmit'              => true,
             ),
             'deadline' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => self::DEADLINE_NONE),
                 'nullable' => true,
                 'default' => self::DEADLINE_NONE,
                 'label' => 'Booking deadline', // _('Booking deadline')
@@ -439,8 +440,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $endDate),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $csdt),
             array('field' => 'start_date', 'operator' => 'after_or_equals', 'value' => $border),
-            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
-            array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => false),
+            array('field' => 'is_billable', 'operator' => 'equals', 'value' => true),
         ), 'AND');
         
         if (! is_null($contract->end_date)) {
@@ -575,14 +576,14 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 
             if ($this->status === self::STATUS_TO_BILL && $this->invoice_id === NULL) {
                 // if there is a budget, this timeaccount should be billed and there is no invoice linked, bill it
-                return TRUE;
+                return true;
             } else {
-                return FALSE;
+                return false;
             }
         } else {
             
             if (! $this->is_billable) {
-                return FALSE;
+                return false;
             }
             
             if ($productAggregate !== null && $productAggregate->billing_point == 'end') {
@@ -600,15 +601,15 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                     . print_r($filter->toArray(), 1));
             }
             
-            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter, $pagination, FALSE, /* $_onlyIds = */ TRUE);
+            $timesheets = Timetracker_Controller_Timesheet::getInstance()->search($filter, $pagination, false, /* $_onlyIds = */ true);
             
             if (! empty($timesheets))  {
-                return TRUE;
+                return true;
             }
         }
         
         // no match, not billable
-        return FALSE;
+        return false;
     }
     
     /**
@@ -681,7 +682,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
             // set this ta billed
             $this->status = self::STATUS_BILLED;
             $this->invoice_id = $invoice->getId();
-            Timetracker_Controller_Timeaccount::getInstance()->update($this, FALSE);
+            Timetracker_Controller_Timeaccount::getInstance()->update($this, false);
 
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' TA got budget: set all unbilled TS of this TA billed');
@@ -689,7 +690,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 . ' TA:' . print_r($this->toArray(), true));
 
             $filter = new Timetracker_Model_TimesheetFilter(array(
-                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
+                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => false),
             ), 'AND');
             // NOTE: using text filter here for id (operator equals is not defined in default timeaccount_id filter)
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));
@@ -791,8 +792,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 
         // we unassign all assigned TS
         $filter = new Timetracker_Model_TimesheetFilter(array(
-            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
-            array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+            array('field' => 'is_cleared', 'operator' => 'equals', 'value' => false),
+            array('field' => 'is_billable', 'operator' => 'equals', 'value' => true),
         ), 'AND');
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
@@ -849,8 +850,8 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 
             // we just assign all unassigned TS to our invoice silently and gracefully
             $filter = new Timetracker_Model_TimesheetFilter(array(
-                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
-                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+                array('field' => 'is_cleared', 'operator' => 'equals', 'value' => false),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => true),
             ), 'AND');
             $filter->addFilter(new Tinebase_Model_Filter_Text(
                 array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())
