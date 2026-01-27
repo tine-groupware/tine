@@ -82,6 +82,7 @@ Tine.EventManager.Selections_FileEditDialog = Ext.extend(Tine.widgets.dialog.Edi
             showProgress: true,
             i18nFileString: null,
             fileSelectionDialog: null,
+            height: 100,
         });
 
         this.gridPanel.on('filesSelected', this.onFilesSelected, this);
