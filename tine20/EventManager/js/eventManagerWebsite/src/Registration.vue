@@ -780,14 +780,16 @@ const createNewProfile = () => {
 };
 
 const registrantId = computed(() => {
-  if (!participants.value) return null;
+  if (!participants.value) {
+    return accountOwner.value?.original_id || accountOwner.value?.id || null;
+  }
 
-  if (participants.value.original_id) {
-    return participants.value.original_id;
+  if (participants.value.original_id || participants.value.id) {
+    return participants.value.original_id || participants.value.id;
   }
 
   if (participants.value.length > 0 && participants.value[0].registrant) {
-    return participants.value[0].registrant.original_id;
+    return participants.value[0].registrant.original_id || participants.value[0].registrant.id;
   }
 
   return null;
@@ -807,25 +809,40 @@ const participantsDropdownOptions = computed(() => {
 
   if (participants.value) {
     if (participants.value.n_fileas) {
-      if (!seen.has(participants.value.original_id)) {
+      const participantId = participants.value.original_id || participants.value.id;
+      if (participantId && !seen.has(participantId)) {
         options.push({
-          value: participants.value.original_id,
+          value: participantId,
           text: participants.value.n_fileas
         });
-        seen.add(participants.value.original_id);
+        seen.add(participantId);
       }
-    } else if (participants.value.length > 0) {
+    } else if (Array.isArray(participants.value) && participants.value.length > 0) {
       const registrantParticipant = participants.value.find(p =>
-        p.participant.original_id === registrantId.value
+        p.participant?.original_id === registrantId.value || p.participant?.id === registrantId.value
       );
 
-      if (registrantParticipant && !seen.has(registrantParticipant.participant.original_id)) {
-        options.push({
-          value: registrantParticipant.participant.original_id,
-          text: registrantParticipant.participant.n_fileas
-        });
-        seen.add(registrantParticipant.participant.original_id);
+      if (registrantParticipant && registrantParticipant.participant) {
+        const participantId = registrantParticipant.participant.original_id || registrantParticipant.participant.id;
+        if (participantId && !seen.has(participantId)) {
+          options.push({
+            value: participantId,
+            text: registrantParticipant.participant.n_fileas
+          });
+          seen.add(participantId);
+        }
       }
+    }
+  }
+
+  if (accountOwner.value && accountOwner.value.n_fileas) {
+    const ownerId = accountOwner.value.original_id || accountOwner.value.id;
+    if (ownerId && !seen.has(ownerId)) {
+      options.push({
+        value: ownerId,
+        text: accountOwner.value.n_fileas
+      });
+      seen.add(ownerId);
     }
   }
 
@@ -833,9 +850,10 @@ const participantsDropdownOptions = computed(() => {
 
     if (participants.value && Array.isArray(participants.value)) {
       participants.value.forEach(registration => {
-        const participantId = registration.participant?.original_id;
+        const participantId = registration.participant?.original_id || registration.participant?.id;
         const participantName = registration.participant?.n_fileas;
-        const isNotSelf = participantId !== registrantId.value;
+        const selfId = registrantId.value || accountOwner.value?.id;
+        const isNotSelf = participantId !== selfId;
 
         if (isNotSelf && participantId && participantName && !seen.has(participantId)) {
           options.push({
@@ -849,12 +867,13 @@ const participantsDropdownOptions = computed(() => {
 
     if (dependantParticipants.value && dependantParticipants.value.length > 0) {
       dependantParticipants.value.forEach(p => {
-        if (p.original_id && p.n_fileas && !seen.has(p.original_id)) {
+        const participantId = p.original_id || p.id;
+        if (participantId && p.n_fileas && !seen.has(participantId)) {
           options.push({
-            value: p.original_id,
+            value: participantId,
             text: p.n_fileas
           });
-          seen.add(p.original_id);
+          seen.add(participantId);
         }
       });
     }
@@ -862,6 +881,23 @@ const participantsDropdownOptions = computed(() => {
 
   return options;
 });
+
+const formatBirthday = (bday) => {
+  if (!bday) return '';
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+    return bday;
+  }
+
+  const date = new Date(bday);
+  if (isNaN(date.getTime())) return '';
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
 
 const handleParticipantSelection = (participantId) => {
   if (!participantId) { // new participant
@@ -886,7 +922,10 @@ const handleParticipantSelection = (participantId) => {
     };
 
     if (accountOwner.value) {
-      registrantDetails.value = { ...accountOwner.value };
+      registrantDetails.value = {
+        ...accountOwner.value,
+        bday: formatBirthday(accountOwner.value.bday)
+      };
       registrantEmail.value = accountOwner.value.email;
     }
 
@@ -894,14 +933,25 @@ const handleParticipantSelection = (participantId) => {
     shouldShowRegistrantCheckbox.value = true;
     showRegisteredContactAlert.value = false;
     isAlreadyRegistered.value = false;
-  } else if (accountOwner.value && String(participantId) === String(accountOwner.value.id)) { // accountOwner
-    contactDetails.value = { ...accountOwner.value };
-    registrantDetails.value = { ...accountOwner.value };
+    return;
+  }
+
+  // Check if it's the accountOwner
+  const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+  if (accountOwner.value && String(participantId) === String(ownerId)) {
+    contactDetails.value = {
+      ...accountOwner.value,
+      bday: formatBirthday(accountOwner.value.bday)
+    };
+    registrantDetails.value = {
+      ...accountOwner.value,
+      bday: formatBirthday(accountOwner.value.bday)
+    };
     isRegistrant.value = false;
     shouldShowRegistrantCheckbox.value = false;
 
     const registration = eventDetails.value.registrations?.find(
-      reg => String(reg.participant?.original_id) === String(participantId)
+      reg => String(reg.participant?.original_id || reg.participant?.id) === String(participantId)
     );
 
     if (registration) {
@@ -913,38 +963,56 @@ const handleParticipantSelection = (participantId) => {
       showRegisteredContactAlert.value = false;
       isAlreadyRegistered.value = false;
     }
-  } else { // dependantParticipant
-    let participant = dependantParticipants.value?.find(p => String(p.original_id) === String(participantId));
+    return;
+  }
 
-    if (!participant){ // from account owner register participants
-      let registration = participants.value?.find(p => String(p.participant.original_id) === String(participantId));
+  // Check dependantParticipants
+  let participant = null;
+  if (dependantParticipants.value && Array.isArray(dependantParticipants.value)) {
+    participant = dependantParticipants.value.find(p =>
+      String(p.original_id || p.id) === String(participantId)
+    );
+  }
+
+  // If not found in dependantParticipants, check participants array
+  if (!participant && participants.value && Array.isArray(participants.value)) {
+    const registration = participants.value.find(p =>
+      String(p.participant?.original_id || p.participant?.id) === String(participantId)
+    );
+    if (registration && registration.participant) {
       participant = registration.participant;
     }
+  }
 
-    if (participant) {
-      contactDetails.value = { ...participant };
+  if (participant) {
+    contactDetails.value = {
+      ...participant,
+      bday: formatBirthday(participant.bday)
+    };
 
-      if (accountOwner.value) {
-        registrantDetails.value = { ...accountOwner.value };
-        registrantEmail.value = accountOwner.value.email;
-      }
+    if (accountOwner.value) {
+      registrantDetails.value = {
+        ...accountOwner.value,
+        bday: formatBirthday(accountOwner.value.bday)
+      };
+      registrantEmail.value = accountOwner.value.email;
+    }
 
-      isRegistrant.value = true;
-      shouldShowRegistrantCheckbox.value = true;
+    isRegistrant.value = true;
+    shouldShowRegistrantCheckbox.value = true;
 
-      const registration = eventDetails.value.registrations?.find(
-        reg => String(reg.participant?.original_id) === String(participantId)
-      );
+    const registration = eventDetails.value.registrations?.find(
+      reg => String(reg.participant?.original_id || reg.participant?.id) === String(participantId)
+    );
 
-      if (registration) {
-        showRegisteredContactAlert.value = registration.status !== '3';
-        isAlreadyRegistered.value = registration.status !== '3';
-        getBookedOptions(registration);
-        registrationIdRef.value = registration.original_id;
-      } else {
-        showRegisteredContactAlert.value = false;
-        isAlreadyRegistered.value = false;
-      }
+    if (registration) {
+      showRegisteredContactAlert.value = registration.status !== '3';
+      isAlreadyRegistered.value = registration.status !== '3';
+      getBookedOptions(registration);
+      registrationIdRef.value = registration.original_id || registration.id;
+    } else {
+      showRegisteredContactAlert.value = false;
+      isAlreadyRegistered.value = false;
     }
   }
 };
@@ -1582,19 +1650,29 @@ async function getEventContactDetails() {
     });
     const data = await resp.json();
     const [contactData, registration, relatedContacts] = data;
-    //dependantParticipants.value = relatedContacts;
+
+    if (Array.isArray(relatedContacts) && relatedContacts.length > 0 && Array.isArray(relatedContacts[0])) {
+      dependantParticipants.value = relatedContacts[0];
+    } else {
+      dependantParticipants.value = relatedContacts;
+    }
+
     accountOwner.value = contactData;
 
     const contactFields = Object.keys(contactDetails.value);
     const filteredContactData = {};
 
     contactFields.forEach(field => {
-      filteredContactData[field] = contactData[field] || "";
+      if (field === 'bday') {
+        filteredContactData[field] = formatBirthday(contactData[field]) || "";
+      } else {
+        filteredContactData[field] = contactData[field] || "";
+      }
     });
 
     contactDetails.value = filteredContactData;
 
-    const { email, ...otherDetails } = contactData; //exclude email
+    const { email, ...otherDetails } = contactData;
     knownContact.value = Object.values(otherDetails).some(v => v && v.trim() !== "");
 
     if (contactData.email && contactData.email.trim() !== '') {
@@ -1699,7 +1777,13 @@ async function getFromAccountOwnerRegisterParticipants() {
       method: 'GET'
     });
     registrantEvents.value = await resp.json();
-    participants.value = registrantEvents.value[0];
+    const firstElement = registrantEvents.value[0];
+    if (Array.isArray(firstElement)) {
+      participants.value = firstElement;
+    } else {
+      accountOwner.value = firstElement;
+      participants.value = null;
+    }
     dependantParticipants.value = registrantEvents.value[1];
   } catch (error) {
     console.error('Error fetching contact details: ', error);
@@ -1725,9 +1809,10 @@ onMounted(async () => {
       query: {}
     });
   } else if (accountOwner.value) {
-    selectedParticipantId.value = accountOwner.value.id;
+    const ownerId = accountOwner.value.original_id || accountOwner.value.id;
+    selectedParticipantId.value = ownerId;
     shouldShowRegistrantCheckbox.value = false;
-    handleParticipantSelection(accountOwner.value.id);
+    handleParticipantSelection(ownerId);
   }
 });
 

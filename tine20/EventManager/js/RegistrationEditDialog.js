@@ -28,14 +28,15 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             const registrantField = this.form.findField('registrant');
             const hasRegistrantField = this.form.findField('has_registrant');
             const participantField = this.form.findField('participant');
+            this.setParticipantListener();
 
             if (!hasRegistrantField.getValue()) {
                 registrantField.hide();
-                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() !== participantField.getValue()) {
+                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id !== participantField.getValue().original_id) {
                     registrantField.show();
                 }
             } else {
-                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() === participantField.getValue()) {
+                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id === participantField.getValue().original_id) {
                     registrantField.hide();
                 }
             }
@@ -43,7 +44,6 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
         this.setStatusListener();
         this.waitingListListener();
-        this.setParticipantListener();
         this.hasRegistrantListener();
         let registerOthers = this.form.openerCt.parentEditDialog.record.data.register_others;
         if (registerOthers === '2') {
@@ -202,13 +202,13 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
         const registrantField = this.form.findField('registrant');
         const participantField = this.form.findField('participant');
 
-        if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() === participantField.getValue()) {
+        if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id === participantField.getValue().original_id) {
             registrantField.hide();
             hasRegistrantField.setValue(false);
         }
 
         if (!hasRegistrantField.getValue()) {
-            if (registrantField.getValue() && participantField.getValue() && registrantField.getValue() !== participantField.getValue()) {
+            if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id !== participantField.getValue().original_id) {
                 registrantField.setValue(participantField.getValue());
                 hasRegistrantField.setValue(true);
             } else {
