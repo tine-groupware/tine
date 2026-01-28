@@ -81,13 +81,12 @@ and follow the instructions of the repo.
 - iOS to version 26
 - Android to version 16
 
-### WebDAV/CardDAV Clients
+### WebDAV Clients
 - OwnCloud Client to version 5.3
 - Windows Explorer to version 11
 - macOS X Finder to macOS 26
 - KDE Plasma to version 6.4
 - Gnome/Nautilus to version 48
-- CardBook (Thunderbird addon)
 
 ### CalDAV Clients
 - Mozilla Thunderbird to version 140.3
@@ -95,6 +94,11 @@ and follow the instructions of the repo.
 - iCal to version 26
 - Reminders to macOS 26
 - iOS to version 26
+- DAVx5 to version 4.5
+
+### CardDAV Clients
+- macOS/iOS Contacts to version 26
+- CardBook (Thunderbird addon)
 - DAVx5 to version 4.5
 
 ### Server
