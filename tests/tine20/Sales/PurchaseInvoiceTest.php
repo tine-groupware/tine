@@ -490,15 +490,11 @@ class Sales_PurchaseInvoiceTest extends TestCase
 
         $this->assertEquals('"1"', $result);
 
-        // activate advanced search
-        Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, true);
-
-        $search = $this->_json->searchPurchaseInvoices(
-            array(array('field' => 'query', 'operator' => 'contains', 'value' => '')),
-            $this->_getPaging())
-        ;
-        $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals(Tinebase_DateTime::now()->setTime(0,0,0), $search['results'][0]['due_at']);
+        $pis = Sales_Controller_Document_PurchaseInvoice::getInstance()->getAll();
+        $this->assertCount(1, $pis);
+        $pi = Sales_Controller_Document_PurchaseInvoice::getInstance()->get($pis->getFirstRecord()->getId());
+        $this->assertCount(1, $pi->attachments);
+        $this->assertSame('import.txt', $pi->attachments->getFirstRecord()->name);
     }
 
     public function testDuplicateCheckOnUpdate()

@@ -187,11 +187,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         $refProp->setValue($piCtrl, true);
         $raii = new Tinebase_RAII(fn() => $refProp->setValue($piCtrl, false));
 
-        foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll()->sort('date') as $oldPI) {
+        foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll()->sort(fn($a, $b) => $a->date && $b->date ? $a->date->compare($b->date) : -1) as $oldPI) {
             $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
-
-            // dunned_at
-            // payment_method
 
             $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
                 Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => $oldPI->number,
