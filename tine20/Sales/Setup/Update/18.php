@@ -182,7 +182,12 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
-        foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll() as $oldPI) {
+        $refProp = new ReflectionProperty(Sales_Controller_Document_PurchaseInvoice::class, '_skipSetModlog');
+        $refProp->setAccessible(true);
+        $refProp->setValue($piCtrl, true);
+        $raii = new Tinebase_RAII(fn() => $refProp->setValue($piCtrl, false));
+
+        foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll()->sort('date') as $oldPI) {
             $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
 
             // dunned_at
@@ -190,8 +195,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
             $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
                 Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => $oldPI->number,
-                Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => $oldPI->is_payed ? Sales_Model_Document_PurchaseInvoice::STATUS_PAID :
-                    ($oldPI->is_approved ? Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED : Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED),
+                Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => $oldPI->payed_at ? Sales_Model_Document_PurchaseInvoice::STATUS_PAID :
+                    Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
                 Sales_Model_Document_PurchaseInvoice::FLD_DESCRIPTION => $oldPI->description,
                 Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $oldPI->date,
                 Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_at,
@@ -201,17 +206,22 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_CURRENCY => 'EUR',
                 Sales_Model_Document_PurchaseInvoice::FLD_INVOICE_DISCOUNT_PERCENTAGE => 0,
                 Sales_Model_Document_PurchaseInvoice::FLD_INVOICE_DISCOUNT_SUM => 0,
-                Sales_Model_Document_PurchaseInvoice::FLD_NET_SUM => $oldPI->price_net,
-                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_NET_SUM => $oldPI->price_net,
+                Sales_Model_Document_PurchaseInvoice::FLD_NET_SUM => $oldPI->price_net + $oldPI->price_gross2,
+                Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_NET_SUM => $oldPI->price_net + $oldPI->price_gross2,
                 Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_GROSS_SUM => $oldPI->price_gross + $oldPI->price_gross2,
                 Sales_Model_Document_PurchaseInvoice::FLD_POSITIONS_DISCOUNT_SUM => 0,
                 Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX => $oldPI->price_tax,
-                Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [[
-                    Sales_Model_Document_SalesTax::FLD_TAX_RATE => $oldPI->sales_tax ?? 0,
+                Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => array_merge([[
+                    Sales_Model_Document_SalesTax::FLD_TAX_RATE => ($salesTax = ($oldPI->sales_tax ?? 0)),
                     Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => $oldPI->price_tax,
-                    Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $oldPI->price_net,
-                    Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross + $oldPI->price_gross2,
-                ]],
+                    Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $oldPI->price_net + ($salesTax > 0 ? 0 : $oldPI->price_gross2),
+                    Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross + ($salesTax > 0 ? 0 : $oldPI->price_gross2),
+                ]], $oldPI->price_gross2 && $salesTax > 0 ? [[
+                    Sales_Model_Document_SalesTax::FLD_TAX_RATE => 0,
+                    Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 0,
+                    Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => $oldPI->price_gross2,
+                    Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross2,
+                ]] : []),
                 Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
                 Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER')?->related_record,
                 Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER')?->related_record,
@@ -224,11 +234,17 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                         Sales_Model_Document_PaymentReminder::FLD_OUTSTANDING_AMOUNT => $oldPI->price_total,
                     ], true),
                 ] : []),
+                'created_by' => $oldPI->getIdFromProperty('created_by'),
+                'creation_time' => $oldPI->creation_time,
+                'last_modified_by' => $oldPI->getIdFromProperty('last_modified_by'),
+                'last_modified_time' => $oldPI->last_modified_time,
+                'seq' => 1,
             ]));
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
 
         $transaction->release();
+        unset($raii);
     }
 }

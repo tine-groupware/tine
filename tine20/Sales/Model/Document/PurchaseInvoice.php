@@ -50,6 +50,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORDS_NAME] = 'Purchase Invoices'; // ngettext('Purchase Invoice', 'Purchase Invoices', n)
         $_definition[self::TITLE_PROPERTY] = '{{ supplier_id.getTitle() }} {{ dateFormat(date, "date") }}';
         $_definition[self::DEFAULT_SORT_INFO] = [self::FIELD => self::FLD_DOCUMENT_NUMBER];
+        $_definition[self::HAS_XPROPS] = true;
 
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
@@ -77,6 +78,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_EXTERNAL_INVOICE_NUMBER => [
                 self::LABEL             => 'External Invoice Number', // _('External Invoice Number')
+                self::QUERY_FILTER      => true,
                 self::TYPE              => self::TYPE_STRING,
                 self::LENGTH            => 255,
                 self::NULLABLE          => true,
@@ -239,7 +241,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
     protected static string $_statusField = self::FLD_PURCHASE_INVOICE_STATUS;
     protected static string $_statusConfigKey = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS;
-    protected static string $_documentNumberPrefix = 'PI-'; // _('PI-')
+    protected static string $_documentNumberPrefix = 'II-'; // _('II-')
 
     public function transitionFrom(Sales_Model_Document_Transition $transition)
     {

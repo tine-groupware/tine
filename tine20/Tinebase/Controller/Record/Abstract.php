@@ -205,6 +205,8 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_recordPathFeatureEnabled = null;
 
+    protected bool $_skipSetModlog = false;
+
     /**
      * add / remove relations during _setReleatedData for virtual relation proproperties
      *
@@ -819,7 +821,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_checkGrant($_record, self::ACTION_CREATE);
 
             // added _doForceModlogInfo behavior
-            if ($_record->has('created_by')) {
+            if ($_record->has('created_by') && !$this->_skipSetModlog) {
                 $origRecord = clone ($_record);
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, self::ACTION_CREATE);
                 $this->_forceModlogInfo($_record, $origRecord, self::ACTION_CREATE);
