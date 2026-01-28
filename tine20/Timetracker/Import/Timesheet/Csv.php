@@ -49,18 +49,51 @@ class Timetracker_Import_Timesheet_Csv extends Tinebase_Import_Csv_Generic
     {
         $result = parent::_doConversions($_data);
 
-        $timeaccount_Controller = Timetracker_Controller_Timeaccount::getInstance();
-        $timeaccount_data = $timeaccount_Controller->getAll();
-        foreach ($timeaccount_data as $timeaccount_id)
-        {
-            $result['timeaccount_id'] = $timeaccount_id['id'];
-        }        
-        
-        $user_LoginName = Tinebase_Core::getUser();
-        $user = Tinebase_User::getInstance()->getUserByLoginName($user_LoginName);
-        $result['account_id'] = $user->getId();
-
+        $result['timeaccount_id'] = $this->_findTimeAccount($_data);
+        $result['account_id'] = $this->_findUser($_data)->getId();
 
         return $result;
+    }
+
+    protected function _findTimeAccount(array $_data): Tinebase_Record_Interface
+    {
+        if (isset($_data['timeaccount_id'])) {
+            try {
+                return Timetracker_Controller_Timeaccount::getInstance()->get($_data['timeaccount_id']);
+            } catch (Tinebase_Exception_NotFound) {
+                // try to get by number
+                try {
+                    $result = Timetracker_Controller_Timeaccount::getInstance()->search(
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                            Timetracker_Model_Timeaccount::class, [
+                            ['field' => 'number', 'operator' => 'equals', 'value' => $_data['timeaccount_id']]
+                        ]));
+                    if ($result->count() > 0) {
+                        return $result->getFirstRecord();
+                    }
+                } catch (Tinebase_Exception_NotFound) {
+                    // TODO try to get by name/title?
+                }
+            }
+        }
+        return Timetracker_Controller_Timeaccount::getInstance()->getAll()->getFirstRecord();
+    }
+
+    protected function _findUser(array $_data): Tinebase_Model_User
+    {
+        if (isset($_data['account_id'])) {
+            try {
+                // try to get user by id
+                return Tinebase_User::getInstance()->getUserById($_data['account_id']);
+            } catch (Tinebase_Exception_NotFound) {
+                // try to get user by login name
+                try {
+                    return Tinebase_User::getInstance()->getUserByLoginName($_data['account_id']);
+                } catch (Tinebase_Exception_NotFound) {
+                    // use current user
+                }
+            }
+        }
+        return Tinebase_Core::getUser();
     }
 }

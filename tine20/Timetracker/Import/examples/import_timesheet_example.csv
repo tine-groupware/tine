@@ -1,0 +1,9 @@
+account_id,timeaccount_id,start_date,start_time,duration,description
+rwright,EO-232,31.12.2025 00:00:00,,480,DemoData eigenes Zeitkonto
+jsmith,EO-232,31.12.2025 00:00:00,,120,DemoData eigenes Zeitkonto
+pwulf,HF-225,31.12.2025 00:00:00,,480,DemoData eigenes Zeitkonto
+sclever,HF-225,31.12.2025 00:00:00,,480,DemoData eigenes Zeitkonto
+jmcblack,EO-232,31.12.2025 00:00:00,,480,DemoData eigenes Zeitkonto
+pwulf,KV-02,30.12.2025 00:00:00,,240,DemoData auf KST 1
+jmcblack,EO-232,30.12.2025 00:00:00,,240,DemoData auf KST 1
+rwright,KV-02,30.12.2025 00:00:00,,240,DemoData auf KST 1
