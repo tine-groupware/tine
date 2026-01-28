@@ -8,10 +8,11 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <extension>csv</extension>
+    <example>Timetracker/Import/examples/import_timesheet_example.csv</example>
     <mapping>
         <field>
-            <source>time</source>
-            <destination>time</destination>
+            <source>timeaccount_id</source>
+            <destination>timeaccount_id</destination>
         </field>
         <field>
             <source>account_id</source>
@@ -20,10 +21,6 @@
         <field>
             <source>is_billable</source>
             <destination>is_billable</destination>
-        </field>
-        <field>
-            <source>billed_in</source>
-            <destination>billed_in</destination>
         </field>
         <field>
             <source>is_cleared</source>
