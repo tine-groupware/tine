@@ -3605,7 +3605,7 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
 
-                while (empty($record->getId()) && $uniqueFlds) {
+                while ($uniqueFlds && (empty($record->getId()) || !$controller->has([$record->getId()], true))) {
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName);
                     foreach ($uniqueFlds as $uniqueFld) {
                         if (null === $record->{$uniqueFld}) {
@@ -3616,7 +3616,9 @@ abstract class Tinebase_Controller_Record_Abstract
                     if ($recordMC->modlogActive) {
                         $filter->addFilter($filter->createFilter(TMCC::FLD_IS_DELETED, TMFA::OP_EQUALS, Tinebase_Model_Filter_Bool::VALUE_NOTSET));
                     }
-                    $record->setId($controller->search($filter)->getFirstRecord()?->getId());
+                    if ($foundUniqueMatch = $controller->search($filter)->getFirstRecord()) {
+                        $record->setId($foundUniqueMatch->getId());
+                    }
                     break;
                 }
 
