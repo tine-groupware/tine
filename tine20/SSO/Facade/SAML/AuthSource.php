@@ -101,7 +101,8 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
             'lastName' => [$user->accountLastName],
             'email' => [$user->accountEmailAddress],
         ];
-        $state['saml:NameID']['urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'] = $user->accountLoginName;
+        $nameIdFormat = $state['SPMetadata']['NameIDFormat'] ?? 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+        $state['saml:NameID'][$nameIdFormat] = $user->accountLoginName;
         if (isset($state['SPMetadata'][SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING])) {
             foreach ($state['SPMetadata'][SSO_Model_Saml2RPConfig::FLD_ATTRIBUTE_MAPPING] as $key => $value) {
                 if (!$value) {
@@ -109,16 +110,16 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
                 } else {
                     $state['Attributes'][$key] = [$user->{$value}];
                     if ('uid' === $key) {
-                        $state['saml:NameID']['urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'] = $user->{$value};
+                        $state['saml:NameID'][$nameIdFormat] = $user->{$value};
                     }
                 }
             }
         }
         $nameId = new NameID();
-        $nameId->setFormat('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent');
-        $nameId->setValue($state['saml:NameID']['urn:oasis:names:tc:SAML:2.0:nameid-format:persistent']);
+        $nameId->setFormat($nameIdFormat);
+        $nameId->setValue($state['saml:NameID'][$nameIdFormat]);
         $nameId->setSPNameQualifier($state['core:SP']);
-        $state['saml:NameID']['urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'] = $nameId;
+        $state['saml:NameID'][$nameIdFormat] = $nameId;
 
         if (!isset($state['PersistentAuthData'])) {
             $state['PersistentAuthData'] = [];
