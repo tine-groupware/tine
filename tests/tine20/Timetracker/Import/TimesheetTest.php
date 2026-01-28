@@ -1,19 +1,14 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Timetracker
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Christian Feitl<c.feitl@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Christian Feitl <c.feitl@metaways.de>
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-class Timetracker_Import_TimesheetTest extends TestCase
+class Timetracker_Import_TimesheetTest extends ImportTestCase
 {
     /**
      * @var Tinebase_Model_Container
@@ -45,5 +40,19 @@ class Timetracker_Import_TimesheetTest extends TestCase
 
         self::assertEquals(4, count($result_timesheet));
         return $result_timesheet;
+    }
+
+    public function testImportCsv()
+    {
+        $this->_filename = __DIR__ . '/../../../../tine20/Timetracker/Import/examples/import_timesheet_example.csv';
+        $this->_deleteImportFile = false;
+        $this->testImportDemoData();
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('time_import_timesheet_csv');
+        $result = $this->_doImport([], $definition);
+        self::assertEquals(8, $result['totalcount']);
+        $importedRecord = $result['results']->filter('duration', 120)->getFirstRecord();
+        self::assertNotNull($importedRecord);
+        self::assertNotEquals(Tinebase_Core::getUser()->getId(), $importedRecord->account_id);
+        self::assertEquals('EO-232', $importedRecord->timeaccount_id->number);
     }
 }
