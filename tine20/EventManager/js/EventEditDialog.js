@@ -354,7 +354,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 registrations_count++;
             }
         });
-        if (available_places <= 0 && total_places <= registrations_count) {
+        if (available_places <= 0 && total_places !== 0 && total_places <= registrations_count) {
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
