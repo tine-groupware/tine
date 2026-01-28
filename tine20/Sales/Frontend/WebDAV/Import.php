@@ -78,9 +78,7 @@ class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sab
             }
         }
 
-        $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice([
-            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => Tinebase_DateTime::now(),
-        ]);
+        $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice();
         Sales_Controller_Document_PurchaseInvoice::getInstance()->create($purchaseInvoice);
 
         // attach invoice file (aka a pdf)

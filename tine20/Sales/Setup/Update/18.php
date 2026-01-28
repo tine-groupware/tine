@@ -175,6 +175,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             Sales_Model_Document_PaymentReminder::class,
             Sales_Model_Document_PurchaseInvoice::class,
+            Sales_Model_Document_Supplier::class,
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
             Sales_Model_Supplier::class,
         ]);
@@ -197,6 +198,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 Sales_Model_Document_PurchaseInvoice::FLD_DESCRIPTION => $oldPI->description,
                 Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $oldPI->date,
                 Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT => $oldPI->due_at,
+                Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_TERMS => $oldPI->due_in,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAY_AT => $oldPI->pay_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_PAID_AT => $oldPI->payed_at,
                 Sales_Model_Document_PurchaseInvoice::FLD_OVER_DUE_AT => $oldPI->overdue_at,

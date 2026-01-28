@@ -92,6 +92,17 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         }
     }
 
+    protected function _inspectBeforeForBookedRecord(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null)
+    {
+        // when booked and no document_date set, throw
+        if (!$_record->{Sales_Model_Document_Offer::FLD_DOCUMENT_DATE}) {
+            throw new Tinebase_Exception_SystemGeneric(
+                Tinebase_Translation::getTranslation(Sales_Config::APP_NAME)->_('Document date is required.'));
+        }
+
+        parent::_inspectBeforeForBookedRecord($_record, $_oldRecord);
+    }
+
     protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
     {
         // we dont do that

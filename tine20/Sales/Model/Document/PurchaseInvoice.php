@@ -68,7 +68,8 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::NULLABLE          => true,
                 self::CONFIG            => [
                     self::APP_NAME          => Sales_Config::APP_NAME,
-                    self::MODEL_NAME        => 'Supplier',
+                    self::MODEL_NAME        => Sales_Model_Document_Supplier::MODEL_NAME_PART,
+                    self::REF_ID_FIELD      => Sales_Model_Document_Supplier::FLD_DOCUMENT_ID,
                 ],
             ],
         ]);
