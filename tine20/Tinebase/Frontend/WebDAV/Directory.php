@@ -127,40 +127,35 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         $quotaChecked = false;
         $completeFile = null;
-        // OwnCloud chunked file upload
-        if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
-            static::checkQuota($pathRecord->getNode());
-            $quotaChecked = true;
-
-            $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
-            $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
-
-            if (!$completeFile instanceof Tinebase_Model_TempFile) {
-                return null;
-            }
-
-            $name = $completeFile->name;
-            if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
-            }
-            $_SERVER['HTTP_OC_CHUNKED'] = false;
-        }
-
-        if ($this->childExists($name)) {
-            try {
-                return $this->getChild($name)->put($data);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
-            }
-        }
-
-        if (!$quotaChecked) {
-            static::checkQuota($pathRecord->getNode());
-        }
-
         $path = $this->_path . '/' . $name;
-
+        // OwnCloud chunked file upload
         try {
+            if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+                static::checkQuota($pathRecord->getNode());
+                $quotaChecked = true;
+
+                $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
+                $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
+
+                if (!$completeFile instanceof Tinebase_Model_TempFile) {
+                    return null;
+                }
+
+                $name = $completeFile->name;
+                if (false === ($data = fopen($completeFile->path, 'r'))) {
+                    throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
+                }
+                $_SERVER['HTTP_OC_CHUNKED'] = false;
+            }
+
+            if ($this->childExists($name)) {
+                return $this->getChild($name)->put($data);
+            }
+
+            if (!$quotaChecked) {
+                static::checkQuota($pathRecord->getNode());
+            }
+
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
             }
@@ -189,6 +184,27 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             }
             if ($e instanceof Tinebase_Exception_QuotaExceeded) {
+                if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
+                    $chunkInfo = [];
+                    $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
+                    static::getOwnCloudChunkInfo($name, $chunkInfo);
+
+                    if (isset($chunkInfo['name']) && isset($chunkInfo['tempId'])) {
+                        $tempFileName = sha1(Tinebase_Core::getUser()->accountId . $chunkInfo['name'] . $chunkInfo['tempId']);
+                        $uploadedChunks = Tinebase_TempFile::getInstance()->search(
+                            new Tinebase_Model_TempFileFilter(array(
+                                array('field' => 'name', 'operator' => 'equals', 'value' => $tempFileName)
+                            )),
+                            new Tinebase_Model_Pagination(array('sort' => 'type', 'dir' => 'ASC'))
+                        );
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . 'chunked file with name : ' . $chunkInfo['name'] . ' exceeded quota, removing ' . count($uploadedChunks) . ' tempFiles');
+                        }
+                        foreach ($uploadedChunks as $tempFile) {
+                            Tinebase_TempFile::getInstance()->deleteTempFile($tempFile);
+                        }
+                    }
+                }
                 throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
             } else if ($e instanceof Tinebase_Exception_NotFound) {
                 throw new Sabre\DAV\Exception\NotFound($e->getMessage());
@@ -230,7 +246,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if ($length > 0) {
             $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
             if ($quotas['effectiveQuota'] > 0 && $quotas['effectiveFree'] < $length) {
-                throw new Sabre\DAV\Exception\InsufficientStorage();
+                throw new Tinebase_Exception_QuotaExceeded();
             }
         }
     }

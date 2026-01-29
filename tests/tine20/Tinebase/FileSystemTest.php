@@ -1463,8 +1463,6 @@ class Tinebase_FileSystemTest extends TestCase
         try {
             $applicationController->setApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
-            $applicationController->setApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000);
             $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} = 1;
             Tinebase_FileSystem_Quota::clearConfigCache();
 
