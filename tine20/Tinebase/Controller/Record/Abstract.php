@@ -995,8 +995,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _handleRecordCreateOrUpdateException(\Throwable $e)
     {
         if ($e instanceof Tinebase_Exception_ProgramFlow || Tinebase_Exception::isDbDuplicate($e)) {
-            // log as ERROR? or better INFO? NOTICE?
-            Tinebase_Exception::logExceptionToLogger($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            }
         } else {
             Tinebase_Exception::log($e);
         }
@@ -1176,8 +1177,10 @@ abstract class Tinebase_Controller_Record_Abstract
             return;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Doing duplicate check.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                ' Doing duplicate check.');
+        }
 
         $duplicates = $this->search($duplicateFilter, new Tinebase_Model_Pagination(array('limit' => 5)), /* $_getRelations = */ true);
 
