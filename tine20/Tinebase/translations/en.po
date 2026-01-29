@@ -2134,6 +2134,12 @@ msgstr "Session Timed Out"
 msgid "You can close this window."
 msgstr "You can close this window."
 
+msgid "Please wait or contact your administrator"
+msgstr "Please wait or contact your administrator"
+
+msgid "Installation is in maintenance mode. Please try again later"
+msgstr "Installation is in maintenance mode. Please try again later"
+
 msgid "Your Client is Outdated"
 msgstr "Your Client is Outdated"
 
@@ -2142,9 +2148,6 @@ msgstr "A new client is available, press OK to get this version"
 
 msgid "tine needs to be updated or is not installed yet."
 msgstr "tine needs to be updated or is not installed yet."
-
-msgid "Please wait or contact your administrator"
-msgstr "Please wait or contact your administrator"
 
 msgid "Could not load service map"
 msgstr "Could not load service map"

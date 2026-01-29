@@ -2134,6 +2134,12 @@ msgstr ""
 msgid "You can close this window."
 msgstr ""
 
+msgid "Please wait or contact your administrator"
+msgstr ""
+
+msgid "Installation is in maintenance mode. Please try again later"
+msgstr ""
+
 msgid "Your Client is Outdated"
 msgstr ""
 
@@ -2141,9 +2147,6 @@ msgid "A new client is available, press OK to get this version"
 msgstr ""
 
 msgid "tine needs to be updated or is not installed yet."
-msgstr ""
-
-msgid "Please wait or contact your administrator"
 msgstr ""
 
 msgid "Could not load service map"
