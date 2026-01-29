@@ -242,98 +242,6 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         return $response;
     }
 
-    public function publicApiGetEventContactDetails($token, $event_id)
-    {
-        $assertAclUsage = $this->assertPublicUsage();
-        try {
-            if ($token) {
-                if (!$key = EventManager_Config::getInstance()->{EventManager_Config::JWT_SECRET}) {
-                    throw new Tinebase_Exception_SystemGeneric('EventManager JWT key is not configured');
-                }
-                try {
-                    $decoded = JWT::decode($token, new \Firebase\JWT\Key($key, 'HS256'));
-                    $email_participant = $decoded->email ?? '';
-                    $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_participant);
-                    $dependant_participant = [];
-
-                    if (!empty($contact)) {
-                        $contact = Addressbook_Controller_Contact::getInstance()
-                            ->get($contact->getId()); // necessary to get relations
-                        $dependant_participant[] = $this->getRelatedContacts($contact);
-
-                        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                            EventManager_Model_Register_Contact::class,
-                            [
-                                [
-                                    'field' => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
-                                    'operator' => 'equals',
-                                    'value' => $contact->getId()
-                                ],
-                                [
-                                    'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
-                                    'operator' => 'equals',
-                                    'value' => 'participant'
-                                ],
-                            ],
-                        );
-                        $participants = EventManager_Controller_Register_Contact::getInstance()
-                            ->search($filter);
-
-                        foreach ($participants as $participant) {
-                            $event = EventManager_Controller_Event::getInstance()->get($event_id);
-                            $registrations = $event->{EventManager_Model_Event::FLD_REGISTRATIONS};
-                            foreach ($registrations as $registration) {
-                                if (
-                                    $registration->getId()
-                                    === $participant->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
-                                ) {
-                                    $register_participant = $participant;
-                                }
-                            }
-                        }
-
-                        if (!empty($register_participant)) {
-                            $participant_data = [
-                                $contact->toArray(),
-                                $register_participant->toArray(),
-                                $dependant_participant
-                            ];
-                        } else {
-                            $participant_data = [$contact->toArray(), '', $dependant_participant];
-                        }
-                    } else {
-                        $contact = [
-                            'email' => $email_participant,
-                        ];
-                        $participant_data = [$contact, ''];
-                    }
-                    $response = new \Laminas\Diactoros\Response();
-                    $response->getBody()->write(json_encode($participant_data));
-                    return $response;
-                } catch (Exception $jwtException) {
-                    // Invalid or expired token
-                    $response = new \Laminas\Diactoros\Response('php://memory', 400);
-                    $response->getBody()->write(json_encode(['error' => 'Invalid or expired token']));
-                    return $response;
-                }
-            }
-            $response = new \Laminas\Diactoros\Response();
-            $response->getBody()->write(json_encode([]));
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 404);
-            $response->getBody()->write(json_encode($tenf->getMessage()));
-        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 401);
-            $response->getBody()->write(json_encode($terna->getMessage()));
-        } catch (Tinebase_Exception_AccessDenied $e) {
-            $response = new \Laminas\Diactoros\Response('php://memory', 403);
-            $response->getBody()->write(json_encode($e->getMessage()));
-        } finally {
-            $assertAclUsage();
-        }
-        return $response;
-    }
-
     public function publicApiGetAccountDetails($token)
     {
         $assertAclUsage = $this->assertPublicUsage();
@@ -361,32 +269,80 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                                     'operator' => 'equals',
                                     'value' => $contact->getId()
                                 ],
-                                [
-                                    'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
-                                    'operator' => 'equals',
-                                    'value' => 'registrant'
-                                ],
                             ],
                         );
-                        $registrants = EventManager_Controller_Register_Contact::getInstance()
+                        $registerContacts = EventManager_Controller_Register_Contact::getInstance()
                             ->search($filter);
 
-                        $register_events = [];
-                        foreach ($registrants as $registrant) {
-                            $register_events[] = EventManager_Controller_Registration::getInstance()
-                                ->get($registrant->registration_id);
+                        $registrationIds = [];
+                        foreach ($registerContacts as $registerContact) {
+                            $regId = $registerContact->registration_id;
+                            if (!in_array($regId, $registrationIds)) {
+                                $registrationIds[] = $regId;
+                            }
                         }
 
-                        if (count($register_events) > 0) {
-                            $registrations_data = [];
-                            foreach ($register_events as $register_event) {
-                                $status = EventManager_Config::getInstance()
-                                    ->get(EventManager_Config::REGISTRATION_STATUS)->records
-                                        ->getById($register_event->{EventManager_Model_Registration::FLD_STATUS});
-                                $register_event->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
-                                $registrations_data[] = $register_event->toArray();
+                        $registrations_data = [];
+
+                        foreach ($registrationIds as $registrationId) {
+                            $registration = EventManager_Controller_Registration::getInstance()
+                                ->get($registrationId);
+                            $status = EventManager_Config::getInstance()
+                                ->get(EventManager_Config::REGISTRATION_STATUS)->records
+                                ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
+                            $registrationArray = $registration->toArray();
+
+                            $participantFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                                EventManager_Model_Register_Contact::class,
+                                [
+                                    [
+                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                                        'operator' => 'equals',
+                                        'value' => $registration->getId()
+                                    ],
+                                    [
+                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                                        'operator' => 'equals',
+                                        'value' => 'participant'
+                                    ],
+                                ],
+                            );
+                            $participants = EventManager_Controller_Register_Contact::getInstance()
+                                ->search($participantFilter);
+
+                            if ($participants->count() > 0) {
+                                $participant = $participants->getFirstRecord();
+                                $registrationArray['participant'] = $participant->toArray();
                             }
-                        } else {
+
+                            $registrantFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                                EventManager_Model_Register_Contact::class,
+                                [
+                                    [
+                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                                        'operator' => 'equals',
+                                        'value' => $registration->getId()
+                                    ],
+                                    [
+                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                                        'operator' => 'equals',
+                                        'value' => 'registrant'
+                                    ],
+                                ],
+                            );
+                            $registrants = EventManager_Controller_Register_Contact::getInstance()
+                                ->search($registrantFilter);
+
+                            if ($registrants->count() > 0) {
+                                $registrant = $registrants->getFirstRecord();
+                                $registrationArray['registrant'] = $registrant->toArray();
+                            }
+
+                            $registrations_data[] = $registrationArray;
+                        }
+
+                        if (count($registrations_data) === 0) {
                             $registrations_data = $contact->toArray();
                         }
                     } else {
@@ -395,6 +351,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                         ];
                         $registrations_data = $registrant;
                     }
+
                     $response = new \Laminas\Diactoros\Response();
                     $response->getBody()->write(json_encode([$registrations_data, $dependant_participant]));
                     return $response;

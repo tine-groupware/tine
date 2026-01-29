@@ -572,6 +572,27 @@ import MarkdownRenderer from './../../../../Tinebase/js/MarkdownRenderer.vue';
 
 const router = useRouter();
 const route = useRoute();
+
+const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
+
+const salutations = ref([
+  { value: 'MR', text: formatMessage('Mr') },
+  { value: 'MS', text: formatMessage('Ms') },
+  { value: 'COMPANY', text: formatMessage('Company') },
+  { value: 'PERSON', text: formatMessage('Person') },
+]);
+
+const countries = ref([
+  { value: 'DE', text: formatMessage('Deutschland') },
+]);
+
+const REGISTRATION_SCENARIO = {
+  UNKNOWN_USER: 'unknown_user',
+  NEW_PARTICIPANT_FROM_ACCOUNT: 'new_participant',
+  ACCOUNT_OWNER: 'account_owner',
+  DEPENDANT: 'dependant'
+};
+
 const isCollapsedParticipant = ref(false);
 const isCollapsedEvent = ref(false);
 const isCollapsedRegistrant = ref(false);
@@ -580,10 +601,8 @@ const showRegisteredContactAlert = ref(false);
 const replies = ref({});
 const uploadedFiles = ref({});
 const validationErrors = ref([]);
-const isVerifyEmail = ref(false);
 const isVerifyEmailRegistrant = ref(false);
 const isAlreadyRegistered = ref(false);
-const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, .csv, .xlsx, .xls';
 const isExpired = ref(false);
 const isUpdate = ref(false);
 const hasFileChanged = ref(false);
@@ -591,11 +610,56 @@ const isRegistrant = ref(false);
 const registrantEmail = ref();
 const registrationIdRef = ref();
 const selectedParticipantId = ref(null);
+const shouldShowRegistrantCheckbox = ref(true);
+
+// Data from backend
 const dependantParticipants = ref(null);
 const registrantEvents = ref(null);
 const participants = ref(null);
 const accountOwner = ref(null);
-const shouldShowRegistrantCheckbox = ref(true);
+
+const eventDetails = ref({
+  name: "",
+  start : "",
+  end: "",
+  location: "",
+  type: "",
+  status: "",
+  fee: "",
+  totalPlaces: "",
+  bookedPlaces: "",
+  availablePlaces: "",
+  doubleOptIn: "",
+  options: [],
+  registrations: [],
+  appointments: [],
+  description: "",
+  isLive: "",
+  registrationPossibleUntil: "",
+});
+
+const emptyContactDetails = () => ({
+  id: "",
+  salutation : "",
+  n_prefix : "",
+  n_given : "",
+  n_middle : "",
+  n_family : "",
+  org_name : "",
+  bday : "",
+  email : "",
+  tel_cell: "",
+  tel_home : "",
+  adr_one_street : "",
+  adr_one_street2: "",
+  adr_one_postalcode : "",
+  adr_one_locality : "",
+  adr_one_region : "",
+  adr_one_countryname : "",
+});
+
+const contactDetails = ref(emptyContactDetails());
+const registrantDetails = ref(emptyContactDetails());
 
 const modal = reactive({
   show: false,
@@ -658,126 +722,11 @@ const eventDate = computed(() => {
 
   const formattedDate = formatDate(eventDetails.value.start, dateFormat);
   return `${formatMessage('on the')} ${formattedDate || formatMessage('TBD')}`
-}
-)
-
-const eventDetails = ref({
-  name: "",
-  start : "",
-  end: "",
-  location: "",
-  type: "",
-  status: "",
-  fee: "",
-  totalPlaces: "",
-  bookedPlaces: "",
-  availablePlaces: "",
-  doubleOptIn: "",
-  options: [],
-  registrations: [],
-  appointments: [],
-  description: "",
-  isLive: "",
-  registrationPossibleUntil: "",
 });
 
-const contactDetails = ref({
-  id: "",
-  salutation : "",
-  n_prefix : "",
-  n_given : "",
-  n_middle : "",
-  n_family : "",
-  org_name : "",
-  bday : "",
-  email : "",
-  tel_cell: "",
-  tel_home : "",
-  adr_one_street : "",
-  adr_one_street2: "",
-  adr_one_postalcode : "",
-  adr_one_locality : "",
-  adr_one_region : "",
-  adr_one_countryname : "",
+const maxBirthDate = computed(() => {
+  return new Date().toISOString().split('T')[0];
 });
-
-const registrantDetails = ref({
-  id: "",
-  salutation : "",
-  n_prefix : "",
-  n_given : "",
-  n_middle : "",
-  n_family : "",
-  org_name : "",
-  bday : "",
-  email : "",
-  tel_cell: "",
-  tel_home : "",
-  adr_one_street : "",
-  adr_one_street2: "",
-  adr_one_postalcode : "",
-  adr_one_locality : "",
-  adr_one_region : "",
-  adr_one_countryname : "",
-});
-
-const salutations = ref([
-  { value: 'MR', text: formatMessage('Mr') },
-  { value: 'MS', text: formatMessage('Ms') },
-  { value: 'COMPANY', text: formatMessage('Company') },
-  { value: 'PERSON', text: formatMessage('Person') },
-]);
-
-const countries = ref([
-  { value: 'DE', text: formatMessage('Deutschland') },
-]);
-
-const createNewProfile = () => {
-  registrantDetails.value = { ...contactDetails.value };
-
-  contactDetails.value = {
-    id: "",
-    salutation: "",
-    n_prefix: "",
-    n_given: "",
-    n_middle: "",
-    n_family: "",
-    org_name: "",
-    bday: "",
-    email: "",
-    tel_cell: "",
-    tel_home: "",
-    adr_one_street: "",
-    adr_one_street2: "",
-    adr_one_postalcode: "",
-    adr_one_locality: "",
-    adr_one_region: "",
-    adr_one_countryname: "",
-  };
-
-  eventDetails.value.options.forEach((option) => {
-    switch (option.option_config_class) {
-      case 'EventManager_Model_CheckboxOption':
-        replies.value[option.id] = 'false';
-        break;
-      case 'EventManager_Model_TextInputOption':
-        replies.value[option.id] = '';
-        break;
-      case 'EventManager_Model_FileOption':
-        if (option.option_config && option.option_config.file_acknowledgement) {
-          replies.value[option.id] = 'false';
-        } else {
-          uploadedFiles.value[option.id] = [];
-        }
-        break;
-    }
-  });
-
-  knownContact.value = false;
-  showRegisteredContactAlert.value = false;
-  isRegistrant.value = true;
-  isAlreadyRegistered.value = false;
-};
 
 const registrantId = computed(() => {
   if (!participants.value) {
@@ -798,7 +747,6 @@ const registrantId = computed(() => {
 const participantsDropdownOptions = computed(() => {
   const registerOthers = eventDetails.value.register_others;
   const options = [];
-
   const registerOthersNum = Number(registerOthers);
 
   if (registerOthersNum === 1) {
@@ -806,34 +754,6 @@ const participantsDropdownOptions = computed(() => {
   }
 
   const seen = new Set();
-
-  if (participants.value) {
-    if (participants.value.n_fileas) {
-      const participantId = participants.value.original_id || participants.value.id;
-      if (participantId && !seen.has(participantId)) {
-        options.push({
-          value: participantId,
-          text: participants.value.n_fileas
-        });
-        seen.add(participantId);
-      }
-    } else if (Array.isArray(participants.value) && participants.value.length > 0) {
-      const registrantParticipant = participants.value.find(p =>
-        p.participant?.original_id === registrantId.value || p.participant?.id === registrantId.value
-      );
-
-      if (registrantParticipant && registrantParticipant.participant) {
-        const participantId = registrantParticipant.participant.original_id || registrantParticipant.participant.id;
-        if (participantId && !seen.has(participantId)) {
-          options.push({
-            value: participantId,
-            text: registrantParticipant.participant.n_fileas
-          });
-          seen.add(participantId);
-        }
-      }
-    }
-  }
 
   if (accountOwner.value && accountOwner.value.n_fileas) {
     const ownerId = accountOwner.value.original_id || accountOwner.value.id;
@@ -847,7 +767,6 @@ const participantsDropdownOptions = computed(() => {
   }
 
   if (registerOthersNum === 1 || registerOthersNum === 3) {
-
     if (participants.value && Array.isArray(participants.value)) {
       participants.value.forEach(registration => {
         const participantId = registration.participant?.original_id || registration.participant?.id;
@@ -882,215 +801,6 @@ const participantsDropdownOptions = computed(() => {
   return options;
 });
 
-const formatBirthday = (bday) => {
-  if (!bday) return '';
-
-  if (/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
-    return bday;
-  }
-
-  const date = new Date(bday);
-  if (isNaN(date.getTime())) return '';
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-};
-
-const handleParticipantSelection = (participantId) => {
-  if (!participantId) { // new participant
-    contactDetails.value = {
-      id: "",
-      salutation: "",
-      n_prefix: "",
-      n_given: "",
-      n_middle: "",
-      n_family: "",
-      org_name: "",
-      bday: "",
-      email: "",
-      tel_cell: "",
-      tel_home: "",
-      adr_one_street: "",
-      adr_one_street2: "",
-      adr_one_postalcode: "",
-      adr_one_locality: "",
-      adr_one_region: "",
-      adr_one_countryname: "",
-    };
-
-    if (accountOwner.value) {
-      registrantDetails.value = {
-        ...accountOwner.value,
-        bday: formatBirthday(accountOwner.value.bday)
-      };
-      registrantEmail.value = accountOwner.value.email;
-    }
-
-    isRegistrant.value = true;
-    shouldShowRegistrantCheckbox.value = true;
-    showRegisteredContactAlert.value = false;
-    isAlreadyRegistered.value = false;
-    return;
-  }
-
-  // Check if it's the accountOwner
-  const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
-  if (accountOwner.value && String(participantId) === String(ownerId)) {
-    contactDetails.value = {
-      ...accountOwner.value,
-      bday: formatBirthday(accountOwner.value.bday)
-    };
-    registrantDetails.value = {
-      ...accountOwner.value,
-      bday: formatBirthday(accountOwner.value.bday)
-    };
-    isRegistrant.value = false;
-    shouldShowRegistrantCheckbox.value = false;
-
-    const registration = eventDetails.value.registrations?.find(
-      reg => String(reg.participant?.original_id || reg.participant?.id) === String(participantId)
-    );
-
-    if (registration) {
-      showRegisteredContactAlert.value = registration.status !== '3';
-      isAlreadyRegistered.value = registration.status !== '3';
-      getBookedOptions(registration);
-      registrationIdRef.value = registration.id;
-    } else {
-      showRegisteredContactAlert.value = false;
-      isAlreadyRegistered.value = false;
-    }
-    return;
-  }
-
-  // Check dependantParticipants
-  let participant = null;
-  if (dependantParticipants.value && Array.isArray(dependantParticipants.value)) {
-    participant = dependantParticipants.value.find(p =>
-      String(p.original_id || p.id) === String(participantId)
-    );
-  }
-
-  // If not found in dependantParticipants, check participants array
-  if (!participant && participants.value && Array.isArray(participants.value)) {
-    const registration = participants.value.find(p =>
-      String(p.participant?.original_id || p.participant?.id) === String(participantId)
-    );
-    if (registration && registration.participant) {
-      participant = registration.participant;
-    }
-  }
-
-  if (participant) {
-    contactDetails.value = {
-      ...participant,
-      bday: formatBirthday(participant.bday)
-    };
-
-    if (accountOwner.value) {
-      registrantDetails.value = {
-        ...accountOwner.value,
-        bday: formatBirthday(accountOwner.value.bday)
-      };
-      registrantEmail.value = accountOwner.value.email;
-    }
-
-    isRegistrant.value = true;
-    shouldShowRegistrantCheckbox.value = true;
-
-    const registration = eventDetails.value.registrations?.find(
-      reg => String(reg.participant?.original_id || reg.participant?.id) === String(participantId)
-    );
-
-    if (registration) {
-      showRegisteredContactAlert.value = registration.status !== '3';
-      isAlreadyRegistered.value = registration.status !== '3';
-      getBookedOptions(registration);
-      registrationIdRef.value = registration.original_id || registration.id;
-    } else {
-      showRegisteredContactAlert.value = false;
-      isAlreadyRegistered.value = false;
-    }
-  }
-};
-
-
-function deleteFile(optionId) {
-  hasFileChanged.value = true;
-  delete uploadedFiles.value[optionId];
-  const fileInput = document.getElementById('file-input');
-  if (fileInput) {
-    fileInput.value = '';
-  }
-}
-
-function openCancelConfirmation() {
-  showModal({
-    title: formatMessage('Cancel Registration'),
-    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${eventDetails.value.name}</strong>"`,
-    type: 'confirm',
-    okOnly: false,
-    okText: formatMessage('Yes'),
-    cancelText: formatMessage('No'),
-    onConfirm: confirmCancel
-  });
-}
-
-async function confirmCancel() {
-  const token = window.location.href.split('/').pop();
-  let eventId = route.params.id;
-
-  try {
-    const response = await fetch(`/EventManager/deregistration/${eventId}/${token}/${registrationIdRef.value}`, {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      method: 'POST',
-    });
-
-    if (!response.ok) {
-      throw new Error('Cancellation failed');
-    }
-
-    showModal({
-      title: formatMessage('Registration Cancelled'),
-      message: formatMessage('Your registration has been cancelled successfully.'),
-      type: 'success',
-      onConfirm: () => {
-        const baseUrl = window.location.origin;
-        window.location.href = `${baseUrl}/EventManager/view/#/event`;
-      }
-    });
-  } catch (error) {
-    console.error(error);
-    showModal({
-      title: formatMessage('Error'),
-      message: formatMessage('Could not cancel your registration. Please try again later.'),
-      type: 'error'
-    });
-  }
-}
-
-const getCharacterCount = (optionId) => {
-  return replies.value[optionId] ? replies.value[optionId].length : 0;
-};
-
-const handleTextInputChange = (option, value) => {
-  if (option.option_config.only_numbers) {
-    replies.value[option.id] = value;
-  } else {
-    if (option.option_config.max_characters && value.length > option.option_config.max_characters) {
-      replies.value[option.id] = value.substring(0, option.option_config.max_characters);
-    } else {
-      replies.value[option.id] = value;
-    }
-  }
-};
-
 const sortOptionsByGroup = computed(() => {
   const options = eventDetails.value.options;
 
@@ -1113,6 +823,265 @@ const visibleOptionsByGroup = computed(() => {
     options: group.options.filter(option => isOptionVisible(option))
   }));
 });
+
+const formatBirthday = (bday) => {
+  if (!bday) return '';
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(bday)) {
+    return bday;
+  }
+
+  const date = new Date(bday);
+  if (isNaN(date.getTime())) return '';
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+};
+
+const getParticipantId = (participant) => {
+  return participant?.original_id || participant?.id;
+};
+
+const isValidEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const determineRegistrationScenario = (participantId) => {
+  if (!accountOwner.value) {
+    return REGISTRATION_SCENARIO.UNKNOWN_USER;
+  }
+
+  const ownerId = getParticipantId(accountOwner.value);
+
+  if (!participantId) {
+    return REGISTRATION_SCENARIO.NEW_PARTICIPANT_FROM_ACCOUNT;
+  }
+
+  if (String(participantId) === String(ownerId)) {
+    return REGISTRATION_SCENARIO.ACCOUNT_OWNER;
+  }
+
+  return REGISTRATION_SCENARIO.DEPENDANT;
+};
+
+const initializeFormForScenario = async (scenario, participantId) => {
+  resetFormState();
+
+  switch (scenario) {
+    case REGISTRATION_SCENARIO.UNKNOWN_USER:
+      await handleUnknownUser();
+      break;
+
+    case REGISTRATION_SCENARIO.NEW_PARTICIPANT_FROM_ACCOUNT:
+      await handleNewParticipantFromAccount();
+      break;
+
+    case REGISTRATION_SCENARIO.ACCOUNT_OWNER:
+      await handleAccountOwner(participantId);
+      break;
+
+    case REGISTRATION_SCENARIO.DEPENDANT:
+      await handleDependant(participantId);
+      break;
+  }
+};
+
+const resetFormState = () => {
+  contactDetails.value = emptyContactDetails();
+  registrantDetails.value = emptyContactDetails();
+  isRegistrant.value = false;
+  shouldShowRegistrantCheckbox.value = true;
+  knownContact.value = false;
+  showRegisteredContactAlert.value = false;
+  isAlreadyRegistered.value = false;
+  initializeEventOptions();
+};
+
+const handleUnknownUser = async () => {
+  shouldShowRegistrantCheckbox.value = false;
+  isRegistrant.value = false;
+  knownContact.value = false;
+};
+
+const handleNewParticipantFromAccount = async () => {
+  if (accountOwner.value) {
+    registrantDetails.value = {
+      ...accountOwner.value,
+      bday: formatBirthday(accountOwner.value.bday)
+    };
+    registrantEmail.value = accountOwner.value.email;
+    isVerifyEmailRegistrant.value = true;
+  }
+
+  isRegistrant.value = true;
+  shouldShowRegistrantCheckbox.value = true;
+  knownContact.value = true; // Show the dropdown
+};
+
+const handleAccountOwner = async (participantId) => {
+  if (!accountOwner.value) return;
+
+  contactDetails.value = {
+    ...accountOwner.value,
+    bday: formatBirthday(accountOwner.value.bday)
+  };
+
+  isRegistrant.value = false;
+  shouldShowRegistrantCheckbox.value = true;
+  knownContact.value = true;
+
+  await checkAndLoadExistingRegistration(participantId);
+};
+
+const handleDependant = async (participantId) => {
+  let participant = null;
+
+  if (dependantParticipants.value && Array.isArray(dependantParticipants.value)) {
+    participant = dependantParticipants.value.find(p =>
+      String(getParticipantId(p)) === String(participantId)
+    );
+  }
+
+  if (!participant && participants.value && Array.isArray(participants.value)) {
+    const registration = participants.value.find(p =>
+      String(getParticipantId(p.participant)) === String(participantId)
+    );
+    if (registration && registration.participant) {
+      participant = registration.participant;
+    }
+  }
+
+  if (participant) {
+    contactDetails.value = {
+      ...participant,
+      bday: formatBirthday(participant.bday)
+    };
+
+    if (accountOwner.value) {
+      registrantDetails.value = {
+        ...accountOwner.value,
+        bday: formatBirthday(accountOwner.value.bday)
+      };
+      registrantEmail.value = accountOwner.value.email;
+      isVerifyEmailRegistrant.value = true;
+    }
+
+    isRegistrant.value = true;
+    shouldShowRegistrantCheckbox.value = true;
+    knownContact.value = true;
+
+    await checkAndLoadExistingRegistration(participantId);
+  }
+};
+
+const checkAndLoadExistingRegistration = async (participantId) => {
+  const registration = eventDetails.value.registrations?.find(
+    reg => String(getParticipantId(reg.participant)) === String(participantId)
+  );
+
+  if (registration) {
+    const isCancelled = registration.status === '3';
+    showRegisteredContactAlert.value = !isCancelled;
+    isAlreadyRegistered.value = !isCancelled;
+
+    if (!isCancelled) {
+      await loadBookedOptions(registration);
+      registrationIdRef.value = registration.original_id || registration.id;
+    }
+  }
+};
+
+const initializeEventOptions = () => {
+  if (!eventDetails.value.options || eventDetails.value.options.length === 0) {
+    return;
+  }
+
+  eventDetails.value.options.forEach((option) => {
+    switch (option.option_config_class) {
+      case 'EventManager_Model_CheckboxOption':
+        replies.value[option.id] = 'false';
+        break;
+      case 'EventManager_Model_TextInputOption':
+        replies.value[option.id] = '';
+        break;
+      case 'EventManager_Model_FileOption':
+        if (option.option_config && option.option_config.file_acknowledgement) {
+          replies.value[option.id] = 'false';
+        } else {
+          uploadedFiles.value[option.id] = [];
+        }
+        break;
+    }
+  });
+};
+
+const loadBookedOptions = async (registration) => {
+  const bookedOptions = registration.booked_options || [];
+
+  for(const bookedOption of bookedOptions) {
+    const optionId = bookedOption.option?.id || bookedOption.option;
+    if (optionId) {
+      const sc = bookedOption.selection_config;
+
+      switch (bookedOption.selection_config_class) {
+        case 'EventManager_Model_Selections_Checkbox':
+          replies.value[optionId] = sc.booked === true || sc.booked === 'true' ? 'true' : 'false';
+          break;
+
+        case 'EventManager_Model_Selections_TextInput':
+          replies.value[optionId] = sc.response || '';
+          break;
+
+        case 'EventManager_Model_Selections_File':
+          if (sc.node_id) {
+            try {
+              await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
+            } catch (error) {
+              console.error(`Failed to load file for option ${optionId}:`, error);
+            }
+          } else {
+            replies.value[optionId] = sc.file_acknowledgement === true || sc.file_acknowledgement === 'true' ? 'true' : 'false';
+          }
+          break;
+      }
+    }
+  }
+};
+
+const loadPreviouslyUploadedFile = async (optionId, nodeId, fileName) => {
+  try {
+    const response = await fetch(`/EventManager/getFile/${nodeId}`, {
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+    const file = new File([blob], fileName, {
+      type: blob.type
+    });
+
+    if (!uploadedFiles.value[optionId]) {
+      uploadedFiles.value[optionId] = [];
+    }
+
+    uploadedFiles.value[optionId] = [file];
+  } catch (error) {
+    console.error(`Error loading file for option ${optionId}:`, error);
+    throw error;
+  }
+};
+
+const handleParticipantSelection = async (participantId) => {
+  const scenario = determineRegistrationScenario(participantId);
+  await initializeFormForScenario(scenario, participantId);
+};
 
 const getGroupedAndUngroupedOptions = () => {
   const optionsByGroup = new Map();
@@ -1187,80 +1156,6 @@ const isOptionRequired = (option) => {
   }
 };
 
-const hasGroupValidationError = (groupName) => {
-  if (!groupName || groupName.trim() === '') return false;
-
-  const { optionsByGroup } = getGroupedAndUngroupedOptions();
-  const groupOptions = optionsByGroup.get(groupName);
-
-  if (!groupOptions) return false;
-
-  return groupOptions.some(option => validationErrors.value.includes(option.id));
-};
-
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-
-watch(() => contactDetails.value.email, (newEmail) => {
-  if (newEmail && newEmail.trim()) {
-    if (isValidEmail(newEmail.trim())) {
-      validationErrors.value = validationErrors.value.filter(err => err !== 'email');
-    } else {
-      if (!validationErrors.value.includes('email')) {
-        validationErrors.value.push('email');
-      }
-    }
-  }
-});
-const validateRequiredFields = () => {
-  validationErrors.value = [];
-  const errors = [];
-
-  const requiredFields = ['n_given', 'n_family', 'email'];
-  const missingFields = _.filter(requiredFields, field =>
-    _.isEmpty(_.get(contactDetails.value, field, '').trim())
-  );
-  errors.push(...missingFields);
-
-  const email = _.get(contactDetails.value, 'email', '').trim();
-  if (email && !isValidEmail(email)) {
-    if (!errors.includes('email')) {
-      errors.push('email');
-    }
-  }
-
-  // check grouped options (only one needs to be filled per group if option is required)
-  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
-  optionsByGroup.forEach((groupOptions, groupName) => {
-    const requiredOptions = groupOptions.filter(option => isOptionRequired(option));
-
-    if (requiredOptions.length > 0) {
-      // Check if ANY option in the group has a value
-      const hasAnyValue = groupOptions.some(option => hasOptionValue(option));
-
-      // If no option in the group has a value, mark all required options in the group as errors
-      if (!hasAnyValue) {
-        requiredOptions.forEach(option => {
-          errors.push(option.id);
-        });
-      }
-    }
-  });
-
-    // Validate ungrouped options (each must be filled individually)
-    ungroupedOptions.forEach(option => {
-      if (isOptionRequired(option) && !hasOptionValue(option)) {
-        errors.push(option.id);
-      }
-    });
-
-    validationErrors.value = errors;
-    return errors.length === 0;
-};
-
-
 const evaluateRule = (rule) => {
   const refOptionField = rule.ref_option_field;
   const referencedOption = eventDetails.value.options.find(opt => opt.id === refOptionField);
@@ -1322,8 +1217,74 @@ const evaluateRule = (rule) => {
   }
 };
 
+const hasGroupValidationError = (groupName) => {
+  if (!groupName || groupName.trim() === '') return false;
 
-function checkValidationFields() {
+  const { optionsByGroup } = getGroupedAndUngroupedOptions();
+  const groupOptions = optionsByGroup.get(groupName);
+
+  if (!groupOptions) return false;
+
+  return groupOptions.some(option => validationErrors.value.includes(option.id));
+};
+
+const validateRequiredFields = () => {
+  validationErrors.value = [];
+  const errors = [];
+
+  const requiredFields = ['n_given', 'n_family', 'email'];
+  const missingFields = _.filter(requiredFields, field =>
+    _.isEmpty(_.get(contactDetails.value, field, '').trim())
+  );
+  errors.push(...missingFields);
+
+  const email = _.get(contactDetails.value, 'email', '').trim();
+  if (email && !isValidEmail(email)) {
+    if (!errors.includes('email')) {
+      errors.push('email');
+    }
+  }
+
+  // Check grouped options (only one needs to be filled per group if option is required)
+  const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
+  optionsByGroup.forEach((groupOptions, groupName) => {
+    const requiredOptions = groupOptions.filter(option => isOptionRequired(option));
+
+    if (requiredOptions.length > 0) {
+      const hasAnyValue = groupOptions.some(option => hasOptionValue(option));
+
+      if (!hasAnyValue) {
+        requiredOptions.forEach(option => {
+          errors.push(option.id);
+        });
+      }
+    }
+  });
+
+  // Validate ungrouped options (each must be filled individually)
+  ungroupedOptions.forEach(option => {
+    if (isOptionRequired(option) && !hasOptionValue(option)) {
+      errors.push(option.id);
+    }
+  });
+
+  validationErrors.value = errors;
+  return errors.length === 0;
+};
+
+watch(() => contactDetails.value.email, (newEmail) => {
+  if (newEmail && newEmail.trim()) {
+    if (isValidEmail(newEmail.trim())) {
+      validationErrors.value = validationErrors.value.filter(err => err !== 'email');
+    } else {
+      if (!validationErrors.value.includes('email')) {
+        validationErrors.value.push('email');
+      }
+    }
+  }
+});
+
+const checkValidationFields = () => {
   validationErrors.value = [];
 
   if (!validateRequiredFields()) {
@@ -1340,17 +1301,122 @@ function checkValidationFields() {
     return false;
   }
   return true;
-}
+};
 
-function checkWaitingList() {
+const getCharacterCount = (optionId) => {
+  return replies.value[optionId] ? replies.value[optionId].length : 0;
+};
+
+const handleTextInputChange = (option, value) => {
+  if (option.option_config.only_numbers) {
+    replies.value[option.id] = value;
+  } else {
+    if (option.option_config.max_characters && value.length > option.option_config.max_characters) {
+      replies.value[option.id] = value.substring(0, option.option_config.max_characters);
+    } else {
+      replies.value[option.id] = value;
+    }
+  }
+};
+
+const singleSelection = (option) => {
+  if (option.group && option.group.trim() !== "") {
+    if (replies.value[option.id] !== 'true') {
+      visibleOptionsByGroup.value.forEach((group) => {
+        if (group.group === option.group) {
+          group.options.forEach((o) => {
+            if (o.id !== option.id && o.option_config_class === 'EventManager_Model_CheckboxOption') {
+              replies.value[o.id] = "false";
+            }
+          });
+        }
+      });
+    }
+  }
+};
+
+const handleFileChange = (event, optionId) => {
+  hasFileChanged.value = true;
+  const files = event.target.files;
+  if (files.length > 0) {
+    uploadedFiles.value[optionId] = files;
+  } else {
+    delete uploadedFiles.value[optionId];
+  }
+};
+
+const deleteFile = (optionId) => {
+  hasFileChanged.value = true;
+  delete uploadedFiles.value[optionId];
+  const fileInput = document.getElementById('file-input');
+  if (fileInput) {
+    fileInput.value = '';
+  }
+};
+
+const download = (data, name, type) => {
+  const url = window.URL.createObjectURL(new Blob([data], { type }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', name);
+  document.body.appendChild(link);
+  link.click();
+  setTimeout(() => {
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }, 200);
+};
+
+const downloadFile = async (nodeId, name, type) => {
+  await fetch(`/EventManager/getFile/${nodeId}`, {
+    method: 'GET'
+  }).then(res => res.blob()).then(data => {
+    download(data, name, type);
+  });
+};
+
+const uploadFileForOption = async (eventId, registrationId, optionId, files) => {
+  const formData = new FormData();
+  formData.append('eventId', eventId);
+
+  Array.from(files).forEach(file => {
+    formData.append('files[]', file);
+  });
+
+  const response = await fetch(`/EventManager/files/${eventId}/${optionId}/${registrationId}`, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to upload files for option ${optionId}`);
+  }
+};
+
+const uploadFiles = async (eventId, registrationId) => {
+  const uploadPromises = Object.entries(uploadedFiles.value)
+    .filter(([optionId, files]) => files && files.length > 0)
+    .map(([optionId, files]) => uploadFileForOption(eventId, registrationId, optionId, files));
+
+  try {
+    await Promise.all(uploadPromises);
+  } catch (error) {
+    console.error('File upload failed:', error);
+  }
+};
+
+const checkWaitingList = () => {
   if (!checkValidationFields()) {
     return;
   }
+
   const registration_deadline = eventDetails.value.registration_possible_until;
   const available_places = eventDetails.value.available_places;
-  if ( registration_deadline && new Date(registration_deadline).getTime() < new Date().getTime()) {
+
+  if (registration_deadline && new Date(registration_deadline).getTime() < new Date().getTime()) {
     isExpired.value = true;
   }
+
   if (available_places && (available_places <= 0 || isExpired.value)) {
     const expiredMessage = isExpired.value
       ? `${formatMessage('The registration date for')} "<strong>${eventDetails.value.name}</strong>" ${formatMessage('has expired. If you register you will be on our waiting list. Do you still want to register?')}`
@@ -1368,7 +1434,7 @@ function checkWaitingList() {
   } else {
     postRegistration();
   }
-}
+};
 
 const handlePostRegistration = (update = false) => {
   if (!checkValidationFields()) {
@@ -1390,7 +1456,6 @@ const postRegistration = async () => {
             filteredReplies[option.id] = replies.value[option.id];
           }
         }
-        // skip file upload options (handle in uploadFiles)
         return;
       }
 
@@ -1411,7 +1476,6 @@ const postRegistration = async () => {
           filteredReplies[option.id] = replies.value[option.id];
         }
       }
-      // skip file upload options (handle in uploadFiles)
       return;
     }
 
@@ -1426,7 +1490,12 @@ const postRegistration = async () => {
 
   const eventId = route.params.id;
   registrantDetails.value.email = registrantEmail.value;
-  const registration = {'eventId': eventId, 'contactDetails': contactDetails.value, 'replies': filteredReplies, 'registrantDetails': registrantDetails.value};
+  const registration = {
+    'eventId': eventId,
+    'contactDetails': contactDetails.value,
+    'replies': filteredReplies,
+    'registrantDetails': registrantDetails.value
+  };
   const body = JSON.parse(JSON.stringify(registration));
   let registrationId = '';
 
@@ -1483,48 +1552,56 @@ const postRegistration = async () => {
   }
 };
 
-const uploadFileForOption = async (eventId, registrationId, optionId, files) => {
-  const formData = new FormData();
-  formData.append('eventId', eventId);
-
-  Array.from(files).forEach(file => {
-    formData.append('files[]', file);
+const openCancelConfirmation = () => {
+  showModal({
+    title: formatMessage('Cancel Registration'),
+    message: `${formatMessage('Do you really want to cancel your registration for')} "<strong>${eventDetails.value.name}</strong>"`,
+    type: 'confirm',
+    okOnly: false,
+    okText: formatMessage('Yes'),
+    cancelText: formatMessage('No'),
+    onConfirm: confirmCancel
   });
-
-  const response = await fetch(`/EventManager/files/${eventId}/${optionId}/${registrationId}`, {
-    method: 'POST',
-    body: formData
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to upload files for option ${optionId}`);
-  }
 };
 
-const uploadFiles = async (eventId, registrationId) => {
-  const uploadPromises = Object.entries(uploadedFiles.value)
-    .filter(([optionId, files]) => files && files.length > 0)
-    .map(([optionId, files]) => uploadFileForOption(eventId, registrationId, optionId, files));
+const confirmCancel = async () => {
+  const token = window.location.href.split('/').pop();
+  let eventId = route.params.id;
 
   try {
-    await Promise.all(uploadPromises);
+    const response = await fetch(`/EventManager/deregistration/${eventId}/${token}/${registrationIdRef.value}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+    });
+
+    if (!response.ok) {
+      throw new Error('Cancellation failed');
+    }
+
+    showModal({
+      title: formatMessage('Registration Cancelled'),
+      message: formatMessage('Your registration has been cancelled successfully.'),
+      type: 'success',
+      onConfirm: () => {
+        const baseUrl = window.location.origin;
+        window.location.href = `${baseUrl}/EventManager/view/#/event`;
+      }
+    });
   } catch (error) {
-    console.error('File upload failed:', error);
+    console.error(error);
+    showModal({
+      title: formatMessage('Error'),
+      message: formatMessage('Could not cancel your registration. Please try again later.'),
+      type: 'error'
+    });
   }
 };
 
-function handleFileChange(event, optionId) {
-  hasFileChanged.value = true;
-  const files = event.target.files;
-  if (files.length > 0) {
-    uploadedFiles.value[optionId] = files;
-  } else {
-    delete uploadedFiles.value[optionId];
-  }
-}
-
 const clearForm = () => {
-  contactDetails.value = _.mapValues(contactDetails.value, () => '');
+  contactDetails.value = emptyContactDetails();
   replies.value = {};
 
   const fileInputs = document.querySelectorAll('input[type="file"]');
@@ -1533,252 +1610,29 @@ const clearForm = () => {
   });
 };
 
-const maxBirthDate = computed(() => {
-  return new Date().toISOString().split('T')[0];
-});
-
-// function to only select one of the checkboxes inside a group
-function singleSelection(option) {
-  if (option.group && option.group.trim() !== "") {
-    if (replies.value[option.id] !== 'true') {
-      visibleOptionsByGroup.value.forEach((group) => {
-        if (group.group === option.group) {
-          group.options.forEach((o) => {
-            if (o.id !== option.id && o.option_config_class === 'EventManager_Model_CheckboxOption') {
-              replies.value[o.id] = "false";
-            }
-          });
-        }
-      });
-    }
-  }
-}
-
-const download = (data, name, type) => {
-  const url = window.URL.createObjectURL(new Blob([data], { type }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.setAttribute('download', name);
-  document.body.appendChild(link);
-  link.click();
-  setTimeout(() => {
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  }, 200);
+const fetchEvent = async () => {
+  let eventId = route.params.id;
+  const response = await fetch(`/EventManager/event/${eventId}`, {
+    method: 'GET'
+  });
+  const data = await response.json();
+  eventDetails.value = data;
+  initializeEventOptions();
 };
 
-async function downloadFile(nodeId, name, type) {
-  await fetch(`/EventManager/getFile/${nodeId}`, {
-    method: 'GET'
-  }).then(res => res.blob()).then(data => {
-    download(data, name, type);
-  });
-}
-
-async function getEvent(skipContactDetails = false, participantId, isReregistered = false) {
-  let eventId = route.params.id;
-  await fetch(`/EventManager/event/${eventId}`, {
-    method: 'GET'
-  }).then(resp => resp.json())
-    .then(data => {
-      eventDetails.value = data;
-      if (eventDetails.value.options) {
-        if (eventDetails.value.options.length > 1) {
-          eventDetails.value.options.forEach((option) => {
-            switch (option.option_config_class) {
-              case 'EventManager_Model_CheckOption':
-                replies.value[option.id] = 'false';
-                break;
-              case 'EventManager_Model_TextInputOption':
-                replies.value[option.id] = '';
-                break;
-              case 'EventManager_Model_FileOption':
-                if (option.option_config && option.option_config.file_acknowledgement) {
-                  replies.value[option.id] = 'false';
-                } else {
-                  uploadedFiles.value[option.id] = null;
-                }
-                break;
-              case 'EventManager_Model_TextOption':
-                // Display-only, no input needed
-                break;
-            }
-          });
-        } else {
-          if (eventDetails.value.options.option_config_class === 'EventManager_Model_CheckOption') {
-            replies.value[eventDetails.value.options.id] = 'false';
-          } else {
-            replies.value[eventDetails.value.options.id] = '';
-          }
-        }
-      }
-    });
-  if (participantId) {
-    const registration = eventDetails.value.registrations?.find(
-      reg => String(reg.participant?.original_id) === String(participantId)
-    );
-
-    if (registration) {
-      await getEventRegistrantDetails();
-      contactDetails.value = registration.participant;
-      if (!contactDetails.value.email){
-        contactDetails.value.email = registration.registrant.email
-      }
-
-      if (!isReregistered) {
-        await getBookedOptions(registration);
-      } else {
-        knownContact.value = true;
-        isAlreadyRegistered.value = false;
-      }
-
-      if (registration.participant.original_id !== registration.registrant.original_id) {
-        showRegisteredContactAlert.value = false;
-      }
-    }
-  } else if (route.params.token && !skipContactDetails) {
-    await getEventContactDetails();
-  }
-}
-
-async function getEventContactDetails() {
-  let eventId = route.params.id;
+const fetchAccountData = async () => {
   let token = route.params.token;
-  try {
-    const resp = await fetch(`/EventManager/contact/${token}/${eventId}`, {
-      method: 'GET'
-    });
-    const data = await resp.json();
-    const [contactData, registration, relatedContacts] = data;
+  if (!token) return;
 
-    if (Array.isArray(relatedContacts) && relatedContacts.length > 0 && Array.isArray(relatedContacts[0])) {
-      dependantParticipants.value = relatedContacts[0];
-    } else {
-      dependantParticipants.value = relatedContacts;
-    }
-
-    accountOwner.value = contactData;
-
-    const contactFields = Object.keys(contactDetails.value);
-    const filteredContactData = {};
-
-    contactFields.forEach(field => {
-      if (field === 'bday') {
-        filteredContactData[field] = formatBirthday(contactData[field]) || "";
-      } else {
-        filteredContactData[field] = contactData[field] || "";
-      }
-    });
-
-    contactDetails.value = filteredContactData;
-
-    const { email, ...otherDetails } = contactData;
-    knownContact.value = Object.values(otherDetails).some(v => v && v.trim() !== "");
-
-    if (contactData.email && contactData.email.trim() !== '') {
-      registrantEmail.value = contactData.email;
-      isVerifyEmail.value = true;
-    }
-
-    if (registration && registration !== '') {
-      await getBookedOptions(registration)
-      registrationIdRef.value = registration.id;
-    }
-
-  } catch (error) {
-    console.error('Error fetching contact details: ', error);
-  }
-}
-
-async function getBookedOptions(registration) {
-  showRegisteredContactAlert.value = registration.status !== '3';
-  isAlreadyRegistered.value = registration.status !== '3';
-  const bookedOptions = registration.booked_options || [];
-  for(const bookedOption of bookedOptions) {
-    const optionId = bookedOption.option?.id || bookedOption.option;
-    if (optionId) {
-      const sc = bookedOption.selection_config;
-      switch (bookedOption.selection_config_class) {
-        case 'EventManager_Model_Selections_Checkbox':
-          replies.value[optionId] = sc.booked === true || optionId === 'true' ? 'true' : 'false';
-          break;
-
-        case 'EventManager_Model_Selections_TextInput':
-          replies.value[optionId] = sc.response || '';
-          break;
-
-        case 'EventManager_Model_Selections_File':
-          if (sc.node_id) {
-            try {
-              await loadPreviouslyUploadedFile(optionId, sc.node_id, sc.file_name);
-            } catch (error) {
-              console.error(`Failed to load file for option ${optionId}:`, error);
-            }
-          } else {
-            replies.value[optionId] = sc.file_acknowledgement === true || sc.file_acknowledgement === 'true' ? 'true' : 'false';
-          }
-          break;
-      }
-    }
-  }
-  console.log('Final replies:', replies.value);
-}
-
-async function loadPreviouslyUploadedFile(optionId, nodeId, fileName) {
-  try {
-    const response = await fetch(`/EventManager/getFile/${nodeId}`, {
-      method: 'GET'
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch file: ${response.statusText}`);
-    }
-
-    const blob = await response.blob();
-    const file = new File([blob], fileName, {
-      type: blob.type
-    });
-
-    if (!uploadedFiles.value[optionId]) {
-      uploadedFiles.value[optionId] = [];
-    }
-
-    uploadedFiles.value[optionId] = [file];
-
-  } catch (error) {
-    console.error(`Error loading file for option ${optionId}:`, error);
-    throw error;
-  }
-}
-
-async function getEventRegistrantDetails() {
-  let eventId = route.params.id;
-  let token = route.params.token;
-  try {
-    const resp = await fetch(`/EventManager/contact/${token}/${eventId}`, {
-      method: 'GET'
-    });
-    const data = await resp.json();
-    const [registrantData, registration] = data;
-
-    registrantDetails.value = registrantData;
-    if (registrantData.email && registrantData.email.trim() !== '') {
-      registrantEmail.value = registrantData.email;
-      isVerifyEmailRegistrant.value = true;
-    }
-  } catch (error) {
-  console.error('Error fetching contact details: ', error);
-  }
-}
-
-async function getFromAccountOwnerRegisterParticipants() {
-  let token = route.params.token;
   try {
     const resp = await fetch(`/EventManager/account/${token}`, {
       method: 'GET'
     });
     registrantEvents.value = await resp.json();
+
     const firstElement = registrantEvents.value[0];
     if (Array.isArray(firstElement)) {
+      accountOwner.value = firstElement[0].registrant;
       participants.value = firstElement;
     } else {
       accountOwner.value = firstElement;
@@ -1786,34 +1640,40 @@ async function getFromAccountOwnerRegisterParticipants() {
     }
     dependantParticipants.value = registrantEvents.value[1];
   } catch (error) {
-    console.error('Error fetching contact details: ', error);
+    console.error('Error fetching account details: ', error);
   }
-}
+};
 
 onMounted(async () => {
-  const shouldCreateNewProfile = route.query.newProfile === 'true';
-  const participantId = route.query.participantId || '';
+  const participantIdFromUrl = route.query.participantId || null;
   const isReregistered = route.query.isReregistered === 'true';
 
-  await getFromAccountOwnerRegisterParticipants();
-  await getEvent(shouldCreateNewProfile, participantId, isReregistered);
+  await Promise.all([
+    fetchEvent(),
+    fetchAccountData()
+  ]);
 
-  if (shouldCreateNewProfile) {
-    if (!participantId) {
-      createNewProfile();
-    }
-    isRegistrant.value = true;
-    await getEventRegistrantDetails();
-    router.replace({
-      params: route.params,
-      query: {}
-    });
-  } else if (accountOwner.value) {
-    const ownerId = accountOwner.value.original_id || accountOwner.value.id;
-    selectedParticipantId.value = ownerId;
-    shouldShowRegistrantCheckbox.value = false;
-    handleParticipantSelection(ownerId);
+  let initialParticipantId = participantIdFromUrl;
+
+  if (!initialParticipantId && accountOwner.value) {
+    initialParticipantId = getParticipantId(accountOwner.value);
   }
+
+  const scenario = determineRegistrationScenario(initialParticipantId);
+
+  // special case: if isReregistered, do not load booked options
+  if (isReregistered && initialParticipantId) {
+    await initializeFormForScenario(scenario, initialParticipantId);
+  } else {
+    await initializeFormForScenario(scenario, initialParticipantId);
+  }
+
+  selectedParticipantId.value = initialParticipantId;
+
+  router.replace({
+    params: route.params,
+    query: {}
+  });
 });
 
 </script>
@@ -2116,14 +1976,15 @@ input[type="date"] {
 
   .modal-title {
     color: #2c3e50 !important;
-  font-weight: 600 !important;
+    font-weight: 600 !important;
   }
 
   .close {
-    color: #2c3e50 !important; opacity: 0.7 !important;
+    color: #2c3e50 !important;
+    opacity: 0.7 !important;
     transition: opacity 0.3s ease !important;
     &:hover {
-    opacity: 1 !important;
+      opacity: 1 !important;
     }
   }
 }
@@ -2175,7 +2036,6 @@ input[type="date"] {
   }
 }
 
-// Responsive design
 @media (max-width: 768px) {
   .registration-container {
     padding: 1.5rem 0;
