@@ -63,11 +63,6 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetEvent',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
-            $routeCollector->get('/contact/{token}/{event_id}', (new Tinebase_Expressive_RouteHandler(
-                EventManager_Controller_Event::class,
-                'publicApiGetEventContactDetails',
-                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
-            ))->toArray());
             $routeCollector->get('/account/{token}', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Event::class,
                 'publicApiGetAccountDetails',
