@@ -716,7 +716,30 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
             $response = new \Laminas\Diactoros\Response();
             $participant = $this->getRegisterContact($request['contactDetails']);
-            $registrant = $this->getRegisterContact($request['registrantDetails']);
+            $registration = null;
+
+            $allEmpty = true;
+            foreach ($request['registrantDetails'] as $value) {
+                if (!empty(trim($value))) {
+                    $allEmpty = false;
+                    break;
+                }
+            }
+
+            if ($allEmpty) {
+                $isSelfRegistration = true;
+            } else {
+                $isSelfRegistration = $this->isSameContact(
+                    $request['contactDetails'],
+                    $request['registrantDetails']
+                );
+            }
+
+            if ($isSelfRegistration) {
+                $registrant = $participant;
+            } else {
+                $registrant = $this->getRegisterContact($request['registrantDetails']);
+            }
 
             //participant replies:
             $options = $request['replies'];
@@ -782,47 +805,67 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         'operator' => 'equals',
                         'value' => $event_id
                     ],
-                    [
-                        'field' => EventManager_Model_Registration::FLD_PARTICIPANT,
-                        'operator' => 'equals',
-                        'value' => $participant
-                    ],
-                    [
-                        'field' => EventManager_Model_Registration::FLD_REGISTRANT,
-                        'operator' => 'equals',
-                        'value' => $registrant
-                    ],
                 ],
             );
-            $register_participant = $this->getInstance()->search($filter)->getFirstRecord();
+            $registrations = $this->getInstance()->search($filter);
 
             $default_values = $this->getDefaultRegistrationKeyFields();
-            if (!empty($register_participant)) {
-                if ($register_participant->{EventManager_Model_Registration::FLD_STATUS} === '3') {
-                    $register_participant->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
-                }
-                $booked_options = $this->keepFilesAfterUpdate($register_participant, $booked_options);
-                $register_participant->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
 
-                if (
-                    $register_participant->{EventManager_Model_Registration::FLD_PARTICIPANT
-                    !== $register_participant->{EventManager_Model_Registration::FLD_REGISTRANT}}
-                ) {
-                    $register_participant->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
+            if ($registrations->count() > 0) {
+                foreach ($registrations as $registration) {
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Register_Contact::class,
+                        [
+                            [
+                                'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                                'operator' => 'equals',
+                                'value' => $registration->getId()
+                            ],
+                        ],
+                    );
+                    $regs = EventManager_Controller_Register_Contact::getInstance()
+                        ->search($filter);
+
+                    if (!empty($regs)) {
+                        if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '3') {
+                            $registration->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
+                        }
+                        $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
+                        $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
+
+                        if ($participant->getId() !== $registrant->getId()) {
+                            $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
+                        } else {
+                            $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = false;
+                        }
+                        foreach ($regs as $reg) {
+                            if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
+                                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $reg;
+                            } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
+                                $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $reg;
+                            }
+                        }
+                        $registration = $this->updateRegisterContact(
+                            $registration,
+                            $request['contactDetails'],
+                            $request['registrantDetails'],
+                            $isSelfRegistration
+                        );
+                        $registration = $this->update($registration);
+                    }
                 }
-                $registration = $this->update($register_participant);
             } else {
                 $has_registrant = ($participant->getId() !== $registrant->getId());
                 $registration = new EventManager_Model_Registration([
-                    'event_id'          => EventManager_Controller_Event::getInstance()->get($event_id),
-                    'participant'       => $participant,
-                    'registrant'        => $registrant,
-                    'function'          => $default_values['function'],
-                    'source'            => $default_values['source'],
-                    'status'            => $default_values['status'],
-                    'booked_options'    => $booked_options,
-                    'description'       => '',
-                    'has_registrant'    => $has_registrant,
+                    'event_id' => EventManager_Controller_Event::getInstance()->get($event_id),
+                    'participant' => $participant,
+                    'registrant' => $registrant,
+                    'function' => $default_values['function'],
+                    'source' => $default_values['source'],
+                    'status' => $default_values['status'],
+                    'booked_options' => $booked_options,
+                    'description' => '',
+                    'has_registrant' => $has_registrant,
                 ], true);
                 $registration = $this->create($registration);
             }
@@ -841,6 +884,124 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $assertAclUsage();
         }
         return $response;
+    }
+
+    private function updateRegisterContact($registration, $participantData, $registrantData, $isSelfRegistration)
+    {
+        $rcController = EventManager_Controller_Register_Contact::getInstance();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            EventManager_Model_Register_Contact::class,
+            [[
+                'field'    => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                'operator' => 'equals',
+                'value'    => $registration->getId(),
+            ]]
+        );
+
+        $existing = $rcController->search($filter);
+
+        $participantReg = null;
+        $registrantReg  = null;
+
+        foreach ($existing as $reg) {
+            if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
+                $participantReg = $reg;
+            } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
+                $registrantReg = $reg;
+            }
+        }
+
+        if (!$participantReg) {
+            $participantReg = new EventManager_Model_Register_Contact([], true);
+        }
+
+        $participantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
+            = $registration->getId();
+        $participantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE}
+            = 'participant';
+
+        foreach ($participantData as $field => $value) {
+            if ($participantReg->has($field)) {
+                $participantReg->$field = $value;
+            }
+        }
+        $participantReg->n_fileas = $this->getNFileas($participantReg);
+
+        $participantReg = $participantReg->getId()
+            ? $rcController->update($participantReg)
+            : $rcController->create($participantReg);
+
+        if (!$registrantReg) {
+            $registrantReg = new EventManager_Model_Register_Contact([], true);
+        }
+
+        $registrantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_ID}
+            = $registration->getId();
+        $registrantReg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE}
+            = 'registrant';
+
+        $sourceData = $isSelfRegistration ? $participantData : $registrantData;
+
+        foreach ($sourceData as $field => $value) {
+            if ($registrantReg->has($field)) {
+                $registrantReg->$field = $value;
+            }
+        }
+        $registrantReg->n_fileas = $this->getNFileas($registrantReg);
+
+        $registrantReg = $registrantReg->getId()
+            ? $rcController->update($registrantReg)
+            : $rcController->create($registrantReg);
+
+        $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT}
+            = !$isSelfRegistration;
+
+        $registration->{EventManager_Model_Registration::FLD_PARTICIPANT}
+            = $participantReg;
+
+        $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
+            = $registrantReg;
+
+        return $registration;
+    }
+
+    private function getNFileas($record)
+    {
+        $family = trim($record->n_family ?? '');
+        $given  = trim($record->n_given ?? '');
+
+        if ($family && $given) {
+            return $family . ', ' . $given;
+        }
+
+        return $family ?: $given;
+    }
+
+    private function isSameContact($contact1, $contact2)
+    {
+        if (!isset($contact2) || empty($contact2)) {
+            return false;
+        }
+
+        $normalize = function ($value) {
+            return strtolower(trim($value ?? ''));
+        };
+
+        $email1 = $normalize($contact1['email'] ?? '');
+        $email2 = $normalize($contact2['email'] ?? '');
+
+        $firstName1 = $normalize($contact1['n_given'] ?? '');
+        $firstName2 = $normalize($contact2['n_given'] ?? '');
+
+        $lastName1 = $normalize($contact1['n_family'] ?? '');
+        $lastName2 = $normalize($contact2['n_family'] ?? '');
+
+        $emailMatch = !empty($email1) && $email1 === $email2;
+        $firstNameMatch = !empty($firstName1) && $firstName1 === $firstName2;
+        $lastNameMatch = !empty($lastName1) && $lastName1 === $lastName2;
+
+        return $emailMatch && $firstNameMatch && $lastNameMatch;
     }
 
     public function getContactByContactInformation($contactInformation)
@@ -876,7 +1037,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $eventManagerContainerId = EventManager_Config::getInstance()
             ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
         try {
-                $contact = $this->getContactByContactInformation($contactInformation);
+            $contact = $this->getContactByContactInformation($contactInformation);
             if (!$contact) {
                 try {
                     $contactData = array_map(function ($value) {
