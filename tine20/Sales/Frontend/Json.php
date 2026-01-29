@@ -5,10 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
- * @todo        check if we can add these functions to the reflection without implementing them here
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -756,8 +753,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
                 $controller = Sales_Controller_PurchaseInvoice::getInstance();
                 break;
-            case 'Document_Invoice':
+            case Sales_Model_Document_Invoice::MODEL_NAME_PART:
                 $controller = Sales_Controller_Document_Invoice::getInstance();
+                break;
+            case Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART:
+                $controller = Sales_Controller_Document_PurchaseInvoice::getInstance();
                 break;
             case 'Invoice':
                 $controller = Sales_Controller_Invoice::getInstance();
@@ -832,7 +832,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
             $result = $result['results'];
         }
-        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class) {
+        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class ||
+                $model === Sales_Model_Document_PurchaseInvoice::class) {
             $expander = new Tinebase_Record_Expander($model, $model::getConfiguration()->jsonExpander);
             $expander->expand($records);
             foreach ($records as $validInvoice) {

@@ -20,6 +20,8 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  * @subpackage  Controller
  *
  * @property Addressbook_Backend_Sql $_backend protected member, you don't have access to that
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Addressbook_Model_Contact>
  */
 class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract implements Tinebase_User_Plugin_SqlInterface
 {

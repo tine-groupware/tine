@@ -40,6 +40,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const FLD_DOCUMENT_CURRENCY = 'document_currency';
     public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
     public const FLD_PAYMENT_MEANS_USED = 'payment_means_used';
+    public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
 
     public static function inheritModelConfigHook(array &$_definition)
     {
@@ -140,12 +141,8 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             ],
             self::FLD_APPROVER => [
                 self::LABEL             => 'Approver', // _('Approver')
-                self::TYPE              => self::TYPE_RECORD,
+                self::TYPE              => self::TYPE_USER,
                 self::NULLABLE          => true,
-                self::CONFIG            => [
-                    self::APP_NAME          => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
-                ],
             ],
         ]);
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_APPROVER] = [];
@@ -194,6 +191,13 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::CONFIG            => [
                 self::OWNING_APP    => Sales_Config::APP_NAME,
             ],
+        ];
+
+        $_definition[self::FIELDS][self::FLD_LAST_DATEV_SEND_DATE] = [
+            self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+            self::TYPE                  => self::TYPE_DATETIME,
+            self::NULLABLE              => true,
+            self::SHY                   => true,
         ];
 
         unset($_definition[self::FIELDS][self::FLD_DOCUMENT_LANGUAGE]);

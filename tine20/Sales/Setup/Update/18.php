@@ -222,7 +222,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                     Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => $oldPI->price_gross2,
                 ]] : []),
                 Sales_Model_Document_PurchaseInvoice::FLD_GROSS_SUM => $oldPI->price_total,
-                Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER')?->related_record,
+                Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => $oldPI->relations->find('type', 'APPROVER')?->related_record->account_id ?: null,
                 Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $oldPI->relations->find('type', 'SUPPLIER')?->related_record,
                 Sales_Model_Document_PurchaseInvoice::FLD_XPROPS => ['migration_src_id' => $oldPI->getId()],
                 Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS_USED  => $oldPI->payment_method,
@@ -240,6 +240,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 'seq' => 1,
             ]));
         }
+
+        Sales_Setup_Initialize::createDefaultFavoritesDocPurchaseInvoice();
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
 

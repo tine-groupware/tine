@@ -40,4 +40,21 @@ class Sales_Import_PurchaseInvoiceTest extends TestCase
         $result = Sales_Controller_PurchaseInvoice::getInstance()->search($filter);
         self::assertEquals(1, count($result));
     }
+
+    public function testImportDocumentDemoData()
+    {
+        self::clear(Sales_Config::APP_NAME, Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART);
+
+        $now = Tinebase_DateTime::now();
+        $importer = new Tinebase_Setup_DemoData_Import('Sales_Model_Document_PurchaseInvoice', [
+            'definition' => 'sales_import_documentpurchaseinvoice_csv',
+            'file' => 'documentpurchaseinvoice.csv',
+        ]);
+        $importer->importDemodata();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_PurchaseInvoice::class, [
+            ['field' => 'creation_time', 'operator' => 'after_or_equals', 'value' => $now]
+        ]);
+        $result = Sales_Controller_Document_PurchaseInvoice::getInstance()->search($filter);
+        self::assertEquals(1, count($result));
+    }
 }
