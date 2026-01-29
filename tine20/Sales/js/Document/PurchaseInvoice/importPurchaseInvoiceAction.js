@@ -23,7 +23,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
                 action[records.length === 1 && ['application/xml', 'application/pdf'].indexOf(contenttype) >= 0 ? 'show' : 'hide']()
             },
             handler: async (cmp, e, importNonXR, fileLocation) => {
-                const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen || c instanceof  Tine.Tinebase.dialog.Dialog || c instanceof Tine.Felamimail.MessageDisplayDialog}).getEl()
+                const maskEl = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog || c instanceof Tine.widgets.MainScreen || c instanceof  Tine.Tinebase.dialog.Dialog || c instanceof Tine.Felamimail?.MessageDisplayDialog}).getEl()
                 const mask = new Ext.LoadMask(maskEl, { msg: app.i18n._('Importing purchase invoice. Please wait...') })
 
                 try {

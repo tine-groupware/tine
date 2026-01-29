@@ -145,9 +145,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
                         sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
                         sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
-                        if(this.forceAutoValues || ! sales_tax) {
-                            sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100)
-                        }
+                        sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100)
+                    } else {
+                        // manual tax breakdown
+                        sales_tax = _.sum(_.map(record.data.sales_tax_by_rate, 'tax_amount'))
                     }
                 }
 
@@ -164,9 +165,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
                         sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || Tine.Tinebase.configManager.get('salesTax')
                         sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
-                        if(this.forceAutoValues || ! sales_tax) {
-                            sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
-                        }
+                        sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
+                    } else {
+                        // manual tax breakdown
+                        sales_tax = _.sum(_.map(record.data.sales_tax_by_rate, 'tax_amount'))
                     }
                 }
 
@@ -177,8 +179,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             // reformat sales_tax_by_rate
             if (record.get('positions').length) {
                 sales_tax_by_rate = Object.keys(sums['sales_tax_by_rate']).reduce((a, rate) => {
-                    const oldRate = _.find(_.get(record, 'modified.sales_tax_by_rate', record.get('sales_tax_by_rate')) || [], {tax_rate: Number(rate)}) || {}
-                    return a.concat(Number(rate) ? [Object.assign(oldRate, {
+                    const oldRate = _.find( record.get('sales_tax_by_rate') || [], {tax_rate: Number(rate)}) ||
+                        Tine.Sales.Model.Document_SalesTax.setFromJson({}).data
+
+                    return a.concat(_.isNumber(Number(rate)) ? [Object.assign(oldRate, {
                         'net_amount': sums['net_sum_by_tax_rate'][rate],
                         'tax_rate': Number(rate),
                         'tax_amount': sums['sales_tax_by_rate'][rate],
@@ -186,13 +190,25 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     })] : [])
                 }, Tine.Tinebase.common.assertComparable([]))
             } else {
-                // @TODO match old rate
-                const tax_rate = Number(sales_tax_by_rate)
-                const tax_amount = sales_tax
-                const net_amount = this.recordClass.toFixed(tax_amount / tax_rate * 100)
-                const gross_amount = this.recordClass.toFixed(net_amount + tax_amount)
+                if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
+                    const tax_rate = Number(sales_tax_by_rate)
+                    const tax_amount = sales_tax
+                    const net_amount = this.recordClass.toFixed(tax_amount / tax_rate * 100)
+                    const gross_amount = this.recordClass.toFixed(net_amount + tax_amount)
 
-                sales_tax_by_rate = Tine.Tinebase.common.assertComparable([{ net_amount, tax_rate, tax_amount, gross_amount }])
+                    const oldRate = _.find(record.get('sales_tax_by_rate') || [], {tax_rate: Number(tax_rate)})
+
+                    sales_tax_by_rate = !oldRate && tax_amount === 0 && net_amount === 0 && gross_amount === 0 ? null :
+                        Tine.Tinebase.common.assertComparable([Object.assign(oldRate || Tine.Sales.Model.Document_SalesTax.setFromJson({}).data, {
+                            net_amount,
+                            tax_rate,
+                            tax_amount,
+                            gross_amount
+                        })])
+                } else {
+                    // manual tax breakdown
+                    sales_tax_by_rate = record.get('sales_tax_by_rate')
+                }
             }
             sales_tax = _.reduce(sales_tax_by_rate, (a, tax) => a + tax.tax_amount, 0);
 

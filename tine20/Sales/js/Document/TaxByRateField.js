@@ -39,7 +39,12 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     setValue(value, editDialog) {
-        value = _.cloneDeep(value)
+        if (_.isArray(value)) {
+            // let's have a store roundtrip to create full records and be able to track changes on expand/collapse
+            this.gridPanel.setStoreFromArray(_.cloneDeep(value) || [])
+            value = this.gridPanel.getFromStoreAsArray(true)
+        }
+
         TaxByRateField.superclass.setValue.call(this, value, editDialog)
         // @TODO take currency from record/document
         this.setRawValue(this.valueToString(value))
@@ -54,16 +59,23 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     },
 
     valueToString(value) {
-        return _.map(_.filter(value, tax => tax.tax_rate > 0), tax => `${Ext.util.Format.money(tax.tax_amount, {currencySymbol: this.currencySymbol})} (${tax.tax_rate}%)`).join(', ')
+        return _.map(value, tax => `${Ext.util.Format.money(tax.tax_amount, {currencySymbol: this.currencySymbol})} (${tax.tax_rate}%)`).join(', ')
+    },
+
+    parseValue(value, fieldName) {
+        const field = _.find(this.gridPanel.colModel.config, {dataIndex: fieldName}).editor.field
+        return field.parseValue.call(field, value)
     },
 
     processValue(value) {
-        value = (String(value).match(/^[0-9,. ]+%$/) ? `${this.currentValue.length === 1 ? this.currentValue[0].tax_amount/this.currentValue[0].tax_rate * parseFloat(String(value).replace(',', '.').replace('%', '')) : 0} (${value})` : value) || 0;
-        value = _.reduce(_.compact(String(value).split(/%\),?/)), (a, v) => {
+        if (value === '' && !this.currentValue) return;
+
+        value = (String(value).match(/^[0-9,. ]+%$/) ? `${this.currentValue.length === 1 ? this.currentValue[0].tax_amount/this.currentValue[0].tax_rate * this.parseValue(value, 'tax_amount') : 0} (${value})` : value);
+        value = [null, '', undefined].indexOf(value) >= 0 ? value : _.reduce(_.compact(String(value).split(/%\),?/)), (a, v) => {
             let [t,r] = String(v).split(/[^0-9,.]+\(/)
 
-            const tax_rate = parseFloat(String(r).replace(',', '.')) || Tine.Tinebase.configManager.get('salesTax')
-            const tax_amount = parseFloat(String(t).replace(',', '.')) || 0
+            const tax_rate = this.parseValue(r, 'tax_rate') || Tine.Tinebase.configManager.get('salesTax')
+            const tax_amount = this.parseValue(t, 'tax_amount') || 0
             const net_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(tax_amount / tax_rate * 100)
             const gross_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(net_amount + tax_amount)
 
