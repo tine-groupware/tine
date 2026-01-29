@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -15,7 +15,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Resource';
 
     public const FLD_NAME = 'name';
-    public const FLD_HIERACHY = 'hierarchy';
+    public const FLD_HIERARCHY = 'hierarchy';
     public const FLD_DESCRIPTION = 'description';
     public const FLD_MAX_NUMBER_OF_PEOPLE = 'max_number_of_people';
     public const FLD_EMAIL = 'email';
@@ -23,7 +23,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
     public const FLD_STATUS = 'status';
     public const FLD_STATUS_WITH_GRANT = 'status_with_grant';
     public const FLD_BUSY_TYPE = 'busy_type';
-    public const FLD_SUPRESS_NOTIFICATION = 'suppress_notification';
+    public const FLD_SUPPRESS_NOTIFICATION = 'suppress_notification';
     public const FLD_COLOR = 'color';
     public const FLD_SITE = 'site';
     public const FLD_LOCATION = 'location';
@@ -70,8 +70,8 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::FLD_STATUS                => [
                     self::COLUMNS                   => [self::FLD_STATUS],
                 ],
-                self::FLD_SUPRESS_NOTIFICATION  => [
-                    self::COLUMNS                   => [self::FLD_SUPRESS_NOTIFICATION],
+                self::FLD_SUPPRESS_NOTIFICATION  => [
+                    self::COLUMNS                   => [self::FLD_SUPPRESS_NOTIFICATION],
                 ],
             ],
         ],
@@ -93,7 +93,7 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
             ],
-            self::FLD_HIERACHY              => [
+            self::FLD_HIERARCHY              => [
                 self::TYPE                      => self::TYPE_TEXT,
                 self::LENGTH                    => 65535,
                 self::NULLABLE                  => true,
@@ -106,11 +106,12 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_INTEGER,
                 self::UNSIGNED                  => true,
                 self::NULLABLE                  => true,
+                // TODO move this to MC (INT + FLOAT types)
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => 0],
             ],
             self::FLD_EMAIL                 => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
-
             ],
             self::FLD_TYPE                  => [
                 self::TYPE                      => self::TYPE_STRING,
@@ -132,10 +133,12 @@ class Calendar_Model_Resource extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 32,
                 self::DEFAULT_VAL               => 'BUSY',
             ],
-            self::FLD_SUPRESS_NOTIFICATION  => [
+            self::FLD_SUPPRESS_NOTIFICATION  => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::NULLABLE                  => true,
-                self::DEFAULT_VAL               => 0,
+                self::DEFAULT_VAL               => false,
+                // TODO move this to MC (BOOL type)
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => false],
             ],
             self::FLD_COLOR                 => [
                 self::TYPE                      => self::TYPE_STRING,

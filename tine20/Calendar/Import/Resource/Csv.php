@@ -26,14 +26,16 @@ class Calendar_Import_Resource_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _doConversions($_data)
     {
-        $config =Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
+        $config = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP)->toArray();
         $result = parent::_doConversions($_data);
         $result['max_number_of_people'] = intval($result['max_number_of_people']);
         $result['suppress_notification']= intval($result['suppress_notification']);
 
-        if($result['email'] == "")
-        {
-            $result['email'] = $result['name'] . '@' . $config['primarydomain'];
+        if ($result['email'] == "" && isset($config['primarydomain'])) {
+            $email = $result['name'] . '@' . $config['primarydomain'];
+            if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                $result['email'] = $email;
+            }
         }
 
         $result['grants'] = [[
@@ -53,9 +55,7 @@ class Calendar_Import_Resource_Csv extends Tinebase_Import_Csv_Abstract
             'account_id' => '0',
             'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE]];
 
-        $result = $this->_setRelation($result);
-
-        return $result;
+        return $this->_setRelation($result);
     }
 
     /**
