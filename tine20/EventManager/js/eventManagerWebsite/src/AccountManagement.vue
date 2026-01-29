@@ -17,7 +17,6 @@
         </b-col>
       </b-row>
 
-      <!-- Self Registrations Section -->
       <div v-if="selfRegisteredEvents.length">
         <h5 class="section-heading">{{ formatMessage('My Events') }}</h5>
         <b-table
@@ -75,12 +74,10 @@
         </b-table>
       </div>
 
-      <!-- No Registrations Message -->
       <div v-else class="text-center mt-5">
         <h6>{{ formatMessage('You don\'t have any registrations for yourself yet — get started by creating one!') }}</h6>
       </div>
 
-      <!-- Other Participants Section -->
       <div v-if="otherParticipants.length">
         <h6 class="section-heading">
           {{ formatMessage('Users you registered') }}
@@ -147,14 +144,12 @@
         </b-table>
       </div>
 
-      <!-- Create New Registration Button -->
       <div class="button-group">
         <b-button class="action-button" @click="openCreateNewProfile">
           {{ formatMessage('Create a new registration') }}
         </b-button>
       </div>
 
-      <!-- Modal -->
       <b-modal
         v-model="modal.show"
         :title="modal.title"
@@ -276,7 +271,6 @@ const participantsDropdownOptions = computed(() => {
   }
 
   if (registerOthersNum === 1 || registerOthersNum === 3) {
-    // Add participants from registrations
     if (registrations.value && Array.isArray(registrations.value)) {
       registrations.value.forEach(registration => {
         const participantId = registration.participant?.original_id || registration.participant?.id;
@@ -293,7 +287,6 @@ const participantsDropdownOptions = computed(() => {
       });
     }
 
-    // Add dependant participants (relations)
     if (dependantParticipants.value && dependantParticipants.value.length > 0) {
       dependantParticipants.value.forEach(p => {
         const participantId = p.original_id || p.id;
@@ -349,18 +342,13 @@ const selfRegisteredEvents = computed(() => {
 });
 
 const otherParticipants = computed(() => {
-  console.log('=== otherParticipants computation ===');
-
   if (!registrations.value || !Array.isArray(registrations.value)) {
-    console.log('No registrations array, returning empty');
     return [];
   }
 
   const ownerId = accountOwnerId.value;
-  console.log('accountOwnerId:', ownerId);
 
   if (!ownerId) {
-    console.log('No accountOwnerId, returning empty');
     return [];
   }
 
@@ -370,23 +358,11 @@ const otherParticipants = computed(() => {
     const participantId = registration.participant?.original_id || registration.participant?.id;
     const registrantId = registration.registrant?.original_id || registration.registrant?.id;
 
-    console.log('Checking registration for otherParticipants:', {
-      event_id: registration.event_id,
-      participantId,
-      registrantId,
-      ownerId,
-      participantIsOwner: String(participantId) === String(ownerId),
-      registrantIsOwner: String(registrantId) === String(ownerId),
-      participantEqualsRegistrant: String(participantId) === String(registrantId)
-    });
-
     const isSelfRegistration = String(participantId) === String(ownerId) &&
       String(participantId) === String(registrantId);
 
     if (!isSelfRegistration) {
       const participantName = registration.participant?.n_fn || registration.participant?.n_fileas;
-
-      console.log('Including in otherParticipants:', participantName);
 
       if (!participantsMap.has(participantId)) {
         participantsMap.set(participantId, {
@@ -397,17 +373,12 @@ const otherParticipants = computed(() => {
       }
 
       participantsMap.get(participantId).events.push(registration);
-    } else {
-      console.log('Excluding (self-registration)');
     }
   });
 
-  // Sort events for each participant
   participantsMap.forEach(participant => {
     participant.events = sortRegistrationsByEventDate(participant.events);
   });
-
-  console.log('otherParticipants result:', Array.from(participantsMap.values()));
   return Array.from(participantsMap.values());
 });
 
@@ -510,14 +481,10 @@ const handleProfileSubmit = async () => {
     alert(formatMessage('Please select an event.'));
     return;
   }
-
   const baseUrl = window.location.origin;
   const token = route.params.token;
-
-  // Determine if this is a new profile or existing participant
   const isSelfRegistration = String(selectedParticipantId.value) === String(accountOwnerId.value);
   const newProfileParam = isSelfRegistration ? 'false' : 'true';
-
   window.location.href = `${baseUrl}/EventManager/view/event/${selectedEventId.value}/registration/${token}?newProfile=${newProfileParam}&participantId=${selectedParticipantId.value}`;
 };
 
@@ -581,7 +548,6 @@ async function fetchAccountData() {
     });
 
     const data = await resp.json();
-    console.log('Raw account data from backend:', data);
     const [firstElement, dependants] = data;
 
     if (Array.isArray(firstElement)) {
@@ -603,11 +569,6 @@ async function fetchAccountData() {
     }
 
     dependantParticipants.value = Array.isArray(dependants) ? dependants : [];
-
-    console.log('Processed accountOwner:', accountOwner.value);
-    console.log('Processed registrations:', registrations.value);
-    console.log('Processed dependants:', dependantParticipants.value);
-
   } catch (error) {
     console.error('Error fetching account details:', error);
   }
