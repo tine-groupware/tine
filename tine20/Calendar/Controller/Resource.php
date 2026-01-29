@@ -112,11 +112,11 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
             if ((!is_array($_record->grants) && !$_record->grants instanceof Tinebase_Record_RecordSet) || empty($_record->grants)) {
                 $_record->grants = [[
-                        'account_id' => '0',
-                        'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                    ]];
+                    'account_id' => '0',
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                ]];
             }
-            if (is_arraY($_record->grants)) {
+            if (is_array($_record->grants)) {
                 $grants = new Tinebase_Record_RecordSet(Calendar_Model_ResourceGrants::class, $_record->grants);
             } else {
                 $grants = $_record->grants;
@@ -143,7 +143,6 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             $container->xprops()['Calendar']['Resource']['resource_id'] = $createdRecord->getId();
 
             $this->_setIconXprops($_record, $container);
-
 
             $updateObserver = new Tinebase_Model_PersistentObserver(array(
                 'observable_model'      => 'Tinebase_Model_Container',
