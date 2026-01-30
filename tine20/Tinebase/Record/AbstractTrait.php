@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -234,7 +234,9 @@ trait Tinebase_Record_AbstractTrait
     {
         $data = array_reduce($path, fn($carry, $pathPart) => $carry[$pathPart] ?? null, $this->xprops());
         if (is_array($data)) {
-            return new $model($data);
+            $record = new $model($data, true);
+            $record->runConvertToRecord();
+            return $record;
         }
         return null;
     }

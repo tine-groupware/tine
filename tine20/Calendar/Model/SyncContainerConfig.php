@@ -113,43 +113,64 @@ class Calendar_Model_SyncContainerConfig extends Tinebase_Record_NewAbstract
 
     public function readValuesFromRemote(): void
     {
-        Tinebase_Record_Expander::expandRecord($this);
-        /** @var Tinebase_Model_CloudAccount $cloudAccount */
-        $cloudAccount = $this->{self::FLD_CLOUD_ACCOUNT_ID};
-        switch ($cloudAccount->{Tinebase_Model_CloudAccount::FLD_TYPE}) {
-            case Tinebase_Model_CloudAccount_CalDAV::class:
-                /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
-                $cloudConfig = $cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG};
-                $calDavClient = $cloudConfig->getClient();
-                $remoteValues = $calDavClient->getCollectionInfos($this->{self::FLD_CALENDAR_PATH}, [
-                    Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR,
-                    Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET,
-                    Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME,
-                    Calendar_Backend_CalDav_Client::PROPERTY_OWNER,
-                ]);
+        try {
+            Tinebase_Record_Expander::expandRecord($this);
+            /** @var Tinebase_Model_CloudAccount $cloudAccount */
+            $cloudAccount = $this->{self::FLD_CLOUD_ACCOUNT_ID};
+            switch ($cloudAccount->{Tinebase_Model_CloudAccount::FLD_TYPE}) {
+                case Tinebase_Model_CloudAccount_CalDAV::class:
+                    /** @var Tinebase_Model_CloudAccount_CalDAV $cloudConfig */
+                    $cloudConfig = $cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG};
+                    $calDavClient = $cloudConfig->getClient();
+                    $remoteValues = $calDavClient->getCollectionInfos($this->{self::FLD_CALENDAR_PATH}, [
+                        Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR,
+                        Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET,
+                        Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME,
+                        Calendar_Backend_CalDav_Client::PROPERTY_OWNER,
+                    ]);
 
-                if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_OWNER])) {
-                    $this->{self::FLD_EXTERNAL_OWNER} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_OWNER];
-                } else {
-                    $this->{self::FLD_EXTERNAL_OWNER} = null;
-                }
-                if (!$this->{self::FLD_EXTERNAL_OWNER_LOCALLY_OVERWRITTEN}) {
-                    $this->{self::FLD_CALENDAR_OWNER} = $this->{self::FLD_EXTERNAL_OWNER};
-                }
-                if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET])) {
-                    $this->{self::FLD_OWN_PRIVILEGE_SET} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET];
-                } else {
-                    $this->{self::FLD_OWN_PRIVILEGE_SET} = [];
-                }
-                if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME])) {
-                    $this->{self::FLD_EXTERNAL_CONTAINER_NAME} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME];
-                }
-                if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR])) {
-                    $this->{self::FLD_EXTERNAL_CONTAINER_COLOR} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR];
-                }
+                    if ($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_OWNER][0]['value'] ?? null) {
+                        $this->{self::FLD_EXTERNAL_OWNER} = $calDavClient->getEmailAddressForPrincipal($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_OWNER][0]['value'] );
+                    } else {
+                        $this->{self::FLD_EXTERNAL_OWNER} = null;
+                    }
+                    if (!$this->{self::FLD_EXTERNAL_OWNER_LOCALLY_OVERWRITTEN}) {
+                        $this->{self::FLD_CALENDAR_OWNER} = $this->{self::FLD_EXTERNAL_OWNER};
+                    }
+                    if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET])) {
+                        $this->{self::FLD_OWN_PRIVILEGE_SET} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CURRENT_USER_PRIVILEGE_SET];
+                    } else {
+                        $this->{self::FLD_OWN_PRIVILEGE_SET} = [];
+                    }
+                    if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME])) {
+                        $this->{self::FLD_EXTERNAL_CONTAINER_NAME} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_DISPLAY_NAME];
+                    }
+                    if (isset($remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR])) {
+                        $this->{self::FLD_EXTERNAL_CONTAINER_COLOR} = $remoteValues[Calendar_Backend_CalDav_Client::PROPERTY_CALENDAR_COLOR];
+                    }
+                    break;
 
-            default:
-                throw new Tinebase_Exception_NotImplemented('not impltement for type ' . $cloudAccount->{Tinebase_Model_CloudAccount::FLD_TYPE});
+                default:
+                    throw new Tinebase_Exception_NotImplemented('not impltement for type ' . $cloudAccount->{Tinebase_Model_CloudAccount::FLD_TYPE});
+            }
+
+            $this->{Calendar_Model_SyncContainerConfig::FLD_LAST_SUCCESSFUL_SYNC} = Tinebase_DateTime::now();
+            array_unshift($this->xprops(Calendar_Model_SyncContainerConfig::FLD_SYNC_HISTORY), ['success' => Tinebase_DateTime::now()->toString()]);
+        } catch (Exception $e) {
+            $this->{Calendar_Model_SyncContainerConfig::FLD_LAST_FAILED_SYNC} = Tinebase_DateTime::now();
+            array_unshift($this->xprops(Calendar_Model_SyncContainerConfig::FLD_SYNC_HISTORY), ['fail' => Tinebase_DateTime::now()->toString()]);
         }
+
+        if (count($this->{Calendar_Model_SyncContainerConfig::FLD_SYNC_HISTORY}) > 100) {
+            $this->{Calendar_Model_SyncContainerConfig::FLD_SYNC_HISTORY} = array_slice($this->{Calendar_Model_SyncContainerConfig::FLD_SYNC_HISTORY}, 0, 100);
+        }
+    }
+
+    public function dehydrate(): array
+    {
+        $this->runConvertToData();
+        $result = $this->toArray();
+        $this->runConvertToRecord();
+        return $result;
     }
 }

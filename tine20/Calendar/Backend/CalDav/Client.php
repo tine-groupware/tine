@@ -78,18 +78,25 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
     public const PROPERTY_CURRENT_USER_PRIVILEGE_SET = 'current-user-privilege-set';
     public const PROPERTY_DISPLAY_NAME = 'displayname';
     public const PROPERTY_OWNER = 'owner';
+    public const PROPERTY_CALENDAR_USER_ADDRESS_SET = 'calendar-user-address-set';
+    public const PROPERTY_EMAIL_ADDRESS_SET = 'email-address-set';
+
 
     protected static array $properties = [
         self::PROPERTY_CALENDAR_COLOR => '<calendar-color xmlns="http://apple.com/ns/ical/" />',
         self::PROPERTY_CURRENT_USER_PRIVILEGE_SET => '<d:current-user-privilege-set />',
         self::PROPERTY_DISPLAY_NAME => '<d:displayname />',
         self::PROPERTY_OWNER => '<d:owner />',
+        self::PROPERTY_CALENDAR_USER_ADDRESS_SET => '<calendar-user-address-set xmlns="urn:ietf:params:xml:ns:caldav" />',
+        self::PROPERTY_EMAIL_ADDRESS_SET => '<email-address-set xmlns="http://calendarserver.org/ns/" />',
     ];
     protected static array $propertiesClark = [
-        self::PROPERTY_CALENDAR_COLOR => '{http://apple.com/ns/ical/}calendar-color',
-        self::PROPERTY_CURRENT_USER_PRIVILEGE_SET => '{DAV:}current-user-privilege-set',
-        self::PROPERTY_DISPLAY_NAME => '{DAV:}displayname',
-        self::PROPERTY_OWNER => '{DAV:}owner',
+        '{http://apple.com/ns/ical/}calendar-color' => self::PROPERTY_CALENDAR_COLOR,
+        '{DAV:}current-user-privilege-set' => self::PROPERTY_CURRENT_USER_PRIVILEGE_SET,
+        '{DAV:}displayname' => self::PROPERTY_DISPLAY_NAME,
+        '{DAV:}owner' => self::PROPERTY_OWNER,
+        '{urn:ietf:params:xml:ns:caldav}calendar-user-address-set' => self::PROPERTY_CALENDAR_USER_ADDRESS_SET,
+        '{http://calendarserver.org/ns/}email-address-set' => self::PROPERTY_EMAIL_ADDRESS_SET,
     ];
     
     public function __construct(array $settings, string $flavor)
@@ -273,15 +280,55 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 $propertiesXml .= static::$properties[$property] . PHP_EOL;
             }
         }
-        $result = $this->multiStatusRequest('PROPFIND', $uri, '<?xml version="1.0"?>
+        $result = [];
+
+        foreach ($this->multiStatusRequest('PROPFIND', $uri, '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
 ' . $propertiesXml . '
   </d:prop>
-</d:propfind>');
+</d:propfind>') as $property => $value) {
+            if (static::$propertiesClark[$property] ?? false) {
+                $result[static::$propertiesClark[$property]] = $value;
+            }
+        }
 
 
-        return [];
+        return $result;
+    }
+
+    public function getEmailAddressForPrincipal(string $principalUri): ?string
+    {
+        $result = $this->multiStatusRequest('PROPFIND', $principalUri, '<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:">
+  <d:prop>
+    ' . self::$properties[self::PROPERTY_EMAIL_ADDRESS_SET] . '
+    ' . self::$properties[self::PROPERTY_CALENDAR_USER_ADDRESS_SET] . '
+  </d:prop>
+ </d:propfind>');
+
+        $email = null;
+        $emailAdrSetClark = array_search(self::PROPERTY_EMAIL_ADDRESS_SET, self::$propertiesClark);
+        $calUserAdrSetClark = array_search(self::PROPERTY_CALENDAR_USER_ADDRESS_SET, self::$propertiesClark);
+        foreach ($result as $property => $value) {
+            if ($emailAdrSetClark === $property) {
+                foreach ($value as $emailValues) {
+                    if ($emailValues['name'] === '{http://calendarserver.org/ns/}email-address') {
+                        $email = $emailValues['value'];
+                        break 2;
+                    }
+                }
+            } elseif (null === $email && $calUserAdrSetClark === $property) {
+                foreach ($value as $emailValues) {
+                    if ($emailValues['name'] === '{DAV:}href' && str_starts_with($emailValues['value'], 'mailto:')) {
+                        $email = substr($emailValues['value'], 7);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $email;
     }
 
     /**
@@ -381,6 +428,12 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                     $acls[] = $acl['value'][0]['name'];
                 }
             }
+            $ownerPrincipal = null;
+            foreach ($result['{DAV:}owner'] ?? [] as $owner) {
+                if ('{DAV:}href' === ($owner['name'] ?? null) && ($ownerPrincipal = ($owner['value'] ?? null))) {
+                    break;
+                }
+            }
 
             $collections->addRecord(new Tinebase_Model_WebDAV_Collection([
                 Tinebase_Model_WebDAV_Collection::FLD_URI => $url,
@@ -388,7 +441,16 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 Tinebase_Model_WebDAV_Collection::FLD_COLOR => $result['{http://apple.com/ns/ical/}calendar-color'] ?? null,
                 Tinebase_Model_WebDAV_Collection::FLD_TYPE => $type,
                 Tinebase_Model_WebDAV_Collection::FLD_ACL => $acls,
+                Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL => $ownerPrincipal,
             ]));
+        }
+
+        $principals = array_unique(array_filter($collections->{Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL}));
+
+        foreach ($principals as $principal) {
+            if ($email = $this->getEmailAddressForPrincipal($principal)) {
+                $collections->filter(Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL, $principal)->{Tinebase_Model_WebDAV_Collection::FLD_OWNER_EMAIL} = $email;
+            }
         }
 
         return $collections;
@@ -885,6 +947,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
     <d:resourcetype />
     <d:current-user-privilege-set />
     <d:displayname />
+    <d:owner />
     <x:supported-calendar-component-set xmlns:x="urn:ietf:params:xml:ns:caldav"/>
     <calendar-color xmlns="http://apple.com/ns/ical/"/>
   </d:prop>

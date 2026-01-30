@@ -407,6 +407,11 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' ' . __LINE__
             . ' about to handle Tinebase_Event_Container_BeforeCreate' );
 
+        if ($syncConfig = $_eventObject->container->getRecordFromXProps([Calendar_Controller_Event::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
+            $syncConfig->readValuesFromRemote();
+            $_eventObject->container->xprops()[Calendar_Controller_Event::SYNC_CONTAINER] = $syncConfig->dehydrate();
+        }
+
         $this->_addDefaultPersonalGrantsToContainer(
             $_eventObject->container,
             'Calendar',

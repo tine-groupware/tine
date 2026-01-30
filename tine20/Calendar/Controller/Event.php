@@ -3442,11 +3442,47 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     public function syncCloudAccountContainers(): bool
     {
-        $cloudAccountContainers = Tinebase_Container::getInstance()->_backend->search(new Tinebase_Model_ContainerFilter([
+        if (!Tinebase_Core::acquireMultiServerLock(__METHOD__)) {
+            return true;
+        }
+
+        $containerCtrl = Tinebase_Container::getInstance();
+        $oldSearchAcl = $containerCtrl->doSearchAclFilter(false);
+        $resetContainerSearchAcl = new Tinebase_RAII(fn() => $containerCtrl->doSearchAclFilter($oldSearchAcl));
+
+        $cloudAccountContainers = $containerCtrl->search(new Tinebase_Model_ContainerFilter([
             [TMFA::FIELD => 'application_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()],
             [TMFA::FIELD => 'xprops', TMFA::OPERATOR => 'contains', TMFA::VALUE => '"' . self::SYNC_CONTAINER . '"' ],
         ]));
 
+        foreach ($cloudAccountContainers as $cloudContainer) {
+            if (!($syncCfg = $cloudContainer->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class))) {
+                continue;
+            }
+
+            if ($syncCfg->{Calendar_Model_SyncContainerConfig::FLD_LAST_SUCCESSFUL_SYNC} instanceof Tinebase_DateTime &&
+                    Tinebase_DateTime::now()->getTimestamp() - $syncCfg->{Calendar_Model_SyncContainerConfig::FLD_LAST_SUCCESSFUL_SYNC}->getTimestamp() < 300) {
+                continue;
+            }
+            if ($syncCfg->{Calendar_Model_SyncContainerConfig::FLD_LAST_FAILED_SYNC} instanceof Tinebase_DateTime &&
+                    Tinebase_DateTime::now()->getTimestamp() - $syncCfg->{Calendar_Model_SyncContainerConfig::FLD_LAST_FAILED_SYNC}->getTimestamp() < 300) {
+                continue;
+            }
+            $syncCfg->readValuesFromRemote();
+
+            $transaction = Tinebase_RAII::getTransactionManagerRAII();
+
+            $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($containerCtrl);
+            $cloudContainer = $containerCtrl->get($cloudContainer->getId());
+            unset($selectForUpdate);
+
+            $cloudContainer->xprops()[self::SYNC_CONTAINER] = $syncCfg->dehydrate();
+            $containerCtrl->update($cloudContainer);
+
+            $transaction->release();
+        }
+
+        unset($resetContainerSearchAcl);
         return true;
     }
 
@@ -3870,13 +3906,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
-        if ($_eventObject instanceof Tinebase_Event_Container_BeforeCreate &&
-                $syncConfig = $_eventObject->container->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
-            $syncConfig->readValuesFromRemote();
-            $_eventObject->container->xprops()[self::SYNC_CONTAINER] = $syncConfig->toArray();
-        }
-
-
         if ($_eventObject instanceof Tinebase_Event_Record_BeforeUpdate && $_eventObject->observable instanceof Tinebase_Model_Container
                 && $syncConfig = $_eventObject->observable->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
 
@@ -3890,7 +3919,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $syncConfig->{Calendar_Model_SyncContainerConfig::FLD_CONTAINER_COLOR_LOCALLY_OVERWRITTEN} = true;
             }
             if ($syncConfig->isDirty()) {
-                $_eventObject->observable->xprops()[self::SYNC_CONTAINER] = $syncConfig->toArray();
+                $_eventObject->observable->xprops()[self::SYNC_CONTAINER] = $syncConfig->dehydrate();
             }
         }
     }

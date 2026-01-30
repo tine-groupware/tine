@@ -19,6 +19,8 @@ class Tinebase_Model_WebDAV_Collection extends Tinebase_Record_NewAbstract
     public const FLD_COLOR = 'color';
     public const FLD_TYPE = 'type';
     public const FLD_ACL = 'acl';
+    public const FLD_OWNER_PRINCIPAL = 'owner_principal';
+    public const FLD_OWNER_EMAIL = 'owner_email';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -42,6 +44,12 @@ class Tinebase_Model_WebDAV_Collection extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_HEX_COLOR,
             ],
             self::FLD_TYPE                  => [
+                self::TYPE                      => self::TYPE_STRING,
+            ],
+            self::FLD_OWNER_PRINCIPAL       => [
+                self::TYPE                      => self::TYPE_STRING,
+            ],
+            self::FLD_OWNER_EMAIL           => [
                 self::TYPE                      => self::TYPE_STRING,
             ],
             self::FLD_ACL                   => [

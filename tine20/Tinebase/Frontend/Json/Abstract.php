@@ -617,9 +617,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * returns record from json data
      *
+     * @template T of Tinebase_Record_Interface
      * @param array $_recordData
-     * @param string $modelName
-     * @return Tinebase_Record_Interface
+     * @param class-string<T> $modelName
+     * @return T
      */
     protected function _jsonToRecord($_recordData, $modelName)
     {

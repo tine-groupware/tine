@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Container
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -17,6 +17,39 @@
  */
 class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
 {
+    public function saveContainer(array $containerData): array
+    {
+        $isCreate = !($containerData['id'] ?? false);
+        $containerData = array_intersect_key($containerData, array_fill_keys(array_merge([
+            'name',
+            'hierarchy',
+            'color',
+            'order',
+            'xprops',
+            'seq',
+        ], $isCreate ? [
+            'type',
+            'application_id',
+            'model',
+        ] : []), true));
+        $container = $this->_jsonToRecord($containerData, Tinebase_Model_Container::class);
+        $container->backend = 'Sql';
+
+        if ($isCreate) {
+            if ($container->type !== Tinebase_Model_Container::TYPE_PERSONAL && $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
+                throw new Tinebase_Exception_InvalidArgument('Can add personal or shared containers only');
+            }
+            $container = Tinebase_Container::getInstance()->addContainer($container);
+        } else {
+            if (!Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
+                throw new Tinebase_Exception_AccessDenied('Permission to update container denied.');
+            }
+            $container = Tinebase_Container::getInstance()->update($container);
+        }
+
+        return $this->_recordToJson($container);
+    }
+
     /**
      * Search for Container matching given arguments
      *
