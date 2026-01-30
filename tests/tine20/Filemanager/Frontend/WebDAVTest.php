@@ -902,9 +902,16 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         try {
             // upload second chunk with exceeded quota
-            $applicationController->setApplicationState($tinebaseApplication,
-                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, 10000000000);
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($parent->getPath());
+            $node = $pathRecord->getNode();
             $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} = 1;
+            $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $quotas['effectiveQuota'] + 10000);
+            $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
+
+            $this->assertGreaterThan(0, $quotas['effectiveQuota'], 'quota should be set' . print_r($quotas, true));
+            $this->assertEquals(0, $quotas['effectiveFree'], 'should not have free space' . print_r($quotas, true));
 
             // upload second chunk
             $tempStream = fopen('php://temp', 'w');
@@ -914,7 +921,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
             $parent->createFile('tine_logo.png-chunking-1000-3-1', $tempStream);
             fclose($tempStream);
 
-            static::fail('acl test failed');
+            static::fail('should get InsufficientStorage exception');
         } catch (Sabre\DAV\Exception\InsufficientStorage $sdei) {
             $uploadedChunks = Tinebase_TempFile::getInstance()->search($filter)->count();
             $this->assertEquals(0, $uploadedChunks, 'tempFiles should be removed');
