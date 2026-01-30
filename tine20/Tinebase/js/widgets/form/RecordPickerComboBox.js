@@ -146,14 +146,23 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             // denormalizationOf means we get denormalization data, but select/pick fresh records
             this.denormalizationRecordClass = this.recordClass;
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelConfig.denormalizationOf);
+            this.contextRecordClass = Tine.Tinebase.data.RecordMgr.get(_.get(this.denormalizationRecordClass.getModelConfiguration(), `fields[${this.config.refIdField}].config.recordClassName`));
+
             this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
+            const me = this
             this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
                 allowCreateNew: false,
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
                 editDialogConfig: {
                     mode: 'local',
-                    denormalizationRecordClass: this.denormalizationRecordClass
+                    denormalizationRecordClass: this.denormalizationRecordClass,
+                    contextRecordClass: this.contextRecordClass,
+                    // NOTE: e.g. Sales_Model_Document_Abstract does not know it's origin yet
+                    contentPanelConstructorInterceptor: function(config) {
+                        const editDialog = me.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
+                        config.contextRecordClass = editDialog ? editDialog.recordClass : config.contextRecordClass
+                    }
                 }
             })));
             this.useEditPlugin = false;
@@ -368,8 +377,18 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      * @param {Number} index
      */
     onSelect: function (record, index) {
-        this.selectedRecord = record;
+        this.setSelectedRecord(record);
         return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.apply(this, arguments);
+    },
+
+    setSelectedRecord: function (record) {
+        this.selectedRecord = record;
+        if (this.denormalizationRecordClass) {
+            this.selectedRecord = this.recordClass.clone(record);
+            this.selectedRecord.json.original_id = this.selectedRecord.data.original_id = record.id;
+            this.selectedRecord.setId(this.recordClass.generateUID());
+            this.selectedRecord.phantom = true;
+        }
     },
 
     /**
@@ -458,7 +477,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 language: this.localizedLangPicker?.getValue()
             });
             description = r.get('description') || description;
-            this.selectedRecord = r;
+            this.setSelectedRecord(r);
             if (this.allowLinkingItself === false) {
                 // check if editDialog exists
                 if (this.editDialog && this.editDialog.record && r.getId() == this.editDialog.record.getId()) {
@@ -517,14 +536,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     getValue: function() {
         let value = Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.getValue.apply(this, arguments);
 
-        if (this.denormalizationRecordClass && this.selectedRecord) {
-            // NOTE: denormalized records are depended records, so we need to send all data (or empty string to delete)
-            value = { ...this.selectedRecord.data };
-            value.original_id = this.selectedRecord.json.original_id || value[this.valueField];
-        }
-
-        if (this.inEditor && this.selectedRecord) {
+        if (this.selectedRecord && (this.inEditor || this.denormalizationRecordClass)) {
             // NOTE: in editorGrids we need the data to show render the title
+            // NOTE: denormalized records are depended records, so we need to send all data (or empty string to delete)
             value = { ...this.selectedRecord.data };
         }
 

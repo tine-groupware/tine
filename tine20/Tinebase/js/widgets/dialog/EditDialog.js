@@ -7,6 +7,7 @@
  */
 import waitFor from "util/waitFor.es6"
 import asString from "../../ux/asString"
+import * as markdown from 'util/markdown'
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -429,6 +430,35 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // get items for this dialog
         this.items = this.getFormItems();
 
+        if (this.denormalizationRecordClass) {
+            this.afterIsRendered().then(async () => {
+                this.insert(0, {
+                    xtype: 'v-alert',
+                    variant: 'info',
+                    columnWidth: 1,
+                    label: await markdown.parse(this.app.formatMessage('Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged.', {
+                        recordName: markdown.escapeMarkdown(this.i18nRecordName),
+                        recordGender: markdown.escapeMarkdown(this.recordClass.getRecordGender()),
+                        contextRecordName: markdown.escapeMarkdown(this.contextRecordClass.getRecordName()),
+                        contextRecordGender: markdown.escapeMarkdown(this.contextRecordClass.getRecordGender()),
+                    })),
+                    listeners: {
+                        scope: this,
+                        render: function (){
+                            this.getEl().on('click', async e => {
+                                e.stopEvent();
+                                const originalId = this.record.json.original_id
+                                const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)
+                                if (originalId && EditDialog?.openWindow) {
+                                    EditDialog.openWindow({recordId: originalId, record: { id: originalId }, mode: 'remote'});
+                                }
+
+                            })
+                        }
+                    }
+                })
+            })
+        }
         // init relations panel if relations are defined
         this.initRelationsPanel();
         // init attachments panel
