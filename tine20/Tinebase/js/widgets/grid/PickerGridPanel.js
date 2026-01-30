@@ -451,7 +451,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // (b) JSON / other -> whole record is stored
         //  i) cross/metadata -> pickable foreign records
         //  ii) otherwise whole record is stored -> non pickable
-        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (isJsonRefIdStorage || this.isMetadataModelFor || /* backward compability */!modelConfig);
+        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (isJsonRefIdStorage || this.isMetadataModelFor || /* backward compability */!modelConfig || !this.config);
 
         if (this.enableTbar) {
             this.initTbar();
