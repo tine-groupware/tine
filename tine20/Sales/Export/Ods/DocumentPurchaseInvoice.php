@@ -25,7 +25,12 @@ class Sales_Export_Ods_DocumentPurchaseInvoice extends Sales_Export_Ods_Abstract
      * @var Tinebase_Record_RecordSet
      */
     protected $_specialFields = array();
-    
+
+    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
+    {
+        Tinebase_Record_Expander::expandRecords($_records);
+    }
+
     /**
      * @param Sales_Model_Document_PurchaseInvoice $record
      */

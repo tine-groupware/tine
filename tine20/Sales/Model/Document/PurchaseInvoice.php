@@ -187,6 +187,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::TYPE              => self::TYPE_KEY_FIELD,
             self::NAME              => Sales_Config::PAYMENT_METHODS,
             self::NULLABLE          => true,
+            self::DEFAULT_VAL       => null,
             self::LENGTH            => 255,
             self::CONFIG            => [
                 self::OWNING_APP    => Sales_Config::APP_NAME,
