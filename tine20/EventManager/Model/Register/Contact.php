@@ -32,7 +32,6 @@ class EventManager_Model_Register_Contact extends Addressbook_Model_Contact
         $_definition[self::APP_NAME] = EventManager_Config::APP_NAME;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::IS_DEPENDENT] = true;
-        $_definition[self::INHERIT_PARENT_SYSTEM_CUSTOM_FIELDS] = true;
         $_definition[self::TABLE] = [
             self::NAME      => self::TABLE_NAME,
             self::INDEXES   => [
