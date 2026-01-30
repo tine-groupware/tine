@@ -1312,6 +1312,9 @@ msgid_plural "Purchase Invoices"
 msgstr[0] "Eingangsrechnung"
 msgstr[1] "Eingangsrechnungen"
 
+msgid "GENDER_Purchase Invoice"
+msgstr "female"
+
 msgid "VAT Procedure"
 msgstr "Mehrwertsteuer-Verfahren"
 
@@ -1458,7 +1461,7 @@ msgid "Time Account"
 msgstr "Zeitkonto"
 
 msgid "GENDER_Customer"
-msgstr "male"
+msgstr "female"
 
 msgid "Has Offers"
 msgstr "Hat Angebote"
