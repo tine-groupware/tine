@@ -2753,6 +2753,9 @@ msgstr "Den existierenden Datensatz behalten und den neuen verwerfen"
 msgid "Action:"
 msgstr "Aktion:"
 
+msgid "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
+msgstr "Hinweis: Änderungen an {recordGender, select, male {diesem} female {dieser} other {diesem}} {recordName} gelten nur für {contextRecordGender, select, male {den zugrundeliegenden} female {die zugrundeliegende} other {das zugrundeliegende}} {contextRecordName}. {recordGender, select, male {Der} female {Die} other {Das}} [original {recordName}]() bleibt unverändert."
+
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
 

@@ -42,9 +42,14 @@ const parseInlinePurified = async (markdownString ,options) => {
     return (await getDOMPurify()).sanitize(await parseInline(markdownString, options))
 }
 
+const escapeMarkdown = (text) => {
+    return text.replace(/[\\`*_{}\[\]()#+\-!.>|]/g, '\\$&');
+}
+
 export {
     parse,
     parsePurified,
     parseInline,
-    parseInlinePurified
+    parseInlinePurified,
+    escapeMarkdown
 }
