@@ -880,7 +880,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      */
     protected $_attributeConfig = NULL;
 
-    protected $_inheritParentSystemCustomFields = false;
+    protected $_inheritParentSystemCustomFields = true;
 
     /*
      * mappings
