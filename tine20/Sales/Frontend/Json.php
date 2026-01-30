@@ -746,6 +746,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
         $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
+        $numberProperty = 'number';
+
         $controller = null;
         switch ($modelName) {
             case 'PurchaseInvoice':
@@ -755,9 +757,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 break;
             case Sales_Model_Document_Invoice::MODEL_NAME_PART:
                 $controller = Sales_Controller_Document_Invoice::getInstance();
+                $numberProperty = Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER;
                 break;
             case Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART:
+                $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE;
+                $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
                 $controller = Sales_Controller_Document_PurchaseInvoice::getInstance();
+                $numberProperty = Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER;
                 break;
             case 'Invoice':
                 $controller = Sales_Controller_Invoice::getInstance();
@@ -816,7 +822,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
             $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
-                . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
+                . PHP_EOL . 'Number : ' . $invoice[$numberProperty] . ', Title  : ' . $invoice->getTitle()
                 . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
             
             Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
