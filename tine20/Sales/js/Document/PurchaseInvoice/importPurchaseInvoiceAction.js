@@ -87,6 +87,17 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
         }
     })), medBtnStyle), 32)
 
+    // Ext.ux.pluginRegistry.register('Sales-Document_PurchaseInvoice-GridPanel',{
+    //     ptype: 'ux.browseplugin',
+    //     multiple: true,
+    //     // scope: this,
+    //     enableFileDialog: false,
+    //     handler: function(fileSelection) {
+    //         // grr. need to upload myself ;-(
+    //         getAction({}).initialConfig.handler(fileSelection.component, Ext.EventObject, true, fileSelection)
+    //     }
+    // })
+
     // fmail
     Ext.ux.ItemRegistry.registerItem('Tine.Felamimail.MailDetailPanel.AttachmentMenu', getAction({
         getFileLocation: (cmp) => {
