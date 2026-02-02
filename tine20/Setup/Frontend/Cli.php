@@ -1,11 +1,12 @@
 <?php
 
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  * @todo        add ext check again
  */
@@ -518,6 +519,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "Error: Passwords do not match! Exiting ... \n";
             exit(1);
         }
+
+        Tinebase_Core::getLogger()->addReplacement($password1);
 
         return $password1;
     }
@@ -1229,14 +1232,21 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * create admin user / activate existing user / allow to reset password
      *
      * @param Zend_Console_Getopt $_opts
+     * @return int
      *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_PasswordPolicyViolation
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Zend_Ldap_Exception
      * @todo check role by rights and not by name
      * @todo replace echos with stdout logger
      */
-    protected function _createAdminUser(Zend_Console_Getopt $_opts)
+    protected function _createAdminUser(Zend_Console_Getopt $_opts): int
     {
-        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            die('Install Tinebase first.');
+        if (! Setup_Controller::getInstance()->isInstalled()) {
+            return 1;
         }
 
         echo "Please enter a username. An existing user is reactivated and you can reset the password.\n";
@@ -1285,6 +1295,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ), true);
             echo "Created new admin user '$username' that expires tomorrow.\n";
         }
+
+        return 0;
     }
 
 
