@@ -116,17 +116,26 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $flags = (array) $_flags;
         $isClearMode = in_array($_mode, ['clear_cache_only', 'clear']);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: ' . print_r($_flags, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: '
+                . print_r($_flags, TRUE));
+        }
 
         $ids = null;
         if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' searching for msgs');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' searching for msgs');
+            }
             $ids = $this->search($_messages, null, false, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' sorting found msgs');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' sorting found msgs');
+            }
             $ids = $this->search(new Felamimail_Model_MessageFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => $ids],
             ]), new Tinebase_Model_Pagination(['sort' => 'folder_id']), false, true);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' done');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' done');
+            }
             $_messages = new Felamimail_Model_MessageFilter([
                 ['field' => 'id', 'operator' => 'in', 'value' => array_slice($ids, 0, 100)],
             ]);
@@ -413,6 +422,13 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
     {
         $result = null;
         foreach ($dkimHeaders as $dkimHeader) {
+            if (is_array($dkimHeader)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not parse DKIM header: ' . print_r($dkimHeader, true));
+                }
+                continue;
+            }
             if (preg_match('/d=([^;]+)/', $dkimHeader, $matches)) {
                 $domain = trim($matches[1]);
                 $supportedMailServers = Felamimail_Config::getInstance()->get(
