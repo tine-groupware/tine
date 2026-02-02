@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -136,6 +136,8 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
      * 
      * @param string $syncrotonFolder
      * @return array
+     *
+     * @deprecated can be removed - we no longer support TYPE_BLACKBERRY
      */
     public function testCreateEntryBB10($syncrotonFolder = null)
     {
@@ -250,6 +252,29 @@ class Addressbook_Frontend_ActiveSyncTest extends ActiveSync_Controller_Controll
                 ? $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT
                 : $syncrotonFolder->type === Syncroton_Command_FolderSync::FOLDERTYPE_CONTACT_USER_CREATED
             );
+        }
+    }
+
+    public function testUpdateContactClearEmailOfSystemUser(): void
+    {
+        $syncrotonFolder = $this->testCreateFolder();
+        $user = $this->_createTestUser();
+        $controller = Syncroton_Data_Factory::factory(
+            $this->_class,
+            $this->_getDevice(Syncroton_Model_Device::TYPE_ANDROID),
+            Tinebase_DateTime::now()
+        );
+        // switch to jsmith - does not have MANAGE_ACCOUNT
+        $this->_setUser($this->_personas['jsmith']);
+        $syncrotonContact = $controller->getEntry(new Syncroton_Model_SyncCollection([
+            'collectionId' => $syncrotonFolder->serverId
+        ]), $user->contact_id);
+        $syncrotonContact->email1Address = '';
+        try {
+            $controller->updateEntry($syncrotonFolder->serverId, $user->contact_id, $syncrotonContact);
+            self::fail('should not be able to update record - see \Addressbook_Controller_Contact::_inspectBeforeUpdate');
+        } catch (Syncroton_Exception_AccessDenied $sead) {
+            self::assertEquals('No permission to update record.', $sead->getMessage());
         }
     }
 }
