@@ -444,9 +444,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     })),
                     listeners: {
                         scope: this,
-                        render: function (){
-                            this.getEl().on('click', async e => {
+                        render: function (cmp){
+                            cmp.getEl().on('click', async e => {
                                 e.stopEvent();
+                                if (! e.getTarget('a')) return;
                                 const originalId = this.record.json.original_id
                                 const EditDialog = Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)
                                 if (originalId && EditDialog?.openWindow) {
