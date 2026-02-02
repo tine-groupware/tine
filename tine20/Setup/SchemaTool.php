@@ -233,9 +233,9 @@ class Setup_SchemaTool
             return ((strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false)
                 || (strpos($val, ", CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") !== false)
                 || (strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL,") !== false))
-                && $val !== "ALTER TABLE tine20_tree_nodes CHANGE islink islink TINYINT(1) DEFAULT '0' NOT NULL, CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL"
-                && $val !== "ALTER TABLE tine20_sales_purchase_invoices CHANGE is_payed is_payed TINYINT(1) DEFAULT '0', CHANGE is_approved is_approved TINYINT(1) DEFAULT '0', CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL"
-                && $val !== "ALTER TABLE tine20_sales_sales_invoices CHANGE is_auto is_auto TINYINT(1) DEFAULT '0', CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL";
+                && $val !== "ALTER TABLE " . SQL_TABLE_PREFIX . "tree_nodes CHANGE islink islink TINYINT(1) DEFAULT '0' NOT NULL, CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL"
+                && $val !== "ALTER TABLE " . SQL_TABLE_PREFIX . "sales_purchase_invoices CHANGE is_payed is_payed TINYINT(1) DEFAULT '0', CHANGE is_approved is_approved TINYINT(1) DEFAULT '0', CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL"
+                && $val !== "ALTER TABLE " . SQL_TABLE_PREFIX . "sales_sales_invoices CHANGE is_auto is_auto TINYINT(1) DEFAULT '0', CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL";
         });
 
         if (!empty($sqls)) {
