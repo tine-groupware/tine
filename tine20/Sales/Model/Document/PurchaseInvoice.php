@@ -35,7 +35,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const FLD_OVER_DUE_AT = 'over_due_at';
     public const FLD_PAY_AT = 'pay_at';
     public const FLD_PAID_AT = 'paid_at';
-    public const FLD_DUNNINGS = 'dunnings'; // recordset mahnungen ?! TODO FIXME
+    public const FLD_PAID_AMOUNT = 'paid_amount';
     public const FLD_APPROVER = 'approver';
     public const FLD_DOCUMENT_CURRENCY = 'document_currency';
     public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
@@ -108,7 +108,11 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::TYPE              => self::TYPE_DATE,
                 self::NULLABLE          => true,
             ],
-            //public const FLD_DUNNINGS = 'dunnings';  recordset mahnungen ?! TODO FIXME
+            self::FLD_PAID_AMOUNT => [
+                self::LABEL             => 'Paid amount', //_('Paid amount')
+                self::TYPE              => self::TYPE_MONEY,
+                self::NULLABLE          => true,
+            ],
         ]);
 
         unset($_definition[self::FILTER_MODEL][self::FLD_DIVISION_ID]);
