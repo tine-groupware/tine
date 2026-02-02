@@ -550,8 +550,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         ]);
         Tinebase_Event::fireEvent($event);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-            __METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
+        }
 
         if ($_password != $_passwordRepeat) {
             throw new Admin_Exception("Passwords don't match.");
@@ -566,7 +568,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-            $this->_checkMaxUsers();
+            if (!in_array($_user->accountLoginName, Tinebase_User::getSystemUsernames())) {
+                $this->_checkMaxUsers();
+            }
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
