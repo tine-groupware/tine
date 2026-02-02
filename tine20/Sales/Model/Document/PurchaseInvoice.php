@@ -302,7 +302,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         //if ('' !== (string)$xr->Invoiced_object_identifier) {} // 0..1
         //if ('' !== (string)$xr->Buyer_accounting_reference) {} // 0..1
         if ('' !== (string)$xr->Payment_terms) { // 0..1
-            //$pInvoice->{self::FLD_PAYMENT_TERMS} = (string)$xr->Payment_terms; // TODO FIXME!!!
+            //$pInvoice->{self::FLD_PAYMENT_TERMS} = intval($xr->Payment_terms); // TODO FIXME!!! skonto is in there?
         }
 
         // 0..* INVOICE_NOTE
@@ -557,7 +557,13 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 $pInvoiceLine->{PIPosition::FLD_UNIT_PRICE} = floatval((string)$invoiceLine->PRICE_DETAILS->Item_net_price);
             }
             $invoiceLine->PRICE_DETAILS->Item_price_discount; // 0..1
-            $invoiceLine->PRICE_DETAILS->Item_gross_price; // 0..1
+            if ('' !== (string)$invoiceLine->PRICE_DETAILS->Item_gross_price) {
+                $pInvoiceLine->{PIPosition::FLD_GROSS_PRICE} = floatval((string)$invoiceLine->PRICE_DETAILS->Item_gross_price); // 0..1
+                if ($pInvoiceLine->{PIPosition::FLD_NET_PRICE} > 0.0 && $pInvoiceLine->{PIPosition::FLD_GROSS_PRICE} >= $pInvoiceLine->{PIPosition::FLD_NET_PRICE}) {
+                    $pInvoiceLine->{PIPosition::FLD_SALES_TAX} = $pInvoiceLine->{PIPosition::FLD_GROSS_PRICE} - $pInvoiceLine->{PIPosition::FLD_NET_PRICE};
+                }
+                $pInvoice->{self::FLD_POSITIONS_GROSS_SUM} = $pInvoice->{self::FLD_POSITIONS_GROSS_SUM} + $pInvoiceLine->{PIPosition::FLD_GROSS_PRICE};
+            }
             $invoiceLine->PRICE_DETAILS->Item_price_base_quantity; // 0..1
             $invoiceLine->PRICE_DETAILS->Item_price_base_quantity_unit_of_measure; // 0..1
             // LINE_VAT_INFORMATION 0..*
