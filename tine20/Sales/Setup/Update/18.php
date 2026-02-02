@@ -187,11 +187,12 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         $refProp->setAccessible(true);
         $refProp->setValue($piCtrl, true);
         $raii = new Tinebase_RAII(fn() => $refProp->setValue($piCtrl, false));
+        $recAttachmentCtrl = Tinebase_FileSystem_RecordAttachments::getInstance();
 
         foreach (Sales_Controller_PurchaseInvoice::getInstance()->getAll()->sort(fn($a, $b) => $a->date && $b->date ? $a->date->compare($b->date) : -1) as $oldPI) {
             $oldPI->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_PurchaseInvoice::class, 'Sql', $oldPI->getId());
 
-            $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
+            $newPI = $piCtrl->create(new Sales_Model_Document_PurchaseInvoice([
                 Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => $oldPI->number,
                 Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => $oldPI->payed_at ? Sales_Model_Document_PurchaseInvoice::STATUS_PAID :
                     Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
@@ -239,6 +240,13 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 'last_modified_time' => $oldPI->last_modified_time,
                 'seq' => 1,
             ]));
+
+            $oldPath = $recAttachmentCtrl->getRecordAttachmentPath($oldPI) . '/';
+            $newPath = $recAttachmentCtrl->getRecordAttachmentPath($newPI, true) . '/';
+            foreach ($recAttachmentCtrl->getRecordAttachments($oldPI) as $recAttachment) {
+                Tinebase_FileSystem::getInstance()->copy($oldPath . $recAttachment->name, $newPath . $recAttachment->name);
+            }
+
         }
 
         Sales_Setup_Initialize::createDefaultFavoritesDocPurchaseInvoice();
