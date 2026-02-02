@@ -23,6 +23,20 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
     statusFieldName: 'purchase_invoice_status',
     forceAutoValues: false,
 
+    async assertDocumentDate() {
+        if (!this.getForm().findField('date').getValue()) {
+            await Ext.MessageBox.show({
+                    icon: Ext.MessageBox.WARNING,
+                    buttons: Ext.MessageBox.OK,
+                    title: this.app.formatMessage('Set Document Date'),
+                    msg: this.app.formatMessage('You need to set a document date')
+                }
+            )
+            this.getForm().findField('date').markInvalid(this.app.formatMessage('You need to set a document date'))
+            return false
+        }
+    },
+
     checkStates () {
         Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.checkStates.apply(this, arguments)
         this.getForm().findField('positions_net_sum')?.setVisible(true);

@@ -43,15 +43,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return false;
         }
 
-        const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
-        if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
-            icon: Ext.MessageBox.QUESTION,
-            buttons: Ext.MessageBox.YESNO,
-            title: this.app.formatMessage('Change Document Date?'),
-            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
-        }) === 'yes') {
-            this.getForm().findField('date').setValue(new Date().clearTime());
-        }
+        if (await this.assertDocumentDate() === false) return false
 
         if (this.record.phantom || this.record.modified) {
             // make sure changes are saved even if booking fails
@@ -67,6 +59,18 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
 
         }, 150);
+    },
+
+    async assertDocumentDate() {
+        const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
+        if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.MessageBox.YESNO,
+            title: this.app.formatMessage('Change Document Date?'),
+            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
+        }) === 'yes') {
+            this.getForm().findField('date').setValue(new Date().clearTime());
+        }
     },
 
     checkStates () {
