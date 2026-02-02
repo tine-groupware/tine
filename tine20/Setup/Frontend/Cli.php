@@ -1674,14 +1674,14 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         if (!Setup_Backend_Mysql::dbSupportsVersion($db, 'mariadb > 10.3 | mysql > 8')) {
-            if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) !== '1') {
+            if (($ilp = $db->query('SELECT @@innodb_large_prefix')->fetchColumn()) != 1) {
                 throw new Tinebase_Exception_Backend_Database('innodb_large_prefix seems not be turned on: ' . $ilp);
             }
             if (($iff = $db->query('SELECT @@innodb_file_format')->fetchColumn()) !== 'Barracuda') {
                 throw new Tinebase_Exception_Backend_Database('innodb_file_format seems not to be Barracuda: ' . $iff);
             }
         }
-        if (($ift = $db->query('SELECT @@innodb_file_per_table')->fetchColumn()) !== '1') {
+        if (($ift = $db->query('SELECT @@innodb_file_per_table')->fetchColumn()) != 1) {
             throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
         }
 
