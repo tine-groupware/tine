@@ -383,8 +383,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     setSelectedRecord: function (record) {
         this.selectedRecord = record;
-        if (this.denormalizationRecordClass) {
-            this.selectedRecord = this.recordClass.clone(record);
+        if (this.denormalizationRecordClass && !record.data.original_id && !record.json.original_id) {
             this.selectedRecord.json.original_id = this.selectedRecord.data.original_id = record.id;
             this.selectedRecord.setId(this.recordClass.generateUID());
             this.selectedRecord.phantom = true;
@@ -448,7 +447,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 this.store.addSorted(value);
 
                 value = value.get(this.valueField);
-            } else if (Ext.isPrimitive(value) && value == this.getValue()) {
+            } else if (Ext.isPrimitive(value) && (value === this.getValue() || value === this.selectedRecord?.id)) {
                 if (!this.selectedRecord && !this.forceSelection) {
                     // value is a raw string, no record exists
                     return;
