@@ -180,6 +180,15 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Supplier::class,
         ]);
 
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Sales_Model_Document_PurchaseInvoice::class,
+            Sales_Model_DocumentPosition_PurchaseInvoice::class,
+        ]);
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            Sales_Model_Document_PurchaseInvoice::class,
+            Sales_Model_DocumentPosition_PurchaseInvoice::class,
+        ]);
+
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
