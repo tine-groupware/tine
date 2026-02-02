@@ -180,6 +180,9 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                     [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
                 ],
             ],
+            self::UI_CONFIG         => [
+                'xtype'                 => 'wdgt.pickergrid-layercombo'
+            ],
         ];
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS_USED] = [

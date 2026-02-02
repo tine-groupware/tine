@@ -69,7 +69,8 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax_by_rate, fields.gross_sum],
-                [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, fields.payment_means_used, { ...placeholder }],
+                [new PaymentMeansField({editDialog: this, columnWidth: 1/5}), fields.credit_term,  fields.due_at, fields.payment_reminders, fields.pay_at],
+                [fields.paid_at, fields.paid_amount, fields.payment_means_used, { ...placeholder }, { ...placeholder }],
                 // [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]

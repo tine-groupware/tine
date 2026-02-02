@@ -255,7 +255,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (booked) { // there is no transition booked -> unbooked
             this.getForm().items.each((field) => {
                 if (_.get(field, 'initialConfig.readOnly')) return;
-                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations', 'payment_reminders'].indexOf(field.name) < 0
                     && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                     field.setReadOnly(booked);
                 }
