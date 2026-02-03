@@ -150,18 +150,18 @@ class EventManager_Controller extends Tinebase_Controller_Event
                         [Tinebase_Model_Tree_FileObject::TYPE_FILE],
                         [$tempFile->getId()]
                     )->getFirstRecord();
-
-                    if ($updateCallback && is_callable($updateCallback)) {
-                        $updateCallback($node);
-                    }
-                    return $node;
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' File already exists: ' . $prefix . $fullFileName);
-                    }
-                    return false;
+                    $node = $nodeController->createNodes(
+                        [$fullFileName],
+                        [Tinebase_Model_Tree_FileObject::TYPE_FILE],
+                        [$tempFile->getId()],
+                        true
+                    )->getFirstRecord();
                 }
+                if ($updateCallback && is_callable($updateCallback)) {
+                    $updateCallback($node);
+                }
+                return $node;
             }
         } catch (Tinebase_Exception_NotFound $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
