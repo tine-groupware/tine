@@ -861,6 +861,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * test chunked upload from OwnCloud clients
      *
      * @backupGlobals enabled
+     * @group noupdate
      * @return void
      */
     public function testOwnCloudChunkedUploadQuotaExceed()
