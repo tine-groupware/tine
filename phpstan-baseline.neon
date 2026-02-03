@@ -186,17 +186,17 @@ parameters:
 			path: tine20/Admin/Controller/EmailAccount.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
@@ -206,17 +206,17 @@ parameters:
 			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:searchCount\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 
 		-
-			message: "#^Method Tinebase_Backend_Sql_Abstract\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
+			message: "#^Method Tinebase_Backend_Sql_Abstract\\<Tinebase_Record_Interface\\>\\:\\:update\\(\\) invoked with 3 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Admin/Controller/LogEntry.php
 

@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  *
- * TODO refactor to Tinebase_Tree_Backend_FileObject
+ * @extends Tinebase_Backend_Sql_Abstract<Tinebase_Model_Tree_FileObject>
  */
 class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
 {
