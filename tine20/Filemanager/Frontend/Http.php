@@ -147,8 +147,8 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
         } elseif ($id) {
             $node = $nodeController->get($id);
-            $nodeController->resolveMultipleTreeNodesPath($node);
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($nodeController->addBasePath($node->path));
+            $nodeController->resolveMultipleTreeNodesPath($node, false);
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($node->path);
         } else {
             $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
