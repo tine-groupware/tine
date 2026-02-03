@@ -155,4 +155,11 @@ class Tinebase_Fulltext_Indexer
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' IN (?)', (array)$_ids));
     }
+
+    public function copyFileContents(string $_sourceId, string $_targetId): void
+    {
+        $db = Tinebase_Core::getDb();
+        $db->query('INSERT INTO ' . SQL_TABLE_PREFIX . 'external_fulltext (`id`, `text_data`) SELECT '
+            . $db->quote($_targetId) . ', `text_data` FROM ' . SQL_TABLE_PREFIX . 'external_fulltext WHERE `id` = ' . $db->quote($_sourceId));
+    }
 }

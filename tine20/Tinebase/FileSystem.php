@@ -581,7 +581,7 @@ class Tinebase_FileSystem implements
         $this->acquireWriteLock();
 
         try {
-            $destinationNode = $this->stat($sourcePath);
+            $sourceNode = $this->stat($sourcePath);
             $sourcePathParts = $this->_splitPath($sourcePath);
 
             try {
@@ -594,8 +594,8 @@ class Tinebase_FileSystem implements
                         ("Destination path exists and is a file. Please remove before.");
                 }
 
-                $destinationNodeName = basename(trim($sourcePath, '/'));
-                $destinationPathParts = array_merge($this->_splitPath($destinationPath), (array)$destinationNodeName);
+                $sourceNodeName = basename(trim($sourcePath, '/'));
+                $destinationPathParts = array_merge($this->_splitPath($destinationPath), (array)$sourceNodeName);
             } catch (Tinebase_Exception_NotFound) {
                 // does parent directory of destinationPath exist?
                 try {
@@ -605,17 +605,17 @@ class Tinebase_FileSystem implements
                         ("Parent directory does not exist. Please create before.");
                 }
 
-                $destinationNodeName = basename(trim($destinationPath, '/'));
+                $sourceNodeName = basename(trim($destinationPath, '/'));
                 $destinationPathParts = array_merge($this->_splitPath(dirname($destinationPath)),
-                    (array)$destinationNodeName);
+                    (array)$sourceNodeName);
             }
 
-            if ($sourcePathParts == $destinationPathParts) {
+            if ($sourcePathParts === $destinationPathParts) {
                 throw new Tinebase_Exception_UnexpectedValue("Source path and destination path must be different.");
             }
 
             if (null !== ($existingNode = $this->_getTreeNodeBackend()
-                    ->getChild($parentNode, $destinationNodeName, true, false))) {
+                    ->getChild($parentNode, $sourceNodeName, true, false))) {
                 if ($existingNode->is_deleted) {
                     $this->_updateDeletedNodeName($existingNode);
                 } else {
@@ -623,8 +623,8 @@ class Tinebase_FileSystem implements
                 }
             }
 
-            if ($destinationNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-                $createdNode = $this->createFileTreeNode($parentNode->getId(), $destinationNodeName, $destinationNode->type);
+            if ($sourceNode->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                $createdNode = $this->createFileTreeNode($parentNode->getId(), $sourceNodeName, $sourceNode->type);
                 if ($createdNode->flysystem) {
                     $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($createdNode->flysystem);
                     $fh = $this->fopen($sourcePath, 'r');
@@ -634,10 +634,25 @@ class Tinebase_FileSystem implements
                         $this->fclose($fh);
                     }
                 }
-                $this->updateFileObject($parentNode, $createdNode, null, $destinationNode->hash);
+                $fileObject = $this->_fileObjectBackend->get($createdNode->object_id);
+                $fileObject->lastavscan_time = $sourceNode->lastavscan_time;
+                $fileObject->is_quarantined = $sourceNode->is_quarantined;
+                $fileObject->indexed_hash = $sourceNode->indexed_hash;
+                $fileObject->preview_count = $sourceNode->preview_count;
+                $fileObject->preview_status = $sourceNode->preview_status;
+                $fileObject->preview_error_count = $sourceNode->preview_error_count;
+                $indexRaii = null;
+                if ($this->_indexingActive) {
+                    $this->_indexingActive = false;
+                    $indexRaii = new Tinebase_RAII(fn() => $this->_indexingActive = true);
+                    Tinebase_Fulltext_Indexer::getInstance()->copyFileContents($sourceNode->object_id, $fileObject->getId());
+                }
+
+                $this->updateFileObject($parentNode, $createdNode, $fileObject, $sourceNode->hash);
+                unset($indexRaii);
                 $createdNode = $this->get($createdNode->getId());
             } else {
-                $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $destinationNodeName);
+                $createdNode = $this->_createDirectoryTreeNode($parentNode->getId(), $sourceNodeName);
             }
 
             // update hash of all parent folders
@@ -873,7 +888,7 @@ class Tinebase_FileSystem implements
             $this->_checkQuotaAndRegisterRefLog($_node, $sizeDiff, $revisionSizeDiff);
         }
 
-        if (true === $this->_isFileIndexingActive()) {
+        if ($this->_indexingActive) {
             Tinebase_ActionQueue::getInstance(Tinebase_ActionQueue::QUEUE_LONG_RUN)
                 ->queueAction('Tinebase_FOO_FileSystem.indexFileObject', $newFileObject->getId());
         }
