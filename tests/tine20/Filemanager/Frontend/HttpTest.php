@@ -40,6 +40,20 @@ class Filemanager_Frontend_HttpTest extends TestCase
         self::assertEquals('test file content', $out);
     }
 
+    public function testDownloadFileWithNodeId()
+    {
+        $jsonTests = new Filemanager_Frontend_JsonTests();
+        $file = $jsonTests->testCreateFileNodeWithTempfile();
+
+        $uit = $this->_getUit();
+        ob_start();
+        $reflectionMethod = $this->getProtectedMethod(Filemanager_Frontend_Http::class, '_downloadFileNodeByPathOrId');
+        $reflectionMethod->invokeArgs($uit, [null, $file['id']]);
+        $out = ob_get_clean();
+
+        self::assertEquals('test file content', $out);
+    }
+
     protected function _createDownloadFolderStruct(): string
     {
         $fs = Tinebase_FileSystem::getInstance();
