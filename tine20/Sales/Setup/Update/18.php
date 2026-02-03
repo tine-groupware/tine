@@ -23,6 +23,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
 
 
     static protected $_allUpdates = [
@@ -58,6 +59,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -189,8 +194,11 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
         ]);
 
-        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+    }
 
+    public function update007(): void
+    {
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
         $refProp = new ReflectionProperty(Sales_Controller_Document_PurchaseInvoice::class, '_skipSetModlog');
         $refProp->setAccessible(true);
@@ -263,9 +271,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
         Sales_Setup_Initialize::createDefaultFavoritesDocPurchaseInvoice();
 
-        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
 
-        $transaction->release();
         unset($raii);
     }
 }
