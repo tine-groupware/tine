@@ -15,7 +15,8 @@
 
 /**
  * Abstract class for a Tine 2.0 sql backend
- * 
+ *
+ * @template T of Tinebase_Record_Interface
  * @package     Tinebase
  * @subpackage  Backend
  */
@@ -243,7 +244,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      *
      * @param string|Tinebase_Record_Interface $_id
      * @param boolean $_getDeleted get deleted records
-     * @return Tinebase_Record_Interface
+     * @return T
      * @throws Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotFound
      */
     public function get($_id, $_getDeleted = FALSE) 
