@@ -40,6 +40,7 @@ class EventManager_Model_Register_Contact extends Addressbook_Model_Contact
                 ],
             ],
         ];
+        $_definition[self::CREATE_MODULE]   = false;
         $_definition[self::EXPOSE_JSON_API] = false;
         $_definition[self::EXPOSE_HTTP_API] = false;
 
