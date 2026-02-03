@@ -342,6 +342,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
                 // Build participant-specific folder path
                 $participant = $_registration->{EventManager_Model_Registration::FLD_PARTICIPANT};
+                $registrant = $_registration->{EventManager_Model_Registration::FLD_REGISTRANT};
                 $participant_original_id = $participant->original_id;
                 $participant_name = $participant_original_id;
                 try {
@@ -382,6 +383,8 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                                     $event_bookedOption->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
                                         ->{EventManager_Model_Selections_File::FLD_FILE_UPLOAD} = true;
                                 }
+                                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $participant;
+                                $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $registrant;
                             }
                         }
                     }
