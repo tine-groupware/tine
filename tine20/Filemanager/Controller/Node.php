@@ -321,21 +321,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * Resolve path of multiple tree nodes
      * 
      * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
+     * @param bool $removeAppIdFromPath
      */
-    public function resolveMultipleTreeNodesPath($_records)
+    public function resolveMultipleTreeNodesPath($_records, $removeAppIdFromPath = true)
     {
         $records = ($_records instanceof Tinebase_Model_Tree_Node)
             ? new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($_records)) : $_records;
             
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Resolving paths for ' . count($records) .  ' records.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Resolving paths for ' . count($records) .  ' records.');
+        }
             
         foreach ($records as $record) {
-            $path = $this->_backend->getPathOfNode($record, TRUE);
-            $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($path, $this->_applicationName);
+            $path = $this->_backend->getPathOfNode($record, true);
+            if ($removeAppIdFromPath) {
+                $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($path, $this->_applicationName);
+            }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-                . ' Got path ' . $record->path .  ' for node ' . $record->name);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Got path ' . $record->path .  ' for node ' . $record->name);
+            }
         }
     }
     
@@ -726,7 +733,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     public function addBasePath($_path)
     {
-        $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+        $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName(
+            $this->_applicationName)
+        );
         $basePath .= '/folders';
         
         $path = (strpos($_path, '/') === 0) ? $_path : '/' . $_path;
