@@ -244,6 +244,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                         Sales_Model_Document_PaymentReminder::FLD_OUTSTANDING_AMOUNT => $oldPI->price_total,
                     ], true),
                 ] : []),
+                Sales_Model_Document_Abstract::FLD_EVAL_DIM_COST_CENTER => $oldPI->{Sales_Model_Document_Abstract::FLD_EVAL_DIM_COST_CENTER},
+
                 'created_by' => $oldPI->getIdFromProperty('created_by'),
                 'creation_time' => $oldPI->creation_time,
                 'last_modified_by' => $oldPI->getIdFromProperty('last_modified_by'),
