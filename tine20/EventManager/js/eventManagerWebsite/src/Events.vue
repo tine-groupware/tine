@@ -28,8 +28,14 @@
             class="event-card mb-4"
           >
             <BCardText>
-              <div v-if="event.description && event.description.length<255">{{event.description}}</div>
-              <div v-else>{{event.description && event.description.substring(0,255)+"..."}}</div>
+              <MarkdownRenderer
+                v-if="event.description && event.description.length < 255"
+                :content="event.description"
+              />
+              <MarkdownRenderer
+                v-else-if="event.description"
+                :content="event.description.substring(0, 255) + '...'"
+              />
             </BCardText>
             <b-button :to="{ path: '/event/'+ event.id }" class="info-button">
               {{formatMessage('More Information')}}
@@ -44,7 +50,9 @@
 <script setup>
 
 import {ref, onBeforeMount} from 'vue';
+import MarkdownRenderer from "../../../../Tinebase/js/MarkdownRenderer.vue";
 import {useFormatMessage} from './index.es6';
+
 const { formatMessage } = useFormatMessage();
 
 const events = ref(null);
