@@ -2012,7 +2012,7 @@
         </table>
         <table>
             <name>customfield_config</name>
-            <version>9</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2029,7 +2029,7 @@
                 <field>
                     <name>model</name>
                     <type>text</type>
-                    <length>40</length>
+                    <length>100</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

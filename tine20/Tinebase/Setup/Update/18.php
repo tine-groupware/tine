@@ -33,6 +33,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE017 = self::class . '::update017';
     protected const RELEASE018_UPDATE018 = self::class . '::update018';
     protected const RELEASE018_UPDATE019 = self::class . '::update019';
+    protected const RELEASE018_UPDATE020 = self::class . '::update020';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -89,6 +90,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE019          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update019',
+            ],
+            self::RELEASE018_UPDATE020          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update020',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -410,6 +415,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.18',
             self::RELEASE018_UPDATE018);
     }
+
     public function update019(): void
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
@@ -429,5 +435,24 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
                 </field>'));
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.19', self::RELEASE018_UPDATE019);
+    }
+
+    public function update020(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->getTableVersion('customfield_config') < 10) {
+            $this->setTableVersion('customfield_config', 10);
+        }
+
+        $this->_backend->alterCol('customfield_config', new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>model</name>
+                <type>text</type>
+                <length>100</length>
+                <notnull>true</notnull>
+            </field>'));
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.20', self::RELEASE018_UPDATE020);
     }
 }
