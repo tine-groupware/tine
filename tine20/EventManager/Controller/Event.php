@@ -313,7 +313,31 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
                             if ($participants->count() > 0) {
                                 $participant = $participants->getFirstRecord();
-                                $registrationArray['participant'] = $participant->toArray();
+                                $participantArray = $participant->toArray();
+
+                                if (empty($participantArray['original_id']) && !empty($participant->id)) {
+                                    try {
+                                        $participantContact = null;
+                                        if (!empty($participant->email)) {
+                                            $participantContact = Addressbook_Controller_Contact::getInstance()
+                                                ->getContactByEmail($participant->email);
+                                        }
+
+                                        if ($participantContact) {
+                                            $participantArray['original_id'] = $participantContact->getId();
+                                        } else {
+                                            $participantArray['original_id'] = $participant->id;
+                                        }
+                                    } catch (Exception $e) {
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                                . ' Could not resolve participant contact: ' . $e->getMessage());
+                                        }
+                                        $participantArray['original_id'] = $participant->id;
+                                    }
+                                }
+
+                                $registrationArray['participant'] = $participantArray;
                             }
 
                             $registrantFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
@@ -336,7 +360,31 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
                             if ($registrants->count() > 0) {
                                 $registrant = $registrants->getFirstRecord();
-                                $registrationArray['registrant'] = $registrant->toArray();
+                                $registrantArray = $registrant->toArray();
+
+                                if (empty($registrantArray['original_id']) && !empty($registrant->id)) {
+                                    try {
+                                        $registrantContact = null;
+                                        if (!empty($registrant->email)) {
+                                            $registrantContact = Addressbook_Controller_Contact::getInstance()
+                                                ->getContactByEmail($registrant->email);
+                                        }
+
+                                        if ($registrantContact) {
+                                            $registrantArray['original_id'] = $registrantContact->getId();
+                                        } else {
+                                            $registrantArray['original_id'] = $registrant->id;
+                                        }
+                                    } catch (Exception $e) {
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                                . ' Could not resolve registrant contact: ' . $e->getMessage());
+                                        }
+                                        $registrantArray['original_id'] = $registrant->id;
+                                    }
+                                }
+
+                                $registrationArray['registrant'] = $registrantArray;
                             }
 
                             $registrations_data[] = $registrationArray;
@@ -383,7 +431,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         $related_contacts = [];
         foreach ($contact->relations as $related_contact) {
-            $related_contacts[] = Addressbook_Controller_Contact::getInstance()->get($related_contact->related_id)->toArray();
+            $related_contacts[] = Addressbook_Controller_Contact::getInstance()
+                ->get($related_contact->related_id)->toArray();
         }
         return $related_contacts;
     }
