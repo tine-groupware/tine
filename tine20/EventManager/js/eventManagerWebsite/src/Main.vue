@@ -12,56 +12,56 @@
   <div class="page-wrap">
     <div>
       <b-navbar class="navbar-hr">
-          <b-navbar-nav>
-            <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
-            <b-nav-item href="EventManager/view/events">{{formatMessage('Events')}}</b-nav-item>
-            <b-nav-item-dropdown :text="formatMessage('Topics')">
-              <b-dropdown-item href="#">{{formatMessage('Church Service')}}</b-dropdown-item>
-              <b-dropdown-item href="#">{{formatMessage('Voluntary Service')}}</b-dropdown-item>
-              <b-dropdown-item href="#">{{formatMessage('Children')}}</b-dropdown-item>
-              <b-dropdown-item href="#">{{formatMessage('Choir')}}</b-dropdown-item>
-            </b-nav-item-dropdown>
-            <b-nav-item @click.prevent="openEmailModal">{{formatMessage('My Registrations')}}</b-nav-item>
-            <b-nav-item href="EventManager/view/contact">{{formatMessage('Contact')}}</b-nav-item>
-          </b-navbar-nav>
+        <b-navbar-nav>
+          <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
+          <b-nav-item href="EventManager/view/events">{{formatMessage('Events')}}</b-nav-item>
+          <b-nav-item-dropdown :text="formatMessage('Topics')">
+            <b-dropdown-item href="#">{{formatMessage('Church Service')}}</b-dropdown-item>
+            <b-dropdown-item href="#">{{formatMessage('Voluntary Service')}}</b-dropdown-item>
+            <b-dropdown-item href="#">{{formatMessage('Children')}}</b-dropdown-item>
+            <b-dropdown-item href="#">{{formatMessage('Choir')}}</b-dropdown-item>
+          </b-nav-item-dropdown>
+          <b-nav-item @click.prevent="openEmailModal">{{formatMessage('My Registrations')}}</b-nav-item>
+          <b-nav-item href="EventManager/view/contact">{{formatMessage('Contact')}}</b-nav-item>
+        </b-navbar-nav>
 
-          <b-navbar-nav class="ml-auto">
-            <b-nav-form>
-              <b-form-input v-model="inputSearch" size="sm" class="mr-sm-2" :placeholder="formatMessage('Search')"></b-form-input>
-              <b-button size="sm" class="search-button" type="submit">{{formatMessage('Search')}}</b-button>
-            </b-nav-form>
-          </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-form @submit.prevent="handleSearch">
+            <b-form-input v-model="inputSearch" size="sm" class="mr-sm-2" :placeholder="formatMessage('Search')"></b-form-input>
+            <b-button size="sm" class="search-button" type="submit">{{formatMessage('Search')}}</b-button>
+          </b-nav-form>
+        </b-navbar-nav>
       </b-navbar>
     </div>
     <main>
-    <div>
-      <SinglePage />
-      <b-modal
-        v-model="modal.show"
-        :title="modal.title"
-        :ok-only="modal.okOnly"
-        :ok-title="modal.okText"
-        :cancel-title="modal.cancelText"
-        @ok="handleModalAction"
-        @cancel="handleModalCancel"
-      >
-        <p v-html="modal.message"></p>
+      <div>
+        <SinglePage />
+        <b-modal
+          v-model="modal.show"
+          :title="modal.title"
+          :ok-only="modal.okOnly"
+          :ok-title="modal.okText"
+          :cancel-title="modal.cancelText"
+          @ok="handleModalAction"
+          @cancel="handleModalCancel"
+        >
+          <p v-html="modal.message"></p>
 
-        <div v-if="modal.input" class="form-group">
-          <b-form-input
-            v-model="modal.inputValue"
-            type="email"
-            :placeholder="modal.inputPlaceholder"
-            :state="modal.inputError ? false : null"
-            required
-          ></b-form-input>
-          <b-form-invalid-feedback :state="!modal.inputError">
-            {{ modal.inputError }}
-          </b-form-invalid-feedback>
-        </div>
-      </b-modal>
+          <div v-if="modal.input" class="form-group">
+            <b-form-input
+              v-model="modal.inputValue"
+              type="email"
+              :placeholder="modal.inputPlaceholder"
+              :state="modal.inputError ? false : null"
+              required
+            ></b-form-input>
+            <b-form-invalid-feedback :state="!modal.inputError">
+              {{ modal.inputError }}
+            </b-form-invalid-feedback>
+          </div>
+        </b-modal>
 
-    </div>
+      </div>
     </main>
     <footer class="mx-5 text-end">
       <a href="EventManager/contact">{{formatMessage('Imprint')}}</a>
@@ -83,8 +83,13 @@ import {
 import SinglePage from './../../../../Tinebase/js/SinglePageApplication.vue';
 import {useFormatMessage} from './index.es6';
 const { formatMessage } = useFormatMessage();
+import { navigateToEvents } from './searchUtils';
 
-const inputSearch =ref("");
+const inputSearch = ref("");
+
+const handleSearch = () => {
+  navigateToEvents(inputSearch.value);
+};
 
 const modal = reactive({
   show: false,
@@ -308,6 +313,3 @@ main {
 }
 
 </style>
-
-
-

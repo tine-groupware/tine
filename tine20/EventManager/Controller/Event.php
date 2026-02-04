@@ -198,8 +198,10 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         try {
             $response = new \Laminas\Diactoros\Response();
             $events = $this->search();
-            $events = $events->toArray();
-            $response->getBody()->write(json_encode($events));
+            $event = $events->getFirstRecord();
+            $converter = Tinebase_Convert_Factory::factory($event);
+            $eventArray = $converter->fromTine20RecordSet($events);
+            $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));

@@ -17,17 +17,27 @@
       </b-col>
     </b-row>
 
-    <b-row class="justify-content-center">
+    <b-row class="justify-content-center" v-if="filteredEvents.length > 0">
       <b-col lg="10" xl="8">
         <div class="events-list">
           <BCard
-            v-for="event in events"
+            v-for="event in filteredEvents"
             :key="event.id"
             :title="event.name"
             tag="article"
             class="event-card mb-4"
           >
             <BCardText>
+              <div v-if="event.tags && event.tags.length > 0" class="mb-3">
+                <b-badge
+                  v-for="(tag, index) in event.tags"
+                  :key="index"
+                  variant="primary"
+                  class="tags me-2 mb-1"
+                >
+                  {{ tag.name }}
+                </b-badge>
+              </div>
               <MarkdownRenderer
                 v-if="event.description && event.description.length < 255"
                 :content="event.description"
@@ -44,18 +54,44 @@
         </div>
       </b-col>
     </b-row>
+
+    <b-row v-else class="justify-content-center my-5">
+      <b-col lg="10" xl="8" class="text-center">
+        <p>{{formatMessage('No events found matching your search.')}}</p>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
 <script setup>
 
-import {ref, onBeforeMount} from 'vue';
+import {ref, onBeforeMount, computed} from 'vue';
 import MarkdownRenderer from "../../../../Tinebase/js/MarkdownRenderer.vue";
+import {getSearchFromUrl} from './searchUtils';
 import {useFormatMessage} from './index.es6';
 
 const { formatMessage } = useFormatMessage();
 
-const events = ref(null);
+const searchQuery = ref(getSearchFromUrl());
+
+const events = ref([]);
+
+const filteredEvents = computed(() => {
+  if (!searchQuery.value || searchQuery.value.trim() === '') {
+    return events.value;
+  }
+
+  const query = searchQuery.value.toLowerCase();
+
+  return events.value.filter(event => {
+    const nameMatches = event.name.toLowerCase().includes(query);
+    const tagMatches = event.tags && event.tags.some(tag =>
+      tag.name && tag.name.toLowerCase().includes(query)
+    );
+
+    return nameMatches || tagMatches;
+  });
+});
 
 async function fetchData() {
   try {
@@ -63,6 +99,7 @@ async function fetchData() {
       method: 'GET'
     });
     events.value = await resp.json();
+    console.log(events.value);
   } catch (error) {
     console.error('Error fetching events:', error);
   }
@@ -77,7 +114,6 @@ onBeforeMount(async () => {
   document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
   loading.value = false;
 })
-
 </script>
 
 <style scoped lang="scss">
@@ -152,6 +188,12 @@ onBeforeMount(async () => {
     color: white !important;
     box-shadow: 0 2px 6px rgba(44, 62, 80, 0.3);
   }
+}
+
+.tags {
+  background-color: #2c3e50 !important;
+  border-color: #2c3e50 !important;
+  color: white !important;
 }
 
 @media (max-width: 768px) {
