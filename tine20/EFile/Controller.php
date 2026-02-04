@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * EFile Controller
  *
@@ -6,7 +6,7 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Philipp Schüle <p.schuele@metaways.de>
- * @copyright    Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2020-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -496,7 +496,9 @@ class EFile_Controller extends Tinebase_Controller_Event
         // check if node was moved or if tier type did change => rename stuff
         $generateTierToken = false;
         if ($_oldRecord && ($_oldRecord->parent_id !== $_record->parent_id ||
-                $_oldRecord->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} !== $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE})) {
+                $_oldRecord->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} !== $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}) &&
+                ($_oldRecord->parent_id === $_record->parent_id || null === ($oldParent = static::getEFilesParentNode($_oldRecord))
+                || $parent->efile_tier_ref_number !== $oldParent->efile_tier_ref_number)) {
             $generateTierToken = true;
         }
 
