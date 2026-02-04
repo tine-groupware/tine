@@ -57,6 +57,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             Sales_Model_Document_Abstract::FLD_PROJECT_REFERENCE,
             Sales_Model_Document_Abstract::FLD_CONTACT_ID,
             Sales_Model_Document_Abstract::FLD_CONTRACT_NUMBER,
+            Sales_Model_Document_Invoice::FLD_PAYMENT_REMINDERS,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

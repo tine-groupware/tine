@@ -298,7 +298,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
-                self::QUERY_FILTER              => true,
+                self::QUERY_FILTER                  => true,
             ],
             self::FLD_DOCUMENT_DATE             => [
                 self::LABEL                         => 'Document Date', //_('Document Date')
@@ -407,6 +407,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
             self::FLD_POSITIONS                 => [
                 // needs to be set by concret implementation
+                // @TODO - no filter w.o. label... but simple operations do not work like:
+                //         invoices with posings having tax_rate 0 (including null)...
+//                self::LABEL                         => 'Positions',
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
@@ -522,6 +525,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
+                    'xtype'                             => 'sales-taxbyrate-field'
                 ],
             ],
             self::FLD_GROSS_SUM                 => [

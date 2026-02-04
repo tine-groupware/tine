@@ -27,7 +27,7 @@ class Sales_Model_EDocument_PaymentMeansCode extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                       => 1,
+        self::VERSION                       => 2,
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'Payment Means' , // ngettext('Payment Means', 'Payment Means', n)

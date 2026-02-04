@@ -739,6 +739,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         ];
 
         this.contextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
+            openerCt: this,
             nodeName: Tine.Filemanager.Model.Node.getRecordName(),
             actions: contextActions,
             scope: this,

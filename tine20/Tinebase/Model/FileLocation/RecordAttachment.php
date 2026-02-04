@@ -131,9 +131,11 @@ class Tinebase_Model_FileLocation_RecordAttachment extends Tinebase_Model_FileLo
         if (!$ctrl instanceof Tinebase_Controller_Record_Abstract) {
             throw new Tinebase_Exception($this->{self::FLD_MODEL} . ' has no record ctrl');
         }
-        // check existance
-        $this->record = $ctrl->getBackend()->get($this->{self::FLD_RECORD_ID});
-        $ctrl->checkGrant($this->record, Tinebase_Model_Grants::GRANT_READ, _throw: true);
+
+        if (null === $this->record) {
+            // check existance
+            $this->record = $ctrl->getBackend()->get($this->{self::FLD_RECORD_ID});
+        }
 
         $_name = str_replace('/', '', (string)$this->{self::FLD_NAME});
         if ('' === trim($_name) && !empty($this->{self::FLD_NAME})) {
@@ -145,10 +147,15 @@ class Tinebase_Model_FileLocation_RecordAttachment extends Tinebase_Model_FileLo
             $this->isFile = true;
             $this->canWrite = $ctrl->checkGrant($this->record, Tinebase_Model_Grants::GRANT_EDIT, _throw: false);
 
-            try {
-                $this->node = Tinebase_FileSystem::getInstance()->stat(Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($this->record) . '/' . $this->_name);
+            if (null === $this->node) {
+                try {
+                    $this->node = Tinebase_FileSystem::getInstance()->stat(Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($this->record) . '/' . $this->_name);
+                    $this->canRead = true;
+                } catch (Tinebase_Exception_NotFound) {
+                }
+            } else {
                 $this->canRead = true;
-            } catch (Tinebase_Exception_NotFound) {}
+            }
         } else {
             $this->_name = $this->record->getId();
             try {
@@ -160,5 +167,17 @@ class Tinebase_Model_FileLocation_RecordAttachment extends Tinebase_Model_FileLo
         $this->_init = true;
     }
 
-    protected Tinebase_Record_Interface $record;
+    public static function fromRecord(Tinebase_Record_Interface $record, ?Tinebase_Model_Tree_Node $node, ?string $name): Tinebase_Model_FileLocation_RecordAttachment
+    {
+        $fLocation = new static([
+            self::FLD_RECORD_ID => $record->getId(),
+            self::FLD_NAME => $node?->name ?: ($name ?: throw new Tinebase_Exception_UnexpectedValue('node or name needs to not null')),
+            self::FLD_MODEL => get_class($record),
+        ]);
+        $fLocation->record = $record;
+        $fLocation->node = $node;
+        return $fLocation;
+    }
+
+    protected ?Tinebase_Record_Interface $record = null;
 }

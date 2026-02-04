@@ -447,6 +447,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                 const menu = Ext.create({
                     xtype: 'menu',
+                    openerCt: this,
                     plugins: [{
                         ptype: 'ux.itemregistry',
                         key:   'Tine.Felamimail.MailDetailPanel.AttachmentMenu'

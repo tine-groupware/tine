@@ -18,12 +18,30 @@ use Sales_Model_DocumentPosition_Invoice as SMDPI;
 class Sales_Document_UblTest extends Sales_Document_Abstract
 {
     protected $oldPreviewSvc = null;
+    protected $oldEDocSvc = null;
 
     public function setUp(): void
     {
         parent::setUp();
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $this->oldEDocSvc = null;
+        if (!Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+            $this->oldEDocSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->toArray();
+
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'https://edocument-mw.mws-hosting.net/ubl';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL} = 'https://edocument-mw.mws-hosting.net';
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC} = 'https://edocument-mw.mws-hosting.net/ublView';
+        }
+    }
+
+    public function tearDown(): void
+    {
+        if (null !== $this->oldEDocSvc) {
+            Sales_Config::getInstance()->{Sales_Config::EDOCUMENT} = $this->oldEDocSvc;
+        }
+        parent::tearDown();
     }
 
     /**
@@ -78,6 +96,235 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame($taxInclValue, (float)$taxInclAmount[0]);
 
         return $xml;
+    }
+
+    public function testPurchaseInvoiceFromNonEDocument(): void
+    {
+        $path = Tinebase_FileSystem::getInstance()
+                ->getApplicationBasePath(Filemanager_Config::APP_NAME, Tinebase_FileSystem::FOLDER_TYPE_SHARED) . '/unittest';
+        Tinebase_FileSystem::getInstance()->mkdir($path);
+        fwrite(
+            $fh = Tinebase_FileSystem::getInstance()->fopen($path .  '/test.pdf', 'w'),
+                file_get_contents(__FILE__));
+        Tinebase_FileSystem::getInstance()->fclose($fh);
+
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
+            new Tinebase_Model_FileLocation([
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                Tinebase_Model_FileLocation::FLD_LOCATION =>
+                    new Filemanager_Model_FileLocation([
+                        Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest/test.pdf',
+                    ]),
+            ]), importNonEDocument: true
+        );
+
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT});
+        $this->assertSame(1, $pInvoice->attachments->count());
+    }
+
+    public function testReadPdfInvoice(): void
+    {
+        //$zug = Sales_EDocument_ZUGFeRD::createFromString(file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
+
+        $path = Tinebase_FileSystem::getInstance()
+                ->getApplicationBasePath(Filemanager_Config::APP_NAME, Tinebase_FileSystem::FOLDER_TYPE_SHARED) . '/unittest';
+        Tinebase_FileSystem::getInstance()->mkdir($path);
+        fwrite(
+            $fh = Tinebase_FileSystem::getInstance()->fopen($path .  '/test.pdf', 'w'),
+            file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
+        Tinebase_FileSystem::getInstance()->fclose($fh);
+
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
+            new Tinebase_Model_FileLocation([
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                Tinebase_Model_FileLocation::FLD_LOCATION =>
+                    new Filemanager_Model_FileLocation([
+                        Filemanager_Model_FileLocation::FLD_FM_PATH => '/shared/unittest/test.pdf',
+                    ]),
+            ])
+        );
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
+        $this->assertInstanceOf(Tinebase_DateTime::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT});
+        $this->assertTrue((new Tinebase_DateTime('2025-12-15'))->equals($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT}));
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS});
+        $this->assertSame(1, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->count());
+        $this->assertSame(Sales_Model_EDocument_PMC_PurchaseCreditTransfer::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG_CLASS});
+        $this->assertInstanceOf(Sales_Model_EDocument_PMC_PurchaseCreditTransfer::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG});
+        $this->assertSame('Kunden AG', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_ACCOUNT_NAME});
+        $this->assertSame('DE02120300000000202051', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_ACCOUNT_IDENTIFIER});
+        $this->assertSame('BYLADEM1001', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_SERVICE_PROVIDER_IDENTIFIER});
+
+        $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS} =  Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED;
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pInvoice);
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
+    }
+
+    public function testPurchaseInvoiceFromXr(): void
+    {
+        $xml = <<<EOSTR
+<?xml version="1.0" encoding="UTF-8"?>
+<xr:invoice xmlns:xr="urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1">
+    <xr:Invoice_number xr:id="BT-1" xr:src="/Invoice/cbc:ID">RE-0000001</xr:Invoice_number>
+    <xr:Invoice_issue_date xr:id="BT-2" xr:src="/Invoice/cbc:IssueDate">2025-05-23</xr:Invoice_issue_date>
+    <xr:Invoice_type_code xr:id="BT-3" xr:src="/Invoice/cbc:InvoiceTypeCode">380</xr:Invoice_type_code>
+    <xr:Invoice_currency_code xr:id="BT-5" xr:src="/Invoice/cbc:DocumentCurrencyCode">EUR</xr:Invoice_currency_code>
+    <xr:Payment_due_date xr:id="BT-9" xr:src="/Invoice/cbc:DueDate">2025-06-02</xr:Payment_due_date>
+    <xr:Buyer_reference xr:id="BT-10" xr:src="/Invoice/cbc:BuyerReference">buy ref</xr:Buyer_reference>
+    <xr:Payment_terms xr:id="BT-20" xr:src="/Invoice/cac:PaymentTerms/cbc:Note">Payable within 10 days without deduction.</xr:Payment_terms>
+    <xr:PROCESS_CONTROL xr:id="BG-2" xr:src="/Invoice">
+        <xr:Business_process_type_identifier xr:id="BT-23" xr:src="/Invoice">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</xr:Business_process_type_identifier>
+        <xr:Specification_identifier xr:id="BT-24" xr:src="/Invoice">urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0</xr:Specification_identifier>
+    </xr:PROCESS_CONTROL>
+    <xr:SELLER xr:id="BG-4" xr:src="/Invoice/cac:AccountingSupplierParty">
+        <xr:Seller_name xr:id="BT-27"
+                        xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName">Mit Namen befüllen</xr:Seller_name>
+        <xr:Seller_identifier xr:id="BT-29"
+                              xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyIdentification/cbc:ID">1234567890</xr:Seller_identifier>
+        <xr:Seller_VAT_identifier xr:id="BT-31"
+                                  xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme[1]/cbc:CompanyID">DE1234567890</xr:Seller_VAT_identifier>
+        <xr:Seller_tax_registration_identifier xr:id="BT-32"
+                                               xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme[2]/cbc:CompanyID">1234567890</xr:Seller_tax_registration_identifier>
+        <xr:Seller_electronic_address xr:id="BT-34"
+                                      xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cbc:EndpointID"
+                                      scheme_identifier="9930">DE1234567890</xr:Seller_electronic_address>
+        <xr:SELLER_POSTAL_ADDRESS xr:id="BG-5"
+                                  xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress">
+            <xr:Seller_address_line_3 xr:id="BT-162"
+                                      xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:AddressLine/cbc:Line">Mit Adresse befüllen</xr:Seller_address_line_3>
+            <xr:Seller_city xr:id="BT-37"
+                            xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:CityName">Mit Stadt befüllen</xr:Seller_city>
+            <xr:Seller_post_code xr:id="BT-38"
+                                 xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:PostalZone">Mit Postleitzahl befüllen</xr:Seller_post_code>
+            <xr:Seller_country_code xr:id="BT-40"
+                                    xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode">DE</xr:Seller_country_code>
+        </xr:SELLER_POSTAL_ADDRESS>
+        <xr:SELLER_CONTACT xr:id="BG-6"
+                           xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact">
+            <xr:Seller_contact_point xr:id="BT-41"
+                                     xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Name">Mit Kontakt-Namen befüllen</xr:Seller_contact_point>
+            <xr:Seller_contact_telephone_number xr:id="BT-42"
+                                                xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Telephone">123</xr:Seller_contact_telephone_number>
+            <xr:Seller_contact_email_address xr:id="BT-43"
+                                             xr:src="/Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail">test@foo.de</xr:Seller_contact_email_address>
+        </xr:SELLER_CONTACT>
+    </xr:SELLER>
+    <xr:BUYER xr:id="BG-7" xr:src="/Invoice/cac:AccountingCustomerParty">
+        <xr:Buyer_name xr:id="BT-44"
+                       xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName">some billing address for 852a12a14fcd6dc28871eda64d3065d00200dcdf</xr:Buyer_name>
+        <xr:Buyer_VAT_identifier xr:id="BT-48"
+                                 xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID">DE0987654321</xr:Buyer_VAT_identifier>
+        <xr:Buyer_electronic_address xr:id="BT-49"
+                                     xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cbc:EndpointID"
+                                     scheme_identifier="9930">DE0987654321</xr:Buyer_electronic_address>
+        <xr:BUYER_POSTAL_ADDRESS xr:id="BG-8"
+                                 xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress">
+            <xr:Buyer_city xr:id="BT-52"
+                           xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:CityName">Neu Altdorf</xr:Buyer_city>
+            <xr:Buyer_post_code xr:id="BT-53"
+                                xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:PostalZone">12345</xr:Buyer_post_code>
+            <xr:Buyer_country_code xr:id="BT-55"
+                                   xr:src="/Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode">DE</xr:Buyer_country_code>
+        </xr:BUYER_POSTAL_ADDRESS>
+    </xr:BUYER>
+    <xr:PAYMENT_INSTRUCTIONS xr:id="BG-16" xr:src="/Invoice">
+        <xr:Payment_means_type_code xr:id="BT-81" xr:src="/Invoice/cac:PaymentMeans/cbc:PaymentMeansCode">58</xr:Payment_means_type_code>
+        <xr:Payment_means_text xr:id="BT-82"
+                               xr:src="/Invoice/cac:PaymentMeans/cbc:PaymentMeansCode/@name">SEPA credit transfer</xr:Payment_means_text>
+        <xr:Remittance_information xr:id="BT-83" xr:src="/Invoice/cac:PaymentMeans/cbc:PaymentID">RE-0000001 DEB-1</xr:Remittance_information>
+        <xr:CREDIT_TRANSFER xr:id="BG-17"
+                            xr:src="/Invoice/cac:PaymentMeans/cac:PayeeFinancialAccount">
+            <xr:Payment_account_identifier xr:id="BT-84"
+                                           xr:src="/Invoice/cac:PaymentMeans/cac:PayeeFinancialAccount/cbc:ID">DE02120300000000202051</xr:Payment_account_identifier>
+            <xr:Payment_account_name xr:id="BT-85"
+                                     xr:src="/Invoice/cac:PaymentMeans/cac:PayeeFinancialAccount/cbc:Name">Mit Namen befüllen</xr:Payment_account_name>
+            <xr:Payment_service_provider_identifier xr:id="BT-86"
+                                                    xr:src="/Invoice/cac:PaymentMeans/cac:PayeeFinancialAccount/cac:FinancialInstitutionBranch/cbc:ID">BYLADEM1001</xr:Payment_service_provider_identifier>
+        </xr:CREDIT_TRANSFER>
+    </xr:PAYMENT_INSTRUCTIONS>
+    <xr:DOCUMENT_TOTALS xr:id="BG-22" xr:src="/Invoice/cac:LegalMonetaryTotal">
+        <xr:Sum_of_Invoice_line_net_amount xr:id="BT-106"
+                                           xr:src="/Invoice/cac:LegalMonetaryTotal/cbc:LineExtensionAmount">5.89</xr:Sum_of_Invoice_line_net_amount>
+        <xr:Invoice_total_amount_without_VAT xr:id="BT-109"
+                                             xr:src="/Invoice/cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount">5.89</xr:Invoice_total_amount_without_VAT>
+        <xr:Invoice_total_VAT_amount xr:id="BT-110" xr:src="/Invoice/cac:TaxTotal/cbc:TaxAmount">1.12</xr:Invoice_total_VAT_amount>
+        <xr:Invoice_total_amount_with_VAT xr:id="BT-112"
+                                          xr:src="/Invoice/cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount">7.01</xr:Invoice_total_amount_with_VAT>
+        <xr:Amount_due_for_payment xr:id="BT-115"
+                                   xr:src="/Invoice/cac:LegalMonetaryTotal/cbc:PayableAmount">7.01</xr:Amount_due_for_payment>
+    </xr:DOCUMENT_TOTALS>
+    <xr:VAT_BREAKDOWN xr:id="BG-23" xr:src="/Invoice/cac:TaxTotal/cac:TaxSubtotal">
+        <xr:VAT_category_taxable_amount xr:id="BT-116"
+                                        xr:src="/Invoice/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxableAmount">5.89</xr:VAT_category_taxable_amount>
+        <xr:VAT_category_tax_amount xr:id="BT-117"
+                                    xr:src="/Invoice/cac:TaxTotal/cac:TaxSubtotal/cbc:TaxAmount">1.12</xr:VAT_category_tax_amount>
+        <xr:VAT_category_code xr:id="BT-118"
+                              xr:src="/Invoice/cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory/cbc:ID">S</xr:VAT_category_code>
+        <xr:VAT_category_rate xr:id="BT-119"
+                              xr:src="/Invoice/cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory/cbc:Percent">19.0</xr:VAT_category_rate>
+    </xr:VAT_BREAKDOWN>
+    <xr:INVOICE_LINE xr:id="BG-25" xr:src="/Invoice/cac:InvoiceLine[1]">
+        <xr:Invoice_line_identifier xr:id="BT-126" xr:src="/Invoice/cac:InvoiceLine[1]/cbc:ID">1</xr:Invoice_line_identifier>
+        <xr:Invoiced_quantity xr:id="BT-129"
+                              xr:src="/Invoice/cac:InvoiceLine[1]/cbc:InvoicedQuantity">1.0</xr:Invoiced_quantity>
+        <xr:Invoiced_quantity_unit_of_measure_code xr:id="BT-130"
+                                                   xr:src="/Invoice/cac:InvoiceLine[1]/cbc:InvoicedQuantity/@unitCode">C62</xr:Invoiced_quantity_unit_of_measure_code>
+        <xr:Invoice_line_net_amount xr:id="BT-131"
+                                    xr:src="/Invoice/cac:InvoiceLine[1]/cbc:LineExtensionAmount">4.9</xr:Invoice_line_net_amount>
+        <xr:INVOICE_LINE_ALLOWANCES xr:id="BG-27" xr:src="/Invoice/cac:InvoiceLine[1]/cac:AllowanceCharge">
+            <xr:Invoice_line_allowance_amount xr:id="BT-136"
+                                              xr:src="/Invoice/cac:InvoiceLine[1]/cac:AllowanceCharge/cbc:Amount">0.1</xr:Invoice_line_allowance_amount>
+            <xr:Invoice_line_allowance_reason_code xr:id="BT-140"
+                                                   xr:src="/Invoice/cac:InvoiceLine[1]/cac:AllowanceCharge/cbc:AllowanceChargeReasonCode">95</xr:Invoice_line_allowance_reason_code>
+        </xr:INVOICE_LINE_ALLOWANCES>
+        <xr:PRICE_DETAILS xr:id="BG-29" xr:src="/Invoice/cac:InvoiceLine[1]/cac:Price">
+            <xr:Item_net_price xr:id="BT-146"
+                               xr:src="/Invoice/cac:InvoiceLine[1]/cac:Price/cbc:PriceAmount">5.0</xr:Item_net_price>
+        </xr:PRICE_DETAILS>
+        <xr:LINE_VAT_INFORMATION xr:id="BG-30"
+                                 xr:src="/Invoice/cac:InvoiceLine[1]/cac:Item/cac:ClassifiedTaxCategory">
+            <xr:Invoiced_item_VAT_category_code xr:id="BT-151"
+                                                xr:src="/Invoice/cac:InvoiceLine[1]/cac:Item/cac:ClassifiedTaxCategory/cbc:ID">S</xr:Invoiced_item_VAT_category_code>
+            <xr:Invoiced_item_VAT_rate xr:id="BT-152"
+                                       xr:src="/Invoice/cac:InvoiceLine[1]/cac:Item/cac:ClassifiedTaxCategory/cbc:Percent">19.0</xr:Invoiced_item_VAT_rate>
+        </xr:LINE_VAT_INFORMATION>
+        <xr:ITEM_INFORMATION xr:id="BG-31" xr:src="/Invoice/cac:InvoiceLine[1]/cac:Item">
+            <xr:Item_name xr:id="BT-153" xr:src="/Invoice/cac:InvoiceLine[1]/cac:Item/cbc:Name">pos 2</xr:Item_name>
+        </xr:ITEM_INFORMATION>
+    </xr:INVOICE_LINE>
+    <xr:INVOICE_LINE xr:id="BG-25" xr:src="/Invoice/cac:InvoiceLine[2]">
+        <xr:Invoice_line_identifier xr:id="BT-126" xr:src="/Invoice/cac:InvoiceLine[2]/cbc:ID">2</xr:Invoice_line_identifier>
+        <xr:Invoiced_quantity xr:id="BT-129"
+                              xr:src="/Invoice/cac:InvoiceLine[2]/cbc:InvoicedQuantity">1.0</xr:Invoiced_quantity>
+        <xr:Invoiced_quantity_unit_of_measure_code xr:id="BT-130"
+                                                   xr:src="/Invoice/cac:InvoiceLine[2]/cbc:InvoicedQuantity/@unitCode">C62</xr:Invoiced_quantity_unit_of_measure_code>
+        <xr:Invoice_line_net_amount xr:id="BT-131"
+                                    xr:src="/Invoice/cac:InvoiceLine[2]/cbc:LineExtensionAmount">0.99</xr:Invoice_line_net_amount>
+        <xr:INVOICE_LINE_ALLOWANCES xr:id="BG-27" xr:src="/Invoice/cac:InvoiceLine[2]/cac:AllowanceCharge">
+            <xr:Invoice_line_allowance_amount xr:id="BT-136"
+                                              xr:src="/Invoice/cac:InvoiceLine[2]/cac:AllowanceCharge/cbc:Amount">0.01</xr:Invoice_line_allowance_amount>
+            <xr:Invoice_line_allowance_reason_code xr:id="BT-140"
+                                                   xr:src="/Invoice/cac:InvoiceLine[2]/cac:AllowanceCharge/cbc:AllowanceChargeReasonCode">95</xr:Invoice_line_allowance_reason_code>
+        </xr:INVOICE_LINE_ALLOWANCES>
+        <xr:PRICE_DETAILS xr:id="BG-29" xr:src="/Invoice/cac:InvoiceLine[2]/cac:Price">
+            <xr:Item_net_price xr:id="BT-146"
+                               xr:src="/Invoice/cac:InvoiceLine[2]/cac:Price/cbc:PriceAmount">1.0</xr:Item_net_price>
+        </xr:PRICE_DETAILS>
+        <xr:LINE_VAT_INFORMATION xr:id="BG-30"
+                                 xr:src="/Invoice/cac:InvoiceLine[2]/cac:Item/cac:ClassifiedTaxCategory">
+            <xr:Invoiced_item_VAT_category_code xr:id="BT-151"
+                                                xr:src="/Invoice/cac:InvoiceLine[2]/cac:Item/cac:ClassifiedTaxCategory/cbc:ID">S</xr:Invoiced_item_VAT_category_code>
+            <xr:Invoiced_item_VAT_rate xr:id="BT-152"
+                                       xr:src="/Invoice/cac:InvoiceLine[2]/cac:Item/cac:ClassifiedTaxCategory/cbc:Percent">19.0</xr:Invoiced_item_VAT_rate>
+        </xr:LINE_VAT_INFORMATION>
+        <xr:ITEM_INFORMATION xr:id="BG-31" xr:src="/Invoice/cac:InvoiceLine[2]/cac:Item">
+            <xr:Item_name xr:id="BT-153" xr:src="/Invoice/cac:InvoiceLine[2]/cac:Item/cbc:Name">pos 1</xr:Item_name>
+        </xr:ITEM_INFORMATION>
+    </xr:INVOICE_LINE>
+</xr:invoice>
+EOSTR;
+
+        $pInvoice = Sales_Model_Document_PurchaseInvoice::fromXR($xml);
     }
 
     public function testUblValidationFail(): void

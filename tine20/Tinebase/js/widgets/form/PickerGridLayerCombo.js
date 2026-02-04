@@ -28,9 +28,6 @@ const PickerGridLayerCombo = Ext.extend(Ext.ux.form.LayerCombo, {
         return this.gridPanel
     },
 
-    // enable readonly layer
-    updateEditState() {},
-
     setFormValue(value) {
         this.gridPanel.setValue(value || [])
     },

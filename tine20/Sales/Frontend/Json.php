@@ -5,10 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
- *
- * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
- * @todo        check if we can add these functions to the reflection without implementing them here
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -45,43 +42,45 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = array(
-        Sales_Model_Document_Address::MODEL_NAME_PART,
-        Sales_Model_Document_Customer::MODEL_NAME_PART,
-        Sales_Model_Document_Boilerplate::MODEL_NAME_PART,
-        Sales_Model_Product::MODEL_NAME_PART,
-        Sales_Model_ProductLocalization::MODEL_NAME_PART,
-        Sales_Model_SubProductMapping::MODEL_NAME_PART,
-        Sales_Model_Document_SalesTax::MODEL_NAME_PART,
-        Sales_Model_Document_Offer::MODEL_NAME_PART,
-        Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
-        Sales_Model_Document_Order::MODEL_NAME_PART,
-        Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
-        Sales_Model_Document_Delivery::MODEL_NAME_PART,
-        Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART,
-        Sales_Model_Document_Invoice::MODEL_NAME_PART,
-        Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
         Sales_Model_Debitor::MODEL_NAME_PART,
-        Sales_Model_Document_Debitor::MODEL_NAME_PART,
         Sales_Model_Division::MODEL_NAME_PART,
         Sales_Model_DivisionBankAccount::MODEL_NAME_PART,
-        Sales_Model_DivisionGrants::MODEL_NAME_PART,
-        Sales_Model_Document_Category::MODEL_NAME_PART,
         Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
+        Sales_Model_DivisionGrants::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
+        Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
+        Sales_Model_Document_Address::MODEL_NAME_PART,
+        Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
+        Sales_Model_Document_Boilerplate::MODEL_NAME_PART,
+        Sales_Model_Document_Category::MODEL_NAME_PART,
+        Sales_Model_Document_Customer::MODEL_NAME_PART,
+        Sales_Model_Document_Debitor::MODEL_NAME_PART,
+        Sales_Model_Document_Delivery::MODEL_NAME_PART,
+        Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
+        Sales_Model_Document_Invoice::MODEL_NAME_PART,
+        Sales_Model_Document_Offer::MODEL_NAME_PART,
+        Sales_Model_Document_Order::MODEL_NAME_PART,
+        Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
+        Sales_Model_Document_SalesTax::MODEL_NAME_PART,
+        Sales_Model_Document_Supplier::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Custom::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Email::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Manual::MODEL_NAME_PART,
+        Sales_Model_EDocument_Dispatch_Upload::MODEL_NAME_PART,
         Sales_Model_EDocument_EAS::MODEL_NAME_PART,
-        Sales_Model_EDocument_PaymentMeansCode::MODEL_NAME_PART,
         Sales_Model_EDocument_PMC_NoConfig::MODEL_NAME_PART,
         Sales_Model_EDocument_PMC_PayeeFinancialAccount::MODEL_NAME_PART,
         Sales_Model_EDocument_PMC_PaymentMandate::MODEL_NAME_PART,
+        Sales_Model_EDocument_PaymentMeansCode::MODEL_NAME_PART,
         Sales_Model_Einvoice_XRechnung::MODEL_NAME_PART,
-        Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
-        Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_Manual::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_Email::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_Upload::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_Custom::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_DynamicConfig::MODEL_NAME_PART,
-        Sales_Model_EDocument_Dispatch_DocumentType::MODEL_NAME_PART,
         Sales_Model_PaymentMeans::MODEL_NAME_PART,
+        Sales_Model_Product::MODEL_NAME_PART,
+        Sales_Model_ProductLocalization::MODEL_NAME_PART,
+        Sales_Model_SubProductMapping::MODEL_NAME_PART,
 //        'OrderConfirmation',
 //        'PurchaseInvoice',
 //        'Offer',
@@ -122,6 +121,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_PURCHASE_INVOICES_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_PurchaseInvoice';
             $this->_configuredModels[] = 'PurchaseInvoice';
+            $this->_configuredModels[] = Sales_Model_PurchasePaymentMeans::MODEL_NAME_PART;
+            $this->_configuredModels[] = Sales_Model_DocumentPosition_PurchaseInvoice::MODEL_NAME_PART;
+            $this->_configuredModels[] = Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART;
         }
         if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_ORDERCONFIRMATIONS_MODULE)) {
             $this->_relatableModels[]  = 'Sales_Model_OrderConfirmation';
@@ -744,6 +746,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
         $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
+        $numberProperty = 'number';
+
         $controller = null;
         switch ($modelName) {
             case 'PurchaseInvoice':
@@ -751,8 +755,15 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
                 $controller = Sales_Controller_PurchaseInvoice::getInstance();
                 break;
-            case 'Document_Invoice':
+            case Sales_Model_Document_Invoice::MODEL_NAME_PART:
                 $controller = Sales_Controller_Document_Invoice::getInstance();
+                $numberProperty = Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER;
+                break;
+            case Sales_Model_Document_PurchaseInvoice::MODEL_NAME_PART:
+                $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE;
+                $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
+                $controller = Sales_Controller_Document_PurchaseInvoice::getInstance();
+                $numberProperty = Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER;
                 break;
             case 'Invoice':
                 $controller = Sales_Controller_Invoice::getInstance();
@@ -811,7 +822,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
             $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
-                . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
+                . PHP_EOL . 'Number : ' . $invoice[$numberProperty] . ', Title  : ' . $invoice->getTitle()
                 . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
             
             Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
@@ -827,7 +838,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
             $result = $result['results'];
         }
-        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class) {
+        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class ||
+                $model === Sales_Model_Document_PurchaseInvoice::class) {
             $expander = new Tinebase_Record_Expander($model, $model::getConfiguration()->jsonExpander);
             $expander->expand($records);
             foreach ($records as $validInvoice) {
@@ -893,6 +905,28 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $transaction->release();
 
         return $result;
+    }
+
+    public function getEDocumentSupplierData(string $purchaseInvoiceId): array
+    {
+        return $this->_recordToJson(
+            Sales_Controller_Document_PurchaseInvoice::getInstance()->getEDocumentSupplier($purchaseInvoiceId)
+        );
+    }
+
+    public function isEDocumentFile(array $fileLocation): bool
+    {
+        /** @var Tinebase_Model_FileLocation $fileLocation */
+        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
+        return Sales_Controller_Document_PurchaseInvoice::getInstance()->isEDocumentFile($fileLocation);
+    }
+
+    public function importPurchaseInvoice(array $fileLocation, bool $importNonXR = false): array
+    {
+        /** @var Tinebase_Model_FileLocation $fileLocation */
+        $fileLocation = $this->_jsonToRecord($fileLocation, Tinebase_Model_FileLocation::class);
+        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice($fileLocation, $importNonXR);
+        return $this->_recordToJson($purchaseInvoice);
     }
 
     /**

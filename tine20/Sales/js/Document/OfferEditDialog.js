@@ -35,5 +35,4 @@ Ext.reg('sales-document-position-offer-gridpanel', OfferPositionGridPanel)
 Tine.widgets.form.FieldManager.register('Sales', 'Document_Offer', 'positions', {
     xtype: 'sales-document-position-offer-gridpanel',
     recordClass: 'Sales.DocumentPosition_Offer',
-    height: 650
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG)

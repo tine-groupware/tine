@@ -11,6 +11,8 @@
  *
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * PaymentMeansCode controller class for Sales application
  *
@@ -37,5 +39,14 @@ class Sales_Controller_EDocument_PaymentMeansCode extends Tinebase_Controller_Re
         $this->_modelName = Sales_Model_EDocument_PaymentMeansCode::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+    }
+
+    public function getByCode(string $code): ?Sales_Model_EDocument_PaymentMeansCode
+    {
+        /** @var ?Sales_Model_EDocument_PaymentMeansCode $pmc */
+        $pmc = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+            [TMFA::FIELD => Sales_Model_EDocument_PaymentMeansCode::FLD_CODE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $code],
+        ]))->getFirstRecord();
+        return $pmc;
     }
 }

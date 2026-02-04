@@ -633,10 +633,6 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
     /**
      * AbstractMixin.computePrice Zeile 62ff
-     *
-     * @param bool $onlyProductType
-     * @return void
-     *
      * TODO not sure if we need the param & the "only product" check ...
      */
     public function computePrice(bool $onlyProductType = true): void

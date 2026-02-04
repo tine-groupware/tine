@@ -252,6 +252,14 @@ class Tinebase_Model_FileLocation_TreeNode extends Tinebase_Record_NewAbstract i
         $this->_init = true;
     }
 
+    public function getNode(): ?Tinebase_Model_Tree_Node
+    {
+        if (!$this->_init) {
+            $this->_init();
+        }
+        return $this->node;
+    }
+
     protected ?Tinebase_Model_Tree_Node $node = null;
     protected bool $canWrite = false;
     protected bool $isFile = false;

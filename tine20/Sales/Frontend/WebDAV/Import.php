@@ -77,10 +77,34 @@ class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sab
                 return '"emptyetag"';
             }
         }
-        
-        $invoice = Sales_Controller_PurchaseInvoice::getInstance()->importPurchaseInvoice($name, $data);
-        
-        return '"' . $invoice->seq . '"';
+
+        $purchaseInvoice = new Sales_Model_Document_PurchaseInvoice();
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->create($purchaseInvoice);
+
+        // attach invoice file (aka a pdf)
+        $attachmentPath = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($purchaseInvoice, true);
+        $deleteFile = !Tinebase_FileSystem::getInstance()->fileExists($attachmentPath . '/' . $name);
+        try {
+            $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
+
+            if (!is_resource($handle)) {
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+            }
+
+            if (is_resource($data)) {
+                stream_copy_to_stream($data, $handle);
+            }
+
+            Tinebase_FileSystem::getInstance()->fclose($handle);
+
+        } catch (Exception $e) {
+            if ($deleteFile) {
+                Tinebase_FileSystem::getInstance()->unlink($attachmentPath . '/' . $name);
+            }
+            throw $e;
+        }
+
+        return '"' . Sales_Controller_Document_PurchaseInvoice::getInstance()->get($purchaseInvoice->getId())->seq . '"';
     }
     
     /**

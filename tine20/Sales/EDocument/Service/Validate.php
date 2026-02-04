@@ -24,12 +24,17 @@ class Sales_EDocument_Service_Validate
         return $this->callSvc($data);
     }
 
-    protected function callSvc($data): array
+    public function validateXRechnungContent(string $data): array
     {
-        $client = new Zend_Http_Client(Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC});
+        return $this->callSvc($data, false);
+    }
+
+    protected function callSvc($data, bool $isStream = true): array
+    {
+        $client = new Zend_Http_Client(rtrim(Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::EDOCUMENT_SVC_BASE_URL}, '/') . '/validate');
         if (null !== static::$zendHttpClientAdapter) {
             $client->setAdapter(static::$zendHttpClientAdapter);
-            if(!static::$zendHttpClientAdapter instanceof Zend_Http_Client_Adapter_Stream) {
+            if($isStream && !static::$zendHttpClientAdapter instanceof Zend_Http_Client_Adapter_Stream) {
                 $data = stream_get_contents($data);
             }
         }
