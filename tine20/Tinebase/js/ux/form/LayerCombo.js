@@ -139,7 +139,11 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     doQuery: Ext.emptyFn,
 
     setReadOnly: function(readOnly) {
-        Ext.ux.form.LayerCombo.superclass.setReadOnly.apply(this, arguments);
+        // map to editable to allow read-only layers
+        this.readOnly = false;
+        this.editable = !readOnly;
+        this.updateEditState();
+
         this.getInnerForm()?.items?.each?.((item) => {
             item?.setReadOnly?.(readOnly);
         })

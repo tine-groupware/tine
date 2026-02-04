@@ -4,7 +4,7 @@
 # @subpackage  DemoData
 # @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
 # @author      Philipp Schüle <p.schuele@metaways.de>
-# @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+# @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (http://www.metaways.de)
 #
 # demodata for Sales module
 # imports Sales
@@ -23,6 +23,7 @@ files:
 - Sales/Offer/sales_import_offer_csv/*
 - Sales/Invoice/sales_import_invoice_csv/*
 - Sales/PurchaseInvoice/sales_import_purchaseinvoice_csv/*
+- Sales/Document_PurchaseInvoice/sales_import_document_purchaseinvoice_csv/*
 - Sales/OrderConfirmation/sales_import_orderconfirmation_csv/*
 
 

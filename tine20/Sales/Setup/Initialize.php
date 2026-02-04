@@ -10,6 +10,7 @@
  */
 
 use Tinebase_ModelConfiguration_Const as TMCC;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * class for Tinebase initialization
@@ -93,6 +94,47 @@ class Sales_Setup_Initialize extends Setup_Initialize
         static::createDefaultFavoritesForSub24();
 
         static::createDefaultFavoritesForContracts();
+
+        static::createDefaultFavoritesDocPurchaseInvoice();
+    }
+
+    public static function createDefaultFavoritesDocPurchaseInvoice(): void
+    {
+        $commonValues = [
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId(),
+            'model'             => Sales_Model_Document_PurchaseInvoice::class,
+        ];
+
+        $pfe = Tinebase_PersistentFilter::getInstance();
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'              => 'All Purchase Invoices', // _('All Purchase Invoices')
+                'description'       => 'All Purchase Invoices', // _('All Purchase Invoices')
+                'filters'           => [],
+            ])
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'              => 'Unpaid Purchase Invoices', // _('Unpaid Purchase Invoices')
+                'description'       => 'All Purchase Invoices that have not yet been paid', // _('All Purchase Invoices that have not yet been paid')
+                'filters'           => [
+                    [TMFA::FIELD => Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS, TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => Sales_Model_Document_PurchaseInvoice::STATUS_PAID],
+                ],
+            ])
+        ));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'              => 'Unapproved Purchase Invoices', // _('Unapproved Purchase Invoices')
+                'description'       => 'All Purchase Invoices that have not yet been approved', // _('All Purchase Invoices that have not yet been approved')
+                'filters'           => [
+                    [TMFA::FIELD => Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED],
+                ],
+            ])
+        ));
     }
 
     protected function _initializeEDocumentEAS(): void
@@ -283,9 +325,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
+            Sales_Model_Document_PurchaseInvoice::class,
             Sales_Model_DocumentPosition_Invoice::class,
             Sales_Model_DocumentPosition_Offer::class,
             Sales_Model_DocumentPosition_Order::class,
+            Sales_Model_DocumentPosition_PurchaseInvoice::class,
         ]);
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
             Sales_Model_Product::class,
@@ -293,9 +337,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
+            Sales_Model_Document_PurchaseInvoice::class,
             Sales_Model_DocumentPosition_Invoice::class,
             Sales_Model_DocumentPosition_Offer::class,
             Sales_Model_DocumentPosition_Order::class,
+            Sales_Model_DocumentPosition_PurchaseInvoice::class,
         ]);
     }
 

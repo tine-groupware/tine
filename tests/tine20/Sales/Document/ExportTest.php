@@ -132,4 +132,68 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
         $this->assertGreaterThan(0, filesize($tempfile));
         unlink($tempfile);
     }
+
+    public function testPurchaseInvoiceXls(): void
+    {
+        $pi = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => Tinebase_DateTime::now(),
+            Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => Tinebase_Core::getUser(),
+        ]));
+        $export = new Sales_Export_DebitorXls(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_PurchaseInvoice::class, [
+                ['field' => 'id', 'operator' => 'equals', 'value' => $pi->getId()],
+            ]), null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+                    'model' => Sales_Model_Document_PurchaseInvoice::class,
+                    'name' => 'document_purchaseinvoice_xls'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $xls = Tinebase_TempFile::getTempPath();
+        $export->generate();
+        $export->write($xls);
+
+        $reader = PHPExcel_IOFactory::createReader('Excel2007');
+        $doc = $reader->load($xls);
+        $arrayData = $doc->getActiveSheet()->rangeToArray('A3:M3');
+
+        $this->assertTrue(in_array(Tinebase_Core::getUser()->getTitle(), $arrayData[0]));
+    }
+
+    public function testPurchaseInvoiceOds(): void
+    {
+        $pi = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => Tinebase_DateTime::now(),
+            Sales_Model_Document_PurchaseInvoice::FLD_APPROVER => Tinebase_Core::getUser(),
+        ]));
+        $export = new Sales_Export_Ods_DocumentPurchaseInvoice(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_PurchaseInvoice::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $pi->getId()],
+        ]), null,
+            [
+                'definitionId' => Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+                    'model' => Sales_Model_Document_PurchaseInvoice::class,
+                    'name' => 'document_purchaseinvoice_default_ods'
+                ]))->getFirstRecord()->getId()
+            ]);
+
+        $export->generate();
+        $xmlBody = $export->getDocument()->asXML();
+        $dom = new DOMDocument();
+        $dom->loadXML($xmlBody);
+        $xpath = new DOMXPath($dom);
+        $allRows = $xpath->query('//table:table-row');
+        $tableData = [];
+        foreach ($allRows as $row) {
+            $rowData = [];
+            $cells = $xpath->query('.//table:table-cell', $row);
+            foreach ($cells as $cell) {
+                $rowData[] = $cell->textContent;
+            }
+            $tableData[] = $rowData;
+        }
+        $this->assertEquals(3, $allRows->length, '1 purchase invoice should be exported');
+        $this->assertContains(Tinebase_Core::getUser()->getTitle(), $tableData[2]);
+    }
 }

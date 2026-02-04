@@ -147,8 +147,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         });
     };
     
-    ['PurchaseInvoice', 'Document_Invoice', 'Invoice'].forEach((modelName) => {
-        const configName = modelName === 'PurchaseInvoice' ? 'datevRecipientEmailsPurchaseInvoice' : 'datevRecipientEmailsInvoice';
+    ['Document_PurchaseInvoice','PurchaseInvoice', 'Document_Invoice', 'Invoice'].forEach((modelName) => {
+        const configName = modelName.match(/PurchaseInvoice$/) ? 'datevRecipientEmailsPurchaseInvoice' : 'datevRecipientEmailsInvoice';
         const datevRecipients = Tine.Tinebase.configManager.get(configName, 'Sales');
         if (!datevRecipients || datevRecipients.length === 0) return;
         const action = getAction(modelName, {});

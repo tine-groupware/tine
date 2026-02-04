@@ -5,6 +5,8 @@
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import RelatedDocumentsGridPanel from './Document/RelatedDocumentsGridPanel'
+
 Ext.ns('Tine.Sales');
 
 /**
@@ -156,6 +158,12 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             plain: true,
             activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }],
             items: [{
             title: this.app.i18n._('Customer'),
             autoScroll: true,

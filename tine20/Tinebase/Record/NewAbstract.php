@@ -14,6 +14,7 @@
  *
  * @package     Tinebase
  * @subpackage  Record
+ * @phpstan-consistent-constructor
  */
 class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {

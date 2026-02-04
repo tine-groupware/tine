@@ -34,8 +34,8 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
      */
     protected static $_modelConfiguration = array(
         self::VERSION       => 7,
-        'recordName'        => 'Purchase Invoice',
-        'recordsName'       => 'Purchase Invoices', // ngettext('Purchase Invoice', 'Purchase Invoices', n)
+        'recordName'        => 'Legacy Purchase Invoice',
+        'recordsName'       => 'Legacy Purchase Invoices', // ngettext('Legacy Purchase Invoice', 'Legacy Purchase Invoices', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,

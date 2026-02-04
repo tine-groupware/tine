@@ -3,7 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import './AbstractEditDialog'
 import InvoicePositionGridPanel from "../DocumentPosition/AbstractGridPanel";
@@ -14,25 +14,24 @@ Tine.Sales.Document_InvoiceEditDialog = Ext.extend(Tine.Sales.Document_AbstractE
     statusFieldName: 'invoice_status',
 
     initComponent () {
-        this.supr().initComponent.call(this)
+        Tine.Sales.Document_InvoiceEditDialog.superclass.initComponent.call(this)
     },
 
-    // getRecordFormItems() {
-    //     const rtnVal = this.supr().getRecordFormItems.call(this)
-    //     const items = rtnVal[0].items
-    //     const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
-    //
-    //     const invoicePeriodLine = [this.fields.service_period_start, this.fields.service_period_end, {... placeholder}, {... placeholder}, {... placeholder}]
-    //     const rIdx = _.indexOf(items, _.find(items, {line: 'references'}))
-    //     items.splice(rIdx+1, 0, invoicePeriodLine)
-    //
-    //     return rtnVal
-    // }
+    getRecordFormItems() {
+        const items = Tine.Sales.Document_InvoiceEditDialog.superclass.getRecordFormItems.call(this)
+
+        const rows = items[0].items
+        const row = _.find(rows, row => _.indexOf(row, this.fields.credit_term) >= 0)
+        const colIdx = _.indexOf(row, this.fields.credit_term)
+
+        row.splice(colIdx+1, 1, this.fields.payment_reminders, {xtype: 'label', html: '&nbsp', columnWidth: 1/5})
+
+        return items
+    }
 });
 
 Ext.reg('sales-document-position-invoice-gridpanel', InvoicePositionGridPanel)
 Tine.widgets.form.FieldManager.register('Sales', 'Document_Invoice', 'positions', {
     xtype: 'sales-document-position-invoice-gridpanel',
     recordClass: 'Sales.DocumentPosition_Invoice',
-    height: 650
 }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG)

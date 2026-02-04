@@ -191,6 +191,7 @@ Tine.widgets.tree.ContextMenu = {
         }
         
         return new Ext.menu.Menu({
+            openerCt: config.openerCt,
             plugins: menuPlugins,
             items: items
         });

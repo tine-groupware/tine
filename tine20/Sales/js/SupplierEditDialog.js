@@ -7,6 +7,8 @@
  */
 Ext.ns('Tine.Sales');
 
+import RelatedDocumentsGridPanel from './Document/RelatedDocumentsGridPanel'
+
 /**
  * @namespace   Tine.Sales
  * @class       Tine.Sales.SupplierEditDialog
@@ -139,6 +141,12 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             plain: true,
             activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }],
             items: [{
             title: this.app.i18n._('Supplier'),
             autoScroll: true,

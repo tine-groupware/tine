@@ -228,6 +228,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Sales_Model_ProductLocalization::FLD_TEXT => '10 port gigabit ethernet switch, standard plug',
                 ]],
                 'salesprice' => 78.87,
+                Sales_Model_Product::FLD_SALESTAXRATE => 0.0,
             ),
             array(
                 'name' => [[
@@ -245,16 +246,18 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     Sales_Model_ProductLocalization::FLD_TEXT => '28 port gigabit ethernet switch, PoE standard plug',
                 ]],
                 'salesprice' => 3496.45,
+                Sales_Model_Product::FLD_SALESTAXRATE => 7.0,
             ),
         );
 
         $default = array(
             'manufacturer' => 'SwitchCo',
-            'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung'
+            'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung',
+            Sales_Model_Product::FLD_SALESTAXRATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
         );
 
         foreach($products as $key => $product) {
-            $switches[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+            $switches[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($default, $product)));
         }
 
         $products = array(
@@ -282,7 +285,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $default = array(
             'manufacturer' => self::$_en ? 'Salad Cabels' : 'Salat Kabel & Co.',
-            'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung'
+            'category' => self::$_en ? 'LAN Equipment' : 'Netzwerkausrüstung',
+            Sales_Model_Product::FLD_SALESTAXRATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
         );
 
         $subProductIds = [];
@@ -344,7 +348,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         foreach($products as $product) {
-            $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+            $this->_productController->create(new Sales_Model_Product(array_merge($default, $product)));
         }
 
         $products = [
@@ -367,7 +371,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $default = array(
             'manufacturer' => 'Hosting Giant Ltd',
-            'category' => 'Hosting'
+            'category' => 'Hosting',
+            Sales_Model_Product::FLD_SALESTAXRATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
         );
 
         $subProductIds = [];
@@ -381,7 +386,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
                 Sales_Model_ProductLocalization::FLD_TEXT => $product['description'],
             ]];
-            $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)))->getId();
+            $subProductIds[$key] = $this->_productController->create(new Sales_Model_Product(array_merge($default, $product)))->getId();
         }
 
         $products = [
@@ -433,11 +438,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ]
         ];
 
-        $default = array(
-            'manufacturer' => 'Hosting Giant Ltd',
-            'category' => 'Hosting'
-        );
-
         foreach($products as $product) {
             $product['name'] = [[
                 Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
@@ -447,7 +447,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Sales_Model_ProductLocalization::FLD_LANGUAGE => self::$_locale,
                 Sales_Model_ProductLocalization::FLD_TEXT => $product['description'],
             ]];
-            $this->_productController->create(new Sales_Model_Product(array_merge($product, $default)));
+            $this->_productController->create(new Sales_Model_Product(array_merge($default, $product)));
         }
     }
 
