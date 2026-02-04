@@ -190,7 +190,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         ];
 
         $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS_USED] = [
-            self::LABEL             => 'Payment Means Used',
+            self::LABEL             => 'Payment Means Used', // _('Payment Means Used')
             self::TYPE              => self::TYPE_KEY_FIELD,
             self::NAME              => Sales_Config::PAYMENT_METHODS,
             self::NULLABLE          => true,

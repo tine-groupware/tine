@@ -145,6 +145,24 @@ msgstr ""
 msgid "Reversed"
 msgstr ""
 
+msgid "Purchase Invoice Stati"
+msgstr ""
+
+msgid "Possible Purchase Invoice Stati"
+msgstr ""
+
+msgid "Approval Requested (unbooked, open)"
+msgstr ""
+
+msgid "Approved (booked, open)"
+msgstr ""
+
+msgid "Paid (booked, closed)"
+msgstr ""
+
+msgid "Purchase Invoice Status Transitions"
+msgstr ""
+
 msgid "Offer Status"
 msgstr ""
 
@@ -205,6 +223,9 @@ msgstr ""
 msgid "Created (unbooked, open)"
 msgstr ""
 
+msgid "EDocument Service Base"
+msgstr ""
+
 msgid "Validation Service URL"
 msgstr ""
 
@@ -224,9 +245,6 @@ msgid "Proforma (unbooked, open)"
 msgstr ""
 
 msgid "Booked (booked, open)"
-msgstr ""
-
-msgid "Paid (booked, closed)"
 msgstr ""
 
 msgid "Invoice Status Transitions"
@@ -372,6 +390,18 @@ msgid "Sub-Product Variable Position Flag"
 msgstr ""
 
 msgid "The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document."
+msgstr ""
+
+msgid "Payment Reminder Levels"
+msgstr ""
+
+msgid "First Reminder"
+msgstr ""
+
+msgid "Second Reminder"
+msgstr ""
+
+msgid "Third Reminder"
 msgstr ""
 
 msgid "Product Number Creation"
@@ -536,6 +566,9 @@ msgstr ""
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr ""
 
+msgid "Document date is required."
+msgstr ""
+
 msgid "payment means need to have one default record"
 msgstr ""
 
@@ -592,6 +625,12 @@ msgid "The invoice you tried to delete has already been cleared and can no longe
 msgstr ""
 
 msgid "The invoice you tried to edit has already been cleared, so no further editing is possible!"
+msgstr ""
+
+msgid "File is not a valid EDocument"
+msgstr ""
+
+msgid "The provided file is not a valid EDocument!"
 msgstr ""
 
 msgid "Unknown Currency Code"
@@ -1075,6 +1114,33 @@ msgid_plural "Categories"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Value must not be empty."
+msgstr ""
+
+msgid "Required Data Missing"
+msgstr ""
+
+msgid "Please provide the required data before changing the workflow status."
+msgstr ""
+
+msgid "Import as Purchase Invoice"
+msgstr ""
+
+msgid "Importing purchase invoice. Please wait..."
+msgstr ""
+
+msgid "Purchase Invoice Created:"
+msgstr ""
+
+msgid "Do you want to create an empty purchase invoice with the file as attachment?"
+msgstr ""
+
+msgid "Importing purchase invoice not Possible"
+msgstr ""
+
+msgid "Import Purchase Invoice"
+msgstr ""
+
 msgid "Send as Email to Datev"
 msgstr ""
 
@@ -1557,6 +1623,24 @@ msgstr ""
 msgid "The permission to administrate the division's order documents."
 msgstr ""
 
+msgid "Read Purchase Invoices"
+msgstr ""
+
+msgid "The grant to read the division's purchase invoice documents."
+msgstr ""
+
+msgid "Edit Purchase Invoices"
+msgstr ""
+
+msgid "The grant to create/edit the division's purchase invoice documents."
+msgstr ""
+
+msgid "Approve Purchase Invoices"
+msgstr ""
+
+msgid "The grant to approve the division's purchase invoice documents."
+msgstr ""
+
 msgid "Read Deliveries"
 msgstr ""
 
@@ -1673,6 +1757,9 @@ msgstr ""
 msgid "Service Period End"
 msgstr ""
 
+msgid "Contract Number"
+msgstr ""
+
 msgid "Recipient"
 msgstr ""
 
@@ -1701,7 +1788,9 @@ msgid "VAT Exemption"
 msgstr ""
 
 msgid "Sales Tax"
-msgstr ""
+msgid_plural "Sales Taxes"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Sales Tax by Rate"
 msgstr ""
@@ -1790,6 +1879,9 @@ msgstr ""
 msgid "Last Datev send date"
 msgstr ""
 
+msgid "Payment Reminders"
+msgstr ""
+
 msgid "IN-"
 msgstr ""
 
@@ -1854,6 +1946,23 @@ msgid "include in shared invoice"
 msgstr ""
 
 msgid "OR-"
+msgstr ""
+
+msgid "GENDER_Payment Reminder"
+msgstr ""
+
+msgid "Payment Reminder"
+msgid_plural "Payment Reminders"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Fee"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Outstanding amount"
 msgstr ""
 
 msgid "Position"
@@ -1933,6 +2042,56 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "GENDER_Order Position"
+msgstr ""
+
+msgid "Purchase Invoice Position"
+msgid_plural "Purchase Invoice Positions"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Purchase Invoice Position"
+msgstr ""
+
+msgid "GENDER_Purchase Invoice"
+msgstr ""
+
+msgid "External Invoice Number"
+msgstr ""
+
+msgid "Due at"
+msgstr ""
+
+msgid "Over due at"
+msgstr ""
+
+msgid "Pay at"
+msgstr ""
+
+msgid "Paid at"
+msgstr ""
+
+msgid "Paid amount"
+msgstr ""
+
+msgid "Payment Means Used"
+msgstr ""
+
+msgid "II-"
+msgstr ""
+
+msgid "GENDER_Sales Tax"
+msgstr ""
+
+msgid "Gross amount"
+msgstr ""
+
+msgid "Net amount"
+msgstr ""
+
+msgid "Tax"
+msgstr ""
+
+msgid "Tax Rate"
 msgstr ""
 
 msgid "Dispatch Config"
@@ -2053,6 +2212,30 @@ msgid_plural "Payment Mandates"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "GENDER_Credit Transfer"
+msgstr ""
+
+msgid "Credit Transfer"
+msgid_plural "Credit Transfers"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Direct Debit"
+msgstr ""
+
+msgid "Direct Debit"
+msgid_plural "Direct Debits"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_Payment Card"
+msgstr ""
+
+msgid "Payment Card"
+msgid_plural "Payment Cards"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "VAT exemption reason code"
 msgid_plural "VAT exemption reason codes"
 msgstr[0] ""
@@ -2123,11 +2306,10 @@ msgstr ""
 msgid "Valid until"
 msgstr ""
 
-msgid "Due at"
-msgstr ""
-
-msgid "Pay at"
-msgstr ""
+msgid "Legacy Purchase Invoice"
+msgid_plural "Legacy Purchase Invoices"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Overdue at"
 msgstr ""
@@ -2182,6 +2364,21 @@ msgstr ""
 msgid "All offer records"
 msgstr ""
 
+msgid "All Purchase Invoices"
+msgstr ""
+
+msgid "Unpaid Purchase Invoices"
+msgstr ""
+
+msgid "All Purchase Invoices that have not yet been paid"
+msgstr ""
+
+msgid "Unapproved Purchase Invoices"
+msgstr ""
+
+msgid "All Purchase Invoices that have not yet been approved"
+msgstr ""
+
 msgid "Limit to Sales Divisions"
 msgstr ""
 
@@ -2201,9 +2398,6 @@ msgid "All Suppliers"
 msgstr ""
 
 msgid "All supplier records"
-msgstr ""
-
-msgid "All Purchase Invoices"
 msgstr ""
 
 msgid "All purchase invoices"
