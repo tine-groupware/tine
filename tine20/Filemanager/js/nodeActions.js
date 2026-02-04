@@ -189,11 +189,6 @@ Tine.Filemanager.nodeActions.CreateFolder = {
 
             gridWdgt.newInlineRecord(newRecord, 'name', async (localRecord) => {
                 let text = localRecord.get('name');
-                
-                if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
-                    return;
-                }
 
                 return await Tine.Filemanager.nodeBackend.createFolder(`${currentPath}${localRecord.get('name')}/`)
                     .then((result) => {
@@ -269,8 +264,8 @@ Tine.Filemanager.nodeActions.Edit = {
     },
     actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
         Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
-        
-        const record = records[0];
+
+        const record = records[0] ?? action?.initialConfig?.filteredContainer;
         const disabledNodeIds = ['myUser', 'shared', 'otherUsers'];
         if (!record) return;
         if (disabledNodeIds.includes(record.id)) {
@@ -313,9 +308,10 @@ Tine.Filemanager.nodeActions.Rename = {
                         Ext.Msg.alert(String.format(i18n._('Not renamed {0}'), nodeName), String.format(i18n._('You must enter a {0} name!'), nodeName));
                         return;
                     }
-                    
-                    if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
+
+                    const invalidChar = Tine.Filemanager.Model.Node.checkForInvalidChars(text);
+                    if (invalidChar) {
+                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal character found:') + ` ${invalidChar}`);
                         return;
                     }
 

@@ -174,9 +174,9 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                                             Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You must enter a {0} name!'), nodeName));
                                             return;
                                         }
-                                        
-                                        if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + text);
+                                        const invalidChar = Tine.Filemanager.Model.Node.checkForinvalidChars(text);
+                                        if (invalidChar) {
+                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal character found:') + ` ${invalidChar}`);
                                             return;
                                         }
                                         
@@ -526,7 +526,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             return node.get('path').match(this.constraint);
         }
         
-        if (!Tine.Filemanager.Model.Node.isNameValid(node.get('name'))) {
+        if (Tine.Filemanager.Model.Node.checkForInvalidChars(node.get('name'))) {
             return false;
         }
         

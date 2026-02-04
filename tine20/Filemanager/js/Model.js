@@ -99,9 +99,9 @@ Tine.Filemanager.Model.NodeMixin = {
             return '/' + path + (isFolder || self.type(path) === 'folder' ? '/' : '');
         },
         
-        isNameValid: function (name) {
-            const forbidden = /[\/\\\:*?"<>|]/;
-            return !forbidden.test(name);
+        checkForInvalidChars: function (value) {
+            const matches = value.match(/[\/\\\:*?"<>|]/);
+            return matches?.[0] ?? null;
         },
         
         getExtension: function(filename) {

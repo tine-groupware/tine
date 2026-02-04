@@ -121,12 +121,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.hasQuickSearchFilterToolbarPlugin) {
             this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push({field: 'path'});
         }
-        
+
         Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
         this.getStore().on('load', this.onLoad.createDelegate(this));
         this.getGrid().on('beforeedit', this.onBeforeEdit, this);
-    
-    
+        this.getGrid().on('canceledit', this.onCancelEdit, this);
+
         this.postalSubscriptions.push(postal.subscribe({
             channel: "recordchange",
             topic: 'Tinebase.Tree_Node.*',
@@ -259,7 +259,27 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @returns {boolean}
      */
     onBeforeEdit: function(row) {
+        const ed = this.grid.colModel.getCellEditor(row.column, row.row);
+        ed.field.validator = (value) => {
+            const invalidChar = Tine.Filemanager.Model.Node.checkForInvalidChars(value);
+            return invalidChar ? this.app.i18n._('Illegal character found:') + ` ${invalidChar}` : true;
+        };
+        ed.on('canceledit', this.onCancelEdit, this);
+
         return Tine.Filemanager.nodeActionsMgr.checkConstraints('edit', row.record);
+    },
+
+    /**
+     * check if record can be edited
+     *
+     * @returns {boolean}
+     * @param ed
+     */
+    onCancelEdit: function(ed, newValue, oldValue) {
+        const invalidChar = Tine.Filemanager.Model.Node.checkForInvalidChars(newValue);
+        if (invalidChar) {
+            Ext.Msg.alert(i18n._('Try again?'), this.app.i18n._('Illegal character found:') + ` ${invalidChar}`);
+        }
     },
 
     /**

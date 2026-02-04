@@ -12,6 +12,7 @@ Promise.all([
         const filteredContainers = action.filteredContainers;
         const path = await action.getPath(baseAction, type);
         const name = _.isFunction(action.getName) ? await action.getName(baseAction, type) : null;
+        if (!name) return;
         const createNewPromise = Tine.OnlyOfficeIntegrator.createNew(type, path, name);
         const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({
             recordData: JSON.stringify({}),
@@ -95,6 +96,7 @@ Promise.all([
                 grid.newInlineRecord(localDocument, 'name', async (localDocument) => {
                     const name = String(localDocument.get('name')).replace(new RegExp(nameMap[type][1] + '$'), '');
                     const folderPath = _.get(baseAction, 'filteredContainers[0].path');
+
                     localDocument.data.path = `${folderPath}${name}${nameMap[type][1]}`;
                     
                     resolve(name);
