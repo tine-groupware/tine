@@ -12,12 +12,15 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+use phpmock\phpunit\PHPMock;
+use PHPMailer\DKIMValidator\Validator;
 
 /**
  * Test class for Felamimail_Controller_Cache_*
  */
 class Felamimail_Controller_Cache_MessageTest extends TestCase
 {
+    use PHPMock;
     /**
      * @var Felamimail_Controller_Cache_Message
      */
@@ -562,20 +565,37 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
     public function testAddMessageCacheWithSenderFlag(): void
     {
         $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, [
-            'mail.org'  => [
-                'id' => 'MAILORG',
-                'value' => 'unknown mailserver',
-            ]
-        ]);
-        $message = $this->_emailTestClass->messageTestHelper('24706.eml');
+        $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $filter = array(array(
             'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
         ));
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchMessages($filter, []);
 
-        $this->assertEquals('MAILORG', $result['results'][0]['flags'][1], 'Message should have sender tag');
+        $this->assertEquals('Metaways', $result['results'][0]['flags'][1], 'Message should have sender tag');
         Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
+    }
+
+    public function testAddMessageCacheWithSenderFlagInvalidCTag(): void
+    {
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../../files/test_dkim_invalid_c.eml');
+        $validator = new Validator($mailAsString);
+        $result = $validator->validateBoolean();
+
+        $this->assertFalse($result);
+    }
+
+    public function testAddMessageCacheWithSenderFlagEmptyPTag(): void
+    {
+        $mailAsString = file_get_contents(dirname(__FILE__) . '/../../files/test_dkim.eml');
+        $dnsGetRecord = $this->getFunctionMock('PHPMailer\\DKIMValidator', 'dns_get_record');
+        $dnsGetRecord->expects($this->any())
+            ->willReturn([[
+                'type' => 'TXT',
+                'txt' => 'v=DKIM1; h=sha256; k=rsa; p= ; s=email;'
+            ]]);
+        $validator = new Validator($mailAsString);
+        $result = $validator->validateBoolean();
+        $this->assertFalse($result);
     }
 }
