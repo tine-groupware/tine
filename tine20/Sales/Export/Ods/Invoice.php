@@ -129,6 +129,8 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                     case 'debitor':
                         if (is_string($debitorId = ($record['address_id']['debitor_id'] ?? null))) {
                             $value = Sales_Controller_Debitor::getInstance()->get($debitorId)->{Sales_Model_Debitor::FLD_NUMBER};
+                        } elseif (is_array($debitorId)) {
+                            $value = $debitorId[Sales_Model_Debitor::FLD_NUMBER];
                         } else {
                             $value = '';
                         }
