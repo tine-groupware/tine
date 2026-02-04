@@ -239,8 +239,8 @@ msgstr "No {0} added"
 msgid "You must enter a {0} name!"
 msgstr "You must enter a {0} name!"
 
-msgid "Illegal characters: "
-msgstr "Illegal characters: "
+msgid "Illegal character found:"
+msgstr "Illegal character found:"
 
 #, python-brace-format
 msgid "A folder named {0} already exists!"
@@ -350,10 +350,6 @@ msgstr "Reload"
 msgid "Create Folder"
 msgstr "Create Folder"
 
-#, python-brace-format
-msgid "Not renamed {0}"
-msgstr "Not renamed {0}"
-
 msgid "Edit Properties"
 msgstr "Edit Properties"
 
@@ -367,6 +363,10 @@ msgstr "Rename {0}"
 #, python-brace-format
 msgid "Please enter the new name of the {0}:"
 msgstr "Please enter the new name of the {0}:"
+
+#, python-brace-format
+msgid "Not renamed {0}"
+msgstr "Not renamed {0}"
 
 msgid "System Link"
 msgstr "System Link"
@@ -433,6 +433,9 @@ msgstr "Description"
 
 msgid "Enter description"
 msgstr "Enter description"
+
+msgid "Try again?"
+msgstr "Try again?"
 
 msgid "You have unfinished uploads. Please check the upload monitor and restart any failed uploads."
 msgstr "You have unfinished uploads. Please check the upload monitor and restart any failed uploads."
