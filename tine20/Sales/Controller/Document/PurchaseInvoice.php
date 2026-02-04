@@ -49,7 +49,10 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS;
         $this->_documentStatusField = Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS;
         $this->_oldRecordBookWriteableFields = [
-            'tags', 'attachments', 'relations', 'payment_reminders',
+            Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS,
+            Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_REMINDERS,
+            Sales_Model_Document_PurchaseInvoice::FLD_PAID_AMOUNT,
+            'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [
             Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS,
