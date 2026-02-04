@@ -78,6 +78,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/DKIMValidator.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/basic-feeds.git"
     },
     {
@@ -153,6 +157,7 @@
     "pear/ole": "^1.0",
     "pear/pear-core-minimal": "^1.10",
     "php-http/curl-client": "^2.1",
+    "phpmailer/dkimvalidator": "dev-main",
     "phpoffice/phpexcel": "1.8.2pl8 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.24.1pl5 as 1.24.1",
     "phpoffice/phpword": "^0.18",
@@ -192,6 +197,7 @@
     "digitalrevolution/php-codesniffer-baseline": "^1.1",
     "laminas/laminas-psr7bridge": "^1",
     "phing/phing": "2.16.*",
+    "php-mock/php-mock-phpunit": "^2.14",
     "phpstan/phpstan": "^1.6",
     "phpunit/phpunit": "^9.6",
     "rector/rector": "^1.2",

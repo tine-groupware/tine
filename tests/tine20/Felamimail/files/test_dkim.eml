@@ -1,0 +1,53 @@
+Return-Path: <test@metaways.de>
+Delivered-To: test@metaways.de
+Received: from vmail-director01.metaways.net ([10.129.4.5])
+	by vmail-imap02.metaways.net with LMTP
+	id wFHuLODAeWn3vhQAVAXrKg:P1
+	(envelope-from <test@metaways.de>)
+	for <test@metaways.de>; Wed, 28 Jan 2026 08:55:12 +0100
+Received: from vmail-smtp03.metaways.net ([10.129.4.5])
+	by vmail-director01.metaways.net with LMTP
+	id wFHuLODAeWn3vhQAVAXrKg
+	(envelope-from <test@metaways.de>)
+	for <test@metaways.de>; Wed, 28 Jan 2026 08:55:12 +0100
+Received: from localhost (ext-mw-services.metaways.net [109.232.173.9])
+	by vmail-smtp03.metaways.net (Postfix) with ESMTPSA id 6C77C3F65E
+	for <test@metaways.de>; Wed, 28 Jan 2026 08:55:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=metaways.de; s=dkim;
+	t=1769586912;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type;
+	bh=Zco0TDwQGYh9GAy2DWGrnSafYy4ZF0x/CXxyS5SZMRA=;
+	b=FDv8Rso+ThdlCExx1QEY4TGwkz9vnr4Pe72GRUCfYK89EqepY2wUUBprS47m9a90iZPSKK
+	kP8S32e0FMr71IhFhCv/iDxgTeTWM1OWflLNrJgDh32e+cuZD1Rt7oDkTQ8aymDQ+KYhMO
+	0gD3niZcwvLZP8jxce8SAiBAlckqQG8=
+Subject: test
+From: "test user" <test@metaways.de>
+To: "test user" <test@metaways.de>
+User-Agent: =?UTF-8?Q?tine=20=C2=AE=20Email=20Client=20(Version=20Mats=20-=20metaways-main-2026.01.21.2)?=
+Organization: Metaways Infosystems GmbH
+Message-Id: <5d285583814e9cf8e58ea525290112f7446f7642@metaways.de>
+X-MailGenerator: Tine 2.0
+X-Tine20TestMessage: test_dkim.eml
+Date: Wed, 28 Jan 2026 07:55:12 +0000
+Content-Type: multipart/alternative;
+ boundary="=_3b42dbca7d9a0a2b784c6ee051904b00"
+MIME-Version: 1.0
+
+--=_3b42dbca7d9a0a2b784c6ee051904b00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+test=0A=0A=E2=80=8B=0A=0A
+
+--=_3b42dbca7d9a0a2b784c6ee051904b00
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; char=
+set=3DUTF-8"><title></title><style type=3D"text/css">.felamimail-body-bl=
+ockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px sol=
+id #000088;} </style></head><body>test<br><br>=E2=80=8B<br><br></body></=
+html>
+
+--=_3b42dbca7d9a0a2b784c6ee051904b00--
