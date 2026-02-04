@@ -12,11 +12,6 @@ import WebDAVCollectionPicker from "CloudAccount/WebDAVCollectionPicker";
 Tine.Calendar.SyncContainerConfigEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     initComponent: function() {
-        // this.on('load', (me, record)=> {
-        //     if (record.phantom) {
-        //         this.on('update', this.onCreateSyncContainer, this)
-        //     }
-        // })
         this.recordProxy = {
             saveRecord: this.saveSyncContainerConfig.createDelegate(this),
         }
@@ -32,37 +27,50 @@ Tine.Calendar.SyncContainerConfigEditDialog = Ext.extend(Tine.widgets.dialog.Edi
         }
     },
 
+    initRecord: function() {
+        this.record = this.recordClass.setFromJson(this.containerData?.xprops?.syncContainer || this.recordClass.getDefaultData())
+        this.onRecordLoad.defer(10, this)
+    },
+
     saveSyncContainerConfig: async function(record, options, additionalArguments) {
         try {
-            const container = await Tine.Tinebase_Container.saveContainer({
-                type: 'personal',
-                owner_id: Tine.Tinebase.registry.get('currentAccount').accountId,
+            const containerData = this.containerData?.xprops?.syncContainer ? this.containerData : {
                 application_id: Tine.Tinebase.appMgr.get('Calendar').id,
                 model: 'Calendar_Model_Event',
                 name: record.get('external_container_name'),
                 color: record.get('external_container_color'),
-                xprops: {syncContainer: record.getData()}
-            })
-            options.success(record.constructor.setFromJson(container.xprops.syncContainer))
+            }
+
+            _.set(containerData, 'xprops.syncContainer', record.getData())
+
+            if (! this.containerData?.xprops?.syncContainer) {
+                // new calendar
+                const personalOwnerId = Tine.Tinebase.container.pathIsPersonalNode(this.containerData.path)
+
+                if(this.containerData.id === 'personal' && personalOwnerId === Tine.Tinebase.registry.get('currentAccount').accountId) {
+                    containerData.type = this.containerData.id
+                    containerData.owner_id = personalOwnerId
+                } else if (this.containerData.id === 'shared') {
+                    containerData.type = this.containerData.id
+                } else {
+                    throw new Error('Only own personal and shared containers can be created')
+                }
+
+            }
+            const savedContainerData = await Tine.Tinebase_Container.saveContainer(containerData)
+            this.fireEvent('containerSaved', savedContainerData)
+            options.success.call(options.scope || window, record.constructor.setFromJson(savedContainerData.xprops.syncContainer))
         } catch (e) {
-            options.failure(e)
+            options.failure.call(options.scope || window, e)
         }
 
-    },
-
-    onCreateSyncContainer: async function(data, mode, me, ticketFn) {
-        const ticket = ticketFn()
-        // @TODO create container, place into tree
-        console.error('data:', data)
-        debugger
-        const container = Tine.Tinebase_Container.addContainer()
-        ticket()
     },
 
     checkStates () {
         if (this.loadRequest) {
             return _.delay(_.bind(this.checkStates, this), 250)
         }
+        this.fields.calendar_path.setReadOnly(!this.fields.cloud_account_id.selectedRecord)
         this.fields.external_container_name.setReadOnly(!+this.fields.container_name_locally_overwritten.getValue())
         this.fields.external_container_color.setReadOnly(!+this.fields.container_color_locally_overwritten.getValue())
         this.fields.external_owner.setReadOnly(!+this.fields.external_owner_locally_overwritten.getValue())
@@ -72,6 +80,9 @@ Tine.Calendar.SyncContainerConfigEditDialog = Ext.extend(Tine.widgets.dialog.Edi
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
                 case 'calendar_path':
+                    config.xtype = 'CloudAccount.WebDAVCollectionPicker'
+                    config.type = 'VEVENT'
+                    config.collectionName = 'Calendar'
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
                         fields['external_container_name'].setValue(record.get('name'))
@@ -137,11 +148,5 @@ Promise.all([
     //     }))
     // }
 
-
-    Tine.widgets.form.FieldManager.register('Calendar', 'SyncContainerConfig', 'calendar_path', {
-        xtype: 'CloudAccount.WebDAVCollectionPicker',
-        type: 'VEVENT',
-        collectionName: 'Calendar'
-    }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG)
 })
 

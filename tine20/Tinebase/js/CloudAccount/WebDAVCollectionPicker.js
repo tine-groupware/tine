@@ -53,6 +53,9 @@ const WebDAVCollectionPicker = Ext.extend(Ext.form.ComboBox, {
             })
             const cloudAccount = editDialog.getForm().findField('cloud_account_id').selectedRecord?.id
 
+            this.onBeforeLoad()
+            this.expand()
+
             const result = await Tine.Tinebase.getCloudAccountWebDAVCollections(cloudAccount)
 
             this.store.loadData(_.filter(result, {type: this.type}))
