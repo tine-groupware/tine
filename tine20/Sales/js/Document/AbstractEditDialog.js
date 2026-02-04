@@ -259,7 +259,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (booked) { // there is no transition booked -> unbooked
             this.getForm().items.each((field) => {
                 if (_.get(field, 'initialConfig.readOnly')) return;
-                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations', 'payment_reminders'].indexOf(field.name) < 0
+                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations', 'payment_reminders'].concat(this.writeableAfterBooked || []).indexOf(field.name) < 0
                     && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                     field.setReadOnly(booked);
                 }
@@ -298,8 +298,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.getForm().items.each((field) => {
             if (field.name?.match(/(^eval_dim_.*)/) && !field._documentEditDialogEvalDimBeforeLoadApplied) {
                 field.store.on('beforeload', (store, options) => {
-                    const category = this.getForm().findField('document_category').selectedRecord;
-                    const division = _.get(category, 'data.division_id.id');
+                    const category = this.getForm().findField('document_category')?.selectedRecord;
+                    const division = category ? _.get(category, 'data.division_id.id') : this.record.get('division_id')?.id;
                     store.baseParams.filter = store.baseParams.filter.concat([
                         { condition: 'OR', filters: [
                             { field: 'divisions', operator: 'definedBy', value: null },

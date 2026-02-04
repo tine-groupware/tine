@@ -22,6 +22,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
     recordClass: 'Sales.Document_PurchaseInvoice',
     statusFieldName: 'purchase_invoice_status',
     forceAutoValues: false,
+    writeableAfterBooked: ['payment_means_used', 'pay_at', 'paid_at', 'paid_amount'],
 
     async assertDocumentDate() {
         if (!this.getForm().findField('date').getValue()) {
@@ -62,6 +63,13 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                         }
                     }
                     break;
+                case 'paid_at':
+                    config.listeners = config.listeners || {};
+                    config.listeners.select = (combo, record, index) => {
+                        if (!fields.paid_amount.getValue()) {
+                            fields.paid_amount.setValue(fields.gross_sum.getValue())
+                        }
+                    }
             }
         })
 
