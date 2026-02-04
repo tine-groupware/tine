@@ -197,7 +197,11 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::DEFAULT_VAL       => null,
             self::LENGTH            => 255,
             self::CONFIG            => [
-                self::OWNING_APP    => Sales_Config::APP_NAME,
+                self::OWNING_APP        => Sales_Config::APP_NAME,
+                self::NO_DEFAULT_VALIDATOR => true,
+            ],
+            self::INPUT_FILTERS     => [
+                Zend_Filter_Empty::class => null,
             ],
         ];
 
