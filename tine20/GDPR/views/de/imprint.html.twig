@@ -13,32 +13,36 @@
 {% block content %}
 <h2 class="mb-4 text-center">{{ _('Imprint') }}</h2>
 <h6>Angaben gemäß § 5 TMG:</h6>
-{% if app.installationRepresentative is not empty -%}
+{% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
+{% if installationResponsible is not empty -%}
     <div class="contact-info">
-        <div>{{ app.installationRepresentative.org_name }}</div>
-        <div>{{ app.installationRepresentative.adr_one_street }}</div>
+        <div>{{ installationResponsible.org_name }}</div>
+        <div>{{ installationResponsible.adr_one_street }}</div>
         {% set address_parts = [
-            app.installationRepresentative.adr_one_postalcode,
-            app.installationRepresentative.adr_one_locality
+            installationResponsible.adr_one_postalcode,
+            installationResponsible.adr_one_locality
         ]|filter(v => v is not empty) %}
 
         {% if address_parts is not empty %}
             <div>{{ address_parts|join(' ') }}</div>
         {% endif %}
-        <div>Vertreten durch {{ app.installationRepresentative.n_fn }}</div>
+        <div>Vertreten durch {{ installationResponsible.n_fileas }}</div>
     </div>
     <h6>Kontakt:</h6>
     <div class="contact-info">
-        <div>Tel.: {{ app.installationRepresentative.tel_work }}</div>
-        <div>Fax:  {{ app.installationRepresentative.tel_fax }}</div>
-        <div>E-Mail: {{ attribute(app.installationRepresentative, app.installationRepresentative.preferred_email) }}</div>
+        <div>Tel.: {{ installationResponsible.tel_work }}</div>
+        <div>Fax:  {{ installationResponsible.tel_fax }}</div>
+        <div>E-Mail: {{ attribute(installationResponsible, installationResponsible.preferred_email) }}</div>
     </div>
 {% endif %}
 
+{% if config(constant('GDPR_Config::COMMERCIAL_REGISTRY'), 'GDPR') is not empty -%}
 <h6>Eingetragen in das Handelsregister beim Amtsgericht {{ config(constant('GDPR_Config::COMMERCIAL_REGISTRY'), 'GDPR') }}</h6>
+{% endif %}
+{% if config(constant('GDPR_Config::VAT_ID'), 'GDPR') is not empty -%}
 <h6>USt.-Id.-Nr. gemäß § 27 UStG: {{ config(constant('GDPR_Config::VAT_ID'), 'GDPR') }}</h6>
+{% endif %}
 
-{% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
 {% if installationResponsible is not empty -%}
     <h6>Verantwortlicher gemäß § 18 Abs. 2 MStV</h6>
     <div class="contact-info">
