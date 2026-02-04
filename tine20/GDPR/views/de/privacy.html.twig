@@ -70,20 +70,21 @@
             der Benutzer sicherzustellen und zu verbessern.
         </p>
     </div>
-    <h2>I. Informationen über die Verarbeitung Ihrer Daten gemäß Art. 13 der Datenschutz-Grundverordnung (DS-GVO)</h2>
+    <h2>I. Informationen über die Verarbeitung Ihrer Daten gemäß Art. 13 der Datenschutz-Grundverordnung (DSGVO)</h2>
     <h3>1. Verantwortlicher und Datenschutzbeauftragter</h3>
     <p>Verantwortlich für diese Website ist</p>
+    {% set installationResponsible = config(constant('GDPR_Config::INSTALLATION_RESPONSIBLE'), 'GDPR') %}
     <div class="contact-info">
-        <div>{{ app.installationRepresentative.n_fileas }}</div>
+        <div>{{ installationResponsible.n_fileas }}</div>
         {% set address_parts = [
-            app.installationRepresentative.adr_one_street,
-            app.installationRepresentative.adr_one_postalcode,
-            app.installationRepresentative.adr_one_locality
+            installationResponsible.adr_one_street,
+            installationResponsible.adr_one_postalcode,
+            installationResponsible.adr_one_locality
         ]|filter(v => v is not empty) %}
         {% if address_parts is not empty %}
             <div>{{ address_parts|join(', ') }}</div>
-            <div>{{ app.installationRepresentative.email }}</div>
         {% endif %}
+        <div>{{ attribute(installationResponsible, installationResponsible.preferred_email) }}</div>
     </div>
     {% set dataProtectionOfficer = config(constant('GDPR_Config::DATA_PROTECTION_OFFICER'), 'GDPR') %}
     {% if dataProtectionOfficer is not empty %}
@@ -315,7 +316,7 @@
     </p>
     <h4>b. Auf welcher Rechtsgrundlage werden diese Daten verarbeitet?</h4>
     <p>
-        Die Daten werden auf der Grundlage des Art. 6 Abs. 1 Buchstabe f DS-GVO verarbeitet.
+        Die Daten werden auf der Grundlage des Art. 6 Abs. 1 Buchstabe f DSGVO verarbeitet.
     </p>
     <h4>c. Wie lange werden die Daten gespeichert?</h4>
     <p>
@@ -345,7 +346,7 @@
     <h3>3. Betroffenenrechte</h3>
     <h4>a. Recht auf Auskunft</h4>
     <p>
-        Sie können Auskunft nach Art. 15 DS-GVO über Ihre personenbezogenen Daten verlangen, die wir verarbeiten.
+        Sie können Auskunft nach Art. 15 DSGVO über Ihre personenbezogenen Daten verlangen, die wir verarbeiten.
     </p>
     <h4>b. Recht auf Widerspruch</h4>
     <p>
@@ -353,20 +354,20 @@
     </p>
     <h4>c. Recht auf Berichtigung</h4>
     <p>
-        Sollten die Sie betreffenden Angaben nicht (mehr) zutreffend sein, können Sie nach Art. 16 DS-GVO eine Berichtigung verlangen.
+        Sollten die Sie betreffenden Angaben nicht (mehr) zutreffend sein, können Sie nach Art. 16 DSGVO eine Berichtigung verlangen.
         Sollten Ihre Daten unvollständig sein, können Sie eine Vervollständigung verlangen.
     </p>
     <h4>d. Recht auf Löschung</h4>
     <p>
-        Sie können nach Art. 17 DS-GVO die Löschung Ihrer personenbezogenen Daten verlangen.
+        Sie können nach Art. 17 DSGVO die Löschung Ihrer personenbezogenen Daten verlangen.
     </p>
     <h4>e. Recht auf Einschränkung der Verarbeitung</h4>
     <p>
-        Sie haben nach Art. 18 DS-GVO das Recht, eine Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
+        Sie haben nach Art. 18 DSGVO das Recht, eine Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen.
     </p>
     <h4>f. Recht auf Beschwerde</h4>
     <p>
-        Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen Datenschutzrecht verstößt, haben Sie nach Art. 77 Abs. 1 DS-GVO das Recht, sich bei einer Datenschutzaufsichtsbehörde eigener Wahl zu beschweren. Hierzu gehört auch die für den Verantwortlichen zuständige Datenschutzaufsichtsbehörde:
+        Wenn Sie der Ansicht sind, dass die Verarbeitung Ihrer personenbezogenen Daten gegen Datenschutzrecht verstößt, haben Sie nach Art. 77 Abs. 1 DSGVO das Recht, sich bei einer Datenschutzaufsichtsbehörde eigener Wahl zu beschweren. Hierzu gehört auch die für den Verantwortlichen zuständige Datenschutzaufsichtsbehörde:
         {% set dataProtectionAuthority = config(constant('GDPR_Config::DATA_PROTECTION_AUTHORITY'), 'GDPR') %}
         {% if dataProtectionAuthority is not empty %}
             {{ dataProtectionAuthority.org_name }} , <a href="{{ dataProtectionAuthority.url }}"> {{ dataProtectionAuthority.url }}</a>
@@ -374,12 +375,12 @@
     </p>
     <h4>g. Recht auf Datenübertragbarkeit</h4>
     <p>
-        Für den Fall, dass die Voraussetzungen des Art. 20 Abs. 1 DS-GVO vorliegen, steht Ihnen das Recht zu, sich Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an Dritte aushändigen zu lassen. Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Protokolldateien sind für den Betrieb der Website zwingend erforderlich. Sie beruhen daher nicht auf einer Einwilligung nach Art. 6 Abs. 1 Buchstabe a DS-GVO oder auf einem Vertrag nach Art. 6 Abs. 1 Buchstabe b DS-GVO, sondern sind nach Art. 6 Abs. 1 Buchstabe f DS-GVO gerechtfertigt. Die Voraussetzungen des Art. 20 Abs. 1 DS-GVO sind demnach insoweit nicht erfüllt.
+        Für den Fall, dass die Voraussetzungen des Art. 20 Abs. 1 DSGVO vorliegen, steht Ihnen das Recht zu, sich Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an Dritte aushändigen zu lassen. Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Protokolldateien sind für den Betrieb der Website zwingend erforderlich. Sie beruhen daher nicht auf einer Einwilligung nach Art. 6 Abs. 1 Buchstabe a DSGVO oder auf einem Vertrag nach Art. 6 Abs. 1 Buchstabe b DSGVO, sondern sind nach Art. 6 Abs. 1 Buchstabe f DSGVO gerechtfertigt. Die Voraussetzungen des Art. 20 Abs. 1 DSGVO sind demnach insoweit nicht erfüllt.
     </p>
-    <h2>II. Widerspruchsrecht gemäß Art. 21 Abs. 1 DS-GVO</h2>
+    <h2>II. Widerspruchsrecht gemäß Art. 21 Abs. 1 DSGVO</h2>
     <p>
         Sie haben das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, jederzeit gegen die Verarbeitung Ihrer
-        personenbezogenen Daten, die aufgrund von Artikel 6 Abs. 1 Buchstabe f DS-GVO erfolgt, Widerspruch einzulegen. Der Verantwortliche verarbeitet die personenbezogenen Daten dann nicht mehr, es sei denn, er kann zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die die Interessen, Rechte und Freiheiten
+        personenbezogenen Daten, die aufgrund von Artikel 6 Abs. 1 Buchstabe f DSGVO erfolgt, Widerspruch einzulegen. Der Verantwortliche verarbeitet die personenbezogenen Daten dann nicht mehr, es sei denn, er kann zwingende schutzwürdige Gründe für die Verarbeitung nachweisen, die die Interessen, Rechte und Freiheiten
         der betroffenen Person überwiegen, oder die Verarbeitung dient der Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen. Die Erfassung der Daten zur Bereitstellung der Website und die Speicherung der Protokolldateien sind für den Betrieb der Website zwingend erforderlich.
     </p>
 {% endblock %}
