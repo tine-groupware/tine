@@ -240,7 +240,11 @@ class Addressbook_Config extends Tinebase_Config_Abstract
         self::INSTALLATION_REPRESENTATIVE => [
             self::LABEL                 => 'Contact (id) representing this installation',
             self::DESCRIPTION           => 'Contact (id) representing this installation', // _('Contact (id) representing this installation')
-            self::TYPE                  => self::TYPE_STRING,
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Addressbook_Config::APP_NAME,
+                self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
+            ],
             self::DEFAULT_STR           => null,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYSETUPMODULE      => false,

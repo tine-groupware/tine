@@ -20,7 +20,7 @@
         {% endif %}
 
         <div class="text-sm text-muted mb-2 text-truncate">
-            Copyright © 2025 {{ app.installationRepresentative.org_name | default('Metaways Infosystems GmbH') }}. All rights reserved.
+            Copyright © {{ "now"|date("Y") }} {{ app.installationRepresentative.org_name | default('Metaways Infosystems GmbH') }}. All rights reserved.
         </div>
         <!-- Links with Bootstrap utilities -->
         <div class="d-flex flex-wrap align-items-center gap-3">
