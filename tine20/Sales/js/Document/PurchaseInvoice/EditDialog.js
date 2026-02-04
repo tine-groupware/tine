@@ -24,16 +24,24 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
     forceAutoValues: false,
     writeableAfterBooked: ['payment_means_used', 'pay_at', 'paid_at', 'paid_amount'],
 
-    async assertDocumentDate() {
-        if (!this.getForm().findField('date').getValue()) {
+    async assertStatusChange() {
+        const isValid = _.reduce(['date', 'approver'], (isValid, field) => {
+            if (! this.getForm().findField(field).getValue()) {
+                this.getForm().findField(field).markInvalid(this.app.formatMessage('Value must not be empty.'))
+                return false
+            }
+            return isValid && true
+        }, true)
+
+
+        if (!isValid) {
             await Ext.MessageBox.show({
                     icon: Ext.MessageBox.WARNING,
                     buttons: Ext.MessageBox.OK,
-                    title: this.app.formatMessage('Set Document Date'),
-                    msg: this.app.formatMessage('You need to set a document date')
+                    title: this.app.formatMessage('Required Data Missing'),
+                    msg: this.app.formatMessage('Please provide the required data before changing the workflow status.'),
                 }
             )
-            this.getForm().findField('date').markInvalid(this.app.formatMessage('You need to set a document date'))
             return false
         }
     },
