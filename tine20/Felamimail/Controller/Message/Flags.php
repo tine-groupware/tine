@@ -52,6 +52,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             self::$_allowedFlags[$data['id']] = $data['id'];
         }
         self::$_allowedFlags['Tine20'] = 'Tine20';
+        self::$_allowedFlags['SPAM'] = 'SPAM';
     }
     
     /**
