@@ -54,6 +54,7 @@
             overflow-y: auto;
             flex: 1;
             min-height: 0;
+            position: relative; /* ADD THIS - makes it the positioning context */
         }
 
         .error {
@@ -93,6 +94,38 @@
             z-index: 1020;
         }
 
+        .redirect-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none !important; /* Add !important */
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .redirect-overlay.active {
+            display: flex !important; /* Add !important */
+        }
+
+        .redirect-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         {% block custom_style %}
         {% endblock %}
     </style>
@@ -101,6 +134,31 @@
     {% block jsIncludes -%}
         {%- include 'Tinebase/views/partials/jsInclude.html.twig' -%}
     {%- endblock jsIncludes %}
+    <script>
+        // Global redirect helper function
+        function showRedirectAndGo(url, message, delay) {
+            document.addEventListener('DOMContentLoaded', function() {
+                message = message || '{{ _('Redirecting...') }}';
+                delay = delay || 500;
+
+                const overlay = document.getElementById('redirectOverlay');
+                const messageEl = document.getElementById('redirectMessage');
+
+                if (overlay) {
+                    overlay.classList.add('active');
+                    overlay.style.display = 'flex'; // Use inline style instead of class
+                }
+
+                if (messageEl) {
+                    messageEl.textContent = message;
+                }
+
+                setTimeout(function() {
+                    window.location.href = url;
+                }, delay);
+            });
+        }
+    </script>
     <!-- Header Section - Fixed Top Left -->
     <div class="header-section">
         {% include 'Tinebase/views/header.html.twig' %}
@@ -117,6 +175,11 @@
                     Content Not Found
                 {% endblock %}
             {% endif %}
+            <!-- Redirect Overlay - Inside content, AFTER the block -->
+            <div id="redirectOverlay" class="redirect-overlay">
+                <div class="redirect-spinner"></div>
+                <p id="redirectMessage">{{ _('Redirecting...') }}</p>
+            </div>
         </div>
     </div>
     <!-- Footer Section - Fixed Bottom -->
