@@ -88,70 +88,21 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         $allIds = null;
         $unsortedUserIds = [];
-        if ('filesystemSize' === $_sort) {
-            if (Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
-                $unsortedUserIds = $this->_userBackend->getUsersIds($_filter);
-                $sortProperty = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->{Tinebase_Config::QUOTA_INCLUDE_REVISION} ? 'revision_size' : 'size';
-                $allIds = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter([
-                    ['field' => 'path', 'operator' => 'equals', 'value' => '/Filemanager/folders/personal'],
-                    ['field' => 'name', 'operator' => 'in', 'value' => $unsortedUserIds]
-                ], _options: ['ignoreAcl' => true]), new Tinebase_Model_Pagination([
-                    Tinebase_Model_Pagination::FLD_SORT => $sortProperty,
-                    Tinebase_Model_Pagination::FLD_DIR => $_dir !== 'ASC' ? 'DESC' : $_dir,
-                ]))->name;
-            }
-        } elseif ('emailUser' === $_sort) {
-            if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
-                $emailUserBackend = null;
-                try {
-                    $emailUserBackend = Tinebase_EmailUser::getInstance();
-                } catch (Tinebase_Exception_NotFound) {}
 
-                if (null !== $emailUserBackend && $emailUserBackend instanceof Tinebase_EmailUser_Sql) {
+        if ('filesystemSize' === $_sort && Tinebase_Application::getInstance()->isInstalled('Filemanager')) {
+            $unsortedUserIds = $this->_userBackend->getUsersIds($_filter);
+            $sortProperty = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}
+                ->{Tinebase_Config::QUOTA_INCLUDE_REVISION} ? 'revision_size' : 'size';
+            $allIds = Tinebase_FileSystem::getInstance()->searchNodes(new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'path', 'operator' => 'equals', 'value' => '/Filemanager/folders/personal'],
+                ['field' => 'name', 'operator' => 'in', 'value' => $unsortedUserIds]
+            ], _options: ['ignoreAcl' => true]), new Tinebase_Model_Pagination([
+                Tinebase_Model_Pagination::FLD_SORT => $sortProperty,
+                Tinebase_Model_Pagination::FLD_DIR => $_dir !== 'ASC' ? 'DESC' : $_dir,
+            ]))->name;
 
-                    $unsortedUserIds = $this->_userBackend->getUsersIds($_filter);
-                    $userXprops = $this->_userBackend->getUsersXprops($unsortedUserIds);
-                    $emailUserIdAccountId = [];
-
-                    $fAccountTblName = SQL_TABLE_PREFIX . Felamimail_Controller_Account::getInstance()->getBackend()->getTableName();
-                    $db = Tinebase_Core::getDb();
-                    foreach ($db->query('SELECT id, user_id, `type`, xprops FROM ' . $fAccountTblName . $db->quoteInto(' WHERE `type` IN (?)', [
-                                Felamimail_Model_Account::TYPE_SYSTEM,
-                                //Felamimail_Model_Account::TYPE_USER_INTERNAL,
-                            // only show / sort by system accounts
-                            ]) . $db->quoteInto(' AND user_id IN (?)', $unsortedUserIds))->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
-                        if (Felamimail_Model_Account::TYPE_SYSTEM === $row['type']) {
-                            $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Tinebase_Model_FullUser([
-                                'id' => $row['user_id'],
-                                'xprops' => $userXprops[$row['user_id']],
-                            ], true));
-                        } else {
-                            $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Felamimail_Model_Account([
-                                'id' => $row['id'],
-                                'xprops' => $row['xprops'],
-                            ], true));
-                        }
-                        $emailUserIdAccountId[$emailUserId] = $row['user_id'];
-                    }
-                    unset($userXprops);
-
-                    $mailSizes = [];
-                    foreach ($emailUserBackend->getUserIdsMailSize(array_keys($emailUserIdAccountId)) as $emailUserId => $mailSize) {
-                        $userId = $emailUserIdAccountId[$emailUserId];
-                            $mailSizes[$userId] ?? $mailSizes[$userId] = 0;
-                        $mailSizes[$userId] += (int)$mailSize;
-                    }
-                    unset($emailUserIdAccountId);
-
-                    $allIds = array_keys($mailSizes);
-                    if ('ASC' === $_dir) {
-                        usort($allIds, fn($a, $b) => $mailSizes[$a] < $mailSizes[$b] ? -1 : ($mailSizes[$a] === $mailSizes[$b] ? 0 : 1));
-                    } else {
-                        usort($allIds, fn($a, $b) => $mailSizes[$a] < $mailSizes[$b] ? 1 : ($mailSizes[$a] === $mailSizes[$b] ? 0 : -1));
-                    }
-                    unset($mailSizes);
-                }
-            }
+        } elseif ('emailUser' === $_sort && Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            $allIds = $this->_sortByEmailUsage($_filter, $_dir);
         }
 
         $_start ??= 0;
@@ -192,6 +143,66 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         return $result;
+    }
+
+    protected function _sortByEmailUsage($_filter, $_dir): ?array
+    {
+        $emailUserBackend = null;
+        try {
+            $emailUserBackend = Tinebase_EmailUser::getInstance();
+        } catch (Tinebase_Exception_NotFound) {}
+
+        if (null !== $emailUserBackend && $emailUserBackend instanceof Tinebase_EmailUser_Sql) {
+            $unsortedUserIds = $this->_userBackend->getUsersIds($_filter);
+            if (empty($unsortedUserIds)) {
+                return null;
+            }
+            $userXprops = $this->_userBackend->getUsersXprops($unsortedUserIds);
+            $emailUserIdAccountId = [];
+
+            $fAccountTblName = SQL_TABLE_PREFIX . Felamimail_Controller_Account::getInstance()->getBackend()->getTableName();
+            $db = Tinebase_Core::getDb();
+            foreach ($db->query('SELECT id, user_id, `type`, xprops FROM ' . $fAccountTblName
+                . $db->quoteInto(' WHERE `type` IN (?)', [
+                    // only show / sort by system accounts
+                    Felamimail_Model_Account::TYPE_SYSTEM,
+                ]) . $db->quoteInto(' AND user_id IN (?)', $unsortedUserIds))->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+                if (Felamimail_Model_Account::TYPE_SYSTEM === $row['type']) {
+                    $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Tinebase_Model_FullUser([
+                        'id' => $row['user_id'],
+                        'xprops' => $userXprops[$row['user_id']],
+                    ], true));
+                } else {
+                    $emailUserId = Tinebase_EmailUser_XpropsFacade::getEmailUserId(new Felamimail_Model_Account([
+                        'id' => $row['id'],
+                        'xprops' => $row['xprops'],
+                    ], true));
+                }
+                $emailUserIdAccountId[$emailUserId] = $row['user_id'];
+            }
+            unset($userXprops);
+
+            $mailSizes = [];
+            foreach ($emailUserBackend->getUserIdsMailSize(array_keys($emailUserIdAccountId)) as $emailUserId => $mailSize) {
+                $userId = $emailUserIdAccountId[$emailUserId];
+                    $mailSizes[$userId] ?? $mailSizes[$userId] = 0;
+                $mailSizes[$userId] += (int)$mailSize;
+            }
+            unset($emailUserIdAccountId);
+
+            $allIds = array_keys($mailSizes);
+            if ('ASC' === $_dir) {
+                usort($allIds, fn($a, $b)
+                => $mailSizes[$a] < $mailSizes[$b] ? -1 : ($mailSizes[$a] === $mailSizes[$b] ? 0 : 1));
+            } else {
+                usort($allIds, fn($a, $b)
+                => $mailSizes[$a] < $mailSizes[$b] ? 1 : ($mailSizes[$a] === $mailSizes[$b] ? 0 : -1));
+            }
+            unset($mailSizes);
+            return $allIds;
+        }
+
+        return null;
     }
     
     /**
