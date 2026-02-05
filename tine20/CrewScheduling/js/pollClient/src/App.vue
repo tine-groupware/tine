@@ -1,5 +1,5 @@
 <template>
-  <SinglePage />
+  <SinglePage :autoFetch="false" />
 </template>
 
 <script setup>
