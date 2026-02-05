@@ -47,9 +47,28 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
     },
 
     checkStates () {
+        if (this.loadRequest) {
+            return _.delay(_.bind(this.checkStates, this), 250)
+        }
+
+        const lastRecord = Tine.Tinebase.data.Record.clone(this.lastRecord || this.record);
+
         Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.checkStates.apply(this, arguments)
         this.getForm().findField('positions_net_sum')?.setVisible(true);
         this.getForm().findField('positions_gross_sum')?.setVisible(true);
+
+        if (this.forceAutoValues || this.calcDueDate(lastRecord)?.toJSON?.() === this.getForm().findField('due_at').getValue()?.toJSON?.()) {
+            this.getForm().findField('due_at').setValue(this.calcDueDate(this.record))
+        }
+
+        if (this.getForm().findField('date').getValue() && this.getForm().findField('credit_term').getValue()) {}
+
+    },
+
+    calcDueDate: function(record) {
+        const date = record.get('date')
+        const creditTerm = record.get('credit_term')
+        return _.isDate(date) && ['', null, undefined].indexOf(creditTerm) < 0 ? date.add(Date.DAY, creditTerm) : null
     },
 
     getRecordFormItems: function() {
