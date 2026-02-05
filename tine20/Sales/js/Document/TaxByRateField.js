@@ -23,6 +23,8 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
             height: 140
         })
 
+        this.setCurrencySymbol(this.currencySymbol ?? Tine.Tinebase.registry.get('currencySymbol'));
+
         TaxByRateField.superclass.initComponent.call(this)
     },
 
