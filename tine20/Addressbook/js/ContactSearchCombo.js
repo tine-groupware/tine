@@ -194,10 +194,17 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     this.accountId = value.accountId;
                     value = value.accountDisplayName;
                 } else if (typeof(value.get) == 'function') {
-                    // account record
-                    this.selectedRecord = this.selectedAccount = value;
-                    this.accountId = value.get('id');
-                    value = value.get('name');
+                    if (value.data.account_id) {
+                        // contact record
+                        this.selectedRecord = value;
+                        this.selectedAccount = this.accountId =value.get('account_id');
+                        // this.accountId = value.get('account_id');
+                    } else {
+                        // account record
+                        this.selectedRecord = this.selectedAccount = value;
+                        this.accountId = value.get('id');
+                        value = value.get('name');
+                    }
                 }
             } else {
                 this.accountId = null;

@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -145,6 +146,24 @@ msgstr "Partially reversed"
 msgid "Reversed"
 msgstr "Reversed"
 
+msgid "Purchase Invoice Stati"
+msgstr "Purchase Invoice Stati"
+
+msgid "Possible Purchase Invoice Stati"
+msgstr "Possible Purchase Invoice Stati"
+
+msgid "Approval Requested (unbooked, open)"
+msgstr "Approval Requested (unbooked, open)"
+
+msgid "Approved (booked, open)"
+msgstr "Approved (booked, open)"
+
+msgid "Paid (booked, closed)"
+msgstr "Paid (booked, closed)"
+
+msgid "Purchase Invoice Status Transitions"
+msgstr "Purchase Invoice Status Transitions"
+
 msgid "Offer Status"
 msgstr "Offer Status"
 
@@ -205,6 +224,9 @@ msgstr "Possible Delivery Status"
 msgid "Created (unbooked, open)"
 msgstr "Created (unbooked, open)"
 
+msgid "EDocument Service Base"
+msgstr "EDocument Service Base"
+
 msgid "Validation Service URL"
 msgstr "Validation Service URL"
 
@@ -225,9 +247,6 @@ msgstr "Proforma (unbooked, open)"
 
 msgid "Booked (booked, open)"
 msgstr "Booked (booked, open)"
-
-msgid "Paid (booked, closed)"
-msgstr "Paid (booked, closed)"
 
 msgid "Invoice Status Transitions"
 msgstr "Invoice Status Transitions"
@@ -373,6 +392,18 @@ msgstr "Sub-Product Variable Position Flag"
 
 msgid "The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document."
 msgstr "The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document."
+
+msgid "Payment Reminder Levels"
+msgstr "Payment Reminder Levels"
+
+msgid "First Reminder"
+msgstr "First Reminder"
+
+msgid "Second Reminder"
+msgstr "Second Reminder"
+
+msgid "Third Reminder"
+msgstr "Third Reminder"
 
 msgid "Product Number Creation"
 msgstr "Product Number Creation"
@@ -536,6 +567,9 @@ msgstr "For selected VAT procedure an exemption reason needs to be provided"
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr "Selected VAT procedure and selected VAT exemption reason are not compatible"
 
+msgid "Document date is required."
+msgstr "Document date is required."
+
 msgid "payment means need to have one default record"
 msgstr "payment means need to have one default record"
 
@@ -593,6 +627,12 @@ msgstr "The invoice you tried to delete has already been cleared and can no long
 
 msgid "The invoice you tried to edit has already been cleared, so no further editing is possible!"
 msgstr "The invoice you tried to edit has already been cleared, so no further editing is possible!"
+
+msgid "File is not a valid EDocument"
+msgstr "File is not a valid EDocument"
+
+msgid "The provided file is not a valid EDocument!"
+msgstr "The provided file is not a valid EDocument!"
 
 msgid "Unknown Currency Code"
 msgstr "Unknown Currency Code"
@@ -1074,6 +1114,33 @@ msgid "Category"
 msgid_plural "Categories"
 msgstr[0] "Category"
 msgstr[1] "Categories"
+
+msgid "Value must not be empty."
+msgstr "Value must not be empty."
+
+msgid "Required Data Missing"
+msgstr "Required Data Missing"
+
+msgid "Please provide the required data before changing the workflow status."
+msgstr "Please provide the required data before changing the workflow status."
+
+msgid "Import as Purchase Invoice"
+msgstr "Import as Purchase Invoice"
+
+msgid "Importing purchase invoice. Please wait..."
+msgstr "Importing purchase invoice. Please wait..."
+
+msgid "Purchase Invoice Created:"
+msgstr "Purchase Invoice Created:"
+
+msgid "Do you want to create an empty purchase invoice with the file as attachment?"
+msgstr "Do you want to create an empty purchase invoice with the file as attachment?"
+
+msgid "Importing purchase invoice not Possible"
+msgstr "Importing purchase invoice not Possible"
+
+msgid "Import Purchase Invoice"
+msgstr "Import Purchase Invoice"
 
 msgid "Send as Email to Datev"
 msgstr "Send as Email to Datev"
@@ -1557,6 +1624,24 @@ msgstr "Admin Orders"
 msgid "The permission to administrate the division's order documents."
 msgstr "The permission to administrate the division's order documents."
 
+msgid "Read Purchase Invoices"
+msgstr "Read Purchase Invoices"
+
+msgid "The grant to read the division's purchase invoice documents."
+msgstr "The grant to read the division's purchase invoice documents."
+
+msgid "Edit Purchase Invoices"
+msgstr "Edit Purchase Invoices"
+
+msgid "The grant to create/edit the division's purchase invoice documents."
+msgstr "The grant to create/edit the division's purchase invoice documents."
+
+msgid "Approve Purchase Invoices"
+msgstr "Approve Purchase Invoices"
+
+msgid "The grant to approve the division's purchase invoice documents."
+msgstr "The grant to approve the division's purchase invoice documents."
+
 msgid "Read Deliveries"
 msgstr "Read Deliveries"
 
@@ -1673,6 +1758,9 @@ msgstr "Service Period Start"
 msgid "Service Period End"
 msgstr "Service Period End"
 
+msgid "Contract Number"
+msgstr "Contract Number"
+
 msgid "Recipient"
 msgstr "Recipient"
 
@@ -1701,7 +1789,9 @@ msgid "VAT Exemption"
 msgstr "VAT Exemption"
 
 msgid "Sales Tax"
-msgstr "Sales Tax"
+msgid_plural "Sales Taxes"
+msgstr[0] "Sales Tax"
+msgstr[1] "Sales Taxes"
 
 msgid "Sales Tax by Rate"
 msgstr "Sales Tax by Rate"
@@ -1790,6 +1880,9 @@ msgstr "PI-"
 msgid "Last Datev send date"
 msgstr "Last Datev send date"
 
+msgid "Payment Reminders"
+msgstr "Payment Reminders"
+
 msgid "IN-"
 msgstr "IN-"
 
@@ -1855,6 +1948,23 @@ msgstr "include in shared invoice"
 
 msgid "OR-"
 msgstr "OR-"
+
+msgid "GENDER_Payment Reminder"
+msgstr "GENDER_Payment Reminder"
+
+msgid "Payment Reminder"
+msgid_plural "Payment Reminders"
+msgstr[0] "Payment Reminder"
+msgstr[1] "Payment Reminders"
+
+msgid "Fee"
+msgstr "Fee"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Outstanding amount"
+msgstr "Outstanding amount"
 
 msgid "Position"
 msgid_plural "Positions"
@@ -1934,6 +2044,56 @@ msgstr[1] "Order Positions"
 
 msgid "GENDER_Order Position"
 msgstr "GENDER_Order Position"
+
+msgid "Purchase Invoice Position"
+msgid_plural "Purchase Invoice Positions"
+msgstr[0] "Purchase Invoice Position"
+msgstr[1] "Purchase Invoice Positions"
+
+msgid "GENDER_Purchase Invoice Position"
+msgstr "GENDER_Purchase Invoice Position"
+
+msgid "GENDER_Purchase Invoice"
+msgstr "GENDER_Purchase Invoice"
+
+msgid "External Invoice Number"
+msgstr "External Invoice Number"
+
+msgid "Due at"
+msgstr "Due at"
+
+msgid "Over due at"
+msgstr "Over due at"
+
+msgid "Pay at"
+msgstr "Pay at"
+
+msgid "Paid at"
+msgstr "Paid at"
+
+msgid "Paid amount"
+msgstr "Paid amount"
+
+msgid "Payment Means Used"
+msgstr "Payment Means Used"
+
+msgid "II-"
+msgstr "II-"
+
+msgid "GENDER_Sales Tax"
+msgstr "GENDER_Sales Tax"
+
+msgid "Gross amount"
+msgstr "Gross amount"
+
+msgid "Net amount"
+msgstr "Net amount"
+
+msgid "Tax"
+msgstr "Tax"
+
+msgid "Tax Rate"
+msgstr "Tax Rate"
 
 msgid "Dispatch Config"
 msgid_plural "Dispatch Configs"
@@ -2053,6 +2213,30 @@ msgid_plural "Payment Mandates"
 msgstr[0] "Payment Mandate"
 msgstr[1] "Payment Mandates"
 
+msgid "GENDER_Credit Transfer"
+msgstr "GENDER_Credit Transfer"
+
+msgid "Credit Transfer"
+msgid_plural "Credit Transfers"
+msgstr[0] "Credit Transfer"
+msgstr[1] "Credit Transfers"
+
+msgid "GENDER_Direct Debit"
+msgstr "GENDER_Direct Debit"
+
+msgid "Direct Debit"
+msgid_plural "Direct Debits"
+msgstr[0] "Direct Debit"
+msgstr[1] "Direct Debits"
+
+msgid "GENDER_Payment Card"
+msgstr "GENDER_Payment Card"
+
+msgid "Payment Card"
+msgid_plural "Payment Cards"
+msgstr[0] "Payment Card"
+msgstr[1] "Payment Cards"
+
 msgid "VAT exemption reason code"
 msgid_plural "VAT exemption reason codes"
 msgstr[0] "VAT exemption reason code"
@@ -2123,11 +2307,10 @@ msgstr "Valid from"
 msgid "Valid until"
 msgstr "Valid until"
 
-msgid "Due at"
-msgstr "Due at"
-
-msgid "Pay at"
-msgstr "Pay at"
+msgid "Legacy Purchase Invoice"
+msgid_plural "Legacy Purchase Invoices"
+msgstr[0] "Legacy Purchase Invoice"
+msgstr[1] "Legacy Purchase Invoices"
 
 msgid "Overdue at"
 msgstr "Overdue at"
@@ -2182,6 +2365,21 @@ msgstr "All Offers"
 msgid "All offer records"
 msgstr "All offer records"
 
+msgid "All Purchase Invoices"
+msgstr "All Purchase Invoices"
+
+msgid "Unpaid Purchase Invoices"
+msgstr "Unpaid Purchase Invoices"
+
+msgid "All Purchase Invoices that have not yet been paid"
+msgstr "All Purchase Invoices that have not yet been paid"
+
+msgid "Unapproved Purchase Invoices"
+msgstr "Unapproved Purchase Invoices"
+
+msgid "All Purchase Invoices that have not yet been approved"
+msgstr "All Purchase Invoices that have not yet been approved"
+
 msgid "Limit to Sales Divisions"
 msgstr "Limit to Sales Divisions"
 
@@ -2202,9 +2400,6 @@ msgstr "All Suppliers"
 
 msgid "All supplier records"
 msgstr "All supplier records"
-
-msgid "All Purchase Invoices"
-msgstr "All Purchase Invoices"
 
 msgid "All purchase invoices"
 msgstr "All purchase invoices"

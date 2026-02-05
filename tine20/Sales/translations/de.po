@@ -108,7 +108,7 @@ msgid "Attached Document Types"
 msgstr "Angehängte Dokumententypen"
 
 msgid "Paperslip"
-msgstr ""
+msgstr "Papierbeleg"
 
 msgid "eDocument"
 msgstr "eDokument"
@@ -157,6 +157,24 @@ msgstr "Teilweise storniert"
 
 msgid "Reversed"
 msgstr "Storniert"
+
+msgid "Purchase Invoice Stati"
+msgstr "Eingangs-Rechnungs Status"
+
+msgid "Possible Purchase Invoice Stati"
+msgstr "Mögliche Eingangs-Rechnungs Status"
+
+msgid "Approval Requested (unbooked, open)"
+msgstr "Genehmigung angefragt (ungebucht, offen)"
+
+msgid "Approved (booked, open)"
+msgstr "Genehmigt (gebucht, offen)"
+
+msgid "Paid (booked, closed)"
+msgstr "Bezahlt (gebucht, geschlossen)"
+
+msgid "Purchase Invoice Status Transitions"
+msgstr "Eingangs-Rechnungs Status Übergänge"
 
 msgid "Offer Status"
 msgstr "Angebotsstatus"
@@ -218,6 +236,9 @@ msgstr "Mögliche Lieferstatus"
 msgid "Created (unbooked, open)"
 msgstr "Erstellt (ungebucht, offen)"
 
+msgid "EDocument Service Base"
+msgstr ""
+
 msgid "Validation Service URL"
 msgstr "Validierungsservice URL"
 
@@ -238,9 +259,6 @@ msgstr "Proforma (ungebucht, offen)"
 
 msgid "Booked (booked, open)"
 msgstr "Gebucht (gebucht, offen)"
-
-msgid "Paid (booked, closed)"
-msgstr "Bezahlt (gebucht, geschlossen)"
 
 msgid "Invoice Status Transitions"
 msgstr "Rechnungsstatus-Übergänge"
@@ -386,6 +404,18 @@ msgstr "Sub-Product Variable Position Flag"
 
 msgid "The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document."
 msgstr "Die Buchungsmethode für Unterprodukte variiert, sodass identische Unterprodukte entweder einzeln oder zusammengefasst an einer einzigen Position in einem Dokument erfasst werden könnenDie Buchungsmethode für Unterprodukte variiert, sodass identische Unterprodukte entweder einzeln oder zusammengefasst an einer einzigen Position in einem Dokument erfasst werden können."
+
+msgid "Payment Reminder Levels"
+msgstr "Zahlungs Erinnerungs Stufen"
+
+msgid "First Reminder"
+msgstr "Erste Erinnerung"
+
+msgid "Second Reminder"
+msgstr "Zweite Erinnerung"
+
+msgid "Third Reminder"
+msgstr "Dritte Erinnerung"
 
 msgid "Product Number Creation"
 msgstr "Produktnummern Erstellung"
@@ -549,6 +579,9 @@ msgstr "Für das gewählte USt.-Verfahren muss ein Befreiungsgrund angegeben wer
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr "Das gewählte USt.-Verfahren und der angegebene Befreiungsgrund sind nicht kompatibel."
 
+msgid "Document date is required."
+msgstr "Belegdatum erforderlich"
+
 msgid "payment means need to have one default record"
 msgstr "Es muss eine Standardzahlungsart definiert sein."
 
@@ -606,6 +639,12 @@ msgstr "Die Rechnung die Sie löschen wollten, ist bereits gebucht und kann nich
 
 msgid "The invoice you tried to edit has already been cleared, so no further editing is possible!"
 msgstr "Die Rechnung die Sie bearbeiten wollten, ist bereits gebucht und kann nicht weiter bearbeitet werden!"
+
+msgid "File is not a valid EDocument"
+msgstr "Die Datei ist kein gültiges eDokument"
+
+msgid "The provided file is not a valid EDocument!"
+msgstr "Die gegebene Datei ist kein gültiges eDokument"
 
 msgid "Unknown Currency Code"
 msgstr "Unbekannter Währungscode"
@@ -815,7 +854,7 @@ msgid "Postbox"
 msgstr "Postfach"
 
 msgid "Postal Code"
-msgstr ""
+msgstr "Postleitzahl"
 
 msgid "Locality"
 msgstr "Ort"
@@ -964,7 +1003,7 @@ msgid "Print Paper Slip"
 msgstr "Belegdruck"
 
 msgid "Send by Email"
-msgstr ""
+msgstr "Per EMail versenden"
 
 msgid "Create eDocument"
 msgstr "eDokument erstellen"
@@ -1089,6 +1128,33 @@ msgid "Category"
 msgid_plural "Categories"
 msgstr[0] "Kategorie"
 msgstr[1] "Kategorien"
+
+msgid "Value must not be empty."
+msgstr "Der Wert darf nicht leer sein."
+
+msgid "Required Data Missing"
+msgstr "Benötigte Daten fehlen"
+
+msgid "Please provide the required data before changing the workflow status."
+msgstr "Bitte tragen sie die benötigten Daten ein bevor sie den Workflow-Status ändern."
+
+msgid "Import as Purchase Invoice"
+msgstr "Als Eingangsrechnung importieren"
+
+msgid "Importing purchase invoice. Please wait..."
+msgstr "Importiere Eingangsrechnung. Bitte warten..."
+
+msgid "Purchase Invoice Created:"
+msgstr "Erstelle Eingangsrechnung:"
+
+msgid "Do you want to create an empty purchase invoice with the file as attachment?"
+msgstr "Möchten sie eine leere Eingangsrechnung mit dieser Datei als Anhang erstellen?"
+
+msgid "Importing purchase invoice not Possible"
+msgstr "Eingangsrechnung importieren ist nicht möglich"
+
+msgid "Import Purchase Invoice"
+msgstr "Eingangsrechnung importieren"
 
 msgid "Send as Email to Datev"
 msgstr "Als E-Mail an Datev senden"
@@ -1312,9 +1378,6 @@ msgid_plural "Purchase Invoices"
 msgstr[0] "Eingangsrechnung"
 msgstr[1] "Eingangsrechnungen"
 
-msgid "GENDER_Purchase Invoice"
-msgstr "female"
-
 msgid "VAT Procedure"
 msgstr "Mehrwertsteuer-Verfahren"
 
@@ -1343,7 +1406,7 @@ msgid "Supplier Number"
 msgstr "Lieferant*innennummer"
 
 msgid "Either postal code or postbox is required!"
-msgstr ""
+msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
 
 msgid "Copy Supplier"
 msgstr "Lieferant*in kopieren"
@@ -1575,6 +1638,24 @@ msgstr "Aufträge verwalten"
 msgid "The permission to administrate the division's order documents."
 msgstr "Die Berechtigung Aufträge dieses Geschäftsbereiches zu verwalten."
 
+msgid "Read Purchase Invoices"
+msgstr "Eingangsrechnungen Lesen"
+
+msgid "The grant to read the division's purchase invoice documents."
+msgstr "Die Berechtigung Eingangsrechnungen dieses Geschäftsbereiches zu lesen."
+
+msgid "Edit Purchase Invoices"
+msgstr "Eingangsrechnungen bearbeiten"
+
+msgid "The grant to create/edit the division's purchase invoice documents."
+msgstr "Die Berechtigung Eingangsrechnungen dieses Geschäftsbereiches zu bearbeiten."
+
+msgid "Approve Purchase Invoices"
+msgstr "Eingangsrechnungen freigeben"
+
+msgid "The grant to approve the division's purchase invoice documents."
+msgstr "Die Berechtigung Eingangsrechnungen dieses Geschäftsbereiches zu genehmigen."
+
 msgid "Read Deliveries"
 msgstr "Lieferungen lesen"
 
@@ -1691,6 +1772,9 @@ msgstr "Leistungszeitraum Start"
 msgid "Service Period End"
 msgstr "Leistungszeitraum Ende"
 
+msgid "Contract Number"
+msgstr "Vertragsnummer"
+
 msgid "Recipient"
 msgstr "Empfänger*in"
 
@@ -1718,8 +1802,11 @@ msgstr "Netto"
 msgid "VAT Exemption"
 msgstr "Umsatzsteuerbefreiung"
 
+#, fuzzy
 msgid "Sales Tax"
-msgstr "Mehrwertsteuer"
+msgid_plural "Sales Taxes"
+msgstr[0] "Mehrwertsteuer"
+msgstr[1] "Mehrwertsteuer"
 
 msgid "Sales Tax by Rate"
 msgstr "MwSt nach Satz"
@@ -1777,7 +1864,7 @@ msgid "DN-"
 msgstr "LS-"
 
 msgid "GENDER_Dispatch Report"
-msgstr ""
+msgstr "male"
 
 msgid "Dispatch Report"
 msgid_plural "Dispatch Reports"
@@ -1807,6 +1894,9 @@ msgstr "PR-"
 
 msgid "Last Datev send date"
 msgstr "Letztes Datev Sende-Datum"
+
+msgid "Payment Reminders"
+msgstr "Zahlungserinnerungen"
 
 msgid "IN-"
 msgstr "RE-"
@@ -1873,6 +1963,23 @@ msgstr "Einer Sammelrechnung hinzufügen"
 
 msgid "OR-"
 msgstr "AU-"
+
+msgid "GENDER_Payment Reminder"
+msgstr "female"
+
+msgid "Payment Reminder"
+msgid_plural "Payment Reminders"
+msgstr[0] "Zahlungserinnerung"
+msgstr[1] "Zahlungserinnerungen"
+
+msgid "Fee"
+msgstr "Gebür"
+
+msgid "Level"
+msgstr "Stufe"
+
+msgid "Outstanding amount"
+msgstr "Ausstehender Betrag"
 
 msgid "Position"
 msgid_plural "Positions"
@@ -1953,13 +2060,63 @@ msgstr[1] "Auftragspositionen"
 msgid "GENDER_Order Position"
 msgstr "female"
 
+msgid "Purchase Invoice Position"
+msgid_plural "Purchase Invoice Positions"
+msgstr[0] "Eingangsrechnungsposition"
+msgstr[1] "Eingangsrechnungspositionen"
+
+msgid "GENDER_Purchase Invoice Position"
+msgstr "female"
+
+msgid "GENDER_Purchase Invoice"
+msgstr "female"
+
+msgid "External Invoice Number"
+msgstr "Externe Rechnungsnummer"
+
+msgid "Due at"
+msgstr "Fällig am"
+
+msgid "Over due at"
+msgstr "Überfällig am"
+
+msgid "Pay at"
+msgstr "Zahlen am"
+
+msgid "Paid at"
+msgstr "Bezahlt am"
+
+msgid "Paid amount"
+msgstr "Gezahlter Betrag"
+
+msgid "Payment Means Used"
+msgstr "Benutztes Zahlungsmittel"
+
+msgid "II-"
+msgstr "ER-"
+
+msgid "GENDER_Sales Tax"
+msgstr "female"
+
+msgid "Gross amount"
+msgstr "Brutto Betrag"
+
+msgid "Net amount"
+msgstr "Netto Betrag"
+
+msgid "Tax"
+msgstr "Steuer"
+
+msgid "Tax Rate"
+msgstr "Steuersatz"
+
 msgid "Dispatch Config"
 msgid_plural "Dispatch Configs"
 msgstr[0] "Versandkonfiguration"
 msgstr[1] "Versandkonfigurationen"
 
 msgid "GENDER_Dispatch Config"
-msgstr ""
+msgstr "female"
 
 msgid "Document Types"
 msgstr "Dokumenttypen"
@@ -1968,7 +2125,7 @@ msgid "Expects Feedback"
 msgstr "Erwartet Rückmeldung"
 
 msgid "GENDER_Custom Config"
-msgstr ""
+msgstr "female"
 
 msgid "Custom Config"
 msgid_plural "Custom Configs"
@@ -1993,10 +2150,10 @@ msgstr[0] "Dokumenttyp"
 msgstr[1] "Dokumenttypen"
 
 msgid "GENDER_Document Type"
-msgstr ""
+msgstr "male"
 
 msgid "GENDER_Email"
-msgstr ""
+msgstr "female"
 
 msgid "If empty, email address of document recipient will be taken."
 msgstr "Wenn leer, wird die E-Mail-Adresse des Dokumentempfängers verwendet.."
@@ -2005,7 +2162,7 @@ msgid "email to: "
 msgstr "E-Mail an:"
 
 msgid "GENDER_Manual Dispatching"
-msgstr ""
+msgstr "male"
 
 msgid "Manual Dispatching"
 msgid_plural "Manual Dispatchings"
@@ -2016,7 +2173,7 @@ msgid "Instructions"
 msgstr "Anweisungen"
 
 msgid "GENDER_Upload"
-msgstr ""
+msgstr "male"
 
 msgid "Upload"
 msgid_plural "Uploads"
@@ -2039,7 +2196,7 @@ msgid "Remark"
 msgstr "Anmerkung"
 
 msgid "GENDER_Payment Means"
-msgstr ""
+msgstr "female"
 
 msgid "Config Class"
 msgstr "Konfigurationsklasse"
@@ -2056,7 +2213,7 @@ msgid "All bank accounts"
 msgstr "Alle Bankkonten"
 
 msgid "GENDER_Payee Financial Account"
-msgstr ""
+msgstr "other"
 
 msgid "Payee Financial Account"
 msgid_plural "Payee Financial Accounts"
@@ -2064,12 +2221,36 @@ msgstr[0] "Empfänger-Bankkonto"
 msgstr[1] "Empfänger-Bankkonten"
 
 msgid "GENDER_Payment Mandate"
-msgstr ""
+msgstr "other"
 
 msgid "Payment Mandate"
 msgid_plural "Payment Mandates"
 msgstr[0] "Zahlungsmandat"
 msgstr[1] "Zahlungsmandate"
+
+msgid "GENDER_Credit Transfer"
+msgstr "male"
+
+msgid "Credit Transfer"
+msgid_plural "Credit Transfers"
+msgstr[0] "Überweisung"
+msgstr[1] "Überweisungen"
+
+msgid "GENDER_Direct Debit"
+msgstr "other"
+
+msgid "Direct Debit"
+msgid_plural "Direct Debits"
+msgstr[0] "Lastschrift"
+msgstr[1] "Lastschrift"
+
+msgid "GENDER_Payment Card"
+msgstr "female"
+
+msgid "Payment Card"
+msgid_plural "Payment Cards"
+msgstr[0] "Kartenzahlung"
+msgstr[1] "Kartenzahlungen"
 
 msgid "VAT exemption reason code"
 msgid_plural "VAT exemption reason codes"
@@ -2077,7 +2258,7 @@ msgstr[0] "Umsatzsteuerbefreiungsgrund-Code"
 msgstr[1] "Umsatzsteuerbefreiungsgrund-Codes"
 
 msgid "GENDER_VAT exemption reason code"
-msgstr ""
+msgstr "male"
 
 msgid "XRechnung"
 msgid_plural "XRechnungen"
@@ -2141,11 +2322,10 @@ msgstr "Gültig ab"
 msgid "Valid until"
 msgstr "Gültig bis"
 
-msgid "Due at"
-msgstr "Fällig am"
-
-msgid "Pay at"
-msgstr "Zahlen am"
+msgid "Legacy Purchase Invoice"
+msgid_plural "Legacy Purchase Invoices"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Overdue at"
 msgstr "Fällig seit"
@@ -2200,6 +2380,21 @@ msgstr "Alle Angebotsdatensätze"
 msgid "All offer records"
 msgstr "Alle Angebote"
 
+msgid "All Purchase Invoices"
+msgstr "Alle Eingangsrechnungen"
+
+msgid "Unpaid Purchase Invoices"
+msgstr "Unbezahlte Eingangsrechnungen"
+
+msgid "All Purchase Invoices that have not yet been paid"
+msgstr "Alle Eingangsrechnungen die noch nicht bezahlt wurden"
+
+msgid "Unapproved Purchase Invoices"
+msgstr "Nicht freigegebene Eingangsrechnungen"
+
+msgid "All Purchase Invoices that have not yet been approved"
+msgstr "Alle Eingangsrechnungen die noch nicht freigegeben wurden"
+
 msgid "Limit to Sales Divisions"
 msgstr "Auf Geschäftsbereiche limitieren"
 
@@ -2220,9 +2415,6 @@ msgstr "Alle Lieferanten"
 
 msgid "All supplier records"
 msgstr "Alle Lieferanten Datensätze"
-
-msgid "All Purchase Invoices"
-msgstr "Alle Eingangsrechnungen"
 
 msgid "All purchase invoices"
 msgstr "Alle Eingangsrechnungen"

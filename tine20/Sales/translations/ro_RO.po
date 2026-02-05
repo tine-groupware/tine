@@ -72,7 +72,7 @@ msgstr ""
 msgid "Add, edit and delete purchase invoices."
 msgstr ""
 
-msgid "Change number of an order confirmations"
+msgid "Change number of an order confirmation"
 msgstr ""
 
 msgid "Allow changing the number of an order confirmation during the update."
@@ -93,13 +93,31 @@ msgstr ""
 msgid "Auto Invoice Contract Interval"
 msgstr ""
 
-msgid "Sets the biggest interval, contracts will be billed."
+msgid "Sets the maximum interval at which contracts will be billed."
 msgstr ""
 
-msgid "Download"
+msgid "Attached Document Types"
 msgstr ""
 
-msgid "E-Mail"
+msgid "Paperslip"
+msgstr ""
+
+msgid "eDocument"
+msgstr ""
+
+msgid "Supporting Document"
+msgstr ""
+
+msgid "Start"
+msgstr ""
+
+msgid "Waiting for feedback"
+msgstr ""
+
+msgid "Success"
+msgstr ""
+
+msgid "Failure"
 msgstr ""
 
 msgid "Followup Status"
@@ -132,6 +150,24 @@ msgstr ""
 msgid "Reversed"
 msgstr ""
 
+msgid "Purchase Invoice Stati"
+msgstr ""
+
+msgid "Possible Purchase Invoice Stati"
+msgstr ""
+
+msgid "Approval Requested (unbooked, open)"
+msgstr ""
+
+msgid "Approved (booked, open)"
+msgstr ""
+
+msgid "Paid (booked, closed)"
+msgstr ""
+
+msgid "Purchase Invoice Status Transitions"
+msgstr ""
+
 msgid "Offer Status"
 msgstr ""
 
@@ -141,7 +177,10 @@ msgstr ""
 msgid "Draft (unbooked, open)"
 msgstr ""
 
-msgid "Released (booked, open)"
+msgid "Manual dispatch required (booked, open)"
+msgstr ""
+
+msgid "Dispatched (booked, open)"
 msgstr ""
 
 msgid "Ordered (booked, closed)"
@@ -189,7 +228,7 @@ msgstr ""
 msgid "Created (unbooked, open)"
 msgstr ""
 
-msgid "EDocument"
+msgid "EDocument Service Base"
 msgstr ""
 
 msgid "Validation Service URL"
@@ -211,12 +250,6 @@ msgid "Proforma (unbooked, open)"
 msgstr ""
 
 msgid "Booked (booked, open)"
-msgstr ""
-
-msgid "Shipped (booked, closed)"
-msgstr ""
-
-msgid "Paid (booked, closed)"
 msgstr ""
 
 msgid "Invoice Status Transitions"
@@ -255,16 +288,22 @@ msgstr "Număr"
 msgid "Text"
 msgstr "Text"
 
-msgid "Own Currency"
-msgstr ""
-
-msgid "The currency defined here is used as default currency in the customerd edit dialog."
-msgstr ""
-
 msgid "Languages Available"
 msgstr ""
 
-msgid "List of the language in which the multilingual texts are laid out."
+msgid "List of languages in which multilingual texts are available."
+msgstr ""
+
+msgid "Invoice eDocument Attachment Name Template"
+msgstr ""
+
+msgid "Invoice eDocument Attachment Rename Template"
+msgstr ""
+
+msgid "Invoice Paperslip Attachment Name Template"
+msgstr ""
+
+msgid "Invoice Paperslip Attachment Rename Template"
 msgstr ""
 
 msgid "Invoice Type"
@@ -357,7 +396,19 @@ msgstr ""
 msgid "Sub-Product Variable Position Flag"
 msgstr ""
 
-msgid "Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document."
+msgid "The accounting method for sub-products varies, allowing identical sub-products to be recorded either individually or grouped together in a single position on a document."
+msgstr ""
+
+msgid "Payment Reminder Levels"
+msgstr ""
+
+msgid "First Reminder"
+msgstr ""
+
+msgid "Second Reminder"
+msgstr ""
+
+msgid "Third Reminder"
 msgstr ""
 
 msgid "Product Number Creation"
@@ -379,6 +430,9 @@ msgid "Product Number Zero Fill"
 msgstr ""
 
 msgid "Fill the number with leading zero"
+msgstr ""
+
+msgid "Debitor Default Payment Means"
 msgstr ""
 
 msgid "Payment Method"
@@ -438,19 +492,28 @@ msgstr ""
 msgid "Datev recipient emails for invoice"
 msgstr ""
 
+msgid "Payment Means Identifier Template"
+msgstr ""
+
 msgid "VAT Procedures"
 msgstr ""
 
 msgid "Possible VAT Procedures"
 msgstr ""
 
-msgid "Taxable"
+msgid "Standard rate"
 msgstr ""
 
-msgid "Non taxable"
+msgid "Services outside scope of tax"
 msgstr ""
 
 msgid "Reverse charge"
+msgstr ""
+
+msgid "Free export item, tax not charged"
+msgstr ""
+
+msgid "Zero rated goods"
 msgstr ""
 
 msgid "Reverse Charge Template"
@@ -480,6 +543,9 @@ msgstr ""
 msgid "Legacy Offers"
 msgstr ""
 
+msgid "Legacy (non-document) Offers"
+msgstr ""
+
 msgid "Order Confirmations Module"
 msgstr ""
 
@@ -489,13 +555,28 @@ msgstr ""
 msgid "Purchase Invoice Module"
 msgstr ""
 
-msgid "Legacy (non-document) Offers)"
+msgid "Contact person filter"
 msgstr ""
 
-msgid "Name needs to be unique."
+msgid "Configure filter for customer contacts via container path filter"
+msgstr ""
+
+msgid "The name must be unique."
 msgstr ""
 
 msgid "Dates \""
+msgstr ""
+
+msgid "For selected VAT procedure an exemption reason needs to be provided"
+msgstr ""
+
+msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
+msgstr ""
+
+msgid "Document date is required."
+msgstr ""
+
+msgid "payment means need to have one default record"
 msgstr ""
 
 msgid "The number you have tried to set is already in use!"
@@ -540,19 +621,25 @@ msgstr ""
 msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
 msgstr ""
 
-msgid "Number duplicate"
+msgid "Duplicate Number"
 msgstr ""
 
-msgid "The number you tried to use has been taken already. Please use another one leave the field blank to take the next free number."
+msgid "The number you tried to use is already taken. Please use another number, or leave the field blank to automatically assign the next available number."
 msgstr ""
 
 msgid "Invoice is cleared already"
 msgstr ""
 
-msgid "The Invoice you tried to delete is cleared already, so deleting is not possible anymore!"
+msgid "The invoice you tried to delete has already been cleared and can no longer be deleted!"
 msgstr ""
 
-msgid "The Invoice you tried to edit is cleared already, so no editing is possible anymore!"
+msgid "The invoice you tried to edit has already been cleared, so no further editing is possible!"
+msgstr ""
+
+msgid "File is not a valid EDocument"
+msgstr ""
+
+msgid "The provided file is not a valid EDocument!"
 msgstr ""
 
 msgid "Unknown Currency Code"
@@ -588,35 +675,14 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-msgid "Email"
-msgstr ""
-
 msgid "Apply postal address"
 msgstr ""
-
-msgid "Street"
-msgstr "Strada"
-
-msgid "Postbox"
-msgstr ""
-
-msgid "Postalcode"
-msgstr "CodPoştal"
-
-msgid "Locality"
-msgstr "Localitatea"
-
-msgid "Region"
-msgstr "Regiune"
-
-msgid "Country"
-msgstr "Ţara"
 
 msgid "Number Debit"
 msgstr ""
 
 msgid "Address"
-msgid_plural "Addresss"
+msgid_plural "Addresses"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -624,7 +690,7 @@ msgstr[2] ""
 msgid "Select Debitor"
 msgstr ""
 
-msgid "Please select debitor"
+msgid "Please select a debitor"
 msgstr ""
 
 msgid "Cancel"
@@ -764,6 +830,12 @@ msgstr ""
 msgid "Postal Address"
 msgstr ""
 
+msgid "Email"
+msgid_plural "Emails"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 msgid "Prefix 1"
 msgstr ""
 
@@ -772,6 +844,24 @@ msgstr ""
 
 msgid "Prefix 3"
 msgstr ""
+
+msgid "Street"
+msgstr "Strada"
+
+msgid "Postbox"
+msgstr ""
+
+msgid "Postal Code"
+msgstr ""
+
+msgid "Locality"
+msgstr "Localitatea"
+
+msgid "Region"
+msgstr "Regiune"
+
+msgid "Country"
+msgstr "Ţara"
 
 msgid "Miscellaneous"
 msgstr ""
@@ -811,6 +901,9 @@ msgstr ""
 msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
 msgstr ""
 
+msgid "Open Debitor"
+msgstr ""
+
 msgid "Include to Dispatch Document"
 msgstr ""
 
@@ -847,6 +940,9 @@ msgstr ""
 msgid "There where Errors:"
 msgstr ""
 
+msgid "Copy { recordName }"
+msgstr ""
+
 msgid "Reversals"
 msgstr ""
 
@@ -860,6 +956,12 @@ msgid "Create new { targetRecordName }?"
 msgstr ""
 
 msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
+msgstr ""
+
+msgid "Reverse { sourceRecordsName }?"
+msgstr ""
+
+msgid "Reversal cannot be undone. Do you want to continue?"
 msgstr ""
 
 msgid "Book unbooked { sourceRecordsName }"
@@ -889,9 +991,6 @@ msgstr ""
 msgid "Paper Slip"
 msgstr ""
 
-msgid "eDocument"
-msgstr ""
-
 msgid "Creating { recordName } { typeName }"
 msgstr ""
 
@@ -901,13 +1000,67 @@ msgstr ""
 msgid "Print Paper Slip"
 msgstr ""
 
-msgid "Send by E-Mail"
+msgid "Send by Email"
 msgstr ""
 
-msgid "Set { recordName } dispatched"
+msgid "Create eDocument"
 msgstr ""
 
 msgid "Dispatch Document"
+msgstr ""
+
+msgid "This document is already dispatched!"
+msgstr ""
+
+msgid "Do you want to dispatch again?"
+msgstr ""
+
+msgid "Nothing was dispatched"
+msgstr ""
+
+msgid "Do you want to dispatch manually by email?"
+msgstr ""
+
+msgid "Dispatching not Possible"
+msgstr ""
+
+msgid "Manual Dispatch Needed"
+msgstr ""
+
+msgid "All automatic dispatch steps are completed, you need to fulfill the remaining tasks manually."
+msgstr ""
+
+msgid "Manual Dispatch via Email"
+msgstr ""
+
+msgid "Bypass Dispatch Configs?"
+msgstr ""
+
+msgid "You are about to manually dispatch this document without evaluating the configured dispatch type. Do you want to proceed?"
+msgstr ""
+
+msgid "Select Recipients"
+msgstr ""
+
+msgid "Please select the recipients email addresses. You also can select other addresses in the email dialog later."
+msgstr ""
+
+msgid "{ adr } (Dispatch email of debitor)"
+msgstr ""
+
+msgid "{ adr } (Electronic address of debitor)"
+msgstr ""
+
+msgid "{ adr } (Email of document recipient)"
+msgstr ""
+
+msgid "{ adr } (Email of customer postal address)"
+msgstr ""
+
+msgid "{ adr } ({type} of customer's external contact person)"
+msgstr ""
+
+msgid "{ adr } ({type} of customer's internal contact person)"
 msgstr ""
 
 msgid "Generated when dispatched"
@@ -925,11 +1078,38 @@ msgstr ""
 msgid "Please select the files which should be dispatched."
 msgstr ""
 
-msgid "Manual Dispatch"
+msgid "Manually dispatched by email without evaluating the configured dispatch type"
 msgstr ""
 
-msgid "Dispatch documents where created, please download and dispatch manually."
+msgid "Complete open Dispatch Processes?"
 msgstr ""
+
+msgid "By sending this mail, the following dispatch processes must be marked completed:"
+msgstr ""
+
+msgid "Dispatched by manual email"
+msgstr ""
+
+msgid "Show Dispatch Configuration"
+msgstr ""
+
+msgid "Mark Process Completed"
+msgstr ""
+
+msgid "Enter Report"
+msgstr ""
+
+msgid "Please Report what you did to complete this dispatch process."
+msgstr ""
+
+msgid "Send Email for this Process"
+msgstr ""
+
+msgid "Payment Means"
+msgid_plural "Payment Means"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Generic"
 msgstr ""
@@ -949,6 +1129,33 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+msgid "Value must not be empty."
+msgstr ""
+
+msgid "Required Data Missing"
+msgstr ""
+
+msgid "Please provide the required data before changing the workflow status."
+msgstr ""
+
+msgid "Import as Purchase Invoice"
+msgstr ""
+
+msgid "Importing purchase invoice. Please wait..."
+msgstr ""
+
+msgid "Purchase Invoice Created:"
+msgstr ""
+
+msgid "Do you want to create an empty purchase invoice with the file as attachment?"
+msgstr ""
+
+msgid "Importing purchase invoice not Possible"
+msgstr ""
+
+msgid "Import Purchase Invoice"
+msgstr ""
+
 msgid "Send as Email to Datev"
 msgstr ""
 
@@ -958,7 +1165,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-msgid "Datev email has been sent before , continue anyway?"
+msgid "The DATEV email has already been sent. Do you want to continue anyway?"
 msgstr ""
 
 msgid "Track Document"
@@ -968,6 +1175,12 @@ msgid "Trac Document { title }"
 msgstr ""
 
 msgid "Expand Positions"
+msgstr ""
+
+msgid "Validate eDocument"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "Invoice Number"
@@ -1169,6 +1382,9 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
+msgid "VAT Procedure"
+msgstr ""
+
 msgid "Overdue date"
 msgstr ""
 
@@ -1193,7 +1409,7 @@ msgstr ""
 msgid "Supplier Number"
 msgstr ""
 
-msgid "Either postalcode or postbox is required!"
+msgid "Either postal code or postbox is required!"
 msgstr ""
 
 msgid "Copy Supplier"
@@ -1221,16 +1437,49 @@ msgstr ""
 msgid "Debitor Number"
 msgstr ""
 
+msgid "A buyer identifier (usually assigned by the seller), such as the customer number for accounting or the customer number for order management. Note: No standardized scheme is required for the creation of the buyer identifier. (BT-64 [EN 16931])."
+msgstr ""
+
+msgid "Defines translation of the \"Postbox\" prefix in BT-50 [EN 16931]."
+msgstr ""
+
+msgid "An e-mail address of the contact point (BT-58 [EN 16931])."
+msgstr ""
+
 msgid "Customer Name"
+msgstr ""
+
+msgid "The full name of the purchaser (default value if left blank is the \"name\" property of the corresponding customer) (BT-44 [EN 16931])."
 msgstr ""
 
 msgid "Company / Organisation (Prefix 1)"
 msgstr ""
 
+msgid "A name by which the acquirer is known, if different from the acquirer's name (BT-45 [EN 16931])."
+msgstr ""
+
 msgid "Unit (Prefix 2)"
 msgstr ""
 
+msgid "Contact person or contact point at the acquirer (e.g. name of a person, department or office name) - supplementary entry - (BT-56 [EN 16931])."
+msgstr ""
+
 msgid "Recipient Name (Prefix 3)"
+msgstr ""
+
+msgid "Contact person or contact point at the acquirer (e.g. name of a person, department or office name) (BT-56 [EN 16931])."
+msgstr ""
+
+msgid "The main line of an address. This is usually either the street and house number (BT-50 if no PO box is specified, otherwise BT-51 [EN 16931])."
+msgstr ""
+
+msgid "Becomes the text \"Postbox\" followed by the mailbox number specified here in BT-50 [EN 16931]."
+msgstr ""
+
+msgid "The name of the city or municipality in which the purchaser's address is located (BT-52 [EN 16931])."
+msgstr ""
+
+msgid "The subdivision of a country (such as region, state, province, etc.) (BT-54 [EN 16931])."
 msgstr ""
 
 msgid "Invoice Item"
@@ -1245,7 +1494,28 @@ msgstr ""
 msgid "Until"
 msgstr ""
 
+msgid "Is Default"
+msgstr ""
+
 msgid "GENDER_Contract"
+msgstr ""
+
+msgid "Buyer Reference"
+msgstr ""
+
+msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
+msgstr ""
+
+msgid "Purchase Order Reference"
+msgstr ""
+
+msgid "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
+msgstr ""
+
+msgid "Project Reference"
+msgstr ""
+
+msgid "The identifier of a project to which the invoice refers (BT-11 [EN 16931])."
 msgstr ""
 
 msgid "Responsible"
@@ -1272,9 +1542,6 @@ msgstr ""
 msgid "Has Deliveries"
 msgstr ""
 
-msgid "VAT Procedure"
-msgstr ""
-
 msgid "GENDER_Debitor"
 msgstr ""
 
@@ -1296,7 +1563,22 @@ msgstr ""
 msgid "Billing Addresses"
 msgstr ""
 
-msgid "Buyer Reference"
+msgid "Buyer legal registration identifier"
+msgstr ""
+
+msgid "An identifier issued by an official registrar that identifies the acquirer as a legal entity or legal person. E.g. commercial register entry, register of associations, etc. (BT-47 [EN 16931])."
+msgstr ""
+
+msgid "Buyer VAT identifier"
+msgstr ""
+
+msgid "The VAT identification number preceded by a country prefix (BT-48 [EN 16931])."
+msgstr ""
+
+msgid "Seller identifier"
+msgstr ""
+
+msgid "An identifier (usually assigned by the purchaser) of the seller, such as the vendor number for the funds management procedure or the supplier number for the ordering system (BT-29 [EN 16931])."
 msgstr ""
 
 msgid "Electronic Invoice Type"
@@ -1305,10 +1587,19 @@ msgstr ""
 msgid "Electronic Invoice Config"
 msgstr ""
 
+msgid "The pattern for 'Buyer electronic address (BT-49 [EN 16931])."
+msgstr ""
+
 msgid "Electronic Address"
 msgstr ""
 
+msgid "Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931])."
+msgstr ""
+
 msgid "Electronic Document Transport Method"
+msgstr ""
+
+msgid "Electronic Document Transport Config"
 msgstr ""
 
 msgid "Bank Account"
@@ -1320,70 +1611,94 @@ msgstr ""
 msgid "Read Debitors"
 msgstr ""
 
-msgid "The grant to read the division's debitors."
+msgid "The permission to read the division's debitors."
 msgstr ""
 
 msgid "Admin Debitors"
 msgstr ""
 
-msgid "The grant to administrate the division's debitors."
+msgid "The permission to administrate the division's debitors."
 msgstr ""
 
 msgid "Read Offers"
 msgstr ""
 
-msgid "The grant to read the division's offer documents."
+msgid "The permission to read the division's offer documents."
 msgstr ""
 
 msgid "Admin Offers"
 msgstr ""
 
-msgid "The grant to administrate the division's offer documents."
+msgid "The permission to administrate the division's offer documents."
 msgstr ""
 
 msgid "Read Orders"
 msgstr ""
 
-msgid "The grant to read the division's order documents."
+msgid "The permission to read the division's order documents."
 msgstr ""
 
 msgid "Admin Orders"
 msgstr ""
 
-msgid "The grant to administrate the division's order documents."
+msgid "The permission to administrate the division's order documents."
+msgstr ""
+
+msgid "Read Purchase Invoices"
+msgstr ""
+
+msgid "The grant to read the division's purchase invoice documents."
+msgstr ""
+
+msgid "Edit Purchase Invoices"
+msgstr ""
+
+msgid "The grant to create/edit the division's purchase invoice documents."
+msgstr ""
+
+msgid "Approve Purchase Invoices"
+msgstr ""
+
+msgid "The grant to approve the division's purchase invoice documents."
 msgstr ""
 
 msgid "Read Deliveries"
 msgstr ""
 
-msgid "The grant to read the division's delivery documents."
+msgid "The permission to read the division's delivery documents."
 msgstr ""
 
 msgid "Admin Deliveries"
 msgstr ""
 
-msgid "The grant to administrate the division's delivery documents."
+msgid "The permission to administrate the division's delivery documents."
 msgstr ""
 
 msgid "Read Invoices"
 msgstr ""
 
-msgid "The grant to read the division's invoice documents."
+msgid "The permission to read the division's invoice documents."
 msgstr ""
 
 msgid "Admin Invoices"
 msgstr ""
 
-msgid "The grant to administrate the division's invoice documents."
+msgid "The permission to administrate the division's invoice documents."
 msgstr ""
 
 msgid "Admin"
 msgstr ""
 
-msgid "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
+msgid "The permission to administrate this division (implies all other grants and the grant to set grants as well)."
+msgstr ""
+
+msgid "The full name under which the seller is registered in the national register of legal entities or as a taxable person or otherwise acts as a person(s) (company) (BT-27 [EN 16931])."
 msgstr ""
 
 msgid "Address Prefix 1"
+msgstr ""
+
+msgid "The main line in an address. This is usually either the street and house number or the text \"PO box\" followed by the PO box number (BT-31 [EN 16931])."
 msgstr ""
 
 msgid "Address Prefix 2"
@@ -1407,7 +1722,7 @@ msgstr ""
 msgid "Contact Name"
 msgstr ""
 
-msgid "Contact EMail"
+msgid "Contact Email"
 msgstr ""
 
 msgid "Contact Phone"
@@ -1416,10 +1731,28 @@ msgstr ""
 msgid "Tax Registration Id"
 msgstr ""
 
-msgid "VAT Number"
+msgid "A local tax code for the seller (determined by their address) or a reference to their registered tax status (BT-32 [EN 16931]). (If applicable, the information “tax liability of the recipient of the service” or the VAT exemption of the invoicing party must be entered here)."
+msgstr ""
+
+msgid "VAT identifier"
+msgstr ""
+
+msgid "The sales tax identification number of the seller (BT-31 [EN 16931])."
 msgstr ""
 
 msgid "Bank Accounts"
+msgstr ""
+
+msgid "The pattern for 'Seller electronic address (BT-34 [EN 16931])."
+msgstr ""
+
+msgid "Specifies the electronic address of the vendor to which the application level response to an invoice can be sent (BT-34 [EN 16931])."
+msgstr ""
+
+msgid "SEPA Creditor Identification"
+msgstr ""
+
+msgid "Dispatch email account"
 msgstr ""
 
 msgid "Document"
@@ -1446,6 +1779,9 @@ msgstr ""
 msgid "Service Period End"
 msgstr ""
 
+msgid "Contract Number"
+msgstr ""
+
 msgid "Recipient"
 msgstr ""
 
@@ -1470,8 +1806,14 @@ msgstr ""
 msgid "Net Sum"
 msgstr ""
 
-msgid "Sales Tax"
+msgid "VAT Exemption"
 msgstr ""
+
+msgid "Sales Tax"
+msgid_plural "Sales Taxes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Sales Tax by Rate"
 msgstr ""
@@ -1482,13 +1824,13 @@ msgstr ""
 msgid "Internal Note"
 msgstr ""
 
-msgid "Project Reference"
-msgstr ""
-
-msgid "Purchase Order Reference"
-msgstr ""
-
 msgid "Attached Documents"
+msgstr ""
+
+msgid "Dispatch History"
+msgstr ""
+
+msgid "Followup"
 msgstr ""
 
 msgid "GENDER_Attached Document"
@@ -1501,9 +1843,6 @@ msgstr[1] ""
 msgstr[2] ""
 
 msgid "Created for Version"
-msgstr ""
-
-msgid "Dispatch History"
 msgstr ""
 
 msgid "GENDER_Category"
@@ -1542,10 +1881,19 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-msgid "Dispatch Date"
+msgid "Dispatch Process"
 msgstr ""
 
-msgid "Dispatch Transport Method"
+msgid "Transport Method"
+msgstr ""
+
+msgid "Report"
+msgstr ""
+
+msgid "Process Step"
+msgstr ""
+
+msgid "Feedback received"
 msgstr ""
 
 msgid "GENDER_Invoice"
@@ -1557,6 +1905,9 @@ msgstr ""
 msgid "Last Datev send date"
 msgstr ""
 
+msgid "Payment Reminders"
+msgstr ""
+
 msgid "IN-"
 msgstr ""
 
@@ -1565,6 +1916,9 @@ msgstr ""
 
 #, python-brace-format
 msgid "Payable within {days} days without deduction."
+msgstr ""
+
+msgid "Not provided by buyer"
 msgstr ""
 
 msgid "GENDER_Offer"
@@ -1619,6 +1973,24 @@ msgid "include in shared invoice"
 msgstr ""
 
 msgid "OR-"
+msgstr ""
+
+msgid "GENDER_Payment Reminder"
+msgstr ""
+
+msgid "Payment Reminder"
+msgid_plural "Payment Reminders"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Fee"
+msgstr ""
+
+msgid "Level"
+msgstr ""
+
+msgid "Outstanding amount"
 msgstr ""
 
 msgid "Position"
@@ -1705,6 +2077,138 @@ msgstr[2] ""
 msgid "GENDER_Order Position"
 msgstr ""
 
+msgid "Purchase Invoice Position"
+msgid_plural "Purchase Invoice Positions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Purchase Invoice Position"
+msgstr ""
+
+msgid "GENDER_Purchase Invoice"
+msgstr ""
+
+msgid "External Invoice Number"
+msgstr ""
+
+msgid "Due at"
+msgstr ""
+
+msgid "Over due at"
+msgstr ""
+
+msgid "Pay at"
+msgstr ""
+
+msgid "Paid at"
+msgstr ""
+
+msgid "Paid amount"
+msgstr ""
+
+msgid "Payment Means Used"
+msgstr ""
+
+msgid "II-"
+msgstr ""
+
+msgid "GENDER_Sales Tax"
+msgstr ""
+
+msgid "Gross amount"
+msgstr ""
+
+msgid "Net amount"
+msgstr ""
+
+msgid "Tax"
+msgstr ""
+
+msgid "Tax Rate"
+msgstr ""
+
+msgid "Dispatch Config"
+msgid_plural "Dispatch Configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Dispatch Config"
+msgstr ""
+
+msgid "Document Types"
+msgstr ""
+
+msgid "Expects Feedback"
+msgstr ""
+
+msgid "GENDER_Custom Config"
+msgstr ""
+
+msgid "Custom Config"
+msgid_plural "Custom Configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Custom Configs"
+msgstr ""
+
+msgid "starting to dispatch the following dispatches:"
+msgstr ""
+
+msgid "successfully dispatched the following dispatches:"
+msgstr ""
+
+msgid "failed to dispatch the following dispatches:"
+msgstr ""
+
+msgid "Document Type"
+msgid_plural "Document Types"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Document Type"
+msgstr ""
+
+msgid "GENDER_Email"
+msgstr ""
+
+msgid "If empty, email address of document recipient will be taken."
+msgstr ""
+
+msgid "email to: "
+msgstr ""
+
+msgid "GENDER_Manual Dispatching"
+msgstr ""
+
+msgid "Manual Dispatching"
+msgid_plural "Manual Dispatchings"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "Instructions"
+msgstr ""
+
+msgid "GENDER_Upload"
+msgstr ""
+
+msgid "Upload"
+msgid_plural "Uploads"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "URL"
+msgstr ""
+
+msgid "upload to: "
+msgstr ""
+
 msgid "GENDER_Electronic Address Schema"
 msgstr ""
 
@@ -1712,6 +2216,78 @@ msgid "Code"
 msgstr ""
 
 msgid "Remark"
+msgstr ""
+
+msgid "GENDER_Payment Means"
+msgstr ""
+
+msgid "Config Class"
+msgstr ""
+
+msgid "GENDER_No Configuration"
+msgstr ""
+
+msgid "No Configuration"
+msgid_plural "No Configurations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "All bank accounts"
+msgstr ""
+
+msgid "GENDER_Payee Financial Account"
+msgstr ""
+
+msgid "Payee Financial Account"
+msgid_plural "Payee Financial Accounts"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Payment Mandate"
+msgstr ""
+
+msgid "Payment Mandate"
+msgid_plural "Payment Mandates"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Credit Transfer"
+msgstr ""
+
+msgid "Credit Transfer"
+msgid_plural "Credit Transfers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Direct Debit"
+msgstr ""
+
+msgid "Direct Debit"
+msgid_plural "Direct Debits"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Payment Card"
+msgstr ""
+
+msgid "Payment Card"
+msgid_plural "Payment Cards"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "VAT exemption reason code"
+msgid_plural "VAT exemption reason codes"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_VAT exemption reason code"
 msgstr ""
 
 msgid "XRechnung"
@@ -1732,6 +2308,9 @@ msgstr ""
 msgid "GENDER_Order Confirmation"
 msgstr ""
 
+msgid "Config"
+msgstr ""
+
 msgid "Billing Interval"
 msgstr ""
 
@@ -1747,13 +2326,13 @@ msgstr ""
 msgid "Default Sorting"
 msgstr ""
 
-msgid "Purchaseprice"
+msgid "Purchase Price"
 msgstr ""
 
-msgid "Salesprice Type"
+msgid "Sales Price Type"
 msgstr ""
 
-msgid "Salesprice"
+msgid "Sales Price"
 msgstr ""
 
 msgid "Manufacturer"
@@ -1774,11 +2353,11 @@ msgstr ""
 msgid "Valid until"
 msgstr ""
 
-msgid "Due at"
-msgstr ""
-
-msgid "Pay at"
-msgstr ""
+msgid "Legacy Purchase Invoice"
+msgid_plural "Legacy Purchase Invoices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Overdue at"
 msgstr ""
@@ -1834,6 +2413,21 @@ msgstr ""
 msgid "All offer records"
 msgstr ""
 
+msgid "All Purchase Invoices"
+msgstr ""
+
+msgid "Unpaid Purchase Invoices"
+msgstr ""
+
+msgid "All Purchase Invoices that have not yet been paid"
+msgstr ""
+
+msgid "Unapproved Purchase Invoices"
+msgstr ""
+
+msgid "All Purchase Invoices that have not yet been approved"
+msgstr ""
+
 msgid "Limit to Sales Divisions"
 msgstr ""
 
@@ -1853,9 +2447,6 @@ msgid "All Suppliers"
 msgstr ""
 
 msgid "All supplier records"
-msgstr ""
-
-msgid "All Purchase Imvoices"
 msgstr ""
 
 msgid "All purchase invoices"
@@ -1929,3 +2520,6 @@ msgstr ""
 
 msgid "Service disruption of view service"
 msgstr ""
+
+#~ msgid "Postalcode"
+#~ msgstr "CodPoştal"
