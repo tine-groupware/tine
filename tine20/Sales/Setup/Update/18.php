@@ -253,6 +253,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                     ], true),
                 ] : []),
                 Sales_Model_Document_Abstract::FLD_EVAL_DIM_COST_CENTER => $oldPI->{Sales_Model_Document_Abstract::FLD_EVAL_DIM_COST_CENTER},
+                Sales_Model_Document_PurchaseInvoice::FLD_LAST_DATEV_SEND_DATE => $oldPI->last_datev_send_date,
 
                 'created_by' => $oldPI->getIdFromProperty('created_by'),
                 'creation_time' => $oldPI->creation_time,

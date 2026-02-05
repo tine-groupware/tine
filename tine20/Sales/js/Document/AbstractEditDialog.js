@@ -36,14 +36,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     async onBeforeStatusSelect(statusField, status, idx) {
+        if (await this.assertStatusChange(statusField, status, idx) === false) return false
+
         if (await Ext.MessageBox.confirm(
             this.app.i18n._('Confirm Status Change'),
             this.app.i18n._('Changing this workflow status might not be revertible. Proceed anyway?')
         ) !== 'yes') {
             return false;
         }
-
-        if (await this.assertDocumentDate() === false) return false
 
         if (this.record.phantom || this.record.modified) {
             // make sure changes are saved even if booking fails
@@ -61,7 +61,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         }, 150);
     },
 
-    async assertDocumentDate() {
+    async assertStatusChange(statusField, status, idx) {
         const booked = this.getForm().findField(this.statusFieldName).store.data.items.find((r) => r.id === this.record.get(this.statusFieldName)).json.booked
         if (!booked && this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
             icon: Ext.MessageBox.QUESTION,
