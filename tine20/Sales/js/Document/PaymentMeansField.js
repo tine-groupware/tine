@@ -20,8 +20,10 @@ const PaymentMeansField = Ext.extend(Tine.Tinebase.widgets.form.VMultiPicker, {
         initList: function() {
             Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.initList.apply(this, arguments);
 
-            const recipient = this.editDialog.getForm().findField(this.recipientField).selectedRecord;
+            const recipient = this.editDialog.getForm().findField(this.recipientField)?.selectedRecord;
             const means = _.get(recipient, 'data.debitor_id.payment_means');
+
+            if (!means) return;
 
             this.onBeforeLoad(this.store, {});
             this.store.loadData(means);

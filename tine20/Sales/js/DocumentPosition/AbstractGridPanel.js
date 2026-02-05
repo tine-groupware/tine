@@ -107,6 +107,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 position.setFromProduct(productData, lang, this.editDialog.record.getData());
             }
 
+            const vatProcedure = this.editDialog.getForm().findField('vat_procedure').getValue();
+            if (vatProcedure !== 'standard') {
+                position.set('sales_tax_rate', 0);
+            }
+
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
