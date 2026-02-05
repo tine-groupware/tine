@@ -14,7 +14,11 @@
 
 <script setup>
 /* eslint-disable */
-import { computed, onMounted, ref, onBeforeMount, shallowRef } from 'vue';
+import { computed, onMounted, ref, onBeforeMount, shallowRef, defineProps } from 'vue';
+
+defineProps({
+  autoFetch: {type: Boolean, default: true}
+})
 
 const initialData = shallowRef({});
 const responseData = ref(null);
@@ -30,6 +34,9 @@ const currentRouteClass = computed(() => {
 });
 
 const fetchData = async () => {
+  if (!vue.getCurrentInstance().props.autoFetch) {
+    return
+  }
   const response = await fetch(window.location.pathname.replace('/view/', '/'))
   responseData.value = await response.json();
   if(!response.ok) console.error('Error fetching data:', responseData.value)
