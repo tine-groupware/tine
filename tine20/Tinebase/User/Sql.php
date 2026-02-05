@@ -205,12 +205,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 'xprops' => $this->rowNameMapping['xprops']
             ])
             ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.is_deleted') . ' = 0');
-        if (null !== $userIds) {
-            $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping['accountId']) . $this->_db->quoteInto(' IN (?)', $userIds));
+        if (!empty($userIds)) {
+            $select->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.'
+                    . $this->rowNameMapping['accountId']) . $this->_db->quoteInto(' IN (?)', $userIds));
         }
 
         $result = [];
-        foreach($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+        foreach ($this->_db->query($select)->fetchAll(Zend_Db::FETCH_NUM) as $row) {
             $result[$row[0]] = $row[1];
         }
         return $result;
