@@ -1429,6 +1429,13 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         self::assertArrayHasKey('emailMailQuota', $emailUser, print_r($emailUser, true));
     }
 
+    public function testSearchUsersEmptyResultSortEmailUser()
+    {
+        $filter = [['field' => "query", 'operator' => "contains", 'value' => Tinebase_Record_Abstract::generateUID()]];
+        $users = $this->_json->searchUsers($filter, ['sort' => 'emailUser']);
+        self::assertEquals(0, $users['totalcount'], print_r($users, true));
+    }
+
     public function testSearchCustomfields()
     {
         $this->_createCustomField();
