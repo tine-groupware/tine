@@ -206,9 +206,21 @@ Tine.widgets.form.FieldManager = function() {
                         field.maxValue = fieldDefinition.max;
                     }
 
-                    if (fieldDefinition.min) {
-                        field.minValue = fieldDefinition.min;
+                    if (fieldDefinition.min || fieldDefinition.unsigned) {
+                        field.minValue = fieldDefinition.min || 0;
                     }
+
+                    const spinnerConfig = _.get(fieldDefinition, 'uiconfig.fieldConfig.spinner', null);
+                    if (spinnerConfig) {
+                        field.xtype = 'uxspinner';
+                        field.strategy = Object.assign({
+                            xtype: 'number',
+                            incrementValue : 1,
+                            minValue: field.minValue,
+                            maxValue: field.maxValue,
+                        }, spinnerConfig);
+                    }
+
                     break;
                 case 'float':
                     field.xtype = 'numberfield';
