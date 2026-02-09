@@ -67,6 +67,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::LABEL             => 'Supplier', // _('Supplier')
                 self::TYPE              => self::TYPE_RECORD,
                 self::NULLABLE          => true,
+                self::QUERY_FILTER              => true,
                 self::CONFIG            => [
                     self::APP_NAME          => Sales_Config::APP_NAME,
                     self::MODEL_NAME        => Sales_Model_Document_Supplier::MODEL_NAME_PART,
