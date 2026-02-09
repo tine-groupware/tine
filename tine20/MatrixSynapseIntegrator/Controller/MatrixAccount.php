@@ -173,13 +173,13 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         return $this->_synapse ?: $this->setSynapseBackend();
     }
 
-    protected function _pushToCorporal(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount)
+    protected function _pushToCorporal()
     {
         if (! MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN)) {
             return;
         }
 
-        $this->getCorporalBackend()->push($matrixAccount);
+        $this->getCorporalBackend()->push();
     }
 
     /**
@@ -259,7 +259,7 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $_createdRecord */
-        $this->_pushToCorporal($_createdRecord);
+        $this->_pushToCorporal();
 
         if (!empty($_createdRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID})) {
             $this->setContactMatrixId($_createdRecord);
@@ -276,10 +276,10 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $updatedRecord */
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
-        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $updatedRecord */
-        $this->_pushToCorporal($updatedRecord);
+        $this->_pushToCorporal();
 
         if ($currentRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} !==
             $updatedRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}) {
@@ -299,7 +299,7 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
 
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $record */
         $record->is_deleted = 1;
-        $this->_pushToCorporal($record);
+        $this->_pushToCorporal();
     }
 
     public function synapseLogin(): array

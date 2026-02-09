@@ -22,9 +22,9 @@ class MatrixSynapseIntegrator_Backend_Corporal
 
     protected const CORPORAL_ENDPOINT = '_matrix/corporal/policy';
 
-    public function push(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): bool
+    public function push(): bool
     {
-        $this->_policy = $this->_getPolicy($matrixAccount);
+        $this->_policy = $this->_getPolicy();
         $this->pushPolicyToCorporal($this->_policy);
 
         return true;
@@ -72,7 +72,7 @@ class MatrixSynapseIntegrator_Backend_Corporal
         return $response->isSuccessful();
     }
 
-    protected function _getPolicy(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
+    protected function _getPolicy(): array
     {
         // TODO allow to configure defaults/flags
 
@@ -86,13 +86,32 @@ class MatrixSynapseIntegrator_Backend_Corporal
                 "forbidEncryptedRoomCreation" => false,
                 "forbidUnencryptedRoomCreation" => false
             ],
-            "users" => [
-                $this->_getUserPolicy($matrixAccount)
-            ],
+            "users" => $this->_getUserPolicy()
         ];
     }
 
-    protected function _getUserPolicy(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
+    protected function _getUserPolicy(): array
+    {
+        $policy = [];
+
+        // TODO add paging / use iterator?
+
+        foreach (MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getBackend()->search() as $active) {
+            $policy[] = $this->_getPolicyForAccount($active);
+        }
+
+        foreach (MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getBackend()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                MatrixSynapseIntegrator_Model_MatrixAccount::class, [
+                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 1]
+            ])) as $inactive) {
+            $policy[] = $this->_getPolicyForAccount($inactive);
+        }
+
+        return $policy;
+    }
+
+    protected function _getPolicyForAccount(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
     {
         try {
             $user = Tinebase_User::getInstance()->getUserById(
