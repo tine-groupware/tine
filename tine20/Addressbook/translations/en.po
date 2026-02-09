@@ -471,6 +471,9 @@ msgstr "Note"
 msgid "Enter Note"
 msgstr "Enter Note"
 
+msgid "Additional properties"
+msgstr "Additional properties"
+
 msgid "Parse address"
 msgstr "Parse address"
 
@@ -828,6 +831,9 @@ msgstr "Paths"
 
 msgid "Preferred Email"
 msgstr "Preferred Email"
+
+msgid "Public Key"
+msgstr "Public Key"
 
 msgid "syncBackendIds"
 msgstr "syncBackendIds"
