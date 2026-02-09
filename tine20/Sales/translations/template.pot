@@ -660,6 +660,9 @@ msgstr ""
 msgid "You have to set a customer!"
 msgstr ""
 
+msgid "This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly."
+msgstr ""
+
 msgid "Name shorthand"
 msgstr ""
 
@@ -758,6 +761,18 @@ msgid "without customer"
 msgstr ""
 
 msgid "Show closed"
+msgstr ""
+
+msgid "Create from Contact ..."
+msgstr ""
+
+msgid "Addressbook Contact"
+msgstr ""
+
+msgid "Contacts and sales addresses can be linked to each other so that changes to the contact automatically change the linked sales address and it is not possible to change the corresponding address fields directly in Sales."
+msgstr ""
+
+msgid "Link sales address to given addressbook contact."
 msgstr ""
 
 msgid "Select customer"

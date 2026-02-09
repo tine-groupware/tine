@@ -331,9 +331,13 @@ class Sales_Controller extends Tinebase_Controller_Event
                 if (! empty($contact->org_name)) {
                     $name = $contact->org_name . ' - ' . $name;
                 }
+                $postalAdress = new Sales_Model_Address([], true);
+                $postalAdress->setFromContact($contact);
+
                 $customer = new Sales_Model_Customer([
                     'name' => $name,
                     'cpextern_id' => $contact->getId(),
+                    'postal' => $postalAdress,
                     'relations' => [[
                         'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
                         'related_model' => Addressbook_Model_Contact::class,

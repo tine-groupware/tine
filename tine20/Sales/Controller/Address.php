@@ -149,8 +149,15 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
 
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        /** @var Sales_Model_Address $_record */
+
         parent::_inspectBeforeCreate($_record);
         $this->_validateParentAndType($_record);
+        $rel = $_record->relations?->filter('type', 'CONTACTADDRESS')->getFirstRecord();
+        if ($rel) {
+            $contact = Addressbook_Controller_Contact::getInstance()->get($rel->related_id);
+            $_record->setFromContact( $contact );
+        }
     }
 
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -246,38 +253,18 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact): void
+    public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact): Sales_Model_Address
     {
-        $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
-        if ($address->customer_id) {
-            $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
-        } else {
-            $customer = Sales_Controller_Customer::getInstance()->get(
-                Sales_Controller_Debitor::getInstance()->get($address->{Sales_Model_Address::FLD_DEBITOR_ID})
-                    ->{Sales_Model_Debitor::FLD_CUSTOMER_ID}
-            );
-        }
-        $fullName = $this->getContactFullName($contact, $language);
-        
         //Update Address
         $oldAddress = clone $address;
-        $address->name =  $customer->name;
-        $address->street = $contact->adr_one_street;
-        $address->postalcode  = $contact->adr_one_postalcode;
-        $address->locality = $contact->adr_one_locality;
-        $address->region = $contact->adr_one_region;
-        $address->countryname = $contact->adr_one_countryname;
-        $address->prefix1 = $contact->org_name;
-        $address->prefix2 = $contact->org_unit;
-        $address->prefix3 = $fullName;
-        $address->language = $language;
-        $address->email = $contact->email;
+        $address->setFromContact( $contact );
 
         /** @var Tinebase_Model_Diff $diff */
         $diff = $oldAddress->diff($address);
         if (!$diff->isEmpty()) {
-            Sales_Controller_Address::getInstance()->update($address);
+            $address = Sales_Controller_Address::getInstance()->update($address);
         }
+        return $address;
     }
 
     /**

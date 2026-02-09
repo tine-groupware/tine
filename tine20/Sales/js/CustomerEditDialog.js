@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import RelatedDocumentsGridPanel from './Document/RelatedDocumentsGridPanel'
+import './createFromContactAction'
 
 Ext.ns('Tine.Sales');
 
@@ -31,8 +32,18 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     initComponent: function() {
         Tine.Sales.CustomerEditDialog.superclass.initComponent.call(this);
+
+        _.each(Tine.Sales.Model.Address.getModelConfiguration().uiconfig.contactManagedFields, fieldName => {
+            this.form.findField(`adr_${fieldName}`).fixedIf = (v, record) => _.some(record.get('relations'), rel => rel.type === 'CONTACTCUSTOMER')
+        })
     },
 
+    checkStates: function() {
+        Tine.Sales.CustomerEditDialog.superclass.checkStates.call(this);
+
+        const rel = _.find(this.record.get('relations'), {type: 'CONTACTCUSTOMER'});
+        this.contactManagedInfo.setVisible(!!rel);
+    },
     /**
      * executed after record got updated from proxy
      */
@@ -313,6 +324,13 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
+                                xtype: 'v-alert',
+                                ref: '../../../../../../../contactManagedInfo',
+                                hidden: true,
+                                columnWidth: 1,
+                                variant: 'info',
+                                label: this.app.formatMessage('This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly.'),
+                            }], [{
                                 name: 'adr_name_shorthand',
                                 columnWidth: .2,
                                 fieldLabel: this.app.i18n._('Name shorthand')

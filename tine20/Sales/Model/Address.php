@@ -74,6 +74,9 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',
         'resolveVFGlobally' => TRUE,
+        self::UI_CONFIG => [
+            'contactManagedFields' => ['name', 'street', 'postalcode', 'locality', 'region', 'countryname', 'prefix1', 'prefix2', 'prefix3', 'email']
+        ],
 
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
@@ -233,6 +236,34 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             ],
         ]
     ];
+
+    public function setFromContact(Addressbook_Model_Contact $contact)
+    {
+        $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
+        if ($this->customer_id) {
+            $customer = Sales_Controller_Customer::getInstance()->get($this->customer_id);
+        } else if ($this->{Sales_Model_Address::FLD_DEBITOR_ID}) {
+            $customer = Sales_Controller_Customer::getInstance()->get(
+                Sales_Controller_Debitor::getInstance()->get($this->{Sales_Model_Address::FLD_DEBITOR_ID})
+                    ->{Sales_Model_Debitor::FLD_CUSTOMER_ID}
+            );
+        } else {
+            $customer = null;
+        }
+        $fullName = Sales_Controller_Address::getInstance()->getContactFullName($contact, $language);
+
+        $this->name =  $customer ? $customer->name : '{{ customer_id.name }}';
+        $this->street = $contact->adr_one_street;
+        $this->postalcode  = $contact->adr_one_postalcode;
+        $this->locality = $contact->adr_one_locality;
+        $this->region = $contact->adr_one_region;
+        $this->countryname = $contact->adr_one_countryname;
+        $this->prefix1 = $contact->org_name;
+        $this->prefix2 = $contact->org_unit;
+        $this->prefix3 = $fullName;
+        $this->language = $language;
+        $this->email = $contact->email;
+    }
 
     public function hydrateFromBackend(array &$data)
     {
