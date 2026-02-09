@@ -358,7 +358,16 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
         $this->assertSame(0, $tsRs->count());
     }
 
-    public function testRounding()
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     *
+     * @group noupdate
+     */
+    public function testRounding(): void
     {
         /** @var HumanResources_Model_AttendanceRecorderDevice $ptDevice */
         $ptDevice = HumanResources_Controller_AttendanceRecorderDevice::getInstance()
