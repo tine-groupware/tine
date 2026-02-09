@@ -816,7 +816,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $path = Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentBasePath($_record);
             Tinebase_FileSystem::getInstance()->fileExists($path);
         }
-        
+
+        $transactionId = null;
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
 
@@ -856,7 +857,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         } catch (Exception $e) {
-            $this->_handleRecordCreateOrUpdateException($e);
+            $this->_handleRecordCreateOrUpdateException($e, $transactionId);
         }
         
         if ($this->_clearCustomFieldsCache) {
@@ -1001,7 +1002,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @todo invent hooking mechanism for database/backend independent exception handling (like lock timeouts)
      */
-    protected function _handleRecordCreateOrUpdateException(\Throwable $e)
+    protected function _handleRecordCreateOrUpdateException(\Throwable $e, ?string $transactionId = null): void
     {
         if ($e instanceof Tinebase_Exception_ProgramFlow || Tinebase_Exception::isDbDuplicate($e)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {

@@ -65,14 +65,16 @@ class Tinebase_Model_CloudAccount_CalDAV extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = null;
+    public static $_unittestCalDavClient = null;
 
     public function getClient(): Calendar_Backend_CalDav_Client
     {
-        return new Calendar_Backend_CalDav_Client([
+        return static::$_unittestCalDavClient ?: new Calendar_Backend_CalDav_Client([
             'baseUri' => $this->{self::FLD_URL},
             'userName' => $this->{self::FLD_USERNAME},
             'password' => $this->getPasswordFromProperty(self::FLD_PWD),
             'authType' => \CURLAUTH_BASIC,
+            Calendar_Backend_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
         ], 'Generic');
     }
 }

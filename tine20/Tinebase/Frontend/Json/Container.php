@@ -31,9 +31,13 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
             'type',
             'application_id',
             'model',
-        ] : []), true));
+        ] : [
+            'id',
+        ]), true));
         $container = $this->_jsonToRecord($containerData, Tinebase_Model_Container::class);
         $container->backend = 'Sql';
+
+        // TODO FIX !!!  add xprops security
 
         if ($isCreate) {
             if ($container->type !== Tinebase_Model_Container::TYPE_PERSONAL && $container->type !== Tinebase_Model_Container::TYPE_SHARED) {
@@ -44,6 +48,7 @@ class Tinebase_Frontend_Json_Container extends  Tinebase_Frontend_Json_Abstract
             if (!Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to update container denied.');
             }
+            $container = Tinebase_Container::getInstance()->get($container->getId())->merge($container);
             $container = Tinebase_Container::getInstance()->update($container);
         }
 

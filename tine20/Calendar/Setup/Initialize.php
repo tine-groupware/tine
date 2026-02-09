@@ -114,5 +114,6 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         $scheduler = Tinebase_Core::getScheduler();
         Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
         Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
+        Calendar_Scheduler_Task::addSyncCloudAccountContainersTask($scheduler);
     }
 }

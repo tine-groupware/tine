@@ -18,11 +18,11 @@
 class Calendar_Backend_CalDav_ClientMock extends Calendar_Backend_CalDav_Client
 {
     protected $_currentUserPrincipalResponse = array(
-        '{DAV:}current-user-principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/'
+        '{DAV:}current-user-principal' => [['value' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/']],
     );
     
     protected $_calendarHomeSetResponse =  array (
-        '{urn:ietf:params:xml:ns:caldav}calendar-home-set' => '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0',
+        '{urn:ietf:params:xml:ns:caldav}calendar-home-set' => [['value' => '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0']],
     );
     
     protected $_calendarICSResponse = array (

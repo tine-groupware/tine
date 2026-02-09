@@ -1233,13 +1233,6 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
 
-        if (null === $result && $_event->getId()) {
-            try {
-                $result = $this->get($_event->getId(), $_getDeleted);
-                $checkGrantFun(true);
-            } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {}
-        }
-
         if (null === $result) {
             $filter = new Calendar_Model_EventFilter([
                 [TMFA::FIELD => 'uid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_event->uid],
@@ -1279,6 +1272,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 if ($result = $this->search($filter, _action: $_action)->getFirstRecord()) {
                     $checkGrantFun(false);
                 }
+            }
+
+            if (null === $result && $_event->getId()) {
+                try {
+                    $result = $this->get($_event->getId(), $_getDeleted);
+                    $checkGrantFun(true);
+                } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {}
             }
         }
         if (null === $result && $foundWithoutGrant) {

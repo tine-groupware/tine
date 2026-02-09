@@ -299,6 +299,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             . __LINE__ . ' Created new ' . $_container->type . ' container for account id ' . $accountId
             . ' with container_id ' . $container->getId());
 
+        $event = new Tinebase_Event_Container_AfterCreate();
+        $event->container = $container;
+        Tinebase_Event::fireEvent($event);
+
         return $container;
     }
 

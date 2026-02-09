@@ -109,6 +109,7 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
     public function update006()
     {
         Calendar_Setup_Initialize::addContainerObserver();
+        Calendar_Scheduler_Task::addSyncCloudAccountContainersTask(Tinebase_Core::getScheduler());
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.06', self::RELEASE018_UPDATE006);
     }
