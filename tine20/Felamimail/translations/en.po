@@ -115,12 +115,6 @@ msgstr "Password-protected download link only"
 msgid "Allow only password-protected download links"
 msgstr "Allow only password-protected download links"
 
-msgid "Tine 2.0 Flag"
-msgstr "Tine 2.0 Flag"
-
-msgid "Add a Tine 2.0 flag to sent messages"
-msgstr "Add a Tine 2.0 flag to sent messages"
-
 msgid "Show Reply-To"
 msgstr "Show Reply-To"
 
@@ -198,6 +192,15 @@ msgstr "Auto"
 
 msgid "Inactive"
 msgstr "Inactive"
+
+msgid "Trusted Mail Servers (via DKIM)"
+msgstr "Trusted Mail Servers (via DKIM)"
+
+msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+msgstr "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+
+msgid "Shared account needs email address"
+msgstr "Shared account needs email address"
 
 msgid "shared / adb_list accounts need to have a password set"
 msgstr "shared / adb_list accounts need to have a password set"
@@ -962,6 +965,9 @@ msgstr "Error"
 
 msgid "Open in Felamimail"
 msgstr "Open in Felamimail"
+
+msgid "This message has been marked as SPAM message"
+msgstr "This message has been marked as SPAM message"
 
 msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
 msgstr "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""

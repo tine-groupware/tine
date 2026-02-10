@@ -1303,6 +1303,9 @@ msgstr ""
 msgid "Anyone"
 msgstr ""
 
+msgid "CloudAccount is not a CalDAV account"
+msgstr ""
+
 #, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr ""
@@ -2143,6 +2146,12 @@ msgstr ""
 msgid "Please wait or contact your administrator"
 msgstr ""
 
+msgid "Could not load service map"
+msgstr ""
+
+msgid "You might have to clear the session/cookies and do the login again"
+msgstr ""
+
 msgid "Translation Problem"
 msgstr ""
 
@@ -2343,6 +2352,10 @@ msgid "Select all pages ({0} records)"
 msgstr ""
 
 msgid "Toggle selection"
+msgstr ""
+
+#, python-brace-format
+msgid "Enter {label}..."
 msgstr ""
 
 msgid "Infinity %"
@@ -2734,6 +2747,9 @@ msgid "Keep existing record and discard mine"
 msgstr ""
 
 msgid "Action:"
+msgstr ""
+
+msgid "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
 msgstr ""
 
 msgid "Enter description"
@@ -3922,10 +3938,7 @@ msgstr ""
 msgid "Detaching Tags"
 msgstr ""
 
-msgid "Timezone"
-msgstr ""
-
-msgid "Setting new timezone..."
+msgid "Select a timezone..."
 msgstr ""
 
 #, python-brace-format
@@ -4580,6 +4593,9 @@ msgstr ""
 msgid "Perform auto search when filter is changed"
 msgstr ""
 
+msgid "Timezone"
+msgstr ""
+
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr ""
 
@@ -4596,12 +4612,6 @@ msgid "Window Type"
 msgstr ""
 
 msgid "You can choose between modal windows or normal browser popup windows."
-msgstr ""
-
-msgid "Confirm Logout"
-msgstr ""
-
-msgid "Show confirmation dialog on logout."
 msgstr ""
 
 msgid "Enable advanced search"
@@ -4653,6 +4663,9 @@ msgid "Your Tine 2.0 account has been deactivated"
 msgstr ""
 
 msgid "BASE"
+msgstr ""
+
+msgid "Redirecting..."
 msgstr ""
 
 msgid "Your user account has been deactivated"

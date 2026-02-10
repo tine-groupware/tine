@@ -256,11 +256,11 @@
 }
 
 .felamimail_spam_suspicions_toolbar {
-    padding: 5px;
+    padding: 10px;
     background-color: #D8A45B;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
 }

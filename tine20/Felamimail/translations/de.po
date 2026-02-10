@@ -130,12 +130,6 @@ msgstr "Nur passwortgeschützter Download Link"
 msgid "Allow only password-protected download links"
 msgstr "Es sind nur Download-Links mit Passwort erlauben"
 
-msgid "Tine 2.0 Flag"
-msgstr "Tine 2.0 Flag"
-
-msgid "Add a Tine 2.0 flag to sent messages"
-msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
-
 msgid "Show Reply-To"
 msgstr "Zeige Antworten-An"
 
@@ -213,6 +207,15 @@ msgstr ""
 
 msgid "Inactive"
 msgstr "Inaktiv"
+
+msgid "Trusted Mail Servers (via DKIM)"
+msgstr ""
+
+msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+msgstr ""
+
+msgid "Shared account needs email address"
+msgstr ""
 
 msgid "shared / adb_list accounts need to have a password set"
 msgstr "Gemeinsame Konten benötigen ein Passwort"
@@ -979,6 +982,9 @@ msgstr "Fehler"
 
 msgid "Open in Felamimail"
 msgstr "Im E-Mail-Modul öffnen"
+
+msgid "This message has been marked as SPAM message"
+msgstr "Diese Nachricht wurde als SPAM Nachricht markiert"
 
 msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
 msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
@@ -1776,6 +1782,12 @@ msgstr "Weiterleitung und weitergeleitete E-Mail als .eml im Anhang"
 
 msgid "Only forward email as a .eml attachment"
 msgstr "Nur weitergeleitete E-Mail als .eml im Anhang"
+
+#~ msgid "Tine 2.0 Flag"
+#~ msgstr "Tine 2.0 Flag"
+
+#~ msgid "Add a Tine 2.0 flag to sent messages"
+#~ msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
 
 #~ msgid "IMAP Credentials is missing"
 #~ msgstr "IMAP Zugangsdaten fehlen"
