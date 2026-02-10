@@ -74,6 +74,7 @@ Tine.Calendar.AttendeeCombo = Ext.extend(Ext.form.ComboBox, {
                 }
             } else {
                 if (!isCurrent) return null;
+                attendee.id = 'current';
             }
 
             // Determine suffix based on attendee role
