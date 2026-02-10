@@ -94,6 +94,13 @@ export default defineComponent({
   },
   computed: {
     closed: function () {
+      if (!!this.poll.deadline) {
+        let deadline = new Date(this.poll.deadline)
+        if (deadline < new Date()) {
+          return true
+        }
+      }
+
       return !!this.poll.id_closed
         || !!this.poll.closed
         || !!this.poll.is_closed
