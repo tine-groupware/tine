@@ -53,18 +53,29 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
         );
 
         $this->_assertContactMatrixId($matrixAccount);
+        return $user;
+    }
 
-        // assert corporal policy json
+    public function _assertUserInPolicy($matrixAccount, $numOfAccountsInPolicy = 1)
+    {
+        $found = false;
         $backend = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getCorporalBackend();
         $policy = $backend->getPushedPolicy();
         self::assertArrayHasKey('users', $policy);
-        self::assertCount(1, $policy['users']);
-        self::assertArrayHasKey('authType', $policy['users'][0]);
-        self::assertEquals('sha1', $policy['users'][0]['authType']);
-        $userData = $policy['users'][0];
-        self::assertEquals($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}, $userData['id']);
-        self::assertEquals($user->accountDisplayName, $userData['displayName']);
-        return $user;
+        self::assertCount($numOfAccountsInPolicy, $policy['users']);
+        foreach ($policy['users'] as $policyUser) {
+            if ($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} === $policyUser['id']) {
+                $found = true;
+                $user = Tinebase_User::getInstance()->getFullUserById(
+                    $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID});
+                self::assertEquals($user->accountDisplayName, $policyUser['displayName']);
+                self::assertArrayHasKey('authType', $policyUser);
+                self::assertEquals('sha1', $policyUser['authType']);
+            }
+        }
+
+        self::assertTrue($found, 'could not find user in policy: '
+            . $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID});
     }
 
     public function testCreateUserDefaults()
@@ -140,6 +151,19 @@ class MatrixSynapseIntegrator_Controller_MatrixAccountTests extends TestCase
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete([$user->getId()]);
         $this->_assertInactiveUserInPolicy();
+    }
+
+    public function testCorporalPolicyWithAllUsers(): void
+    {
+        $user1 = $this->testCreateUser();
+        $this->_assertUserInPolicy(
+            MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser($user1)
+        );
+        $user2 = $this->testCreateUser();
+        $this->_assertUserInPolicy(
+            MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->getMatrixAccountForUser($user2),
+            2
+        );
     }
 
     public function testSetMatrixIdInContacts()
