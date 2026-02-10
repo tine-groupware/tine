@@ -44,6 +44,13 @@ class Felamimail_Model_MessagePipeMove implements Tinebase_BL_ElementInterface, 
         $account = Felamimail_Controller_Account::getInstance()->get($_data->account_id);
         $folder = self::getTargetFolder($account, $targetFolder);
 
+        if (isset($this->_config['addFlags']) && is_array($this->_config['addFlags'])) {
+            try {
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_data, $this->_config['addFlags']);
+            } catch (Felamimail_Exception_IMAP $fei) {
+                Tinebase_Exception::log($fei);
+            }
+        }
         Felamimail_Controller_Message_Move::getInstance()->moveMessages($_data, $folder, false);
     }
 

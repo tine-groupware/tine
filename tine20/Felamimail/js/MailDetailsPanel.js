@@ -263,14 +263,19 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     const folder = app.getFolderStore().getById(messageData.folder_id);
                     if (!folder || !account || account.get('type') === 'user' || !messageData.is_spam_suspicions) return '';
 
-                    const html = '<span style="width: 60%; padding: 5px;">'
+                    if (messageData['flags'].includes('SPAM')) {
+                        const html = '<span style="padding: 5px">' + app.i18n._('This message has been marked as SPAM message') + '</span>';
+                        return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}</div>`;
+                    }
+
+                    const html = '<span style="width: 60%; padding: 5px">'
                         + app.i18n._('This message is probably SPAM. Please help improve your anti-SPAM system by choosing: "Yes, it is SPAM" or "No, it is not"') + '</span>';
                     const aboutAction = `<span id="action_about" class="felamimail-action"><span class="felamimail-location-icon action_about"></span></span>`;
                     const actions =
                         '<span id="spam_action_spam" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +
                         '<span id="spam_action_ham" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-ham"></span><span>' + app.i18n._('No, it is not') + '</span></span>' ;
 
-                    return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}${aboutAction}<span>${actions}</span></div>`;
+                    return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}${aboutAction}<span style="padding: 5px;">${actions}</span></div>`;
                 },
                 linkifyEmail(name, email) {
                     const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));

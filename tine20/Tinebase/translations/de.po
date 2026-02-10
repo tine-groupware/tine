@@ -1320,6 +1320,9 @@ msgstr "MFA versandt angestoßen"
 msgid "Anyone"
 msgstr "Jeder"
 
+msgid "CloudAccount is not a CalDAV account"
+msgstr ""
+
 #, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr "Die folgenden Felder wurden nicht importiert: %s"
@@ -2160,6 +2163,12 @@ msgstr "tine muss aktualisiert werden oder ist noch nicht komplett installiert."
 msgid "Please wait or contact your administrator"
 msgstr "Bitte warten Sie oder kontaktieren Sie den Administrator"
 
+msgid "Could not load service map"
+msgstr ""
+
+msgid "You might have to clear the session/cookies and do the login again"
+msgstr ""
+
 msgid "Translation Problem"
 msgstr "Übersetzungsproblem"
 
@@ -2361,6 +2370,10 @@ msgstr "Alle Seiten auswählen ({0} Einträge)"
 
 msgid "Toggle selection"
 msgstr "Auswahl umkehren"
+
+#, python-brace-format
+msgid "Enter {label}..."
+msgstr ""
 
 msgid "Infinity %"
 msgstr "Unendlich %"
@@ -3943,11 +3956,8 @@ msgstr "Bitte warten ..."
 msgid "Detaching Tags"
 msgstr "Entferne Tags"
 
-msgid "Timezone"
-msgstr "Zeitzone"
-
-msgid "Setting new timezone..."
-msgstr "Neue Zeitzone setzen..."
+msgid "Select a timezone..."
+msgstr ""
 
 #, python-brace-format
 msgid "Rename {0}"
@@ -4129,6 +4139,31 @@ msgid "Business Logic Pipeline Item"
 msgid_plural "Business Logic Pipeline Items"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "GENDER_CalDAV"
+msgstr ""
+
+msgid "CalDAV"
+msgid_plural "CalDAVs"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "URL"
+msgstr ""
+
+msgid "GENDER_Cloud Account"
+msgstr ""
+
+msgid "Cloud Account"
+msgid_plural "Cloud Accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Owner"
+msgstr ""
+
+msgid "Cloud Account Type"
+msgstr ""
 
 msgid "Record Name"
 msgid_plural "Records Name"
@@ -4576,6 +4611,9 @@ msgstr "Automatische Suche beim Filterwechsel"
 msgid "Perform auto search when filter is changed"
 msgstr "Automatische Suche beim Filterwechsel auslösen"
 
+msgid "Timezone"
+msgstr "Zeitzone"
+
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr "Die Zeitzone, in der Zeiten in Tine 2.0 angezeigt werden sollen."
 
@@ -4593,12 +4631,6 @@ msgstr "Fenstertyp"
 
 msgid "You can choose between modal windows or normal browser popup windows."
 msgstr "Sie können zwischen modalen und normalen PopUp-Fenstern wählen."
-
-msgid "Confirm Logout"
-msgstr "Ausloggen bestätigen"
-
-msgid "Show confirmation dialog on logout."
-msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
 
 msgid "Enable advanced search"
 msgstr "Erweiterte Suche aktivieren"
@@ -4651,6 +4683,9 @@ msgstr "Ihr Tine 2.0 Konto wurde deaktiviert"
 msgid "BASE"
 msgstr ""
 
+msgid "Redirecting..."
+msgstr ""
+
 msgid "Your user account has been deactivated"
 msgstr "Ihr Benutzerkonto würde deaktiviert"
 
@@ -4696,3 +4731,11 @@ msgstr "Nur Nachbarn"
 msgid "Preview"
 msgstr "Vorschau"
 
+#~ msgid "Setting new timezone..."
+#~ msgstr "Neue Zeitzone setzen..."
+
+#~ msgid "Confirm Logout"
+#~ msgstr "Ausloggen bestätigen"
+
+#~ msgid "Show confirmation dialog on logout."
+#~ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."

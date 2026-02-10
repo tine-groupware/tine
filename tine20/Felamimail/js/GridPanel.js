@@ -126,7 +126,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! record.hasFlag('\\Seen')) {
             className += 'flag_unread ';
         }
-        if (record.get('is_spam_suspicions')) {
+        if (record.get('is_spam_suspicions') && !record.hasFlag('SPAM')) {
             className += 'is_spam_suspicions ';
         }
         return className;

@@ -1303,6 +1303,9 @@ msgstr "MFA send out triggered"
 msgid "Anyone"
 msgstr "Anyone"
 
+msgid "CloudAccount is not a CalDAV account"
+msgstr "CloudAccount is not a CalDAV account"
+
 #, python-format, php-format
 msgid "The following fields weren't imported: %s"
 msgstr "The following fields weren't imported: %s"
@@ -2143,6 +2146,12 @@ msgstr "tine needs to be updated or is not installed yet."
 msgid "Please wait or contact your administrator"
 msgstr "Please wait or contact your administrator"
 
+msgid "Could not load service map"
+msgstr "Could not load service map"
+
+msgid "You might have to clear the session/cookies and do the login again"
+msgstr "You might have to clear the session/cookies and do the login again"
+
 msgid "Translation Problem"
 msgstr "Translation Problem"
 
@@ -2344,6 +2353,10 @@ msgstr "Select all pages ({0} records)"
 
 msgid "Toggle selection"
 msgstr "Toggle selection"
+
+#, python-brace-format
+msgid "Enter {label}..."
+msgstr "Enter {label}..."
 
 msgid "Infinity %"
 msgstr "Infinity %"
@@ -2735,6 +2748,9 @@ msgstr "Keep existing record and discard mine"
 
 msgid "Action:"
 msgstr "Action:"
+
+msgid "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
+msgstr "Notice: Changes to {recordGender, select, male {this} female {this} other {this}} {recordName} apply only to {contextRecordGender, select, male {the associated} female {the associated} other {the associated}} {contextRecordName}. {recordGender, select, male {The} female {The} other {The}} [original {recordName}]() remains unchanged."
 
 msgid "Enter description"
 msgstr "Enter description"
@@ -3922,11 +3938,8 @@ msgstr "Please Wait..."
 msgid "Detaching Tags"
 msgstr "Detaching Tags"
 
-msgid "Timezone"
-msgstr "Timezone"
-
-msgid "Setting new timezone..."
-msgstr "Setting new timezone..."
+msgid "Select a timezone..."
+msgstr "Select a timezone..."
 
 #, python-brace-format
 msgid "Rename {0}"
@@ -4580,6 +4593,9 @@ msgstr "Auto search on filter change"
 msgid "Perform auto search when filter is changed"
 msgstr "Perform auto search when filter is changed"
 
+msgid "Timezone"
+msgstr "Timezone"
+
 msgid "The timezone in which dates are shown in Tine 2.0."
 msgstr "The timezone in which dates are shown in Tine 2.0."
 
@@ -4597,12 +4613,6 @@ msgstr "Window Type"
 
 msgid "You can choose between modal windows or normal browser popup windows."
 msgstr "You can choose between modal windows or normal browser popup windows."
-
-msgid "Confirm Logout"
-msgstr "Confirm Logout"
-
-msgid "Show confirmation dialog on logout."
-msgstr "Show confirmation dialog on logout."
 
 msgid "Enable advanced search"
 msgstr "Enable advanced search"
@@ -4654,6 +4664,9 @@ msgstr "Your Tine 2.0 account has been deactivated"
 
 msgid "BASE"
 msgstr "BASE"
+
+msgid "Redirecting..."
+msgstr "Redirecting..."
 
 msgid "Your user account has been deactivated"
 msgstr "Your user account has been deactivated"

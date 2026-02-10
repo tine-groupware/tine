@@ -250,6 +250,28 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         self::assertTrue(file_exists($filename), 'eml file not found: ' . $filename);
     }
 
+    public function testMessagePipeCopyWithCustomFlags()
+    {
+        $pipe = 'spam';
+        $targetFolder = 'spam';
+        $config = [
+            'spam' => [
+                'strategy' => 'copy',
+                'config' => [
+                    'target' => [
+                        'folder' => 'spam'
+                    ],
+                    'addFlags' => ['SPAM']
+                ]
+            ]
+        ];
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+
+        $message = $this->_assertMessageInFolder($targetFolder, $message['subject']);
+        $this->assertEquals('SPAM', $message['flags'][0]);
+    }
+
     /**
      * test message pipe spam with move mail
      * - move mail configured trash folder of current user
@@ -285,6 +307,28 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         $this->assertEquals($inboxBefore['cache_totalcount'], $inboxAfter['cache_totalcount']);
 
         $this->_assertMessageInFolder($targetFolder, $message['subject']);
+    }
+
+    public function testMessagePipeMoveWithCustomFlags()
+    {
+        $pipe = 'spam';
+        $targetFolder = 'trash';
+        $config = [
+            'spam' => [
+                'strategy' => 'move',
+                'config' => [
+                    'target' => [
+                        'folder' => '#trash' ,
+                    ],
+                    'addFlags' => ['SPAM']
+                ]
+            ]
+        ];
+        $message = $this->_messagePipeTestHelper();
+        $this->_executePipeLine($config[$pipe], $message);
+
+        $message = $this->_assertMessageInFolder($targetFolder, $message['subject']);
+        $this->assertEquals('SPAM', $message['flags'][0]);
     }
 
     /**
@@ -342,7 +386,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG, $config);
 
         $this->_getFolder('INBOX', true, $_account);
-        $this->_foldersToClear[] = ['INBOX', 'Sent', 'Trash'];
+        $this->_foldersToClear = ['INBOX', 'Sent', 'Trash'];
         $subject = 'SPAM? (15) *** test messagePipe';
 
         $message = $this->_sendMessage(
