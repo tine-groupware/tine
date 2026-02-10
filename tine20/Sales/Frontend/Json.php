@@ -726,6 +726,14 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_save($recordData, Sales_Controller_PurchaseInvoice::getInstance(), 'PurchaseInvoice', 'id', array($duplicateCheck));
     }
 
+    public function contactToAdress($contact)
+    {
+        $contact = $this->_jsonToRecord($contact, Addressbook_Model_Contact::class);
+        $address = new Sales_Model_Address([], true);
+        $address->setFromContact($contact);
+
+        return $this->_recordToJson($address);
+    }
     /**
      * export purchase invoice to Datev email
      *

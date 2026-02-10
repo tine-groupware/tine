@@ -49,6 +49,16 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         Tine.Sales.AddressEditDialog.superclass.initComponent.call(this);
+        _.each(Tine.Sales.Model.Address.getModelConfiguration().uiconfig.contactManagedFields, fieldName => {
+            this.form.findField(fieldName).fixedIf = (v, record) => _.some(record.get('relations'), rel => rel.type === 'CONTACTADDRESS')
+        })
+    },
+
+    checkStates: function() {
+        Tine.Sales.AddressEditDialog.superclass.checkStates.call(this);
+
+        const rel = _.find(this.record.get('relations'), {type: 'CONTACTADDRESS'});
+        this.contactManagedInfo.setVisible(!!rel);
     },
 
     /**
@@ -81,6 +91,13 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         var items = [
             [{
+                xtype: 'v-alert',
+                ref: '../../../../../../contactManagedInfo',
+                hidden: true,
+                columnWidth: 1,
+                variant: 'info',
+                label: this.app.formatMessage('This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly.'),
+            }], [{
                 name: 'name_shorthand',
                 columnWidth: .2,
                 fieldLabel: this.app.i18n._('Name shorthand')

@@ -136,7 +136,15 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        // create default debitor if missing
+        $rel = $_record->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+        if ($rel) {
+            $contact = Addressbook_Controller_Contact::getInstance()->get($rel->related_id);
+            $_record->postal->customer_id = $_createdRecord->getId();
+            $_record->postal->setFromContact($contact);
+        }
+
+
+        // create default  if missing
         if (!$_record->{SMC::FLD_DEBITORS}) {
             $_record->{SMC::FLD_DEBITORS} = new Tinebase_Record_RecordSet(Sales_Model_Debitor::class);
         }
@@ -230,7 +238,7 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
                 $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
 
-                $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter)->getFirstRecord();
+                $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter, null, true)->getFirstRecord();
             }
 
             if (null === $postalAddressRecord) {
@@ -242,6 +250,16 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
             unset($billingAddress[Sales_Model_Address::FLD_CUSTOMER_ID]);
             $billingAddress['type'] = Sales_Model_Address::TYPE_BILLING;
             $billingAddress[Sales_Model_Address::FLD_DEBITOR_ID] = $debitor->getId();
+
+            $rel = $_record->relations->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+            if ($rel) {
+                $billingAddress['relations'] = [array_merge($rel->getData(), [
+                    'id' => null,
+                    'type' => 'CONTACTADDRESS',
+                    'own_id' => null,
+                    'own_model' => 'Sales_Model_Address',
+                ])];
+            }
 
             $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
             $debitor->{SMDN::FLD_BILLING}?->addRecord($address);
