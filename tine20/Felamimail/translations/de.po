@@ -130,6 +130,12 @@ msgstr "Nur passwortgeschützter Download Link"
 msgid "Allow only password-protected download links"
 msgstr "Es sind nur Download-Links mit Passwort erlauben"
 
+msgid "Tine 2.0 Flag"
+msgstr "Tine 2.0 Flag"
+
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
+
 msgid "Show Reply-To"
 msgstr "Zeige Antworten-An"
 
@@ -207,15 +213,6 @@ msgstr ""
 
 msgid "Inactive"
 msgstr "Inaktiv"
-
-msgid "Trusted Mail Servers (via DKIM)"
-msgstr ""
-
-msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
-msgstr ""
-
-msgid "Shared account needs email address"
-msgstr ""
 
 msgid "shared / adb_list accounts need to have a password set"
 msgstr "Gemeinsame Konten benötigen ein Passwort"
@@ -982,9 +979,6 @@ msgstr "Fehler"
 
 msgid "Open in Felamimail"
 msgstr "Im E-Mail-Modul öffnen"
-
-msgid "This message has been marked as SPAM message"
-msgstr "Diese Nachricht wurde als SPAM Nachricht markiert"
 
 msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
 msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
@@ -1783,351 +1777,361 @@ msgstr "Weiterleitung und weitergeleitete E-Mail als .eml im Anhang"
 msgid "Only forward email as a .eml attachment"
 msgstr "Nur weitergeleitete E-Mail als .eml im Anhang"
 
-#~ msgid "Tine 2.0 Flag"
-#~ msgstr "Tine 2.0 Flag"
+msgid "Trusted Mail Servers (via DKIM)"
+msgstr ""
 
-#~ msgid "Add a Tine 2.0 flag to sent messages"
-#~ msgstr "Füge eine Tine 2.0 Flag zu gesendeten Nachrichten hinzu"
+msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+msgstr ""
 
-#~ msgid "IMAP Credentials is missing"
-#~ msgstr "IMAP Zugangsdaten fehlen"
+msgid "Shared account needs email address"
+msgstr ""
 
-#~ msgid "SMTP Credentials is missing"
-#~ msgstr "SMTP Zugangsdaten fehlen"
+#, php-format
+msgid "Only internal senders can send emails to this address: %1$s"
+msgstr "Nur interne Absender können E-Mails an diese Adresse senden: %1$s"
 
-#~ msgid "File (in File Manager)..."
-#~ msgstr "Datei (im Dateimanager)..."
+msgid "IMAP Credentials is missing"
+msgstr "IMAP Zugangsdaten fehlen"
 
-#~ msgid "File Manager (Download Link)"
-#~ msgstr "Dateimanager (Download Link)"
+msgid "SMTP Credentials is missing"
+msgstr "SMTP Zugangsdaten fehlen"
 
-#~ msgid "File Manager (Download link, password)"
-#~ msgstr "Dateimanager (Download Link, Passwort)"
+msgid "File (in File Manager)..."
+msgstr "Datei (im Dateimanager)..."
 
-#~ msgid "File Manager (Systemlink)"
-#~ msgstr "Dateimanager (System Link)"
+msgid "File Manager (Download Link)"
+msgstr "Dateimanager (Download Link)"
 
-#~ msgid "IMAP Hostname are missing"
-#~ msgstr "IMAP Hostname fehlt"
+msgid "File Manager (Download link, password)"
+msgstr "Dateimanager (Download Link, Passwort)"
 
-#~ msgid "File (in File Manager) ..."
-#~ msgstr "Datei (im Dateimanager) ..."
+msgid "File Manager (Systemlink)"
+msgstr "Dateimanager (System Link)"
 
-#~ msgid "Add a new email ..."
-#~ msgstr "Neue E-Mail hinzufügen ..."
+msgid "IMAP Hostname are missing"
+msgstr "IMAP Hostname fehlt"
 
-#~ msgid "Set vacation start date ..."
-#~ msgstr "Startdatum der Abwesenheit ..."
+msgid "File (in File Manager) ..."
+msgstr "Datei (im Dateimanager) ..."
 
-#~ msgid "Set vacation end date ..."
-#~ msgstr "Enddatum der Abwesenheit ..."
+msgid "Add a new email ..."
+msgstr "Neue E-Mail hinzufügen ..."
 
-#~ msgid "Choose the first Representative ..."
-#~ msgstr "Wählen Sie die erste Vertretungsperson ..."
+msgid "Set vacation start date ..."
+msgstr "Startdatum der Abwesenheit ..."
 
-#~ msgid "Choose second Representative ..."
-#~ msgstr "Wählen Sie die zweite Vertretungsperson ..."
+msgid "Set vacation end date ..."
+msgstr "Enddatum der Abwesenheit ..."
 
-#~ msgid "Choose Template ..."
-#~ msgstr "Abwesenheitsnotizvorlage auswählen ..."
+msgid "Choose the first Representative ..."
+msgstr "Wählen Sie die erste Vertretungsperson ..."
 
-#~ msgid "Mail Type"
-#~ msgstr "E-Mail Typ"
+msgid "Choose second Representative ..."
+msgstr "Wählen Sie die zweite Vertretungsperson ..."
 
-#~ msgid "Possible mail types."
-#~ msgstr "Mögliche E-Mail Typen"
+msgid "Choose Template ..."
+msgstr "Abwesenheitsnotizvorlage auswählen ..."
 
-#~ msgid "Mailinglist"
-#~ msgstr "E-Mail-Verteiler"
+msgid "Mail Type"
+msgstr "E-Mail Typ"
 
-#~ msgid "Mailinglist Reject Reason"
-#~ msgstr "E-Mail-Verteiler Ablehnungsgrund"
+msgid "Possible mail types."
+msgstr "Mögliche E-Mail Typen"
 
-#~ msgid "Email Notification from E-Mailadress"
-#~ msgstr "E-Mail Benachrichtigung Absender E-Mail Adresse"
+msgid "Mailinglist"
+msgstr "E-Mail-Verteiler"
 
-#~ msgid "User is allowed to set custom vacation message for system account"
-#~ msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
+msgid "Mailinglist Reject Reason"
+msgstr "E-Mail-Verteiler Ablehnungsgrund"
 
-#~ msgid "Should the email body be cached (recommended for slow IMAP server connections)"
-#~ msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
+msgid "Email Notification from E-Mailadress"
+msgstr "E-Mail Benachrichtigung Absender E-Mail Adresse"
 
-#~ msgid "Prevent copying mails in the same account"
-#~ msgstr "Verhindere Kopieren von E-Mails in das gleiche Konto"
+msgid "User is allowed to set custom vacation message for system account"
+msgstr "Der Benutzer darf eine benutzerdefinierte Abwesenheitsnotiz für das Systemkonto einstellen"
 
-#~ msgid "Enabled Features in Felamimail Application."
-#~ msgstr "Eingeschaltete Features für die Felamimail Anwendung."
+msgid "Should the email body be cached (recommended for slow IMAP server connections)"
+msgstr "Soll die E-Mail zwischengespeichert werden (empfohlen für langsame IMAP Verbindungen)"
 
-#~ msgid "Shows context menu for system accounts to approve migration"
-#~ msgstr "Zeigt Menüpunkt zur Freigabe der Kontomigration"
+msgid "Prevent copying mails in the same account"
+msgstr "Verhindere Kopieren von E-Mails in das gleiche Konto"
 
-#~ msgid "Move notifications to a subfolder via sieve"
-#~ msgstr "Benachrichtigungen mit SIEVE Regel in Unterordner verschieben"
+msgid "Enabled Features in Felamimail Application."
+msgstr "Eingeschaltete Features für die Felamimail Anwendung."
 
-#~ msgid "Only password download link"
-#~ msgstr "Nur passwortgeschützter Download Link"
+msgid "Shows context menu for system accounts to approve migration"
+msgstr "Zeigt Menüpunkt zur Freigabe der Kontomigration"
 
-#~ msgid "Allow only password download link"
-#~ msgstr "Nur Download-Links mit Passwort erlauben"
+msgid "Move notifications to a subfolder via sieve"
+msgstr "Benachrichtigungen mit SIEVE Regel in Unterordner verschieben"
 
-#~ msgid "Create template, trash, sent, draft and junks folders for system accounts"
-#~ msgstr "Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern für Systemkonten"
+msgid "Only password download link"
+msgstr "Nur passwortgeschützter Download Link"
 
-#~ msgid "Filter E-Mail URIs"
-#~ msgstr "E-Mail URIs filtern"
+msgid "Allow only password download link"
+msgstr "Nur Download-Links mit Passwort erlauben"
 
-#~ msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
-#~ msgstr "Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind erlaubt wenn dies eingeschaltet wird"
+msgid "Create template, trash, sent, draft and junks folders for system accounts"
+msgstr "Erstellen von Vorlagen-, Papierkorb-, gesendeten, Entwurfs- und Junk-Ordnern für Systemkonten"
 
-#~ msgid "Paths of the special folders (like Sent, Trash, ...)"
-#~ msgstr "Pfad für spezielle Ordner (wie Gesendet, Mülleimer, …)"
+msgid "Filter E-Mail URIs"
+msgstr "E-Mail URIs filtern"
 
-#~ msgid "Allow self signed TLS cert for IMAP connection"
-#~ msgstr "Erlaube selbst signierte TLS Zertifikate für IMAP Verbindungen"
+msgid "Should the email body uris be filtered. Only anchors with URIs are allowed if this is turned on"
+msgstr "Sollen links in E-Mail Text gefiltert werden. Nur interne Verweise sind erlaubt wenn dies eingeschaltet wird"
 
-#~ msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
-#~ msgstr "Erlaube SIEVE Weiterleitungen nur an interne (primäre oder sekundäre E-Mail Domain) E-Mail Adressen"
+msgid "Paths of the special folders (like Sent, Trash, ...)"
+msgstr "Pfad für spezielle Ordner (wie Gesendet, Mülleimer, …)"
 
-#~ msgid "URL icon path for own domain"
-#~ msgstr "URL des icon Pfades für die eigene Domain"
+msgid "Allow self signed TLS cert for IMAP connection"
+msgstr "Erlaube selbst signierte TLS Zertifikate für IMAP Verbindungen"
 
-#~ msgid "Used to mark messages from configured primary and secondary domains"
-#~ msgstr "Wird genutzt um Nachrichten zu markieren die von der konfigurierten primären oder sekundären Domain stammen"
+msgid "Allow only sieve redirect rules to internal (primary/secondary) email addresses"
+msgstr "Erlaube SIEVE Weiterleitungen nur an interne (primäre oder sekundäre E-Mail Domain) E-Mail Adressen"
 
-#~ msgid "shared / adb_list accounts need to have an email set"
-#~ msgstr "Gemeinsame Konten benötigen eine E-Mail-Adresse"
+msgid "URL icon path for own domain"
+msgstr "URL des icon Pfades für die eigene Domain"
 
-#~ msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
-#~ msgstr "Interne Benutzerkonten sind nur erlaubt mit der Konfiguration Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
+msgid "Used to mark messages from configured primary and secondary domains"
+msgstr "Wird genutzt um Nachrichten zu markieren die von der konfigurierten primären oder sekundären Domain stammen"
 
-#~ msgid "Internal user accounts need an email address"
-#~ msgstr "Interne Benutzerkonten brauchen eine E-Mail-Adresse"
+msgid "shared / adb_list accounts need to have an email set"
+msgstr "Gemeinsame Konten benötigen eine E-Mail-Adresse"
 
-#~ msgid "Internal user accounts need to be assigned to a user"
-#~ msgstr "Interne Benutzerkonten müssen einer Nutzer:in zugeordnet sein"
+msgid "Internal user accounts are only allowed with Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
+msgstr "Interne Benutzerkonten sind nur erlaubt mit der Konfiguration Tinebase_Config::EMAIL_USER_ID_IN_XPROPS"
 
-#~ msgid "Please choose a new email address for internal user account"
-#~ msgstr "Bitte wählen sie eine neue E-Mail Adresse für Idas interne Benutzerkonto"
+msgid "Internal user accounts need an email address"
+msgstr "Interne Benutzerkonten brauchen eine E-Mail-Adresse"
 
-#~ msgid "system account for user does not exist"
-#~ msgstr "Systemkonto existiert nicht für diese Benutzer*in"
+msgid "Internal user accounts need to be assigned to a user"
+msgstr "Interne Benutzerkonten müssen einer Nutzer:in zugeordnet sein"
 
-#~ msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
-#~ msgstr "Die Konfiguration EMAIL_USER_ID_IN_XPROPS ist nicht eingeschaltet! Bitte überprüfen sie ob ihr Benutzer*innen E-Mail Backend es unterstützt und führen sie die CLI Methode Tinebase.emailUserIdInXprops aus"
+msgid "Please choose a new email address for internal user account"
+msgstr "Bitte wählen sie eine neue E-Mail Adresse für Idas interne Benutzerkonto"
 
-#~ msgid "Could not find email user xprops!"
-#~ msgstr "Konnte E-Mail-User xprops nicht finden!"
+msgid "system account for user does not exist"
+msgstr "Systemkonto existiert nicht für diese Benutzer*in"
 
-#~ msgid "Internal user accounts need a valid user"
-#~ msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
+msgid "Config EMAIL_USER_ID_IN_XPROPS is not enabled! Please check if your email user backend supports it and run CLI method Tinebase.emailUserIdInXprops"
+msgstr "Die Konfiguration EMAIL_USER_ID_IN_XPROPS ist nicht eingeschaltet! Bitte überprüfen sie ob ihr Benutzer*innen E-Mail Backend es unterstützt und führen sie die CLI Methode Tinebase.emailUserIdInXprops aus"
 
-#~ msgid "System account of user is missing"
-#~ msgstr "System-Konto für Benutzer*in fehlt"
+msgid "Could not find email user xprops!"
+msgstr "Konnte E-Mail-User xprops nicht finden!"
 
-#, python-brace-format
-#~ msgid "Folder with name {0} already exists!"
-#~ msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
+msgid "Internal user accounts need a valid user"
+msgstr "Das persönliche Systemkonto benötigt einen validen Benutzer"
 
-#~ msgid "Failure on create folder"
-#~ msgstr "Fehler beim anlegen des Ordners"
-
-#~ msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
-#~ msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: "
-
-#~ msgid "It is not possible to file the message in this record (might be a recurring event)."
-#~ msgstr "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen Wiederholungstermin handeln)."
-
-#~ msgid "It is not allowed to copy e-mails in the same account."
-#~ msgstr "E-Mails innerhalb eines Kontos zu kopieren ist nicht erlaubt."
-
-#~ msgid "My Mail Download Links"
-#~ msgstr "Meine E-Mail Download Links"
-
-#~ msgid "Sieve vacation has been updated:"
-#~ msgstr "Sieve Abwesenheitsnotiz wurde aktualisiert:"
-
-#~ msgid "It is not allowed to redirect emails to self! Please change the recipient."
-#~ msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ändern Sie den Empfänger."
-
-#~ msgid "IMAP Hostname missing"
-#~ msgstr "IMAP Hostname fehlt"
-
-#~ msgid "IMAP Credentials missing"
-#~ msgstr "IMAP Zugangsdaten fehlen"
-
-#~ msgid "SMTP Hostname missing"
-#~ msgstr "SMTP Hostname fehlt"
-
-#~ msgid "SMTP Credentials missing"
-#~ msgstr "SMTP Zugangsdaten fehlen"
+msgid "System account of user is missing"
+msgstr "System-Konto für Benutzer*in fehlt"
 
 #, python-brace-format
-#~ msgid "The recipients of this email distribution list are maintained in the list: {locationsHtml}"
-#~ msgstr "Die Empfänger dieses Email-Verteilers werden in folgender Liste verwaltet: {locationsHtml}"
+msgid "Folder with name {0} already exists!"
+msgstr "Ordner mit dem Namen {0} ist bereits vorhanden!"
 
-#~ msgid "Auto-move notifications folder"
-#~ msgstr "Ordner für Benachrichtigungen"
+msgid "Failure on create folder"
+msgstr "Fehler beim anlegen des Ordners"
 
-#~ msgid "Behavior of sent mails"
-#~ msgstr "Ablageort für gesendete Mails"
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: "
 
-#~ msgid "Save copy of sent mail on mail server."
-#~ msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
+msgid "It is not possible to file the message in this record (might be a recurring event)."
+msgstr "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen Wiederholungstermin handeln)."
 
-#~ msgid "Folder of the source mail if it is no system folder."
-#~ msgstr "Ordner der Ursprungsmail wenn dieser kein Systemordner ist."
+msgid "It is not allowed to copy e-mails in the same account."
+msgstr "E-Mails innerhalb eines Kontos zu kopieren ist nicht erlaubt."
 
-#~ msgid "It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled."
-#~ msgstr "Es ist nicht möglich, Konten zu konvertieren, da die Konfigurationsoption EMAIL_USER_ID_IN_XPROPS deaktiviert ist."
+msgid "My Mail Download Links"
+msgstr "Meine E-Mail Download Links"
 
-#~ msgid "Migration has not been approved."
-#~ msgstr "Die Migration wurde noch nicht freigegeben"
+msgid "Sieve vacation has been updated:"
+msgstr "Sieve Abwesenheitsnotiz wurde aktualisiert:"
 
-#~ msgid "Account type change not possible"
-#~ msgstr "Wechsel zu diesem Kontotyp nicht möglich"
+msgid "It is not allowed to redirect emails to self! Please change the recipient."
+msgstr "Es ist nicht erlaubt, E-Mails an sich selbst weiterzuleiten. Bitte ändern Sie den Empfänger."
 
-#~ msgid "E-Mail account needs a password"
-#~ msgstr "Das E-Mail-Konto benötigt ein Passwort"
+msgid "IMAP Hostname missing"
+msgstr "IMAP Hostname fehlt"
 
-#~ msgid "The grant use the shared email account"
-#~ msgstr "Das Recht um den gemeinsamen E-Mail-Account zu verwenden"
+msgid "IMAP Credentials missing"
+msgstr "IMAP Zugangsdaten fehlen"
 
-#~ msgid "The grant edit the shared email account"
-#~ msgstr "Das Recht um den gemeinsamen E-Mail-Account zu bearbeiten"
+msgid "SMTP Hostname missing"
+msgstr "SMTP Hostname fehlt"
 
-#~ msgid "Send Mails"
-#~ msgstr "E-Mails senden"
-
-#~ msgid "The grant to send mails via the email account"
-#~ msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"
-
-#~ msgid "Server connection failed. Do you still want to save this setting and exit?"
-#~ msgstr "Server-Verbindung fehlgeschlagen. Möchten Sie die Einstellungen trotzdem speichern?"
-
-#~ msgid "Connection succeed"
-#~ msgstr "Verbindung erfolgreich"
-
-#~ msgid "E-mail usage"
-#~ msgstr "E-Mail-Nutzung"
-
-#~ msgid "File (in Filemanager) ..."
-#~ msgstr "Datei (im Dateimanager) ..."
-
-#~ msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}"
-#~ msgstr "{attachmentCount, plural, one {Anhang wurde gespeichert} other {# Anhänge wurden gespeichert}}"
-
-#~ msgid "Filemanager (Download link)"
-#~ msgstr "Dateimanager (Download Link)"
-
-#~ msgid "Click icon to change"
-#~ msgstr "Zum Ändern auf die Zeile klicken"
-
-#~ msgid "Selected E-Mail"
-#~ msgstr "Ausgewählte E-Mail"
-
-#~ msgid "Loading Mail Addresses"
-#~ msgstr "Lade E-Mail-Adressen"
-
-#~ msgid "Preferred E-Mail"
-#~ msgstr "Bevorzugte E-Mail"
-
-#~ msgid "No e-mail account assigned"
-#~ msgstr "Kein E-Mail Konto zugewiesen"
-
-#~ msgid "Your email credentials are wrong. Please contact your administrator"
-#~ msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator"
-
-#~ msgid "Files of type eml, emltpl and msg allowed only."
-#~ msgstr "Nur Dateien vom Typ eml, emltpl und msg sind erlaubt."
-
-#~ msgid "Could not file message."
-#~ msgstr "Konnte Nachrichten nicht ablegen."
-
-#~ msgid "Do you want to send a reading confirmation message?"
-#~ msgstr "Wollen Sie eine Lesebestätigung senden?"
-
-#~ msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
-#~ msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
-
-#~ msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
-#~ msgstr "Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigung, falls Sie nach Ablauf der konfigurierten Frist keine Antwort auf die E-Mail erhalten haben"
-
-#~ msgid "Activate this toggle button to send the mail as separate mail to each recipient."
-#~ msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der Nachricht."
-
-#~ msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
-#~ msgstr "Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
-
-#~ msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
-#~ msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem aktiven Benutzerkonto können diese Links öffnen."
-
-#~ msgid "Do you really want to send?"
-#~ msgstr "Wollen Sie die Nachricht wirklich absenden?"
-
-#~ msgid "Do you really want to send a message with an empty subject?"
-#~ msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
+msgid "SMTP Credentials missing"
+msgstr "SMTP Zugangsdaten fehlen"
 
 #, python-brace-format
-#~ msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
-#~ msgstr ""
-#~ "Die Absender-Adresse für diese Mail wurde auf : {0} geändert, \n"
-#~ " da sie für das Konto : {1} nicht das E-Mail Versenden Recht haben."
+msgid "The recipients of this email distribution list are maintained in the list: {locationsHtml}"
+msgstr "Die Empfänger dieses Email-Verteilers werden in folgender Liste verwaltet: {locationsHtml}"
 
-#~ msgid "Agree that this account can be transferred to other users"
-#~ msgstr "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
+msgid "Auto-move notifications folder"
+msgstr "Ordner für Benachrichtigungen"
 
-#~ msgid "You cannot move the folder to an own sub folder!"
-#~ msgstr "Ordner in eigenen Unterordner verschieben nicht möglich!"
+msgid "Behavior of sent mails"
+msgstr "Ablageort für gesendete Mails"
+
+msgid "Save copy of sent mail on mail server."
+msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
+
+msgid "Folder of the source mail if it is no system folder."
+msgstr "Ordner der Ursprungsmail wenn dieser kein Systemordner ist."
+
+msgid "It is not possible to convert accounts because the config option EMAIL_USER_ID_IN_XPROPS is disabled."
+msgstr "Es ist nicht möglich, Konten zu konvertieren, da die Konfigurationsoption EMAIL_USER_ID_IN_XPROPS deaktiviert ist."
+
+msgid "Migration has not been approved."
+msgstr "Die Migration wurde noch nicht freigegeben"
+
+msgid "Account type change not possible"
+msgstr "Wechsel zu diesem Kontotyp nicht möglich"
+
+msgid "E-Mail account needs a password"
+msgstr "Das E-Mail-Konto benötigt ein Passwort"
+
+msgid "The grant use the shared email account"
+msgstr "Das Recht um den gemeinsamen E-Mail-Account zu verwenden"
+
+msgid "The grant edit the shared email account"
+msgstr "Das Recht um den gemeinsamen E-Mail-Account zu bearbeiten"
+
+msgid "Send Mails"
+msgstr "E-Mails senden"
+
+msgid "The grant to send mails via the email account"
+msgstr "Das Recht um mit dem E-Mail-Konto E-Mails zu versenden"
+
+msgid "Server connection failed. Do you still want to save this setting and exit?"
+msgstr "Server-Verbindung fehlgeschlagen. Möchten Sie die Einstellungen trotzdem speichern?"
+
+msgid "Connection succeed"
+msgstr "Verbindung erfolgreich"
+
+msgid "E-mail usage"
+msgstr "E-Mail-Nutzung"
+
+msgid "File (in Filemanager) ..."
+msgstr "Datei (im Dateimanager) ..."
+
+msgid "{attachmentCount, plural, one {Attachment was saved} other {# Attachments where saved}}"
+msgstr "{attachmentCount, plural, one {Anhang wurde gespeichert} other {# Anhänge wurden gespeichert}}"
+
+msgid "Filemanager (Download link)"
+msgstr "Dateimanager (Download Link)"
+
+msgid "Click icon to change"
+msgstr "Zum Ändern auf die Zeile klicken"
+
+msgid "Selected E-Mail"
+msgstr "Ausgewählte E-Mail"
+
+msgid "Loading Mail Addresses"
+msgstr "Lade E-Mail-Adressen"
+
+msgid "Preferred E-Mail"
+msgstr "Bevorzugte E-Mail"
+
+msgid "No e-mail account assigned"
+msgstr "Kein E-Mail Konto zugewiesen"
+
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Ihre E-Mail-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator"
+
+msgid "Files of type eml, emltpl and msg allowed only."
+msgstr "Nur Dateien vom Typ eml, emltpl und msg sind erlaubt."
+
+msgid "Could not file message."
+msgstr "Konnte Nachrichten nicht ablegen."
+
+msgid "Do you want to send a reading confirmation message?"
+msgstr "Wollen Sie eine Lesebestätigung senden?"
+
+msgid "This message is probably SPAM. Please help to train your anti-SPAM system with a decision: \"Yes, it is SPAM\" or \"No, it is not\""
+msgstr "Diese Nachricht ist möglicherweise SPAM. Bitte helfen Sie, das Anti-SPAM-System mit Ihrer Entscheidung zu trainieren: \"Ja, es ist SPAM\" oder \"Nein, kein SPAM\""
+
+msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
+msgstr "Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigung, falls Sie nach Ablauf der konfigurierten Frist keine Antwort auf die E-Mail erhalten haben"
+
+msgid "Activate this toggle button to send the mail as separate mail to each recipient."
+msgstr "Wenn der Knopf gedrückt ist, bekommt jeder Empfänger seine eigene einzelne Kopie der Nachricht."
+
+msgid "NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
+msgstr "Beachte: Diese Nachricht wird als Massen-Mail verschickt. So bekommt z.b. jeder Empfänger seine eigene einzelne Kopie."
+
+msgid "Some attachments are of type \"systemlinks\" whereas some of the recipients (marked yellow), couldn't be validated to be accounts on this installation. Only recipients with an active account will be able to open those attachments."
+msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger (gelb markiert) sind keine Benutzer dieser Instanz. Nur Empfänger mit einem aktiven Benutzerkonto können diese Links öffnen."
+
+msgid "Do you really want to send?"
+msgstr "Wollen Sie die Nachricht wirklich absenden?"
+
+msgid "Do you really want to send a message with an empty subject?"
+msgstr "Wollen Sie die Nachricht wirklich mit einem leeren Betreff senden?"
 
 #, python-brace-format
-#~ msgid "Mailvelope decryption Error [{0}]"
-#~ msgstr "Mailvelope Entschlüsselungs-Fehler [{0}]"
+msgid "The from-address for this mail got changed to {0} , as you don't have the send mail right for the account {1}."
+msgstr ""
+"Die Absender-Adresse für diese Mail wurde auf : {0} geändert, \n"
+" da sie für das Konto : {1} nicht das E-Mail Versenden Recht haben."
+
+msgid "Agree that this account can be transferred to other users"
+msgstr "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
+
+msgid "You cannot move the folder to an own sub folder!"
+msgstr "Ordner in eigenen Unterordner verschieben nicht möglich!"
 
 #, python-brace-format
-#~ msgid "To decrypt this message please install {0} with API support enabled"
-#~ msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese Nachricht zu entschlüsseln"
+msgid "Mailvelope decryption Error [{0}]"
+msgstr "Mailvelope Entschlüsselungs-Fehler [{0}]"
 
-#~ msgid "PGP encrypted Message"
-#~ msgstr "PGP verschlüsselte Nachricht"
+#, python-brace-format
+msgid "To decrypt this message please install {0} with API support enabled"
+msgstr "Bitte installieren Sie {0} mit aktivierter API Unterstützung um diese Nachricht zu entschlüsseln"
 
-#~ msgid "A separate mail is send to each recipient."
-#~ msgstr "An jeden Empfänger wird eine separate E-Mail gesendet."
+msgid "PGP encrypted Message"
+msgstr "PGP verschlüsselte Nachricht"
 
-#~ msgid "Resolve to single contact"
-#~ msgstr "In Einzelkontakte umwandeln"
+msgid "A separate mail is send to each recipient."
+msgstr "An jeden Empfänger wird eine separate E-Mail gesendet."
 
-#~ msgid "Only send all X days to the same sender"
-#~ msgstr "Nur alle X Tage an den gleichen Absender schicken"
+msgid "Resolve to single contact"
+msgstr "In Einzelkontakte umwandeln"
 
-#~ msgid "Choose first Representative ..."
-#~ msgstr "Wählen Sie die erste Vertretungsperson …"
+msgid "Only send all X days to the same sender"
+msgstr "Nur alle X Tage an den gleichen Absender schicken"
 
-#~ msgid "E-Mail"
-#~ msgstr "E-Mail"
+msgid "Choose first Representative ..."
+msgstr "Wählen Sie die erste Vertretungsperson …"
 
-#~ msgid "How often should Felamimail check for new Emails (in minutes)."
-#~ msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll (in Minuten)."
+msgid "E-Mail"
+msgstr "E-Mail"
 
-#~ msgid ".eml file Attachment in forwarded mails"
-#~ msgstr ".eml Dateianhang in weitergeleiteten Mails"
+msgid "How often should Felamimail check for new Emails (in minutes)."
+msgstr "Wie oft Felamimail nach neuen E-Mails schauen soll (in Minuten)."
 
-#~ msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
-#~ msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
+msgid ".eml file Attachment in forwarded mails"
+msgstr ".eml Dateianhang in weitergeleiteten Mails"
 
-#~ msgid "Setting the default font in the E-Mail app"
-#~ msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
+msgid "Attach an .eml file to a forwarded mail. Otherwise all attachments separate"
+msgstr "Hänge eine .eml Datei an eine weitergleitete Mail an. Alle anderen Anhänge seperat"
 
-#~ msgid "All highlighted mail of my email accounts"
-#~ msgstr "Alle markierten Nachrichten meiner Konten"
+msgid "Setting the default font in the E-Mail app"
+msgstr "Einstellung für die Standardschriftart im der E-Mail-Modul"
 
-#~ msgid "Can not combine \"allow external\" and \"allow only members\""
-#~ msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
+msgid "All highlighted mail of my email accounts"
+msgstr "Alle markierten Nachrichten meiner Konten"
 
-#~ msgid "Forward and forwarded email as .eml in attachment"
-#~ msgstr "Weiterleitung und weitergeleitete E-Mail als .eml im Anhang"
+msgid "Can not combine \"allow external\" and \"allow only members\""
+msgstr "\"Externe E-Mails weiterleiten\" und \"Nur E-Mails von Gruppenmitgliedern weiterleiten\" können nicht kombiniert werden"
 
-#~ msgid "Only forwarded email as .eml in attachment"
-#~ msgstr "Nur weitergeleitete email als .eml im Anhang"
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr "Weiterleitung und weitergeleitete E-Mail als .eml im Anhang"
 
-#~ msgid "Mark all messages as read"
-#~ msgstr "Alle Nachrichten als gelesen markieren"
+msgid "Only forwarded email as .eml in attachment"
+msgstr "Nur weitergeleitete email als .eml im Anhang"
+
+msgid "Mark all messages as read"
+msgstr "Alle Nachrichten als gelesen markieren"
+
+msgid "This message has been marked as SPAM message"
+msgstr "Diese Nachricht wurde als SPAM Nachricht markiert"
