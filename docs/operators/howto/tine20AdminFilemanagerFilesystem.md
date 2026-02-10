@@ -1,12 +1,49 @@
-Tine Admin HowTo: Filemanager / Filesystem
-=================
+# Tine Admin HowTo: Filemanager / Filesystem
 
-Version: Nele 2018.11
+Version: Liva 2025.11
 
-Konfiguration und Problemlösungen des Filemanager-Moduls von Tine 2.0
+Konfiguration und Problemlösungen des Filemanager-Moduls von tine Groupware
 
-Volltextindizierung mit Apache Tika
-=================
+# Versionierung ("ModLog") im Filesystem
+
+Mit der entsprechenden Einstellung werden Dateien im tine Dateisystem versioniert, d.h. bei jeder Änderung wird eine 
+neue Dateiversion erstellt, man kann sich die Historie anzeigen lassen bzw. alte Versionen wiederherstellen / herunterladen.
+
+Die Versionierung wird mit folgendem Schalter in der 'filesystem'-Konfiguration eingestellt:
+
+    'filesystem' => [
+        'modLogActive' => true,
+        [...]
+    ], 
+
+Bei einem Docker-Compose Setup kann das Verhalten über die ENV-Variable TINE20_FILESYSTEM_MODLOG_ACTIVE (Default: true)
+gesteuert werden.
+
+## Aufräumen der Versionen
+
+Das Aufräumen erledigt ein Scheduler-Job mit dem Namen "Tinebase_FileRevisionCleanup", der standardmäßig einmal täglich
+ausgeführt wird.
+
+Mit den folgenden zusätzlichen Konfigurationsoptionen kann die Anzahl der vorgehaltenen Versionen bzw. die zeitliche
+Dauer der Speicherung eingestellt werden (es sind die Standardwerte angegeben): 
+
+    'filesystem' => [
+        'numKeepRevisions' => 100, // 100 Versionen
+        'monthKeepRevisions' => 60, // Monate
+        [...]
+    ],
+
+## Auswirkungen auf den Gesamt-Storage-Verbrauch
+
+Man kann einstellen, ob die Versionen mit in der Belegungsanzeige berücksichtigt werden. Das geht über den Schalter
+'includeRevision' (Default: false) in der 'quota'-Konfiguration:
+
+    'quota' => [
+        'includeRevision' => false,
+        [...]
+    ],
+
+# Volltextindizierung mit Apache Tika
 
 Damit die Datei-Inhalte im Filemanager durchsucht werden können, muss Apache Tika (https://tika.apache.org/ - tika-app.jar)
  auf dem Server verfügbar sein. Das ist eine Jar-Datei, die an einem konfigurierten
@@ -15,16 +52,16 @@ Damit die Datei-Inhalte im Filemanager durchsucht werden können, muss Apache Ti
 
 Getestet wurde die Funktionalität mit Version 1.14, es sollte aber auch mit neueren Versionen klappen.
 
-Die Konfiguration in Tine 2.0 sieht dann so aus (z.B. config.inc.php):
+Die Konfiguration in tine Groupware sieht dann so aus (z.B. config.inc.php):
 
-    'fulltext' => array(
+    'fulltext' => [
         'tikaJar' => '/usr/share/tika.jar',
         [...]
-    ),
-    'filesystem => array(
+    ],
+    'filesystem' => [
         'index_content' => true,
         [...]
-    ), 
+    ], 
 
 Beim Speichern einer Datei wird diese dann indiziert.
 
@@ -47,15 +84,13 @@ Ab Ubuntu 20.04 gibt es einigermassen aktuelle DEB-Pakete: libtika-java
 
 Ansonsten sollte man die aktuelle Version von der Webseite (https://tika.apache.org/download.html) herunterladen (und auch die CVEs im Auge behalten: https://tika.apache.org/security.html).
 
-Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File System) erstellen
-=====
+# Liste mit den Benutzern mit den meisten Daten im tine Groupware VFS (Virtual File System) erstellen
 
     sql> select user.login_name,fo.created_by, sum(fr.size) as filesize from tine20_tree_fileobjects as fo JOIN tine20_tree_filerevisions as fr ON fo.id = fr.id join tine20_accounts as user on user.id=fo.created_by group by fo.created_by order by filesize DESC;
 
-Konfiguration eines Preview-Service
-=====
+# Konfiguration des Preview-Service
 
-Damit der Docservice von Tine 2.0 verwendet wird, muss folgende Konfiguration in die config.inc.php
+Damit der Docservice von tine Groupware verwendet wird, muss folgende Konfiguration in die config.inc.php
  hinzugefügt werden:
 
     'filesystem' => array(
@@ -108,25 +143,24 @@ Alle Previews neu erzeugen
     tine20-cli --method Tinebase.fileSystemRecreateAllPreviews
 ```
 
-Wie oft wird der TempFile-Ordner automatisch aufgeräumt?
-=====
+# TempFile-Ordner
+
+## Wie oft wird der TempFile-Ordner automatisch aufgeräumt?
 
 Der Cleanup-Job Tinebase_TempFileCleanup läuft stündlich und räumt alle (nicht-punkt) Dateien im Temp-Ordner weg, die
  älter als 6 Stunden sind.
 
-Mein TempFile-Ordner ist sehr groß. Kann ich einen Cleanup von Hand anstossen?
-=====
+## Mein TempFile-Ordner ist sehr groß. Kann ich einen Cleanup von Hand anstossen?
 
 Ja, das geht so (Löscht alle Dateien, die älter als 2019-12-19 11:28:00 sind):
 
     tine20.php --method=Tinebase.clearTable temp_files -- date='2019-12-19 11:28:00'
 
-Änderungen im Dateimanager/Filesystem rückgängig machen z.b. gelöschte Datei wiederherstellen (UNDO-Funktion)
-=================
+# Änderungen im Dateimanager/Filesystem rückgängig machen z.b. gelöschte Datei wiederherstellen (UNDO-Funktion)
 
 ACHTUNG: damit das im Dateimanager klappt, muss das Filesystem-Modlog angeschaltet sein.
 
-Es wird ein Zugriff auf die Tine 2.0 CLI vorausgesetzt.
+Es wird ein Zugriff auf die tine Groupware CLI vorausgesetzt.
 
 Wenn man weiss, von wem und wann Änderungen gemacht wurden, können diese einfach wiederhergestellt
  werden (-d steht für Dry Run):
@@ -136,8 +170,7 @@ Wenn man weiss, von wem und wann Änderungen gemacht wurden, können diese einfa
       modification_time=2020-02-17 \
       modification_account=ACCOUNTID
 
-Dateimanager-Verzeichnis via WebDAV unter Linux (CLI) einbinden
-=====
+# Dateimanager-Verzeichnis via WebDAV unter Linux (CLI) einbinden
 
 siehe https://www.dinotools.de/2013/11/20/linux-einhaengen-einer-webdav-ressource-ins-dateisystem/
 

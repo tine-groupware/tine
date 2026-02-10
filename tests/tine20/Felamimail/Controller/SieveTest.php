@@ -138,7 +138,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         self::assertStringContainsString(Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
             ->_('Your email has been rejected'), $sieveScript);
         self::assertStringContainsString(Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
-            ->_('Only internal senders can send emails to this address.'), $sieveScript);
+            ->_('Only internal senders can send emails to this address: ') . $mailinglist->email, $sieveScript);
         
         unset($raii);
     }

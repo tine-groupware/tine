@@ -115,6 +115,12 @@ msgstr ""
 msgid "Allow only password-protected download links"
 msgstr ""
 
+msgid "Tine 2.0 Flag"
+msgstr ""
+
+msgid "Add a Tine 2.0 flag to sent messages"
+msgstr ""
+
 msgid "Show Reply-To"
 msgstr ""
 
@@ -191,15 +197,6 @@ msgid "Auto"
 msgstr ""
 
 msgid "Inactive"
-msgstr ""
-
-msgid "Trusted Mail Servers (via DKIM)"
-msgstr ""
-
-msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
-msgstr ""
-
-msgid "Shared account needs email address"
 msgstr ""
 
 msgid "shared / adb_list accounts need to have a password set"
@@ -964,9 +961,6 @@ msgid "Error"
 msgstr ""
 
 msgid "Open in Felamimail"
-msgstr ""
-
-msgid "This message has been marked as SPAM message"
 msgstr ""
 
 msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
@@ -1763,4 +1757,17 @@ msgid "Forwarding and forwarded email as .eml in attachment"
 msgstr ""
 
 msgid "Only forward email as a .eml attachment"
+msgstr ""
+
+msgid "Trusted Mail Servers (via DKIM)"
+msgstr ""
+
+msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+msgstr ""
+
+msgid "Shared account needs email address"
+msgstr ""
+
+#, php-format
+msgid "Only internal senders can send emails to this address: %1$s"
 msgstr ""
