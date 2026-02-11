@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:30+0000\n"
+"PO-Revision-Date: 2026-02-09 13:43+0100\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012-2013\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -21,9 +21,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.8\n"
 
 msgid "manage shared addressbooks"
 msgstr "Gemeinsame Adressbücher verwalten"
@@ -92,10 +91,10 @@ msgid "Make group and lists to mailinglists"
 msgstr "Gruppen und Listen zu Verteilerlisten machen"
 
 msgid "Addressbook Short Names"
-msgstr ""
+msgstr "Adressbuch-Kurznamen"
 
 msgid "Add Short Name field to Adressbook"
-msgstr ""
+msgstr "Feld „Kurzname“ zum Adressbuch hinzufügen"
 
 msgid "Manage resources in Addressbook"
 msgstr "Ressourcen im Adressbuch verwalten"
@@ -294,7 +293,7 @@ msgid "All Contacts"
 msgstr "Alle Kontakte"
 
 msgid "This contact was automatically added by the system as an event attendee."
-msgstr ""
+msgstr "Dieser Kontakt wurde vom System automatisch als Terminteilnehmer hinzugefügt."
 
 msgid "Import CSV formated contacts from Google address book"
 msgstr "Importiere CSV-formatierte Kontakte aus einem Google-Adressbuch"
@@ -385,14 +384,14 @@ msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
 
 msgid "Copy Postal Address to Clipboard"
-msgstr ""
+msgstr "Post Anschrift in die Zwischenablage kopieren"
 
 msgid "Copied to clipboard"
-msgstr ""
+msgstr "In die Zwischenablage kopiert"
 
 #, python-brace-format
 msgid "\"{value}\" was copied to clipboard"
-msgstr ""
+msgstr "\"{value}\" wurde in die Zwischenablage kopiert"
 
 msgid "Street"
 msgstr "Straße"
@@ -482,6 +481,9 @@ msgstr "Notizen"
 
 msgid "Enter Note"
 msgstr "Notiz eingeben"
+
+msgid "Additional properties"
+msgstr "Zusätzliche Eigenschaften"
 
 msgid "Parse address"
 msgstr "Adresse einlesen"
@@ -841,6 +843,9 @@ msgstr "Pfade"
 msgid "Preferred Email"
 msgstr "Bevorzugte E-Mail"
 
+msgid "Public Key"
+msgstr ""
+
 msgid "syncBackendIds"
 msgstr ""
 
@@ -848,7 +853,7 @@ msgid "Label"
 msgstr "Bezeichner"
 
 msgid "Calendar Free Busy URLs"
-msgstr ""
+msgstr "Kalender Frei Belegt URLs"
 
 msgid "GENDER_Address"
 msgstr "female"
@@ -922,8 +927,8 @@ msgstr[1] "Standorte"
 
 msgid "External FreeBusy Url"
 msgid_plural "External FreeBusy Urls"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Externe Frei Belegt URL"
+msgstr[1] "Externe Frei Belegt URLs"
 
 msgid "GENDER_Group"
 msgstr "female"
@@ -1072,10 +1077,10 @@ msgstr[0] "Verknüpfung"
 msgstr[1] "Verknüpfungen"
 
 msgid "Display Name (email)"
-msgstr ""
+msgstr "Anzeigename (E-Mail)"
 
 msgid "Display Name - Company / Organisation"
-msgstr ""
+msgstr "Anzeigename - Firma/Organisation"
 
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr ""
