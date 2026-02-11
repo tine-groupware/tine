@@ -1054,15 +1054,23 @@ class Tinebase_Core
             }
             
         } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__
+                    . '::' . __LINE__ . ' ' . $e->getMessage());
+            }
 
             $enabled = false;
             if ('File' === $backendType && isset($backendOptions['cache_dir']) && ! is_dir($backendOptions['cache_dir'])) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__
-                    . '::' . __LINE__ . ' Create cache directory and re-try');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__
+                        . '::' . __LINE__ . ' Create cache directory and re-try');
+                }
                 if (@mkdir($backendOptions['cache_dir'], 0770, true)) {
                     $enabled = $_enabled;
                 }
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__
+                    . '::' . __LINE__ . ' Disable caching');
             }
 
             self::setupCache($enabled);
