@@ -80,6 +80,11 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     const FONT_TIMES_NEW_ROMAN = 'times new roman';
 
     const FONT_VERDANA = 'verdana';
+
+    /**
+     * default message display format in htmlEditor
+     */
+    const DISPLAY_FORMAT = 'displayFormat';
     
     /**
      * application
@@ -112,6 +117,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::CONFIRM_DELETE,
             self::EML_FORWARD,
             self::DEFAULT_FONT,
+            self::DISPLAY_FORMAT
         );
             
         return $allPrefs;
@@ -154,6 +160,10 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
             self::DEFAULT_FONT => [
                 'label'         => $translate->_('Default Font'),
                 'description'   => $translate->_('Setting the default font in the Email app'),
+            ],
+            self::DISPLAY_FORMAT => [
+                'label'         => $translate->_('Display Format'),
+                'description'   => $translate->_('Setting the default Email display format in the Email app'),
             ]
         );
         
@@ -250,6 +260,25 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                         <option>
                             <value>' . self::FONT_VERDANA . '</value>
                             <label>' . 'Verdana' . '</label>
+                        </option>
+                    </options>';
+                break;
+            case self::DISPLAY_FORMAT:
+                $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->value = Felamimail_Model_Account::DISPLAY_HTML;
+                $preference->options = '<?xml version="1.0" encoding="UTF-8"?>
+                    <options>
+                        <option>
+                            <label>' . $translate->_('HTML') . '</label>
+                            <value>' . Felamimail_Model_Account::DISPLAY_HTML . '</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Plain Text') . '</label>
+                            <value>' . Felamimail_Model_Account::DISPLAY_PLAIN . '</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Depending on content format') . '</label>
+                            <value>' . Felamimail_Model_Account::DISPLAY_CONTENT_TYPE . '</value>
                         </option>
                     </options>';
                 break;

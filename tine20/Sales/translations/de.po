@@ -673,6 +673,9 @@ msgstr "RECHNUNG"
 msgid "You have to set a customer!"
 msgstr "Bitte legen Sie einen Kunden bzw eine Kundin fest!"
 
+msgid "This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly."
+msgstr "Diese Adresse wird durch den verknüpften Kontakt verwaltet. Änderungen an den nicht schreibbaren Feldern können direkt im diesem Kontakt getätigt werden."
+
 msgid "Name shorthand"
 msgstr "Kund*innen Kürzel"
 
@@ -773,6 +776,18 @@ msgstr "ohne Kund*in"
 
 msgid "Show closed"
 msgstr "Geschlossene anzeigen"
+
+msgid "Create from Contact ..."
+msgstr "Aus Kontakt erstellen ..."
+
+msgid "Addressbook Contact"
+msgstr "Adressbuch Kontakt"
+
+msgid "Contacts and sales addresses can be linked to each other so that changes to the contact automatically change the linked sales address and it is not possible to change the corresponding address fields directly in Sales."
+msgstr "Kontakte  und Sales Adressen können miteinander verknüpft werden, so dass Änderungen am Kontakt automatisch auch die verknüpfte Sales Adresse ändern und das direkte Ändern der entsprechenden Adressfelder im Sales nicht möglich ist."
+
+msgid "Link sales address to given addressbook contact."
+msgstr "Sales Adresse mit gegebenen Adressbuch Kontakt verknüpfen."
 
 msgid "Select customer"
 msgstr "Kund*innen auswählen"

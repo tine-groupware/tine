@@ -268,6 +268,7 @@ class Tinebase_Frontend_CliTest extends TestCase
 
         foreach ($scheduler->getAll() as $task) {
             if (in_array($task->name, [
+                // FIXME skip those checks as they fail at random (?)
                 'Tinebase_FileRevisionCleanup',
                 'Tinebase_DeletedFileCleanup',
                 'Tinebase_FileSystemCheckIndex',
@@ -280,8 +281,7 @@ class Tinebase_Frontend_CliTest extends TestCase
                 // Sales
                 'createAutoInvoicesDailyTask', // skip because invoicing might not be active
                 'createAutoInvoicesMonthlyTask', // skip because invoicing might not be active
-            ])) {
-                // FIXME skip those checks as they fail at random (?)
+            ]) || !$task->active) {
                 continue;
             }
             static::assertNotEmpty($task->last_run, 'task ' . $task->name . ' did not run successfully: ' .

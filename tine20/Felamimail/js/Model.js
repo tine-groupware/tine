@@ -332,12 +332,19 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      * @param account
      */
     getFormatConfig(formatConfig, message, account = null) {
+        const defaultDisplayFormat = Tine.Felamimail.registry.get('preferences').get('displayFormat');
+
         account = account ?? Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
         // set default mimeType to text/plain when no account found, might happen for .eml emails
         let mimeType = 'text/plain';
         
         if (account) {
             mimeType = account.get(formatConfig);
+
+            if (formatConfig === 'display_format' && mimeType === 'follow_preference') {
+                mimeType = defaultDisplayFormat ?? 'text/html';
+            }
+
             if (mimeType === 'content_type') {
                 mimeType = message.get('body_content_type');
             } else {

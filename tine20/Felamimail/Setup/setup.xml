@@ -7,7 +7,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>31</version>
+            <version>32</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -119,7 +119,7 @@
                     <name>display_format</name>
                     <type>text</type>
                     <length>64</length>
-                    <default>html</default>
+                    <default>follow_preference</default>
                 </field>
                 <field>
                     <name>compose_format</name>

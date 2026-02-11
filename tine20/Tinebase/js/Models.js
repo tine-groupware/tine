@@ -403,6 +403,7 @@ Tine.Tinebase.Model.Relation = Record.create([
     {name: 'id'},
     {name: 'own_model'},
     {name: 'own_id'},
+    {name: 'related_degree'},
     {name: 'related_model'},
     {name: 'related_id'},
     {name: 'type'},

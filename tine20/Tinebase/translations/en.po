@@ -3747,6 +3747,12 @@ msgstr "Saving Favorite \"{0}\""
 msgid "(shared)"
 msgstr "(shared)"
 
+msgid "Follow Preference"
+msgstr "Follow Preference"
+
+msgid "this config can not be set because its overwritten from a locked preference in admin mode."
+msgstr "this config can not be set because its overwritten from a locked preference in admin mode."
+
 msgid "Defined by..."
 msgstr "Defined by..."
 

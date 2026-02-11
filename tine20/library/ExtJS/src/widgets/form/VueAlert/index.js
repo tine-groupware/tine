@@ -36,6 +36,11 @@ Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
             return
         }
         this.props.label = t
+    },
+
+    onShow: function() {
+        this.supr().onShow.call(this, arguments)
+        this.getVisibilityEl().setStyle('display', 'initial')
     }
 })
 

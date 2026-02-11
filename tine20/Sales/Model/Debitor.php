@@ -85,8 +85,12 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_CUSTOMER_ID   => [],
-                self::FLD_DELIVERY      => [],
-                self::FLD_BILLING       => [],
+                self::FLD_DELIVERY      => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
+                ],
+                self::FLD_BILLING       => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
+                ],
                 self::FLD_PAYMENT_MEANS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
