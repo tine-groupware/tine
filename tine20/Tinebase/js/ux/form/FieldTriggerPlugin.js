@@ -81,7 +81,7 @@ class FieldTriggerPlugin {
             }, []).length * 16 + (this.field.getTriggerWidth?.() || 0) + 'px'
         })
 
-        this.setVisible((!this.hideOnEmptyValue || this.field.getValue()) && (!this.hideOnInvalidValue || this.field.isValid()));
+        this.setVisible((!this.hideOnEmptyValue || this.field.getValue()) && (!this.hideOnInvalidValue || this.field.isValid()) && this.visible);
     }
 
     setTriggerClass(triggerClass) {

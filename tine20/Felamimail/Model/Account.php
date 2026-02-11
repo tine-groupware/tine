@@ -335,13 +335,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             ],
             'display_format' => [
                 self::TYPE => self::TYPE_STRING,
+                self::SPECIAL_TYPE  => self::SPECIAL_TYPE_PREFERENCE_OVERRIDE,
                 self::LENGTH => 64,
                 self::LABEL => 'Display Format', // _('Display Format')
                 self::SHY => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
-                    ['InArray', [self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE]]
+                    Zend_Filter_Input::DEFAULT_VALUE => self::FOLLOW_PREFERENCE,
+                    ['InArray', [self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE, self::FOLLOW_PREFERENCE]]
                 ],
                 self::INPUT_FILTERS             => [
                     Zend_Filter_Empty::class => self::DISPLAY_HTML,
@@ -349,6 +350,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_StringToLower::class
                 ],
                 self::NULLABLE                  => true,
+                self::UI_CONFIG     => [
+                    self::APPLICATION      => Felamimail_Config::APP_NAME,
+                    'preferenceName'    => Felamimail_Preference::DISPLAY_FORMAT,
+                ]
             ],
             'compose_format' => [
                 self::TYPE => self::TYPE_STRING,
@@ -1067,5 +1072,18 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
             Tinebase_EmailUser_Model_Account::TYPE_USER_EXTERNAL,
             Tinebase_EmailUser_Model_Account::TYPE_SHARED_EXTERNAL,
         ]);
+    }
+
+    public function __get($_name)
+    {
+        $result = parent::__get($_name);
+        if ($_name === 'display_format') {
+            if ($result === self::FOLLOW_PREFERENCE) {
+                $result = Tinebase_Core::getPreference(Felamimail_Config::APP_NAME)
+                    ->getValueForUser(Felamimail_Preference::DISPLAY_FORMAT, $this->user_id);
+            }
+        }
+
+        return $result;
     }
 }

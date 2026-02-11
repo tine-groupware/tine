@@ -50,7 +50,8 @@ Tine.widgets.form.FieldManager = function() {
             timezone: 'widget-timezonecombo',
             url: 'urlfield',
             email: 'tw-emailField',
-            application: 'tw-app-picker'
+            application: 'tw-app-picker',
+            preferenceOverride: 'widget-preferencecombo'
         },
 
         /**

@@ -903,23 +903,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     account: this.record,
                     maxLength: 64,
                     value: 'Templates'
-                }], [{
-                    fieldLabel: this.app.i18n._('Display Format'),
-                    name: 'display_format',
-                    typeAhead: false,
-                    triggerAction: 'all',
-                    lazyRender: true,
-                    editable: false,
-                    mode: 'local',
-                    forceSelection: true,
-                    value: 'content_type',
-                    xtype: 'combo',
-                    store: [
-                        ['html', this.app.i18n._('HTML')],
-                        ['plain',  this.app.i18n._('Plain Text')],
-                        ['content_type',  this.app.i18n._('Depending on content format')]
-                    ]
-                }], [{
+                }], [
+                    Tine.widgets.form.FieldManager.get(
+                    this.appName,
+                    this.modelName,
+                    'display_format',
+                    Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG,
+                    {
+                        typeAhead: false,
+                        triggerAction: 'all',
+                        lazyRender: true,
+                        editable: false,
+                        mode: 'local',
+                        forceSelection: true,
+                    })
+                ], [{
                     fieldLabel: this.app.i18n._('Compose Format'),
                     name: 'compose_format',
                     typeAhead: false,

@@ -265,6 +265,7 @@ require("./CreditsScreen.js");
 require("./widgets/CountryCombo.js");
 require("./widgets/ActivitiesPanel.js");
 require("./widgets/ActivitiesGridPanel.js");
+require("./widgets/PreferenceCombo.js");
 require("./widgets/form/RecordPickerComboBox.js");
 require("./widgets/relation/PickerCombo.js");
 require("./widgets/form/ConfigPanel.js");
