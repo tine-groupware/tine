@@ -227,7 +227,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
         
         if (isset($timeaccount->deadline) && $timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
+            }
             
             // it is only on monday allowed to add timesheets for last week
             $date = new Tinebase_DateTime();
