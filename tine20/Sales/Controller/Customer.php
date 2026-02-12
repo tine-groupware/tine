@@ -136,13 +136,16 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
+        /** @var Sales_Model_Customer $_record */
         $rel = $_record->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
         if ($rel) {
             $contact = Addressbook_Controller_Contact::getInstance()->get($rel->related_id);
+            if (! $_record->postal instanceof Sales_Model_Address) {
+                $_record->postal = new Sales_Model_Address();
+            }
             $_record->postal->customer_id = $_createdRecord->getId();
             $_record->postal->setFromContact($contact);
         }
-
 
         // create default  if missing
         if (!$_record->{SMC::FLD_DEBITORS}) {
