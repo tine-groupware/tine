@@ -19,6 +19,9 @@ Die Versionierung wird mit folgendem Schalter in der 'filesystem'-Konfiguration 
 Bei einem Docker-Compose Setup kann das Verhalten über die ENV-Variable TINE20_FILESYSTEM_MODLOG_ACTIVE (Default: true)
 gesteuert werden.
 
+Welche Version der Datei ausgeliefert wird, steht statisch in der DB - es halt also nicht direkt mit der Einstellung zu
+tun und es kann problemlos zwischen an/aus umgeschaltet werden.
+
 ### Aufräumen der Versionen
 
 Das Aufräumen erledigt ein Scheduler-Job mit dem Namen "Tinebase_FileRevisionCleanup", der standardmäßig einmal täglich
