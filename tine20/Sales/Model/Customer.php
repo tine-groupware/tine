@@ -17,6 +17,7 @@
  *
  * @property string $name_shorthand
  * @property string $cpextern_id
+ * @property ?Sales_Model_Address $postal
  */
 class Sales_Model_Customer extends Tinebase_Record_NewAbstract
 {
