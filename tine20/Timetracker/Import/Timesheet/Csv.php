@@ -58,23 +58,33 @@ class Timetracker_Import_Timesheet_Csv extends Tinebase_Import_Csv_Generic
     protected function _findTimeAccount(array $_data): Tinebase_Record_Interface
     {
         if (isset($_data['timeaccount_id'])) {
+            $timeAccountId = $_data['timeaccount_id'];
             try {
-                return Timetracker_Controller_Timeaccount::getInstance()->get($_data['timeaccount_id']);
+                return Timetracker_Controller_Timeaccount::getInstance()->get($timeAccountId);
             } catch (Tinebase_Exception_NotFound) {
-                // try to get by number
-                try {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Could not find time account with ID ' . $timeAccountId);
+                }
+                foreach (['number', 'title'] as $field) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Try to find matching time account by ' . $field);
+                    }
                     $result = Timetracker_Controller_Timeaccount::getInstance()->search(
                         Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                             Timetracker_Model_Timeaccount::class, [
-                            ['field' => 'number', 'operator' => 'equals', 'value' => $_data['timeaccount_id']]
+                            ['field' => $field, 'operator' => 'equals', 'value' => $timeAccountId]
                         ]));
                     if ($result->count() > 0) {
                         return $result->getFirstRecord();
                     }
-                } catch (Tinebase_Exception_NotFound) {
-                    // TODO try to get by name/title?
                 }
             }
+        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Did not find matching TA - use the first TA we can get');
         }
         return Timetracker_Controller_Timeaccount::getInstance()->getAll()->getFirstRecord();
     }
