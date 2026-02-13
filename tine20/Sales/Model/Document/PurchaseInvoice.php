@@ -290,7 +290,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         if ('' !== (string)$xr->Invoice_issue_date) { // 1
             $pInvoice->{self::FLD_DOCUMENT_DATE} = new Tinebase_DateTime((string)$xr->Invoice_issue_date);
         }
-        //if ('' !== (string)$xr->Invoice_type_code) {} // 1 $isStorno ? '384' : '380'
+        //if ('' !== (string)$xr->Invoice_type_code) {} // 1  TODO FIXME $isStorno ? '384' : '380'
         if ('' !== (string)$xr->Invoice_currency_code) { // 1
             $pInvoice->{self::FLD_DOCUMENT_CURRENCY} = (string)$xr->Invoice_currency_code;
         }
@@ -303,16 +303,24 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         if ('' !== (string)$xr->Buyer_reference) { // 1
             $pInvoice->{self::FLD_BUYER_REFERENCE} = (string)$xr->Buyer_reference;
         }
-        //if ('' !== (string)$xr->Project_reference) {} // 0..1
-        //if ('' !== (string)$xr->Contract_reference) {} // 0..1
-        //if ('' !== (string)$xr->Purchase_order_reference) {} // 0..1
-        //if ('' !== (string)$xr->Sales_order_reference) {} // 0..1
+        if ('' !== (string)$xr->Project_reference) { // 0..1
+            $pInvoice->{self::FLD_PROJECT_REFERENCE} = (string)$xr->Project_reference;
+        }
+        if ('' !== (string)$xr->Contract_reference) { // 0..1
+            $pInvoice->{self::FLD_CONTRACT_NUMBER} = (string)$xr->Contract_reference;
+        }
+        if ('' !== (string)$xr->Purchase_order_reference) { // 0..1
+            $pInvoice->{self::FLD_PURCHASE_ORDER_REFERENCE} = (string)$xr->Purchase_order_reference;
+        }
+        //if ('' !== (string)$xr->Sales_order_reference) {} // 0..1 TODO or this one?!
         //if ('' !== (string)$xr->Receiving_advice_reference) {} // 0..1
         //if ('' !== (string)$xr->Despatch_advice_reference) {} // 0..1
         //if ('' !== (string)$xr->Tender_or_lot_reference) {} // 0..1
         //if ('' !== (string)$xr->Invoiced_object_identifier) {} // 0..1
         //if ('' !== (string)$xr->Buyer_accounting_reference) {} // 0..1
         if ('' !== (string)$xr->Payment_terms) { // 0..1
+            // https://www.xoev.de/sixcms/media.php/13/XRechnung-EnglishSummary-v211.pdf
+            // hier werden *nur* ? Skonto Daten Übermittelt
             //$pInvoice->{self::FLD_PAYMENT_TERMS} = intval($xr->Payment_terms); // TODO FIXME!!! skonto is in there?
         }
 
@@ -335,7 +343,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         // $xr->PROCESS_CONTROL->Business_process_type_identifier 1 e.g. urn:fdc:peppol.eu:2017:poacc:billing:01:1.0
         // $xr->PROCESS_CONTROL->Specification_identifier 1 e.g. urn:cen.eu:en16931:2017#compliant#urn:xeinkauf.de:kosit:xrechnung_3.0
 
-        // 0..* PRECEDING_INVOICE_REFERENCE
+        // 0..* PRECEDING_INVOICE_REFERENCE TODO => precursor_documents?!
         /*foreach ($xr->PRECEDING_INVOICE_REFERENCE as $precedingDocument) {
             $precedingDocument->Preceding_Invoice_reference // 1
             $precedingDocument->Preceding_Invoice_issue_date // 0..1
@@ -358,9 +366,11 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             ]))->getFirstRecord();
             if (null !== $supplier) {
                 $pInvoice->{self::FLD_SUPPLIER_ID} = $supplier;
+                // TODO update supplier data if invoice is newer than last modified date
             }
         }
         $xrSupplier = Sales_Model_Supplier::fromXRXml($seller);
+        // TODO what do we do with this? not at all? client requests it separately?
 
 
         // 1 BUYER
