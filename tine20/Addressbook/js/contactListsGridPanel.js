@@ -10,27 +10,20 @@
  
 Ext.ns('Tine.Addressbook');
 
+import {listTypeRenderer} from './renderers'
+
 /**
  * @namespace   Tine.Addressbook
- * @class       Tine.Addressbook.ListEditDialogRoleGridPanel
- * @extends     Ext.grid.EditorGridPanel
+ * @class       Tine.Addressbook.contactListsGridPanel
+ * @extends     Tine.widgets.grid.PickerGridPanel
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
-    recordClass: 'Addressbook.List',
-    usePagingToolbar: false,
-
-    gridConfig: {
-        autoExpandColumn: 'name'
-    },
-
+    recordClass: 'Addressbook.Model.List',
+    autoExpandColumn: 'name',
     // the list record
     record: null,
-
-    // deactivate some fns
-    initActions: Ext.emptyFn,
-    initFilterPanel: Ext.emptyFn,
 
     /**
      * init component
@@ -41,28 +34,21 @@ Tine.Addressbook.contactListsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
             fields: Tine.Addressbook.Model.List
         });
 
-        this.gridConfig.cm = new Ext.grid.ColumnModel({
-            defaults: {
-                resizable: true
-            },
-            columns: this.getColumns()
-        });
-
-        // allow dbclick to open
-        this.action_editInNewWindow = new Ext.Action({hidden: true});
-
-        // make sure grid is updated after group changed
-        this.onUpdateRecord = _.bind(this.onUpdateRecord, this, _, 'local');
+        this.initColumns();
 
         Tine.Addressbook.contactListsGridPanel.superclass.initComponent.call(this);
+
+        this.searchCombo.additionalFilters = [
+            { field: 'account_only', operator: 'equals', value: this.record.get('type') === 'user' }
+        ];
     },
 
-    getColumns: function() {
-        const columns = [
-            { id: 'type', header: this.app.i18n._('Type'), width: 20, renderer: Tine.Addressbook.ListGridPanel.listTypeRenderer },
+    initColumns: function() {
+        this.columns = [
+            { id: 'type', header: this.app.i18n._('Type'), width: 20, renderer: listTypeRenderer },
             { id: 'name', header: this.app.i18n._('Name'), width: 100, renderer: this.nameRenderer}
         ];
-        return columns;
+        return this.columns;
     },
 
     nameRenderer(value, metadata, record) {

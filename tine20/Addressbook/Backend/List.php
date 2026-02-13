@@ -63,7 +63,7 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
             'joinOn'       => 'list_id',
         // use first element of result array
             'singleValue'  => TRUE,
-        )
+        ),
     );
 
     /**
@@ -82,6 +82,23 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
         parent::__construct($_dbAdapter, $_options);
+    }
+
+    /**
+     * @param string|array $_cols
+     * @param bool $_getDeleted
+     * @return Zend_Db_Select
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {
+        $select = parent::_getSelect($_cols, $_getDeleted);
+
+        $select->joinLeft(
+        /* table  */ array('groups_ao' => $this->_tablePrefix . 'groups'),
+            /* on     */ $this->_db->quoteIdentifier('groups_ao.list_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
+            /* select */ array('account_only' => 'groups_ao.account_only'));
+
+        return $select;
     }
 
     /**

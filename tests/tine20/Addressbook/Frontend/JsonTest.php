@@ -265,9 +265,9 @@ class Addressbook_Frontend_JsonTest extends TestCase
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY
         ) {
-            self::assertFalse($list['account_only']);
+            self::assertFalse((bool)$list['account_only']);
         } else {
-            self::assertTrue($list['account_only']);
+            self::assertTrue((bool)$list['account_only']);
         }
     }
 

@@ -115,6 +115,11 @@ class Addressbook_Model_List extends Tinebase_Record_NewAbstract
         ],
 
         'filterModel'       => [
+            'account_only'              => array(
+                'filter'            => 'Addressbook_Model_ListAccountOnlyFilter',
+                'label'             => null,
+                'options'           => array()
+            ),
             'path'              => [
                 'filter'            => 'Tinebase_Model_Filter_Path',
                 'label'             => null,

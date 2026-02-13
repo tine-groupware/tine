@@ -353,10 +353,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         foreach ($toAdd as $groupId) {
-            Addressbook_Controller_List::getInstance()->addListMember($groupId, $updatedRecord->getId());
+            Addressbook_Controller_List::getInstance()->addListMember($groupId, $updatedRecord);
         }
         foreach ($toDelete as $groupId) {
-            Addressbook_Controller_List::getInstance()->removeListMember($groupId, $updatedRecord->getId());
+            Addressbook_Controller_List::getInstance()->removeListMember($groupId, $updatedRecord);
         }
         $updatedRecord->groups = Addressbook_Controller_List::getInstance()->getMemberships($updatedRecord);
 

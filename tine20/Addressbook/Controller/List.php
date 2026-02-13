@@ -104,7 +104,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
         $result = new Tinebase_Record_RecordSet('Addressbook_Model_List',
             array(parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect)));
         $this->_removeHiddenListMembers($result);
-        $this->_setAccountOnly($result);
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $result->getFirstRecord();
     }
@@ -152,29 +151,6 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             foreach ($lists as $list) {
                 // use array_values to make sure we have numeric index starting with 0 again
                 $list->members = array_values(array_diff($list->members, $hiddenMemberids));
-            }
-        }
-    }
-
-    /**
-     * set account_only property of list
-     *
-     * @param Tinebase_Record_RecordSet $lists
-     *
-     * TODO maybe we should fetch this via sql join
-     */
-    protected function _setAccountOnly($lists)
-    {
-        foreach ($lists as $list) {
-            if ($list->type === Addressbook_Model_List::LISTTYPE_GROUP && $list->group_id) {
-                try {
-                    $group = Tinebase_Group::getInstance()->getGroupById($list->group_id);
-                    $list->account_only = (bool) $group->account_only;
-                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                    Tinebase_Exception::log($ternd);
-                }
-            } else {
-                $list->account_only = false;
             }
         }
     }
@@ -264,6 +240,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
             if (true === $_addToGroup && ! empty($list->group_id)) {
                 foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_newMembers) as $userId) {
+                    if ($_newMembers instanceof Addressbook_Model_Contact) {
+                        $userId = $_newMembers->account_id;
+                        if (empty($userId)) {
+                            continue;
+                        }
+                    }
                     Admin_Controller_Group::getInstance()->addGroupMember($list->group_id, $userId, false);
                 }
             }
@@ -351,6 +333,12 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
             if (true === $_removeFromGroup && ! empty($list->group_id)) {
                 foreach (Tinebase_Record_RecordSet::getIdsFromMixed($_removeMembers) as $userId) {
+                    if ($_removeMembers instanceof Addressbook_Model_Contact) {
+                        $userId = $_removeMembers->account_id;
+                        if (empty($userId)) {
+                            continue;
+                        }
+                    }
                     Admin_Controller_Group::getInstance()->removeGroupMember($list->group_id, $userId, false);
                 }
             }

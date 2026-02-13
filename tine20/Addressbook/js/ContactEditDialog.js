@@ -453,8 +453,35 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     initComponent: function () {
         this.initToolbar();
         this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
-            initialLoadAfterRender: false,
-            frame: false
+            frame: false,
+            record: this.record,
+            listeners: {
+                scope: this,
+                change: function (field, newValue, oldValue) {
+                    const newGroups = newValue;
+                    const oldGroups = this.record.get('groups');
+                    const getIds = function (groups) {
+                        return groups.map(function (group) {
+                            return Ext.isObject(group) ? group.id : group;
+                        });
+                    };
+
+                    const newIds = getIds(newGroups);
+                    const oldIds = getIds(oldGroups);
+                    const added = newGroups.filter(function (group) {
+                        return oldIds.indexOf(group.id) === -1;
+                    });
+                    const removed = oldGroups.filter(function(group) {
+                        return newIds.indexOf(group.id) === -1;
+                    });
+
+                    this.record.set('groups_diff', {
+                        model: 'Addressbook_Model_List',
+                        added: added,
+                        removed: removed,
+                    });
+                }
+            }
         });
         Tine.Addressbook.ContactEditDialog.superclass.initComponent.apply(this, arguments);
 
