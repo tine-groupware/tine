@@ -228,12 +228,6 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         this.idPrefix = Ext.id();
         this.statusActions = [];
         this.statuses = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus');
-        this.statuses.each((item) => {
-            // hide the save action if event is already in the calendar , usually external invite does not saved
-            if (this.hasExistingEvent && item.id === 'NEEDS-ACTION') {
-                this.statuses.remove(item);
-            }
-        });
         this.statuses.each((status) => {
             this.statusActions.push(new Ext.Button(new Ext.Action({
                 id: this.idPrefix + '-tglbtn-' + status.id,
@@ -373,6 +367,8 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         const myAttenderRecord = this.record.getMyAttenderRecord();
         const attenderRecord = this.getTargetAttendeeRecord() ?? myAttenderRecord;
         let showActions = false;
+        //todo: show save action only when needed
+        let showSaveAction = !this.hasExistingEvent;
         let text = '';
 
         if (myAttenderRecord) {
@@ -411,6 +407,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             else if (precondition.hasOwnProperty('ORGANIZER')) {
                 // fixme: check precondition failed, allow it in be ?
                 text = this.app.i18n._("You are the organizer of this event.");
+                showSaveAction = false;
             }
             else {
                 text = this.app.i18n._("Unsupported message");
@@ -465,24 +462,22 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
 
         this.iMIPclause.setText(text);
         this.viewInCalendarAction[(!this.allowViewInCalendar || !attenderRecord) ? 'hide' : 'show']();
-
-        if (showActions) {
-            Ext.each(this.statusActions, function (action) {
-                action.show();
-            });
-            this.deactivateCombo();
-            this.actionToolbar.doLayout();
-        }
+        this.deactivateCombo();
+        this.actionToolbar.doLayout();
 
         this.statuses.each((status) => {
             const freqBtn = Ext.getCmp(this.idPrefix + '-tglbtn-' + status.id);
-
-            if (freqBtn && attenderRecord) {
-                freqBtn.toggle(status.id === attenderRecord.get('status'));
-            }
-            // hide the save action if event is already in the calendar , usually external invite is not saved
             if (!attenderRecord) {
                 freqBtn.hide();
+            } else {
+                if (status.id === 'NEEDS-ACTION') {
+                    freqBtn[showSaveAction ? 'show': 'hide']();
+                } else {
+                    if (showActions) {
+                        freqBtn.show();
+                    }
+                    freqBtn.toggle(status.id === attenderRecord.get('status'));
+                }
             }
         })
     }

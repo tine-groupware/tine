@@ -271,16 +271,17 @@ class AreaLocks extends Ext.util.Observable {
           maxAbsenceTime: conf.lifetime,
           absenceCallback: _.bind(this.lock, this, areaName),
           presenceCallback: (lastPresenceDate, po, ttl) => {
-            const lockState = this.getLockState(areaName)
-            const expires = new Date(lastPresenceDate.getTime() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
-            if (expires !== lockState.expires) {
-              this.setLockState(areaName, _.assign(lockState, {expires: expires}))
-            }
-            postal.publish({
-              channel: 'areaLocks',
-              topic: [areaName, 'ttl'].join('.'),
-              data: {expires, ttl}
-            })
+              const lockState = this.getLockState(areaName);
+              if (lockState.expires >= new Date().format(Date.patterns.ISO8601Long)) {
+                  const expires = new Date(lastPresenceDate.getTime() + conf.lifetime * 60000).format(Date.patterns.ISO8601Long)
+
+                  this.setLockState(areaName, _.assign(lockState, {expires: expires}))
+                  postal.publish({
+                      channel: 'areaLocks',
+                      topic: [areaName, 'ttl'].join('.'),
+                      data: {expires, ttl}
+                  })
+              }
           }
         })
       } else {
