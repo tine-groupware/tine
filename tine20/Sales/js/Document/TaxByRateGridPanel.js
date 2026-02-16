@@ -85,7 +85,8 @@ const TaxByRateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         _.each(colModel.columns, col => {
             col.width = 100
             if (col.dataIndex === 'tax_rate') {
-                col.quickaddField.value = Tine.Tinebase.configManager.get('salesTax');
+                // col.quickaddField.value = Tine.Tinebase.configManager.get('salesTax');
+                col.quickaddField.nullable = true; // prevent fluent add
             }
         })
 

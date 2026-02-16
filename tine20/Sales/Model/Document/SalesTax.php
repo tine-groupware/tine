@@ -112,7 +112,6 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-//                    self::READ_ONLY                     => true,
                     self::COLUMN_CONFIG                 => [
                         'width'                             => 100
                     ],
@@ -126,7 +125,6 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-//                    self::READ_ONLY                     => true,
                     self::COLUMN_CONFIG                 => [
                         'width'                             => 100
                     ],
@@ -140,7 +138,6 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
-//                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_TAX_RATE                  => [
@@ -155,7 +152,6 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                     [Tinebase_Record_Validator_GreaterOrEqualThan::class, 0.0],
                 ],
                 self::UI_CONFIG                     => [
-//                    self::READ_ONLY                     => true,
                 ],
             ],
         ],

@@ -128,7 +128,11 @@ Tine.widgets.form.FieldManager = function() {
             }
             field.name = fieldDefinition.fieldName || fieldDefinition.name;
             field.readOnly = field.hasOwnProperty('readOnly') ? field.readOnly : (!! fieldDefinition.readOnly || !! _.get(fieldDefinition, 'uiconfig.readOnly'));
+            // @TODO blank means ''/null. A int/float/bool/date which is not nullable can't be blank
+            field.nullable = !!fieldDefinition.nullable;
             field.allowBlank = !! (fieldDefinition.validators && fieldDefinition.validators.allowEmpty);
+            field.emptyValue = field.hasOwnProperty('emptyValue') ? field.emptyValue : (fieldDefinition.nullable ? null : '');
+
             // make field available via recordForm.formfield_NAME
             field.ref = '../../formfield_' + field.name;
 
@@ -426,7 +430,6 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 default:
                     field.xtype = field.xtype || this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
-                    field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
 
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
