@@ -28,7 +28,7 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         );
     }
 
-    public function testMatrixAccountApi($delete = true): array
+    public function testMatrixAccountApi(bool $delete = true): array
     {
         return $this->_testSimpleRecordApi(
             MatrixSynapseIntegrator_Model_MatrixAccount::MODEL_NAME_PART,
@@ -37,6 +37,24 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             $delete,
             MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData(),
             false // no update (see above - descriptionField)
+        );
+    }
+
+    public function testRoomApi(bool $delete = true): array
+    {
+        $list = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
+            'name' => 'test list',
+            'container_id' => $this->_getTestContainer(
+                Addressbook_Config::APP_NAME, Addressbook_Model_List::class)->getId(),
+        ]));
+        return $this->_testSimpleRecordApi(
+            modelName: MatrixSynapseIntegrator_Model_Room::MODEL_NAME_PART,
+            nameField: MatrixSynapseIntegrator_Model_Room::FLD_NAME,
+            descriptionField: MatrixSynapseIntegrator_Model_Room::FLD_TOPIC,
+            delete: $delete,
+            recordData: [
+                MatrixSynapseIntegrator_Model_Room::FLD_LIST_ID => $list,
+            ]
         );
     }
 

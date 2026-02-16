@@ -17,12 +17,9 @@
  * @subpackage  Controller
  * @todo        add acl (Admin.manageUser needed for some actions / rights / visibility)
  */
-class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controller_Record_Abstract
+class MatrixSynapseIntegrator_Controller_MatrixAccount extends MatrixSynapseIntegrator_Controller_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
-
-    protected ?MatrixSynapseIntegrator_Backend_Corporal $_corporal = null;
-    protected ?MatrixSynapseIntegrator_Backend_Synapse $_synapse = null;
 
     /**
      * the constructor
@@ -31,17 +28,13 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
      */
     protected function __construct()
     {
-        $this->_applicationName = MatrixSynapseIntegrator_Config::APP_NAME;
+        parent::__construct();
         $this->_modelName = MatrixSynapseIntegrator_Model_MatrixAccount::class;
         $this->_backend = new Tinebase_Backend_Sql([
             Tinebase_Backend_Sql::MODEL_NAME        => MatrixSynapseIntegrator_Model_MatrixAccount::class,
             Tinebase_Backend_Sql::TABLE_NAME        => MatrixSynapseIntegrator_Model_MatrixAccount::TABLE_NAME,
             Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
         ]);
-
-        $this->_purgeRecords = false;
-        $this->_resolveCustomFields = true;
-        $this->_doContainerACLChecks = true;
     }
 
     /**
@@ -72,40 +65,6 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             Tinebase_Model_Filter_Abstract::OPERATOR_EQUALS,
             Tinebase_Core::getUser()->getId()
         ));
-    }
-
-    /**
-     * check if user has the right to manage MatrixAccounts
-     *
-     * @param string $_action {get|create|update|delete}
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _checkRight($_action)
-    {
-        if (! $this->_doRightChecks) {
-            return;
-        }
-
-        switch ($_action) {
-            case 'get':
-                $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
-                break;
-            case 'create':
-            case 'update':
-            case 'delete':
-                $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
-                break;
-            default;
-                break;
-        }
-
-        parent::_checkRight($_action);
-    }
-
-    protected function _getApplicationRightsClass(): string
-    {
-        return Admin_Acl_Rights::class;
     }
 
     /**
@@ -149,37 +108,6 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
             MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID,
             $matrixId
         );
-    }
-
-    public function setCorporalBackend(
-        ?MatrixSynapseIntegrator_Backend_Corporal $backend = null): MatrixSynapseIntegrator_Backend_Corporal
-    {
-        return $this->_corporal = $backend ?: new MatrixSynapseIntegrator_Backend_Corporal();
-    }
-
-    public function getCorporalBackend(): MatrixSynapseIntegrator_Backend_Corporal
-    {
-        return $this->_corporal ?: $this->setCorporalBackend();
-    }
-
-    public function setSynapseBackend(
-        ?MatrixSynapseIntegrator_Backend_Synapse $backend = null): MatrixSynapseIntegrator_Backend_Synapse
-    {
-        return $this->_synapse = $backend ?: new MatrixSynapseIntegrator_Backend_Synapse();
-    }
-
-    public function getSynapseBackend(): MatrixSynapseIntegrator_Backend_Synapse
-    {
-        return $this->_synapse ?: $this->setSynapseBackend();
-    }
-
-    protected function _pushToCorporal()
-    {
-        if (! MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN)) {
-            return;
-        }
-
-        $this->getCorporalBackend()->push();
     }
 
     /**
@@ -243,7 +171,6 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
-
         $this->_replaceStringInMatrixId($_record);
     }
 
@@ -259,8 +186,6 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $_createdRecord */
-        $this->_pushToCorporal();
-
         if (!empty($_createdRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID})) {
             $this->setContactMatrixId($_createdRecord);
         }
@@ -279,27 +204,10 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends Tinebase_Controll
         /** @var MatrixSynapseIntegrator_Model_MatrixAccount $updatedRecord */
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
-        $this->_pushToCorporal();
-
         if ($currentRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID} !==
             $updatedRecord->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID}) {
             $this->setContactMatrixId($updatedRecord);
         }
-    }
-
-    /**
-     * inspect delete of one record (after delete)
-     *
-     * @param   Tinebase_Record_Interface $record          the just deleted record
-     * @return  void
-     */
-    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
-    {
-        parent::_inspectAfterDelete($record);
-
-        /** @var MatrixSynapseIntegrator_Model_MatrixAccount $record */
-        $record->is_deleted = 1;
-        $this->_pushToCorporal();
     }
 
     public function synapseLogin(): array
