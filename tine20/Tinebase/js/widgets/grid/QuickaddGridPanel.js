@@ -202,6 +202,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
         const newRecord = Tine.Tinebase.data.Record.setFromJson(defaultData, this.recordClass);
         newRecord.phantom = true;
 
+        // @TODO: we get recordData from all quickAddFields - but the value might be empty because the user didn't enter it
+        //        in this case we should keep default data?
         _.each(recordData, function(val, key) {
             if (val) {
                 // we want to see the red dirty triangles

@@ -375,8 +375,10 @@ const types = {
     'datetime_separated_time': 'date',
     'time':     'date',
     'string':   'string',
+    'localizedString': 'string',
     'stringAutocomplete': 'string',
     'text':     'string',
+    'fulltext':     'string',
     'boolean':  'bool',
     'integer':  'int',
     'bigint':   'int',
@@ -460,6 +462,9 @@ const getFieldFromModelConfig = function(fieldDefinition, key) {
             && !isArray(field.defaultValue) && String(field.defaultValue).match(/^[\[{]/)) {
             // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}
             field.defaultValue = JSON.parse(field.defaultValue);
+        }
+        if (!field.defaultValue && ['int', 'float'].indexOf(field.type) >= 0 && !fieldDefinition.nullable) {
+            field.defaultValue = 0;
         }
         if (fieldDefinition.type === 'dynamicRecord' && !fieldDefinition.nullable && !field.defaultValue) {
             field.defaultValue = {};
@@ -750,7 +755,6 @@ Record.generateUID = function(length) {
     return uuid.join('');
 };
 
-// @TODO: rethink: how does this relate/fit to field.defaultValue which is applied in reader?
 Record.getDefaultData = function(recordClass, defaults) {
     var modelConfig = recordClass.getModelConfiguration(),
         appName = modelConfig.appName,
@@ -761,7 +765,10 @@ Record.getDefaultData = function(recordClass, defaults) {
         modelConfig.defaultData = {};
     }
     
-    const dd = JSON.parse(JSON.stringify(modelConfig.defaultData));
+    // get default data from fields config
+    const dd = Record.setFromJson(JSON.stringify(modelConfig.defaultData), recordClass).getData();
+    delete dd[recordClass.getMeta('idProperty')];
+    delete dd['__meta'];
 
     // find container by selection or use defaultContainer by registry
     if (modelConfig.containerProperty &&! modelConfig.extendsContainer) {
