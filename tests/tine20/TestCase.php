@@ -991,7 +991,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             'accountStatus'         => 'enabled',
             'accountExpires'        => NULL,
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-            'accountLastName'       => 'Tine 2.0',
+            'accountLastName'       => Tinebase_Record_Abstract::generateUID(10),
             'accountFirstName'      => 'PHPUnit User',
             'accountEmailAddress'   => 'phpunit@' . $emailDomain,
         ], $userdata));
