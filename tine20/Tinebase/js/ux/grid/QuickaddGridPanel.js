@@ -93,6 +93,18 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // The customized header template
         this.initTemplates();
 
+        // NOTE: quickaddRecord is used for defaultData handling
+        //       and if mode !== header as placeholder to get a row rendered
+        //       BUT: it does not hold the actual data of the new row. all state is within the quickaddFields
+        if (!this.quickaddRecord) {
+            const defaultData = Ext.apply(Ext.isFunction(this.recordClass.getDefaultData) ?
+                this.recordClass.getDefaultData() : {}, Ext.isFunction(this.getRecordDefaults) ? this.getRecordDefaults() : {});
+
+            defaultData.id = defaultData.id ?? Tine.Tinebase.data.Record.generateUID();
+            this.quickaddRecord = Tine.Tinebase.data.Record.setFromJson(defaultData, this.recordClass);
+            this.quickaddRecord.phantom = true;
+        }
+
         // add our fields after view is rendered
         this.getView().afterRender = this.getView().afterRender.createSequence(this.renderQuickAddFields, this);
 
@@ -121,6 +133,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         break;
                     case e.ESC:
                         e.stopEvent();
+                        // f.setValue(this.quickaddRecord.get(f.fieldName));
                         f.setValue('');
                         f.el.blur();
                         break;
@@ -220,7 +233,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     };
                 }
 
-
+                // column.quickaddField.setValue(this.quickaddRecord.get(column.dataIndex));
                 column.quickaddField.setDisabled(this.readOnly || column.id != this.quickaddMandatory);
                 column.quickaddField.on(this.quickaddHandlers);
             }
@@ -251,16 +264,6 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     // quickaddMode !== 'header'
     renderQuickAddRow(idx) {
         this.store.remove(this.quickaddRecord);
-
-        if (!this.quickaddRecord) {
-            const defaultData = Ext.apply(Ext.isFunction(this.recordClass.getDefaultData) ?
-                this.recordClass.getDefaultData() : {}, Ext.isFunction(this.getRecordDefaults) ? this.getRecordDefaults() : {});
-
-            defaultData.id = defaultData.id ?? Tine.Tinebase.data.Record.generateUID();
-            this.quickaddRecord = Tine.Tinebase.data.Record.setFromJson(defaultData, this.recordClass);
-            this.quickaddRecord.phantom = true;
-        }
-
         this.store.insert(idx || this.store.getCount(), [this.quickaddRecord]);
     },
 
@@ -307,6 +310,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var data = {};
             Ext.each(this.getCols(true), function(item){
                 if(item.quickaddField){
+                    // @TODO apply defaultData if user didn't change field and field must not be empty?
                     data[item.id] = item.quickaddField.selectedRecord ?
                         item.quickaddField.selectedRecord.data :
                         item.quickaddField.getValue();
@@ -322,6 +326,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 if (this.fireEvent('newentry', data)){
                     var quickAddField = this.colModel.getColumnById(this.quickaddMandatory).quickaddField;
                     if (quickAddField.resetOnNew !== false) {
+                        // quickAddField[quickAddField.clearValue ? 'clearValue' : 'setValue'](this.quickaddRecord.get(this.quickaddMandatory));
                         quickAddField[quickAddField.clearValue ? 'clearValue' : 'setValue']('');
                         if (this.validate) {
                             quickAddField.clearInvalid();
@@ -330,6 +335,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     var columns = this.colModel.config;
                     for (var i = 0, len = columns.length; i < len; i++) {
                         if (columns[i].quickaddField != undefined && (this.resetAllOnNew || columns[i].quickaddField.resetOnNew)) {
+                            // columns[i].quickaddField.setValue(this.quickaddRecord.get(columns[i].dataIndex));
                             if (columns[i].quickaddField.xtype === 'extuxmoneyfield') {
                                 // prevent 0,00 € in moneyfields
                                 columns[i].quickaddField.setRawValue('');

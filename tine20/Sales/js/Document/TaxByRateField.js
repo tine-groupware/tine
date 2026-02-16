@@ -42,6 +42,9 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
 
     setValue(value, editDialog) {
         if (_.isArray(value)) {
+            // prevent focus loss when expanded
+            if (JSON.stringify(value) === JSON.stringify(this.currentValue)) return;
+
             // let's have a store roundtrip to create full records and be able to track changes on expand/collapse
             this.gridPanel.setStoreFromArray(_.cloneDeep(value) || [])
             value = this.gridPanel.getFromStoreAsArray(true)
