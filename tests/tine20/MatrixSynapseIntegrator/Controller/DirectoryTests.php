@@ -50,9 +50,8 @@ class MatrixSynapseIntegrator_Controller_DirectoryTests extends TestCase
 
         $userInfo = MatrixSynapseIntegrator_Controller_Directory::getInstance()->getUserInfo($user);
 
-        self::assertContains('PHPUnit User', $userInfo);
-        self::assertContains('Tine 2.0', $userInfo);
-        self::assertContains('PHPUnit User Tine 2.0', $userInfo);
+        self::assertContains($user->accountFirstName, $userInfo);
+        self::assertContains($user->accountLastName, $userInfo);
         self::assertContains($user->accountLoginName, $userInfo);
         self::assertContains($user->accountLoginName . '@mail.test', $userInfo);
         self::assertContains('+49123456789', $userInfo, print_r($userInfo, true));
