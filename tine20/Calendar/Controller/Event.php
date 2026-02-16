@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -540,16 +540,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     }
 
     /**
-     * returns freebusy information for given period and given attendee
-     * 
+     * returns free/busy information for given period and given attendee
+     *
+     * @param Calendar_Model_EventFilter $_periods
+     * @param Tinebase_Record_RecordSet $_attendee
+     * @param array $_ignoreUIDs
+     * @return Tinebase_Record_RecordSet<Calendar_Model_FreeBusy>
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     *
      * @todo merge overlapping events to one freebusy entry
-     * 
-     * @param  Calendar_Model_EventFilter                           $_periods
-     * @param  Tinebase_Record_RecordSet                            $_attendee
-     * @param  array                                                $_ignoreUIDs
-     * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
+     *
      */
-    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
+    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = []): Tinebase_Record_RecordSet
     {
         $fbInfoSet = new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
         
@@ -558,6 +563,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         Calendar_Model_Attender::enforceListIdForGroups($attendee);
         $groupmembers = $attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                . ' getConflictingPeriods for attendee: ' . print_r($attendee->toArray(), true));
+        }
 
         $conflictCriteria = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'in',     'value' => $attendee),
@@ -577,13 +587,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
-            . ' value: ' . print_r($typeMap, true));
 
         // fetch resources to get freebusy type
         // NOTE: we could add busy_type to attendee later
         if (isset($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE])) {
-            $resources = Calendar_Controller_Resource::getInstance()->getMultiple(array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
+            $resources = Calendar_Controller_Resource::getInstance()->getMultiple(
+                array_keys($typeMap[Calendar_Model_Attender::USERTYPE_RESOURCE]), true);
         }
 
         $processedEventIds = array();
