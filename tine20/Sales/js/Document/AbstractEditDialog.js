@@ -149,7 +149,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, 0))
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
-                        sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || defaultTaxRate
+                        sales_tax_by_rate = /*record.get('sales_tax_by_rate')?.[0]?.tax_rate ||*/ defaultTaxRate
                         sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
                         sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100)
                     } else {
@@ -169,7 +169,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, 0))
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
-                        sales_tax_by_rate = record.get('sales_tax_by_rate')?.[0]?.tax_rate || defaultTaxRate
+                        sales_tax_by_rate = /*record.get('sales_tax_by_rate')?.[0]?.tax_rate ||*/ defaultTaxRate
                         sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
                         sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
                     } else {
