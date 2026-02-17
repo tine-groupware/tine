@@ -77,6 +77,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 case 'supplier_id':
                     config.listeners = config.listeners || {};
                     config.listeners.select = (combo, record, index) => {
+                        if (!record) return;
                         fields['credit_term']?.setValue(record.get('credit_term'))
                         fields['document_currency'].setValue(record.get('currency') || fields['document_currency'].getValue())
                         // fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
