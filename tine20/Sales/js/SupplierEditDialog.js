@@ -256,7 +256,10 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }, {
                                 name: 'bic',
                                 fieldLabel: this.app.i18n._('BIC')
-                            }]]
+                            }], [
+                                this.fieldManager('eas_id'),
+                                this.fieldManager('electronic_address'),
+                            ]]
                     }]
                 }, {
                     xtype: 'fieldset',

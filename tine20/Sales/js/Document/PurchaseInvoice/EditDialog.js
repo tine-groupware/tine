@@ -22,7 +22,11 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
     recordClass: 'Sales.Document_PurchaseInvoice',
     statusFieldName: 'purchase_invoice_status',
     forceAutoValues: false,
-    writeableAfterBooked: ['payment_means_used', 'pay_at', 'paid_at', 'paid_amount'],
+
+    initComponent() {
+        Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.initComponent.call(this)
+        this.writeableAfterBooked = this.writeableAfterBooked.concat(['payment_means_used', 'pay_at', 'paid_at', 'paid_amount'])
+    },
 
     async assertStatusChange() {
         const isValid = _.reduce(['date', 'approver'], (isValid, field) => {
@@ -62,6 +66,11 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
         }
 
         if (this.getForm().findField('date').getValue() && this.getForm().findField('credit_term').getValue()) {}
+        if (_.get(this.record, 'data.xprops.is_imported_edocument')) {
+            this.infoBox.setText(this.app.i18n._('This is an imported e-invoice. Accounting data is write-protected. '))
+            this.infoBox.setVisible(true);
+            this.setBookedFieldsReadOnly(true);
+        }
 
     },
 
@@ -109,6 +118,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 enableResponsive: true,
             },
             items: [
+                [{ xtype: 'v-alert', variant: 'info', columnWidth: 1, ref: '../../../../../infoBox', hidden: true, label: '...' }],
                 [fields.document_number, fields.external_invoice_number, placeholder, placeholder, fields.document_currency],
                 [ Object.assign(fields[this.statusFieldName], {columnWidth: 2/5}), fields.approver, placeholder, placeholder],
                 // NOTE: contract_id waits for contract rewrite

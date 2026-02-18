@@ -285,7 +285,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
             self::FLD_EAS_ID                => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Electronic Address Schema', // _('Electronic Address Schema')
-                self::DESCRIPTION               => "The pattern for 'Buyer electronic address (BT-49 [EN 16931]).", //_("The pattern for 'Buyer electronic address (BT-49 [EN 16931]).")
+                self::DESCRIPTION               => "The pattern for 'Seller electronic address (BT-34 [EN 16931]).", //_("The pattern for 'Seller electronic address (BT-34 [EN 16931]).")
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
@@ -295,7 +295,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
             self::FLD_ELECTRONIC_ADDRESS    => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LABEL                     => 'Electronic Address', // _('Electronic Address')
-                self::DESCRIPTION               => 'Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).', //_('Specifies an electronic address of the purchaser to which an invoice should be sent (BT-49 [EN 16931]).')
+                self::DESCRIPTION               => 'Specifies the electronic address of the vendor to which the application level response to an invoice can be sent (BT-34 [EN 16931]).', //_('Specifies the electronic address of the vendor to which the application level response to an invoice can be sent (BT-34 [EN 16931]).')
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
             ],
