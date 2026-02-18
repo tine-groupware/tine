@@ -217,7 +217,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
             self::FLD_START_DATE    => array(
                 'label'                 => 'Date', // _('Date')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-                //'type'                  => 'date',
                 'type'                  => 'datetime_separated_date',
             ),
             'start_time'            => array(

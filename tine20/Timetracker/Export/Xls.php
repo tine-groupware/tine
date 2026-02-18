@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * 
  */
 
@@ -56,6 +56,25 @@ class Timetracker_Export_Xls extends Tinebase_Export_Xls
     {
         $context = parent::_getTwigContext($context);
         $context['searchCountSum'] = $this->_searchCountSum;
+        $context['filter']['start_date'] = $this->_getStartDateFilterForContext();
         return $context;
+    }
+
+    protected function _getStartDateFilterForContext(): array
+    {
+        $start = $end = null;
+
+        $startDateFilter = $this->_filter->getFilter('start_date');
+        if ($startDateFilter instanceof Tinebase_Model_Filter_Date) {
+            $dateValues = $startDateFilter->getDateValues();
+            if (is_array($dateValues)) {
+                list($start, $end) = $dateValues;
+            }
+        }
+
+        return [
+            'start' => $start,
+            'end' => $end,
+        ];
     }
 }

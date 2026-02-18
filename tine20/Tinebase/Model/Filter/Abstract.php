@@ -40,32 +40,32 @@ abstract class Tinebase_Model_Filter_Abstract
     /**
      * @var string property this filter is applied to
      */
-    protected $_field = NULL;
+    protected $_field = null;
     
     /**
      * @var string operator
      */
-    protected $_operator = NULL;
+    protected $_operator = null;
     
     /**
      * @var mixed value to filter with
      */
-    protected $_value = NULL;
+    protected $_value = null;
     
     /**
      * @var string filter id [optional]
      */
-    protected $_id = NULL;
+    protected $_id = null;
     
     /**
      * @var string filter label [optional]
      */
-    protected $_label = NULL;
+    protected $_label = null;
     
     /**
      * @var array special options
      */
-    protected $_options = NULL;
+    protected $_options = null;
 
     protected $_clientOptions = null;
 
@@ -114,7 +114,7 @@ abstract class Tinebase_Model_Filter_Abstract
      * @param array  $_options
      * @todo remove legacy code + obsolete params sometimes
      */
-    public function __construct($_fieldOrData, $_operator = NULL, mixed $_value = NULL, array $_options = array())
+    public function __construct($_fieldOrData, $_operator = null, mixed $_value = null, array $_options = array())
     {
         $this->_db = Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
@@ -195,7 +195,7 @@ abstract class Tinebase_Model_Filter_Abstract
         if ($this->_opSqlMap) {
             return $this->_opSqlMap;
         }
-        return NULL;
+        return null;
     }
     
     /**
@@ -346,7 +346,7 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function removeId()
     {
-        $this->_id = NULL;
+        $this->_id = null;
     }
 
     /**
@@ -387,9 +387,9 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function isImplicit()
     {
-        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : NULL;
+        $value = (func_num_args() === 1) ? (bool) func_get_arg(0) : null;
         $currValue = $this->_isImplicit;
-        if ($value !== NULL) {
+        if ($value !== null) {
             $this->_isImplicit = $value;
         }
         
