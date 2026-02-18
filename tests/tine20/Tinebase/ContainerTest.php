@@ -321,7 +321,7 @@ class Tinebase_ContainerTest extends TestCase
             array('field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE)
         )));
         $groupToAdd = $lists->getFirstRecord();
-        if (!$groupToAdd) {
+        if (!$groupToAdd || empty($groupToAdd->group_id)) {
             // TODO maybe add a test group in this case?
             self::markTestSkipped('no valid group/list found');
         }
