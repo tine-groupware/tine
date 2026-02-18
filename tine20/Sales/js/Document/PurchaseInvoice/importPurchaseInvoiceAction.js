@@ -72,7 +72,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
             return new Promise(resolve => {
                 Tine.Tinebase.widgets.file.SelectionDialog.openWindow({
                     mode: 'source',
-                    constraint: /(xml|pdf)$/,
+                    constraint: /(xml|pdf)$/i,
                     allowMultiple: false,
                     defaultLocationType: 'local',
                     uploadMode: 'upload',

@@ -42,6 +42,8 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const FLD_PAYMENT_MEANS_USED = 'payment_means_used';
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
 
+    public const XPROP_IS_IMPORTED_EDOCUMENT = 'is_imported_edocument';
+
     public static function inheritModelConfigHook(array &$_definition)
     {
         parent::inheritModelConfigHook($_definition);
@@ -621,7 +623,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
         }
 
-
+        $pInvoice->xprops()[self::XPROP_IS_IMPORTED_EDOCUMENT] = 1;
         return $pInvoice;
     }
 }
