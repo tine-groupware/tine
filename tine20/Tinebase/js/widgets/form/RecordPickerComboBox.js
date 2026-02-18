@@ -151,18 +151,23 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
             const me = this
             this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
-                allowCreateNew: false,
+                allowCreateNew: true,
                 preserveJsonProps: 'original_id',
-                qtip: window.i18n._('Edit copy'),
-                editDialogConfig: {
-                    mode: 'local',
-                    denormalizationRecordClass: this.denormalizationRecordClass,
-                    contextRecordClass: this.contextRecordClass,
-                    // NOTE: e.g. Sales_Model_Document_Abstract does not know it's origin yet
-                    contentPanelConstructorInterceptor: function(config) {
-                        const editDialog = me.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
-                        config.contextRecordClass = editDialog ? editDialog.recordClass : config.contextRecordClass
+                assertState: function(){
+                    this.setQtip(!!this.field.selectedRecord ? window.i18n._('Edit copy') : 'Add new original')
+                    this.editDialogConfig = !!this.field.selectedRecord ? {
+                        mode: 'local',
+                        denormalizationRecordClass: me.denormalizationRecordClass,
+                        contextRecordClass: me.contextRecordClass,
+                        // NOTE: e.g. Sales_Model_Document_Abstract does not know it's origin yet
+                        contentPanelConstructorInterceptor: function(config) {
+                            const editDialog = me.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
+                            config.contextRecordClass = editDialog ? editDialog.recordClass : config.contextRecordClass
+                        }
+                    } : {
+                        mode: 'remote',
                     }
+                    RecordEditFieldTriggerPlugin.prototype.assertState.call(this)
                 }
             })));
             this.useEditPlugin = false;

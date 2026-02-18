@@ -247,7 +247,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
         if (Ext.isArray(this.allowedTypes) && !_.reduce(this.files, (allowed, file) => {
             return allowed && _.find(this.allowedTypes, (type) => {
-                return type.match(/\//) ? file.type === type : file.name.match(new RegExp(_.escapeRegExp(type) + '$'))
+                return type.match(/\//) ? file.type === type : file.name.match(new RegExp(_.escapeRegExp(type) + '$', 'i'))
             })
         }, true)) {
             await Ext.MessageBox.show({

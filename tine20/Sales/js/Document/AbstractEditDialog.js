@@ -23,6 +23,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     statusFieldName: null,
     forceAutoValues: true,
 
+    writeableAfterBooked: [ 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations', 'payment_reminders'],
+
     initComponent() {
         Tine.Sales.Document_AbstractEditDialog.superclass.initComponent.call(this)
 
@@ -30,6 +32,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (this.recordClass.hasField('boilerplates')) {
             this.items.get(0).insert(1, new BoilerplatePanel({}));
         }
+        this.writeableAfterBooked = this.writeableAfterBooked.concat([this.statusFieldName])
 
         // status handling
         this.fields[this.statusFieldName].on('beforeselect', this.onBeforeStatusSelect, this)
@@ -259,13 +262,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const statusField = this.fields[this.statusFieldName]
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         if (booked) { // there is no transition booked -> unbooked
-            this.getForm().items.each((field) => {
-                if (_.get(field, 'initialConfig.readOnly')) return;
-                if ([this.statusFieldName, 'description', 'buyer_reference', 'contact_id', 'tags', 'attachments', 'relations', 'payment_reminders'].concat(this.writeableAfterBooked || []).indexOf(field.name) < 0
-                    && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
-                    field.setReadOnly(booked);
-                }
-            });
+            this.setBookedFieldsReadOnly(booked);
+            this.infoBox.setText(this.app.i18n._('Document is booked. Accounting data is write-protected.'))
+            this.infoBox.setVisible(true);
+            this.setBookedFieldsReadOnly(true);
         }
 
         // check service period contains all positions
@@ -317,6 +317,16 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         })
 
         this.lastRecord = Tine.Tinebase.data.Record.clone(this.record);
+    },
+
+    setBookedFieldsReadOnly: function(readOnly) {
+        this.getForm().items.each((field) => {
+            if (_.get(field, 'initialConfig.readOnly')) return;
+            if (this.writeableAfterBooked.indexOf(field.name) < 0
+                && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
+                field.setReadOnly(readOnly);
+            }
+        });
     },
 
     getRecordFormItems: function() {
@@ -422,6 +432,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 enableResponsive: true,
             },
             items: [
+                [{ xtype: 'v-alert', variant: 'info', columnWidth: 1, ref: '../../../../../infoBox', hidden: true, label: '...' }],
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
                 // NOTE: contract_id waits for contract rewrite
                 [/*fields.contract_id, */ _.assign(fields.customer_id, {columnWidth: 2/5}), _.assign(fields.recipient_id, {columnWidth: 3/5})],

@@ -29,7 +29,7 @@ Ext.extend(Tine.Tinebase.widgets.file.LocationTypePlugin.Upload, Tine.Tinebase.w
     getSelectionDialogArea: async function(area, cmp) {
         if (! this.selectionDialogInitialised) {
             this.cmp = cmp;
-            const allowedTypes = cmp.allowedTypes || cmp.constraint && ['file', 'folder'].indexOf(cmp.constraint) < 0 && ! _.isFunction(cmp.constraint) ? _.compact(String(cmp.constraint).replace(/^\/\(?/, '').replace(/\)?\$\//, '').split('|')) : null
+            const allowedTypes = cmp.allowedTypes || cmp.constraint && ['file', 'folder'].indexOf(cmp.constraint) < 0 && ! _.isFunction(cmp.constraint) ? _.compact(String(cmp.constraint).replace(/^\/\(?/, '').replace(/\)?\$\/i?/, '').split('|')) : null
 
             this.pluginPanel = new Tine.widgets.form.FileSelectionArea(Ext.apply({
                 text: i18n._('Select or drop file to upload'),
