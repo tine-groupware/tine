@@ -57,6 +57,10 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public const DAY_THIS = 'dayThis';
     public const DAY_LAST = 'dayLast';
     public const DAY_NEXT = 'dayNext';
+    public const WEEK_THIS = 'weekThis';
+    public const WEEK_BEFORE_LAST = 'weekBeforeLast';
+    public const WEEK_LAST = 'weekLast';
+    public const WEEK_NEXT = 'weekNext';
     public const MONTH_THIS = 'monthThis';
     public const MONTH_LAST = 'monthLast';
     public const MONTH_NEXT = 'monthNext';
@@ -87,7 +91,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $value = array($this->_value);
         } else {
             $operator = $this->_operator;
-            $value = $this->_getDateValues($operator, $this->_value);
+            $value = $this->getDateValues($operator, $this->_value);
             if (! is_array($value)) {
                 // NOTE: (array) null is an empty array
                 $value = array($value);
@@ -171,14 +175,21 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     /**
      * calculates the date filter values
      *
-     * @param string $_operator
-     * @param string $_value
-     * @return array|string date value
+     * @param ?string $_operator
+     * @param mixed $_value
+     * @return array|string|null date value
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _getDateValues($_operator, $_value)
+    public function getDateValues(?string $_operator = null, mixed $_value = null): array|string|null
     {
-        //FIXME: operator equals with value should be resolved as 'within' ?
+        if (is_null($_value)) {
+            $_value = $this->_value;
+        }
+        if (is_null($_operator)) {
+            $_operator = $this->_operator;
+        }
+
+        // FIXME: operator equals with value should be resolved as 'within' ?
         if ($_operator === 'within') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . print_r($_value, true));
@@ -215,13 +226,13 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     break;
                 
                 /******* week *********/
-                case 'weekNext':
+                case self::WEEK_NEXT:
                     $date->add(21, Tinebase_DateTime::MODIFIER_DAY);
-                case 'weekBeforeLast':    
+                case self::WEEK_BEFORE_LAST:
                     $date->sub(7, Tinebase_DateTime::MODIFIER_DAY);
-                case 'weekLast':    
+                case self::WEEK_LAST:
                     $date->sub(7, Tinebase_DateTime::MODIFIER_DAY);
-                case 'weekThis':
+                case self::WEEK_THIS:
                     $value = $this->_getFirstAndLastDayOfWeek($date);
                     break;
                 /******* month *********/
@@ -356,7 +367,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         if (!in_array($this->_operator, ['within', 'inweek', Tinebase_Model_Filter_Abstract::OP_EQUALS])) {
             throw new Tinebase_Exception_UnexpectedValue('only within, inweek, equals operator supported');
         }
-        if (is_string($value = $this->_getDateValues($this->_operator, $this->_value))) {
+        if (is_string($value = $this->getDateValues($this->_operator, $this->_value))) {
             $value = ['from' => $value, 'until' => $value];
         }
         return $value;
@@ -483,7 +494,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public static function getLastDayOf($value, ?\Tinebase_DateTime $date = null)
     {
         $result = static::getFirstDayOf($value, $date);
-        return $result->addDay($result->get('t') - 1)->setTime(23,59,59);
+        return $result->addDay((int)$result->get('t') - 1)->setTime(23,59,59);
     }
 
     public static function getEndOfYesterday()
