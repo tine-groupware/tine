@@ -99,11 +99,11 @@ msgstr "Sie sind dabei den Faktor des Zeitkontos zu ändern. Soll dieser neue Fa
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Zeitkonten sind noch in Benutzung! Sind Sie sicher, dass Sie sie löschen möchten?"
 
-msgid "End date cannot be before start date"
-msgstr ""
+msgid "End date cannot be before start date: %s is before %s"
+msgstr "Das Enddatum darf nicht vor dem Startdatum liegen: %s liegt vor %s"
 
-msgid "start time and end time need to be set for multi day"
-msgstr ""
+msgid "Start time and end time need to be set for multi day timesheet"
+msgstr "Startzeit und Endzeit müssen bei Mehrtages-Stundenzetteln gesetzt werden"
 
 msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 msgstr "Die Rechnung die Sie versucht haben zu bearbeiten ist bereits abgerechnet. Datumsänderungen führen zu erneuter Abrechnung. Wollen Sie diese Aktion wirklich ausführen?"
