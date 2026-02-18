@@ -23,18 +23,25 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     /**
      * calculates the date filter values
      *
-     * @param string $_operator
-     * @param string $_value
-     * @return array|string date value
+     * @param ?string $_operator
+     * @param mixed $_value
+     * @return array|string|null date value
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    protected function _getDateValues($_operator, $_value)
+    public function getDateValues(?string $_operator = null, mixed $_value = null): array|string|null
     {
+        if (is_null($_value)) {
+            $_value = $this->_value;
+        }
+        if (is_null($_operator)) {
+            $_operator = $this->_operator;
+        }
+
         if ($_operator === 'within') {
             if (! is_array($_value)) {
                 // get beginning / end date and add 00:00:00 / 23:59:59
                 date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && !empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
-                $value = parent::_getDateValues($_operator, $_value);
+                $value = parent::getDateValues($_operator, $_value);
                 $value[0] .= ' 00:00:00';
                 $value[1] .= ' 23:59:59';
                 date_default_timezone_set('UTC');
@@ -57,12 +64,14 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
         } elseif ($_operator === 'inweek') {
             // get beginning / end date and add 00:00:00 / 23:59:59
             date_default_timezone_set((isset($this->_options['timezone']) || array_key_exists('timezone', $this->_options)) && !empty($this->_options['timezone']) ? $this->_options['timezone'] : Tinebase_Core::getUserTimezone());
-            $value = parent::_getDateValues($_operator, $_value);
+            $value = parent::getDateValues($_operator, $_value);
             $value[0] .= ' 00:00:00';
             $value[1] .= ' 23:59:59';
             date_default_timezone_set('UTC');
         } else {
-            $value = ($_value instanceof DateTime) ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_value;
+            $value = ($_value instanceof Tinebase_DateTime)
+                ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG)
+                : $_value;
         }
         
         return $value;

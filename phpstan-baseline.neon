@@ -4851,11 +4851,6 @@ parameters:
 			path: tine20/Tinebase/Model/Filter/CustomField.php
 
 		-
-			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Model/Filter/Date.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:NOTICE\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Filter/ForeignRecord.php
