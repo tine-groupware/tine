@@ -32,6 +32,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     public const FLD_CLEARED_AMOUNT = 'cleared_amount';
     public const FLD_RECORDED_AMOUNT = 'recorded_amount';
     public const FLD_END_DATE = 'end_date';
+    public const FLD_START_DATE = 'start_date';
     public const FLD_CORRELATION_ID = 'correlation_id';
 
     /**
@@ -86,8 +87,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'table'             => array(
             'name'    => 'timetracker_timesheet',
             'indexes' => array(
-                'start_date' => array(
-                    'columns' => array('start_date')
+                self::FLD_START_DATE => array(
+                    'columns' => array(self::FLD_START_DATE)
                 ),
                 'timeaccount_id' => array(
                     'columns' => array('timeaccount_id'),
@@ -113,7 +114,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         // frontend
         'multipleEdit'      => true,
         'splitButton'       => true,
-        'defaultFilter'     => 'start_date',
+        'defaultFilter'     => self::FLD_START_DATE,
 
         'fields'            => array(
             'account_id'            => array(
@@ -213,7 +214,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 //                // strip time information from datetime string
 //                'inputFilters'          => array('Zend_Filter_PregReplace' => array('/(\d{4}-\d{2}-\d{2}).*/', '$1'))
 //            ),
-            'start_date'            => array(
+            self::FLD_START_DATE    => array(
                 'label'                 => 'Date', // _('Date')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 //'type'                  => 'date',
