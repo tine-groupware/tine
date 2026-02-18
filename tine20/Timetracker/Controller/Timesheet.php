@@ -4,9 +4,9 @@
  * 
  * @package     Timetracker
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -390,35 +390,31 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $this->_calcAmounts($_record);
     }
 
+    /**
+     * @param Timetracker_Model_Timesheet $_record
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_SystemGeneric
+     */
     protected function _inspectEndDate(Timetracker_Model_Timesheet $_record): void
     {
         if ($_record->{Timetracker_Model_Timesheet::FLD_END_DATE} &&
-            $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d') !== $_record->start_date->format('Y-m-d')) {
-            if (strcmp($_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d'), $_record->start_date->format('Y-m-d')) < 1) {
-                Tinebase_Exception::log(new Tinebase_Exception('FE error: End date cannot be before start date'));
-                throw new Tinebase_Exception_SystemGeneric(
-                /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'End date cannot be before start date'//)
-                );
-            }
-            if (!$_record->start_time || !$_record->end_time) {
-                Tinebase_Exception::log(new Tinebase_Exception('FE error: start time and end time need to be set for multi day'));
-                throw new Tinebase_Exception_SystemGeneric(
-                /*Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)->_(*/'start time and end time need to be set for multi day'//)
-                );
-            }
-
+            $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d')
+                !== $_record->{Timetracker_Model_Timesheet::FLD_START_DATE}->format('Y-m-d')
+        ) {
+            $this->_validateEndDate($_record);
 
             $_record->{Timetracker_Model_Timesheet::FLD_CORRELATION_ID} = Tinebase_Record_Abstract::generateUID();
             $endTime = $_record->end_time;
             $_record->end_time = '00:00:00';
-            $startDate = $_record->start_date->getClone();
+            $startDate = $_record->{Timetracker_Model_Timesheet::FLD_START_DATE}->getClone();
             $done = false;
             do {
                 $startDate->addDay(1);
 
                 $newRecord = clone $_record;
                 $newRecord->setId(null);
-                $newRecord->start_date = $startDate->getClone();
+                $newRecord->{Timetracker_Model_Timesheet::FLD_START_DATE} = $startDate->getClone();
                 $newRecord->end_date = null;
                 $newRecord->start_time = '00:00:00';
 
@@ -429,6 +425,32 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
 
                 $this->create($newRecord);
             } while(false === $done);
+        }
+    }
+
+    /**
+     * @param Timetracker_Model_Timesheet $_record
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _validateEndDate(Timetracker_Model_Timesheet $_record): void
+    {
+        $start = $_record->{Timetracker_Model_Timesheet::FLD_START_DATE}->format('Y-m-d');
+        $end = $_record->{Timetracker_Model_Timesheet::FLD_END_DATE}->format('Y-m-d');
+        if (strcmp($end, $start) < 1) {
+            throw new Tinebase_Exception_SystemGeneric(
+                sprintf(Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)
+                    ->_('End date cannot be before start date: %s is before %s'),
+                    $end,
+                    $start
+                )
+            );
+        }
+        if (!$_record->start_time || !$_record->end_time) {
+            throw new Tinebase_Exception_SystemGeneric(
+                Tinebase_Translation::getTranslation(Timetracker_Config::APP_NAME)
+                    ->_('Start time and end time need to be set for multi day timesheet')
+            );
         }
     }
 
