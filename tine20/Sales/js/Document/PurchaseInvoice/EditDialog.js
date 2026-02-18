@@ -66,12 +66,49 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
         }
 
         if (this.getForm().findField('date').getValue() && this.getForm().findField('credit_term').getValue()) {}
+    },
+
+    onRecordLoad() {
+        Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.onRecordLoad.call(this)
+        const me = this
         if (_.get(this.record, 'data.xprops.is_imported_edocument')) {
             this.infoBox.setText(this.app.i18n._('This is an imported e-invoice. Accounting data is write-protected. '))
             this.infoBox.setVisible(true);
             this.setBookedFieldsReadOnly(true);
-        }
 
+            if (! this.fields.supplier_id.getValue()) {
+                this.fields.supplier_id.setReadOnly(false)
+                this.fields.supplier_id.on('select', async (combo, supplier) => {
+                    if (supplier && !supplier.get('electronic_address')) {
+                        // const diff = _.reduce(await supplierData, (diff, value, field) => {
+                        //     if (value && value !== supplier.get(field)) {
+                        //         diff[field] = value
+                        //     }
+                        //     return diff
+                        // }, {})
+
+                        if (await Ext.MessageBox.show({
+                            icon: Ext.MessageBox.QUESTION,
+                            buttons: Ext.MessageBox.OKCANCEL,
+                            title: this.app.formatMessage('Update Supplier Data?'),
+                            msg: this.app.formatMessage('The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?')
+                        }) === 'ok') {
+                            supplier.set('eas_id', (await supplierData).eas_id)
+                            supplier.set('electronic_address', (await supplierData).electronic_address)
+                            const updatedSupplierData = await Tine.Sales.saveSupplier(Object.assign(supplier.getData(), {id: supplier.get('original_id'), original_id: null}))
+                            combo.setValue(updatedSupplierData)
+                        }
+                    }
+                })
+                const supplierData = Tine.Sales.getEDocumentSupplierData(me.record.id)
+                const recordEditPlugin =_.find(this.fields.supplier_id.plugins, plugin => _.isFunction(plugin.getRecordDefaults))
+                if (recordEditPlugin) {
+                    recordEditPlugin.getRecordDefaults = _.wrap(recordEditPlugin.getRecordDefaults, async (getRecordDefaults) => {
+                        return Object.assign(await getRecordDefaults(), await supplierData)
+                    })
+                }
+            }
+        }
     },
 
     calcDueDate: function(record) {

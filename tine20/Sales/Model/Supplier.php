@@ -335,35 +335,51 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
     public static function fromXRXml(SimpleXMLElement $xr): static
     {
         $supplier = new static([
-            'name' => (string)$xr->Seller_name, // 1
-            self::FLD_ELECTRONIC_ADDRESS => (string)$xr->Seller_electronic_address, // 1
+            'name' => (string)$xr->SELLER->Seller_name, // 1 (BT-27)
+//            'url' => ?
+            'vat_procedure' => Sales_Config::getInstance()->{Sales_Config::VAT_PROCEDURES}->records
+                    ->find(Sales_Model_EDocument_VATProcedure::FLD_UNTDID_5305, $xr->VAT_BREAKDOWN->VAT_category_code)?->id
+                ?? Sales_Config::VAT_PROCEDURE_STANDARD, // 1
+            'currency' => (string)$xr->Invoice_currency_code, // 1
+
+            self::FLD_EAS_ID => Sales_Controller_EDocument_EAS::getInstance()
+                ->getByCode((string)$xr->SELLER->Seller_electronic_address->attributes()->scheme_identifier), // 1
+            self::FLD_ELECTRONIC_ADDRESS => (string)$xr->SELLER->Seller_electronic_address, // 1
         ], true);
 
 
-        $xr->Seller_trading_name; // 0..1
-        foreach ($xr->Seller_identifier as $tmp) {}; // 0..*
-        $xr->Seller_legal_registration_identifier; // 0..*
-        if ($vatId = (string)$xr->Seller_VAT_identifier) { // 0..1
+        if((String)$xr->PAYMENT_INSTRUCTIONS->Payment_means_type_code === "58") {
+            $supplier->iban = (string)$xr->PAYMENT_INSTRUCTIONS->CREDIT_TRANSFER[0]->Payment_account_identifier;
+            $supplier->bic = (string)$xr->PAYMENT_INSTRUCTIONS->CREDIT_TRANSFER[0]->Payment_service_provider_identifier;
+        }
+
+
+//        foreach ($xr->SELLER->Seller_identifier as $tmp) {}; // 0..*
+//        $xr->Seller_legal_registration_identifier; // 0..*
+        if ($vatId = (string)$xr->SELLER->Seller_VAT_identifier) { // 0..1
             $supplier->vatid = $vatId;
         }
-        $xr->Seller_tax_registration_identifier; // 0..1
-        $xr->Seller_additional_legal_information; // 0..1
+//        $xr->SELLER->Seller_tax_registration_identifier; // 0..1
+//        $xr->SELLER->Seller_additional_legal_information; // 0..1
 
         // 1 SELLER_POSTAL_ADDRESS
-        $sellerPostalAdr = $xr->SELLER_POSTAL_ADDRESS;
-        $sellerPostalAdr->Seller_address_line_1; // 0..1
-        $sellerPostalAdr->Seller_address_line_2; // 0..1
-        $sellerPostalAdr->Seller_address_line_3; // 0..1
-        $sellerPostalAdr->Seller_city; // 1
-        $sellerPostalAdr->Seller_post_code; // 1
-        $sellerPostalAdr->Seller_country_subdivision; // 0..1
-        $sellerPostalAdr->Seller_country_code; // 1
+        $sellerPostalAdr = $xr->SELLER->SELLER_POSTAL_ADDRESS;
+        $supplier->adr_prefix1 = (string)$sellerPostalAdr->Seller_address_line_1 /* 0..1 */ ?: null;
+        $supplier->adr_prefix2 = (string)$sellerPostalAdr->Seller_address_line_2 /* 0..1 */ ?: null;
+        $supplier->adr_name = (string)$xr->SELLER->Seller_trading_name /* 0..1 (BT-28) */ ?: (string)$xr->SELLER->Seller_name /* 1 (BT-27) */;
+        $supplier->adr_email = (string)$xr->SELLER->SELLER_CONTACT->Seller_contact_email_address ?: null;
+        $supplier->adr_street = (string)$sellerPostalAdr->Seller_address_line_3 /* 0..1 */ ?: null;
+        $supplier->adr_postalcode = (string)$sellerPostalAdr->Seller_post_code /* 1 */;
+        $supplier->adr_locality = (string)$sellerPostalAdr->Seller_city /* 1 */;
+        $supplier->adr_region = (string)$sellerPostalAdr->Seller_country_subdivision /* 0..1 */ ?: null;
+        $supplier->adr_countryname  = (string)$sellerPostalAdr->Seller_country_code /* 1 */;
+//        $supplier->adr_pobox;
 
         // 1 SELLER_CONTACT
-        $sellerContact = $xr->SELLER_CONTACT;
-        $sellerContact->Seller_contact_point; // 0..1
-        $sellerContact->Seller_contact_telephone_number; // 0..1
-        $sellerContact->Seller_contact_email_address; // 0..1
+//        $sellerContact = $xr->SELLER->SELLER_CONTACT;
+//        $sellerContact->Seller_contact_point; // 0..1
+//        $sellerContact->Seller_contact_telephone_number; // 0..1
+//        $sellerContact->Seller_contact_email_address; // 0..1
 
         return $supplier;
     }
