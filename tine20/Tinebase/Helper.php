@@ -578,10 +578,10 @@ class Tinebase_Helper
                 // the converter failed (for example when the string contains ".-") - we just use the original value
                 $convertedMailPart = $emailpart;
             }
-            $convertedDomainPart = call_user_func_array($converterFunction, [
+            $convertedDomainPart = '' !== $domainpart ? call_user_func_array($converterFunction, [
                 $domainpart,
                 IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46
-            ]);
+            ]) : $domainpart;
             return $convertedMailPart . '@' . $convertedDomainPart;
         } else {
             return call_user_func_array($converterFunction, [$domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46]);
