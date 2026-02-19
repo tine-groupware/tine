@@ -1047,7 +1047,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $params->host     = isset($fields['host'])     ? $fields['host']    : 'localhost';
         $params->password = isset($fields['password']) ? $fields['password'] : '';
         $params->port     = isset($fields['port'])     ? $fields['port']     : null;
-        $params->ssl      = isset($fields['ssl'])      ? $fields['ssl']      : false;
+        $params->ssl      = strtoupper(isset($fields['ssl']) ? $fields['ssl'] : 'none');
         $params->account = $account;
 
         $fieldsWithoutPw = $fields;
