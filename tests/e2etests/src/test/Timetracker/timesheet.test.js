@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const expectPuppeteer = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -13,53 +13,55 @@ describe('Create and delete time sheet', () => {
 
     test('Open dialog', async () => {
         popupWindow = await lib.getEditDialog('Stundenzettel hinzufügen');
-        await expect(popupWindow).toMatchElement('span.x-tab-strip-text', {text: 'Stundenzettel'});
+        await expectPuppeteer(popupWindow).toMatchElement('span.x-tab-strip-text', {text: 'Stundenzettel'});
     });
 
     test('Select time account', async() => {
         await popupWindow.waitForSelector('[name="timeaccount_id"]');
-        await expect(popupWindow).toFill('[name="timeaccount_id"]', 'test');
+        await expectPuppeteer(popupWindow).toFill('[name="timeaccount_id"]', 'test');
         await popupWindow.waitForSelector('.x-combo-list-item');
-        await popupWindow.keyboard.press('Enter');
+        await expectPuppeteer(popupWindow).toClick('.x-combo-list-item', {text: '1 - Test Timeaccount 1'});
+    });
+
+    test('Enter start and end time', async() => {
+        const currentUser = await lib.getCurrentUser(popupWindow);
+        await popupWindow.waitForSelector('input[name="start_date"]');
+        await expectPuppeteer(popupWindow).toFill('input[name="start_date"]', '19.02.2026');
+
+        await popupWindow.waitForSelector('input[name="duration"]');
+        await expectPuppeteer(popupWindow).toFill('input[name="duration"]', '03:30');
+
+        await popupWindow.waitForSelector('input[name="start_time"]');
+        await expectPuppeteer(popupWindow).toFill('input[name="start_time"]', '08:00');
+
+        expect(await popupWindow.evaluate(() => document.querySelector('input[name=account_id]').value)).toEqual(currentUser.accountDisplayName);
     });
 
     test('Enter description', async () => {
         await popupWindow.waitForSelector('[name="description"]');
-        await expect(popupWindow).toFill('[name=description]', testDescription);
-    });
-
-    test('Enter start and end time', async() => {
-        await popupWindow.waitForSelector('input[name="start_time"]');
-        await expect(popupWindow).toFill('input[name="start_time"]', '08:00');
-
-        await popupWindow.waitForSelector('input[name="end_time"]');
-
-        // end time is added automatically, so we have to delete it first
-        await expect(popupWindow).toClick('input[name="end_time"]');
-        await popupWindow.keyboard.press('Backspace');
-        await expect(popupWindow).toFill('input[name="end_time"]', '11:30');
-
-        await expect(popupWindow).toMatchElement('input[name="duration"]', {value: '03:30'});
+        await expectPuppeteer(popupWindow).toFill('[name=description]', testDescription);
     });
 
     test('Confirm', async() => {
-        await expect(popupWindow).toClick('button', {text: 'Ok'});
+        await expectPuppeteer(popupWindow).toClick('button', {text: 'Ok'});
     });
 
     // FIXME make it work
-    test.skip('Check values in the grid', async() => {
-        await expect(page).toMatchElement('div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1'});
-        await expect(page).toMatchElement('div.x-grid3-col-description', {text: testDescription});
-        await expect(page).toMatchElement('div.x-grid3-col-duration', {text: '3 Stunden, 30 Minuten'});
+    test('Check values in the grid', async() => {
+        await page.click('.t-app-timetracker .x-btn-image.x-tbar-loading');
+        await page.waitForTimeout(500);
+        await expectPuppeteer(page).toMatchElement('div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1'});
+        await expectPuppeteer(page).toMatchElement('div.x-grid3-col-description', {text: testDescription});
+        await expectPuppeteer(page).toMatchElement('div.x-grid3-col-duration', {text: '3 Stunden, 30 Minuten'});
     });
 
     // FIXME make it work
-    test.skip('Delete and confirm', async() => {
-        await expect(page).toClick('div.x-grid3-col-description', {text: testDescription});
+    test('Delete and confirm', async() => {
+        await expectPuppeteer(page).toClick('div.x-grid3-col-description', {text: testDescription});
         await page.keyboard.press('Delete');
         await page.waitForSelector('.x-btn-icon-small-left');
-        await expect(page).toClick('button', {text: 'Ja'});
-        await expect(page).not.toMatchElement('div.x-grid3-col-description', {text: testDescription});
+        await expectPuppeteer(page).toClick('button', {text: 'Ja'});
+        await expectPuppeteer(page).not.toMatchElement('div.x-grid3-col-description', {text: testDescription});
     });
 });
 
