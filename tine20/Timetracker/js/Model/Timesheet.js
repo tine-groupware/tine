@@ -34,10 +34,10 @@ Tine.Timetracker.Model.TimesheetMixin = {
             const dd = Tine.Tinebase.data.Record.getDefaultData(Tine.Timetracker.Model.Timesheet, defaults);
 
             // specific defaults
-            return Object.assign({
+            return Object.assign(dd, {
                 account_id: Tine.Tinebase.registry.get('currentAccount'),
                 start_date: new Date()
-            }, dd);
+            });
         }
     }
 }
