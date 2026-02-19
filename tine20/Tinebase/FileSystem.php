@@ -1554,7 +1554,11 @@ class Tinebase_FileSystem implements
                 'mode' => $_mode,
                 'node' => $node
             ));
-            stream_context_set_option($handle, $contextOptions);
+            if (PHP_VERSION_ID >= 80300) {
+                stream_context_set_options($handle, $contextOptions);
+            } else {
+                stream_context_set_option($handle, $contextOptions);
+            }
         }
         
         return $handle;
