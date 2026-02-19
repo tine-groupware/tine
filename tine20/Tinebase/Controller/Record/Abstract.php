@@ -786,10 +786,15 @@ abstract class Tinebase_Controller_Record_Abstract
     /**
      * add one record
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @param   boolean $_duplicateCheck
-     * @return  T
-     * @throws  Tinebase_Exception_AccessDenied
+     * @param Tinebase_Record_Interface $_record
+     * @param boolean $_duplicateCheck
+     * @return T
+     * @throws Throwable
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_AreaLocked
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Cache_Exception
      */
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
@@ -797,10 +802,12 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $this->_duplicateCheck = $_duplicateCheck;
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-            . print_r($_record->toArray(),true));
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Create new ' . $this->_modelName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                . print_r($_record->toArray(), true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Create new ' . $this->_modelName);
+        }
 
         $db = (method_exists($this->_backend, 'getAdapter')) ? $this->_backend->getAdapter() : Tinebase_Core::getDb();
 
