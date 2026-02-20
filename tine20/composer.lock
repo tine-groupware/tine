@@ -13300,20 +13300,21 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.14",
+            "version": "1.5.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "87656ae519fb83d650c3dee144e2aca58698bf51"
+                "reference": "7e50ca9c07a38967fa96b96d7d95c4b6f22a2195"
             },
             "require": {
                 "ext-ctype": "*",
-                "php": ">=7.4.0",
+                "php": ">=8.0",
                 "zendframework/zendframework1": "1.12.20.*"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpunit/phpunit": "^8.5"
+                "phpunit/phpunit": "^8.5",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -13333,6 +13334,12 @@
                 ],
                 "php81test": [
                     "cd tests/docker; docker-compose run cli81 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color Syncroton/AllTests.php'; cd ../..;"
+                ],
+                "rector:test": [
+                    "vendor/bin/rector process --config .rector.php --dry-run"
+                ],
+                "rector:fix": [
+                    "vendor/bin/rector process --config .rector.php"
                 ]
             },
             "license": [
@@ -13340,7 +13347,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2025-10-01T14:33:25+00:00"
+            "time": "2026-02-20T09:40:07+00:00"
         },
         {
             "name": "thecodingmachine/safe",
