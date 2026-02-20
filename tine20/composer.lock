@@ -13124,14 +13124,17 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20.80",
+            "version": "1.12.20.85",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/zendframework1.git",
-                "reference": "e8259e7427741be6effafaab452de3bd20bc27c9"
+                "reference": "cacb8893b758c2ced99d42d4331c6a891d1e6a77"
             },
             "require": {
-                "php": ">=8.0"
+                "php": ">=8.2"
+            },
+            "require-dev": {
+                "rector/rector": "^2.3"
             },
             "type": "project",
             "autoload": {
@@ -13141,11 +13144,19 @@
                     ]
                 }
             },
+            "scripts": {
+                "rector:test": [
+                    "bin/rector process --config .rector.php --dry-run"
+                ],
+                "rector:fix": [
+                    "bin/rector process --config .rector.php"
+                ]
+            },
             "license": [
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2025-07-03T10:47:24+00:00"
+            "time": "2026-02-20T16:53:12+00:00"
         }
     ],
     "packages-dev": [
@@ -15585,7 +15596,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15610,5 +15621,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
