@@ -12296,15 +12296,16 @@
         },
         {
             "name": "tine-groupware/ubl-common",
-            "version": "0.1.3",
+            "version": "0.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/ubl-common.git",
-                "reference": "8fde1a16e9a89e75d73fed3b7a26d0485bddbe09"
+                "reference": "0e503883dc283c99381d8b9435943e470f5cf704"
             },
             "require-dev": {
                 "goetas-webservices/xsd2php": "dev-master",
-                "goetas-webservices/xsd2php-runtime": "^0.2.17"
+                "goetas-webservices/xsd2php-runtime": "^0.2.17",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -12315,6 +12316,12 @@
             "scripts": {
                 "xsd2php": [
                     "docker build -t ubl-common:1 -f ./docker/Dockerfile ./docker; docker run -u `id -u`:`id -g` --rm -v ./:/ubl ubl-common:1 ash -c 'cd /ubl; ./vendor/bin/xsd2php convert ./xsd2phpConf.yml ./xsd/main.xsd'"
+                ],
+                "rector:test": [
+                    "vendor/bin/rector process --config .rector.php --dry-run"
+                ],
+                "rector:fix": [
+                    "vendor/bin/rector process --config .rector.php"
                 ]
             },
             "license": [
@@ -12326,22 +12333,23 @@
                     "email": "p.mehrer@metaways.de"
                 }
             ],
-            "time": "2024-10-28T11:18:27+00:00"
+            "time": "2026-02-23T15:46:42+00:00"
         },
         {
             "name": "tine-groupware/ubl-invoice",
-            "version": "0.1.1",
+            "version": "0.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/ubl-invoice.git",
-                "reference": "1a5862ec22fcd9e0a2d513358825277d7fd19bad"
+                "reference": "2163918148b96fe58274f69cf62423c9fa00aeee"
             },
             "require": {
-                "tine-groupware/ubl-common": "0.1.3"
+                "tine-groupware/ubl-common": "0.1.4"
             },
             "require-dev": {
                 "goetas-webservices/xsd2php": "dev-master",
-                "goetas-webservices/xsd2php-runtime": "^0.2.17"
+                "goetas-webservices/xsd2php-runtime": "^0.2.17",
+                "rector/rector": "^2.3"
             },
             "type": "library",
             "autoload": {
@@ -12352,6 +12360,12 @@
             "scripts": {
                 "xsd2php": [
                     "docker build -t ubl-common:1 -f ./docker/Dockerfile ./docker; docker run -u `id -u`:`id -g` --rm -v ./:/ubl ubl-common:1 ash -c 'cd /ubl; ./vendor/bin/xsd2php convert ./xsd2phpConf.yml ./xsd/UBL-Invoice-2.1.xsd'"
+                ],
+                "rector:test": [
+                    "vendor/bin/rector process --config .rector.php --dry-run"
+                ],
+                "rector:fix": [
+                    "vendor/bin/rector process --config .rector.php"
                 ]
             },
             "license": [
@@ -12363,7 +12377,7 @@
                     "email": "p.mehrer@metaways.de"
                 }
             ],
-            "time": "2024-10-28T11:21:38+00:00"
+            "time": "2026-02-23T15:52:06+00:00"
         },
         {
             "name": "tine20/composerapploader",
