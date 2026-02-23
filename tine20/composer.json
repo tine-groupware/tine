@@ -26,6 +26,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/openid-connect-server.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/sddl-parser.git"
     },
     {
@@ -152,7 +156,7 @@
     "metaways/timezoneconvert": "1.*",
     "mlocati/ip-lib": "^1.18",
     "nikic/fast-route": "^1.2",
-    "nl.idaas/openid-server": "0.*",
+    "nl.idaas/openid-server": "v0.4.2pl1 as v0.4.2",
     "palepurple/rate-limit": "^2.0",
     "pear/ole": "^1.0",
     "pear/pear-core-minimal": "^1.10",
