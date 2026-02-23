@@ -245,7 +245,22 @@ Tine.Tinebase.ExceptionHandler = function() {
             case 503:
                 Ext.MessageBox.show(Ext.apply(defaults, {
                     title: i18n._('Service Unavailable'),
-                    msg: i18n._('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.')
+                    msg: exception.message ? i18n._(exception.message)
+                        : i18n._('The server is currently unable to handle the request due to a temporary overloading, maintenance or misconfiguration of the server. Please try again or contact your administrator.'),
+                    fn: (btn) => {
+                        if (btn === 'ok') {
+                            Tine.Tinebase.tineInit.isReloading = true;
+                            Tine.Tinebase.tineInit.clearRegistry().then(() => {
+                                if (! window.isMainWindow) {
+                                    Ext.ux.PopupWindow.close();
+                                    return;
+                                }
+                                Tine.Tinebase.common.reload({
+                                    clearCache: true
+                                });
+                            });
+                        }
+                    },
                 }));
                 break;
                 
