@@ -259,7 +259,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
     {
         $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
         $list = $this->_uit->getList($adminListId);
-        self::assertTrue(isset($list['account_only']), 'account_only field missing from list ' . print_r($list, true));
+        self::assertTrue(isset($list['account_only']), 'account_only field missing from list '
+            . print_r($list, true));
 
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
             Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY

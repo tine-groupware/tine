@@ -1,15 +1,15 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  * 
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
- * class to hold addressbook list data
+ * class to hold address book list data
  *
  * @package     Addressbook
  *
@@ -23,51 +23,51 @@
  * @property    string      $type                 type of list
  * @property    string      $list_type
  */
-class Addressbook_Model_List extends Tinebase_Record_Abstract
+class Addressbook_Model_List extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'List';
+    public const MODEL_NAME_PART = 'List';
     
     /**
      * list type: list (user defined lists)
      * 
      * @var string
      */
-    const LISTTYPE_LIST = 'list';
+    public const LISTTYPE_LIST = 'list';
     
     /**
      * list type: group (lists matching a system group)
      * 
      * @var string
      */
-    const LISTTYPE_GROUP = 'group';
+    public const LISTTYPE_GROUP = 'group';
 
     /**
      * mailinglist xprops
      */
-    const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
-    const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
-    const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
-    const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
-    const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
-    const XPROP_SIEVE_REPLY_TO = 'sieveReplyTo';
+    public const XPROP_SIEVE_ALLOW_EXTERNAL = 'sieveAllowExternal';
+    public const XPROP_SIEVE_ALLOW_ONLY_MEMBERS = 'sieveAllowOnlyMembers';
+    public const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
+    public const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
+    public const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+    public const XPROP_SIEVE_REPLY_TO = 'sieveReplyTo';
 
     /**
      * external email user ids (for example in dovecot/postfix sql)
      */
-    const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
-    const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
+    public const XPROP_EMAIL_USERID_IMAP = 'emailUserIdImap';
+    public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
      * name of fields which require manage accounts to be updated
      *
      * @var array list of fields which require manage accounts to be updated
      */
-    protected static $_manageAccountsFields = array(
+    protected static $_manageAccountsFields = [
         'name',
         'description',
         'email',
         'account_only'
-    );
+    ];
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -76,16 +76,20 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      */
     protected static $_configurationObject = NULL;
 
+    public const TABLE_NAME = 'addressbook_lists';
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected static $_modelConfiguration = array(
+    protected static $_modelConfiguration = [
+        self::VERSION       => 8,
         'recordName'        => 'Group', // gettext('GENDER_Group')
         'recordsName'       => 'Groups', // ngettext('Group', 'Groups', n)
         'hasRelations'      => true,
         'hasCustomFields'   => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         'hasNotes'          => true,
         'hasTags'           => true,
         'modlogActive'      => true,
@@ -99,23 +103,29 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
         'containerUsesFilter' => true,
 
-        'titleProperty'     => 'name',//array('%s - %s', array('number', 'title')),
+        'titleProperty'     => 'name', // ['%s - %s', ['number', 'title']],
         'appName'           => 'Addressbook',
         'modelName'         => 'List',
-        'moduleName'        => 'Groups',  // ngettext('Group', 'Groups', n)
+        'moduleName'        => 'Groups', // ngettext('Group', 'Groups', n)
 
-        'filterModel'       => array(
-            'path'              => array(
+        self::TABLE         => [
+            self::NAME          => self::TABLE_NAME,
+            self::INDEXES       => [
+            ],
+        ],
+
+        'filterModel'       => [
+            'path'              => [
                 'filter'            => 'Tinebase_Model_Filter_Path',
                 'label'             => null,
-                'options'           => array()
-            ),
-            'showHidden'        => array(
+                'options'           => [],
+            ],
+            'showHidden'        => [
                 'filter'            => 'Addressbook_Model_ListHiddenFilter',
                 'label'             => null,
-                'options'           => array()
-            ),
-            'contact'           => array(
+                'options'           => [],
+            ],
+            'contact'           => [
                 'filter'            => 'Addressbook_Model_ListMemberFilter',
                 'label'             => 'List Member', // _('List Member')
                 'options'           => [],
@@ -126,11 +136,11 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     'multipleForeignRecords' => true,
                     'ownField' => 'contact',
                 ],
-            ),
-            'container_id'      => array(
+            ],
+            'container_id'      => [
                 'filter'  => Tinebase_Model_Filter_Container::class,
-                'options' => array('modelName' => Addressbook_Model_Contact::class),
-            ),
+                'options' => ['modelName' => Addressbook_Model_Contact::class],
+            ],
             'name_email_query'       => [
                 'filter'            => Tinebase_Model_Filter_Query::class,
                 'title'             => 'Name/Email', // _('Name/Email')
@@ -152,75 +162,83 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     'modelName' => self::class,
                 ],
             ],
-        ),
+        ],
 
-        'fields'            => array(
-            'name'              => array(
-                'label'             => 'Name', //_('Name')
-                'type'              => 'string',
-                'queryFilter'       => true,
-                'validators'        => array('presence' => 'required'),
-            ),
-            'description'       => array(
-                'label'             => 'Description', //_('Description')
-                'type'              => 'text',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'queryFilter'       => true,
-            ),
-            'members'           => array(
-                'label'             => 'Members', //_('Members')
-                'type'              => 'FOO',
-                'default'           => array(),
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                self::SHY           => true
-            ),
-            'email'             => array(
+        'fields'            => [
+            'name'              => [
+                'label' => 'Name', //_('Name')
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 128,
+                'queryFilter' => true,
+                'validators' => ['presence' => 'required'],
+            ],
+            'description' => [
+                'label' => 'Description', //_('Description')
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'queryFilter' => true,
+            ],
+            'email'             => [
                 'label'             => 'E-Mail', //_('E-Mail')
-                'type'              => 'string',
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 128,
+                self::NULLABLE => true,
                 'queryFilter'       => true,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-            'type'              => array(
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'type'              => [
                 'label'             => 'Type', //_('Type')
-                'type'              => 'string',
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 32,
                 'default'           => self::LISTTYPE_LIST,
-                'validators'        => array(
+                'validators'        => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
-                ),
+                    ['InArray', [self::LISTTYPE_LIST, self::LISTTYPE_GROUP]],
+                ],
                 self::COPY_OMIT => true
-            ),
-            'list_type'         => array(
+            ],
+            'list_type'         => [
                 'label'             => 'List type', //_('List type')
                 'type'              => 'keyfield',
+                self::LENGTH => 40,
+                self::NULLABLE => true,
                 'name'              => Addressbook_Config::LIST_TYPE,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::COPY_OMIT => true
-            ),
-            'group_id'          => array(
+            ],
+            'members'           => [
+                'label'             => 'Members', //_('Members')
+                'type'              => self::TYPE_VIRTUAL,
+                'default'           => [],
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::SHY           => true,
+                self::OMIT_MOD_LOG  => false,
+            ],
+            'group_id'          => [
                 'label'             => null, // TODO fill this?
-                'type'              => 'string',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'type'              => self::TYPE_VIRTUAL,
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::COPY_OMIT => true
-            ),
-            'account_only'          => array(
+            ],
+            'account_only'          => [
                 'label'             => null, // TODO fill this?
-                'type'              => 'boolean',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'virtual'           => true,
-            ),
-            'memberroles'       => array(
+                'type'              => self::TYPE_VIRTUAL,
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'memberroles'       => [
                 'label'             => null, // TODO fill this?
-                'type'              => 'virtual',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-            'paths'             => array(
+                'type'              => self::TYPE_VIRTUAL,
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            'paths'             => [
                 'label'             => null, // TODO fill this?
-                'type'              => 'FOO',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-        ),
-    );
+                'type'              => self::TYPE_VIRTUAL,
+                'validators'        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
 
     /**
      * get translated list type
@@ -241,21 +259,21 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     }
 
     /**
-     * if foreign Id fields should be resolved on search and get from json
+     * if foreign ID fields should be resolved on search and get from JSON
      * should have this format:
-     *     array('Calendar_Model_Contact' => 'contact_id', ...)
+     *     ['Calendar_Model_Contact' => 'contact_id', ...]
      * or for more fields:
-     *     array('Calendar_Model_Contact' => array('contact_id', 'customer_id), ...)
+     *     ['Calendar_Model_Contact' => ['contact_id', 'customer_id', ...]
      * (e.g. resolves contact_id with the corresponding Model)
      *
      * @var array
      */
-    protected static $_resolveForeignIdFields = array(
-        Tinebase_Model_User::class => array(
+    protected static $_resolveForeignIdFields = [
+        Tinebase_Model_User::class => [
             'created_by',
-            'last_modified_by'
-        )
-    );
+            'last_modified_by',
+        ],
+    ];
 
     /**
      * @return array

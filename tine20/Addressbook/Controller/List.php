@@ -169,7 +169,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             if ($list->type === Addressbook_Model_List::LISTTYPE_GROUP && $list->group_id) {
                 try {
                     $group = Tinebase_Group::getInstance()->getGroupById($list->group_id);
-                    $list->account_only = $group->account_only;
+                    $list->account_only = (bool) $group->account_only;
                 } catch (Tinebase_Exception_Record_NotDefined $ternd) {
                     Tinebase_Exception::log($ternd);
                 }

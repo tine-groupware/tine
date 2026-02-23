@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>19.0</version>
+    <version>19.1</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -41,105 +41,6 @@
                         <onupdate>CASCADE</onupdate>
                     </reference>
                     <ondelete>cascade</ondelete>
-                </index>
-            </declaration>
-        </table>
-        <table>
-            <name>addressbook_lists</name>
-            <version>7</version>
-            <declaration>
-                <field>
-                    <name>id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>container_id</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>name</name>
-                    <type>text</type>
-                    <length>128</length>
-                    <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>description</name>
-                    <type>text</type>
-                    <length>255</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>email</name>
-                    <type>text</type>
-                    <length>64</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>type</name>
-                    <type>text</type>
-                    <length>32</length>
-                    <notnull>true</notnull>
-                    <default>list</default>
-                </field>
-                <field>
-                    <name>list_type</name>
-                    <type>text</type>
-                    <length>40</length>
-                    <notnull>false</notnull>
-                </field>
-                <field>
-                    <name>xprops</name>
-                    <type>text</type>
-                    <length>65535</length>
-                </field>
-                <field>
-                    <name>created_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>creation_time</name>
-                    <type>datetime</type>
-                </field> 
-                <field>
-                    <name>last_modified_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>
-                <field>
-                    <name>last_modified_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>is_deleted</name>
-                    <type>boolean</type>
-                    <default>false</default>
-                </field>
-                <field>
-                    <name>deleted_by</name>
-                    <type>text</type>
-                    <length>40</length>
-                </field>            
-                <field>
-                    <name>deleted_time</name>
-                    <type>datetime</type>
-                </field>
-                <field>
-                    <name>seq</name>
-                    <type>integer</type>
-                    <notnull>true</notnull>
-                    <default>0</default>
-                </field>
-                <index>
-                    <name>id</name>
-                    <primary>true</primary>
-                    <field>
-                        <name>id</name>
-                    </field>
                 </index>
             </declaration>
         </table>
