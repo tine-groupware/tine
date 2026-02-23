@@ -30,6 +30,11 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
      */
     editDialog: null,
 
+    /**
+     * tab panel plugin
+     */
+    tabPanelPlugin: null,
+
     initComponent: function() {
         var appName = this.recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
@@ -46,33 +51,36 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
 
         // sometimes we need the instances from registry (e.g. printing)
         this.editDialog.recordForm = this;
-        let tabs = _.groupBy(fieldDefinitions, 'uiconfig.tab');
-        this.tapPanelPlugin.init = this.tapPanelPlugin.init.createSequence((tabPanel) => {
-            _.each(tabs, (fieldDefinitions, tabName) => {
-                if (tabName && tabName !== 'undefined') {
-                    let items = [];
-                    _.each(fieldDefinitions, (fieldDefinition) => {
-                        items.push(Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog'))
-                    })
-                    tabPanel.add({
-                        title: app.i18n._hidden(tabName),
-                        layout: 'form',
-                        layoutConfig: {
-                            enableResponsive: true,
-                        },
-                        border: true,
-                        frame: true,
-                        labelAlign: 'top',
-                        autoScroll: true,
-                        items: items,
-                        defaults: {
-                            anchor: '100%',
-                            labelSeparator: ''
-                        }
-                    })
-                }
-            })
-        })
+
+        if (this.tabPanelPlugin) {
+            let tabs = _.groupBy(fieldDefinitions, 'uiconfig.tab');
+            this.tabPanelPlugin.init = this.tabPanelPlugin.init.createSequence((tabPanel) => {
+                _.each(tabs, (fieldDefinitions, tabName) => {
+                    if (tabName && tabName !== 'undefined') {
+                        let items = [];
+                        _.each(fieldDefinitions, (fieldDefinition) => {
+                            items.push(Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog'))
+                        })
+                        tabPanel.add({
+                            title: app.i18n._hidden(tabName),
+                            layout: 'form',
+                            layoutConfig: {
+                                enableResponsive: true,
+                            },
+                            border: true,
+                            frame: true,
+                            labelAlign: 'top',
+                            autoScroll: true,
+                            items: items,
+                            defaults: {
+                                anchor: '100%',
+                                labelSeparator: ''
+                            }
+                        })
+                    }
+                })
+            });
+        }
 
         const fieldsToExclude = _.get(this, 'editDialog.fieldsToExclude', this.fieldsToExclude);
         const fieldsToInclude = _.get(this, 'editDialog.fieldsToInclude', this.fieldsToInclude);

@@ -641,7 +641,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return new Tine.widgets.form.RecordForm({
             recordClass: this.recordClass,
             editDialog: this,
-            tapPanelPlugin: plugin
+            tabPanelPlugin: plugin
         });
     },
 
