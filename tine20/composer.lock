@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "74c7fdb860ad46a58569a39c545ca1aa",
+    "content-hash": "fb5bc4740b0856b0c478a272639568aa",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -4976,17 +4976,11 @@
         },
         {
             "name": "nl.idaas/openid-server",
-            "version": "v0.4.2",
+            "version": "v0.4.2pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/limosa-io/openid-connect-server.git",
-                "reference": "ea20f8fe8f20833fb752d4db4aa89f63312b9388"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/limosa-io/openid-connect-server/zipball/ea20f8fe8f20833fb752d4db4aa89f63312b9388",
-                "reference": "ea20f8fe8f20833fb752d4db4aa89f63312b9388",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/openid-connect-server.git",
+                "reference": "e28fcae47346ff1afb7d8e0a544687920599fa17"
             },
             "require": {
                 "lcobucci/jwt": "^4.3|^5.0",
@@ -5003,7 +4997,12 @@
                     "Idaas\\OpenID\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "IdaasTests\\": "tests/",
+                    "LeagueTests\\": "vendor/league/oauth2-server/tests/"
+                }
+            },
             "license": [
                 "LGPL-3.0-only"
             ],
@@ -5014,11 +5013,7 @@
                 }
             ],
             "description": "OpenID Connect server for PHP",
-            "support": {
-                "issues": "https://github.com/limosa-io/openid-connect-server/issues",
-                "source": "https://github.com/limosa-io/openid-connect-server/tree/v0.4.2"
-            },
-            "time": "2023-11-27T08:34:40+00:00"
+            "time": "2026-02-23T18:14:45+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -16762,6 +16757,12 @@
             "version": "2.13.3.0-patch2",
             "alias": "2.13.3",
             "alias_normalized": "2.13.3.0"
+        },
+        {
+            "package": "nl.idaas/openid-server",
+            "version": "0.4.2.0-patch1",
+            "alias": "v0.4.2",
+            "alias_normalized": "0.4.2.0"
         },
         {
             "package": "phpoffice/phpexcel",
