@@ -2151,6 +2151,12 @@ msgstr "Sitzung ist abgelaufen"
 msgid "You can close this window."
 msgstr "Sie können dieses Fenster schließen."
 
+msgid "Please wait or contact your administrator"
+msgstr "Bitte warten Sie oder kontaktieren Sie den Administrator"
+
+msgid "Installation is in maintenance mode. Please try again later"
+msgstr ""
+
 msgid "Your Client is Outdated"
 msgstr "Ihr Client ist veraltet"
 
@@ -2159,9 +2165,6 @@ msgstr "Ein neuer Client ist verfügbar, klicken Sie OK um die neue Version zu e
 
 msgid "tine needs to be updated or is not installed yet."
 msgstr "tine muss aktualisiert werden oder ist noch nicht komplett installiert."
-
-msgid "Please wait or contact your administrator"
-msgstr "Bitte warten Sie oder kontaktieren Sie den Administrator"
 
 msgid "Could not load service map"
 msgstr ""

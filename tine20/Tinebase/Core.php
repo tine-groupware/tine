@@ -1911,6 +1911,7 @@ class Tinebase_Core
             'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
             'is_anonymous'      => Tinebase_Core::getUser()->accountLoginName == 'anonymoususer',
+            'isInMaintenanceMode'   => Tinebase_Core::inMaintenanceModeAll(),
             'jsonKey'           => Tinebase_Core::get('jsonKey'),
             'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
             'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),

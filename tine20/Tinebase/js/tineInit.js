@@ -662,6 +662,27 @@ Tine.Tinebase.tineInit = {
                     });
                 });
             }
+            const isInMaintenanceMode = Tine.Tinebase.registry.get('isInMaintenanceMode');
+            if (isInMaintenanceMode) {
+                Ext.MessageBox.show({
+                    title : i18n._('Please wait or contact your administrator'),
+                    msg : i18n._('Installation is in maintenance mode. Please try again later'),
+                    buttons: false,
+                    closable:false,
+                    wait:true,
+                    modal:true,
+                    icon: Ext.MessageBox.WARNING,
+                    minWidth: Ext.MessageBox.minProgressWidth
+                });
+
+                window.setTimeout(() => {
+                    Tine.Tinebase.common.reload({
+                        keepRegistry: false,
+                        clearCache: true
+                    });
+                }, 20000);
+                return;
+            }
             Tine.Tinebase.tineInit.showLoginBox(function(response){
                 Tine.log.info('tineInit::renderWindow -fetch users registry');
                 Tine.Tinebase.tineInit.initRegistry(true, function() {
