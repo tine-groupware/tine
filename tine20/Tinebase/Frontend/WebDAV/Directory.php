@@ -190,7 +190,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             if ($e instanceof Tinebase_Exception_QuotaExceeded) {
                 if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
                     $chunkInfo = [];
-                    $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
+                    $name = rawurldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
                     static::getOwnCloudChunkInfo($name, $chunkInfo);
 
                     if (isset($chunkInfo['name']) && isset($chunkInfo['tempId'])) {

@@ -893,7 +893,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         fclose($tempStream);
 
         $chunkInfo = [];
-        Tinebase_Frontend_WebDAV_Directory::getOwnCloudChunkInfo(urldecode(basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'))), $chunkInfo);
+        Tinebase_Frontend_WebDAV_Directory::getOwnCloudChunkInfo(rawurldecode(basename(ltrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'))), $chunkInfo);
         $tempFileName = sha1(Tinebase_Core::getUser()->accountId . $chunkInfo['name'] . $chunkInfo['tempId']);
         $filter = new Tinebase_Model_TempFileFilter(array(
             array('field' => 'name', 'operator' => 'equals', 'value' => $tempFileName)
