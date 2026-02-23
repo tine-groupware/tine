@@ -99,6 +99,9 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             }
             this.renderAclNodePathInfo(!checked);
         }
+        if (!this.pinProtectionCheckbox.isHidden()) {
+            this.pinProtectionCheckbox.setDisabled(this.pinProtectionReadOnly || !checked);
+        }
     },
 
     onRecordLoad: async function (editDialog, record, ticketFn) {
@@ -111,7 +114,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
             path.match(/^\/personal(\/[^/]+){0,2}\/$/) !== null ||
             path.match(/^\/shared(\/[^/]+){0,1}\/$/) !== null);
 
-        const pinProtectionReadOnly = record.get('type') !== 'folder' || !record.data?.account_grants?.adminGrant;
+        this.pinProtectionReadOnly = record.get('type') !== 'folder' || !record.data?.account_grants?.adminGrant;
         this.aclNodeOwnGrants = record.get('grants');
         this.hasOwnGrantsCheckbox.setValue(hasOwnGrants);
         this.pinProtectionCheckbox.setValue(!!record.get('pin_protected_node'));
@@ -139,7 +142,7 @@ Tine.Filemanager.GrantsPanel = Ext.extend(Ext.Panel, {
 
         this.afterIsRendered().then(() => {
             this.hasOwnGrantsCheckbox.setDisabled(ownGrantsReadOnly);
-            this.pinProtectionCheckbox.setDisabled(pinProtectionReadOnly);
+            this.pinProtectionCheckbox.setDisabled(this.pinProtectionReadOnly || !this.hasOwnGrantsCheckbox.checked);
             this.setReadOnly(!hasRequiredGrant);
             this.grantsGrid.setReadOnly(!hasOwnGrants || !hasRequiredGrant);
             if (!hasOwnGrants) {
