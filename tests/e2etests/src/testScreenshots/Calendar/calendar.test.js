@@ -129,18 +129,16 @@ describe('editDialog', () => {
 
     test('user view', async () => {
         await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
-        await newPage.waitForTimeout(1000);
-        let orga = await newPage.$$('.x-combo-list-item');
-        await orga[orga.length - 1].click(); // not good!
+        await expect(newPage).toMatchElement('.x-combo-list-item', {text:'Organisator*in'})
+        await expect(newPage).toClick('.x-combo-list-item', {text:'Organisator*in'})
         await newPage.waitForTimeout(1000);
         await lib.makeScreenshot(newPage, {path: 'screenshots/Kalender/10_kalender_termin_anderer_organisator.png'});
     });
 
     test('save events', async () => {
         await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
-        await newPage.waitForTimeout(1000);
-        let orga = await newPage.$$('.x-combo-list-item');
-        await orga[orga.length - 3].click(); // not good!
+        await expect(newPage).toMatchElement('.x-combo-list-item', {text:'Admin, tine ® (Teilnehmer*in)'})
+        await expect(newPage).toClick('.x-combo-list-item', {text:'Admin, tine ® (Teilnehmer*in)'})
         await newPage.waitForTimeout(1000);
         await expect(newPage).toClick('button', {text: 'Ok'});
 
