@@ -241,13 +241,13 @@ class Sales_InvoiceTestCase extends TestCase
         
         $i = 0;
         
-        $indexes = fgetcsv($fhcsv);
+        $indexes = fgetcsv($fhcsv, escape: '\\');
         
         $this->_contactController = Addressbook_Controller_Contact::getInstance();
         
         $addresses = array();
         
-        while ($row = fgetcsv($fhcsv)) {
+        while ($row = fgetcsv($fhcsv, escape: '\\')) {
             if ($i >= $count) {
                 break;
             }

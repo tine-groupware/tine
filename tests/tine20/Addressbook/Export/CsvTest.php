@@ -51,12 +51,12 @@ class Addressbook_Export_CsvTest extends TestCase
         try {
             rewind($fh);
 
-            $row = fgetcsv($fh, 0, "\t", '"');
+            $row = fgetcsv($fh, 0, "\t", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('Adam', $row[0]);
             static::assertEquals('tmpadam@test.de', $row[1]);
 
-            $row = fgetcsv($fh, 0, "\t", '"');
+            $row = fgetcsv($fh, 0, "\t", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv: ');
             static::assertEquals('Paul', $row[0]);
             static::assertEquals('tmppaul@test.de', $row[1]);
@@ -74,12 +74,12 @@ class Addressbook_Export_CsvTest extends TestCase
         try {
             rewind($fh);
 
-            $row = fgetcsv($fh, 0, "\t", '"');
+            $row = fgetcsv($fh, 0, "\t", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('Adam', $row[0]);
             static::assertEquals('tmpadam@test.de', $row[1]);
 
-            $row = fgetcsv($fh, 0, "\t", '"');
+            $row = fgetcsv($fh, 0, "\t", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv: ');
             static::assertEquals('Paul', $row[0]);
             static::assertEquals('tmppaul@test.de', $row[1]);
@@ -96,14 +96,14 @@ class Addressbook_Export_CsvTest extends TestCase
         ]);
         try {
             rewind($fh);
-            $row = fgetcsv($fh, 0, ",");
+            $row = fgetcsv($fh, 0, ",", escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('FirstName', $row[0]);
             static::assertEquals('LastName', $row[1]);
             static::assertEquals('Company', $row[2]);
             static::assertEquals('Mobile', $row[3]);
 
-            $row = fgetcsv($fh, 0, ",");
+            $row = fgetcsv($fh, 0, ",", escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('Adam', $row[0]);
             static::assertEquals('test', $row[1]);

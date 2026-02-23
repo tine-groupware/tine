@@ -553,7 +553,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return false;
         }
         $users = [];
-        while ($line = fgetcsv($stream, 0, ';')) {
+        while ($line = fgetcsv($stream, 0, ';', escape: '\\')) {
             if ($firstColIsKey) {
                 $users[$line[0]] = $line[1];
             } else {

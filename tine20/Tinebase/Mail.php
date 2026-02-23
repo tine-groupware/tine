@@ -694,7 +694,7 @@ class Tinebase_Mail extends Zend_Mail
             #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
             
             // split addresses
-            $addresses = fgetcsv($stream);
+            $addresses = fgetcsv($stream, escape: '\\');
         }
         
         if (! is_array($addresses)) {
