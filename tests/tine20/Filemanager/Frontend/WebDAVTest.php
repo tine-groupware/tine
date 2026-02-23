@@ -851,13 +851,6 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
     }
 
     /**
-     * @group ServerTests
-     * @return void
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_SystemGeneric
-     *
-     */
-    /**
      * test chunked upload from OwnCloud clients
      *
      * @backupGlobals enabled
@@ -935,6 +928,13 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         }
     }
 
+    /**
+     * @group ServerTests
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     *
+     */
     public function testPutWithUrlencode()
     {
         $this->_skipIfLDAPBackend('FIXME: auth has a problem with LDAP backend');
