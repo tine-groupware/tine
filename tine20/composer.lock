@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37515230fcdae8cccc5ffb6963620101",
+    "content-hash": "1a0187a4778b922b483f0ccd0e0ddd87",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6080,19 +6080,20 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl8",
+            "version": "1.8.2pl9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "c8fe92a0dc9a92470fe90354430b647894982fea"
+                "reference": "f08f5ca131f372888558373ca79ceb303e517217"
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "php": "^7.1|^8"
+                "php": "^8"
             },
             "require-dev": {
+                "rector/rector": "^2.3",
                 "squizlabs/php_codesniffer": "2.*"
             },
             "type": "library",
@@ -6100,6 +6101,14 @@
                 "psr-0": {
                     "PHPExcel": "Classes/"
                 }
+            },
+            "scripts": {
+                "rector:test": [
+                    "vendor/bin/rector process --config .rector.php --dry-run"
+                ],
+                "rector:fix": [
+                    "vendor/bin/rector process --config .rector.php"
+                ]
             },
             "license": [
                 "LGPL-2.1"
@@ -6131,7 +6140,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2024-08-05T21:59:48+00:00"
+            "time": "2026-02-23T11:00:46+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -15522,7 +15531,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch8",
+            "version": "1.8.2.0-patch9",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },

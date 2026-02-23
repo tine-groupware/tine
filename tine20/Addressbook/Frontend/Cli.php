@@ -522,7 +522,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "file could not be opened: " . $csv . "\n";
             return 2;
         }
-        while ($line = fgetcsv($stream, 0, ',')) {
+        while ($line = fgetcsv($stream, 0, ',', escape: '\\')) {
             $list = Addressbook_Controller_List::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Addressbook_Model_List::class, [
                 ['field' => 'name', 'operator' => 'equals', 'value' => $line[0],
@@ -586,7 +586,7 @@ class Addressbook_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 ['name' => $listName]));
         }
 
-        while ($line = fgetcsv($stream, 0, ';')) {
+        while ($line = fgetcsv($stream, 0, ';', escape: '\\')) {
             $contact = Addressbook_Controller_Contact::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Addressbook_Model_Contact::class, [
                 ['field' => 'n_fileas', 'operator' => 'equals', 'value' => $line[0]]]))

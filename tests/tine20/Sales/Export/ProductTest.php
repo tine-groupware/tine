@@ -40,10 +40,10 @@ class Sales_Export_ProductTest extends TestCase
         try {
             rewind($fh);
 
-            $row = fgetcsv($fh, 0, ";", '"');
+            $row = fgetcsv($fh, 0, ";", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('Name', $row[1]);
-            $row = fgetcsv($fh, 0, ";", '"');
+            $row = fgetcsv($fh, 0, ";", '"', escape: '\\');
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertEquals('Ein neues produkt', $row[1], 'row: ' . print_r($row, true));
             static::assertEquals('0.55 ' . Tinebase_Core::getDefaultCurrencySymbol(), $row[2]);
