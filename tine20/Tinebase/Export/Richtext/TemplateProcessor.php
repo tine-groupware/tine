@@ -655,7 +655,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
      * @param string $replacement
      * @throws Tinebase_Exception_NotImplemented
      */
-    public function replaceBlock($blockname, $replacement)
+    public function replaceBlock($blockname, $replacement): void
     {
         throw new Tinebase_Exception_NotImplemented('do not use this function! ' . __METHOD__);
     }
