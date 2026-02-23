@@ -12022,14 +12022,15 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.17",
+            "version": "1.5.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "06f85b654e315fcf681a9c27a3a530f99bd2210b"
+                "reference": "25fee5ba33e3210f6b136640253fe8f7b2c47e80"
             },
             "require": {
                 "ext-ctype": "*",
+                "ext-xml": "*",
                 "php": ">=8.0",
                 "zendframework/zendframework1": "1.12.20.*"
             },
@@ -12069,7 +12070,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2026-02-20T12:41:05+00:00"
+            "time": "2026-02-23T11:52:21+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -15653,7 +15654,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15678,5 +15679,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
