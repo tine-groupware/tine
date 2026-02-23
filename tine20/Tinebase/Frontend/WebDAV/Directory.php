@@ -127,14 +127,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         $quotaChecked = false;
         $completeFile = null;
-        $path = $this->_path . '/' . $name;
+        $path = null;
         // OwnCloud chunked file upload
         try {
             if (isset($_SERVER['HTTP_OC_CHUNKED']) && is_resource($data)) {
                 static::checkQuota($pathRecord->getNode());
                 $quotaChecked = true;
 
-                $name = urldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
+                $name = rawurldecode(basename(ltrim(parse_url((string) $_SERVER['REQUEST_URI'], PHP_URL_PATH), '/')));
                 $completeFile = static::handleOwnCloudChunkedFileUpload($name, $data);
 
                 if (!$completeFile instanceof Tinebase_Model_TempFile) {
@@ -155,6 +155,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             if (!$quotaChecked) {
                 static::checkQuota($pathRecord->getNode());
             }
+
+            $path = $this->_path . '/' . $name;
 
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
                 Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
@@ -179,7 +181,9 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             $etag = Tinebase_FileSystem::getInstance()->getETag($path);
 
         } catch (Exception $e) {
-            Tinebase_FileSystem::getInstance()->unlink($path);
+            if ($path) {
+                Tinebase_FileSystem::getInstance()->unlink($path);
+            }
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             }
