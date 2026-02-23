@@ -2698,7 +2698,7 @@ fi';
         
         $db = Tinebase_Core::getDb();
 
-        while ($row = fgetcsv($fh, separator: ';')) {
+        while ($row = fgetcsv($fh, separator: ';', escape: '\\')) {
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
             $groupId = $row[0];
             $listId = $row[1];

@@ -219,9 +219,9 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $femalePhotoIndex = 0;
         $malePhotoIndex   = 0;
 
-        $indexes = fgetcsv($fhcsv);
+        $indexes = fgetcsv($fhcsv, escape: '\\');
 
-        while ($row = fgetcsv($fhcsv)) {
+        while ($row = fgetcsv($fhcsv, escape: '\\')) {
             foreach($row as $index => $field) {
                 if ($indexes[$index] == 'gender') {
                     if ($field == 'male') {

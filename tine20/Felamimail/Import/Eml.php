@@ -29,7 +29,7 @@ class Felamimail_Import_Eml
         $rows = [];
         foreach ($files as $file) {
             $open = fopen($importUserCsv . DIRECTORY_SEPARATOR . $file, 'r');
-            while (($row = fgetcsv($open)) !== false) {
+            while (($row = fgetcsv($open, escape: '\\')) !== false) {
                 $rows[$row[2]]= $row[3];
             }
         }

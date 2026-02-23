@@ -244,7 +244,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             $this->resultMsg[] = $msg;
             return false;
         }
-        while ($line = fgetcsv($fh, null, ';'/*, '"', '\\'*/)) {
+        while ($line = fgetcsv($fh, null, ';', '"', '\\')) {
             if ('Aktiv' !== $line[14]) {
                 continue;
             }

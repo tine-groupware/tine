@@ -19,7 +19,7 @@ class Admin_Export_UserTest extends TestCase
         try {
             rewind($fh);
 
-            $row = fgetcsv($fh, 0, "\t", '"');
+            $row = fgetcsv($fh, 0, "\t", '"', escape: '\\');
             print_r($row);
             static::assertTrue(is_array($row), 'could not read csv ');
             static::assertStringContainsString('accountLoginName', $row[0]);
