@@ -161,7 +161,7 @@
     "ramsey/uuid": "^4.7",
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
-    "sentry/sentry": "3.22.1pl1 as 3.22.1",
+    "sentry/sentry": "3.22.1pl2 as 3.22.1",
     "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
     "smalot/pdfparser": "^2.12",
     "spomky-labs/otphp": "^10.0",
