@@ -502,11 +502,13 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
     {
         $this->_testNeedsTransaction();
         // Get test message
-        $message = $this->_emailTestClass->messageTestHelper('multipart_alternative.eml');
+        $folderToTest = $this->_getFolder('INBOX');
+        $message = $this->_emailTestClass->messageTestHelper('multipart_alternative.eml', _folder: $folderToTest);
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart_alternative.eml';
 
-        $filter = array(array(
-            'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'folder_id', 'operator' => 'equals', 'value' => $folderToTest->getId()),
+            array('field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid))
         ));
         $json = new Felamimail_Frontend_Json();
 
@@ -528,9 +530,9 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         Tinebase_Tags::getInstance()->setRights($right);
         Felamimail_Controller_Message_Flags::getInstance()->addFlags([$message], [$tag->getId()]);
 
-        $updatedFolder = $this->_folder;
+        $updatedFolder = $folderToTest;
         while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
-            $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
+            $updatedFolder = $this->_controller->updateCache($updatedFolder, 30, 1);
         }
 
         $result = $json->searchMessages($filter, []);
