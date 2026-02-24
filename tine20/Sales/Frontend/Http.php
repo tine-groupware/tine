@@ -63,7 +63,7 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string|null $recordIds
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function exportInvoicePositions($invoiceId, $accountable, string $recordIds = null)
+    public function exportInvoicePositions($invoiceId, $accountable, ?string $recordIds = null)
     {
         if (! (class_exists($accountable) && in_array('Sales_Model_Accountable_Interface', class_implements($accountable)))) {
             throw new Tinebase_Exception_InvalidArgument('The given accountable ' . $accountable . ' does not exist or doesn\'t implement Sales_Model_Accountable_Interface');
