@@ -64,40 +64,51 @@ trait Tinebase_Controller_Record_ModlogTrait
             throw new Tinebase_Exception_InvalidArgument('record object expected');
         }
 
-        $bchub = Tinebase_BroadcastHub::getInstance();
-        if ($bchub->isActive()) {
-            $verb = null;
-            $cId = null;
-            if (null === $_newRecord && $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
-                $verb = 'delete';
-                $cId = $notNullRecord->getContainerId();
-            } elseif ($_newRecord) {
-                if (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
-                    $verb = 'create';
-                    $cId = $notNullRecord->getContainerId();
-                } elseif ($_newRecord->is_deleted && $_oldRecord && !$_oldRecord->is_deleted) {
-                    $verb = 'delete';
-                    $cId = $notNullRecord->getContainerId();
-                } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
-                    $verb = 'update';
-                    $cId = $_oldRecord->getContainerId();
-                }
-            }
-            $id = $notNullRecord->getId();
-            if (null !== $verb) {
-                $bchub->pushAfterCommit($verb, $notNullRecord::class, $id, $cId);
-            }
-        }
+        $this->_notifyBroadcastHub($_newRecord, $_oldRecord, $notNullRecord);
 
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {
-            return NULL;
+            return null;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Writing modlog for ' . $notNullRecord::class);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Writing modlog for ' . $notNullRecord::class);
+        }
 
         return Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
             $this->_getBackendType(), $notNullRecord->getId());
+    }
+
+    protected function _notifyBroadcastHub(?Tinebase_Record_Interface $_newRecord,
+                                           ?Tinebase_Record_Interface $_oldRecord,
+                                           Tinebase_Record_Interface $notNullRecord): void
+    {
+        $bchub = Tinebase_BroadcastHub::getInstance();
+        if (!$bchub->isActive()) {
+            return;
+        }
+
+        $verb = null;
+        $cId = null;
+        if (null === $_newRecord && $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
+            $verb = 'delete';
+            $cId = $notNullRecord->getContainerId();
+        } elseif ($_newRecord) {
+            if (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
+                $verb = 'create';
+                $cId = $notNullRecord->getContainerId();
+            } elseif ($_newRecord->is_deleted && $_oldRecord && !$_oldRecord->is_deleted) {
+                $verb = 'delete';
+                $cId = $notNullRecord->getContainerId();
+            } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
+                $verb = 'update';
+                $cId = $_oldRecord->getContainerId();
+            }
+        }
+        $id = $notNullRecord->getId();
+        if (null !== $verb) {
+            $bchub->pushAfterCommit($verb, $notNullRecord::class, $id, $cId);
+        }
     }
 
     /**
