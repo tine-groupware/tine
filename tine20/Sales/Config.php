@@ -517,6 +517,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED => [
                     self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED, // till we have a better (storno) solution
                         Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
                     ]
                 ],
