@@ -22,6 +22,10 @@
   "repositories": [
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/bootstrap-email.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/composerapploader.git"
     },
     {
@@ -136,7 +140,7 @@
     "ext-xmlreader": "*",
     "ext-xmlwriter": "*",
     "ext-zip": "*",
-    "antibodies-online/bootstrap-email": "^1.0",
+    "antibodies-online/bootstrap-email": "^2.0",
     "aschmelyun/basic-feeds": "^0.0.2",
     "benmorel/gsm-charset-converter": "^0.2",
     "clean/phpdoc-md": "^0.19.3",
