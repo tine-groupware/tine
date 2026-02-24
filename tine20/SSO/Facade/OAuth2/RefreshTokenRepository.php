@@ -13,12 +13,12 @@
 
 class SSO_Facade_OAuth2_RefreshTokenRepository implements \League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface
 {
-    public function getNewRefreshToken()
+    public function getNewRefreshToken(): ?\League\OAuth2\Server\Entities\RefreshTokenEntityInterface
     {
         return new SSO_Facade_OAuth2_RefreshTokenEntity();
     }
 
-    public function persistNewRefreshToken(\League\OAuth2\Server\Entities\RefreshTokenEntityInterface $refreshTokenEntity)
+    public function persistNewRefreshToken(\League\OAuth2\Server\Entities\RefreshTokenEntityInterface $refreshTokenEntity): void
     {
         $token = new SSO_Model_Token([
             SSO_Model_Token::FLD_TOKEN  => $refreshTokenEntity->getIdentifier(),
@@ -37,12 +37,12 @@ class SSO_Facade_OAuth2_RefreshTokenRepository implements \League\OAuth2\Server\
         ]);
     }
 
-    public function revokeRefreshToken($tokenId)
+    public function revokeRefreshToken($tokenId): void
     {
         SSO_Controller_Token::getInstance()->deleteByFilter($this->getFilterForToken($tokenId));
     }
 
-    public function isRefreshTokenRevoked($tokenId)
+    public function isRefreshTokenRevoked($tokenId): bool
     {
         try {
             if (null !== SSO_Controller_Token::getInstance()->search($this->getFilterForToken($tokenId))

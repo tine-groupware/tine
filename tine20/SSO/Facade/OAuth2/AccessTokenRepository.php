@@ -55,12 +55,12 @@ class SSO_Facade_OAuth2_AccessTokenRepository implements \Idaas\OpenID\Repositor
         ]);
     }
 
-    public function revokeAccessToken($tokenId)
+    public function revokeAccessToken($tokenId): void
     {
         SSO_Controller_Token::getInstance()->deleteByFilter($this->getFilterForToken($tokenId));
     }
 
-    public function isAccessTokenRevoked($tokenId)
+    public function isAccessTokenRevoked($tokenId): bool
     {
         try {
             if (null !== SSO_Controller_Token::getInstance()->search($this->getFilterForToken($tokenId))

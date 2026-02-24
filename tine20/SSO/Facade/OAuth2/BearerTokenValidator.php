@@ -104,7 +104,7 @@ class SSO_Facade_OAuth2_BearerTokenValidator implements AuthorizationValidatorIn
     /**
      * {@inheritdoc}
      */
-    public function validateAuthorization(ServerRequestInterface $request)
+    public function validateAuthorization(ServerRequestInterface $request): ServerRequestInterface
     {
         if ($request->hasHeader('authorization') === false) {
             throw OAuthServerException::accessDenied('Missing "Authorization" header');

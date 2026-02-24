@@ -13,12 +13,12 @@
 
 class SSO_Facade_OAuth2_AuthCodeRepository implements \League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface
 {
-    public function getNewAuthCode()
+    public function getNewAuthCode(): \League\OAuth2\Server\Entities\AuthCodeEntityInterface
     {
         return new SSO_Facade_OAuth2_AuthCodeEntity();
     }
 
-    public function persistNewAuthCode(\League\OAuth2\Server\Entities\AuthCodeEntityInterface $authCodeEntity)
+    public function persistNewAuthCode(\League\OAuth2\Server\Entities\AuthCodeEntityInterface $authCodeEntity): void
     {
         $token = new SSO_Model_Token([
             'token' => $authCodeEntity->getIdentifier(),
@@ -37,12 +37,12 @@ class SSO_Facade_OAuth2_AuthCodeRepository implements \League\OAuth2\Server\Repo
         ]);
     }
 
-    public function revokeAuthCode($codeId)
+    public function revokeAuthCode($codeId): void
     {
         SSO_Controller_Token::getInstance()->deleteByFilter($this->getFilterForToken($codeId));
     }
 
-    public function isAuthCodeRevoked($codeId)
+    public function isAuthCodeRevoked($codeId): bool
     {
         try {
             if (null !== SSO_Controller_Token::getInstance()->search($this->getFilterForToken($codeId))
