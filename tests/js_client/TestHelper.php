@@ -11,7 +11,7 @@
 require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
 
-error_reporting( E_ALL | E_STRICT );
+error_reporting( E_ALL );
 
 set_include_path(implode(PATH_SEPARATOR, array(
     dirname(__FILE__),

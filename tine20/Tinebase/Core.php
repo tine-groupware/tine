@@ -779,7 +779,6 @@ class Tinebase_Core
                 break;
                 
             case E_NOTICE:
-            case E_STRICT:
             case E_USER_NOTICE:
             default:
                 if (Tinebase_Core::isRegistered(Tinebase_Core::LOGGER)) {
