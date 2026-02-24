@@ -39,4 +39,4 @@ if (extension_loaded('mbstring')) {
 $autoloader = require __DIR__ . '/vendor/autoload.php';
 
 // activate our own error handler after autoloader initialization
-set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_STRICT | E_DEPRECATED);
+set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_DEPRECATED);
