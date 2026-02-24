@@ -13,14 +13,14 @@
 
 class SSO_Facade_OAuth2_ScopeRepository implements League\OAuth2\Server\Repositories\ScopeRepositoryInterface
 {
-    public function getScopeEntityByIdentifier($identifier)
+    public function getScopeEntityByIdentifier($identifier): ?\League\OAuth2\Server\Entities\ScopeEntityInterface
     {
         $scope = new SSO_Facade_OAuth2_ScopeEntity();
         $scope->setIdentifier($identifier);
         return $scope;
     }
 
-    public function finalizeScopes(array $scopes, $grantType, \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity, $userIdentifier = null)
+    public function finalizeScopes(array $scopes, $grantType, \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity, $userIdentifier = null, ?string $authCodeId = null): array
     {
         return $scopes;
     }

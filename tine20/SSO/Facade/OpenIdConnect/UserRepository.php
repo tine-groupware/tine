@@ -20,7 +20,7 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
         $this->idToken = $token;
     }
 
-    public function getUserEntityByUserCredentials($username, $password, $grantType, \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity)
+    public function getUserEntityByUserCredentials($username, $password, $grantType, \League\OAuth2\Server\Entities\ClientEntityInterface $clientEntity): ?\League\OAuth2\Server\Entities\UserEntityInterface
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__);
     }

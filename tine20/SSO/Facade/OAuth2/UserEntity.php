@@ -20,7 +20,7 @@ class SSO_Facade_OAuth2_UserEntity implements \League\OAuth2\Server\Entities\Use
         $this->user = $user;
     }
 
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         return $this->user->getId();
     }
