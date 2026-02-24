@@ -513,7 +513,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 $account = $this->usernames[$username];
             } else {
                 $fh = fopen('php://memory', 'w+');
-                fputcsv($fh, [$raw[0], $raw[1]], $this->accountImportSeparator);
+                fputcsv($fh, [$raw[0], $raw[1]], $this->accountImportSeparator, escape: '\\');
                 rewind($fh);
                 $csv = stream_get_contents($fh);
                 fclose($fh);
