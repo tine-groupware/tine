@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47315698313ed90758d13735d4e19269",
+    "content-hash": "496ebeba7527fa3241e6a5bbe8ada145",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -7922,17 +7922,11 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "3.22.1",
+            "version": "3.22.1pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/getsentry/sentry-php.git",
-                "reference": "8859631ba5ab15bc1af420b0eeed19ecc6c9d81d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/8859631ba5ab15bc1af420b0eeed19ecc6c9d81d",
-                "reference": "8859631ba5ab15bc1af420b0eeed19ecc6c9d81d",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/sentry-php.git",
+                "reference": "8991b16361cb13634fff215d9202ffc6a79c1ed7"
             },
             "require": {
                 "ext-json": "*",
@@ -7968,6 +7962,7 @@
                 "phpstan/phpstan": "^1.3",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^8.5.14|^9.4",
+                "rector/rector": "^1.2",
                 "symfony/phpunit-bridge": "^5.2|^6.0",
                 "vimeo/psalm": "^4.17"
             },
@@ -7983,7 +7978,25 @@
                     "Sentry\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Sentry\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "tests": [
+                    "vendor/bin/phpunit --verbose"
+                ],
+                "phpcs": [
+                    "vendor/bin/php-cs-fixer fix --verbose --diff --dry-run"
+                ],
+                "phpstan": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "psalm": [
+                    "vendor/bin/psalm"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -8004,21 +8017,7 @@
                 "logging",
                 "sentry"
             ],
-            "support": {
-                "issues": "https://github.com/getsentry/sentry-php/issues",
-                "source": "https://github.com/getsentry/sentry-php/tree/3.22.1"
-            },
-            "funding": [
-                {
-                    "url": "https://sentry.io/",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://sentry.io/pricing/",
-                    "type": "custom"
-                }
-            ],
-            "time": "2023-11-13T11:47:28+00:00"
+            "time": "2026-02-24T09:19:42+00:00"
         },
         {
             "name": "simplesamlphp/assert",
@@ -12526,17 +12525,11 @@
         },
         {
             "name": "twig/html-extra",
-            "version": "v3.7.1",
+            "version": "v3.7.1pl1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/html-extra.git",
-                "reference": "95ceb36e70fa8d07af08cf5135ecbf5e0bd8f386"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/html-extra/zipball/95ceb36e70fa8d07af08cf5135ecbf5e0bd8f386",
-                "reference": "95ceb36e70fa8d07af08cf5135ecbf5e0bd8f386",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/twig-html-extra",
+                "reference": "afba316bc88631f5e9fa176ec494a58440e4310a"
             },
             "require": {
                 "php": ">=7.1.3",
@@ -12544,6 +12537,7 @@
                 "twig/twig": "^2.7|^3.0"
             },
             "require-dev": {
+                "rector/rector": "dev-main",
                 "symfony/phpunit-bridge": "^5.4|^6.3"
             },
             "type": "library",
@@ -12555,7 +12549,6 @@
                     "/Tests/"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -12573,20 +12566,7 @@
                 "html",
                 "twig"
             ],
-            "support": {
-                "source": "https://github.com/twigphp/html-extra/tree/v3.7.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/twig/twig",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-07-29T15:34:56+00:00"
+            "time": "2026-02-24T09:33:48+00:00"
         },
         {
             "name": "twig/twig",
@@ -15630,6 +15610,12 @@
             "alias_normalized": "7.4.1.0"
         },
         {
+            "package": "twig/html-extra",
+            "version": "3.7.1.0-patch1",
+            "alias": "v3.7.1",
+            "alias_normalized": "3.7.1.0"
+        },
+        {
             "package": "twig/twig",
             "version": "2.16.1.0-patch1",
             "alias": "v2.16.1",
@@ -15669,7 +15655,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15694,5 +15680,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
