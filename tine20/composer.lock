@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a396f614c82f185375e11b041c161712",
+    "content-hash": "bdd642f91f306b1355b41c9de012dfbd",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -7914,18 +7914,18 @@
         },
         {
             "name": "sentry/sentry",
-            "version": "3.22.1pl1",
+            "version": "3.22.1pl2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/sentry-php.git",
-                "reference": "8991b16361cb13634fff215d9202ffc6a79c1ed7"
+                "reference": "2e79408bb39a03a4168967597209870db03648f9"
             },
             "require": {
                 "ext-json": "*",
                 "ext-mbstring": "*",
                 "guzzlehttp/promises": "^1.5.3|^2.0",
                 "jean85/pretty-package-versions": "^1.5|^2.0.4",
-                "php": "^7.2|^8.0",
+                "php": "^8.0",
                 "php-http/async-client-implementation": "^1.0",
                 "php-http/client-common": "^1.5|^2.0",
                 "php-http/discovery": "^1.15",
@@ -8009,7 +8009,7 @@
                 "logging",
                 "sentry"
             ],
-            "time": "2026-02-24T09:19:42+00:00"
+            "time": "2026-02-24T11:26:12+00:00"
         },
         {
             "name": "simplesamlphp/assert",
@@ -15576,6 +15576,12 @@
             "version": "1.24.1.0-patch5",
             "alias": "1.24.1",
             "alias_normalized": "1.24.1.0"
+        },
+        {
+            "package": "sentry/sentry",
+            "version": "3.22.1.0-patch2",
+            "alias": "3.22.1",
+            "alias_normalized": "3.22.1.0"
         },
         {
             "package": "simplesamlphp/assert",

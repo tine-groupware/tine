@@ -179,7 +179,7 @@
     "ramsey/uuid": "^4.7",
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
-    "sentry/sentry": "^3",
+    "sentry/sentry": "3.22.1pl2 as 3.22.1",
     "simplesamlphp/assert": "v1.9.1pl1 as v1.9.1",
     "simplesamlphp/simplesamlphp": "v2.5.0pl2 as v2.5.0",
     "simplesamlphp/xml-common": "dev-master as v2.4.3",
