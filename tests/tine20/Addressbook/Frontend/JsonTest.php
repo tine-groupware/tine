@@ -2600,7 +2600,8 @@ Steuernummer 33/111/32212";
             array('field' => 'record_id', 'operator' => 'equals', 'value' => $list['id']),
         ), '');
 
-        static::assertEquals(4, $notes['totalcount']);
+        static::assertEquals(4, $notes['totalcount'],
+            'notes count mismatch: ' . print_r($notes['results'], true));
         foreach (array(
                      array('members ( 0: ali PHPUNIT 1: ali PHPUNIT -> )'),
                      array('members ( 0: ali PHPUNIT ->  0: ali PHPUNIT 1: ali PHPUNIT)'),
