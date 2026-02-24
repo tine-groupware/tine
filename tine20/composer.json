@@ -42,6 +42,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/twig-html-extra"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine-groupware/ubl-invoice.git"
     },
     {
@@ -75,6 +79,10 @@
     {
       "type": "git",
       "url": "https://github.com/tine20/sabrevobject.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine-groupware/sentry-php.git"
     },
     {
       "type": "git",
@@ -153,7 +161,7 @@
     "ramsey/uuid": "^4.7",
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
-    "sentry/sentry": "^3",
+    "sentry/sentry": "3.22.1pl1 as 3.22.1",
     "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
     "smalot/pdfparser": "^2.12",
     "spomky-labs/otphp": "^10.0",
@@ -169,7 +177,7 @@
     "tine20/composerapploader": "1.0.*",
     "twig/cssinliner-extra": "^3.7",
     "twig/extensions": "^1.5",
-    "twig/html-extra": "^3.7",
+    "twig/html-extra": "v3.7.1pl1 as v3.7.1",
     "twig/twig": "v2.16.1pl1 as v2.16.1",
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
     "web-auth/webauthn-lib": "^3.3",
