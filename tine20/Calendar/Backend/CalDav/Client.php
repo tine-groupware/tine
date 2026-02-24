@@ -374,7 +374,11 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
         $syncSuccess = false;
         if ('' === $token) {
-            $props = $this->propFind($calUri, ['{DAV:}sync-token']);
+            try {
+                $props = $this->propFind($calUri, ['{DAV:}sync-token']);
+            } catch (Sabre\HTTP\ClientHttpException $che) {
+                throw new Tinebase_Exception('PropFind failed on uri ' . $calUri . ' error: ' . $che->getMessage());
+            }
             if (!empty($props['{DAV:}sync-token'] ?? null)) {
                 return $props['{DAV:}sync-token'];
             }
@@ -390,7 +394,8 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         }
         if ($response['statusCode'] !== 207) {
             // TODO FIXME check for not supported and throw new Tinebase_Exception_NotImplemented()
-            throw new Tinebase_Exception('sync token request for ' . $calUri . ' failed with ' . $response['statusCode']);
+            throw new Tinebase_Exception('sync token request for ' . $calUri . ' failed with '
+                . $response['statusCode']);
         }
 
         /** @var \Sabre\DAV\Xml\Response\MultiStatus $multistatus */
@@ -467,8 +472,10 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 $id = $this->_getEventIdFromName($name = basename($uri));
 
                 if ($this->_importVTodos && strpos($data, 'BEGIN:VTODO') !== false) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
-                        . ' Processing VTODO record: ' . $uri);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__
+                            . ' Processing VTODO record: ' . $uri);
+                    }
 
                     $oldUserAgent = $_SERVER['HTTP_USER_AGENT'];
                     $userAgentRAII = new Tinebase_RAII(fn() => $_SERVER['HTTP_USER_AGENT'] = $oldUserAgent);
