@@ -160,6 +160,7 @@
     "laminas/laminas-zendframework-bridge": "^1.6",
     "league/flysystem": "^3.0",
     "league/flysystem-webdav": "^3.16",
+    "league/uri": "7.5.1",
     "metaways/opendocument": "1.*",
     "metaways/timezoneconvert": "1.*",
     "mlocati/ip-lib": "^1.18",
