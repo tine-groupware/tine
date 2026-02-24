@@ -736,7 +736,7 @@ class Tinebase_Core
     /**
      * tines error exception handler for catchable fatal errors
      *
-     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * NOTE: PHP < 5.3 don't throw exceptions for Catchable fatal errors per default,
      * so we convert them into exceptions manually
      *
      * @param integer $severity
@@ -2616,7 +2616,7 @@ class Tinebase_Core
             return;
         }
 
-        $tinebaseConfig = Setup_Controller::getInstance()->isInstalled('Tinebase')
+        $tinebaseConfig = Setup_Controller::getInstance()->isInstalled()
             ? Tinebase_Config::getInstance()
             : self::getConfig();
         $sentryServerUri = $tinebaseConfig->{Tinebase_Config::SENTRY_URI};
