@@ -1046,7 +1046,6 @@ class Tinebase_Core
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__
                     . '::' . __LINE__ . ' Adding exception logger to Redis Backend');
                 $refProp = new ReflectionProperty(Zend_Cache_Backend_Redis::class, '_redis');
-                $refProp->setAccessible(true);
                 $refProp->getValue($cacheBackend)->setLogDelegator(function($exception) {
                     Tinebase_Exception::log($exception);
                 });

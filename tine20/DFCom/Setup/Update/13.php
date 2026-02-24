@@ -59,7 +59,6 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
 
         $initalize = new DFCom_Setup_Initialize();
         $method = new ReflectionMethod(DFCom_Setup_Initialize::class, '_initializeSystemCFs');
-        $method->setAccessible(true);
         $method->invoke($initalize);
 
         $this->addApplicationUpdate(DFCom_Config::APP_NAME, '1.3', self::RELEASE013_UPDATE003);

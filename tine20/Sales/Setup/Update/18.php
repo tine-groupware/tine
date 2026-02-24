@@ -201,7 +201,6 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     {
         $piCtrl = Sales_Controller_Document_PurchaseInvoice::getInstance();
         $refProp = new ReflectionProperty(Sales_Controller_Document_PurchaseInvoice::class, '_skipSetModlog');
-        $refProp->setAccessible(true);
         $refProp->setValue($piCtrl, true);
         $raii = new Tinebase_RAII(fn() => $refProp->setValue($piCtrl, false));
         $recAttachmentCtrl = Tinebase_FileSystem_RecordAttachments::getInstance();

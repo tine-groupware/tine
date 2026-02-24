@@ -111,7 +111,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $exceptions->addRecord($exception1);
 
         $refMeth = new ReflectionMethod(Calendar_Controller_EventNotifications::class, '_createVCalendar');
-        $refMeth->setAccessible(true);
         // be aware of $component->{'ORGANIZER'}->add('SENT-BY', 'mailto:' . $updater->accountEmailAddress); .... relevant?
         // exception1
         $vcalendar = $refMeth->invoke(Calendar_Controller_EventNotifications::getInstance(), $calCtrl->get($exception1->getId()), Calendar_Model_iMIP::METHOD_REQUEST, Tinebase_Core::getUser(), $attendee)->serialize();
@@ -238,7 +237,6 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $exception2 = $calCtrl->createRecurException($nextOccurance);
 
         $refMeth = new ReflectionMethod(Calendar_Controller_EventNotifications::class, '_createVCalendar');
-        $refMeth->setAccessible(true);
         $vcalendar = $refMeth->invoke(Calendar_Controller_EventNotifications::getInstance(), $calCtrl->get($createdEvent->getId()), Calendar_Model_iMIP::METHOD_REQUEST, Tinebase_Core::getUser(), $attendee)->serialize();
 
         $converter = new Calendar_Convert_Event_VCalendar2_Abstract();
