@@ -388,7 +388,7 @@ class Admin_Frontend_CliTest extends TestCase
             foreach ($row as $colIndex => &$field) {
                 $field = str_replace('DOMAIN', $maildomain, $field);
             }
-            fputcsv($writeFile, $row, $delimiter, $enclosure);
+            fputcsv($writeFile, $row, $delimiter, $enclosure, escape: '\\');
         }
         
         fclose($readFile);
@@ -427,7 +427,7 @@ class Admin_Frontend_CliTest extends TestCase
                 $field = str_replace('GROUP1', $this->_testGroup['teacher']->getId(), $field);
                 $field = str_replace('GROUP2', $this->_testGroup['student']->getId(), $field);
             }
-            fputcsv($writeFile, $row, $delimiter, $enclosure);
+            fputcsv($writeFile, $row, $delimiter, $enclosure, escape: '\\');
         }
         
         fclose($readFile);
