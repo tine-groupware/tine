@@ -383,8 +383,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             case 'delete':
                 $this->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
                 break;
-            default;
-               break;
         }
 
         parent::_checkRight($_action);

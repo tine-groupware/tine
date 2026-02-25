@@ -322,8 +322,6 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
             case 'delete':
                 $this->checkRight('MANAGE_CONTAINERS');
                 break;
-            default;
-               break;
         }
 
         parent::_checkRight($_action);

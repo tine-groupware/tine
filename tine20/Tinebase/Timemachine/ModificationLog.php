@@ -1508,7 +1508,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                                 file_put_contents($path, $fh);
                             $fh && @fclose($fh);
                             @unlink($tmpFile);
-                        default;
                     }
                 }
             }

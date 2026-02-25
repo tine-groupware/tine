@@ -124,8 +124,6 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
             case 'delete':
                 $this->checkRight(Filemanager_Acl_Rights::MANAGE_DOWNLOADLINKS);
                 break;
-            default;
-            break;
         }
 
         parent::_checkRight($_action);
