@@ -6,7 +6,6 @@
     <order>60</order>
     <status>enabled</status>
     <depends>
-        <application>Tasks</application>
     </depends>
     <tables>
         <table>
