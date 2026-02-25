@@ -208,12 +208,12 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
         // Chrome, Safari, FF4+
         if (e.getKey() == e.ENTER) {
             var s = this.cmp.win.getSelection(),
-                r = s.getRangeAt(0),
+                r = s.rangeCount ? s.getRangeAt(0) : null,
                 doc = this.cmp.getDoc(),
-                level = this.getBlockquoteLevel(s.anchorNode),
+                level = s?.anchorNode ? this.getBlockquoteLevel(s.anchorNode) : 0,
                 scrollTop = doc.body.scrollTop;
                 
-            if (level > 0) {
+            if (level > 0 && r) {
                 // cut from cursor to end of the document
                 if (s.anchorNode.nodeName == '#text') {
                     r.setStartBefore(s.anchorNode.parentNode);
