@@ -21,12 +21,12 @@ class Setup_Backend_Factory
     /**
      * factory function to return a selected setup backend class
      *
-     * @param string|null $_type
+     * @param string $_type
      * @return Setup_Backend_Interface
      * @throws Setup_Exception
      * @throws Tinebase_Exception_InvalidArgument
      */
-    static public function factory($_type = null)
+    static public function factory(string $_type = '')
     {
         if (isset(static::$_instanceCache[$_type])) {
             return static::$_instanceCache[$_type];
