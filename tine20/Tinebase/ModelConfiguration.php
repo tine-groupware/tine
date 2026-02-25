@@ -1041,6 +1041,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         if (empty($this->_modelName)) {
             [,,$this->_modelName] = explode('_', $recordClass, 3);
         }
+        if (empty($this->_appName)) {
+            [$this->_appName] = explode('_', $recordClass, 2);
+        }
 
         $this->_application = $this->_applicationName = $this->_appName;
 
