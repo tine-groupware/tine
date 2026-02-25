@@ -138,6 +138,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected $_additionalColumns = array();
 
+    /**
+     * @var array<string, SplObjectStorage>
+     */
     protected $_selectHooks = [];
 
     /**
@@ -899,7 +902,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_addForeignTableJoins($select, $cols);
 
-        /** @var SplObjectStorage $objs */
         foreach ($this->_selectHooks as $objs) {
             $objs->rewind();
             $objs->current()->manipulateSelect($select);
