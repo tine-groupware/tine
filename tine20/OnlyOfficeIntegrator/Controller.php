@@ -144,7 +144,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             $name = $tempFile->name;
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $contentType = finfo_file($finfo, $tempFile->path);
-            finfo_close($finfo);
+            unset($finfo);
         } else {
             try {
                 $node = Tinebase_FileSystem::getInstance()->get(

@@ -170,7 +170,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $path);
-        finfo_close($finfo);
+        unset($finfo);
         
         return $this->createTempFile($path, $name, $mimeType ?: $type, $size, $error);
     }

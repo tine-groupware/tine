@@ -911,7 +911,7 @@ class Tinebase_FileSystem implements
                 } else {
                     $mimeType = null;
                 }
-                finfo_close($finfo);
+                unset($finfo);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' finfo_open() is not available: Could not get file information.');
