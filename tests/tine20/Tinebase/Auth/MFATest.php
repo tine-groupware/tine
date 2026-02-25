@@ -228,7 +228,6 @@ class Tinebase_Auth_MFATest extends TestCase
     {
         $userTest = new Admin_Frontend_Json_UserTest();
         $ref = new ReflectionProperty(Admin_Frontend_Json_UserTest::class, '_json');
-        $ref->setAccessible(true);
         $ref->setValue($userTest, new Admin_Frontend_Json());
         $userData = $userTest->_getUserArrayWithPw();
         $userData['mfa_configs'] = [[
@@ -309,7 +308,6 @@ class Tinebase_Auth_MFATest extends TestCase
 
         $userTest = new Admin_Frontend_Json_UserTest();
         $ref = new ReflectionProperty(Admin_Frontend_Json_UserTest::class, '_json');
-        $ref->setAccessible(true);
         $ref->setValue($userTest, new Admin_Frontend_Json());
         $userData = $userTest->_getUserArrayWithPw();
         $userData['mfa_configs'] = [[

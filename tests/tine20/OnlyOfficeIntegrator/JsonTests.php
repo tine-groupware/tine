@@ -1100,7 +1100,6 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         static::assertTrue($this->_uit->tokenSignOut($config['document']['key']), 'tokenSignOut failed');
 
         $refl = new ReflectionMethod(OnlyOfficeIntegrator_Frontend_Json::class, 'waitForTokenRequired');
-        $refl->setAccessible(true);
         static::assertTrue($refl->invoke($this->_uit, null, $config['document']['key']));
 
         $httpTestClient = new Zend_Http_Client_Adapter_Test();

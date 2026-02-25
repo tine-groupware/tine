@@ -30,7 +30,6 @@ trait GetProtectedMethodTrait
     {
         $class = new ReflectionClass($object);
         $method = $class->getMethod($method);
-        $method->setAccessible(true);
 
         return $method;
     }

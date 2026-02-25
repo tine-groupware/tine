@@ -764,7 +764,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $mc = Sales_Model_Division::getConfiguration();
         $fieldsProp = new ReflectionProperty(Tinebase_ModelConfiguration::class, '_fields');
-        $fieldsProp->setAccessible(true);
         $fields = $fieldsProp->getValue($mc);
         $fields[Sales_Model_Division::FLD_NAME][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
         $fields[Sales_Model_Division::FLD_ADDR_PREFIX1][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
@@ -932,7 +931,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $mc = Sales_Model_Debitor::getConfiguration();
         $refProp = new ReflectionProperty($mc, '_fields');
-        $refProp->setAccessible(true);
         $fields = $mc->getFields();
         $fields[Sales_Model_Debitor::FLD_PAYMENT_MEANS][TMCC::NULLABLE] = true;
         $refProp->setValue($mc, $fields);

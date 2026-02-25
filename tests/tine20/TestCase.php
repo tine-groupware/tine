@@ -134,7 +134,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
         Tinebase_FileSystem_Previews::$unittestTransactionId = $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-        (new ReflectionProperty(Felamimail_Controller_Account::class, '_instance'))->setAccessible(true);
         (new ReflectionClass(Felamimail_Controller_Account::class))
             ->setStaticPropertyValue('_instance', Felamimail_Controller_AccountMock::getInstance());
         
