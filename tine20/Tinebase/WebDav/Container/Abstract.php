@@ -44,7 +44,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection 
     public function __construct(protected Tinebase_Model_Container|Tinebase_Model_Tree_Node $_container, $_useIdAsName = false)
     {
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $this->_useIdAsName = (boolean)$_useIdAsName;
+        $this->_useIdAsName = (bool) $_useIdAsName;
     }
     
     /**

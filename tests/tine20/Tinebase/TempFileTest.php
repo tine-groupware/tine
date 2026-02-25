@@ -54,7 +54,7 @@ class Tinebase_TempFileTest extends TestCase
             $this->markTestSkipped('TODO fix this for pgsql');
         }
 
-        $size = (double) (3.8 * 1024.0 * 1024.0 * 1024.0);
+        $size = (float) (3.8 * 1024.0 * 1024.0 * 1024.0);
         $tempFile = new Tinebase_Model_TempFile(array(
             'id'          => '123',
             'session_id'  => 'abc',

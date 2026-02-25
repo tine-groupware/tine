@@ -114,7 +114,7 @@ abstract class Tinebase_Session_Abstract extends Zend_Session_Namespace
     public static function writeClose($readonly = true)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' Closing session (readonly: ' . (integer) $readonly . ')');
+            __METHOD__ . '::' . __LINE__ . ' Closing session (readonly: ' . (int) $readonly . ')');
         Zend_Session::writeClose($readonly);
     }
     

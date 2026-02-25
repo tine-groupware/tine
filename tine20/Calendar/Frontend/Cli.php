@@ -899,7 +899,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $event->dtstart->setTimezone('Europe/Berlin');
                 $data = [
                     'filename' => $file['name'],
-                    'size' => Tinebase_Helper::formatBytes((integer) $fileRes[0]['size']),
+                    'size' => Tinebase_Helper::formatBytes((int) $fileRes[0]['size']),
                     'calendar' => $container->name,
                     'container_id' => $container->getId(),
                     'account' => $owner ? $owner->accountLoginName : 'unknown',
