@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77d7a0d274152ebf354d90ccbdbc2bc8",
+    "content-hash": "968d65aa5d589f0ea3363c476e5f33f3",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -12084,11 +12084,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.18",
+            "version": "1.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "25fee5ba33e3210f6b136640253fe8f7b2c47e80"
+                "reference": "340e0c9b2469a68becdc52a3c74f2e1440e6ca25"
             },
             "require": {
                 "ext-ctype": "*",
@@ -12132,7 +12132,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2026-02-23T11:52:21+00:00"
+            "time": "2026-02-25T17:01:27+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -15706,7 +15706,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.2 - 8.3",
+        "php": "8.2 - 8.4",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
@@ -15729,7 +15729,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15754,5 +15754,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
