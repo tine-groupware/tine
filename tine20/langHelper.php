@@ -96,8 +96,8 @@ if ($opts->wipe) {
             echo "Processing $appName po files \n";
         }
         
-        `cd "$translationPath" 
-        rm *`;
+        shell_exec('cd "' . $translationPath . '" 
+        rm *');
     }
 }
 
@@ -152,9 +152,9 @@ if ($opts->mo) {
 
 if ($opts->c || $opts->package) {
     // remove translation backups of msgmerge
-    `cd "$tine20path" \
+    shell_exec('cd "' . $tine20path . '" \
     find . -type f -iname "*.po~" -exec rm {} \; \
-    find . -type f -iname "*.mo" -exec rm {} \;`;
+    find . -type f -iname "*.mo" -exec rm {} \;');
 }
 if ($opts->statistics) {
     statistics($opts->v);
@@ -286,9 +286,9 @@ function generatePOTFiles($opts)
         }
 
         // https://github.com/Polyconseil/vue-gettext/issues/9
-        `find . -type f -iname "*.vue" -exec sed "s/\"formatMessage/formatMessage/g" {} \; > $tempExtractDir/vueStrings.js`;
+        shell_exec('find . -type f -iname "*.vue" -exec sed "s/\"formatMessage/formatMessage/g" {} \; > ' . $tempExtractDir . '/vueStrings.js');
 
-        `find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
+        shell_exec('find . -type f -iname "*.php" -or -type f -iname "*.js" -or -type f -iname "*.vue" -or -type f -iname "*.xml" -or -iname "*.twig" \
         | grep -v node_modules | sort -d -f \
         | xgettext \
           --no-wrap \
@@ -301,10 +301,10 @@ function generatePOTFiles($opts)
           --keyword=formatMessage \
           --keyword=translate \
           --files-from=- \
-          2> /dev/null`;
+          2> /dev/null');
 
         # need to extract php files again separately
-        `find . -type f -iname "*.php" \
+        shell_exec('find . -type f -iname "*.php" \
         | grep -v node_modules | sort -d -f | \
         xgettext \
           --no-wrap \
@@ -317,14 +317,14 @@ function generatePOTFiles($opts)
           --keyword=formatMessage \
           --keyword=translate \
           --files-from=- \
-          2> /dev/null`;
+          2> /dev/null');
 
         if (! $opts->{'keep-line-numbers'}) {
-            `grep -v '#: ' translations/template.pot > $tempExtractDir/template.pot`;
-            `cp $tempExtractDir/template.pot translations/template.pot`;
+            shell_exec('grep -v \'#: \' translations/template.pot > ' . $tempExtractDir . '/template.pot');
+            shell_exec('cp ' . $tempExtractDir . '/template.pot translations/template.pot');
         }
 
-        `rm -rf "$tempExtractDir"`;
+        shell_exec('rm -rf "' . $tempExtractDir . '"');
     }
 }
 
@@ -344,7 +344,7 @@ function extractTemplates($path, $target)
                 if (!file_exists($trgt)) {
                     mkdir($trgt);
                 }
-                `unzip -o "$file" -d "$trgt"`;
+                shell_exec('unzip -o "' . $file . '" -d "' . $trgt . '"');
             }
         }
     }
@@ -374,8 +374,8 @@ function potmerge($opts)
         }
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$translationPath/en.po",  $opts->v);
         $enHeader = file_get_contents("$translationPath/en.po");
-        `cd "$translationPath"
-         msgen --no-wrap template.pot > en.po $msgDebug`;
+        shell_exec('cd "' . $translationPath . '"
+         msgen --no-wrap template.pot > en.po ' . $msgDebug);
          
         foreach ($langs as $langCode) {
             
@@ -406,12 +406,12 @@ function potmerge($opts)
             if ($opts->v) {
                echo $poFile . ": ";
             }
-            `cd "$translationPath"
-             msgmerge --no-fuzzy-matching --no-wrap $poFile template.pot $msgDebug -o $poFile`;
+            shell_exec('cd "' . $translationPath . '"
+             msgmerge --no-fuzzy-matching --no-wrap ' . $poFile . ' template.pot ' . $msgDebug . ' -o ' . $poFile);
 
             if (! $opts->{'keep-line-numbers'}) {
-                `grep -v '#: ' $poFile > $poFile.nolinenumbers`;
-                `cp $poFile.nolinenumbers $poFile && rm $poFile.nolinenumbers`;
+                shell_exec('grep -v \'#: \' ' . $poFile . ' > ' . $poFile . '.nolinenumbers');
+                shell_exec('cp ' . $poFile . '.nolinenumbers ' . $poFile . ' && rm ' . $poFile . '.nolinenumbers');
             }
 
         }
@@ -429,12 +429,12 @@ function contributorsMerge($_verbose, $_language, $_archive)
 {
     global $tine20path;
     $tmpdir = '/tmp/tinetranslations/';
-    `rm -Rf $tmpdir`;
-    `mkdir $tmpdir`;
+    shell_exec('rm -Rf ' . $tmpdir);
+    shell_exec('mkdir ' . $tmpdir);
     //`cp $archive $tmpdir`;
     switch (substr($_archive, -4)) {
         case '.zip':
-            `unzip -d $tmpdir '$_archive'`;
+            shell_exec('unzip -d ' . $tmpdir . ' \'' . $_archive . '\'');
             break;
         default:
             echo "Error: Only zip archives are supported \n";
@@ -495,8 +495,8 @@ function contributorsMerge($_verbose, $_language, $_archive)
            echo $_language . ".po : ";
            $output = '';
         }
-        `msgmerge --no-fuzzy-matching --update '$contributedPoFile'  $tinePoFile $output`;
-        `cp '$contributedPoFile' $tinePoFile`;
+        shell_exec('msgmerge --no-fuzzy-matching --update \'' . $contributedPoFile . '\'  ' . $tinePoFile . ' ' . $output);
+        shell_exec('cp \'' . $contributedPoFile . '\' ' . $tinePoFile);
     }
 }
 
@@ -521,8 +521,8 @@ function msgfmt ($_verbose)
                     echo "Processing $appName/$poFile \n";
                 }
                 // create mo file
-                `cd "$translationPath"
-                msgfmt -o $langName.mo $poFile`;
+                shell_exec('cd "' . $translationPath . '"
+                msgfmt -o ' . $langName . '.mo ' . $poFile);
             }
         }
     }
@@ -538,8 +538,8 @@ function buildpackage($_verbose, $_archive)
 {
     $destDir = __DIR__;
     $tmpdir = '/tmp/tinetranslations/';
-    `rm -Rf $tmpdir`;
-    `mkdir $tmpdir`;
+    shell_exec('rm -Rf ' . $tmpdir);
+    shell_exec('mkdir ' . $tmpdir);
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
         
@@ -547,26 +547,26 @@ function buildpackage($_verbose, $_archive)
             continue;
         }
         
-        `mkdir $tmpdir/$appName`;
+        shell_exec('mkdir ' . $tmpdir . '/' . $appName);
         generateNewTranslationFile('en', 'GB', $appName, getPluralForm('English'), "$tmpdir/$appName/$appName.pot",  $_verbose);
-        `cat $translationPath/template.pot >> $tmpdir/$appName/$appName.pot`;
-        `cp $translationPath/*.po $tmpdir/$appName/`;
+        shell_exec('cat ' . $translationPath . '/template.pot >> ' . $tmpdir . '/' . $appName . '/' . $appName . '.pot');
+        shell_exec('cp ' . $translationPath . '/*.po ' . $tmpdir . '/' . $appName . '/');
     }
     
     if ($_archive && is_dir($_archive)) {
-        `cp -r $tmpdir/* $_archive`;
+        shell_exec('cp -r ' . $tmpdir . '/* ' . $_archive);
         
         if (is_dir("$_archive/.bzr")) {
-            `cd $_archive
+            shell_exec('cd ' . $_archive . '
             bzr add *
-            bzr commit -m 'Tine 2.0 Translations'
-            bzr push`;
+            bzr commit -m \'Tine 2.0 Translations\'
+            bzr push');
         }
     } else {
         $filename = ($_archive && strpos($_archive, 'tar.gz') !== FALSE) ? $_archive : 'lp-lang-package.tar.gz';
-        `cd "$tmpdir"
-         tar -czf $filename *`;
-        `mv $tmpdir/$filename {$destDir}`;
+        shell_exec('cd "' . $tmpdir . '"
+         tar -czf ' . $filename . ' *');
+        shell_exec('mv ' . $tmpdir . '/' . $filename . ' ' . $destDir);
     }
 }
 
@@ -604,7 +604,7 @@ function statistics($_verbose)
                 $langCode = substr($poFile, 0, -3);
                 $langLocale = new Zend_Locale($langCode);
                 
-                $statsOutput = `msgfmt --statistics $translationPath/$poFile 2>&1`;
+                $statsOutput = shell_exec('msgfmt --statistics ' . $translationPath . '/' . $poFile . ' 2>&1');
                 $statsParts = explode(',', $statsOutput);
                 $statsParts = preg_replace('/^\s*(\d+).*/i', '$1', $statsParts);
 
@@ -664,7 +664,7 @@ function statistics($_verbose)
     }
     
     // clean up unwanted messages.mo
-    `rm messages.mo`;
+    shell_exec('rm messages.mo');
     
     $results = array(
         'version'      => Tinebase_Helper::getDevelopmentRevision(),
@@ -883,19 +883,19 @@ function gitAdd($_locale)
 {
     foreach (Tinebase_Translation::getTranslationDirs() as $dir) {
         if (file_exists("$dir/$_locale.po")) {
-            `cd "$dir"
-            git add "$dir/$_locale.po"`;
+            shell_exec('cd "' . $dir . '"
+            git add "' . $dir . '/' . $_locale . '.po"');
         }
         if (file_exists("$dir/$_locale.mo")) {
-            `cd "$dir"
-            git add "$dir/$_locale.mo"`;
+            shell_exec('cd "' . $dir . '"
+            git add "' . $dir . '/' . $_locale . '.mo"');
         }
     }
 }
 
 function txMerge($opts)
 {
-    $branch = $opts->branch ?? trim(`git rev-parse --abbrev-ref HEAD`);
+    $branch = $opts->branch ?? trim(shell_exec('git rev-parse --abbrev-ref HEAD'));
     $config = new Zend_Config_Ini('.tx/branches');
     if (!isset($config->$branch)) {
         if ($opts->v) {
@@ -916,17 +916,17 @@ function txMerge($opts)
 
         // push all stuff to tx to avoid content loss on pull as tx pull doesn't merge
         $cmd = "tx push -s -t -f --skip ". ($opts->language ? "-l $opts->language " : "") . "groupware.$appName";
-        $opts->v ? passthru($cmd) : `$cmd`;
+        $opts->v ? passthru($cmd) : shell_exec($cmd);
 
         // pull from tx n - NOTE: we don't use -f here to not lose fuzzy strings in principal
         $cmd = "tx pull -t --use-git-timestamps --skip  " . ($opts->language ? "-l $opts->language " : "") . "groupware.$appName";
-        $opts->v ? passthru($cmd) : `$cmd`;
+        $opts->v ? passthru($cmd) : shell_exec($cmd);
 
         // reformat as tx wraps lines,
         foreach (scandir("$appName/translations") as $poFile) {
             if ($opts->language && $opts->language !== str_replace('.po', '', $poFile)) continue;
             if (substr($poFile, -3) === '.po') {
-                `msgcat --no-wrap -o $appName/translations/$poFile $appName/translations/$poFile`;
+                shell_exec('msgcat --no-wrap -o ' . $appName . '/translations/' . $poFile . ' ' . $appName . '/translations/' . $poFile);
             }
         }
     }

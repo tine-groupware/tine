@@ -2994,7 +2994,7 @@ class Setup_Controller
             $configDir = dirname($configFile);
 
             $files = file_exists("$configDir/index.php") ? 'config.inc.php' : '.';
-            `cd $configDir; tar cjf $backupDir/tine20_config.tar.bz2 $files`;
+            shell_exec('cd ' . $configDir . '; tar cjf ' . $backupDir . '/tine20_config.tar.bz2 ' . $files);
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of config file successful');
         }
@@ -3042,7 +3042,7 @@ class Setup_Controller
 
         $filesDir = isset($config->filesdir) ? $config->filesdir : false;
         if (isset($options['files']) && $options['files'] && $filesDir) {
-            `cd $filesDir; tar cjf $backupDir/tine20_files.tar.bz2 .`;
+            shell_exec('cd ' . $filesDir . '; tar cjf ' . $backupDir . '/tine20_files.tar.bz2 .');
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Backup of files successful');
         }
@@ -3142,7 +3142,7 @@ class Setup_Controller
                 $configDir = dirname($configFile);
             }
 
-            `cd $configDir; tar xf $configBackupFile`;
+            shell_exec('cd ' . $configDir . '; tar xf ' . $configBackupFile);
 
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of config file successful');
         }
@@ -3164,7 +3164,7 @@ class Setup_Controller
                 throw new Setup_Exception("$filesBackupFile not found");
             }
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting files restore');
-            `cd $filesDir; tar xf $filesBackupFile`;
+            shell_exec('cd ' . $filesDir . '; tar xf ' . $filesBackupFile);
             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Restore of files successful');
         }
 
