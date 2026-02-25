@@ -1896,8 +1896,6 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage invoices!");
                 }
                 break;
-            default;
-            break;
         }
 
         parent::_checkRight($_action);

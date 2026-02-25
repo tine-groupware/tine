@@ -75,8 +75,6 @@ class Admin_Controller_ImportExportDefinition extends Tinebase_Controller_Record
             case self::ACTION_DELETE:
                 $this->checkRight(Admin_Acl_Rights::MANAGE_IMPORTEXPORTDEFINITIONS);
                 break;
-            default;
-                break;
         }
 
         parent::_checkRight($_action);

@@ -199,8 +199,6 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
             case 'delete':
                 $this->checkRight('MANAGE_SHARED_TAGS');
                 break;
-            default;
-               break;
         }
 
         parent::_checkRight($_action);

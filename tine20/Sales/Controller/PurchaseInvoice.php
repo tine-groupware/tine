@@ -343,8 +343,6 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage purchase invoices!");
                 }
                 break;
-            default;
-            break;
         }
 
         parent::_checkRight($_action);

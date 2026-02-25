@@ -190,8 +190,6 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage customers!");
                 }
                 break;
-            default;
-                break;
         }
 
         parent::_checkRight($_action);
