@@ -13303,11 +13303,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.18",
+            "version": "1.5.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "25fee5ba33e3210f6b136640253fe8f7b2c47e80"
+                "reference": "340e0c9b2469a68becdc52a3c74f2e1440e6ca25"
             },
             "require": {
                 "ext-ctype": "*",
@@ -13351,7 +13351,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2026-02-23T11:52:21+00:00"
+            "time": "2026-02-25T17:01:27+00:00"
         },
         {
             "name": "thecodingmachine/safe",
