@@ -149,7 +149,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
 
         static $knownFilterIds = [];
-        if (isset($knownFilterIds[$_filter->getId()])) {
+        if (isset($knownFilterIds[$_filter->getId() ?? ''])) {
             return;
         }
         $_filter->andWrapItself();
