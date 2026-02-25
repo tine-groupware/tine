@@ -250,7 +250,7 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     public function csvInjectionEscaping($_value)
     {
         if (strlen((string)$_value) > 0) {
-            switch (ord((string)$_value)) {
+            switch (ord(((string)$_value)[0])) {
                 case 9:  // tab vertical
                 case 13: // carriage return
                 case 43: // +
