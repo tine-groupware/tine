@@ -109,6 +109,7 @@ Tine.Calendar.SearchCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
     },
 
     setValue: Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setValue,
+    setSelectedRecord: Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.setSelectedRecord,
 
     /**
      * @param {} store
