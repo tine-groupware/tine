@@ -811,7 +811,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $messageBody;
         }
 
-        if (count($bodyParts) === 1 && isset($bodyParts[$_partId]['contentType'])
+        if (null !== $_partId && count($bodyParts) === 1 && isset($bodyParts[$_partId]['contentType'])
             && $bodyParts[$_partId]['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822
             && isset($structure['messageStructure']['type']) && $structure['messageStructure']['type'] === 'multipart') {
             // fetch first sub-part of rfc822 message if it is a multipart message
