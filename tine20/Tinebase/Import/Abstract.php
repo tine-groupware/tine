@@ -584,7 +584,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 switch ($field['typecast']) {
                     case 'int':
                     case 'integer':
-                        $data[$key] = (integer) $_data[$key];
+                        $data[$key] = (int) $_data[$key];
                         break;
                     case 'float':
                         $data[$key] = (float) str_replace(',', '.', (String)$_data[$key]);

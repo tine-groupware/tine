@@ -128,13 +128,13 @@ class Calendar_Import_Event_Csv extends Tinebase_Import_Csv_Generic
         $time = explode(':', $result['time']);
         $date = $result['date'];
         $date->setTime(
-            (integer)$time['0'],
-            isset($time['1']) ? (integer)$time['1'] : 0,
-            isset($time['2']) ? (integer)$time['2'] : 0
+            (int) $time['0'],
+            isset($time['1']) ? (int) $time['1'] : 0,
+            isset($time['2']) ? (int) $time['2'] : 0
         );
 
         $result['dtstart'] = $date->toString();
-        $duration = isset($result['duration']) && !empty($result['duration']) ? (integer)$result['duration'] : 1;
+        $duration = isset($result['duration']) && !empty($result['duration']) ? (int) $result['duration'] : 1;
         $date->addHour($duration);
         $result['dtend'] = $date->toString();
 

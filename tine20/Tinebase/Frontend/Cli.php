@@ -835,7 +835,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ]);
             foreach (Tinebase_Model_Grants::getAllGrants() as $possibleGrant) {
                 if (isset($grant[$possibleGrant])) {
-                    $grantRecord->{$possibleGrant} = (boolean) $grant[$possibleGrant];
+                    $grantRecord->{$possibleGrant} = (bool) $grant[$possibleGrant];
                 }
             }
             $grantsToSet->addRecord($grantRecord);

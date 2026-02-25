@@ -1799,7 +1799,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         $account = $this->get($_account->getId());
         if ($account->sieve_vacation_active != $_vacationEnabled) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Updating sieve_vacation_active = ' . (integer) $_vacationEnabled
+                __METHOD__ . '::' . __LINE__ . ' Updating sieve_vacation_active = ' . (int) $_vacationEnabled
                 . ' for account: ' . $account->name);
 
             $account->sieve_vacation_active = (bool) $_vacationEnabled;

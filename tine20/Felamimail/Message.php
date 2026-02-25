@@ -378,7 +378,7 @@ class Felamimail_Message extends Zend_Mail_Message
                 $part = $part->getPart(array_shift($parts));
             }
         } else {
-            $part = parent::getPart((integer) $num);
+            $part = parent::getPart((int) $num);
         }
 
         return $part;
