@@ -183,7 +183,6 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
         $oldValue = $divisionCtrl->doContainerACLChecks(false);
         try {
             $setContainerMethod = new ReflectionMethod(HumanResources_Controller_Division::class, '_setContainer');
-            $setContainerMethod->setAccessible(true);
             foreach ($divisionCtrl->getAll() as $division) {
                 $setContainerMethod->invoke($divisionCtrl, $division);
                 $divisionCtrl->getBackend()->update($division);

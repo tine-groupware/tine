@@ -166,7 +166,6 @@ class CrewScheduling_Setup_Update_18 extends Setup_Update_Abstract
         $oldValue = $roleCtrl->doContainerACLChecks(false);
         $setContainerMethod = new ReflectionMethod(CrewScheduling_Controller_SchedulingRole::class,
             '_setContainer');
-        $setContainerMethod->setAccessible(true);
 
         $updateContainer = null;
         try {

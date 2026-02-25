@@ -170,7 +170,6 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
             $mc = self::getConfiguration();
             $orgValidators = $validators = $mc->validators;
             $refProp = new ReflectionProperty($mc, '_validators');
-            $refProp->setAccessible(true);
             $validators[self::FLD_TAX_RATE][] = new Zend_Validate_NotEmpty(0);
             try {
                 $refProp->setValue($mc, $validators);

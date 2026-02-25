@@ -190,7 +190,6 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         $export->generate();
         $filename = $export->getDownloadFilename('a', 'b');
         $prop = new ReflectionProperty(Tinebase_Export_Abstract::class, '_exportTimeStamp');
-        $prop->setAccessible(true);
 
         static::assertSame('testName_' . $prop->getValue($export) . '.docx', $filename);
     }

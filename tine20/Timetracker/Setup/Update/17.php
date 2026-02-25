@@ -118,7 +118,6 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
 
         $initalize = new Timetracker_Setup_Initialize();
         $method = new ReflectionMethod(Timetracker_Setup_Initialize::class, '_initializeSystemCFs');
-        $method->setAccessible(true);
         $method->invoke($initalize);
 
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);

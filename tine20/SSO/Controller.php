@@ -786,7 +786,6 @@ class SSO_Controller extends Tinebase_Controller_Event
         static::initSAMLServer();
         $idp = \SimpleSAML\IdP::getById('saml2:' . SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_ENTITYID});
         $simpleSampleIsReallyGreat = new ReflectionProperty(\SimpleSAML\IdP::class, 'authSource');
-        $simpleSampleIsReallyGreat->setAccessible(true);
         $newSimple = new SSO_Facade_SAML_AuthSimple('tine20');
         $simpleSampleIsReallyGreat->setValue($idp, $newSimple);
 
@@ -908,7 +907,6 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected static function initSAMLServer()
     {
-        (new ReflectionProperty(\SimpleSAML\Session::class, 'instance'))->setAccessible(true);
         (new ReflectionClass(\SimpleSAML\Session::class))->setStaticPropertyValue('instance', new SSO_Facade_SAML_Session());
 
         $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};

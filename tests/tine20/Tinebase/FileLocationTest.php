@@ -15,7 +15,6 @@ class Tinebase_FileLocationTest extends TestCase
     {
         $fe = new Tinebase_Frontend_Json;
         $method = new ReflectionMethod($fe, '_jsonToRecord');
-        $method->setAccessible(true);
         $fileLocation = $method->invoke($fe, $data, Tinebase_Model_FileLocation::class);
 
         return $fileLocation;

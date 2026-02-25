@@ -161,7 +161,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         if ($additionalFilter) {
             $refProp = new ReflectionProperty(Tinebase_Model_Filter_FilterGroup::class, '_filterModel');
-            $refProp->setAccessible(true);
             $refProp->setValue($filter, [
                 'application_id' => ['filter' => Tinebase_Model_Filter_Text::class],
                 'record_type' => ['filter' => Tinebase_Model_Filter_Text::class],

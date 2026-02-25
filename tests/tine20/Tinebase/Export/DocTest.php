@@ -37,7 +37,6 @@ class Tinebase_Export_DocTest extends TestCase
         ]]);
         $rs2 = new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [$rs1->getFirstRecord()]);
         $refProp = new ReflectionProperty(Addressbook_Export_Doc::class, '_records');
-        $refProp->setAccessible(true);
         $refProp->setValue($export, ['A' => $rs1, 'B' => $rs2]);
 
         $export->generate();
@@ -117,7 +116,6 @@ class Tinebase_Export_DocTest extends TestCase
             'template'          => dirname(__DIR__) . '/files/export/addressbook_contact_twigMap.docx',
         ]);
         $refProp = new ReflectionProperty(Tinebase_Export_Doc2::class, '_records');
-        $refProp->setAccessible(true);
         $refProp->setValue($export, new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [
             new Addressbook_Model_Contact([
                 'room'              => [['name' => 'test'], ['name' => 'Name']],
@@ -134,7 +132,6 @@ class Tinebase_Export_DocTest extends TestCase
         }
 
         $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
-        $refProp->setAccessible(true);
         static::assertStringContainsString('test, Name', $refProp->getValue($export->getDocument()));
     }
 
@@ -145,7 +142,6 @@ class Tinebase_Export_DocTest extends TestCase
             'template'          => dirname(__DIR__) . '/files/export/addressbook_contact_twigMap.docx',
         ]);
         $refProp = new ReflectionProperty(Tinebase_Export_DocV2::class, '_records');
-        $refProp->setAccessible(true);
         $refProp->setValue($export, new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [
             new Addressbook_Model_Contact([
                 'room'              => [['name' => 'test'], ['name' => 'Name']],
@@ -162,7 +158,6 @@ class Tinebase_Export_DocTest extends TestCase
         }
 
         $refProp = new ReflectionProperty(Tinebase_Export_Richtext_TemplateProcessor::class, 'tempDocumentMainPart');
-        $refProp->setAccessible(true);
         static::assertStringContainsString('test, Name', $refProp->getValue($export->getDocument()));
     }
 

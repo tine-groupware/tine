@@ -65,7 +65,6 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
         ]);
         $doc = new Sales_Export_Document($filter, null, ['definitionId' => Tinebase_ImportExportDefinition::getInstance()->getByName('document_offer_docx')->getId()]);
         $pathProp = new ReflectionProperty($doc, '_templateFileName');
-        $pathProp->setAccessible(true);
         $pathProp->setValue($doc, __DIR__ . '/files/overwrite/test.docx');
         $tempfile = tempnam(Tinebase_Core::getTempDir(), __METHOD__ . '_') . '.docx';
 
