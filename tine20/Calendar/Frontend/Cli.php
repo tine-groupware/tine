@@ -369,7 +369,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo $count . "\n";
 
         $fp = fopen($args['filename'], 'a');
-        fputcsv($fp, $headData);
+        fputcsv($fp, $headData, escape: '\\');
         fclose($fp);
 
         $i = 0;
@@ -462,7 +462,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $usage = Tinebase_Helper::formatBytes($usage, 'MB');
                     $data = [$user['accountLoginName'], $counContainers, $clUsage, $usage];
                     $fp = fopen($args['filename'], 'a');
-                    fputcsv($fp, $data);
+                    fputcsv($fp, $data, escape: '\\');
                     fclose($fp);
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Save the result in ' .
                         $args['filename']);
@@ -862,7 +862,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ];
 
         // headline
-        fputcsv($csvhandle, $data);
+        fputcsv($csvhandle, $data, escape: '\\');
 
         foreach ($result as $file) {
             // check size
@@ -907,7 +907,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     'event_dtstart' => $event->dtstart->toString(),
                 ];
 
-                fputcsv($csvhandle, $data);
+                fputcsv($csvhandle, $data, escape: '\\');
 
                 // print_r($data);
             }
