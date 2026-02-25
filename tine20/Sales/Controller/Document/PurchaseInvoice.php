@@ -221,7 +221,11 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         }
         if (null === $eDocumentNode) {
             foreach ($pInvoice->attachments as $attachment) {
-                if ($this->isEDocumentFile(Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $attachment, null))) {
+                $fileLocation = new Tinebase_Model_FileLocation([
+                    Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                    Tinebase_Model_FileLocation::FLD_LOCATION => Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $attachment, null)]);
+
+                if ($this->isEDocumentFile($fileLocation)) {
                     $eDocumentNode = $attachment;
                     break;
                 }
@@ -229,7 +233,10 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         }
 
         if (null !== $eDocumentNode) {
-            $xmlContent = $this->_getEDocumentXml(Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $eDocumentNode, null), $content, $type);
+            $fileLocation = new Tinebase_Model_FileLocation([
+                Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
+                Tinebase_Model_FileLocation::FLD_LOCATION => Tinebase_Model_FileLocation_RecordAttachment::fromRecord($pInvoice, $eDocumentNode, null)]);
+            $xmlContent = $this->_getEDocumentXml($fileLocation, $content, $type);
             unset($content);
             if (null !== $xmlContent) {
                 //$validationResult = (new Sales_EDocument_Service_Validate)->validateXRechnungContent($xmlContent);
@@ -241,7 +248,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
                 }
                 $xr = new SimpleXMLElement($xmlContent, namespaceOrPrefix: 'urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1');
 
-                return Sales_Model_Supplier::fromXRXml($xr->SELLER);
+                return Sales_Model_Supplier::fromXRXml($xr);
             }
         }
 

@@ -372,7 +372,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 // TODO update supplier data if invoice is newer than last modified date
             }
         }
-        $xrSupplier = Sales_Model_Supplier::fromXRXml($seller);
+        $xrSupplier = Sales_Model_Supplier::fromXRXml($xr);
         // TODO what do we do with this? not at all? client requests it separately?
 
 
