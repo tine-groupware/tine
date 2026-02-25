@@ -153,7 +153,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                     $_ldapData[$ldapAttribute] = ($mailSettings->{$objectProperty} == true) ? 'forwardonly' : array();
                     break;
                     
-                case 'emailAddress';
+                case 'emailAddress':
                     $_ldapData[$ldapAttribute] = $_user->accountEmailAddress;
                     break;
 

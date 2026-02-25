@@ -866,8 +866,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                         $text = Tinebase_Config::getInstance()->get(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION)->{$key};
                         $userData .= "<br /> $text <br />";
                         break;
-                    default;
-                        break;
                 }
             }
 

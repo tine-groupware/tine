@@ -226,8 +226,6 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage suppliers!");
                 }
                 break;
-            default;
-            break;
         }
 
         parent::_checkRight($_action);

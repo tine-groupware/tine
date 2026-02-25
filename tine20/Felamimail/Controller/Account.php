@@ -1362,8 +1362,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage personal accounts!");
                 }
                 break;
-            default;
-               break;
         }
 
         parent::_checkRight($_action);
