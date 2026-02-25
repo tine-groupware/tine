@@ -153,6 +153,7 @@ RUN apt-mirror activate \
     php8.4-xml \
     php8.4-yaml \
     php8.4-zip \
+    tzdata-legacy \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate \
  && ln -s /etc/php/8.4 /etc/php/default \
@@ -195,6 +196,7 @@ RUN apt-mirror activate \
     php8.5-xml \
     php8.5-yaml \
     php8.5-zip \
+    tzdata-legacy \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate \
  && ln -s /etc/php/8.5 /etc/php/default \
