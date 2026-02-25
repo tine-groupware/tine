@@ -1228,9 +1228,12 @@ class Tinebase_Core
                     . ' Using MySQL charset: ' . $dbConfigArray['charset']);
 
                 // force some driver options
-                $driverOptions = $dbConfigArray['driver_options'] ?? [];
-                // be aware of the difference of array_merge and [] + [] with numeric keys!
-                $dbConfigArray['driver_options'] = $driverOptions + [PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE];
+                if (PHP_VERSION_ID < 80500) {
+                    $dbConfigArray['driver_options'][PDO::MYSQL_ATTR_USE_BUFFERED_QUERY] = false;
+                } else {
+                    /** @phpstan-ignore-next-line  */
+                    $dbConfigArray['driver_options'][Pdo\Mysql::ATTR_USE_BUFFERED_QUERY] = false;
+                }
                 $dbConfigArray['options']['init_commands'] = array(
                     "SET NAMES $upperCaseCharset",
                     "SET time_zone = '+0:00'",

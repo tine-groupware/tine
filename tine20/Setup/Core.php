@@ -207,7 +207,11 @@ class Setup_Core extends Tinebase_Core
                 return false;
             }
 
-            if ($dbConfig->adapter === self::PDO_MYSQL && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) {
+            if ($dbConfig->adapter === self::PDO_MYSQL && (
+                    (PHP_VERSION_ID < 80500 && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) ||
+                    /** @phpstan-ignore-next-line */
+                    (PHP_VERSION_ID >= 80500 && (! defined(Pdo\Mysql::ATTR_USE_BUFFERED_QUERY) || ! defined(Pdo\Mysql::ATTR_INIT_COMMAND)))
+                )) {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' MySQL PDO constants not defined.');
                 return FALSE;
