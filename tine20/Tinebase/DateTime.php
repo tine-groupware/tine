@@ -753,12 +753,8 @@ class Tinebase_DateTime extends DateTime implements \Stringable
      */
     public static function isDate($_date)
     {
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            $result = date_parse($_date);
-            return empty($result['warning_count']) && empty($result['error_count']);
-        } else {
-            return Zend_Date::isDate($_date, 'yyyy-MM-dd HH:mm:ss');
-        }
+        $result = date_parse($_date);
+        return empty($result['warning_count']) && empty($result['error_count']);
     }
     
     /**

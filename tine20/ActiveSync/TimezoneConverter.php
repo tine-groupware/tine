@@ -606,15 +606,10 @@ class ActiveSync_TimezoneConverter
     {
         $standardTransition = null;
         $daylightTransition = null;
-        
-        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-            // Since php version 5.3.0 getTransitions accepts optional start and end parameters.
-            $start = mktime(0, 0, 0, 12, 1, $_year - 1);
-            $end   = mktime(24, 0, 0, 12, 31, $_year);
-            $transitions = $_timezone->getTransitions($start, $end);
-        } else {
-            $transitions = $_timezone->getTransitions();
-        }
+
+        $start = mktime(0, 0, 0, 12, 1, $_year - 1);
+        $end   = mktime(24, 0, 0, 12, 31, $_year);
+        $transitions = $_timezone->getTransitions($start, $end);
 
         if ($transitions) {
             foreach ($transitions as $index => $transition) {
