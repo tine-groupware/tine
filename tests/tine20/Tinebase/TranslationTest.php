@@ -269,7 +269,7 @@ msgid "run"
 msgstr "изпълни"
 ';
         file_put_contents($poFile, $poData);
-        `cd $extraTranslationsDir && msgfmt -o de_DE.mo de_DE.po`;
+        shell_exec('cd ' . $extraTranslationsDir . ' && msgfmt -o de_DE.mo de_DE.po');
 
         Tinebase_Core::getCache()->clean();
 
@@ -281,6 +281,6 @@ msgstr "изпълни"
         $this->assertEquals(1, preg_match('/изпълни/', $jsTranslations));
 
         // cleanup
-        `rm -Rf $extraTranslationsDir`;
+        shell_exec('rm -Rf ' . $extraTranslationsDir);
     }
 }
