@@ -430,7 +430,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 // check if relation is product and has price
                 if ($relation['type'] == 'PRODUCT' && isset($relation['remark']['price'])) {
                     $quantity = (isset($relation['remark']['quantity'])) ? $relation['remark']['quantity'] : 1;
-                    $sum += $relation['remark']['price'] * (integer) $quantity;
+                    $sum += $relation['remark']['price'] * (int) $quantity;
                 }
             }
             

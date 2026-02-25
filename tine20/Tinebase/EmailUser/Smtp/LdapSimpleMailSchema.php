@@ -398,7 +398,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
         $properties = array();
         if (str_ends_with((string) $ldapProperty, ':boolean')) {
             $ldapProperty = substr((string) $ldapProperty, 0, -8);
-            $properties = (boolean) null;
+            $properties = (bool) null;
         }
         foreach ($this->_ldapRawData[$account] as $dn) {
             if (isset($dn[$ldapProperty])) {
@@ -406,7 +406,7 @@ class Tinebase_EmailUser_Smtp_LdapSimpleMailSchema extends Tinebase_EmailUser_Ld
                     $properties = array_merge($properties, $dn[$ldapProperty]);
                 }
                 else {
-                    $properties = (boolean) ($dn[$ldapProperty][0] == 'TRUE') ? true : false;
+                    $properties = (bool) ($dn[$ldapProperty][0] == 'TRUE') ? true : false;
                 }
             }
         }

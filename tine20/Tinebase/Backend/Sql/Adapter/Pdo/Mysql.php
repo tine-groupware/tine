@@ -81,7 +81,7 @@ class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     {
         $cacheId = md5(self::class . '::useUtf8mb4');
         if (false !== ($result = Tinebase_Core::getCache()->load($cacheId))) {
-            return (boolean)$result;
+            return (bool) $result;
         }
 
         // empty db with innodb_large_prefix: on => utf8mb4

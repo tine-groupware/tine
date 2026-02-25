@@ -752,7 +752,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
                             break;
 
                         case 'emailForwardOnly':
-                            $rawData[$property] = (integer) $value;
+                            $rawData[$property] = (int) $value;
                             break;
 
                         default:

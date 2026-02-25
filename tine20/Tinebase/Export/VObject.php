@@ -26,7 +26,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
 
     protected function _writeToFile()
     {
-        return (boolean) $this->_config->filename;
+        return (bool) $this->_config->filename;
     }
 
     /**

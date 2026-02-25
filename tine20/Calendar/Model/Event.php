@@ -931,7 +931,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isRecurInstance()
     {
-        return (boolean) preg_match('/^fakeid/', $this->getId());
+        return (bool) preg_match('/^fakeid/', $this->getId());
     }
 
     /**

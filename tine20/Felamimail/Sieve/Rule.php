@@ -225,7 +225,7 @@ class Felamimail_Sieve_Rule
             'action_type'           => $action['type'],
             'action_argument'       => $action['argument'],
             'conjunction'           => $this->_conjunction,
-            'enabled'               => (integer) $this->_enabled,
+            'enabled'               => (int) $this->_enabled,
             'id'                    => $this->_id,
         );
     }
