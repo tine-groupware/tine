@@ -97,6 +97,7 @@ docker_build_test:
           - "8.2"
           - "8.3"
           - "8.4"
+          - "8.5"
   before_script:
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
