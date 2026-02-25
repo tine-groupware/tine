@@ -18,6 +18,8 @@
  */
 class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Container
 {
+    public const TASK_TIMEACCOUNT_CUSTOM_FIELD_NAME = 'timeaccount';
+
     /**
      * the constructor
      *

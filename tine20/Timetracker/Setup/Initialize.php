@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Timetracker
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -188,7 +188,7 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
     }
 
     /**
-     * init system customfields
+     * init system custom fields
      */
     protected function _initializeSystemCFs()
     {
@@ -196,40 +196,42 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             return;
         }
 
-        $taskAppId = Tinebase_Application::getInstance()->getApplicationByName(
-            Tasks_Config::APP_NAME
-        )->getId();
+        if (Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
+            $taskAppId = Tinebase_Application::getInstance()->getApplicationByName(
+                Tasks_Config::APP_NAME
+            )->getId();
 
-        $cf = new Tinebase_Model_CustomField_Config([
-            'name' => 'timeaccount',
-            'application_id' => $taskAppId,
-            'model' => Tasks_Model_Task::class,
-            'is_system' => true,
-            'definition' => [
-                Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::NAME => 'timeaccount',
-                    TMCC::LABEL => 'Time Account', //_('Time Account')
-                    TMCC::TYPE => TMCC::TYPE_RECORD,
-                    TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,],
-                    TMCC::NULLABLE => true,
-                    TMCC::OWNING_APP => Tasks_Config::APP_NAME,
-                    TMCC::CONFIG => [
-                        TMCC::APPLICATION => Timetracker_Config::APP_NAME,
-                        TMCC::APP_NAME => Timetracker_Config::APP_NAME,
-                        TMCC::MODEL_NAME => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+            $cf = new Tinebase_Model_CustomField_Config([
+                'name' => Timetracker_Controller_Timeaccount::TASK_TIMEACCOUNT_CUSTOM_FIELD_NAME,
+                'application_id' => $taskAppId,
+                'model' => Tasks_Model_Task::class,
+                'is_system' => true,
+                'definition' => [
+                    Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                        TMCC::NAME => Timetracker_Controller_Timeaccount::TASK_TIMEACCOUNT_CUSTOM_FIELD_NAME,
+                        TMCC::LABEL => 'Time Account', //_('Time Account')
+                        TMCC::TYPE => TMCC::TYPE_RECORD,
+                        TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                        TMCC::NULLABLE => true,
+                        TMCC::OWNING_APP => Tasks_Config::APP_NAME,
+                        TMCC::CONFIG => [
+                            TMCC::APPLICATION => Timetracker_Config::APP_NAME,
+                            TMCC::APP_NAME => Timetracker_Config::APP_NAME,
+                            TMCC::MODEL_NAME => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+                        ],
                     ],
                 ],
-            ],
-        ], true);
-        Tinebase_CustomField::getInstance()->addCustomField($cf);
+            ], true);
+            Tinebase_CustomField::getInstance()->addCustomField($cf);
+        }
     }
 
     protected function _initializePersistentObserver()
     {
-        static::addPeristentObserverTT();
+        static::addPersistentObserverTT();
     }
 
-    public static function addPeristentObserverTT()
+    public static function addPersistentObserverTT()
     {
         Tinebase_Record_PersistentObserver::getInstance()->addObserver(
             new Tinebase_Model_PersistentObserver([
