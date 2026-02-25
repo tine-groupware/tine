@@ -264,12 +264,12 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns index of record identified by its id
      * 
-     * @param  string $_id id of record
+     * @param  ?string $_id id of record <- this should not be nullable ... but it is: legacy
      * @return int|false    index of record or false if not in set
      */
     public function getIndexById($_id)
     {
-        return $this->_idMap[$_id] ?? (is_numeric($_id) ?
+        return $this->_idMap[$_id ?? ''] ?? (is_numeric($_id) ?
             (is_string($_id) ? ($this->_idMap[intval($_id)] ?? false) : ($this->_idMap[(string)$_id] ?? false))
             : false);
     }
