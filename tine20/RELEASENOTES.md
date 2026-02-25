@@ -3,7 +3,7 @@ TINE RELEASE NOTES
 =====================
                     
   Release:     Mats (2026.11)
-  Last change: 2026-01-06
+  Last change: 2026-02-25
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -11,4 +11,6 @@ TINE RELEASE NOTES
 - imap.allowExternalEmail -> smtp.allowAnyExternalDomains
 - smtp.additionaldomains -> smtp.additionalexternaldomains
 
-## PHP 8.2 Support has been dropped
+## PHP 8.4 Support has been added
+
+## PHP 8.1 Support has been dropped
