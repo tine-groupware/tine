@@ -56,8 +56,6 @@ class MatrixSynapseIntegrator_Controller_Abstract extends Tinebase_Controller_Re
             case 'delete':
                 $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
                 break;
-            default;
-                break;
         }
 
         parent::_checkRight($_action);
