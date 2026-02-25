@@ -32,7 +32,7 @@ abstract class Tinebase_Record_Expander_Sub extends Tinebase_Record_Expander_Abs
     protected function _addRecordsToProcess(Tinebase_Record_RecordSet $_records)
     {
         foreach ($_records as $record) {
-            $this->_recordsToProcess->attach($record);
+            $this->_recordsToProcess->offsetSet($record);
         }
     }
 }

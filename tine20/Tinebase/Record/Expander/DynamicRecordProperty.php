@@ -95,7 +95,7 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
         }
 
         foreach ($removeRecords as $record) {
-            $this->_recordsToProcess->detach($record);
+            $this->_recordsToProcess->offsetUnset($record);
         }
         if ($expandData->count() === 0) {
             return;
