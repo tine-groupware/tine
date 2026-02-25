@@ -64,6 +64,11 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
         };
         event.preventDefault();
 
+        // save selection
+        const win = this.win;
+        const sel = win.getSelection();
+        const savedRange = sel.rangeCount ? sel.getRangeAt(0).cloneRange() : null;
+
         if (htmlText) {
             try {
                 const app = Tine.Tinebase.appMgr.get('Tinebase');
@@ -85,6 +90,14 @@ Ext.apply(Ext.form.HtmlEditor.prototype, {
                 }
             } catch (e) {}
         }
+
+        // restore selection after await
+        if (savedRange) {
+            const s = win.getSelection();
+            s.removeAllRanges();
+            s.addRange(savedRange);
+        }
+
         this.execCmd(result.method, result.content);
     },
 });
