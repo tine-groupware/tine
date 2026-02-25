@@ -553,10 +553,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (null === $splObjSet) {
             $splObjSet = new SplObjectStorage();
         }
-        if ($splObjSet->contains($this)) {
+        if ($splObjSet->offsetExists($this)) {
             $_recursive = false;
         } elseif ($_recursive) {
-            $splObjSet->attach($this);
+            $splObjSet->offsetSet($this);
         }
 
         try {
@@ -573,7 +573,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             }
         } finally {
             if ($_recursive) {
-                $splObjSet->detach($this);
+                $splObjSet->offsetUnset($this);
             }
         }
         return $recordArray;

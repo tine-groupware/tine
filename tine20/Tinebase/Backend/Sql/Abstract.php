@@ -184,12 +184,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (!isset($this->_selectHooks[$hook->getKey()])) {
             $this->_selectHooks[$hook->getKey()] = new SplObjectStorage();
         }
-        $this->_selectHooks[$hook->getKey()]->attach($hook);
+        $this->_selectHooks[$hook->getKey()]->offsetSet($hook);
     }
 
     public function removeSelectHook(Tinebase_Backend_Sql_SelectHook $hook): void
     {
-        $this->_selectHooks[$hook->getKey()]->detach($hook);
+        $this->_selectHooks[$hook->getKey()]->offsetUnset($hook);
         if (0 === $this->_selectHooks[$hook->getKey()]->count()) {
             unset($this->_selectHooks[$hook->getKey()]);
         }
