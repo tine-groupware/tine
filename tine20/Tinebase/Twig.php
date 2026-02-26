@@ -110,10 +110,6 @@ class Tinebase_Twig
         $enablePublicPages = Tinebase_Application::getInstance()->isInstalled(GDPR_Config::APP_NAME, true) &&
             GDPR_Config::getInstance()->get(GDPR_Config::ENABLE_PUBLIC_PAGES);
 
-        if ($enablePublicPages) {
-            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
-        }
-
         $logoContent = [
             'b' => null,
             'i' => null,
@@ -133,7 +129,9 @@ class Tinebase_Twig
         }
 
         $globals = [
-            Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages ? Addressbook_Config::getInstallationRepresentative() : null,
+            Addressbook_Config::INSTALLATION_REPRESENTATIVE => $enablePublicPages
+                ? Addressbook_Config::getInstallationRepresentative()
+                : null,
             'websiteUrl'        => $tbConfig->{Tinebase_Config::WEBSITE_URL},
             GDPR_Config::ENABLE_PUBLIC_PAGES =>  $enablePublicPages,
             'branding'          => [
