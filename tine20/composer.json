@@ -149,7 +149,7 @@
     "doctrine/orm": "^2",
     "dragonmantank/cron-expression": "^3.5",
     "ezyang/htmlpurifier": "^4",
-    "firebase/php-jwt": "^6",
+    "firebase/php-jwt": "^7",
     "giggsey/libphonenumber-for-php": "^8",
     "goetas-webservices/xsd2php-runtime": "^0.2.17",
     "hansott/psr7-cookies": "*",
