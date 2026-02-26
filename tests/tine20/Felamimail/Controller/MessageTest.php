@@ -2276,4 +2276,14 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
 
         self::assertEquals('2022-10-06 10:27:13', $message->sent->get('Y-m-d h:i:s'));
     }
+
+    public function testSendBootStrapEmail()
+    {
+        $locale = Tinebase_Core::getLocale();
+
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(GDPR_Config::APP_NAME));
+        $htmlTemplate = $twig->load(Tinebase_Config::APP_NAME . '/views/emails/base.html.twig', $locale);
+        $html = $htmlTemplate->render();
+        self::assertStringContainsString('ExternalClass',$html);
+    }
 }
