@@ -457,9 +457,12 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(in_array(SQL_TABLE_PREFIX . 'felamimail_cache_message', $tables), 'felamimail tables need to be in _getBackupStructureOnlyTables');
     }
 
-    public function testSortInstallableApplications()
+    public function testSortInstallableApplications(): void
     {
-        $apps = ['Tinebase','Addressbook','Courses','CoreData','Filemanager','SimpleFAQ','HumanResources','Crm','Inventory','ExampleApplication','ActiveSync','Timetracker','Tasks','Projects','Felamimail','Admin','Calendar','Sales'];
+        $apps = ['Tinebase','Addressbook','Courses','CoreData','Filemanager','SimpleFAQ','HumanResources','Crm',
+            'Inventory','ExampleApplication','ActiveSync','Timetracker','Tasks','Projects','Felamimail','Admin',
+            'Calendar','Sales'
+        ];
 
         $applications = array();
         foreach ($apps as $applicationName) {
@@ -477,6 +480,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             'Sales',
             'ExampleApplication',
             'Inventory',
+            'Timetracker',
             'ActiveSync',
             'Filemanager',
             'Crm',
@@ -484,7 +488,6 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             'Courses',
             'HumanResources',
             'Projects',
-            'Timetracker',
             'SimpleFAQ',
         ];
         self::assertEquals($expected, array_keys($result));
