@@ -858,7 +858,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 if ($_mode === self::FETCH_MODE_SINGLE) {
                     $result[] = $row[0];
                 } else if ($_mode === self::FETCH_MODE_PAIR) {
-                    $result[$row[0]] = $row[1];
+                    $result[$row[0] ?? ''] = $row[1];
                 }
             }
         }
