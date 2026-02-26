@@ -767,7 +767,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         
         // handle deletes/exdates
         foreach ($containerEtags as $id => $data) {
-            if (isset($localIds[$data['base_event_id']])) {
+            if (isset($data['base_event_id']) && isset($localIds[$data['base_event_id']])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                         . ' Record ' . $id . ' is exdate of ' . $data['base_event_id']);
                 continue;
