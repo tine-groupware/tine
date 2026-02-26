@@ -392,11 +392,13 @@ Tine.widgets.grid.RendererManager = function() {
             }
 
             // finally apply generic wrap for dynamic metadata provider
-            const wrap = _.wrap(renderer ? renderer : this.defaultRenderer, function(func, value, metaData, record, rowIndex, colIndex, store) {
+            const wrap = _.wrap(renderer ? renderer : this.defaultRenderer, function(func, ...args) {
+                let [value, metaData, record, rowIndex, colIndex, store] = args;
                 if (_.isFunction(wrap.transformMetaData)) {
-                    metaData = wrap.transformMetaData(value, metaData, record, rowIndex, colIndex, store);
+                    metaData = wrap.transformMetaData.apply(this, args);
+                    args[1] = metaData;
                 }
-                return func(value, metaData, record, rowIndex, colIndex, store);
+                return func.apply(this, args);
             });
 
             return wrap
