@@ -905,11 +905,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     private function _checkExtendExpiration(Tinebase_Model_FullUser $user, Tinebase_Model_FullUser|Tinebase_Model_User $oldUser): void
     {
         if ($oldUser->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_EXPIRED &&
-            $user->accountExpires !== null &&
-            !$oldUser->accountExpires->equals($user->accountExpires))
+            $user->accountExpires !== null)
         {
-            if ($user->accountExpires->isLater(new Tinebase_DateTime())) {
+            if (!$oldUser->accountExpires->equals($user->accountExpires)
+                && $user->accountExpires->isLater(new Tinebase_DateTime()))
+            {
                 $user->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+            }
+            if ($user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED)
+            {
+                $user->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
+                $user->accountExpires = null;
             }
         }
     }
