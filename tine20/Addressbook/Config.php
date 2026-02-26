@@ -515,11 +515,12 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     /**
      * @return Addressbook_Model_Contact|null
      */
-    public static function getInstallationRepresentative()
+    public static function getInstallationRepresentative(): ?Addressbook_Model_Contact
     {
         /** @var Addressbook_Model_Contact $contact */
         static $contact = null;
         if (null === $contact && !empty(self::getInstance()->{self::INSTALLATION_REPRESENTATIVE})) {
+            $oldContainerACL = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get(self::$_instance
                     ->{self::INSTALLATION_REPRESENTATIVE}, _getRelatedData: false, _aclProtect: false);
@@ -528,6 +529,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
                     Tinebase_Core::getLogger()->notice(
                         __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                 }
+            } finally {
+                Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldContainerACL);
             }
         }
 
