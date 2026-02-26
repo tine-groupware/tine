@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f5719d223d40193e9a45deccbda07fa3",
+    "content-hash": "88877f2d24432074844f968d15c8b277",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -8275,11 +8275,11 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v2.5.0pl2",
+            "version": "v2.5.0pl3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/simplesamlphp.git",
-                "reference": "93d28097555d69b0f5a24edea073fb75d48a8d95"
+                "reference": "821d8d9c516e7c184375080ce02868e9e2b103da"
             },
             "require": {
                 "beste/clock": "~3.0",
@@ -8352,7 +8352,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2026-01-20T13:38:29+00:00"
+            "time": "2026-02-26T14:46:08+00:00"
         },
         {
             "name": "simplesamlphp/xml-common",
@@ -15666,7 +15666,7 @@
         },
         {
             "package": "simplesamlphp/simplesamlphp",
-            "version": "2.5.0.0-patch2",
+            "version": "2.5.0.0-patch3",
             "alias": "v2.5.0",
             "alias_normalized": "2.5.0.0"
         },
