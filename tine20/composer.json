@@ -222,7 +222,6 @@
     "tedivm/jshrink": "~1.0"
   },
   "autoload": {
-    "files": [],
     "psr-4": {
       "UBL21\\": "ubl/php"
     },
