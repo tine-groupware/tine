@@ -55,9 +55,10 @@ class Tinebase_Twig_BootstrapEmailExtension extends AbstractExtension
             error_reporting($errorReporting);
             return $html;
         } catch (\Exception $e) {
-            // Log error or handle as needed
-            error_log('Bootstrap Email compilation error: ' . $e->getMessage());
-            return $html; // Return original HTML on error
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Bootstrap Email compilation error: ' . $e->getMessage());
+
+            throw new Tinebase_Exception_SystemGeneric("Bootstrap Email compilation error");
         }
     }
 }
