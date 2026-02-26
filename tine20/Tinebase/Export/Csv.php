@@ -118,7 +118,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_AbstractDeprecated implements 
                 $string .= $delimiter;
             }
             if (!$this->_config->raw && is_string($dataElement) && strlen($dataElement) > 0) {
-                switch (ord($dataElement)) {
+                switch (ord($dataElement[0])) {
                     case 9:  // tab vertical
                     case 13: // carriage return
                     case 43: // +

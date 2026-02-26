@@ -280,7 +280,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
         foreach($exceptionMap as $exception) {
             $baseEventId = $exception->base_event_id;
-            $baseEvent = array_key_exists($baseEventId, $baseEventMap) ? $baseEventMap[$baseEventId] : false;
+            $baseEvent = null !== $baseEventId && array_key_exists($baseEventId, $baseEventMap) ? $baseEventMap[$baseEventId] : false;
             if ($baseEvent) {
                 $exceptionSet = $exceptionSets[$baseEventId];
                 $exceptionSet->addRecord($exception);

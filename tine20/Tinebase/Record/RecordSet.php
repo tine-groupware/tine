@@ -958,7 +958,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
     public function removeById($id)
     {
-        if (isset($this->_idMap[$id])) {
+        if (null !== $id && isset($this->_idMap[$id])) {
             unset($this->_listOfRecords[$this->_idMap[$id]]);
             unset($this->_idMap[$id]);
         }
