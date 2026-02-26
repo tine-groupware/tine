@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "968d65aa5d589f0ea3363c476e5f33f3",
+    "content-hash": "ac0c590bc7f6d6c0c54ca29c53c7892b",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6199,11 +6199,11 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "1.24.1pl5",
+            "version": "1.24.1pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PhpSpreadsheet.git",
-                "reference": "806951c7f9d8a24fc0a60f35cee058314e01eda9"
+                "reference": "00879a66964f81dd58627d42282d9f868353b3e9"
             },
             "require": {
                 "ext-ctype": "*",
@@ -6226,7 +6226,8 @@
                 "php": "^8.1",
                 "psr/http-client": "^1.0",
                 "psr/http-factory": "^1.0",
-                "psr/simple-cache": "^1.0 || ^2.0"
+                "psr/simple-cache": "^1.0 || ^2.0",
+                "symfony/polyfill-php83": "^1.33"
             },
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "dev-master",
@@ -6238,6 +6239,7 @@
                 "phpstan/phpstan": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^8.5 || ^9.0",
+                "rector/rector": "^1.2",
                 "squizlabs/php_codesniffer": "^3.7",
                 "tecnickcom/tcpdf": "^6.4"
             },
@@ -6260,17 +6262,11 @@
                 }
             },
             "scripts": {
-                "check": [
-                    "php-cs-fixer fix --ansi --dry-run --diff",
-                    "phpcs",
-                    "phpunit --color=always",
-                    "phpstan analyse --ansi"
+                "rector:test": [
+                    "vendor/bin/rector process --config .rector.php --dry-run"
                 ],
-                "fix": [
-                    "php-cs-fixer fix --ansi"
-                ],
-                "versions": [
-                    "phpcs --report-width=200 samples/ src/ tests/ --ignore=samples/Header.php --standard=PHPCompatibility --runtime-set testVersion 7.3- -n"
+                "rector:fix": [
+                    "vendor/bin/rector process --config .rector.php"
                 ]
             },
             "license": [
@@ -6308,7 +6304,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2025-12-12T15:07:13+00:00"
+            "time": "2026-02-26T09:49:02+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -15649,7 +15645,7 @@
         },
         {
             "package": "phpoffice/phpspreadsheet",
-            "version": "1.24.1.0-patch5",
+            "version": "1.24.1.0-patch6",
             "alias": "1.24.1",
             "alias_normalized": "1.24.1.0"
         },
@@ -15729,7 +15725,7 @@
         "ext-xmlwriter": "*",
         "ext-zip": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.2",
         "ext-spl": "8.2",
@@ -15754,5 +15750,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
