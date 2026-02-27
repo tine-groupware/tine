@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "397efdd50e7a9b34f852c5047e97b554",
+    "content-hash": "ae5941555c230087b723d36af25a967f",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6141,17 +6141,18 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl11",
+            "version": "1.8.2pl12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "7727a025ec76d422df3636673b703126b5748640"
+                "reference": "0b20dfe4279a128a759725838aa23ed4a1e448d4"
             },
             "require": {
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "php": "^8"
+                "php": "^8",
+                "symfony/polyfill-php83": "^1.33"
             },
             "require-dev": {
                 "rector/rector": "^2.3",
@@ -6201,7 +6202,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2026-02-26T15:46:55+00:00"
+            "time": "2026-02-27T10:02:47+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -15644,7 +15645,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch11",
+            "version": "1.8.2.0-patch12",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },
