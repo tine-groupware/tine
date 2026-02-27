@@ -29,5 +29,7 @@ class Admin_Event_BeforeImportUser extends Tinebase_Event_Abstract
     {
         $this->account = $_account;
         $this->options = $_options;
+
+        parent::__construct([]);
     }
 }
