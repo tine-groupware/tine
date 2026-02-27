@@ -22,10 +22,6 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/tine-groupware/bootstrap-email.git"
-    },
-    {
-      "type": "git",
       "url": "https://github.com/tine-groupware/composerapploader.git"
     },
     {
