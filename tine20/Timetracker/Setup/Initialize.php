@@ -187,6 +187,13 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ]);
     }
 
+    public static function applicationInstalled(Tinebase_Model_Application $app): void
+    {
+        if (Tasks_Config::APP_NAME === $app->name && !Tinebase_Core::isReplica()) {
+            static::createTasksCf();
+        }
+    }
+
     /**
      * init system custom fields
      */
@@ -196,10 +203,20 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
             return;
         }
 
+        static::createTasksCf();
+    }
+
+    public static function createTasksCf(): void
+    {
         if (Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
             $taskAppId = Tinebase_Application::getInstance()->getApplicationByName(
                 Tasks_Config::APP_NAME
             )->getId();
+
+            if (null !== Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($taskAppId,
+                    Timetracker_Controller_Timeaccount::TASK_TIMEACCOUNT_CUSTOM_FIELD_NAME, Tasks_Model_Task::class, true)) {
+                return;
+            }
 
             $cf = new Tinebase_Model_CustomField_Config([
                 'name' => Timetracker_Controller_Timeaccount::TASK_TIMEACCOUNT_CUSTOM_FIELD_NAME,
