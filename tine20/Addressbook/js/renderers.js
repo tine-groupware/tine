@@ -21,7 +21,7 @@ const mailAddressRenderer = function (email) {
     }
 
     email = Tine.Tinebase.EncodingHelper.encode(email);
-    var link = (this.felamimail === true) ? '#' : 'mailto:' + email;
+    var link = (Tine.Felamimail.registry.get('preferences').get('useInAdb') == 1) ? '#' : 'mailto:' + email;
     var id = Ext.id() + ':' + email;
 
     return '<a href="' + link + '" class="tinebase-email-link" id="' + id + '">'
