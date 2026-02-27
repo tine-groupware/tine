@@ -114,7 +114,7 @@
     }
   ],
   "require": {
-    "php": "8.2 - 8.4",
+    "php": "8.2 - 8.5",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",

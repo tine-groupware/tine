@@ -42,7 +42,7 @@ variables:
   PHPUNIT_FILTER: ""
   
   # "Php version to use."
-  PHP_VERSION: "8.4"
+  PHP_VERSION: "8.5"
 
   # "Codename for build"
   CODENAME: "Mats"
