@@ -34,5 +34,7 @@ class Tinebase_Event_User_ChangeCredentialCache extends Tinebase_Event_Abstract
         if ($_oldCredentialCache !== NULL) {
             $this->oldCredentialCache = $_oldCredentialCache;
         }
+
+        parent::__construct([]);
     }
 }
