@@ -180,7 +180,7 @@
     "sabre/vobject": "^4.5",
     "sentry/sentry": "3.22.1pl3 as 3.22.1",
     "simplesamlphp/assert": "v1.9.1pl1 as v1.9.1",
-    "simplesamlphp/simplesamlphp": "v2.5.0pl3 as v2.5.0",
+    "simplesamlphp/simplesamlphp": "v2.5.0pl4 as v2.5.0",
     "simplesamlphp/xml-common": "dev-master as v2.4.3",
     "smalot/pdfparser": "^2.12",
     "spomky-labs/base64url": "^2.0",
