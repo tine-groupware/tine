@@ -29,5 +29,7 @@ class Courses_Event_BeforeAddTeacher extends Tinebase_Event_Abstract
     {
         $this->account = $_account;
         $this->course = $_course;
+
+        parent::__construct([]);
     }
 }
