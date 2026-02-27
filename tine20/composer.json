@@ -153,7 +153,7 @@
     "pear/ole": "^1.0",
     "pear/pear-core-minimal": "^1.10",
     "php-http/curl-client": "^2.1",
-    "phpoffice/phpexcel": "1.8.2pl12 as 1.8.2",
+    "phpoffice/phpexcel": "1.8.2pl13 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.24.1pl4 as 1.24.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
