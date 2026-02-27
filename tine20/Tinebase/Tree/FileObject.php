@@ -224,7 +224,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         // lock row first
-        $select = $this->_db->select()->from($this->_tablePrefix . $this->_tableName)
+        $select = $this->_db->select()->forUpdate()->from($this->_tablePrefix . $this->_tableName)
             ->where($this->_db->quoteIdentifier($this->_tablePrefix . $this->_tableName . '.id') . ' = ?', $objectId);
         $stmt = $this->_db->query($select);
         $stmt->fetchAll();
