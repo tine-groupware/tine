@@ -579,6 +579,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         // create a typemap
         $typeMap = array();
         foreach ($attendee as $attender) {
+            if (empty($attender['user_id'])) {
+                continue;
+            }
             if (! isset($typeMap[$attender['user_type']])) {
                 $typeMap[$attender['user_type']] = array();
             }
