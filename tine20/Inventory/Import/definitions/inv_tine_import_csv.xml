@@ -117,5 +117,14 @@
             <destination>total_number</destination>
             <typecast>integer</typecast>
         </field>
+        <field>
+            <source>Inventartyp</source>
+            <destination>type</destination>
+        </field>
+        <field>
+            <source>Tags</source>
+            <destination>tags</destination>
+            <separator>,</separator>
+        </field>
     </mapping>
 </config>
