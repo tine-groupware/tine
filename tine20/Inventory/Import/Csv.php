@@ -103,7 +103,6 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         if ((isset($result["status"]) || array_key_exists("status", $result))) {
-
             $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->records->getById($result["status"]);
             if (empty($statusRecord)) {
                 $statusRecord = Inventory_Config::getInstance()->get(Inventory_Config::INVENTORY_STATUS)->getKeyfieldRecordByValue($result["status"]);
@@ -112,6 +111,15 @@ class Inventory_Import_Csv extends Tinebase_Import_Csv_Abstract
                 }
             }
             $result["status"] = $statusRecord['id'];
+        }
+
+        if ((isset($result["type"]) || array_key_exists("type", $result))) {
+            $typeRecord = Inventory_Controller_Type::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Inventory_Model_Type::class, [
+                ['field' => 'name', 'operator' => 'equals', 'value' => $result["type"]],
+            ]))->getFirstRecord();
+
+
+            $result['type']  = $typeRecord ? $typeRecord->getId() : null;
         }
 
         return $result;
