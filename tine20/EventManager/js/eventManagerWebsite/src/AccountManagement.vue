@@ -75,7 +75,7 @@
       </div>
 
       <div v-else class="text-center mt-5">
-        <h6>{{ formatMessage('You don\'t have any registrations for yourself yet — get started by creating one!') }}</h6>
+        <h6>{{ formatMessage('You don\'t have any registrations for yourself yet. Get started by creating one!') }}</h6>
       </div>
 
       <div v-if="otherParticipants.length">

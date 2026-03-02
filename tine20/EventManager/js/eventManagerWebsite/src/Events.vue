@@ -39,12 +39,10 @@
                 </b-badge>
               </div>
               <MarkdownRenderer
-                v-if="event.description && event.description.length < 255"
-                :content="event.description"
-              />
-              <MarkdownRenderer
-                v-else-if="event.description"
-                :content="event.description.substring(0, 255) + '...'"
+                v-if="event.description"
+                :content="event.description.length > 255
+                ? event.description.substring(0, 255) + '...'
+                : event.description"
               />
             </BCardText>
             <b-button :to="{ path: '/event/'+ event.id }" class="info-button">
