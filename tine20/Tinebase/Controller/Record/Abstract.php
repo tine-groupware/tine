@@ -1035,8 +1035,9 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _denormalizedDiff(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_otherRecord)
     {
         return $_record->diff($_otherRecord,
-            ['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by',
-                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED, TMCC::FLD_ORIGINAL_ID]);
+            array_merge(['id', 'seq', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'deleted_by',
+                'deleted_time', 'is_deleted', TMCC::FLD_LOCALLY_CHANGED, TMCC::FLD_ORIGINAL_ID],
+                $_record::getConfiguration()->denormalizationConfig[TMCC::DENORMALIZATION_DIFF_OMIT_FIELDS] ?? []));
     }
 
     /**

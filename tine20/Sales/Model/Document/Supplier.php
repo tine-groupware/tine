@@ -40,6 +40,9 @@ class Sales_Model_Document_Supplier extends Sales_Model_Supplier
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Supplier::class;
         $_definition[self::DENORMALIZATION_CONFIG] = [
             self::TRACK_CHANGES         => true,
+            self::DENORMALIZATION_DIFF_OMIT_FIELDS => [
+                'fulltext',
+            ]
         ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,

@@ -8,7 +8,7 @@
  *
  */
 
-class Sales_Controller_Document_Supplier extends Tinebase_Controller_Record_Abstract
+class Sales_Controller_Document_Supplier extends Sales_Controller_Supplier
 {
     use Tinebase_Controller_SingletonTrait;
 
@@ -28,5 +28,25 @@ class Sales_Controller_Document_Supplier extends Tinebase_Controller_Record_Abst
         $this->_modelName = Sales_Model_Document_Supplier::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+        $this->_duplicateCheckFields = null;
+    }
+
+    protected function _checkRight($_action)
+    {
+        Tinebase_Controller_Record_Abstract::_checkRight($_action);
+    }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        if (!$_record->number) {
+            $_record->number = 0;
+        }
+        Tinebase_Controller_Record_Abstract::_inspectBeforeCreate($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $_record->number = $_oldRecord->number;
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }

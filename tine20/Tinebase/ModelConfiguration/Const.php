@@ -64,6 +64,7 @@ class Tinebase_ModelConfiguration_Const {
     public const DEGREE = 'degree';
     public const DELEGATED_ACL_FIELD = 'delegateAclField';
     public const DENORMALIZATION_CONFIG = 'denormalizationConfig';
+    public const DENORMALIZATION_DIFF_OMIT_FIELDS = 'denormalizationDiffOmitFields';
     public const DENORMALIZATION_OF = 'denormalizationOf';
     /**
      * valid vor type 'records' - means records are governed (not independent)
