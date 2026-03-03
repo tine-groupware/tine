@@ -1374,6 +1374,36 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         unset($unitTestModeRaii);
     }
 
+    public function testPurchaseInvoiceSupplier(): void
+    {
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => new Sales_Model_Document_Supplier([
+                'name' => 'test supplier',
+            ])
+        ]));
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+        $this->assertTrue((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
+
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Document_Supplier([
+            'name' => 'test supplier',
+        ]));
+
+        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+        ]));
+        $this->assertSame($supplier->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+        $this->assertNotSame($supplier->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
+        $this->assertFalse((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
+
+        $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url = 'https://unittest';
+        $pInvoiceUpdated = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pInvoice);
+        $this->assertSame($supplier->getId(), $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+        $this->assertNotSame($supplier->getId(), $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
+        $this->assertTrue((bool)$pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
+        $this->assertSame($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url, $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url);
+
+    }
+
     public function testCategoryEvalDimensionCopy()
     {
         $customer = $this->_createCustomer();
