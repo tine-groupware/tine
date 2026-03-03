@@ -930,6 +930,14 @@ const handleAccountOwner = async (participantId) => {
     bday: formatBirthday(accountOwner.value.bday)
   };
 
+  registrantDetails.value = {
+    ...accountOwner.value,
+    bday: formatBirthday(accountOwner.value.bday)
+  };
+  registrantEmail.value = accountOwner.value.email;
+  isVerifyEmailRegistrant.value = true;
+
+
   isRegistrant.value = false;
   shouldShowRegistrantCheckbox.value = true;
   knownContact.value = true;
@@ -1490,11 +1498,17 @@ const postRegistration = async () => {
 
   const eventId = route.params.id;
   registrantDetails.value.email = registrantEmail.value;
+
+  if (!(eventDetails.value.registrations.find(reg => reg.id === contactDetails.value.registration_id))) {
+    contactDetails.value.registration_id = '';
+  }
+
   const registration = {
     'eventId': eventId,
     'contactDetails': contactDetails.value,
     'replies': filteredReplies,
-    'registrantDetails': registrantDetails.value
+    'registrantDetails': registrantDetails.value,
+    'isAlreadyRegistered': isAlreadyRegistered.value
   };
   const body = JSON.parse(JSON.stringify(registration));
   let registrationId = '';
@@ -1526,7 +1540,8 @@ const postRegistration = async () => {
         onConfirm: () => {
           clearForm();
           const baseUrl = window.location.origin;
-          window.location.href = `${baseUrl}/EventManager/view/events`;
+          const token = window.location.href.split('/').pop();
+          window.location.href = `${baseUrl}/EventManager/view/account/${token}`;
         }
       });
     } else {
@@ -1537,7 +1552,8 @@ const postRegistration = async () => {
         onConfirm: () => {
           clearForm();
           const baseUrl = window.location.origin;
-          window.location.href = `${baseUrl}/EventManager/view/events`;
+          const token = window.location.href.split('/').pop();
+          window.location.href = `${baseUrl}/EventManager/view/account/${token}`;
         }
       });
     }
@@ -1645,7 +1661,7 @@ const fetchAccountData = async () => {
 };
 
 onMounted(async () => {
-  const participantIdFromUrl = route.query.participantId || null;
+  const participantIdFromUrl = route.query.participantId && route.query.participantId !== 'null' ?  route.query.participantId : null;
   const isReregistered = route.query.isReregistered === 'true';
 
   await Promise.all([

@@ -27,18 +27,12 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
         (function () {
             const registrantField = this.form.findField('registrant');
             const hasRegistrantField = this.form.findField('has_registrant');
-            const participantField = this.form.findField('participant');
             this.setParticipantListener();
 
-            if (!hasRegistrantField.getValue()) {
-                registrantField.hide();
-                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id !== participantField.getValue().original_id) {
-                    registrantField.show();
-                }
+            if (hasRegistrantField.getValue()) {
+                registrantField.show();
             } else {
-                if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id === participantField.getValue().original_id) {
-                    registrantField.hide();
-                }
+                registrantField.hide();
             }
         }).defer(100, this);
 
@@ -67,7 +61,10 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
 
     setParticipantListener: function () {
         this.form.findField('participant').on('select', function (combo, record, index) {
-            this.form.findField('registrant').setValue(combo.getValue());
+            const registrantField = this.form.findField('registrant');
+            if (registrantField.getValue() === '') {
+                this.form.findField('registrant').setValue(combo.getValue());
+            }
         }, this);
     },
 
@@ -196,26 +193,4 @@ Tine.EventManager.RegistrationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
             this.doLayout();
         },this);
     },
-
-    onSaveAndClose: function () {
-        const hasRegistrantField = this.form.findField('has_registrant');
-        const registrantField = this.form.findField('registrant');
-        const participantField = this.form.findField('participant');
-
-        if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id === participantField.getValue().original_id) {
-            registrantField.hide();
-            hasRegistrantField.setValue(false);
-        }
-
-        if (!hasRegistrantField.getValue()) {
-            if (registrantField.getValue() && participantField.getValue() && registrantField.getValue().original_id !== participantField.getValue().original_id) {
-                registrantField.setValue(participantField.getValue());
-                hasRegistrantField.setValue(true);
-            } else {
-                registrantField.hide();
-            }
-        }
-
-        this.supr().onSaveAndClose.apply(this, arguments);
-    }
 });
