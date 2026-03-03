@@ -21,7 +21,7 @@ class Sales_Model_Document_Supplier extends Sales_Model_Supplier
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME      => self::TABLE_NAME,
@@ -38,6 +38,9 @@ class Sales_Model_Document_Supplier extends Sales_Model_Supplier
         $_definition[self::EXPOSE_HTTP_API] = false;
 
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Supplier::class;
+        $_definition[self::DENORMALIZATION_CONFIG] = [
+            self::TRACK_CHANGES         => true,
+        ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
             self::NORESOLVE             => true,
