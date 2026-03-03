@@ -386,7 +386,7 @@ class Setup_ExtCheck
             $values = array();
             $parser = xml_parser_create();
             xml_parse_into_struct($parser, $buffer, $values);
-            xml_parser_free($parser);
+            unset($parser);
         } else {
             throw new Setup_Exception("File $_file not found!");
         }
