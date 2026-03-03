@@ -1573,6 +1573,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * - returns http error code 500 on fail
      * - checks: config, db, temp dir, files dir
      * - client ip address needs to be in Tinebase_Config::ALLOWEDHEALTHCHECKIPS
+     * - returns 503 if maintenance mode is ond and MAINTENANCE_MODE_HEALTH_CHECK = true
      *
      * @return \Laminas\Diactoros\Response
      *
@@ -1587,6 +1588,16 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' client ip not allowed: '
                     . $clientIp);
             return new \Laminas\Diactoros\Response('php://memory', 404);
+        }
+
+        if (Tinebase_Core::inMaintenanceModeAll()
+            && Tinebase_Config::getInstance()->{Tinebase_Config::MAINTENANCE_MODE_HEALTH_CHECK}
+        ) {
+            $data = [
+                'status' => 'maintenance',
+                'problems' => [],
+            ];
+            return new \Laminas\Diactoros\Response\JsonResponse($data, 503);
         }
 
         $status = 'pass';
