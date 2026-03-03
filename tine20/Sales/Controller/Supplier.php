@@ -98,6 +98,8 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        parent::_inspectBeforeCreate($_record);
+
         $this->_setNextNumber($_record);
         self::validateCurrencyCode($_record->currency);
     }
@@ -111,6 +113,8 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectAfterCreate($_createdRecord, $_record)
     {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
         // record finally have id here , create postal address needs record_id.
         Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
     }
@@ -185,6 +189,8 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
         Sales_Controller_Customer::getInstance()->handleExternAndInternId($_record);
         Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
 
@@ -205,6 +211,8 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
         Sales_Controller_Customer::getInstance()->handleExternAndInternId($record);
         Sales_Controller_Address::getInstance()->resolvePostalAddress($record);
     }
