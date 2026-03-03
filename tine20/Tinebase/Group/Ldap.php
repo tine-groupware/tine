@@ -663,11 +663,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         $metaData = $this->_getMetaData($_group->getId());
         $dn = $metaData['dn'];
         
-        $ldapData = array(
+        $ldapData = array_merge([
             'cn'          => $_group->name,
-            'description' => $_group->description,
             'objectclass' => $metaData['objectclass']
-        );
+        ], $_group->description ? [
+            'description' => $_group->description,
+        ] : []);
         
         foreach ($this->_plugins as $plugin) {
             $plugin->inspectUpdateGroup($_group, $ldapData);
