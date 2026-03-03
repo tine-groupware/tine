@@ -8,7 +8,6 @@
  */
 -->
 
-<!-- components/MarkdownRenderer.vue -->
 <template>
   <div class="tb-markdown" v-html="renderedHtml"></div>
 </template>
@@ -56,13 +55,11 @@ const renderMarkdown = async () => {
   try {
     const markedInstance = await getMarked()
     const purify = await getDOMPurify()
-
-    // marked.parse() returns a Promise, so we need to await it
     const html = await markedInstance.parse(props.content)
     renderedHtml.value = purify.sanitize(html)
   } catch (error) {
     console.error('Error rendering markdown:', error)
-    renderedHtml.value = props.content // Fallback to plain text
+    renderedHtml.value = props.content
   }
 }
 

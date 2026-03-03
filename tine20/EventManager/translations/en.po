@@ -270,8 +270,8 @@ msgstr "Update"
 msgid "Cancel Registration"
 msgstr "Cancel Registration"
 
-msgid "You don’t have any registrations for yourself yet — get started by creating one!"
-msgstr "You don’t have any registrations for yourself yet — get started by creating one!"
+msgid "You don't have any registrations for yourself yet. Get started by creating one!"
+msgstr "You don't have any registrations for yourself yet. Get started by creating one!"
 
 msgid "Users you registered"
 msgstr "Users you registered"
@@ -395,6 +395,9 @@ msgstr "Events"
 msgid "More Information"
 msgstr "More Information"
 
+msgid "No events found matching your search."
+msgstr "No events found matching your search."
+
 msgid "Church Service"
 msgstr "Church Service"
 
@@ -455,12 +458,6 @@ msgstr "Update Registration"
 msgid "Register"
 msgstr "Register"
 
-msgid "Registration for"
-msgstr "Registration for"
-
-msgid "on the"
-msgstr "on the"
-
 msgid "Mr"
 msgstr "Mr"
 
@@ -475,6 +472,12 @@ msgstr "Person"
 
 msgid "Deutschland"
 msgstr "Deutschland"
+
+msgid "Registration for"
+msgstr "Registration for"
+
+msgid "on the"
+msgstr "on the"
 
 msgid "Validation Error"
 msgstr "Validation Error"
