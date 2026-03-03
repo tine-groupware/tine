@@ -821,6 +821,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
     public const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
     public const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
+    public const MAINTENANCE_MODE_HEALTH_CHECK = 'maintenanceModeHealthCheck';
 
     /**
      * @var string
@@ -2934,6 +2935,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => TRUE,
             self::SETBYSETUPMODULE => TRUE,
+        ),
+        self::MAINTENANCE_MODE_HEALTH_CHECK => array(
+            //_('Maintenance mode for health check')
+            self::LABEL => 'Maintenance mode for health check',
+            //_('If this is true, the tine health check is also in maintenance and returns http code 503')
+            self::DESCRIPTION => 'If this is true, the tine health check is also in maintenance and returns http code 503',
+            self::TYPE => self::TYPE_BOOL,
+            self::DEFAULT_STR => false,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
         ),
         self::VERSION_CHECK => array(
             //_('Version check enabled')
