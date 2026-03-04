@@ -99,6 +99,17 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_IMPORTEXPORTDEFINITIONS = 'manage_importexportdefinitions';
 
     /**
+     * the right to manage scheduler tasks
+     * @staticvar string
+     */
+    const MANAGE_SCHEDULER_TASKS = 'manage_scheduler_tasks';
+
+    /**
+     * the right to manage logs
+     * @staticvar string
+     */
+    const MANAGE_LOGS = 'manage_logs';
+    /**
      * the right to view roles
      * @staticvar string
      */
@@ -237,6 +248,8 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTAINERS,
             self::MANAGE_CUSTOMFIELDS,
             self::MANAGE_IMPORTEXPORTDEFINITIONS,
+            self::MANAGE_SCHEDULER_TASKS,
+            self::MANAGE_LOGS,
             self::MANAGE_SSO,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
@@ -314,6 +327,14 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_IMPORTEXPORTDEFINITIONS => array(
                 'text'          => $translate->_('Manage import and export definitions'),
                 'description'   => $translate->_('Add and edit import and export definitions'),
+            ),
+            self::MANAGE_SCHEDULER_TASKS => array(
+                'text'          => $translate->_('Manage scheduler tasks'),
+                'description'   => $translate->_('Add and edit scheduler tasks.'),
+            ),
+            self::MANAGE_LOGS            => array(
+                'text'          => $translate->_('Manage logs'),
+                'description'   => $translate->_('Add and delete application logs.'),
             ),
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('View access log'),

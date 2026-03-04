@@ -159,6 +159,7 @@ Tine.Admin.init = function () {
             leaf: null,
             expanded: true,
             dataPanelType: "logentries",
+            viewRight: 'logs',
             hidden: !Tine.Admin.showModule('logentries')
         },{
             text: translation.gettext('Server Information'),
@@ -248,6 +249,7 @@ Tine.Admin.init = function () {
                 leaf: null,
                 expanded: true,
                 dataPanelType: "importexportdefinitions",
+                viewRight: 'importexportdefinitions',
                 hidden: !Tine.Admin.showModule('importexportdefinitions')
             });
         }
