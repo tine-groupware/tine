@@ -145,6 +145,7 @@ Ext.form.TriggerField = Ext.extend(Ext.form.TextField,  {
                 }
                 this.trigger.setDisplayed(!this.hideTrigger);
             }
+            //fixme: this.wrap.getWidth() might be 0 , but the width in style is set
             this.onResize(this.width || this.wrap.getWidth());
         }
     },

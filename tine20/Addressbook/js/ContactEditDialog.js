@@ -313,7 +313,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             deferredRender: false,
             autoHeight: true,
             split: true,
-            activeTab: 0,
             defaults: {
                 frame: true
             },
