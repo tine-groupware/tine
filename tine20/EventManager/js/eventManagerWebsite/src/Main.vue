@@ -15,12 +15,6 @@
         <b-navbar-nav>
           <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
           <b-nav-item href="EventManager/view/events">{{formatMessage('Events')}}</b-nav-item>
-          <b-nav-item-dropdown :text="formatMessage('Topics')">
-            <b-dropdown-item href="#">{{formatMessage('Church Service')}}</b-dropdown-item>
-            <b-dropdown-item href="#">{{formatMessage('Voluntary Service')}}</b-dropdown-item>
-            <b-dropdown-item href="#">{{formatMessage('Children')}}</b-dropdown-item>
-            <b-dropdown-item href="#">{{formatMessage('Choir')}}</b-dropdown-item>
-          </b-nav-item-dropdown>
           <b-nav-item @click.prevent="openEmailModal">{{formatMessage('My Registrations')}}</b-nav-item>
           <b-nav-item href="EventManager/view/contact">{{formatMessage('Contact')}}</b-nav-item>
         </b-navbar-nav>

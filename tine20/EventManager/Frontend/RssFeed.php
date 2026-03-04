@@ -99,6 +99,14 @@ class EventManager_Frontend_RssFeed
             $registration_possible_until = $event['registration_possible_until'];
             $last_modified_time = $event['last_modified_time'] ?? $event['creation_time'];
             $event_id = $event['id'];
+            $tags = $event['tags'];
+            $categories = [];
+            if (count($tags) > 0) {
+                foreach ($tags as $tag) {
+                    $categories[] = $tag['name'];
+                }
+            }
+
             $url = Tinebase_Core::getUrl() . '/EventManager/view/#/event/' . $event_id;
 
             $feed->entry([
@@ -116,6 +124,7 @@ class EventManager_Frontend_RssFeed
                 'registration_possible_until' => $registration_possible_until,
                 'pubDate' => $last_modified_time,
                 'link' => $url,
+                'categories' => $categories,
             ]);
         }
         return $feed;
