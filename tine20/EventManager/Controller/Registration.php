@@ -228,6 +228,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
     {
         try {
+            $participantOriginalId = $_record->participant->original_id;
+            $registrantOriginalId = $_record->registrant->original_id;
+            if (!empty($participantOriginalId)) {
+                if (empty($registrantOriginalId)) {
+                    $_record->registrant->original_id = $_record->participant->original_id;
+                }
+            }
             return parent::create($_record, $_duplicateCheck);
         } catch (Tinebase_Exception_Duplicate $ted) {
             $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
@@ -718,8 +725,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
             $response = new \Laminas\Diactoros\Response();
-            $participant = $this->getRegisterContact($request['contactDetails']);
-            $registration = null;
+            $participant = $this->getOrCreateRegisterContact($request['contactDetails'], 'participant');
 
             $allEmpty = true;
             foreach ($request['registrantDetails'] as $value) {
@@ -741,7 +747,7 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             if ($isSelfRegistration) {
                 $registrant = $participant;
             } else {
-                $registrant = $this->getRegisterContact($request['registrantDetails']);
+                $registrant = $this->getOrCreateRegisterContact($request['registrantDetails'], 'registrant');
             }
 
             //participant replies:
@@ -800,62 +806,50 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 }
             }
 
-            $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                EventManager_Model_Registration::class,
-                [
-                    [
-                        'field' => EventManager_Model_Registration::FLD_EVENT_ID,
-                        'operator' => 'equals',
-                        'value' => $event_id
-                    ],
-                ],
-            );
-            $registrations = $this->getInstance()->search($filter);
-
             $default_values = $this->getDefaultRegistrationKeyFields();
 
-            if ($registrations->count() > 0) {
-                foreach ($registrations as $registration) {
-                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        EventManager_Model_Register_Contact::class,
+            if ($request['contactDetails']['registration_id']) {
+                $registration = $this->get($request['contactDetails']['registration_id']);
+
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    EventManager_Model_Register_Contact::class,
+                    [
                         [
-                            [
-                                'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
-                                'operator' => 'equals',
-                                'value' => $registration->getId()
-                            ],
+                            'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
+                            'operator' => 'equals',
+                            'value' => $registration->getId()
                         ],
-                    );
-                    $regs = EventManager_Controller_Register_Contact::getInstance()
-                        ->search($filter);
+                    ],
+                );
+                $regs = EventManager_Controller_Register_Contact::getInstance()
+                    ->search($filter);
 
-                    if (!empty($regs)) {
-                        if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '3') {
-                            $registration->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
-                        }
-                        $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
-                        $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
-
-                        if ($participant->getId() !== $registrant->getId()) {
-                            $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
-                        } else {
-                            $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = false;
-                        }
-                        foreach ($regs as $reg) {
-                            if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
-                                $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $reg;
-                            } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
-                                $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $reg;
-                            }
-                        }
-                        $registration = $this->updateRegisterContact(
-                            $registration,
-                            $request['contactDetails'],
-                            $request['registrantDetails'],
-                            $isSelfRegistration
-                        );
-                        $registration = $this->update($registration);
+                if (!empty($regs)) {
+                    if ($registration->{EventManager_Model_Registration::FLD_STATUS} === '3') {
+                        $registration->{EventManager_Model_Registration::FLD_STATUS} = $default_values['status'];
                     }
+                    $booked_options = $this->keepFilesAfterUpdate($registration, $booked_options);
+                    $registration->{EventManager_Model_Registration::FLD_BOOKED_OPTIONS} = $booked_options;
+
+                    if ($participant->getId() !== $registrant->getId()) {
+                        $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = true;
+                    } else {
+                        $registration->{EventManager_Model_Registration::FLD_HAS_REGISTRANT} = false;
+                    }
+                    foreach ($regs as $reg) {
+                        if ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'participant') {
+                            $registration->{EventManager_Model_Registration::FLD_PARTICIPANT} = $reg;
+                        } elseif ($reg->{EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE} === 'registrant') {
+                            $registration->{EventManager_Model_Registration::FLD_REGISTRANT} = $reg;
+                        }
+                    }
+                    $registration = $this->updateRegisterContact(
+                        $registration,
+                        $request['contactDetails'],
+                        $request['registrantDetails'],
+                        $isSelfRegistration
+                    );
+                    $registration = $this->update($registration);
                 }
             } else {
                 $has_registrant = ($participant->getId() !== $registrant->getId());
@@ -1007,48 +1001,47 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $emailMatch && $firstNameMatch && $lastNameMatch;
     }
 
-    public function getContactByContactInformation($contactInformation)
+    public function getContactByContactInformation($contactInformation, $registrationType)
     {
         $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            Addressbook_Model_Contact::class,
+            EventManager_Model_Register_Contact::class,
             [
-                ['field' => 'email_query', 'operator' => 'equals', 'value' => $contactInformation['email']],
+                [
+                    'field' => 'original_id',
+                    'operator' => 'equals',
+                    'value' => $contactInformation['original_id']
+                ],
+                [
+                    'field' => 'registration_type',
+                    'operator' => 'equals',
+                    'value' => $registrationType
+                ],
             ],
         );
-        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
-
-        if (count($contacts) > 1) {
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Addressbook_Model_Contact::class,
-                [
-                    ['field' => 'n_family', 'operator' => 'contains', 'value' => $contactInformation['n_family']],
-                    ['field' => 'n_given', 'operator' => 'contains', 'value' => $contactInformation['n_given']],
-                ],
-            );
-            $contact = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-        } else {
-            $contact = $contacts->getFirstRecord();
-        }
-
+        $denormalized_contacts = EventManager_Controller_Register_Contact::getInstance()->search($filter);
+        $contact = $denormalized_contacts->getFirstRecord();
         return $contact;
     }
 
-    public function getRegisterContact($contactInformation)
+    public function getOrCreateRegisterContact($contactInformation, $registrationType)
     {
         $assertAclUsage = $this->assertPublicUsage();
         $contact = null;
         $eventManagerContainerId = EventManager_Config::getInstance()
             ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
         try {
-            $contact = $this->getContactByContactInformation($contactInformation);
+            $contact = $this->getContactByContactInformation($contactInformation, $registrationType);
             if (!$contact) {
+                $contactData = array_map(function ($value) {
+                    return $value;
+                }, $contactInformation);
+                $contactData['container_id'] = $eventManagerContainerId;
+                $contact = new Addressbook_Model_Contact($contactData);
                 try {
-                    $contactData = array_map(function ($value) {
-                        return $value;
-                    }, $contactInformation);
-                    $contactData['container_id'] = $eventManagerContainerId;
-                    $contact = new Addressbook_Model_Contact($contactData);
                     $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
+                } catch (Tinebase_Exception_Duplicate $de) {
+                    //we should keep both (since for example parents can register kids with same email)
+                    $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
                 } catch (Tinebase_Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1062,7 +1055,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                             $contact->$field = $value;
                         }
                     }
-                    $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
                 }
             }
         } catch (Exception $e) {
