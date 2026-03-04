@@ -6,5 +6,6 @@ Tine.Admin.registerItem({
     iconCls: 'admin-node-templates',
     pos: 900,
     dataPanelType: "Tine.Tinebase.TwigTemplateGridPanel",
+    viewRight: 'templates',
     hidden: !Tine.Admin.showModule('templates')
 });

@@ -69,17 +69,18 @@ if (Tine.Admin && Ext.isFunction(Tine.Admin.registerItem)) {
         text: 'SSO', // _('SSO')
         pos: 1000,
         dataPanelType: null,
+        viewRight: 'sso',
         children: [{
             text: 'Relying Parties', // _('Relying Parties')
             iconCls: 'SSORelyingParty',
             dataPanelType: 'Tine.SSO.RelyingPartyGridPanel',
-            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'Admin'),
             leaf: true,
         }, {
             text: 'External Identity Providers', // _('External Identity Providers')
             iconCls: 'SSOExternalIdp',
             dataPanelType: 'Tine.SSO.ExternalIdpGridPanel',
-            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+            disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'Admin'),
             leaf: true,
         }],
         leaf: false,
