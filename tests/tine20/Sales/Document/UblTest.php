@@ -123,7 +123,7 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame(1, $pInvoice->attachments->count());
     }
 
-    public function testReadPdfInvoice(): void
+    public function testReadPdfInvoice(?Sales_Model_Supplier $existingSupplier = null): void
     {
         //$zug = Sales_EDocument_ZUGFeRD::createFromString(file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
 
@@ -154,10 +154,46 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame('Kunden AG', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_ACCOUNT_NAME});
         $this->assertSame('DE02120300000000202051', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_ACCOUNT_IDENTIFIER});
         $this->assertSame('BYLADEM1001', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS}->getFirstRecord()->{Sales_Model_PurchasePaymentMeans::FLD_CONFIG}->{Sales_Model_EDocument_PMC_PurchaseCreditTransfer::FLD_SERVICE_PROVIDER_IDENTIFIER});
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID});
+        $this->assertInstanceOf(Sales_Model_Document_SupplierAddress::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id);
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id);
+        $this->assertSame('Max@Mustermann.de', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Address::FLD_EMAIL});
 
         $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS} =  Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED;
         $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pInvoice);
         $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
+
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID});
+        $this->assertInstanceOf(Sales_Model_Document_SupplierAddress::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id);
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id);
+        $this->assertSame('Max@Mustermann.de', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Address::FLD_EMAIL});
+        //$this->assertSame('Max@Mustermann.de', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->adr_email);
+        if (null === $existingSupplier) {
+            $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID});
+            $this->assertTrue((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_Supplier::FLD_LOCALLY_CHANGED});
+            $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID});
+        } else {
+            $this->assertSame($existingSupplier->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID});
+            $this->assertSame($existingSupplier->postal_id->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID});
+            $this->assertTrue((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_Supplier::FLD_LOCALLY_CHANGED});
+        }
+    }
+
+    public function testReadPdfInvoiceSupplierVAT(): void
+    {
+        $this->testReadPdfInvoice(Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+            'name' => 'Test Supplier',
+            'vatid' => 'DE123456789',
+            'adr_email' => 'a@b.c',
+        ])));
+    }
+
+    public function testReadPdfInvoiceSupplierEmail(): void
+    {
+        $this->testReadPdfInvoice(Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+            'name' => 'Test Supplier',
+            'adr_email' => 'Max@Mustermann.de',
+        ])));
     }
 
     public function testPurchaseInvoiceFromXr(): void
@@ -325,6 +361,8 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
 EOSTR;
 
         $pInvoice = Sales_Model_Document_PurchaseInvoice::fromXR($xml);
+        $this->assertNotNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID});
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
     }
 
     public function testUblValidationFail(): void

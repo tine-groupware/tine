@@ -121,7 +121,7 @@ class Sales_SuppliersTest extends TestCase
         $this->assertEquals(1, $deletedSupplier->is_deleted);
         
         $addressBackend = new Sales_Backend_Address();
-        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['id'], 'customer_id', TRUE);
+        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['id'], 'supplier_id', true);
 
         $this->assertEquals(1, $deletedAddresses->count());
         
@@ -168,9 +168,9 @@ class Sales_SuppliersTest extends TestCase
         $this->assertEquals('test Name', $result['postal_id']['name']);
         $this->assertEquals('testMail@mail.test', $result['postal_id']['email']);
 
-        $retVal['adr_name'] = '';
-        $retVal['adr_email'] = '';
-        $result = $this->_json->saveSupplier($retVal);
+        $result['adr_name'] = '';
+        $result['adr_email'] = '';
+        $result = $this->_json->saveSupplier($result);
         $this->assertEquals('', $result['postal_id']['name']);
         $this->assertEquals('', $result['postal_id']['email']);
     }

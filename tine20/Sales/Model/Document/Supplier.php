@@ -52,6 +52,8 @@ class Sales_Model_Document_Supplier extends Sales_Model_Supplier
                 self::MODEL_NAME            => self::$documentIdModel, // TODO not nice, it can be any document really...
             ],
         ];
+        $_definition[self::FIELDS]['postal_id'][self::CONFIG][self::MODEL_NAME] = Sales_Model_Document_SupplierAddress::MODEL_NAME_PART;
+        unset($_definition[self::FIELDS]['postal_id'][self::CONFIG][self::DEPENDENT_RECORDS]);
     }
 
     /**

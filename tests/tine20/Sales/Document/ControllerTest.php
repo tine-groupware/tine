@@ -1392,13 +1392,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
         ]));
         $this->assertSame($supplier->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
-        $this->assertNotSame($supplier->getId(), $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
+        $this->assertNotSame($supplier->getId(), ($docSupplierId = $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId()));
         $this->assertFalse((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
 
         $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url = 'https://unittest';
         $pInvoiceUpdated = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pInvoice);
         $this->assertSame($supplier->getId(), $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
         $this->assertNotSame($supplier->getId(), $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
+        $this->assertSame($docSupplierId, $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->getId());
         $this->assertTrue((bool)$pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
         $this->assertSame($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url, $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->url);
 

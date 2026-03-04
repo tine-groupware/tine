@@ -77,7 +77,11 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             ],
         ]);
 
-        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_SUPPLIER_ID] = [];
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_SUPPLIER_ID] = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'postal_id' => [],
+            ],
+        ];
 
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_EXTERNAL_INVOICE_NUMBER => [
@@ -363,16 +367,36 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             }
         }*/
         if ('' !== (string)$seller->Seller_electronic_address) { // 1
-            $supplier = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
+            $pInvoice->{self::FLD_SUPPLIER_ID} = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
                 [TMFA::FIELD => Sales_Model_Supplier::FLD_ELECTRONIC_ADDRESS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => (string)$seller->Seller_electronic_address],
             ]))->getFirstRecord();
-            if (null !== $supplier) {
-                $pInvoice->{self::FLD_SUPPLIER_ID} = $supplier;
-                // TODO update supplier data if invoice is newer than last modified date
+        }
+        if (null === $pInvoice->{self::FLD_SUPPLIER_ID} && '' !== (string)$seller->Seller_VAT_identifier) { // 0..1
+            $suppliers = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
+                [TMFA::FIELD => 'vatid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => (string)$seller->Seller_VAT_identifier],
+            ]));
+            if (1 === $suppliers->count()) {
+                $pInvoice->{self::FLD_SUPPLIER_ID} = $suppliers->getFirstRecord();
             }
         }
-        $xrSupplier = Sales_Model_Supplier::fromXRXml($xr);
-        // TODO what do we do with this? not at all? client requests it separately?
+        if (null === $pInvoice->{self::FLD_SUPPLIER_ID} && '' !== (string)$seller->SELLER_CONTACT->Seller_contact_email_address) { // 0..1
+            $suppliers = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
+                [TMFA::FIELD => 'postal_id', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => Sales_Model_Address::FLD_EMAIL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => (string)$seller->SELLER_CONTACT->Seller_contact_email_address],
+                ]],
+            ]));
+            if (1 === $suppliers->count()) {
+                $pInvoice->{self::FLD_SUPPLIER_ID} = $suppliers->getFirstRecord();
+            }
+        }
+
+        if (null === $pInvoice->{self::FLD_SUPPLIER_ID}) {
+            // create document_supplier without original_id
+            $pInvoice->{self::FLD_SUPPLIER_ID} = new Sales_Model_Supplier([], true);
+        } else {
+            Tinebase_Record_Expander::expandRecord($pInvoice->{self::FLD_SUPPLIER_ID});
+        }
+        $pInvoice->{self::FLD_SUPPLIER_ID}->fromXRXml($xr);
 
 
         // 1 BUYER
