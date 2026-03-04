@@ -419,9 +419,11 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                     }
                 }
             }
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' exception: ' . $e->getMessage());
+        } catch (Throwable $t) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' exception: ' . $t->getMessage());
+            }
         }
 
         if (isset($headers['dkim-signature'])) {
