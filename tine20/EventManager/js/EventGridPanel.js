@@ -36,25 +36,31 @@ Tine.EventManager.EventGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     getViewRowClass: function (record, index, rowParams, store) {
         let className = Tine.EventManager.EventGridPanel.superclass.getViewRowClass.call(this, record, index, rowParams, store);
-        if (record.data && record.data.registrations) {
-            const hasWaitingList = record.data.registrations.some(function (registration) {
-                return registration.status === "2"; //waiting list
-            });
-            if (hasWaitingList) {
-                className += ' event-waiting-list-row';
-            }
+        if (record.data && record.data.available_places <= 0) {
+            className += ' event-full-row';
+        } else if (record.data && record.data.available_places <= (0.1 * record.data.total_places)) {
+            className += ' event-nearly-full-row';
+        } else {
+            className += ' event-available-row';
         }
         return className;
     },
 
     afterRender: function () {
         Tine.EventManager.EventGridPanel.superclass.afterRender.call(this);
-        if (!document.getElementById('event-waiting-list-style')) {
+
+        if (!document.getElementById('event-available-places-style')) {
             const style = document.createElement('style');
-            style.id = 'event-waiting-list-style';
+            style.id = 'event-available-places-style';
             style.textContent = `
-                .event-waiting-list-row .x-grid3-cell {
-                    color: #ff0000 !important;
+                .event-full-row td.x-grid3-td-available_places .x-grid3-cell-inner {
+                    background-color: #FF6464 !important;
+                }
+                .event-nearly-full-row td.x-grid3-td-available_places .x-grid3-cell-inner {
+                    background-color: #FFE162 !important;
+                }
+                .event-available-row td.x-grid3-td-available_places .x-grid3-cell-inner {
+                    background-color: #91C483 !important;
                 }
             `;
             document.head.appendChild(style);
