@@ -43,7 +43,7 @@ msgid "run right description"
 msgstr "Das Ausführen-Recht benötigt man, um Zugriff auf die Applikation zu haben."
 
 msgid "Manage Templates"
-msgstr ""
+msgstr "Templates verwalten"
 
 msgid "Manage applications twig templates right"
 msgstr "Recht zum Verwalten der Twig-Vorlagen von Anwendungen"

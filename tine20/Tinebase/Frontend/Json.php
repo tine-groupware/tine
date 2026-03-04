@@ -442,7 +442,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $apps = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
         }
-        $apps = $apps->filter(fn($app) => Tinebase_Core::getUser()->hasRight($app, Tinebase_Acl_Rights_Abstract::TWIG));
+        $apps = $apps->filter(fn($app) => Tinebase_Core::getUser()->hasRight($app, Tinebase_Acl_Rights_Abstract::MANAGE_TEMPLATES));
 
         $pathFilterValue = $pathFilter?->getValue();
         $pathFilter = match($pathFilter?->getOperator()) {
