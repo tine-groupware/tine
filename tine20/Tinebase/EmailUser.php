@@ -499,12 +499,17 @@ class Tinebase_EmailUser
      * @return boolean
      * @throws Tinebas_Exception_SystemGeneric
      * @throws Tinebase_Exception_EmailInAddionalDomains
+     *
+     * @todo refactor $_includeExternalDomains / additional domain handling:
+     *       - additional domains should be always allowed for creating email-addresses of users / groups
+     *       - if allowAnyExternalDomains is set, additional domains have no relevance
+     *       - additional domains or external domains should never create (internal) email accounts!
      */
     public static function checkAllowedDomain(
         $_email,
-        $_throwException = false,
+        bool $_throwException = false,
         $_allowedDomains = null,
-        $_includeExternalDomains = false
+        bool $_includeExternalDomains = false
     ): bool
     {
         if (!Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
@@ -537,7 +542,7 @@ class Tinebase_EmailUser
             $allowAnyExternalDomains = $allowExternalEmail;
         }
 
-        if ($isExternal && $allowAnyExternalDomains) {
+        if ($isExternal && $allowAnyExternalDomains && $_includeExternalDomains) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' Allowed all external domains, skip!'
@@ -547,9 +552,10 @@ class Tinebase_EmailUser
         }
 
         if (!empty($allowedDomains) && !in_array($domain, $allowedDomains)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                Tinebase_Core::getLogger()->warn(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $domain . ' is not in allowed domains! Allowed domains: ' . print_r($allowedDomains, true)
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $domain . ' is not in allowed domains! Allowed domains: '
+                    . print_r($allowedDomains, true)
                 );
             }
             $result = false;
@@ -559,7 +565,7 @@ class Tinebase_EmailUser
             if (!$_includeExternalDomains && $isExternal) {
                 throw new Tinebase_Exception_EmailInAdditionalDomains();
             } else {
-                $translation = Tinebase_Translation::getTranslation('Tinebase');
+                $translation = Tinebase_Translation::getTranslation();
                 throw new Tinebase_Exception_SystemGeneric(str_replace(
                     ['{0}', '{1}'],
                     [$_email, implode(',', $allowedDomains)],
