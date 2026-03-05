@@ -123,19 +123,23 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->assertSame(1, $pInvoice->attachments->count());
     }
 
-    public function testReadPdfInvoice(?Sales_Model_Supplier $existingSupplier = null): void
+    public function testReadPdfInvoiceOldVersion(): void
     {
-        //$zug = Sales_EDocument_ZUGFeRD::createFromString(file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
+        $pi = $this->readPIFromPdf(__DIR__ . '/files/ZUGFeRD-Example.pdf');
+        $this->assertSame('2021_10', $pi->{Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER});
+    }
 
+    protected function readPIFromPdf(string $filePath): Sales_Model_Document_PurchaseInvoice
+    {
         $path = Tinebase_FileSystem::getInstance()
                 ->getApplicationBasePath(Filemanager_Config::APP_NAME, Tinebase_FileSystem::FOLDER_TYPE_SHARED) . '/unittest';
         Tinebase_FileSystem::getInstance()->mkdir($path);
         fwrite(
             $fh = Tinebase_FileSystem::getInstance()->fopen($path .  '/test.pdf', 'w'),
-            file_get_contents(__DIR__ . '/files/XRECHNUNG_Einfach.pdf'));
+            file_get_contents($filePath));
         Tinebase_FileSystem::getInstance()->fclose($fh);
 
-        $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
+        return Sales_Controller_Document_PurchaseInvoice::getInstance()->importPurchaseInvoice(
             new Tinebase_Model_FileLocation([
                 Tinebase_Model_FileLocation::FLD_MODEL_NAME => Filemanager_Model_FileLocation::class,
                 Tinebase_Model_FileLocation::FLD_LOCATION =>
@@ -144,6 +148,12 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
                     ]),
             ])
         );
+    }
+
+    public function testReadPdfInvoice(?Sales_Model_Supplier $existingSupplier = null): void
+    {
+        $pInvoice = $this->readPIFromPdf(__DIR__ . '/files/XRECHNUNG_Einfach.pdf');
+
         $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_NUMBER});
         $this->assertInstanceOf(Tinebase_DateTime::class, $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT});
         $this->assertTrue((new Tinebase_DateTime('2025-12-15'))->equals($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_DUE_AT}));
