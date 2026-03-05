@@ -22,7 +22,7 @@ class Sales_EDocument_ZUGFeRD
     ) {
         $warnMsg = '';
         $prefix = null;
-        foreach ($pdf->getDetails()['pdfextension:schemas'] ?? [] as $schema) {
+        foreach ($pdf->getDetails()['pdfextension:schemas'] ?? $pdf->getDetails()['pdfaextension:schemas'] ?? [] as $schema) {
             if (('urn:factur-x:pdfa:CrossIndustryDocument:invoice:1p0#' === ($schema['pdfaschema:namespaceuri'] ?? null)
                     || 'Factur-X PDFA Extension Schema' === ($schema['pdfaschema:schema'] ?? null)) && ($schema['pdfaschema:prefix'] ?? false)) {
                 $prefix = $schema['pdfaschema:prefix'];
@@ -31,13 +31,13 @@ class Sales_EDocument_ZUGFeRD
         }
 
         if (null === $prefix) {
+            $warnMsg .= 'no pdf extension schema / prefix found:' . PHP_EOL;
+            $warnMsg .= print_r($pdf->getDetails()['pdfextension:schemas'] ?? [], true) . PHP_EOL;
             if ($pdf->getDetails()['fx:documentfilename'] ?? false) {
-                $warnMsg .= 'no pdf extension schema / prefix found:' . PHP_EOL;
-                $warnMsg .= print_r($pdf->getDetails()['pdfextension:schemas'] ?? [], true) . PHP_EOL;
                 $prefix = 'fx';
-            } else {
+            } /*else {
                 throw new Tinebase_Exception_UnexpectedValue('no Factur-X PDFA Extension Schema found, not a ZUGFeRD pdf');
-            }
+            }*/
         }
 
         if ('INVOICE' !== ($pdf->getDetails()[$prefix . ':documenttype'] ?? null)) {
@@ -79,10 +79,28 @@ class Sales_EDocument_ZUGFeRD
         } else {
             $warnMsg .= $prefix . ':documentfilename not found' . PHP_EOL;
         }
+        if (null === $this->xml) {
+            foreach ($pdf->getObjectsByType('Filespec') as $object) {
+                foreach (['F', 'UF'] as $elementName) {
+                    if (!($efHeader = $object->getHeader()->get('EF')) instanceof \Smalot\PdfParser\Header) {
+                        continue 2;
+                    }
+                    if (!($xRef = $efHeader->get($elementName)) instanceof \Smalot\PdfParser\PDFObject) {
+                        continue;
+                    }
+                    $this->xml = $xRef->getContent();
+                    if (str_starts_with($this->xml, '<?xml ')) {
+                        break 2;
+                    } else {
+                        $this->xml = null;
+                    }
+                }
+            }
+        }
 
         if ('' !== $warnMsg) {
             $e = new Tinebase_Exception($warnMsg);
-            $e->setLogToSentry(true);
+            $e->setLogToSentry(false);
             $e->setLogLevelMethod('warn');
             Tinebase_Exception::log($e);
         }
