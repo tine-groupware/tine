@@ -98,25 +98,12 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->resolvePostalAddress($_record);
+
         parent::_inspectBeforeCreate($_record);
 
         $this->_setNextNumber($_record);
         self::validateCurrencyCode($_record->currency);
-    }
-
-    /**
-     * inspect creation of one record (after create)
-     *
-     * @param Tinebase_Record_Interface $_createdRecord
-     * @param Tinebase_Record_Interface $_record
-     * @return  void
-     */
-    protected function _inspectAfterCreate($_createdRecord, $_record)
-    {
-        parent::_inspectAfterCreate($_createdRecord, $_record);
-
-        // record finally have id here , create postal address needs record_id.
-        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
     }
     
     /**
@@ -137,7 +124,46 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
 
         return $_ids;
     }
-    
+
+    /**
+     * @param Sales_Model_Supplier $_record
+     * @param class-string $model
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
+    {
+        $postalAddress = [];
+
+        foreach($_record as $field => $value) {
+            if (strpos($field, 'adr_') !== FALSE) {
+                $postalAddress[substr($field, 4)] = $value;
+            }
+        }
+
+        //its only for the occasion after resolveVirtualFields
+        if (is_object($_record->postal_id)) {
+            $postalAddress['seq'] = $_record->postal_id->seq;
+            $postalAddress['id'] = $_record->postal_id->getId();
+        } elseif ($_record->getId()) {
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'supplier_id', 'operator' => 'equals', 'value' => $_record->getId())));
+
+            /** @phpstan-ignore-next-line */
+            if ($postalAddressRecord = Tinebase_Core::getApplicationInstance($model)->search($filter)->getFirstRecord()) {
+                $postalAddress['id'] = $postalAddressRecord->getId();
+                $postalAddress['seq'] = $postalAddressRecord->seq;
+            }
+        }
+
+        $postalAddress['supplier_id'] = $_record->getId();
+        $postalAddress['type'] = 'postal';
+
+        $_record['postal_id'] = new $model($postalAddress);
+    }
+
     /**
      * resolves all virtual fields for the supplier
      *
@@ -146,15 +172,21 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     public function resolveVirtualFields($supplier)
     {
-        $addressController = Sales_Controller_Address::getInstance();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $supplier['id'])));
         $mc = Sales_Model_Supplier::getConfiguration();
-        $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
-        
+        if (null === ($supplier['postal_id'] ?? null)) {
+            $addressController = Sales_Controller_Address::getInstance();
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $supplier['id'])));
+            $postalAddressRecord = $addressController->search($filter)->getFirstRecord();
+        } else {
+            $postalAddressRecord = $supplier['postal_id'];
+        }
+
         if ($postalAddressRecord) {
-            $supplier['postal_id'] = $postalAddressRecord->toArray();
-            foreach($postalAddressRecord as $field => $value) {
+            if (is_object($postalAddressRecord)) {
+                $supplier['postal_id'] = $postalAddressRecord->toArray();
+            }
+            foreach($supplier['postal_id'] as $field => $value) {
                 if (in_array('adr_' . $field, $mc->fieldKeys)) {
                     $supplier[('adr_' . $field)] = $value;
                 }
@@ -162,10 +194,10 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         }
         return $supplier;
     }
-    
+
     /**
      * @param array $resultSet
-     * 
+     *
      * @return array
      */
     public function resolveMultipleVirtualFields($resultSet)
@@ -173,7 +205,7 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         foreach($resultSet as &$result) {
             $result = $this->resolveVirtualFields($result);
         }
-        
+
         return $resultSet;
     }
     
@@ -192,29 +224,13 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
         Sales_Controller_Customer::getInstance()->handleExternAndInternId($_record);
-        Sales_Controller_Address::getInstance()->resolvePostalAddress($_record);
+        $this->resolvePostalAddress($_record);
 
         self::validateCurrencyCode($_record->currency);
         
         if ($_record->number != $_oldRecord->number) {
             $this->_setNextNumber($_record, TRUE);
         }
-    }
-
-    /**
-     * inspect update of one record (before update)
-     *
-     * @param Tinebase_Record_Interface $updatedRecord
-     * @param Tinebase_Record_Interface $record
-     * @param Tinebase_Record_Interface $currentRecord
-     * @return  void
-     */
-    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
-    {
-        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
-
-        Sales_Controller_Customer::getInstance()->handleExternAndInternId($record);
-        Sales_Controller_Address::getInstance()->resolvePostalAddress($record);
     }
     
     /**

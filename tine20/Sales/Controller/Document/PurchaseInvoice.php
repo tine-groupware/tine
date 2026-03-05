@@ -248,7 +248,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
                 }
                 $xr = new SimpleXMLElement($xmlContent, namespaceOrPrefix: 'urn:ce.eu:en16931:2017:xoev-de:kosit:standard:xrechnung-1');
 
-                return Sales_Model_Supplier::fromXRXml($xr);
+                return (new Sales_Model_Supplier([], true))->fromXRXml($xr);
             }
         }
 

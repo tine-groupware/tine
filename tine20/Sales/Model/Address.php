@@ -26,6 +26,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
 
     public const FLD_CUSTOMER_ID = 'customer_id';
     public const FLD_DEBITOR_ID = 'debitor_id';
+    public const FLD_SUPPLIER_ID = 'supplier_id';
 
     public const FLD_SHORTHAND = 'name_shorthand';
     public const FLD_LANGUAGE = 'language';
@@ -87,6 +88,9 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::FLD_DEBITOR_ID   => [
                     self::COLUMNS   => [self::FLD_DEBITOR_ID],
                 ],
+                self::FLD_SUPPLIER_ID  => [
+                    self::COLUMNS   => [self::FLD_SUPPLIER_ID],
+                ],
             ],
         ],
 
@@ -111,6 +115,17 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::CONFIG => [
                     self::APP_NAME     => Sales_Config::APP_NAME,
                     self::MODEL_NAME   => Sales_Model_Debitor::MODEL_NAME_PART,
+                    self::IS_PARENT => true,
+                ],
+                self::NULLABLE => true,
+            ],
+            self::FLD_SUPPLIER_ID       => [
+                self::LABEL         => 'Supplier',    // _('Supplier')
+                self::TYPE          => self::TYPE_RECORD,
+                'sortable'          => false,
+                self::CONFIG => [
+                    self::APP_NAME     => Sales_Config::APP_NAME,
+                    self::MODEL_NAME   => Sales_Model_Supplier::MODEL_NAME_PART,
                     self::IS_PARENT => true,
                 ],
                 self::NULLABLE => true,
