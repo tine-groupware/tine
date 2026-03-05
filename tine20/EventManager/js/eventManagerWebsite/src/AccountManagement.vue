@@ -457,8 +457,9 @@ async function registerAgain(registration, isReregistered) {
   const eventId = registration.event_id;
   const token = route.params.token;
   const participantId = registration.participant?.original_id || registration.participant?.id;
+  const registrationId = registration.id;
 
-  window.location.href = `${baseUrl}/EventManager/view/event/${eventId}/registration/${token}?participantId=${participantId}&isReregistered=${isReregistered}`;
+  window.location.href = `${baseUrl}/EventManager/view/event/${eventId}/registration/${token}?registrationId=${registrationId}&participantId=${participantId}&isReregistered=${isReregistered}`;
 }
 
 function openCreateNewProfile() {

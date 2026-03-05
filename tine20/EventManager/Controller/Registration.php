@@ -257,6 +257,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
     {
         try {
+            $participant = $_record->{EventManager_Model_Registration::FLD_PARTICIPANT};
+            $registrant = $_record->{EventManager_Model_Registration::FLD_REGISTRANT};
+            if ($participant->original_id === $registrant->original_id) {
+                foreach ($participant as $field => $value) {
+                    if (
+                        $registrant->has($field)
+                        && $field !== 'id'
+                        && $field !== 'registration_type'
+                    ) {
+                        $_record->{EventManager_Model_Registration::FLD_REGISTRANT}->$field = $value;
+                    }
+                }
+            }
+
             return parent::update($_record, $_duplicateCheck, $_updateDeleted);
         } catch (Tinebase_Exception_Duplicate $ted) {
             $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
@@ -744,8 +758,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 );
             }
 
+            $registrant = new EventManager_Model_Register_Contact();
             if ($isSelfRegistration) {
-                $registrant = $participant;
+                foreach ($participant as $field => $value) {
+                    if ($registrant->has($field) && $field !== 'id' && $field !== 'registration_type') {
+                        $registrant->$field = $value;
+                    }
+                }
             } else {
                 $registrant = $this->getOrCreateRegisterContact($request['registrantDetails'], 'registrant');
             }
