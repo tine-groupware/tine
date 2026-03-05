@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -25,6 +25,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
 
 
     static protected $_allUpdates = [
@@ -58,6 +59,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE008          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update008',
+            ],
+            self::RELEASE018_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -287,5 +292,41 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Document_Supplier::class
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.8', self::RELEASE018_UPDATE008);
+    }
+
+    public function update009(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Address::class,
+            Sales_Model_Document_Address::class,
+            Sales_Model_Document_SupplierAddress::class,
+        ]);
+
+        $supplierIds = Sales_Controller_Supplier::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Supplier::class, [
+                [TMFA::FIELD => 'is_deleted', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+            ]), _onlyIds: true);
+        if (!empty($supplierIds)) {
+            $db = $this->getDb();
+            $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME) . 'SET '
+                . Sales_Model_Address::FLD_SUPPLIER_ID . ' = ' . Sales_Model_Address::FLD_CUSTOMER_ID . ' WHERE ' . Sales_Model_Address::FLD_CUSTOMER_ID . ($quotedIds = $db->quoteInto(' IN (?)', $supplierIds)));
+            $db->query('UPDATE ' . $db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME) . 'SET '
+                . Sales_Model_Address::FLD_CUSTOMER_ID . ' = NULL WHERE ' . Sales_Model_Address::FLD_SUPPLIER_ID . $quotedIds);
+        }
+
+        $documentSuppliers = Sales_Controller_Document_Supplier::getInstance()->getAll();
+        Tinebase_Record_Expander::expandRecords($documentSuppliers);
+        foreach ($documentSuppliers as $documentSupplier) {
+            if (null === $documentSupplier->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID} || null !== $documentSupplier->postal_id) {
+                continue;
+            }
+            if (null !== ($adr = Sales_Controller_Supplier::getInstance()->get($documentSupplier->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID}))) {
+                $documentSupplier->postal_id = $adr;
+                Sales_Controller_Document_Supplier::getInstance()->update($documentSupplier);
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.9', self::RELEASE018_UPDATE009);
     }
 }

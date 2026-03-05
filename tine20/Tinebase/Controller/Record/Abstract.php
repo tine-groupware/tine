@@ -1153,7 +1153,7 @@ abstract class Tinebase_Controller_Record_Abstract
             try {
                 /** @var Tinebase_Controller_Record_Abstract $ctrl */
                 $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
-                $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getRelatedData:  false, _getDeleted: true);
+                $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getDeleted: true);
                 $record->{TMCC::FLD_ORIGINAL_ID} = $originalRecord->getId();
             } catch (Tinebase_Exception_NotFound) {
                 $record->{TMCC::FLD_ORIGINAL_ID} = null;
