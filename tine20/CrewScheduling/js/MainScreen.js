@@ -276,7 +276,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                         handler: this.onButtonFilter,
                         iconCls: 'action_filter'
                     }, {
-                        // @TODO enable if user has at least createPollGrant for one schedulingRole
+                        // @TODO enable if user has at least managePollGrant for one schedulingRole
                         text: this.app.i18n._('Polls'),
                         ref: '../../../buttonPolls',
                         tooltip: this.app.i18n._('Manage Polls'),

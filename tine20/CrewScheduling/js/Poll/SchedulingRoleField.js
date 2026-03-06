@@ -18,7 +18,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
             this.supr().initComponent.call(this);
             (async () => {
                 const roles = _.filter(await getRoles(), (role) => {
-                    return _.get(role, 'account_grants.createPollGrant') || _.get(role, 'account_grants.adminGrant')
+                    return _.get(role, 'account_grants.managePollGrant') || _.get(role, 'account_grants.adminGrant')
                 });
                 this.store.loadData(roles)
                 this.mode = 'local'
