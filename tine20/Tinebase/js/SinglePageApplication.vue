@@ -65,7 +65,7 @@ $secondary: #8cb8d7;
 
 :root {
   --header-height: 100px;
-  --footer-height: 150px;
+  --footer-height: 90px;
   --spacing: 20px;
 }
 
@@ -107,7 +107,7 @@ html, body {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 20px;
+  padding: 10px 20px;
   background-color: #f6f6f6;
   border-top: 1px solid #EDEDED;
   display: flex;
@@ -118,4 +118,23 @@ html, body {
   z-index: 10000;
 }
 
+/* Generic fix - all modals respect fixed header/footer */
+.modal {
+  top: var(--header-height);
+  bottom: var(--footer-height);
+  height: auto;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: calc(100vh - var(--header-height) - var(--footer-height) - var(--spacing) * 2);
+}
+
+.modal-body {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
 </style>

@@ -1,8 +1,8 @@
 <footer class="d-flex flex-column justify-content-between h-100">
     <!-- Top section - Organization info -->
-    <div class="flex-grow-1 d-flex flex-column justify-content-center">
+    <div class="flex-grow-1 d-flex flex-column justify-content-center" style="font-size: 0.75rem;">
         {% if app.installationRepresentative.org_name is not empty %}
-            <p class="text-muted mb-2 text-truncate">
+            <p class="text-muted text-truncate">
                 {{ app.installationRepresentative.org_name }}
             </p>
         {% endif %}
@@ -14,19 +14,19 @@
         ]|filter(v => v is not empty) %}
 
         {% if address_parts is not empty %}
-            <div class="text-muted mb-1 text-truncate">
+            <div class="text-muted text-truncate">
                 {{ address_parts|join(', ') }}
             </div>
         {% endif %}
 
-        <div class="text-sm text-muted mb-2 text-truncate">
+        <div class="text-muted text-truncate">
             Copyright © {{ "now"|date("Y") }} {{ app.installationRepresentative.org_name | default('Metaways Infosystems GmbH') }}. All rights reserved.
         </div>
         <!-- Links with Bootstrap utilities -->
         <div class="d-flex flex-wrap align-items-center gap-3">
             <div class="d-flex flex-wrap align-items-center gap-1 w-100">
                 {% if app.enablePublicPages %}
-                    <a href="{{ app.installation.weburl }}/GDPR/view/terms" class="text-sm text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
+                    <a href="{{ app.installation.weburl }}/GDPR/view/terms" class="text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
                     <span class="text-muted mx-1">|</span>
                     <a href="{{ app.installation.weburl }}/GDPR/view/privacy-policy" class="text-sm text-primary text-decoration-none">{{ _('Privacy Policy') }}</a>
                     <span class="text-muted mx-1">|</span>
@@ -34,7 +34,7 @@
                     <span class="text-muted mx-1">|</span>
                     <a href="{{ app.installation.weburl }}/GDPR/view/imprint" class="text-sm text-primary text-decoration-none">{{ _('Imprint') }}</a>
                 {% endif %}
-                <span class="text-xs ax-right fs-6 ms-auto">Powered by: <a target="_blank" href="{{ app.branding.weburl }}" title="{{ app.branding.description }}">{{ app.branding.title }}</a></span>
+                <span class="ax-right ms-auto">Powered by: <a target="_blank" href="{{ app.branding.weburl }}" title="{{ app.branding.description }}">{{ app.branding.title }}</a></span>
             </div>
         </div>
     </div>
