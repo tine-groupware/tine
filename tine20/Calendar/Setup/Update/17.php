@@ -103,11 +103,18 @@ class Calendar_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update005()
     {
-        Tinebase_Container::getInstance()->forceSyncTokenResync(new Tinebase_Model_ContainerFilter([
-            ['field' => 'application_id', 'operator' => 'equals', 'value' =>
-                Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()],
-            ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class]
-        ]));
+        try {
+            Tinebase_Container::getInstance()->forceSyncTokenResync(new Tinebase_Model_ContainerFilter([
+                ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                    Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId()],
+                ['field' => 'model', 'operator' => 'equals', 'value' => Calendar_Model_Event::class]
+            ]));
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not trigger forceSyncTokenResync. You might have to run '
+                . 'Tinebase_Frontend_Cli::forceSyncTokenResync manually. Error: ' . $e->getMessage());
+
+        }
 
         $this->addApplicationUpdate(Calendar_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
     }
