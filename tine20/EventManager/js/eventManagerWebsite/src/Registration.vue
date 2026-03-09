@@ -611,11 +611,12 @@ const registrantEmail = ref();
 const registrationIdRef = ref();
 const selectedParticipantId = ref(null);
 const shouldShowRegistrantCheckbox = ref(true);
+const registrationId = ref(null);
 
 // Data from backend
 const dependantParticipants = ref(null);
 const registrantEvents = ref(null);
-const participants = ref(null);
+const registrations = ref(null);
 const accountOwner = ref(null);
 
 const eventDetails = ref({
@@ -729,16 +730,16 @@ const maxBirthDate = computed(() => {
 });
 
 const registrantId = computed(() => {
-  if (!participants.value) {
+  if (!registrations.value) {
     return accountOwner.value?.original_id || accountOwner.value?.id || null;
   }
 
-  if (participants.value.original_id || participants.value.id) {
-    return participants.value.original_id || participants.value.id;
+  if (registrations.value.original_id || registrations.value.id) {
+    return registrations.value.original_id || registrations.value.id;
   }
 
-  if (participants.value.length > 0 && participants.value[0].registrant) {
-    return participants.value[0].registrant.original_id || participants.value[0].registrant.id;
+  if (registrations.value.length > 0 && registrations.value[0].registrant) {
+    return registrations.value[0].registrant.original_id || registrations.value[0].registrant.id;
   }
 
   return null;
@@ -767,8 +768,8 @@ const participantsDropdownOptions = computed(() => {
   }
 
   if (registerOthersNum === 1 || registerOthersNum === 3) {
-    if (participants.value && Array.isArray(participants.value)) {
-      participants.value.forEach(registration => {
+    if (registrations.value && Array.isArray(registrations.value)) {
+      registrations.value.forEach(registration => {
         const participantId = registration.participant?.original_id || registration.participant?.id;
         const participantName = registration.participant?.n_fileas;
         const selfId = registrantId.value || accountOwner.value?.id;
@@ -954,13 +955,14 @@ const handleDependant = async (participantId) => {
     );
   }
 
-  if (!participant && participants.value && Array.isArray(participants.value)) {
-    const registration = participants.value.find(p =>
-      String(getParticipantId(p.participant)) === String(participantId)
+  if (!participant && Array.isArray(registrations.value)) {
+    const registration = registrations.value.find(r =>
+      registrationId.value
+        ? r.id === registrationId.value
+        : String(getParticipantId(r.participant)) === String(participantId)
     );
-    if (registration && registration.participant) {
-      participant = registration.participant;
-    }
+
+    participant = registration?.participant ?? participant;
   }
 
   if (participant) {
@@ -1645,51 +1647,55 @@ const fetchAccountData = async () => {
       method: 'GET'
     });
     registrantEvents.value = await resp.json();
-
-    const firstElement = registrantEvents.value[0];
-    if (Array.isArray(firstElement)) {
-      accountOwner.value = firstElement[0].registrant;
-      participants.value = firstElement;
-    } else {
-      accountOwner.value = firstElement;
-      participants.value = null;
-    }
-    dependantParticipants.value = registrantEvents.value[1];
   } catch (error) {
     console.error('Error fetching account details: ', error);
   }
 };
 
-onMounted(async () => {
-  const participantIdFromUrl = route.query.participantId && route.query.participantId !== 'null' ?  route.query.participantId : null;
-  const isReregistered = route.query.isReregistered === 'true';
+const resolveAccountOwnerAndParticipants = (participantIdFromUrl, registrationIdFromUrl) => {
+  const eventRegistrationIds = new Set(eventDetails.value.registrations.map(r => r.id));
+  const allRegistrations = registrantEvents.value[0];
+  const matchedRegistration = allRegistrations.find(r =>
+    registrationIdFromUrl
+      ? r.id === registrationIdFromUrl
+      : eventRegistrationIds.has(r.id)
+  );
 
-  await Promise.all([
-    fetchEvent(),
-    fetchAccountData()
-  ]);
+  if (matchedRegistration) {
+    accountOwner.value = matchedRegistration.registrant;
+  } else {
+    const matchedByParticipantId = participantIdFromUrl
+      ? allRegistrations.find(r => r.registrant?.original_id === participantIdFromUrl)
+      : null;
 
-  let initialParticipantId = participantIdFromUrl;
-
-  if (!initialParticipantId && accountOwner.value) {
-    initialParticipantId = getParticipantId(accountOwner.value);
+    accountOwner.value = matchedByParticipantId?.registrant ?? allRegistrations[0]?.registrant;
   }
+  registrations.value = allRegistrations?? null;
+  dependantParticipants.value = registrantEvents.value[1];
+};
+
+onMounted(async () => {
+  const participantIdFromUrl = route.query.participantId && route.query.participantId !== 'null'
+    ? route.query.participantId
+    : null;
+  const registrationIdFromUrl = route.query.registrationId && route.query.registrationId !== 'null'
+    ? route.query.registrationId
+    : null;
+   if (registrationIdFromUrl) {
+     registrationId.value = registrationIdFromUrl;
+   }
+
+  await Promise.all([fetchEvent(), fetchAccountData()]);
+
+  resolveAccountOwnerAndParticipants(participantIdFromUrl, registrationIdFromUrl);
+
+  let initialParticipantId = participantIdFromUrl ?? getParticipantId(accountOwner.value);
 
   const scenario = determineRegistrationScenario(initialParticipantId);
-
-  // special case: if isReregistered, do not load booked options
-  if (isReregistered && initialParticipantId) {
-    await initializeFormForScenario(scenario, initialParticipantId);
-  } else {
-    await initializeFormForScenario(scenario, initialParticipantId);
-  }
+  await initializeFormForScenario(scenario, initialParticipantId);
 
   selectedParticipantId.value = initialParticipantId;
-
-  router.replace({
-    params: route.params,
-    query: {}
-  });
+  router.replace({ params: route.params, query: {} });
 });
 
 </script>
