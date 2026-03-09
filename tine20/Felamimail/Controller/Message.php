@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Felamimail
  * @subpackage  Controller
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 use Hfig\MAPI\OLE\Pear;
@@ -1592,6 +1592,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_deleteDraftByUid($_message->messageuid, $account, $draftFolder);
         }
 
+        // TODO set draft ID in client, write into mail, remove header on sent
+        // TODO add new draft first, delete old (all) drafts with draft ID afterwards
+
         // add custom header (for easy removal)
         $headers = is_array($_message->headers) ? $_message->headers : [];
         $headers['X-Tine20-AutoSaved'] = true;
@@ -1613,8 +1616,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     public function cleanupAutoSavedDrafts($accountIds): ?Tinebase_Record_RecordSet
     {
         if (!Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_AUTOSAVE_DRAFTS)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' FEATURE_AUTOSAVE_DRAFTS is disabled');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' FEATURE_AUTOSAVE_DRAFTS is disabled');
+            }
             return null;
         }
         $draftFolderIds = [];
@@ -1647,9 +1652,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $messages = null;
         try {
+            $receivedBefore = Tinebase_DateTime::now()->subMonth(
+                Felamimail_Config::getInstance()->{Felamimail_Config::CLEAR_AUTO_SAVED_DRAFTS_BEFORE_MONTHS}
+            );
             $messages = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Felamimail_Model_Message::class, [
-                ['field' => 'folder_id', 'operator' => 'in', 'value' => $draftFolderIds]
+                ['field' => 'folder_id', 'operator' => 'in', 'value' => $draftFolderIds],
+                ['field' => 'received', 'operator' => 'before', 'value' => $receivedBefore],
             ]));
             $messages = $messages->filter(function($record) {
                 $headers = $this->getMessageHeaders($record, null, true);

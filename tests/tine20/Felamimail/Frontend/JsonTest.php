@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  *
  * @package     Felamimail
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -3215,22 +3215,30 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
 
     public function testCleanupAutoSavedDrafts()
     {
-        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($this->_account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+        Felamimail_Config::getInstance()->{Felamimail_Config::CLEAR_AUTO_SAVED_DRAFTS_BEFORE_MONTHS} = 0;
+
+        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($this->_account,
+            Felamimail_Model_Folder::FOLDER_DRAFTS);
         $filter = [['field' => 'folder_id', 'operator' => 'equals', 'value' => $draftFolder->getId()]];
         
         $this->_saveDraft();
         $result = $this->_json->searchMessages($filter, []);
-        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: '
+            . print_r($result, true));
 
         $messageToSave = $this->_getMessageData('', 'test2');
         $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
         $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         $result = $this->_json->searchMessages($filter, []);
-        self::assertEquals(2, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+        self::assertEquals(2, count($result['results']), 'auto saved draft should be removed: '
+            . print_r($result, true));
 
         Felamimail_Controller_Message::getInstance()->cleanupAutoSavedDrafts([$this->_account->getId()]);
         $result = $this->_json->searchMessages($filter, []);
-        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: '
+            . print_r($result, true));
+
+        Felamimail_Config::getInstance()->{Felamimail_Config::CLEAR_AUTO_SAVED_DRAFTS_BEFORE_MONTHS} = 1;
     }
 
     /**
