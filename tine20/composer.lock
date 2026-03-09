@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e84fb2a14714e6b66063470ea7fb2024",
+    "content-hash": "e3ff65578210548a7b630d629e5e2a5b",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -6016,11 +6016,11 @@
         },
         {
             "name": "phpmailer/dkimvalidator",
-            "version": "dev-main",
+            "version": "v0.3.1pl1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/DKIMValidator.git",
-                "reference": "3c94d6e9523de9fa76de835d115f1ad962a892d9"
+                "reference": "d1d40a9104f0868528b7e9b98e80ec551842e4f6"
             },
             "require": {
                 "ext-hash": "*",
@@ -6034,7 +6034,6 @@
                 "phpunit/phpunit": "8.4.1",
                 "roave/security-advisories": "dev-master"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -6085,7 +6084,7 @@
                 }
             ],
             "description": "A DKIM signature validator in PHP.",
-            "time": "2026-01-22T04:15:21+00:00"
+            "time": "2026-03-04T11:51:12+00:00"
         },
         {
             "name": "phpoffice/math",
@@ -15644,6 +15643,12 @@
             "alias_normalized": "0.4.3.0"
         },
         {
+            "package": "phpmailer/dkimvalidator",
+            "version": "0.3.1.0-patch1",
+            "alias": "v0.3.1",
+            "alias_normalized": "0.3.1.0"
+        },
+        {
             "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch13",
             "alias": "1.8.2",
@@ -15701,14 +15706,13 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "phpmailer/dkimvalidator": 20,
         "simplesamlphp/xml-common": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "8.2 - 8.4",
+        "php": "8.2 - 8.4 | ~8.5.4",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
@@ -15756,5 +15760,5 @@
         "ext-xmlwriter": "8.2",
         "ext-zip": "8.2"
     },
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
