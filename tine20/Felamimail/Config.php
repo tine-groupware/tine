@@ -24,6 +24,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      */
     const CACHE_EMAIL_BODY = 'cacheEmailBody';
 
+    const CLEAR_AUTO_SAVED_DRAFTS_BEFORE_MONTHS = 'clearAutoSavedDraftsBeforeMonths';
+
     /**
      * delete archived mail
      *
@@ -309,6 +311,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE      => TRUE,
             self::DEFAULT_STR           => 1,
         ),
+        self::CLEAR_AUTO_SAVED_DRAFTS_BEFORE_MONTHS => [
+        //_('Clear Auto-Saved Drafts Before Months')
+            self::LABEL                 => 'Clear Auto-Saved Drafts Before Months',
+        // _('Remove all auto-saved drafts that are older than this number of months')
+            self::DESCRIPTION           => 'Remove all auto-saved drafts that are older than this number of months',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => 1,
+        ],
         self::DELETE_ARCHIVED_MAIL => array(
             //_('Delete Archived Mail')
             self::LABEL                 => 'Delete Archived Mail',
