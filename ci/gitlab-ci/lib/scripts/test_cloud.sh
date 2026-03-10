@@ -79,6 +79,27 @@ test_cloud_mariadb() {
     mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl
 }
 
+test_cloud_imap_mariadb() {
+    # helmfile write-values needs to run before!
+    db_host=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.host)
+    db_name=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.dbname)
+    db_username=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.username)
+    db_password=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.password)
+
+    mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl ${db_name}
+}
+
+test_cloud_smtp_mariadb() {
+    # helmfile write-values needs to run before!
+
+    db_host=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.host)
+    db_name=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.dbname)
+    db_username=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.username)
+    db_password=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.password)
+
+    mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl ${db_name}
+}
+
 test_cloud_setup_database() {
     db_name=$(cat /tmp/values.yaml | yq .database.name)
 
@@ -89,4 +110,10 @@ test_cloud_teardown_database() {
     db_name=$(cat /tmp/values.yaml | yq .database.name)
 
     echo 'DROP DATABASE IF EXISTS `'${db_name}'`;' | test_cloud_mariadb
+
+    # delete artifacts in mail db if they exists
+    echo "DELETE FROM dovecot_users WHERE domain='nightly-main.tcloud.tine-dev.de';" | test_cloud_imap_mariadb
+    echo "DELETE FROM smtp_destinations WHERE destination LIKE '%nightly-2025-11.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
+    echo "DELETE FROM smtp_users WHERE email LIKE '%nightly-main.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
+    echo "DELETE FROM smtp_virtual_domains WHERE domain='nightly-main.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
 }
