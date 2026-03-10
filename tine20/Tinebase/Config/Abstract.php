@@ -232,7 +232,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @param  string $name
      * @return mixed
      */
-    public function get($name, mixed $default = NULL)
+    public function get($name, mixed $default = null)
     {
         if (isset($this->_mergedConfigCache[$name]) || array_key_exists($name, $this->_mergedConfigCache)) {
             if (!isset($this->_mergedConfigCache[$name]) && null !== $default) {

@@ -1459,7 +1459,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             // the property name
             $fieldDef['key'] = $fieldKey;
 
-            switch($fieldDef[self::TYPE]) {
+            switch ($fieldDef[self::TYPE]) {
                 case self::TYPE_KEY_FIELD:
                     $fieldDef['length'] = 40;
                     $keyFieldAppName = $fieldDef['config']['application'] ?? $this->_applicationName;
