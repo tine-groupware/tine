@@ -112,8 +112,8 @@ test_cloud_teardown_database() {
     echo 'DROP DATABASE IF EXISTS `'${db_name}'`;' | test_cloud_mariadb
 
     # delete artifacts in mail db if they exists
-    echo "DELETE FROM dovecot_users WHERE domain='nightly-main.tcloud.tine-dev.de';" | test_cloud_imap_mariadb
-    echo "DELETE FROM smtp_destinations WHERE destination LIKE '%nightly-2025-11.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
-    echo "DELETE FROM smtp_users WHERE email LIKE '%nightly-main.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
-    echo "DELETE FROM smtp_virtual_domains WHERE domain='nightly-main.tcloud.tine-dev.de';" | test_cloud_smtp_mariadb
+    echo "DELETE FROM dovecot_users WHERE domain='${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_imap_mariadb
+    echo "DELETE FROM smtp_destinations WHERE destination LIKE '%${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
+    echo "DELETE FROM smtp_users WHERE email LIKE '%${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
+    echo "DELETE FROM smtp_virtual_domains WHERE domain='${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
 }
