@@ -15,11 +15,10 @@
         <b-navbar-nav>
           <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
           <b-nav-item href="EventManager/view/events">{{formatMessage('Events')}}</b-nav-item>
-          <b-nav-item @click.prevent="openEmailModal">{{formatMessage('My Registrations')}}</b-nav-item>
-          <b-nav-item href="EventManager/view/contact">{{formatMessage('Contact')}}</b-nav-item>
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
+          <b-nav-item @click.prevent="openEmailModal" class="mx-1">{{formatMessage('My Registrations')}}</b-nav-item>
           <b-nav-form @submit.prevent="handleSearch">
             <b-form-input v-model="inputSearch" size="sm" class="mr-sm-2" :placeholder="formatMessage('Search')"></b-form-input>
             <b-button size="sm" class="search-button" type="submit">{{formatMessage('Search')}}</b-button>
