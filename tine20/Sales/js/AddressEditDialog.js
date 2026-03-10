@@ -50,14 +50,14 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Sales.AddressEditDialog.superclass.initComponent.call(this);
         _.each(Tine.Sales.Model.Address.getModelConfiguration().uiconfig.contactManagedFields, fieldName => {
-            this.form.findField(fieldName).fixedIf = (v, record) => _.some(record.get('relations'), rel => rel.type === 'CONTACTADDRESS')
+            this.form.findField(fieldName).fixedIf = (v, record) => !record.json.original_id && _.some(record.get('relations'), rel => rel.type === 'CONTACTADDRESS')
         })
     },
 
     checkStates: function() {
         Tine.Sales.AddressEditDialog.superclass.checkStates.call(this);
 
-        const rel = _.find(this.record.get('relations'), {type: 'CONTACTADDRESS'});
+        const rel = !this.record.json.original_id && _.find(this.record.get('relations'), {type: 'CONTACTADDRESS'});
         this.contactManagedInfo.setVisible(!!rel);
     },
 
