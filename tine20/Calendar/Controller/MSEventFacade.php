@@ -300,6 +300,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected function _assertCalUser(Calendar_Model_Event $event): void
     {
         if ($this->_assertCalUserAttendee) {
+            /** @var ?Tinebase_Model_Container $container */
+            $container = null;
             if ($event->container_id &&
                     ($container = Tinebase_Container::getInstance()->get($event->getIdFromProperty($event::FLD_CONTAINER_ID)))
                     && ($resourceId = ($container->xprops()[Calendar_Config::APP_NAME][Calendar_Model_Resource::MODEL_NAME_PART]['resource_id'] ?? null))) {
@@ -308,6 +310,13 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                     'user_id' => $resourceId,
                 ]));
             } else {
+                if (null === $container) {
+                    $container = $this->_currentEventFacadeContainer;
+                }
+                if (null !== $container && Tinebase_Model_Container::TYPE_SHARED === $container->type &&
+                        $this->_calendarUser->user_id === Tinebase_Core::getUser()->contact_id) {
+                    return;
+                }
                 $event->assertAttendee($this->_calendarUser);
             }
         }
