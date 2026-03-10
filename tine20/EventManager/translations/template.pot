@@ -398,18 +398,6 @@ msgstr ""
 msgid "No events found matching your search."
 msgstr ""
 
-msgid "Church Service"
-msgstr ""
-
-msgid "Voluntary Service"
-msgstr ""
-
-msgid "Children"
-msgstr ""
-
-msgid "Choir"
-msgstr ""
-
 msgid "My Registrations"
 msgstr ""
 
@@ -564,6 +552,21 @@ msgid "Creation Time"
 msgstr ""
 
 msgid "Last Modified Time"
+msgstr ""
+
+msgid "Information regarding your involvement"
+msgstr ""
+
+msgid "Missing Participants"
+msgstr ""
+
+msgid "Currently there are no participants signed for this event"
+msgstr ""
+
+msgid "Notify Participants"
+msgstr ""
+
+msgid "All"
 msgstr ""
 
 msgid "Edit Rules"
@@ -811,9 +814,6 @@ msgid "Event Contacts"
 msgstr ""
 
 msgid "EventManager"
-msgstr ""
-
-msgid "Topics"
 msgstr ""
 
 msgid "Select an Event"

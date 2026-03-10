@@ -325,6 +325,26 @@ class EventManager_ControllerTest extends TestCase
         EventManager_Controller_Event::getInstance()->delete($updated_event);
     }
 
+    /**
+     * try to update the address of a participant from a registration
+     */
+    public function testUpdateParticipantFromRegistration()
+    {
+        $event = $this->_getEvent();
+        EventManager_Controller_Event::getInstance()->create($event);
+        $registration = $this->_getRegistration($event->getId(), null, true);
+        $event->{EventManager_Model_Event::FLD_REGISTRATIONS} =
+            new Tinebase_Record_RecordSet(EventManager_Model_Registration::class, [$registration]);
+        $event = EventManager_Controller_Event::getInstance()->update($event);
+        $testAddress = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}[0]->participant->adr_one_locality;
+
+        $event->{EventManager_Model_Event::FLD_REGISTRATIONS}[0]->participant->adr_one_locality = 'New Test Street';
+        $event = EventManager_Controller_Event::getInstance()->update($event);
+        $newTestAddress = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}[0]->participant->adr_one_locality;
+
+        self::assertNotEquals($testAddress, $newTestAddress);
+    }
+
 
     /************ protected helper funcs *************/
 
