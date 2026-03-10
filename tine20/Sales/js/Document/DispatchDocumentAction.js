@@ -86,6 +86,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 app.formatMessage('Do you want to dispatch manually by email?')
                             ) === 'yes') {
                                 this.menu.items.get(0).handler.call(this, cmp, true)
+                            } else {
+                                Ext.ux.MessageBox.msg(app.formatMessage('Document successfully dispatched.'));
                             }
                         }
 
@@ -145,7 +147,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             width: 800
                         }, await (async ()=> {
                             const debitor = record.get('debitor_id')
-                            const customer = await Tine.Sales.getCustomer(record.data.customer_id.original_id)
+                            const customer = await Tine.Sales.getCustomer(record.json.customer_id.original_id || record.data.customer_id.id)
 
                             const emails = []
                                 .concat(debitor.edocument_dispatch_type === 'Sales_Model_EDocument_Dispatch_Email' && debitor.edocument_dispatch_config?.email ?
