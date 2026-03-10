@@ -122,8 +122,16 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} !== "3"
             && $_oldRecord->{EventManager_Model_Registration::FLD_STATUS} === "3"
         ) {
-            $template = $this->_getTemplate($_updatedRecord);
-            $this->_sendProcessEmail($_updatedRecord, $template);
+            $template = $this->_getTemplate($_record);
+            $this->_sendProcessEmail($_record, $template);
+        }
+
+        if (
+            $_updatedRecord->{EventManager_Model_Registration::FLD_STATUS} === "1"
+            && $_oldRecord->{EventManager_Model_Registration::FLD_STATUS} === "2"
+        ) {
+            $template = $this->_getTemplate($_record, true);
+            $this->_sendProcessEmail($_record, $template);
         }
 
         $this->_updateParentStatistics($_updatedRecord, true);
@@ -197,20 +205,24 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         }
     }
 
-    public function _getTemplate($_record)
+    public function _getTemplate($_record, $sendConfirmationEmail = false)
     {
         $event = EventManager_Controller_Event::getInstance()
             ->get($_record->{EventManager_Model_Registration::FLD_EVENT_ID});
         $today = Tinebase_DateTime::today();
-        if (
-            $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 1
-        ) {
-            $template = 'SendWaitingListEmail';
-        } elseif (
-            $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
-            && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today
-        ) {
-            $template = 'SendWaitingListAfterRegDayEmail';
+        if (!$sendConfirmationEmail) {
+            if (
+                $event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES} < 1
+            ) {
+                $template = 'SendWaitingListEmail';
+            } elseif (
+                $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL}
+                && $event->{EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL} < $today
+            ) {
+                $template = 'SendWaitingListAfterRegDayEmail';
+            } else {
+                $template = 'SendConfirmationEmail';
+            }
         } else {
             $template = 'SendConfirmationEmail';
         }

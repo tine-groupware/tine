@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-03-02 11:06+0100\n"
+"PO-Revision-Date: 2026-03-09 16:58+0100\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -402,18 +402,6 @@ msgstr "Mehr Information"
 msgid "No events found matching your search."
 msgstr "Es wurden keine Veranstaltungen gefunden, die Ihrer Suche entsprechen."
 
-msgid "Church Service"
-msgstr "Gottesdienst"
-
-msgid "Voluntary Service"
-msgstr "Ehrenamtliche Tätigkeiten"
-
-msgid "Children"
-msgstr "Kinder"
-
-msgid "Choir"
-msgstr "Chor"
-
 msgid "My Registrations"
 msgstr "Meine Anmeldungen"
 
@@ -569,6 +557,21 @@ msgstr "Erstellungszeit"
 
 msgid "Last Modified Time"
 msgstr "Letzte Änderungszeit"
+
+msgid "Information regarding your involvement"
+msgstr "Informationen zu Ihrer Anmeldung"
+
+msgid "Missing Participants"
+msgstr "Fehlende Teilnehmende"
+
+msgid "Currently there are no participants signed for this event"
+msgstr "Derzeit sind keine Teilnehmende für diese Veranstaltung angemeldet."
+
+msgid "Notify Participants"
+msgstr "Teilnehmende benachrichtigen"
+
+msgid "All"
+msgstr "Alle"
 
 msgid "Edit Rules"
 msgstr "Regeln bearbeiten"
@@ -817,9 +820,6 @@ msgstr "Veranstaltungsmanager-Kontakte"
 msgid "EventManager"
 msgstr "Veranstaltungsmanager"
 
-msgid "Topics"
-msgstr "Themen"
-
 msgid "Select an Event"
 msgstr "Wählen Sie eine Veranstaltung aus"
 
@@ -918,6 +918,21 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Church Service"
+#~ msgstr "Gottesdienst"
+
+#~ msgid "Voluntary Service"
+#~ msgstr "Ehrenamtliche Tätigkeiten"
+
+#~ msgid "Children"
+#~ msgstr "Kinder"
+
+#~ msgid "Choir"
+#~ msgstr "Chor"
+
+#~ msgid "Topics"
+#~ msgstr "Themen"
 
 #~ msgid "You don’t have any registrations for yourself yet — get started by creating one!"
 #~ msgstr "Sie haben noch keine eigene Registrierung– legen Sie los und erstellen Sie eine!"
