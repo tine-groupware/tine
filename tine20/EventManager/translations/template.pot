@@ -359,10 +359,7 @@ msgstr ""
 msgid "Registration possible until:"
 msgstr ""
 
-msgid "Manage my registration"
-msgstr ""
-
-msgid "Register now"
+msgid "Register / Manage my registrations"
 msgstr ""
 
 msgid "Please enter a valid email address"

@@ -89,10 +89,7 @@
 
         <div class="button-group">
           <b-button @click="openEmailModal" class="action-button">
-            {{ formatMessage('Manage my registration') }}
-          </b-button>
-          <b-button @click="openEmailModal" class="action-button">
-            {{ formatMessage('Register now') }}
+            {{ formatMessage('Register / Manage my registrations') }}
           </b-button>
         </div>
       </div>
