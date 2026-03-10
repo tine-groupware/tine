@@ -115,9 +115,14 @@ describe('Contacts', () => {
                 await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
                 await popupWindow.waitForTimeout(3000);
                 await lib.makeScreenshot(popupWindow,{path: 'screenshots/2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen.png'});
-                let test = await popupWindow.waitForSelector('.x-panel.x-wdgt-pickergrid.x-grid-panel');
 
-                let arrowtrigger = await test.$$('.x-form-arrow-trigger');
+                // Find relation panel by its unique column header
+                const relationPanel = await popupWindow.evaluateHandle(() => {
+                    const uniqueHeader = document.querySelector('.x-grid3-hd-related_model');
+                    return uniqueHeader?.closest('.x-panel.x-wdgt-pickergrid.x-grid-panel');
+                });
+
+                let arrowtrigger = await relationPanel.$$('.x-form-arrow-trigger');
                 await arrowtrigger[0].click(); // test!
                 await lib.makeScreenshot(popupWindow,{path: 'screenshots/1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links.png'});
                 await lib.makeScreenshot(popupWindow,{path: 'screenshots/2_allgemeines/24_allgemein_hr_mitarbeiter_verknuepfungen_hinzu.png'});

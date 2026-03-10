@@ -15,7 +15,13 @@ describe('Mainpage', () => {
         // add link to personal folder
         await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
         await popupWindow.waitForSelector('.x-grid3-hd.x-grid3-cell.x-grid3-td-remark');
-        let arrows = await popupWindow.$$('.x-panel.x-wdgt-pickergrid.x-grid-panel .x-form-trigger.x-form-arrow-trigger');
+        // Find relation panel by its unique column header
+        const relationPanel = await popupWindow.evaluateHandle(() => {
+            const uniqueHeader = document.querySelector('.x-grid3-hd-related_model');
+            return uniqueHeader?.closest('.x-panel.x-wdgt-pickergrid.x-grid-panel');
+        });
+
+        let arrows = await relationPanel.$$('.x-form-trigger.x-form-arrow-trigger');
         await arrows[0].click();
         await popupWindow.waitForTimeout(2000);
         await expect(popupWindow).toClick('.x-combo-list-item ', {text: 'Dateimanager'});
