@@ -326,7 +326,25 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         parent::setFromArray($_data);
         $this->fulltext = $this->number . ' - ' . $this->name;
     }
-    
+
+    protected function _setFromJson(array &$_data)
+    {
+        parent::_setFromJson($_data);
+        unset($_data['postal_id']);
+    }
+
+    public function __set($_name, $_value)
+    {
+        parent::__set($_name, $_value);
+        if ('postal_id' === $_name && $_value instanceof Sales_Model_Address) {
+            foreach (self::$_modelConfiguration[self::FIELDS] as $name => $def) {
+                if (str_starts_with($name, 'adr_')) {
+                    $this->$name = $_value->{substr($name, 4)};
+                }
+            }
+        }
+    }
+
     /**
      * @see Tinebase_Record_Abstract
      */
@@ -377,6 +395,7 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         $this->adr_locality = (string)$sellerPostalAdr->Seller_city /* 1 */;
         $this->adr_region = (string)$sellerPostalAdr->Seller_country_subdivision /* 0..1 */ ?: null;
         $this->adr_countryname  = (string)$sellerPostalAdr->Seller_country_code /* 1 */;
+        Sales_Controller_Supplier::getInstance()->resolvePostalAddress($this);
 //        $this->adr_pobox;
 
         // 1 SELLER_CONTACT

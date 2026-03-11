@@ -321,7 +321,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             if (null === $documentSupplier->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID} || null !== $documentSupplier->postal_id) {
                 continue;
             }
-            if (null !== ($adr = Sales_Controller_Supplier::getInstance()->get($documentSupplier->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID}))) {
+            if (null !== ($adr = Sales_Controller_Supplier::getInstance()->get($documentSupplier->{Sales_Model_Document_Supplier::FLD_ORIGINAL_ID})->postal_id)) {
                 $documentSupplier->postal_id = $adr;
                 Sales_Controller_Document_Supplier::getInstance()->update($documentSupplier);
             }
