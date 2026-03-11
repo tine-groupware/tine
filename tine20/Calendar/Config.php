@@ -218,6 +218,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_EVENT_NOTIFICATION_CONFIRMATION = 'featureEventNotificationConfirmation';
 
+    const FEATURE_CLOUD_CALENDAR_SYNC = 'featureCloudCalendarSync';
+
     /**
      * @var string
      */
@@ -645,9 +647,14 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => false,
                 ),
-                self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION   => [
+                self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION  => [
                     self::LABEL         => 'Event Notification Confirmation', //_('Event Notification Confirmation')
                     self::DESCRIPTION   => 'Event Notification Confirmation',
+                    self::TYPE          => self::TYPE_BOOL,
+                    self::DEFAULT_STR   => false,
+                ],
+                self::FEATURE_CLOUD_CALENDAR_SYNC => [
+                    self::LABEL         => 'Enable Cloud Calendar Sync',
                     self::TYPE          => self::TYPE_BOOL,
                     self::DEFAULT_STR   => false,
                 ],

@@ -268,7 +268,9 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         const syncContainer = _.get(node, 'attributes.container.xprops.syncContainer')
         this.action_editExternalCalendar.containerData = _.get(node, 'attributes.container')
-        this.action_editExternalCalendar.setHidden(!personalOwnerId && node.id !== 'shared' && !syncContainer)
+        this.action_editExternalCalendar.setHidden(
+            !this.app.featureEnabled('featureCloudCalendarSync') ||
+            (!personalOwnerId && node.id !== 'shared' && !syncContainer))
         this.action_editExternalCalendar.setText(syncContainer ? this.app.i18n._('Edit External Calendar') : this.app.i18n._('Add External Calendar'))
 
         this.supr().onContextMenu.apply(this, arguments);

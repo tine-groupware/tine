@@ -33,7 +33,7 @@ const WebDAVCollectionPicker = Ext.extend(Ext.form.ComboBox, {
         this.store = new Ext.data.JsonStore({
             root: 'results',
             id: 'shortName',
-            fields: ['uri', 'name', 'color', 'type', 'acl'],
+            fields: ['acl', 'color', 'name', 'owner_email', 'owner_principal', 'type', 'uri'],
             remoteSort: false,
             sortInfo: {
                 field: 'name',

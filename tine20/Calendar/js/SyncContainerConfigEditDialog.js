@@ -89,7 +89,7 @@ Tine.Calendar.SyncContainerConfigEditDialog = Ext.extend(Tine.widgets.dialog.Edi
                         fields['container_name_locally_overwritten'].setValue(false)
                         fields['external_container_color'].setValue(record.get('color'))
                         fields['container_color_locally_overwritten'].setValue(false)
-                        fields['external_owner'].setValue(record.get('owner'))
+                        fields['external_owner'].setValue(record.get('owner_email'))
                         fields['external_owner_locally_overwritten'].setValue(false)
                         fields['own_privilege_set'].setValue(record.get('acl'))
                     }
