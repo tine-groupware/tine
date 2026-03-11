@@ -133,7 +133,7 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    protected function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
+    public function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
     {
         $postalAddress = [];
 
@@ -147,6 +147,9 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         if (is_object($_record->postal_id)) {
             $postalAddress['seq'] = $_record->postal_id->seq;
             $postalAddress['id'] = $_record->postal_id->getId();
+            if ($_record->postal_id->has('original_id')) {
+                $postalAddress['original_id'] = $_record->postal_id->original_id;
+            }
         } elseif ($_record->getId()) {
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'supplier_id', 'operator' => 'equals', 'value' => $_record->getId())));
