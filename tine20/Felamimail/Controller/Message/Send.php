@@ -321,7 +321,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
         $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
 
-        $mailToAppend = $this->createMailForSending($_message, $sourceAccount);
+        $mailToAppend = $this->createMailForSending($_message, $sourceAccount, keepDraftHeaders: true);
 
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend, $this->_getAdditionalHeaders($_message));
@@ -387,13 +387,15 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Account $_account
      * @param array $_nonPrivateRecipients
      * @param boolean $preserveHeaders
+     * @param boolean $keepDraftHeaders
      * @return Tinebase_Mail
      */
     public function createMailForSending(
         Felamimail_Model_Message $_message,
         Felamimail_Model_Account $_account,
         &$_nonPrivateRecipients = array(),
-        $preserveHeaders = false
+        bool $preserveHeaders = false,
+        bool $keepDraftHeaders = false
     ) {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
@@ -402,7 +404,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $this->_setMailFrom($mail, $_account, $_message);
         $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
 
-        $this->_setMailHeaders($mail, $_account, $_message, $preserveHeaders);
+        $this->_setMailHeaders($mail, $_account, $_message, $preserveHeaders, $keepDraftHeaders);
         $this->_addAttachments($mail, $_message);
         $this->_setMailBody($mail, $_message);
 
@@ -911,12 +913,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
      * @param boolean $preserveHeaders
+     * @param boolean $keepDraftHeaders
      */
     protected function _setMailHeaders(
         Zend_Mail $_mail,
         Felamimail_Model_Account $_account,
         ?\Felamimail_Model_Message $_message = null,
-        $preserveHeaders = false
+        bool $preserveHeaders = false,
+        bool $keepDraftHeaders = false
     ) {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(
@@ -960,13 +964,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 }
             }
 
-            $this->_addCustomHeaders($_mail, $_message);
+            $this->_addCustomHeaders($_mail, $_message, $keepDraftHeaders);
         }
     }
 
     protected function _addCustomHeaders(
         Zend_Mail $_mail,
-        Felamimail_Model_Message $_message
+        Felamimail_Model_Message $_message,
+        bool $keepDraftHeaders = false
     ) {
         if (empty($_message->headers) || ! is_array($_message->headers)) {
             return;
@@ -978,6 +983,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         foreach ($_message->headers as $key => $value) {
+            if (!$keepDraftHeaders && in_array($key, [
+                Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID,
+                Felamimail_Model_Message::HEADER_DRAFT_AUTO_SAVED,
+            ])) {
+                // skip draft headers
+                continue;
+            }
             $value = $this->_trimHeader($key, $value);
             try {
                 $_mail->addHeader($key, $value);
