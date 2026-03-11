@@ -15,14 +15,14 @@
  * @package     Tinebase
  * @subpackage  Exception
  */
-class Tinebase_Exception_EmailInAdditionalDomains extends Tinebase_Exception_ProgramFlow
+class Tinebase_Exception_EmailInAdditionalDomains extends Tinebase_Exception_SystemGeneric
 {
     /**
      * @var string
      */
     protected $_appName = 'Tinebase';
     
-    public function __construct($_message = 'email address in additional domains', $_code=601)
+    public function __construct($_message = 'email address is in additional domains', $_code=600)
     {
         parent::__construct($_message, $_code);
     }
