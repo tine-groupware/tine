@@ -1650,10 +1650,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @param  string $_timezone
      * @param  bool $_recursive
      * @return  void
-     * @deprecated
-     * todo we should throw an exception
-     * todo later we should remove the function
      * @throws Tinebase_Exception_Record_Validation
+     * @deprecated
+     * @todo we should throw an exception
+     * @todo later we should remove the function
      */
     public function setTimezone($_timezone, $_recursive = TRUE)
     {
@@ -1667,18 +1667,18 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             }
 
             foreach ($toConvert as &$value) {
-                if (! method_exists($value, 'setTimezone')) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                if (method_exists($value, 'setTimezone')) {
+                    $value->setTimezone($_timezone);
+                } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
                         __METHOD__ . '::' . __LINE__ . ' '
-                        . print_r($this->toArray(), true));
-                    throw new Tinebase_Exception_Record_Validation($field . ' must have a method setTimezone');
+                        . $field . ' does not have a method setTimezone: ' . print_r($value, true));
                 }
-                $value->setTimezone($_timezone);
             }
         }
 
         if ($_recursive) {
-            foreach ($this->_data as $property => $propValue) {
+            foreach ($this->_data as $propValue) {
                 if ($propValue && is_object($propValue) &&
                     ($propValue instanceof Tinebase_Record_Interface ||
                         $propValue instanceof Tinebase_Record_RecordSet) ) {
