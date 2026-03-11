@@ -1379,14 +1379,28 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
             Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => new Sales_Model_Document_Supplier([
                 'name' => 'test supplier',
+                'adr_email' => 'a@b.c',
             ])
         ]));
         $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+        $this->assertNull($pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
         $this->assertTrue((bool)$pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_LOCALLY_CHANGED});
+        $this->assertSame('a@b.c', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->email);
+        $this->assertSame('a@b.c', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->adr_email);
 
-        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Document_Supplier([
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
             'name' => 'test supplier',
+            'adr_email' => 'x@y.z',
         ]));
+        $this->assertSame('x@y.z', $supplier->postal_id->email);
+        $this->assertSame('x@y.z', $supplier->adr_email);
+
+        $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id = $supplier->postal_id;
+        $this->assertSame('x@y.z', $pInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->adr_email);
+        $pInvoiceUpdated = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pInvoice);
+        $this->assertNull($pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+        $this->assertSame($supplier->postal_id->getId(), $pInvoiceUpdated->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->postal_id->{Sales_Model_Document_PurchaseInvoice::FLD_ORIGINAL_ID});
+
 
         $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
             Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,

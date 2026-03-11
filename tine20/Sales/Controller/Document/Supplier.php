@@ -52,7 +52,7 @@ class Sales_Controller_Document_Supplier extends Sales_Controller_Supplier
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 
-    protected function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
+    public function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
     {
         parent::resolvePostalAddress($_record, Sales_Model_Document_SupplierAddress::class);
     }
