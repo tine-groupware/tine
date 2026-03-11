@@ -492,7 +492,7 @@ Kommen wir nun zur Bearbeitung von Kontakten aus der Tabelle heraus: Oben links,
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
-.Versenden von Massenmails über Filterkriterien
+.Versenden von Serienmails über Filterkriterien
 image::Adressbuch/17_adressbuch_email_viele_empfaenger.png[id="fig_adresseemailvieleempfaenger",width="100%"]
 
 
@@ -576,7 +576,7 @@ image::Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste.png[id="fig_adr
 
 Die Zeile menu:[An] enthält schon eine Zieladresse, wenn Sie den E-Mail-Editor nach Auswahl einer oder mehrerer Kontakte in der Tabelle aufgerufen haben; andernfalls ist die Zeile leer. Direkt rechts neben menu:[An] gibt es ein kleines Pulldown-Menü; es dient der Auswahl, ob die Adresse direkt, als menu:[Cc] oder als menu:[Bcc] angeschrieben werden soll.
 
-Das menu:[Cc] (_Carbon Copy_) und das menu:[Bcc] zeigen dem Empfänger, dass er nicht Hauptempfänger einer Nachricht ist, sondern sie nur informativ erhält; dabei sieht er allerdings in der Nachricht, wer der Hauptempfänger ist. Der Unterschied zwischen menu:[Cc] und menu:[Bcc] (_Blind carbon copy_) ist, dass keiner der anderen E-Mail-Empfänger den oder die weiteren Bcc-Empfänger sieht. Diese Funktion eignet sich daher besonders zum Versenden von Mails an mehrere Empfänger unter Einhaltung des Datenschutzes, das heißt, ohne dass jeder Empfänger alle anderen Mailadressen der Empfängerliste mitgeliefert bekommt. Denken Sie daran, wenn Sie einmal eine Massen-E-Mail versenden – wie schnell können Sie sich durch Unachtsamkeit hier eine Menge Ärger einhandeln. Das muss nicht sein!
+Das menu:[Cc] (_Carbon Copy_) und das menu:[Bcc] zeigen dem Empfänger, dass er nicht Hauptempfänger einer Nachricht ist, sondern sie nur informativ erhält; dabei sieht er allerdings in der Nachricht, wer der Hauptempfänger ist. Der Unterschied zwischen menu:[Cc] und menu:[Bcc] (_Blind carbon copy_) ist, dass keiner der anderen E-Mail-Empfänger den oder die weiteren Bcc-Empfänger sieht. Diese Funktion eignet sich daher besonders zum Versenden von Mails an mehrere Empfänger unter Einhaltung des Datenschutzes, das heißt, ohne dass jeder Empfänger alle anderen Mailadressen der Empfängerliste mitgeliefert bekommt. Denken Sie daran, wenn Sie einmal eine Serien-E-Mail versenden – wie schnell können Sie sich durch Unachtsamkeit hier eine Menge Ärger einhandeln. Das muss nicht sein!
 
 Dass eine E-Mail einen menu:[Betreff] enthalten sollte, ist sicher nichts Neues ({branch} warnt Sie übrigens, wenn Sie eine E-Mail ohne Betreff abschicken wollen). Zur Auswahl stehen dann noch eine Reihe von Gestaltungselementen, wie Sie sie von anderen Editoren
 auch kennen. Praktisch ist der kleine Radiergummi ganz rechts außen, genannt menu:[Formatierungen entfernen]: Er dient dazu, lästige Objekte, wie Hyperlinks, Unterstreichungen, verschiedene Schriftgrößen usw. zu tilgen, wenn diese, z.B. durch Drag&Drop aus anderen Quellen, in den E-Mail-Text hineingeraten sind und dort nichts zu suchen haben.

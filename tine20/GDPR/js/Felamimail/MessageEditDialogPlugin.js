@@ -11,6 +11,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         this.editDialog = editDialog;
         this.recipientGrid = this.editDialog.recipientGrid;
         if (!this.recipientGrid) return;
+        this.recipientGrid.searchCombo.listEmptyText = this.app.i18n._('No matching email address found which agreed to the selected intended purpose.');
         if (this.editDialog.massMailingPlugins.includes('poll')) return;
         this.selectedDataIntendedPurpose = '';
 
