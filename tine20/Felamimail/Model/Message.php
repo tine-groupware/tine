@@ -93,7 +93,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      *
      */
     public const ATTACHMENT_FILENAME_REGEXP = "/name=\"(.*)\"/";
-    
+
+    public const HEADER_DRAFT_AUTO_SAVED = 'x-tine20-draftautosaved';
+    public const HEADER_DRAFT_MESSAGE_ID = 'x-tine20-draftmessageid';
+
     /**
      * quote string ("> ")
      * 

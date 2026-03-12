@@ -3248,9 +3248,14 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $messageToSave = $this->_getMessageData();
         $messageToSave['messageuid'] = '';
         $messageToSave['bcc'] = array('bccaddress@email.org', 'bccaddress2@email.org');
+        $messageToSave['headers'][Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID] = Tinebase_Record_Abstract::generateUID();
         $draft = $this->_json->saveDraft($messageToSave);
         $this->_foldersToClear = array($this->_account->drafts_folder);
         self::assertNotEmpty($draft['messageuid'], 'messageuid of draft message missing: ' . print_r($draft, true));
+        self::assertArrayHasKey('headers', $draft);
+        self::assertArrayHasKey(Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID, $draft['headers']);
+        self::assertEquals($messageToSave['headers'][Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID],
+            $draft['headers'][Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID]);
 
         // check if message is in drafts folder and recipients are present
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
@@ -3275,7 +3280,8 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
     public function testDeleteDraft()
     {
         $draft = $this->_saveDraft();
-        $result = $this->_json->deleteDraft($draft['messageuid'], $draft['account_id']);
+        $result = $this->_json->deleteDraft($draft['headers'][Felamimail_Model_Message::HEADER_DRAFT_MESSAGE_ID],
+            $draft['account_id']);
         self::assertTrue($result['success']);
         $this->_assertDraftNotFound($draft);
     }

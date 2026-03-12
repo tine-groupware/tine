@@ -310,14 +310,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * @param integer $uid
+     * @param string $draftMessageID
      * @param string $accountid
      * @return array
      */
-    public function deleteDraft($uid, $accountid)
+    public function deleteDraft(string $draftMessageID, string $accountid)
     {
         return [
-            'success' => Felamimail_Controller_Message::getInstance()->deleteDraft($uid, $accountid)
+            'success' => Felamimail_Controller_Message::getInstance()->deleteDraft($draftMessageID, $accountid)
         ];
     }
 
