@@ -41,7 +41,6 @@ class Sales_Controller_Document_Supplier extends Sales_Controller_Supplier
         if (!$_record->number) {
             $_record->number = 0;
         }
-        $this->resolvePostalAddress($_record);
 
         Tinebase_Controller_Record_Abstract::_inspectBeforeCreate($_record);
     }
@@ -50,10 +49,5 @@ class Sales_Controller_Document_Supplier extends Sales_Controller_Supplier
     {
         $_record->number = $_oldRecord->number;
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
-    }
-
-    public function resolvePostalAddress(Sales_Model_Supplier $_record, string $model = Sales_Model_Address::class): void
-    {
-        parent::resolvePostalAddress($_record, Sales_Model_Document_SupplierAddress::class);
     }
 }
