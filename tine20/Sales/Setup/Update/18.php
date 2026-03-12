@@ -26,6 +26,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
+    protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
 
 
     static protected $_allUpdates = [
@@ -328,5 +329,13 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.9', self::RELEASE018_UPDATE009);
+    }
+
+    public function update010(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Supplier::class
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
     }
 }
