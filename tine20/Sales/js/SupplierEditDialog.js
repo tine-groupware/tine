@@ -38,7 +38,16 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+
+        const form = this.getForm();
+        const postalAdr = this.record.get('postal_id') || {};
+        Object.keys(postalAdr).forEach((fieldName) => {
+            const field = form.findField(`adr_${fieldName}`);
+            if (field) {
+                field.setValue(postalAdr[fieldName], this.record);
+            }
+        });
+
         Tine.Sales.SupplierEditDialog.superclass.onRecordLoad.call(this);
         
         if (this.copyRecord) {
@@ -53,7 +62,24 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-    
+
+    /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function(callback, scope) {
+        var form = this.getForm();
+
+        const postalAdr = this.record.get('postal_id') || {};
+        form.items.items.forEach((field) => {
+            if (field?.name?.match(/^adr_/)) {
+                postalAdr[field.name.replace(/^adr_/, '')] = field.getValue()
+            }
+        });
+        this.record.set('postal_id', postalAdr)
+
+        Tine.Sales.SupplierEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+    },
+
     /**
      * duplicate(s) found exception handler
      * 
@@ -110,7 +136,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 click: function() {
                     this.onRecordUpdate();
-                    Tine.Sales.addToClipboard(this.record);
+                    Tine.Sales.addToClipboard(Tine.Tinebase.data.Record.setFromJson(this.record.get('postal_id'), Tine.Sales.Model.Address), this.record.get('name'));
                 }
            }
         });
@@ -139,6 +165,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 enableResponsive: true,
                 responsiveBreakpointOverrides: [{level: 2, width: 700}]
             },
+            defaults: { autoScroll: true },
             items: [{
                 region: 'center',
                 layout: 'hfit',
@@ -272,51 +299,72 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [
                             [{
-                                name: 'adr_name',
-                                fieldLabel: this.app.i18n._('Name'),
-                                columnWidth: 47/100
+                                xtype: 'v-alert',
+                                ref: '../../../../../../../contactManagedInfo',
+                                hidden: true,
+                                columnWidth: 1,
+                                variant: 'info',
+                                label: this.app.formatMessage('This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly.'),
+                            }], [{
+                                name: 'adr_name_shorthand',
+                                columnWidth: .2,
+                                fieldLabel: this.app.i18n._('Name shorthand')
+                            }, {
+                                xtype: 'widget-keyfieldcombo',
+                                columnWidth: .2,
+                                app:   'Sales',
+                                keyFieldName: 'languagesAvailable',
+                                fieldLabel: this.app.i18n._('Language'),
+                                name: 'adr_language',
+                                requiredGrant: 'editGrant'
                             }, {
                                 name: 'adr_email',
                                 fieldLabel: this.app.i18n._('Email'),
-                                columnWidth: 47/100
-                            }, {
+                                columnWidth: .55
+                            }, this.clipboardButton],[{
+                                name: 'adr_name',
+                                fieldLabel: this.app.i18n._('Name'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix1',
+                                fieldLabel: this.app.i18n._('Prefix 1'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix2',
+                                fieldLabel: this.app.i18n._('Prefix 2'),
+                                columnWidth: 1
+                            }], [{
+                                name: 'adr_prefix3',
+                                fieldLabel: this.app.i18n._('Prefix 3'),
+                                columnWidth: 1
+                            }, ], [{
                                 name: 'adr_street',
                                 fieldLabel: this.app.i18n._('Street'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 name: 'adr_pobox',
                                 fieldLabel: this.app.i18n._('Postbox'),
-                                columnWidth: 47/100
-                                
+                                columnWidth: 0.5
+
                             }], [{
                                 name: 'adr_postalcode',
-                                allowBlank: false,
                                 fieldLabel: this.app.i18n._('Postal Code'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 name: 'adr_locality',
-                                allowBlank: true,
                                 fieldLabel: this.app.i18n._('Locality'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }], [{
                                 name: 'adr_region',
                                 fieldLabel: this.app.i18n._('Region'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }, {
                                 xtype: 'widget-countrycombo',
                                 name: 'adr_countryname',
                                 fieldLabel: this.app.i18n._('Country'),
-                                columnWidth: 47/100
+                                columnWidth: 0.5
                             }
-                            ], [{
-                                name: 'adr_prefix1',
-                                fieldLabel: this.app.i18n._('Prefix'),
-                                columnWidth: 47/100
-                            }, {
-                                name: 'adr_prefix2',
-                                fieldLabel: this.app.i18n._('Additional Prefix'),
-                                columnWidth: 48/100
-                            }, this.clipboardButton]
+                            ]
                         ]
                     }]
                 }, {
