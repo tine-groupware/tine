@@ -244,7 +244,14 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             [{
                                 name: 'vatid',
                                 fieldLabel: this.app.i18n._('VAT ID')
-                            }, {
+                            },  {
+                                name: 'vat_procedure',
+                                xtype: 'widget-keyfieldcombo',
+                                fieldLabel: this.app.i18n._('VAT Procedure'),
+                                app: 'Sales',
+                                keyFieldName: 'vatProcedures',
+                            }], [
+                                this.fieldManager('payment_means_default'), {
                                 name: 'credit_term',
                                 fieldLabel: this.app.i18n._('Credit Term (days)'),
                                 xtype: 'uxspinner',
@@ -260,12 +267,6 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('Currency'),
                                 xtype: 'widget-currencycombo',
                                 allowBlank: false
-                            },  {
-                                name: 'vat_procedure',
-                                xtype: 'widget-keyfieldcombo',
-                                fieldLabel: this.app.i18n._('VAT Procedure'),
-                                app: 'Sales',
-                                keyFieldName: 'vatProcedures',
                             }, {
                                 name: 'currency_trans_rate',
                                 fieldLabel: this.app.i18n._('Currency Translation Rate'),
@@ -378,7 +379,7 @@ Tine.Sales.SupplierEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         formDefaults: formFieldDefaults,
                         items: [[
                             {
-                                columnWidth: 1/3,
+                                columnWidth: 1/2,
                                 fieldLabel: this.app.i18n._('Web'),
                                 xtype: 'urlfield',
                                 name: 'url',

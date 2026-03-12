@@ -2070,8 +2070,8 @@ msgstr "GENDER_Purchase Invoice Position"
 msgid "GENDER_Purchase Invoice"
 msgstr "GENDER_Purchase Invoice"
 
-msgid "External Invoice Number"
-msgstr "External Invoice Number"
+msgid "External Document Number"
+msgstr "External Document Number"
 
 msgid "Due at"
 msgstr "Due at"
