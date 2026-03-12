@@ -86,7 +86,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
 
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
             self::FLD_EXTERNAL_INVOICE_NUMBER => [
-                self::LABEL             => 'External Invoice Number', // _('External Invoice Number')
+                self::LABEL             => 'External Document Number', // _('External Document Number')
                 self::QUERY_FILTER      => true,
                 self::TYPE              => self::TYPE_STRING,
                 self::LENGTH            => 255,

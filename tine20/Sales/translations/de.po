@@ -2086,8 +2086,8 @@ msgstr "female"
 msgid "GENDER_Purchase Invoice"
 msgstr "female"
 
-msgid "External Invoice Number"
-msgstr "Externe Rechnungsnummer"
+msgid "External Document Number"
+msgstr "Externe Belegnummer"
 
 msgid "Due at"
 msgstr "Fällig am"

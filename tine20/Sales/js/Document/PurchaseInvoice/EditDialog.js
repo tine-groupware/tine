@@ -126,6 +126,7 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                         if (!record) return;
                         fields['credit_term']?.setValue(record.get('credit_term'))
                         fields['document_currency'].setValue(record.get('currency') || fields['document_currency'].getValue())
+                        fields['payment_means_used'].setValue(record.get('payment_means_default') || fields['payment_means_used'].getValue())
                         // fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
                         // if (record.get('discount')) {
                         //     fields['invoice_discount_type'].setValue('PERCENTAGE')

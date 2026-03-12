@@ -2058,7 +2058,7 @@ msgstr ""
 msgid "GENDER_Purchase Invoice"
 msgstr ""
 
-msgid "External Invoice Number"
+msgid "External Document Number"
 msgstr ""
 
 msgid "Due at"

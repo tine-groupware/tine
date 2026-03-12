@@ -23,6 +23,8 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
 
     public const FLD_EAS_ID = 'eas_id';
     public const FLD_ELECTRONIC_ADDRESS = 'electronic_address';
+    public const FLD_PAYMENT_MEANS_DEFAULT = 'payment_means_default';
+
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -170,6 +172,21 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                 'shy'     => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            self::FLD_PAYMENT_MEANS_DEFAULT => [
+                self::LABEL             => 'Payment Means', // _('Payment Means')
+                self::TYPE              => self::TYPE_KEY_FIELD,
+                self::NAME              => Sales_Config::PAYMENT_METHODS,
+                self::NULLABLE          => true,
+                self::DEFAULT_VAL       => null,
+                self::LENGTH            => 255,
+                self::CONFIG            => [
+                    self::OWNING_APP            => Sales_Config::APP_NAME,
+                    self::NO_DEFAULT_VALIDATOR  => true,
+                ],
+                self::INPUT_FILTERS     => [
+                    Zend_Filter_Empty::class => null,
+                ],
+            ],
             'iban' => array (
                 'label'   => 'IBAN',
                 'group'   => 'accounting',
