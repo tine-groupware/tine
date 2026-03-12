@@ -150,7 +150,7 @@ services:
 {% endif %}
 {% if tinedockercompose_edocument_service is defined and tinedockercompose_edocument_service|bool %}
   edocument:
-    image: registry.rz1.metaways.net/tine/edocument-services:0.0.14-amd64
+    image: registry.rz1.metaways.net/tine/edocument-services:0.0.15-amd64
     restart: always
     ports:
       - "3000:3000"
