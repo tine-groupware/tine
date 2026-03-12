@@ -62,15 +62,15 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
      * @param Tinebase_Record_Interface $record
      * @param string $action
      * @param boolean $throw
-     * @param string $errorMessage
+     * @param ?string $errorMessage
      * @param Tinebase_Record_Interface $oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _checkGrant($record, $action, $throw = true, $errorMessage = 'No Permission.', $oldRecord = null)
+    protected function _checkGrant($record, $action, $throw = true, $errorMessage = null, $oldRecord = null)
     {
         if (! $this->_doContainerACLChecks) {
-            return TRUE;
+            return true;
         }
 
         $hasGrant = parent::_checkGrant($record, $action, $throw, $errorMessage, $oldRecord);
@@ -83,24 +83,35 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
         // always get current record grants
         $currentRecord = $this->_backend->get($record->getId());
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Checked record (incl. grants): ' . print_r($currentRecord->toArray(), true));
-        
         switch ($action) {
-            case 'get':
+            case 'get': // _('get')
                 $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_READ);
                 break;
-            case 'update':
+            case 'update': // _('update')
                 $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_EDIT);
                 break;
-            case 'delete':
+            case 'delete': // _('delete')
                 $hasGrant = $this->hasGrant($currentRecord, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
         
         if (! $hasGrant) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No permissions to ' . $action . ' record.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' No permissions to ' . $action . ' record.');
+            }
             if ($throw) {
+                if (!$errorMessage) {
+                    $translation = Tinebase_Translation::getTranslation();
+                    $translatedAction = $translation->_($action);
+                    // TODO use translated record name
+                    $recordName = $this->_modelName;
+                    $errorMessage = sprintf(
+                        $translation->_('You do not have permission to %s record of type %s'),
+                        $translatedAction,
+                        $recordName
+                    );
+                }
                 throw new Tinebase_Exception_AccessDenied($errorMessage);
             }
         }
