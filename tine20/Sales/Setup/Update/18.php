@@ -334,7 +334,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     public function update010(): void
     {
         Setup_SchemaTool::updateSchema([
-            Sales_Model_Document_Supplier::class
+            Sales_Model_Document_Supplier::class,
+            Sales_Model_Contract::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
     }

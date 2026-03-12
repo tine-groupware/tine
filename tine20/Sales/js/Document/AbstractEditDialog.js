@@ -435,8 +435,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [{ xtype: 'v-alert', variant: 'info', columnWidth: 1, ref: '../../../../../infoBox', hidden: true, label: '...' }],
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
                 // NOTE: contract_id waits for contract rewrite
-                [/*fields.contract_id, */ _.assign(fields.customer_id, {columnWidth: 2/5}), _.assign(fields.recipient_id, {columnWidth: 3/5})],
-                _.assign([ _.assign(fields.buyer_reference, {columnWidth: 2/5}), fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
+                [fields.contract_id, fields.customer_id, _.assign(fields.recipient_id, {columnWidth: 3/5})],
+                _.assign([ fields.contract_number, fields.buyer_reference, fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
                 [fields.service_period_start, fields.service_period_end, _.assign({ ...placeholder } , {columnWidth: 3/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
