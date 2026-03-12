@@ -722,6 +722,12 @@ msgstr ""
 msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr ""
 
+msgid "Maintenance mode for health check"
+msgstr ""
+
+msgid "If this is true, the tine health check is also in maintenance and returns http code 503"
+msgstr ""
+
 msgid "Version check enabled"
 msgstr ""
 
@@ -1159,6 +1165,19 @@ msgstr ""
 
 #, python-format, php-format
 msgid "Status %s is not valid."
+msgstr ""
+
+msgid "get"
+msgstr ""
+
+msgid "update"
+msgstr ""
+
+msgid "delete"
+msgstr ""
+
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
 msgstr ""
 
 #, python-brace-format
@@ -2756,9 +2775,6 @@ msgid "Notice: Changes to {recordGender, select, male {this} female {this} other
 msgstr ""
 
 msgid "Enter description"
-msgstr ""
-
-msgid "delete"
 msgstr ""
 
 #, python-brace-format

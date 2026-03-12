@@ -722,6 +722,12 @@ msgstr "Maintenance mode enabled"
 msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 
+msgid "Maintenance mode for health check"
+msgstr "Maintenance mode for health check"
+
+msgid "If this is true, the tine health check is also in maintenance and returns http code 503"
+msgstr "If this is true, the tine health check is also in maintenance and returns http code 503"
+
 msgid "Version check enabled"
 msgstr "Version check enabled"
 
@@ -1160,6 +1166,19 @@ msgstr "A Message has been filed to this record. Subject: {0}"
 #, python-format, php-format
 msgid "Status %s is not valid."
 msgstr "Status %s is not valid."
+
+msgid "get"
+msgstr "get"
+
+msgid "update"
+msgstr "update"
+
+msgid "delete"
+msgstr "delete"
+
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr "You do not have permission to %s record of type %s"
 
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
@@ -2757,9 +2776,6 @@ msgstr "Notice: Changes to {recordGender, select, male {this} female {this} othe
 
 msgid "Enter description"
 msgstr "Enter description"
-
-msgid "delete"
-msgstr "delete"
 
 #, python-brace-format
 msgid "Print {0}"
