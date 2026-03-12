@@ -739,6 +739,12 @@ msgstr "Wartungsmodus aktiviert"
 msgid "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"on\" (only users having the maintenance right can login) and \"all\""
 msgstr "Wartungsmodus für Tine 2.0 festlegen. Mögliche Werte: \"off\", \"on\" (nur Benutzer*innen mit Wartungsrecht können sich anmelden) und \"all\""
 
+msgid "Maintenance mode for health check"
+msgstr ""
+
+msgid "If this is true, the tine health check is also in maintenance and returns http code 503"
+msgstr ""
+
 msgid "Version check enabled"
 msgstr "Versions-Kontrolle eingeschaltet"
 
@@ -1177,6 +1183,19 @@ msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
 #, python-format, php-format
 msgid "Status %s is not valid."
 msgstr "Status %s ist ungültig."
+
+msgid "get"
+msgstr "Abrufen"
+
+msgid "update"
+msgstr "Aktualisieren"
+
+msgid "delete"
+msgstr "Löschen"
+
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
 
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
@@ -2774,9 +2793,6 @@ msgstr "Hinweis: Änderungen an {recordGender, select, male {diesem} female {die
 
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
-
-msgid "delete"
-msgstr "Löschen"
 
 #, python-brace-format
 msgid "Print {0}"
