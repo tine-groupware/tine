@@ -32,7 +32,7 @@ Ext.namespace('Tine.Sales');
  * Create a new Tine.Sales.ContractGridPanel
  */
 Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    windowWidth: 800,
+    windowWidth: 900,
     windowHeight: 600,
     displayNotes: true,
 
@@ -268,7 +268,8 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             ref: '../../../../../customerPicker',
             fieldLabel: this.app.i18n._('Customer')
         }], [
-            this.fieldManager('buyer_reference', { columnWidth: 0.5 }),
+            this.fieldManager('buyer_contract_number', { columnWidth: 0.25 }),
+            this.fieldManager('buyer_reference', { columnWidth: 0.25 }),
             this.fieldManager('purchase_order_reference', { columnWidth: 0.25 }),
             this.fieldManager('project_reference', { columnWidth: 0.25 })
         ], [ Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {

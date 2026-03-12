@@ -1523,6 +1523,9 @@ msgstr "Bestellnummer"
 msgid "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
 msgstr "Eine vom Erwerbenden ausgegebene Kennung für eine referenzierte Bestellung (BT-13 [EN 16931])."
 
+msgid "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
+msgstr "Eine eindeutige Bezeichnung des Vertrages (z. B. Vertragsnummer).  (BT-12 [EN 16931])."
+
 msgid "Project Reference"
 msgstr "Projektkennung"
 

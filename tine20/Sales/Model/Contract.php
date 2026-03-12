@@ -33,6 +33,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
     const RELATION_TYPE_RESPONSIBLE = 'RESPONSIBLE';
 
     public const FLD_BUYER_REFERENCE = 'buyer_reference'; // varchar 255
+    public const FLD_BUYER_CONTRACT_NUMBER = 'buyer_contract_number'; // varchar 255
     public const FLD_PURCHASE_ORDER_REFERENCE = 'purchase_order_reference';
     public const FLD_PROJECT_REFERENCE = 'project_reference';
 
@@ -219,9 +220,18 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     )
                 )
             ),
-            self::FLD_BUYER_REFERENCE        => [
+            self::FLD_BUYER_REFERENCE           => [
                 self::LABEL                         => 'Buyer Reference', //_('Buyer Reference')
                 self::DESCRIPTION                   => 'An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).', // _('An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+                self::QUERY_FILTER                  => true,
+                self::SHY                           => true,
+            ],
+            self::FLD_BUYER_CONTRACT_NUMBER     => [
+                self::LABEL                         => 'Buyer Contract Number', //_('Buyer Contract Number')
+                self::DESCRIPTION                   => 'A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931]).', // _('A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931]).')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
