@@ -345,7 +345,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CONTRACT_NUMBER        => [
                 self::LABEL                         => 'Contract Number', //_('Contract Number')
-                // self::DESCRIPTION                   => 'An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).', // _('An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931]).')
+                self::DESCRIPTION                   => 'A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931]).', // _('A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931]).')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
                 self::NULLABLE                      => true,
