@@ -194,7 +194,9 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
         $this->testReadPdfInvoice(Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
             'name' => 'Test Supplier',
             'vatid' => 'DE123456789',
-            'adr_email' => 'a@b.c',
+            'postal_id' => new Sales_Model_Address([
+                'email' => 'a@b.c',
+            ], true),
         ])));
     }
 
@@ -202,7 +204,9 @@ class Sales_Document_UblTest extends Sales_Document_Abstract
     {
         $this->testReadPdfInvoice(Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
             'name' => 'Test Supplier',
-            'adr_email' => 'Max@Mustermann.de',
+            'postal_id' => new Sales_Model_Address([
+                'email' => 'Max@Mustermann.de',
+            ], true),
         ])));
     }
 

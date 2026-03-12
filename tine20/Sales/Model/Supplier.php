@@ -48,7 +48,6 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
-        'resolveVFGlobally' => TRUE,
         
         'titleProperty'     => '{{number}} - {{name}}',
         'appName'           => 'Sales',
@@ -203,87 +202,6 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
                     self::DEPENDENT_RECORDS => true,
                 ],
             ],
-            'adr_prefix1' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Prefix', //_('Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_prefix2' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Additional Prefix', //_('Additional Prefix')
-                    'shy'           => TRUE
-                ),
-                'type'   => 'virtual',
-            ),
-            'adr_name' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Name', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
-            ],
-            'adr_email' => [
-                'config' => [
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Email', //_('Name')
-                    'shy'           => TRUE
-                ],
-                'type'   => 'virtual',
-            ],
-            'adr_street' => array(
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Street', //_('Street')
-                    'shy'           => TRUE
-                ),
-                'type' => 'virtual',
-            ),
-            'adr_postalcode' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postal Code', //_('Postal Code')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_locality' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Locality', //_('Locality')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_region' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Region', //_('Region')
-                    'shy'           => TRUE
-                ),
-            ),
-            'adr_countryname' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Country', //_('Country')
-                    'shy'           => TRUE,
-                    'default'       => 'DE'
-                ),
-            ),
-            'adr_pobox' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'duplicateOmit' => TRUE,
-                    'label'         => 'Postbox', //_('Postbox')
-                    'shy'           => TRUE
-                ),
-            ),
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(
@@ -327,24 +245,6 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
         $this->fulltext = $this->number . ' - ' . $this->name;
     }
 
-    protected function _setFromJson(array &$_data)
-    {
-        parent::_setFromJson($_data);
-        unset($_data['postal_id']);
-    }
-
-    public function __set($_name, $_value)
-    {
-        parent::__set($_name, $_value);
-        if ('postal_id' === $_name && $_value instanceof Sales_Model_Address) {
-            foreach (self::$_modelConfiguration[self::FIELDS] as $name => $def) {
-                if (str_starts_with($name, 'adr_')) {
-                    $this->$name = $_value->{substr($name, 4)};
-                }
-            }
-        }
-    }
-
     /**
      * @see Tinebase_Record_Abstract
      */
@@ -386,17 +286,19 @@ class Sales_Model_Supplier extends Tinebase_Record_NewAbstract
 
         // 1 SELLER_POSTAL_ADDRESS
         $sellerPostalAdr = $xr->SELLER->SELLER_POSTAL_ADDRESS;
-        $this->adr_prefix1 = (string)$sellerPostalAdr->Seller_address_line_1 /* 0..1 */ ?: null;
-        $this->adr_prefix2 = (string)$sellerPostalAdr->Seller_address_line_2 /* 0..1 */ ?: null;
-        $this->adr_name = (string)$xr->SELLER->Seller_trading_name /* 0..1 (BT-28) */ ?: (string)$xr->SELLER->Seller_name /* 1 (BT-27) */;
-        $this->adr_email = (string)$xr->SELLER->SELLER_CONTACT->Seller_contact_email_address ?: null;
-        $this->adr_street = (string)$sellerPostalAdr->Seller_address_line_3 /* 0..1 */ ?: null;
-        $this->adr_postalcode = (string)$sellerPostalAdr->Seller_post_code /* 1 */;
-        $this->adr_locality = (string)$sellerPostalAdr->Seller_city /* 1 */;
-        $this->adr_region = (string)$sellerPostalAdr->Seller_country_subdivision /* 0..1 */ ?: null;
-        $this->adr_countryname  = (string)$sellerPostalAdr->Seller_country_code /* 1 */;
-        Sales_Controller_Supplier::getInstance()->resolvePostalAddress($this);
-//        $this->adr_pobox;
+        if (!$this->postal_id instanceof Sales_Model_Address) {
+            $this->postal_id = new Sales_Model_Address([], true);
+        }
+        $this->postal_id->prefix1 = (string)$sellerPostalAdr->Seller_address_line_1 /* 0..1 */ ?: null;
+        $this->postal_id->prefix2 = (string)$sellerPostalAdr->Seller_address_line_2 /* 0..1 */ ?: null;
+        $this->postal_id->name = (string)$xr->SELLER->Seller_trading_name /* 0..1 (BT-28) */ ?: (string)$xr->SELLER->Seller_name /* 1 (BT-27) */;
+        $this->postal_id->email = (string)$xr->SELLER->SELLER_CONTACT->Seller_contact_email_address ?: null;
+        $this->postal_id->street = (string)$sellerPostalAdr->Seller_address_line_3 /* 0..1 */ ?: null;
+        $this->postal_id->postalcode = (string)$sellerPostalAdr->Seller_post_code /* 1 */;
+        $this->postal_id->locality = (string)$sellerPostalAdr->Seller_city /* 1 */;
+        $this->postal_id->region = (string)$sellerPostalAdr->Seller_country_subdivision /* 0..1 */ ?: null;
+        $this->postal_id->countryname  = (string)$sellerPostalAdr->Seller_country_code /* 1 */;
+//        $this->postal_id->pobox;
 
         // 1 SELLER_CONTACT
 //        $sellerContact = $xr->SELLER->SELLER_CONTACT;
