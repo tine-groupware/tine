@@ -88,6 +88,12 @@ msgstr ""
 msgid "Import CSV formated polls from crew scheduling"
 msgstr ""
 
+msgid "Poll event type import"
+msgstr ""
+
+msgid "Import CSV formated poll event types from crew scheduling"
+msgstr ""
+
 msgid "Poll participant CSV import"
 msgstr ""
 
@@ -98,6 +104,12 @@ msgid "Poll reply CSV import"
 msgstr ""
 
 msgid "Import CSV formated polls replies from crew scheduling"
+msgstr ""
+
+msgid "Poll site import"
+msgstr ""
+
+msgid "Import CSV formated poll sites from crew scheduling"
 msgstr ""
 
 msgid "Crew Scheduling Roles"
@@ -144,6 +156,9 @@ msgid "CrewScheduling"
 msgid_plural "CrewSchedulings"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Change Crew Scheduling Event Filter"
+msgstr ""
 
 msgid "Event"
 msgstr ""
@@ -206,9 +221,6 @@ msgid "Auto Schedule"
 msgstr ""
 
 msgid "Auto assign attendee for selected / all cells"
-msgstr ""
-
-msgid "Site"
 msgstr ""
 
 msgid "Cancel"
@@ -332,10 +344,34 @@ msgstr ""
 msgid "Availability Poll"
 msgstr ""
 
+msgid "You are in admin mode"
+msgstr ""
+
+msgid "Click on the name of a participant to modify their responses."
+msgstr ""
+
 msgid "Invalid Link"
 msgstr ""
 
 msgid "An unexpected error occurred."
+msgstr ""
+
+msgid "closed"
+msgstr ""
+
+#, python-brace-format
+msgid "Answers possible until {deadline}"
+msgstr ""
+
+#, python-brace-format
+msgid "Answers possible for {diffDays} more days"
+msgstr ""
+
+#, python-brace-format
+msgid "{from} - {until}"
+msgstr ""
+
+msgid "for"
 msgstr ""
 
 msgid "Send Mail"
@@ -407,9 +443,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Event Type"
-msgstr ""
+msgid_plural "Event Types"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Default Minimal Attendee Role Count"
+msgstr ""
+
+msgid "Value from role is taken"
 msgstr ""
 
 msgid "Required Attendee Groups for role"
@@ -418,16 +459,19 @@ msgstr ""
 msgid "Required Groups Behaviour"
 msgstr ""
 
+msgid "GENDER_Event Type"
+msgstr ""
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "GENDER_Participant"
 msgstr ""
 
 msgid "Participant"
 msgid_plural "Participants"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Poll"
-msgid_plural "Polls"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -464,7 +508,7 @@ msgstr ""
 msgid "Once given date is passed poll is closed and attendee cannot replay any longer."
 msgstr ""
 
-msgid "Location of the event."
+msgid "Sites"
 msgstr ""
 
 msgid "Search for sites ... (leave empty for all sites)"
@@ -492,6 +536,14 @@ msgstr ""
 
 msgid "Status"
 msgstr ""
+
+msgid "GENDER_Site"
+msgstr ""
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "GENDER_Required Group"
 msgstr ""
@@ -573,6 +625,12 @@ msgstr ""
 msgid "Take part now"
 msgstr ""
 
+msgid "Thank you very much!"
+msgstr ""
+
+msgid "Yours sincerly"
+msgstr ""
+
 msgid "Crew Scheduling Poll: \"{ roleName }\" (closed)"
 msgstr ""
 
@@ -580,31 +638,4 @@ msgid "The Crew Scheduling poll for the scheduling role { roleName } is closed."
 msgstr ""
 
 msgid "See results"
-msgstr ""
-
-msgid "You are in admin mode"
-msgstr ""
-
-msgid "Click on the name of a participant to modify their responses."
-msgstr ""
-
-msgid "Answers possible until {deadline}"
-msgstr ""
-
-msgid "Answers possible for {diffDays} more days"
-msgstr ""
-
-msgid "For {events} between {from} and {until}"
-msgstr ""
-
-msgid "events"
-msgstr ""
-
-msgid "closed"
-msgstr ""
-
-msgid "This poll is closed already"
-msgstr ""
-
-msgid "for"
 msgstr ""

@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,6 +88,12 @@ msgstr "Poll CSV import"
 msgid "Import CSV formated polls from crew scheduling"
 msgstr "Import CSV formated polls from crew scheduling"
 
+msgid "Poll event type import"
+msgstr "Poll event type import"
+
+msgid "Import CSV formated poll event types from crew scheduling"
+msgstr "Import CSV formated poll event types from crew scheduling"
+
 msgid "Poll participant CSV import"
 msgstr "Poll participant CSV import"
 
@@ -100,6 +105,12 @@ msgstr "Poll reply CSV import"
 
 msgid "Import CSV formated polls replies from crew scheduling"
 msgstr "Import CSV formated polls replies from crew scheduling"
+
+msgid "Poll site import"
+msgstr "Poll site import"
+
+msgid "Import CSV formated poll sites from crew scheduling"
+msgstr "Import CSV formated poll sites from crew scheduling"
 
 msgid "Crew Scheduling Roles"
 msgstr "Crew Scheduling Roles"
@@ -145,6 +156,9 @@ msgid "CrewScheduling"
 msgid_plural "CrewSchedulings"
 msgstr[0] "CrewScheduling"
 msgstr[1] "CrewSchedulings"
+
+msgid "Change Crew Scheduling Event Filter"
+msgstr "Change Crew Scheduling Event Filter"
 
 msgid "Event"
 msgstr "Event"
@@ -208,9 +222,6 @@ msgstr "Auto Schedule"
 
 msgid "Auto assign attendee for selected / all cells"
 msgstr "Auto assign attendee for selected / all cells"
-
-msgid "Site"
-msgstr "Site"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -333,11 +344,35 @@ msgstr "For event type **{ eventType.name }** attendee needs to be member in one
 msgid "Availability Poll"
 msgstr "Availability Poll"
 
+msgid "You are in admin mode"
+msgstr "You are in admin mode"
+
+msgid "Click on the name of a participant to modify their responses."
+msgstr "Click on the name of a participant to modify their responses."
+
 msgid "Invalid Link"
 msgstr "Invalid Link"
 
 msgid "An unexpected error occurred."
 msgstr "An unexpected error occurred."
+
+msgid "closed"
+msgstr "closed"
+
+#, python-brace-format
+msgid "Answers possible until {deadline}"
+msgstr "Answers possible until {deadline}"
+
+#, python-brace-format
+msgid "Answers possible for {diffDays} more days"
+msgstr "Answers possible for {diffDays} more days"
+
+#, python-brace-format
+msgid "{from} - {until}"
+msgstr "{from} - {until}"
+
+msgid "for"
+msgstr "for"
 
 msgid "Send Mail"
 msgstr "Send Mail"
@@ -408,16 +443,29 @@ msgstr[0] "Scheduling Role Config"
 msgstr[1] "Scheduling Role Configs"
 
 msgid "Event Type"
-msgstr "Event Type"
+msgid_plural "Event Types"
+msgstr[0] "Event Type"
+msgstr[1] "Event Types"
 
 msgid "Default Minimal Attendee Role Count"
 msgstr "Default Minimal Attendee Role Count"
+
+msgid "Value from role is taken"
+msgstr "Value from role is taken"
 
 msgid "Required Attendee Groups for role"
 msgstr "Required Attendee Groups for role"
 
 msgid "Required Groups Behaviour"
 msgstr "Required Groups Behaviour"
+
+msgid "GENDER_Event Type"
+msgstr "GENDER_Event Type"
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] "Poll"
+msgstr[1] "Polls"
 
 msgid "GENDER_Participant"
 msgstr "GENDER_Participant"
@@ -426,11 +474,6 @@ msgid "Participant"
 msgid_plural "Participants"
 msgstr[0] "Participant"
 msgstr[1] "Participants"
-
-msgid "Poll"
-msgid_plural "Polls"
-msgstr[0] "Poll"
-msgstr[1] "Polls"
 
 msgid "Response Date"
 msgstr "Response Date"
@@ -465,8 +508,8 @@ msgstr "Deadline"
 msgid "Once given date is passed poll is closed and attendee cannot replay any longer."
 msgstr "Once given date is passed poll is closed and attendee cannot replay any longer."
 
-msgid "Location of the event."
-msgstr "Location of the event."
+msgid "Sites"
+msgstr "Sites"
 
 msgid "Search for sites ... (leave empty for all sites)"
 msgstr "Search for sites ... (leave empty for all sites)"
@@ -493,6 +536,14 @@ msgstr "Poll Participant"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "GENDER_Site"
+msgstr "GENDER_Site"
+
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] "Site"
+msgstr[1] "Sites"
 
 msgid "GENDER_Required Group"
 msgstr "GENDER_Required Group"
@@ -573,6 +624,12 @@ msgstr "Please take part in the poll and respond by { deadline }."
 
 msgid "Take part now"
 msgstr "Take part now"
+
+msgid "Thank you very much!"
+msgstr "Thank you very much!"
+
+msgid "Yours sincerly"
+msgstr "Yours sincerly"
 
 msgid "Crew Scheduling Poll: \"{ roleName }\" (closed)"
 msgstr "Crew Scheduling Poll: \"{ roleName }\" (closed)"
