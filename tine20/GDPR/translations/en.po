@@ -43,9 +43,6 @@ msgstr "default"
 msgid "Default data source for ADB contacts"
 msgstr "Default data source for ADB contacts"
 
-msgid "Manage consent Email template"
-msgstr "Manage consent Email template"
-
 msgid "Available Languages"
 msgstr "Available Languages"
 
@@ -63,6 +60,12 @@ msgstr "GDPR registration secret string"
 
 msgid "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable."
 msgstr "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable."
+
+msgid "manage consent link ttl"
+msgstr "manage consent link ttl"
+
+msgid "GDPR manage consent link ttl in days"
+msgstr "GDPR manage consent link ttl in days"
 
 msgid "GDPR template path"
 msgstr "GDPR template path"
@@ -141,9 +144,6 @@ msgstr "Excel all data"
 msgid "GDPR"
 msgstr "GDPR"
 
-msgid "GRPR LINK"
-msgstr "GRPR LINK"
-
 msgid "Must not be contacted"
 msgstr "Must not be contacted"
 
@@ -176,6 +176,12 @@ msgstr "Show expired"
 
 msgid "GDPR Purpose of processing"
 msgstr "GDPR Purpose of processing"
+
+msgid "Request Consent"
+msgstr "Request Consent"
+
+msgid "Send Request Consent message to contacts"
+msgstr "Send Request Consent message to contacts"
 
 msgid "Description"
 msgstr "Description"
@@ -224,6 +230,9 @@ msgstr "Cancel"
 
 msgid "Confirm"
 msgstr "Confirm"
+
+msgid "Get new link"
+msgstr "Get new link"
 
 msgid "Register"
 msgstr "Register"
@@ -298,6 +307,9 @@ msgstr "Compose mass mail without recipients"
 msgid "Create mass mail without {0} support"
 msgstr "Create mass mail without {0} support"
 
+msgid "Start with empty mail"
+msgstr "Start with empty mail"
+
 msgid "Hide from self registration"
 msgstr "Hide from self registration"
 
@@ -348,6 +360,9 @@ msgstr "Organization"
 msgid "Imprint"
 msgstr "Imprint"
 
+msgid "Privacy Policy"
+msgstr "Privacy Policy"
+
 msgid "Registration"
 msgstr "Registration"
 
@@ -362,6 +377,19 @@ msgstr "Enter your E-mail address to register."
 
 msgid "We have sent you a confirmation link to the E-mail address you provided. Please check your inbox."
 msgstr "We have sent you a confirmation link to the E-mail address you provided. Please check your inbox."
+
+msgid "Dear {{ contact.n_fn }},"
+msgstr "Dear {{ contact.n_fn }},"
+
+#, python-format
+msgid "You are receiving this message because you have agreed to the intended use %s."
+msgstr "You are receiving this message because you have agreed to the intended use %s."
+
+msgid "Click here"
+msgstr "Click here"
+
+msgid "to adjust your consent settings."
+msgstr "to adjust your consent settings."
 
 msgid "Link to consent management"
 msgstr "Link to consent management"
@@ -378,6 +406,30 @@ msgstr "Confirm your E-mail address"
 msgid "Confirm your registration"
 msgstr "Confirm your registration"
 
+msgid "Please update your privacy consent"
+msgstr "Please update your privacy consent"
+
+msgid "Good afternoon, "
+msgstr "Good afternoon, "
+
+msgid "In order to continue processing our data correctly and in accordance with the applicable data protection regulations, we kindly ask you to review your data protection consents and update them if necessary."
+msgstr "In order to continue processing our data correctly and in accordance with the applicable data protection regulations, we kindly ask you to review your data protection consents and update them if necessary."
+
+msgid "To do so, please visit the following page and make the necessary settings:"
+msgstr "To do so, please visit the following page and make the necessary settings:"
+
+msgid "The update will only take a few moments."
+msgstr "The update will only take a few moments."
+
+msgid "If you have any questions or need assistance, please do not hesitate to contact us at any time."
+msgstr "If you have any questions or need assistance, please do not hesitate to contact us at any time."
+
+msgid "Thank you for your cooperation."
+msgstr "Thank you for your cooperation."
+
+msgid "Kind regards,"
+msgstr "Kind regards,"
+
 msgid "Consent from"
 msgstr "Consent from"
 
@@ -389,6 +441,12 @@ msgstr "Welcome to your consent management."
 
 msgid "Here you can decide for which purposes we may contact you."
 msgstr "Here you can decide for which purposes we may contact you."
+
+msgid "This link is expired, please click the button to get the new link."
+msgstr "This link is expired, please click the button to get the new link."
+
+msgid "We have sent you a new link. Please check your inbox."
+msgstr "We have sent you a new link. Please check your inbox."
 
 msgid "Register and we will send you news and information about our services in the future."
 msgstr "Register and we will send you news and information about our services in the future."
@@ -404,6 +462,12 @@ msgstr "The submitted E-mail address will only be used for the selected purpose.
 
 msgid "You can withdraw your consent or change the use of your data at any time."
 msgstr "You can withdraw your consent or change the use of your data at any time."
+
+msgid "This registration link is expired, please click the button to get the new registration link."
+msgstr "This registration link is expired, please click the button to get the new registration link."
+
+msgid "We have sent you a new registration link. Please check your inbox."
+msgstr "We have sent you a new registration link. Please check your inbox."
 
 msgid "Terms of Service"
 msgstr "Terms of Service"

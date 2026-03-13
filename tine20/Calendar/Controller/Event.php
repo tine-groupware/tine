@@ -1601,6 +1601,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                         $attendees->cal_event_id = $persistentExceptionEvent->getId();
                         $calendar = Tinebase_Container::getInstance()->getContainerById($_event->container_id);
                         foreach ($attendees as $attendee) {
+                            //todo: fe sometimes send attendeeData without valid user_id, if user_id is not set , skip _createAttender , just continue
                             $this->_createAttender($attendee, $_event, TRUE, $calendar);
                             $this->_increaseDisplayContainerContentSequence($attendee, $persistentExceptionEvent, Tinebase_Model_ContainerContent::ACTION_CREATE);
                         }

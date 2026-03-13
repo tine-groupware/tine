@@ -40,6 +40,7 @@
  * @property    boolean $is_spam_suspicions true if is spam suspicions
  * @property    array   $sent_copy_folder   target folder ids when save copy message to source folder
  * @property    Tinebase_DateTime  $expected_answer    the selected date option for an expected answer
+ * @property    array   $context            the context used in twig template
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
@@ -192,6 +193,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), // originally categories handled by Tinebase_Tags
         'sent_copy_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'expected_answer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'context'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), // the context used in twig template
     );
     
     /**

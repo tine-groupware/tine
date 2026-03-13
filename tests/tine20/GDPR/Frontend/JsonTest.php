@@ -347,4 +347,10 @@ class GDPR_Frontend_JsonTest extends TestCase
         $result = $this->_uit->getRecipientTokensByIntendedPurpose($diprId);
         $this->assertSame(0, count($result['results']));
     }
+
+    public function testGetEmailTwigTemplate()
+    {
+        $result = (new Tinebase_Frontend_Json())->getEmailTwigTemplate('UpdatePrivacyConsent', 'GDPR');
+        $this->assertStringNotContainsString('__TWIG', $result['content']);
+    }
 }
