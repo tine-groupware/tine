@@ -255,7 +255,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (! ff.isXType('checkbox')) {
                 this.createMultiButton(ff);
             }
-            
+
             var match = ff.hasOwnProperty('name') ? ff.name.match(/customfield_(.*)/) : null;
             if (match && match.length == 2) {
                 var cf = this.interRecord.get('customfields');
@@ -283,14 +283,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 startValue = startValue[ff.recordClass.getMeta('idProperty')];
                 ff.startRecord = new ff.recordClass(startValue);
             } else if (ff.isXType('checkbox')) {
-                var startValue = (startValue == 1) ? true : false;
+                startValue = (startValue === 1) ? true : null;
                 ff.setValue(startValue);
+                ff.startingValue = startValue;
             } else if (ff.isXType('tinewidgetscontainerselectcombo')) {
                 startValue = ff.getValue()
                 ff.on('blur', this.onTriggerField, ff)
                 ff.on('select', this.onTriggerField, ff)
             }
-            ff.startingValue = (startValue == undefined || startValue == null) ? '' : startValue;
+            ff.startingValue = ff.hasOwnProperty('startingValue') ? ff.startingValue : (startValue == undefined || startValue == null) ? '' : startValue;
             
             Tine.log.info('Setting start value to "' + startValue + '".');
             
@@ -368,6 +369,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         {
             left = left + ';top: 5px';
         }
+
+        if (formField.isXType('checkbox')) {
+            left = left + ';top: 10px';
+        }
         
         // create Button
         formField.multiButton = new Ext.Element(document.createElement('img'));
@@ -408,6 +413,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                     this.value = this.startingValue;
                 }
             } else {
+                if (this.isXType('checkbox')) {
+                    this.currentValue = this.startingValue;
+                }
                 this.setValue(this.startingValue);
             }
             
@@ -442,6 +450,10 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         }
         // trigger event
         this.fireEvent(this.triggerEvents[0], this);
+
+        if (this.isXType('checkbox')) {
+            delete(this.currentValue);
+        }
     },
     
     /*
@@ -458,9 +470,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.on('afterrender', Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.onTriggerField.createDelegate(this, [true]));
             return;
         }
-        
-        var ar = this.el.parent().down('.tinebase-editmultipledialog-dirty')
-            || this.el.parent().down('.tinebase-editmultipledialog-clearer');
+
+        const ar = this.el.parent().down('.tinebase-editmultipledialog-dirty');
+        const clearer = this.el.parent().down('.tinebase-editmultipledialog-clearer');
 
         var originalValue = this.hasOwnProperty('startingValue') ? this.startingValue : this.originalValue,
             currentValue;
@@ -471,6 +483,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             currentValue = this.fullDateTime;
         } else if (this.isXType('textarea')) {
             currentValue = this.getValue() || ''
+        } else if (this.isXType('checkbox')) {
+            currentValue = calledOnAfterRender ? (this.hasOwnProperty('currentValue') ? this.currentValue : this.getValue()) : null;
+
+            if (calledOnAfterRender && !this.multiButton) {
+                Tine.widgets.dialog.MultipleEditDialogPlugin.prototype.createMultiButton(this);
+            }
         } else {
             currentValue = this.getValue();
         }
@@ -478,6 +496,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
         if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
             // Create or set arrow
+            if (clearer) {
+                clearer.setStyle('display','block');
+            }
             if (ar) {
                 ar.setStyle('display','block');
             } else {
@@ -504,6 +525,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             // Set arrow
             if (ar) {
                 ar.setStyle('display','none');
+            }
+            if (clearer) {
+                clearer.setStyle('display','none');
             }
             // Set field
             this.edited = false;
@@ -648,9 +672,14 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             ff.origAllowBlank = ff.allowBlank;
             ff.allowBlank = true;
             ff.multi = true;
-            
+
             ff.setValue('');
             ff.originalValue = '';
+
+            if (ff.isXType('checkbox')) {
+                ff.originalValue = null;
+            }
+
             ff.clearInvalid();
             Ext.QuickTips.register({
                 target: ff,
@@ -699,7 +728,9 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.wrapCheckbox.defer(100, this, [checkbox]);
             return;
         }
-        checkbox.getEl().wrap({tag: 'span', 'class': 'tinebase-editmultipledialog-dirtycheck'});
+        if (checkbox.getEl() && checkbox?.wrap) {
+            checkbox.wrap.addClass('tinebase-editmultipledialog-dirtycheck');
+        }
         checkbox.originalValue = null;
         checkbox.setValue(false);
     },
