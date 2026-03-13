@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2024-01-23 14:02+0100\n"
+"PO-Revision-Date: 2026-01-27 14:13+0100\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>\n"
 "Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.8\n"
 
 msgid "Manage Scheduling Roles"
 msgstr "Dienstplaungsrollen Verwalten"
@@ -88,6 +88,12 @@ msgstr "Umfragen CSV Import"
 msgid "Import CSV formated polls from crew scheduling"
 msgstr "Importiere CSV formatierte Umfragen der Dienstplanung"
 
+msgid "Poll event type import"
+msgstr ""
+
+msgid "Import CSV formated poll event types from crew scheduling"
+msgstr ""
+
 msgid "Poll participant CSV import"
 msgstr "Umfragen Teilnehmr*innen CSV Import"
 
@@ -99,6 +105,12 @@ msgstr "Umfragen Antworten CSV Import"
 
 msgid "Import CSV formated polls replies from crew scheduling"
 msgstr "Importiere CSV formatierte Umfragen-Antworten der Dienstplanung"
+
+msgid "Poll site import"
+msgstr ""
+
+msgid "Import CSV formated poll sites from crew scheduling"
+msgstr ""
 
 msgid "Crew Scheduling Roles"
 msgstr "Dienstplanungs Rollen"
@@ -144,6 +156,9 @@ msgid "CrewScheduling"
 msgid_plural "CrewSchedulings"
 msgstr[0] "Dienstplanung"
 msgstr[1] "Dienstplanungen"
+
+msgid "Change Crew Scheduling Event Filter"
+msgstr ""
 
 msgid "Event"
 msgstr "Termin"
@@ -207,9 +222,6 @@ msgstr "Automatische Planung"
 
 msgid "Auto assign attendee for selected / all cells"
 msgstr "Füge für die Auswahl / alle Felder Teilnehmer automatisch hinzu"
-
-msgid "Site"
-msgstr "Standort"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -332,11 +344,35 @@ msgstr "Für die Terminart **{ eventType.name }** muss die Person Mitglied in ei
 msgid "Availability Poll"
 msgstr "Verfügbarkeitsumfrage"
 
+msgid "You are in admin mode"
+msgstr "Achtung, Sie sind im Admin-Modus"
+
+msgid "Click on the name of a participant to modify their responses."
+msgstr "Klicken Sie auf den Namen eine*r Teilnehmer*in um die Rückmeldung für diese Person zu bearbeiten."
+
 msgid "Invalid Link"
 msgstr "Ungültiger Link"
 
 msgid "An unexpected error occurred."
 msgstr "Ein unerwarteter Fehler ist aufgetreten."
+
+msgid "closed"
+msgstr "geschlossen"
+
+#, python-brace-format
+msgid "Answers possible until {deadline}"
+msgstr "Antworten bis zum {deadline} möglich"
+
+#, python-brace-format
+msgid "Answers possible for {diffDays} more days"
+msgstr "Antworten noch {diffDays} Tage möglich"
+
+#, python-brace-format
+msgid "{from} - {until}"
+msgstr ""
+
+msgid "for"
+msgstr "für"
 
 msgid "Send Mail"
 msgstr "E-Mail senden"
@@ -406,17 +442,31 @@ msgid_plural "Scheduling Role Configs"
 msgstr[0] "Dienstplanungsrollen Konfiguration"
 msgstr[1] "Dienstplanungsrollen Konfigurationen"
 
+#, fuzzy
 msgid "Event Type"
-msgstr "Terminart"
+msgid_plural "Event Types"
+msgstr[0] "Terminart"
+msgstr[1] "Terminart"
 
 msgid "Default Minimal Attendee Role Count"
 msgstr "Standardmäßige minimale Teilnehmerrollen Anzahl"
+
+msgid "Value from role is taken"
+msgstr "Wert aus Rolle wird übernommen"
 
 msgid "Required Attendee Groups for role"
 msgstr "Erforderliche Teilenhmer-Gruppen für diese Rolle"
 
 msgid "Required Groups Behaviour"
 msgstr "Verhalten der erforderlichen Gruppen"
+
+msgid "GENDER_Event Type"
+msgstr ""
+
+msgid "Poll"
+msgid_plural "Polls"
+msgstr[0] "Umfrage"
+msgstr[1] "Umfragen"
 
 msgid "GENDER_Participant"
 msgstr "female"
@@ -425,11 +475,6 @@ msgid "Participant"
 msgid_plural "Participants"
 msgstr[0] "Teilnehmer*in"
 msgstr[1] "Teilnehmer*innen"
-
-msgid "Poll"
-msgid_plural "Polls"
-msgstr[0] "Umfrage"
-msgstr[1] "Umfragen"
 
 msgid "Response Date"
 msgstr "Antwort Datum"
@@ -464,8 +509,8 @@ msgstr "Frist"
 msgid "Once given date is passed poll is closed and attendee cannot replay any longer."
 msgstr "Sobald das angegebene Datum überschritten ist, wird die Umfrage geschlossen und die Teilnehmer*innen können nicht mehr antworten."
 
-msgid "Location of the event."
-msgstr "Terminort"
+msgid "Sites"
+msgstr ""
 
 msgid "Search for sites ... (leave empty for all sites)"
 msgstr "Suche nach Standorten ... (leer lassen für alle Standorte)"
@@ -492,6 +537,15 @@ msgstr "Umfrage Teilnehmer*in"
 
 msgid "Status"
 msgstr "Status"
+
+msgid "GENDER_Site"
+msgstr ""
+
+#, fuzzy
+msgid "Site"
+msgid_plural "Sites"
+msgstr[0] "Standort"
+msgstr[1] "Standort"
 
 msgid "GENDER_Required Group"
 msgstr "female"
@@ -588,32 +642,17 @@ msgstr "Die Dienstplanungs-Umfrage für die Planungsrolle { roleName } ist beend
 msgid "See results"
 msgstr "Ergebnisse ansehen"
 
-msgid "You are in admin mode"
-msgstr "Achtung, Sie sind im Admin-Modus"
+#~ msgid "Location of the event."
+#~ msgstr "Terminort"
 
-msgid "Click on the name of a participant to modify their responses."
-msgstr "Klicken Sie auf den Namen eine*r Teilnehmer*in um die Rückmeldung für diese Person zu bearbeiten."
+#~ msgid "For {events} between {from} and {until}"
+#~ msgstr "Für {events} zwischen {from} und {until}"
 
-msgid "Answers possible until {deadline}"
-msgstr "Antworten bis zum {deadline} möglich"
+#~ msgid "events"
+#~ msgstr "Veranstaltungen"
 
-msgid "Answers possible for {diffDays} more days"
-msgstr "Antworten noch {diffDays} Tage möglich"
-
-msgid "For {events} between {from} and {until}"
-msgstr "Für {events} zwischen {from} und {until}"
-
-msgid "events"
-msgstr "Veranstaltungen"
-
-msgid "closed"
-msgstr "geschlossen"
-
-msgid "This poll is closed already"
-msgstr "Diese Umfrage ist bereits abgeschlossen"
-
-msgid "for"
-msgstr "für"
+#~ msgid "This poll is closed already"
+#~ msgstr "Diese Umfrage ist bereits abgeschlossen"
 
 #~ msgid "Edit Event Types"
 #~ msgstr "Terminarten bearbeiten"

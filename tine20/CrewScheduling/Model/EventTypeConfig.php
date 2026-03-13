@@ -136,9 +136,10 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
                 self::NULLABLE     => true,
                 self::VALIDATORS   => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
                 self::LABEL        => 'Default Minimal Attendee Role Count', // _('Default Minimal Attendee Role Count')
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
                 self::INPUT_FILTERS => ['Zend_Filter_Empty' => NULL],
                 self::UI_CONFIG     => [
-                    'emptyText'         => 'If not set value from role is taken per default' // _('If not set value from role is taken per default')
+                    'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
                 ],
             ],
             self::FLD_SHORTFALL_ACTION => [
@@ -153,9 +154,10 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
                     Zend_Filter_Empty::class => null,
                 ],
                 self::LABEL        => 'Shortfall Action', // _('Shortfall Action')
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
                 self::NAME         => CrewScheduling_Config::SHORTFALL_ACTIONS,
                 self::UI_CONFIG     => [
-                    'emptyText'         => 'If not set value from role is taken per default' // _('If not set value from role is taken per default')
+                    'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
                 ],
             ],
             self::FLD_EXCEEDANCE_ACTION => [
@@ -170,20 +172,28 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
                     Zend_Filter_Empty::class => null,
                 ],
                 self::LABEL        => 'Exceedance Action', // _('Exceedance Action')
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
                 self::NAME         => CrewScheduling_Config::EXCEEDANCE_ACTIONS,
                 self::UI_CONFIG     => [
-                    'emptyText'         => 'If not set value from role is taken per default' // _('If not set value from role is taken per default')
+                    'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
                 ],
             ],
             self::FLD_ROLE_ATTENDEE_REQUIRED_GROUPS => [
                 self::TYPE       => self::TYPE_RECORDS,
                 self::NULLABLE   => true,
                 self::LABEL     => 'Required Attendee Groups for role', // _('Required Attendee Groups for role')
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
                 self::DEFAULT_VAL  => null,
                 self::UI_CONFIG                     => [
                     self::COLUMNS                     => [CrewScheduling_Model_RequiredGroups::FLD_GROUP],
+                    self::FIELDS_CONFIG => [
+                        'viewConfig' => [
+                            'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
+                            'deferEmptyText' => false,
+                        ],
+                    ],
                 ],
                 self::CONFIG => [
                     self::APP_NAME                  => CrewScheduling_Config::APP_NAME,
@@ -195,19 +205,38 @@ class CrewScheduling_Model_EventTypeConfig extends Tinebase_Record_NewAbstract
             self::FLD_ROLE_ATTENDEE_REQUIRED_GROUPS_OPERATOR => [
                 self::TYPE         => self::TYPE_KEY_FIELD,
                 self::NULLABLE     => true,
-                self::VALIDATORS   => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
+                self::DEFAULT_VAL  => null,
+                self::VALIDATORS   => [
+                    Zend_Filter_Input::ALLOW_EMPTY => TRUE,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+                self::INPUT_FILTERS => [
+                    Zend_Filter_Empty::class => null,
+                ],
                 self::LABEL       => 'Required Groups Behaviour', // _('Required Groups Behaviour')
                 self::NAME         => CrewScheduling_Config::GROUP_OPERATORS,
-                self::DEFAULT_VAL  => null,
-//                self::DEFAULT_VAL  => CrewScheduling_Config::OPERATOR_ONE_OF,
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
+                self::UI_CONFIG     => [
+                    'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
+                ],
             ],
             self::FLD_SAME_ROLE_SAME_ATTENDEE => [
                 self::TYPE         => self::TYPE_KEY_FIELD,
                 self::NULLABLE     => true,
-                self::VALIDATORS   => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
+                self::DEFAULT_VAL  => null,
+                self::VALIDATORS   => [
+                    Zend_Filter_Input::ALLOW_EMPTY => TRUE,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                ],
+                self::INPUT_FILTERS => [
+                    Zend_Filter_Empty::class => null,
+                ],
                 self::LABEL       => 'Behavior if this role is also required from other event types', // _('Behavior if this role is also required from other event types')
-                self::INPUT_FILTERS => ['Zend_Filter_Empty' => NULL],
                 self::NAME         => CrewScheduling_Config::SAME_ROLE_SAME_ATTENDEE,
+                self::DESCRIPTION => 'If not set value from role is taken per default', // _('If not set value from role is taken per default')
+                self::UI_CONFIG     => [
+                    'emptyText'         => 'Value from role is taken', // _('Value from role is taken')
+                ],
             ],
             self::FLD_OTHER_ROLE_SAME_ATTENDEE => [
                 self::TYPE          => self::TYPE_BOOLEAN,
