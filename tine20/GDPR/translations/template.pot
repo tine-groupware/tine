@@ -67,6 +67,12 @@ msgstr ""
 msgid "GDPR template path"
 msgstr ""
 
+msgid "Enable public pages"
+msgstr ""
+
+msgid "Enable public pages like terms and conditions, imprint, representative information."
+msgstr ""
+
 msgid "Data protection officer"
 msgstr ""
 
@@ -79,7 +85,16 @@ msgstr ""
 msgid "Data protection authority."
 msgstr ""
 
+msgid "Hosting provider"
+msgstr ""
+
 msgid "Contact of the hosting provider (if installation is not hosted in-house)"
+msgstr ""
+
+msgid "Legally responsible"
+msgstr ""
+
+msgid "Legal person responsible for this installation"
 msgstr ""
 
 msgid "Retention period for log files"
@@ -92,18 +107,6 @@ msgid "Backup retention period"
 msgstr ""
 
 msgid "Backup retention period in days."
-msgstr ""
-
-msgid "Enable public pages"
-msgstr ""
-
-msgid "Enable public pages like terms and conditions, imprint, representative information."
-msgstr ""
-
-msgid "Legally responsible"
-msgstr ""
-
-msgid "Legal person responsible for this installation"
 msgstr ""
 
 msgid "Commercial registry"
@@ -226,6 +229,9 @@ msgid "Register"
 msgstr ""
 
 msgid "Go to my manage consent link"
+msgstr ""
+
+msgid "No matching email address found which agreed to the selected intended purpose."
 msgstr ""
 
 msgid "Processing purpose of this mass mailing"
@@ -370,12 +376,6 @@ msgid "Confirm your E-mail address"
 msgstr ""
 
 msgid "Confirm your registration"
-msgstr ""
-
-msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-msgstr ""
-
-msgid "Confirm E-Mail address"
 msgstr ""
 
 msgid "Consent from"

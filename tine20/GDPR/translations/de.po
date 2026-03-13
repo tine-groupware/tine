@@ -72,6 +72,12 @@ msgstr ""
 msgid "GDPR template path"
 msgstr ""
 
+msgid "Enable public pages"
+msgstr "Öffentliche Seiten aktivieren"
+
+msgid "Enable public pages like terms and conditions, imprint, representative information."
+msgstr ""
+
 msgid "Data protection officer"
 msgstr "Datenschutzbeauftragter"
 
@@ -84,8 +90,17 @@ msgstr "Datenschutzaufsichtsbehörde"
 msgid "Data protection authority."
 msgstr "Kontakt der zuständigen Aufsichtsbehörde."
 
+msgid "Hosting provider"
+msgstr ""
+
 msgid "Contact of the hosting provider (if installation is not hosted in-house)"
 msgstr "Kontakt des Hosting-Anbieters (wenn Installation nicht selbst betrieben wird)"
+
+msgid "Legally responsible"
+msgstr "Rechtlich Verantwortlicher"
+
+msgid "Legal person responsible for this installation"
+msgstr "Rechtlicher Installationsverantwortlicher (z.B. gemäß § 18 Abs. 2 MStV)"
 
 msgid "Retention period for log files"
 msgstr "Vorhaltezeit von Protokolldateien"
@@ -98,18 +113,6 @@ msgstr "Vorhaltezeit von Datensicherungen"
 
 msgid "Backup retention period in days."
 msgstr "Vorhaltezeit von Datensicherungen in Tagen."
-
-msgid "Enable public pages"
-msgstr "Öffentliche Seiten aktivieren"
-
-msgid "Enable public pages like terms and conditions, imprint, representative information."
-msgstr ""
-
-msgid "Legally responsible"
-msgstr "Rechtlich Verantwortlicher"
-
-msgid "Legal person responsible for this installation"
-msgstr "Rechtlicher Installationsverantwortlicher (z.B. gemäß § 18 Abs. 2 MStV)"
 
 msgid "Commercial registry"
 msgstr "Handelsregister"
@@ -233,8 +236,11 @@ msgstr "Registrieren"
 msgid "Go to my manage consent link"
 msgstr "Mein Link zur Verwaltung der Zustimmung"
 
+msgid "No matching email address found which agreed to the selected intended purpose."
+msgstr "Keine passende E-Mail Adresse gefunden die dem ausgewähltem Verwendungszweck zugestimmt hat."
+
 msgid "Processing purpose of this mass mailing"
-msgstr "Verwendungszweck dieser Massen-Mail"
+msgstr "Verwendungszweck dieser Serien-Mail"
 
 #, python-brace-format
 msgid "Note: mass mail is sent without {0} support"
@@ -242,7 +248,7 @@ msgstr "Beachte: Serienmail wird ohne {0} Unterstützung gesendet"
 
 #, python-brace-format
 msgid "In {0} mass mailing mode, this recipient will be removed, "
-msgstr "Im {0} Massen Mailing Modus wird dieser Empfänger entfernt, "
+msgstr "Im {0} Serien Mailing Modus wird dieser Empfänger entfernt, "
 
 msgid "Send message individually to list members instead"
 msgstr "Nachricht stattdessen individuell an Listen-Mitglieder verschicken"
@@ -377,12 +383,6 @@ msgstr "Bestätigen Sie Ihre E-Mail-Address"
 msgid "Confirm your registration"
 msgstr "Bestätigung Ihrer Anmeldung"
 
-msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-msgstr "vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-
-msgid "Confirm E-Mail address"
-msgstr "E-Mail-Adresse bestätigen"
-
 msgid "Consent from"
 msgstr "Einwilligung von"
 
@@ -412,6 +412,12 @@ msgstr "Sie können jederzeit Ihre Zustimmung widerrufen oder die Verwendung Ihr
 
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
+
+#~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+#~ msgstr "vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+
+#~ msgid "Confirm E-Mail address"
+#~ msgstr "E-Mail-Adresse bestätigen"
 
 #~ msgid "Privacy Policy"
 #~ msgstr "Datenschutzerklärung"

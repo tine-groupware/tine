@@ -67,6 +67,12 @@ msgstr "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environm
 msgid "GDPR template path"
 msgstr "GDPR template path"
 
+msgid "Enable public pages"
+msgstr "Enable public pages"
+
+msgid "Enable public pages like terms and conditions, imprint, representative information."
+msgstr "Enable public pages like terms and conditions, imprint, representative information."
+
 msgid "Data protection officer"
 msgstr "Data protection officer"
 
@@ -79,8 +85,17 @@ msgstr "Data protection authority"
 msgid "Data protection authority."
 msgstr "Data protection authority."
 
+msgid "Hosting provider"
+msgstr "Hosting provider"
+
 msgid "Contact of the hosting provider (if installation is not hosted in-house)"
 msgstr "Contact of the hosting provider (if installation is not hosted in-house)"
+
+msgid "Legally responsible"
+msgstr "Legally responsible"
+
+msgid "Legal person responsible for this installation"
+msgstr "Legal person responsible for this installation"
 
 msgid "Retention period for log files"
 msgstr "Retention period for log files"
@@ -93,18 +108,6 @@ msgstr "Backup retention period"
 
 msgid "Backup retention period in days."
 msgstr "Backup retention period in days."
-
-msgid "Enable public pages"
-msgstr "Enable public pages"
-
-msgid "Enable public pages like terms and conditions, imprint, representative information."
-msgstr "Enable public pages like terms and conditions, imprint, representative information."
-
-msgid "Legally responsible"
-msgstr "Legally responsible"
-
-msgid "Legal person responsible for this installation"
-msgstr "Legal person responsible for this installation"
 
 msgid "Commercial registry"
 msgstr "Commercial registry"
@@ -227,6 +230,9 @@ msgstr "Register"
 
 msgid "Go to my manage consent link"
 msgstr "Go to my manage consent link"
+
+msgid "No matching email address found which agreed to the selected intended purpose."
+msgstr "No matching email address found which agreed to the selected intended purpose."
 
 msgid "Processing purpose of this mass mailing"
 msgstr "Processing purpose of this mass mailing"
@@ -371,12 +377,6 @@ msgstr "Confirm your E-mail address"
 
 msgid "Confirm your registration"
 msgstr "Confirm your registration"
-
-msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-msgstr "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-
-msgid "Confirm E-Mail address"
-msgstr "Confirm E-Mail address"
 
 msgid "Consent from"
 msgstr "Consent from"
