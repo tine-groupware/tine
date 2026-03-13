@@ -316,6 +316,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             }
         })
 
+        this.fields.customer_id?.setHideTrigger(!!this.record.get('contract_id'))
         this.lastRecord = Tine.Tinebase.data.Record.clone(this.record);
     },
 
@@ -330,6 +331,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     },
 
     getRecordFormItems: function() {
+        const me = this
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
                 case 'document_category':
@@ -338,7 +340,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         const division = _.get(category, 'data.division_id');
                         const customer = this.getForm().findField('customer_id').selectedRecord;
                         if (_.uniq(_.map(customer.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
-                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category.", {category: await category.getTitle(), customer: await customer.getTitle(), division}));
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category.", {
+                                category: await category.getTitle(),
+                                customer: await customer.getTitle(),
+                                division
+                            }));
                             return false;
                         }
                     }
@@ -361,7 +367,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         const category = this.getForm().findField('document_category').selectedRecord;
                         const division = _.get(category, 'data.division_id');
                         if (_.uniq(_.map(record.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
-                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>.", {customer: await record.getTitle(), division, category: category.getTitle()}));
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>.", {
+                                customer: await record.getTitle(),
+                                division,
+                                category: category.getTitle()
+                            }));
                             return false;
                         }
                     }
@@ -394,7 +404,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         onTriggerClick: () => {
                             // @TODO open document debitor once dispatch config gets denormalized
                             const debitorId = this.record.get('debitor_id').original_id || this.record.get('debitor_id').id
-                            Tine.Sales.DebitorEditDialog.openWindow({recordId: debitorId, record: {id: debitorId}, mode: 'remote'})
+                            Tine.Sales.DebitorEditDialog.openWindow({
+                                recordId: debitorId,
+                                record: {id: debitorId},
+                                mode: 'remote'
+                            })
                         }
                     }))
                     // more logic in Tine.Sales.AddressSearchCombo
@@ -410,7 +424,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 position.set('sales_tax_rate', productTaxRate)
                             } else if (record.id !== 'standard' && position.get('sales_tax_rate')) {
                                 if (position.get('unit_price_type') === 'gross') {
-                                    position.set('unit_price', position.get('unit_price') - (position.get('sales_tax')/position.get('quantity') || 0))
+                                    position.set('unit_price', position.get('unit_price') - (position.get('sales_tax') / position.get('quantity') || 0))
                                     position.set('unit_price_type', 'net')
                                 }
                                 position.set('sales_tax_rate', 0)
@@ -421,6 +435,29 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         this.getForm().findField('positions')?.setValue(positions)
                     }
                     break;
+                case 'contract_id':
+                    config.listeners = config.listeners || {}
+                    config.listeners.select = async (combo, record, index) => {
+                        const customer_id = _.get(record, 'data.customer.id')
+                        if (customer_id) {
+                            const customer = Record.setFromJson(await Tine.Sales.getCustomer(customer_id), 'Sales.Customer')
+                            this.fields.customer_id.onSelect(customer, 0, true)
+                        }
+                        this.fields.contract_number.setValue(record ? (record.get('buyer_contract_number') || record.get('number')): null)
+                    }
+                    config.forceReload = true
+                    config.onBeforeLoad = function (store, options) {
+                        Tine.Tinebase.widgets.form.RecordPickerComboBox.prototype.onBeforeLoad.call(this, store, options);
+
+                        const customer = me.fields.customer_id.selectedRecord
+                        if (customer) {
+                            options.params.filter = options.params.filter || []
+                            options.params.filter.push({ field: 'customer', operator: 'definedBy?condition=and&setOperator=oneOf',value: [
+                                { field: ':id', operator: 'equals', value: customer.json.original_id }
+                            ]})
+                        }
+                    }
+                    break
             }
         })
 
