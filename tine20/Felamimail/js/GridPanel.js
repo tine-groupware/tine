@@ -781,8 +781,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         };
 
         const icons = record.getFlagIcons();
+        const mailServerIcon = record.getMailSenderIcon();
         const leftIcons = icons.filter(icon => ['passed', 'answered'].includes(icon.name));
-        const rightIcons = icons.filter(icon => ['spam', 'encrypted', 'tine20'].includes(icon.name));
+        const rightIcons = icons.filter(icon => ['spam', 'encrypted', 'tine20', mailServerIcon?.id].includes(icon.name));
         const unreadIcon = icons.find(icon => 'seen' === icon.name);
         const date = record.data?.received ?? '';
 
