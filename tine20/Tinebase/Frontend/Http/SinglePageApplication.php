@@ -138,16 +138,10 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) . ":10443";
         }
         $scriptSrc = implode(' ', $scriptSrcs);
-        $header += [
-            "Content-Security-Policy" => "default-src 'self'",
-            "Content-Security-Policy" => "script-src $scriptSrc",
-            "Content-Security-Policy" => "frame-ancestors $frameAncestors",
 
-            // headers for IE 10+11
-            "X-Content-Security-Policy" => "default-src 'self'",
-            "X-Content-Security-Policy" => "script-src $scriptSrc",
-            "X-Content-Security-Policy" => "frame-ancestors $frameAncestors",
-        ];
+        $header['Content-Security-Policy'] = "frame-ancestors $frameAncestors";
+//        todo: make sure this works (figure out correct headers):
+//        $header['Content-Security-Policy'] = "default-src 'self' 'unsafe-inline'; script-src $scriptSrc; frame-ancestors $frameAncestors";
 
         // set Strict-Transport-Security; used only when served over HTTPS
         $headers['Strict-Transport-Security'] = 'max-age=16070400';

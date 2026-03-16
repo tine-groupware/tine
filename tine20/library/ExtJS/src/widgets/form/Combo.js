@@ -1263,7 +1263,7 @@ var menu = new Ext.menu.Menu({
         q = qe.query;
         forceAll = qe.forceAll;
         if(forceAll === true || (q.length >= this.minChars)){
-            if(this.lastQuery !== q){
+            if(this.lastQuery !== q || this.forceReload){
                 this.lastQuery = q;
                 if(this.mode == 'local'){
                     this.selectedIndex = -1;

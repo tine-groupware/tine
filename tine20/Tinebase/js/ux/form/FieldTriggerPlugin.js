@@ -31,6 +31,7 @@ class FieldTriggerPlugin {
         field.clearValue = field.clearValue?.createSequence(_.bind(this.assertState, this))
         field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
         field.setDisabled = field.setDisabled.createSequence(_.bind(this.assertState, this))
+        field.setHideTrigger = field.setHideTrigger.createSequence(_.bind(this.assertState, this))
         field.on('keydown', this.assertState, this, { buffer: 50 })
 
         await field.afterIsRendered()
@@ -57,10 +58,10 @@ class FieldTriggerPlugin {
             // preserve space for triggers
             if (!this.preserveElStyle) {
                 wrap.addClass('x-form-trigger-plugin-wrap')
-                const paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
+                this.paddingRight = Number(String(field.el.getStyle('padding-right')).replace('px', ''));
                 field.el.setStyle({
                     'box-sizing': 'border-box',
-                    'padding-right': paddingRight+17 + 'px',
+                    'padding-right': this.paddingRight+17 + 'px',
                     'width' : '100%',
                     'height': field.getHeight() + 'px'
                 });
