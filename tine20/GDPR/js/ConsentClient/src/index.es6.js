@@ -14,7 +14,7 @@ import EmailPage from './EmailPage.vue'
 const routes = [
   { path: '/register/for/:dipId?', name: 'email-page',component: EmailPage, props: true},
   { path: '/register/:token?', name: 'registration-view',component: RegistrationView, props: true},
-  { path: '/manageConsent/:contactId?', name: 'manage-consent', component: ManageConsentPage, props: true},
+  { path: '/manageConsent/:token?', name: 'manage-consent', component: ManageConsentPage, props: true},
 ]
 
 const { mount } = createTineApp(App, {

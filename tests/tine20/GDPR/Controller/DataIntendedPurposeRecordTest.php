@@ -401,7 +401,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         } catch (Tinebase_Exception_SystemGeneric) {}
     }
 
-    public function testPublicApiGetManageConsentByContactId()
+    public function testpublicApiGetManageConsentByToken()
     {
         $contact = new Addressbook_Model_Contact([
             'n_given' => Tinebase_Record_Abstract::generateUID() . 'unittest',
@@ -411,7 +411,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
         /** @var Addressbook_Model_Contact $createdContact */
         $createdContact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByContactId($createdContact->getId());
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByToken($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
         $dipCount = $responseData['allDataIntendedPurposes'];
 
@@ -430,7 +430,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
         $dataIntendedPurpose[GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_SERVICE] = true;
         GDPR_Controller_DataIntendedPurpose::getInstance()->update($dataIntendedPurpose);
 
-        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByContactId($createdContact->getId());
+        $response = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->publicApiGetManageConsentByToken($createdContact->getId());
         $responseData = json_decode($response->getBody(), true);
         $dipCountNew = $responseData['allDataIntendedPurposes'];
 

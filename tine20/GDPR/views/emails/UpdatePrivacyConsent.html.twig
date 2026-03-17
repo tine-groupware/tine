@@ -1,0 +1,44 @@
+{#
+available parameters:
+    app.branding.title
+    contact (second run only)
+    href="{% verbatim %}{{ manageconsentlink }}{% endverbatim %}" use this to preserve twig placeholders for the second rendering
+    sender
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ _('Please update your privacy consent') }}
+{% endblock %}
+
+{% block salutation %}
+    <h5>{{ _('Dear {{ contact.n_fn }},') }}</h5>
+    <hr>
+{% endblock %}
+
+{% block body %}
+    <div class="mt-4 mb-4">
+        <p class="text-start">
+            {{ _('Good afternoon, ') }}<br>
+            {{ _('In order to continue processing our data correctly and in accordance with the applicable data protection regulations, we kindly ask you to review your data protection consents and update them if necessary.') }}<br>
+            {{ _('To do so, please visit the following page and make the necessary settings:') }}<br>
+        </p>
+    </div>
+    <div class="ax-center my-5">
+        <a class="btn btn-primary p-2" href="{% verbatim %}{{ manageconsentlink }}{% endverbatim %}" role="button">{{ _('Manage my subscription') }}</a>
+    </div>
+    <div class="mt-4 mb-4">
+        <p class="text-start">
+            {{ _('The update will only take a few moments.') }}<br>
+            {{ _('If you have any questions or need assistance, please do not hesitate to contact us at any time.') }}<br>
+            {{ _('Thank you for your cooperation.') }}<br>
+            <br>
+            {{ _('Kind regards,') }}<br>
+            <br>
+            {{ '{{ sender }}' }}<br>
+        </p>
+    </div>
+{% endblock %}
+
+

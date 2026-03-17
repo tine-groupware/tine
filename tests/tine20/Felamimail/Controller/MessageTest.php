@@ -1020,6 +1020,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     public function testGDPRMassMailingMessage()
     {
         GDPR_Config::getInstance()->set(GDPR_Config::ENABLE_PUBLIC_PAGES, true);
+        GDPR_Config::getInstance()->set(GDPR_Config::JWT_SECRET, 'test');
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
@@ -1057,7 +1058,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                     ],
                     'gdpr@mail.test'
                 ],
-                'body' => 'Dear {{ recipient }} {{ manageconstentlink }} {{ sender }}',
+                'body' => 'Dear {{ recipient }} {{ sender }} {{ manageconsentlink }} Mein Abonnement verwalten</a>',
                 'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
                 'massMailingFlag' => true,
             ]);
@@ -1068,12 +1069,11 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             static::assertEquals(2, count($messages), 'expected 2 mails send');
             
             foreach($messages as $message) {
-                $body = $message->getBodytext()->getRawContent();
+                $body = $message->getBodyText()->getRawContent();
                 if (in_array($contact->email, $message->getRecipients())) {
-                    static::assertStringContainsString($contact->getId(), $body);
                     static::assertStringContainsString($contact->n_fileas, $body);
+                    static::assertStringContainsString('/GDPR/view/manageConsent', $body);
                 }
-                static::assertStringContainsString('/GDPR/view/manageConsent', $body);
                 static::assertStringNotContainsString('recipient', $body);
                 static::assertStringNotContainsString('sender', $body);
             }
