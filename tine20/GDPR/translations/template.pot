@@ -43,9 +43,6 @@ msgstr ""
 msgid "Default data source for ADB contacts"
 msgstr ""
 
-msgid "Manage consent Email template"
-msgstr ""
-
 msgid "Available Languages"
 msgstr ""
 
@@ -62,6 +59,12 @@ msgid "GDPR registration secret string"
 msgstr ""
 
 msgid "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable."
+msgstr ""
+
+msgid "manage consent link ttl"
+msgstr ""
+
+msgid "GDPR manage consent link ttl in days"
 msgstr ""
 
 msgid "GDPR template path"
@@ -141,9 +144,6 @@ msgstr ""
 msgid "GDPR"
 msgstr ""
 
-msgid "GRPR LINK"
-msgstr ""
-
 msgid "Must not be contacted"
 msgstr ""
 
@@ -175,6 +175,12 @@ msgid "Show expired"
 msgstr ""
 
 msgid "GDPR Purpose of processing"
+msgstr ""
+
+msgid "Request Consent"
+msgstr ""
+
+msgid "Send Request Consent message to contacts"
 msgstr ""
 
 msgid "Description"
@@ -223,6 +229,9 @@ msgid "Cancel"
 msgstr ""
 
 msgid "Confirm"
+msgstr ""
+
+msgid "Get new link"
 msgstr ""
 
 msgid "Register"
@@ -298,6 +307,9 @@ msgstr ""
 msgid "Create mass mail without {0} support"
 msgstr ""
 
+msgid "Start with empty mail"
+msgstr ""
+
 msgid "Hide from self registration"
 msgstr ""
 
@@ -348,6 +360,9 @@ msgstr ""
 msgid "Imprint"
 msgstr ""
 
+msgid "Privacy Policy"
+msgstr ""
+
 msgid "Registration"
 msgstr ""
 
@@ -361,6 +376,19 @@ msgid "Enter your E-mail address to register."
 msgstr ""
 
 msgid "We have sent you a confirmation link to the E-mail address you provided. Please check your inbox."
+msgstr ""
+
+msgid "Dear {{ contact.n_fn }},"
+msgstr ""
+
+#, python-format
+msgid "You are receiving this message because you have agreed to the intended use %s."
+msgstr ""
+
+msgid "Click here"
+msgstr ""
+
+msgid "to adjust your consent settings."
 msgstr ""
 
 msgid "Link to consent management"
@@ -378,6 +406,30 @@ msgstr ""
 msgid "Confirm your registration"
 msgstr ""
 
+msgid "Please update your privacy consent"
+msgstr ""
+
+msgid "Good afternoon, "
+msgstr ""
+
+msgid "In order to continue processing our data correctly and in accordance with the applicable data protection regulations, we kindly ask you to review your data protection consents and update them if necessary."
+msgstr ""
+
+msgid "To do so, please visit the following page and make the necessary settings:"
+msgstr ""
+
+msgid "The update will only take a few moments."
+msgstr ""
+
+msgid "If you have any questions or need assistance, please do not hesitate to contact us at any time."
+msgstr ""
+
+msgid "Thank you for your cooperation."
+msgstr ""
+
+msgid "Kind regards,"
+msgstr ""
+
 msgid "Consent from"
 msgstr ""
 
@@ -388,6 +440,12 @@ msgid "Welcome to your consent management."
 msgstr ""
 
 msgid "Here you can decide for which purposes we may contact you."
+msgstr ""
+
+msgid "This link is expired, please click the button to get the new link."
+msgstr ""
+
+msgid "We have sent you a new link. Please check your inbox."
 msgstr ""
 
 msgid "Register and we will send you news and information about our services in the future."
@@ -403,6 +461,12 @@ msgid "The submitted E-mail address will only be used for the selected purpose."
 msgstr ""
 
 msgid "You can withdraw your consent or change the use of your data at any time."
+msgstr ""
+
+msgid "This registration link is expired, please click the button to get the new registration link."
+msgstr ""
+
+msgid "We have sent you a new registration link. Please check your inbox."
 msgstr ""
 
 msgid "Terms of Service"

@@ -490,10 +490,10 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      * @param Felamimail_Model_Message $_message
      * @return null
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig, &$context)
     {
         if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
-            Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message, $_twig);
+            Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message, $_twig, $context);
         }
         return;
     }

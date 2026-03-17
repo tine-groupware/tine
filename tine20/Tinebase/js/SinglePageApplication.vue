@@ -14,7 +14,7 @@
 
 <script setup>
 /* eslint-disable */
-import { computed, onMounted, ref, onBeforeMount, shallowRef, defineProps } from 'vue';
+import { computed, ref, onBeforeMount, shallowRef, defineProps } from 'vue';
 
 defineProps({
   autoFetch: {type: Boolean, default: true}
@@ -22,11 +22,10 @@ defineProps({
 
 const initialData = shallowRef({});
 const responseData = ref(null);
+const errorMessage = ref(null);
 import { useRoute } from 'vue-router';
 const route = useRoute();
-const errorMessage = computed(() => {
-    return initialData.value.errorMessage ?? null;
-})
+const loading = ref(true);
 
 // Compute a class based on the current route
 const currentRouteClass = computed(() => {
@@ -34,26 +33,31 @@ const currentRouteClass = computed(() => {
 });
 
 const fetchData = async () => {
-  if (!vue.getCurrentInstance().props.autoFetch) {
-    return
-  }
-  const response = await fetch(window.location.pathname.replace('/view/', '/'))
-  responseData.value = await response.json();
-  if(!response.ok) console.error('Error fetching data:', responseData.value)
+  loading.value = true
+  try{
+    if (!vue.getCurrentInstance().props.autoFetch) {
+      return
+    }
+    const response = await fetch(window.location.pathname.replace('/view/', '/'))
+    responseData.value = await response.json();
 
-  if (window.initialData) {
-    initialData.value = window.initialData;
+    if (window.initialData) {
+      initialData.value = window.initialData;
+    }
+
+    if(!response.ok) {
+      errorMessage.value = 'Content not found';
+      console.error('Error fetching data:', responseData.value)
+    }
+  } catch(e) {
+    errorMessage.value = e?.message ?? 'Content not found';
+  } finally {
+    document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
+    loading.value = false
   }
 }
 
-onBeforeMount(async () => {
-  try{
-    await fetchData();
-  } catch(e) {
-    initialData.value = { errorMessage: 'Content not found' };
-    document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
-  }
-})
+onBeforeMount(fetchData)
 
 </script>
 
