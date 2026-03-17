@@ -272,8 +272,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         + app.i18n._('This message is probably SPAM. Please help improve your anti-SPAM system by choosing: "Yes, it is SPAM" or "No, it is not"') + '</span>';
                     const aboutAction = `<span id="action_about" class="felamimail-action"><span class="felamimail-location-icon action_about"></span></span>`;
                     const actions =
-                        '<span id="spam_action_spam" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +
-                        '<span id="spam_action_ham" class="felamimail-action"><span class="felamimail-location-icon felamimail-action-ham"></span><span>' + app.i18n._('No, it is not') + '</span></span>' ;
+                        '<span id="spam_action_spam" class="felamimail-action-highlight"><span class="felamimail-location-icon felamimail-action-spam"></span><span>' + app.i18n._('Yes, it is SPAM') + '</span></span>' +
+                        '<span id="spam_action_ham" class="felamimail-action-highlight"><span class="felamimail-location-icon felamimail-action-ham"></span><span>' + app.i18n._('No, it is not') + '</span></span>' ;
 
                     return `<div id="spam_toolbar" class="felamimail_spam_suspicions_toolbar">${html}${aboutAction}<span style="padding: 5px;">${actions}</span></div>`;
                 },
@@ -421,6 +421,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             'a[class=tinebase-email-link]',
             'span[class=tinebase-showheaders-link]',
             'a[href^=#]',
+            'span[class=felamimail-action-highlight]',
             'span[class=felamimail-action]',
         ];
 
@@ -569,17 +570,17 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     }
                 }
                 break;
-            case 'span[class=felamimail-action]':
+            case 'span[class=felamimail-action-highlight]':
                 const match = target.id.match(/^spam_action_(.*)/);
-                if (match.length > 1) {
+                if (match?.length > 1) {
                     document.getElementById('spam_toolbar').remove();
                     this.app.getMainScreen().getCenterPanel().processSpamStrategy(match[1]);
                 }
-                if (target.id === 'action_about') {
-                    Ext.Msg.alert(this.app.i18n._('Confirm SPAM Suspicion'),
-                        Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
-                    );
-                }
+                break;
+            case 'span[class=felamimail-action]':
+                Ext.Msg.alert(this.app.i18n._('Confirm SPAM Suspicion'),
+                    Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
+                );
                 break;
         }
     },
