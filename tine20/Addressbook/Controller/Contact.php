@@ -1610,7 +1610,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _checkDelegatedGrant(Tinebase_Record_Interface $_record,
                                             string $_action,
                                             bool $_throw,
-                                            string $_errorMessage,
+                                            ?string $_errorMessage,
                                             ?Tinebase_Record_Interface $_oldRecord): bool
     {
         $tead = null;
