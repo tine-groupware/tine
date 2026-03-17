@@ -371,7 +371,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = Tinebase_Model_User::class, bool $_getDeleted = false)
     {
-        if(!(isset($this->rowNameMapping[$_property]) || array_key_exists($_property, $this->rowNameMapping))) {
+        if (!(isset($this->rowNameMapping[$_property]) || array_key_exists($_property, $this->rowNameMapping))) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
         
@@ -381,9 +381,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         };
         
         $select = $this->_getUserSelectObject($_getDeleted)
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.' . $this->rowNameMapping[$_property]) . ' = ?', $value));
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select);
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier( SQL_TABLE_PREFIX . 'accounts.'
+                    . $this->rowNameMapping[$_property]) . ' = ?', $value));
 
         $stmt = $select->query();
 
@@ -392,8 +391,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if ($row === false) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' = ' . $value . ' not found.');
         }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($row, true));
 
         $account = null;
         try {

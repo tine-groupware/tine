@@ -150,8 +150,14 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             $this->setTableVersion('accounts', 20);
         }
 
-        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
-            'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
+        try {
+            Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
+                'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // skip trying to use the old value - mysql 8.0 does not like the above statement
+            Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX
+                . 'accounts SET login_failures = NULL WHERE login_failures IS NOT NULL');
+        }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
     }
 
@@ -284,6 +290,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update010(): void
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_TwigTemplate::class,
         ]);
