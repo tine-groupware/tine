@@ -634,8 +634,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @todo think about just setting the default values when user
      *       hasn't the required grant to change the field (instead of throwing exception)
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = NULL, $_oldRecord = NULL)
     {
+        if (empty($_errorMessage)) {
+            $_errorMessage = 'No Permission.';
+        }
+
+        $translate = Tinebase_Translation::getTranslation('Timetracker');
+        $_errorMessage = $translate->_($_errorMessage);
+
         if (! $this->_doTimesheetContainerACLChecks) {
             return TRUE;
         }
@@ -650,7 +657,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         // only TA managers are allowed to alter TS of closed TAs, but they have to confirm first that they really want to do it
         if ($_action != 'get') {
             if ($isAdmin && ($this->_requestContext['skipClosedCheck'] ?? false)) {
-               return true;
+                return true;
             }
 
             $this->_validateRelations($_record, $_oldRecord);
@@ -687,14 +694,18 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 );
                 break;
             case 'create':
-                $hasGrant = (
-                    ($_record->account_id == Tinebase_Core::getUser()->getId() && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, array_merge([
-                            Timetracker_Model_TimeaccountGrants::BOOK_OWN
-                        ], Timetracker_Config::TS_PROCESS_STATUS_REQUESTED === $_record->process_status ? [
-                            Timetracker_Model_TimeaccountGrants::REQUEST_OWN
-                        ] : [])))
-                    || Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL)
-                );
+                $grantsToCheck =  array_merge([
+                    Timetracker_Model_TimeaccountGrants::BOOK_OWN
+                ], Timetracker_Config::TS_PROCESS_STATUS_REQUESTED === $_record->process_status ? [
+                    Timetracker_Model_TimeaccountGrants::REQUEST_OWN
+                ] : []);
+                $timesheetAccountId = is_string($_record->account_id) ? $_record->account_id : $_record->account_id['accountId'];
+                $hasBookOrRequestOwn = ($timesheetAccountId === Tinebase_Core::getUser()->getId()
+                    && Timetracker_Controller_Timeaccount::getInstance()->hasGrant($_record->timeaccount_id, $grantsToCheck));
+                $hasGrant = $hasBookOrRequestOwn
+                    || Timetracker_Controller_Timeaccount::getInstance()->hasGrant(
+                        $_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL
+                    );
 
                 if ($hasGrant) {
                     foreach ($this->_fieldGrants as $field => $config) {
