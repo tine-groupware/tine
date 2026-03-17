@@ -2723,20 +2723,16 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param Tinebase_Record_Interface $_record
      * @param string $_action
      * @param boolean $_throw
-     * @param string $_errorMessage
+     * @param ?string $_errorMessage
      * @param Tinebase_Record_Interface $_oldRecord
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
-     *
-     * @todo use this function in other create + update functions
-     * @todo invent concept for simple adding of grants (plugins?)
-     *
      */
     protected function _checkGrant(
         $_record,
         $_action,
         $_throw = true,
-        $_errorMessage = 'No Permission.',
+        $_errorMessage = null,
         /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = null
     ) {
         if (
@@ -2780,11 +2776,29 @@ abstract class Tinebase_Controller_Record_Abstract
                     . ' No permissions to ' . $_action . ' in container ' . print_r($containerId, true));
             }
             if ($_throw) {
+                if (!$_errorMessage) {
+                    $_errorMessage = $this->_getTranslatedNoPermissionMessage($_action);
+                }
                 throw new Tinebase_Exception_AccessDenied($_errorMessage);
             }
         }
         
         return $hasGrant;
+    }
+
+    protected function _getTranslatedNoPermissionMessage(string $action): string
+    {
+        $translation = Tinebase_Translation::getTranslation();
+        $translatedAction = $translation->_($action);
+        // TODO use translated record name
+        $recordName = $this->_modelName;
+        $errorMessage = sprintf(
+            $translation->_('You do not have permission to %s record of type %s'),
+            $translatedAction,
+            $recordName
+        );
+
+        return $errorMessage;
     }
 
     protected function _checkDelegatedGrant(Tinebase_Record_Interface $_record,
