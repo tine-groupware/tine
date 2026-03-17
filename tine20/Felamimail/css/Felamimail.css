@@ -91,12 +91,27 @@
     background-image:url(../../images/icon-set/icon_ham.svg) !important;
 }
 
+.felamimail-action-highlight {
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #D8A45B;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #916e3e;
+}
+
+.felamimail-action-highlight:hover {
+    filter: brightness(1.2);
+}
+
 .felamimail-action {
     padding: 5px;
     margin: 5px;
     cursor: pointer;
     background-color: #D8A45B;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .felamimail-action:hover {
