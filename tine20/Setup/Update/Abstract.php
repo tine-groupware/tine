@@ -507,11 +507,26 @@ class Setup_Update_Abstract
 
         if ($setupId) {
             try {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
-                /** @noinspection PhpUndefinedMethodInspection */
-                $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
-                    Tinebase_Model_FullUser::class);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $setupId . ' as setupuser.');
+                }
+                try {
+                    /** @noinspection PhpUndefinedMethodInspection */
+                    $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
+                        Tinebase_Model_FullUser::class);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // TODO remove after TB Update ~20/21
+                    if (str_contains($zdse->getMessage(), 'Invalid data type for JSON data')) {
+                        // login_failures needs to be of type string
+                        $update18 = new Tinebase_Setup_Update_18(Setup_Backend_Factory::factory());
+                        $update18->update001();
+                        $setupUser = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $setupId,
+                            Tinebase_Model_FullUser::class);
+                    } else {
+                        throw $zdse;
+                    }
+                }
                 static::assertAdminGroupMembership($setupUser);
                 static::assertContactId($setupUser);
                 return $setupUser;
