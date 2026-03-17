@@ -3189,7 +3189,7 @@ class Setup_Controller
      * Parameter $options has to be array with this structure:
      *      array(
      *          'user'          => string   // Username to create the token for
-     *          'id'            => string   // Value for field tine20_auth_token.id
+     *          'id'            => string   // Value for field tine20_auth_token.id (optional)
      *          'auth_token'    => string   // Value for field tine20_auth_token.auth_token
      *          'valid_until'   => string   // Value for field tine20_auth_token.valid_until
      *          'channels'      => string   // Comma separated list of channel names. Values for JSON array in field tine20_auth_token.channels
@@ -3201,6 +3201,10 @@ class Setup_Controller
     public function addAuthToken($options)
     {
         $result = null;
+
+        if (! isset($options['id'])) {
+            $options['id'] = Tinebase_Record_Abstract::generateUID();
+        }
 
         $db = Setup_Core::getDb();
 

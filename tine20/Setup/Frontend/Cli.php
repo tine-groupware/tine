@@ -1673,7 +1673,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $mandatoryOptions = array(
             'user',
-            'id',
             'auth_token',
             'valid_until',
             'channels',
