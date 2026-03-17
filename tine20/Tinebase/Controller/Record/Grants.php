@@ -102,15 +102,7 @@ abstract class Tinebase_Controller_Record_Grants extends Tinebase_Controller_Rec
             }
             if ($throw) {
                 if (!$errorMessage) {
-                    $translation = Tinebase_Translation::getTranslation();
-                    $translatedAction = $translation->_($action);
-                    // TODO use translated record name
-                    $recordName = $this->_modelName;
-                    $errorMessage = sprintf(
-                        $translation->_('You do not have permission to %s record of type %s'),
-                        $translatedAction,
-                        $recordName
-                    );
+                    $errorMessage = $this->_getTranslatedNoPermissionMessage($action);
                 }
                 throw new Tinebase_Exception_AccessDenied($errorMessage);
             }
