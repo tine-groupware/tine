@@ -168,7 +168,21 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         ];
 
         $jsFiles[] = 'EventManager/js/eventManagerWebsite/src/index.es6.js';
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, EventManager_Config::APP_NAME, context: $context);
+
+        $mainScreen = Tinebase_Frontend_Http_SinglePageApplication::getClientHTML(
+            $jsFiles,
+            EventManager_Config::APP_NAME,
+            context: $context
+        );
+
+        return $mainScreen->withHeader(
+            "Content-Security-Policy",
+            preg_replace(
+                '/frame-ancestors.*;?/',
+                'frame-ancestors *;',
+                implode(" ", $mainScreen->getHeader('Content-Security-Policy'))
+            )
+        );
     }
 
     public function publicApiStatic()
