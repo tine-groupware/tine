@@ -350,7 +350,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      * @static
      */
     _doLogout: async function() {
-        Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'));
+        Ext.MessageBox.wait(i18n._('Logging you out...'), i18n._('Please wait!'), { estimate: 30000 });
         const response = await Tine.Tinebase.logout();
         // clear the authenticated mod_ssl session
         if (window.crypto && Ext.isFunction(window.crypto.logout)) {

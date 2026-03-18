@@ -11,7 +11,6 @@ import waitFor from "util/waitFor.es6";
 Ext.namespace('Tine.MatrixSynapseIntegrator');
 
 Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
-    hideMode: 'visibility', // just initially, see changeHideMode
     url: null,
     autoEl: { tag: 'div', cls: 't-app-matrixsynapseintegrator', cn: [
         { tag: 'iframe', style: 'width:100%; height: 100%; border: none; visibility: hidden;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
@@ -37,20 +36,6 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    },
-
-    changeHideMode: function() {
-        // NOTE: we start client in background to show unread count (see Application::init)
-        // when hideMode === 'display' element's feature detection fails (e.g. display-table)
-        // but with hideMode === 'visibility' element is displayed on bottom of the page when fully loaded
-        // so initially we hide by visibility and change to display once feature detection has passed
-        if (this.hideMode === 'visibility') {
-            this.hideMode = 'display';
-            if (this.isHidden()) {
-                this.getVisibilityEl().addClass('x-hide-display');
-                this.getVisibilityEl().removeClass('x-hide-visibility');
-            }
-        }
     },
 
     showClient: function() {
@@ -107,8 +92,20 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                 this.loadingIndicator.on('dblclick', this.showClient, this)
 
                 this.clientFrame.dom.src = this.url.href
+                if (! this.bootstrapData.mx_account.is_initialized) {
+                    window.addEventListener('beforeunload', (event) => {
+                        if (! this.bootstrapData.mx_account.is_initialized) {
+                            event.preventDefault();
+                        }
+                    });
+                    Ext.MessageBox.wait(this.app.formatMessage('{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser.', {
+                        brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+                    }), this.app.i18n._('Please wait ...'), { closable: true, estimate: 30000 })
+                } else {
+                    window.setTimeout(this.checkClientLoaded.bind(this), 5000)
+                }
+
             } else {
-                this.changeHideMode()
                 this.showUnavailableAlertIf()
             }
         })
@@ -124,7 +121,7 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
             
             switch (event.data.type) {
                 case "elementBootstrapdataRequest":
-                    this.changeHideMode()
+                    this.clientIsLoaded = true;
                     event.source.postMessage(Object.assign({
                         type: "elementBootstrapdataResponse",
                         eventUUID: event.data.eventUUID,
@@ -137,6 +134,12 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     }, await Tine.MatrixSynapseIntegrator.getLogindata()), this.url.origin);
                     break;
                 case "elementSetupEncryptionDone":
+                    if (! this.bootstrapData.mx_account.is_initialized) {
+                        this.bootstrapData.mx_account.is_initialized = true
+                        this.bootstrapData.mx_account.account_id = this.bootstrapData.mx_account.account_id.accountId || this.bootstrapData.mx_account.account_id
+                        this.bootstrapData.mx_account = await Tine.MatrixSynapseIntegrator.saveMatrixAccount(this.bootstrapData.mx_account)
+                        Ext.MessageBox.hide()
+                    }
                     this.showClient()
                     break
                 case "elementStartupFailure":
@@ -225,6 +228,20 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
         this.supr().initComponent.call(this);
     },
 
+    checkClientLoaded: async function() {
+        if (!this.clientIsLoaded && await Ext.MessageBox.show({
+            title: this.app.formatMessage('Chat could not be loaded'),
+            msg: this.app.formatMessage('The Chat program could not be loaded. Try again?'),
+            buttons: Ext.MessageBox.YESNO,
+            icon: Ext.MessageBox.QUESTION_WARN
+        }) === 'yes') {
+            this.loadingIndicator.show();
+            this.clientFrame.dom.src = Ext.SSL_SECURE_URL
+            this.clientFrame.dom.src = this.url.href
+            window.setTimeout(this.checkClientLoaded.bind(this), 15000)
+        }
+    },
+
     promptRecoveryData: async function() {
         const [btn, recoveryDatum] = await Ext.MessageBox.show({
             title: this.app.formatMessage('Recovery Key or Password Needed'),
@@ -264,17 +281,19 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     },
 
     promptClearLocalStorage: async function() {
-        const [btn] = await Ext.MessageBox.show({
+        if (await Ext.MessageBox.show({
             title: this.app.formatMessage('Chat storage corrupted', ),
             msg: this.app.formatMessage('Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?', {
                 brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
             }),
             buttons: Ext.MessageBox.OKCANCEL,
             icon: Ext.MessageBox.QUESTION_INPUT,
-        });
-        if (btn === 'ok') {
+        }) === 'ok') {
             await this.clientRPC('clearLocalStorageRequest',)
-            this.clientFrame.dom.src = this.clientFrame.dom.src
+            this.loadingIndicator.show()
+            this.clientFrame.dom.src = Ext.SSL_SECURE_URL
+            this.clientFrame.dom.src = this.url.href
+            window.setTimeout(this.checkClientLoaded.bind(this), 10000)
         }
         await Ext.MessageBox.show({
             title: this.app.formatMessage('Manual Management Required'),
@@ -290,9 +309,9 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     alertUnhandledEncryptionError: async function(error) {
         await Ext.MessageBox.show({
             title: this.app.formatMessage('Unhandled encryption error'),
-            msg: this.app.formatMessage('An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error: ', {
+            msg: this.app.formatMessage('An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:', {
                 brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
-            }) + error,
+            }) + `${error}`,
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.ERROR,
         });
