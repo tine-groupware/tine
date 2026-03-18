@@ -31,7 +31,7 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName = 'Tinebase';
         $this->_backend = new Tinebase_Backend_Scheduler();
-        $this->_modelName = 'Tinebase_Model_SchedulerTask';
+        $this->_modelName = Tinebase_Model_SchedulerTask::class;
         $this->_purgeRecords = false;
         $this->_omitModLog = false;
         $this->_doContainerACLChecks = false;
@@ -80,6 +80,11 @@ class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
         }
 
         $this->checkRight(Tinebase_Acl_Rights::ADMIN);
+    }
+
+    public function getBackend(): Tinebase_Backend_Scheduler
+    {
+        return $this->_backend;
     }
 
     /**
