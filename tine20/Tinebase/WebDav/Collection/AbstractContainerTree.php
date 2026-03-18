@@ -848,19 +848,23 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
                         if (count($pathParts) === 1) {
                             // webdav -> root file system ...
-                            // TODO we need to improve the "unlimited quota" check - use QUOTA_TOTALINMB if there is no personal and no root quota
-                            /*
-                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes() &&
-                                    0 === Tinebase_FileSystem_Quota::getPersonalQuotaBytes()) {
-                                // unlimited: RFC 4331: If a resource has no quota enforced or unlimited storage
-                                // ("infinite limits"), the server MAY choose not to return this property
+                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes()) {
+                                if (0 === Tinebase_FileSystem_Quota::getPersonalQuotaBytes()) {
+                                    // unlimited: RFC 4331: If a resource has no quota enforced or unlimited storage
+                                    // ("infinite limits"), the server MAY choose not to return this property
+                                    $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
+                                    if (empty($quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB})) {
+                                        //return nothing for if QUOTA_TOTALINMB is not set or 0
+                                        break;
+                                    }
+                                    $response[$property] = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}*1024*1024;
+                                    break;
+                                }
+                                $response[$property] = Tinebase_FileSystem_Quota::getPersonalQuotaBytes();
                                 break;
                             }
-                            $response[$property] = Tinebase_FileSystem_Quota::getPersonalQuotaBytes() ?:
-                                Tinebase_FileSystem_Quota::getRootFreeBytes();
-                            */
-                            $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-                            $response[$property] = $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB}*1024*1024;
+                            $response[$property] = Tinebase_FileSystem_Quota::getRootFreeBytes();
+                            break;
                         }
                     }
                     break;
@@ -869,14 +873,16 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                     if (Tinebase_Model_Tree_Node::class === $this->_containerModel) {
                         if (count($pathParts) === 1) {
                             // webdav -> root file system ...
-                            // TODO we need to improve the "unlimited quota" check
-                            // TODO we should return the used quota of the user here if we returned the personal quota in quota-available-bytes?
-                            if (0 === Tinebase_FileSystem_Quota::getRootQuotaBytes()) {
-                                // owncloud displays garbage if we dont have a quota-available-bytes value
-                                // so better not return something here
-                                break;
+                            $fileSystem = Tinebase_FileSystem::getInstance();
+                            $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
+                            $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
+
+                            // owncloud displays garbage if we dont have a quota-available-bytes value
+                            // so better not return something here
+                            if ($response['{DAV:}quota-available-bytes'] > 0) {
+                                $response[$property] = $fileSystemStorage['effectiveUsage'];
                             }
-                            $response[$property] = Tinebase_FileSystem_Quota::getRootUsedBytes();
+                            break;
                         }
                     }
                     break;
