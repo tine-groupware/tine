@@ -48,6 +48,9 @@ msgstr "Standard"
 msgid "Default data source for ADB contacts"
 msgstr "Standard Datenherkunft für Adressbuch Kontakte"
 
+msgid "Manage consent Email template"
+msgstr "E-Mail Schablone für Verwaltung von Einwilligungen"
+
 msgid "Available Languages"
 msgstr "Verfügbare Sprachen"
 
@@ -64,12 +67,6 @@ msgid "GDPR registration secret string"
 msgstr ""
 
 msgid "The GDPR JWT secret string corresponding to the GDPR JWT_SECRET environment variable."
-msgstr ""
-
-msgid "manage consent link ttl"
-msgstr ""
-
-msgid "GDPR manage consent link ttl in days"
 msgstr ""
 
 msgid "GDPR template path"
@@ -149,6 +146,9 @@ msgstr "Excel alle Daten"
 msgid "GDPR"
 msgstr "DSGVO"
 
+msgid "GRPR LINK"
+msgstr "DSGVO Link"
+
 msgid "Must not be contacted"
 msgstr "Darf nicht kontaktiert werden"
 
@@ -181,12 +181,6 @@ msgstr "Abgelaufene anzeigen"
 
 msgid "GDPR Purpose of processing"
 msgstr "DSGVO Verwendungszweck"
-
-msgid "Request Consent"
-msgstr "Einwilligung anfragen"
-
-msgid "Send Request Consent message to contacts"
-msgstr "Nachricht zur Einwilligungsanfrage an Kontakte senden"
 
 msgid "Description"
 msgstr "Beschreibung"
@@ -235,9 +229,6 @@ msgstr "Abbrechen"
 
 msgid "Confirm"
 msgstr "Bestätigen"
-
-msgid "Get new link"
-msgstr "Neuen Link erhalten"
 
 msgid "Register"
 msgstr "Registrieren"
@@ -312,9 +303,6 @@ msgstr "Keine Empfänger der Serienmail hinzufügen"
 msgid "Create mass mail without {0} support"
 msgstr "Serienmail ohne {0} Unterstützung verfassen"
 
-msgid "Start with empty mail"
-msgstr "Mit leerer Mail beginnen"
-
 msgid "Hide from self registration"
 msgstr "Vor Selbstregistrierung verbergen"
 
@@ -365,9 +353,6 @@ msgstr "Unternehmen"
 msgid "Imprint"
 msgstr "Impressum"
 
-msgid "Privacy Policy"
-msgstr "Datenschutzerklärung"
-
 msgid "Registration"
 msgstr "Anmeldung"
 
@@ -382,19 +367,6 @@ msgstr "Tragen Sie Ihre E-Mail-Adresse ein, um sich anzumelden."
 
 msgid "We have sent you a confirmation link to the E-mail address you provided. Please check your inbox."
 msgstr "Wir haben Ihnen einen Link zur Bestätigung an die angegebene E-Mail-Adresse geschickt. Bitte prüfen Sie Ihren Posteingang."
-
-msgid "Dear {{ contact.n_fn }},"
-msgstr "Hallo {{ contact.n_fn }},"
-
-#, python-format
-msgid "You are receiving this message because you have agreed to the intended use %s."
-msgstr "Sie erhalten diese Nachricht weil sie dem Verwendungszweck %s zugestimmt haben."
-
-msgid "Click here"
-msgstr "Klicken sie hier"
-
-msgid "to adjust your consent settings."
-msgstr "um ihre Einwilligungseinstellungen anzupassen."
 
 msgid "Link to consent management"
 msgstr "Link zur Verwaltung von Zustimmung"
@@ -411,30 +383,6 @@ msgstr "Bestätigen Sie Ihre E-Mail-Address"
 msgid "Confirm your registration"
 msgstr "Bestätigung Ihrer Anmeldung"
 
-msgid "Please update your privacy consent"
-msgstr "Bitte aktualisieren Sie Ihre Datenschutzeinwilligungen"
-
-msgid "Good afternoon, "
-msgstr "Guten Tag,"
-
-msgid "In order to continue processing our data correctly and in accordance with the applicable data protection regulations, we kindly ask you to review your data protection consents and update them if necessary."
-msgstr "um unsere Daten weiterhin korrekt und gemäß den geltenden Datenschutzbestimmungen zu verarbeiten, bitten wir Sie, Ihre Datenschutzeinwilligungen zu überprüfen und gegebenenfalls zu aktualisieren."
-
-msgid "To do so, please visit the following page and make the necessary settings:"
-msgstr "Bitte rufen Sie dazu die folgende Seite auf und nehmen Sie die erforderlichen Einstellungen vor:"
-
-msgid "The update will only take a few moments."
-msgstr "Die Aktualisierung dauert nur wenige Momente."
-
-msgid "If you have any questions or need assistance, please do not hesitate to contact us at any time."
-msgstr "Sollten Sie Fragen haben oder Unterstützung benötigen, können Sie sich jederzeit gerne an uns wenden."
-
-msgid "Thank you for your cooperation."
-msgstr "Vielen Dank für Ihre Mithilfe."
-
-msgid "Kind regards,"
-msgstr "Freundliche Grüße"
-
 msgid "Consent from"
 msgstr "Einwilligung von"
 
@@ -446,12 +394,6 @@ msgstr "Willkommen bei Ihrer Einwilligungsverwaltung."
 
 msgid "Here you can decide for which purposes we may contact you."
 msgstr "Hier können Sie festlegen, zu welchen Zwecken wir Sie kontaktieren dürfen."
-
-msgid "This link is expired, please click the button to get the new link."
-msgstr "Dieser Link ist abgelaufen. Bitte klicken Sie auf die Schaltfläche, um den neuen Link zu erhalten."
-
-msgid "We have sent you a new link. Please check your inbox."
-msgstr "Wir haben Ihnen einen neuen Link geschickt. Bitte überprüfen Sie Ihren Posteingang."
 
 msgid "Register and we will send you news and information about our services in the future."
 msgstr "Melden Sie sich an, dann senden wir Ihnen künftig Neuigkeiten und Nachrichten rund um unsere Dienstleitungen."
@@ -468,11 +410,24 @@ msgstr "Die übermittelte E-Mail-Adresse wird ausschließlich für den gewählte
 msgid "You can withdraw your consent or change the use of your data at any time."
 msgstr "Sie können jederzeit Ihre Zustimmung widerrufen oder die Verwendung Ihrer Daten ändern."
 
-msgid "This registration link is expired, please click the button to get the new registration link."
-msgstr "Dieser Registrierungslink ist abgelaufen. Bitte klicken Sie auf die Schaltfläche, um den neuen Registrierungslink zu erhalten."
-
-msgid "We have sent you a new registration link. Please check your inbox."
-msgstr "Wir haben Ihnen einen neuen Registrierungslink geschickt. Bitte überprüfen Sie Ihren Posteingang."
-
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
+
+#~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+#~ msgstr "vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+
+#~ msgid "Confirm E-Mail address"
+#~ msgstr "E-Mail-Adresse bestätigen"
+
+#~ msgid "Privacy Policy"
+#~ msgstr "Datenschutzerklärung"
+
+#~ msgid "Manage"
+#~ msgstr "Verwalten"
+
+#, python-brace-format
+#~ msgid "I am not {email}"
+#~ msgstr "Ich bin nicht {email}"
+
+#~ msgid "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
+#~ msgstr "Die Empfänger mit 'Darf nicht kontaktiert werden' werden entfernt, wenn kein Verwendungszweck ausgewählt wurde."

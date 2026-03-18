@@ -6,10 +6,7 @@
  * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import getTwingEnv from "../../../Tinebase/js/twingEnv.es6";
-
 Ext.ns('Tine.GDPR.Addressbook');
-import { getSendRequestConsentAction } from "./SendRequestConsentAction"
 
 Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
 
@@ -20,19 +17,28 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
     canonicalName: ['Addressbook',  'EditDialog', 'Contact', 'GDPRPanel'].join(Tine.Tinebase.CanonicalPath.separator),
 
     initComponent: function () {
+        var me = this;
         this.app = this.app || Tine.Tinebase.appMgr.get('GDPR');
         this.title = this.app.i18n._('GDPR');
-
+        this.action_gdpr = new Ext.Button({
+            text: this.app.i18n._('GRPR LINK'),
+            handler: () => {
+                window.open(this.gdprLink, '_blank');
+            },
+            disabled: false,
+            hidden: true,
+            scope: this
+        });
+    
+        this.blacklistContactLabel = new Ext.form.Label({
+            text: this.app.i18n._('Must not be contacted')
+        });
         this.blacklistContactCheckbox = new Ext.form.Checkbox({
-            columnWidth: 0.7,
+            hideLabel: true,
             disabled: true,
-            fieldLabel: this.app.i18n._('Must not be contacted'),
             boxLabel: this.app.i18n._("This contact has withdrawn consent to use their data for any purpose."),
             listeners: {scope: this, check: this.onBlacklistContactCheck}
         });
-        this.action_requestConsent = new Ext.Button(getSendRequestConsentAction({
-            columnWidth: 0.2,
-        }));
         this.expiryDatePicker = new Ext.ux.form.ClearableDateField({
             fieldLabel: this.app.i18n._('Expiry Date'),
         });
@@ -61,6 +67,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             flex: 1,
         });
 
+
         this.items = [{
             layout: 'vbox',
             align: 'stretch',
@@ -72,18 +79,9 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
                 width: '100%',
                 labelAlign: 'top',
                 items: [
-                    {
-                        flex: 1,
-                        xtype: 'columnform',
-                        autoHeight: true,
-                        labelAlign: 'top',
-                        items: [
-                            [
-                                this.blacklistContactCheckbox,
-                                this.action_requestConsent
-                            ]
-                        ]
-                    },
+                    [this.action_gdpr],
+                    this.blacklistContactLabel,
+                    this.blacklistContactCheckbox,
                     {
                         layout: 'hbox',
                         height: 50,
@@ -108,11 +106,9 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             ]
         }];
 
-        this.actionUpdater = new Tine.widgets.ActionUpdater({
-            evalGrants: false
-        });
-        this.actionUpdater.addAction(this.action_requestConsent);
         this.supr().initComponent.call(this);
+
+
     },
 
     onRender: function() {
@@ -170,8 +166,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         if (blacklistContact) {
             this.dataIntendedPurposesGrid.setReadOnly(true);
         }
-
-        this.actionUpdater.updateActions([this.action_requestConsent]);
+        this.gdprLink = Tine.Tinebase.common.getUrl() + `GDPR/view/manageConsent/${record.id}`;
     },
 
     setReadOnly: function(readOnly) {

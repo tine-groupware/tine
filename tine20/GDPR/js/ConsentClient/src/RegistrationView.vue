@@ -5,59 +5,48 @@ descriptiong: descriptoin
 -->
 <template>
   <div class="main-container" v-if="!loading || responseData">
-    <div v-if="!isExpired">
-      <div v-if="!token">
-        <div class="text-container" v-html="templates?.registrationViewTemplate"></div>
-        <BFormInput class="mb-3 mt-2"
-          id="email-addr"
-          :placeholder="formatMessage('E-mail')"
-          type="email"
-          v-model="email"
-          :readonly=!!email
-        ></BFormInput>
-        <BFormInput class="mb-3 mt-2"
-          id="first-name"
-          :placeholder="formatMessage('First Name')"
-          type="text"
-          v-model="n_given"
-        ></BFormInput>
-        <BFormInput class="mb-3 mt-2"
-          id="last-name"
-          :placeholder="formatMessage('Last Name')"
-          type="text"
-          v-model="n_family"
-        ></BFormInput>
-        <BFormInput class="mb-3 mt-2"
-          id="organization"
-          :placeholder="formatMessage('Organization')"
-          type="text"
-          v-model="org_name"
-        ></BFormInput>
-        <div class="d-grid gap-2">
-          <BButton block variant="primary" @click="onButtonClicked">{{ formatMessage('Register') }}</BButton>
-        </div>
+    <div v-if="!submissionComplete">
+      <div class="text-container" v-html="templates?.registrationViewTemplate"></div>
+      <BFormInput class="mb-3 mt-2"
+        id="email-addr"
+        :placeholder="formatMessage('E-mail')"
+        type="email"
+        v-model="email"
+        :readonly=!!email
+      ></BFormInput>
+      <BFormInput class="mb-3 mt-2"
+        id="first-name"
+        :placeholder="formatMessage('First Name')"
+        type="text"
+        v-model="n_given"
+      ></BFormInput>
+      <BFormInput class="mb-3 mt-2"
+        id="last-name"
+        :placeholder="formatMessage('Last Name')"
+        type="text"
+        v-model="n_family"
+      ></BFormInput>
+      <BFormInput class="mb-3 mt-2"
+        id="organization"
+        :placeholder="formatMessage('Organization')"
+        type="text"
+        v-model="org_name"
+      ></BFormInput>
+      <div class="d-grid gap-2">
+        <BButton block variant="primary" @click="onButtonClicked">{{ formatMessage('Register') }}</BButton>
       </div>
-      <div v-else>
+    </div>
+    <div v-else>
+      <div v-if="contactId">
         <div class="text-container" v-html="templates?.afterClickRegistrationTemplate"></div>
         <router-link :to="{
           name: 'manage-consent',
-          params: { token: token }
+          params: { contactId: contactId }
         }">
         <div class="d-grid gap-2">
           <BButton block variant="primary">{{ formatMessage('Go to my manage consent link') }}</BButton>
         </div>
         </router-link>
-      </div>
-    </div>
-    <div v-else>
-      <div v-if="!sendNewLink">
-        <div class="text-container" v-html="templates?.linkExpiredTemplate"></div>
-        <div class="d-flex justify-content-center">
-          <BButton @click="onSendNewLinkButtonClicked" variant="primary">{{ formatMessage("Get new link")}}</BButton>
-        </div>
-      </div>
-      <div v-else>
-        <div class="text-container" v-html="templates?.afterSendLinkExpiredEmailTemplate"></div>
       </div>
     </div>
   </div>
@@ -66,8 +55,9 @@ descriptiong: descriptoin
 <script setup>
 
 import {
+  onBeforeMount,
+  defineProps,
   ref,
-  onBeforeMount
 } from "vue"
 
 const loading = ref(true);
@@ -77,28 +67,19 @@ const email = ref("")
 const n_family = ref("")
 const n_given = ref("")
 const org_name = ref("")
-const token = ref('')
-const isExpired = ref(false);
-const sendNewLink = ref(false);
+const submissionComplete = ref(false)
+const contactId = ref('')
 
-// ← fires automatically when parent finishes fetching
 const fetchData = async () => {
   const response = await fetch(window.location.pathname.replace('/view/', '/'))
   responseData.value = await response.json();
   if(!response.ok) console.error('Error fetching data:', responseData.value)
 
-  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html']
-  email.value = responseData.value.email
-
-  if (responseData.value.error) {
-    if (responseData.value.error === 'Token is expired') {
-      isExpired.value = true;
-      return;
-    }
-  }
-
+  templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
+  email.value = responseData.value.email;
   if (responseData.value.current_contact) {
-    token.value = responseData.value.token
+    submissionComplete.value = true;
+    contactId.value = responseData.value.current_contact.id;
   }
 }
 
@@ -110,6 +91,11 @@ onBeforeMount(async () => {
   document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
   loading.value = false;
 })
+
+const props = defineProps({
+  submissionComplete: {type: Boolean, default: false},
+})
+
 
 const onButtonClicked = async () => {
   const body = {
@@ -123,24 +109,15 @@ const onButtonClicked = async () => {
     body:    JSON.stringify(body),
   })
     .then(async response => {
+      // show than you
       responseData.value = await response.json();
-      token.value = responseData.value?.token
+      contactId.value = responseData.value?.current_contact?.id
+      submissionComplete.value = true;
     })
     .catch((e) => {
       // show failed but thank you
       debugger
     })
-}
-
-const onSendNewLinkButtonClicked = async () => {
-  await fetch(window.location.pathname.replace('/view/', '/'), {
-    method: 'POST',
-    body: JSON.stringify({
-      expired: true,
-    })
-  }).then(data => {
-    sendNewLink.value = true;
-  })
 }
 
 </script>

@@ -82,9 +82,9 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
      * @return null
      * @throws Tinebase_Exception_Backend_Database
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig, &$context)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
-        GDPR_Controller_DataIntendedPurposeRecord::getInstance()->prepareMassMailingMessage($_message, $_twig, $context);
+        GDPR_Controller_DataIntendedPurposeRecord::getInstance()->prepareMassMailingMessage($_message, $_twig);
         return ;
     }
 
@@ -95,12 +95,12 @@ class GDPR_Controller extends Tinebase_Controller_Event implements
                 GDPR_Controller::class, 'publicApiMainScreen', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->get('/manageConsent[/{token}]', (new Tinebase_Expressive_RouteHandler(
-                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetManageConsentByToken', [
+            $routeCollector->get('/manageConsent[/{contactId}]', (new Tinebase_Expressive_RouteHandler(
+                GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiGetManageConsentByContactId', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
-            $routeCollector->post('/manageConsent/{token}', (new Tinebase_Expressive_RouteHandler(
-            GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostManageConsentByToken', [
+            $routeCollector->post('/manageConsent/{contactId}', (new Tinebase_Expressive_RouteHandler(
+            GDPR_Controller_DataIntendedPurposeRecord::class, 'publicApiPostManageConsentByContactId', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->get('/register/for[/{dipId}]', (new Tinebase_Expressive_RouteHandler(

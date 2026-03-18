@@ -515,7 +515,6 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
     onRender : function(ct, position){
         Ext.form.HtmlEditor.superclass.onRender.call(this, ct, position);
         this.el.dom.style.border = '0 none';
-        this.el.dom.style.overflow = 'auto';
         this.el.dom.setAttribute('tabIndex', -1);
         this.el.addClass('x-hidden');
         if(Ext.isIE){ // fix IE 1px bogus margin

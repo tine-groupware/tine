@@ -13,6 +13,7 @@ $secondary: #8cb8d7;
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 .main-container {
+  height: 100vh;
   max-width: 600px;
   display: flex;
   flex: 1;
