@@ -273,7 +273,7 @@ prevent-wrong-update-script-changes:
     - git fetch origin
     - prevent_wrong_update_script_changes
   rules:
-    - if: $PREVENT_WRONG_UPDATE_SCRIPT_CHANGES == "false"
+    - if: $PREVENT_WRONG_UPDATE_SCRIPT_CHANGES != "true"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /allow-failure-prevent-wrong-update-script-changes/
       allow_failure: true
