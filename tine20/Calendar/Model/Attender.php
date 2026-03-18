@@ -267,9 +267,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             return null;
         }
 
+        if (is_array($this->user_id) && isset($this->user_id['pollReplies'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " user_id should not have pollReplies : " . print_r($this->user_id['pollReplies'], true));
+            return null;
+        }
+
         $adbController = Addressbook_Controller_Contact::getInstance();
         $adbAcl = $adbController->doContainerACLChecks(false);
         try {
+
             $contact = $adbController->get($this->user_id, null, false);
             return $contact->account_id ? $contact->account_id : null;
         } catch (Tinebase_Exception_NotFound $e) {
