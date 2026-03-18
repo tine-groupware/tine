@@ -379,31 +379,6 @@ class Tinebase_Twig
             }));
         $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('localizeString', function ($records, $locale = null) {
             $language = is_string($locale) ? $locale : $locale->getLanguage();
-
-            if (is_array($records)) {
-                // Find by language in plain array
-                $record = array_filter($records, fn($r) =>
-                    (is_array($r) ? $r[Tinebase_Record_PropertyLocalization::FLD_LANGUAGE] ?? null
-                        : $r->{Tinebase_Record_PropertyLocalization::FLD_LANGUAGE} ?? null) === $language
-                );
-                $record = array_values($record)[0] ?? null;
-
-                // Fallback to 'en'
-                if (!$record) {
-                    $record = array_filter($records, fn($r) =>
-                        (is_array($r) ? $r[Tinebase_Record_PropertyLocalization::FLD_LANGUAGE] ?? null
-                            : $r->{Tinebase_Record_PropertyLocalization::FLD_LANGUAGE} ?? null) === 'en'
-                    );
-                    $record = array_values($record)[0] ?? null;
-                }
-
-                if (!$record) {
-                    return '';
-                }
-
-                return $record[Tinebase_Record_PropertyLocalization::FLD_TEXT] ?? '';
-            }
-
             $record = $records?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $language);
 
             if (!$record) {

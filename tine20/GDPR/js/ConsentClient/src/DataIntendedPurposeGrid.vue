@@ -10,9 +10,9 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="purpose in extendedDataIntendedPurposes" :key="purpose.__record.key" :class="{ 'highlight-row': props.consentConfig.dip && purpose.intendedPurpose.id === props.consentConfig.dip.id }">
-        <td><strong>{{ purpose.__record.name }}</strong></td>
-        <td v-if="!props.consentConfig.current_contact" :class=purpose.__record.cellClass><strong>{{ purpose.__record.desc }}</strong></td>
+      <tr v-for="purpose in extendedDataIntendedPurposes" :key="purpose.__record.key">
+        <td class="highlight"><strong>{{ purpose.__record.name }}</strong></td>
+        <td v-if="!props.consentConfig.current_contact" class="highlight" :class=purpose.__record.cellClass><strong>{{ purpose.__record.desc }}</strong></td>
         <td v-if="props.consentConfig.current_contact" class="status" :class=purpose.__record.cellClass>{{ purpose.__record.statusText}}</td>
         <td v-if="props.consentConfig.current_contact" class="action-button text-center"><BButton variant="primary py-0" @click="openDialog(purpose)">{{ formatMessage(purpose.__record.status) }}</BButton></td>
       </tr>
@@ -163,7 +163,9 @@ button:active {
   color: #222;
   border: 1px solid #008CC9;
 }
-
+td.highlight{
+  background-color: #DCE8F5;
+}
 td.UNDECIDED{
   background-color: yellow;
 }
@@ -185,6 +187,15 @@ td.action-button, td.action-button{
   min-width: 130px;
 }
 
+.button{
+  width: 100%;
+  padding: 0;
+}
+
+.consent-button-group{
+  margin: 1em;
+}
+
 .consent-button-group > button{
   padding: 0 1em;
   margin: 0 1em;
@@ -194,10 +205,6 @@ td.action-button, td.action-button{
   table {
     vertical-align: middle;
   }
-}
-
-tr.highlight-row td:not(.highlight):not([class*="table-"]) {
-  background-color: rgba(82, 225, 241, 0.5) !important;
 }
 
 </style>

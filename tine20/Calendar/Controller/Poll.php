@@ -447,7 +447,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
      * @param Felamimail_Model_Message $_message
      * @return null
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig, &$context)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
         if (!preg_match('#/Calendar/view/poll/([a-z0-9]+)#', $_message->body, $matches)) {
             // nothing to do here

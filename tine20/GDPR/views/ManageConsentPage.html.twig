@@ -25,15 +25,3 @@ url: GDPR/view/manageConsent/contactId
             <a>{{ _('Here you can decide for which purposes we may contact you.') }}</a>
         </div>
 {% endblock %}
-
-{% block linkExpiredTemplate %}
-    <div class="my-4">
-        <p>{{ _("This link is expired, please click the button to get the new link.") }}</p>
-    </div>
-{% endblock %}
-
-{% block afterSendLinkExpiredEmailTemplate %}
-    <div class="my-4">
-        <p>{{ _("We have sent you a new link. Please check your inbox.") }}</p>
-    </div>
-{% endblock %}

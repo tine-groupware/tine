@@ -36,15 +36,3 @@ available parameters:
         {% endif %}
     </div>
 {% endblock %}
-
-{% block linkExpiredTemplate %}
-    <div class="my-4">
-        <p>{{ _("This registration link is expired, please click the button to get the new registration link.") }}</p>
-    </div>
-{% endblock %}
-
-{% block afterSendLinkExpiredEmailTemplate %}
-    <div class="my-4">
-        <p>{{ _("We have sent you a new registration link. Please check your inbox.") }}</p>
-    </div>
-{% endblock %}

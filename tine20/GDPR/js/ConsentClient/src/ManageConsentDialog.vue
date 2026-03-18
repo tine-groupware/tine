@@ -80,7 +80,8 @@ const postConsent = async () => {
             break;
     }
 
-    await fetch(window.location.pathname.replace('/view/', '/'), {
+    const contactId = window.location.href.split('/').pop();
+    await fetch(`/GDPR/manageConsent/${contactId}`, {
         method: 'POST',
         body: JSON.stringify(body)
     }).then(resp => resp.json())

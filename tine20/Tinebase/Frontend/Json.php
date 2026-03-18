@@ -2041,29 +2041,4 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return $_node->preview_count ?? 0;
     }
-
-    /**
-     * get Message twig template by template path
-     * @param string $templatePath
-     * @param string $app
-     * @return array
-     */
-    public function getEmailTwigTemplate(string $templatePath, string $app = 'Tinebase', $context = [])
-    {
-        $result = [
-            'subject' => '',
-            'content' => ''
-        ];
-
-        try {
-            $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation($app));
-            $htmlTemplate = $twig->load($app . '/views/emails/'. $templatePath .'.html.twig');
-            $result['content'] = $htmlTemplate->render($context);
-            $result['subject'] = $htmlTemplate->renderBlock('subject', $context);
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Failed to get E-Mail twig template : ' .  $e->getMessage());
-        }
-
-        return $result;
-    }
 }

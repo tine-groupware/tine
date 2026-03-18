@@ -53,7 +53,6 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'from_node' }, // JS only - contains node data if opened from Filemanager
       { name: 'is_spam_suspicions', type: 'bool' },
       { name: 'expected_answer' },
-      { name: 'context' }, // virtual field for twig template
       { name: 'tags'},
     ], {
     appName: 'Felamimail',

@@ -15,7 +15,6 @@ use AntibodiesOnline\BootstrapEmail\ScssCompiler;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-
 class Tinebase_Twig_BootstrapEmailExtension extends AbstractExtension
 {
     private $bootstrapEmailCompiler;
@@ -45,19 +44,15 @@ class Tinebase_Twig_BootstrapEmailExtension extends AbstractExtension
      * @param string $html The HTML template to compile
      * @return string Compiled HTML with inlined CSS
      */
-    public function compileBootstrapEmail(string &$html): string
+    public function compileBootstrapEmail(string $html): string
     {
         try {
             $errorReporting = error_reporting();
             error_reporting($errorReporting & ~E_DEPRECATED);
-            // href="{% verbatim %}{{ link }}{% endverbatim %}" always use verbatim to preserve links for the second rendering, eg. ['href', 'src']
-            $document = Tinebase_Twig_HtmlProtector::protectAttributes($html);
-            $document = $this->bootstrapEmailCompiler->compile($document);
-            $html = $document->saveHTML();
-            $html = Tinebase_Twig_HtmlProtector::unmaskTwig($html);
+
+            $html = $this->bootstrapEmailCompiler->compileHtml($html);
 
             error_reporting($errorReporting);
-
             return $html;
         } catch (\Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
