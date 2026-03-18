@@ -248,6 +248,7 @@ Ext.Msg.show({
          * @return {Ext.MessageBox} this
          */
         show: async function(options){
+            clearInterval(this.animateProgressInterval);
             options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
             synchronousVisibilityState = !__HIDDEN
             Ext.getBody().mask("Loading");
@@ -294,8 +295,9 @@ Ext.Msg.show({
             }
 
             opt = {...defaultConfigs,...options};
-            opt["closable"] = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
+            opt["closable"] = opt.hasOwnProperty('closable') ? !!opt.closable : (opt.progress !== true && opt.wait !== true);
             opt["prompt"] = opt.prompt || (opt.multiline ? true : false);
+            opt["progress"] = opt.progress;
 
             // if a MessageBox.show() came right after the first MessageBox calls
             // the async module are being loaded, so
@@ -383,18 +385,38 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         wait : function(msg, title, config){
+            if (_.get(config, 'estimate')) _.delay(_.bind(this.animateProgress, this, config.estimate), 250)
             return this.show({
                 title : title,
                 msg : msg,
                 buttons: false,
-                closable:false,
-                wait:true,
+                closable: _.get(config, 'closable', false),
+                wait: !_.get(config, 'estimate', false),
+                progress:true,
                 modal:true,
                 minWidth: this.minProgressWidth,
                 waitConfig: config,
                 fn: 'fake',
                 icon: this.INFO_WAIT
             });
+        },
+
+        animateProgress: function(estimate) {
+            clearInterval(this.animateProgressInterval);
+            const steps = Math.ceil(estimate / 1000 * 2);
+            let step = 0;
+
+            const interval = this.animateProgressInterval = setInterval(() => {
+                if (interval !== this.animateProgressInterval) return
+                step++;
+                const progress = Math.sqrt(step / steps); //Math.log(1 + (step / steps) * (Math.E - 1));
+
+                this.updateProgress(Math.min(progress, 0.999));
+
+                if (step >= steps) {
+                    clearInterval(interval);
+                }
+            }, 500);
         },
 
         /**

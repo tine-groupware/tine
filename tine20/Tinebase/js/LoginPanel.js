@@ -117,7 +117,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
     checkOIDCLogin: function() {
         var oidcResponse = window.location.hash;
         if (oidcResponse.match(/access_token/)) {
-            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'), { estimate: 5000 });
             Ext.Ajax.request({
                 scope: this,
                 params: {
@@ -188,7 +188,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
             if (window.initialData?.afterLoginRedirect) {
                 return this.redirect(window.initialData.afterLoginRedirect);
             }
-            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'), { estimate: 5000 });
             
             if (responseData?.assetHash && Tine.clientVersion.assetHash !== responseData.assetHash) {
                 Tine.Tinebase.common.reload({
@@ -229,7 +229,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
     },
 
     onExtIDPLoginPress: function (idpID) {
-        Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+        Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'), { estimate: 5000 })
         this._login(null, null, null, {
             'X-TINE20-REQUEST-CONTEXT-idpId': idpID
         })
@@ -258,7 +258,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
         const values = this.getFormValue()
 
         if (this.checkFormValidity()) {
-            if (values.password) Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+            if (values.password) Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'), { estimate: 2000 })
             this._login(values.username, values.password, additionalParams)
         } else {
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));

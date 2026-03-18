@@ -92,7 +92,19 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                 this.loadingIndicator.on('dblclick', this.showClient, this)
 
                 this.clientFrame.dom.src = this.url.href
-                window.setTimeout(this.checkClientLoaded.bind(this), 5000)
+                if (! this.bootstrapData.mx_account.is_initialized) {
+                    window.addEventListener('beforeunload', (event) => {
+                        if (! this.bootstrapData.mx_account.is_initialized) {
+                            event.preventDefault();
+                        }
+                    });
+                    Ext.MessageBox.wait(this.app.formatMessage('{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser.', {
+                        brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
+                    }), this.app.i18n._('Please wait ...'), { closable: true, estimate: 30000 })
+                } else {
+                    window.setTimeout(this.checkClientLoaded.bind(this), 5000)
+                }
+
             } else {
                 this.showUnavailableAlertIf()
             }
@@ -122,6 +134,12 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     }, await Tine.MatrixSynapseIntegrator.getLogindata()), this.url.origin);
                     break;
                 case "elementSetupEncryptionDone":
+                    if (! this.bootstrapData.mx_account.is_initialized) {
+                        this.bootstrapData.mx_account.is_initialized = true
+                        this.bootstrapData.mx_account.account_id = this.bootstrapData.mx_account.account_id.accountId || this.bootstrapData.mx_account.account_id
+                        this.bootstrapData.mx_account = await Tine.MatrixSynapseIntegrator.saveMatrixAccount(this.bootstrapData.mx_account)
+                        Ext.MessageBox.hide()
+                    }
                     this.showClient()
                     break
                 case "elementStartupFailure":
@@ -213,7 +231,7 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     checkClientLoaded: async function() {
         if (!this.clientIsLoaded && await Ext.MessageBox.show({
             title: this.app.formatMessage('Chat could not be loaded'),
-            msg: this.app.formatMessage('The Chat program could not be loaded. Try again?.'),
+            msg: this.app.formatMessage('The Chat program could not be loaded. Try again?'),
             buttons: Ext.MessageBox.YESNO,
             icon: Ext.MessageBox.QUESTION_WARN
         }) === 'yes') {
@@ -291,9 +309,9 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     alertUnhandledEncryptionError: async function(error) {
         await Ext.MessageBox.show({
             title: this.app.formatMessage('Unhandled encryption error'),
-            msg: this.app.formatMessage('An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error: ', {
+            msg: this.app.formatMessage('An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:', {
                 brandingTitle: Tine.Tinebase.registry.get('brandingTitle')
-            }) + error,
+            }) + `${error}`,
             buttons: Ext.MessageBox.OK,
             icon: Ext.MessageBox.ERROR,
         });
