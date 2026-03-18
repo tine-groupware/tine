@@ -87,7 +87,7 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                 (rpInfo.description ? '<p class="tb-login-infotext-description">' + rpInfo.description + '</p>' : ''),
             scope: this,
             onLoginPress: function (additionalParams) {
-                Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'));
+                Ext.MessageBox.wait(window.i18n._hidden('Logging you in...'), window.i18n._hidden('Please wait'), { estimate: 3000 });
 
 
                 const values = this.getFormValue()

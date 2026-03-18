@@ -28,6 +28,8 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
     public const FLD_MATRIX_RECOVERY_KEY = 'matrix_recovery_key';
     public const FLD_MATRIX_RECOVERY_PASSWORD = 'matrix_recovery_password';
     public const FLD_MATRIX_SESSION_KEY = 'matrix_session_key';
+    public const FLD_IS_INITIALIZED = 'is_initialized';
+
 
     public const MODEL_NAME_PART = 'MatrixAccount';
     public const TABLE_NAME = 'matrix_account';
@@ -168,6 +170,18 @@ class MatrixSynapseIntegrator_Model_MatrixAccount extends Tinebase_Record_NewAbs
 //                self::LABEL                     => 'Active', // _('Active')
 //                self::DEFAULT_VAL               => true,
 //            ],
+            self::FLD_IS_INITIALIZED  => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::NULLABLE                  => false,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::FILTER                    => [Zend_Filter_Empty::class => true],
+                self::LABEL                     => 'Is Initialized', // _('Is Initialized')
+                self::DESCRIPTION               => 'The Account is fully initialized in the synapse server and crypt setup has run.', // _('The Account is fully initialized in the synapse server and crypt setup has run.')
+                self::DEFAULT_VAL               => false,
+                self::UI_CONFIG                 => [
+                    self::READ_ONLY                 => true,
+                ],
+            ],
         ]
     ];
 }

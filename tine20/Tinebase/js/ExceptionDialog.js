@@ -223,7 +223,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      */
     onSendReport: function () {
         if (! this.nonInteractive) {
-            Ext.MessageBox.wait(i18n._('Sending report...'), i18n._('Please wait a moment'));
+            Ext.MessageBox.wait(i18n._('Sending report...'), i18n._('Please wait a moment'), { estimate: 30000 });
         }
         var baseUrl = Tine.bugreportUrl;
         var hash = this.generateHash();

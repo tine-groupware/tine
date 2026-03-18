@@ -89,6 +89,7 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
 
         $userData = $this->_recordToJson($matrixAccount);
         return [
+            'mx_account' => $userData,
             'mx_user_id' => $userData[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID],
             'recovery_key' => $matrixAccount->getPasswordFromProperty(
                 MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_KEY

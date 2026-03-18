@@ -73,6 +73,18 @@ msgstr "Kein Chat Konto zugewiesen"
 msgid "You have not yet been assigned an chat account. This view is therefore empty"
 msgstr "Ihnen wurde bis jetzt kein Chat-Konto zugewiesen. Diese Ansicht ist daher leer."
 
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
+
+msgid "{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser."
+msgstr "{ brandingTitle } richtet gerade ihren Chat Zugang ein. Bitte haben sie einen Moment Geduld und schließen sie den Browser nicht."
+
+msgid "Chat could not be loaded"
+msgstr "Chat kann nicht geladen werden"
+
+msgid "The Chat program could not be loaded. Try again?"
+msgstr "Das Chat Programm konnte nicht geladen werden. Erneut versuchen?"
+
 msgid "Recovery Key or Password Needed"
 msgstr "Wiederherstellungs-Schlüssel oder -Passwort benötigt"
 
@@ -85,11 +97,23 @@ msgstr "Wiederherstellungs-Schlüssel oder -Passwort falsch"
 msgid "The recovery data you entered was incorrect. Please try again."
 msgstr "Ihre eingegebenen Wiederherstellungsdaten waren nicht korrekt. Bitte versuchen sie es noch einmal."
 
+msgid "Chat storage corrupted"
+msgstr "Chat-Daten beschädigt"
+
+msgid "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
+msgstr "Die lokalen Chat-Daten sind beschädigt. Dies kann vorkommen, wenn mehrere Benutzer denselben Computer nutzen. Um dieses Problem zu beheben, müssen die lokalen Chat-Daten gelöscht werden. Dies kann zum Verlust von Nachrichten führen. Möchten Sie die lokalen Chat-Daten löschen?"
+
 msgid "Manual Management Required"
 msgstr "Manuelle Verwaltung benötigt"
 
 msgid "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
 msgstr "{ brandingTitle } kennt ihren ihre korrekten Wiederherstellungsdaten nicht und kann kann ihre Chats daher nicht entsperren. Sie können versuchen ihre Wiederherstellungsdaten direkt im Chat Programm eingeben. In diesem Fall speichert { brandingTitle } diese Daten nicht und sie müssen sie ggf. mehrfach eingeben."
+
+msgid "Unhandled encryption error"
+msgstr "Unbehandelter Verschlüsselungsfehler"
+
+msgid "An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:"
+msgstr "Es ist ein unbehandelter Fehler aufgetreten. Bitte laden Sie { brandingTitle } neu. Sollte der Fehler weiterhin bestehen, wenden Sie sich bitte an den Support. Fehler:"
 
 msgid "Matrix Accounts"
 msgstr "Matrix Konten"
