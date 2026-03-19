@@ -1,6 +1,10 @@
 ### Running Tests in tine Groupware
 
+TODO: this is also referenced in the developer documentation (docs/developers/server/phpunit.md) - we should make sure they're in sync.
+
 To run tests in the tine Groupware environment, use the `console` script located in the `tine-docker` directory.
+
+The tine-docker (or called tine-dev / docker-dev) repository can be found here: https://github.com/tine-groupware/tine-dev
 
 #### Configuration
 The path to the `tine-docker` environment can be different for each developer. To make the commands below work, set the `TINE_DOCKER_PATH` environment variable:
