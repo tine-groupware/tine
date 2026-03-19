@@ -20,6 +20,12 @@
     </style>
     {% endif %}
 
+        {% if customStyles %}
+            {%- for customStyle in customStyles -%}
+                <link rel="stylesheet" href="{{ customStyle }}">
+            {% endfor -%}
+        {% endif %}
+
     <style>@media (prefers-color-scheme: dark) { body {background-color: black} } </style>
 
     {% block metaViewport -%}
