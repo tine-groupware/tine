@@ -296,6 +296,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         return value;
     },
 
+    // generic overflow tip from Field.js
+    showOverflowTipForText: function(text) {
+        const moreText = this.getListItemQtip(this.selectedRecord)
+        if (moreText) {
+            text = text + '\n\n' + moreText;
+            this.el.set({qtip: ''});
+        }
+
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.showOverflowTipForText.call(this, text);
+    },
+
     // TODO re-init this.list if it goes away?
     // NOTE: we sometimes lose this.list (how?). prevent error by checking existence.
     doResize: function(w){
