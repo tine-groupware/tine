@@ -33,7 +33,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('CrewScheduling'),
     const action = getAction({})
     const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
     Ext.ux.ItemRegistry.registerItem(`CrewScheduling-Poll-GridPanel-ContextMenu`, action, 40)
-    Ext.ux.ItemRegistry.registerItem(`CrewScheduling-Poll-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 38)
-    Ext.ux.ItemRegistry.registerItem(`CrewScheduling-Poll-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 90)
+    Ext.ux.ItemRegistry.registerItem(`CrewScheduling-Poll-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 38)
+    Ext.ux.ItemRegistry.registerItem(`CrewScheduling-Poll-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 90)
 
 })

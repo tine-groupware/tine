@@ -154,7 +154,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const action = getAction(modelName, {});
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'};
         Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ContextMenu`, action, 2);
-        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 30);
-        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10);
+        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 30)
+        Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 10)
     })
 })
