@@ -1835,6 +1835,41 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 }
             });
+
+            if (this.stateful) {
+                this.gridConfig.stateful = true;
+                this.gridConfig.stateId = this.stateId + '-Grid';
+                const gridStateId = this.getResolvedGridStateId();
+                let gridState = Ext.state.Manager.get(gridStateId);
+                if (gridState) this.defaultSortInfo = gridState.sort;
+
+                const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
+                this.regionStateId = `${stateId}_detailspanelregion`;
+                this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+
+                this.regionConfigStateId = `${stateId}_region_config`;
+                this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
+                    'south': {},
+                    'east': {},
+                });
+
+                //update script , it should be removed after we make sure customer has the updateed state
+                const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+                const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
+                if (oldDetailsPanelRegion) {
+                    this.detailsPanelRegion = oldDetailsPanelRegion;
+                    Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
+                    Ext.state.Manager.clear(oldRegionStateId);
+                }
+                const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+                const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
+                if (oldRegionConfig) {
+                    this.regionConfig = oldRegionConfig;
+                    Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+                    Ext.state.Manager.clear(oldRegionConfigStateId);
+                }
+            }
+
             // todo : hide the layout action if disableResponsiveLayout ?
             const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
             this.widthClasses = ['auto', 'oneColumn', 'big'].concat(levels);
@@ -1853,9 +1888,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     }
                 });
             });
+            const layoutMenuItems = layoutActions.slice();
+            layoutMenuItems.push('-');
+            layoutMenuItems.push(new Ext.menu.CheckItem({
+                text: Ext.util.Format.capitalize(i18n._('show full text')),
+                checked: this.regionConfig ? !!this.regionConfig.showFullText : null,
+                checkHandler: (item, checked) => {
+                    this.regionConfig.showFullText = checked;
+                    Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+
+                    this.grid.view.refresh();
+                }
+            }));
+
             this.layoutMenu = new Ext.Action({
                 xtype: 'tbsplit',
-                menu: new Ext.menu.Menu({items: layoutActions}),
+                menu: new Ext.menu.Menu({items: layoutMenuItems}),
                 displayPriority: 80,
                 iconCls: 'x-cols-icon',
                 tooltip: 'Layout',
@@ -1871,6 +1919,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         const level = this.regionConfig[this.detailsPanelRegion]?.responsiveLevel;
                         action.setIconClass(action.initialConfig.dataIndex === level ? 'action_enable' : '');
                     });
+                    const menuItems = action.items[0].menu.items;
+                    const checkItem = menuItems.items[menuItems.items.length - 1];
+                    if (checkItem instanceof Ext.menu.CheckItem) {
+                        checkItem.setChecked(!!this.regionConfig.showFullText);
+                    }
                 },
             });
             this.pagingToolbar.insert(11, this.sortingMenu);
@@ -1904,40 +1957,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
         //we need the state configs before initial Grid
-        if (this.stateful) {
-            this.gridConfig.stateful = true;
-            this.gridConfig.stateId = this.stateId + '-Grid';
-            const gridStateId = this.getResolvedGridStateId();
-            let gridState = Ext.state.Manager.get(gridStateId);
-            if (gridState) this.defaultSortInfo = gridState.sort;
-            
-            const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
-            this.regionStateId = `${stateId}_detailspanelregion`;
-            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-            
-            this.regionConfigStateId = `${stateId}_region_config`;
-            this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
-                'south': {},
-                'east': {},
-            });
-            
-            //update script , it should be removed after we make sure customer has the updateed state
-            const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-            const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
-            if (oldDetailsPanelRegion) {
-                this.detailsPanelRegion = oldDetailsPanelRegion;
-                Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
-                Ext.state.Manager.clear(oldRegionStateId);
-            }
-            const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
-            const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
-            if (oldRegionConfig) {
-                this.regionConfig = oldRegionConfig;
-                Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
-                Ext.state.Manager.clear(oldRegionConfigStateId);
-            }
-        }
-        
         this.gridConfig.store = this.store;
         
         // activate grid header menu for column selection

@@ -614,6 +614,7 @@ viewConfig: {
                 p.id = c.id;
                 p.css = i === 0 ? 'x-grid3-cell-first ' : (i == last ? 'x-grid3-cell-last ' : '');
                 p.attr = p.cellAttr = '';
+                this.transformMetaData(r.data[c.name], p, r, rowIndex, i, ds)
                 p.value = c.renderer.call(c.scope, r.data[c.name], p, r, rowIndex, i, ds);
                 p.style = c.style;
                 if(Ext.isEmpty(p.value)){
@@ -640,6 +641,30 @@ viewConfig: {
             buf[buf.length] =  rt.apply(rp);
         }
         return buf.join('');
+    },
+
+    transformMetaData: function(value, metaData, record, rowIndex, colIndex, store) {
+        try {
+            const appName = store.proxy.appName;
+            const modelName = store.proxy.modelName;
+            const stateId = `${appName}-${modelName}`;
+            let regionConfigStateId = `${stateId}_region_config`;
+            let regionconfig = null;
+
+            if (Ext.state.Manager.getProvider()) {
+                regionconfig = Ext.state.Manager.get(regionConfigStateId);
+            }
+
+            if (regionconfig && regionconfig.showFullText) {
+                metaData.showFullText = true;
+                metaData.maxRowHeight = 'none';
+            } else {
+                metaData.showFullText = false;
+                metaData.maxRowHeight = '1.2em';
+            }
+        } catch (e) {
+            console.error("transformMetaData has the following error: " + e);
+        }
     },
 
     // private

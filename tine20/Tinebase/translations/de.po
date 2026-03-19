@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 12:12+0000\n"
+"PO-Revision-Date: 2026-02-05 17:17+0100\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -29,6 +29,7 @@ msgstr ""
 "X-Poedit-Country: GB\n"
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.8\n"
 
 msgid "admin"
 msgstr "Admin"
@@ -3588,6 +3589,9 @@ msgstr "Zeige Datensätze {0} - {1} von {2}"
 msgid "No {0} to display"
 msgstr "Keine {0} gefunden"
 
+msgid "show full text"
+msgstr "Texte vollständig anzeigen"
+
 msgid "{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}"
 msgstr "{recordGender, select, male {{recordCount, plural, one {# {recordName} ausgewählt} other {# {recordsName} ausgewählt}}} female {{recordCount, plural, one {# {recordName} ausgewählt} other {# {recordsName} ausgewählt}}} other {{recordCount, plural, one {# {recordName} ausgewählt} other {# {recordsName} ausgewählt}}}}"
 
@@ -4755,3 +4759,15 @@ msgstr "Nur Nachbarn"
 
 msgid "Preview"
 msgstr "Vorschau"
+
+#~ msgid "show markdown"
+#~ msgstr "Markdown anzeigen"
+
+#~ msgid "Setting new timezone..."
+#~ msgstr "Neue Zeitzone setzen..."
+
+#~ msgid "Confirm Logout"
+#~ msgstr "Ausloggen bestätigen"
+
+#~ msgid "Show confirmation dialog on logout."
+#~ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
