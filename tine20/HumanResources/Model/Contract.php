@@ -48,7 +48,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
         'recordsName'     => 'Contracts', // gettext('GENDER_Contract')
         'hasRelations'    => FALSE,
-        'hasCustomFields' => FALSE,
+        'hasCustomFields' => true,
         'hasNotes'        => FALSE,
         'hasTags'         => FALSE,
         'modlogActive'    => TRUE,
