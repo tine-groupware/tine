@@ -296,6 +296,17 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         return value;
     },
 
+    // generic overflow tip from Field.js
+    showOverflowTipForText: function(text) {
+        const moreText = this.getListItemQtip(this.selectedRecord)
+        if (moreText) {
+            text = text + '\n\n' + moreText;
+            this.el.set({qtip: ''});
+        }
+
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.showOverflowTipForText.call(this, text);
+    },
+
     // TODO re-init this.list if it goes away?
     // NOTE: we sometimes lose this.list (how?). prevent error by checking existence.
     doResize: function(w){
@@ -388,10 +399,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
     setSelectedRecord: function (record) {
         this.selectedRecord = record;
-        if (this.denormalizationRecordClass && !record.data.original_id && !record.json.original_id) {
-            this.selectedRecord.json.original_id = this.selectedRecord.data.original_id = record.id;
-            this.selectedRecord.setId(this.recordClass.generateUID());
-            this.selectedRecord.phantom = true;
+        if (this.denormalizationRecordClass && !record.data.original_id) {
+            if (!record.json.original_id) {
+                this.selectedRecord.json.original_id = this.selectedRecord.data.original_id = record.id;
+                this.selectedRecord.setId(this.recordClass.generateUID());
+                this.selectedRecord.phantom = true;
+            } else {
+                // NOTE: we use the original models in client which don't have the original_id property
+                this.selectedRecord.data.original_id = record.json.original_id;
+            }
         }
     },
 
