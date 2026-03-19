@@ -178,6 +178,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected $_hasTemplate = false;
 
+    /**
+     * only some extensions are allowed for templates
+     *
+     * @var bool
+     */
+    protected bool $_verifyTemplateFileExtension = true;
+
     /** @var Tinebase_Twig */
     protected $_twig = null;
     /**
@@ -322,9 +329,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } catch (Exception) {
             }
         }
-        if ($this->_templateFileName && !in_array($templateFileExtension = pathinfo($this->_templateFileName, PATHINFO_EXTENSION), [
+        if ($this->_templateFileName
+            && $this->_verifyTemplateFileExtension
+            && !in_array($templateFileExtension = strtolower(pathinfo($this->_templateFileName, PATHINFO_EXTENSION)), [
                     'doc', 'docx', 'xls', 'xlsx', 'ods', 'odt'
-                ])) {
+                ])
+        ) {
             throw new Tinebase_Exception_UnexpectedValue('File extension: "' . $templateFileExtension . '" in ' . $this->_templateFileName . ' is not supported');
         }
         if (!$this->_modelName && !empty($this->_config->model)) {
@@ -843,7 +853,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _loadTwig()
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' loading twig template...');
+        }
 
         $options = [
             // in order to cache the templates, we need to cache $this->_twigMapping too!
