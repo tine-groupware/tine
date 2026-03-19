@@ -323,7 +323,8 @@ Tine.widgets.tree.ContextMenu = {
                             
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
                                 node.setText(Ext.util.Format.htmlEncode(_text));
-                                
+                                node.attributes.longName = _text;
+
                                 this.scope.fireEvent('containerrename', nodeData, node, _text);
                                                               
                             },
