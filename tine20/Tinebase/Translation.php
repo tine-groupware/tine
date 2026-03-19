@@ -249,11 +249,18 @@ class Tinebase_Translation
     public static function getRegionCodeByCountryName($_countryName)
     {
         $countries = self::getCountryList();
-        foreach($countries['results'] as $country) {
-            if ($country['translatedName'] === $_countryName) {
+        // already ISO code
+        foreach ($countries['results'] as $country) {
+            if ($country['shortName'] === $_countryName) {
+                return $_countryName;
+            }
+        }
+        // match translated name, case-insensitive
+        foreach ($countries['results'] as $country) {
+            if (mb_strtolower($country['translatedName']) === mb_strtolower($_countryName)) {
                 return $country['shortName'];
             }
-        } 
+        }
 
         return null;
     }
