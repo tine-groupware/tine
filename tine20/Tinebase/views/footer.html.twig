@@ -25,14 +25,15 @@
         <!-- Links with Bootstrap utilities -->
         <div class="d-flex flex-wrap align-items-center mt-1">
             <div class="d-flex flex-wrap align-items-center w-100">
+                {% set weburl = app.installation.weburl | default(config(constant('Tinebase_Config::TINE20_URL'))) %}
                 {% if app.enablePublicPages %}
-                    <a href="{{ app.installation.weburl }}/GDPR/view/terms" class="text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
+                    <a href="{{ weburl }}/GDPR/view/terms" class="text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
                     <span class="text-muted mx-1">|</span>
-                    <a href="{{ app.installation.weburl }}/GDPR/view/privacy-policy" class="text-primary text-decoration-none">{{ _('Privacy Policy') }}</a>
+                    <a href="{{ weburl }}/GDPR/view/privacy-policy" class="text-primary text-decoration-none">{{ _('Privacy Policy') }}</a>
                     <span class="text-muted mx-1">|</span>
                     <a href="mailto:{{ app.installationRepresentative.email | default('') }}" class="text-primary text-decoration-none">{{ _('Contact Us') }}</a>
                     <span class="text-muted mx-1">|</span>
-                    <a href="{{ app.installation.weburl }}/GDPR/view/imprint" class="text-primary text-decoration-none">{{ _('Imprint') }}</a>
+                    <a href="{{ weburl }}/GDPR/view/imprint" class="text-primary text-decoration-none">{{ _('Imprint') }}</a>
                 {% endif %}
                 <div class="text-muted text-truncate ax-right ms-auto" style="font-size: 14px">Powered by: <a target="_blank" href="{{ app.branding.weburl }}" title="{{ app.branding.description }}">{{ app.branding.title }}</a></div>
             </div>

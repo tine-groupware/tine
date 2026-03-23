@@ -23,5 +23,5 @@ interface Felamimail_Controller_MassMailingPluginInterface
      * @param Tinebase_Twig $_twig
      * @return null
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig);
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig, &$context);
 }

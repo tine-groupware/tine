@@ -1,23 +1,36 @@
 <template>
-    <div class="main-container" v-if="!loading || responseData">
+
+  <div class="main-container" v-if="!loading || responseData">
+    <div v-if="!isExpired">
       <div class="text-container" v-html="templates?.manageConsentPageExplainText"></div>
       <DataIntendedPurposeGrid v-model:consentConfig="responseData"/>
     </div>
+    <div v-else>
+      <div v-if="!sendNewLink">
+        <div class="text-container" v-html="templates?.linkExpiredTemplate"></div>
+        <div class="d-flex justify-content-center">
+          <BButton @click="onSendNewLinkButtonClicked" variant="primary">{{ formatMessage("Get new link")}}</BButton>
+        </div>
+      </div>
+      <div v-else>
+        <div class="text-container" v-html="templates?.afterSendLinkExpiredEmailTemplate"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import {
-    onBeforeMount,
-    ref,
-} from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 import DataIntendedPurposeGrid from "./DataIntendedPurposeGrid.vue";
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const responseData = ref(null);
 const templates = ref(null);
-const loading = ref(true);
+const isExpired = ref(false);
+const sendNewLink = ref(false);
+const responseData = ref(null);
+const loading = ref(null);
 
 const fetchData = async () => {
   const response = await fetch(window.location.pathname.replace('/view/', '/'))
@@ -26,7 +39,12 @@ const fetchData = async () => {
     console.log('Error fetching data:', responseData.value.error)
   }
   templates.value = responseData.value.templates[__WEBPACK_DEFAULT_EXPORT__.__name + '.html'];
+
   if (responseData.value.error) {
+    if (responseData.value.error === 'Token is expired') {
+      isExpired.value = true;
+      return;
+    }
     router.push({
       name: 'email-page',
       params: { dipId: '' }
@@ -35,15 +53,26 @@ const fetchData = async () => {
 }
 
 onBeforeMount(async () => {
-    loading.value = true;
-    try{
-        await fetchData();
-    } catch(e) {
-        console.error(e);
-    }
-    document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
-    loading.value = false;
+  loading.value = true;
+  try {
+    await fetchData();
+  } catch (e) {
+    console.error(e);
+  }
+  document.getElementsByClassName('tine-viewport-waitcycle')[0].style.display = 'none';
+  loading.value = false;
 })
+
+const onSendNewLinkButtonClicked = async () => {
+  await fetch(window.location.pathname.replace('/view/', '/'), {
+    method: 'POST',
+    body: JSON.stringify({
+      expired: true,
+    })
+  }).then(data => {
+    sendNewLink.value = true;
+  })
+}
 </script>
 
 <style lang="scss">
