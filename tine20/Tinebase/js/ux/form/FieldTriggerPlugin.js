@@ -31,7 +31,9 @@ class FieldTriggerPlugin {
         field.clearValue = field.clearValue?.createSequence(_.bind(this.assertState, this))
         field.setReadOnly = field.setReadOnly.createSequence(_.bind(this.assertState, this))
         field.setDisabled = field.setDisabled.createSequence(_.bind(this.assertState, this))
-        field.setHideTrigger = field.setHideTrigger.createSequence(_.bind(this.assertState, this))
+        if (field.setHideTrigger) {
+            field.setHideTrigger = field.setHideTrigger.createSequence(_.bind(this.assertState, this))
+        }
         field.on('keydown', this.assertState, this, { buffer: 50 })
 
         await field.afterIsRendered()

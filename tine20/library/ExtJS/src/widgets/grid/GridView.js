@@ -643,24 +643,26 @@ viewConfig: {
         return buf.join('');
     },
 
-    transformMetaData: function(value, metaData, record, rowIndex, colIndex, store) {
+    transformMetaData: function (value, metaData, record, rowIndex, colIndex, store) {
         try {
-            const appName = store.proxy.appName;
-            const modelName = store.proxy.modelName;
-            const stateId = `${appName}-${modelName}`;
-            let regionConfigStateId = `${stateId}_region_config`;
-            let regionconfig = null;
+            if (store.proxy) {
+                const appName = store.proxy.appName;
+                const modelName = store.proxy.modelName;
+                const stateId = `${appName}-${modelName}`;
+                let regionConfigStateId = `${stateId}_region_config`;
+                let regionconfig = null;
 
-            if (Ext.state.Manager.getProvider()) {
-                regionconfig = Ext.state.Manager.get(regionConfigStateId);
-            }
+                if (Ext.state.Manager.getProvider()) {
+                    regionconfig = Ext.state.Manager.get(regionConfigStateId);
+                }
 
-            if (regionconfig && regionconfig.showFullText) {
-                metaData.showFullText = true;
-                metaData.maxRowHeight = 'none';
-            } else {
-                metaData.showFullText = false;
-                metaData.maxRowHeight = '1.2em';
+                if (regionconfig && regionconfig.showFullText) {
+                    metaData.showFullText = true;
+                    metaData.maxRowHeight = 'none';
+                } else {
+                    metaData.showFullText = false;
+                    metaData.maxRowHeight = '1.2em';
+                }
             }
         } catch (e) {
             console.error("transformMetaData has the following error: " + e);
