@@ -1207,12 +1207,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.movingOrDeleting = false;
         
         Tine.log.debug('Tine.Felamimail.GridPanel::onAfterDelete() -> Loading grid data after delete.');
-        if (ids.length > 0) {
-            this.loadGridData({
-                removeStrategy: 'keepBuffered',
-                autoRefresh: true
-            });
-        }
+
+        this.loadGridData({
+            removeStrategy: 'keepBuffered',
+            autoRefresh: true
+        });
     },
     
     /**
@@ -2021,7 +2020,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             await Promise.allSettled(promises)
                 .then((result) => {
-                    this.onAfterDelete(msgsIds);
+                    if ('spam' === option) {
+                        this.onAfterDelete(msgsIds);
+                    }
+                    if ('ham' === option) {
+                        this.movingOrDeleting = false;
+                    }
                     this.doRefresh();
             });
             
