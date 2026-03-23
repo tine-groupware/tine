@@ -242,6 +242,23 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             $converter = Tinebase_Convert_Factory::factory($event);
             $eventArray = $converter->fromTine20Model($event);
 
+            if (!empty($eventArray['contact_fields']) && is_array($eventArray['contact_fields'])) {
+                $contactModelConfig = Addressbook_Model_Contact::getConfiguration();
+                $fields = $contactModelConfig->getFields();
+
+                $enriched = [];
+                foreach ($eventArray['contact_fields'] as $fieldName => $enabled) {
+                    $enriched[$fieldName] = [
+                        'enabled' => (bool)$enabled,
+                        'label' => isset($fields[$fieldName]['label'])
+                            ? Tinebase_Translation::getTranslation('Addressbook')
+                                ->translate($fields[$fieldName]['label'])
+                            : $fieldName,
+                    ];
+                }
+                $eventArray['contact_fields'] = $enriched;
+            }
+
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
