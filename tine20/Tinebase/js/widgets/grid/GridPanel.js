@@ -1914,10 +1914,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         const level = this.regionConfig[this.detailsPanelRegion]?.responsiveLevel;
                         action.setIconClass(action.initialConfig.dataIndex === level ? 'action_enable' : '');
                     });
-                    const menuItems = action.items[0].menu.items;
-                    const checkItem = menuItems.items[menuItems.items.length - 1];
-                    if (checkItem instanceof Ext.menu.CheckItem) {
-                        checkItem.setChecked(!!this.regionConfig.showFullText);
+                    if (action.items) {
+                        const menuItems = action.items[0].menu.items;
+                        const checkItem = menuItems.items[menuItems.items.length - 1];
+                        if (checkItem instanceof Ext.menu.CheckItem) {
+                            checkItem.setChecked(!!this.regionConfig.showFullText);
+                        }
                     }
                 },
             });
