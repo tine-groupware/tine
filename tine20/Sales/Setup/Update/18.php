@@ -65,6 +65,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update009',
             ],
+            self::RELEASE018_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
