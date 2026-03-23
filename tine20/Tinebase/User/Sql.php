@@ -842,16 +842,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $this->updateContactInSqlBackend($_contact);
     }
-    
+
     /**
-     * update contact data(first name, last name, ...) of user in local sql storage
-     * 
+     * update contact data (first name, last name, ...) of user in local sql storage
+     *
      * @param Addressbook_Model_Contact $_contact
      * @return integer
-     * @throws Exception
-     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function updateContactInSqlBackend(Addressbook_Model_Contact $_contact)
+    public function updateContactInSqlBackend(Addressbook_Model_Contact $_contact): int
     {
         $contactId = $_contact->getId();
 
@@ -860,7 +861,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
 
-        $accountData = array(
+        $accountData = [
             $this->rowNameMapping['accountDisplayName']  => $_contact->n_fileas,
             $this->rowNameMapping['accountFullName']     => $_contact->n_fn,
             $this->rowNameMapping['accountFirstName']    => $_contact->n_given,
@@ -868,26 +869,27 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountEmailAddress'] => $_contact->email,
             'last_modified_time' => new Zend_Db_Expr('NOW()'),
             'seq' => $oldUser->seq + 1,
-        );
-        
-        try {
-            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-            
-            $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId)
-            );
-            $result = $accountsTable->update($accountData, $where);
+        ];
 
-            $newUser = $this->getUserByPropertyFromSqlBackend('contactId', $contactId, 'Tinebase_Model_FullUser');
-            $this->_writeModLog($newUser, $oldUser);
-
-            return $result;
-
-        } catch (Exception $e) {
-            // TODO FIXME this is bad! we really shouldn't just roll back a transaction for which we are not responsible!
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            throw($e);
+        foreach (['accountDisplayName', 'accountLastName', 'accountFullName'] as $required) {
+            // do not update empty values if field is required
+            if (empty($accountData[$required])) {
+                unset($accountData[$required]);
+            }
         }
+        
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId)
+        );
+        $result = $accountsTable->update($accountData, $where);
+
+        $newUser = $this->getUserByPropertyFromSqlBackend('contactId', $contactId,
+            'Tinebase_Model_FullUser');
+        $this->_writeModLog($newUser, $oldUser);
+
+        return $result;
     }
     
     /**
