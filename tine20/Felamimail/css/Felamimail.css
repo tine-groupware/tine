@@ -93,7 +93,6 @@
 
 .felamimail-action-highlight {
     padding: 10px;
-    margin: 5px;
     cursor: pointer;
     background-color: #D8A45B;
     border-radius: 10px;
@@ -278,6 +277,22 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 8px;
+}
+
+.felamimail-spam-message-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1 1 250px;
+    min-width: 0;
+}
+
+.felamimail-spam-action-group {
+    display: flex;
+    align-items: center;
+    gap: 4px 8px;
+    flex-shrink: 0;
 }
 
 /***** node classes ******/

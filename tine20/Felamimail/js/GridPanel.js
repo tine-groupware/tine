@@ -1207,10 +1207,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.movingOrDeleting = false;
         
         Tine.log.debug('Tine.Felamimail.GridPanel::onAfterDelete() -> Loading grid data after delete.');
-        this.loadGridData({
-            removeStrategy: 'keepBuffered',
-            autoRefresh: true
-        });
+        if (ids.length > 0) {
+            this.loadGridData({
+                removeStrategy: 'keepBuffered',
+                autoRefresh: true
+            });
+        }
     },
     
     /**
@@ -1954,7 +1956,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const nextRecord = sm.isFilterSelect ? null : this.getNextMessage(msgs);
         const account = this.app.getActiveAccount();
         const msgsIds = [];
-        
+
+        document.getElementById('spam_toolbar')?.remove();
+
         try {
             const promises = [];
             let increaseUnreadCountInTargetFolder = 0;
@@ -2016,7 +2020,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             
             await Promise.allSettled(promises)
-                .then(() => {
+                .then((result) => {
                     this.onAfterDelete(msgsIds);
                     this.doRefresh();
             });
