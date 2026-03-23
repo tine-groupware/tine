@@ -62,8 +62,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_PARTICIPANT => [], // Todo: Container property of contact should be expanded (rn fix EventManager_Convert_Event_Json)
-                self::FLD_REGISTRANT => [], // Todo: Container property of contact should be expanded (rn fix EventManager_Convert_Event_Json)
+                self::FLD_PARTICIPANT => [],
+                self::FLD_REGISTRANT => [],
                 self::FLD_BOOKED_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         EventManager_Model_BookedOption::FLD_OPTION => [],
