@@ -24,6 +24,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
+    protected const RELEASE018_UPDATE011 = __CLASS__ . '::update011';
 
 
     protected static $_allUpdates = [
@@ -38,6 +39,10 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE018_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
+            ],
             self::RELEASE018_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
@@ -142,7 +147,6 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             EventManager_Model_Event::class,
             EventManager_Model_Registration::class,
         ]);
-        EventManager_Setup_Initialize::getContactEventContainer();
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.7', self::RELEASE018_UPDATE007);
     }
@@ -175,5 +179,17 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
+    }
+
+    public function update011()
+    {
+        if (!Tinebase_Core::isReplica()) {
+            $container_id = EventManager_Config::getInstance()
+                ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+            if ($container_id) {
+                Tinebase_Container::getInstance()->deleteContainer($container_id);
+            }
+        }
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
     }
 }

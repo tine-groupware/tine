@@ -1054,19 +1054,20 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         return $contact;
     }
 
+//    TODO: FIX since container does not exists anymore
     public function getOrCreateRegisterContact($contactInformation, $registrationType)
     {
         $assertAclUsage = $this->assertPublicUsage();
         $contact = null;
-        $eventManagerContainerId = EventManager_Config::getInstance()
-            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
+        /*$eventManagerContainerId = EventManager_Config::getInstance()
+            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);*/
         try {
             $contact = $this->getContactByContactInformation($contactInformation, $registrationType);
             if (!$contact) {
                 $contactData = array_map(function ($value) {
                     return $value;
                 }, $contactInformation);
-                $contactData['container_id'] = $eventManagerContainerId;
+//                $contactData['container_id'] = $eventManagerContainerId;
                 $contact = new Addressbook_Model_Contact($contactData);
                 try {
                     $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
@@ -1080,13 +1081,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                     }
                 }
             } else {
-                if ($contact->container_id === $eventManagerContainerId) {
+//                if ($contact->container_id === $eventManagerContainerId) {
                     foreach ($contactInformation as $field => $value) {
                         if ($contact->has($field)) {
                             $contact->$field = $value;
                         }
                     }
-                }
+//                }
             }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
