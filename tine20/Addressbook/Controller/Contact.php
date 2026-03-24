@@ -1601,7 +1601,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         $expanderDef = $mc->jsonExpander;
-        foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $val) {
+        foreach ($additionalAdrFields as $val) {
             $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$val] = [];
         }
         $mc->setJsonExpander($expanderDef);

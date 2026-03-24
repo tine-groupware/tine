@@ -32,6 +32,16 @@ class EventManager_Model_Register_Contact extends Addressbook_Model_Contact
         $_definition[self::APP_NAME] = EventManager_Config::APP_NAME;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::IS_DEPENDENT] = true;
+
+        unset($_definition[self::CONTAINER_PROPERTY]);
+        unset($_definition[self::CONTAINER_NAME]);
+        unset($_definition[self::CONTAINERS_NAME]);
+
+        $_definition[self::ASSOCIATIONS] = [];
+
+        unset($_definition[self::TABLE][self::INDEXES]['container_id_index']);
+        unset($_definition[self::TABLE][self::INDEXES][self::JSON_EXPANDER]['container_id']);
+
         $_definition[self::TABLE] = [
             self::NAME      => self::TABLE_NAME,
             self::INDEXES   => [

@@ -7,8 +7,8 @@ declare(strict_types=1);
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -129,8 +129,6 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
-
-        $container_id = EventManager_Setup_Initialize::getContactEventContainer()->getId();
 
         $location = $this->getLocation(
             'Familienferienstätte St. Ursula',

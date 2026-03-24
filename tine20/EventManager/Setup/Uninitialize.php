@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @package     EventManager
  * @subpackage  Setup
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de> Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -20,19 +20,6 @@ declare(strict_types=1);
  */
 class EventManager_Setup_Uninitialize extends Setup_Uninitialize
 {
-    protected function _uninitializeDeleteEventContacts()
-    {
-        if (Tinebase_Core::isReplica()) {
-            return;
-        }
-
-        $container_id = EventManager_Config::getInstance()
-            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
-        if ($container_id) {
-            Tinebase_Container::getInstance()->deleteContainer($container_id);
-        }
-    }
-
     protected function _uninitializeDeleteEventFolderFilemanager()
     {
         if (Tinebase_Core::isReplica()) {

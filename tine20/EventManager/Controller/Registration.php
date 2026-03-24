@@ -1058,33 +1058,17 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
     {
         $assertAclUsage = $this->assertPublicUsage();
         $contact = null;
-        $eventManagerContainerId = EventManager_Config::getInstance()
-            ->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
         try {
             $contact = $this->getContactByContactInformation($contactInformation, $registrationType);
             if (!$contact) {
                 $contactData = array_map(function ($value) {
                     return $value;
                 }, $contactInformation);
-                $contactData['container_id'] = $eventManagerContainerId;
                 $contact = new Addressbook_Model_Contact($contactData);
-                try {
-                    $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-                } catch (Tinebase_Exception_Duplicate $de) {
-                    //we should keep both (since for example parents can register kids with same email)
-                    $contact = Addressbook_Controller_Contact::getInstance()->create($contact, false);
-                } catch (Tinebase_Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . ' Exception: ' . $e->getMessage());
-                    }
-                }
             } else {
-                if ($contact->container_id === $eventManagerContainerId) {
-                    foreach ($contactInformation as $field => $value) {
-                        if ($contact->has($field)) {
-                            $contact->$field = $value;
-                        }
+                foreach ($contactInformation as $field => $value) {
+                    if ($contact->has($field)) {
+                        $contact->$field = $value;
                     }
                 }
             }
