@@ -19,9 +19,10 @@
 class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
 {
     public const FLD_LIST_ID = 'list_id';
+
     public const FLD_NAME = 'name';
-    // TODO might be added later
-    // public const FLD_SYSTEM_USER_ONLY = 'system_user_only';
+    public const FLD_ROOM_ID = 'room_id';
+    public const FLD_SYSTEM_USER_ONLY = 'system_user_only';
     public const FLD_TOPIC = 'topic';
 
     public const MODEL_NAME_PART = 'Room';
@@ -56,8 +57,8 @@ class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE             => true,
 
         self::CREATE_MODULE             => false, // true? maybe in CoreData, Admin?
-        self::EXPOSE_HTTP_API           => true,
-        self::EXPOSE_JSON_API           => true,
+        self::EXPOSE_HTTP_API           => false,
+        self::EXPOSE_JSON_API           => false, // atm it is only updated via adb saveList
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -90,6 +91,28 @@ class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
                self::LENGTH                    => 255,
                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false],
                self::LABEL                     => 'Name', // _('Name')
+            ],
+            // we get the room id from synapse -> save it here
+            self::FLD_ROOM_ID => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => true,
+                self::LENGTH                    => 255,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                     => 'Room ID', // _('Room ID')
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_SYSTEM_USER_ONLY => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::NULLABLE                  => false,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false],
+                self::LABEL                     => 'Only System Users', // _('Only System Users')
+                self::DEFAULT_VAL               => true,
+                // TODO make this changeable
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_LIST_ID => [
                 self::TYPE                      => self::TYPE_RECORD,

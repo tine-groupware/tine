@@ -40,22 +40,31 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         );
     }
 
-    public function testRoomApi(bool $delete = true): array
+    public function testRoomCreateDelete(): void
     {
         $list = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
             'name' => 'test list',
             'container_id' => $this->_getTestContainer(
                 Addressbook_Config::APP_NAME, Addressbook_Model_List::class)->getId(),
         ]));
-        return $this->_testSimpleRecordApi(
-            modelName: MatrixSynapseIntegrator_Model_Room::MODEL_NAME_PART,
-            nameField: MatrixSynapseIntegrator_Model_Room::FLD_NAME,
-            descriptionField: MatrixSynapseIntegrator_Model_Room::FLD_TOPIC,
-            delete: $delete,
-            recordData: [
-                MatrixSynapseIntegrator_Model_Room::FLD_LIST_ID => $list,
-            ]
-        );
+        $roomData = [
+            MatrixSynapseIntegrator_Model_Room::FLD_NAME => 'test room',
+            MatrixSynapseIntegrator_Model_Room::FLD_TOPIC => 'topic',
+            MatrixSynapseIntegrator_Model_Room::FLD_SYSTEM_USER_ONLY => true,
+        ];
+
+        $adbJson = new Addressbook_Frontend_Json();
+        $listData = $list->toArray();
+        $listData[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM] = $roomData;
+        $listArray = $adbJson->saveList($listData);
+
+        self::assertArrayHasKey(MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM, $listArray,
+            print_r($listArray, true));
+        self::assertNotNull($listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM]);
+        self::assertEquals('test room', $listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM]
+            [MatrixSynapseIntegrator_Model_Room::FLD_NAME]);
+
+        // TODO check delete list -> room should be deleted, too
     }
 
     public function testGetBootstrapdata()

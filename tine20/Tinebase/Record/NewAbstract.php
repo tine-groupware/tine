@@ -439,7 +439,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         }
 
         // convert data to record(s)
-        foreach(static::$_configurationObject->_fields as $fieldName => $config) {
+        foreach (static::$_configurationObject->_fields as $fieldName => $config) {
             if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
                 $config = $config[self::TYPE] === self::TYPE_VIRTUAL && isset($config[self::CONFIG][self::TYPE]) ?
                     $config[self::CONFIG] : $config;

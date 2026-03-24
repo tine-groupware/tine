@@ -108,7 +108,7 @@ class Setup_Uninitialize
                     )
                 );
                 $filter->customfieldACLChecks(false);
-
+                Tinebase_CustomField::getInstance()->getConfigBackend()->setAllCFs();
                 foreach (Tinebase_CustomField::getInstance()->searchConfig($filter) as $cFConfig) {
                     Tinebase_CustomField::getInstance()->deleteCustomField($cFConfig);
                 }

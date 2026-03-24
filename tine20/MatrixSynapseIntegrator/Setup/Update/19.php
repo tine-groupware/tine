@@ -17,6 +17,7 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE001 = __CLASS__ . '::update001';
     protected const RELEASE019_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE019_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE019_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -38,6 +39,10 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
             ],
+            self::RELEASE019_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
+            ],
         ],
     ];
 
@@ -51,7 +56,7 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
 
     public function update001(): void
     {
-        MatrixSynapseIntegrator_Setup_Initialize::initializeCustomFields();
+        MatrixSynapseIntegrator_Setup_Initialize::createCustomFields(MatrixSynapseIntegrator_Setup_Initialize::$customfields);
         MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setMatrixIdInContacts();
 
         $this->addApplicationUpdate(
@@ -80,5 +85,18 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
             MatrixSynapseIntegrator_Config::APP_NAME,
             '19.3',
             self::RELEASE019_UPDATE003);
+    }
+
+    public function update004(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            MatrixSynapseIntegrator_Model_Room::class,
+        ]);
+        MatrixSynapseIntegrator_Setup_Initialize::createCustomFields(MatrixSynapseIntegrator_Setup_Initialize::$customfields);
+
+        $this->addApplicationUpdate(
+            MatrixSynapseIntegrator_Config::APP_NAME,
+            '19.4',
+            self::RELEASE019_UPDATE004);
     }
 }

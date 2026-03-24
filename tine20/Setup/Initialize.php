@@ -241,7 +241,9 @@ class Setup_Initialize
                     'application_id' => $appId,
                     'model' => $appModel['model'],
                     'is_system' => $customfield['is_system'] ?? 0,
-                    'definition' => $definition,
+                    'definition' => [
+                        Tinebase_Model_CustomField_Config::DEF_FIELD => $definition
+                    ],
                 ];
 
                 if ($customfield['type'] == 'record') {
