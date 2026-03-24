@@ -46,6 +46,34 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         $this->_backend = new Tinebase_WebDav_PrincipalBackend();
     }
 
+    public function testPrincipalPropfind(): void
+    {
+        $server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root(), new Tinebase_WebDav_Sabre_SapiMock());
+        $server->debugExceptions = true;
+
+        $response = new Tinebase_WebDav_Sabre_ResponseMock();
+        $server->httpResponse = $response;
+
+        $server->addPlugin(new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth()));
+        $server->addPlugin(new Tinebase_WebDav_Plugin_ACL());
+        $server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
+        $server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
+        $server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
+
+        $request = new Sabre\HTTP\Request('PROPFIND', '/principals/users/' . Tinebase_Core::getUser()->contact_id . '/', [], '<?xml version="1.0" encoding="UTF-8"?>
+  <d:propfind xmlns:d="DAV:">
+    <d:prop>
+      <calendar-user-address-set xmlns="urn:ietf:params:xml:ns:caldav" />
+      <email-address-set xmlns="http://calendarserver.org/ns/" />
+    </d:prop>
+  </d:propfind>');
+
+        $server->httpRequest = $request;
+        $server->exec();
+
+        $this->assertStringContainsString('<d:href>mailto:' . Tinebase_Core::getUser()->accountEmailAddress . '</d:href>', $response->body);
+    }
+
     public function testPrincipalsWithBrokenGroupList()
     {
         $group = Admin_Controller_Group::getInstance()->create(new Tinebase_Model_Group([
@@ -88,8 +116,8 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
 <A:expand-property xmlns:A="DAV:">
   <A:property name="calendar-proxy-write-for" namespace="http://calendarserver.org/ns/">
     <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>
-    <A:property name="displayname" namespace="DAV:"/>
     <A:property name="calendar-user-address-set" namespace="urn:ietf:params:xml:ns:caldav"/>
+    <A:property name="displayname" namespace="DAV:"/>
   </A:property>
   <A:property name="calendar-proxy-read-for" namespace="http://calendarserver.org/ns/">
     <A:property name="email-address-set" namespace="http://calendarserver.org/ns/"/>

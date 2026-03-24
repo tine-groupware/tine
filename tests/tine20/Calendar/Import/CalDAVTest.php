@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Calendar_Import_CalDAV
@@ -53,6 +55,7 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
                 'userName' => Tinebase_Core::getUser()->accountLoginName,
                 'password' => $testCredentials['password'],
                 Calendar_Backend_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
+                Calendar_Backend_CalDav_Client::OPT_NO_CACHE => true,
             ], $options);
         $this->_uit = new Calendar_Backend_CalDav_ClientMock($caldavClientOptions, 'Generic', $this->_personas['sclever']->accountEmailAddress);
         $this->_uit->setVerifyPeer(false);
@@ -63,6 +66,133 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
     {
         $result = $this->_getUit()->findAllCollections();
         $this->assertSame(2, $result->count());
+    }
+
+    public function testSyncContainerCreateLocal(): void
+    {
+        $calDavClientRaii = new Tinebase_RAII(fn() => Tinebase_Model_CloudAccount_CalDAV::$_unittestCalDavClient = null);
+        Tinebase_Model_CloudAccount_CalDAV::$_unittestCalDavClient = $mockClient = new Calendar_Backend_CalDav_GenericClientMock([
+            'baseUri' => '/',
+            Calendar_Backend_CalDav_Client::OPT_DISABLE_EXTERNAL_ORGANIZER_CALENDAR => true,
+            Calendar_Backend_CalDav_Client::OPT_NO_CACHE => true,
+        ], 'Generic');
+        $eventCalendarData = null;
+        $mockClient->multiStatusRequestDelegator = function(string $method, string $uri, string $body, int $depth) use (&$eventCalendarData) {
+            static $count = 0;
+            return match($count++) {
+                // 01 => \Calendar_Backend_CalDav_Client::getCollectionInfos() => no proper answer required
+                0 => [],
+                // 03 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote => no proper answer required
+                1 => [],
+                // 04 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote => no proper answer required
+                2 => [],
+                // 06 => \readEventFromRemote => return event data
+                3 => ['/calendars/unittest/c8e8141adf7b259b9abc72b5d06750f6656cc0b2.ics' => [
+                    '{urn:ietf:params:xml:ns:caldav}calendar-data' => $eventCalendarData,
+                    '{DAV:}getetag' => 'someETag',
+                ]],
+                // 08 => \readEventFromRemote => return event data
+                4 => ['/calendars/unittest/c8e8141adf7b259b9abc72b5d06750f6656cc0b2.ics' => [
+                    '{urn:ietf:params:xml:ns:caldav}calendar-data' => $eventCalendarData,
+                    '{DAV:}getetag' => 'someETag1',
+                ]],
+                // 09 => \Calendar_Backend_CalDav_Client::getCollectionInfos() => no proper answer required
+                5 => [],
+                // 11 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote => \Calendar_Backend_CalDav_Client::_fetchServerEtags
+                6 => ['/calendars/unittest/c8e8141adf7b259b9abc72b5d06750f6656cc0b2.ics' => [
+                    '{DAV:}getetag' => 'someETag1',
+                ]],
+                // 12 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote
+                7 => ['/calendars/unittest/c8e8141adf7b259b9abc72b5d06750f6656cc0b2.ics' => [
+                    '{urn:ietf:params:xml:ns:caldav}calendar-data' => $eventCalendarData,
+                    '{DAV:}getetag' => 'someETag1',
+                ]],
+                default => (function() {
+                    return [];
+                })(),
+            };
+        };
+        $mockClient->propFindDelegator = function($url, $properties, $depth) {
+            static $count = 0;
+            return match($count++) {
+                // 02 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote ask for synctoken => no proper answer required
+                // 10 => \Calendar_Model_SyncContainerConfig::readObjectsInCollectionFromRemote ask for synctoken => no proper answer required
+                default => (function() {
+                    return [];
+                })(),
+            };
+        };
+        $mockClient->requestDelegator = function($method, $url, $body, $headers) use (&$eventCalendarData) {
+            static $count = 0;
+            return match($count++) {
+                // 05 => \Calendar_Backend_CalDav_Client::writeEventRemotelyStoreLocally => PUT request
+                0 => ['statusCode' => ($eventCalendarData = $body) ? 201 : 201],
+                // 07 => \Calendar_Backend_CalDav_Client::writeEventRemotelyStoreLocally => PUT request
+                1 => ['statusCode' => ($eventCalendarData = $body) ? 201 : 201],
+                default => (function() {
+                    return [];
+                })(),
+            };
+        };
+
+        $cloudAccount = Tinebase_Controller_CloudAccount::getInstance()->create(new Tinebase_Model_CloudAccount([
+            Tinebase_Model_CloudAccount::FLD_NAME => 'unittest',
+            Tinebase_Model_CloudAccount::FLD_TYPE => Tinebase_Model_CloudAccount_CalDAV::class,
+            Tinebase_Model_CloudAccount::FLD_OWNER_ID => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_CloudAccount::FLD_CONFIG => new Tinebase_Model_CloudAccount_CalDAV([
+                Tinebase_Model_CloudAccount_CalDAV::FLD_URL => 'http://localhost/unittest',
+                Tinebase_Model_CloudAccount_CalDAV::FLD_USERNAME => 'unittest',
+                Tinebase_Model_CloudAccount_CalDAV::FLD_PWD => 'unittest',
+            ]),
+        ], true));
+        $container = $this->_getTestContainer(Calendar_Config::APP_NAME, Calendar_Model_Event::class, additionalData: [
+            'xprops' => [
+                Calendar_Controller_Event::SYNC_CONTAINER => (new Calendar_Model_SyncContainerConfig([
+                    Calendar_Model_SyncContainerConfig::FLD_CLOUD_ACCOUNT_ID => $cloudAccount,
+                    Calendar_Model_SyncContainerConfig::FLD_CALENDAR_PATH => '/calendars/unittest',
+                ]))->dehydrate(),
+            ],
+        ]);
+
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        $createdEvent = Calendar_Controller_Event::getInstance()->create($eventToCreate = new Calendar_Model_Event([
+            'container_id' => $container,
+            'uid' => Tinebase_Record_Abstract::generateUID(),
+            'dtstart' => Tinebase_DateTime::now()->addHour(1),
+            'dtend' => Tinebase_DateTime::now()->addHour(2),
+            'summary' => 'test'
+        ], true));
+
+        $this->assertSame($container->getId(), $createdEvent->getIdFromProperty('container_id'));
+        $this->assertSame($container->getId(), Calendar_Controller_Event::getInstance()->getBackend()->get($createdEvent->getId())->getIdFromProperty('container_id'));
+
+        $createdEvent->summary = 'unittest';
+        $updatedEvent = Calendar_Controller_Event::getInstance()->update($createdEvent);
+        $this->assertNotSame($eventToCreate->summary, $updatedEvent->summary);
+        $this->assertSame($container->getId(), $updatedEvent->getIdFromProperty('container_id'));
+        $this->assertSame($createdEvent->getId(), $updatedEvent->getId());
+
+        // test same "event / uid" in different container
+        $container1 = $this->_getTestContainer(Calendar_Config::APP_NAME, Calendar_Model_Event::class, additionalData: [
+            'xprops' => [
+                Calendar_Controller_Event::SYNC_CONTAINER => (new Calendar_Model_SyncContainerConfig([
+                    Calendar_Model_SyncContainerConfig::FLD_CLOUD_ACCOUNT_ID => $cloudAccount,
+                    Calendar_Model_SyncContainerConfig::FLD_CALENDAR_PATH => '/calendars/unittest',
+                ]))->dehydrate(),
+            ],
+        ]);
+
+        $syncedEvents = Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $container1->getId()],
+        ]));
+        $this->assertSame(1, $syncedEvents->count());
+        $syncedEvent = $syncedEvents->getFirstRecord();
+        $this->assertSame($syncedEvent->uid, $updatedEvent->uid);
+        $this->assertSame($syncedEvent->external_id, $updatedEvent->external_id);
+        $this->assertNotSame($syncedEvent->getId(), $updatedEvent->getId());
+
+        unset($calDavClientRaii);
     }
 
     public function testVTodoImportCreateSharedContainer(): void

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -206,6 +206,10 @@ trait Tinebase_Record_AbstractTrait
             throw new Tinebase_Exception_Record_DefinitionFailure($field . ' is missing ' . self::REF_ID_FIELD);
         }
 
+        if (is_string($pwd = $this->{$field}) && strlen($pwd) > 0) {
+            return $pwd;
+        }
+
         if (!($ccId = $this->{$fieldConf[self::CONFIG][self::REF_ID_FIELD]})) {
             return null;
         }
@@ -218,5 +222,22 @@ trait Tinebase_Record_AbstractTrait
         $cc->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
         Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
         return $cc->password;
+    }
+
+    /**
+     * @template T of Tinebase_Record_Interface
+     * @param array $path
+     * @param class-string<T> $model
+     * @return T|null
+     */
+    public function getRecordFromXProps(array $path, string $model): ?Tinebase_Record_Interface
+    {
+        $data = array_reduce($path, fn($carry, $pathPart) => $carry[$pathPart] ?? null, $this->xprops());
+        if (is_array($data)) {
+            $record = new $model($data, true);
+            $record->runConvertToRecord();
+            return $record;
+        }
+        return null;
     }
 }

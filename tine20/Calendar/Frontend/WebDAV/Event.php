@@ -195,7 +195,18 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         if ($recreateInsteadOfMove && $existingEvent /*&& !$existingEvent->hasExternalOrganizer()*/ && $existingEvent->container_id !== $event->container_id) {
-            $existingEvent = null;
+            if ($useExternalUId) {
+                Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(false);
+                try {
+                    $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventFromExternalEventData($event, $event->container_id, _action: 'sync', _getDeleted: true, requiredGrants: [Tinebase_Model_Grants::GRANT_SYNC]);
+                } catch (Tinebase_Exception_AccessDenied) {
+                    throw new Sabre\DAV\Exception\Forbidden('write access denied');
+                }
+                Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
+            }
+            if (null !== $existingEvent && $existingEvent->container_id !== $event->container_id) {
+                $existingEvent = null;
+            }
         }
 
         if ($existingEvent === null) {
@@ -251,8 +262,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Update existing event');
 
-            if ($existingEvent->hasExternalOrganizer() && is_numeric($existingEvent->external_seq) &&
-                    (int)$event->external_seq < (int)$existingEvent->external_seq) {
+            if ($existingEvent->hasExternalOrganizer() && Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer() &&
+                    is_numeric($existingEvent->external_seq) && (int)$event->external_seq < (int)$existingEvent->external_seq) {
                 throw new Sabre\DAV\Exception\PreconditionFailed('updating existing event with outdated external seq');
             }
 
@@ -294,7 +305,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
             $calCtrl = Calendar_Controller_Event::getInstance();
             $oldCalenderAcl = $calCtrl->doContainerACLChecks();
             try {
-                if ($event->hasExternalOrganizer()) {
+                if ($event->hasExternalOrganizer() && Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer()) {
                     $calCtrl->doContainerACLChecks(false);
                 }
                 $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($vobjectData);

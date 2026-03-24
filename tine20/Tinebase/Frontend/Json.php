@@ -1586,6 +1586,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         /** @var Tinebase_Model_CloudAccount $record */
         $record = $this->_jsonToRecord($data, Tinebase_Model_CloudAccount::class);
+        $record->isValid(true);
         return $record->testAccess();
     }
 

@@ -1004,6 +1004,12 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
+    public function syncCloudAccountContainers(): int
+    {
+        Calendar_Controller_Event::getInstance()->syncCloudAccountContainers();
+        return 0;
+    }
+
     /**
      * add scheduled imports for public (school) holidays
      *
