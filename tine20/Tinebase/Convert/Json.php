@@ -517,6 +517,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                         $this->_resolveMultipleRecordFields($records, $mc, $multiple);
 
                         $this->_resolveRecursive($records, $mc, $multiple);
+
+                        foreach ($mc->getJsonFacadeFields() as $fieldKey => $def) {
+                            foreach ($records as $record) {
+                                /** @var Tinebase_Record_JsonFacadeInterface $model */
+                                $model = $def[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME];
+                                $model::jsonFacadeToJson($record, $fieldKey, $def);
+                            }
+                        }
                     }
                 }
             }

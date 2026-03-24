@@ -66,6 +66,9 @@ class EventManager_ControllerTest extends TestCase
         );
         $event = EventManager_Controller_Event::getInstance()->get($event->getId());
         self::assertCount(1, $event->{EventManager_Model_Event::FLD_REGISTRATIONS});
+
+        $jsonEvent = (new EventManager_Frontend_Json)->getEvent($event->getId());
+        $this->assertArrayHasKey('adr_one', $jsonEvent[EventManager_Model_Event::FLD_REGISTRATIONS][0][EventManager_Model_Registration::FLD_PARTICIPANT] ?? [], print_r($jsonEvent, true));
     }
 
     /**
@@ -344,6 +347,7 @@ class EventManager_ControllerTest extends TestCase
         $newTestAddress = $event->{EventManager_Model_Event::FLD_REGISTRATIONS}[0]->participant->adr_one_locality;
 
         self::assertNotEquals($testAddress, $newTestAddress);
+        $this->assertSame('New Test Street', $newTestAddress);
     }
 
 

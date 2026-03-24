@@ -106,6 +106,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::RECURSIVE_RESOLVING   => true,
             ],
             self::FLD_HAS_REGISTRANT     => [
                 self::LABEL                 => 'This participant has been registered by another person',
@@ -138,6 +139,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 ],
                 self::DESCRIPTION       => 'Only change this field if someone else is responsible for the registration of the participant',
                 // _('Only change this field if someone else is responsible for the registration of the participant')
+                self::RECURSIVE_RESOLVING   => true,
             ],
             self::FLD_FUNCTION      => [
                 self::TYPE              => self::TYPE_KEY_FIELD,
