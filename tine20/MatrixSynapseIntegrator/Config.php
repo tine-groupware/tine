@@ -39,6 +39,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     public const MATRIX_SYNAPSE_SHARED_SECRET_AUTH = 'matrixSynapseSharedSecretAuth';
 
     public const ADDRESSBOOK_CF_NAME_MATRIX_ID = 'matrix_id';
+    public const ADDRESSBOOK_CF_NAME_ROOM = 'room';
 
     /**
      * (non-PHPdoc)

@@ -1120,7 +1120,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     }
                 }
             } catch (Tinebase_Exception_NotFound|Zend_Db_Exception) {
-                // during install app may not be there yet
+                // during installation, the app may not be there yet
                 $modelsSystemCFs = [];
             }
             foreach ($modelsSystemCFs as $cfc) {

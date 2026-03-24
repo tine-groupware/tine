@@ -69,4 +69,27 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
 //            Tinebase_Core::getUser()->getId()
 //        ));
     }
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        // TODO create room via synapse call
+        // TODO save room id in record
+
+    }
+
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        $expanderDef = $mc->jsonExpander;
+        $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+            [MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM] = [];
+        $mc->setJsonExpander($expanderDef);
+    }
 }
