@@ -7,8 +7,8 @@ declare(strict_types=1);
   *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -20,7 +20,7 @@ declare(strict_types=1);
 class EventManager_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * initialize folders for events, options and registrations
+     * initialize folders for events, options, and registrations
      */
     public function _initializeEventFolders(Tinebase_Model_Application $_application, $_options = null)
     {
@@ -28,7 +28,7 @@ class EventManager_Setup_Initialize extends Setup_Initialize
     }
 
     /**
-     * create event folder
+     * create the events folder
      */
     public static function createEventFolder()
     {
@@ -67,50 +67,6 @@ class EventManager_Setup_Initialize extends Setup_Initialize
             // This is fine
         };
     }
-    protected function _initializeDefaultContainer(): Tinebase_Model_Container
-    {
-        if (Tinebase_Core::isReplica()) {
-            return self::getContactEventContainer();
-        }
-
-        return self::_createContactEventContainer();
-    }
-
-    protected static function _createContactEventContainer(): Tinebase_Model_Container
-    {
-        $groupsBackend = Tinebase_Group::getInstance();
-        $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [
-            [
-                'account_id' => Tinebase_User::getInstance()
-                    ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS)->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-                Tinebase_Model_Grants::GRANT_ADD => true,
-            ],
-            [
-                'account_id' => $groupsBackend->getDefaultAdminGroup()->getId(),
-                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                Tinebase_Model_Grants::GRANT_ADD => true,
-                Tinebase_Model_Grants::GRANT_READ => true,
-                Tinebase_Model_Grants::GRANT_EDIT => true,
-                Tinebase_Model_Grants::GRANT_DELETE => true,
-                Tinebase_Model_Grants::GRANT_ADMIN => true
-            ],
-        ]);
-        $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
-        $systemContainer = Tinebase_Container::getInstance()->createSystemContainer(
-            Addressbook_Config::APP_NAME,
-            Addressbook_Model_Contact::class,
-            $translate->_('Event Contacts'),
-            grants: $grants
-        );
-        // config must be set after, since it belongs to EventManager and not Addressbook
-        EventManager_Config::getInstance()
-            ->set(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER, $systemContainer->getId());
-
-        return $systemContainer;
-    }
 
     protected function _initializeCostCenterCostBearer()
     {
@@ -129,60 +85,5 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
             EventManager_Model_Event::class,
         ]);
-    }
-
-    public static function getContactEventContainer(): Tinebase_Model_Container
-    {
-        $configInstance = EventManager_Config::getInstance();
-        $containerId = $configInstance->get(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER);
-
-        if ($containerId) {
-            try {
-                return Tinebase_Container::getInstance()->getContainerById($containerId);
-            } catch (Tinebase_Exception_NotFound) {
-                // continue
-            }
-        }
-
-        if (Tinebase_Core::isReplica()) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                    ' Replica: Syncing modification logs to get Event Contacts container');
-            }
-            Tinebase_Timemachine_ModificationLog::getInstance()->readModificationLogFromMaster(1000);
-        }
-
-        $containerBackend = Tinebase_Container::getInstance();
-        $filters = new Tinebase_Model_ContainerFilter([
-            ['field' => 'application_id', 'operator' => 'equals', 'value' => Tinebase_Application::getInstance()
-                ->getApplicationByName(Addressbook_Config::APP_NAME)->getId()],
-            ['field' => 'model', 'operator' => 'equals', 'value' => EventManager_Model_Register_Contact::class],
-            ['field' => 'name', 'operator' => 'equals', 'value' => 'Event Contacts'],
-            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
-        ]);
-
-        $containers = $containerBackend->search($filters);
-
-        if ($containers->count() === 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                    ' Event Contacts container not found');
-            }
-            if (Tinebase_Core::isReplica()) {
-                throw new Tinebase_Exception_NotFound('Event Contacts container not found');
-            }
-            return self::_createContactEventContainer();
-        }
-
-        $container = $containers->getFirstRecord();
-
-        $configInstance->set(EventManager_Config::DEFAULT_CONTACT_EVENT_CONTAINER, $container->getId());
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                ' Set DEFAULT_CONTACT_EVENT_CONTAINER config to: ' . $container->getId());
-        }
-
-        return $container;
     }
 }

@@ -233,7 +233,8 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     self::REF_ID_FIELD              => EventManager_Model_Registration::FLD_EVENT_ID,
                     self::APP_NAME                  => EventManager_Config::APP_NAME,
                     self::MODEL_NAME                => EventManager_Model_Registration::MODEL_NAME_PART,
-                ]
+                ],
+                self::RECURSIVE_RESOLVING   => true,
             ],
             self::FLD_APPOINTMENTS  => [
                 self::TYPE              => self::TYPE_RECORDS,

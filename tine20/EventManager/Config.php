@@ -8,8 +8,8 @@ declare(strict_types=1);
  * @package     EventManager
  * @subpackage  Config
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2020-2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2020-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 /**
@@ -36,7 +36,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const OPTION_REQUIRED_TYPE = 'optionRequiredType';
     public const RULE_TYPE = 'ruleType';
     public const CRITERIA_TYPE = 'criteriaType';
-    public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer';
+    public const DEFAULT_CONTACT_EVENT_CONTAINER = 'defaultContactEventContainer'; // deprecated. todo delete in 2027.11
     public const ALLOWED_FILE_TYPE = 'allowedFileType';
 
     public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';
