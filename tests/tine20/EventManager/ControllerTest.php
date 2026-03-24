@@ -503,7 +503,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrant'            => $registrant,
+                'registrant'             => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -515,7 +515,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrant'            => $registrant,
+                'registrant'             => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
@@ -526,7 +526,7 @@ class EventManager_ControllerTest extends TestCase
             return new EventManager_Model_Registration([
                 'event_id'               => $event_id,
                 'participant'            => $participant,
-                'registrant'            => $registrant,
+                'registrant'             => $registrant,
                 'function'               => $default_values['function'],
                 'source'                 => $default_values['source'],
                 'status'                 => $default_values['status'],
