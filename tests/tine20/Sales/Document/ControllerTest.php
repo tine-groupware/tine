@@ -746,7 +746,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         try {
             Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
             $this->fail('unreachable');
-        } catch (Tinebase_Exception) {}
+        } catch (Tinebase_Exception) {
+            $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        }
 
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
         $this->assertSame(Sales_Model_Document_Invoice::STATUS_DISPATCHED, $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS});
