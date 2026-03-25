@@ -4,6 +4,12 @@ require('dotenv').config();
 
 beforeAll(async () => {
     await lib.getBrowser('E-Mail');
+    const currenUser = await lib.getCurrentUser(page);
+    await expect(page).toClick('span', {text: currenUser.accountEmailAddress, button: 'right'});
+    await page.waitForSelector('.x-menu-item-icon.action_update_cache', {visible: true});
+    await page.click('.x-menu-item-icon.action_update_cache');
+    await page.waitForSelector('.x-tree-node-el.x-unselectable.felamimail-node-account.x-tree-node-expanded.x-tree-node-loading')
+    await expect(page).not.toMatchElement('.x-tree-node-el.x-unselectable.felamimail-node-account.x-tree-node-expanded.x-tree-node-loading');
     await page.waitForSelector('a span',{text: "Posteingang"});
     await expect(page).toClick('a span',{text: "Posteingang"});
     await page.waitForTimeout(2000);
