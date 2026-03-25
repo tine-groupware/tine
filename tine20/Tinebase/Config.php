@@ -462,6 +462,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public const LDAP_OVERWRITE_CONTACT_FIELDS = 'ldapOverwriteContactFields';
 
+    public const NO_OWNCLOUD_PERMISSIONS = 'noOwnCloudPermissions';
     public const REPORT_WEBDAV = 'reportWebdav';
     public const REPORT_WEBDAV_USER_LIST = 'userList';
     public const REPORT_WEBDAV_AFFECTED_USER = 'affectedUser';
@@ -1534,6 +1535,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
             ),
         ),
+        self::NO_OWNCLOUD_PERMISSIONS => [
+            self::LABEL => 'Disable Owncloud permissions support', //_('Disable Owncloud permissions support')
+            self::DESCRIPTION => 'Disable Owncloud permissions support',
+            self::TYPE => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+            self::DEFAULT_STR => false,
+        ],
         self::REPORT_WEBDAV => [
             self::LABEL => 'Report WebDAV issues', //_('Report WebDAV issues')
             self::DESCRIPTION => 'Report WebDAV issues',
