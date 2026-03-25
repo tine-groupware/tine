@@ -3,8 +3,8 @@
  * Tine 2.0
  *
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 -->
 
@@ -615,7 +615,6 @@ const registrationId = ref(null);
 
 // Data from backend
 const dependantParticipants = ref(null);
-const registrantEvents = ref(null);
 const registrations = ref(null);
 const accountOwner = ref(null);
 
@@ -1646,32 +1645,14 @@ const fetchAccountData = async () => {
     const resp = await fetch(`/EventManager/account/${token}`, {
       method: 'GET'
     });
-    registrantEvents.value = await resp.json();
+    const data = await resp.json();
+    const [accountOwnerData, registrationsData, dependants] = data;
+    accountOwner.value = Array.isArray(accountOwnerData) ? accountOwnerData[0] : [];
+    registrations.value = Array.isArray(registrationsData) ? registrationsData : [];
+    dependantParticipants.value = Array.isArray(dependants) ? dependants : [];
   } catch (error) {
     console.error('Error fetching account details: ', error);
   }
-};
-
-const resolveAccountOwnerAndParticipants = (participantIdFromUrl, registrationIdFromUrl) => {
-  const eventRegistrationIds = new Set(eventDetails.value.registrations.map(r => r.id));
-  const allRegistrations = registrantEvents.value[0];
-  const matchedRegistration = allRegistrations.find(r =>
-    registrationIdFromUrl
-      ? r.id === registrationIdFromUrl
-      : eventRegistrationIds.has(r.id)
-  );
-
-  if (matchedRegistration) {
-    accountOwner.value = matchedRegistration.registrant;
-  } else {
-    const matchedByParticipantId = participantIdFromUrl
-      ? allRegistrations.find(r => r.registrant?.original_id === participantIdFromUrl)
-      : null;
-
-    accountOwner.value = matchedByParticipantId?.registrant ?? allRegistrations[0]?.registrant;
-  }
-  registrations.value = allRegistrations?? null;
-  dependantParticipants.value = registrantEvents.value[1];
 };
 
 onMounted(async () => {
@@ -1686,8 +1667,6 @@ onMounted(async () => {
    }
 
   await Promise.all([fetchEvent(), fetchAccountData()]);
-
-  resolveAccountOwnerAndParticipants(participantIdFromUrl, registrationIdFromUrl);
 
   let initialParticipantId = participantIdFromUrl ?? getParticipantId(accountOwner.value);
 

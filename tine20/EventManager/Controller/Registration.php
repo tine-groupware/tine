@@ -67,6 +67,10 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 TMFA::OPERATOR => 'definedBy',
                 TMFA::VALUE => [
                     [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
+                        TMFA::OPERATOR => TMFA::OPERATOR_NOT,
+                        TMFA::VALUE => null
+                    ],
+                    [TMFA::FIELD => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
                         TMFA::OPERATOR => TMFA::OP_EQUALS,
                         TMFA::VALUE => $_record->{EventManager_Model_Registration::FLD_PARTICIPANT}
                             ->{EventManager_Model_Registration::FLD_ORIGINAL_ID}
@@ -753,30 +757,16 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $response = new \Laminas\Diactoros\Response();
             $participant = $this->getOrCreateRegisterContact($request['contactDetails'], 'participant');
 
-            $allEmpty = true;
+            $isSelfRegistration = true;
             foreach ($request['registrantDetails'] as $value) {
                 if (!empty(trim($value))) {
-                    $allEmpty = false;
+                    $isSelfRegistration = false;
                     break;
                 }
             }
 
-            if ($allEmpty) {
-                $isSelfRegistration = true;
-            } else {
-                $isSelfRegistration = $this->isSameContact(
-                    $request['contactDetails'],
-                    $request['registrantDetails']
-                );
-            }
-
-            $registrant = new EventManager_Model_Register_Contact();
             if ($isSelfRegistration) {
-                foreach ($participant as $field => $value) {
-                    if ($registrant->has($field) && $field !== 'id' && $field !== 'registration_type') {
-                        $registrant->$field = $value;
-                    }
-                }
+                $registrant = $this->getOrCreateRegisterContact($request['contactDetails'], 'registrant');
             } else {
                 $registrant = $this->getOrCreateRegisterContact($request['registrantDetails'], 'registrant');
             }
@@ -1034,23 +1024,26 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
 
     public function getContactByContactInformation($contactInformation, $registrationType)
     {
-        $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            EventManager_Model_Register_Contact::class,
-            [
+        $contact = null;
+        if (!empty($contactInformation['original_id'])) {
+            $filter =  Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                EventManager_Model_Register_Contact::class,
                 [
-                    'field' => 'original_id',
-                    'operator' => 'equals',
-                    'value' => $contactInformation['original_id']
+                    [
+                        'field' => 'original_id',
+                        'operator' => 'equals',
+                        'value' => $contactInformation['original_id']
+                    ],
+                    [
+                        'field' => 'registration_type',
+                        'operator' => 'equals',
+                        'value' => $registrationType
+                    ],
                 ],
-                [
-                    'field' => 'registration_type',
-                    'operator' => 'equals',
-                    'value' => $registrationType
-                ],
-            ],
-        );
-        $denormalized_contacts = EventManager_Controller_Register_Contact::getInstance()->search($filter);
-        $contact = $denormalized_contacts->getFirstRecord();
+            );
+            $denormalized_contacts = EventManager_Controller_Register_Contact::getInstance()->search($filter);
+            $contact = $denormalized_contacts->getFirstRecord();
+        }
         return $contact;
     }
 
@@ -1066,11 +1059,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                 }, $contactInformation);
                 $contact = new Addressbook_Model_Contact($contactData);
             } else {
+                $newDenormalizedContact = new EventManager_Model_Register_Contact();
                 foreach ($contactInformation as $field => $value) {
-                    if ($contact->has($field)) {
-                        $contact->$field = $value;
+                    if ($newDenormalizedContact->has($field) && $field !== 'id' && $field !== 'registration_type') {
+                        $newDenormalizedContact->$field = $value;
                     }
                 }
+                $contact = $newDenormalizedContact;
             }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

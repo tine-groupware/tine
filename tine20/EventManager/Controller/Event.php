@@ -271,144 +271,51 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                     $email_registrant = $decoded->email ?? '';
                     $contact = Addressbook_Controller_Contact::getInstance()->getContactByEmail($email_registrant);
                     $dependant_participant = [];
+                    $registrations_data = [];
+                    $registrationIds = [];
+                    $accountOwner = [];
+
+                    $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        EventManager_Model_Register_Contact::class,
+                        [
+                            [
+                                'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
+                                'operator' => 'equals',
+                                'value' => 'participant'
+                            ],
+                        ],
+                    );
+                    $registerContacts = EventManager_Controller_Register_Contact::getInstance()
+                        ->search($filter);
+
+                    foreach ($registerContacts as $registerContact) {
+                        $regId = $registerContact->registration_id;
+                        if (!in_array($regId, $registrationIds)) {
+                            $registrationIds[] = $regId;
+                        }
+                        if (count($accountOwner) === 0 && $registerContact->email === $email_registrant) {
+                            $accountOwner[] = $registerContact->toArray();
+                        }
+                    }
+
+                    foreach ($registrationIds as $registrationId) {
+                        $registration = EventManager_Controller_Registration::getInstance()
+                            ->get($registrationId);
+                        $status = EventManager_Config::getInstance()
+                            ->get(EventManager_Config::REGISTRATION_STATUS)->records
+                            ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
+                        $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
+                        $registrations_data[] = $registration->toArray();
+                    }
+
+                    if (count($registrations_data) === 0) {
+                        $registrations_data = $contact->toArray();
+                    }
 
                     if (!empty($contact)) {
                         $contact = Addressbook_Controller_Contact::getInstance()
                             ->get($contact->getId()); // necessary to get relations
                         $dependant_participant = $this->getRelatedContacts($contact);
-
-                        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                            EventManager_Model_Register_Contact::class,
-                            [
-                                [
-                                    'field' => EventManager_Model_Register_Contact::FLD_ORIGINAL_ID,
-                                    'operator' => 'equals',
-                                    'value' => $contact->getId()
-                                ],
-                            ],
-                        );
-                        $registerContacts = EventManager_Controller_Register_Contact::getInstance()
-                            ->search($filter);
-
-                        $registrationIds = [];
-                        foreach ($registerContacts as $registerContact) {
-                            $regId = $registerContact->registration_id;
-                            if (!in_array($regId, $registrationIds)) {
-                                $registrationIds[] = $regId;
-                            }
-                        }
-
-                        $registrations_data = [];
-
-                        foreach ($registrationIds as $registrationId) {
-                            $registration = EventManager_Controller_Registration::getInstance()
-                                ->get($registrationId);
-                            $status = EventManager_Config::getInstance()
-                                ->get(EventManager_Config::REGISTRATION_STATUS)->records
-                                ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
-                            $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
-                            $registrationArray = $registration->toArray();
-
-                            $participantFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                                EventManager_Model_Register_Contact::class,
-                                [
-                                    [
-                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
-                                        'operator' => 'equals',
-                                        'value' => $registration->getId()
-                                    ],
-                                    [
-                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
-                                        'operator' => 'equals',
-                                        'value' => 'participant'
-                                    ],
-                                ],
-                            );
-                            $participants = EventManager_Controller_Register_Contact::getInstance()
-                                ->search($participantFilter);
-
-                            if ($participants->count() > 0) {
-                                $participant = $participants->getFirstRecord();
-                                $participantArray = $participant->toArray();
-
-                                if (empty($participantArray['original_id']) && !empty($participant->id)) {
-                                    try {
-                                        $participantContact = null;
-                                        if (!empty($participant->email)) {
-                                            $participantContact = Addressbook_Controller_Contact::getInstance()
-                                                ->getContactByEmail($participant->email);
-                                        }
-
-                                        if ($participantContact) {
-                                            $participantArray['original_id'] = $participantContact->getId();
-                                        } else {
-                                            $participantArray['original_id'] = $participant->id;
-                                        }
-                                    } catch (Exception $e) {
-                                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                                . ' Could not resolve participant contact: ' . $e->getMessage());
-                                        }
-                                        $participantArray['original_id'] = $participant->id;
-                                    }
-                                }
-
-                                $registrationArray['participant'] = $participantArray;
-                            }
-
-                            $registrantFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                                EventManager_Model_Register_Contact::class,
-                                [
-                                    [
-                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_ID,
-                                        'operator' => 'equals',
-                                        'value' => $registration->getId()
-                                    ],
-                                    [
-                                        'field' => EventManager_Model_Register_Contact::FLD_REGISTRATION_TYPE,
-                                        'operator' => 'equals',
-                                        'value' => 'registrant'
-                                    ],
-                                ],
-                            );
-                            $registrants = EventManager_Controller_Register_Contact::getInstance()
-                                ->search($registrantFilter);
-
-                            if ($registrants->count() > 0) {
-                                $registrant = $registrants->getFirstRecord();
-                                $registrantArray = $registrant->toArray();
-
-                                if (empty($registrantArray['original_id']) && !empty($registrant->id)) {
-                                    try {
-                                        $registrantContact = null;
-                                        if (!empty($registrant->email)) {
-                                            $registrantContact = Addressbook_Controller_Contact::getInstance()
-                                                ->getContactByEmail($registrant->email);
-                                        }
-
-                                        if ($registrantContact) {
-                                            $registrantArray['original_id'] = $registrantContact->getId();
-                                        } else {
-                                            $registrantArray['original_id'] = $registrant->id;
-                                        }
-                                    } catch (Exception $e) {
-                                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                                . ' Could not resolve registrant contact: ' . $e->getMessage());
-                                        }
-                                        $registrantArray['original_id'] = $registrant->id;
-                                    }
-                                }
-
-                                $registrationArray['registrant'] = $registrantArray;
-                            }
-
-                            $registrations_data[] = $registrationArray;
-                        }
-
-                        if (count($registrations_data) === 0) {
-                            $registrations_data = $contact->toArray();
-                        }
                     } else {
                         $registrant = [
                             'email' => $email_registrant,
@@ -416,8 +323,16 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                         $registrations_data = $registrant;
                     }
 
+                    if (count($accountOwner) === 0 && !empty($contact)) {
+                        $accountOwner[] = $contact->toArray();
+                    }
+
                     $response = new \Laminas\Diactoros\Response();
-                    $response->getBody()->write(json_encode([$registrations_data, $dependant_participant]));
+                    $response->getBody()->write(json_encode([
+                        $accountOwner,
+                        $registrations_data,
+                        $dependant_participant
+                    ]));
                     return $response;
                 } catch (Exception $jwtException) {
                     // Invalid or expired token
