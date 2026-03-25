@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware
  *
  * @package     Felamimail
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -2275,5 +2275,16 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
 
         self::assertEquals('2022-10-06 10:27:13', $message->sent->get('Y-m-d h:i:s'));
+    }
+
+    public function testPetitionLink()
+    {
+        $cachedMessage = $this->messageTestHelper('petition_ltsh.eml');
+
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+
+        self::assertStringContainsString(
+            '<a href="https://www.something.mail.de/oepetition/petitionMitzeichnungAktivierung',
+            $message->body);
     }
 }
