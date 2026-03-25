@@ -558,12 +558,19 @@ var form = new Ext.form.FormPanel({
 
     markDirty: function() {
         if(!this.rendered ) return;
-        this.el.addClass(this.dirtyClass);
-
+        if (this.wrap) {
+            this.wrap.addClass(this.dirtyClass);
+        } else {
+            this.el.addClass(this.dirtyClass);
+        }
     },
     clearDirty: function() {
         if(!this.rendered ) return;
-        this.el.removeClass(this.dirtyClass);
+        if (this.wrap) {
+            this.wrap.removeClass(this.dirtyClass);
+        } else {
+            this.el.removeClass(this.dirtyClass);
+        }
     },
 
     /**
