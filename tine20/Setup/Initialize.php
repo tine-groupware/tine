@@ -268,6 +268,6 @@ class Setup_Initialize
      */
     public static function createSharedTags(array $tags, bool $randomizeColors = true)
     {
-        Tinebase_Tags::getInstance()->createSharedTags($tags, $randomizeColors);
+        return Tinebase_Tags::getInstance()->createSharedTags($tags, $randomizeColors);
     }
 }
