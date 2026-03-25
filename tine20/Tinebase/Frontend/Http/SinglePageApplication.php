@@ -135,8 +135,31 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $scriptSrcs  = ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'];
         $connectSrcs = ["'self'"];
         $imgSrcs     = ["'self'", 'data:', 'blob:'];
+        $frameSrcs   = ["'self'"];
 
-        if (TINE20_BUILDTYPE === 'DEVELOPMENT') {
+        if (OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL)) {
+            $onlyOfficeUrl = rtrim(
+                OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL),
+                '/'
+            );
+        }
+
+        if (!empty($onlyOfficeUrl)) {
+            $parsed = parse_url($onlyOfficeUrl);
+            $onlyOfficeOrigin = $parsed['scheme'] . '://' . $parsed['host']
+                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+            $scriptSrcs[] = $onlyOfficeOrigin;
+            $connectSrcs[] = $onlyOfficeOrigin;
+            $frameSrcs[] = $onlyOfficeOrigin;
+
+            $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
+            $connectSrcs[] = $wsScheme . '://' . $parsed['host']
+                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        }
+
+
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
             $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
             $host      = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST);
             $wsScheme  = $protocol === 'https' ? 'wss' : 'ws';
@@ -152,13 +175,17 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             "script-src "  . implode(' ', $scriptSrcs),
             "connect-src " . implode(' ', $connectSrcs),
             "img-src "     . implode(' ', $imgSrcs),
+            "frame-src "    . implode(' ', $frameSrcs),
             "style-src 'self' 'unsafe-inline'",
             "frame-ancestors $frameAncestors",
         ]);
 
         $header['Content-Security-Policy'] = $csp;
+
+        // set Strict-Transport-Security; used only when served over HTTPS
         $header['Strict-Transport-Security'] = 'max-age=16070400';
 
+        // cache mainscreen for one day in production
         $maxAge = !defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 86400 : -10000;
         $header += [
             'Cache-Control' => 'private, max-age=' . $maxAge,
