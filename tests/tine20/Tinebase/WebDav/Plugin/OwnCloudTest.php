@@ -212,6 +212,29 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->_assertQueryResponse($responseDoc, $query);
     }
 
+    public function testGetQuotaPropertyV3()
+    {
+        $body = '<?xml version="1.0" encoding="utf-8"?>
+<propfind xmlns="DAV:">
+    <prop>
+        <resourcetype xmlns="DAV:"/>
+        <quota-available-bytes/>
+        <quota-used-bytes/>
+    </prop>
+</propfind>';
+
+        $request = new Sabre\HTTP\Request('PROPFIND', self::BASE_URIV3_DAV_FILES_USERNAME . '/', [
+            'DEPTH' => '0',
+        ]);
+
+        $responseDoc = $this->_execPropfindRequest($body, $request);
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/d:quota-available-bytes';
+        $this->_assertQueryResponse($responseDoc, $query );
+
+        $query = '//d:multistatus/d:response/d:propstat/d:prop/d:quota-used-bytes';
+        $this->_assertQueryResponse($responseDoc, $query);
+    }
+
     /**
      * test testGetProperties method
      */
