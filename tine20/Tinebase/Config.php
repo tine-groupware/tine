@@ -3138,7 +3138,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Installation logo')
             self::LABEL => 'Installation logo (legacy, use light/dark variants)',
             //_('Path to custom installation logo.')
-            self::DESCRIPTION => 'Path to custom installation logo.',
+            self::DESCRIPTION => 'Path to custom installation logo. Supported formats: GIF, PNG, JPG. Use INSTALL_LOGO_xxx_SVG for SVG logos.',
             self::TYPE => 'string',
             self::DEFAULT_STR => false,
             self::CLIENTREGISTRYINCLUDE => true,

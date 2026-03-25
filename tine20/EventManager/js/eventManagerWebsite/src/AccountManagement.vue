@@ -3,8 +3,8 @@
  * Tine 2.0
  *
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 -->
 
@@ -17,131 +17,71 @@
         </b-col>
       </b-row>
 
-      <div v-if="selfRegisteredEvents.length">
+      <div v-if="allParticipants.length">
         <h5 class="section-heading">{{ formatMessage('My Events') }}</h5>
-        <b-table
-          bordered
-          hover
-          responsive
-          :items="selfRegisteredEvents"
-          :fields="fields"
-          small
+        <div
+          v-for="participant in allParticipants"
+          :key="participant.id"
         >
-          <template #cell(name)="{ item }">
-            <a
-              :href="getEventLink(item.event_id)"
-              target="_blank"
-              class="event-link"
-            >
-              {{ getEventName(item.event_id) }}
-            </a>
-          </template>
+          <h6 class="user-heading">{{ participant.name }}</h6>
+          <b-table
+            bordered
+            hover
+            responsive
+            :items="participant.events"
+            :fields="fields"
+            small
+          >
+            <template #cell(name)="{ item }">
+              <a
+                :href="getEventLink(item.event_id)"
+                target="_blank"
+                class="event-link"
+              >
+                {{ getEventName(item.event_id) }}
+              </a>
+            </template>
 
-          <template #cell(date)="{ item }">
-            <span>{{ getEventDate(item.event_id) }}</span>
-          </template>
+            <template #cell(date)="{ item }">
+              <span>{{ getEventDate(item.event_id) }}</span>
+            </template>
 
-          <template #cell(status)="{ item }">
-            <span>{{ formatMessage(item.status) }}</span>
-          </template>
+            <template #cell(status)="{ item }">
+              <span>{{ formatMessage(item.status) }}</span>
+            </template>
 
-          <template #cell(option)="{ item }">
-            <b-button
-              v-if="item.status === 'Cancelled'"
-              class="action-button-table"
-              size="sm"
-              @click="registerAgain(item, true)"
-            >
-              {{ formatMessage('Register Again') }}
-            </b-button>
-            <div v-else>
+            <template #cell(option)="{ item }">
               <b-button
+                v-if="item.status === 'Cancelled'"
                 class="action-button-table"
                 size="sm"
-                @click="registerAgain(item, false)"
+                @click="registerAgain(item, true)"
               >
-                {{ formatMessage('Update') }}
+                {{ formatMessage('Register Again') }}
               </b-button>
-              <b-button
-                class="action-button-table"
-                size="sm"
-                @click="openCancelConfirmation(item)"
-              >
-                {{ formatMessage('Cancel Registration') }}
-              </b-button>
-            </div>
-          </template>
-        </b-table>
+              <div v-else>
+                <b-button
+                  class="action-button-table"
+                  size="sm"
+                  @click="registerAgain(item, false)"
+                >
+                  {{ formatMessage('Update') }}
+                </b-button>
+                <b-button
+                  class="action-button-table"
+                  size="sm"
+                  @click="openCancelConfirmation(item)"
+                >
+                  {{ formatMessage('Cancel Registration') }}
+                </b-button>
+              </div>
+            </template>
+          </b-table>
+        </div>
       </div>
 
       <div v-else class="text-center mt-5">
-        <h6>{{ formatMessage('You don\'t have any registrations for yourself yet. Get started by creating one!') }}</h6>
-      </div>
-
-      <div v-if="otherParticipants.length">
-        <h6 class="section-heading">
-          {{ formatMessage('Users you registered') }}
-        </h6>
-      </div>
-      <div
-        v-if="otherParticipants.length"
-        v-for="participant in otherParticipants"
-        :key="participant.id"
-      >
-        <h6 class="user-heading">{{ participant.name }}</h6>
-        <b-table
-          bordered
-          hover
-          responsive
-          :items="participant.events"
-          :fields="fields"
-          small
-        >
-          <template #cell(name)="{ item }">
-            <a
-              :href="getEventLink(item.event_id)"
-              target="_blank"
-              class="event-link"
-            >
-              {{ getEventName(item.event_id) }}
-            </a>
-          </template>
-
-          <template #cell(date)="{ item }">
-            <span>{{ getEventDate(item.event_id) }}</span>
-          </template>
-
-          <template #cell(status)="{ item }">
-            <span>{{ formatMessage(item.status) }}</span>
-          </template>
-
-          <template #cell(option)="{ item }">
-            <b-button
-              v-if="item.status === 'Cancelled'"
-              class="action-button-table"
-              size="sm"
-              @click="registerAgain(item, true)"
-            >
-              {{ formatMessage('Register Again') }}
-            </b-button>
-            <div v-else>
-              <b-button
-                class="action-button-table"
-                size="sm"
-                @click="registerAgain(item, false)"
-              >
-                {{ formatMessage('Update') }}
-              </b-button>
-              <b-button
-                class="action-button-table"
-                size="sm"
-                @click="openCancelConfirmation(item)"
-              >
-                {{ formatMessage('Cancel Registration') }}
-              </b-button>
-            </div>
-          </template>
-        </b-table>
+        <h6>{{ formatMessage('You don\'t have any registrations yet. Get started by creating one!') }}</h6>
       </div>
 
       <div class="button-group">
@@ -233,10 +173,6 @@ const handleModalCancel = () => {
   modal.show = false;
 };
 
-const accountOwnerId = computed(() => {
-  return accountOwner.value?.original_id || accountOwner.value?.id || null;
-});
-
 const selectedEventRegisterOthers = computed(() => {
   if (!selectedEventId.value || !events.value) return null;
   const event = events.value.find(e => e.id === selectedEventId.value);
@@ -260,13 +196,13 @@ const participantsDropdownOptions = computed(() => {
   const seen = new Set();
 
   if (accountOwner.value && accountOwner.value.n_fileas) {
-    const ownerId = accountOwnerId.value;
+    const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
     if (ownerId && !seen.has(ownerId)) {
       options.push({
         value: ownerId,
         text: accountOwner.value.n_fileas
       });
-      seen.add(ownerId);
+      seen.add(accountOwner.value.n_fileas);
     }
   }
 
@@ -275,14 +211,15 @@ const participantsDropdownOptions = computed(() => {
       registrations.value.forEach(registration => {
         const participantId = registration.participant?.original_id || registration.participant?.id;
         const participantName = registration.participant?.n_fileas;
-        const isNotSelf = participantId !== accountOwnerId.value;
+        const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+        const isNotSelf = participantId !== ownerId;
 
-        if (isNotSelf && participantId && participantName && !seen.has(participantId)) {
+        if (isNotSelf && participantId && participantName && !seen.has(participantName)) {
           options.push({
             value: participantId,
             text: participantName
           });
-          seen.add(participantId);
+          seen.add(participantName);
         }
       });
     }
@@ -290,12 +227,12 @@ const participantsDropdownOptions = computed(() => {
     if (dependantParticipants.value && dependantParticipants.value.length > 0) {
       dependantParticipants.value.forEach(p => {
         const participantId = p.original_id || p.id;
-        if (participantId && p.n_fileas && !seen.has(participantId)) {
+        if (participantId && p.n_fileas && !seen.has(p.n_fileas)) {
           options.push({
             value: participantId,
             text: p.n_fileas
           });
-          seen.add(participantId);
+          seen.add(p.n_fileas);
         }
       });
     }
@@ -321,59 +258,26 @@ const fields = [
   { key: 'option', label: formatMessage('Action'), thStyle: { width: '20%' } }
 ];
 
-const selfRegisteredEvents = computed(() => {
+const allParticipants = computed(() => {
   if (!registrations.value || !Array.isArray(registrations.value)) {
-    return [];
-  }
-
-  const ownerId = accountOwnerId.value;
-
-  if (!ownerId) {
-    return [];
-  }
-
-  const filtered = registrations.value.filter(registration => {
-    const participantId = registration.participant?.original_id || registration.participant?.id;
-    const registrantId = registration.registrant?.original_id || registration.registrant?.id;
-    return String(participantId) === String(ownerId) &&
-      String(participantId) === String(registrantId);
-  });
-  return sortRegistrationsByEventDate(filtered);
-});
-
-const otherParticipants = computed(() => {
-  if (!registrations.value || !Array.isArray(registrations.value)) {
-    return [];
-  }
-
-  const ownerId = accountOwnerId.value;
-
-  if (!ownerId) {
     return [];
   }
 
   const participantsMap = new Map();
 
   registrations.value.forEach(registration => {
-    const participantId = registration.participant?.original_id || registration.participant?.id;
-    const registrantId = registration.registrant?.original_id || registration.registrant?.id;
+    const participantId = registration.participant?.original_id;
+    const participantName = registration.participant?.n_fn || registration.participant?.n_fileas;
 
-    const isSelfRegistration = String(participantId) === String(ownerId) &&
-      String(participantId) === String(registrantId);
-
-    if (!isSelfRegistration) {
-      const participantName = registration.participant?.n_fn || registration.participant?.n_fileas;
-
-      if (!participantsMap.has(participantId)) {
-        participantsMap.set(participantId, {
-          id: participantId,
-          name: participantName,
-          events: []
-        });
-      }
-
-      participantsMap.get(participantId).events.push(registration);
+    if (!participantsMap.has(participantId)) {
+      participantsMap.set(participantId, {
+        id: participantId,
+        name: participantName,
+        events: []
+      });
     }
+
+    participantsMap.get(participantId).events.push(registration);
   });
 
   participantsMap.forEach(participant => {
@@ -464,7 +368,7 @@ async function registerAgain(registration, isReregistered) {
 
 function openCreateNewProfile() {
   selectedEventId.value = null;
-  selectedParticipantId.value = accountOwnerId.value;
+  selectedParticipantId.value = accountOwner.value?.original_id || accountOwner.value?.id;
 
   showModal({
     title: formatMessage('New Registration'),
@@ -484,7 +388,8 @@ const handleProfileSubmit = async () => {
   }
   const baseUrl = window.location.origin;
   const token = route.params.token;
-  const isSelfRegistration = String(selectedParticipantId.value) === String(accountOwnerId.value);
+  const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+  const isSelfRegistration = String(selectedParticipantId.value) === String(ownerId);
   const newProfileParam = isSelfRegistration ? 'false' : 'true';
   window.location.href = `${baseUrl}/EventManager/view/event/${selectedEventId.value}/registration/${token}?newProfile=${newProfileParam}&participantId=${selectedParticipantId.value}`;
 };
@@ -549,26 +454,9 @@ async function fetchAccountData() {
     });
 
     const data = await resp.json();
-    const [firstElement, dependants] = data;
-
-    if (Array.isArray(firstElement)) {
-      registrations.value = firstElement;
-
-      if (firstElement.length > 0) {
-        if (firstElement[0].registrant) {
-          accountOwner.value = firstElement[0].registrant;
-        } else if (firstElement[0].participant) {
-          accountOwner.value = firstElement[0].participant;
-        }
-      }
-    } else if (firstElement && typeof firstElement === 'object') {
-      accountOwner.value = firstElement;
-      registrations.value = [];
-    } else {
-      accountOwner.value = null;
-      registrations.value = [];
-    }
-
+    const [accountOwnerData, registrationsData, dependants] = data;
+    accountOwner.value = Array.isArray(accountOwnerData) ? accountOwnerData[0] : [];
+    registrations.value = Array.isArray(registrationsData) ? registrationsData : [];
     dependantParticipants.value = Array.isArray(dependants) ? dependants : [];
   } catch (error) {
     console.error('Error fetching account details:', error);
@@ -649,7 +537,7 @@ initializeData();
 .user-heading {
   color: #2c3e50;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.2rem;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }

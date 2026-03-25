@@ -1156,7 +1156,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
                 $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getDeleted: true);
                 $record->{TMCC::FLD_ORIGINAL_ID} = $originalRecord->getId();
-            } catch (Tinebase_Exception_NotFound) {
+            } catch (Tinebase_Exception_NotFound | Tinebase_Exception_AccessDenied) {
                 $record->{TMCC::FLD_ORIGINAL_ID} = null;
             }
         }

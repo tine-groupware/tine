@@ -259,8 +259,7 @@ class EventManager_ControllerTest extends TestCase
         self::assertNotEquals($tempf_id, $node_id);
     }
 
-    // todo fix now that container does not exists for denormalize contacts
-    /*public function testFileUploadToRegistrationAnonymousUser()
+    public function testFileUploadToRegistrationAnonymousUser()
     {
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
@@ -282,7 +281,7 @@ class EventManager_ControllerTest extends TestCase
             ->{EventManager_Model_BookedOption::FLD_SELECTION_CONFIG}
             ->{EventManager_Model_Selections_File::FLD_NODE_ID};
         self::assertNotEquals($tempf_id, $node_id);
-    }*/
+    }
 
     public function testMoreThanOneBookedOptionTypeToRegistration()
     {
