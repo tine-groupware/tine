@@ -52,6 +52,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 
     protected \Sabre\DAV\Server $server;
 
+    protected $noOwncloudePermissions = false;
+
     /**
      * Initializes the plugin
      *
@@ -71,6 +73,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}id'
         );
+        $this->noOwncloudePermissions = Tinebase_Config::getInstance()->{Tinebase_Config::NO_OWNCLOUD_PERMISSIONS};
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}permissions'
         );
@@ -107,41 +110,46 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
             $this->server->httpResponse->setHeader('OC-CHECKSUM', 'sha1:' . $fNode->hash);
         }
 
-        $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', function() use($node) {
-            $permission = 'S';
-            $fNode = null;
-            if ( $node instanceof Tinebase_Frontend_WebDAV_Node) {
-                $fNode = $node->getNode();
-            }
-            if ($node instanceof Filemanager_Frontend_WebDAV) {
-                try {
-                    $path = $node->getPath();
-                    $fNode = Tinebase_FileSystem::getInstance()->stat($path);
-                } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
-                        '::' . __LINE__ . ' Could not get node from instance Filemanager_Frontend_WebDAV : ' . $e->getMessage());                }
-            }
-            if ($fNode) {
-                $grants = Tinebase_FileSystem::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $fNode);
-                if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
-                    $permission .= 'WCKDR';
-                } else {
-                    if ($grants->{Tinebase_Model_Grants::GRANT_DELETE}) {
-                        $permission .= 'D';
-                    }
-                    if ($grants->{Tinebase_Model_Grants::GRANT_EDIT}) {
-                        $permission .= 'W';
-                    }
-                    if ($grants->{Tinebase_Model_Grants::GRANT_ADD}) {
-                        $permission .= 'CK';
-                    }
-                    if ($grants->{Tinebase_Model_Grants::GRANT_PUBLISH}) {
-                        $permission .= 'R';
+        if ($this->noOwncloudePermissions) {
+            $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', fn() => 'SWCKDR');
+        } else {
+            $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', function () use ($node) {
+                $permission = 'S';
+                $fNode = null;
+                if ($node instanceof Tinebase_Frontend_WebDAV_Node) {
+                    $fNode = $node->getNode();
+                }
+                if ($node instanceof Filemanager_Frontend_WebDAV) {
+                    try {
+                        $path = $node->getPath();
+                        $fNode = Tinebase_FileSystem::getInstance()->stat($path);
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ .
+                            '::' . __LINE__ . ' Could not get node from instance Filemanager_Frontend_WebDAV : ' . $e->getMessage());
                     }
                 }
-            }
-            return $permission;
-        });
+                if ($fNode) {
+                    $grants = Tinebase_FileSystem::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $fNode);
+                    if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                        $permission .= 'WCKDR';
+                    } else {
+                        if ($grants->{Tinebase_Model_Grants::GRANT_DELETE}) {
+                            $permission .= 'D';
+                        }
+                        if ($grants->{Tinebase_Model_Grants::GRANT_EDIT}) {
+                            $permission .= 'W';
+                        }
+                        if ($grants->{Tinebase_Model_Grants::GRANT_ADD}) {
+                            $permission .= 'CK';
+                        }
+                        if ($grants->{Tinebase_Model_Grants::GRANT_PUBLISH}) {
+                            $permission .= 'R';
+                        }
+                    }
+                }
+                return $permission;
+            });
+        }
 
         $propFind->handle('{' . self::NS_OWNCLOUD . '}data-fingerprint', '');
         $propFind->handle('{' . self::NS_OWNCLOUD . '}share-types', '');
