@@ -1,11 +1,11 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,6 +16,30 @@
  */
 class Calendar_Setup_Initialize extends Setup_Initialize
 {
+    protected function _initializeContainerObserver(): void
+    {
+        static::addContainerObserver();
+    }
+
+    public static function addContainerObserver(): void
+    {
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(new Tinebase_Model_PersistentObserver([
+            'observable_model'      => Tinebase_Model_Container::class,
+            'observable_identifier' => null,
+            'observer_model'        => Calendar_Model_Event::class,
+            'observer_identifier'   => 'Calendar_Event_Container_BeforeCreate',
+            'observed_event'        => Tinebase_Event_Container_BeforeCreate::class,
+        ]));
+
+        Tinebase_Record_PersistentObserver::getInstance()->addObserver(new Tinebase_Model_PersistentObserver([
+            'observable_model'      => Tinebase_Model_Container::class,
+            'observable_identifier' => null,
+            'observer_model'        => Calendar_Model_Event::class,
+            'observer_identifier'   => 'Calendar_Event_Container_BeforeUpdate',
+            'observed_event'        => Tinebase_Event_Record_BeforeUpdate::class,
+        ]));
+    }
+
     /**
      * init favorites
      */
@@ -90,5 +114,6 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         $scheduler = Tinebase_Core::getScheduler();
         Calendar_Scheduler_Task::addUpdateConstraintsExdatesTask($scheduler);
         Calendar_Scheduler_Task::addTentativeNotificationTask($scheduler);
+        Calendar_Scheduler_Task::addSyncCloudAccountContainersTask($scheduler);
     }
 }

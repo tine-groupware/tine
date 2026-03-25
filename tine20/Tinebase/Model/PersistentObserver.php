@@ -41,7 +41,7 @@ class Tinebase_Model_PersistentObserver extends Tinebase_Record_Abstract
         'observable_model'       => array('presence' => 'required', 'allowEmpty' => false),
         'observable_identifier'  => array('allowEmpty' => true, 'Alnum'),
         'observer_model'         => array('presence' => 'required', 'allowEmpty' => false),
-        'observer_identifier'    => array('presence' => 'required', 'allowEmpty' => false, 'Alnum'),
+        'observer_identifier'    => array('presence' => 'required', 'allowEmpty' => false),
         'observed_event'         => array('presence' => 'required', 'allowEmpty' => false),
         'do_acl'                 => array( Zend_Filter_Input::ALLOW_EMPTY => true,
                                            Zend_Filter_Input::DEFAULT_VALUE => true,

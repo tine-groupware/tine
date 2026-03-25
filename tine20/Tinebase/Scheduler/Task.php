@@ -25,6 +25,8 @@ class Tinebase_Scheduler_Task
      * @var string
      */
     public const TASK_TYPE_MINUTELY = '* * * * *';
+
+    public const TASK_TYPE_5MINUTELY = '*/5 * * * *';
     
     /**
      * hourly task

@@ -61,4 +61,5 @@ require('./WeekdayFilter');
 require('./EventFinderOptionsDialog');
 require('./floorplan/src/openViewBtn');
 require('./ViewInCalendarDialog');
-require('./AttendeeCombo')
+require('./AttendeeCombo');
+require('./SyncContainerConfigEditDialog');

@@ -135,10 +135,12 @@ describe('editDialog', () => {
         await lib.makeScreenshot(newPage, {path: 'screenshots/Kalender/10_kalender_termin_anderer_organisator.png'});
     });
 
-    test.skip('save events', async () => {
+    test('save events', async () => {
+        const currentUser = await lib.getCurrentUser(newPage);
+        const attendeeText = `${currentUser.accountDisplayName} (Teilnehmer*in)`;
         await newPage.click('input[name=perspective] + .x-form-trigger.x-form-arrow-trigger');
-        await expect(newPage).toMatchElement('.x-combo-list-item', {text:'Admin, tine ® (Teilnehmer*in)'})
-        await expect(newPage).toClick('.x-combo-list-item', {text:'Admin, tine ® (Teilnehmer*in)'})
+        await expect(newPage).toMatchElement('.x-combo-list-item', {text: attendeeText})
+        await expect(newPage).toClick('.x-combo-list-item', {text: attendeeText})
         await newPage.waitForTimeout(1000);
         await expect(newPage).toClick('button', {text: 'Ok'});
 
@@ -147,7 +149,7 @@ describe('editDialog', () => {
 });
 
 describe('context menu', () => {
-    test.skip('email', async () => {
+    test('email', async () => {
         try {
             await expect(page).toClick('button', {text: 'Blatt'});
         } catch (e) {
@@ -164,7 +166,7 @@ describe('context menu', () => {
         await lib.makeScreenshot(page, {path: 'screenshots/Kalender/11_kalender_termin_kontextmenue.png'});
     });
 
-    test.skip('set answer', async () => {
+    test('set answer', async () => {
         let answser = await expect(page).toMatchElement('.x-menu-item-text', {text: 'Meine Antwort setzen'});
         await answser.hover();
         answser = await expect(page).toMatchElement('.x-menu-item-text', {text: 'Keine Antwort'});

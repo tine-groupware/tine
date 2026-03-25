@@ -696,7 +696,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $contact->n_family
         );
         
-        if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
+        if (!empty($contact->email)) {
             $principal['{http://sabredav.org/ns}email-address'] = $contact->email;
         }
         

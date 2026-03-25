@@ -21,6 +21,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
     public const OPT_USE_OWN_ATTENDEE_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'useOwnAttendeeForSkipInternalOtherOrganizerEvents';
     public const OPT_ALLOW_PARTY_CRUSH_FOR_SKIP_INTERNAL_OTHER_ORGANIZER_EVENTS = 'allowPartyCrushForSkipInternalOtherOrganizerEvents';
     public const OPT_XPROPS_KEY = 'xpropsKey';
+    public const OPT_NO_CACHE = 'noCache';
 
     protected $_requestTries = null;
     protected $currentUserPrincipal = null;
@@ -73,6 +74,32 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
     protected ?Calendar_Convert_Event_VCalendar_Abstract $_converter = null;
     protected array $settings;
+    protected bool $noCache = false;
+
+    public const PROPERTY_CALENDAR_COLOR = 'calendar-color';
+    public const PROPERTY_CURRENT_USER_PRIVILEGE_SET = 'current-user-privilege-set';
+    public const PROPERTY_DISPLAY_NAME = 'displayname';
+    public const PROPERTY_OWNER = 'owner';
+    public const PROPERTY_CALENDAR_USER_ADDRESS_SET = 'calendar-user-address-set';
+    public const PROPERTY_EMAIL_ADDRESS_SET = 'email-address-set';
+
+
+    protected static array $properties = [
+        self::PROPERTY_CALENDAR_COLOR => '<calendar-color xmlns="http://apple.com/ns/ical/" />',
+        self::PROPERTY_CURRENT_USER_PRIVILEGE_SET => '<d:current-user-privilege-set />',
+        self::PROPERTY_DISPLAY_NAME => '<d:displayname />',
+        self::PROPERTY_OWNER => '<d:owner />',
+        self::PROPERTY_CALENDAR_USER_ADDRESS_SET => '<calendar-user-address-set xmlns="urn:ietf:params:xml:ns:caldav" />',
+        self::PROPERTY_EMAIL_ADDRESS_SET => '<email-address-set xmlns="http://calendarserver.org/ns/" />',
+    ];
+    protected static array $propertiesClark = [
+        '{http://apple.com/ns/ical/}calendar-color' => self::PROPERTY_CALENDAR_COLOR,
+        '{DAV:}current-user-privilege-set' => self::PROPERTY_CURRENT_USER_PRIVILEGE_SET,
+        '{DAV:}displayname' => self::PROPERTY_DISPLAY_NAME,
+        '{DAV:}owner' => self::PROPERTY_OWNER,
+        '{urn:ietf:params:xml:ns:caldav}calendar-user-address-set' => self::PROPERTY_CALENDAR_USER_ADDRESS_SET,
+        '{http://calendarserver.org/ns/}email-address-set' => self::PROPERTY_EMAIL_ADDRESS_SET,
+    ];
     
     public function __construct(array $settings, string $flavor)
     {
@@ -82,6 +109,9 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
         $this->userName = $settings[self::OPT_USERNAME] ?? null;
 
+        if ($settings[self::OPT_NO_CACHE] ?? false) {
+            $this->noCache = true;
+        }
         if (is_int($settings['calDavRequestTries'] ?? null)) {
             $this->_requestTries = $settings['calDavRequestTries'];
         }
@@ -182,6 +212,10 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
             throw new Tinebase_Exception_NotFound('404');
         }
 
+        if (401 === (int)($response['statusCode'] ?? null)) {
+            throw new Tinebase_Exception_Unauthorized('401');
+        }
+
         $result = $this->parseMultiStatus($response['body']);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -243,28 +277,89 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         return $result;
     }
 
+    public function getCollectionInfos(string $uri, array $properties): array
+    {
+        $propertiesXml = '';
+        foreach ($properties as $property) {
+            if (static::$properties[$property] ?? false) {
+                $propertiesXml .= static::$properties[$property] . PHP_EOL;
+            }
+        }
+        $result = [];
+
+        foreach ($this->multiStatusRequest('PROPFIND', $uri, '<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:">
+  <d:prop>
+' . $propertiesXml . '
+  </d:prop>
+</d:propfind>') as $property => $value) {
+            if (static::$propertiesClark[$property] ?? false) {
+                $result[static::$propertiesClark[$property]] = $value;
+            }
+        }
+
+
+        return $result;
+    }
+
+    public function getEmailAddressForPrincipal(string $principalUri): ?string
+    {
+        $result = $this->multiStatusRequest('PROPFIND', $principalUri, '<?xml version="1.0"?>
+<d:propfind xmlns:d="DAV:">
+  <d:prop>
+    ' . self::$properties[self::PROPERTY_EMAIL_ADDRESS_SET] . '
+    ' . self::$properties[self::PROPERTY_CALENDAR_USER_ADDRESS_SET] . '
+  </d:prop>
+ </d:propfind>');
+
+        $email = null;
+        $emailAdrSetClark = array_search(self::PROPERTY_EMAIL_ADDRESS_SET, self::$propertiesClark);
+        $calUserAdrSetClark = array_search(self::PROPERTY_CALENDAR_USER_ADDRESS_SET, self::$propertiesClark);
+        foreach ($result as $property => $value) {
+            if ($emailAdrSetClark === $property) {
+                foreach ($value as $emailValues) {
+                    if ($emailValues['name'] === '{http://calendarserver.org/ns/}email-address') {
+                        $email = $emailValues['value'];
+                        break 2;
+                    }
+                }
+            } elseif (null === $email && $calUserAdrSetClark === $property) {
+                foreach ($value as $emailValues) {
+                    if ($emailValues['name'] === '{DAV:}href' && str_starts_with($emailValues['value'], 'mailto:')) {
+                        $email = substr($emailValues['value'], 7);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $email;
+    }
+
     /**
      * findUserPrincipal
      * - result ($this->currentUserPrincipal) is not cached  //for 1 week
      */
     public function findCurrentUserPrincipal(): bool
     {
-        /* $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->userName);
-        if (Tinebase_Core::getCache()->test($cacheId)) {
+        $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->baseUri . $this->userName);
+        if (!$this->noCache && Tinebase_Core::getCache()->test($cacheId)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                 . ' Loading user principal from cache');
 
             if (($this->currentUserPrincipal = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
                 return true;
             }
-        }*/
+        }
 
         $result = $this->multiStatusRequest('PROPFIND', '/principals/', self::findCurrentUserPrincipalRequest);
         if (isset($result['{DAV:}current-user-principal']))
         {
-            $this->currentUserPrincipal = $result['{DAV:}current-user-principal'];
+            $this->currentUserPrincipal = $result['{DAV:}current-user-principal'][0]['value'];
 
-            //Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24*3600*7);
+            if (!$this->noCache) {
+                Tinebase_Core::getCache()->save($this->currentUserPrincipal, $cacheId, array(), /* 1 week */ 24 * 3600 * 7);
+            }
             return true;
         }
 
@@ -285,8 +380,8 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 . ' No principal found for user ' . $this->userName);
             return false;
         }
-        $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->userName);
-        if (Tinebase_Core::getCache()->test($cacheId) && ($this->calendarHomeSet = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
+        $cacheId = Tinebase_Helper::convertCacheId(__METHOD__ . $this->baseUri . $this->userName);
+        if (!$this->noCache && Tinebase_Core::getCache()->test($cacheId) && ($this->calendarHomeSet = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__
                 . ' Loading user home set from cache');
             return true;
@@ -295,8 +390,10 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         $result = $this->multiStatusRequest('PROPFIND', $this->currentUserPrincipal, self::findCalendarHomeSetRequest);
 
         if (isset($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'])) {
-            $this->calendarHomeSet = rtrim($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'], '/') . '/';
-            Tinebase_Core::getCache()->save($this->calendarHomeSet, $cacheId, array(), /* 1 week */ 24*3600*7);
+            $this->calendarHomeSet = rtrim($result['{urn:ietf:params:xml:ns:caldav}calendar-home-set'][0]['value'], '/') . '/';
+            if (!$this->noCache) {
+                Tinebase_Core::getCache()->save($this->calendarHomeSet, $cacheId, array(), /* 1 week */ 24 * 3600 * 7);
+            }
             return true;
         }
 
@@ -314,22 +411,36 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 
         $collections = new Tinebase_Record_RecordSet(Tinebase_Model_WebDAV_Collection::class);
         foreach($this->multiStatusRequest('PROPFIND', $this->calendarHomeSet, self::findAllCalendarsRequest, 1) as $url => $result) {
-            if (!($compSet = $result['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] ?? null) instanceof \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet) {
-                continue;
+            $type = null;
+            foreach ($result['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] ?? [] as $component) {
+                if ('{urn:ietf:params:xml:ns:caldav}comp' === $component['name']) {
+                    foreach ($component['attributes'] ?? [] as $key => $value) {
+                        if ('name' !== $key) {
+                            continue;
+                        }
+                        if ('VEVENT' === $value) {
+                            $type = $value;
+                            break 2;
+                        } elseif ('VTODO' === $value) {
+                            $type = $value;
+                        }
+                    }
+                }
             }
-            if (in_array('VEVENT', $compSet->getValue())) {
-                $type = 'VEVENT';
-            } elseif (in_array('VTODO', $compSet->getValue())) {
-                $type = 'VTODO';
-            } else {
+            if (null === $type) {
                 continue;
             }
 
-            if ($result['{DAV:}acl'] instanceof Sabre\DAVACL\Xml\Property\Acl) {
-                foreach ($result['{DAV:}acl']->getPrivileges() as $acl) {
-                    // $acl['principal'] === '{DAV:}authenticated' || $this->currentUserPrincipal === $acl['principal'];
-                    // what about groups? roles?
-                    $acl['privilege'];
+            $acls = [];
+            foreach ($result['{DAV:}current-user-privilege-set'] ?? [] as $acl) {
+                if ('{DAV:}privilege' === $acl['name'] && ($acl['value'][0]['name'] ?? null)) {
+                    $acls[] = $acl['value'][0]['name'];
+                }
+            }
+            $ownerPrincipal = null;
+            foreach ($result['{DAV:}owner'] ?? [] as $owner) {
+                if ('{DAV:}href' === ($owner['name'] ?? null) && ($ownerPrincipal = ($owner['value'] ?? null))) {
+                    break;
                 }
             }
 
@@ -338,8 +449,17 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
                 Tinebase_Model_WebDAV_Collection::FLD_NAME => $result['{DAV:}displayname'] ?? null,
                 Tinebase_Model_WebDAV_Collection::FLD_COLOR => $result['{http://apple.com/ns/ical/}calendar-color'] ?? null,
                 Tinebase_Model_WebDAV_Collection::FLD_TYPE => $type,
-                //Tinebase_Model_WebDAV_Collection::FLD_ACL => '',
+                Tinebase_Model_WebDAV_Collection::FLD_ACL => $acls,
+                Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL => $ownerPrincipal,
             ]));
+        }
+
+        $principals = array_unique(array_filter($collections->{Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL}));
+
+        foreach ($principals as $principal) {
+            if ($email = $this->getEmailAddressForPrincipal($principal)) {
+                $collections->filter(Tinebase_Model_WebDAV_Collection::FLD_OWNER_PRINCIPAL, $principal)->{Tinebase_Model_WebDAV_Collection::FLD_OWNER_EMAIL} = $email;
+            }
         }
 
         return $collections;
@@ -403,7 +523,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         $result = [];
         foreach ($multistatus->getResponses() as $response) {
             if ('404' === $response->getHttpStatus()) {
-                $result['404'][] = $this->_getEventIdFromName($response->getHref());
+                $result['404'][] = $this->_getEventIdFromName(basename($response->getHref(), '.ics'));
             } else {
                 $props = $response->getResponseProperties();
                 if (null !== ($etag = ($props['200']['{DAV:}getetag'] ?? null))) {
@@ -588,7 +708,35 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         unset ($msEventRaii);
     }
 
-    public function writeEvent(string $uri, Calendar_Model_Event $event): ?Calendar_Model_Event
+    public function deleteEventRemotelyStoreLocally(string $uri, Calendar_Model_Event $event): void
+    {
+        try {
+            if (!($id = $event->external_id ?: $event->getId())) {
+                $event->setId($id = $event::generateUID());
+            }
+            $requestUrl = $this->getAbsoluteUrl($uri . '/' . $id . '.ics');
+            $response = $this->request('DELETE', $requestUrl, headers: [
+                'User-Agent' => 'Tine20/2024.11', // TODO FIXME version!?
+            ]);
+            if ($response['statusCode'] !== 201 && $response['statusCode'] !== 204) {
+                throw new Tinebase_Exception('status code wrong: ' . print_r($response, true));
+            }
+        } catch (Throwable $t) {
+            if ($t instanceof Tinebase_Exception) {
+                $e = $t;
+            } else {
+                $e = new Tinebase_Exception($t->getMessage(), previous: $t);
+            }
+            $e->setLogToSentry(false);
+            $e->setLogLevelMethod('info');
+            Tinebase_Exception::log($e);
+            return;
+        }
+
+        $this->syncCalendarEvents($uri, $event->container_id instanceof Tinebase_Model_Container ? $event->container_id : Tinebase_Container::getInstance()->get($event->container_id));
+    }
+
+    public function writeEventRemotelyStoreLocally(string $uri, Calendar_Model_Event $event): ?Calendar_Model_Event
     {
         $this->decorator->initCalendarImport($this->settings);
 
@@ -597,11 +745,13 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
             . ' Trying to write event to ' . $uri . ' with user ' . $this->userName);
 
         $body = $this->getConverter()->fromTine20Model($event)->serialize();
-        if (null === ($id = $event->external_id ?: $event->getId())) {
+        if (!($id = $event->external_id ?: $event->getId())) {
             $event->setId($id = $event::generateUID());
         }
         $requestUrl = $this->getAbsoluteUrl($uri . '/' . $id . '.ics');
-        $this->existingRecordIds[$uri][$id] = true;
+        if ($event->external_id) {
+            $this->existingRecordIds[$uri][$id] = $event->getId();
+        }
 
         $readEventFromRemote = function() use($uri, $requestUrl, $event) {
             Calendar_Controller_Event::getInstance()->skipSyncContainerCheck(true);
@@ -645,7 +795,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         return Calendar_Controller_Event::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
             [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $event->getIdFromProperty('container_id')],
             [TMFA::FIELD => 'uid', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $event->uid],
-            [TMFA::FIELD => 'recurid', TMFA::OPERATOR => $event->recurid ? TMFA::OP_EQUALS : 'isnull', TMFA::VALUE => $event->recurid],
+            [TMFA::FIELD => 'recurid', TMFA::OPERATOR => $event->recurid ? TMFA::OP_EQUALS : 'isnull', TMFA::VALUE => $event->recurid ?: true],
         ]))->getFirstRecord();
     }
 
@@ -834,8 +984,9 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
 <d:propfind xmlns:d="DAV:">
   <d:prop>
     <d:resourcetype />
-    <d:acl />
+    <d:current-user-privilege-set />
     <d:displayname />
+    <d:owner />
     <x:supported-calendar-component-set xmlns:x="urn:ietf:params:xml:ns:caldav"/>
     <calendar-color xmlns="http://apple.com/ns/ical/"/>
   </d:prop>
@@ -845,7 +996,7 @@ class Calendar_Backend_CalDav_Client extends \Sabre\DAV\Client
         '<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
-    <x:calendar-data xmlns:x="urn:ietf:params:xml:ns:caldav"/>
+    <d:getetag />
   </d:prop>
 </d:propfind>';
 

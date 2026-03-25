@@ -562,7 +562,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                                 : this.responsiveBreakpointOverrides),
                     },
                     defaults: { autoScroll: true },
-                    items: [Ext.applyIf(this.getRecordFormItems (plugin), {
+                    items: [Ext.applyIf(this.getRecordFormItems(plugin), {
                         region: 'center',
                         xtype: 'columnform',
                         labelAlign: 'top',
@@ -639,6 +639,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     getRecordFormItems: function(plugin) {
         return new Tine.widgets.form.RecordForm({
+            ref: '../../../../recordForm',
             recordClass: this.recordClass,
             editDialog: this,
             tabPanelPlugin: plugin

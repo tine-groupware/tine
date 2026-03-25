@@ -200,6 +200,44 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
         this.contextMenuUserFolder.add(this.action_manageFreeBusyUrls);
         this.contextMenuSingleContainerProperties.add(this.action_manageFreeBusyUrls);
+
+        this.action_editExternalCalendar = new Ext.Action({
+            iconCls: 'cloud-share',
+            handler: function() {
+                let containerData = this.action_editExternalCalendar.containerData;
+                let ctxNode = this.ctxNode;
+                Tine.Calendar.SyncContainerConfigEditDialog.openWindow({
+                    containerData,
+                    listeners: {
+                        scope: this,
+                        containerSaved: function(savedContainerData) {
+                            if (containerData?.xprops?.syncContainer) {
+                                // edit existing container
+                                if (savedContainerData.name !== containerData.name) {
+                                    ctxNode.setText(Ext.util.Format.htmlEncode(savedContainerData.name));
+                                    this.scope.fireEvent('containerrename', savedContainerData, ctxNode, savedContainerData.name);
+                                }
+
+                                if (savedContainerData.color !== containerData.color) {
+                                    ctxNode.getUI().colorNode.setStyle({color: savedContainerData.color});
+                                    ctxNode.attributes.color = savedContainerData.color;
+                                    this.scope.fireEvent('containercolorset', savedContainerData);
+                                }
+
+                            } else {
+                                // new container
+                                const newNode = this.loader.createNode(savedContainerData);
+                                this.loader.expandChildNode(ctxNode, newNode);
+                                this.fireEvent('containeradd', savedContainerData);
+                            }
+                        }
+                    }
+                })
+            },
+            scope: this
+        });
+        this.contextMenuUserFolder.add(this.action_editExternalCalendar);
+        this.contextMenuSingleContainer.add(this.action_editExternalCalendar);
     },
 
     onContextMenu: function(node, event) {
@@ -227,6 +265,13 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         this.action_manageFreeBusyUrls.setHidden((!grants.resourceEditGrant || !resourceId) && !personalOwnerId);
         this.action_editResource.resourceId = this.action_manageFreeBusyUrls.resourceId = resourceId;
         this.action_manageFreeBusyUrls.personalOwnerId = personalOwnerId;
+
+        const syncContainer = _.get(node, 'attributes.container.xprops.syncContainer')
+        this.action_editExternalCalendar.containerData = _.get(node, 'attributes.container')
+        this.action_editExternalCalendar.setHidden(
+            !this.app.featureEnabled('featureCloudCalendarSync') ||
+            (!personalOwnerId && node.id !== 'shared' && !syncContainer))
+        this.action_editExternalCalendar.setText(syncContainer ? this.app.i18n._('Edit External Calendar') : this.app.i18n._('Add External Calendar'))
 
         this.supr().onContextMenu.apply(this, arguments);
     },

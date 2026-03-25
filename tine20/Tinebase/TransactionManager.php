@@ -55,7 +55,7 @@ class Tinebase_TransactionManager
     /**
      * @var bool allow unittest to skip a roll back
      */
-    protected $_unitTestForceSkipRollBack = false;
+    protected bool $_unitTestForceSkipRollBack = false;
 
     /**
      * @var Tinebase_TransactionManager
@@ -329,10 +329,7 @@ class Tinebase_TransactionManager
         $this->_openTransactions = [];
     }
 
-    /**
-     * @param $bool
-     */
-    public function unitTestForceSkipRollBack($bool = null)
+    public function unitTestForceSkipRollBack(?bool $bool = null): bool
     {
         $oldValue = $this->_unitTestForceSkipRollBack;
         if (null !== $bool) {

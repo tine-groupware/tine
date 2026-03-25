@@ -41,5 +41,6 @@ class Tinebase_Model_ContainerFilter extends Tinebase_Model_Filter_FilterGroup
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'uuid'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'is_deleted'        => array('filter' => 'Tinebase_Model_Filter_Bool'),
+        'xprops'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
 }

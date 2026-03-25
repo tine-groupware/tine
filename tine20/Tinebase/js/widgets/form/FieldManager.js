@@ -58,9 +58,10 @@ Tine.widgets.form.FieldManager = function() {
          * get form field of well known field names
          *
          * @param {String} fieldName
+         * @param {Object} config
          * @return {Object}
          */
-        getByFieldname: function(fieldName) {
+        getByFieldname: function(fieldName, config) {
             var field = null;
 
             return field;
@@ -459,12 +460,13 @@ Tine.widgets.form.FieldManager = function() {
                 genericKey = this.getKey([appName, modelName, fieldName]),
                 config = config || {};
 
-            // check for registered renderer
+            // check for registered field
             var field = fields[categoryKey] ? fields[categoryKey] : fields[genericKey];
+            field = field ? Object.assign({}, field, config) : null;
 
             // check for common names
             if (! field) {
-                field = this.getByFieldname(fieldName);
+                field = this.getByFieldname(fieldName, config);
             }
 
             // check for known datatypes
