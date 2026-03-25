@@ -40,7 +40,8 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
     initComponent: function() {
         this.recordProxy = Tine.Timetracker.timeaccountBackend;
         this.recordClass = Tine.Timetracker.Model.Timeaccount;
-        
+        this.initTemplate();
+
         Tine.Timetracker.TimeaccountPickerCombo.superclass.initComponent.apply(this, arguments);
 
         this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
@@ -68,6 +69,30 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
             this.pageTb.doLayout();
         }
     },
+
+    /**
+     * init template
+     * @private
+     */
+    initTemplate: function() {
+        if (! this.tpl) {
+            this.tpl = new Ext.XTemplate('<tpl for=".">',
+                '<div class="x-combo-list-item" {[this.getQtip(values.' + this.recordClass.getMeta('idProperty') + ')]}>',
+                '<table>',
+                '<tr>',
+                '<td style="min-width: 16px;">{[this.invoiceableRenderer(null, null, values)]}</td>',
+                '<td width="100%">{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</td>',
+                '</tr>',
+                '</table>',
+                '</div>',
+                '</tpl>', {
+                    invoiceableRenderer: this.invoiceableRenderer,
+                    getTitle: this.getTitle.createDelegate(this),
+                    getQtip: this.getQtip.createDelegate(this)
+                }
+            );
+        }
+    },
     
     /**
      * apply showClosed value
@@ -77,7 +102,7 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
             this.showClosedBtn.setValue(options.params.filter);
         }
     },
-    
+
     /**
      * append showClosed value
      */
@@ -95,7 +120,27 @@ Tine.Timetracker.TimeaccountPickerCombo = Ext.extend(Tine.Tinebase.widgets.form.
                 store.baseParams.filter.push(this.showClosedBtn.getValue());
             }
         }
-    }
+    },
+
+    /**
+     * list type renderer
+     *
+     * @private
+     * @return {String} HTML
+     */
+    invoiceableRenderer: function(data, cell, record) {
+        const is_billable = record.is_billable;
+        const cssClass = (is_billable ? 'tine-grid-row-action-icon TimetrackerTimeaccount_Invoice' : '');
+        return '<div style="background-position:1px;" class="' + cssClass + '">&#160</div>';
+    },
+
+    getListItemQtip(record) {
+        let result = Tine.Timetracker.TimeaccountPickerCombo.superclass.getListItemQtip.apply(this, arguments);
+        if (record.get('is_billable')) {
+            result = `[ ${this.app.i18n._('Project time is invoiceable')} ] ${result}`;
+        }
+        return result;
+    },
 });
 
 Tine.widgets.form.RecordPickerManager.register('Timetracker', 'Timeaccount', Tine.Timetracker.TimeaccountPickerCombo);

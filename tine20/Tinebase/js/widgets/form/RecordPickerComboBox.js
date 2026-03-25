@@ -244,33 +244,37 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     initTemplate: function() {
         if (! this.tpl) {
             this.tpl = new Ext.XTemplate('<tpl for="."><div class="x-combo-list-item" {[this.getQtip(values.' + this.recordClass.getMeta('idProperty') + ')]}>{[this.getTitle(values.' + this.recordClass.getMeta('idProperty') + ')]}</div></tpl>', {
-                getTitle: (function(id) {
-                    const record = this.getStore().getById(id)
-
-                    const options = {}
-                    if (this.ownLangPicker) {
-                        options.language = this.ownLangPicker.getValue()
-                    }
-
-                    if (typeof this.getLineTitle === 'function') {
-                        let customTitle = this.getLineTitle(record)
-                        if (customTitle !== false) {
-                            return (Ext.util.Format.htmlEncode(customTitle))
-                        }
-                    }
-
-                    let title = record ? record.getTitle(options) : ' ';
-                    title = title && this.app ? this.app.i18n._hidden(title) : title;
-
-                    return Ext.util.Format.htmlEncode(title)
-                }).createDelegate(this),
-                getQtip: (function(id) {
-                    const record = this.getStore().getById(id)
-                    const qtipText = this.getListItemQtip(record);
-                    return qtipText ? `ext:qtip="${Tine.Tinebase.common.doubleEncode(qtipText)}"` : '';
-                }).createDelegate(this)
+                getTitle: this.getTitle.createDelegate(this),
+                getQtip: this.getQtip.createDelegate(this)
             })
         }
+    },
+
+    getTitle(id) {
+        const record = this.getStore().getById(id)
+
+        const options = {}
+        if (this.ownLangPicker) {
+            options.language = this.ownLangPicker.getValue()
+        }
+
+        if (typeof this.getLineTitle === 'function') {
+            let customTitle = this.getLineTitle(record)
+            if (customTitle !== false) {
+                return (Ext.util.Format.htmlEncode(customTitle))
+            }
+        }
+
+        let title = record ? record.getTitle(options) : ' ';
+        title = title && this.app ? this.app.i18n._hidden(title) : title;
+
+        return Ext.util.Format.htmlEncode(title);
+    },
+
+    getQtip(id) {
+        const record = this.getStore().getById(id)
+        const qtipText = this.getListItemQtip(record);
+        return qtipText ? `ext:qtip="${Tine.Tinebase.common.doubleEncode(qtipText)}"` : '';
     },
 
     initValue: function() {
