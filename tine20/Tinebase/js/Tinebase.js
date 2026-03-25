@@ -359,6 +359,8 @@ require('./widgets/dialog/ResetPasswordDialog');
 
 require('Exception/HTMLReportDialog');
 
+require('CloudAccount/EditDialog');
+
 // UI style >= 2019
 require('node-waves');
 require('node-waves/src/less/waves.less');

@@ -26,5 +26,8 @@ class Calendar_Setup_Uninitialize extends Setup_Uninitialize
         if ($scheduler->hasTask(Calendar_Scheduler_Task::SEND_TENTATIVE_NOTIFICATIONS)) {
             $scheduler->removeTask(Calendar_Scheduler_Task::SEND_TENTATIVE_NOTIFICATIONS);
         }
+        if ($scheduler->hasTask(Calendar_Scheduler_Task::SYNC_CLOUD_ACCOUNT_CONTAINERS)) {
+            $scheduler->removeTask(Calendar_Scheduler_Task::SYNC_CLOUD_ACCOUNT_CONTAINERS);
+        }
     }
 }

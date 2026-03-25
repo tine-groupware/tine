@@ -11,5 +11,5 @@
 
 class Calendar_Exception_InSyncContainer extends Tinebase_Exception
 {
-    public $syncContainerConfig;
+    public Calendar_Model_SyncContainerConfig $syncContainerConfig;
 }

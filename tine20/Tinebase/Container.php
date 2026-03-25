@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Container
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage, use standard record controller/backend functions
@@ -298,6 +298,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
             . __LINE__ . ' Created new ' . $_container->type . ' container for account id ' . $accountId
             . ' with container_id ' . $container->getId());
+
+        $event = new Tinebase_Event_Container_AfterCreate();
+        $event->container = $container;
+        Tinebase_Event::fireEvent($event);
 
         return $container;
     }
@@ -2273,6 +2277,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 Tinebase_Controller_Record_Abstract::ACTION_UPDATE, $oldContainer);
         }
 
+        if ($_fireEvent) {
+            $event = new Tinebase_Event_Record_BeforeUpdate();
+            $event->observable = $_record;
+            $event->oldRecord = $oldContainer;
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
+        }
+
         try {
             $result = parent::update($_record);
         } catch (Zend_Db_Statement_Exception $zdse) {
@@ -2293,6 +2304,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         if ($_fireEvent) {
             $event = new Tinebase_Event_Record_Update();
             $event->observable = $result;
+            $event->oldRecord = $oldContainer;
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent($event);
         }
 

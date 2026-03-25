@@ -32,7 +32,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Calendar_Model_FreeBusyUrl::MODEL_NAME_PART,
         'Poll',
         'EventType',
-        'EventTypes'
+        'EventTypes',
+        Calendar_Model_SyncContainerConfig::MODEL_NAME_PART,
     ];
 
     /**
