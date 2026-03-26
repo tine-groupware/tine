@@ -149,6 +149,17 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->discount)) {
             $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
             $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->discount;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ .
+                '::' . __LINE__ . ' set customer default discount');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ .
+                '::' . __LINE__ . ' customer default discount NOT set');
+            if ($document->has(Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ .
+                    '::' . __LINE__ . ' "' . $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE} . '" "' .
+                    $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM} . '" "' .
+                    $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->discount . '"');
+            }
         }
 
         if ($document->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) && empty($document->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE}) &&
