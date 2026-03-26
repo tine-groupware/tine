@@ -52,7 +52,9 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
         this.store.each((boilerplate) => {
             const fieldName = `boilerplate_${boilerplate.get('name')}`;
             let field = editDialog.getForm().findField(fieldName);
-            boilerplate.set('boilerplate', field.getValue());
+            if (field) {
+                boilerplate.set('boilerplate', field.getValue());
+            }
         });
         record.set('boilerplates', Tine.Tinebase.common.assertComparable(_.map(this.store.data.items, 'data'), true));
 

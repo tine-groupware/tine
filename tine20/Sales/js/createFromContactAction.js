@@ -111,7 +111,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
     const action = getAction({})
     const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-    Ext.ux.ItemRegistry.registerItem(`Sales-Customer-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
-    Ext.ux.ItemRegistry.registerItem(`Sales-Address-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
+    Ext.ux.ItemRegistry.registerItem(`Sales-Customer-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 40)
+    Ext.ux.ItemRegistry.registerItem(`Sales-Address-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 40)
 
 });

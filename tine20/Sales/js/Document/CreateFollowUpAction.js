@@ -237,8 +237,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             const action = getFollowUpAction(sourceType, targetType, allowedTransitions[sourceType][targetType])
             const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
             Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ContextMenu`, action, 44)
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 34)
-            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 40)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 34)
+            Ext.ux.ItemRegistry.registerItem(`Sales-Document_${sourceType}-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 40)
         })
     })
 

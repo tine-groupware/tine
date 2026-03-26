@@ -224,7 +224,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     ['Offer', 'Order', 'Delivery', 'Invoice'].forEach((type) => {
         const action = getAction(type, {})
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-        Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply(new Ext.SplitButton(action), medBtnStyle), 10)
+        Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply({ xtype: 'splitbutton', overrides: medBtnStyle }, action), 10)
     })
 })
 
