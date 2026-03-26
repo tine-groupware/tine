@@ -47,14 +47,10 @@ Promise.all([
     });
 
 
+    const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'};
     Ext.ux.ItemRegistry.registerItem('Tasks-Task-QuickAddGridPanel-Bbar', addTimesheetAction, 40);
     Ext.ux.ItemRegistry.registerItem('Tasks-Task-QuickAddGridPanel-ContextMenu', addTimesheetAction, 40);
 
     Ext.ux.ItemRegistry.registerItem('Tasks-Task-GridPanel-ContextMenu', addTimesheetAction, 40);
-    Ext.ux.ItemRegistry.registerItem('Tasks-Task-GridPanel-ActionToolbar-leftbtngrp', Ext.apply(new Ext.Button(addTimesheetAction), {
-        scale: 'medium',
-        rowspan: 2,
-        iconAlign: 'top'
-    }), 40);
-
+    Ext.ux.ItemRegistry.registerItem('Tasks-Task-GridPanel-ActionToolbar-leftbtngrp', Ext.apply({ xtype: 'button', overrides: medBtnStyle }, addTimesheetAction), 40);
 })

@@ -88,7 +88,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Tasks'),
 
     // const action = getAction({})
     // const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-    // Ext.ux.ItemRegistry.registerItem(`Tasks-Task-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 5)
+    // Ext.ux.ItemRegistry.registerItem(`Tasks-Task-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 5)
 
     Ext.preg('tasks.createFromTempalte', TriggerPlugin)
 });

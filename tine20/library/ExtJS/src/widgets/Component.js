@@ -128,7 +128,7 @@ Ext.Component = function(config){
         if(config.isAction){           // actions
             this.baseAction = config;
         }
-        config = config.initialConfig; // component cloning / action set up
+        config = Ext.apply({}, config.initialConfig, config.overrides || {}); // component cloning / action set up
     }else if(config.tagName || config.dom || Ext.isString(config)){ // element object
         config = {applyTo: config, id: config.id || config};
     }

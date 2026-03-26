@@ -72,8 +72,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Admin'),
     const action = getAction({})
     const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
     Ext.ux.ItemRegistry.registerItem(`Tinebase-TwigTemplate-GridPanel-ContextMenu`, action, 49)
-    Ext.ux.ItemRegistry.registerItem(`Tinebase-TwigTemplate-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(action), medBtnStyle), 39)
-    Ext.ux.ItemRegistry.registerItem(`Tinebase-TwigTemplate-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 100)
+    Ext.ux.ItemRegistry.registerItem(`Tinebase-TwigTemplate-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 39)
+    Ext.ux.ItemRegistry.registerItem(`Tinebase-TwigTemplate-editDialog-Toolbar`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, action), 100)
 
 })
 

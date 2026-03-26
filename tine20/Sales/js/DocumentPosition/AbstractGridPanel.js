@@ -398,7 +398,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         if (currencySymbol !== this.currencySymbol) {
             this.currencySymbol = currencySymbol;
             _.each(this.colModel.config, col => {
-                const fieldConfig = this.recordClass.getModelConfiguration().fields[col.dataIndex]
+                const fieldConfig = this.recordClass.getModelConfiguration().fields[col.dataIndex] || {}
                 if (fieldConfig.type === 'money') {
                     col.renderer.transformMetaData = (value, metaData) => {
                         metaData.currencySymbol = currencySymbol

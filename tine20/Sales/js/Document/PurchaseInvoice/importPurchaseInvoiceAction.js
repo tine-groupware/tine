@@ -65,7 +65,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
 
     // purchase invoice grid
     const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
-    Ext.ux.ItemRegistry.registerItem(`Sales-Document_PurchaseInvoice-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(getAction({
+    Ext.ux.ItemRegistry.registerItem(`Sales-Document_PurchaseInvoice-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply({ xtype: 'button', overrides: medBtnStyle }, getAction({
         text: app.i18n._('Import Purchase Invoice'),
         actionUpdater: Ext.emptyFn,
         getFileLocation: async (cmp) => {
@@ -85,7 +85,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
                 });
             })
         }
-    })), medBtnStyle), 32)
+    })), 32)
 
     // Ext.ux.pluginRegistry.register('Sales-Document_PurchaseInvoice-GridPanel',{
     //     ptype: 'ux.browseplugin',
