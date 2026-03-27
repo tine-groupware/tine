@@ -65,7 +65,8 @@ class Tinebase_Twig_TineLoader implements Twig\Loader\SourceContextLoaderInterfa
         if (!(static::$cache[$name] ?? (static::$cache[$name] = $this->getTwigTemplate($name)))) {
             throw new Twig\Error\LoaderError($name . ' not found');
         }
-        return $name . (static::$cache[$name]->last_modified_time ?: static::$cache[$name]->creation_time)->getTimestamp();
+        return $name . (string)(static::$locale ?? Tinebase_Core::getLocale()) .
+            (static::$cache[$name]->last_modified_time ?: static::$cache[$name]->creation_time)->getTimestamp();
     }
 
     /**
