@@ -7,7 +7,7 @@
 <body class="bg-light">
     <div class="container my-10">
         <div class="my-1">
-            <a class="d-inline-block" href="{{ config(constant('Tinebase_Config::BRANDING_WEBURL')) }}">
+            <a class="d-inline-block" href="{{ config(constant('Tinebase_Config::WEBSITE_URL')) }}">
                 <img src="{{ app.installation.logoContent.getBody() | data_uri }}"
                      class="max-h-16"
                      alt="Logo" />
@@ -16,7 +16,7 @@
         <div class="card mt-5 mb-10">
             <div class="card-body">
                 {% block salutation %}
-                <h5>{{ _('Hello') }}  {{ contact.getTitle() | default(_('User')) }}</h5>
+                <h5>{{ _('Hello') }}  {{ contact.getTitle() | default(_('User')) }},</h5>
                 <hr>
                 {% endblock %}
                 <div class="space-y-3">
