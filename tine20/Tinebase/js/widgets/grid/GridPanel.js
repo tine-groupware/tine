@@ -463,7 +463,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nRecordsName = this.i18nRecordsName ? this.i18nRecordsName : this.recordClass.getRecordsName();
         this.i18nContainerName = this.i18nContainerName ? this.i18nContainerName : this.recordClass.getContainerName();
         this.i18nContainersName = this.i18nContainersName ? this.i18nContainersName : this.recordClass.getContainersName();
-        
+
+        if (_.get(this, 'viewConfig.emptyText') && !this.i18nEmptyText) {
+            this.i18nEmptyText = this.app.i18n._hidden(_.get(this, 'viewConfig.emptyText'));
+        }
+
         this.i18nEmptyText = this.i18nEmptyText ||
             this.i18nContainersName
             ? String.format(i18n._("No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
