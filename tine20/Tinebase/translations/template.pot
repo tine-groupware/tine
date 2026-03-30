@@ -1159,6 +1159,10 @@ msgid_plural "Bank Holiday Calendars"
 msgstr[0] ""
 msgstr[1] ""
 
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr ""
+
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr ""
@@ -1174,10 +1178,6 @@ msgid "update"
 msgstr ""
 
 msgid "delete"
-msgstr ""
-
-#, python-format, php-format
-msgid "You do not have permission to %s record of type %s"
 msgstr ""
 
 #, python-brace-format
@@ -1466,6 +1466,27 @@ msgstr ""
 msgid "Add new Element..."
 msgstr ""
 
+msgid "Test Connection"
+msgstr ""
+
+msgid "Cloud Account Access Possible"
+msgstr ""
+
+msgid "Cloud connect to cloud account with given data."
+msgstr ""
+
+msgid "Cloud Account Access Failure"
+msgstr ""
+
+msgid "Cloud not connect to cloud account with given data."
+msgstr ""
+
+msgid "Save cloud account anyway?"
+msgstr ""
+
+msgid "Select a { collectionName }..."
+msgstr ""
+
 msgid "Usage:&#160;"
 msgstr ""
 
@@ -1473,6 +1494,9 @@ msgid "personal"
 msgstr ""
 
 msgid "No Information"
+msgstr ""
+
+msgid "This field supports Markdown formatting. For more information check the user manual"
 msgstr ""
 
 msgid "No Access"
