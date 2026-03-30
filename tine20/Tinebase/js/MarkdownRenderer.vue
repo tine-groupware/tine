@@ -33,7 +33,8 @@ const getMarked = async () => {
     marked = markedModule.marked || markedModule.default || markedModule
     marked.use({
       pedantic: false,
-      gfm: true
+      gfm: true,
+      breaks: true
     })
   }
   return marked

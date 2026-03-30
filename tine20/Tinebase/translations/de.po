@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-02-05 17:17+0100\n"
+"PO-Revision-Date: 2026-03-30 12:18+0200\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -26,10 +26,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid "admin"
 msgstr "Admin"
@@ -1177,6 +1175,10 @@ msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Feiertagskalender"
 msgstr[1] "Feiertagskalender"
 
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
+
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
@@ -1193,10 +1195,6 @@ msgstr "Aktualisieren"
 
 msgid "delete"
 msgstr "Löschen"
-
-#, python-format, php-format
-msgid "You do not have permission to %s record of type %s"
-msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
 
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
@@ -1484,6 +1482,27 @@ msgstr "Der ganze Tag"
 msgid "Add new Element..."
 msgstr "Neues Element zufügen…"
 
+msgid "Test Connection"
+msgstr ""
+
+msgid "Cloud Account Access Possible"
+msgstr ""
+
+msgid "Cloud connect to cloud account with given data."
+msgstr ""
+
+msgid "Cloud Account Access Failure"
+msgstr ""
+
+msgid "Cloud not connect to cloud account with given data."
+msgstr ""
+
+msgid "Save cloud account anyway?"
+msgstr ""
+
+msgid "Select a { collectionName }..."
+msgstr ""
+
 msgid "Usage:&#160;"
 msgstr "Verwendung:&#160;"
 
@@ -1492,6 +1511,9 @@ msgstr "Persönlich"
 
 msgid "No Information"
 msgstr "Keine Information"
+
+msgid "This field supports Markdown formatting. For more information check the user manual"
+msgstr "Dieses Feld unterstützt Markdown-Formatierung. Weitere Informationen finden Sie im Handbuch."
 
 msgid "No Access"
 msgstr "Kein Zugriff"
