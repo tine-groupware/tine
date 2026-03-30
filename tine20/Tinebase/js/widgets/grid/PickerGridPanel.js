@@ -190,6 +190,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.searchComboConfig.additionalFilterSpec = this.additionalFilterSpec;
 
         this.recordClass = _.isString(this.recordClass) ? Tine.Tinebase.data.RecordMgr.get(this.recordClass) : this.recordClass;
+        this.app = this.app || (_.isFunction(this.recordClass.getMeta) ? Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')) : null);
         this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
         this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
 
@@ -518,6 +519,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         // on rowcontextmenu handler
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
+        if (_.get(this, 'viewConfig.emptyText')) {
+            _.set(this, 'viewConfig.emptyText', this.app.i18n._hidden(_.get(this, 'viewConfig.emptyText')));
+        }
     },
 
     /**
