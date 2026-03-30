@@ -2719,31 +2719,55 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $container = Tinebase_Container::getInstance()->get($containerId);
                 if (Tinebase_Model_Container::TYPE_PERSONAL === $container->type) {
                     try {
-                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                        $innerFilter = new Calendar_Model_EventFilter([], _condition: Calendar_Model_EventFilter::CONDITION_OR);
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
                             [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
                                 'user_id' => Tinebase_User::getInstance()->getUserById($container->owner_id)->contact_id,
                                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                             ]],
                             [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
                         ]));
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => 'not', TMFA::VALUE => [
+                                'user_id' => Tinebase_User::getInstance()->getUserById($container->owner_id)->contact_id,
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            ]],
+                        ]));
+                        $_filter->addFilterGroup($innerFilter);
                     } catch (Tinebase_Exception_NotFound) {}
                 } elseif (Tinebase_Model_Container::TYPE_SHARED === $container->type) {
                     if ($resourceId = ($container->xprops()['Calendar']['Resource']['resource_id'] ?? false)) {
-                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                        $innerFilter = new Calendar_Model_EventFilter([], _condition: Calendar_Model_EventFilter::CONDITION_OR);
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
                             [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
                                 'user_id' => $resourceId,
                                 'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
                             ]],
                             [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
                         ]));
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => 'not', TMFA::VALUE => [
+                                'user_id' => $resourceId,
+                                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                            ]],
+                        ]));
+                        $_filter->addFilterGroup($innerFilter);
                     } else {
-                        $_filter->addFilterGroup(new Calendar_Model_EventFilter([
+                        $innerFilter = new Calendar_Model_EventFilter([], _condition: Calendar_Model_EventFilter::CONDITION_OR);
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
                             [TMFA::FIELD => 'attender', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => [
                                 'user_id' => Tinebase_Core::getUser()->contact_id, // TODO FIXME calendar user?!
                                 'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                             ]],
                             [TMFA::FIELD => 'attender_status', TMFA::OPERATOR => 'notin', TMFA::VALUE => [Calendar_Model_Attender::STATUS_DECLINED]],
                         ]));
+                        $innerFilter->addFilterGroup(new Calendar_Model_EventFilter([
+                            [TMFA::FIELD => 'attender', TMFA::OPERATOR => 'not', TMFA::VALUE => [
+                                'user_id' => Tinebase_Core::getUser()->contact_id, // TODO FIXME calendar user?!
+                                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            ]],
+                        ]));
+                        $_filter->addFilterGroup($innerFilter);
                     }
                 }
             }

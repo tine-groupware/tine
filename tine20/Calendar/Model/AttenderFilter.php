@@ -229,8 +229,8 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
                 ' AND ' . $gs->getSQL(),
                 /* select */
-                array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
-            $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NULL');
+                []);
+            $_select->where($adapter->quoteIdentifier($dname . '.id') . ' IS NULL');
         } else {
             if ($isExcept) {
                 $_select->joinLeft(
@@ -240,8 +240,8 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                     $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
                     ' AND ' . $gs->getSQL(),
                     /* select */
-                    array($dname => $_backend->getDbCommand()->getAggregate($dname . '.id')));
-                $_select->having($_backend->getDbCommand()->getAggregate($dname . '.id') . ' IS NOT NULL');
+                    []);
+                $_select->where($adapter->quoteIdentifier($dname . '.id') . ' IS NOT NULL');
             } else {
                 $_select->joinLeft(
                 /* table  */

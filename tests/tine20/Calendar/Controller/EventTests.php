@@ -1490,6 +1490,36 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->get($persistentEvent->getId());
     }
 
+    public function testNoSyncDeclinedPersonal(): void
+    {
+        $event1 = $this->_getEvent(true);
+        $event2 = $this->_getEvent(true);
+        $event1->attendee = $this->_getAttendee();
+        $event1->attendee->removeLast();
+        $event1->attendee->addRecord(new Calendar_Model_Attender([
+            'user_id'   => $this->_personas['sclever']->contact_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED,
+        ], true));
+        $event2->attendee = $event1->attendee->getClone();
+        $event2->attendee->removeFirst();
+
+        $event1->attendee->getFirstRecord()->status = Calendar_Model_Attender::STATUS_DECLINED;
+
+        $oldNoSyncValue = $this->_controller->doNoSyncDeclinedAttendeeEvents(true);
+        $raii = new Tinebase_RAII(fn() => $this->_controller->doNoSyncDeclinedAttendeeEvents($oldNoSyncValue));
+        /*$event1 = */$this->_controller->create($event1);
+        $event2 = $this->_controller->create($event2);
+
+        $result = $this->_controller->search(new Calendar_Model_EventFilter([
+            [TMFA::FIELD => 'container_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $event2->getIdFromProperty('container_id')],
+        ]), _action: 'sync');
+        $this->assertSame(1, $result->count());
+        $this->assertSame($event2->getId(), $result->getFirstRecord()->getId());
+
+        unset($raii);
+    }
+
     public function testGetChangesForRecurEventsForOneself()
     {
         Tinebase_Core::setUser($this->_personas['sclever']);
