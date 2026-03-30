@@ -288,6 +288,8 @@ class EFile_Controller extends Tinebase_Controller_Event
             self::setExtendedDefaults($_parent, $_child);
         }
 
+        $renameChild = EFile_Config::getInstance()->{EFile_Config::TIER_TOKEN_RENAME}[$_child->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}] ?? true;
+
         $parentConfig = $_parent->xprops()['efile_config'] ?? [];
         $prefixConf = array_merge(EFile_Config::getInstance()->{EFile_Config::TIER_REFNUMBER_PREFIX}, $parentConfig[EFile_Config::TIER_REFNUMBER_PREFIX] ?? []);
         $tierType = $_child->{EFile_Config::TREE_NODE_FLD_TIER_TYPE};
@@ -339,7 +341,7 @@ class EFile_Controller extends Tinebase_Controller_Event
             }
 
             $namePart = $tierToken . self::TIER_TOKEN_SEPERATOR;
-            if (strpos($_child->name, $namePart) !== 0) {
+            if ($renameChild && strpos($_child->name, $namePart) !== 0) {
                 $_child->name = $namePart . $_child->name;
             }
         }
