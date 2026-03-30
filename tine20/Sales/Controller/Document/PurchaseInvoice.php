@@ -11,13 +11,16 @@
  *
  */
 
+use Sales_Model_Document_PurchaseInvoice as SMD_PInvoice;
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * PurchaseInvoice Document controller class for Sales application
  *
  * @package     Sales
  * @subpackage  Controller
  *
- * @method Sales_Model_Document_PurchaseInvoice create(Sales_Model_Document_PurchaseInvoice $_record)
+ * @method Sales_Model_Document_PurchaseInvoice create(Sales_Model_Document_PurchaseInvoice $_record, $_duplicateCheck = true)
  */
 class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Document_Abstract
 {
@@ -67,6 +70,15 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $this->_requiredFilterACLupdate = [Sales_Model_DivisionGrants::GRANT_EDIT_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
         $this->_requiredFilterACLsync = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
         $this->_requiredFilterACLexport = [Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_PURCHASE_INVOICE, Sales_Model_DivisionGrants::GRANT_ADMIN];
+    }
+
+    protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
+    {
+        return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+            [TMFA::FIELD => SMD_PInvoice::FLD_EXTERNAL_INVOICE_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_EXTERNAL_INVOICE_NUMBER}],
+            [TMFA::FIELD => SMD_PInvoice::FLD_DOCUMENT_DATE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_DOCUMENT_DATE}],
+            [TMFA::FIELD => SMD_PInvoice::FLD_SUPPLIER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_SUPPLIER_ID}],
+        ]);
     }
 
     /**
@@ -302,7 +314,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             'tempFile' => $contentFh,
         ], true));
 
-        $purchaseInvoice = $this->create($purchaseInvoice);
+        $purchaseInvoice = $this->create($purchaseInvoice, _duplicateCheck: null !== $xmlContent);
 
         if (null !== $xmlContent) {
             /** @var Tinebase_Model_Tree_Node $node */
