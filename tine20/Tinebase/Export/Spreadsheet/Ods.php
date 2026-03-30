@@ -384,7 +384,36 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
 
             // create cell with type and value and add style
             $cell = $row->appendCell($cellValue, $cellType);
-            
+
+            // handle markdown fields
+            if (
+                (
+                    $field->identifier === 'description'
+                    || $field->type === 'markdown'
+                    || $field->specialType === 'markdown'
+                )
+                && !empty($cellValue)
+            ) {
+                $cellElement = $cell->getBody();
+
+                while ($cellElement->children(OpenDocument_Document::NS_TEXT)->count() > 0) {
+                    unset($cellElement->children(OpenDocument_Document::NS_TEXT)[0]);
+                }
+
+                // strip markdown headings to plain text
+                $plainText = $cellValue;
+                $plainText = preg_replace('/^#{1,6}\s+/m', '', $plainText);
+
+                $lines = explode("\n", $plainText);
+                foreach ($lines as $line) {
+                    $cellElement->addChild(
+                        'p',
+                        OpenDocument_SpreadSheet_Cell::encodeValue($line),
+                        OpenDocument_Document::NS_TEXT
+                    );
+                }
+            }
+
             if ($field->columnStyle) {
                 $cell->setStyle((string) $field->columnStyle);
             } else {

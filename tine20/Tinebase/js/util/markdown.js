@@ -10,6 +10,7 @@ const getMarked = async () => {
             async: true,
             pedantic: false,
             gfm: true,
+            breaks: true,
         })
     }
 
