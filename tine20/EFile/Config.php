@@ -31,6 +31,7 @@ class EFile_Config extends Tinebase_Config_Abstract
     
     const TIER_REFNUMBER_PREFIX = 'tierRefNumberPrefix';
     const TIER_TOKEN_TEMPLATE = 'tierTokenTemplate';
+    const TIER_TOKEN_RENAME = 'tierTokenRename';
 
     const TREE_NODE_FLD_FILE_METADATA = 'efile_file_metadata';
     const TREE_NODE_FLD_TIER_TYPE = 'efile_tier_type';
@@ -117,6 +118,19 @@ class EFile_Config extends Tinebase_Config_Abstract
                 EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE => '%03d',
                 EFile_Model_EFileTierType::TIER_TYPE_CASE => '#%06d',
                 EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT => '%06d',
+            ],
+        ],
+        self::TIER_TOKEN_RENAME         => [
+            self::LABEL                     => 'eFile Token Name in Filename', //_('eFile Token Name in Filename')
+            self::DESCRIPTION               => 'eFile Token Name in Filename', //_('eFile Token Name in Filename')
+            self::TYPE                      => self::TYPE_ARRAY,
+            self::DEFAULT_STR               => [
+                EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN => true,
+                EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP => true,
+                EFile_Model_EFileTierType::TIER_TYPE_FILE => true,
+                EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE => true,
+                EFile_Model_EFileTierType::TIER_TYPE_CASE => true,
+                EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT => true,
             ],
         ],
         EFile_Model_EFileTierType::MODEL_NAME_PART => [
