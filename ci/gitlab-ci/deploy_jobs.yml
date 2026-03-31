@@ -331,23 +331,46 @@ trigger-weekly-release:
 
 mkdocs-deploy:
   stage: deploy
-  image: ${UTIL_REGISTRY}/mkdocs:1
+  image: ${UTIL_REGISTRY}/mkdocs:2
   needs: []
   script:
-    - cd tine20
-    - composer install --ignore-platform-reqs
-    - vendor/bin/phpdoc-md
-    - cd ..
-    - mkdocs build
-    - s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ./site/ s3://${DOCS_S3_BUCKET}
+    - !reference [.lib, script]
+    - docs_deploy
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /mkdocs-deploy/
     - if: $MKDOCS_DEPLOY == "false"
       when: never
     - if: $MKDOCS_DEPLOY == "true"
-    # mkdocs-deploy is triggered by a nightly pipeline and if docs changes. Maybe we only need one of them?
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $CI_COMMIT_REF_NAME == $TINE_VERSION_NEXT
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $TINE_VERSION_NEXT
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $CI_COMMIT_REF_NAME == $TINE_VERSION_BETA
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $TINE_VERSION_BETA
+      changes:
+        - docs/**/*
     - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $CI_COMMIT_REF_NAME == $TINE_VERSION_BE
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $TINE_VERSION_BE
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $CI_COMMIT_REF_NAME == $TINE_VERSION_LTS
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $TINE_VERSION_LTS
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+      changes:
+        - docs/**/*
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
       changes:
         - docs/**/*
   timeout: 20m

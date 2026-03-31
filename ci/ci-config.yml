@@ -103,6 +103,9 @@ variables:
   #CUSTOMER_IMAGE_REGISTRY_REPO: ""
 
   PUSH_TO_VPACKAGES: "true"
+
+  DOCS_S3_BUCKET: docs-tine-groupware-de.s3web.rz1.metaways
+  DOCS_URL: https://docs.tine-groupware.de
   
   TEST_IMAGE_VERSION: "4"
   TEST_IMAGE_REGISTRY: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test
