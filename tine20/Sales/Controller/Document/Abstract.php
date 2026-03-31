@@ -142,11 +142,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->credit_term;
         }
 
-        if ($document->has(Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE) && empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) &&
-                empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) &&
-                intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE}) === 0 &&
-                intval($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM}) === 0 &&
-                !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->discount)) {
+        // avoid a very strange jit issue :-/
+        $applyCustomerDiscount = $document->has(Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE);
+        $applyCustomerDiscount = $applyCustomerDiscount && empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE});
+        $applyCustomerDiscount = $applyCustomerDiscount && empty($document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM});
+        $applyCustomerDiscount = $applyCustomerDiscount && !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->discount);
+        if ($applyCustomerDiscount) {
             $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_PERCENTAGE;
             $document->{Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_PERCENTAGE} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->discount;
         }
