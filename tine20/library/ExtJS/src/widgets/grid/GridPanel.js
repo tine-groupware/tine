@@ -717,6 +717,9 @@ function(grid, rowIndex, columnIndex, e) {
             if(c.hidden){
                 o.columns[i].hidden = true;
             }
+            if(c.useManualWidth){
+                o.columns[i].useManualWidth = true;
+            }
         }
         if(store){
             ss = store.getSortState();

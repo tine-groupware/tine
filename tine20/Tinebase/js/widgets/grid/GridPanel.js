@@ -68,15 +68,6 @@ Tine.widgets.grid.GridPanel = function(config) {
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
     }
 
-    // autogenerate stateId
-    if (this.stateful !== false && ! this.stateId) {
-        this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName') + '-GridPanel';
-    }
-
-    if (this.stateId && Ext.isTouchDevice) {
-        this.stateId = this.stateId + '-Touch';
-    }
-
     this.plugins = this.plugins || [];
 
     if (this.recordClass) {
@@ -1534,7 +1525,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
         this.grid.view.layout();
     },
-    
+
+    getStateId: function() {
+        // autogenerate stateId
+        if (this.stateful !== false && !this.stateId) {
+            this.stateId = this.recordClass.getMeta('appName') + '-' + this.recordClass.getMeta('recordName')
+                + '-GridPanel' + this.getStateIdSuffix()
+        }
+
+        return this.stateId;
+    },
+
     getResolvedGridStateId() {
         const stateIdSuffix = this.getStateIdSuffix();
         const suffixEast = this.detailsPanelRegion === 'east' ? '_DetailsPanel_East' : '';
@@ -1833,7 +1834,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             if (this.stateful) {
                 this.gridConfig.stateful = true;
-                this.gridConfig.stateId = this.stateId + '-Grid';
+                this.gridConfig.stateId = this.getStateId() + '-Grid';
                 const gridStateId = this.getResolvedGridStateId();
                 let gridState = Ext.state.Manager.get(gridStateId);
                 if (gridState) this.defaultSortInfo = gridState.sort;
@@ -1867,7 +1868,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             // todo : hide the layout action if disableResponsiveLayout ?
             const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
-            this.widthClasses = ['auto', 'oneColumn', 'big'].concat(levels);
+            this.widthClasses = _.uniq(['auto', 'oneColumn', 'big'].concat(levels)); // @TODO sort by size!
             
             const layoutActions = this.widthClasses.map((level) => {
                 const text = level === 'oneColumn' ? 'one column' : level;
@@ -1976,40 +1977,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             parentScope: this,
             view: this.createView(),
             recordClass: this.recordClass,
-            getDragDropText: this.getDragDropText.createDelegate(this),
-            getState : ()=> {
-                const o = {columns: []};
-                const store = this.store;
-                let ss;
-                let gs;
-                
-                let i = 0, c;
-                for(; (c = this.grid.colModel.config[i]); i++){
-                    o.columns[i] = {
-                        id: c.id,
-                        width: c.width,
-                    };
-                    if(c.useManualWidth){
-                        o.columns[i].useManualWidth = true;
-                    }
-                    if(c.hidden){
-                        o.columns[i].hidden = true;
-                    }
-                }
-                if(store){
-                    ss = store.getSortState();
-                    if(ss){
-                        o.sort = ss;
-                    }
-                    if(store.getGroupState){
-                        gs = store.getGroupState();
-                        if(gs){
-                            o.group = gs;
-                        }
-                    }
-                }
-                return o;
-            },
+            getDragDropText: this.getDragDropText.createDelegate(this)
         }));
         
 
