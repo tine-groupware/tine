@@ -498,6 +498,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     } else {
                         Ext.apply(Tine[appName][gridPanelName].prototype, gpConfig);
                     }
+                    const xtype = `${appName}.${gridPanelName}`;
+                    Ext.ComponentMgr.isRegistered(xtype) ? null : Ext.reg(xtype, Tine[appName][gridPanelName]);
 
                     if (! Tine[appName][gridPanelName].prototype.detailsPanel) {
                         Tine[appName][gridPanelName].prototype.detailsPanel = {

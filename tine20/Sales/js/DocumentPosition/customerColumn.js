@@ -14,7 +14,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 header: app.i18n._("Customer"),
                 width: 130,
                 dataIndex: 'document_id',
-                hidden: false,
+                hidden: this.hideColumns && this.hideColumns.indexOf('customer_id') !== -1,
                 sortable: false,
                 renderer: (v) => {
                     return customerRenderer(v.customer_id, {}, v);
