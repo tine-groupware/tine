@@ -935,6 +935,19 @@ class Calendar_JsonTests extends Calendar_TestCase
             $this->assertEquals('10:00:00', substr($dtstart, -8), 'all fishing events should start at 10:00');
         }
     }
+
+    public function testCounterEventApi(): void
+    {
+        $eventToCreate = $this->_getEvent();
+        $createdEvent = $this->_eventController->create($eventToCreate);
+        $counterEvent = $createdEvent->toArray();
+        $counterEvent['dtstart'] = Tinebase_DateTime::now()->addDay(1)->toString();
+        $counterEvent['dtend'] = Tinebase_DateTime::now()->addHour(25)->toString();
+
+        $result = $this->_uit->counterEvent($createdEvent->getId(), $counterEvent, ['composeEmail' => true]);
+        $this->assertIsArray($result);
+        $this->assertStringContainsString('METHOD:COUNTER', $result['attachments'][0]);
+    }
     
     /**
      * testUpdateRecurSeriesRruleWeekly

@@ -233,6 +233,9 @@ class Calendar_Controller_EventNotifications
                     }
                 }
                 break;
+            case 'counter':
+                $this->sendNotificationToAttender($organizer, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                break;
             case 'booked':
             case 'created':
             case 'deleted':
@@ -387,7 +390,7 @@ class Calendar_Controller_EventNotifications
 
             // check if user wants this notification NOTE: organizer gets mails unless she set notificationlevel to NONE
             // NOTE prefUser is organizer for external notifications
-            if ((null !== $_updater && $attendeeAccountId == $_updater->getId() && !$sendOnOwnActions && $_action !== 'alarm')
+            if ((null !== $_updater && $attendeeAccountId == $_updater->getId() && !$sendOnOwnActions && $_action !== 'alarm' && $_action !== 'counter')
                 || ($sendLevel < $_notificationLevel && (
                         ((is_object($organizer) && method_exists($attendee, 'getPreferredEmailAddress') && $attendee->getPreferredEmailAddress() != $organizer->getPreferredEmailAddress())
                             || (is_object($organizer) && !method_exists($attendee, 'getPreferredEmailAddress') && $attendee->email != $organizer->getPreferredEmailAddress()))
@@ -443,12 +446,12 @@ class Calendar_Controller_EventNotifications
 
                 if ($this->_onlyGenerateNotificationsNoSend) {
                     $this->emails[] = new Felamimail_Model_Message([
-                        'from_email' => $sender->accountEmailAddress(),
-                        'from_name' => $sender->accountFullName(),
+                        'from_email' => $sender->accountEmailAddress,
+                        'from_name' => $sender->accountFullName,
                         'subject' => $messageSubject,
                         'body' => $messageBody,
                         'attachments' => $attachments,
-                        'to' => $recipients,
+                        'to' => $recipients[0]->getPreferredEmailAddress(),
                     ]);
                 } else {
                     Tinebase_Notification::getInstance()->send($sender, $recipients, $messageSubject, $messageBody, $calendarPart, $attachments);
@@ -604,10 +607,6 @@ class Calendar_Controller_EventNotifications
             case 'alarm':
                 $messageSubject = sprintf($translate->_('Alarm for the event "%1$s" at %2$s'), $_event->summary, $startDateString);
                 break;
-            case 'created':
-                $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
-                $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                break;
             case 'booked':
                 if ($attender->user_type !== Calendar_Model_Attender::USERTYPE_RESOURCE) {
                     throw new Tinebase_Exception_UnexpectedValue('not a resource');
@@ -620,10 +619,6 @@ class Calendar_Controller_EventNotifications
                     $startDateString
                 );
                 $method = Calendar_Model_iMIP::METHOD_REQUEST;
-                break;
-            case 'deleted':
-                $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled'), $_event->summary, $startDateString);
-                $method = Calendar_Model_iMIP::METHOD_CANCEL;
                 break;
             case 'changed':
                 switch ($_notificationLevel) {
@@ -687,13 +682,28 @@ class Calendar_Controller_EventNotifications
                 }
                 break;
 
-            case 'tentative':
-                $messageSubject = sprintf($translate->_('Tentative event notification for the event "%1$s" at %2$s'), $_event->summary, $startDateString);
+            case 'counter':
+                $messageSubject = sprintf($translate->_('Proposed changes for event "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_COUNTER;
+                break;
+
+            case 'created':
+                $messageSubject = sprintf($translate->_('Event invitation "%1$s" at %2$s'), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_REQUEST;
                 break;
 
             case 'declineCounter':
                 $messageSubject = sprintf($translate->_('Proposed changes for event "%1$s" at %2$s declined'), $_event->summary, $startDateString);
                 $method = Calendar_Model_iMIP::METHOD_DECLINECOUNTER;
+                break;
+
+            case 'deleted':
+                $messageSubject = sprintf($translate->_('Event "%1$s" at %2$s has been canceled'), $_event->summary, $startDateString);
+                $method = Calendar_Model_iMIP::METHOD_CANCEL;
+                break;
+
+            case 'tentative':
+                $messageSubject = sprintf($translate->_('Tentative event notification for the event "%1$s" at %2$s'), $_event->summary, $startDateString);
                 break;
 
             default:

@@ -3138,7 +3138,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         return $updatedAttender;
     }
-    
+
+    public function counterEvent(Calendar_Model_Event $currentEvent, Calendar_Model_Event $counterEvent, array $options = []): bool|Felamimail_Model_Message
+    {
+        $onlyGenerateRaii = null;
+        if (true === ($options['composeEmail'] ?? false)) {
+            Calendar_Controller_EventNotifications::getInstance()->resetGeneratedEmails();
+            $oldOnlyGenerate = Calendar_Controller_EventNotifications::getInstance()->onlyGenerateNotificationsNoSend(true);
+            $onlyGenerateRaii = new Tinebase_RAII(function() use ($oldOnlyGenerate) {
+                Calendar_Controller_EventNotifications::getInstance()->resetGeneratedEmails();
+                Calendar_Controller_EventNotifications::getInstance()->onlyGenerateNotificationsNoSend($oldOnlyGenerate);
+            });
+        }
+
+        // ensure counterEvent contains necessary infos:
+        foreach (['uid', 'organizer', 'organizer_type', 'organizer_email', 'organizer_displayname', 'recurid'] as $property) {
+            $counterEvent->$property = $currentEvent->$property;
+        }
+
+        $result = true;
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($counterEvent, Tinebase_Core::getUser(), 'counter');
+
+        if (null !== $onlyGenerateRaii) {
+            $result = current(Calendar_Controller_EventNotifications::getInstance()->getGeneratedEmails());
+            unset($onlyGenerateRaii);
+        }
+
+        return $result;
+    }
+
     /**
      * saves all attendee of given event
      * 
