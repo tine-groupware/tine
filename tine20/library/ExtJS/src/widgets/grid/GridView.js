@@ -1236,7 +1236,7 @@ viewConfig: {
                 widthExtra = 0; 
             }
         }
-        const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.stateId);
+        const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.getStateId());
         const currentGridState = Ext.state.Manager.get(currentGridStateId);
         const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
             || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
@@ -1354,7 +1354,7 @@ viewConfig: {
             cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
         }
         
-        if (this.grid?.stateId && this.grid.stateId === this.latestGridStateId) {
+        if (this.grid?.getStateId() && this.grid.getStateId() === this.latestGridStateId) {
             this.grid.saveState();
         }
         
@@ -1692,8 +1692,8 @@ viewConfig: {
      * @return {String}
      */
     oneColumnRenderer: function(recordId, metadata, record, rowIndex, colIndex, store) {
-        if (this?.grid?.stateId) {
-            const stateIdDefault = this.grid.stateId;
+        if (this?.grid?.getStateId()) {
+            const stateIdDefault = this.grid.getStateId();
             if (!Ext.state.Manager.get(stateIdDefault)) this.grid.saveState();
         }
         const block =  document.createElement('div');
