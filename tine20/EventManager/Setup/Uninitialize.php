@@ -27,8 +27,8 @@ class EventManager_Setup_Uninitialize extends Setup_Uninitialize
         }
 
         $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';
-        $path = EventManager_Config::getInstance()
-            ->get(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH);
+        $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
         Filemanager_Controller_Node::getInstance()->deleteNodes([$prefix . $path]);
     }
 
