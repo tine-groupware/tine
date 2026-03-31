@@ -251,6 +251,7 @@ var tabs = new Ext.TabPanel({
     elements : 'body',
     headerAsText : false,
     frame : false,
+    pills: false,
     hideBorders :true,
 
     // private
@@ -307,9 +308,16 @@ var tabs = new Ext.TabPanel({
         this.initItems();
     },
 
+    adjustBodyHeight: function(h){
+        return h - (this.pills ? 10 : 0);
+    },
     // private
     onRender : function(ct, position){
         Ext.TabPanel.superclass.onRender.call(this, ct, position);
+
+        if(this.pills){
+            this.el.addClass('x-tab-panel-pills');
+        }
 
         if(this.plain){
             var pos = this.tabPosition == 'top' ? 'header' : 'footer';
