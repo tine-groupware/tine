@@ -376,6 +376,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL   => null,
                 self::FILTER_DEFINITION => [
                     self::FILTER => Addressbook_Model_ContactIdFilter::class,
+                    self::OPTIONS => [
+                        self::MODEL_NAME => Addressbook_Model_Contact::class,
+                    ],
                 ],
             ],
             'organizer_type'      => [
