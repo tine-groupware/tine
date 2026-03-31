@@ -59,6 +59,9 @@ extra:
     - icon: fontawesome/solid/globe
       link: https://transifex.com/tine
       name: translations on transifex
+  version:
+    provider: mike
+    alias: true
 
 plugins:
   - search
