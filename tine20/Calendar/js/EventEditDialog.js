@@ -255,7 +255,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     increment: timeIncrement,
                                     requiredGrant: 'editGrant'
                                 }, {
-                                    columnWidth: .19,
+                                    columnWidth: .3,
                                     xtype: 'checkbox',
                                     hideLabel: true,
                                     boxLabel: this.app.i18n._('whole day'),

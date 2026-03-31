@@ -26,11 +26,13 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
      * @cfg {Boolean} checked <tt>true</tt> if the checkbox should render initially checked (defaults to <tt>false</tt>)
      */
     checked : false,
+
+    switch: true,
     /**
      * @cfg {String/Object} autoCreate A DomHelper element spec, or true for a default element spec (defaults to
      * {tag: 'input', type: 'checkbox', autocomplete: 'off'})
      */
-    defaultAutoCreate : { tag: 'input', type: 'checkbox', autocomplete: 'off'},
+    defaultAutoCreate : { tag: 'input', type: 'checkbox', autocomplete: 'off', cls: 'form-check-input'},
     /**
      * @cfg {String} boxLabel The text that appears beside the checkbox
      */
@@ -104,9 +106,17 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         if(this.inputValue !== undefined){
             this.el.dom.value = this.inputValue;
         }
-        this.wrap = this.el.wrap({cls: 'x-form-check-wrap'});
+
+        this.el.set({value: '', 'role': this.switch ? 'switch' : 'checkbox'});
+        this.el.addClass(this.switch ? 'form-switch-input' : 'form-check-input');
+        this.wrap = this.el.wrap({cls: 'form-check'});
+        this.bsWrap = this.wrap.wrap({cls: 'bootstrap-scope'});
+        if (this.switch) {
+            this.wrap.addClass('form-switch');
+        }
+
         if(this.boxLabel){
-            this.wrap.createChild({tag: 'label', htmlFor: this.el.id, cls: 'x-form-cb-label', html: this.boxLabel});
+            this.wrap.createChild({tag: 'label', htmlFor: this.el.id, cls: 'form-check-label', html: this.boxLabel});
         }
         if(this.checked){
             this.setValue(true);
