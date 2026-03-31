@@ -577,7 +577,8 @@ Tine.Calendar.RrulePanel.WEEKLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
             d = (i+Ext.DatePicker.prototype.startDay)%7
             bydayItems.push({
                 boxLabel: Date.dayNames[d],
-                name: Tine.Calendar.RrulePanel.prototype.wkdays[d]
+                name: Tine.Calendar.RrulePanel.prototype.wkdays[d],
+                listeners: { render: cmp => cmp.wrap.addClass('dark-reverse') }
             })
         }
         
