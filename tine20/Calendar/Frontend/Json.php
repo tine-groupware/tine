@@ -565,7 +565,34 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Calendar_Controller_Resource::getInstance(),
             Calendar_Model_ResourceFilter::class, true);
     }
-    
+
+    /**
+     * returns Felamimail_Model_Message if options['composeEmail'] = true, otherwise bool
+     *
+     * @param string|array $currentEvent
+     * @param array $counterEvent
+     * @param array $options
+     * @return bool|array
+     */
+    public function counterEvent(string|array $currentEvent, array $counterEvent, array $options = []): bool|array
+    {
+        $backendOptions = [
+            'composeEmail' => ($options['composeEmail'] ?? false),
+        ];
+        $result = Calendar_Controller_Event::getInstance()->counterEvent(
+            Calendar_Controller_Event::getInstance()->get(is_array($currentEvent) ? $currentEvent['id'] ?? '' : $currentEvent),
+            $this->_jsonToRecord($counterEvent, Calendar_Model_Event::class),
+            $backendOptions
+        );
+
+        if (!is_bool($result)) {
+            $result = $this->_recordToJson($result);
+            $result['attachments'][0] = $result['attachments'][0]->getContent();
+        }
+
+        return $result;
+    }
+
     /**
      * creates/updates an event / recur
      *
