@@ -124,6 +124,28 @@ class Tinebase_ControllerTest extends TestCase
         self::assertEquals(1, count($emailAccounts));
     }
 
+    public function testCleanUpCredentialCache(): void
+    {
+        $cloudAccount = Tinebase_Controller_CloudAccount::getInstance()->create(new Tinebase_Model_CloudAccount([
+            Tinebase_Model_CloudAccount::FLD_NAME => 'unittest',
+            Tinebase_Model_CloudAccount::FLD_TYPE => Tinebase_Model_CloudAccount_CalDAV::class,
+            Tinebase_Model_CloudAccount::FLD_OWNER_ID => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_CloudAccount::FLD_CONFIG => new Tinebase_Model_CloudAccount_CalDAV([
+                Tinebase_Model_CloudAccount_CalDAV::FLD_URL => 'http://localhost/unittest',
+                Tinebase_Model_CloudAccount_CalDAV::FLD_USERNAME => 'unittest',
+                Tinebase_Model_CloudAccount_CalDAV::FLD_PWD => 'unittest',
+            ]),
+        ], true));
+
+        $date = Tinebase_DateTime::now()->addMonth(7);
+
+        $this->assertNotEmpty($cloudAccount?->{Tinebase_Model_CloudAccount::FLD_CONFIG}?->{Tinebase_Model_CloudAccount_CalDAV::FLD_CC_ID});
+        $this->assertGreaterThan($date, Tinebase_Auth_CredentialCache::getInstance()->get($cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG}->{Tinebase_Model_CloudAccount_CalDAV::FLD_CC_ID})->valid_until);
+
+        Tinebase_Controller_CloudAccount::getInstance()->delete([$cloudAccount->getId()]);
+        $this->assertLessThan($date, Tinebase_Auth_CredentialCache::getInstance()->get($cloudAccount->{Tinebase_Model_CloudAccount::FLD_CONFIG}->{Tinebase_Model_CloudAccount_CalDAV::FLD_CC_ID})->valid_until);
+    }
+
     /**
      * testCleanupCache
      */
