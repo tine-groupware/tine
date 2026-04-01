@@ -966,8 +966,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
 
     protected function _addCustomHeaders(
         Zend_Mail $_mail,
-        Felamimail_Model_Message $_message
-    ) {
+        Felamimail_Model_Message $_message): void
+    {
         if (empty($_message->headers) || ! is_array($_message->headers)) {
             return;
         }
@@ -978,6 +978,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         foreach ($_message->headers as $key => $value) {
+            if (is_array($value)) {
+                $value = implode('; ', $value);
+            }
             $value = $this->_trimHeader($key, $value);
             try {
                 $_mail->addHeader($key, $value);
