@@ -46,24 +46,26 @@ class  MatrixSynapseIntegrator_Setup_Initialize extends Setup_Initialize
                 [
                     'is_system' => true,
                     'name' => MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM,
-                    TMCC::LABEL => 'Matrix Room', // _('Matrix Room')
-                    TMCC::TYPE => TMCC::TYPE_RECORD,
-                    TMCC::VALIDATORS        => [
-                        Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    ],
-                    TMCC::NULLABLE          => true,
-                    TMCC::OWNING_APP => MatrixSynapseIntegrator_Config::APP_NAME,
-                    TMCC::CONFIG            => [
-                        TMCC::APP_NAME          => MatrixSynapseIntegrator_Config::APP_NAME,
-                        TMCC::MODEL_NAME        => MatrixSynapseIntegrator_Model_Room::MODEL_NAME_PART,
-                        TMCC::REF_ID_FIELD      => 'list_id',
-                        TMCC::DEPENDENT_RECORDS => true,
-                    ],
                     Tinebase_Model_CustomField_Config::DEF_HOOK => [
                         [MatrixSynapseIntegrator_Controller_Room::class, 'modelConfigHook'],
                     ],
-                    TMCC::UI_CONFIG         => [
-                        'group'                         => 'Matrix',
+                    Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                        TMCC::LABEL => 'Matrix Room', // _('Matrix Room')
+                        TMCC::TYPE => TMCC::TYPE_RECORD,
+                        TMCC::CONFIG            => [
+                            TMCC::APP_NAME          => MatrixSynapseIntegrator_Config::APP_NAME,
+                            TMCC::MODEL_NAME        => MatrixSynapseIntegrator_Model_Room::MODEL_NAME_PART,
+                            TMCC::REF_ID_FIELD      => 'list_id',
+                            TMCC::DEPENDENT_RECORDS => true,
+                        ],
+                        TMCC::UI_CONFIG         => [
+                            'group'                         => 'Matrix',
+                        ],
+                        TMCC::VALIDATORS        => [
+                            Zend_Filter_Input::ALLOW_EMPTY      => true,
+                        ],
+                        TMCC::NULLABLE          => true,
+                        TMCC::OWNING_APP => MatrixSynapseIntegrator_Config::APP_NAME,
                     ],
                 ]
             ]

@@ -206,6 +206,10 @@ class Setup_Initialize
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
+     *
+     * @deprecated we should no longer use this function - it complicates the creation of customfields due to
+     *             different config structures - maybe we should use a mandatory "owning app" field in the customfield
+     *             config?
      */
     public static function createCustomFields(array $customfields)
     {
@@ -241,14 +245,17 @@ class Setup_Initialize
                     'application_id' => $appId,
                     'model' => $appModel['model'],
                     'is_system' => $customfield['is_system'] ?? 0,
-                    'definition' => [
-                        Tinebase_Model_CustomField_Config::DEF_FIELD => $definition
-                    ],
+                    'definition' => $definition,
                 ];
 
-                if ($customfield['type'] == 'record') {
+                $type = $customfield['type'] ?? ($definition[Tinebase_Model_CustomField_Config::DEF_FIELD]['type'] ?? null);
+                if (! $type) {
+                    throw new Tinebase_Exception_InvalidArgument('type missing from cf definition');
+                }
+
+                if ($type == 'record' && isset($customfield['recordConfig'])) {
                     $cfc['definition']['recordConfig'] = $customfield['recordConfig'];
-                } elseif ($customfield['type'] == 'keyField') {
+                } elseif ($type == 'keyField' && ! isset($cfc['definition']['keyFieldConfig'])) {
                     if (isset($customfield['recordConfig'])) {
                         $keyfieldConf = $customfield['recordConfig'];
                     } else if (isset($customfield['keyFieldConfig'])) {
