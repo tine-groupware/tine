@@ -317,7 +317,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
 
-        this.actions_export.initialConfig.actionUpdater = this.updateExportAction.createDelegate(this);
+        Ext.Action.setInitialConfig(this.actions_export, 'actionUpdater', this.updateExportAction.createDelegate(this));
     },
 
     /**

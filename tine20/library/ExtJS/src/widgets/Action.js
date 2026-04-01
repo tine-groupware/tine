@@ -4,6 +4,9 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+import ripple from 'util/ripple';
+
 /**
  * @class Ext.Action
  * <p>An Action is a piece of reusable functionality that can be abstracted out of any particular component so that it
@@ -108,7 +111,7 @@ Ext.Action = Ext.extend(Object, {
      * @param {String} text The text to display
      */
     setText : function(text){
-        this.initialConfig.text = text;
+        Ext.Action.setInitialConfig(this, 'text', text);
         this.callEach('setText', [text]);
     },
 
@@ -125,7 +128,7 @@ Ext.Action = Ext.extend(Object, {
      * @param {String} cls The CSS class supplying the icon image
      */
     setIconClass : function(cls){
-        this.initialConfig.iconCls = cls;
+        Ext.Action.setInitialConfig(this, 'iconCls', cls);
         this.callEach('setIconClass', [cls]);
     },
 
@@ -142,7 +145,7 @@ Ext.Action = Ext.extend(Object, {
      * @param {Boolean} disabled True to disable the component, false to enable it
      */
     setDisabled : function(v){
-        this.initialConfig.disabled = v;
+        Ext.Action.setInitialConfig(this, 'disabled', v);
         this.callEach('setDisabled', [v]);
     },
 
@@ -173,7 +176,7 @@ Ext.Action = Ext.extend(Object, {
      * @param {Boolean} hidden True to hide the component, false to show it
      */
     setHidden : function(v){
-        this.initialConfig.hidden = v;
+        Ext.Action.setInitialConfig(this, 'hidden', v);
         this.callEach('setVisible', [!v]);
     },
 
@@ -205,8 +208,8 @@ Ext.Action = Ext.extend(Object, {
      * @param {Object} scope The scope (<code>this</code> reference) in which the function is executed. Defaults to the Component firing the event.
      */
     setHandler : function(fn, scope){
-        this.initialConfig.handler = fn;
-        this.initialConfig.scope = scope;
+        Ext.Action.setInitialConfig(this, 'handler', fn);
+        Ext.Action.setInitialConfig(this, 'scope', scope);
         this.callEach('setHandler', [fn, scope]);
     },
 
@@ -251,3 +254,11 @@ Ext.Action = Ext.extend(Object, {
         this.initialConfig.handler.apply(this.initialConfig.scope || window, arguments);
     }
 });
+
+Ext.Action.ripple = function(action) {
+    return ripple(_.get(action, 'baseAction', action));
+};
+Ext.Action.setInitialConfig = function(action, prop, val) {
+    ripple(_.get(action, 'baseAction', action))
+        .apply(_.set, `initialConfig.${prop}`, val);
+};

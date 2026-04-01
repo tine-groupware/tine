@@ -441,7 +441,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initActions.call(this);
 
         this.action_deleteRecord.setText(this.app.i18n._('Delete'));
-        this.action_deleteRecord.initialConfig.translationObject = null;
+        Ext.Action.setInitialConfig(this.action_deleteRecord, 'translationObject', null);
 
         this.actionUpdater.addActions([
             this.action_editRecord,
