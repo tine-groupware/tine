@@ -894,17 +894,22 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $uploadedChunks = Tinebase_TempFile::getInstance()->search($filter)->count();
         $this->assertEquals(1, $uploadedChunks, 'should have 2 tempfile in db');
 
+        $oldAppState = $applicationController->getApplicationState($tinebaseApplication,
+            Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE);
         try {
             // upload second chunk with exceeded quota
             $pathRecord = Tinebase_Model_Tree_Node_Path::createFromStatPath($parent->getPath());
             $node = $pathRecord->getNode();
             $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} = 1;
+            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $quotaConfig);
+            Tinebase_FileSystem_Quota::clearConfigCache();
+
             $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
             $applicationController->setApplicationState($tinebaseApplication,
                 Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $quotas['effectiveQuota'] + 10000);
             $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
 
-            $this->assertGreaterThan(0, $quotas['effectiveQuota'], 'quota should be set' . print_r($quotas, true));
+            $this->assertGreaterThan(0, $quotas['effectiveQuota'], 'quota should be set ' . print_r($quotas, true));
             $this->assertEquals(0, $quotas['effectiveFree'], 'should not have free space' . print_r($quotas, true));
 
             // upload second chunk
@@ -923,6 +928,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
             foreach ($deletePaths as $path) {
                 Tinebase_FileSystem::getInstance()->rmdir($path, true);
             }
+            $applicationController->setApplicationState($tinebaseApplication,
+                Tinebase_Application::STATE_FILESYSTEM_ROOT_SIZE, $oldAppState);
             Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA , $oldQuotaConfig);
             Tinebase_FileSystem_Quota::clearConfigCache();
         }
