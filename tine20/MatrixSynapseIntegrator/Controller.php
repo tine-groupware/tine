@@ -199,7 +199,12 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
         $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
         $bodyMsg = json_decode((string)$request->getBody(), true);
 
-        if (!is_array($bodyMsg) || !isset($bodyMsg['user']['id']) || !isset($bodyMsg['user']['password'])) {
+        if (
+            !is_array($bodyMsg)
+            || (!isset($bodyMsg['user']['id'])
+            && !isset($bodyMsg['user']['loginName']))
+            || !isset($bodyMsg['user']['password'])
+        ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' Illegal body: ' . $request->getBody());
@@ -207,52 +212,119 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception_Expressive_HttpStatus('illegal or missing json body', 400);
         }
 
-        $matrixId = $bodyMsg['user']['id'];
+        $result = $this->_checkCredentials($bodyMsg);
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Matrix id: ' . $matrixId);
-        }
-
-        $result = ['auth' => ['success' => false]];
-
-        try {
-            $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
-                ->getMatrixAccountByMatrixId($matrixId);
-        } catch (Tinebase_Exception_NotFound) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' No matrix account found');
-            }
-            $matrixAccount = null;
-        }
-
-        if ($matrixAccount) {
-            $user = Tinebase_User::getInstance()->getFullUserById(
-                $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID}
-            );
-
-            $authResult = Tinebase_Auth::getInstance()->authenticate($user->accountLoginName, $bodyMsg['user']['password']);
-            if ($authResult->getCode() === Tinebase_Auth::SUCCESS) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Auth succeeded');
-                }
-
-                // needed for acl checks
-                Tinebase_Core::set(Tinebase_Core::USER, $user);
-                $result['auth']['success'] = true;
-                $result['auth']['mxid'] = $matrixId;
-                $result['auth']['profile'] = $this->_getProfileForUser($user);
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Response: ' . print_r($result, true));
-            }
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Response: ' . print_r($result, true));
         }
 
         $response = (new \Zend\Diactoros\Response())->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($result));
 
         return $response;
+    }
+
+    protected function _checkCredentials($body)
+    {
+        $loginName = null;
+        $matrixAccount = null;
+        $user = null;
+        $failed = ['auth' => ['success' => false]];
+
+        // login with username or email
+        if (isset($body['user']['loginName'])) {
+            $loginName = $body['user']['loginName'];
+        }
+
+        // login with matrix id
+        if (isset($body['user']['id'])) {
+            $matrixId = $body['user']['id'];
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Matrix id: ' . $matrixId);
+            }
+
+            try {
+                $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
+                    ->getMatrixAccountByMatrixId($matrixId);
+            } catch (Tinebase_Exception_NotFound) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No matrix account found by id');
+                }
+
+                return $failed;
+            }
+
+            $user = Tinebase_User::getInstance()
+                ->getFullUserById($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID});
+
+            $loginName = $user->accountLoginName;
+        }
+
+        if (!$loginName) {
+            return $failed;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Login name: ' . $loginName);
+        }
+
+        $authResult = Tinebase_Auth::getInstance()->authenticate($loginName, $body['user']['password']);
+        if ($authResult->getCode() !== Tinebase_Auth::SUCCESS) {
+            return $failed;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Auth succeeded');
+        }
+
+        // ensures login name is a login name and not an email. $authResult->getIdentity() will always return
+        // the login name for the user, also if an email was used to authenticate.
+        $loginName = $authResult->getIdentity();
+
+        if (!$user) {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($loginName);
+        }
+
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        if (!$matrixAccount) {
+            try {
+                $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
+                    ->getMatrixAccountForUser($user);
+            } catch (Tinebase_Exception_NotFound) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No matrix account found for user');
+                }
+
+                return $failed;
+            }
+        }
+
+        $matrixId = $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+
+        if (
+            !MatrixSynapseIntegrator_Config::getInstance()
+                ->get(MatrixSynapseIntegrator_Config::REST_AUTH_ALLOW_UNINITIALIZED)
+            && !$matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_IS_INITIALIZED}
+        ) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Matrix authentication request denied, because user is not initialized. loginName = "'
+                    . $loginName . '" matrixId = "' . $matrixId . '"');
+            }
+
+            return $failed;
+        }
+
+        return ['auth' => [
+            'success' => true,
+            'mxid' => $matrixId,
+            'profile' => $this->_getProfileForUser($user),
+        ]];
     }
 
     protected function _getProfileForUser(Tinebase_Model_FullUser $user): array
@@ -298,7 +370,8 @@ class MatrixSynapseIntegrator_Controller extends Tinebase_Controller_Event
                     $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()
                         ->getMatrixAccountForUser($_eventObject->account);
                     MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->delete([$matrixAccount->getId()]);
-                } catch (Tinebase_Exception_NotFound) {}
+                } catch (Tinebase_Exception_NotFound) {
+                }
                 break;
         }
     }

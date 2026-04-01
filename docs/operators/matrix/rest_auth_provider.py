@@ -22,12 +22,26 @@ class RestAuthProvider:
         logger.info('Endpoint: %s', self.endpoint)
 
         api.register_password_auth_provider_callbacks(
+            check_3pid_auth=self.check_3pid_auth,
             auth_checkers={
-                ("m.login.password", ("password",)): self.check_pass,
+                ("m.login.password", ("password",)): self.check_auth,
             },
         )
 
-    async def check_pass(
+    async def check_3pid_auth(
+        self,
+        medium: str, 
+        address: str,
+        password: str,
+    ) -> Optional[Tuple[str,Optional[Callable[["synapse.module_api.LoginResponse"], Awaitable[None]]]]]:
+        logger.info("RestAuthProvider: Login attempt (3pid): medium = {}, address = {}".format(medium, address))
+
+        if medium != "email":
+            return None
+
+        return await self.check_auth_rest(password=password, email=address)
+
+    async def check_auth(
         self,
         username: str,
         login_type: str,
@@ -41,11 +55,25 @@ class RestAuthProvider:
         if login_type != "m.login.password":
             return None
 
-        logger.info("RestAuthProvider: Check password: username = " + username)
+        logger.info("RestAuthProvider: Login attempt (pass): username = {}".format(username))
 
-        user_id = self.api.get_qualified_user_id(username.lower())
+        return await self.check_auth_rest(password=login_dict.get("password"), username=username)
         
-        data = {'user': {'id': user_id, 'password': login_dict.get("password")}}
+    async def check_auth_rest(self, password: str, username: str = None, email: str = None):
+        data = {'user': {'password': password}}
+
+        if username is not None:
+            qualified_user_id = self.api.get_qualified_user_id(username.lower())
+
+            if await self.api.check_user_exists(qualified_user_id) is None:
+                data['user']['loginName'] = username
+                logger.info("RestAuthProvider: No user with id {} exits, expecting {} to be a tine login name:".format(qualified_user_id, username))
+            else:
+                data['user']['id'] = qualified_user_id
+
+        if email is not None:
+            data['user']['loginName'] = email
+
         r = requests.post(self.endpoint + '/_matrix-internal/identity/v1/check_credentials', json = data)
         r.raise_for_status()
         r = r.json()
@@ -56,15 +84,17 @@ class RestAuthProvider:
 
         auth = r["auth"]
         if not auth["success"]:
-            logger.info("RestAuthProvider: User not authenticated: username = " + username + " user_id = " + user_id)
+            logger.info("RestAuthProvider: User not authenticated: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
             return None
 
-        if await self.api.check_user_exists(user_id) == None:
-            logger.info("RestAuthProvider: User dose not exist yet: username = " + username + " user_id = " + user_id)
-            localpart = user_id.split(":", 1)[0][1:]
+        matrix_id = auth["mxid"]
+
+        if await self.api.check_user_exists(matrix_id) == None:
+            logger.info("RestAuthProvider: User dose not exist yet: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
+            localpart = matrix_id.split(":", 1)[0][1:]
 
             await self.api.register_user(localpart, auth["profile"]["display_name"])
-            logger.info("RestAuthProvider: Registered user: username = " + username + " user_id = " + user_id)
+            logger.info("RestAuthProvider: Registered user: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
 
-        logger.info("RestAuthProvider: User authenticated: username = " + username + " user_id = " + user_id)
-        return (user_id, None)
+        logger.info("RestAuthProvider: User authenticated: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
+        return (matrix_id, None)

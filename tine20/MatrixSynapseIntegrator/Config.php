@@ -37,6 +37,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     public const MATRIX_SYNAPSE_DATABASE_USERNAME = 'matrixSynapseDatabaseUsername';
     public const MATRIX_SYNAPSE_DATABASE_PASSWORD = 'matrixSynapseDatabasePassword';
     public const MATRIX_SYNAPSE_SHARED_SECRET_AUTH = 'matrixSynapseSharedSecretAuth';
+    public const REST_AUTH_ALLOW_UNINITIALIZED = 'restAuthAllowUninitialized';
 
     public const ADDRESSBOOK_CF_NAME_MATRIX_ID = 'matrix_id';
     public const ADDRESSBOOK_CF_NAME_ROOM = 'room';
@@ -196,6 +197,17 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,
+        ],
+        self::REST_AUTH_ALLOW_UNINITIALIZED => [
+            //_('Synapse shared secret auth')
+            self::LABEL                 => 'rest auth allow uninitialized',
+            //_('Synapse shared secret auth')
+            self::DESCRIPTION           => 'rest auth allow uninitialized',
+            self::TYPE                  => self::TYPE_BOOL,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => true,
         ],
     ];
 
