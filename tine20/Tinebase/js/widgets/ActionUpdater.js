@@ -5,7 +5,9 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
- 
+
+import ripple from 'util/ripple';
+
  Ext.ns('Tine', 'Tine.widgets');
  
  Tine.widgets.ActionUpdater = function(config) {
@@ -139,12 +141,13 @@
                 this.defaultUpdater(action, grants, records, isFilterSelect, container);
             }
 
-            // reference selection into action
-            action.initialConfig.selections = records;
-            action.initialConfig.isFilterSelect = isFilterSelect;
-            action.initialConfig.selectionModel = selectionModel;
+            const chain = ripple(_.get(action, 'baseAction', action))
+                .apply(_.set, 'initialConfig.selections', records)
+                .apply(_.set, 'initialConfig.isFilterSelect', isFilterSelect)
+                .apply(_.set, 'initialConfig.selectionModel', selectionModel);
+
             if (container) {
-                action.initialConfig.filteredContainers = container;
+                chain.apply(_.set, 'initialConfig.filteredContainers', container);
             }
         }, this);
         
