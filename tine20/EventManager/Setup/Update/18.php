@@ -25,6 +25,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
     protected const RELEASE018_UPDATE011 = __CLASS__ . '::update011';
+    protected const RELEASE018_UPDATE012 = __CLASS__ . '::update012';
 
 
     protected static $_allUpdates = [
@@ -43,6 +44,10 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE018_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
+            ],
             self::RELEASE018_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
@@ -191,5 +196,14 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
+    }
+
+    public function update012()
+    {
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Register_Contact::class,
+        ]);
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.12', self::RELEASE018_UPDATE012);
     }
 }
