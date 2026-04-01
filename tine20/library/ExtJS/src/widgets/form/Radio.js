@@ -16,6 +16,7 @@
  */
 Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
     inputType: 'radio',
+    switch: false,
 
     /**
      * Overridden and disabled. The editor element does not support standard valid/invalid marking. @hide

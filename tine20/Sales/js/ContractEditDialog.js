@@ -236,6 +236,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     getFormItems: function() {
         
         this.productGridPanel = new Tine.Sales.ProductAggregateGridPanel({
+            pos: 200,
             app: this.app,
             editDialog: this,
             title: this.app.i18n._('Positions'),
@@ -347,6 +348,9 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
             items:[
                 {

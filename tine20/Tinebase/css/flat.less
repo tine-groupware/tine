@@ -105,6 +105,23 @@
   border-bottom: none !important;
 }
 
+.x-tab-panel-pills {
+  background-color: #eaeef1;
+  .x-tab-panel-header {
+    position: relative;
+    background: none;
+    margin: 5px 0;
+    margin-left: 20px;
+    li {
+      border-radius: var(--bs-border-radius-pill);
+      margin: 0 2px;
+      span.x-tab-strip-text {
+        text-transform: initial;
+      }
+    }
+  }
+
+}
   /* AppTabs */
 .tine-mainscreen-apptabs {
   & .x-tab-strip-wrap ul.x-tab-strip-top {
@@ -1461,4 +1478,8 @@ span:hover.tinebase-contact-link {
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.form-check-label {
+  margin-top: 2px;
 }
