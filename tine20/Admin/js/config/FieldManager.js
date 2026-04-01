@@ -7,6 +7,7 @@
  *
  */
 Ext.ns('Tine.Admin.config');
+import AceField from 'widgets/form/AceField';
 
 
 /**
@@ -34,6 +35,26 @@ Tine.Admin.config.FieldManager = function() {
                 constr = items[type]
             } else {
                 switch (type) {
+                    case 'array':
+                    case 'object':
+                        constr = Ext.ux.form.LayerCombo
+                        options = Ext.apply({
+                            getItems: function () {
+                                return [new AceField({
+                                    mode: 'json',
+                                    name: 'value',
+                                    height: 300,
+                                    hideLabel: true,
+                                })];
+                            },
+                            getFormValue: function () {
+                                return this.getInnerForm().getForm().findField('value').getValue();
+                            },
+                            setFormValue: function (value) {
+                                this.getInnerForm().getForm().findField('value').setValue(value);
+                            },
+                        }, options);
+                        break;
                     case 'int':
                         constr = Ext.form.NumberField;
                         break;
