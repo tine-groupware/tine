@@ -1243,10 +1243,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             var serviceKey = this.app.name + '.delete' + this.recordClass.getMeta('modelName') + 's';
             if (! services.hasOwnProperty(serviceKey)) {
                 this.action_deleteRecord.setDisabled(1);
-                this.action_deleteRecord.initialConfig.actionUpdater = function(action) {
+                Ext.Action.setInitialConfig(this.action_deleteRecord, 'actionUpdater', function(action) {
                     Tine.log.debug("disable delete action because no delete method was found in serviceMap");
                     action.setDisabled(1);
-                }
+                });
             }
         }
     },

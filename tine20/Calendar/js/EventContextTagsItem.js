@@ -62,7 +62,7 @@ Tine.Calendar.EventContextTagsItem = Ext.extend(Ext.menu.Item, {
             app: this.app,
             text: this.app.i18n._('Additional Tags...')
         });
-        other.initialConfig.handler = other.initialConfig.handler.createSequence(this.onOtherClick, this);
+        Ext.Action.setInitialConfig(other, 'handler', other.initialConfig.handler.createSequence(this.onOtherClick, this));
         this.menu.push(other);
 
         Tine.Calendar.EventContextTagsItem.superclass.initComponent.call(this);

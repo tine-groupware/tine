@@ -103,10 +103,10 @@ Promise.all([
                     
                     // we need to return a promise for gridPanel here as it needs to remove the local record!
                     return new Promise((resolve) => {
-                        baseAction.initialConfig.onNewNode = (recordData) => {
+                        Ext.Action.setInitialConfig(baseAction, 'onNewNode', (recordData) => {
                             const remoteDocument = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node)
                             resolve(remoteDocument);
-                        };
+                        });
                     });
                 });
             });
