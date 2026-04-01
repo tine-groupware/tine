@@ -1,4 +1,5 @@
 <?php
+
 /**
  * tine Groupware
  *
@@ -9,8 +10,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-use \Psr\Http\Message\RequestInterface;
-
+use Psr\Http\Message\RequestInterface;
 
 class MatrixSynapseIntegrator_ControllerTests extends TestCase
 {
@@ -52,8 +52,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
 
     public function testCheckCredentialsBadBody1()
     {
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            new \Zend\Diactoros\ServerRequest([], [], null, null, 'php://memory'));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            new \Zend\Diactoros\ServerRequest([], [], null, null, 'php://memory')
+        );
 
         static::expectException(Tinebase_Exception_Expressive_HttpStatus::class);
         static::expectExceptionCode(400);
@@ -71,8 +73,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         static::expectException(Tinebase_Exception_Expressive_HttpStatus::class);
         static::expectExceptionCode(400);
@@ -90,8 +94,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         static::expectException(Tinebase_Exception_Expressive_HttpStatus::class);
         static::expectExceptionCode(400);
@@ -122,8 +128,102 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
+
+        $response = $this->_uit->checkCredentials();
+
+        static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
+        static::assertSame(['auth' => [
+            'success'   => true,
+            'mxid'      => $mxid,
+            'profile'   => [
+                'display_name'  => Tinebase_Core::getUser()->accountDisplayName,
+                'three_pids'    => [
+                    [
+                        'medium'    => 'email',
+                        'address'   => Tinebase_Core::getUser()->accountEmailAddress,
+                    ]
+                ]
+            ]
+        ]], json_decode((string)$response->getBody(), true));
+    }
+
+    public function testCheckCredentialsAuthEmail()
+    {
+        $this->_skipIfLDAPBackend();
+
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount(
+                MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData()
+            )
+        );
+        $mxid = $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+
+        $fh = fopen('php://memory', 'rw');
+        fwrite($fh, json_encode([
+            'user' => [
+                'loginName'       => Tinebase_Core::getUser()->accountEmailAddress,
+                'password' => Tinebase_Helper::array_value(
+                    'password',
+                    TestServer::getInstance()->getTestCredentials()
+                )
+            ]
+        ]));
+        rewind($fh);
+
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
+
+        $response = $this->_uit->checkCredentials();
+
+        static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
+        static::assertSame(['auth' => [
+            'success'   => true,
+            'mxid'      => $mxid,
+            'profile'   => [
+                'display_name'  => Tinebase_Core::getUser()->accountDisplayName,
+                'three_pids'    => [
+                    [
+                        'medium'    => 'email',
+                        'address'   => Tinebase_Core::getUser()->accountEmailAddress,
+                    ]
+                ]
+            ]
+        ]], json_decode((string)$response->getBody(), true));
+    }
+
+    public function testCheckCredentialsAuthUsername()
+    {
+        $this->_skipIfLDAPBackend();
+
+        $matrixAccount = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount(
+                MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData()
+            )
+        );
+        $mxid = $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID};
+
+        $fh = fopen('php://memory', 'rw');
+        fwrite($fh, json_encode([
+            'user' => [
+                'loginName'       => Tinebase_Core::getUser()->accountLoginName,
+                'password' => Tinebase_Helper::array_value(
+                    'password',
+                    TestServer::getInstance()->getTestCredentials()
+                )
+            ]
+        ]));
+        rewind($fh);
+
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->checkCredentials();
 
@@ -154,8 +254,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->checkCredentials();
 
@@ -172,8 +274,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->directory();
 
@@ -198,8 +302,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->directory();
 
@@ -226,8 +332,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->identity();
 
@@ -258,8 +366,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->identity();
 
@@ -286,8 +396,10 @@ class MatrixSynapseIntegrator_ControllerTests extends TestCase
         ]));
         rewind($fh);
 
-        Tinebase_Core::getContainer()->set(RequestInterface::class,
-            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh)));
+        Tinebase_Core::getContainer()->set(
+            RequestInterface::class,
+            (new \Zend\Diactoros\ServerRequest())->withBody(new \Zend\Diactoros\Stream($fh))
+        );
 
         $response = $this->_uit->profile();
 
