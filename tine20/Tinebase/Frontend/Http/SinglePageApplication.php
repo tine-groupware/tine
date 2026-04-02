@@ -137,27 +137,38 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $imgSrcs     = ["'self'", 'data:', 'blob:'];
         $frameSrcs   = ["'self'"];
 
-        if (OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL)) {
-            $onlyOfficeUrl = rtrim(
-                OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL),
-                '/'
-            );
+        // @todo invent facility for tine APPs to register CSP sources
+
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_ACTIVE}) {
+            $connectSrcs[] = Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
         }
 
-        if (!empty($onlyOfficeUrl)) {
-            $parsed = parse_url($onlyOfficeUrl);
-            $onlyOfficeOrigin = $parsed['scheme'] . '://' . $parsed['host']
-                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
-
-            $scriptSrcs[] = $onlyOfficeOrigin;
-            $connectSrcs[] = $onlyOfficeOrigin;
-            $frameSrcs[] = $onlyOfficeOrigin;
-
-            $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
-            $connectSrcs[] = $wsScheme . '://' . $parsed['host']
-                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        if (Tinebase_Application::getInstance()->isInstalled(MatrixSynapseIntegrator_Config::APP_NAME, true)) {
+            $frameSrcs[] = MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::ELEMENT_URL);
         }
 
+        if (Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true)) {
+            if (OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL)) {
+                $onlyOfficeUrl = rtrim(
+                    OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL),
+                    '/'
+                );
+            }
+
+            if (!empty($onlyOfficeUrl)) {
+                $parsed = parse_url($onlyOfficeUrl);
+                $onlyOfficeOrigin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+                $scriptSrcs[] = $onlyOfficeOrigin;
+                $connectSrcs[] = $onlyOfficeOrigin;
+                $frameSrcs[] = $onlyOfficeOrigin;
+
+                $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
+                $connectSrcs[] = $wsScheme . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+            }
+        }
 
         if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
             $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
