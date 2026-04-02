@@ -64,8 +64,12 @@ class Timetracker_Export_Xls extends Tinebase_Export_Xls
     {
         $start = $end = null;
 
-        $startDateFilter = $this->_filter->getFilter('start_date');
+        $startDateFilter = $this->_filter->getFilter('start_date', _recursive: true);
         if ($startDateFilter instanceof Tinebase_Model_Filter_Date) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Filter found: ' . print_r($startDateFilter->toArray(), true));
+            }
             $dateValues = $startDateFilter->getDateValues();
             if (is_array($dateValues)) {
                 list($start, $end) = $dateValues;

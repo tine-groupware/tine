@@ -697,7 +697,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
             $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
             $twigTmpl = $this->_twig->load('fileNameTmpl');
-            return $twigTmpl->render($this->_getTwigContext(['record' => $this->_currentRecord]));
+            $context = $this->_getTwigContext(['record' => $this->_currentRecord]);
+            return $twigTmpl->render($context);
         }
 
         $model = '';
@@ -1588,8 +1589,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _renderTwigTemplate($_record = null)
     {
+        $context = $this->_getTwigContext(['record' => $_record]);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Additional Context: ' . print_r(array_diff_key($context, ['record' => '']), true));
+        }
         $twigResult = $this->_twigTemplate->render(
-            $this->_getTwigContext(array('record' => $_record)));
+            $this->_getTwigContext($context));
         $twigResult = json_decode($twigResult);
         if (!is_array($twigResult)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
