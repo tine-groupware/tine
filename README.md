@@ -9,7 +9,7 @@ For more information please visit our [homepage](https://www.tine-groupware.de) 
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
 * [Mastodon](https://mastodon.social/@tinegroupware)
 * [Bluesky](https://bsky.app/profile/tine-groupware.bsky.social)
-* [Documentation](https://tine-docu.s3web.rz1.metaways.net)
+* [Documentation](https://docs.tine-groupware.de/)
 * [OCI images](https://hub.docker.com/u/tinegroupware)
 * [Video Tutorials](https://tutorials.tine-groupware.de/)
 
@@ -40,7 +40,7 @@ There is no commercial support for the developers' community versions at all. Pl
 resources if you are not willing or able to contribute to the community.
 
 ## documentation & training
-A nightly version of our documentation is published to https://tine-docu.s3web.rz1.metaways.net.
+A nightly version of our documentation is published to https://docs.tine-groupware.de/.
 
 As tine is extremely powerful, feature rich and customizable we emphasize to train your operators, admins and users properly.
 Introducing tine in your organisation is a project itself.

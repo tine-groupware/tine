@@ -3068,7 +3068,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom web URL for branding.')
             self::DESCRIPTION => 'Custom web URL for branding.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => 'https://github.com/tine20/tine20',
+            self::DEFAULT_STR => 'https://github.com/tine-groupware/tine',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
@@ -3079,7 +3079,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Custom url for help.')
             self::DESCRIPTION => 'Custom URL for help.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => 'https://tine-docu.s3web.rz1.metaways.net/',
+            self::DEFAULT_STR => 'https://docs.tine-groupware.de/',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE
