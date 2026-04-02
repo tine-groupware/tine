@@ -3,9 +3,9 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 class Tinebase_Frontend_Http_SinglePageApplication {
 
@@ -117,7 +117,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     }
 
     /**
-     * gets headers for initial client html pages
+     * gets headers for initial client HTML pages
      *
      * @return array
      */
@@ -125,32 +125,114 @@ class Tinebase_Frontend_Http_SinglePageApplication {
     {
         $header = [];
 
-        $frameAncestors = implode(' ' ,array_merge(
+        $frameAncestors = implode(' ', array_merge(
             (array) Tinebase_Core::getConfig()->get(Tinebase_Config::ALLOWEDJSONORIGINS, array()),
             array("'self'")
         ));
 
-        // set Content-Security-Policy header against clickjacking and XSS
+        // set the Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
-        $scriptSrcs = array("'self'", "'unsafe-eval'", 'https://versioncheck.tine20.net');
-        if (TINE20_BUILDTYPE == 'DEVELOPMENT') {
-            $scriptSrcs[] = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL) . '://' .
-                Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) . ":10443";
-        }
-        $scriptSrc = implode(' ', $scriptSrcs);
+        $scriptSrcs  = ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'];
+        $connectSrcs = ["'self'"];
+        $imgSrcs     = ["'self'", 'data:', 'blob:'];
+        $frameSrcs   = ["'self'"];
+        $styleSrcs   = ["'self'", "'unsafe-inline'"];
+        $objectSrcs  = ["'self'", 'blob:'];
 
-        $header['Content-Security-Policy'] = "frame-ancestors $frameAncestors";
-//        todo: make sure this works (figure out correct headers):
-//        $header['Content-Security-Policy'] = "default-src 'self' 'unsafe-inline'; script-src $scriptSrc; frame-ancestors $frameAncestors";
+        // @todo invent facility for tine APPs to register CSP sources
+        /*$scriptSrcs = array_merge(
+            ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('script-src')
+        );
+        $connectSrcs = array_merge(
+            ["'self'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('connect-src')
+        );
+        $imgSrcs = array_merge(
+            ["'self'", 'data:', 'blob:'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('img-src')
+        );
+        $frameSrcs = array_merge(
+            ["'self'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('frame-src')
+        );
+        $styleSrcs = array_merge(
+            ["'self'", "'unsafe-eval'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('style-src')
+        );
+        $objectSrcs = array_merge(
+            ["'self'", 'blob:'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('object-src')
+        );*/
+
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_ACTIVE}) {
+            $connectSrcs[] = Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled(MatrixSynapseIntegrator_Config::APP_NAME, true)) {
+            $frameSrcs[] = MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::ELEMENT_URL);
+        }
+
+        if (Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true)) {
+            if (OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL)) {
+                $onlyOfficeUrl = rtrim(
+                    OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL),
+                    '/'
+                );
+            }
+
+            if (!empty($onlyOfficeUrl)) {
+                $parsed = parse_url($onlyOfficeUrl);
+                $onlyOfficeOrigin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+                $scriptSrcs[] = $onlyOfficeOrigin;
+                $connectSrcs[] = $onlyOfficeOrigin;
+                $frameSrcs[] = $onlyOfficeOrigin;
+
+                $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
+                $connectSrcs[] = $wsScheme . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+            }
+        }
+
+        if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
+            $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
+            $host      = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST);
+            $wsScheme  = $protocol === 'https' ? 'wss' : 'ws';
+
+            $scriptSrcs[]  = "$protocol://$host:10443";
+            $connectSrcs[] = "$protocol://$host:10443";
+            $connectSrcs[] = "$wsScheme://$host:10443";
+            $connectSrcs[] = 'webpack:';
+        }
+
+        $csp = implode('; ', [
+            "default-src 'self'",
+            "script-src " . implode(' ', $scriptSrcs),
+            "connect-src " . implode(' ', $connectSrcs),
+            "img-src " . implode(' ', $imgSrcs),
+            "frame-src " . implode(' ', $frameSrcs),
+            "style-src " . implode(' ', $styleSrcs),
+            "object-src " . implode(' ', $objectSrcs),
+            "frame-ancestors $frameAncestors",
+//            "report-to csp-endpoint",
+        ]);
+
+        $header['Content-Security-Policy'] = $csp;
+//        $header['Content-Security-Policy-Report-Only'] = $csp;
 
         // set Strict-Transport-Security; used only when served over HTTPS
-        $headers['Strict-Transport-Security'] = 'max-age=16070400';
+        $header['Strict-Transport-Security'] = 'max-age=16070400';
 
         // cache mainscreen for one day in production
-        $maxAge = ! defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE != 'DEVELOPMENT' ? 86400 : -10000;
+        $maxAge = !defined('TINE20_BUILDTYPE') || TINE20_BUILDTYPE !== 'DEVELOPMENT' ? 86400 : -10000;
         $header += [
             'Cache-Control' => 'private, max-age=' . $maxAge,
-            'Expires' => gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT",
+            'Expires'       => gmdate(
+                'D, d M Y H:i:s',
+                Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()
+            ) . ' GMT',
         ];
 
         return $header;
