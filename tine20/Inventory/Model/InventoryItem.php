@@ -31,7 +31,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     public const FLD_TOTAL_NUMBER = 'total_number';
     public const FLD_ACTIVE_NUMBER = 'active_number';
     public const FLD_TYPE = 'type';
-    public const FLD_INVOICE = 'invoice';
+    public const FLD_INVOICE = 'invoice'; // is a sys cf that will only be applied if Sales installed
     public const FLD_PRICE = 'price';
     public const FLD_WARRANTY = 'warranty';
     public const FLD_ADDED_DATE = 'added_date';
@@ -109,12 +109,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     'related_model' => HumanResources_Model_Employee::class,
                 ]
             ]
-        ],
-
-        self::JSON_EXPANDER => [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_INVOICE => [],
-            ],
         ],
 
         self::FIELDS            => [
@@ -198,18 +192,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Inventory Type', // _('Inventory Type')
                 self::NULLABLE          => true,
-            ],
-            self::FLD_INVOICE => [
-                self::TYPE              => self::TYPE_RECORD,
-                self::LENGTH            => 40,
-                self::CONFIG            => [
-                    self::APP_NAME          => Sales_Config::APP_NAME,
-                    self::MODEL_NAME        => Sales_Model_PurchaseInvoice::MODEL_NAME_PART,
-                ],
-                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::LABEL             => 'Purchase Invoice', // _('Purchase Invoice')
-                self::NULLABLE          => true,
-                self::QUERY_FILTER      => true,
             ],
             self::FLD_PRICE => [
                 self::TYPE         => self::TYPE_MONEY,
