@@ -902,6 +902,7 @@ class Tinebase_Application
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
                         Setup_Controller::INSTALL_NO_REPLICA_CHECK => true]);
+                Setup_Controller::getInstance()->createImportExportDefinitions($record, Tinebase_Core::isReplica());
                 break;
 
             case Tinebase_Timemachine_ModificationLog::UPDATED:
