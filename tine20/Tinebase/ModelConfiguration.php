@@ -1756,7 +1756,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      */
     protected function _addToPasswordFields(array $fieldDef, string $fieldKey): void
     {
-        if (isset($fieldDef[self::SPECIAL_TYPE]) && $fieldDef[self::SPECIAL_TYPE] === self::SPECIAL_TYPE_PASSWORD) {
+        if (($fieldDef[self::TYPE] ?? null) === self::TYPE_PASSWORD ||
+                ($fieldDef[self::SPECIAL_TYPE] ?? null) === self::SPECIAL_TYPE_PASSWORD) {
             $this->_pwFields[] = $fieldKey;
         }
     }
