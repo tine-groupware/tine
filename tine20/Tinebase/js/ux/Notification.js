@@ -18,7 +18,7 @@ Ext.ux.Notification = function(){
             
             // define icon url
             // TODO use relative path here
-            var iconUrl = window.location.href.replace(/#+.*/, '') + '/images/tine_logo.png';
+            var iconUrl = window.location.href.replace(/#+.*/, '') + '/logo';
             
             // webkit notifications
             if (window.webkitNotifications !== undefined && window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
