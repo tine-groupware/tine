@@ -762,11 +762,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $success = true;
         $parentIds = array();
         $transactionManager = Tinebase_TransactionManager::getInstance();
-        $modlogFileObjects = $_fileObjectBackend->modlogActive(false);
 
         $dataSelect = $this->_db->select()
             ->from(['n' => $this->_tablePrefix . $this->_tableName], ['parent_id', 'object_id'])
-            ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id', ['revision_size'])
+            ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id', ['revision_size', 'revision'])
             ->join(['r' => $this->_tablePrefix . 'tree_filerevisions'], 'o.id = r.id AND o.revision = r.revision', ['size']);
 
         $sizeSelect = $this->_db->select()
@@ -801,18 +800,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 $sizeSelect->where('n.parent_id = ?', $id);
                 $size = intval($sizeSelect->query()->fetchColumn(0));
 
-
                 if ($size !== (int)$data['size'] || $revision_size !== (int)$data['revision_size']) {
-                    /** @var Tinebase_Model_Tree_FileObject $fileObject */
-                    try {
-                        $fileObject = $_fileObjectBackend->get($data['object_id'], true);
-                    } catch (Tinebase_Exception_NotFound) {
-                        $transactionManager->commitTransaction($transactionId);
-                        continue;
-                    }
-                    $fileObject->size = $size;
-                    $fileObject->revision_size = $revision_size;
-                    $_fileObjectBackend->update($fileObject);
+
+                    $this->_db->update($_fileObjectBackend->getPrefixedTableName(), ['revision_size' => $revision_size], $this->_db->quoteInto('id = ?', $data['object_id']));
+                    $this->_db->update($this->_tablePrefix . 'tree_filerevisions', ['size' => $size], $this->_db->quoteInto('id = ?', $data['object_id']) . $this->_db->quoteInto(' AND revision = ?', $data['revision']));
                 }
 
                 $transactionManager->commitTransaction($transactionId);
@@ -823,13 +814,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Exception::log($e);
                 $success = false;
             }
-
-            Tinebase_Lock::keepLocksAlive();
         }
 
-        $_fileObjectBackend->modlogActive($modlogFileObjects);
-
         if (!empty($parentIds)) {
+            Tinebase_Lock::keepLocksAlive();
+            unset($_folderIds);
             $success = $this->_recalculateFolderSize($_fileObjectBackend, $parentIds) && $success;
         }
 
