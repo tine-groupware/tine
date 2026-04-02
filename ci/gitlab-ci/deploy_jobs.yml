@@ -357,20 +357,20 @@ mkdocs-deploy:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == $TINE_VERSION_LTS
       changes:
         - docs/**/*
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
-    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_NEXT && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
       changes:
         - docs/**/*
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
-    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BETA && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
       changes:
         - docs/**/*
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
-    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_BE && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
       changes:
         - docs/**/*
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
-    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy(,|$)/ && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
+    - if: $CI_PIPELINE_SOURCE == "push" && $BASE_MAJOR_COMMIT_REF_NAME == $TINE_VERSION_LTS && $CUSTOMER_MAJOR_COMMIT_REF_NAME == "ecclesias/"
       changes:
         - docs/**/*
   timeout: 20m
