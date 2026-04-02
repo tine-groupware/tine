@@ -1558,6 +1558,36 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         return this.stateIdSuffix;
     },
 
+    getState() {
+        const state = {}
+        // @TODO get responsiveLevel as first key
+        // @TODO applyState on resize (have abstract mixin)
+        if (this.detailsPanel) {
+            state.detailsPanel = {
+                region: this.detailsPanelRegion,
+                collapsed: this.detailsPanel.isCollapsed(),
+                width: this.detailsPanel.getWidth(),
+                height: this.detailsPanel.getHeight()
+            }
+        }
+        if(this.hasQuickSearchFilterToolbarPlugin) {
+            state.filterPanelShow = this.filterPanel.getQuickFilterPlugin().filterPanel.isVisible()
+        }
+    },
+
+    applyState: function(state) {
+        // @TODO
+        // if (state.detailsPanel) {
+        //     this.detailsPanelRegion = state.detailsPanel.region;
+        //     this.detailsPanel.setCollapsed(state.detailsPanel.collapsed);
+        //     this.detailsPanel.setWidth(state.detailsPanel.width);
+        //     this.detailsPanel.setHeight(state.detailsPanel.height);
+        // }
+        // if (state.filterPanelShow) {
+        //     this.filterPanel.getQuickFilterPlugin().filterPanel.show();
+        // }
+    },
+
     /**
      * called after a new set of Records has been loaded
      * 
@@ -1844,35 +1874,35 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.stateful) {
                 this.gridConfig.stateful = true;
                 this.gridConfig.stateId = this.getStateId() + '-Grid';
-                const gridStateId = this.getResolvedGridStateId();
-                let gridState = Ext.state.Manager.get(gridStateId);
-                if (gridState) this.defaultSortInfo = gridState.sort;
-
-                const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
-                this.regionStateId = `${stateId}_detailspanelregion`;
-                this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-
-                this.regionConfigStateId = `${stateId}_region_config`;
-                this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
-                    'south': {},
-                    'east': {},
-                });
-
-                //update script , it should be removed after we make sure customer has the updateed state
-                const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-                const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
-                if (oldDetailsPanelRegion) {
-                    this.detailsPanelRegion = oldDetailsPanelRegion;
-                    Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
-                    Ext.state.Manager.clear(oldRegionStateId);
-                }
-                const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
-                const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
-                if (oldRegionConfig) {
-                    this.regionConfig = oldRegionConfig;
-                    Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
-                    Ext.state.Manager.clear(oldRegionConfigStateId);
-                }
+                // const gridStateId = this.getResolvedGridStateId();
+                // let gridState = Ext.state.Manager.get(gridStateId);
+                // if (gridState) this.defaultSortInfo = gridState.sort;
+                //
+                // const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
+                // this.regionStateId = `${stateId}_detailspanelregion`;
+                // this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+                //
+                // this.regionConfigStateId = `${stateId}_region_config`;
+                // this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
+                //     'south': {},
+                //     'east': {},
+                // });
+                //
+                // //update script , it should be removed after we make sure customer has the updateed state
+                // const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+                // const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
+                // if (oldDetailsPanelRegion) {
+                //     this.detailsPanelRegion = oldDetailsPanelRegion;
+                //     Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
+                //     Ext.state.Manager.clear(oldRegionStateId);
+                // }
+                // const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+                // const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
+                // if (oldRegionConfig) {
+                //     this.regionConfig = oldRegionConfig;
+                //     Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+                //     Ext.state.Manager.clear(oldRegionConfigStateId);
+                // }
             }
 
             // todo : hide the layout action if disableResponsiveLayout ?
