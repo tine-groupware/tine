@@ -120,6 +120,9 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * gets headers for initial client HTML pages
      *
      * @return array
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     *
      */
     public static function getHeaders()
     {
@@ -132,67 +135,39 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
         // set the Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
-        $scriptSrcs  = ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'];
-        $connectSrcs = ["'self'"];
-        $imgSrcs     = ["'self'", 'data:', 'blob:'];
-        $frameSrcs   = ["'self'"];
-        $styleSrcs   = ["'self'", "'unsafe-inline'"];
-        $objectSrcs  = ["'self'", 'blob:'];
 
-        // @todo invent facility for tine APPs to register CSP sources
-        /*$scriptSrcs = array_merge(
+        $scriptSrcs = array_merge(
             ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('script-src')
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('script-src')
         );
         $connectSrcs = array_merge(
             ["'self'"],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('connect-src')
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('connect-src')
         );
         $imgSrcs = array_merge(
             ["'self'", 'data:', 'blob:'],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('img-src')
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('img-src')
         );
         $frameSrcs = array_merge(
             ["'self'"],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('frame-src')
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('frame-src')
         );
         $styleSrcs = array_merge(
-            ["'self'", "'unsafe-eval'"],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('style-src')
+            ["'self'", "'unsafe-inline'"],
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('style-src')
         );
         $objectSrcs = array_merge(
             ["'self'", 'blob:'],
-            Tinebase_Security_CspRegistry::getInstance()->getSources('object-src')
-        );*/
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('object-src')
+        );
 
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_ACTIVE}) {
-            $connectSrcs[] = Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
-        }
-
-        if (Tinebase_Application::getInstance()->isInstalled(MatrixSynapseIntegrator_Config::APP_NAME, true)) {
-            $frameSrcs[] = MatrixSynapseIntegrator_Config::getInstance()->get(MatrixSynapseIntegrator_Config::ELEMENT_URL);
-        }
-
-        if (Tinebase_Application::getInstance()->isInstalled(OnlyOfficeIntegrator_Config::APP_NAME, true)) {
-            if (OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL)) {
-                $onlyOfficeUrl = rtrim(
-                    OnlyOfficeIntegrator_Config::getInstance()->get(OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL),
-                    '/'
-                );
-            }
-
-            if (!empty($onlyOfficeUrl)) {
-                $parsed = parse_url($onlyOfficeUrl);
-                $onlyOfficeOrigin = $parsed['scheme'] . '://' . $parsed['host']
-                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
-
-                $scriptSrcs[] = $onlyOfficeOrigin;
-                $connectSrcs[] = $onlyOfficeOrigin;
-                $frameSrcs[] = $onlyOfficeOrigin;
-
-                $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
-                $connectSrcs[] = $wsScheme . '://' . $parsed['host']
-                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        $allApps = Tinebase_Application::getInstance()->getApplications();
+        foreach ($allApps as $app) {
+            if (Tinebase_Application::getInstance()->isInstalled($app->id, true)) {
+                $appConfig = $app->name . '_Config';
+                if (class_exists($appConfig) && method_exists($appConfig, 'registerCspSources')) {
+                    $appConfig::getInstance()->registerCspSources();
+                }
             }
         }
 
@@ -207,6 +182,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             $connectSrcs[] = 'webpack:';
         }
 
+        //@todo create csp-endpoint for Content-Security-Policy-Report-Only ?
+        //@see https://developer.mozilla.org/en-US/docs/Web/API/Reporting_API
         $csp = implode('; ', [
             "default-src 'self'",
             "script-src " . implode(' ', $scriptSrcs),
@@ -216,11 +193,9 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             "style-src " . implode(' ', $styleSrcs),
             "object-src " . implode(' ', $objectSrcs),
             "frame-ancestors $frameAncestors",
-//            "report-to csp-endpoint",
         ]);
 
         $header['Content-Security-Policy'] = $csp;
-//        $header['Content-Security-Policy-Report-Only'] = $csp;
 
         // set Strict-Transport-Security; used only when served over HTTPS
         $header['Strict-Transport-Security'] = 'max-age=16070400';

@@ -27,6 +27,7 @@ class Tinebase_Frontend_AllTests
         $suite->addTestSuite(Tinebase_Frontend_HttpTest::class);
         $suite->addTestSuite(Tinebase_Frontend_Http_SinglePageApplicationTest::class);
         $suite->addTestSuite(Tinebase_Frontend_WebDAV_RecordTest::class);
+        $suite->addTestSuite(Tinebase_Frontend_Http_CspRegistryTest::class);
         
         return $suite;
     }
