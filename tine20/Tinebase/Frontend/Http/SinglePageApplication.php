@@ -3,9 +3,9 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 class Tinebase_Frontend_Http_SinglePageApplication {
 
@@ -136,8 +136,34 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         $connectSrcs = ["'self'"];
         $imgSrcs     = ["'self'", 'data:', 'blob:'];
         $frameSrcs   = ["'self'"];
+        $styleSrcs   = ["'self'", "'unsafe-inline'"];
+        $objectSrcs  = ["'self'", 'blob:'];
 
         // @todo invent facility for tine APPs to register CSP sources
+        /*$scriptSrcs = array_merge(
+            ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('script-src')
+        );
+        $connectSrcs = array_merge(
+            ["'self'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('connect-src')
+        );
+        $imgSrcs = array_merge(
+            ["'self'", 'data:', 'blob:'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('img-src')
+        );
+        $frameSrcs = array_merge(
+            ["'self'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('frame-src')
+        );
+        $styleSrcs = array_merge(
+            ["'self'", "'unsafe-eval'"],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('style-src')
+        );
+        $objectSrcs = array_merge(
+            ["'self'", 'blob:'],
+            Tinebase_Security_CspRegistry::getInstance()->getSources('object-src')
+        );*/
 
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_ACTIVE}) {
             $connectSrcs[] = Tinebase_Config::getInstance()->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
@@ -183,15 +209,18 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
         $csp = implode('; ', [
             "default-src 'self'",
-            "script-src "  . implode(' ', $scriptSrcs),
+            "script-src " . implode(' ', $scriptSrcs),
             "connect-src " . implode(' ', $connectSrcs),
-            "img-src "     . implode(' ', $imgSrcs),
-            "frame-src "    . implode(' ', $frameSrcs),
-            "style-src 'self' 'unsafe-inline'",
+            "img-src " . implode(' ', $imgSrcs),
+            "frame-src " . implode(' ', $frameSrcs),
+            "style-src " . implode(' ', $styleSrcs),
+            "object-src " . implode(' ', $objectSrcs),
             "frame-ancestors $frameAncestors",
+//            "report-to csp-endpoint",
         ]);
 
         $header['Content-Security-Policy'] = $csp;
+//        $header['Content-Security-Policy-Report-Only'] = $csp;
 
         // set Strict-Transport-Security; used only when served over HTTPS
         $header['Strict-Transport-Security'] = 'max-age=16070400';
