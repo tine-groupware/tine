@@ -145,12 +145,13 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
             // if participant is an account, current user needs to be that account
             if (Addressbook_Model_Contact::CONTACTTYPE_USER === $participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->type) {
                 if (null === Tinebase_Core::getUser()) {
-                    throw new Tinebase_Exception_AccessDenied('not allowed');
-                }
-                if (Tinebase_Core::getUser()->getId() !== $participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->getIdFromProperty('account_id') &&
+                    Tinebase_Core::setUser(Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+                } else {
+                    if (Tinebase_Core::getUser()->getId() !== $participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->getIdFromProperty('account_id') &&
                         !CrewScheduling_Controller_Poll::getInstance()->checkGrant($poll, CrewScheduling_Model_SchedulingRoleGrants::MANAGE_POLL, false)
-                ) {
-                    return self::getFixedParticipantResponse($poll);
+                    ) {
+                        return self::getFixedParticipantResponse($poll);
+                    }
                 }
             } else { // if participant is not an account only anonymous usage!
                 if (null === Tinebase_Core::getUser()) {
