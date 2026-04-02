@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -63,5 +63,12 @@ class Inventory_Controller_InventoryItem extends Tinebase_Controller_Record_Abst
     public function getDefaultInventory()
     {
         return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Inventory_Preference::DEFAULT_INVENTORYITEM_CONTAINER);
+    }
+
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        $expanderDef = $mc->jsonExpander;
+        $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES][Inventory_Model_InventoryItem::FLD_INVOICE] = [];
+        $mc->setJsonExpander($expanderDef);
     }
 }

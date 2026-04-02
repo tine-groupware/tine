@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Inventory</name>
-    <!-- gettext('Inventory') -->   
+    <!-- gettext('Inventory') -->
     <version>19.0</version>
     <order>60</order>
     <status>enabled</status>
