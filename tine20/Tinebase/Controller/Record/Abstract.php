@@ -2575,7 +2575,12 @@ abstract class Tinebase_Controller_Record_Abstract
                     $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
                 }
             }
-            foreach ($config->getFields() as $field) {
+            foreach ($config->getFields() as $key => $field) {
+                if (TMCC::TYPE_DYNAMIC_RECORD === ($field[TMCC::TYPE] ?? null) &&
+                        true === ($field[TMCC::CONFIG][TMCC::PERSISTENT] ?? null) &&
+                        $_record->$key instanceof Tinebase_Record_Interface) {
+                    $this->handleDeleteDependentRecords($_record->$key);
+                }
                 if (TMCC::TYPE_PASSWORD === ($field[TMCC::TYPE] ?? null) &&
                         'shared' === ($field[TMCC::CONFIG][TMCC::CREDENTIAL_CACHE] ?? null) &&
                         ($field[TMCC::CONFIG][TMCC::REF_ID_FIELD] ?? null) &&
