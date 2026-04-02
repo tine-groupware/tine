@@ -568,12 +568,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 if (false !== ($revisionSize = $this->_db->query($this->_db->select()->from($this->_tablePrefix . $this->_tableName, array('revision_size'))
                         ->where('id = ?', $id))->fetchColumn()) &&
                     false !== ($revisionSum = $this->_db->query($this->_db->select()->from($this->_tablePrefix . $this->_revisionsTableName, array($dbExpr))
-                        ->where('id = ?', $id))->fetchColumn()) && $revisionSize !== $revisionSum) {
+                        ->where('id = ?', $id))->fetchColumn()) && intval($revisionSize) !== intval($revisionSum)) {
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' revision size mismatch on ' . $id . ': ' . $revisionSum .' != ' . $revisionSize);
 
-                    $this->_db->update($this->_tablePrefix . $this->_tableName, ['revision_size' => $revisionSum], $this->_db->quoteInto('id = ?', $id));
+                    $this->_db->update($this->_tablePrefix . $this->_tableName, ['revision_size' => intval($revisionSum)], $this->_db->quoteInto('id = ?', $id));
                 }
                 
                 $transactionManager->commitTransaction($transactionId);
