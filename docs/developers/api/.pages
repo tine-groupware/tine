@@ -1,0 +1,10 @@
+nav:
+  - index.md
+  - addressbook.md
+  - crm-leads.md
+  - calendar.md
+  - tasks.md
+  - projects.md
+  - sales.md
+  - json-rpc-reference.md
+  - public-http-reference.md
