@@ -399,17 +399,12 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
 
         foreach ($models as $key => $model) {
-            if (class_exists($model)) {
-                $reflection = new ReflectionClass($model);
-                $interfaces = $reflection->getInterfaceNames();
-                if (! in_array('Tinebase_Record_Interface', $interfaces)) {
-                    unset($models[$key]);
-                }
-            } else {
-                // interface, no php class, ...
+            if (!is_a($model, Tinebase_Record_Interface::class, true)) {
                 unset($models[$key]);
             }
         }
+
+        sort($models);
 
         return $models;
     }
