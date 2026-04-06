@@ -34,6 +34,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE018 = self::class . '::update018';
     protected const RELEASE018_UPDATE019 = self::class . '::update019';
     protected const RELEASE018_UPDATE020 = self::class . '::update020';
+    protected const RELEASE018_UPDATE021 = self::class . '::update021';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -94,6 +95,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE020          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update020',
+            ],
+            self::RELEASE018_UPDATE021          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update021',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -461,5 +466,36 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             </field>'));
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.20', self::RELEASE018_UPDATE020);
+    }
+
+    public function update021(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_AppPassword::class,
+        ]);
+
+        $this->_db->update(
+            Tinebase_Controller_AppPassword::getInstance()->getBackend()->getPrefixedTableName(),
+            ['auth_token' => new Zend_Db_Expr('CONCAT("sha1_", auth_token)')],
+            'auth_token IS NOT NULL AND auth_token NOT LIKE "sha1_%"'
+        );
+
+        foreach ($this->_db->query('SELECT `key_id`, `account_id`, `key`, `routes`, `ttl` FROM ' . SQL_TABLE_PREFIX . 'jwt_access_routes WHERE `is_deleted` = 0 AND (`ttl` IS NULL OR `ttl` > NOW())')->fetchAll(Zend_Db::FETCH_ASSOC) as $row) {
+            Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+                Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $row['account_id'],
+                Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => $row['key_id'],
+                Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => $row['key'],
+                Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys(json_decode($row['routes'], true), true),
+                Tinebase_Model_AppPassword::FLD_VALID_UNTIL => $row['ttl'] ?? Tinebase_DateTime::now()->addYear(100),
+            ]));
+        }
+
+        $this->dropTable('jsw_access_routes');
+
+        Tinebase_Core::getScheduler()->removeTask('Admin_Controller_JWTAccessRoutes::cleanTTL');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.21', self::RELEASE018_UPDATE021);
     }
 }

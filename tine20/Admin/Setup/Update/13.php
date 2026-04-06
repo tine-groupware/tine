@@ -78,9 +78,9 @@ class Admin_Setup_Update_13 extends Setup_Update_Abstract
      */
     public function update002()
     {
-        Setup_SchemaTool::updateSchema([
+        /*Setup_SchemaTool::updateSchema([
             Admin_Model_JWTAccessRoutes::class
-        ]);
+        ]);*/
         $this->addApplicationUpdate('Admin', '13.2', self::RELEASE013_UPDATE002);
     }
 }

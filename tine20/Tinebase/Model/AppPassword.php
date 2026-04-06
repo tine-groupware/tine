@@ -26,6 +26,9 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
     public const FLD_CHANNELS = 'channels';
     public const FLD_VALID_UNTIL = 'valid_until';
     public const FLD_ALLOW_GET = 'allow_get';
+    public const FLD_JWT_PRIVAT_KEY = 'jwt_private_key';
+    public const FLD_JWT_CC_ID = 'jwt_cc_id';
+    public const FLD_JWT_KEY_ID = 'jwt_key_id';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -33,7 +36,7 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION               => 2,
+        self::VERSION               => 3,
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE         => false,
@@ -41,22 +44,17 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
 
         self::TABLE                 => [
             self::NAME                  => self::TABLE_NAME,
-            self::UNIQUE_CONSTRAINTS    => [
+            self::INDEXES               => [
                 self::FLD_ACCOUNT_ID       => [
                     self::COLUMNS               => [self::FLD_ACCOUNT_ID, self::FLD_AUTH_TOKEN]
+                ],
+                self::FLD_JWT_KEY_ID        => [
+                    self::COLUMNS               => [self::FLD_JWT_KEY_ID]
                 ],
             ],
         ],
 
         self::FIELDS                => [
-            self::FLD_AUTH_TOKEN       => [
-                self::TYPE                  => self::TYPE_STRING,
-                self::LENGTH                => 255,
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
-            ],
             self::FLD_ACCOUNT_ID       => [
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 40,
@@ -65,12 +63,34 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
+            self::FLD_AUTH_TOKEN       => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::NULLABLE              => true,
+            ],
             self::FLD_VALID_UNTIL      => [
                 self::TYPE                  => self::TYPE_DATETIME,
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_JWT_PRIVAT_KEY   => [
+                self::TYPE                  => self::TYPE_PASSWORD,
+                self::CONFIG                => [
+                    self::CREDENTIAL_CACHE      => 'shared',
+                    self::REF_ID_FIELD          => self::FLD_JWT_CC_ID,
+                ],
+            ],
+            self::FLD_JWT_KEY_ID        => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+                self::NULLABLE              => true,
+            ],
+            self::FLD_JWT_CC_ID        => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 40,
+                self::NULLABLE              => true,
             ],
             self::FLD_CHANNELS         => [
                 self::TYPE                  => self::TYPE_JSON,

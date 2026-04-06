@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Firebase\JWT\JWT;
+
 /**
  * cli server
  *
@@ -1961,17 +1963,30 @@ fi';
 
         $user = Tinebase_User::getInstance()->getFullUserByLoginName($data['user']);
 
-        $pwd =  Tinebase_Record_Abstract::generateUID(Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
-        Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
-            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
-            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
-            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
-            Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys((array)$data['channels'], true),
-            Tinebase_Model_AppPassword::FLD_ALLOW_GET => (bool)($data['allow_get'] ?? false),
-        ]));
-        $pwd = base64_encode($user->accountLoginName . ':' . $pwd);
+        if ($data['jwt'] ?? false) {
+            $pwd = Tinebase_Record_Abstract::generateUID();
 
-        echo PHP_EOL . 'generated pwd: ' . $pwd . PHP_EOL . PHP_EOL;
+            $token = Tinebase_Controller_AppPassword::getInstance()->getNewJwtToken([
+                Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
+                Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys((array)$data['channels'], true),
+                Tinebase_Model_AppPassword::FLD_ALLOW_GET => (bool)($data['allow_get'] ?? false),
+                Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => $pwd,
+            ]);
+
+            echo PHP_EOL . 'generated jwt: ' . $token . PHP_EOL . PHP_EOL;
+        } else {
+            $pwd = Tinebase_Record_Abstract::generateUID(Tinebase_Controller_AppPassword::PWD_LENGTH);
+            Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+                Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
+                Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
+                Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+                Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys((array)$data['channels'], true),
+                Tinebase_Model_AppPassword::FLD_ALLOW_GET => (bool)($data['allow_get'] ?? false),
+            ]));
+            $pwd = base64_encode($user->accountLoginName . ':' . $pwd);
+
+            echo PHP_EOL . 'generated pwd: ' . $pwd . PHP_EOL . PHP_EOL;
+        }
 
         return 0;
     }

@@ -39,28 +39,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ),
     );
 
-    public function createJwtAccessRoute(Zend_Console_Getopt $_opts): int
-    {
-        $this->_checkAdminRight();
-
-        $args = $this->_parseArgs($_opts, ['account', 'route']);
-
-        try {
-            $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            echo $tenf->getMessage() . "\n";
-            return 1;
-        }
-        $route = (array)$args['route'];
-
-        echo PHP_EOL . Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
-                Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
-                Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
-            ]) . PHP_EOL;
-
-        return 0;
-    }
-
     /**
      * create system groups for addressbook lists that don't have a system group
      *

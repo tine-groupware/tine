@@ -46,15 +46,14 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
 
         Tinebase_Core::startCoreSession();
 
-        $user = null;
+        $user = Tinebase_Core::getUser();
         if (!$routeHandler->ignoreMaintenanceMode() && Setup_Controller::getInstance()->isInstalled()) {
             if (Tinebase_Core::inMaintenanceMode() ||
-                Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
-                if (Tinebase_Core::inMaintenanceModeAll() || !is_object($user = Tinebase_Core::getUser()) ||
+                    Tinebase_Core::getApplicationInstance($routeHandler->getApplicationName())->isInMaintenanceMode()) {
+                if (Tinebase_Core::inMaintenanceModeAll() || !is_object($user) ||
                         !$user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights::MAINTENANCE)) {
                     throw new Tinebase_Exception_MaintenanceMode();
                 }
-                throw new Tinebase_Exception_MaintenanceMode();
             }
         }
 
@@ -65,40 +64,13 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             $unauthorized = true;
             do {
                 if ($appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
-                    if (in_array($routeHandler->getName(), $appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS})) {
+                    if ($appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS}[$routeHandler->getName()] ?? false) {
                         $unauthorized = false;
-                        break;
-                    } else {
-                        Tinebase_Core::unsetUser();
-                    }
-                }
-
-                if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
-                    foreach ($request->getHeader('Authorization') as $authHeader) {
-                        if (str_starts_with($authHeader, 'Bearer ')) {
-                            $token = substr($authHeader, 7);
-                            try {
-                                Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);
-                                $user = Tinebase_Core::getUser();
-                                $unauthorized = false;
-                                break 2;
-                            } catch (Tinebase_Exception_AccessDenied $tead) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
-                                    '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $tead->getMessage());
-
-                                break;
-                            } catch (Tinebase_Exception $te) {
-                                // something went wrong -> 500
-                                throw $te;
-                            } catch (Exception $e) {
-                                // these are jwt fails, so basically bad requests ... yet we return 401
-                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
-                                    '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $e->getMessage());
-
-                                break;
-                            }
+                        if (null === $user) {
+                            Tinebase_Core::setUser($user = Tinebase_User::getInstance()->getFullUserById($appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID}));
                         }
                     }
+                    break;
                 }
 
                 if (null === $user) {
@@ -125,6 +97,10 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
 
             if ($unauthorized) {
                 if ($routeHandler->unauthorizedRedirectLogin()) {
+                    if ($appPwd) {
+                        Tinebase_Core::unsetUser();
+                        unset(Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class});
+                    }
                     $uri = $request->getUri();
                     $path = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH) . $uri->getPath() . ($uri->getQuery() ? '?' . $uri->getQuery() : '') .
                         ($uri->getFragment() ? '#' . $uri->getFragment() : '');
