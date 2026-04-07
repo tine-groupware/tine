@@ -405,7 +405,7 @@ class Tinebase_Export_XlsxTest extends TestCase
             'name' => 'adb_xls'
         ]))->getFirstRecord()->getId();
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'Authorization: Bearer lalalala' . "\r\n"
@@ -424,7 +424,7 @@ class Tinebase_Export_XlsxTest extends TestCase
 
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
-        $server->handle();
+        $server->handle($tRequest);
 
         $this->assertSame(401, $emitter->response->getStatusCode());
     }
@@ -456,17 +456,18 @@ class Tinebase_Export_XlsxTest extends TestCase
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
 
-        /*$jwtRoutes = */Admin_Controller_JWTAccessRoutes::getInstance()->create(new Admin_Model_JWTAccessRoutes([
-            Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $this->_originalTestUser->getId(),
-            Admin_Model_JWTAccessRoutes::FLD_ROUTES => [Tinebase_Export_Abstract::class . '::expressiveApi'],
-            Admin_Model_JWTAccessRoutes::FLD_ISSUER => 'unittest',
-            Admin_Model_JWTAccessRoutes::FLD_KEY => 'unittest',
+        Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [Tinebase_Export_Abstract::class . '::expressiveApi' => true],
+            Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => 'unittest',
+            Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => 'unittest',
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(1),
         ]));
         $token = JWT::encode([
-            'iss' => 'unittest'
-        ], 'unittest', 'HS256');
+            'account_id' => $this->_originalTestUser->getId(),
+        ], 'unittest', 'HS256', 'unittest');
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'Authorization: Bearer ' . $token . "\r\n"
@@ -482,8 +483,9 @@ class Tinebase_Export_XlsxTest extends TestCase
         Tinebase_Core::setContainer($container);
         Tinebase_Core::unsetUser();
         unset(Tinebase_Session::getSessionNamespace()->currentAccount);
+        $sessionRaii = new Tinebase_RAII(function() { unset(Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}); });
 
-        $server->handle();
+        $server->handle($tRequest);
 
         $this->assertSame(200, $emitter->response->getStatusCode());
 
@@ -504,6 +506,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         $this->assertArrayHasKey($testContact->n_family, $flippedArrayData, $msg);
 
         unset($raii);
+        unset($sessionRaii);
     }
 
     /**
@@ -532,7 +535,7 @@ class Tinebase_Export_XlsxTest extends TestCase
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'POST /Tinebase/export/' . $definitionId . ' HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . "\r\n"
@@ -546,7 +549,9 @@ class Tinebase_Export_XlsxTest extends TestCase
         $container->set(RequestInterface::class, $request);
         Tinebase_Core::setContainer($container);
 
-        $server->handle();
+        $server->handle($tRequest);
+
+        $this->assertSame(200, $emitter->response->getStatusCode());
 
         $tmpFile = Tinebase_TempFile::getTempPath();
         $raii = new Tinebase_RAII(function() use($tmpFile) {

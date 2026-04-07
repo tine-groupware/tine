@@ -98,17 +98,16 @@ class Tinebase_Auth_MFA_GenericSmsAdapter implements Tinebase_Auth_MFA_AdapterIn
 
             $userRaii = null;
             if (!Tinebase_Core::getUser()) {
-                $userRaii = new Tinebase_RAII(Admin_Controller_JWTAccessRoutes::getInstance()->assertPublicUsage());
+                $userRaii = new Tinebase_RAII(Tinebase_Controller_AppPassword::getInstance()->assertPublicUsage());
             }
 
             $_userCfg->{Tinebase_Model_MFA_UserConfig::FLD_CONFIG}->{Tinebase_Model_MFA_SmsUserConfig::FLD_AUTH_TOKEN} =
-                Admin_Controller_JWTAccessRoutes::getInstance()->getNewJWT([
-                    Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $user->getId(),
-                    Admin_Model_JWTAccessRoutes::FLD_ROUTES => [
-                        Tinebase_Controller::class . '::postSendSupportRequest',
-                    ],
-                    Admin_Model_JWTAccessRoutes::FLD_TTL => Tinebase_DateTime::now()->addMinute(30),
-                ], keyBits: 1024); // 1024 bits are significantly faster than 2048 and we are only valid for 30 minutes
+                Tinebase_Controller_AppPassword::getInstance()->getNewJwtToken([
+                    Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
+                    Tinebase_Model_AppPassword::FLD_CHANNELS => [Tinebase_Controller::class . '::postSendSupportRequest' => true],
+                    Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => Tinebase_Record_Abstract::generateUID(),
+                    Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addMinute(30),
+                ]);
 
             unset($userRaii);
             return true;

@@ -38,14 +38,14 @@ class Admin_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
+        /*Tinebase_TransactionManager::getInstance()->rollBack();
 
         Setup_SchemaTool::updateSchema([
             Admin_Model_JWTAccessRoutes::class,
         ]);
 
         $scheduler = Tinebase_Core::getScheduler();
-        Admin_Scheduler_Task::addJWTAccessRoutesCleanUpTask($scheduler);
+        Admin_Scheduler_Task::addJWTAccessRoutesCleanUpTask($scheduler);*/
 
         $this->addApplicationUpdate(Admin_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
     }

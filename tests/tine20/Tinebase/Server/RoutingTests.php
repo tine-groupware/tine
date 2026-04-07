@@ -37,7 +37,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'GET /ExampleApplication/public/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
@@ -54,7 +54,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $container->set(\Psr\Http\Message\RequestInterface::class, $request);
         Tinebase_Core::setContainer($container);
 
-        $server->handle();
+        $server->handle($tRequest);
 
         $emitter->response->getBody()->rewind();
         static::assertEquals(ExampleApplication_Controller::publicTestRouteOutput, $emitter->response->getBody()
@@ -76,7 +76,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         Tinebase_Application::getInstance()->setApplicationStatus(Tinebase_Application::getInstance()
             ->getApplicationByName('ExampleApplication'), Tinebase_Application::ENABLED);
 
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'GET /ExampleApplication/testRoute HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Mozilla/5.0 (X11; Linux i686; rv:15.0) Gecko/20120824 Thunderbird/15.0 Lightning/1.7' . "\r\n"
@@ -88,11 +88,11 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         ));
 
-        $content = $this->_emitRequest($request);
+        $content = $this->_emitRequest($request, $tRequest);
         static::assertEquals(ExampleApplication_Controller::authTestRouteOutput, $content);
     }
 
-    protected function _emitRequest($request)
+    protected function _emitRequest($request, $tRequest)
     {
         $emitter = new Tinebase_Server_UnittestEmitter();
         $server = new Tinebase_Server_Expressive($emitter);
@@ -101,7 +101,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $container->set(\Psr\Http\Message\RequestInterface::class, $request);
         Tinebase_Core::setContainer($container);
 
-        $server->handle();
+        $server->handle($tRequest);
 
         $emitter->response->getBody()->rewind();
         return $emitter->response->getBody()->getContents();
@@ -112,7 +112,7 @@ class Tinebase_Server_RoutingTests extends TestCase
      */
     public function testHealthCheck()
     {
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'GET /health HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Tine 2.0 UNITTEST' . "\r\n"
@@ -120,7 +120,7 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         ));
 
-        $content = $this->_emitRequest($request);
+        $content = $this->_emitRequest($request, $tRequest);
         self::assertNotEmpty($content);
         self::assertEquals('{"status":"pass","problems":[]}', $content);
     }
@@ -133,7 +133,7 @@ class Tinebase_Server_RoutingTests extends TestCase
         $apiKey = 'testmetrics123';
         Tinebase_Config::getInstance()->set(Tinebase_Config::METRICS_API_KEY, $apiKey);
         
-        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend(Tinebase_Http_Request::fromString(
+        $request = \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($tRequest = Tinebase_Http_Request::fromString(
             'GET /metrics/' . $apiKey . ' HTTP/1.1' . "\r\n"
             . 'Host: localhost' . "\r\n"
             . 'User-Agent: Tine 2.0 UNITTEST' . "\r\n"
@@ -141,7 +141,7 @@ class Tinebase_Server_RoutingTests extends TestCase
             . "\r\n"
         ));
 
-        $content = $this->_emitRequest($request);
+        $content = $this->_emitRequest($request, $tRequest);
         $decodedContent = json_decode($content, true);
         self::assertIsArray($decodedContent, 'could not decode content: ' . $content);
 
