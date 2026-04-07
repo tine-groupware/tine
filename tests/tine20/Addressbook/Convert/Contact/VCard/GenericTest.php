@@ -119,4 +119,130 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends TestCase
         $this->assertStringContainsString('URL;TYPE=HOME;VALUE=URI:http://www.tine20.org', $vcard, $vcard);
         $this->assertStringContainsString('CATEGORIES:CATEGORY 1,CATEGORY 2', $vcard, $vcard);
     }
+
+    public function testImportWithISOCountryCode()
+    {
+        $vcard = "BEGIN:VCARD
+VERSION:3.0
+FN:Test User
+N:User;Test
+ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B;12345;DE
+END:VCARD";
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $contact = $converter->toTine20Model($vcard);
+
+        $this->assertEquals('DE', $contact->adr_one_countryname);
+    }
+
+    public function testImportWithGermanCountryName()
+    {
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
+
+        $vcard = "BEGIN:VCARD
+VERSION:3.0
+FN:Test User
+N:User;Test
+ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B;12345;Deutschland
+END:VCARD";
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $contact = $converter->toTine20Model($vcard);
+
+        $this->assertEquals('DE', $contact->adr_one_countryname);
+    }
+
+    public function testImportWithEnglishCountryName()
+    {
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
+
+        $vcard = "BEGIN:VCARD
+VERSION:3.0
+FN:Test User
+N:User;Test
+ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B;12345;Germany
+END:VCARD";
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $contact = $converter->toTine20Model($vcard);
+
+        $this->assertEquals('DE', $contact->adr_one_countryname);
+    }
+
+    public function testExportWithISOCountryCode()
+    {
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
+
+        $contact = new Addressbook_Model_Contact([
+            'n_given' => 'Test',
+            'n_family' => 'User',
+            'adr_one_street' => 'Street 1',
+            'adr_one_locality' => 'City',
+            'adr_one_postalcode' => '12345',
+            'adr_one_countryname' => 'DE'
+        ]);
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $vcard = $converter->fromTine20Model($contact)->serialize();
+
+        $this->assertStringContainsString('Deutschland', $vcard);
+    }
+
+    public function testExportWithISOCountryCodeEnglish()
+    {
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
+
+        $contact = new Addressbook_Model_Contact([
+            'n_given' => 'Test',
+            'n_family' => 'User',
+            'adr_one_street' => 'Street 1',
+            'adr_one_locality' => 'City',
+            'adr_one_postalcode' => '12345',
+            'adr_one_countryname' => 'DE'
+        ]);
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $vcard = $converter->fromTine20Model($contact)->serialize();
+
+        $this->assertStringContainsString('Germany', $vcard);
+    }
+
+    public function testImportExportCountryConversion()
+    {
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
+
+        $vcardIn = "BEGIN:VCARD
+VERSION:3.0
+FN:Test User
+N:User;Test
+ADR;TYPE=WORK:;Address Business 2;Address Business 1;City Business;Region B;12345;Deutschland
+END:VCARD";
+
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_GENERIC
+        );
+
+        $contact = $converter->toTine20Model($vcardIn);
+
+        $this->assertEquals('DE', $contact->adr_one_countryname);
+
+        $vcardOut = $converter->fromTine20Model($contact)->serialize();
+
+        $this->assertStringContainsString('Deutschland', $vcardOut);
+    }
 }

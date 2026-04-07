@@ -69,7 +69,8 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
             switch ($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE}) {
                 case Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD:
                     $adr = $_record->{$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}};
-                    $card->add('ADR', [null, $adr->street2, $adr->street, $adr->locality, $adr->region, $adr->postalcode, $adr->countryname], $vcardMap);
+                    $countryName = Tinebase_Translation::getCountryNameByRegionCode($adr->countryname) ?: $adr->countryname;
+                    $card->add('ADR', [null, $adr->street2, $adr->street, $adr->locality, $adr->region, $adr->postalcode, $countryName], $vcardMap);
                     break;
                 case Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORDS:
                     foreach ($_record->{$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}} as $adr) {
@@ -99,15 +100,21 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
             }
         }
         //$card->add('EMAIL', $_record->email, array('TYPE' => 'WORK'));
-        
+
         //$card->add('EMAIL', $_record->email_home, array('TYPE' => 'HOME'));
-        
-        $card->add('URL', $_record->url, array('TYPE' => 'WORK'));
-        
-        $card->add('URL', $_record->url_home, array('TYPE' => 'HOME'));
-        
-        $card->add('NOTE', $_record->note);
-        
+
+        if (!empty($_record->url)) {
+            $card->add('URL', $_record->url, array('TYPE' => 'WORK'));
+        }
+
+        if (!empty($_record->url_home)) {
+            $card->add('URL', $_record->url_home, array('TYPE' => 'HOME'));
+        }
+
+        if (!empty($_record->note)) {
+            $card->add('NOTE', $_record->note);
+        }
+
         $this->_fromTine20ModelAddBirthday($_record, $card);
         
         $this->_fromTine20ModelAddPhoto($_record, $card);
