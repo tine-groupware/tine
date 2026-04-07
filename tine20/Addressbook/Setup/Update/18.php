@@ -87,14 +87,19 @@ class Addressbook_Setup_Update_18 extends Setup_Update_Abstract
         $result = $db->query(
             'select id from ' . SQL_TABLE_PREFIX .
             Addressbook_Model_Contact::TABLE_NAME .
-            " where adr_one_countryname != '' or adr_two_countryname != ''"
+            " where (adr_one_countryname != '' OR adr_two_countryname != '') AND is_deleted = 0"
         );
 
         $contactIds = $result->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        $acl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
 
         foreach ($contactIds as $contact_id) {
             $countryValues = ['adr_one_countryname', 'adr_two_countryname'];
-            $contact = Addressbook_Controller_Contact::getInstance()->get($contact_id);
+            try {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($contact_id);
+            } catch (Exception $e) {
+                continue;
+            }
             foreach ($countryValues as $adr_country) {
                 $countryName = $contact->$adr_country;
 
@@ -113,6 +118,8 @@ class Addressbook_Setup_Update_18 extends Setup_Update_Abstract
                 }
             }
         }
+
+        Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($acl);
 
         $this->addApplicationUpdate(Addressbook_Config::APP_NAME, '18.4',
             self::RELEASE018_UPDATE004);
