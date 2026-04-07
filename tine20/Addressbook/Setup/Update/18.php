@@ -104,7 +104,7 @@ class Addressbook_Setup_Update_18 extends Setup_Update_Abstract
 
                 $ISOCode = Tinebase_Translation::getRegionCodeByCountryName($countryName);
 
-                if ($countryName !== $ISOCode) {
+                if ($ISOCode && $countryName !== $ISOCode) {
                     $db->query(
                         'UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
                         ' SET ' . $adr_country . ' = ' . $db->quote($ISOCode) .
