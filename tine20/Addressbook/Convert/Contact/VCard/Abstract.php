@@ -147,7 +147,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                         $partsIndex = 1;
                         $arr = [];
                         foreach (['street2', 'street', 'locality', 'region', 'postalcode', 'countryname'] as $field) {
-                            $arr[$field] = $parts[$partsIndex++];
+                            if ($field === 'countryname') {
+                                $countryValue = $parts[$partsIndex++];
+                                $arr[$field] = Tinebase_Translation::getRegionCodeByCountryName($countryValue) ?: $countryValue;
+                            } else {
+                                $arr[$field] = $parts[$partsIndex++];
+                            }
                         }
                         $data[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}] = $arr;
                     }

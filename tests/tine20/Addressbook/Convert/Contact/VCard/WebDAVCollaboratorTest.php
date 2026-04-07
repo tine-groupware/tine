@@ -57,50 +57,52 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaboratorTest extends \PHPUnit\
     }
 
     /**
-     * test converting vcard from sogo connector to Addressbook_Model_Contact 
-     * 
+     * test converting vcard from sogo connector to Addressbook_Model_Contact
+     *
      * @return Addressbook_Model_Contact
      */
     public function testConvertToTine20Model()
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../../Import/files/WebDAVCollaborator.vcf', 'r');
 
-        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR);
+        $converter = Addressbook_Convert_Contact_VCard_Factory::factory(
+            Addressbook_Convert_Contact_VCard_Factory::CLIENT_COLLABORATOR
+        );
 
         $contact = $converter->toTine20Model($vcardStream);
 
-        $this->assertEquals('DEUTSCHLAND',        $contact->adr_one_countryname);
-        $this->assertEquals('businesscity',       $contact->adr_one_locality);
-        $this->assertEquals('45734',              $contact->adr_one_postalcode);
-        $this->assertEquals('businessarea',       $contact->adr_one_region);
-        $this->assertEquals('business street 2',  $contact->adr_one_street);
-//         $this->assertEquals('Address Business 2',      $contact->adr_one_street2);
-        $this->assertEquals('DEUTSCHLAND',        $contact->adr_two_countryname);
-        $this->assertEquals('private cyty',       $contact->adr_two_locality);
-        $this->assertEquals('44322',              $contact->adr_two_postalcode);
-        $this->assertEquals('private area',       $contact->adr_two_region);
-        $this->assertEquals('private street 44',  $contact->adr_two_street);
-//         $this->assertEquals('Address Privat 2',        $contact->adr_two_street2);
-        $this->assertEquals('mail@example.com',   $contact->email);
-        $this->assertEquals('mail2@example.com',  $contact->email_home);
-        $this->assertEquals('Nachname',           $contact->n_family);
-        $this->assertEquals('Vorname',            $contact->n_given);
-        $this->assertEquals('Middle',             $contact->n_middle);
-        $this->assertEquals('salutation',         $contact->n_prefix);
-        $this->assertEquals('name suffix',        $contact->n_suffix);
+        $this->assertEquals('DE', $contact->adr_one_countryname);
+        $this->assertEquals('businesscity', $contact->adr_one_locality);
+        $this->assertEquals('45734', $contact->adr_one_postalcode);
+        $this->assertEquals('businessarea', $contact->adr_one_region);
+        $this->assertEquals('business street 2', $contact->adr_one_street);
+//         $this->assertEquals('Address Business 2', $contact->adr_one_street2);
+        $this->assertEquals('DE', $contact->adr_two_countryname);
+        $this->assertEquals('private cyty', $contact->adr_two_locality);
+        $this->assertEquals('44322', $contact->adr_two_postalcode);
+        $this->assertEquals('private area', $contact->adr_two_region);
+        $this->assertEquals('private street 44', $contact->adr_two_street);
+//         $this->assertEquals('Address Privat 2', $contact->adr_two_street2);
+        $this->assertEquals('mail@example.com', $contact->email);
+        $this->assertEquals('mail2@example.com', $contact->email_home);
+        $this->assertEquals('Nachname', $contact->n_family);
+        $this->assertEquals('Vorname', $contact->n_given);
+        $this->assertEquals('Middle', $contact->n_middle);
+        $this->assertEquals('salutation', $contact->n_prefix);
+        $this->assertEquals('name suffix', $contact->n_suffix);
         $this->assertEquals("Nots \nWith \nLine\nBreaks\n", $contact->note);
-        $this->assertEquals('Firma',              $contact->org_name);
-        $this->assertEquals('department',         $contact->org_unit);
+        $this->assertEquals('Firma', $contact->org_name);
+        $this->assertEquals('department', $contact->org_unit);
         $this->assertEquals('+49 (040) 12345 - 3', $contact->tel_cell);
-        $this->assertEquals(null,                 $contact->tel_cell_private);
+        $this->assertEquals(null, $contact->tel_cell_private);
         $this->assertEquals('+49 (040) 12345 - 2', $contact->tel_fax);
-        $this->assertEquals(null,                 $contact->tel_fax_home);
+        $this->assertEquals(null, $contact->tel_fax_home);
         $this->assertEquals('+49 (040) 12345 - 1', $contact->tel_home);
-        $this->assertEquals(null,                 $contact->tel_pager);
+        $this->assertEquals(null, $contact->tel_pager);
         $this->assertEquals('+49 (040) 12345 - 0', $contact->tel_work);
-//         $this->assertEquals('Titel',                   $contact->title);
-        $this->assertEquals('websi.te',           $contact->url);
-//         $this->assertEquals('http://www.tine20.org',   $contact->url_home);
+//         $this->assertEquals('Titel', $contact->title);
+        $this->assertEquals('websi.te', $contact->url);
+//         $this->assertEquals('http://www.tine20.org', $contact->url_home);
 
         return $contact;
     }
