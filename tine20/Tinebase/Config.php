@@ -4217,4 +4217,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             return NULL;
         }
     }
+
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     * @see Tinebase_Frontend_Http_SinglePageApplication::getHeaders()
+     */
+    public function registerCspSources(): void
+    {
+        $url = $this->get(Tinebase_Config::BROADCASTHUB_URL);
+
+        if (!empty($url)) {
+            $parsed = parse_url(rtrim($url, '/'));
+            $origin = $parsed['scheme'] . '://' . $parsed['host']
+                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+            $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
+            $wsOrigin = $wsScheme . '://' . $parsed['host']
+                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $origin);
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $wsOrigin);
+        }
+    }
 }
