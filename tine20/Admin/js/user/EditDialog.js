@@ -165,6 +165,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             passwordDialog.openWindow();
             passwordDialog.on('apply', async (record) => {
+                const passwordMustChangeField = this.getForm().findField('password_must_change');
+                if (passwordMustChangeField) {
+                    passwordMustChangeField.setValue(this.record.get('password_must_change'));
+                }
                 Tine.Admin.UserEditDialog.superclass.onApplyChanges.apply(this, arguments);
             }, this);
         } else {
