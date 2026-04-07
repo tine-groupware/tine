@@ -759,6 +759,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     protected function _recalculateFolderSize(Tinebase_Tree_FileObject $_fileObjectBackend, array $_folderIds)
     {
+        static $visited = [];
+
         $success = true;
         $parentIds = array();
         $transactionManager = Tinebase_TransactionManager::getInstance();
@@ -778,6 +780,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id', []);
 
         foreach($_folderIds as $id) {
+            if (isset($visited[$id])) {
+                continue;
+            }
+            $visited[$id] = true;
+
             $transactionId = $transactionManager->startTransaction($this->_db);
 
             try {
@@ -849,7 +856,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         }
 
         if (!empty($subFolderIds)) {
-            $result = array_merge($result, $this->_getIdsOfDeepestFolders($subFolderIds, $_getDeleted));
+            $result = array_merge($this->_getIdsOfDeepestFolders($subFolderIds, $_getDeleted), $result);
         }
 
         return $result;
