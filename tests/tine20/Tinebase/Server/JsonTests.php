@@ -321,7 +321,7 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     public function testAppPwdApiCall()
     {
-        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH, 'a'));
         $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
             Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
             Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
@@ -346,7 +346,7 @@ class Tinebase_Server_JsonTests extends TestCase
             Tinebase_Core::unsetUser();
             $session->currentAccount = null;
             $session->{Tinebase_Model_AppPassword::class} = null;
-            $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'b')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+            $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH, 'b'));
             $resultString = $this->_handleRequest('Addressbook.searchContacts', [[], []], true,
                 'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n", true);
             $result = Tinebase_Helper::jsonDecode($resultString);
@@ -366,7 +366,7 @@ class Tinebase_Server_JsonTests extends TestCase
     public function testAppPwdApiCall1()
     {
         $this->_createAreaLockConfig();
-        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH, 'a'));
         $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
             Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
             Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,

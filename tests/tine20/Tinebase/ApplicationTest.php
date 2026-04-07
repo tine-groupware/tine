@@ -308,7 +308,6 @@ class Tinebase_ApplicationTest extends TestCase
             'Admin' => array(
                 Admin_Model_Config::class,
                 Admin_Model_EmailAccount::class,
-                Admin_Model_JWTAccessRoutes::class,
                 Admin_Model_SambaMachine::class,
                 Admin_Model_SchedulerTask::class,
                 Admin_Model_SchedulerTask_Import::class,

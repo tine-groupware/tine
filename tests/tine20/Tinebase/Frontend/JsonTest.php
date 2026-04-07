@@ -1206,15 +1206,16 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
     public function testAppPwd()
     {
+        $token = 'tooooooooken';
         $result = $this->_instance->saveAppPassword([
             Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => Tinebase_Core::getUser()->getId(),
             Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
-            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => 'foo',
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $token,
             Tinebase_Model_AppPassword::FLD_CHANNELS => [0=>0],
         ]);
 
         $this->assertArrayHasKey('id', $result);
-        $this->assertSame('foo', $result[Tinebase_Model_AppPassword::FLD_AUTH_TOKEN]);
+        $this->assertSame('sha3-512_' . hash('sha3-512', $token), $result[Tinebase_Model_AppPassword::FLD_AUTH_TOKEN]);
     }
 
     /**

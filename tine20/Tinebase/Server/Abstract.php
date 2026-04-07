@@ -247,61 +247,64 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     final protected function _handleAppPwdAuth(): void
     {
         $isGetAuth = false;
+        $basicAuthValue = null;
+        $isBasicAuth = false;
         if ($authValue = $this->_request->getHeader('Authorization', null)?->getFieldValue()) {
-            if (!str_starts_with((string)$authValue, 'Basic ') || false === ($authValue = base64_decode(substr((string)$authValue, 6), true))
-                || 2 !== count($authValue = explode(':', $authValue, 2))) {
-                return;
+            if (str_starts_with($authValue, 'Basic ') && ($basicAuthValue = base64_decode(substr($authValue, 6), true))
+                    && 2 === count($basicAuthValue = explode(':', $basicAuthValue, 2))) {
+                $isBasicAuth = true;
+            } elseif (str_starts_with($authValue, 'Bearer ')) {
+                $authValue = substr($authValue, 7);
             }
-        } elseif (($authValue = $this->_request->getQuery('Authorization')) && ($authValue = base64_decode($authValue, true))
-                && 2 === count($authValue = explode(':', $authValue, 2))) {
+        } elseif ($authValue = $this->_request->getQuery('Authorization')) {
             $isGetAuth = true;
+            if (($basicAuthValue = base64_decode((string)$authValue, true))
+                    && 2 === count($basicAuthValue = explode(':', $basicAuthValue, 2))) {
+                $isBasicAuth = true;
+            }
         } else {
             return;
         }
 
-        $appPwd = $authValue[1];
-        if (strlen($appPwd) !== Tinebase_Controller_AppPassword::PWD_LENGTH || strpos($appPwd, Tinebase_Controller_AppPassword::PWD_SUFFIX) !== Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) {
-            return;
-        }
-
-        try {
-            $user = Tinebase_User::getInstance()->getUserByLoginName($authValue[0], Tinebase_Model_FullUser::class);
-        } catch (Tinebase_Exception_NotFound) {
-            return;
-        }
-        $encryptedPwd = sha1($appPwd);
-
-        $oldValue = Tinebase_Controller_AppPassword::getInstance()->doContainerACLChecks(false);
-        try {
-            $appPwd = Tinebase_Controller_AppPassword::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_AppPassword::class, [
-                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_ACCOUNT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $user->getId()],
-                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_AUTH_TOKEN, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $encryptedPwd],
-                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
-                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_ALLOW_GET, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $isGetAuth ? true : Tinebase_Model_Filter_Bool::VALUE_NOTSET],
-                ])
-            )->getFirstRecord();
-        } finally {
-            Tinebase_Controller_AppPassword::getInstance()->doContainerACLChecks($oldValue);
-        }
-
-        if (null !== $appPwd) {
-            if (!Tinebase_Session::sessionExists()) {
+        $user = null;
+        if ($isBasicAuth) {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserByLoginName($basicAuthValue[0]);
+            } catch (Tinebase_Exception_NotFound) {
+                return;
+            }
+            $appPwd = Tinebase_Controller_AppPassword::getInstance()->getByToken($user->getId(), $basicAuthValue[1]);
+        } else {
+            if (null !== ($appPwd = Tinebase_Controller_AppPassword::getInstance()->getByJwt($authValue))) {
                 try {
-                    Tinebase_Core::startCoreSession();
-                } catch (Zend_Session_Exception) {
-                    // expire session cookie for client
-                    Tinebase_Session::expireSessionCookie();
-
-                    throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+                    $user = Tinebase_User::getInstance()->getFullUserById($appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID});
+                } catch (Tinebase_Exception_NotFound) {
+                    return;
                 }
             }
-
-            $session = Tinebase_Session::getSessionNamespace();
-            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
-            $session->currentAccount = $user;
-            Tinebase_Core::setUser($user);
         }
+        if (null === $appPwd) {
+            return;
+        }
+        if ($isGetAuth && !$appPwd->{Tinebase_Model_AppPassword::FLD_ALLOW_GET}) {
+            return;
+        }
+
+        if (!Tinebase_Session::sessionExists()) {
+            try {
+                Tinebase_Core::startCoreSession();
+            } catch (Zend_Session_Exception) {
+                // expire session cookie for client
+                Tinebase_Session::expireSessionCookie();
+
+                throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+            }
+        }
+
+        $session = Tinebase_Session::getSessionNamespace();
+        $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+        $session->currentAccount = $user;
+        Tinebase_Core::setUser($user);
     }
 
     /**

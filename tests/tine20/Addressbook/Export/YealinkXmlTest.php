@@ -30,7 +30,7 @@ class Addressbook_Export_YealinkXmlTest extends TestCase
 
     public function testAppPwdExportApiCall()
     {
-        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH, 'a'));
         $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
             Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
             Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
@@ -64,7 +64,7 @@ class Addressbook_Export_YealinkXmlTest extends TestCase
 
     public function testAppPwdExportApiCallNoFilter(): void
     {
-        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH, 'a'));
         $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
             Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
             Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,

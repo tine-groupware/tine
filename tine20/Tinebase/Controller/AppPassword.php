@@ -6,23 +6,28 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * controller for AppPassword
  *
  * @package     Tinebase
  * @subpackage  Controller
+ *
+ * @extends Tinebase_Controller_Record_Abstract<Tinebase_Model_AppPassword>
  */
 class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
 
-    public const PWD_SUFFIX = '~ApP\}';
-    public const PWD_SUFFIX_LENGTH = 6;
     public const PWD_LENGTH = 26;
+    public const PWD_MIN_LENGTH = 10;
 
     /**
      * the constructor
@@ -101,10 +106,93 @@ class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstrac
 
     protected function _inspectPwd(Tinebase_Model_AppPassword $_record): void
     {
-        $appPwd = $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN};
-        if (strlen((string) $appPwd) !== Tinebase_Controller_AppPassword::PWD_LENGTH || strpos((string) $appPwd, Tinebase_Controller_AppPassword::PWD_SUFFIX) !== Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) {
+        if (null === ($appPwd = $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN}) || preg_match('/^sha(1|3-512)_/', $appPwd)) {
             return;
         }
-        $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN} = sha1((string) $appPwd);
+        $appPwd = (string)$appPwd;
+        if (strlen($appPwd) < self::PWD_MIN_LENGTH) {
+            throw new Tinebase_Exception_UnexpectedValue('Password too short.');
+        }
+        $_record->{Tinebase_Model_AppPassword::FLD_AUTH_TOKEN} = 'sha3-512_' . hash('sha3-512', $appPwd);
+    }
+
+    public function getByToken(string $userId, string $token): ?Tinebase_Model_AppPassword
+    {
+        $oldValue = $this->doContainerACLChecks(false);
+        try {
+            return $this->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_AppPassword::class, [
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_ACCOUNT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $userId],
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_AUTH_TOKEN, TMFA::OPERATOR => 'in', TMFA::VALUE => [
+                        'sha1_' . sha1($token),
+                        'sha3-512_' . hash('sha3-512', $token),
+                    ]],
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
+                ])
+            )->getFirstRecord();
+        } finally {
+            $this->doContainerACLChecks($oldValue);
+        }
+    }
+
+    public function getByJwt(string $token): ?Tinebase_Model_AppPassword
+    {
+        $tks = explode('.', $token);
+        if (count($tks) != 3) {
+            return null;
+        }
+        [$headb64] = $tks;
+        try {
+            if (null === ($header = JWT::jsonDecode(JWT::urlsafeB64Decode($headb64)))) {
+                return null;
+            }
+        } catch (Exception) {
+            return null;
+        }
+        if (!isset($header->kid) || !isset($header->alg)) {
+            return null;
+        }
+
+        $oldValue = $this->doContainerACLChecks(false);
+        try {
+            foreach ($this->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_AppPassword::class, [
+                        [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_JWT_KEY_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $header->kid],
+                        [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => Tinebase_DateTime::now()],
+                    ])) as $appPwd) {
+                try {
+                    $jwt = JWT::decode($token, new \Firebase\JWT\Key($appPwd->getPasswordFromProperty(Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY), $header->alg));
+                } catch (Exception) {
+                    continue;
+                }
+                if ($jwt->account_id !== $appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID}
+                    /* legacy, remove: */ && (!isset($jwt->iss) ||  40 !== strlen($jwt->iss))) {
+                    continue;
+                }
+                return $appPwd;
+            }
+        } finally {
+            $this->doContainerACLChecks($oldValue);
+        }
+
+        return null;
+    }
+
+    public function generateJwt(array $data): Tinebase_Model_AppPassword
+    {
+        return $this->create(new Tinebase_Model_AppPassword(array_merge([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => Tinebase_Record_Abstract::generateUID(),
+        ], $data)));
+    }
+
+    public function getNewJwtToken(array $data): string
+    {
+        $appPwd = $this->generateJwt($data);
+
+        return JWT::encode([
+            'account_id' => $appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID},
+        ], $data[Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY], 'HS512', $appPwd->{Tinebase_Model_AppPassword::FLD_JWT_KEY_ID});
     }
 }
