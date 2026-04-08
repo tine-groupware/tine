@@ -204,7 +204,7 @@ release-update-tests:
       log "determining starting version"
       export starting_version=$(test_release_update_test_determine_start_version)
       if [ -z "${starting_version}" ]; then
-        log "could not determine staring version. RELEASE_UPDATE_TEST_START_REF needs to be set for not next(main)/beta/lts branches."
+        log "could not determine starting version. RELEASE_UPDATE_TEST_START_REF needs to be set for not next(main)/beta/lts branches."
         exit 1
       fi
       log "installing ${starting_version}"
