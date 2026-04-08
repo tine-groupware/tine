@@ -43,4 +43,17 @@ class Tinebase_Frontend_Http_CspRegistry
     {
         array_walk(self::$_sources, fn(&$v) => $v = []);
     }
+
+    public function registerAppSources(): void
+    {
+        $allApps = Tinebase_Application::getInstance()->getApplications();
+        foreach ($allApps as $app) {
+            if (Tinebase_Application::getInstance()->isInstalled($app->id, true)) {
+                $appConfig = $app->name . '_Config';
+                if (class_exists($appConfig) && method_exists($appConfig, 'registerCspSources')) {
+                    $appConfig::getInstance()->registerCspSources();
+                }
+            }
+        }
+    }
 }
