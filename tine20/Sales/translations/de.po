@@ -901,9 +901,6 @@ msgstr "Belegdatum ändern?"
 msgid "Change document date from { date } to today?"
 msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
 
-msgid "Document is booked. Accounting data is write-protected."
-msgstr "Der Beleg ist gebucht. Die Buchhaltungsdaten sind schreibgeschützt."
-
 msgid "Service Start Extended"
 msgstr "Leistungszeitraum erweitert"
 
@@ -2508,3 +2505,9 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
+
+msgid "Document lines"
+msgstr "Belegpositionen"
+
+msgid "Document is booked. Accounting data is write-protected."
+msgstr "Der Beleg ist gebucht. Die Buchhaltungsdaten sind schreibgeschützt."
