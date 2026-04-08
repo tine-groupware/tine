@@ -220,6 +220,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             }
         }
 
+        $gsSql = $gs->getSQL();
         if (substr($this->_operator, 0, 3) === 'not') {
             // join attendee to be excluded as a new column. records having this column NULL don't have the attendee
             $_select->joinLeft(
@@ -227,32 +228,20 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                 array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
                 /* on     */
                 $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
-                ' AND ' . $gs->getSQL(),
+                ($gsSql ? ' AND (' . $gsSql . ')' : ''),
                 /* select */
                 []);
             $_select->where($adapter->quoteIdentifier($dname . '.id') . ' IS NULL');
         } else {
-            if ($isExcept) {
-                $_select->joinLeft(
-                /* table  */
-                    array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
-                    /* on     */
-                    $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
-                    ' AND ' . $gs->getSQL(),
-                    /* select */
-                    []);
-                $_select->where($adapter->quoteIdentifier($dname . '.id') . ' IS NOT NULL');
-            } else {
-                $_select->joinLeft(
-                /* table  */
-                    array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
-                    /* on     */
-                    $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id'),
-                    /* select */
-                    []
-                );
-                $gs->appendWhere(Zend_Db_Select::SQL_OR);
-            }
+            $_select->joinLeft(
+            /* table  */
+                array($dname => $_backend->getTablePrefix() . 'cal_attendee'),
+                /* on     */
+                $adapter->quoteIdentifier($dname . '.cal_event_id') . ' = ' . $adapter->quoteIdentifier($_backend->getTableName() . '.id') .
+                ($gsSql ? ' AND (' . $gsSql . ')' : ''),
+                /* select */
+                []);
+            $_select->where($adapter->quoteIdentifier($dname . '.id') . ' IS NOT NULL');
         }
     }
     
