@@ -234,9 +234,11 @@ class Tinebase_TranslationTest extends TestCase
         $this->assertStringContainsString('langHelper.php [ options ]', $output[0]);
     }
 
+    /**
+     * @group noupdate
+     */
     public function testExtraTranslations()
     {
-
         $tinebaseTranslationsDir = realpath(__DIR__ . '/../../../tine20/Tinebase/translations');
         $extraTranslationsDir = $tinebaseTranslationsDir . '/extra/Addressbook';
         @mkdir($extraTranslationsDir, 0777, true);
