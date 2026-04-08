@@ -136,6 +136,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         // set the Content-Security-Policy header against clickjacking and XSS
         // @see https://developer.mozilla.org/en/Security/CSP/CSP_policy_directives
 
+        Tinebase_Frontend_Http_CspRegistry::getInstance()->registerAppSources();
+
         $scriptSrcs = array_merge(
             ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('script-src')
@@ -160,16 +162,6 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             ["'self'", 'blob:'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('object-src')
         );
-
-        $allApps = Tinebase_Application::getInstance()->getApplications();
-        foreach ($allApps as $app) {
-            if (Tinebase_Application::getInstance()->isInstalled($app->id, true)) {
-                $appConfig = $app->name . '_Config';
-                if (class_exists($appConfig) && method_exists($appConfig, 'registerCspSources')) {
-                    $appConfig::getInstance()->registerCspSources();
-                }
-            }
-        }
 
         if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
             $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
@@ -210,6 +202,11 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             ) . ' GMT',
         ];
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Headers: ' . print_r($header, true));
+        }
+
         return $header;
     }
 
@@ -229,8 +226,8 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             $jsonFileUri = $devServerURL . '/' . $jsonFile;
             $json = Tinebase_Helper::getFileOrUriContents($jsonFileUri);
             if (! $json) {
-                Tinebase_Core::getLogger()->err(self::class . '::' . __METHOD__
-                    . ' (' . __LINE__ .') Could not get json file: ' . $jsonFile);
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not get json file: ' . $jsonFile);
                 throw new Exception('You need to run webpack-dev-server in dev mode! See https://wiki.tine20.org/Developers/Getting_Started/Working_with_GIT#Install_webpack');
             }
         } else if ($absoluteJsonFilePath = self::getAbsoluteAssetsJsonFilename()) {
@@ -286,8 +283,10 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 }
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->notice(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') cannot filter assetMap by installed apps');
-            Tinebase_Core::getLogger()->notice(self::class . '::' . __METHOD__ . ' (' . __LINE__ .') ' . $e);
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' cannot filter assetMap by installed apps');
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $e);
         }
 
         return sha1(json_encode($map) . TINE20_BUILDTYPE);
