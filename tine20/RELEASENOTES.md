@@ -3,7 +3,7 @@ TINE RELEASE NOTES
 =====================
                     
   Release:     Mats (2026.11)
-  Last change: 2026-02-25
+  Last change: 2026-04-08
 
 # GENERAL CHANGES (Administrative/Operative)
 
@@ -14,3 +14,6 @@ TINE RELEASE NOTES
 ## PHP 8.4 Support has been added
 
 ## PHP 8.1 Support has been dropped
+
+# New App "Poll"
+- Added new app for managing polls and surveys
