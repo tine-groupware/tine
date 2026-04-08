@@ -146,9 +146,9 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     // sales_tax & sales_tax_by_rate
                     // ok discount is already applied -> lower sales_tax_by_rate by discount rate
                     sales_tax = this.recordClass.toFixed(Object.keys(sums['gross_sum_by_tax_rate']).reduce((a, rate) => {
-                        const factor = (1 - record.get('invoice_discount_sum') / record.get('positions_gross_sum')) || 0
-                        ['sales_tax_by_rate', 'net_sum_by_tax_rate', 'gross_sum_by_tax_rate'].forEach(key => sums[key][rate] = sums[key][rate] * factor)
-                        return a + sums['sales_tax_by_rate'][rate]
+                        const factor = (1 - record.get('invoice_discount_sum') / record.get('positions_gross_sum')) || 0;
+                        ['sales_tax_by_rate', 'net_sum_by_tax_rate', 'gross_sum_by_tax_rate'].forEach(key => sums[key][rate] = sums[key][rate] * factor);
+                        return a + sums['sales_tax_by_rate'][rate];
                     }, 0))
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
