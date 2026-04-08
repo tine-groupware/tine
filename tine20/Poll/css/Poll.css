@@ -1,0 +1,9 @@
+.PollIconCls {
+    background-image:url(../../images/oxygen/16x16/status/dialog-password.png) !important;
+}
+.x-btn-medium .PollIconCls {
+    background-image:url(../../images/oxygen/22x22/status/dialog-password.png) !important;
+}
+.x-btn-large .PollIconCls {
+    background-image:url(../../images/oxygen/32x32/status/dialog-password.png) !important;
+}

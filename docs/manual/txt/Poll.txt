@@ -1,0 +1,10 @@
+[[chap.poll]]
+== Poll ==
+////
+Author:  <@metaways.de>
+////
+
+[[sec.poll.einleitung]]
+=== Einleitung ===
+
+{{{/Poll}}}
