@@ -1,0 +1,19 @@
+{
+  "name": "Poll",
+  "version": "0.0.1",
+  "description": "Tine 2.0 Poll",
+  "main": "Poll.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cash",
+    "book"
+  ],
+  "author": "Christian Feitl",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type" : "git",
+    "url" : "https://gerrit.tine20.com/customers/p/tine20-Poll.git"
+  }
+}

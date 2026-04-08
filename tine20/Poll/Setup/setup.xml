@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>Poll</name>
+    <!-- gettext('Poll') -->
+    <version>19.0</version>
+    <status>enabled</status>
+    <depends>
+    </depends>
+</application>
