@@ -788,15 +788,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         const date = record.data?.received ?? '';
 
         const createImageElements = (icons) => {
-            return icons.map(icon => `
-                <img 
-                  src="${icon.src || ''}" 
-                  class="felamimail-message-icon ${icon.cls || icon.name || ''}" 
-                  id="${icon.name}"
-                  alt="${icon.name}"
-                  ${icon.qtip ? `ext:qtip="${icon.qtip}"` : ''}
-                >
-              `).join('');
+            return icons
+                .filter(icon => icon.src) // remove empty src
+                .map(icon => `
+              <img 
+                src="${icon.src}" 
+                class="felamimail-message-icon ${icon.cls || icon.name || ''}" 
+                id="${icon.name}"
+                alt="${icon.name}"
+                ${icon.qtip ? `ext:qtip="${icon.qtip}"` : ''}
+                style="display:none;"
+                onload="this.style.display='inline-block';"
+              >
+            `).join('');
         };
 
         const html = `
