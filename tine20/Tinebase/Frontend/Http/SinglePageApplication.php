@@ -147,11 +147,12 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('connect-src')
         );
         $imgSrcs = array_merge(
-            ["'self'", 'data:', 'blob:'],
+        //@todo: deal with extern images in emails, delete 'https:' when done
+            ["'self'", 'data:', 'blob:', 'https:'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('img-src')
         );
         $frameSrcs = array_merge(
-            ["'self'"],
+            ["'self'", 'blob:'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('frame-src')
         );
         $styleSrcs = array_merge(

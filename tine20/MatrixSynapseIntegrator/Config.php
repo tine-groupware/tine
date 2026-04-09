@@ -267,7 +267,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     {
         $url = $this->get(MatrixSynapseIntegrator_Config::ELEMENT_URL);
 
-        if (!empty($url)) {
+        if (!empty($url) && !(str_contains($url, '{MATRIX_USER_ID}'))) {
             $parsed = parse_url(rtrim($url, '/'));
             $origin = $parsed['scheme'] . '://' . $parsed['host']
                 . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
