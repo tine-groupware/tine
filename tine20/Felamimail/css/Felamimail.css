@@ -138,6 +138,14 @@
     color: #aaaaaa;
 }
 
+.flag_answered {
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/corner-up-left.svg) !important;
+}
+
+.flag_passed {
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/corner-up-right.svg) !important;
+}
+
 .is_spam_suspicions td {
     color: #D8A45B;
 }
@@ -150,6 +158,8 @@
     width: 12px;
     height: 12px;
     padding-left: 2px;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .FelamimailFlagIcon.MessageFileIcon {
@@ -557,6 +567,7 @@ em.emoji {
     width: 16px;
     height: 16px;
     background-repeat: no-repeat;
+    background-size: contain;
     margin: 0 2px;
 }
 
