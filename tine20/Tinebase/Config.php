@@ -4212,8 +4212,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             /** @noinspection PhpUndefinedMethodInspection */
             return $configClassName::getInstance();
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Application ' . $applicationName . ' has no config.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Application ' . $applicationName . ' has no config.');
+            }
             return NULL;
         }
     }
@@ -4224,19 +4226,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     public function registerCspSources(): void
     {
-        $url = $this->get(Tinebase_Config::BROADCASTHUB_URL);
+        $url = $this->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
 
         if (!empty($url)) {
             $parsed = parse_url(rtrim($url, '/'));
-            $origin = $parsed['scheme'] . '://' . $parsed['host']
-                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+            if ($parsed) {
+                $origin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
 
-            $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
-            $wsOrigin = $wsScheme . '://' . $parsed['host']
-                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+                $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
+                $wsOrigin = $wsScheme . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
 
-            Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $origin);
-            Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $wsOrigin);
+                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $origin);
+                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $wsOrigin);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Broadcasthub URL could not be parsed: ' . $url);
+                }
+            }
         }
     }
 }
