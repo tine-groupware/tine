@@ -354,6 +354,20 @@ mkdocs-deploy:
   timeout: 20m
   interruptible: false
 
+mkdocs-build-and-deploy-docker-image:
+  extends: .abstract_jobs.docker
+  stage: deploy
+  needs: []
+  script:
+    - docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
+    - docker login -u "tine+gitlabci " -p "${REGISTRY_RZ1_METAWAYS_NET_PASSWORD}" "registry.rz1.metaways.net"
+    - !reference [.lib, script]
+    - docs_build_docker_image
+    - docs_push_docker_image docker.io/tinegroupware/docs
+    - docs_push_docker_image registry.rz1.metaways.net/tine/docs
+  rules:
+    - !reference [mkdocs-deploy, rules]
+
 update-version-check:
   stage: deploy
   extends: .abstract_jobs.docker
