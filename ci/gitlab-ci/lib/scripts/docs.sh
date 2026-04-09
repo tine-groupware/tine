@@ -19,7 +19,7 @@ function docs_deploy () {
 
     echo $version $alias
 
-    build_php_doc
+    docs_build_php_doc
 
     # build and sync doc with correct site url for version an alias
     docs_build_and_sync $version
@@ -30,7 +30,7 @@ function docs_deploy () {
     docs_update_versions $version $alias
 }
 
-function build_php_doc() {
+function docs_build_php_doc() {
     cd tine20
     composer install --ignore-platform-reqs
     vendor/bin/phpdoc-md
@@ -71,4 +71,28 @@ function docs_update_versions() {
     cat $versions_path
 
     s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync $versions_path s3://${DOCS_S3_BUCKET}/versions.json
+}
+
+function docs_build_docker_image() {
+    image="${REGISTRY}/docs-commit:${IMAGE_TAG}"
+
+    docker build \
+        --target manual \
+        --tag $image \
+        --file ./docs/Dockerfile \
+        --build-arg SCREENSHOTS_S3_BUCKET \
+        --build-arg SCREENSHOTS_S3_HOST \
+        --build-arg SCREENSHOTS_S3_ACCESS_KEY \
+        --build-arg SCREENSHOTS_S3_SECRET_KEY \
+        .
+
+}
+
+function docs_push_docker_image() {
+    target=$1
+    tag=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    image="${REGISTRY}/docs-commit:${IMAGE_TAG}"
+
+    docker tag $image $target:$tag
+    docker push $target:$tag
 }
