@@ -2344,6 +2344,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 //            'label' => 'Bank Holiday Calendar' // _('Bank Holiday Calendar')
         )));
 
+        if (!Tinebase_Core::isReplica()) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => Tinebase_Model_Instance::class,
+                'application_id' => $application,
+                'model' => Tinebase_Model_Instance::class,
+            )));
+        }
+
         return $result;
     }
 

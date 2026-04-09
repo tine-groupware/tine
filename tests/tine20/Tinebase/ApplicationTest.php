@@ -537,6 +537,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_Image::class,
                 Tinebase_Model_ImportException::class,
                 Tinebase_Model_ImportExportDefinition::class,
+                Tinebase_Model_Instance::class,
+                Tinebase_Model_InstanceMailDomain::class,
                 Tinebase_Model_JsonRecordWrapper::class,
                 Tinebase_Model_LogEntry::class,
                 Tinebase_Model_MFA_Config::class,

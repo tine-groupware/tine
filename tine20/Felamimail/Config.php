@@ -635,4 +635,21 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     {
         return self::$_properties;
     }
+
+    /**
+     * @throws Tinebase_Exception_InvalidArgument
+     * @see Tinebase_Frontend_Http_SinglePageApplication::getHeaders()
+     */
+    public function registerCspSources(): void
+    {
+        $supportedMailServers = $this->get(self::TRUSTED_MAIL_DOMAINS);
+        foreach ($supportedMailServers as  $data) {
+            if (!empty($data['image']) && !str_contains($data['image'], 'icon-set')) {
+                $parsed = parse_url(rtrim($data['image'], '/'));
+                $origin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('img-src', $origin);
+            }
+        }
+    }
 }

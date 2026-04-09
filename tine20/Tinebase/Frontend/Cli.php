@@ -2373,6 +2373,31 @@ fi';
         return 0;
     }
 
+    public function importInstances(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['path']) || empty($data['path'])) {
+            echo 'mandatory argument "path" missing' . PHP_EOL;
+            return 1;
+        }
+
+        $importer = new Tinebase_Import_Instance_Yaml([
+            'model' => Tinebase_Model_Instance::class
+        ]);
+
+        $importResult = $importer->importFile($data['path']);
+
+        if ($importResult) {
+            echo 'import instances: ' . print_r($importResult, true) . PHP_EOL;
+        } else {
+            echo 'instances import failed' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
     public function syncFileTreeFromBackupDB(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();

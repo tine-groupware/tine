@@ -105,6 +105,22 @@ class Tinebase_Frontend_CliTest extends TestCase
         return $opts;
     }
 
+    public function testImportInstances()
+    {
+        $result = $this->_appCliHelper('Tinebase', 'importInstances', [
+            'path=' . dirname(__FILE__) . '/../files/import_instances.yaml',
+        ]);
+        $this->assertStringContainsString('[totalcount] => 2', $result);
+        $instances = Tinebase_Controller_Instance::getInstance()->search(_getRelations: true);
+        $this->assertEquals(2, count($instances));
+
+        // test update instances
+        $result = $this->_appCliHelper('Tinebase', 'importInstances', [
+            'path=' . dirname(__FILE__) . '/../files/import_instances.yaml',
+        ]);
+        $this->assertStringContainsString('[updatecount] => 2', $result);
+    }
+
     /**
      * test purge deleted records
      */

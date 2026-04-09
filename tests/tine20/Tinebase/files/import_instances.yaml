@@ -1,0 +1,15 @@
+customers:
+  test1:
+    name: "test1"
+    fqdn: "test1.test.de"
+    smtp:
+      primarydomain: test1.primarydomain.de
+      secondarydomains: "test1.secondarydomains.de,test1.secondarydomains2.de"
+
+  test2:
+    name: "test2"
+    fqdn: "test2.test.de"
+    smtp:
+      primarydomain: test2.primarydomain.de
+      secondarydomains: "test2.secondarydomains.de,test2.secondarydomains2.de"
+
