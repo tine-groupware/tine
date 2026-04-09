@@ -165,6 +165,23 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $appointment_status = EventManager_Config::getInstance()->get(EventManager_Config::APPOINTMENT_STATUS)
             ->records->getById('1');
 
+        //contact_fields
+        $defaultContactFields = [
+            'n_given'               => true,
+            'n_middle'              => true,
+            'n_family'              => true,
+            'bday'                  => true,
+            'email'                 => true,
+            'tel_cell'              => true,
+            'tel_work'              => true,
+            'adr_one_street'        => true,
+            'adr_one_street2'       => true,
+            'adr_one_postalcode'    => true,
+            'adr_one_locality'      => true,
+            'adr_one_region'        => true,
+            'adr_one_countryname'   => true,
+        ];
+
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
             EventManager_Model_Event::FLD_NAME                          => 'Familienexerzitien 2025',
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-10-20 17:00:00"),
@@ -177,6 +194,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_TOTAL_PLACES                  => 39,
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_OPTIONS                       => [
                 [
                     EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
@@ -276,6 +294,7 @@ Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
@@ -315,6 +334,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -342,6 +362,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -368,6 +389,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
@@ -387,6 +409,7 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
@@ -411,6 +434,7 @@ und aus weiteren Materialien vorgestellt.',
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Herzliche Einladung zu einem nächsten Online-Abend zum Thema "Familiengottesdienste".
@@ -433,6 +457,7 @@ www.kindergottesdienst-katholisch.de',
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
@@ -461,6 +486,7 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
             EventManager_Model_Event::FLD_TOTAL_PLACES                  => 20,
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
+            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_OPTIONS                       => [
                 [
                     EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
