@@ -249,6 +249,12 @@ msgstr ""
 msgid "The session should end after it begun. Please change the end time, or it would be deleted"
 msgstr ""
 
+msgid "Registration Contact Fields"
+msgstr ""
+
+msgid "Contact Fields"
+msgstr ""
+
 msgid "Waiting List"
 msgstr ""
 
@@ -270,10 +276,7 @@ msgstr ""
 msgid "Cancel Registration"
 msgstr ""
 
-msgid "You don't have any registrations for yourself yet. Get started by creating one!"
-msgstr ""
-
-msgid "Users you registered"
+msgid "You don't have any registrations yet. Get started by creating one!"
 msgstr ""
 
 msgid "Create a new registration"
@@ -806,9 +809,6 @@ msgid "Text Output"
 msgid_plural "Text Outputs"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Event Contacts"
-msgstr ""
 
 msgid "EventManager"
 msgstr ""

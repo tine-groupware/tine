@@ -38,6 +38,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_REGISTRATION_POSSIBLE_UNTIL = 'registration_possible_until';
     public const FLD_REGISTER_OTHERS = 'register_others';
+    public const FLD_CONTACT_FIELDS = 'contact_fields';
 
     const MODEL_NAME_PART = 'Event';
     const TABLE_NAME = 'eventmanager_event';
@@ -274,6 +275,13 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL       => 1,
                 self::NAME              => EventManager_Config::EVENT_REGISTER_OTHERS,
                 self::NULLABLE          => true,
+            ],
+            self::FLD_CONTACT_FIELDS       => [
+                self::LABEL                 => 'Contact Fields', //_('Contact Fields')
+                self::TYPE                  => self::TYPE_JSON,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+                self::NULLABLE              => true,
             ],
         ]
     ];

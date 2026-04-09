@@ -1,6 +1,6 @@
 <!--
 /*
- * Tine 2.0
+ * tine Groupware
  *
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Tonia Wulff <t.wulff@metaways.de>
@@ -37,181 +37,25 @@
             {{formatMessage('Participant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedParticipant }">▼</span>
           </h4>
           <b-collapse visible id="collapse-1">
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Salutation')"
-              class="mb-3"
-            >
-              <b-form-select v-model="contactDetails.salutation" :options="salutations"></b-form-select>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Title')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.title"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('First Name') + '*'"
-              class="mb-3"
-            >
-              <b-form-input
-                v-model="contactDetails.n_given"
-                :class="{ 'required-field-error': validationErrors.includes('n_given') }"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Middle Name')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.n_middle"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Last Name') + '*'"
-              class="mb-3"
-            >
-              <b-form-input
-                v-model="contactDetails.n_family"
-                :class="{ 'required-field-error': validationErrors.includes('n_family') }"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Company')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.org_name"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Day of Birth')"
-              class="mb-3"
-            >
-              <b-form-input
-                id="birthday-input"
-                type="date"
-                class="form-registration"
-                v-model="contactDetails.bday"
-                :max="maxBirthDate"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('E-mail') + '*'"
-              class="mb-3"
-            >
-              <b-form-input
-                v-model="contactDetails.email"
-                :class="{ 'required-field-error': validationErrors.includes('email') }"
-              ></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Mobile')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.tel_cell"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Telephone')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.tel_home"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Street')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.adr_one_street"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('House Nr.')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.adr_one_street2"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Postal Code')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.adr_one_postalcode"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('City')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.adr_one_locality"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Region')"
-              class="mb-3"
-            >
-              <b-form-input v-model="contactDetails.adr_one_region"></b-form-input>
-            </b-form-group>
-            <b-form-group
-              label-cols-sm="4"
-              label-cols-lg="3"
-              content-cols-sm
-              content-cols-lg="7"
-              :label="formatMessage('Country')"
-              class="mb-3"
-            >
-              <b-form-select v-model="contactDetails.adr_one_countryname" :options="countries"></b-form-select>
-            </b-form-group>
+            <template v-for="fieldName in visibleContactFields" :key="fieldName">
+              <b-form-group
+                label-cols-sm="4"
+                label-cols-lg="3"
+                content-cols-sm
+                content-cols-lg="7"
+                :label="registrationContactFields[fieldName].label + (requiredFields.includes(fieldName) ? ' *' : '')"
+                class="mb-3"
+              >
+                <component
+                  :is="contactFieldConfig[fieldName]?.component || 'b-form-input'"
+                  v-model="contactDetails[fieldName]"
+                  v-bind="contactFieldConfig[fieldName]?.props?.()"
+                  :class="{
+                    'required-field-error': requiredFields.includes(fieldName) && validationErrors.includes(fieldName)
+                  }"
+                />
+              </b-form-group>
+            </template>
           </b-collapse>
         </b-col>
       </b-row>
@@ -352,182 +196,25 @@
                 {{formatMessage('Registrant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
               </h4>
               <b-collapse visible id="collapse-3">
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Salutation')"
-                  class="mb-3"
-                >
-                  <b-form-select v-model="registrantDetails.salutation" :options="salutations"></b-form-select>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Title')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.title"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('First Name') + '*'"
-                  class="mb-3"
-                >
-                  <b-form-input
-                    v-model="registrantDetails.n_given"
-                    :class="{ 'required-field-error': validationErrors.includes('n_given') }"
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Middle Name')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.n_middle"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Last Name') + '*'"
-                  class="mb-3"
-                >
-                  <b-form-input
-                    v-model="registrantDetails.n_family"
-                    :class="{ 'required-field-error': validationErrors.includes('n_family') }"
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Company')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.org_name"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Day of Birth')"
-                  class="mb-3"
-                >
-                  <b-form-input
-                    id="birthday-input2"
-                    type="date"
-                    class="form-registration"
-                    v-model="registrantDetails.bday"
-                    :max="maxBirthDate"
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('E-mail') + '*'"
-                  class="mb-3"
-                >
-                  <b-form-input
-                    v-model="registrantEmail"
-                    :class="{ 'required-field-error': validationErrors.includes('email') }"
-                    :readonly="isVerifyEmailRegistrant"
-                  ></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Mobile')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.tel_cell"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Telephone')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.tel_home"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Street')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.adr_one_street"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('House Nr.')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.adr_one_street2"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Postal Code')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.adr_one_postalcode"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('City')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.adr_one_locality"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Region')"
-                  class="mb-3"
-                >
-                  <b-form-input v-model="registrantDetails.adr_one_region"></b-form-input>
-                </b-form-group>
-                <b-form-group
-                  label-cols-sm="4"
-                  label-cols-lg="3"
-                  content-cols-sm
-                  content-cols-lg="7"
-                  :label="formatMessage('Country')"
-                  class="mb-3"
-                >
-                  <b-form-select v-model="registrantDetails.adr_one_countryname" :options="countries"></b-form-select>
-                </b-form-group>
+                <template v-for="fieldName in visibleContactFields" :key="fieldName">
+                  <b-form-group
+                    label-cols-sm="4"
+                    label-cols-lg="3"
+                    content-cols-sm
+                    content-cols-lg="7"
+                    :label="registrationContactFields[fieldName].label + (requiredFields.includes(fieldName) ? ' *' : '')"
+                    class="mb-3"
+                  >
+                    <component
+                      :is="contactFieldConfig[fieldName]?.component || 'b-form-input'"
+                      v-model="registrantDetails[fieldName]"
+                      v-bind="contactFieldConfig[fieldName]?.props?.()"
+                      :class="{
+                    'required-field-error': requiredFields.includes(fieldName) && validationErrors.includes(fieldName)
+                  }"
+                    />
+                  </b-form-group>
+                </template>
               </b-collapse>
             </b-col>
           </b-row>
@@ -617,6 +304,7 @@ const registrationId = ref(null);
 const dependantParticipants = ref(null);
 const registrations = ref(null);
 const accountOwner = ref(null);
+const registrationContactFields = ref([]);
 
 const eventDetails = ref({
   name: "",
@@ -1237,11 +925,53 @@ const hasGroupValidationError = (groupName) => {
   return groupOptions.some(option => validationErrors.value.includes(option.id));
 };
 
+const contactFieldConfig = {
+  salutation: {
+    component: 'b-form-select',
+    props: () => ({ options: salutations.value })
+  },
+  bday: {
+    component: 'b-form-input',
+    props: () => ({ type: 'date', max: maxBirthDate.value })
+  },
+  adr_one_countryname: {
+    component: 'b-form-select',
+    props: () => ({ options: countries.value })
+  },
+};
+
+const contactFieldOrder = [
+  'salutation', 'title', 'n_given', 'n_middle', 'n_family',
+  'org_name', 'bday', 'email', 'tel_cell', 'tel_home',
+  'adr_one_street', 'adr_one_street2', 'adr_one_postalcode',
+  'adr_one_locality', 'adr_one_region', 'adr_one_countryname'
+];
+
+const visibleContactFields = computed(() => {
+  const fields = registrationContactFields.value;
+  if (!fields) return [];
+
+  const enabledFields = Object.keys(fields).filter(
+    fieldName => fields[fieldName]?.enabled === true
+  );
+
+  return enabledFields.sort((a, b) => {
+    const indexA = contactFieldOrder.indexOf(a);
+    const indexB = contactFieldOrder.indexOf(b);
+
+    if (indexA === -1 && indexB === -1) return 0;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  });
+});
+
+const requiredFields = ['n_given', 'n_family', 'email'];
+
 const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
-  const requiredFields = ['n_given', 'n_family', 'email'];
   const missingFields = _.filter(requiredFields, field =>
     _.isEmpty(_.get(contactDetails.value, field, '').trim())
   );
@@ -1634,6 +1364,7 @@ const fetchEvent = async () => {
   });
   const data = await response.json();
   eventDetails.value = data;
+  registrationContactFields.value = data.contact_fields;
   initializeEventOptions();
 };
 
