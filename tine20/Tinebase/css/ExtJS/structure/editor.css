@@ -1,0 +1,23 @@
+/*!
+ * Ext JS Library 3.1.1
+ * Copyright(c) 2006-2010 Ext JS, LLC
+ * licensing@extjs.com
+ * http://www.extjs.com/license
+ */
+.x-html-editor-wrap {
+    border:1px solid;
+}
+
+.x-html-editor-tb .x-btn-text {
+    background:transparent no-repeat;
+}
+
+
+.x-html-editor-tip .x-tip-bd .x-tip-bd-inner {
+    padding:5px;
+    padding-bottom:1px;
+}
+
+.x-html-editor-tb .x-toolbar {
+    position:static !important;
+}

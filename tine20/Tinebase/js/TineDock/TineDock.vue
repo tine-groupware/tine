@@ -314,7 +314,16 @@ const { y, arrivedState } = useScroll(tineDockRef, { behavior: 'smooth' })
         font-size: 8px;
       }
     }
-
+    .ApplicationIconCls {
+      background-size: 30px 30px !important;
+      transition: all 0.3s ease-in-out;
+      &:hover {
+        background-size: 34px 34px !important;
+      }
+      &:active {
+        background-size: 30px 30px !important;
+      }
+    }
     .dragged-item{
       opacity: 0.5;
       cursor: pointer;
