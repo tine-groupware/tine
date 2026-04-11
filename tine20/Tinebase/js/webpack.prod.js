@@ -22,7 +22,7 @@ module.exports = merge(common, {
         new UnminifiedWebpackPlugin({
             postfix : 'debug',
             replace: [[/(Tine\.clientVersion\.buildType\s*=\s*)'RELEASE'/, "$1'DEBUG'"]],
-            exclude: /Tinebase\/css\/build\/.*/
+            exclude: /Tinebase\/styles\/build\/.*/
         }),
         new BrotliPlugin({})
     ],

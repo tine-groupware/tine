@@ -35,12 +35,12 @@
     },
     {
       "name": "ExampleApplication FAT Client",
-      "file": "css/ExampleApplication-FAT.css",
+      "file": "styles/ExampleApplication-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "ExampleApplication.css",
-          "path": "css/"
+          "text": "ExampleApplication.scss",
+          "path": "styles/"
         }
       ]
     }

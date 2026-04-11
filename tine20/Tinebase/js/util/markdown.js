@@ -1,4 +1,4 @@
-import '../../css/util/markdown.less'
+import '../../styles/util/markdown.scss'
 
 let marked
 let DOMPurify

@@ -5,7 +5,7 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-import '../../../css/ux/form/FieldTriggerPlugin.css'
+import '../../../styles/ux/form/FieldTriggerPlugin.scss'
 
 class FieldTriggerPlugin {
     triggerClass = 'x-form-trigger'

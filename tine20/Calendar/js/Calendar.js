@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-require('../css/Calendar.css');
+require('../styles/Calendar.scss');
 
 require('./Application');
 require('./MainScreen');

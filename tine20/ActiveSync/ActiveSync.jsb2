@@ -43,12 +43,12 @@
     },
     {
       "name": "ActiveSync FAT Client",
-      "file": "css/ActiveSync-FAT.css",
+      "file": "styles/ActiveSync-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "ActiveSync.css",
-          "path": "css/"
+          "text": "ActiveSync.scss",
+          "path": "styles/"
         }
       ]
     }

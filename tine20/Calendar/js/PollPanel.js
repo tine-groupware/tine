@@ -10,7 +10,7 @@
 
 Ext.ns('Tine.Calendar');
 
-require('../css/PollPanel.css');
+require('../styles/PollPanel.scss');
 
 Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
     /**
