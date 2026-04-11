@@ -8,7 +8,7 @@
 
 Ext.ns('Tine.Calendar');
 
-require('../css/timelinepanel.css');
+require('../styles/timelinepanel.scss');
 
 /**
  * @namespace   Tine.Calendar

@@ -8,7 +8,7 @@
 
 Ext.ns('Tine.Calendar');
 
-require('../css/yearviewpanel.css');
+require('../styles/yearviewpanel.scss');
 require('./Printer/YearView');
 
 /**

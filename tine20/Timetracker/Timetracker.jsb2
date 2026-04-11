@@ -75,12 +75,12 @@
     },
     {
       "name": "Timetracker FAT Client",
-      "file": "css/Timetracker-FAT.css",
+      "file": "styles/Timetracker-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Timetracker.css",
-          "path": "css/"
+          "text": "Timetracker.scss",
+          "path": "styles/"
         }
       ]
     }

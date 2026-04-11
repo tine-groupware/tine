@@ -20,7 +20,7 @@ tine20/*/*/*FAT*
 tine20/*/js/*-lang-*
 tine20/Tinebase/js/Locale/build/*.js
 tine20/Tinebase/js/build/*
-tine20/Tinebase/css/build/*
+tine20/Tinebase/styles/build/*
 scripts/packaging/tine20build/
 .vagrant
 scripts/vagrant/tmp

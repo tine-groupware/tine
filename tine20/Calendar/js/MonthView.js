@@ -8,7 +8,7 @@
 
 Ext.ns('Tine.Calendar');
 
-require('../css/monthviewpanel.css');
+require('../styles/monthviewpanel.scss');
 require('./Printer/MonthView');
 
 /**
