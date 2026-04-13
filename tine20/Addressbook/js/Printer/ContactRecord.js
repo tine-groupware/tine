@@ -1,7 +1,7 @@
 Ext.ns('Tine.Addressbook.Printer');
 
 Tine.Addressbook.Printer.ContactRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
-    stylesheetPath: 'Tinebase/css/widgets/print.css',
+    stylesheetPath: 'Tinebase/styles/widgets/print.css',
 
     generateBody: function(component, data) {
         var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;

@@ -23,12 +23,12 @@
     },
     {
       "name": "Inventory FAT Client",
-      "file": "css/Inventory-FAT.css",
+      "file": "styles/Inventory-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Inventory.css",
-          "path": "css/"
+          "text": "Inventory.scss",
+          "path": "styles/"
         }
       ]
     }

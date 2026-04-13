@@ -167,9 +167,9 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
             text: String.format(
                 '<img src="{0}" class="x-menu-item-icon x-cols-icon" />{1}',
                 Ext.BLANK_IMAGE_URL,
-                this._view.columnsText
+                'Fritten'//this._view.columnsText
             ),
-            style: 'line-height:16px;padding:3px 21px 3px 27px;'
+            style: 'line-height:16px;padding:3px 21px 3px 27px;position: relative;'
         }));
     },
 

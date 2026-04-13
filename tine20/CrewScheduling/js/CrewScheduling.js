@@ -14,7 +14,7 @@ import './Calendar/EventCSPanel';
 Ext.ns('Tine.CrewScheduling');
 
 require('./MainScreen');
-require('../css/crewScheduling.css');
+require('../styles/crewScheduling.scss');
 
 /**
  * @namespace   Tine.CrewScheduling

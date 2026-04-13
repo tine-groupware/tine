@@ -31,8 +31,8 @@ require('./FilePublishedDialog.js');
 require('./NotificationPanel.js');
 require('./NotificationGridPanel.js');
 require('./RevisionPanel.js');
-require('../css/Filemanager.css');
-require('../css/Node.css');
+require('../styles/Filemanager.scss');
+require('../styles/Node.scss');
 
 
 /**

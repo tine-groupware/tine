@@ -111,28 +111,28 @@
     },
     {
       "name": "Addressbook FAT Client",
-      "file": "css/Addressbook-FAT.css",
+      "file": "styles/Addressbook-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Addressbook.css",
-          "path": "css/"
+          "text": "Addressbook.scss",
+          "path": "styles/"
         },
         {
-          "text": "Contact.css",
-          "path": "css/"
+          "text": "Contact.scss",
+          "path": "styles/"
         },
         {
-          "text": "List.css",
-          "path": "css/"
+          "text": "List.scss",
+          "path": "styles/"
         },
         {
-          "text": "Structure.css",
-          "path": "css/"
+          "text": "Structure.scss",
+          "path": "styles/"
         },
         {
-          "text": "Resource.css",
-          "path": "css/"
+          "text": "Resource.scss",
+          "path": "styles/"
         }
       ]
     }
