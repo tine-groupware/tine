@@ -31,12 +31,12 @@ if (!window.Promise) {
     }, 2000);
 } else {
     try {
-        require.ensure(['Tinebase.js'], function () {
-            var libs = require('Tinebase.js');
+        require.ensure(['tinebase.js'], function () {
+            var libs = require('tinebase.js');
 
             libs.lodash.assign(window, libs);
             require('tineInit');
-        }, 'Tinebase/js/Tinebase');
+        }, 'Tinebase/js/tinebase');
     } catch (e) {
         window.location.reload(true);
     }
