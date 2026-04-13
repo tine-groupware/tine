@@ -10,8 +10,8 @@
  * setup webpack entry
  */
 import(
-    /* webpackChunkName: "Tinebase/js/Tinebase" */
-    'Tinebase.js'
+    /* webpackChunkName: "Tinebase/js/tinebase" */
+    'tinebase.js'
 ).then(function (libs) {
     libs.lodash.assign(window, libs);
     require('tineInit');
