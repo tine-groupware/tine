@@ -7,8 +7,7 @@
  */
 
 import '../styles/element.scss'
-// TODO activate when ready
-// import './Addressbook/ListRoomPanel'
+import './Addressbook/ListRoomPanel'
 import './Admin/userEditDialogRecordFormPlugin'
 import './Application'
 import './MainScreen'

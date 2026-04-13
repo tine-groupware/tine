@@ -35,7 +35,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
                         account_id: userId
                     };
                 },
-                validateValue : function(value) {
+                validateValue: function(value) {
                     return true;
                 }
             })

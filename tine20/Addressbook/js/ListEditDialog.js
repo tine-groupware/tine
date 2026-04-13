@@ -222,7 +222,10 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             plain: true,
             activeTab: 0,
             plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
+                ptype: 'ux.itemregistry',
+                key: 'Addressbook-List-EditDialog-TabPanel'
+            }, {
+                ptype: 'ux.tabpanelkeyplugin'
             }],
             items: tabpanelItems
         };

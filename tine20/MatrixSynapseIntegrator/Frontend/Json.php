@@ -26,6 +26,7 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
      */
     protected $_configuredModels = [
         MatrixSynapseIntegrator_Model_MatrixAccount::MODEL_NAME_PART,
+        MatrixSynapseIntegrator_Model_Room::MODEL_NAME_PART,
     ];
 
     public function setRecoveryPassword(string $password): array
