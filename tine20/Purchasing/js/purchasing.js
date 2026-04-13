@@ -5,5 +5,6 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
 import '../styles/purchasing.less'
 import './Mainscreen'

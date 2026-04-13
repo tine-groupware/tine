@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Ext.ns('Tine.Felamimail');
+Ext.ns('Tine.Felamimail.sieve');
 /**
  * @param config
  * @constructor
