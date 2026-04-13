@@ -1546,24 +1546,12 @@ class Tinebase_Core
      */
     public static function logMemoryUsage()
     {
-        if (function_exists('memory_get_peak_usage')) {
-            $memory = memory_get_peak_usage(true);
-        } else {
-            $memory = memory_get_usage(true);
-        }
-        
-        return  ' Memory usage: ' . ($memory / 1024 / 1024) . ' MB';
+        return  ' Memory usage: ' . (memory_get_peak_usage(true) / 1024 / 1024) . ' MB';
     }
-    
+
     public static function logCacheSize()
     {
-        if(function_exists('realpath_cache_size')) {
-            $realPathCacheSize = realpath_cache_size();
-        } else {
-            $realPathCacheSize = 'unknown';
-        }
-        
-        return ' Real patch cache size: ' . $realPathCacheSize;
+        return ' Real patch cache size: ' . realpath_cache_size();
     }
     
     /******************************* REGISTRY ************************************/
