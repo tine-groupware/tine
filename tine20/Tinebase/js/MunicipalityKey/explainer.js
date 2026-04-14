@@ -5,7 +5,7 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-require('../../styles/municipalityKeyExplainer.scss');
+require('../../css/municipalityKeyExplainer.less');
 
 const qtipSatzart = Ext.util.Format.nl2br(`10=Land
 20=Regierungsbezirk

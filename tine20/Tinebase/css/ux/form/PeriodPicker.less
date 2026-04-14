@@ -1,0 +1,83 @@
+.ux-pp-field {
+    width: 100%;
+}
+
+.ux-pp-field {
+    float: left;
+}
+
+.ux-pp-range {
+    float: left;
+}
+
+.ux-pp-controls {
+    float: left;
+    position: relative;
+}
+
+.ux-pp-period {
+    width: 100%;
+    padding-top: 2px;
+    box-sizing: border-box;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    text-align: center;
+    cursor: pointer;
+}
+
+.ux-pp-prev {
+    left: 0px;
+    mask-image: url(../../../../images/icon-set/icon_arrow_left.svg);
+    -webkit-mask-image: url(../../../../images/icon-set/icon_arrow_left.svg);
+}
+
+.ux-pp-next {
+    right: 0px;
+    top: 0px;
+    mask-image: url(../../../../images/icon-set/icon_arrow_right.svg);
+    -webkit-mask-image: url(../../../../images/icon-set/icon_arrow_right.svg);
+}
+
+.ux-pp-prev, .ux-pp-next, .ux-pp-mode {
+    overflow: hidden;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+    position: absolute;
+    margin: 2px;
+    z-index: 10;
+}
+
+.ux-pp-mode {
+    background-image: url(../../../../library/ExtJS/resources/images/default/panel/tool-sprites.gif);
+    left: 17px;
+}
+.ux-pp-mode-absolute {
+    background-position: 15px -135px;
+}
+
+.ux-pp-mode-relative {
+    background-position: 0px -135px;
+}
+
+.x-pp-combo {
+    position: absolute;
+    top: 0;
+}
+
+.x-pp-combo .ux-pp-prev, .x-pp-combo .ux-pp-next {
+    margin-top: 1px;
+}
+
+.x-pp-combo .ux-pp-period {
+    margin-top: 1px;
+}
+
+.ux-pp-this .ux-pp-period {
+    font-weight: bold;
+}
+
+.dark-mode .ux-pp-range,
+.dark-mode .ux-pp-controls div {
+    filter: invert(1) hue-rotate(180deg);
+}

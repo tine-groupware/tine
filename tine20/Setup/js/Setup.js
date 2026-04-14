@@ -18,4 +18,4 @@ require('./ConfigManagerPanel');
 require('./AuthenticationPanel');
 require('./EmailPanel');
 require('./LicensePanel');
-require('../styles/Setup.scss');
+require('../css/Setup.css');

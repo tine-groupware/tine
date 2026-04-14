@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-require('../../../styles/widgets/PickerGridPanel.scss');
+require('../../../css/widgets/PickerGridPanel.css');
 const { getLocalizedLangPicker } = require("../form/LocalizedLangPicker");
 
 Ext.ns('Tine.widgets.grid');

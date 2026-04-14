@@ -8,7 +8,7 @@
  */
 
 // styles
-require('../styles/UserManual.scss');
+require('../css/UserManual.css');
 
 require('./Application');
 require('./ContextItem');

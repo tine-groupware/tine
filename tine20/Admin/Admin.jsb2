@@ -143,12 +143,12 @@
     },
     {
       "name": "Admin FAT Client",
-      "file": "styles/Admin-FAT.css",
+      "file": "css/Admin-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Admin.scss",
-          "path": "styles/"
+          "text": "Admin.css",
+          "path": "css/"
         }
       ]
     }

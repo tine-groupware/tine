@@ -7,7 +7,7 @@
  */
 Ext.ns('Tine.CrewScheduling');
 
-require('../styles/memberSelectionPanel.scss');
+require('../css/memberSelectionPanel.css');
 require('./MemberToken');
 
 /**

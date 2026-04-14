@@ -35,12 +35,12 @@
     },
     {
       "name": "Courses FAT Client",
-      "file": "styles/Courses-FAT.css",
+      "file": "css/Courses-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Courses.scss",
-          "path": "styles/"
+          "text": "Courses.css",
+          "path": "css/"
         }
       ]
     }

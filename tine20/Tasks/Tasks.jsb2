@@ -35,12 +35,12 @@
     },
     {
       "name": "Tasks FAT Client",
-      "file": "styles/Tasks-FAT.css",
+      "file": "css/Tasks-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Tasks.scss",
-          "path": "styles/"
+          "text": "Tasks.css",
+          "path": "css/"
         }
       ]
     }

@@ -14,7 +14,7 @@ import AttendeeValidation from './Model/AttendeeValidation';
 import 'ux/grid/ColumnHeaderGroup.js'
 import * as async from 'async';
 import * as markdown from 'util/markdown'
-require('../styles/eventMembersGrid.scss');
+require('../css/eventMembersGrid.css');
 require('./MemberToken');
 require('./MemberSelectionDialog');
 import { HTMLProxy, Expression } from "twingEnv.es6";

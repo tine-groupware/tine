@@ -9,7 +9,7 @@
 
 /*global Ext*/
 
-require("../../../styles/ux/form/PeriodPicker.scss");
+require("../../../css/ux/form/PeriodPicker.less");
 
 Ext.ns('Ext.ux', 'Ext.ux.form');
 /**

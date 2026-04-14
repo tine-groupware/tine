@@ -124,9 +124,9 @@ function cleanupTinebase() {
   (cd ${TINE20ROOT}/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
 
   (cd ${TINE20ROOT}/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets | grep -v build))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build/bootstrap;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap.min.css))
+  (cd ${TINE20ROOT}/tine20/Tinebase/css/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Tinebase/css/build;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap))
+  (cd ${TINE20ROOT}/tine20/Tinebase/css/build/bootstrap;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap.min.css))
 
   # cleanup ExtJS
   (cd ${TINE20ROOT}/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))

@@ -31,12 +31,12 @@
     },
     {
       "name": "CoreData FAT Client",
-      "file": "styles/CoreData-FAT.css",
+      "file": "css/CoreData-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "CoreData.scss",
-          "path": "styles/"
+          "text": "CoreData.css",
+          "path": "css/"
         }
       ]
     }

@@ -10,7 +10,7 @@
 
 Ext.namespace('Tine.HumanResources');
 
-import '../styles/HumanResources.scss'
+import '../css//HumanResources.css'
 
 import './Models'
 import './EmployeeGridPanel'

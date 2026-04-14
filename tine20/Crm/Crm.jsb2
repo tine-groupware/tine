@@ -71,16 +71,16 @@
     },
     {
       "name": "Crm FAT Client",
-      "file": "styles/Crm-FAT.css",
+      "file": "css/Crm-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Crm.scss",
-          "path": "styles/"
+          "text": "Crm.css",
+          "path": "css/"
         },
         {
-          "text": "Lead.scss",
-          "path": "styles/"
+          "text": "Lead.css",
+          "path": "css/"
         }
       ]
     }

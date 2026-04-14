@@ -7,7 +7,7 @@
  */
 Ext.ns('Tine.CrewScheduling');
 
-require('../styles/memberToken.scss');
+require('../css/memberToken.css');
 
 /**
  * @namespace   Tine.CrewScheduling

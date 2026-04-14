@@ -59,12 +59,12 @@
     },
     {
       "name": "SimpleFAQ FAT Client",
-      "file": "styles/SimpleFAQ-FAT.css",
+      "file": "css/SimpleFAQ-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "SimpleFAQ.scss",
-          "path": "styles/"
+          "text": "SimpleFAQ.css",
+          "path": "css/"
         }
       ]
     }

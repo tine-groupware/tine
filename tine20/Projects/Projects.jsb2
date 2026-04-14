@@ -35,12 +35,12 @@
     },
     {
       "name": "Projects FAT Client",
-      "file": "styles/Projects-FAT.css",
+      "file": "css/Projects-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Projects.scss",
-          "path": "styles/"
+          "text": "Projects.css",
+          "path": "css/"
         }
       ]
     }

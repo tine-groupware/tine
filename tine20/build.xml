@@ -497,7 +497,7 @@
             }
 
             function main() {
-                    $styleSheet = fopen('Tinebase/styles/mimetypes.css', 'w+');
+                    $styleSheet = fopen('Tinebase/css/mimetypes.css', 'w+');
                     $this->buildMimeTypesStyleFile('16x16', $styleSheet);
                     $this->buildMimeTypesStyleFile('22x22', $styleSheet);
                     $this->buildMimeTypesStyleFile('32x32', $styleSheet);

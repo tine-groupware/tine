@@ -142,12 +142,12 @@
     },
     {
       "name": "Felamimail FAT Client",
-      "file": "styles/Felamimail-FAT.css",
+      "file": "css/Felamimail-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Felamimail.scss",
-          "path": "styles/"
+          "text": "Felamimail.css",
+          "path": "css/"
         }
       ]
     }

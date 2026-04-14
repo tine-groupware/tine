@@ -1,0 +1,60 @@
+#button(@tbColor) {
+
+  .x-btn-tl,
+  .x-btn-tc,
+  .x-btn-tr,
+  .x-btn-ml,
+  .x-btn-mc,
+  .x-btn-mr,
+  .x-btn-bl,
+  .x-btn-bc,
+  .x-btn-br {
+    background-color: @tbColor;
+    background-image: none;
+    transition: background-color .2s ease-out;
+  }
+
+  .x-btn-over {
+    .x-btn-tl,
+    .x-btn-tc,
+    .x-btn-tr,
+    .x-btn-ml,
+    .x-btn-mc,
+    .x-btn-mr,
+    .x-btn-bl,
+    .x-btn-bc,
+    .x-btn-br {
+      background-color: darken(@tbColor, 10%);
+      transition: background-color .2s;
+    }
+  }
+
+  //.x-btn-click {
+  //  .x-btn-tl,
+  //  .x-btn-tc,
+  //  .x-btn-tr,
+  //  .x-btn-ml,
+  //  .x-btn-mc,
+  //  .x-btn-mr,
+  //  .x-btn-bl,
+  //  .x-btn-bc,
+  //  .x-btn-br {
+  //    background-color: darken(@tbColor, 30%);
+  //    transition: background-color .2s;
+  //  }
+  //}
+
+  .x-btn-pressed {
+    .x-btn-tl,
+    .x-btn-tc,
+    .x-btn-tr,
+    .x-btn-ml,
+    .x-btn-mc,
+    .x-btn-mr,
+    .x-btn-bl,
+    .x-btn-bc,
+    .x-btn-br {
+      background-color: darken(@tbColor, 20%);
+    }
+  }
+}

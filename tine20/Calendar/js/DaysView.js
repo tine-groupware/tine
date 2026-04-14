@@ -8,7 +8,7 @@
 
 Ext.ns('Tine.Calendar');
 
-require('../styles/daysviewpanel.scss');
+require('../css/daysviewpanel.css');
 require('./Printer/DaysView');
 
 /**

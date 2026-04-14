@@ -167,12 +167,12 @@
     },
     {
       "name": "Sales FAT Client",
-      "file": "styles/Sales-FAT.css",
+      "file": "css/Sales-FAT.css",
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Sales.scss",
-          "path": "styles/"
+          "text": "Sales.css",
+          "path": "css/"
         }
       ]
     }

@@ -17,7 +17,7 @@ Ext.ns('Ext.ux.Printer');
  */
 Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 
-    stylesheetPath: 'Tinebase/styles/widgets/print.css',
+    stylesheetPath: 'Tinebase/css/widgets/print.css',
 
     /**
      * @param {Tine.widgets.dialog.EditDialog} editDialog the edit dialog to print

@@ -2,7 +2,7 @@ Ext.ns('Tine.Addressbook.Printer');
 
 Tine.Addressbook.Printer.ListRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
 
-    stylesheetPath: 'Tinebase/styles/widgets/print.css',
+    stylesheetPath: 'Tinebase/css/widgets/print.css',
 
     generateMemberBody: function(component) {
         var renderer = new Ext.ux.Printer.GridPanelRenderer();
