@@ -857,7 +857,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $contactId = $_contact->getId();
 
         // prevent changing of email if it does not match configured domains
-        Tinebase_EmailUser::checkAllowedDomain($_contact->email, true, _includeExternalDomains: true);
+        Tinebase_EmailUser::checkAllowedDomain($_contact->email, true);
 
         $oldUser = $this->getUserByProperty('contactId', $contactId, 'Tinebase_Model_FullUser');
 
@@ -1105,7 +1105,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
         }
 
-        Tinebase_EmailUser::checkAllowedDomain($_user->accountEmailAddress, true, _includeExternalDomains: true);
+        Tinebase_EmailUser::checkAllowedDomain($_user->accountEmailAddress, true);
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
@@ -1224,9 +1224,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
-        Tinebase_EmailUser::checkAllowedDomain($_user->accountEmailAddress,
-            true,
-            _includeExternalDomains: true);
+        Tinebase_EmailUser::checkAllowedDomain($_user->accountEmailAddress, true);
 
         $_user->isValid(TRUE);
         

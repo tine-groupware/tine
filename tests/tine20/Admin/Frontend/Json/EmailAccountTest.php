@@ -845,6 +845,35 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
     }
 
     /**
+     * @param Tinebase_Model_FullUser $user
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function testConvertUserInternalEmailAccountWithExternalDomain($user = null)
+    {
+        $this->_testNeedsTransaction();
+
+        if (! $user) {
+            $user = $this->_createUserWithEmailAccount();
+        }
+        $accountData = self::getUserInternalAccountData($user);
+        $accountData['email'] = 'address@anydomain.com';
+
+        try {
+            Admin_Controller_EmailAccount::getInstance()->create(
+                new Felamimail_Model_Account($accountData));
+            self::fail('should throw Tinebase_Exception_EmailInAdditionalDomains');
+        } catch (Tinebase_Exception_EmailInAdditionalDomains $teeiad) {
+            $translate = Tinebase_Translation::getTranslation();
+            self::assertEquals($translate->_("email address is in additional domains"), $teeiad->getMessage());
+        }
+    }
+
+    /**
      * @param Tinebase_Model_User $user
      * @return array
      */
