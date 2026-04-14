@@ -270,9 +270,8 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             $url = str_replace('{MATRIX_USER_ID}', '*', $url);
             $parsed = parse_url(rtrim($url, '/'));
             if ($parsed) {
-                $origin = $parsed['scheme'] . '://' . $parsed['host'];
-                // TODO do we need the port?
-//                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+                $origin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
                 Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('frame-src', $origin);
             }
         }
