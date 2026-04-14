@@ -61,6 +61,12 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             flex: 1,
         });
 
+        this.dataIntendedPurposesGrid.colModel.config.forEach((config) => {
+            if (config.id === 'agreeDate') {
+                config.quickaddField.value = new Date().clearTime();
+            }
+        })
+
         this.items = [{
             layout: 'vbox',
             align: 'stretch',
