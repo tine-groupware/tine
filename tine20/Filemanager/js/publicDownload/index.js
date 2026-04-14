@@ -1,1 +1,1 @@
-import "../../../Tinebase/css/mimetypes.css"
+import "../../../Tinebase/styles/mimetypes.scss"

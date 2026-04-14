@@ -53,7 +53,7 @@ var definePlugin = new webpack.DefinePlugin({
 
 var copyPlugin = new CopyPlugin({
     patterns: [
-        {from: "node_modules/bootstrap/dist/css", to: "Tinebase/css/build/bootstrap/"},
+        {from: "node_modules/bootstrap/dist/css", to: "Tinebase/styles/build/bootstrap/"},
     ]
 });
 

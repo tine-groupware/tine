@@ -2,11 +2,11 @@
   "name": "setup",
   "version": "0.0.1",
   "description": "Tine 2.0 Setup",
-  "main": "Setup.js",
+  "main": "setup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Cornelius Weiß",
+  "author": "Cornelius Weiss",
   "license": "AGPL-3.0",
   "tine20": {
     "entryPoints": [
