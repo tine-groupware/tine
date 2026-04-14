@@ -59,12 +59,12 @@ function cleanupCss()
     CLIENTBUILDFILTER="FAT"
 
     for FILE in `ls ${TINE20ROOT}/tine20`; do
-        # tine20 app needs translations OR Setup dir
+        # tine app needs translations OR Setup dir
         if [ -d "${TINE20ROOT}/tine20/$FILE/translations" ] || [ -d "${TINE20ROOT}/tine20/$FILE/Setup" ]; then
             if [ "$FILE" != "Tinebase"  ]; then
                 echo "+ $FILE"
-                if [ -d "${TINE20ROOT}/tine20/$FILE/css" ]; then
-                    (cd ${TINE20ROOT}/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+                if [ -d "${TINE20ROOT}/tine20/$FILE/styles" ]; then
+                    (cd ${TINE20ROOT}/tine20/$FILE/styles; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
                 fi
             fi
         fi
@@ -75,7 +75,7 @@ function cleanupJs() {
     echo "cleanup js files in:"
 
     for FILE in `ls "${TINE20ROOT}/tine20"`; do
-        # tine20 app needs translations OR Setup dir
+        # tine app needs translations OR Setup dir
         if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
             echo "+ ${FILE}"
             if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
@@ -98,7 +98,7 @@ function cleanupFiles() {
     echo "cleanup files:"
 
     for FILE in `ls ${TINE20ROOT}/tine20`; do
-        # tine20 app needs translations OR Setup dir
+        # tine app needs translations OR Setup dir
         if [ ! -d "${TINE20ROOT}/tine20/$FILE/translations" ] && [ ! -d "${TINE20ROOT}/tine20/$FILE/Setup" ]; then
             if ! [[ "$FILE" =~ $(echo ^\($FILES\)$) ]]; then
                 echo "- $FILE"
@@ -119,14 +119,14 @@ function cleanupTinebase() {
 
   CLIENTBUILDFILTER="FAT"
 
-  (cd ${TINE20ROOT}/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-  (cd ${TINE20ROOT}/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-  (cd ${TINE20ROOT}/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Addressbook/styles; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Admin/styles;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Setup/styles;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
 
-  (cd ${TINE20ROOT}/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets | grep -v build))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/widgets;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap))
-  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build/bootstrap;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap.min.css))
+  (cd ${TINE20ROOT}/tine20/Tinebase/styles; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css | grep -v widgets | grep -v build))
+  (cd ${TINE20ROOT}/tine20/Tinebase/styles/widgets; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
+  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap))
+  (cd ${TINE20ROOT}/tine20/Tinebase/styles/build/bootstrap; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v bootstrap.min.css))
 
   # cleanup ExtJS
   (cd ${TINE20ROOT}/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
