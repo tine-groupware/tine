@@ -182,6 +182,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_ACTUAL      => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED                      => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -192,6 +193,7 @@ class HumanResources_Model_MonthlyWTReport extends Tinebase_Record_Abstract
             self::FLDS_WORKING_TIME_TARGET      => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE                  => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED                      => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
