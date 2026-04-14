@@ -72,7 +72,6 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::SETBYSETUPMODULE          => true,
-            self::DEFAULT_STR               => 'http://{MATRIX_USER_ID}.localhost:8080/',
         ],
         self::HOME_SERVER_URL            => [
             //_('Home Server URL')
@@ -271,9 +270,8 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             $url = str_replace('{MATRIX_USER_ID}', '*', $url);
             $parsed = parse_url(rtrim($url, '/'));
             if ($parsed) {
-                $origin = $parsed['scheme'] . '://' . $parsed['host'];
-                // TODO do we need the port?
-//                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+                $origin = $parsed['scheme'] . '://' . $parsed['host']
+                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
                 Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('frame-src', $origin);
             }
         }
