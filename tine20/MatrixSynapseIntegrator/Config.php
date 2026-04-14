@@ -72,7 +72,6 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::SETBYSETUPMODULE          => true,
-            self::DEFAULT_STR               => 'http://{MATRIX_USER_ID}.localhost:8080/',
         ],
         self::HOME_SERVER_URL            => [
             //_('Home Server URL')
