@@ -9,7 +9,7 @@
 /**
  * entry point for sso login client
  */
-import(/* webpackChunkName: "Tinebase/js/tinebase" */ 'tinebase.js').then(function (libs) {
+import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(function (libs) {
     libs.lodash.assign(window, libs);
     require('tineInit');
 

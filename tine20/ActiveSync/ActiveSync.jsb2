@@ -1,0 +1,56 @@
+{
+  "projectName": "Tine 2.0 - ActiveSync",
+  "deployDir": "ActiveSync",
+  "licenseText": "Tine 2.0 - ActiveSync \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "ActiveSync FAT Client",
+      "file": "js/ActiveSync-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Application.js",
+          "path": "js/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "DeviceStore.js",
+          "path": "js/"
+        },
+        {
+          "text": "SyncDevices.js",
+          "path": "js/"
+        },
+        {
+          "text": "EditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SyncDevicesGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "ActiveSync FAT Client",
+      "file": "styles/ActiveSync-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ActiveSync.scss",
+          "path": "styles/"
+        }
+      ]
+    }
+  ]
+}

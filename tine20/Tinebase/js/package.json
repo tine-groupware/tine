@@ -1,7 +1,7 @@
 {
   "name": "tine20_tinebase",
   "private": true,
-  "main": "tinebase.js",
+  "main": "Tinebase.js",
   "scripts": {
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js",
     "build": "./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js",

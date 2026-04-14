@@ -2,7 +2,7 @@
   "name": "usermanual",
   "version": "0.0.1",
   "description": "Tine 2.0 context sensitive online user manual",
-  "main": "userManual.js",
+  "main": "UserManual.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,6 +14,6 @@
     "help",
     "manual"
   ],
-  "author": "Cornelius Weiss",
+  "author": "Cornelius Weiß",
   "license": "AGPL-3.0"
 }

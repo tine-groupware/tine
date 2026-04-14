@@ -7,18 +7,18 @@
  */
 
 
-import './EventEditDialog.js';
-import './BookedOptionEditDialog.js';
-import './RegistrationEditDialog.js';
-import './OptionEditDialog.js';
-import './CheckboxOptionEditDialog.js';
-import './FileOptionUploadGrid.js';
-import './FileOptionEditDialog.js';
-import './FileEditDialog.js';
-import './FileUploadGrid.js';
-import './OptionsRuleEditDialog.js';
-import './OptionRelationEditDialog.js';
-import './TextInputOptionEditDialog.js';
-import './EventGridPanel.js';
-import './notifyAction';
+require('./EventEditDialog.js');
+require('./BookedOptionEditDialog.js');
+require('./RegistrationEditDialog.js');
+require('./OptionEditDialog.js');
+require('./CheckboxOptionEditDialog.js');
+require('./FileOptionUploadGrid.js');
+require('./FileOptionEditDialog.js');
+require('./FileEditDialog.js');
+require('./FileUploadGrid.js');
+require('./OptionsRuleEditDialog.js');
+require('./OptionRelationEditDialog.js');
+require('./TextInputOptionEditDialog.js');
+require('./EventGridPanel.js');
+require('./notifyAction');
 

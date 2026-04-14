@@ -2,7 +2,7 @@
   "name": "bookmarks",
   "version": "0.0.1",
   "description": "Tine 2.0 Bookmarks",
-  "main": "bookmarks.js",
+  "main": "Bookmarks.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

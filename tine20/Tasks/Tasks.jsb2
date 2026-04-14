@@ -1,0 +1,48 @@
+{
+  "projectName": "Tine 2.0 - Tasks",
+  "deployDir": "Tasks",
+  "licenseText": "Tine 2.0 - Tasks \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Tasks FAT Client",
+      "file": "js/Tasks-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Tasks.js",
+          "path": "js/"
+        },
+        {
+          "text": "TaskGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TaskEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "CalDAVContainerPropertiesHookField.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Tasks FAT Client",
+      "file": "styles/Tasks-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Tasks.scss",
+          "path": "styles/"
+        }
+      ]
+    }
+  ]
+}

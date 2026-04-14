@@ -6,4 +6,4 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './Application';
+require( './Application');
