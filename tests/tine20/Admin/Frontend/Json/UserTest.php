@@ -593,6 +593,42 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertEquals($userArray['accountEmailAddress'], $updatedContact->email);
     }
 
+    public function testCreateUserWithAdditionalExternalDomains()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
+
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConfig->allowAnyExternalDomains = false;
+        $smtpConfig->additionalexternaldomains = Tinebase_Helper::convertDomainToPunycode('anotherdomain.com');
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+
+        $user = $this->_createTestUser([
+            'accountEmailAddress' => 'address@anotherdomain.com'
+        ]);
+        $userArray = $user->toArray();
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+    }
+
+    public function testCreateUserWithAllowAnyExternalDomains()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
+
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP);
+        $smtpConfig->allowAnyExternalDomains = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SMTP, $smtpConfig);
+
+        $user = $this->_createTestUser([
+            'accountEmailAddress' => 'address@anydomain.com'
+        ]);
+        $userArray = $user->toArray();
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+    }
+
+
     /**
      * @group nogitlabciad
      */
