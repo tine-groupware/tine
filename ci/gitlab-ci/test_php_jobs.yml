@@ -28,11 +28,12 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-  after_script:
-    - |
-      if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
-        s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/
-      fi
+  # see https://taiga.metaways.net/project/admin-tine20-service/us/5063
+  # after_script:
+  #   - |
+  #     if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ]; then
+  #       s3cmd --access_key=${SCREENSHOTS_S3_ACCESS_KEY} --secret_key=${SCREENSHOTS_S3_SECRET_KEY} --host ${SCREENSHOTS_S3_HOST} --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ${CI_PROJECT_DIR}/coverage/ s3://tine-phpunit-coverage/${CI_COMMIT_REF_NAME}/
+  #     fi
   needs: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source-sequential/
