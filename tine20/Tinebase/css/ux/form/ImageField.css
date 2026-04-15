@@ -1,27 +1,60 @@
-.x-box-inner .ux-imagefield-ct.x-form-field.x-box-item {
-    border: 1px solid #B5B8C8;
-    background-color: transparent !important;
-}
-.ux-imagefield-wrapper {
-    position: relative;
+.ux-imagefield-ct {
+    height: 90px;
+    width: 90px;
+    border-radius: 50% !important;
+    overflow: hidden;
+    cursor: pointer;
+    box-sizing: border-box;
+    border: 2px solid #B5B8C8;
 }
 
-.ux-imagefield-wrapper img {
+.ux-imagefield-wrapper img{
     width: 100%;
+    height: 100%;
 }
 
-.ux-imagefield-button{
-     position:absolute;
-     top:0px;
-     width: 100%;
-     height: 100%;
+/* Hover overlay instead of "click to edit" text */
+.ux-imagefield-ct:hover .ux-imagefield-button {
+    opacity: 1;
 }
-.ux-imagefield-text{
+
+.ux-imagefield-button {
+    position:absolute;
+    top:0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.ux-imagefield-text {
+    font-size: 36px;
     position: absolute;
-    text-align:center;
-    width:100%;
-    height:100%;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    top: 50% !important;
-    /*left: 50%;*/
+.contact-north-flex-wrap .x-panel-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    gap: 5px;
+}
+
+.contact-north-fields {
+    min-width: 50px;
+    flex: 1 1 300px;
+}
+
+.contact-north-image {
+    display: flex;
+    justify-content: center;
+    width: 90px;
+    height: 90px;
+    margin: 10px 0;
 }
