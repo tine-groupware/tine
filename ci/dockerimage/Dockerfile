@@ -13,7 +13,7 @@ ARG DOCKER_HUB_PROXY=""
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/ubuntu:jammy as php8.1
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:jammy AS php8.1
 ARG APT_MIRROR=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/jammy.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
@@ -48,7 +48,7 @@ RUN apt-mirror activate \
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.2
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.2
 ARG APT_MIRROR=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
@@ -85,7 +85,7 @@ RUN apt-mirror activate \
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble as php8.3
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.3
 ARG APT_MIRROR=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
@@ -120,9 +120,9 @@ RUN apt-mirror activate \
 
 
 
-FROM ${DOCKER_HUB_PROXY}hairyhenderson/gomplate:stable-alpine as gomplate
+FROM ${DOCKER_HUB_PROXY}hairyhenderson/gomplate:stable-alpine AS gomplate
 
-FROM ${PHP_IMAGE} as base
+FROM ${PHP_IMAGE} AS base
 ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
 ARG APT_MIRROR=""
@@ -204,7 +204,7 @@ CMD ["/usr/local/bin/entrypoint"]
 
 
 
-FROM ${BASE_IMAGE} as test
+FROM ${BASE_IMAGE} AS test
 ARG APT_MIRROR=""
 # todo: install coreutils and build-base
 RUN apt-mirror activate \
@@ -224,7 +224,7 @@ COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
 
 
 
-FROM ${BASE_IMAGE} as dev
+FROM ${BASE_IMAGE} AS dev
 ARG APT_MIRROR=""
 RUN apt-mirror activate \
  && apt-get update \
@@ -237,7 +237,7 @@ RUN apt-mirror activate \
 
 
 
-FROM ${BASE_IMAGE} as dependency
+FROM ${BASE_IMAGE} AS dependency
 ARG APT_MIRROR=""
 # todo: install coreutils and build-base
 RUN apt-mirror activate \
@@ -256,7 +256,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-prog
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine as jsdependency
+FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine AS jsdependency
 ARG TINE20ROOT=/usr/share
 ARG APT_MIRROR=""
 RUN apk add git
@@ -270,12 +270,12 @@ FROM ${JSDEPENDENCY_IMAGE} AS jsdependency-copy
 
 
 
-FROM ${DEPENDENCY_IMAGE} as icon-set-provider
+FROM ${DEPENDENCY_IMAGE} AS icon-set-provider
 # .git changes with every commit and broke caching form source downwards. So it needs to be excluded and only the result is used
 COPY .git ${TINE20ROOT}/.git
 RUN git submodule update --init
 
-FROM ${DEPENDENCY_IMAGE} as source
+FROM ${DEPENDENCY_IMAGE} AS source
 COPY tine20 ${TINE20ROOT}/tine20/
 COPY tests ${TINE20ROOT}/tests/
 COPY scripts ${TINE20ROOT}/scripts/
@@ -288,7 +288,7 @@ FROM ${SOURCE_IMAGE} AS source-copy
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine as jsbuild
+FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine AS jsbuild
 ARG TINE20ROOT=/usr/share
 ARG REVISION=local
 WORKDIR ${TINE20ROOT}/tine20/Tinebase/js
@@ -296,12 +296,12 @@ COPY --from=jsdependency-copy ${TINE20ROOT}/tine20/Tinebase/js/node_modules ${TI
 COPY --from=source-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 RUN export BUILD_DATE=$(date -u "+%F %T") && BUILD_REVISION=${REVISION} node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --progress --config webpack.docker.js
 
-FROM ${JSBUILD_IMAGE} as jsbuild-copy
+FROM ${JSBUILD_IMAGE} AS jsbuild-copy
 
 
 
 
-FROM ${SOURCE_IMAGE} as build
+FROM ${SOURCE_IMAGE} AS build
 ARG RELEASE=local
 ARG CODENAME=local
 ARG REVISION=local
@@ -323,12 +323,12 @@ COPY --from=jsbuild-copy /out/ ${TINE20ROOT}/
 RUN bash -c "source /build_script.sh && cleanup"
 RUN bash -c "source /build_script.sh && fixFilePermissions"
 
-FROM ${BUILD_IMAGE} as build-copy
+FROM ${BUILD_IMAGE} AS build-copy
 
 
 
 
-FROM ${BASE_IMAGE} as built
+FROM ${BASE_IMAGE} AS built
 ARG APT_MIRROR=""
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 RUN echo '*/1 * * * * sh -c "cd /usr/share/tine20; php tine20.php --method Tinebase.triggerAsyncEvents"' | /bin/crontab -u tine20 -
@@ -343,7 +343,7 @@ HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
 
 
 
-FROM ${BUILT_IMAGE} as test-built
+FROM ${BUILT_IMAGE} AS test-built
 ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
 ARG APT_MIRROR=""
@@ -372,7 +372,7 @@ RUN echo '' | /bin/crontab -u tine20 -
 
 
 
-FROM ${BUILT_IMAGE} as packaging
+FROM ${BUILT_IMAGE} AS packaging
 ARG TINE20PACKAGES=/root/packages
 ARG RELEASE=local
 ARG CODENAME=local
@@ -384,11 +384,11 @@ RUN bash -c "source /build_script.sh && createSpecialArchives"
 RUN bash -c "source /build_script.sh && packageTranslations"
 RUN bash -c "source /build_script.sh && buildChecksum"
 
-FROM ${PACKAGING_IMAGE} as packaging-copy
+FROM ${PACKAGING_IMAGE} AS packaging-copy
 
 
 
 
-FROM scratch as packages
+FROM scratch AS packages
 ARG TINE20PACKAGES=/root/packages/source
 COPY --from=packaging-copy ${TINE20PACKAGES} /
