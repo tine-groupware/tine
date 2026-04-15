@@ -729,6 +729,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function recalculateFolderSize(Tinebase_Tree_FileObject $_fileObjectBackend)
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::ignoreTransaction();
+        }
+
         // no transactions yet
         // get root node ids
         $searchFilter = Tinebase_Model_Tree_Node_Filter::getFolderParentIdFilterIgnoringAcl(null);
