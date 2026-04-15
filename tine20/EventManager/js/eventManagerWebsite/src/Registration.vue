@@ -43,7 +43,7 @@
                 label-cols-lg="3"
                 content-cols-sm
                 content-cols-lg="7"
-                :label="registrationContactFields[fieldName].label + (requiredFields.includes(fieldName) ? ' *' : '')"
+                :label="registrationContactFields[fieldName].label + (requiredContactFields.includes(fieldName) ? ' *' : '')"
                 class="mb-3"
               >
                 <component
@@ -51,7 +51,7 @@
                   v-model="contactDetails[fieldName]"
                   v-bind="contactFieldConfig[fieldName]?.props?.()"
                   :class="{
-                    'required-field-error': requiredFields.includes(fieldName) && validationErrors.includes(fieldName)
+                    'required-field-error': requiredContactFields.includes(fieldName) && validationErrors.includes(fieldName)
                   }"
                 />
               </b-form-group>
@@ -202,7 +202,7 @@
                     label-cols-lg="3"
                     content-cols-sm
                     content-cols-lg="7"
-                    :label="registrationContactFields[fieldName].label + (requiredFields.includes(fieldName) ? ' *' : '')"
+                    :label="registrationContactFields[fieldName].label + (requiredContactFields.includes(fieldName) ? ' *' : '')"
                     class="mb-3"
                   >
                     <component
@@ -210,7 +210,7 @@
                       v-model="registrantDetails[fieldName]"
                       v-bind="contactFieldConfig[fieldName]?.props?.()"
                       :class="{
-                    'required-field-error': requiredFields.includes(fieldName) && validationErrors.includes(fieldName)
+                    'required-field-error': requiredContactFields.includes(fieldName) && validationErrors.includes(fieldName)
                   }"
                     />
                   </b-form-group>
@@ -305,6 +305,7 @@ const dependantParticipants = ref(null);
 const registrations = ref(null);
 const accountOwner = ref(null);
 const registrationContactFields = ref([]);
+const requiredContactFields = ref([]);
 
 const eventDetails = ref({
   name: "",
@@ -324,27 +325,19 @@ const eventDetails = ref({
   description: "",
   isLive: "",
   registrationPossibleUntil: "",
+  registerOthers: "",
+  contactFields: [],
 });
 
-const emptyContactDetails = () => ({
-  id: "",
-  salutation : "",
-  n_prefix : "",
-  n_given : "",
-  n_middle : "",
-  n_family : "",
-  org_name : "",
-  bday : "",
-  email : "",
-  tel_cell: "",
-  tel_home : "",
-  adr_one_street : "",
-  adr_one_street2: "",
-  adr_one_postalcode : "",
-  adr_one_locality : "",
-  adr_one_region : "",
-  adr_one_countryname : "",
-});
+const emptyContactDetails = () => {
+  const details = {};
+  if (registrationContactFields.value && typeof registrationContactFields.value === 'object') {
+    for (const fieldName of Object.keys(registrationContactFields.value)) {
+      details[fieldName] = '';
+    }
+  }
+  return details;
+};
 
 const contactDetails = ref(emptyContactDetails());
 const registrantDetails = ref(emptyContactDetails());
@@ -952,7 +945,7 @@ const visibleContactFields = computed(() => {
   if (!fields) return [];
 
   const enabledFields = Object.keys(fields).filter(
-    fieldName => fields[fieldName]?.enabled === true
+    fieldName => fields[fieldName]?.optional === true || fields[fieldName]?.required === true
   );
 
   return enabledFields.sort((a, b) => {
@@ -966,14 +959,12 @@ const visibleContactFields = computed(() => {
   });
 });
 
-const requiredFields = ['n_given', 'n_family', 'email'];
-
 const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
-  const missingFields = _.filter(requiredFields, field =>
-    _.isEmpty(_.get(contactDetails.value, field, '').trim())
+  const missingFields = _.filter(requiredContactFields.value, field =>
+    _.isEmpty((_.get(contactDetails.value, field) ?? '').toString().trim())
   );
   errors.push(...missingFields);
 
@@ -1365,6 +1356,7 @@ const fetchEvent = async () => {
   const data = await response.json();
   eventDetails.value = data;
   registrationContactFields.value = data.contact_fields;
+  requiredContactFields.value = data.required_contact_fields;
   initializeEventOptions();
 };
 

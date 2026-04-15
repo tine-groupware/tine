@@ -3276,6 +3276,18 @@ msgstr "Save config"
 msgid "Reload config"
 msgstr "Reload config"
 
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Required"
+msgstr "Required"
+
+msgid "Field"
+msgstr "Field"
+
+msgid "Contact Fields"
+msgstr "Contact Fields"
+
 msgid "Compose Email"
 msgstr "Compose Email"
 

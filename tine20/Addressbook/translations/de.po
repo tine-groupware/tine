@@ -483,6 +483,9 @@ msgstr "Notizen"
 msgid "Enter Note"
 msgstr "Notiz eingeben"
 
+msgid "Additional properties"
+msgstr ""
+
 msgid "Parse address"
 msgstr "Adresse einlesen"
 
@@ -840,6 +843,9 @@ msgstr "Pfade"
 
 msgid "Preferred Email"
 msgstr "Bevorzugte E-Mail"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "syncBackendIds"
 msgstr ""
