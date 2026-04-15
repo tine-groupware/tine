@@ -3,7 +3,7 @@
 # to be longer than 80 charts. The email user name contains a 40 char hash and an @ leaving 39 for DEPLOYMENT_NAME and
 # DEPLOYMENT_BASE_DOMAIN (and a dot).
 test_cloud_generate_deployment_name() {
-    DEPLOYMENT_NAME=$(echo -n $CI_ENVIRONMENT_NAME | sed 's/\./-/g' | sed 's/\//-/g')
+    DEPLOYMENT_NAME=$(echo -n $CI_ENVIRONMENT_NAME | sed 's/\./-/g' | sed 's/\//-/g' | awk '{print tolower($0)}')
 
     if [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 39 ]]; then
         echo $DEPLOYMENT_NAME
