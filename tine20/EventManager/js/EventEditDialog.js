@@ -1,10 +1,10 @@
 /*
- * Tine 2.0
+ * tine Groupware
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
- * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Stefanie Stamer <s.stamer@metaways.de> Tonia Wulff <t.wulff@metaways.de>
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 import './filePanel';
@@ -101,7 +101,13 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         fieldManager('status'),
                                     ],
                                     [
-                                        fieldManager('total_places'),
+                                        fieldManager('total_places', {
+                                            checkState: function () {
+                                                const total = me.form.findField('total_places').getValue() || 0;
+                                                const booked = me.form.findField('booked_places').getValue() || 0;
+                                                me.form.findField('available_places').setValue(total - booked);
+                                            }
+                                        }),
                                         fieldManager('booked_places'),
                                         fieldManager('available_places'),
                                     ],
