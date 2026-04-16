@@ -9,6 +9,68 @@
  *
  */
 
+if (class_exists('Tideways\Profiler')) {
+    $raii = null;
+    if (!\Tideways\Profiler::isStarted()) {
+        \Tideways\Profiler::start([]);
+    }
+    \Tideways\Profiler::enableCallgraphProfiler();
+    \Tideways\Profiler::enableTracingProfiler();
+    \Tideways\Profiler::watchCallback(
+        'Tinebase_Frontend_Cli::handle',
+        function($context) {
+            \Tideways\Profiler::setTransactionName($name = 'CLI: ' . ($context['args'][0] ?? null)?->method);
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'Tinebase_Server_Cors::handle',
+        function($context) {
+            \Tideways\Profiler::setTransactionName('cors');
+            \Tideways\Profiler::ignoreTransaction();
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'Tinebase_Expressive_RouteHandler::dispatch',
+        function($context) {
+            \Tideways\Profiler::setTransactionName($name = 'Expressive: ' . $context['object']->getName());
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'Tinebase_Http_Server::handle',
+        function($context) {
+            \Tideways\Profiler::setTransactionName($name = 'HTTP: ' . ($context['args'][0]['method'] ?? 'unknown'));
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'Tinebase_Server_WebDAV::handle',
+        function($context) use(&$raii) {
+            $raii = new Tinebase_RAII(function() {
+                if (null === \Tideways\Profiler::getTransactionName()) {
+                    \Tideways\Profiler::setTransactionName('WebDAV: unauthenticated/misc');
+                }
+            });
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'Sabre\DAV\Server::start',
+        function($context) {
+            \Tideways\Profiler::setTransactionName('WebDAV: sabre');
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+        'ActiveSync_Server_Http::handle',
+        function($context) {
+            \Tideways\Profiler::setTransactionName('ActiveSync');
+        }
+    );
+    \Tideways\Profiler::watchCallback(
+            'Zend_Json_Server::_handle',
+            function($context) {
+                \Tideways\Profiler::setTransactionName($name = 'Json: ' . $context['object']->getRequest()->getMethod());
+            }
+        );
+}
+
 // All server operations are done in UTC
 date_default_timezone_set('UTC');
 
