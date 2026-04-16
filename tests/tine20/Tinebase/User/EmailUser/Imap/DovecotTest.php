@@ -170,7 +170,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
             'emailPort' => $this->_config['port'],
             'emailSecure' => $this->_config['ssl'],
             'emailHost' => $this->_config['host'],
-            'emailLoginname' => $user->accountEmailAddress
+            'emailLoginname' => $user->accountEmailAddress,
+            'emailStatus' => $user->accountStatus,
+            'emailExpiryDate' => null,
+            'emailLastModified' => $user->imapUser->emailLastModified,
         ), $additionalExpectations), $user->imapUser->toArray());
     }
 
@@ -307,6 +310,22 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         self::assertEquals($emailUser->getId() . '@' . $this->_config['instanceName'], $rawDovecotUser['username']);
         self::assertTrue(isset($rawDovecotUser['instancename']), 'instancename missing: ' . print_r($rawDovecotUser, true));
         self::assertEquals($this->_config['instanceName'], $rawDovecotUser['instancename']);
+    }
+
+    public function testDeactivateUser()
+    {
+        $this->_skipIfLDAPBackend();
+
+        $user = $this->_addUser();
+        $user->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_EXPIRED;
+        $user->accountExpires = new Tinebase_DateTime('2000-01-01 00:00:00');
+        $user = Tinebase_User::getInstance()->updateUser($user);
+
+        // check email tables (username + instancename)
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+        $rawDovecotUser = $this->_getRawDovecotUser($user, $emailUser);
+        self::assertEquals($user['accountStatus'], $rawDovecotUser['status']);
+        self::assertEquals($user['last_modified_time'], new Tinebase_DateTime($rawDovecotUser['last_modified_time']));
     }
 
     protected function _getRawDovecotUser($user, $emailUser = null)

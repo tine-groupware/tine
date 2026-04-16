@@ -76,7 +76,10 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
         'emailHost'         => array('allowEmpty' => true),
         'emailPort'         => array('allowEmpty' => true),
         'emailSecure'       => array('allowEmpty' => true),
-        'emailAuth'         => array('allowEmpty' => true)
+        'emailAuth'         => array('allowEmpty' => true),
+        'emailStatus'       => array('allowEmpty' => true),
+        'emailExpiryDate'   => array('allowEmpty' => true),
+        'emailLastModified' => array('allowEmpty' => true),
     );
     
     /**
