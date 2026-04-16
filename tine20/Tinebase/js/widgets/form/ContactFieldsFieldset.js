@@ -19,6 +19,7 @@ const ContactFieldsFieldset = Ext.extend(Ext.form.Field, {
     autoHeight: true,
     unwantedFields: [],
     defaultCheckedFields: [],
+    defaultRequiredFields: [],
 
     checkboxes: null,
 
@@ -37,14 +38,20 @@ const ContactFieldsFieldset = Ext.extend(Ext.form.Field, {
             const allFieldsList = [...allFields.checked, ...allFields.unchecked];
             const result = {};
             allFieldsList.forEach(function (field) {
-                result[field.name] = this.defaultCheckedFields.includes(field.name);
+                result[field.name] = {
+                    optional: this.defaultCheckedFields.includes(field.name),
+                    required: this.defaultRequiredFields.includes(field.name)
+                };
             }, this);
             return result;
         }
 
         const result = {};
-        Ext.iterate(this.checkboxes, function (fieldName, cb) {
-            result[fieldName] = cb.getValue();
+        Ext.iterate(this.checkboxes, function (fieldName, cbs) {
+            result[fieldName] = {
+                optional: cbs.optional.getValue(),
+                required: cbs.required.getValue()
+            };
         });
         return result;
     },
@@ -54,9 +61,15 @@ const ContactFieldsFieldset = Ext.extend(Ext.form.Field, {
 
         if (!value || typeof value !== 'object') return;
 
-        Ext.iterate(this.checkboxes, function (fieldName, cb) {
+        Ext.iterate(this.checkboxes, function (fieldName, cbs) {
             if (value.hasOwnProperty(fieldName)) {
-                cb.setValue(value[fieldName]);
+                const entry = value[fieldName];
+                if (typeof entry === 'object') {
+                    cbs.optional.setValue(!!entry.optional);
+                    cbs.required.setValue(!!entry.required);
+                } else {
+                    cbs.optional.setValue(!!entry);
+                }
             }
         });
     },
@@ -73,27 +86,105 @@ const ContactFieldsFieldset = Ext.extend(Ext.form.Field, {
         const allFields = [...fields.checked, ...fields.unchecked];
         const colCount = 3;
 
+        const labelOptional = i18n._('Optional');
+        const labelRequired = i18n._('Required');
+        const labelField    = i18n._('Field');
+
+        const headerItems = Array.from({ length: colCount }, (_, col) => ({
+            columnWidth: 1 / colCount,
+            layout: 'form',
+            style: 'padding-top: 4px; padding-bottom: 4px;',
+            items: [{
+                xtype: 'panel',
+                html: '<div style="display:flex; align-items:center;">' +
+                    '<span style="width:80px; font-size:11px; font-weight:bold; color:#333;">' + labelOptional + '</span>' +
+                    '<span style="width:80px; font-size:11px; font-weight:bold; color:#333;">' + labelRequired + '</span>' +
+                    '<span style="font-size:11px; font-weight:bold; color:#333;">' + labelField + '</span>' +
+                    '</div>',
+                border: false,
+                bodyStyle: 'background:transparent;'
+            }]
+        }));
+
+        const columnItems = Array.from({ length: colCount }, (_, col) => ({
+            columnWidth: 1 / colCount,
+            layout: 'form',
+            items: allFields
+                .filter((_, i) => i % colCount === col)
+                .map(field => {
+                    const isChecked  = this.defaultCheckedFields.includes(field.name);
+                    const isRequired = this.defaultRequiredFields.includes(field.name);
+
+                    const optionalCb = new Ext.form.Checkbox({
+                        checked: isChecked || isRequired,
+                        hideLabel: true
+                    });
+                    const requiredCb = new Ext.form.Checkbox({
+                        checked: isRequired,
+                        hideLabel: true
+                    });
+
+                    requiredCb.on('check', function (cb, checked) {
+                        if (checked) {
+                            optionalCb.setValue(true);
+                        }
+                    });
+                    optionalCb.on('check', function (cb, checked) {
+                        if (!checked) {
+                            requiredCb.setValue(false);
+                        }
+                    });
+
+                    this.checkboxes[field.name] = { optional: optionalCb, required: requiredCb };
+
+                    const label = adbApp.i18n._hidden(field.fieldLabel || field.label || field.name);
+
+                    return {
+                        xtype: 'panel',
+                        border: false,
+                        bodyStyle: 'background:transparent; padding: 1px 0;',
+                        layout: 'column',
+                        items: [
+                            { columnWidth: 0, width: 80, layout: 'form', items: optionalCb },
+                            { columnWidth: 0, width: 80, layout: 'form', items: requiredCb },
+                            {
+                                columnWidth: 1,
+                                layout: 'form',
+                                items: [{
+                                    xtype: 'displayfield',
+                                    value: label,
+                                    hideLabel: true,
+                                    style: 'line-height:22px; padding-left:2px;'
+                                }]
+                            }
+                        ]
+                    };
+                })
+        }));
+
         const fieldset = new Ext.form.FieldSet({
             title: this.title || adbApp.i18n._('Contact Fields'),
             layout: 'column',
             autoHeight: true,
             renderTo: ct,
-            items: Array.from({ length: colCount }, (_, col) => ({
-                columnWidth: 1 / colCount,
-                layout: 'form',
-                items: allFields
-                    .filter((_, i) => i % colCount === col)
-                    .map(field => {
-                        const cb = new Ext.form.Checkbox({
-                            name: 'contact_field_' + field.name,
-                            boxLabel: adbApp.i18n._hidden(field.fieldLabel || field.label || field.name),
-                            hideLabel: true,
-                            checked: this.defaultCheckedFields.includes(field.name)
-                        });
-                        this.checkboxes[field.name] = cb;
-                        return cb;
-                    })
-            }))
+            items: [
+                {
+                    xtype: 'panel',
+                    columnWidth: 1,
+                    border: false,
+                    bodyStyle: 'background:transparent;',
+                    layout: 'column',
+                    items: headerItems
+                },
+                {
+                    xtype: 'panel',
+                    columnWidth: 1,
+                    border: false,
+                    bodyStyle: 'background:transparent;',
+                    layout: 'column',
+                    items: columnItems
+                }
+            ]
         });
 
         this.fieldset = fieldset;
@@ -106,10 +197,11 @@ const ContactFieldsFieldset = Ext.extend(Ext.form.Field, {
     _buildContactFields: function () {
         const allFields = Tine.Addressbook.Model.Contact.getFieldDefinitions();
         return {
-            checked: allFields.filter(f => this.defaultCheckedFields.includes(f.name)),
+            checked: allFields.filter(f => this.defaultCheckedFields.includes(f.name) || this.defaultRequiredFields.includes(f.name)),
             unchecked: allFields.filter(
                 f =>
                 !this.defaultCheckedFields.includes(f.name) &&
+                !this.defaultRequiredFields.includes(f.name) &&
                 !this.unwantedFields.includes(f.name)
             )
         };

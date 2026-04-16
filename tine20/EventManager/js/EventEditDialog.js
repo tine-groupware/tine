@@ -367,6 +367,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             'tel_cell', 'tel_work', 'adr_one_street', 'adr_one_street2',
                             'adr_one_postalcode', 'adr_one_locality', 'adr_one_region',
                             'adr_one_countryname'],
+                        defaultRequiredFields: ['n_given','n_family', 'email'],
                     })
                 ]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
