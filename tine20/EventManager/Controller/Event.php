@@ -247,16 +247,26 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $fields = $contactModelConfig->getFields();
 
                 $enriched = [];
-                foreach ($eventArray['contact_fields'] as $fieldName => $enabled) {
+                $requiredContactFields = [];
+                foreach ($eventArray['contact_fields'] as $fieldName => $fieldConfig) {
+                    $optional = isset($fieldConfig['optional']) ? (bool)$fieldConfig['optional'] : false;
+                    $required = isset($fieldConfig['required']) ? (bool)$fieldConfig['required'] : false;
+
                     $enriched[$fieldName] = [
-                        'enabled' => (bool)$enabled,
-                        'label' => isset($fields[$fieldName]['label'])
+                        'optional' => $optional,
+                        'required' => $required,
+                        'label'    => isset($fields[$fieldName]['label'])
                             ? Tinebase_Translation::getTranslation('Addressbook')
                                 ->translate($fields[$fieldName]['label'])
                             : $fieldName,
                     ];
+
+                    if ($required) {
+                        $requiredContactFields[] = $fieldName;
+                    }
                 }
                 $eventArray['contact_fields'] = $enriched;
+                $eventArray['required_contact_fields'] = $requiredContactFields;
             }
 
             $response->getBody()->write(json_encode($eventArray));

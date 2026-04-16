@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-03-30 12:18+0200\n"
+"PO-Revision-Date: 2026-04-15 12:22+0200\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -3291,6 +3291,18 @@ msgstr "Konfiguration speichern"
 
 msgid "Reload config"
 msgstr "Konfiguration neu laden"
+
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Required"
+msgstr "Erforderlich"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Contact Fields"
+msgstr "Kontaktfelder"
 
 msgid "Compose Email"
 msgstr "E-Mail erstellen"
