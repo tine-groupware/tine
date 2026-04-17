@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -881,6 +881,31 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertNotSame($invoice->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->getFirstRecord()->getId(), $copy->{Sales_Model_Document_Invoice::FLD_POSITIONS}->getFirstRecord()->{Sales_Model_DocumentPosition_Invoice::FLD_NOTES}->getFirstRecord()->getId());
     }
 
+    public function testCreateDocumentWithoutDebitorOnCustomer()
+    {
+        $customer = $this->_createCustomer();
+        Sales_Controller_Debitor::getInstance()->getBackend()->delete($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId());
+
+        $product1 = $this->_createProduct();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ],
+            Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [new Sales_Model_PaymentMeans([
+                Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS},
+                Sales_Model_PaymentMeans::FLD_DEFAULT => true,
+            ])]),
+        ]));
+    }
+    
     public function testInvoiceStorno()
     {
         $this->clear(Sales_Config::APP_NAME, Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART);

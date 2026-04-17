@@ -283,8 +283,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 ], true));
                 $customer = Sales_Controller_Customer::getInstance()->update($customer);
                 $orgDebitor = $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} =
-                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID,
-                        $divisionId);
+                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(fn($rec) => $rec->getIdFromProperty(Sales_Model_Debitor::FLD_DIVISION_ID) === $divisionId, null);
             }
         }
         
