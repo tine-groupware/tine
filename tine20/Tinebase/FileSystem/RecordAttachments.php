@@ -18,6 +18,7 @@
  */
 class Tinebase_FileSystem_RecordAttachments
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_FileSystem_RecordAttachments> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

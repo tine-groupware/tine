@@ -19,6 +19,7 @@
  */
 class Bookmarks_Controller extends Tinebase_Controller_Event
 {
+    /** @use Tinebase_Controller_SingletonTrait<Bookmarks_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     protected $_applicationName = Bookmarks_Config::APP_NAME;

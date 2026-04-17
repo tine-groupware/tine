@@ -19,6 +19,7 @@
  */
 class Tinebase_MimeType
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_MimeType> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

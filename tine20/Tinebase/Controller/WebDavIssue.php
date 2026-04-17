@@ -10,6 +10,7 @@
 
 class Tinebase_Controller_WebDavIssue extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_WebDavIssue> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

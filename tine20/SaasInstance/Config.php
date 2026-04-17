@@ -15,6 +15,7 @@
  */
 class SaasInstance_Config extends Tinebase_Config_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<SaasInstance_Config> */
     use Tinebase_Controller_SingletonTrait;
 
     public const APP_NAME = 'SaasInstance';

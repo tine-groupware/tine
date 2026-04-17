@@ -21,6 +21,7 @@
  */
 class Tinebase_AreaLock implements Tinebase_Controller_Interface
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_AreaLock> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

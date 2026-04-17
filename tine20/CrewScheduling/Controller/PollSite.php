@@ -19,6 +19,7 @@
  */
 class CrewScheduling_Controller_PollSite extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<CrewScheduling_Controller_PollSite> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

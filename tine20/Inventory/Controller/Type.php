@@ -18,6 +18,7 @@
  */
 class Inventory_Controller_Type extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Inventory_Controller_Type> */
     use Tinebase_Controller_SingletonTrait;
     
     /**

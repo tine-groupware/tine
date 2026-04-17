@@ -21,6 +21,7 @@ declare(strict_types=1);
  */
 class EventManager_Controller_Appointment extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller_Appointment> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

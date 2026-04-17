@@ -18,6 +18,7 @@
  */
 class Tinebase_Controller_BankAccount extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_BankAccount> */
     use Tinebase_Controller_SingletonTrait;
     
     /**

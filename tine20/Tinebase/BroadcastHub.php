@@ -17,6 +17,7 @@ use Zend_RedisProxy as Redis;
  */
 class Tinebase_BroadcastHub
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_BroadcastHub> */
     use Tinebase_Controller_SingletonTrait;
 
     public function isActive(): bool

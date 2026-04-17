@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_AttendanceRecord extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_AttendanceRecord> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

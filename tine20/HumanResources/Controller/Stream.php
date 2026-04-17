@@ -21,6 +21,7 @@ use HumanResources_Model_StreamModalReport as Report;
  */
 class HumanResources_Controller_Stream extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_Stream> */
     use Tinebase_Controller_SingletonTrait;
 
     protected $recreateReports = false;

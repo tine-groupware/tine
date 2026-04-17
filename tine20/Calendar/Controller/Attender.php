@@ -17,6 +17,7 @@
  */
 class Calendar_Controller_Attender extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Calendar_Controller_Attender> */
     use Tinebase_Controller_SingletonTrait;
 
     protected function __construct()

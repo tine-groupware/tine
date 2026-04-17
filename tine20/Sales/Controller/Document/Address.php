@@ -19,6 +19,7 @@
  */
 class Sales_Controller_Document_Address extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_Address> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

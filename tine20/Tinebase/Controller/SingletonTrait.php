@@ -8,11 +8,19 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2019-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ * @template T of object
  */
 
 trait Tinebase_Controller_SingletonTrait
 {
+    /**
+     * @var ?T
+     */
     private static ?self $_instance = null;
+
+    /**
+     * @return T
+     */
 
     public static function getInstance(): self
     {

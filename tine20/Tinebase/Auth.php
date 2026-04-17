@@ -116,6 +116,7 @@ class Tinebase_Auth
      */
     public const SUCCESS                        =  Zend_Auth_Result::SUCCESS;
 
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Auth> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

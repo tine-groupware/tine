@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_MonthlyWTReport extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_MonthlyWTReport> */
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 

@@ -20,6 +20,7 @@
  */
 class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Felamimail_Controller_AttachmentCache> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

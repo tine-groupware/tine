@@ -19,6 +19,7 @@
  */
 class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Admin_Controller_EmailAccount> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

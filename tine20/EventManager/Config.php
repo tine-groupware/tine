@@ -21,6 +21,7 @@ declare(strict_types=1);
  */
 class EventManager_Config extends Tinebase_Config_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Config> */
     use Tinebase_Controller_SingletonTrait;
 
     const APP_NAME = 'EventManager';

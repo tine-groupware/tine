@@ -21,6 +21,7 @@ declare(strict_types=1);
  */
 class EventManager_Controller_Selection extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller_Selection> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

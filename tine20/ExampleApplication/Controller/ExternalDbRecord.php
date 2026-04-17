@@ -18,6 +18,7 @@
  */
 class ExampleApplication_Controller_ExternalDbRecord extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<ExampleApplication_Controller_ExternalDbRecord> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

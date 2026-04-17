@@ -24,6 +24,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_AppPassword> */
     use Tinebase_Controller_SingletonTrait;
 
     public const PWD_LENGTH = 26;

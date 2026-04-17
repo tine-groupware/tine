@@ -22,6 +22,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Tinebase_Controller_TwigTemplate extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_TwigTemplate> */
     use Tinebase_Controller_SingletonTrait;
 
     /**
