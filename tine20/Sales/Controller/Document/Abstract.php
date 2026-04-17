@@ -306,7 +306,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
 
         if (1 !== $_record->{Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS}
-                ->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count()
+                ?->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true)->count()
         ) {
             throw new Tinebase_Exception_UnexpectedValue('payment means need to have one default record');
         }
