@@ -3,10 +3,10 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import '../styles/sso.less'
+import '../styles/sso.scss'
 import './AdminPanel'
 
 // sso app entry point for tine20 fat-client

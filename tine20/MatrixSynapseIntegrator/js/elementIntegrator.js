@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
-import '../styles/element.less'
+import '../styles/element.scss'
 // TODO activate when ready
 // import './Addressbook/ListRoomPanel'
 import './Admin/userEditDialogRecordFormPlugin'
