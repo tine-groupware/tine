@@ -548,6 +548,8 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $numberFilter = $offerFilter->createFilter(Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, 'equals', '')
         );
 
+        $defaultPaymentMeansId = Sales_Config::getInstance()->{Sales_Config::DEBITOR_DEFAULT_PAYMENT_MEANS};
+
         foreach ($orders as $order) {
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
@@ -585,6 +587,10 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE => $order->title,
                 Sales_Model_Document_Abstract::FLD_DESCRIPTION => $order->description,
                 Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $order->attachments,
+                Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [new Sales_Model_PaymentMeans([
+                    Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => $defaultPaymentMeansId,
+                    Sales_Model_PaymentMeans::FLD_DEFAULT => true,
+                ])]),
             ]);
 
             Sales_Controller_Document_Order::getInstance()->create($newOrder);
