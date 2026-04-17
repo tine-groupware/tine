@@ -15,6 +15,7 @@
  */
 class EventManager_Controller_Register_ContactPropertiesAddress extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller_Register_ContactPropertiesAddress> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

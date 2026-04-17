@@ -21,6 +21,7 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  */
 class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_EvaluationDimension> */
     use Tinebase_Controller_SingletonTrait;
 
     protected bool $ignoreInspect = false;

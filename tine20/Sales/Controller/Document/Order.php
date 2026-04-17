@@ -19,6 +19,7 @@
  */
 class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_Order> */
     use Tinebase_Controller_SingletonTrait;
 
     protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_ORDER;

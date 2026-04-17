@@ -18,6 +18,7 @@
  */
 class Bookmarks_Config extends Tinebase_Config_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Bookmarks_Config> */
     use Tinebase_Controller_SingletonTrait;
     const APP_NAME = 'Bookmarks';
     protected $_appName = self::APP_NAME;

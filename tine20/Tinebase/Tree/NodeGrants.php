@@ -18,6 +18,7 @@
  */
 class Tinebase_Tree_NodeGrants extends Tinebase_Controller_Record_Grants
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Tree_NodeGrants> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

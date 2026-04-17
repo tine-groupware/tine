@@ -19,6 +19,7 @@
  */
 class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Filemanager_Controller_Node> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

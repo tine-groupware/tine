@@ -11,6 +11,7 @@
 
 class CrewScheduling_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<CrewScheduling_Acl_Rights> */
     use Tinebase_Controller_SingletonTrait;
 
     public const MANAGE_SCHEDULING_ROLES = 'manage_scheduling_roles';

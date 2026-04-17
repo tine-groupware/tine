@@ -18,6 +18,7 @@
  */
 class UserManual_Config extends Tinebase_Config_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<UserManual_Config> */
     use Tinebase_Controller_SingletonTrait;
 
     const APP_NAME = 'UserManual';

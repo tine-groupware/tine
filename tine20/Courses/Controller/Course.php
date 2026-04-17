@@ -18,6 +18,7 @@
  */
 class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Courses_Controller_Course> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

@@ -24,6 +24,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract implements
     Felamimail_Controller_MassMailingPluginInterface
 {
+    /** @use Tinebase_Controller_SingletonTrait<CrewScheduling_Controller_Poll> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

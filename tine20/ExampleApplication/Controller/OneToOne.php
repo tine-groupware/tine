@@ -18,6 +18,7 @@
  */
 class ExampleApplication_Controller_OneToOne extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<ExampleApplication_Controller_OneToOne> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

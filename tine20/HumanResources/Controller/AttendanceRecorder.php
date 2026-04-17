@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_AttendanceRecorder implements Tinebase_Controller_Interface
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_AttendanceRecorder> */
     use Tinebase_Controller_SingletonTrait;
 
     protected $backend;

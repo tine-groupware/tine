@@ -30,6 +30,7 @@ use \Firebase\JWT\JWT;
  */
 class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 {
+    /** @use Tinebase_Controller_SingletonTrait<OnlyOfficeIntegrator_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     const KEY_SEPARATOR = '.';

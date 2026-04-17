@@ -16,6 +16,7 @@ use Aschmelyun\BasicFeeds\Feed;
 
 class EventManager_Frontend_RssFeed
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Frontend_RssFeed> */
     use Tinebase_Controller_SingletonTrait;
 
     public function publicApiGetRssFeed()

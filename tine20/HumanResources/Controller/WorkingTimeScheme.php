@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_WorkingTimeScheme> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

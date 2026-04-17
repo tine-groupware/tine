@@ -21,6 +21,7 @@
  */
 class ExampleApplication_Controller extends Tinebase_Controller_Event implements Tinebase_Application_Container_Interface
 {
+    /** @use Tinebase_Controller_SingletonTrait<ExampleApplication_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     const publicTestRouteOutput = 'publicTestRouteOutput';

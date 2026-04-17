@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_Division extends Tinebase_Controller_Record_Container
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_Division> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

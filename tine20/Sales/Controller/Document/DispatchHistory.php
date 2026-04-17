@@ -22,6 +22,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Controller_Document_DispatchHistory extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_DispatchHistory> */
     use Tinebase_Controller_SingletonTrait;
 
     protected function __construct()

@@ -22,6 +22,7 @@ use Tinebase_ModelConfiguration_Const as TMCC;
  */
 class Sales_Controller_Division extends Tinebase_Controller_Record_Container
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Division> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

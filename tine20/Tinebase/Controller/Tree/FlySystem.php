@@ -15,6 +15,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Tinebase_Controller_Tree_FlySystem extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_Tree_FlySystem> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

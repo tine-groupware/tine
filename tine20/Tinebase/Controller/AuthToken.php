@@ -18,6 +18,7 @@
  */
 class Tinebase_Controller_AuthToken extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_AuthToken> */
     use Tinebase_Controller_SingletonTrait;
 
     protected $_purgedOldRecordsThisLifecycle = false;

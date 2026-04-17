@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_CostCenter extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_CostCenter> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

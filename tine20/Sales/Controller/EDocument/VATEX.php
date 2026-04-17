@@ -21,6 +21,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Controller_EDocument_VATEX extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_EDocument_VATEX> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

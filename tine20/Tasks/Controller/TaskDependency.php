@@ -19,6 +19,7 @@
  */
 class Tasks_Controller_TaskDependency extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tasks_Controller_TaskDependency> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

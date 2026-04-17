@@ -21,6 +21,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Controller_EDocument_PaymentMeansCode extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_EDocument_PaymentMeansCode> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

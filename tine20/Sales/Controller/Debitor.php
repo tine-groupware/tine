@@ -18,6 +18,7 @@
  */
 class Sales_Controller_Debitor extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Debitor> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

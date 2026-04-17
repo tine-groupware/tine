@@ -21,6 +21,7 @@ declare(strict_types=1);
  */
 class EventManager_Controller extends Tinebase_Controller_Event
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     protected static $_defaultModel = EventManager_Model_Event::class;

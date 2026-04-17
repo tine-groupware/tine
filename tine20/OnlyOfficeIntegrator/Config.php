@@ -18,6 +18,7 @@
  */
 class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<OnlyOfficeIntegrator_Config> */
     use Tinebase_Controller_SingletonTrait;
 
     const APP_NAME = 'OnlyOfficeIntegrator';

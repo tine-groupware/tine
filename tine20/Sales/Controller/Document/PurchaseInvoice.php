@@ -24,6 +24,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Document_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_PurchaseInvoice> */
     use Tinebase_Controller_SingletonTrait;
 
     public const IS_EDOCUMENT = 'isEDocument';

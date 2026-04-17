@@ -18,6 +18,7 @@
  */
 class SSO_Controller_OAuthDeviceCode extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<SSO_Controller_OAuthDeviceCode> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

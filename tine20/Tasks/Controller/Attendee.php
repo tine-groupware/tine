@@ -21,6 +21,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Tasks_Controller_Attendee extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tasks_Controller_Attendee> */
     use Tinebase_Controller_SingletonTrait;
 
     /**
