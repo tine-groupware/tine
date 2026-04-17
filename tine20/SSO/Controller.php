@@ -29,6 +29,7 @@ use Strobotti\JWK\KeyFactory;
  */
 class SSO_Controller extends Tinebase_Controller_Event
 {
+    /** @use Tinebase_Controller_SingletonTrait<SSO_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     public const WEBFINGER_REL = 'http://openid.net/specs/connect/1.0/issuer';

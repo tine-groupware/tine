@@ -18,6 +18,7 @@
  */
 class EFile_Controller extends Tinebase_Controller_Event
 {
+    /** @use Tinebase_Controller_SingletonTrait<EFile_Controller> */
     use Tinebase_Controller_SingletonTrait;
 
     const TIER_TOKEN_SEPERATOR = ' - ';

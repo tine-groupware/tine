@@ -18,6 +18,7 @@
  */
 class Tinebase_Controller_BankHoliday extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_BankHoliday> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

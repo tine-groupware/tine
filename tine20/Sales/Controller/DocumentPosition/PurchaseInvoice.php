@@ -19,6 +19,7 @@
  */
 class Sales_Controller_DocumentPosition_PurchaseInvoice extends Sales_Controller_DocumentPosition_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_DocumentPosition_PurchaseInvoice> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

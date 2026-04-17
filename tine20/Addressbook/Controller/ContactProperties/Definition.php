@@ -20,6 +20,7 @@ use Addressbook_Model_ContactProperties_Definition as AMCPD;
  */
 class Addressbook_Controller_ContactProperties_Definition extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Addressbook_Controller_ContactProperties_Definition> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

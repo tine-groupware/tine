@@ -15,6 +15,7 @@
  */
 class Calendar_Controller_EventNotifications
 {
+    /** @use Tinebase_Controller_SingletonTrait<Calendar_Controller_EventNotifications> */
     use Tinebase_Controller_SingletonTrait;
 
     const NOTIFICATION_LEVEL_NONE = 0;

@@ -20,6 +20,7 @@
  */
 class SSO_Controller_ExternalIdp extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<SSO_Controller_ExternalIdp> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

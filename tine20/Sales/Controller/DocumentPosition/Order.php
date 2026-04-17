@@ -19,6 +19,7 @@
  */
 class Sales_Controller_DocumentPosition_Order extends Sales_Controller_DocumentPosition_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_DocumentPosition_Order> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

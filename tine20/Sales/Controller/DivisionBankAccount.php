@@ -12,6 +12,7 @@
 
 class Sales_Controller_DivisionBankAccount extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_DivisionBankAccount> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

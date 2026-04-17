@@ -23,6 +23,7 @@ use Firebase\JWT\JWT;
  */
 class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller_Event> */
     use Tinebase_Controller_SingletonTrait;
 
     protected static array $updateStatisticsCache = [];

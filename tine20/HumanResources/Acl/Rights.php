@@ -16,6 +16,7 @@
  */
 class HumanResources_Acl_Rights extends Tinebase_Acl_Rights_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Acl_Rights> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

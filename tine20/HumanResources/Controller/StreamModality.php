@@ -20,6 +20,7 @@ use HumanResources_Model_StreamModality as StreamModality;
  */
 class HumanResources_Controller_StreamModality extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_StreamModality> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

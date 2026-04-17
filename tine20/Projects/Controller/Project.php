@@ -19,6 +19,7 @@
  */
 class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Projects_Controller_Project> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

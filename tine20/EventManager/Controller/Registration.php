@@ -26,6 +26,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class EventManager_Controller_Registration extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EventManager_Controller_Registration> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

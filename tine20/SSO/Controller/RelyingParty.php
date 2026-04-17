@@ -20,6 +20,7 @@
  */
 class SSO_Controller_RelyingParty extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<SSO_Controller_RelyingParty> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

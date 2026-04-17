@@ -19,6 +19,7 @@
  */
 class Sales_Controller_Document_Customer extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_Customer> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

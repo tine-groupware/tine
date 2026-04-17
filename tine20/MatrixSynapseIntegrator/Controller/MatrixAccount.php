@@ -19,6 +19,7 @@
  */
 class MatrixSynapseIntegrator_Controller_MatrixAccount extends MatrixSynapseIntegrator_Controller_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<MatrixSynapseIntegrator_Controller_MatrixAccount> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

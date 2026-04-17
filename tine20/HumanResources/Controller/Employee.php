@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_Employee> */
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 

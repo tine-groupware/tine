@@ -26,6 +26,7 @@ use Tinebase_Model_Alarm as TBMA;
  */
 class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tasks_Controller_Task> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

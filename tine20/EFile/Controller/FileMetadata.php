@@ -18,6 +18,7 @@
  */
 class EFile_Controller_FileMetadata extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<EFile_Controller_FileMetadata> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

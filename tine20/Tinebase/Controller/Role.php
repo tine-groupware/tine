@@ -8,6 +8,7 @@
  */
 class Tinebase_Controller_Role implements Tinebase_Controller_Record_Interface, Tinebase_Controller_SearchInterface
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_Role> */
     use Tinebase_Controller_SingletonTrait;
 
 

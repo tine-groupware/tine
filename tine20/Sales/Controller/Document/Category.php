@@ -19,6 +19,7 @@
  */
 class Sales_Controller_Document_Category extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_Category> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

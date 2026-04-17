@@ -18,6 +18,7 @@
  */
 class HumanResources_Controller_WTRCorrection extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<HumanResources_Controller_WTRCorrection> */
     use Tinebase_Controller_SingletonTrait;
     use HumanResources_Controller_CheckFilterACLEmployeeTrait;
 

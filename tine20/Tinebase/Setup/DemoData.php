@@ -16,6 +16,7 @@
  */
 class Tinebase_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Setup_DemoData> */
     use Tinebase_Controller_SingletonTrait;
 
     protected $_appName = Tinebase_Config::APP_NAME;

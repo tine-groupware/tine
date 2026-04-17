@@ -22,6 +22,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class SSO_Controller_Token extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<SSO_Controller_Token> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

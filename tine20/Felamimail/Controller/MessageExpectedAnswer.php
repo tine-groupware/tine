@@ -20,6 +20,7 @@
  */
 class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Felamimail_Controller_MessageExpectedAnswer> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

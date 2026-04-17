@@ -10,6 +10,7 @@
 
 class Sales_Controller_Document_Supplier extends Sales_Controller_Supplier
 {
+    /** @use Tinebase_Controller_SingletonTrait<Sales_Controller_Document_Supplier> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

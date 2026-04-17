@@ -24,6 +24,7 @@
  */
 class Addressbook_Controller_ContactProperties_Address extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Addressbook_Controller_ContactProperties_Address> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

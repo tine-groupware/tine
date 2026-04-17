@@ -18,6 +18,7 @@
  */
 class CrewScheduling_Controller_SchedulingRole extends Tinebase_Controller_Record_Container
 {
+    /** @use Tinebase_Controller_SingletonTrait<CrewScheduling_Controller_SchedulingRole> */
     use Tinebase_Controller_SingletonTrait;
 
     protected function __construct()

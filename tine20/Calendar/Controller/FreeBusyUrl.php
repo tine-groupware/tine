@@ -14,6 +14,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 /** @extends Tinebase_Controller_Record_Abstract<Calendar_Model_FreeBusyUrl> */
 class Calendar_Controller_FreeBusyUrl extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Calendar_Controller_FreeBusyUrl> */
     use Tinebase_Controller_SingletonTrait;
 
     /**

@@ -19,6 +19,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Timetracker_Controller_Timesheet> */
     use Tinebase_Controller_SingletonTrait;
 
     /**
