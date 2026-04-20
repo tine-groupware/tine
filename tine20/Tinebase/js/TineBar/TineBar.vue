@@ -145,31 +145,6 @@ const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.p
     background-repeat: no-repeat;
     background-position: center !important;
     background-size: 30px 30px !important;
-    position: relative;
-
-    &:hover {
-      cursor: pointer;
-      background-size: 32px 32px !important;
-    }
-    &:active {
-      background-size: 30px 30px !important;
-    }
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 0;
-      border-bottom: 1px dashed rgba(0, 0, 0, 0.4);
-
-      transition: all 0.3s ease-in-out;
-    }
-    &:hover::after {
-      border-bottom-color: rgba(0, 0, 0, 1);
-      width: 80%;
-    }
   }
 
   .application-menu-btn{
