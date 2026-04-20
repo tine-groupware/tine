@@ -28,15 +28,24 @@ class  MatrixSynapseIntegrator_Setup_Initialize extends Setup_Initialize
                 [
                     'is_system' => true,
                     'name' => MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_MATRIX_ID,
-                    TMCC::LABEL => 'Matrix-ID', // _('Matrix-ID')
-                    TMCC::UI_CONFIG => [
-                        'order' => '29',
-                        'group' => 'Contact Information',
-                    ],
-                    TMCC::TYPE => TMCC::TYPE_TEXT,
                     TMCC::SPECIAL_TYPE => Addressbook_Model_ContactProperties_InstantMessenger::class,
-                    TMCC::INPUT_FILTERS => [
-                        Zend_Filter_StringTrim::class                    ],
+
+                    Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                        TMCC::LABEL => 'Matrix-ID', // _('Matrix-ID')
+                        TMCC::TYPE => TMCC::TYPE_TEXT,
+                        TMCC::UI_CONFIG => [
+                            'order' => '29',
+                            'group' => 'Contact Information',
+                        ],
+                        TMCC::VALIDATORS => [
+                            Zend_Filter_Input::ALLOW_EMPTY => true,
+                        ],
+                        TMCC::INPUT_FILTERS => [
+                            Zend_Filter_StringTrim::class
+                        ],
+                        TMCC::NULLABLE => true,
+                        TMCC::OWNING_APP => MatrixSynapseIntegrator_Config::APP_NAME,
+                    ],
                 ],
             ]
         ], [
