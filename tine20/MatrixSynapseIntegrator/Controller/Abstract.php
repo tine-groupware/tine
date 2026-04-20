@@ -18,6 +18,7 @@
  */
 class MatrixSynapseIntegrator_Controller_Abstract extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<MatrixSynapseIntegrator_Controller_Abstract> */
     use Tinebase_Controller_SingletonTrait;
 
     protected ?MatrixSynapseIntegrator_Backend_Corporal $_corporal = null;

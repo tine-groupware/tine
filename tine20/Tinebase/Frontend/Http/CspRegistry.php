@@ -10,7 +10,7 @@
  */
 class Tinebase_Frontend_Http_CspRegistry
 {
-
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Frontend_Http_CspRegistry> */
     use Tinebase_Controller_SingletonTrait;
     protected static array $_sources = [
         'script-src'  => [],

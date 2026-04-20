@@ -20,6 +20,7 @@
  */
 class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Controller_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<MatrixSynapseIntegrator_Controller_Room> */
     use Tinebase_Controller_SingletonTrait;
 
     /**
