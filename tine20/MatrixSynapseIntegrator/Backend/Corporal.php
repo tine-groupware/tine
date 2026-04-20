@@ -6,7 +6,7 @@
  * @package      MatrixSynapseIntegrator
  * @subpackage   Backend
  * @license      https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -86,7 +86,8 @@ class MatrixSynapseIntegrator_Backend_Corporal
                 "forbidEncryptedRoomCreation" => false,
                 "forbidUnencryptedRoomCreation" => false
             ],
-            "users" => $this->_getUserPolicy()
+            "users" => $this->_getUserPolicy(),
+            "managedRoomIds" => $this->_getManagedRooms(),
         ];
     }
 
@@ -114,28 +115,46 @@ class MatrixSynapseIntegrator_Backend_Corporal
     protected function _getPolicyForAccount(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): array
     {
         try {
-            $user = Tinebase_User::getInstance()->getUserById(
+            $user = Tinebase_User::getInstance()->getFullUserById(
                 $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID}
             );
         } catch (Tinebase_Exception_NotFound) {
             $user = null;
         }
+
+        $joinedRooms = [];
+        if ($user) {
+            $rooms = MatrixSynapseIntegrator_Controller_Room::getInstance()->getRoomsForAccount($user);
+            foreach ($rooms as $room) {
+                $joinedRooms[] = [
+                    'roomId' => $room->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID},
+                    // TODO where do we set the power level? maybe depending on list membership role?
+                    'powerLevel' => 10,
+                ];
+            }
+        }
+
         return [
             "id" => $matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID},
             "active" => $matrixAccount->is_deleted == 0,
             "displayName" => $user ? $user->accountDisplayName : 'unknown',
             "forbidRoomCreation" => false,
+            "joinedRooms" => $joinedRooms,
 			"authType" => "sha1",
 			"authCredential" => $user
                 ? Tinebase_User::getInstance()->getPasswordHashByLoginname($user->accountLoginName)
                 : '',
 //			"authType" => "plain",
 //			"avatarUri" => "https://example.com/john.jpg",
-//            "joinedRooms" => [
-//				{"roomId": "!roomA:example.com", "powerLevel": 0},
-//				{"roomId": "!roomB:example.com", "powerLevel": 50}
-//            ],
         ];
+    }
+
+    protected function _getManagedRooms(): array
+    {
+        // TODO add paging / use iterator / direct backend call?
+
+        $rooms = MatrixSynapseIntegrator_Controller_Room::getInstance()->getAll();
+        return $rooms->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID};
     }
 
     public function getPushedPolicy(): array

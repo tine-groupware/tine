@@ -19,15 +19,6 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
      */
     protected $_uit = null;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setCorporalBackend(
-            new MatrixSynapseIntegrator_Backend_CorporalMock()
-        );
-    }
-
     public function testMatrixAccountApi(bool $delete = true): array
     {
         return $this->_testSimpleRecordApi(

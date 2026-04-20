@@ -81,6 +81,9 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
     {
         parent::_inspectBeforeCreate($_record);
 
+        if (!$this->_synapse) {
+            throw new Tinebase_Exception_Backend('Synapse not initialized');
+        }
         $roomId = $this->_synapse->createRoom($_record);
         $_record->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID} = $roomId;
     }
@@ -91,5 +94,14 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
         $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
             [MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM] = [];
         $mc->setJsonExpander($expanderDef);
+    }
+
+    public function getRoomsForAccount(Tinebase_Model_FullUser $user): Tinebase_Record_RecordSet
+    {
+        $listIds = Addressbook_Controller_List::getInstance()->getMemberships($user->contact_id);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(MatrixSynapseIntegrator_Model_Room::class, [
+            ['field' => MatrixSynapseIntegrator_Model_Room::FLD_LIST_ID, 'operator' => 'in', 'value' => $listIds],
+        ]);
+        return $this->search($filter);
     }
 }
