@@ -17,6 +17,7 @@
  */
 class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
 {
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Controller_Instance> */
     use Tinebase_Controller_SingletonTrait;
     
     /**
