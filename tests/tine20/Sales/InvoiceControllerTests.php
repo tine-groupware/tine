@@ -28,7 +28,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      */
     protected function setUp(): void
     {
-        if ($this->_dbIsPgsql() || ! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+        if (! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
         }
 
@@ -261,6 +261,81 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_invoiceController->update($invoice);
     }
 
+    public function testAutoBillUnbillableTS(): void
+    {
+        $this->_createCostCenters();
+        $this->_createProducts([[
+            'name' => 'Unbillable Hours',
+            'description' => 'timesheets',
+            'price' => '0',
+            'accountable' => Timetracker_Model_TimeaccountNotBillable::class,
+        ]]);
+        $products = $this->_productRecords;
+        $this->_createProducts();
+        $this->_productRecords->mergeById($products);
+        $this->_createCustomers();
+        $this->_timesheetController = Timetracker_Controller_Timesheet::getInstance();
+        $this->_createTimeaccounts();
+        $this->_timesheetRecords = new Tinebase_Record_RecordSet('Timetracker_Model_Timesheet');
+        $tsDate = clone $this->_referenceDate;
+        $tsDate->subMonth(1)->addDay(5);
+        // this is a ts on 20xx-01-06
+        $this->_timesheetRecords->addRecord($this->_timesheetController->create(new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $this->_timeaccountRecords->getByIndex(2)->getId(),
+            'start_date' => $tsDate,
+            'duration' => 105,
+            'description' => 'ts from ' . (string) $tsDate,
+        ))));
+        $this->_timesheetRecords->addRecord($this->_timesheetController->create(new Timetracker_Model_Timesheet(array(
+            'account_id' => Tinebase_Core::getUser()->getId(),
+            'timeaccount_id' => $this->_timeaccountRecords->getByIndex(2)->getId(),
+            'start_date' => $tsDate,
+            'duration' => 180,
+            'description' => 'ts from ' . (string) $tsDate,
+            'is_billable' => false,
+        ))));
+
+        $startDate = $this->_referenceDate->getClone()->subMonth(1);
+        $endDate   = $startDate->getClone()->addMonth(7);
+        $hoursId = $this->_productRecords->find(function($val) {
+            return null !== $val->name->find('text', 'Hours');
+        }, null)->getId();
+        $hoursUnbillableId = $this->_productRecords->find(function($val) {
+            return null !== $val->name->find('text', 'Unbillable Hours');
+        }, null)->getId();
+
+        $this->_createContracts([[],[],[
+            'number'       => 1,
+            'title'        => Tinebase_Record_Abstract::generateUID(),
+            'description'  => '1 unittest begin',
+            'container_id' => $this->_sharedContractsContainerId,
+            'billing_address_id' => $this->_addressRecords->filter(
+                Sales_Model_Address::FLD_DEBITOR_ID, $this->_customerRecords->filter(
+                'name', 'Customer3')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
+                'type', 'billing')->getFirstRecord()->getId(),
+
+            'start_date' => clone $startDate,
+            'end_date' => $endDate,
+            'products' => [
+                ['start_date' => $startDate, 'end_date' => $endDate, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 'product_id' => $hoursId],
+                ['start_date' => $startDate, 'end_date' => $endDate, 'quantity' => 1, 'interval' => 1, 'billing_point' => 'begin', 'product_id' => $hoursUnbillableId],
+            ],
+        ]]);
+
+        $this->_invoiceController->createAutoInvoices($this->_referenceDate);
+
+        $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
+        $this->assertSame(1, $allInvoices->count());
+        $invoice = $this->_invoiceController->get($allInvoices->getFirstRecord()->getId());
+        $positions = Sales_Controller_InvoicePosition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_InvoicePosition::class, [
+            ['field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId()],
+        ]));
+        $this->assertSame(2, $positions->count());
+        $this->assertNotNull($positions->find('quantity', 1.75));
+        $this->assertNotNull($positions->find('quantity', 3.0));
+    }
+
     public function testXRechnungAttachment()
     {
         $this->_createFullFixtures();
@@ -268,7 +343,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_invoiceController->createAutoInvoices($this->_referenceDate);
 
         $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
-        echo $allInvoices->count() . PHP_EOL;
 
         /** @var Sales_Model_Invoice $invoice */
         $invoice = $allInvoices->getFirstRecord();

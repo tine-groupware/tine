@@ -609,6 +609,7 @@ class Sales_InvoiceTestCase extends TestCase
             }
             
             $i++;
+            if (empty($cd)) continue;
             $contract = new Sales_Model_Contract($cd);
             $contract->setTimezone('UTC');
             $contract->eval_dim_cost_center = $costcenter->getId();

@@ -489,7 +489,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Timetracker_Model_Timeaccount::class,
                 Timetracker_Model_TimeaccountFavorite::class,
                 Timetracker_Model_TimeaccountGrants::class,
+                Timetracker_Model_TimeaccountNotBillable::class,
                 Timetracker_Model_Timesheet::class,
+                Timetracker_Model_TimesheetNotBillable::class,
             ),
             'Tinebase' => array(
                 Tinebase_Model_AccessLog::class,

@@ -16,6 +16,7 @@ Tine.Timetracker.registerAccountables = function() {
     }
     
     Tine.Sales.AccountableRegistry.register('Timetracker', 'Timeaccount');
+    Tine.Sales.AccountableRegistry.register('Timetracker', 'TimeaccountNotBillable');
 };
 
 Tine.Timetracker.registerAccountables();
