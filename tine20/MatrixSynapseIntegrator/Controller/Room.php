@@ -81,9 +81,8 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
     {
         parent::_inspectBeforeCreate($_record);
 
-        // TODO create room via synapse call
-        // TODO save room id in record
-
+        $roomId = $this->_synapse->createRoom($_record);
+        $_record->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID} = $roomId;
     }
 
     public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void

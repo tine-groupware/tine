@@ -42,6 +42,9 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
 
     public function testRoomCreateDelete(): void
     {
+        $testSynapse = new MatrixSynapseIntegrator_Backend_SynapseMock();
+        MatrixSynapseIntegrator_Controller_Room::getInstance()->setSynapseBackend($testSynapse);
+
         $list = Addressbook_Controller_List::getInstance()->create(new Addressbook_Model_List([
             'name' => 'test list',
             'container_id' => $this->_getTestContainer(
@@ -61,8 +64,10 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         self::assertArrayHasKey(MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM, $listArray,
             print_r($listArray, true));
         self::assertNotNull($listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM]);
-        self::assertEquals('test room', $listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM]
-            [MatrixSynapseIntegrator_Model_Room::FLD_NAME]);
+        $roomData = $listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM];
+        self::assertEquals('test room', $roomData[MatrixSynapseIntegrator_Model_Room::FLD_NAME]);
+        self::assertEquals(\MatrixSynapseIntegrator_Backend_SynapseMock::ROOM_ID,
+            $roomData[MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID]);
 
         // TODO check delete list -> room should be deleted, too
     }

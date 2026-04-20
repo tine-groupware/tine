@@ -18,6 +18,8 @@
  */
 class MatrixSynapseIntegrator_Backend_SynapseMock extends MatrixSynapseIntegrator_Backend_Synapse
 {
+    public const ROOM_ID = '!hwkMyiXxaBUxTkGhDl:matrix.local.tine-dev.de';
+
     public function login(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
     {
         return [
@@ -26,5 +28,10 @@ class MatrixSynapseIntegrator_Backend_SynapseMock extends MatrixSynapseIntegrato
              'access_token' => 'syt_bW9ua2V5ODM_lZeStfEXvhyzIREMPfjW_0oJGpP',
              'device_id' => 'ZMRHTQVBVI',
          ];
+    }
+
+    public function createRoom(MatrixSynapseIntegrator_Model_Room $room): string
+    {
+        return self::ROOM_ID;
     }
 }
