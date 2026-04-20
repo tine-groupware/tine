@@ -1245,7 +1245,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected function _createGroup()
     {
         $group = Tinebase_Group::getInstance()->addGroup(new Tinebase_Model_Group([
-            'name'      => 'unittestgroup' . Tinebase_Record_Abstract::generateUID(5)
+            'name' => 'unittestgroup' . Tinebase_Record_Abstract::generateUID(5)
         ]));
         $this->_listsToDelete[] = $group->list_id;
 
