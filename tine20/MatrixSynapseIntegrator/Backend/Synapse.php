@@ -18,11 +18,25 @@
  */
 class MatrixSynapseIntegrator_Backend_Synapse
 {
-    protected const LOGIN_ENDPOINT = '_matrix/client/v3/login';
+    protected const SYNAPSE_ENDPOINT = '_matrix/client/v3';
+    protected const LOGIN_ENDPOINT = 'login';
+    protected const ROOM_ENDPOINT = 'createRoom';
 
     public function login(MatrixSynapseIntegrator_Model_MatrixAccount $account): array
     {
-        $client = $this->_getHttpClient();
+        if (MatrixSynapseIntegrator_Config::getInstance()->get(
+            MatrixSynapseIntegrator_Config::MATRIX_SYNAPSE_SHARED_SECRET_AUTH
+        )) {
+            $loginData = $this->_getSharedSecretLoginParams($account);
+        } else {
+            $loginData = $this->_getPasswordLoginParams($account);
+        }
+        return $this->_synapseRequest(self::LOGIN_ENDPOINT, $loginData);
+    }
+
+    protected function _synapseRequest(string $endpoint, array $requestData): array
+    {
+        $client = $this->_getHttpClient($endpoint);
 
         // TODO set some headers?
 //        $client->setHeaders([
@@ -31,18 +45,11 @@ class MatrixSynapseIntegrator_Backend_Synapse
 //            'Content-Type' =>  'application/json',
 //        ]);
 
-        if (MatrixSynapseIntegrator_Config::getInstance()->get(
-            MatrixSynapseIntegrator_Config::MATRIX_SYNAPSE_SHARED_SECRET_AUTH
-        )) {
-            $loginData = $this->_getSharedSecretLoginParams($account);
-        } else {
-            $loginData = $this->_getPasswordLoginParams($account);
-        }
-        $client->setRawData(json_encode($loginData));
+        $client->setRawData(json_encode($requestData));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Synapse login to ' . $client->getUri());
+                . ' [' . $endpoint . '] Synapse call to ' . $client->getUri());
         }
 
         $client->request(Zend_Http_Client::POST);
@@ -60,7 +67,7 @@ class MatrixSynapseIntegrator_Backend_Synapse
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' response: ' . $response->getBody());
             }
-            throw new Tinebase_Exception_Backend('synapse login failed');
+            throw new Tinebase_Exception_Backend('synapse request failed');
         }
     }
 
@@ -97,12 +104,31 @@ class MatrixSynapseIntegrator_Backend_Synapse
         ];
     }
 
-    protected function _getHttpClient(): Zend_Http_Client
+    protected function _getHttpClient(string $endpoint): Zend_Http_Client
     {
         $matrixHomeServer = MatrixSynapseIntegrator_Config::getInstance()->get(
             MatrixSynapseIntegrator_Config::HOME_SERVER_URL);
-        $synapseUrl = $matrixHomeServer . '/' . self::LOGIN_ENDPOINT;
+        $synapseUrl = $matrixHomeServer . DIRECTORY_SEPARATOR . self::SYNAPSE_ENDPOINT . DIRECTORY_SEPARATOR . $endpoint;
 
         return Tinebase_Core::getHttpClient($synapseUrl);
+    }
+
+    public function createRoom(MatrixSynapseIntegrator_Model_Room $room): string
+    {
+        // curl --header "Authorization: Bearer ***" -XPOST https://URL/_matrix/client/v3/createRoom
+        //      --data '{"name": "test", "preset": "_private_chat_"}'
+        // => {"room_id":"ROOM_ID"}
+
+        $roomData = [
+            'name' => $room->{MatrixSynapseIntegrator_Model_Room::FLD_NAME},
+            'topic' => $room->{MatrixSynapseIntegrator_Model_Room::FLD_TOPIC},
+        ];
+        $responseData = $this->_synapseRequest(self::ROOM_ENDPOINT, $roomData);
+
+        if (! isset($responseData['room_id'])) {
+            throw new Tinebase_Exception_Backend('synapse room creation failed');
+        }
+
+        return $responseData['room_id'];
     }
 }
