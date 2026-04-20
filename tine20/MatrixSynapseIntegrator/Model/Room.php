@@ -89,7 +89,8 @@ class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
                self::TYPE                      => self::TYPE_STRING,
                self::NULLABLE                  => false,
                self::LENGTH                    => 255,
-               self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => false],
+               // TODO might improve this: technically, we need the name - but the client should no mark the tab panel / form as invalid if it is empty
+               self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                self::LABEL                     => 'Name', // _('Name')
             ],
             // we get the room id from synapse -> save it here
