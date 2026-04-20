@@ -8,7 +8,7 @@
 Ext.ns('Tine.Tinebase.widgets.keyfield');
 
 /**
- * @namespace   Tine.Tasks
+ * @namespace   Tine.Tinebase
  * @class       Tine.Tinebase.widgets.keyfield.Filter
  * @extends     Tine.widgets.grid.FilterModel
  * 
