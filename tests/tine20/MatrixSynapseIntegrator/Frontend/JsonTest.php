@@ -69,7 +69,14 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
         self::assertEquals(\MatrixSynapseIntegrator_Backend_SynapseMock::ROOM_ID,
             $roomData[MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID]);
 
-        // TODO check delete list -> room should be deleted, too
+        // check delete list -> room should be deleted, too
+        $adbJson->deleteLists([$listArray['id']]);
+        try {
+            MatrixSynapseIntegrator_Controller_Room::getInstance()->get($roomData['id']);
+            self::fail('room should be deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::assertStringContainsString('MatrixSynapseIntegrator_Model_Room record with id', $tenf->getMessage());
+        }
     }
 
     public function testGetBootstrapdata()
