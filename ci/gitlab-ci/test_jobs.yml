@@ -249,6 +249,7 @@ release-update-tests:
 prevent-upstream-changes:
   image: ${TEST_IMAGE}
   stage: test
+  needs: []
   before_script: []
   script:
     - !reference [.lib, script]
@@ -267,6 +268,7 @@ prevent-upstream-changes:
 prevent-wrong-update-script-changes:
   image: ${TEST_IMAGE}
   stage: test
+  needs: []
   before_script: []
   script:
     - !reference [.lib, script]
@@ -282,6 +284,7 @@ prevent-wrong-update-script-changes:
 prevent-wrong-branch:
   image: alpine
   stage: test
+  needs: []
   script:
     - |
       if [[ "$MAJOR_COMMIT_REF_NAME" != "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" ]]; then
