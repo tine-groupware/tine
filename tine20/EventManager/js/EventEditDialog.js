@@ -297,46 +297,79 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldManager('appointments', {
                             checkState: function () {
                                 let sessions = me.form.findField('appointments').getValue()
-                                sessions.sort((session1, session2) => {
-                                    if (session1['start_time'] < session2['start_time']) {
-                                        return -1;
-                                    }
-                                    if (session1['start_time'] > session2['start_time']) {
-                                        return 1;
-                                    }
-                                    return 0;
-                                })
                                 let counter = 0;
                                 sessions.forEach((session) => {
                                     session['session_number'] = counter + 1;
                                     counter += 1;
-                                    if (me.form.findField('end').getValue() && session['end_time'] && (me.form.findField('end').getValue() >= session['end_time'])) {
-                                        session['end_time'] = me.form.findField('end').getValue();
-                                        Ext.MessageBox.show({
-                                            buttons: Ext.Msg.OK,
-                                            icon: Ext.MessageBox.WARNING,
-                                            title: me.app.i18n._('Registration'),
-                                            msg: me.app.i18n._('The session should take place before the end date. Please change the date or it would be change automatically')
-                                        });
-                                    }
-                                    if (session['start_time'] && me.form.findField('start').getValue() && (session['start_time'] < me.form.findField('start').getValue())) {
-                                        session['start_time'] = me.form.findField('start').getValue();
-                                        Ext.MessageBox.show({
-                                            buttons: Ext.Msg.OK,
-                                            icon: Ext.MessageBox.WARNING,
-                                            title: me.app.i18n._('Registration'),
-                                            msg: me.app.i18n._('The session should start on the same date or after the event started. Please change the date or it would be change automatically')
-                                        });
-                                    }
-                                    if (session['start_time'] && session['end_time'] && (session['start_time'] > session['end_time'])) {
-                                        session['end_time'] = '';
-                                        Ext.MessageBox.show({
-                                            buttons: Ext.Msg.OK,
-                                            icon: Ext.MessageBox.WARNING,
-                                            title: me.app.i18n._('Registration'),
-                                            msg: me.app.i18n._('The session should end after it begun. Please change the end time, or it would be deleted')
-                                        });
-                                    }
+
+                                    const combineDateTime = (sessionDate, time) => {
+                                        if (!sessionDate || !time || time === '') {
+                                            return null;
+                                        }
+
+                                        const dateStr = (sessionDate instanceof Date)
+                                            ? `${sessionDate.getFullYear()}-${String(sessionDate.getMonth() + 1).padStart(2, '0')}-${String(sessionDate.getDate()).padStart(2, '0')}`
+                                            : sessionDate.substring(0, 10);
+
+                                        let timeStr;
+                                        if (time instanceof Date) {
+                                            timeStr = time.toTimeString().substring(0, 8);
+                                        } else if (time.length > 8) {
+                                            timeStr = time.substring(11, 19);
+                                        } else {
+                                            timeStr = time;
+                                        }
+
+                                        return new Date(`${dateStr}T${timeStr}`);
+                                    };
+
+                                    sessions.sort((session1, session2) => {
+                                        const start1 = combineDateTime(session1['session_date'], session1['start_time']);
+                                        const start2 = combineDateTime(session2['session_date'], session2['start_time']);
+                                        if (start1 === null && start2 === null) {
+                                            return 0;
+                                        }
+                                        if (start1 === null) {
+                                            return 1;
+                                        }
+                                        if (start2 === null) {
+                                            return -1;
+                                        }
+                                        return start1 - start2;
+                                    });
+
+                                    const eventStart = me.form.findField('start').getValue();
+                                    const eventEnd   = me.form.findField('end').getValue();
+                                    const sessStart  = combineDateTime(session['session_date'], session['start_time']);
+                                    const sessEnd    = combineDateTime(session['session_date'], session['end_time']);
+
+                                if (eventEnd && sessEnd && sessEnd > eventEnd) {
+                                    session['end_time'] = me.form.findField('end').getValue();
+                                    Ext.MessageBox.show({
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.WARNING,
+                                        title: me.app.i18n._('Registration'),
+                                        msg: me.app.i18n._('The session should take place before the end date. Please change the date or it would be change automatically')
+                                    });
+                                }
+                                if (sessStart && eventStart && sessStart < eventStart) {
+                                    session['start_time'] = me.form.findField('start').getValue();
+                                    Ext.MessageBox.show({
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.WARNING,
+                                        title: me.app.i18n._('Registration'),
+                                        msg: me.app.i18n._('The session should start on the same date or after the event started. Please change the date or it would be change automatically')
+                                    });
+                                }
+                                if (sessStart && sessEnd && sessStart > sessEnd) {
+                                    session['end_time'] = '';
+                                    Ext.MessageBox.show({
+                                        buttons: Ext.Msg.OK,
+                                        icon: Ext.MessageBox.WARNING,
+                                        title: me.app.i18n._('Registration'),
+                                        msg: me.app.i18n._('The session should end after it begun. Please change the end time, or it would be deleted')
+                                    });
+                                }
                                 })
                             }
                         })

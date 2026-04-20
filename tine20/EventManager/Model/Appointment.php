@@ -40,7 +40,7 @@ class EventManager_Model_Appointment extends Tinebase_Record_NewAbstract
         self::VERSION                   => 1,
         self::RECORD_NAME               => 'Appointment', // gettext('GENDER_Appointment')
         self::RECORDS_NAME              => 'Appointments', // ngettext('Appointment', 'Appointments', n)
-        self::DEFAULT_SORT_INFO         =>  ['field' => 'session_number', 'direction' => 'DESC'],
+        self::DEFAULT_SORT_INFO         =>  ['field' => 'session_number', 'direction' => 'ASC'],
         self::TITLE_PROPERTY            => self::FLD_EVENT_ID,
         self::IS_DEPENDENT              => true,
         self::HAS_RELATIONS             => false,
