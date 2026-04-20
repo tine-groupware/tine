@@ -541,7 +541,9 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         }
 
         // prevent changing of email if it does not match configured domains
-        Tinebase_EmailUser::checkAllowedDomain($_group->email, true);
+        if (!empty($_group->email)) {
+            Tinebase_EmailUser::checkAllowedDomain($_group->email, true);
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Creating new group ' . $_group->name 
