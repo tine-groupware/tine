@@ -269,7 +269,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $eventArray['contact_fields'] = $enriched;
                 $eventArray['required_contact_fields'] = $requiredContactFields;
             }
-
+            $eventArray['country_list'] = Tinebase_Translation::getCountryList()['results'];
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);

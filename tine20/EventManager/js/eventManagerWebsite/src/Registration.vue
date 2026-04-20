@@ -265,13 +265,10 @@ const acceptedTypes = '.pdf, .doc, .docx, .png, .jpeg, .txt, .html, .htm, .jpg, 
 const salutations = ref([
   { value: 'MR', text: formatMessage('Mr') },
   { value: 'MS', text: formatMessage('Ms') },
-  { value: 'COMPANY', text: formatMessage('Company') },
   { value: 'PERSON', text: formatMessage('Person') },
 ]);
 
-const countries = ref([
-  { value: 'DE', text: formatMessage('Deutschland') },
-]);
+const countries = ref([]);
 
 const REGISTRATION_SCENARIO = {
   UNKNOWN_USER: 'unknown_user',
@@ -1357,6 +1354,12 @@ const fetchEvent = async () => {
   eventDetails.value = data;
   registrationContactFields.value = data.contact_fields;
   requiredContactFields.value = data.required_contact_fields;
+  if (data.country_list) {
+    countries.value = data.country_list.map(c => ({
+      value: c.shortName,
+      text: c.translatedName
+    }));
+  }
   initializeEventOptions();
 };
 
