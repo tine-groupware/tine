@@ -103,11 +103,11 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
     // private
     onRender : function(ct, position){
         Ext.form.Checkbox.superclass.onRender.call(this, ct, position);
-        if(this.inputValue !== undefined){
-            this.el.dom.value = this.inputValue;
+        if(this.constructor !== Ext.form.Checkbox){
+            this.el.dom.value = '';
         }
 
-        this.el.set({value: '', 'role': this.switch ? 'switch' : 'checkbox'});
+        this.el.set({ 'role': this.switch ? 'switch' : 'checkbox' });
         this.el.addClass(this.switch ? 'form-switch-input' : 'form-check-input');
         this.wrap = this.el.wrap({cls: 'form-check'});
         this.bsWrap = this.wrap.wrap({cls: 'bootstrap-scope'});
