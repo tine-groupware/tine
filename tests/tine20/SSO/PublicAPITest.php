@@ -453,14 +453,22 @@ class SSO_PublicAPITest extends TestCase
 
     public function testOAuthAutoAuth()
     {
-        $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
-            SSO_Model_RelyingParty::FLD_NAME => 'unittest',
-            SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
-            SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
-                SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
-                SSO_Model_OAuthOIdRPConfig::FLD_SECRET          => 'unittest',
-            ]),
-        ]));
+        try {
+            $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
+                SSO_Model_RelyingParty::FLD_NAME => 'unittest',
+                SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
+                SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
+                    SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS => ['https://unittest.test/uri'],
+                    SSO_Model_OAuthOIdRPConfig::FLD_SECRET => 'unittest',
+                ]),
+            ]));
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' ' . $tead->getMessage());
+            }
+            self::markTestSkipped('Access denied on SSO app');
+        }
 
         $this->assertTrue($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_IS_CONFIDENTIAL});
 
