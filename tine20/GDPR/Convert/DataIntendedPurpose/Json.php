@@ -26,7 +26,7 @@ class GDPR_Convert_DataIntendedPurpose_Json extends Tinebase_Convert_Json
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $result = parent::fromTine20Model($_record);
-        $result[GDPR_Model_DataIntendedPurpose::FLD_URL] = Tinebase_Core::getUrl() . '/GDPR/view/register/for/' . $_record->getId();
+        $result[GDPR_Model_DataIntendedPurpose::FLD_URL] = rtrim(Tinebase_Core::getUrl(), '/') . '/GDPR/view/register/for/' . $_record->getId();
         return $result;
     }
 
@@ -42,7 +42,9 @@ class GDPR_Convert_DataIntendedPurpose_Json extends Tinebase_Convert_Json
     public function fromTine20RecordSet(?\Tinebase_Record_RecordSet $_records = NULL, $_filter = NULL, $_pagination = NULL)
     {
         foreach ($_records as $record) {
-            $record[GDPR_Model_DataIntendedPurpose::FLD_URL] = Tinebase_Core::getUrl() . '/GDPR/view/register/for/' . $record->getId();
+            if ($record->{GDPR_Model_DataIntendedPurpose::FLD_IS_SELF_REGISTRATION}) {
+                $record[GDPR_Model_DataIntendedPurpose::FLD_URL] = rtrim(Tinebase_Core::getUrl(), '/') . '/GDPR/view/register/for/' . $record->getId();
+            }
         }
 
         $result = parent::fromTine20RecordSet($_records, $_filter, $_pagination);

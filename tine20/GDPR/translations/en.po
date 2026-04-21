@@ -298,11 +298,11 @@ msgstr "Compose mass mail without recipients"
 msgid "Create mass mail without {0} support"
 msgstr "Create mass mail without {0} support"
 
-msgid "Hide from self registration"
-msgstr "Hide from self registration"
+msgid "User Self-Enrollment Allowed"
+msgstr "User Self-Enrollment Allowed"
 
-msgid "Hide from self service"
-msgstr "Hide from self service"
+msgid "User Self-Service Access Allowed"
+msgstr "User Self-Service Access Allowed"
 
 msgid "Registration link"
 msgstr "Registration link"
