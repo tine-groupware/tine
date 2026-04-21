@@ -128,6 +128,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'xml':
                 case 'doc':
                 case 'docx':
+                case '*':
                     $result = $export->generate($_filter);
                     break;
                 default:
