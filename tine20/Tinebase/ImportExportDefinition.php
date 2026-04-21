@@ -100,14 +100,10 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             if ($definition->plugin_options) {
                 try {
                     $config = Tinebase_ImportExportDefinition::getInstance()->getOptionsAsZendConfigXml(
-                        $definition, array()
+                        $definition
                     );
                 } catch (Tinebase_Exception_InvalidArgument $teia) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__
-                        . ' Removing export definition because'
-                        . ' exception was thrown: ' . $teia->getMessage());
-                    $toRemove[] = $definition;
+                    $this->_removeDefinition($definition, $toRemove, $teia->getMessage());
                 }
                 if (!empty($config->template)) {
                     if (!str_contains($config->template, 'tine20://')) {
@@ -117,27 +113,17 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                         $node = $fileSystem->stat(substr($config->template, 9));
                         if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $node->getId(),
                                 Tinebase_Model_Grants::GRANT_READ)) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                                __METHOD__ . '::' . __LINE__
-                                . ' Removing export definition because'
-                                . ' user has no read grant on template file ' . $config->template);
-                            $toRemove[] = $definition;
+                            $this->_removeDefinition($definition, $toRemove,
+                                'user has no read grant on template file ' . $config->template);
                         }
                     } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__
-                            . ' Removing export definition because'
-                            . ' exception was thrown: ' . $e->getMessage());
-                        $toRemove[] = $definition;
+                        $this->_removeDefinition($definition, $toRemove, $e->getMessage());
                     }
                 } elseif (!empty($config->templateFileId)) {
                     if (false === $fileSystem->hasGrant(Tinebase_Core::getUser()->getId(), $config->templateFileId,
                             Tinebase_Model_Grants::GRANT_READ)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                            __METHOD__ . '::' . __LINE__
-                            . ' Removing export definition because'
-                            . ' user has no read grant on template file id ' . $config->templateFileId);
-                        $toRemove[] = $definition;
+                        $this->_removeDefinition($definition, $toRemove,
+                            'user has no read grant on template file id ' . $config->templateFileId);
                     }
                 }
             }
@@ -146,6 +132,17 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $result->removeRecords($toRemove);
         
         return $result;
+    }
+
+    protected function _removeDefinition(Tinebase_Model_ImportExportDefinition $definition,
+                                         Tinebase_Record_RecordSet $toRemove,
+                                         string $message): void
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+            __METHOD__ . '::' . __LINE__
+            . ' Removing export definition ' . $definition->name . ' because'
+            . ' ' . $message);
+        $toRemove->addRecord($definition);
     }
 
     /**
