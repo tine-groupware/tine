@@ -25,7 +25,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct()
+    protected function __construct()
     {
         $this->_applicationName = 'Timetracker';
         $this->_backend = new Timetracker_Backend_Timeaccount();
