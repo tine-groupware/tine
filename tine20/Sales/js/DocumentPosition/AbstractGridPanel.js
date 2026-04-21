@@ -86,7 +86,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.store.suspendEvents();
             // copy product properties to position
             let productData = position.get('title');
-            const lang = this.lang || this.editDialog.getForm().findField('document_language').getValue();
+            const lang = this.lang || this.editDialog?.getForm?.()?.findField('document_language').getValue();
 
             if (_.isString(productData)) {
                 // manual position
@@ -107,8 +107,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 position.setFromProduct(productData, lang, this.editDialog.record.getData());
             }
 
-            const vatProcedure = this.editDialog.getForm().findField('vat_procedure').getValue();
-            if (vatProcedure !== 'standard') {
+            const vatProcedure = this.editDialog?.getForm?.()?.findField('vat_procedure').getValue();
+            if (vatProcedure && vatProcedure !== 'standard') {
                 position.set('sales_tax_rate', 0);
             }
 
