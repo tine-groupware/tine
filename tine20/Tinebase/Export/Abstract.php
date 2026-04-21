@@ -116,7 +116,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_prefKey = null;
 
     /**
-     * format strings
+     * format strings - supported formats are: * (all), doc, docx, rtf, odt, ods, xls, xlsx, csv, pdf, html, txt, rtf
      *
      * @var string
      */

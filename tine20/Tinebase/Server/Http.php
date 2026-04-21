@@ -167,8 +167,12 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         } catch (Throwable $exception) {
             if (!$exception instanceof Tinebase_Exception_ProgramFlow) {
                 Tinebase_Exception::log($exception, false);
-            } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .' ' . $exception->getMessage());
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .' ' . $exception->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' ' . $exception->getTraceAsString());
+                }
             }
 
             try {
@@ -185,7 +189,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 } else if (preg_match('/download|export/', $this->_method)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            .' Server error during download/export - exit with 500');
+                            . ' Server error during download/export - exit with 500');
                     }
                     header('HTTP/1.0 500 Internal Server Error');
                     exit;
