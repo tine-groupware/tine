@@ -15,7 +15,7 @@ function prevent_upstream_change() {
         if [ -f $f ]; then
             while read allowed; do
                 changes="$(echo "$changes" | grep -v -E "^$allowed$" || true)"
-            done < $f
+            done < <(grep "" $f) # using grep as it adds a new line to the end of the file. If there is no newline at the end of the last line, the loop will skip it
         fi
     done
 
