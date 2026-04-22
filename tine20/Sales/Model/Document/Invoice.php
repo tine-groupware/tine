@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -53,16 +53,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Invoice'; // gettext('GENDER_Invoice')
         $_definition[self::RECORDS_NAME] = 'Invoices'; // ngettext('Invoice', 'Invoices', n)
 
-        $_definition[self::VERSION] = 4;
+        $_definition[self::VERSION] = 5;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
-        $_definition[self::TABLE] = [
-            self::NAME                      => self::TABLE_NAME,
-            /*self::INDEXES                   => [
-                self::FLD_PRODUCT_ID            => [
-                    self::COLUMNS                   => [self::FLD_PRODUCT_ID],
-                ],
-            ]*/
-        ];
+        $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
         // invoice recipient type
         $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_BILLING;

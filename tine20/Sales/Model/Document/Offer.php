@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -43,16 +43,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Offer'; // gettext('GENDER_Offer')
         $_definition[self::RECORDS_NAME] = 'Offers'; // ngettext('Offer', 'Offers', n)
         
-        $_definition[self::VERSION] = 5;
+        $_definition[self::VERSION] = 6;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
-        $_definition[self::TABLE] = [
-            self::NAME                      => self::TABLE_NAME,
-            /*self::INDEXES                   => [
-                self::FLD_...            => [
-                    self::COLUMNS                   => [self::FLD_...],
-                ],
-            ]*/
-        ];
+        $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
         if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
             $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];

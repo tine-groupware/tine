@@ -27,6 +27,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
+    protected const RELEASE018_UPDATE011 = __CLASS__ . '::update011';
 
 
     static protected $_allUpdates = [
@@ -68,6 +69,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE010          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update010',
+            ],
+            self::RELEASE018_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -342,5 +347,17 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Contract::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.10', self::RELEASE018_UPDATE010);
+    }
+
+    public function update011(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_Document_PurchaseInvoice::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
     }
 }
