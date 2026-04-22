@@ -53,12 +53,14 @@ class HumanResources_Model_BLDailyWTReport_BreakTimeConfig extends Tinebase_Reco
             self::FLDS_TIME_WORKED      => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Time worked', // _('Time worked')
                 self::VALIDATORS            => [Zend_Filter_Input::PRESENCE_REQUIRED => true],
             ],
             self::FLDS_BREAK_TIME        => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Break time', // _('Break time')
                 self::VALIDATORS            => [Zend_Filter_Input::PRESENCE_REQUIRED => true],
             ],

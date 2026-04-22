@@ -240,6 +240,10 @@ Ext.extend(Ext.ux.form.Spinner.TimeStrategy, Ext.ux.form.Spinner.Strategy, {
         v = v + dir*incr*constant;
         v = this.fixBoundries(v);
 
+        if (!this.allowNegative && v < 0) {
+            v = 0;
+        }
+
         const [H,i,s] = Ext.ux.form.DurationSpinner.getTimeParts(v);
 
         field.setRawValue((v<0 ? '- ' : '') + this.format
