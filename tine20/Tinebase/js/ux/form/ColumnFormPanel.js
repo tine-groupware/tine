@@ -126,9 +126,13 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
 
     manageRowVisibility: function(column) {
         const row = column.ownerCt.ownerCt;
-        row.setVisible(_.reduce(row.items.items, (accu, wrap) => {
-            return accu || wrap.items.items[0].visible;
-        }), false);
+        const setVisible = _.reduce(row.items.items, (accu, wrap) => {
+            return accu || wrap.items.items[0].visible || wrap.items.items[0].hidden === false;
+        }, false);
+        if (setVisible !== row.isVisible?.()) {
+            row.setVisible(setVisible);
+            row.doLayout();
+        }
     },
 
     onBeforeAddFromItem: function(column, c, index) {

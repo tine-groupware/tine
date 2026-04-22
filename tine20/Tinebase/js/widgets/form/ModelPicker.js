@@ -20,7 +20,7 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
     displayField: 'modelName',
     valueField: 'className',
     mode: 'local',
-    useRecordName: false,
+    useRecordName: true,
 
     initComponent() {
         const availableModels = this.availableModels?.map((model) => { return Tine.Tinebase.data.RecordMgr.get(model) });
