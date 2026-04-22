@@ -32,6 +32,8 @@ class Timetracker_Model_TimeaccountNotBillable extends Timetracker_Model_Timeacc
         unset($_definition[self::VERSION]);
         unset($_definition[self::TABLE]);
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
+        $_definition[self::RECORD_NAME] = 'Zeitkonto (nicht abrechenbar)';
+        $_definition[self::RECORDS_NAME] = 'Zeitkonten (nicht abrechenbar)';
     }
 
     protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL)
