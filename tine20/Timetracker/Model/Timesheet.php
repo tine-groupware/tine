@@ -255,6 +255,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'label'                 => 'Duration', // _('Duration')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'type'                  => 'integer',
+                self::UNSIGNED          => true,
                 'specialType'           => 'minutes',
                 'default'               => '30',
             ),
@@ -299,6 +300,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
                 'specialType'           => 'minutes',
+                self::UNSIGNED          => true,
                 'default'               => '30',
                 self::UI_CONFIG         => [
                     self::FIELDS_CONFIG     => [

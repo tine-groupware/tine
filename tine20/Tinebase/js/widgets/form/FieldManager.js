@@ -194,13 +194,11 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'durationSec') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'seconds';
-                        field.allowNegative = false;
                     }
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'minutes') {
                         field.xtype = 'durationspinner';
                         field.baseUnit = 'minutes';
-                        field.allowNegative = false;
                     }
                     
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'bytes1000') {
@@ -214,6 +212,7 @@ Tine.widgets.form.FieldManager = function() {
 
                     if (fieldDefinition.min || fieldDefinition.unsigned) {
                         field.minValue = fieldDefinition.min || 0;
+                        field.allowNegative = false;
                     }
 
                     const spinnerConfig = _.get(fieldDefinition, 'uiconfig.fieldConfig.spinner', null);

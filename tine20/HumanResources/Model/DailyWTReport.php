@@ -233,6 +233,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'working_time_target' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Target Working Time', // _('Target Working Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
@@ -254,6 +255,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'break_time_net'    => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Net Break Time', // _('Net Break Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
@@ -265,6 +267,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'break_time_deduction' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Break Deduction Time', // _('Break Deduction Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
@@ -289,6 +292,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'working_time_actual' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Actual Working Time', // _('Actual Working Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
@@ -325,6 +329,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
             'working_time_total' => [
                 self::TYPE                  => self::TYPE_INTEGER,
                 self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::UNSIGNED              => true,
                 self::LABEL                 => 'Total Working Time', // _('Total Working Time')
                 self::UI_CONFIG             => [
                     self::READ_ONLY             => true,
