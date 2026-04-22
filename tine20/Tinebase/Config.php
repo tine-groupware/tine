@@ -238,6 +238,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const BATCH_JOB_MAX_CONCURRENCY = 'batchJobMaxConcurrency';
 
+    public const SESSION = 'session';
+
     /**
      * smtp conf name
      * 
@@ -1157,6 +1159,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Database Configuration')
             self::LABEL => 'Database Configuration',
             self::DESCRIPTION => 'Database Configuration',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => false,
+        ],
+        self::SESSION => [
+            //_('Session Configuration')
+            self::LABEL => 'Session Configuration',
+            self::DESCRIPTION => 'Session Configuration',
             self::TYPE => self::TYPE_OBJECT,
             self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
