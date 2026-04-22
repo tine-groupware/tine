@@ -137,10 +137,15 @@ class CrewScheduling_Model_AttendeeRole extends Tinebase_Record_NewAbstract
             ]
         ]);
         $expander->expandRecord($this);
-
-
+        $eventTypes = $this->{CrewScheduling_Model_AttendeeRole::FLD_EVENT_TYPES};
+        if ($eventTypes instanceof Tinebase_Record_RecordSet && $eventTypes->count() > 0) {
+            $shortNames = $eventTypes->sort('short_name')->short_name;
+        } else {
+            // TODO do something in this case? is it a problem?
+            $shortNames = [];
+        }
 
         return $this->{CrewScheduling_Model_AttendeeRole::FLD_ROLE}->{CrewScheduling_Model_SchedulingRole::FLD_KEY} .
-        ':' . implode('&', array_unique($this->{CrewScheduling_Model_AttendeeRole::FLD_EVENT_TYPES}?->sort('short_name')->short_name ?? []));
+        ':' . implode('&', array_unique($shortNames));
     }
 }
