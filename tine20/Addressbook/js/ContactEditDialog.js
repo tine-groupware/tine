@@ -582,7 +582,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             } else {
                 // only set the fields that could be detected
                 Ext.iterate(result.contact, function(key, value) {
-                    if (value && ! this.record.get(key)) {
+                    if (value && this.record.data.hasOwnProperty(key)) {
                         this.record.set(key, value);
                     }
                 }, this);
