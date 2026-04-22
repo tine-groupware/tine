@@ -35,8 +35,10 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
 	protected $_configuredModels = array(
         Timetracker_Model_Timesheet::MODEL_NAME_PART,
+        Timetracker_Model_TimesheetNotBillable::MODEL_NAME_PART,
         Timetracker_Model_Timeaccount::MODEL_NAME_PART,
         Timetracker_Model_TimeaccountGrants::MODEL_NAME_PART,
+        Timetracker_Model_TimeaccountNotBillable::MODEL_NAME_PART,
     );
 
     /**
