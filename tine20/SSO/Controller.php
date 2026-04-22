@@ -101,6 +101,10 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     public static function serviceNotEnabled(): \Psr\Http\Message\ResponseInterface
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' SSO service not enabled!');
+        }
         return new \Laminas\Diactoros\Response('php://memory', 403);
     }
 
