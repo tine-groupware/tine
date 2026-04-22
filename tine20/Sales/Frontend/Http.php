@@ -89,9 +89,9 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filter = new $billableFilterName(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
 
-        if ($accountable == 'Sales_Model_ProductAggregate') {
+        if ($accountable === Sales_Model_ProductAggregate::class) {
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'model', 'operator' => 'equals', 'value' => 'Sales_Model_ProductAggregate')));
-        } elseif ($accountable == 'Timetracker_Model_Timeaccount') {
+        } elseif ($accountable === Timetracker_Model_Timeaccount::class) {
             $filter = new Timetracker_Model_TimesheetFilter(array(
                 array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
                     array('condition' => 'OR', 'filters' => array(
@@ -100,12 +100,29 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     )),
                     array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
                 )),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
             ));
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
 
             if (!empty($recordIds)) {
                 $recordIds = strpos((string)$recordIds, ',') !== false ? explode(',', $recordIds) : [$recordIds];
                 $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'in', 'value' => $recordIds)));
+            }
+        } elseif ($accountable === Timetracker_Model_TimeaccountNotBillable::class) {
+            $filter = new Timetracker_Model_TimesheetFilter(array(
+                array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                    array('condition' => 'OR', 'filters' => array(
+                        array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                        array('field' => 'budget', 'operator' => 'equals', 'value' => NULL),
+                    )),
+                )),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => false),
+            ));
+            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
+
+            if (!empty($recordIds)) {
+                $recordIds = strpos((string)$recordIds, ',') !== false ? explode(',', $recordIds) : [$recordIds];
+                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $recordIds)));
             }
         }
 
