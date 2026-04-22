@@ -95,13 +95,6 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         Sales_Controller_Document_Invoice::class . '::documentProformaNumberConfigOverride',
                 ],
             ],
-            self::FLD_LAST_DATEV_SEND_DATE       => [
-                self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
-                self::TYPE                  => self::TYPE_DATETIME,
-                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                self::NULLABLE              => true,
-                self::SHY                   => true,
-            ],
         ]);
 
         $_definition[self::FIELDS][self::FLD_IS_SHARED] = [
@@ -129,6 +122,14 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::UI_CONFIG         => [
                 'xtype'                 => 'wdgt.pickergrid-layercombo'
             ],
+        ];
+
+        $_definition[self::FIELDS][self::FLD_LAST_DATEV_SEND_DATE] = [
+            self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+            self::TYPE                  => self::TYPE_DATETIME,
+            self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            self::NULLABLE              => true,
+            self::SHY                   => true,
         ];
     }
 
