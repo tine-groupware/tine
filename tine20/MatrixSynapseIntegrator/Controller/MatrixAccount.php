@@ -250,4 +250,27 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends MatrixSynapseInte
         Addressbook_Controller_Contact::getInstance()->update($contact);
         Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($aclCheck);
     }
+
+    public function saveOwnMatrixAccount(MatrixSynapseIntegrator_Model_MatrixAccount $matrixAccount): MatrixSynapseIntegrator_Model_MatrixAccount
+    {
+        if ($matrixAccount->{MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID} !== Tinebase_Core::getUser()->getId()) {
+            throw new Tinebase_Exception_AccessDenied('Only own Matrix Account can be updated');
+        }
+        // reset some fields that should not be updated by the user
+        $currentRecord = $this->getMatrixAccountForUser(Tinebase_Core::getUser());
+        foreach ([
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
+            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID
+            ] as $field) {
+            $matrixAccount->$field = $currentRecord->{$field};
+        }
+
+        // TODO use RAII
+        $this->_doPushToCorporal = false;
+        $checks = $this->doRightChecks(false);
+        $updatedAccount = $this->update($matrixAccount);
+        $this->doRightChecks($checks);
+        $this->_doPushToCorporal = true;
+        return $updatedAccount;
+    }
 }
