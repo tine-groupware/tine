@@ -4,8 +4,8 @@
  *
  * @package     Sales
  * @subpackage  Model
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -55,11 +55,9 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::DEFAULT_SORT_INFO] = [self::FIELD => self::FLD_DOCUMENT_NUMBER];
         $_definition[self::HAS_XPROPS] = true;
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
-        $_definition[self::TABLE] = [
-            self::NAME => self::TABLE_NAME,
-        ];
+        $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::NULLABLE] = true;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] = self::class . '#' . self::FLD_DOCUMENT_NUMBER;

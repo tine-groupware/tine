@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -42,16 +42,9 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Delivery'; // gettext('GENDER_Delivery')
         $_definition[self::RECORDS_NAME] = 'Deliveries'; // ngettext('Delivery', 'Deliveries', n)
 
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
-        $_definition[self::TABLE] = [
-            self::NAME                      => self::TABLE_NAME,
-            /*self::INDEXES                   => [
-                self::FLD_PRODUCT_ID            => [
-                    self::COLUMNS                   => [self::FLD_PRODUCT_ID],
-                ],
-            ]*/
-        ];
+        $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
         // delivery recipient type
         $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_DELIVERY;
