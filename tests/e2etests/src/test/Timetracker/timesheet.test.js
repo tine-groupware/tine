@@ -58,9 +58,11 @@ describe('Create and delete time sheet', () => {
 
     test('Delete and confirm', async() => {
         await expectPuppeteer(page).toClick('div.x-grid3-col-description', {text: testDescription, visible: true});
+        await page.waitForTimeout(500);
+        await page.waitForSelector('.x-grid3-row-selected');
         await page.keyboard.press('Delete');
-        await page.waitForSelector('button.yes-button', {visible: true});
-        await expectPuppeteer(page).toClick('button.yes-button', {text: 'Ja', visible: true});
+        await page.waitForSelector('.btn.btn-md.vue-button.yes-button', {visible: true});
+        await expectPuppeteer(page).toClick('.btn.btn-md.vue-button.yes-button', {text: 'Ja', visible: true});
         await page.waitForTimeout(1000);
         await page.waitForSelector('.t-app-timetracker .x-btn-image.x-tbar-loading');
         await page.click('.t-app-timetracker .x-btn-image.x-tbar-loading');
