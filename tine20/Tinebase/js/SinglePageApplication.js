@@ -85,6 +85,12 @@ function configureApp(app, textdomain)
 
 export function createTineApp(AppComponent, options = {})
 {
+    // Sanitize URL
+    if (window.location.pathname.includes('//')) {
+        const cleanPath = window.location.pathname.replace(/\/+/g, '/');
+        window.history.replaceState(null, '', cleanPath + window.location.search + window.location.hash);
+    }
+
     const {
         textdomain = 'Tinebase', // Default value, can be overridden
         routes = [],

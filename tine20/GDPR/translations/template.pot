@@ -307,13 +307,13 @@ msgstr ""
 msgid "Create mass mail without {0} support"
 msgstr ""
 
+msgid "User Self-Enrollment Allowed"
+msgstr ""
+
+msgid "User Self-Service Access Allowed"
+msgstr ""
+
 msgid "Start with empty mail"
-msgstr ""
-
-msgid "Hide from self registration"
-msgstr ""
-
-msgid "Hide from self service"
 msgstr ""
 
 msgid "Registration link"

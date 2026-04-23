@@ -602,11 +602,10 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     protected function _getDefaultGDPRContainerId()
     {
         try {
-            $GDPRAddressbook = Tinebase_Container::getInstance()->getContainerByName(
-                Addressbook_Model_Contact::class,
-                'GDPR Contacts',
-                Tinebase_Model_Container::TYPE_SHARED
-            );
+            if (!$containerId = GDPR_Config::getInstance()->get(GDPR_Config::SUBSCRIPTION_CONTAINER_ID)) {
+                throw new Tinebase_Exception_NotFound('subscriptionContainerId  is not set');
+            }
+            $GDPRAddressbook = Tinebase_Container::getInstance()->getContainerById($containerId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // create new internal adb
             $GDPRAddressbook = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
@@ -616,10 +615,11 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
                 'model'             => 'Addressbook_Model_Contact'
             )), null, true);
+
+            GDPR_Config::getInstance()->set(GDPR_Config::SUBSCRIPTION_CONTAINER_ID, $GDPRAddressbook->getId());
         }
-        $containerId = $GDPRAddressbook->getId();
-        GDPR_Config::getInstance()->set(GDPR_Config::SUBSCRIPTION_CONTAINER_ID, $GDPRAddressbook->getId());
-        return $containerId;
+
+        return $GDPRAddressbook->getId();
     }
 
     protected function _updateDipr($diprData, $contactId, $agreeOnly = false)
