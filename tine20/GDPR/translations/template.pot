@@ -298,10 +298,10 @@ msgstr ""
 msgid "Create mass mail without {0} support"
 msgstr ""
 
-msgid "Hide from self registration"
+msgid "User Self-Enrollment Allowed"
 msgstr ""
 
-msgid "Hide from self service"
+msgid "User Self-Service Access Allowed"
 msgstr ""
 
 msgid "Registration link"

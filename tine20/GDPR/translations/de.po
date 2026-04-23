@@ -303,11 +303,11 @@ msgstr "Keine Empfänger der Serienmail hinzufügen"
 msgid "Create mass mail without {0} support"
 msgstr "Serienmail ohne {0} Unterstützung verfassen"
 
-msgid "Hide from self registration"
-msgstr "Vor Selbstregistrierung verbergen"
+msgid "User Self-Enrollment Allowed"
+msgstr "Nutzer kann sich selbst anmelden"
 
-msgid "Hide from self service"
-msgstr "Vom Selbstbedienungsbereich ausblenden"
+msgid "User Self-Service Access Allowed"
+msgstr "Nutzer kann Einwilligung selbst verwalten"
 
 msgid "Registration link"
 msgstr "Registrierungslink"
@@ -412,22 +412,3 @@ msgstr "Sie können jederzeit Ihre Zustimmung widerrufen oder die Verwendung Ihr
 
 msgid "Terms of Service"
 msgstr "Nutzungsbedingungen"
-
-#~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-#~ msgstr "vielen Dank für Ihre Anmeldung, um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
-
-#~ msgid "Confirm E-Mail address"
-#~ msgstr "E-Mail-Adresse bestätigen"
-
-#~ msgid "Privacy Policy"
-#~ msgstr "Datenschutzerklärung"
-
-#~ msgid "Manage"
-#~ msgstr "Verwalten"
-
-#, python-brace-format
-#~ msgid "I am not {email}"
-#~ msgstr "Ich bin nicht {email}"
-
-#~ msgid "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
-#~ msgstr "Die Empfänger mit 'Darf nicht kontaktiert werden' werden entfernt, wenn kein Verwendungszweck ausgewählt wurde."

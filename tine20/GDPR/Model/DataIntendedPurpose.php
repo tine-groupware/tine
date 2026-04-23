@@ -105,7 +105,7 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
             self::FLD_IS_SELF_REGISTRATION => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::NULLABLE => true,
-                self::LABEL => 'Hide from self registration', // _('Hide from self registration')
+                self::LABEL => 'User Self-Enrollment Allowed', // _('User Self-Enrollment Allowed')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => false
@@ -114,7 +114,7 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
             self::FLD_IS_SELF_SERVICE => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 self::NULLABLE => true,
-                self::LABEL => 'Hide from self service', // _('Hide from self service')
+                self::LABEL => 'User Self-Service Access Allowed', // _('User Self-Service Access Allowed')
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => false
