@@ -11,3 +11,4 @@ import './Addressbook/Model';
 import './Addressbook/ContactEditDialogPlugin';
 import './Felamimail/MessageEditDialogPlugin';
 import './Addressbook/SendRequestConsentAction';
+import './DataIntendedPurposeEditDialog';

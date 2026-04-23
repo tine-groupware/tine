@@ -312,14 +312,14 @@ msgstr "Keine Empfänger der Serienmail hinzufügen"
 msgid "Create mass mail without {0} support"
 msgstr "Serienmail ohne {0} Unterstützung verfassen"
 
+msgid "User Self-Enrollment Allowed"
+msgstr "Nutzer kann sich selbst anmelden"
+
 msgid "Start with empty mail"
 msgstr "Mit leerer Mail beginnen"
 
-msgid "Hide from self registration"
-msgstr "Vor Selbstregistrierung verbergen"
-
-msgid "Hide from self service"
-msgstr "Vom Selbstbedienungsbereich ausblenden"
+msgid "User Self-Service Access Allowed"
+msgstr "Nutzer kann Einwilligung selbst verwalten"
 
 msgid "Registration link"
 msgstr "Registrierungslink"
