@@ -371,7 +371,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             {
                 $contactDips = $contact->{GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME}->sort('agreeDate', 'DESC');
                 $dipIds = array_map(function ($dip) {
-                    return $dip->getId();
+                    return $dip['id'] ?? $dip;
                 }, $contactDips->intendedPurpose);
 
                 foreach ($allDataIntendedPurposes as $dataIntendedPurpose) {
@@ -469,6 +469,8 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     protected function _handlePublicApiRequest(callable $callback): \Laminas\Diactoros\Response
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
+
         try {
             $result = $callback();
             $response = new \Laminas\Diactoros\Response();
@@ -481,6 +483,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
         return $response;
     }
