@@ -101,4 +101,105 @@ class Tinebase_HelperTests extends \PHPUnit\Framework\TestCase
         ];
         self::assertTrue(Tinebase_Helper::ipAddressMatchNetmasks($byPassMasks));
     }
+
+    public function testNewCurlMulti(): void
+    {
+        $this->markTestSkipped('this is only for local execution / testing, leave it skipped so static analyze can find class usage!');
+        /**
+         * use this local js server
+        const http = require('node:http');
+
+        console.log('preping server');
+        let a = 0;
+const server = http.createServer((req, res) => {
+        let timeout = 10;
+  if (++a % 2) {
+      timeout = 500;
+  }
+  console.log('received req ', a);
+  setTimeout(((a) => { return () => {
+            res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('' + a);
+    console.log('send res ', a);
+  }})(a), timeout);
+});
+
+server.listen(8182);
+
+setTimeout(() => {
+        console.log('closing server');
+        server.close();
+    }, 4000);
+         */
+        $httpClient = new Tinebase_Http_ConcurrentClient(maxConnections: 3);
+
+        $process = proc_open('node ' . dirname(dirname(__DIR__)) . '/testServer.js', [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']], $pipes);
+        sleep(1);
+        $start = microtime(true);
+
+        foreach ($httpClient->generateMultiCurlResponses([
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+            new Tinebase_Http_CC_CurlRequest('http://localhost:8182/'),
+        ]) as $key => $response) {
+            echo $key . ' - ' . $response->content . PHP_EOL;
+            echo microtime(true) - $start . PHP_EOL;
+        }
+
+
+        echo microtime(true) - $start . PHP_EOL;
+        echo PHP_EOL . 'server log:' . PHP_EOL;
+        echo stream_get_contents($pipes[1]);
+        echo stream_get_contents($pipes[2]);
+        proc_close($process);
+    }
+
+    /**
+    public function testAmpHttpConcurrentClient(): void
+    {
+        $httpClient = new Tinebase_Http_ConcurrentClient(maxConnections: 3);
+
+        $request = new Amp\Http\Client\Request("http://localhost:8182", "GET");
+        $requests = [
+            $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+            clone $request,
+        ];
+
+        $process = proc_open('node ' . dirname(dirname(__DIR__)) . '/testServer.js', [['pipe', 'r'], ['pipe', 'w'], ['pipe', 'w']], $pipes);
+        sleep(1);
+
+try {
+    $start = microtime(true);
+    //$httpResponses = [];
+    foreach ($httpClient->generateResponses($requests) as $httpResponse) {
+        echo microtime(true) - $start . PHP_EOL;
+        echo $httpResponse->getBody()->buffer() . PHP_EOL;
+        $httpResponse->getBody()->close();
+        echo microtime(true) - $start . PHP_EOL;
+    }
+} catch (\Exception $e) { echo $e->getMessage() . PHP_EOL;}
+        echo PHP_EOL . 'server log:' . PHP_EOL;
+        echo stream_get_contents($pipes[1]);
+        echo stream_get_contents($pipes[2]);
+        proc_close($process);
+    }*/
 }
