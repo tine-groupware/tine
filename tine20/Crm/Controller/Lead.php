@@ -154,6 +154,8 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     /**
      * creates notification text and sends out notifications
      *
+     * @docs https://docs.tine-groupware.de/be/users/CrmNotifications
+     *
      * @todo:
      *  - add changes to mail body
      *  - find updater in addressbook to notify him
