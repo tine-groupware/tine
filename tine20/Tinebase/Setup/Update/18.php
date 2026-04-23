@@ -35,6 +35,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE019 = self::class . '::update019';
     protected const RELEASE018_UPDATE020 = self::class . '::update020';
     protected const RELEASE018_UPDATE021 = self::class . '::update021';
+    protected const RELEASE018_UPDATE022 = self::class . '::update022';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -99,6 +100,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE021          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update021',
+            ],
+            self::RELEASE018_UPDATE022          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update022',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE          => [
@@ -497,5 +502,12 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         Tinebase_Core::getScheduler()->removeTask('Admin_Controller_JWTAccessRoutes::cleanTTL');
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.21', self::RELEASE018_UPDATE021);
+    }
+
+    public function update022(): void
+    {
+        $this->dropTable('jwt_access_routes');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.22', self::RELEASE018_UPDATE022);
     }
 }
