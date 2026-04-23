@@ -583,14 +583,14 @@ em.emoji {
     height: 14px;
 }
 
-.felamimail-message-icon-container.has-multiple-icons .answered {
+.felamimail-message-icon-container.has-multiple-icons .flag_answered {
     position: relative;
     z-index: 2;
     top: 2px;
     right: 2px;
 }
 
-.felamimail-message-icon-container.has-multiple-icons .passed {
+.felamimail-message-icon-container.has-multiple-icons .flag_passed {
     position: absolute;
     bottom: 3px;
     left: 5px;
