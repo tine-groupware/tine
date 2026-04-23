@@ -589,10 +589,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         if ($period) {
             self::mergeRecurrenceSet($_events, $period->getFrom(), $period->getUntil());
 
+            /** @var Calendar_Model_Event $event */
             foreach ($_events as $event) {
                 if (! $event->isInPeriod($period)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__
-                        . ') Removing not matching event ' . $event->summary);
                     $removedEvents->addRecord($event);
                     $_events->removeRecord($event);
                 }
