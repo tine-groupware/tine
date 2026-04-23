@@ -103,4 +103,12 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
             ),
         ];
     }
+
+    public function saveOwnMatrixAccount(array $accountData): array
+    {
+        $record = $this->_jsonToRecord($accountData, MatrixSynapseIntegrator_Model_MatrixAccount::class);
+        $updatedRecord = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->saveOwnMatrixAccount($record);
+        return $this->_recordToJson($updatedRecord);
+    }
+
 }

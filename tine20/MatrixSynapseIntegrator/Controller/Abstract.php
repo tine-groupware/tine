@@ -24,6 +24,8 @@ class MatrixSynapseIntegrator_Controller_Abstract extends Tinebase_Controller_Re
     protected ?MatrixSynapseIntegrator_Backend_Corporal $_corporal = null;
     protected ?MatrixSynapseIntegrator_Backend_Synapse $_synapse = null;
 
+    protected bool $_doPushToCorporal = true;
+
     /**
      * the constructor
      *
@@ -93,6 +95,7 @@ class MatrixSynapseIntegrator_Controller_Abstract extends Tinebase_Controller_Re
     {
         if (! MatrixSynapseIntegrator_Config::getInstance()->get(
             MatrixSynapseIntegrator_Config::CORPORAL_SHARED_AUTH_TOKEN)
+            || !$this->_doPushToCorporal
         ) {
             return;
         }

@@ -74,10 +74,15 @@ class MatrixSynapseIntegrator_Backend_Corporal
 
     protected function _getPolicy(): array
     {
-        // TODO allow to configure defaults/flags
+        // prevent acls from being checked
+        $roomAcl = MatrixSynapseIntegrator_Controller_Room::getInstance()->doRightChecks(false);
+        $users = $this->_getUserPolicy();
+        $rooms = $this->_getManagedRooms();
+        MatrixSynapseIntegrator_Controller_Room::getInstance()->doRightChecks($roomAcl);
 
         return [
             "schemaVersion" => 2,
+            // TODO allow to configure flags
             "flags" => [
                 "allowCustomUserDisplayNames" => true,
                 "allowCustomUserAvatars" => true,
@@ -86,8 +91,8 @@ class MatrixSynapseIntegrator_Backend_Corporal
                 "forbidEncryptedRoomCreation" => false,
                 "forbidUnencryptedRoomCreation" => false
             ],
-            "users" => $this->_getUserPolicy(),
-            "managedRoomIds" => $this->_getManagedRooms(),
+            "users" => $users,
+            "managedRoomIds" => $rooms,
         ];
     }
 

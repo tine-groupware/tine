@@ -139,7 +139,7 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
                     if (! this.bootstrapData.mx_account.is_initialized) {
                         this.bootstrapData.mx_account.is_initialized = true
                         this.bootstrapData.mx_account.account_id = this.bootstrapData.mx_account.account_id.accountId || this.bootstrapData.mx_account.account_id
-                        this.bootstrapData.mx_account = await Tine.MatrixSynapseIntegrator.saveMatrixAccount(this.bootstrapData.mx_account)
+                        this.bootstrapData.mx_account = await Tine.MatrixSynapseIntegrator.saveOwnMatrixAccount(this.bootstrapData.mx_account)
                         Ext.MessageBox.hide()
                     }
                     this.showClient()

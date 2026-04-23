@@ -159,4 +159,30 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             $updatedAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]
         );
     }
+
+    public function testSaveOwnMatrixAccount()
+    {
+        MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->setCorporalBackend(
+            new MatrixSynapseIntegrator_Backend_CorporalMock()
+        );
+
+        $user = $this->_createTestUser();
+        $account = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->create(
+            new MatrixSynapseIntegrator_Model_MatrixAccount(
+                MatrixSynapseIntegrator_ControllerTests::getMatrixAccountData($user)
+            )
+        )->toArray();
+        $this->_setUser($user);
+        $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID] = '@somethingelse:matrix.domain';
+        $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_DESCRIPTION] = 'my account';
+        $updatedAccount = $this->_getUit()->saveOwnMatrixAccount($account);
+        self::assertNotEquals(
+            $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID],
+            $updatedAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID]
+        );
+        self::assertEquals(
+            $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_DESCRIPTION],
+            $updatedAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_DESCRIPTION]
+        );
+    }
 }
