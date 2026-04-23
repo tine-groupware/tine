@@ -76,6 +76,12 @@ msgstr ""
 msgid "Should the email body be cached? (Recommended for slow IMAP server connections)"
 msgstr ""
 
+msgid "Clear Auto-Saved Drafts Before Months"
+msgstr ""
+
+msgid "Remove all auto-saved drafts that are older than this number of months"
+msgstr ""
+
 msgid "Delete Archived Mail"
 msgstr ""
 
@@ -113,12 +119,6 @@ msgid "Password-protected download link only"
 msgstr ""
 
 msgid "Allow only password-protected download links"
-msgstr ""
-
-msgid "Tine 2.0 Flag"
-msgstr ""
-
-msgid "Add a Tine 2.0 flag to sent messages"
 msgstr ""
 
 msgid "Show Reply-To"
@@ -199,6 +199,15 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
+msgid "Trusted Mail Servers (via DKIM)"
+msgstr ""
+
+msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
+msgstr ""
+
+msgid "Shared account needs email address"
+msgstr ""
+
 msgid "shared / adb_list accounts need to have a password set"
 msgstr ""
 
@@ -250,9 +259,6 @@ msgid "Failed to create folder"
 msgstr ""
 
 msgid "still unanswered: "
-msgstr ""
-
-msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: "
 msgstr ""
 
 msgid "It is not possible to file the message in this record (it might be a recurring event)."
@@ -520,19 +526,13 @@ msgstr ""
 msgid "Templates Folder Name"
 msgstr ""
 
-msgid "Display Format"
+msgid "Compose Format"
 msgstr ""
 
 msgid "HTML"
 msgstr ""
 
 msgid "Plain Text"
-msgstr ""
-
-msgid "Depending on content format"
-msgstr ""
-
-msgid "Compose Format"
 msgstr ""
 
 msgid "Reply-To Email"
@@ -961,6 +961,9 @@ msgid "Error"
 msgstr ""
 
 msgid "Open in Felamimail"
+msgstr ""
+
+msgid "This message has been marked as SPAM message"
 msgstr ""
 
 msgid "This message is probably SPAM. Please help improve your anti-SPAM system by choosing: \"Yes, it is SPAM\" or \"No, it is not\""
@@ -1591,6 +1594,9 @@ msgstr ""
 msgid "Templates Folder"
 msgstr ""
 
+msgid "Display Format"
+msgstr ""
+
 msgid "Reply-To"
 msgstr ""
 
@@ -1723,6 +1729,9 @@ msgstr ""
 msgid "Setting the default font in the Email app"
 msgstr ""
 
+msgid "Setting the default Email display format in the Email app"
+msgstr ""
+
 msgid "All folders of my email accounts"
 msgstr ""
 
@@ -1747,10 +1756,14 @@ msgstr ""
 msgid "All mails with the draft flag"
 msgstr ""
 
-msgid "Only internal senders can send emails to this address."
+#, php-format
+msgid "Only internal senders can send emails to this address: %1$s"
 msgstr ""
 
 msgid "Cannot combine \"allow external\" and \"allow only members\" options"
+msgstr ""
+
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s."
 msgstr ""
 
 msgid "Forwarding and forwarded email as .eml in attachment"
@@ -1759,15 +1772,5 @@ msgstr ""
 msgid "Only forward email as a .eml attachment"
 msgstr ""
 
-msgid "Trusted Mail Servers (via DKIM)"
-msgstr ""
-
-msgid "Map: Trusted Mail Domains (regex) => Flag Icon. Mail client shows a special flag for mails from this domain if DKIM signature is valid."
-msgstr ""
-
-msgid "Shared account needs email address"
-msgstr ""
-
-#, php-format
-msgid "Only internal senders can send emails to this address: %1$s"
+msgid "Depending on content format"
 msgstr ""
