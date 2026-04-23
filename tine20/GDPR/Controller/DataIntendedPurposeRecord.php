@@ -249,6 +249,8 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     public function publicApiGetManageConsentByContactId($contactId = null)
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
+
         try {
             $result = $this->_getDefaultGDPRData($contactId);
             $response = new \Laminas\Diactoros\Response();
@@ -258,6 +260,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
 
         return $response;
@@ -266,6 +269,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     public function publicApiPostRegisterForDataIntendedPurpose($dipId = null)
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
 
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
@@ -316,6 +320,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
 
         return $response;
@@ -323,6 +328,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
 
     public function publicApiPostManageConsentByContactId($contactId = null) {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
 
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
@@ -335,6 +341,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
         return $response;
     }
@@ -342,6 +349,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     public function publicApiGetRegisterFromToken($token)
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
 
         try {
             $result = $this->_decodeJWTData($token);
@@ -356,6 +364,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
         return $response;
     }
@@ -363,6 +372,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     public function publicApiGetRegisterForDataIntendedPurpose($dipId = null)
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
 
         try {
             $result = [];
@@ -533,6 +543,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     public function publicApiPostRegisterFromToken($token)
     {
         $assertAclUsage = $this->assertPublicUsage();
+        $contactCtrlRaii = new Tinebase_RAII(Addressbook_Controller_Contact::getInstance()->assertPublicUsage());
 
         try {
             $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
@@ -551,6 +562,7 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
             $response->getBody()->write(json_encode($e->getMessage()));
         } finally {
             $assertAclUsage();
+            unset($contactCtrlRaii);
         }
         return $response;
     }
