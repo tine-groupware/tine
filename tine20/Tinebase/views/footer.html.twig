@@ -25,7 +25,7 @@
         <!-- Links with Bootstrap utilities -->
         <div class="d-flex flex-wrap align-items-center mt-1">
             <div class="d-flex flex-wrap align-items-center w-100">
-                {% set weburl = app.installation.weburl | default(config(constant('Tinebase_Config::TINE20_URL'))) %}
+                {% set weburl = config(constant('Tinebase_Config::TINE20_URL')) %}
                 {% if app.enablePublicPages %}
                     <a href="{{ weburl }}/GDPR/view/terms" class="text-primary text-decoration-none">{{ _('Terms of Service') }}</a>
                     <span class="text-muted mx-1">|</span>
