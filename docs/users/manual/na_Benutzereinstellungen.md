@@ -75,7 +75,7 @@ Sollten Sie Ihre tine-Installation selbst angelegt haben und damit deren oberste
 Gehen wir nun weiter. Links im Bearbeitungsfenster sehen Sie unter Anwendungen alle für Sie freigegebenen tine-Programmteile und können dort entsprechende, für Sie persönlich geltende, Einstellungen vornehmen.
 
 <!--ActiveSync-->
-## ActiveSync
+## ActiveSync { data-ctx="/ActiveSync/EditDialog/SyncDevice" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_desktop }}Benutzereinstellungen/5_benutzereinstellungen_activesync_light_1920x1020.png#only-light){.desktop-img}
@@ -83,7 +83,7 @@ Gehen wir nun weiter. Links im Bearbeitungsfenster sehen Sie unter Anwendungen a
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_mobile }}Benutzereinstellungen/5_benutzereinstellungen_activesync_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_mobile }}Benutzereinstellungen/5_benutzereinstellungen_activesync_dark_1280x720.png#only-dark){.mobile-img}
 
-<span id="syncdevice"></span>
+
 Die hier vorgenommenen Einstellungen gelten für das Synchronisieren Ihres tine-Datenbestandes mit Ihrem Mobilfunkgerät. Sie können ein Standard-Adressbuch, einen Standard-Kalender sowie eine Standard-Aufgabenliste einstellen, mit denen sich tine mit Ihrem Mobilfunkgerät über die ActiveSync-Schnittstelle synchronisiert, d.h. Ihr Mobilfunkgerät überträgt dort eingegebene Daten an die hier angegebenen Standardanwendungen.
 
 Über sogenannte ActiveSync Filter können Sie auch beliebige Kontakte, Termine und Aufgaben aus verschiedenen Adressbüchern, Kalendern und Aufgabenlisten mit Ihrem Gerät synchronisieren. Erstellen Sie dazu in der jeweiligen Anwendung einen Favoriten, der die gewünschten und zu synchronisierenden Datensätze in der Tabellenansicht filtert (siehe [Allgemeine Hinweise zur Bedienung - Standard-Bedienalgorithmen im Hauptbildschirm - Favoriten definieren](ca_StandardBedienhinweise.md/#favoriten-definieren)). Im Kontextmenü des selbsterstellten Favoriten können sie über den Eintrag Als ActiveSync Filter setzen ein bei tine angemeldetes ActiveSync-Gerät auswählen. tine synchronisiert nun die durch den Favoriten definierten Datensätze mit dem Gerät.

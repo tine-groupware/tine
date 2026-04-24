@@ -1,4 +1,4 @@
-# Zeiterfassung
+# Zeiterfassung { data-ctx="/Timetracker" }
 
 <!--Zeiterfassung-->
 <!--ERP-->
@@ -6,7 +6,7 @@
 <!--Stundenzettel-->
 Ein unabdingbarer Baustein im ERP-Bereich, den tine ja ebenfalls in Teilen abdeckt, ist die Anwendung Zeiterfassung.
 
-## Untermodule und Favoriten
+## Untermodule und Favoriten { data-ctx="/Timetracker/MainScreen/ModulPicker" }
 
 Die Ansicht der linken Seite ist in diesem Programmteil eine etwas andere als in denen des klassischen Groupware-Bereichs, denn Zeiterfassung kennt z.B. keine Unterteilung in Datenbanken für "persönliche", "gemeinsame" oder Objekte "anderer Benutzer".
 
@@ -16,13 +16,14 @@ Die Ansicht der linken Seite ist in diesem Programmteil eine etwas andere als in
 ![Abbildung: Module der Zeiterfassung]({{ img_url_mobile }}Zeiterfassung/1_zeiterfassung_module_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Module der Zeiterfassung]({{ img_url_mobile }}Zeiterfassung/1_zeiterfassung_module_dark_1280x720.png#only-dark){.mobile-img}
 
-<span id="modulpicker"></span>
+
 Zeiterfassung hat zwei Untermodule: Stundenzettel und Zeitkonten. Die Stundenzettel sind immer eine Teilmenge eines Zeitkontos, d.h. Sie müssen zunächst Zeitkonten anlegen, um im zweiten Schritt Stundenzettel abspeichern zu können. Unter Module finden Sie diese beiden Programmteile zum Starten.
 
-<span id="timeaccount-favoritespicker"></span>
+<a id="ctx:Timetracker.MainScreen.Timeaccount.FavoritesPicker"></a>
 Favoriten sieht hier, je nach gewähltem Modul, unterschiedlich aus. Unter Stundenzettel finden Sie als vorangelegte Favoriten eine ganze Reihe (in der Standardvariante fünf) verschiedene Sortierkriterien, die sich alle auf Ihre eigene Person und verschiedene Zeitabschnitte beziehen. Unter dem Modul Zeitkonten werden Ihnen in der Standardvariante drei Ansichten angeboten, die entsprechend dem Abrechnungsstatus der Zeitkonten Abgerechnete Zeitkonten, Abzurechnende Zeitkonten und Nicht abgerechnete Zeitkonten heißen.
 
-## Zeitkonten hinzufügen
+## Zeitkonten hinzufügen { data-ctx="/TimeTracker/EditDialog/TimeAccount" }
+<a id="ctx:Timetracker.MainScreen.Timeaccount.ActionToolbar"></a>
 Starten Sie das Modul durch Anklicken von Zeitkonten unter Module. Wir wollen ein neues Zeitkonto anlegen – gehen Sie dazu ins Bearbeitungsmenü und klicken Sie den Button Zeitkonto hinzufügen an.
 
 <!-- SCREENSHOT -->
@@ -72,7 +73,7 @@ Die Berechtigungen sind zu Beginn immer leer -- auch das ist der Stellung dieser
 
 Damit haben wir alle Menüpunkte und Einstellungen für Zeitkonten besprochen; legen Sie bitte testweise ein Zeitkonto an, wenn es nicht schon welche gibt! Wir benötigen es im nächsten Unterabschnitt, wenn wir die Stundenzettel besprechen.
 
-## Die restlichen Menüpunkte für Zeitkonten
+## Die restlichen Menüpunkte für Zeitkonten { data-ctx="/Timetracker/MainScreen/Timeaccount/ActionToolbar" }
 Mit Zeitkonto bearbeiten erhalten Sie nach Markierung eines vorhandenen Zeitkontos dieselbe Bearbeitungsmaske wie bei Zeitkonto hinzufügen.
 
 Zeitkonto löschen löscht das ausgewählte Zeitkonto, nach einer Sicherheitsabfrage.[^1]
@@ -86,7 +87,8 @@ Exportiere Zeitkonto ist zwar ein Pulldown; momentan ist aber nur der Export in 
 
 Einträge importieren - Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Adressbuch.md/#kontakte-importieren)).
 
-## Stundenzettel hinzufügen
+## Stundenzettel hinzufügen { data-ctx="/Timetracker/EditDialog/Timesheet" }
+<a id="ctx:Timetracker.MainScreen.Timesheet.ActionToolbar"></a>
 Ein Stundenzettel ist, in Anlehnung an diesen Begriff aus der "alten" Produktionswelt, das Objekt zur Erfassung eines einzelnen Arbeitsaufwandes innerhalb eines bestimmten Zeitkontos:
 
 <!-- SCREENSHOT -->
@@ -118,7 +120,7 @@ Der Checkbutton Klärungsbedarf. Dieser kann vom Mitarbeiter gesetzt werden, wen
 
 Schließlich können Sie per Pulldown mit Auswahlmöglichkeit aus der Reihe der in tine angelegten Benutzer einen solchen für diesen Stundenzettel zuweisen. Für die Faktura ist das nicht nötig, deshalb ist die Eingabe hier fakultativ. Beachten Sie aber innerbetriebliche Regelungen zum Controlling.
 
-## Die restlichen Menüpunkte für Stundenzettel
+## Die restlichen Menüpunkte für Stundenzettel { data-ctx="/Timetracker/MainScreen/Timesheet/ActionToolbar" }
 Mit Stundenzettel bearbeiten erhalten Sie nach Markierung eines vorhandenen Stundenzettels dieselbe Bearbeitungsmaske wie bei Stundenzettel hinzufügen.
 
  Stundenzettel löschen löscht den ausgewählten Stundenzettel, nach einer Sicherheitsabfrage.

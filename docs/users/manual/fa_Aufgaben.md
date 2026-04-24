@@ -1,5 +1,5 @@
 # Aufgaben
-## Einleitung
+## Einleitung { data-ctx="/Tasks" }
 Mit der Anwendung Aufgaben weisen Sie sich selbst oder einem beliebigen anderen Benutzer eine Aufgabe zu. Die vorhandenen Aufgaben werden, wie gewohnt, als Tabelle dargestellt:
 
 <!-- SCREENSHOT -->
@@ -11,7 +11,7 @@ Mit der Anwendung Aufgaben weisen Sie sich selbst oder einem beliebigen anderen 
 <!--ActiveSync-->
 Eine Aufgabe beschreibt, was ein bestimmter Mitarbeiter bis zu einem bestimmten Datum erledigt haben sollte. Dazu bietet tine ein paar nützliche Eigenschaften an, die der besseren Übersicht als Filter dienen. Darauf kommen wir gleich zu sprechen. Außerdem ist die Übermittlung von Aufgaben auch Bestandteil des in tine implementierten Übertragungsprotokolls für mobile Endgeräte. Beachten Sie hier allerdings, dass nicht alle mobilen Geräte, die mit dem von tine benutzten ActiveSync-Übertragungsprotokoll arbeiten, auch von Haus aus das Synchronisieren von Aufgaben unterstützen. Abhilfe kann hier im Einzelfall die Installation von Zusatz-Applikationen schaffen. Konsultieren Sie dazu den Dienstleister, der Ihre tine-Installation betreut. [Aufgaben synchronisieren](fa_Aufgaben.md/#aufgaben-synchronisieren) enthält weitere Hinweise zur Synchronisation.
 
-## Favoriten und Aufgabenlisten
+## Favoriten und Aufgabenlisten { data-ctx="/Tasks/MainScreen/Task/FavoritesPicker" }
 
 Wie gewohnt, finden Sie auf der linken Seite unter Favoriten eine Reihe nützlicher Standardansichten bereits vorbereitet:
 
@@ -29,11 +29,12 @@ Zuletzt von mir bearbeitet: Alle Aufgaben, an denen Sie zuletzt gearbeitet haben
 
 Wenn Sie beim Wechseln der Favoriten-Ansichten die Filterzeilen über der Tabelle im Blick haben, sehen Sie, dass die Favoriten durch Filter definierte Ansichten sind (vgl. [Allgemeine Hinweise zur Bedienung - Suchfilter für die Tabellenansicht](ca_StandardBedienhinweise.md/#suchfilter-fur-die-tabellenansicht)).
 
-<span id="task-containertree"></span>
+<a id="ctx:Tasks.MainScreen.Task.ContainerTree"></a>
 Die unter den Favoriten zu findenden Aufgabenlisten enthalten standardmäßig die drei üblichen Ordner Meine Aufgabenlisten, Gemeinsame Aufgabenlisten und Aufgabenlisten anderer Benutzer, wobei der Inhalt der beiden letztgenannten von dem Vorhandensein solcher Listen in Ihrem speziellen tine-System sowie von Ihren Zugriffsrechten abhängt. Im Ordner Meine Aufgabenlisten finden Sie auf jeden Fall Ihre persönliche Aufgabenliste vor, denn diese erzeugt tine mit der Anlage des Benutzers automatisch.
 
-## Aufgabe hinzufügen
+## Aufgabe hinzufügen { data-ctx="/Tasks/EditDialog/Task" }
 
+<a id="ctx:Tasks.MainScreen.Task.ActionToolbar"></a>
 Klicken Sie im Bearbeitungsmenü ganz links den Button Aufgabe hinzufügen an:
 
 <!-- SCREENSHOT -->
@@ -52,7 +53,7 @@ Im Feld Anmerkungen versehen Sie die Aufgabe mit einer beliebigen Beschreibung. 
 
 Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pulldown Gespeichert in. Hier können Sie nun, wie oben erwähnt, die Aufgabenliste auswählen, in der Sie die Aufgabe speichern wollen. Je nachdem, welche Berechtigungen für Sie gelten, finden Sie hier Aufgabenlisten anderer Benutzer sowie gemeinsame Aufgabenlisten. Sollten Sie hier nicht die Aufgabenlisten finden, die Sie suchen, schauen Sie sich die vorhandenen Aufgabenlisten und die zugehörigen Rechtevergaben an (Admin -> Container). Lesen Sie für genaue Informationen in [Administration - Container](oa_Administration.md/#container) nach.
 
-<span id="task-alarmgrid"></span>
+<a id="ctx:Tasks.EditDialog.Task.AlarmGrid"></a>
 Neben den bereits von anderen Anwendungen bekannten und in [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md) beschriebenen Reitern Notizen, Anhänge, Verknüpfungen und Historie finden Sie hier noch einen Alarm. Öffnen Sie den entsprechenden Reiter.
 
 <!-- SCREENSHOT -->

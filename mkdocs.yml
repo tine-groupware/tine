@@ -58,6 +58,9 @@ markdown_extensions:
   - abbr
   - footnotes
 
+hooks:
+  - docs/hooks/build_context_map.py
+
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -91,9 +94,9 @@ plugins:
           name: Deutsch
       reconfigure_material: true
       reconfigure_search: true
-  - enumerate-headings:
-      toc_depth: 6
-      strict: true
-      increment_across_pages: true
-      include:
-        - users/manual/*
+#  - enumerate-headings:
+#      toc_depth: 6
+#      strict: true
+#      increment_across_pages: true
+#      include:
+#        - users/manual/*

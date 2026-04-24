@@ -1,5 +1,5 @@
 # Kalender
-## Einleitung
+## Einleitung { data-ctx="/Calendar" }
 
 <!--ActiveSync-->
 Der Kalender ist, neben dem Adressbuch und dem E-Mail-Client, wohl eine der drei Kernfunktionen einer Groupware. Da ein Kalender, wenn er den Ansprüchen an die Zusammenarbeit von Gruppen genügen soll, auch mit verschiedenen Geräteplattformen zurechtkommen muss, ist tine mit Schnittstellen ausgerüstet. Das ist zum einen _ActiveSync_ von Microsoft, das die Synchronisation mit den Kalendern mobiler Geräte zulässt, aber auch MS-Outlook-Kalender-Benutzer anbindet, z.B. externe Projektpartner, die die Microsoft-Groupware verwenden.
@@ -33,7 +33,7 @@ Klicken Sie nun den Reiter Kalender an oder aktivieren Sie ihn über den Reiter 
 
 Die Ansicht ist unspektakulär, wie bei jedem Kalender. Allerdings handelt es sich hier um eine Groupware; es stehen Ihnen also neben der Eingabe eigener Termine eine ganze Reihe weiterer, Personen-übergreifender Funktionen zur Verfügung, wie zum Beispiel das Einladen anderer Teilnehmer zu Terminen, das Buchen von Ressourcen für Besprechungen, das Anzeigen von Terminen anderer Benutzer (sofern Sie über die Rechte dazu verfügen) oder das Filtern von Kalendereinträgen (auch anderer Benutzer) nach verschiedenen Kriterien in speziell dafür definierten Ansichten.
 
-## Favoriten und verschiedene Kalender
+## Favoriten und verschiedene Kalender { data-ctx="/Calendar/MainScreen/Event/FavoritesPicker" }
 
 <!--Favoriten-Ansicht-->
 Auch im Kalender können Sie bestimmte gefilterte Ansichten als FAVORITEN speichern (vgl. [Adressverwaltung - Kontakte filtern](ba_Adressbuch.md/#kontakte-filtern)). Standardmäßig sind bereits vier praktische Favoriten-Filter angelegt. Abgelehnte Termine, Alle meine Termine, Erwartet Antwort und Ich bin Organisator.
@@ -46,8 +46,8 @@ Auch im Kalender können Sie bestimmte gefilterte Ansichten als FAVORITEN speich
 
 Probieren Sie jetzt einmal die vier Standard-Favoriten-Ansichten aus, und schauen Sie sich dabei auch die entsprechenden syntaktischen Definitionen in den Filterzeilen an. So gewinnen Sie Übung für die Definition eigener FAVORITEN-Ansichten. Die Kalender-Anwendung ist hier ähnlich vielseitig, aber eben auch ähnlich anspruchsvoll, wie das Adressbuch.
 
-<span id="event-attendeefilter"></span>
-<span id="event-containertree"></span>
+<a id="ctx:Calendar.MainScreen.Event.AttendeeFilter"></a>
+<a id="ctx:Calendar.MainScreen.Event.ContainerTree"></a>
 Die Besonderheit im Kalender besteht in zwei weiteren Einstellkriterien auf der linken Seite. Neben der bekannten Container-Baumstruktur unter KALENDER, über die Sie weitere im System angelegte Kalender wählen, blenden Sie unter der Rubrik TEILNEHMER die Termine anderer Teilnehmer ein. Klicken Sie dazu das ausgegraute Teilnehmer hinzufügen an.
 
 <!-- SCREENSHOT -->
@@ -62,7 +62,7 @@ Welchen Sinn hat das nun? Externe Personen, wie Kunden oder Lieferanten, haben d
 !!! info "Wichtig"
     Achten Sie beim Auswählen von Kalendern in der Baumstruktur oder von Teilnehmern darauf, dass eventuell vorher in FAVORITEN eingestellte Filter (z.B. Erwartet Antwort) erhalten bleiben, wenn sie nicht im Widerspruch zu den zuletzt gemachten Einstellungen stehen. Sie sollten also immer, wenn Sie eine spezielle Ansicht in der linken Seite definiert haben, auch ein Auge auf den Filterkriterien über dem Kalenderfenster haben.
 
-<span id="event-minidatepicker"></span>
+<a id="ctx:Calendar.MainScreen.Event.MiniDatePicker"></a>
 Letzte angebotene Einstellmöglichkeit auf der linken Seite ist der Minikalender. Damit springen Sie schnell zu einem gewünschten Zeitabschnitt, und obwohl der Minikalender immer einen Monat anzeigt, können Sie per Mausklick auch die gewünschte Ansicht im Zielzeitraum wählen.
 
 <!-- SCREENSHOT -->
@@ -81,10 +81,11 @@ Das Ändern der Ansicht geht alternativ auch mit einem Klick auf die Buttons Tag
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_mobile }}Kalender/14_kalender_ansicht_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_mobile }}Kalender/14_kalender_ansicht_dark_1280x720.png#only-dark){.mobile-img}
 
-## Das Bearbeitungsmenü
+## Das Bearbeitungsmenü { data-ctx="/Calendar/MainScreen/Event/ActionToolbar" }
 
 Das Bearbeitungsmenü auf der linken Seite über der Tabelle enthält die Buttons Termin hinzufügen, Termin bearbeiten, Termin löschen, Drucke Seite, Importiere Termine, Exportiere TermineNachricht verfassen, Split (bisher nur in der CE), Blatt, Liste und Farben
 
+<a id="ctx:Calendar.MainScreen.Event.Sheet"></a><a id="ctx:Calendar.MainScreen.Event.List"></a>
 Mit Split, Blatt und Liste wählen Sie verschiedene Ansichten für den Kalender. Standard als Blatt ist die Wochenansicht; die Anzeige als Liste ist vor allem für den Ausdruck besser geeignet, denn sie enthält in Tabellenform eine Reihe weiterer Informationen über einen Termin, die im Blatt nicht sofort sichtbar sind. Sie können hier, wie in jeder Tabellenansicht von tine, mit dem kleinen Tabellensymbol rechts außen, Spalten nach Bedarf an- und abwählen.
 
 <!-- SCREENSHOT -->
@@ -101,7 +102,7 @@ Der Button Farbe soll der Übersichtlichkeit dienen. Hier können die angezeigte
 
 ## Termin hinzufügen/bearbeiten
 
-### Allgemeine Termindaten eingeben und Teilnehmer einladen
+### Allgemeine Termindaten eingeben und Teilnehmer einladen { data-ctx="/Calendar/EditDialog/Event" }
 
 Klicken Sie nun den ersten Button des Bearbeitungsmenüs, Termin hinzufügen.
 
@@ -142,7 +143,7 @@ Was bewirkt die Markierung von Privat? Die "normalen" Rechte des Kalenders werde
 Außerdem gibt es in den Berechtigungen noch einen Checkbutton frei/belegt; wenn Sie diesen markieren, werden andere Benutzer bei der Terminvergabe vor Überschneidungen mit Ihren Terminen gewarnt, wenn jene Sie einladen wollen.
 
 <!--Termin, andere Teilnehmer-->
-<span id="event-attendeegrid"></span>
+<a id="ctx:Calendar.EditDialog.Event.AttendeeGrid"></a>
 Im linken unteren Teil der Eingabemaske finden Sie noch drei weitere, für die Termineingabe wichtige Reiter: Im Reiter Teilnehmer sehen Sie standardmäßig drei Spalten: Rolle, Name und Status. Alternativ können über dem Tabellensymbol auf der rechten Seite Gespeichert in und Typ hinzugefügt werden.
 Als ersten Teilnehmer sehen Sie natürlich sich selbst.
 
@@ -171,6 +172,7 @@ Im Feld Gespeichert in sehen Sie bei der Neuanlage eines Termins zunächst nicht
     Um einen Termin zu finden, wo mehrere Teilnehmer Zeit haben, können Sie, nachdem Sie die entsprechenden Teilnehmer ausgewählt haben, ganz oben links auf Termin finden klicken. Das öffnet eine Kalenderansicht mit den Terminen der jeweiligen Teilnehmer.
 
 <!--Ressource-->
+<a id="ctx:Calendar.EditDialog.Resource"></a>
 Ein Benutzer, oder im Fall des Kalenders, ein Teilnehmer kann ein in tine angelegter Benutzer sein oder eine beliebige Person aus irgendeinem tine-Adressbuch sein. Sie können also auch Kunden, Lieferanten oder wen auch immer einladen – insofern ist die Bezeichnung "Benutzer" hier etwas irreführend.
 Mit Gruppe ist natürlich eine Ihrer gültigen tine-Benutzergruppen gemeint, die Sie über diese Funktion geschlossen zum Termin einladen können.
 Eine Ressource ist ein Hilfsmittel, z.B. ein Besprechungsraum oder ein Präsentationsgerät, das Sie für den Termin reservieren wollen.
@@ -243,7 +245,7 @@ Diese Meldungen bleiben bei abgesagten Terminen bis zum nächsten Browser-Refres
 
 Kommen wir noch schnell zum Pulldown Ansicht, dessen Besprechung wir weiter oben verschoben hatten. Die Funktion der Ansicht hat nur Sinn bei mehreren Teilnehmern. Mit dieser Funktion können Sie als Organisator sich in die Lage der anderen Teilnehmer versetzen und den Termin aus ihrer Perspektive sehen.
 
-### Wiederholungen
+### Wiederholungen { data-ctx="/Calendar/EditDialog/Event/RecurrenceConfig" }
 
 <!--Termin,Wiederholungen-->
 Über den Reiter Wiederholungen im mittleren Teil des Termineingabefensters können Sie sich wiederholende Termine definieren. Klicken Sie diesen Reiter an – die Standardeinstellung ist Keine.
@@ -256,7 +258,7 @@ Die Einstellungen zu Monatlich bieten Ihnen, neben dem schon bekannten Prinzip d
 
 Bei der Auswahl Jährlich wird naheliegenderweise kein Wiederholungsabstand mehr angeboten. Sie können hier den Tag entweder als ersten, zweiten, dritten, vierten oder letzten Wochentag oder als über eine Ordinalzahl bestimmten Tag eines bestimmten Monats definieren. Die Festlegung des Terminketten-Endes erfolgt wieder wie oben.
 
-### Alarm
+### Alarm { data-ctx="/Calendar/EditDialog/Event/AlarmGrid" }
 
 <!--Termin,Alarm auslösen-->
 Standardmäßig ist festgelegt, dass keine Alarmzeit aktiviert ist. Diese Einstellung können Sie verändern; lesen Sie dazu bitte unter [Benutzerspezifische Einstellungen - Kalender](na_Benutzereinstellungen.md/#kalender) nach. Die Alarmbenachrichtigung [Umfrage](da_Kalender.md/#umfrage) erledigt das System über eine E-Mail, die es allen bestätigten Teilnehmern des Termines zusendet.
@@ -268,7 +270,7 @@ Sollte keiner der Alarme Ihnen zusagen, wählen sie den Punkt Benutzerdefinierte
 !!! warning "Achtung"
     Diese E-Mail wird, in Abhängigkeit von der Größe Ihrer tine-Installation und anderen Faktoren (wie z.B. Leistungsfähigkeit der Server-Hardware), mit Zeitverzögerung von einer bis zu mehreren Minuten versendet. Sie sollten also bei der Bemessung der Benachrichtigungszeiten diese Verzögerungen mit einkalkulieren.
 
-### Umfrage
+### Umfrage { data-ctx="/Calendar/EditDialog/Event/Poll" }
 <!--Termin,Umfragetool-->
 Das Umfrage-Tool soll bei der Terminfindung eine Hilfestellung geben.
 Über Optionen können Sie die Einstellungen der Umfrage bearbeiten. Zum Beispiel welchen Namen die Umfrage haben soll, ob diese Passwort geschützt ist usw… Des Weiteren finden Sie hier den Link zu der von Ihnen kreierten Termin-Umfrage. Andere zur Auswahl stehende Termine fügen Sie unter dem Reiter Alternative Termin
@@ -299,7 +301,7 @@ Wenn Sie als Organisator einen Termin löschen, ist er sowohl in Ihrem als auch 
 
 Mit dieser Funktion erhalten Sie eine Seite im Querformat, die, je nach gewählter Ansicht (Blatt, Liste, Tag, Woche, Monat) und angewählten Feldern, die Termine ausdruckt.
 
-## Termine importieren
+## Termine importieren { data-ctx="/Calendar/ImportDialog/Event" }
 
 <!--Termin,Fremdquellen einlesen-->
 <!--ICS-Format-->

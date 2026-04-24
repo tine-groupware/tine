@@ -1,6 +1,6 @@
 # E-Mail
 
-## Einleitung
+## Einleitung { data-ctx="/Felamimail" }
 E-Mail gehört zu den Kernfunktionen einer Groupware. tine erlaubt die Einbindung beliebig vieler E-Mail-Konten, d.h. Sie können über Ihre bereits vorhandenen E-Mail-Konten innerhalb von tine E-Mails empfangen und senden. tine umfasst jedoch keinen E-Mail-Server. Die E-Mail-Konten müssen also bei einem externen Dienstleister oder auf einem firmeneigenen Mailserver angelegt sein. Wenn es die Firmenpolicy erlaubt, können Sie auch Ihre privaten E-Mail-Konten in tine einbinden.
 
 Hier ist ein kurzer Exkurs zu E-Mail-Clients und deren Besonderheiten hilfreich:
