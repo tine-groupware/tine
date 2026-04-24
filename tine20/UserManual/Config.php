@@ -23,11 +23,25 @@ class UserManual_Config extends Tinebase_Config_Abstract
 
     const APP_NAME = 'UserManual';
 
+    const HELP_BASE_URL = 'helpBaseUrl';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
-    protected static $_properties = [];
+    protected static $_properties = [
+        self::HELP_BASE_URL        => [
+            //_('Help Base URL')
+            self::LABEL                 => 'Help Base URL',
+            //_('Base url of the user manual')
+            self::DESCRIPTION           => 'Base url of the user manual',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'https://docs.local.tine-dev.de',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
+    ];
 
     /**
      * (non-PHPdoc)

@@ -5,6 +5,7 @@ Export Definitionen steuern den Aufruf und die Ausführung von Exporten.
 Die Konfiguration erfolgt im `xml` Format.
 
 **Beispiel:**  
+<!-- {# prevent macro execution -->
 ~~~ xml
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
@@ -27,6 +28,7 @@ Die Konfiguration erfolgt im `xml` Format.
 <exportFilename>Pfarrnachrichten {{ dateFormat(calendar.from, 'YYYY') }}-{{ dateFormat(calendar.from, 'MM') }}-{{ dateFormat(calendar.from, 'd')+1 }}.docx</exportFilename>
 </config>
 ~~~
+<!-- end prevent macro execution #} -->
 
 
 

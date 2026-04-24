@@ -1,0 +1,2 @@
+[mkdocs.plugins]
+chapter-numbering = plugins.chapter_numbering:ChapterNumberingPlugin

@@ -238,7 +238,7 @@ Was bewirkt die Markierung von menu:[Privat]? Die "normalen" Rechte des Kalender
 
 Außerdem gibt es in den Berechtigungen noch einen Checkbutton menu:[frei/belegt]; wenn Sie diesen markieren, werden andere Benutzer bei der Terminvergabe vor Überschneidungen mit Ihren Terminen gewarnt, wenn jene Sie einladen wollen.
 
-(((Termin,andere Teilnehmer)))
+(((Termin, andere Teilnehmer)))
 {{{/Calendar/EditDialog/Event/AttendeeGrid}}}
 Im linken unteren Teil der Eingabemaske finden Sie noch drei weitere, für die Termineingabe wichtige Reiter: Im Reiter menu:[Teilnehmer] sehen Sie standardmäßig drei Spalten: menu:[Rolle], menu:[Name] und menu:[Status]. Alternativ können über dem Tabellensymbol auf der rechten Seite menu:[Gespeichert in] und menu:[Typ] hinzugefügt werden.
 Als ersten Teilnehmer sehen Sie natürlich sich selbst.
