@@ -125,11 +125,14 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
                 $mail->addAttachment($attachment);
             }  else if ($attachment instanceof Tinebase_Model_Tree_Node) {
                 $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $encoding = str_starts_with((string)$attachment->contenttype, 'message/')
+                    ? Zend_Mime::ENCODING_8BIT
+                    : Zend_Mime::ENCODING_BASE64;
                 $mail->createAttachment(
                     $content,
                     $attachment->contenttype,
                     Zend_Mime::DISPOSITION_ATTACHMENT,
-                    Zend_Mime::ENCODING_BASE64,
+                    $encoding,
                     $attachment->name
                 );
             } else if (isset($attachment['filename'])) {

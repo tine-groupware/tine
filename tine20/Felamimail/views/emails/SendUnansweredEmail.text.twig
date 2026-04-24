@@ -1,0 +1,18 @@
+{#
+available parameters:
+    user
+    locale
+    recipients
+    subject
+    preferenceDatetimeUser
+    attachments
+#}
+{% extends 'Tinebase/views/emails/base.text.twig' %}
+{% block subject %}
+    {{ subject }}
+{% endblock %}
+
+
+{% block body %}
+    {{ _('Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: %1$s.') | format('<strong>' ~ preferenceDatetimeUser ~ '</strong>') | raw }}
+{% endblock %}

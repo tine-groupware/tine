@@ -55,7 +55,7 @@ class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Re
                     ['field' => Felamimail_Model_MessageExpectedAnswer::FLD_MESSAGE_ID, 'operator' => 'equals', 'value' => $entry->message_id]
                 ]);
                 try {
-                    $this->sendAnswerMail($entry);
+                    $this->sendUnAnswerMail($entry);
                     $this->deleteByFilter($filter);
                 } catch (Exception $e) {
                     Tinebase_Exception::log($e);
@@ -71,7 +71,7 @@ class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Re
      *
      * @param Felamimail_Model_MessageExpectedAnswer $entry
      */
-    public function sendAnswerMail(Felamimail_Model_MessageExpectedAnswer $entry): void
+    public function sendUnAnswerMail(Felamimail_Model_MessageExpectedAnswer $entry): void
     {
         $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $entry->user_id));
         if (Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE, $entry->user_id) === 'auto') {
@@ -80,17 +80,64 @@ class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Re
         $translate = Tinebase_Translation::getTranslation('Felamimail', $locale);
         $subject = $translate->_('still unanswered: ') . $entry->subject;
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, $entry->user_id);
-        $preferenceDatetimeUser = Tinebase_Translation::dateToStringInTzAndLocaleFormat($entry->expected_answer, $timezone, $locale, 'date', true);
-        $text = $translate->_('Here is the reminder you requested. Unfortunately, we were unable to locate a response to the attached email within the deadline you specified: ') . $preferenceDatetimeUser;
+        $preferenceDatetimeUser = Tinebase_Translation::dateToStringInTzAndLocaleFormat(
+            $entry->expected_answer,
+            $timezone,
+            $locale,
+            'date',
+            true
+        );
         $recipient = Addressbook_Controller_Contact::getInstance()->getContactByUserId($entry->user_id);
         $user = Tinebase_User::getInstance()->getFullUserById($entry->user_id);
         $attachments = $this->getAttachments($entry);
-        Tinebase_Notification::getInstance()->send($user, array($recipient), $subject, $text, _attachments: $attachments);
+        $templateFileName = 'SendUnansweredEmail';
+        $this->_sendMessageWithTemplate(
+            $templateFileName,
+            [
+                'user' => $user,
+                'locale' => $locale,
+                'recipients' => array($recipient),
+                'subject' => $subject,
+                'preferenceDatetimeUser' => $preferenceDatetimeUser,
+                'attachments' => $attachments
+            ]
+        );
     }
 
     public function getAttachments(Felamimail_Model_MessageExpectedAnswer $entry): Tinebase_Record_RecordSet
     {
         $entry = Felamimail_Controller_MessageExpectedAnswer::getInstance()->get($entry->id);
         return $entry->attachments;
+    }
+
+    /**
+     * send message with template
+     *
+     */
+    protected function _sendMessageWithTemplate($templateFileName, $context = [])
+    {
+        $locale = $context['locale'];
+
+        $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME));
+        $htmlTemplate = $twig->load(
+            Felamimail_Config::APP_NAME . '/views/emails/' . $templateFileName . '.html.twig',
+            $locale
+        );
+        $textTemplate = $twig->load(
+            Felamimail_Config::APP_NAME . '/views/emails/' . $templateFileName . '.text.twig',
+            $locale
+        );
+
+        $html = $htmlTemplate->render($context);
+        $text = $textTemplate->render($context);
+
+        Tinebase_Notification::getInstance()->send(
+            $context['user'],
+            $context['recipients'],
+            $context['subject'],
+            $text,
+            $html,
+            $context['attachments']
+        );
     }
 }
