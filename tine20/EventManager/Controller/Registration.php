@@ -1275,77 +1275,14 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         $html = $htmlTemplate->render($context);
         $text = $textTemplate->render($context);
         $subject = $htmlTemplate->renderBlock('subject', $context);
-        $updater = Tinebase_Core::getUser();
 
-        // using Tinebase_Notification_Backend_Smtp send method, but changing recipients,
-        // they don't need to be contacts in this case
-        $mail = new Tinebase_Mail('UTF-8');
-        $mail->setSubject($subject);
-        $mail->setBodyText($text);
-        $mail->setBodyHtml($html);
-
-        $mail->addHeader('X-Tine20-Type', 'Notification');
-        $mail->addHeader('Precedence', 'bulk');
-        $mail->addHeader('User-Agent', Tinebase_Core::getTineUserAgent('Notification Service'));
-
-        $fromAddress = Tinebase_Notification_Backend_Smtp::getFromAddress();
-        $fromName = 'Tine 2.0 notification service';
-
-        if (empty($fromAddress)) {
-            Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . ' No notification service address set. Could not send notification.'
-            );
-            return;
-        }
-
-        if ($updater !== null && ! empty($updater->accountEmailAddress)) {
-            $mail->setFrom($updater->accountEmailAddress, $updater->accountFullName);
-            $mail->setSender($fromAddress, $fromName);
-        } else {
-            $mail->setFrom($fromAddress, $fromName);
-        }
-
-        $preferredEmailAddress = $context['email'];
-
-        // send
-        if (! empty($preferredEmailAddress)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $preferredEmailAddress
-                );
-            }
-            $mail->addTo($preferredEmailAddress, $context['name']);
-            try {
-                Tinebase_Smtp::getInstance()->sendMessage($mail);
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                // TODO check Felamimail - there is a similar error handling. should be generalized!
-                if (preg_match('/^5\.1\.1/', $zmpe->getMessage())) {
-                    // User unknown in virtual mailbox table
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                        Tinebase_Core::getLogger()->warn(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage()
-                        );
-                    }
-                } elseif (preg_match('/^5\.1\.3/', $zmpe->getMessage())) {
-                    // Bad recipient address syntax
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                        Tinebase_Core::getLogger()->warn(
-                            __METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage()
-                        );
-                    }
-                } else {
-                    throw $zmpe;
-                }
-            }
-        } else {
-            try {
-                $context['name'];
-            } catch (Exception $e) {
-                $context['name'] = $updater->accountFullName;
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Not sending notification email to ' . $context['name'] . '. No email address available.');
-            }
-        }
+        Tinebase_Notification::getInstance()->send(
+            Tinebase_Core::getUser(),
+            [$context['contact']],
+            $subject,
+            $text,
+            $html
+        );
     }
 
     public function getDefaultRegistrationKeyFields(): array
