@@ -14,31 +14,9 @@ import { accountSortType } from 'common'
  * @extends Record
  * Attender Record Definition
  */
-const Attendee = Record.create([
-    {name: 'id'},
-    {name: 'cal_event_id'},
-    {name: 'user_id', sortType: accountSortType },
-    {name: 'user_type'},
-    {name: 'role', type: 'keyField', keyFieldConfigName: 'attendeeRoles'},
-    {name: 'quantity'},
-    {name: 'status', type: 'keyField', keyFieldConfigName: 'attendeeStatus'},
-    {name: 'status_authkey'},
-    {name: 'displaycontainer_id'},
-    {name: 'transp'},
-    {name: 'checked'}, // filter grid helper field
-    {name: 'fbInfo'}   // helper field
-], {
+const Attendee = Record.create([], {
     appName: 'Calendar',
     modelName: 'Attender',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Attender', 'Attendee', n); gettext('Attendee');
-    recordName: 'Attender',
-    recordsName: 'Attendee',
-    containerProperty: 'cal_event_id',
-    // ngettext('Event', 'Events', n); gettext('Events');
-    containerName: 'Event',
-    containersName: 'Events',
 
     /**
      * gets name of attender
