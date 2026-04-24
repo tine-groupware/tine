@@ -154,7 +154,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
         self::FIELDS          => [
             self::FLD_USER_ID => [
-                self::TYPE       => self::TYPE_STRING,
+                self::TYPE          => self::TYPE_RECORD, // type record?
+                self::CONFIG        => [
+                    self::APP_NAME      => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME    => 'Contact',
+                ],
                 self::LENGTH     => 40,
                 self::NULLABLE   => true,
                 self::LABEL      => 'User', // _('User')
@@ -190,7 +194,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 self::NULLABLE   => true,
             ],
             self::FLD_ROLE     => [
-                self::TYPE          => self::TYPE_STRING,
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Calendar_Config::ATTENDEE_ROLES,
                 self::LENGTH        => 32,
                 self::DEFAULT_VAL   => self::ROLE_REQUIRED,
                 self::NULLABLE      => false,
@@ -223,7 +228,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             self::FLD_STATUS => [
-                self::TYPE       => self::TYPE_STRING,
+                self::TYPE                  => self::TYPE_KEY_FIELD,
+                self::NAME                  => Calendar_Config::ATTENDEE_STATUS,
                 self::LENGTH     => 40,
                 self::NULLABLE   => false,
                 self::DEFAULT_VAL   => self::STATUS_NEEDSACTION,

@@ -1,4 +1,1917 @@
 {
+  "Event": {
+    "containerProperty": "container_id",
+    "extendsContainer": null,
+    "containersName": "Calendars",
+    "containerName": "Calendar",
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "external_seq",
+      "dtend",
+      "transp",
+      "class",
+      "description",
+      "geo",
+      "adr_lon",
+      "adr_lat",
+      "location",
+      "location_record",
+      "event_site",
+      "organizer",
+      "organizer_type",
+      "organizer_email",
+      "organizer_displayname",
+      "priority",
+      "status",
+      "summary",
+      "url",
+      "uid",
+      "external_uid",
+      "external_id",
+      "etag",
+      "attendee",
+      "alarms",
+      "dtstart",
+      "recurid",
+      "members",
+      "resources",
+      "date",
+      "duration",
+      "time",
+      "groups",
+      "base_event_id",
+      "exdate",
+      "rrule",
+      "is_all_day_event",
+      "rrule_until",
+      "rrule_constraints",
+      "originator_tz",
+      "poll_id",
+      "mute",
+      "event_types",
+      "freebusyGrant",
+      "readGrant",
+      "syncGrant",
+      "exportGrant",
+      "editGrant",
+      "deleteGrant",
+      "privateGrant",
+      "id",
+      "cs_roles_configs",
+      "customfields",
+      "relations",
+      "container_id",
+      "tags",
+      "attachments",
+      "xprops",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "period": {
+        "filter": "Calendar_Model_PeriodFilter"
+      },
+      "container_id": {
+        "filter": "Calendar_Model_CalendarFilter",
+        "options": {
+          "modelName": "Calendar_Model_Event"
+        }
+      },
+      "attender": {
+        "filter": "Calendar_Model_AttenderFilter"
+      },
+      "attender_status": {
+        "filter": "Calendar_Model_AttenderStatusFilter"
+      },
+      "attender_role": {
+        "filter": "Calendar_Model_AttenderRoleFilter"
+      },
+      "grants": {
+        "filter": "Calendar_Model_GrantFilter"
+      },
+      "weekday": {
+        "filter": "Calendar_Model_WeekdayFilter"
+      },
+      "site": {
+        "filter": "Tinebase_Model_Filter_Relation",
+        "options": {
+          "related_model": "Addressbook_Model_Contact",
+          "filtergroup": "Addressbook_Model_ContactFilter"
+        }
+      },
+      "external_seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "dtend": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "transp": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "class": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "description": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "geo": {
+        "filter": "Tinebase_Model_Filter_Float"
+      },
+      "adr_lon": {
+        "filter": "Tinebase_Model_Filter_Float"
+      },
+      "adr_lat": {
+        "filter": "Tinebase_Model_Filter_Float"
+      },
+      "location": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "location_record": {
+        "filter": "Addressbook_Model_ContactIdFilter",
+        "options": {
+          "modelName": "Addressbook_Model_Contact",
+          "appName": "Addressbook",
+          "controller": "Addressbook_Controller_Addressbook_Model_Contact",
+          "filtergroup": "Addressbook_Model_Addressbook_Model_ContactFilter"
+        }
+      },
+      "event_site": {
+        "filter": "Tinebase_Model_Filter_ForeignId",
+        "options": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "filtergroup": "Addressbook_Model_ContactFilter",
+          "controller": "Addressbook_Controller_Contact"
+        }
+      },
+      "organizer": {
+        "filter": "Addressbook_Model_ContactIdFilter",
+        "appName": "Addressbook"
+      },
+      "organizer_type": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "organizer_email": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "organizer_displayname": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "priority": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "status": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "summary": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "url": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "uid": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "external_uid": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "external_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "etag": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "dtstart": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "recurid": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "base_event_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "exdate": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "rrule": {
+        "filter": "Calendar_Model_RruleFilter"
+      },
+      "is_all_day_event": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "rrule_until": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "rrule_constraints": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "originator_tz": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "poll_id": {
+        "filter": "Tinebase_Model_Filter_Id"
+      },
+      "mute": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "event_types": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "filtergroup": "Calendar_Model_EventTypesFilter",
+          "controller": "Calendar_Controller_EventTypes",
+          "refIdField": "record",
+          "filterOptions": {
+            "doJoin": true
+          }
+        }
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "Calendar_Model_Event"
+        }
+      },
+      "cs_roles_configs": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "filtergroup": "CrewScheduling_Model_EventRoleConfigFilter",
+          "controller": "CrewScheduling_Controller_EventRoleConfig",
+          "refIdField": "cal_event",
+          "filterOptions": {
+            "doJoin": true
+          }
+        }
+      },
+      "customfield": {
+        "filter": "Tinebase_Model_Filter_CustomField",
+        "options": {
+          "idProperty": "cal_events.id"
+        }
+      },
+      "tag": {
+        "key": "tag",
+        "filter": "Tinebase_Model_Filter_Tag",
+        "options": {
+          "idProperty": "cal_events.id",
+          "applicationName": "Calendar"
+        }
+      },
+      "attachments": {
+        "filter": "Tinebase_Model_Filter_RecordAttachment",
+        "options": {
+          "idProperty": "id",
+          "modelName": "Calendar_Model_Event"
+        }
+      },
+      "xprops": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "description",
+            "location",
+            "summary"
+          ],
+          "modelName": "Calendar_Model_Event"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": null,
+    "fields": {
+      "external_seq": {
+        "type": "integer",
+        "unsigned": true,
+        "default": 0,
+        "inputFilters": [
+          "Zend_Filter_Int"
+        ],
+        "modlogOmit": true,
+        "fieldName": "external_seq",
+        "key": "external_seq",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "dtend": {
+        "type": "datetime",
+        "fieldName": "dtend",
+        "key": "dtend",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "transp": {
+        "type": "string",
+        "length": 40,
+        "default": "OPAQUE",
+        "nullable": true,
+        "validators": [
+          [
+            "Zend_Validate_InArray",
+            [
+              "OPAQUE",
+              "TRANSPARENT"
+            ]
+          ]
+        ],
+        "fieldName": "transp",
+        "key": "transp"
+      },
+      "class": {
+        "type": "string",
+        "length": 40,
+        "default": "PUBLIC",
+        "validators": [
+          [
+            "Zend_Validate_InArray",
+            [
+              "PUBLIC",
+              "PRIVATE"
+            ]
+          ]
+        ],
+        "fieldName": "class",
+        "key": "class"
+      },
+      "description": {
+        "type": "text",
+        "inputFilters": [],
+        "nullable": true,
+        "queryFilter": true,
+        "fieldName": "description",
+        "key": "description",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "geo": {
+        "type": "float",
+        "unsigned": true,
+        "nullable": true,
+        "default": null,
+        "fieldName": "geo",
+        "key": "geo",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "adr_lon": {
+        "type": "float",
+        "unsigned": true,
+        "nullable": true,
+        "default": null,
+        "fieldName": "adr_lon",
+        "key": "adr_lon",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "adr_lat": {
+        "type": "float",
+        "unsigned": true,
+        "nullable": true,
+        "default": null,
+        "fieldName": "adr_lat",
+        "key": "adr_lat",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "location": {
+        "type": "text",
+        "inputFilters": [],
+        "length": 1024,
+        "nullable": true,
+        "queryFilter": true,
+        "fieldName": "location",
+        "key": "location",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "location_record": {
+        "type": "record",
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "recordClassName": "Addressbook_Model_Contact",
+          "controllerClassName": "Addressbook_Controller_Contact",
+          "filterClassName": "Addressbook_Model_ContactFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "length": 40,
+        "nullable": true,
+        "default": null,
+        "filterDefinition": {
+          "filter": "Addressbook_Model_ContactIdFilter",
+          "options": {
+            "modelName": "Addressbook_Model_Contact",
+            "appName": "Addressbook"
+          }
+        },
+        "fieldName": "location_record",
+        "key": "location_record",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "event_site": {
+        "label": "Site",
+        "type": "record",
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "recordClassName": "Addressbook_Model_Contact",
+          "controllerClassName": "Addressbook_Controller_Contact",
+          "filterClassName": "Addressbook_Model_ContactFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "nullable": true,
+        "uiconfig": {
+          "searchComboConfig": {
+            "useEditPlugin": false
+          },
+          "feature": {
+            "appName": "Tinebase",
+            "feature": "featureSite"
+          }
+        },
+        "fieldName": "event_site",
+        "key": "event_site",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "organizer": {
+        "type": "record",
+        "config": {
+          "appName": "Addressbook",
+          "modelName": "Contact",
+          "recordClassName": "Addressbook_Model_Contact",
+          "controllerClassName": "Addressbook_Controller_Contact",
+          "filterClassName": "Addressbook_Model_ContactFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "length": 40,
+        "nullable": true,
+        "default": null,
+        "filterDefinition": {
+          "filter": "Addressbook_Model_ContactIdFilter",
+          "appName": "Addressbook"
+        },
+        "fieldName": "organizer",
+        "key": "organizer",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "organizer_type": {
+        "type": "string",
+        "length": 255,
+        "default": "contact",
+        "validators": {
+          "0": [
+            "Zend_Validate_InArray",
+            [
+              "contact",
+              "email"
+            ]
+          ],
+          "allowEmpty": false,
+          "Zend_Filter_Empty": "contact"
+        },
+        "fieldName": "organizer_type",
+        "key": "organizer_type"
+      },
+      "organizer_email": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "default": null,
+        "fieldName": "organizer_email",
+        "key": "organizer_email",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "organizer_displayname": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "default": null,
+        "fieldName": "organizer_displayname",
+        "key": "organizer_displayname",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "priority": {
+        "type": "integer",
+        "unsigned": true,
+        "nullable": true,
+        "default": null,
+        "fieldName": "priority",
+        "key": "priority",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "status": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "default": null,
+        "validators": [
+          [
+            "Zend_Validate_InArray",
+            [
+              "CONFIRMED",
+              "TENTATIVE",
+              "CANCELLED"
+            ]
+          ]
+        ],
+        "fieldName": "status",
+        "key": "status"
+      },
+      "summary": {
+        "type": "text",
+        "inputFilters": [],
+        "length": 1024,
+        "nullable": true,
+        "queryFilter": true,
+        "fieldName": "summary",
+        "key": "summary",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "url": {
+        "type": "text",
+        "inputFilters": [],
+        "length": 65535,
+        "nullable": true,
+        "fieldName": "url",
+        "key": "url",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "uid": {
+        "type": "string",
+        "copyOmit": true,
+        "length": 255,
+        "fieldName": "uid",
+        "key": "uid",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "external_uid": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "fieldName": "external_uid",
+        "key": "external_uid",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "external_id": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "fieldName": "external_id",
+        "key": "external_id",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "etag": {
+        "type": "string",
+        "length": 60,
+        "nullable": true,
+        "default": null,
+        "fieldName": "etag",
+        "key": "etag",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "attendee": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "config": {
+          "type": "preExpanded",
+          "config": {
+            "recordClassName": "Calendar_Model_Attender"
+          },
+          "sortable": false
+        },
+        "fieldName": "attendee",
+        "key": "attendee",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "alarms": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "alarms",
+        "key": "alarms",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "dtstart": {
+        "type": "datetime",
+        "fieldName": "dtstart",
+        "key": "dtstart",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "recurid": {
+        "type": "string",
+        "length": 255,
+        "copyOmit": true,
+        "nullable": true,
+        "default": null,
+        "fieldName": "recurid",
+        "key": "recurid",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "members": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "members",
+        "key": "members",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "resources": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "resources",
+        "key": "resources",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "date": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "date",
+        "key": "date",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "duration": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "duration",
+        "key": "duration",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "time": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "time",
+        "key": "time",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "groups": {
+        "type": "virtual",
+        "modlogOmit": false,
+        "fieldName": "groups",
+        "key": "groups",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "base_event_id": {
+        "type": "string",
+        "length": 40,
+        "nullable": true,
+        "default": null,
+        "fieldName": "base_event_id",
+        "key": "base_event_id",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "exdate": {
+        "type": "datetime",
+        "doctrineIgnore": true,
+        "fieldName": "exdate",
+        "key": "exdate",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "rrule": {
+        "type": "json",
+        "length": 255,
+        "nullable": true,
+        "default": null,
+        "filterDefinition": {
+          "filter": "Calendar_Model_RruleFilter"
+        },
+        "fieldName": "rrule",
+        "key": "rrule",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "is_all_day_event": {
+        "type": "boolean",
+        "nullable": true,
+        "default": 0,
+        "fieldName": "is_all_day_event",
+        "key": "is_all_day_event",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "rrule_until": {
+        "type": "datetime",
+        "nullable": true,
+        "default": null,
+        "fieldName": "rrule_until",
+        "key": "rrule_until",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "rrule_constraints": {
+        "type": "text",
+        "inputFilters": [],
+        "nullable": true,
+        "fieldName": "rrule_constraints",
+        "key": "rrule_constraints",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "originator_tz": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "default": null,
+        "fieldName": "originator_tz",
+        "key": "originator_tz",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "poll_id": {
+        "type": "record",
+        "config": {
+          "appName": "Calendar",
+          "modelName": "Poll",
+          "recordClassName": "Calendar_Model_Poll",
+          "controllerClassName": "Calendar_Controller_Poll",
+          "filterClassName": "Calendar_Model_PollFilter",
+          "dependentRecords": false,
+          "length": 40
+        },
+        "length": 40,
+        "nullable": true,
+        "default": null,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id"
+        },
+        "fieldName": "poll_id",
+        "key": "poll_id",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "mute": {
+        "type": "boolean",
+        "nullable": true,
+        "default": null,
+        "validators": {
+          "allowEmpty": true,
+          "default": false
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "fieldName": "mute",
+        "key": "mute"
+      },
+      "event_types": {
+        "type": "records",
+        "isVirtual": true,
+        "nullable": true,
+        "label": "Event Types",
+        "validators": {
+          "allowEmpty": true
+        },
+        "inputFilters": {
+          "Zend_Filter_Empty": null
+        },
+        "config": {
+          "appName": "Calendar",
+          "modelName": "EventTypes",
+          "refIdField": "record",
+          "dependentRecords": true,
+          "recordClassName": "Calendar_Model_EventTypes",
+          "controllerClassName": "Calendar_Controller_EventTypes",
+          "filterClassName": "Calendar_Model_EventTypesFilter"
+        },
+        "recursiveResolving": true,
+        "uiconfig": {
+          "searchComboConfig": {
+            "useEditPlugin": false
+          }
+        },
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_ForeignRecords",
+          "options": {
+            "filtergroup": "Calendar_Model_EventTypesFilter",
+            "controller": "Calendar_Controller_EventTypes",
+            "refIdField": "record",
+            "filterOptions": {
+              "doJoin": true
+            }
+          }
+        },
+        "fieldName": "event_types",
+        "key": "event_types"
+      },
+      "freebusyGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "freebusyGrant",
+        "key": "freebusyGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "readGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "readGrant",
+        "key": "readGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "syncGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "syncGrant",
+        "key": "syncGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "exportGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "exportGrant",
+        "key": "exportGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "editGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "editGrant",
+        "key": "editGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "deleteGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "deleteGrant",
+        "key": "deleteGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "privateGrant": {
+        "type": "virtual",
+        "modlogOmit": true,
+        "fieldName": "privateGrant",
+        "key": "privateGrant",
+        "config": {
+          "sortable": false
+        },
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "Calendar_Model_Event"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "cs_roles_configs": {
+        "label": "Event's role Config",
+        "type": "records",
+        "owningApp": "CrewScheduling",
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "EventRoleConfig",
+          "dependentRecords": true,
+          "refIdField": "cal_event",
+          "recordClassName": "CrewScheduling_Model_EventRoleConfig",
+          "controllerClassName": "CrewScheduling_Controller_EventRoleConfig",
+          "filterClassName": "CrewScheduling_Model_EventRoleConfigFilter"
+        },
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_ForeignRecords",
+          "options": {
+            "filtergroup": "CrewScheduling_Model_EventRoleConfigFilter",
+            "controller": "CrewScheduling_Controller_EventRoleConfig",
+            "refIdField": "cal_event",
+            "filterOptions": {
+              "doJoin": true
+            }
+          }
+        },
+        "systemCF": true,
+        "fieldName": "cs_roles_configs",
+        "key": "cs_roles_configs",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "customfields": {
+        "label": "Custom Fields",
+        "shy": true,
+        "sortable": false,
+        "type": "custom",
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "customfields",
+        "key": "customfields"
+      },
+      "relations": {
+        "label": "Relations",
+        "shy": true,
+        "sortable": false,
+        "type": "relation",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "Relation"
+        },
+        "filterDefinition": [],
+        "validators": {
+          "allowEmpty": true
+        },
+        "copyOmit": true,
+        "fieldName": "relations",
+        "key": "relations"
+      },
+      "container_id": {
+        "nullable": true,
+        "length": 40,
+        "label": "Calendar",
+        "shy": true,
+        "type": "container",
+        "validators": {
+          "allowEmpty": true
+        },
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Container",
+          "options": {
+            "modelName": "Calendar_Model_Event"
+          }
+        },
+        "fieldName": "container_id",
+        "key": "container_id"
+      },
+      "tags": {
+        "label": "Tags",
+        "sortable": false,
+        "type": "tag",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "filterDefinition": {
+          "key": "tag",
+          "filter": "Tinebase_Model_Filter_Tag",
+          "options": {
+            "idProperty": "cal_events.id",
+            "applicationName": "Calendar"
+          }
+        },
+        "fieldName": "tags",
+        "key": "tags"
+      },
+      "attachments": {
+        "label": "Attachments",
+        "type": "attachments",
+        "recursiveResolving": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_RecordAttachment",
+          "options": {
+            "idProperty": "id",
+            "modelName": "Calendar_Model_Event"
+          }
+        },
+        "sortable": false,
+        "omitOnSearch": false,
+        "fieldName": "attachments",
+        "key": "attachments",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "xprops": {
+        "label": null,
+        "type": "json",
+        "length": 65535,
+        "nullable": true,
+        "default": null,
+        "disabled": true,
+        "validators": {
+          "0": "Tinebase_Record_Validator_Json",
+          "allowEmpty": true,
+          "default": []
+        },
+        "system": true,
+        "fieldName": "xprops",
+        "key": "xprops"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "external_seq": 0,
+      "transp": "OPAQUE",
+      "class": "PUBLIC",
+      "organizer_type": "contact",
+      "is_all_day_event": 0,
+      "seq": 0,
+      "is_deleted": 0
+    },
+    "titleProperty": "summary",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": [
+      "uid",
+      "recurid",
+      "relations"
+    ],
+    "recordName": "Event",
+    "recordsName": "Events",
+    "appName": "Calendar",
+    "modelName": "Event",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": true,
+    "hasSystemCustomFields": true,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": true,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": {
+      "attendee": {
+        "type": "preExpanded",
+        "config": {
+          "recordClassName": "Calendar_Model_Attender"
+        },
+        "sortable": false,
+        "key": "attendee"
+      },
+      "alarms": {
+        "sortable": false,
+        "key": "alarms"
+      },
+      "members": {
+        "sortable": false,
+        "key": "members"
+      },
+      "resources": {
+        "sortable": false,
+        "key": "resources"
+      },
+      "date": {
+        "sortable": false,
+        "key": "date"
+      },
+      "duration": {
+        "sortable": false,
+        "key": "duration"
+      },
+      "time": {
+        "sortable": false,
+        "key": "time"
+      },
+      "groups": {
+        "sortable": false,
+        "key": "groups"
+      },
+      "event_types": {
+        "appName": "Calendar",
+        "modelName": "EventTypes",
+        "refIdField": "record",
+        "dependentRecords": true,
+        "key": "event_types"
+      },
+      "freebusyGrant": {
+        "sortable": false,
+        "key": "freebusyGrant"
+      },
+      "readGrant": {
+        "sortable": false,
+        "key": "readGrant"
+      },
+      "syncGrant": {
+        "sortable": false,
+        "key": "syncGrant"
+      },
+      "exportGrant": {
+        "sortable": false,
+        "key": "exportGrant"
+      },
+      "editGrant": {
+        "sortable": false,
+        "key": "editGrant"
+      },
+      "deleteGrant": {
+        "sortable": false,
+        "key": "deleteGrant"
+      },
+      "privateGrant": {
+        "sortable": false,
+        "key": "privateGrant"
+      }
+    },
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
+  "Attender": {
+    "containerProperty": null,
+    "extendsContainer": null,
+    "containersName": null,
+    "containerName": null,
+    "grantsModel": "Tinebase_Model_Grants",
+    "defaultSortInfo": null,
+    "fieldKeys": [
+      "user_id",
+      "cal_event_id",
+      "user_type",
+      "user_email",
+      "user_displayname",
+      "role",
+      "transp",
+      "displaycontainer_id",
+      "status_authkey",
+      "status",
+      "quantity",
+      "id",
+      "crewscheduling_roles",
+      "xprops",
+      "notes",
+      "created_by",
+      "creation_time",
+      "last_modified_by",
+      "last_modified_time",
+      "seq",
+      "deleted_by",
+      "deleted_time",
+      "is_deleted"
+    ],
+    "filterModel": {
+      "user_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "cal_event_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "user_type": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "user_email": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "user_displayname": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "role": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "transp": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "displaycontainer_id": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "status_authkey": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "status": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "quantity": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "id": {
+        "filter": "Tinebase_Model_Filter_Id",
+        "options": {
+          "idProperty": "id",
+          "modelName": "Calendar_Model_Attender"
+        }
+      },
+      "crewscheduling_roles": {
+        "filter": "Tinebase_Model_Filter_ForeignRecords",
+        "options": {
+          "appName": "CrewScheduling",
+          "modelName": "AttendeeRole",
+          "dependentRecords": true,
+          "refIdField": "attendee",
+          "filtergroup": "CrewScheduling_Model_AttendeeRoleFilter",
+          "controller": "CrewScheduling_Controller_AttendeeRole"
+        }
+      },
+      "xprops": {
+        "filter": "Tinebase_Model_Filter_Text"
+      },
+      "created_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "creation_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "last_modified_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "last_modified_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "seq": {
+        "filter": "Tinebase_Model_Filter_Int"
+      },
+      "deleted_by": {
+        "filter": "Tinebase_Model_Filter_User"
+      },
+      "deleted_time": {
+        "filter": "Tinebase_Model_Filter_DateTime"
+      },
+      "is_deleted": {
+        "filter": "Tinebase_Model_Filter_Bool"
+      },
+      "query": {
+        "label": "Quick Search",
+        "field": "query",
+        "filter": "Tinebase_Model_Filter_Query",
+        "useGlobalTranslation": true,
+        "options": {
+          "fields": [
+            "user_id",
+            "cal_event_id"
+          ],
+          "modelName": "Calendar_Model_Attender"
+        }
+      }
+    },
+    "defaultFilter": "query",
+    "requiredRight": null,
+    "singularContainerMode": true,
+    "fields": {
+      "user_id": {
+        "type": "json",
+        "length": 255,
+        "nullable": true,
+        "label": "User",
+        "queryFilter": true,
+        "fieldName": "user_id",
+        "key": "user_id",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "cal_event_id": {
+        "type": "string",
+        "length": 40,
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true
+        },
+        "label": "Event Id",
+        "queryFilter": true,
+        "fieldName": "cal_event_id",
+        "key": "cal_event_id"
+      },
+      "user_type": {
+        "type": "string",
+        "length": 32,
+        "default": "user",
+        "nullable": false,
+        "validators": {
+          "0": [
+            "InArray",
+            [
+              "any",
+              "user",
+              "group",
+              "groupmember",
+              "resource",
+              "email"
+            ]
+          ],
+          "allowEmpty": true,
+          "default": "user"
+        },
+        "fieldName": "user_type",
+        "key": "user_type"
+      },
+      "user_email": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "fieldName": "user_email",
+        "key": "user_email",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "user_displayname": {
+        "type": "string",
+        "length": 255,
+        "nullable": true,
+        "fieldName": "user_displayname",
+        "key": "user_displayname",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "role": {
+        "type": "keyfield",
+        "name": "attendeeRoles",
+        "length": 40,
+        "default": "REQ",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true,
+          "default": "REQ"
+        },
+        "fieldName": "role",
+        "key": "role",
+        "inputFilters": {
+          "Zend_Filter_Empty": "REQ"
+        }
+      },
+      "transp": {
+        "type": "string",
+        "length": 40,
+        "default": "OPAQUE",
+        "nullable": true,
+        "validators": {
+          "0": [
+            "InArray",
+            [
+              "OPAQUE",
+              "TRANSPARENT"
+            ]
+          ],
+          "allowEmpty": true,
+          "default": "OPAQUE"
+        },
+        "fieldName": "transp",
+        "key": "transp"
+      },
+      "displaycontainer_id": {
+        "type": "string",
+        "length": 40,
+        "nullable": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "displaycontainer_id",
+        "key": "displaycontainer_id"
+      },
+      "status_authkey": {
+        "type": "string",
+        "length": 40,
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true
+        },
+        "fieldName": "status_authkey",
+        "key": "status_authkey"
+      },
+      "status": {
+        "type": "keyfield",
+        "name": "attendeeStatus",
+        "length": 40,
+        "nullable": false,
+        "default": "NEEDS-ACTION",
+        "validators": {
+          "allowEmpty": true,
+          "default": "NEEDS-ACTION"
+        },
+        "fieldName": "status",
+        "key": "status",
+        "inputFilters": {
+          "Zend_Filter_Empty": "NEEDS-ACTION"
+        }
+      },
+      "quantity": {
+        "type": "integer",
+        "nullable": false,
+        "validators": {
+          "allowEmpty": true
+        },
+        "default": 1,
+        "fieldName": "quantity",
+        "key": "quantity"
+      },
+      "id": {
+        "id": true,
+        "label": "ID",
+        "validators": {
+          "allowEmpty": true
+        },
+        "length": 40,
+        "shy": true,
+        "filterDefinition": {
+          "filter": "Tinebase_Model_Filter_Id",
+          "options": {
+            "idProperty": "id",
+            "modelName": "Calendar_Model_Attender"
+          }
+        },
+        "fieldName": "id",
+        "type": "string",
+        "key": "id"
+      },
+      "crewscheduling_roles": {
+        "label": "Crewscheduling Roles",
+        "type": "records",
+        "nullable": true,
+        "owningApp": "CrewScheduling",
+        "config": {
+          "appName": "CrewScheduling",
+          "modelName": "AttendeeRole",
+          "dependentRecords": true,
+          "refIdField": "attendee",
+          "recordClassName": "CrewScheduling_Model_AttendeeRole",
+          "controllerClassName": "CrewScheduling_Controller_AttendeeRole",
+          "filterClassName": "CrewScheduling_Model_AttendeeRoleFilter"
+        },
+        "systemCF": true,
+        "fieldName": "crewscheduling_roles",
+        "key": "crewscheduling_roles",
+        "validators": {
+          "allowEmpty": true
+        }
+      },
+      "xprops": {
+        "label": null,
+        "type": "json",
+        "length": 65535,
+        "nullable": true,
+        "default": null,
+        "disabled": true,
+        "validators": {
+          "0": "Tinebase_Record_Validator_Json",
+          "allowEmpty": true,
+          "default": []
+        },
+        "system": true,
+        "fieldName": "xprops",
+        "key": "xprops"
+      },
+      "notes": {
+        "label": null,
+        "type": "note",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "fieldName": "notes",
+        "key": "notes"
+      },
+      "created_by": {
+        "label": "Created By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "created_by",
+        "key": "created_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "creation_time": {
+        "label": "Creation Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "creation_time",
+        "key": "creation_time"
+      },
+      "last_modified_by": {
+        "label": "Last Modified By",
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "last_modified_by",
+        "key": "last_modified_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "last_modified_time": {
+        "label": "Last Modified Time",
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "last_modified_time",
+        "key": "last_modified_time"
+      },
+      "seq": {
+        "label": null,
+        "type": "integer",
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "shy": true,
+        "useGlobalTranslation": true,
+        "default": 0,
+        "unsigned": true,
+        "fieldName": "seq",
+        "key": "seq"
+      },
+      "deleted_by": {
+        "label": null,
+        "system": true,
+        "type": "user",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "length": 40,
+        "nullable": true,
+        "fieldName": "deleted_by",
+        "key": "deleted_by",
+        "config": {
+          "appName": "Tinebase",
+          "modelName": "User",
+          "type": "record",
+          "recordClassName": "Tinebase_Model_User",
+          "controllerClassName": "Tinebase_User",
+          "filterClassName": "Tinebase_Model_FullUserFilter"
+        }
+      },
+      "deleted_time": {
+        "label": null,
+        "system": true,
+        "type": "datetime",
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "nullable": true,
+        "fieldName": "deleted_time",
+        "key": "deleted_time"
+      },
+      "is_deleted": {
+        "type": "boolean",
+        "unsigned": true,
+        "system": true,
+        "validators": {
+          "allowEmpty": true
+        },
+        "useGlobalTranslation": true,
+        "default": 0,
+        "fieldName": "is_deleted",
+        "key": "is_deleted"
+      }
+    },
+    "defaultData": {
+      "user_type": "user",
+      "role": "REQ",
+      "transp": "OPAQUE",
+      "status": "NEEDS-ACTION",
+      "quantity": 1,
+      "seq": 0,
+      "is_deleted": 0
+    },
+    "titleProperty": "user_id",
+    "multipleEdit": null,
+    "multipleEditRequiredRight": null,
+    "languagesAvailable": null,
+    "uiconfig": null,
+    "delegateAclField": null,
+    "copyEditAction": null,
+    "copyOmitFields": null,
+    "recordName": "Attendee",
+    "recordsName": "Attendees",
+    "appName": "Calendar",
+    "modelName": "Attender",
+    "createModule": false,
+    "moduleName": null,
+    "isDependent": false,
+    "hasCustomFields": false,
+    "hasSystemCustomFields": true,
+    "modlogActive": true,
+    "hasNotes": true,
+    "hasAttachments": false,
+    "hasAlarms": null,
+    "idProperty": "id",
+    "splitButton": false,
+    "attributeConfig": null,
+    "hasPersonalContainer": true,
+    "import": null,
+    "export": null,
+    "virtualFields": [],
+    "group": null,
+    "copyNoAppendTitle": null,
+    "denormalizationOf": null,
+    "isMetadataModelFor": null
+  },
   "SchedulingRole": {
     "containerProperty": "container_id",
     "extendsContainer": "container_id",

@@ -685,6 +685,7 @@ Record.create = function(o, meta) {
         f[method] = bind(Record[method], Record);
     });
     f.setFromJson = function(json) {
+        f.init();
         return Record.setFromJson(json, p);
     };
 

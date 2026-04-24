@@ -7,8 +7,6 @@
  *
  */
 
-import './Calendar/Model/Attendee';
-import './Calendar/Model/Event';
 import './Calendar/AttendeeGridPanelPlugin';
 import './Calendar/EventCSPanel';
 require('./MainScreen');

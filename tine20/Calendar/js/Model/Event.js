@@ -18,92 +18,10 @@ import {default as getTwingEnv, Expression } from "twingEnv.es6";
  * @extends Record
  * Event record definition
  */
-const Event = Record.create(Record.genericFields.concat([
-    { name: 'id' },
-    { name: 'dtend', type: 'date', dateFormat: 'Y-m-d H:i:s' },
-    { name: 'transp' },
-    // ical common fields
-    { name: 'class' },
-    { name: 'description' },
-    { name: 'geo' },
-    { name: 'adr_lon' },
-    { name: 'adr_lat' },
-    { name: 'location' },
-    { name: 'location_record' },
-    { name: 'event_site', type: 'record', fieldDefinition: { config: {
-        // we need some fieldDef to get grouping store working
-        appName: 'Addressbook',
-        modelName: 'Contact',
-    }}},
-    { name: 'organizer_type' },
-    { name: 'organizer' },
-    { name: 'organizer_email' },
-    { name: 'organizer_displayname' },
-    { name: 'priority' },
-    { name: 'status' },
-    { name: 'summary' },
-    { name: 'url' },
-    { name: 'uid' },
-    // ical common fields with multiple appearance
-    //{ name: 'attach' },
-    { name: 'attendee' },
-    { name: 'alarms'},
-    { name: 'tags' },
-    { name: 'notes'},
-    { name: 'attachments'},
-    { name: 'event_types', type: 'records', fieldDefinition: { config: {
-        // we need some fieldDef to get filter working
-        appName: 'Calendar',
-        modelName: 'EventTypes',
-        refIdField: 'record',
-        dependentRecords: true
-    }}},
-    //{ name: 'contact' },
-    //{ name: 'related' },
-    //{ name: 'resources' },
-    //{ name: 'rstatus' },
-    // scheduleable interface fields
-    { name: 'dtstart', type: 'date', dateFormat: 'Y-m-d H:i:s' },
-    { name: 'recurid' },
-    { name: 'base_event_id' },
-    // scheduleable interface fields with multiple appearance
-    { name: 'exdate' },
-    //{ name: 'exrule' },
-    //{ name: 'rdate' },
-    { name: 'xprops' },
-    { name: 'rrule' },
-    { name: 'poll_id' },
-    { name: 'mute' },
-    { name: 'is_all_day_event', type: 'bool'},
-    { name: 'rrule_until', type: 'date', dateFormat: 'Y-m-d H:i:s' },
-    { name: 'rrule_constraints' },
-    { name: 'originator_tz' },
-    // grant helper fields
-    {name: 'addGrant'       , type: 'bool'},
-    {name: 'readGrant'      , type: 'bool'},
-    {name: 'editGrant'      , type: 'bool'},
-    {name: 'deleteGrant'    , type: 'bool'},
-    {name: 'exportGrant'    , type: 'bool'},
-    {name: 'freebusyGrant'  , type: 'bool'},
-    {name: 'privateGrant'   , type: 'bool'},
-    {name: 'syncGrant'      , type: 'bool'},
-    // relations
-    { name: 'relations',   omitDuplicateResolving: true},
-    { name: 'customfields', omitDuplicateResolving: true}
-]), {
+const Event = Record.create([], {
     appName: 'Calendar',
     modelName: 'Event',
-    idProperty: 'id',
-    titleProperty: 'summary',
-    // ngettext('Event', 'Events', n); gettext('Events');
-    recordName: 'Event',
-    recordsName: 'Events',
-    containerProperty: 'container_id',
     grantsPath: 'data',
-    // ngettext('Calendar', 'Calendars', n); gettext('Calendars');
-    containerName: 'Calendar',
-    containersName: 'Calendars',
-    copyOmitFields: ['uid', 'recurid'],
     allowBlankContainer: false,
     copyNoAppendTitle: true,
 
@@ -483,8 +401,7 @@ Event.getFilterModel = function() {
                 app: app,
                 keyfieldName: 'attendeeRoles'
             },
-            {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
-            {filtertype: 'tinebase.tag', app: app},
+            {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer'), app: app},
             {
                 label: app.i18n._('Status'),
                 gender: app.i18n._('GENDER_Status'),
@@ -516,10 +433,6 @@ Event.getFilterModel = function() {
                 keyfieldName: 'eventClasses',
                 defaultAll: true
             },
-            {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'datetime'},
-            //{label: i18n._('Last Modified by'),                                                  field: 'last_modified_by',   valueType: 'user'},
-            {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'datetime'},
-            //{label: i18n._('Created by'),                                                        field: 'created_by',         valueType: 'user'},
             {
                 filtertype: 'calendar.rrule',
                 app: app
