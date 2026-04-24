@@ -4,11 +4,12 @@
 
 Die Anwendung HumanResources gehört nicht zu den Kernfunktionalitäten einer Groupware, ist auf Kundenwunsch entstanden und entspricht keinem vollständigen Personalmanagementsystem. Im Rahmen einer Groupwarelösung steht jedoch bereits ein umfangreiches Funktionspaket zur Personalverwaltung und Zeitwirtschaft zur Verfügung.
 
-## Einleitung
+## Einleitung { data-ctx="/HumanResources" }
 Die Anwendung Human Resources dient der Personalabteilung zur Verwaltung relevanter Mitarbeiterinformationen. Da hierzu auch vertrauliche Daten gehören, sollten Sie die Zugriffsrechte auf diesen Programmteil sehr genau überlegen.
 
 Die Anwendung besteht aus fünf Modulen: Mitarbeiter, die zugehörigen Personalkonten, Tägliche Arbeitszeitberichte, Monatliche Arbeitszeitberichte und Abwesenheitsplanung.
 
+<a id="ctx:HumanResources.MainScreen.ModulPicker"></a>
 Starten Sie die Anwendung über den Reiter tine, indem Sie dort HumanResources anklicken.
 
 <!-- SCREENSHOT -->
@@ -17,6 +18,7 @@ Starten Sie die Anwendung über den Reiter tine, indem Sie dort HumanResources a
 ![Abbildung: Module unter HumanResources]({{ img_url_mobile }}HumanResources/1_humanresources_module_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Module unter HumanResources]({{ img_url_mobile }}HumanResources/1_humanresources_module_dark_1280x720.png#only-dark){.mobile-img}
 
+<a id="ctx:HumanResources.MainScreen.Employee.FavoritesPicker"></a>
 Die vorgefertigten Favoriten-Ansichten wechseln je nach Modul. So zeigen die Favoriten Alle Angestellten und Zur Zeit angestellt einerseits alle im Unternehmen bisher beschäftigten Mitarbeiter (inklusive der bereits ausgeschiedenen) und andererseits die derzeit beschäftigten Mitarbeiter (mit aktuell laufendem Arbeitsvertrag) an. Alle Konten zeigt alle Personalkonten an.
 
 ## Stammdaten
@@ -96,7 +98,7 @@ Legen Sie bei Typ Arbeitszeitlimitierung den täglich anzurechnenden Arbeitszeit
 
 Die Übertragung der Regel erfolgt jeweils unmittelbar im Feld Konfiguration. Nach Fertigstellung aller Angaben speichern Sie das Schema durch Bestätigung auf Button OK.
 
-## Mitarbeiter
+## Mitarbeiter { data-ctx="/HumanResources/MainScreen/Employee" }
 Wenn Sie links unter Module auf Mitarbeiter klicken, erhalten Sie rechts in der Tabelle zeilenweise die angelegten Mitarbeiter. Ein Klick auf das Tabellenkopf-Symbol ganz rechts außen zeigt Ihnen, dass die Tabelle aus Platzgründen nur etwa die Hälfte aller möglichen Angaben anzeigt.
 
 <!-- SCREENSHOT -->
@@ -107,7 +109,7 @@ Wenn Sie links unter Module auf Mitarbeiter klicken, erhalten Sie rechts in der 
 
 Schauen wir uns diese in ihrer Gesamtheit daher jetzt über die Bearbeitungsmaske näher an.
 
-### Mitarbeiter hinzufügen
+### Mitarbeiter hinzufügen { data-ctx="/HumanResources/EditDialog/Employee" }
 Klicken Sie im Bearbeitungsmenü links außen den Button Mitarbeiter hinzufügen an.
 
 <!-- SCREENSHOT -->
@@ -151,8 +153,10 @@ Unter dem Reiter Kostenstellen finden Sie zwei Eingabefelder: Einmal die Kostens
     Die Definition und Festlegung der Kostenstellenstruktur unterliegt keiner Vorgabe und ist von Branche zu Branche bzw. von Unternehmen zu Unternehmen individuell. Erkundigen Sie sich bitte nach der für Ihr Unternehmen gültigen innerbetrieblichen Nomenklatur.
 
 <!--Arbeitsverträge-->
-### Verträge
+### Verträge { data-ctx="/HumanResources/EditDialog/Employee/Contract" }
 Arbeitsverträge legen Sie unter dem Reiter Verträge an. Klicken Sie im unteren Bereich des Tabellenfensters auf Vertrag hinzufügen.
+
+<a id="ctx:HumanResources.EditDialog.Contract"></a>
 
 <!-- SCREENSHOT -->
 ![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_desktop }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_light_1920x1020.png#only-light){.desktop-img}
@@ -178,7 +182,7 @@ Haben Sie einen Arbeitsvertrag angelegt, klicken Sie in der Übersichtstabelle r
 Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen anderen Arbeitsvertrag. Der Button Vertrag löschen unterhalb des Tabellenfensters ist jetzt nicht mehr ausgegraut  – damit können Sie den Arbeitsvertrag löschen. Das Abspeichern mindestens eines Arbeitsvertrages für einen Arbeitnehmer führt ebenso dazu, dass die beiden Reiter Urlaub und Krankheit nicht mehr ausgegraut sind.
 
 <!--Urlaubstage-->
-### Urlaub – Krankheit
+### Urlaub – Krankheit { data-ctx="/HumanResources/EditDialog/Employee/FreeTime" }
 Unter dem Reiter Urlaub finden Sie in der Tabelle die Urlaubstage des Arbeitnehmers.
 
 Die erste Tabellenspalte entspricht dem Benutzerkonto, d.h. Sie sehen das Kalenderjahr, dem die Urlaubstage zugeordnet sind. Die anderen Tabellenspalten schauen wir uns jetzt in der Bearbeitungsmaske an. Klicken Sie dazu unten den Button Urlaubstage hinzufügen.
@@ -189,7 +193,7 @@ Die erste Tabellenspalte entspricht dem Benutzerkonto, d.h. Sie sehen das Kalend
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_mobile }}HumanResources/12_humanresources_mitarbeiter_urlaub_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_mobile }}HumanResources/12_humanresources_mitarbeiter_urlaub_dark_1280x720.png#only-dark){.mobile-img}
 
-<span id="editdialog-freetime"></span>
+<a id="ctx:HumanResources.EditDialog.FreeTime"></a>
 Über das Pulldown Status legen Sie zunächst fest, ob es sich um einen beantragten, in Bearbeitung befindlichen, bereits angenommenen oder abgewiesenen Urlaubsantrag handelt. Standardmäßig steht der Status auf Angenommen. Beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf Angenommen und schauen Sie sich das nächste Pulldown, Personalkonto, an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, Übrig, werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen inkl. Resturlaub aus dem Vorjahr und kann nicht überschrieben werden.
 
 Darunter finden Sie ein Kalenderfeld, über das Sie komfortabel die einzelnen Tage des jetzt zu bearbeitenden Urlaubs eingeben. Klicken Sie auf die gewünschten Tage, summiert das System diese automatisch – und zieht sie auch wieder ab, wenn Sie noch einmal darauf klicken. Haben Sie den Urlaub richtig eingegeben, speichern Sie ihn mit Ok ab. Nach dem Schließen dieser Bearbeitungsmaske sehen Sie, dass der eben eingegebene Urlaub in einer neuen Zeile der Tabelle registriert wurde. Wenn Sie jetzt eine Zeile markieren, lösen Sie mit den beiden Buttons Urlaubstage bearbeiten und Urlaubstage löschen unterhalb des Tabellenfensters die entsprechende Funktion aus. Das Ganze geht natürlich wie immer auch per rechtem Mausklick und Kontextmenü.
@@ -208,7 +212,7 @@ Hier gibt es noch eine Sonderfunktion: Haben Sie unentschuldigte Krankheitstage 
 
 Ein Klick auf das Tabellenkopf-Symbol rechts außen zeigt Ihnen bei beiden Tabellen, dass die nicht eingeblendeten Felder nur Bearbeitungsvermerke enthalten. Sie können also im Normalfall die Standardeinstellungen unverändert lassen.
 
-## Weitere Funktionen des Bearbeitungsmenüs
+## Weitere Funktionen des Bearbeitungsmenüs { data-ctx="/HumanResources/MainScreen/Employee/ActionToolbar" }
 Mitarbeiter bearbeiten: öffnet nach Markierung eines vorhandenen Mitarbeiters in der Tabelle dieselbe Bearbeitungsmaske wie Mitarbeiter hinzufügen.
 
 Mitarbeiter löschen: löscht den ausgewählten Mitarbeiter nach einer Sicherheitsabfrage.
@@ -218,10 +222,10 @@ Drucke Seite: öffnet Ihren systemeigenen Druckerdialog und erzeugt standardmä�
 Mitarbeiter exportieren: bietet zwei Optionen:
 Als ODS exportieren für eine Tabelle im Dateiformat von Open-/LibreOffice (Zeilen- und Spaltenanordnung entspricht derjenigen der Bildschirmtabelle) und Als XLS exportieren für eine XLS-Datei, also das Format für die Tabellenkalkulation MS Excel in der Version 2000/XP, wobei neuere Versionen abwärtskompatibel sind.
 
-## Personalkonten
+## Personalkonten { data-ctx="/HumanResources/MainScreen/Account" }
 Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter Modules auf Personalkonten. Wenn Sie zuvor einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button Personalkonten anlegen. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
 
-<span id="editdialog-account"></span>
+<a id="ctx:HumanResources.EditDialog.Account"></a>
 Klicken Sie nun Personalkonto bearbeiten im Bearbeitungsmenü oder im Kontextmenü der rechten Maustaste.
 
 <!-- SCREENSHOT -->

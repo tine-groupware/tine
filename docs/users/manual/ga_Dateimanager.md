@@ -1,4 +1,4 @@
-# Dateimanager
+# Dateimanager { data-ctx="/Filemanager" }
 Der Dateimanager in tine ist zwar kein vollwertiges Dokumentenmanagementsystem (dazu fehlt es ihm an Funktionen, wie etwa der Verschlagwortung von Dokumenten), doch für die üblichen Anwendungsfälle im Rahmen einer Groupware ganz gut als solches zu gebrauchen. Vergegenwärtigen wir uns kurz, vor welchen Herausforderungen ein Unternehmen beispielsweise im Umgang mit den üblichen Vorlagen, wie Briefköpfe, Kalkulationen, Angebote, Rechnungen o.ä., steht – sie sollen
 
 * allen Mitarbeitern zur Verfügung stehen, die damit arbeiten müssen,
@@ -21,7 +21,7 @@ Diese Anforderungen erfüllt der tine-Dateimanager durchaus. Machen wir uns das 
 
 Schauen wir uns die einzelnen Bedienelemente und Funktionen des Dateimanagers nun im Rahmen dieses Fallbeispiels an.
 
-## Der Ordnerbaum
+## Der Ordnerbaum { data-ctx="/Filemanager/MainScreen/Node" }
 Der Baum Ordner enthält in der Grundkonfiguration einen Oberordner (alle Ordner) und drei Unterordner (Meine Ordner, Gemeinsame Ordner und Ordner anderer Benutzer). Meine Ordner wiederum hat immer auch noch den Unterordner Persönliche Dateien von... (Benutzername) – das ist der Ablageort für Ihre eigenen/persönlichen Dokumente, der automatisch mit dem Benutzer angelegt wird.
 
 Klicken Sie auf Gemeinsame Ordner, öffnet sich die darunterliegende Baumstruktur.

@@ -1,5 +1,5 @@
 # Kundenbeziehungsmanagement (CRM)
-## Einleitung
+## Einleitung { data-ctx="/Crm" }
 
 <!--Lead-->
 <!--Empfehlung-->
@@ -18,9 +18,9 @@ Jeder Mitarbeiter im Vertrieb hat durch die Hinterlegung dieser Informationen zu
 
 Starten Sie nun das CRM im Reiter tine.com über CRM.
 
-## Favoriten und Leadlisten
+## Favoriten und Leadlisten { data-ctx="/Crm/MainScreen/Lead/FavoritesPicker" }
 
-<span id="lead-containertree"></span>
+<a id="ctx:Crm.MainScreen.Lead.ContainerTree"></a>
 Oben links sehen Sie, wie gewohnt, mehrere Favoritenansichten. Als Standard bringt tine hier Alle Leads, Leads mit überfälligen Aufgaben, Meine Leads und Zuletzt von mir bearbeitet mit. Alle Leads listet Ihnen alle derzeit aktiven Leads des Unternehmens auf, also nicht die "akzeptierten" oder "verlorenen". Unter Leads mit überfälligen Aufgaben finden sie die Leads wo das Fälligkeitsdatum einer Aufgaben erreicht ist, und die Aufgabe noch offen ist. Meine Leads zeigt jene, für die Sie selbst als Kontakt vermerkt sind (wir kommen gleich darauf). Wie immer können Sie sich hier eigene Favoriten erstellen und abspeichern (vgl. [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)).
 
 Unter den Favoriten befindet sich der Verzeichnisbaum für Leadlisten mit Ihren eigenen, den gemeinsamen und den Leadlisten anderer Benutzer. Unter Meine Leadlisten werden Sie auf jeden Fall Ihre persönliche Leadliste finden, die bei der Erzeugung Ihres tine-Benutzerkontos automatisch angelegt wurde. Ob Sie unter den anderen beiden Ordnern Leadlisten sehen, hängt von Ihren persönlichen Zugriffsrechten ab. Sollten Sie im Vertrieb tätig sein, werden Sie vermutlich mindestens eine gemeinsame Leadliste im Zugriff haben.
@@ -37,7 +37,8 @@ Die Punkte im Bearbeitungsmenü besprechen wir im Folgenden ausführlich.
 
 Die Tabelle umfasst – neben den wichtigsten Datenfeldern – im unteren Bereich die drei Felder Lead-Status, Lead-Quellen und Lead-Typen. Sie dienen der grafischen Auswertung; sollten Sie dort keine Tortendiagramme sehen, liegt das daran, dass Sie noch keine Leads gespeichert haben.
 
-### Lead hinzufügen
+### Lead hinzufügen { data-ctx="/Crm/EditDialog/Lead" }
+<a id="ctx:Crm.MainScreen.Lead.ActionToolbar"></a>
 Klicken Sie oben links im Bearbeitungsmenü auf Lead hinzufügen.
 
 <!-- SCREENSHOT -->
@@ -122,7 +123,7 @@ Wollen Sie weitere mit dem Lead verbundene Kontakte sehen, rufen Sie die Leadmas
 
 Status, Wahrscheinlichkeit und Umsatz haben wir bereits behandelt; erklärungsbedürftig an dieser Stelle ist nur die Spalte Voraussichtlicher Umsatz: Die dort aufgeführte Summe ergibt sich als Produkt aus dem von Ihnen angegebenen Umsatz und der Wahrscheinlichkeit – sie hat rein statistische Aussagekraft.
 
-## Die übrigen Funktionen des Bearbeitungsmenüs
+## Die übrigen Funktionen des Bearbeitungsmenüs { data-ctx="/Crm/MainScreen/Lead/ActionToolbar" }
 
 Lead bearbeiten: Dieser sowie der folgende Menüpunkt ist nur aktiv, wenn ein Lead in der Tabelle ausgewählt wurde. Er öffnet die gleiche Maske, die Sie schon von Lead hinzufügen kennen.
 
