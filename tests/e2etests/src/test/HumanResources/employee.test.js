@@ -1,4 +1,4 @@
-const expectPuppeteer = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -36,7 +36,7 @@ describe('employee', () => {
                 test('open dialog', async() => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     freetimeEditDialog = await lib.getEditDialog('Urlaubstage hinzufügen', employeeEditDialog);
-                    await freetimeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     try {
                         await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
                     } catch {}
@@ -58,7 +58,7 @@ describe('employee', () => {
                     let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > a > em > span');
-                    await freetimeEditDialog.waitForTimeout(50);
+                    await new Promise(r => setTimeout(r, 50));
                     
                     if (remainingDays-2 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not decrease');
@@ -69,7 +69,7 @@ describe('employee', () => {
                     let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
 
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
-                    await freetimeEditDialog.waitForTimeout(50);
+                    await new Promise(r => setTimeout(r, 50));
                     
                     if (remainingDays+1 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not increase');
@@ -78,7 +78,7 @@ describe('employee', () => {
                 
                 test('vacation is saved', async () => {
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-toolbar-right-row button', {text: 'Ok'});
-                    await freetimeEditDialog.waitForTimeout(15000);
+                    await new Promise(r => setTimeout(r, 15000));
 
                     // wait for loading starts and ends
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
@@ -86,7 +86,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
-                    await employeeEditDialog.waitForTimeout(1000);
+                    await new Promise(r => setTimeout(r, 1000));
 
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
                 });
@@ -97,7 +97,7 @@ describe('employee', () => {
                 test('load vacation', async () => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     freetimeEditDialog = await lib.getEditDialog('Urlaubstage bearbeiten', employeeEditDialog);
-                    await freetimeEditDialog.waitForTimeout(1000);
+                    await new Promise(r => setTimeout(r, 1000));
                     try {
                         await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
                     } catch {}
@@ -126,7 +126,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
 
 
-                    await employeeEditDialog.waitForTimeout(2000); // wait till view is updated
+                    await new Promise(r => setTimeout(r, 2000)); // wait till view is updated
 
                     const days = await employeeEditDialog.$eval('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-days_count', el=> el.textContent);
                     
@@ -142,7 +142,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-secondary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
                     await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-secondary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                 });
                 
                 test('vacation is deleted', async () => {
@@ -151,7 +151,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).not.toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-type', {text: '[U] Urlaub'});
                 });
             });
@@ -168,7 +168,7 @@ describe('employee', () => {
                 let freetimeEditDialog;
                 test('open dialog', async() => {
                     freetimeEditDialog = await lib.getEditDialog('Krankheitstage hinzufügen', employeeEditDialog);
-                    await freetimeEditDialog.waitForTimeout(1000);
+                    await new Promise(r => setTimeout(r, 1000));
                     await expectPuppeteer(freetimeEditDialog).toFill('textarea[name=description]', testString);
                 });
 
@@ -206,7 +206,7 @@ describe('employee', () => {
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-SICKNESS .x-ux-pagingtb-refresh-disabled');
 
-                    await employeeEditDialog.waitForTimeout(5000);
+                    await new Promise(r => setTimeout(r, 5000));
 
                     await employeeEditDialog.waitForSelector('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-cell-inner.x-grid3-col-type_status');
 
@@ -223,28 +223,28 @@ describe('employee', () => {
 
             describe('book sickness as vacation', () => {
                 test('can book sickness as vacation', async () => {
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-SICKNESS .x-grid3-cell-inner.x-grid3-col-type_status', {button: 'right'});
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.x-menu-item-text', {text: 'Als Urlaub buchen'});
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                 });
                 test('sickness got vacation', async () => {
                     await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Urlaub'});
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled', {timeout: 10000});
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled.x-item-disabled');
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.tine-hr-freetimegrid-type-VACATION .x-ux-pagingtb-refresh-disabled');
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                 });
             });
             
             describe('delete vacation (was sickness)', () => {
                 test('confirm dialog is shown', async () => {
-                    await employeeEditDialog.waitForTimeout(2000);
+                    await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
                     await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-secondary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
@@ -268,41 +268,41 @@ describe('employee', () => {
     describe('edit contract', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
-            await page.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
-            await page.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
-            await employeeEditDialog.waitForTimeout(3000);
+            await new Promise(r => setTimeout(r, 3000));
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge', visible:true});
         });
         test('open contract', async () => {
-            await employeeEditDialog.waitForTimeout(5000)
+            await new Promise(r => setTimeout(r, 5000))
             contractEditDialog = await lib.getEditDialog('Vertrag hinzufügen', employeeEditDialog);
-            await contractEditDialog.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
         });
         test('edit contract', async () => {
             await contractEditDialog.click('input[name=start_date]');
             await contractEditDialog.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-form-invalid.x-trigger-wrap-focus .x-form-trigger');
             await expectPuppeteer(contractEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(2) > td:nth-child(1) > a > em > span');
-            await contractEditDialog.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             await contractEditDialog.type('input[name=feast_calendar_id]', 'Feast');
             await expectPuppeteer(contractEditDialog).toClick('.x-combo-list-item', {text: 'Feast Calendar'});
-            await contractEditDialog.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_0]', '06:00', {delay: 50});
-            await contractEditDialog.waitForTimeout(200);
+            await new Promise(r => setTimeout(r, 200));
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_1]', '08:00', {delay: 50});
-            await contractEditDialog.waitForTimeout(200);
+            await new Promise(r => setTimeout(r, 200));
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_2]', '03:00', {delay: 50});
-            await contractEditDialog.waitForTimeout(200);
+            await new Promise(r => setTimeout(r, 200));
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_3]', '00:00', {delay: 50});
-            await contractEditDialog.waitForTimeout(200);
+            await new Promise(r => setTimeout(r, 200));
             await expectPuppeteer(contractEditDialog).toFill('input[name=weekdays_4]', '04:00', {delay: 50});
-            await contractEditDialog.waitForTimeout(200);
+            await new Promise(r => setTimeout(r, 200));
         });
         test('edit breaktime configs', async () => {
             await contractEditDialog.click('[class=new-row] input');
             let breaktime = lib.getNewWindow();
-            await contractEditDialog.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             await expectPuppeteer(contractEditDialog).toMatchElement('.x-combo-list-item', {
                 text: 'Pausenzeit',
                 visible: true
@@ -312,7 +312,7 @@ describe('employee', () => {
                 visible: true
             });
             breaktime = await breaktime;
-            await breaktime.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             await expectPuppeteer(breaktime).toClick('input[name=time_worked]');
             await lib.makeScreenshot(breaktime,{path: 'screenshots/Error/test1.png'});
             await expectPuppeteer(breaktime).toFill('input[name=time_worked]', '06:00:00', {delay: 50});
@@ -320,38 +320,38 @@ describe('employee', () => {
             await expectPuppeteer(breaktime).toClick('input[name=time_worked]');
             await expectPuppeteer(breaktime).toFill('input[name=break_time]', '01:00:00', {delay: 50});
             await expectPuppeteer(breaktime).toClick('button', {text: 'Ok'});
-            await contractEditDialog.waitForTimeout(5000);
+            await new Promise(r => setTimeout(r, 5000));
             await lib.makeScreenshot(contractEditDialog,{path: 'screenshots/Error/test3.png'});
         });
 
         test('edit workingtimeschema', async () => {
             await contractEditDialog.type('[class=new-row] input', 'Arbeitzeitlimitierung');
-            await contractEditDialog.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             let workingtimeschema = lib.getNewWindow();
             await contractEditDialog.keyboard.press('Enter')
             workingtimeschema = await workingtimeschema;
-            await workingtimeschema.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             await expectPuppeteer(workingtimeschema).toFill('input[name=start_time]', '06:00', {delay: 50});
             await expectPuppeteer(workingtimeschema).toFill('input[name=end_time]', '20:00', {delay: 50});
             await expectPuppeteer(workingtimeschema).toClick('button', {text: 'Ok'});
-            await contractEditDialog.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             await expectPuppeteer(contractEditDialog).toClick('button', {text: 'Ok'});
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Ok'});
         });
 
         test('check contract', async () => {
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge'});
-            await employeeEditDialog.waitForTimeout(5000)
+            await new Promise(r => setTimeout(r, 5000))
             await employeeEditDialog.waitForSelector('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
             await employeeEditDialog.click('.x-grid3-cell-first .x-grid3-cell-inner.x-grid3-col-start_date');
-            await employeeEditDialog.waitForTimeout(5000);
+            await new Promise(r => setTimeout(r, 5000));
             contractEditDialog = await lib.getEditDialog('Bearbeiten', employeeEditDialog);
-            await contractEditDialog.waitForTimeout(5000);
+            await new Promise(r => setTimeout(r, 5000));
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_0]').value)).toEqual('06:00');
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_1]').value)).toEqual('08:00');
             expect(await contractEditDialog.evaluate(() => document.querySelector('input[name=weekdays_2]').value)).toEqual('03:00');

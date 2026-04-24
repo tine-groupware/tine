@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -13,7 +13,7 @@ describe('Mainpage', () => {
         let popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
 
         // add link to personal folder
-        await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
+        await expectPuppeteer(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
         await popupWindow.waitForSelector('.x-grid3-hd.x-grid3-cell.x-grid3-td-remark');
         // Find relation panel by its unique column header
         const relationPanel = await popupWindow.evaluateHandle(() => {
@@ -23,22 +23,22 @@ describe('Mainpage', () => {
 
         let arrows = await relationPanel.$$('.x-form-trigger.x-form-arrow-trigger');
         await arrows[0].click();
-        await popupWindow.waitForTimeout(2000);
-        await expect(popupWindow).toClick('.x-combo-list-item ', {text: 'Dateimanager'});
-        await popupWindow.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
+        await expectPuppeteer(popupWindow).toClick('.x-combo-list-item ', {text: 'Dateimanager'});
+        await new Promise(r => setTimeout(r, 2000));
         await popupWindow.click('.x-form-trigger.undefined');
         await popupWindow.waitForSelector('.x-panel.x-panel-noborder.x-grid-panel');
-        await popupWindow.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
         await popupWindow.click('.x-window-bwrap .x-grid3-cell-inner.x-grid3-col-name',{clickCount:2});
-        await popupWindow.waitForTimeout(3000);
-        await expect(popupWindow).toClick('.x-window.x-window-plain.x-resizable-pinned button',{text: 'Ok'});
-        await popupWindow.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
+        await expectPuppeteer(popupWindow).toClick('.x-window.x-window-plain.x-resizable-pinned button',{text: 'Ok'});
+        await new Promise(r => setTimeout(r, 3000));
 
         // show in filemanager
         await popupWindow.click('.x-grid3-row.x-grid3-row-first.x-grid3-row-last', {button: 'right'});
         await popupWindow.waitForSelector('.x-menu-list', {visible: true});
         await popupWindow.waitForSelector('span' , {text: 'Im Dateimanager anzeigen', visible: true});
-        await expect(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen', visible: true});
+        await expectPuppeteer(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen', visible: true});
         await page.waitForSelector('.tine-dock .dock-item .ApplicationIconCls.FilemanagerIconCls');
 
     });

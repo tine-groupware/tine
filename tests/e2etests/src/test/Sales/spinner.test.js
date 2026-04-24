@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -12,9 +12,9 @@ describe.skip('Mainpage', () => {
     let popupwindow;
     test('open frische fische record', async () => {
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name',{text: "Frische Fische Gmbh & Co. KG"});
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name',{text:'Frische Fische Gmbh & Co. KG', clickCount: 2});
+        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name',{text:'Frische Fische Gmbh & Co. KG', clickCount: 2});
         popupwindow = await lib.getNewWindow();
-        await popupwindow.waitForTimeout(5000);
+        await new Promise(r => setTimeout(r, 5000));
     });
 
     test('check format of spinner', async () => {
@@ -32,12 +32,12 @@ describe.skip('Mainpage', () => {
     });
 
     test('change value of spinner', async () => {
-        await expect(popupwindow).toFill('input[name=credit_term]', '25,2');
-        await expect(popupwindow).toFill('input[name=currency_trans_rate]', '25,2458');
-        await expect(popupwindow).toFill('input[name=discount]', '25,8477');
-        await expect(popupwindow).toClick('input[name=credit_term]');
+        await expectPuppeteer(popupwindow).toFill('input[name=credit_term]', '25,2');
+        await expectPuppeteer(popupwindow).toFill('input[name=currency_trans_rate]', '25,2458');
+        await expectPuppeteer(popupwindow).toFill('input[name=discount]', '25,8477');
+        await expectPuppeteer(popupwindow).toClick('input[name=credit_term]');
         //wait to change value in inputSpinner
-        await popupwindow.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
 
         let value;
 

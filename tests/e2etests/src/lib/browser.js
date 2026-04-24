@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer, setDefaultOptions } = require('expect-puppeteer');
 require('dotenv').config();
 
 const fs = require('fs');
@@ -38,8 +38,9 @@ module.exports = {
         const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
         mkdirp(downloadPath);
         console.log('Downloading file to:', downloadPath);
-        await page._client.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: downloadPath});
-        await expect(page).toClick(selector, option);
+        const cdpSession = await page.createCDPSession();
+        await cdpSession.send('Page.setDownloadBehavior', {behavior: 'allow', downloadPath: downloadPath});
+        await expectPuppeteer(page).toClick(selector, option);
         let filename = await this.waitForFileToDownload(downloadPath);
         return path.resolve(downloadPath, filename);
     },
@@ -49,7 +50,7 @@ module.exports = {
         let filename;
         while (!filename || filename.endsWith('.crdownload')) {
             filename = fs.readdirSync(downloadPath)[0];
-            await page.waitForTimeout(500);
+            await new Promise(r => setTimeout(r, 500));
         }
         return filename;
     },
@@ -66,10 +67,10 @@ module.exports = {
     },
 
     getEditDialog: async function (btnText, win) {
-        await expect(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
-        await page.waitForTimeout(1000); // wait for btn to get active
+        await expectPuppeteer(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
+        await new Promise(r => setTimeout(r, 1000)); // wait for btn to get active
         let popupWindow = this.getNewWindow();
-        await expect(win || page).toClick('.x-btn-text', {text: btnText});
+        await expectPuppeteer(win || page).toClick('.x-btn-text', {text: btnText});
         popupWindow = await popupWindow;
         this.proxyConsole(popupWindow);
         try {
@@ -77,7 +78,7 @@ module.exports = {
         } catch {
         }
         await popupWindow.waitForFunction(() => !document.querySelector('.ext-el-mask'));
-        await popupWindow.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         return popupWindow;
     },
 
@@ -93,7 +94,7 @@ module.exports = {
         page.evaluate(() => Tine.Tinebase.common.reload({
             clearCache: true
         }));
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
         await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon', 20000);
     },
 
@@ -131,22 +132,22 @@ module.exports = {
 
         await page.waitForSelector('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
         await page.click('.x-btn-text.tine-grid-row-action-icon.renderer_accountUserIcon');
-        const frame = await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
-        await expect(frame).toClick('.x-menu-item-icon.action_adminMode');
+        const frame = await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
+        await expectPuppeteer(frame).toClick('.x-menu-item-icon.action_adminMode');
         const preferencePopup = await this.getNewWindow();
         await preferencePopup.waitForSelector('.x-tree-node');
         //wait for finish load dialog
-        await expect(preferencePopup).toMatchElement('input[name=timezone]');
-        await expect(preferencePopup).toClick('span', {text: appName});
+        await expectPuppeteer(preferencePopup).toMatchElement('input[name=timezone]');
+        await expectPuppeteer(preferencePopup).toClick('span', {text: appName});
 
         // change setting to YES
-        await expect(preferencePopup).toMatchElement('input[name=' + preference + ']');
-        await expect(preferencePopup).toFill('input[name=' + preference + ']', value);
-        await preferencePopup.waitForTimeout(500);
+        await expectPuppeteer(preferencePopup).toMatchElement('input[name=' + preference + ']');
+        await expectPuppeteer(preferencePopup).toFill('input[name=' + preference + ']', value);
+        await new Promise(r => setTimeout(r, 500));
         await preferencePopup.keyboard.press('Enter');
-        await preferencePopup.waitForTimeout(500);
-        await expect(preferencePopup).toClick('button', {text: 'Ok'});
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 500));
+        await expectPuppeteer(preferencePopup).toClick('button', {text: 'Ok'});
+        await new Promise(r => setTimeout(r, 1000));
 
         await this.reloadRegistry(page);
         await page.waitForSelector('.x-tab-strip-closable.x-tab-with-icon.tine-mainscreen-apptabspanel-menu-tabel', {timeout: 0});
@@ -158,7 +159,7 @@ module.exports = {
             specStarted: result => jasmine.currentTest = result
         });
 
-        expect.setDefaultOptions({timeout: 5000});
+        setDefaultOptions({timeout: 5000});
 
         let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--ignore-certificate-errors', '--start-maximized'];
 
@@ -188,33 +189,33 @@ module.exports = {
         await page.setViewport(resolution);
 
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: 30000});
-        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+        await expectPuppeteer(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
             console.log('switching to german');
             await page.waitForSelector('input[name=locale]');
             await page.click('input[name=locale]');
-            await expect(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
+            await expectPuppeteer(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
             // wait for reload
-            await page.waitForTimeout(500);
+            await new Promise(r => setTimeout(r, 500));
             await page.waitForSelector('input[name=locale]');
         }
 
         await page.waitForSelector('input[name=username]', {timeout: 30000});
-        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
-        await expect(page).toMatchElement('input[name=username]');
+        await expectPuppeteer(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+        await expectPuppeteer(page).toMatchElement('input[name=username]');
         await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
         await page.focus('input[name=username]');
-        await page.waitForTimeout(1000); //wait for input field completely loaded
-        await expect(page).toFill('input[name=username]', process.env.TEST_USERNAME, {delay: 50});
-        await expect(page).toFill('input[name=password]', process.env.TEST_PASSWORD, {delay: 50});
-        await expect(page).toClick('button', {text: 'Anmelden'});
+        await new Promise(r => setTimeout(r, 1000)); //wait for input field completely loaded
+        await expectPuppeteer(page).toFill('input[name=username]', process.env.TEST_USERNAME, {delay: 50});
+        await expectPuppeteer(page).toFill('input[name=password]', process.env.TEST_PASSWORD, {delay: 50});
+        await expectPuppeteer(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.tine-dock', {timeout: 0});
             if (!!+process.env.MFA) {
                 await page.waitForSelector('.x-window-header-text', {text: 'Multi Faktor Authentifikation'});
                 const mfaDialog = await this.getEditDialog('OK');
-                await expect(mfaDialog).toClick('button', {text: "Abbrechen"});
+                await expectPuppeteer(mfaDialog).toClick('button', {text: "Abbrechen"});
             }
         } catch (e) {
             console.log('login failed!');
@@ -223,13 +224,13 @@ module.exports = {
         }
 
         if (app) {
-            await expect(page).toClick('.action_menu.application-menu-btn');
+            await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
             await page.waitForSelector('.application-menu-item');
-            await expect(page).toClick('.application-menu-item__text', {text: app});
+            await expectPuppeteer(page).toClick('.application-menu-item__text', {text: app});
         }
         if (module) {
             await page.waitForSelector('span', {text: 'Module'});
-            await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
+            await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west span', {text: module});
         }
     },
 
@@ -269,7 +270,7 @@ module.exports = {
             specStarted: result => jasmine.currentTest = result
         });
 
-        expect.setDefaultOptions({timeout: 5000});
+        setDefaultOptions({timeout: 5000});
 
         let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', '--start-maximized'];
 
@@ -301,27 +302,27 @@ module.exports = {
         await page.setViewport(resolution);
         await page.authenticate({'username': process.env.HTACCESS_USERNAME, 'password': process.env.HTACCESS_PASSWORD});
         await page.goto(process.env.TEST_URL + '/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
-        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+        await expectPuppeteer(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
             console.log('switching to german');
             await page.waitForSelector('input[name=locale]');
             await page.click('input[name=locale]');
-            await expect(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
+            await expectPuppeteer(page).toClick('.x-combo-list-item', {text: 'Deutsch [de]'});
             // wait for reload
-            await page.waitForTimeout(500);
+            await new Promise(r => setTimeout(r, 500));
             await page.waitForSelector('input[name=locale]');
         }
 
         await page.waitForSelector('input[name=username]');
-        await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
-        await expect(page).toMatchElement('input[name=username]');
+        await expectPuppeteer(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
+        await expectPuppeteer(page).toMatchElement('input[name=username]');
         await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
         await page.focus('input[name=username]');
-        await page.waitForTimeout(1000); //wait for input field completely loaded
-        await expect(page).toFill('input[name=username]', process.env.SETUP_USERNAME, {delay: 50});
-        await expect(page).toFill('input[name=password]', process.env.SETUP_PASSWORD, {delay: 50});
-        await expect(page).toClick('button', {text: 'Anmelden'});
+        await new Promise(r => setTimeout(r, 1000)); //wait for input field completely loaded
+        await expectPuppeteer(page).toFill('input[name=username]', process.env.SETUP_USERNAME, {delay: 50});
+        await expectPuppeteer(page).toFill('input[name=password]', process.env.SETUP_PASSWORD, {delay: 50});
+        await expectPuppeteer(page).toClick('button', {text: 'Anmelden'});
         try {
             await page.waitForSelector('.account-user-avatar', {timeout: 0});
         } catch (e) {
@@ -375,7 +376,7 @@ module.exports = {
                 }, mode);
 
                 await page.setViewport(resolution);
-                await page.waitForTimeout(500);
+                await new Promise(r => setTimeout(r, 500));
 
                 await page.screenshot({ ...options, path: filePath });
             }

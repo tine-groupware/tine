@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer')
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser')
 require('dotenv').config()
 let subject
@@ -6,8 +6,8 @@ let subject
 beforeAll(async () => {
   await lib.getBrowser('E-Mail')
   await page.waitForSelector('a span',{text: "Posteingang"})
-  await expect(page).toClick('a span',{text: "Posteingang"})
-  await page.waitForTimeout(2000)
+  await expectPuppeteer(page).toClick('a span',{text: "Posteingang"})
+  await new Promise(r => setTimeout(r, 2000))
 })
 
 describe('test email rendering', () => {
@@ -15,9 +15,9 @@ describe('test email rendering', () => {
     for (let i=1; i<=4; i++) {
       let fileToUpload = 'src/test/Felamimail/Test '+i+'.eml'
 
-      await expect(page).toMatchElement('.x-btn-text', {text: 'Nachrichten importieren'});
-      await page.waitForTimeout(100); // wait for btn to get active
-      await expect(page).toClick('.x-btn-text', {text: 'Nachrichten importieren'});
+      await expectPuppeteer(page).toMatchElement('.x-btn-text', {text: 'Nachrichten importieren'});
+      await new Promise(r => setTimeout(r, 100)); // wait for btn to get active
+      await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Nachrichten importieren'});
 
       let elementHandle = await page.$("input[type=file]");
       await elementHandle.uploadFile(fileToUpload);
@@ -25,7 +25,7 @@ describe('test email rendering', () => {
       try {
         // There might be a pop-up telling us that only .eml is allowed for no reason
         await page.waitForSelector('button.vue-button.ok-button', {timeout: 2000})
-        await expect(page.toClick('button.vue-button.ok-button'))
+        await expectPuppeteer(page.toClick('button.vue-button.ok-button'))
       } catch (e) {}
       await page.waitForSelector('.x-grid3-col-subject', {text: 'Test '+i})
     }
@@ -53,7 +53,7 @@ describe('test email rendering', () => {
       await waitForLoadmask(page)
 
       await page.waitForSelector('.x-btn-text', {text: 'Löschen'})
-      await expect(page).toClick('.x-btn-text', {text: 'Löschen'});
+      await expectPuppeteer(page).toClick('.x-btn-text', {text: 'Löschen'});
 
       await waitForLoadmask(page)
     }

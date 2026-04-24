@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -20,17 +20,17 @@ describe('MainScreen', () => {
 describe.skip('employee', () => {
     let newPage;
     test('open EditDialog', async () => {
-        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
+        await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
         var [button] = await lib.getElement('button', page, 'Mitarbeiter hinzufügen');
         await button.click();
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
-        await newPage.waitForTimeout(5000); //@todo wait for selector etc...
+        await new Promise(r => setTimeout(r, 5000)); //@todo wait for selector etc...
         await lib.makeScreenshot(newPage, {path: 'screenshots/StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu.png'});
         await lib.makeScreenshot(newPage, {path: 'screenshots/HumanResources/6_humanresources_mitarbeiter_dialog.png'});
         let stick = await newPage.$$('button');
         await stick[1].hover();
-        await newPage.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(
             newPage, {path: 'screenshots/HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab.png',
             clip: {x: 0, y: 0, width: 1366, height: (768 / 3)}}
@@ -38,23 +38,23 @@ describe.skip('employee', () => {
     });
 
     test('costcenter', async () => {
-        await expect(newPage).toClick('span', {text: 'Kostenstellen'});
+        await expectPuppeteer(newPage).toClick('span', {text: 'Kostenstellen'});
         await lib.makeScreenshot(newPage, {path: 'screenshots/HumanResources/8_humanresources_mitarbeiter_kostenstellen.png'});
     });
 
     test('contracts', async () => {
-        await expect(newPage).toClick('.x-tab-strip-text', {text: 'Verträge'});
-        await newPage.waitForTimeout(1000);
+        await expectPuppeteer(newPage).toClick('.x-tab-strip-text', {text: 'Verträge'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(newPage, {path: 'screenshots/HumanResources/9_humanresources_mitarbeiter_vertraege.png'});
         let popup = await lib.getEditDialog('Vertrag hinzufügen', newPage);
-        await popup.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(popup, {path: 'screenshots/HumanResources/10_humanresources_mitarbeiter_vertragsdialog.png'});
         await popup.close();
     });
 
     test('add Tag', async () => {
-        await expect(newPage).toClick('span', {text: 'Mitarbeiter'});
-        //await newPage.waitForTimeout(1000);
+        await expectPuppeteer(newPage).toClick('span', {text: 'Mitarbeiter'});
+        //await new Promise(r => setTimeout(r, 1000));
         let arrowtrigger = await newPage.$$('.x-form-arrow-trigger');
         arrowtrigger.forEach(async function (element, index) {
             //console.log(index + ' \n ' + element);
@@ -68,7 +68,7 @@ describe.skip('employee', () => {
             if (index == 2) await element.click();
         });
         await newPage.waitForSelector('.ext-mb-input');
-        await expect(newPage).toFill('.ext-mb-input', 'Persönlicher Tag');
+        await expectPuppeteer(newPage).toFill('.ext-mb-input', 'Persönlicher Tag');
         await lib.makeScreenshot(newPage, {path: 'screenshots/StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl.png'});
         await newPage.keyboard.press('Escape');
         await newPage.close();
@@ -83,15 +83,15 @@ describe.skip('employee', () => {
         });
 
         test('vacation', async () => {
-            await newPage.waitForTimeout(2000);
-            await expect(newPage).toClick('span', {text: 'Urlaub'});
-            await newPage.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
+            await expectPuppeteer(newPage).toClick('span', {text: 'Urlaub'});
+            await new Promise(r => setTimeout(r, 2000));
             await lib.makeScreenshot(newPage, {path: 'screenshots/HumanResources/11_humanresources_mitarbeiter_vertraege.png'});
-            await expect(newPage).toClick('button', {text: 'Urlaubstage hinzufügen'});
+            await expectPuppeteer(newPage).toClick('button', {text: 'Urlaubstage hinzufügen'});
             let popup = await lib.getNewWindow();
-            await popup.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             await lib.makeScreenshot(popup,{path: 'screenshots/HumanResources/12_humanresources_mitarbeiter_urlaub.png'});
-            await expect(popup).toClick('button', {text: 'Abbrechen'});
+            await expectPuppeteer(popup).toClick('button', {text: 'Abbrechen'});
             await newPage.close();
         })
     })
@@ -100,23 +100,23 @@ describe.skip('employee', () => {
 describe.skip('employee accounts', () => {
     let newPage;
     test('mainpage', async () => {
-        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Personalkonten'});
-        await page.waitForTimeout(2000);
+        await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Personalkonten'});
+        await new Promise(r => setTimeout(r, 2000));
         let row = await page.$$('.t-app-humanresources .t-contenttype-account .x-grid3-row');
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await row[2].click({clickCount: 2});
         newPage = await lib.getNewWindow();
-        await newPage.waitForTimeout(5000);
+        await new Promise(r => setTimeout(r, 5000));
         await lib.makeScreenshot(newPage, {path: 'screenshots/HumanResources/14_humanresources_personalkonten_dialog.png'});
     });
 
     // not in BE
     test.skip('special leave', async () => {
-        await expect(newPage).toClick('span', {text: 'Sonderurlaub'});
-        await page.waitForTimeout(2000);
-        await expect(newPage).toClick('button', {text: 'Sonderurlaub hinzufügen'});
+        await expectPuppeteer(newPage).toClick('span', {text: 'Sonderurlaub'});
+        await new Promise(r => setTimeout(r, 2000));
+        await expectPuppeteer(newPage).toClick('button', {text: 'Sonderurlaub hinzufügen'});
         let popup = await lib.getNewWindow();
-        await popup.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(popup,{path: 'screenshots/HumanResources/16_humanresources_personalkonten_sonderurlaub.png'});
     });
 });

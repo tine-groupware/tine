@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
+    testRunner: 'jest-jasmine2',
     globals: {
         browser: '',
         page: '',
@@ -19,5 +20,5 @@ module.exports = {
     verbose: true,
     maxWorkers: process.env.TEST_WORKER,
     testTimeout: 60000,
-    setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
+    setupFilesAfterEnv: ["expect-puppeteer", "<rootDir>/setupTests.js"],
 };
