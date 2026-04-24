@@ -21,6 +21,10 @@ theme:
         name: Switch to light mode
   features:
     - content.code.copy
+    - navigation.indexes
+
+extra_css:
+  - stylesheets/extra.css
 
 #nav:
 #  - 'User Guide': 'user-guide.md'
@@ -45,11 +49,14 @@ markdown_extensions:
         - name: math
           class: arithmatex
           format: "!!python/object/apply:pymdownx.arithmatex.arithmatex_inline_format {kwds: {mode: generic}}"
-  - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
   - admonition
   - pymdownx.details
+  - attr_list
+  - md_in_html
+  - abbr
+  - footnotes
 
 extra:
   social:
@@ -62,10 +69,14 @@ extra:
   version:
     provider: mike
     alias: true
+  img_url_desktop: https://tine-screenshots.s3.rz1.metaways.net/main/1080p/
+  img_url_mobile: https://tine-screenshots.s3.rz1.metaways.net/main/720p/
+  icon_url: https://raw.githubusercontent.com/tine-groupware/icon-set/master/
 
 plugins:
   - search
   - awesome-pages
+  - macros
   - i18n:
       docs_structure: suffix
       fallback_to_default: true
@@ -80,3 +91,9 @@ plugins:
           name: Deutsch
       reconfigure_material: true
       reconfigure_search: true
+  - enumerate-headings:
+      toc_depth: 6
+      strict: true
+      increment_across_pages: true
+      include:
+        - users/manual/*
