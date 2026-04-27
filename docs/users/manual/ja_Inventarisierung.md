@@ -1,10 +1,10 @@
-# Inventarisierung
+# Inventarisierung { data-ctx="/Inventory" }
 
 <!--ERP-->
 Die Anwendung Inventarisierung gehört – wie Sales, HumanResources und Zeiterfassung – nicht zu den Kernfunktionalitäten einer Groupware. Diese Anwendungen sind als "ERP-Bausteine" im Laufe der Zeit auf Kundenwunsch entstanden und haben dann Eingang in tine gefunden. Es werden sicher nicht die letzten Erweiterungen sein, sodass dieses Buch möglicherweise in der nächsten Auflage bereits weitere Zusatzanwendungen beschreiben wird.
 
 <!--Inventar-,Listen-->
-## Favoriten und Inventarlisten
+## Favoriten und Inventarlisten { data-ctx="/Inventory/MainScreen/InventoryItem/FavoritesPicker" }
 
 Wie gewohnt finden Sie auf der linken Seite unter Favoriten nützliche Standardansichten. Hier ist es nur eine: Alle Inventargegenstände.
 
@@ -14,11 +14,12 @@ Wie gewohnt finden Sie auf der linken Seite unter Favoriten nützliche Standarda
 ![Abbildung: Inventarisierung in tine]({{ img_url_mobile }}Inventarisierung/1_inventarisierung_uebersicht_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Inventarisierung in tine]({{ img_url_mobile }}Inventarisierung/1_inventarisierung_uebersicht_dark_1280x720.png#only-dark){.mobile-img}
 
-<span id="inventoryitem-containertree"></span>
+<a id="ctx:Inventory.MainScreen.InventoryItem.ContainerTree"></a>
 Die unter den Favoriten zu findenden Inventarlisten, enthalten standardmäßig die drei üblichen Ordner Meine Inventarlisten, Gemeinsame Inventarlisten und Inventarlisten anderer Benutzer, wobei der Inhalt der letztgenannten beiden Ordner von dem Vorhandensein solcher Listen in Ihrem speziellen tine-System sowie von Ihren Zugriffsrechten abhängt. Im Ordner Meine Inventarlisten finden Sie auf jeden Fall Ihre persönliche Inventarliste vor, denn diese erzeugt tine mit der Anlage des Benutzers automatisch.
 
 <!--Inventar-,Gegenstände-->
-## Inventar Gegenstand hinzufügen
+## Inventar Gegenstand hinzufügen { data-ctx="/Inventory/EditDialog/InventoryItem" }
+<a id="ctx:Inventory.MainScreen.InventoryItem.ActionToolbar"></a>
 Klicken Sie im Bearbeitungsmenü ganz links den Button Inventar Gegenstand hinzufügen.
 
 <!-- SCREENSHOT -->
@@ -53,7 +54,7 @@ Neben dem Preis hinterlegen Sie über ein Pulldown die Kostenstelle des Gegensta
 
 In der Reihe darunter besteht die Möglichkeit, eine freie Bezeichnung der Anschaffungsrechnung für den betreffenden Gegenstand sowie das Rechnungsdatum zu hinterlegen. Alle Eingaben in der Buchhaltungsmaske sind fakultativ.
 
-## Weitere Funktionen des Bearbeitungsmenüs
+## Weitere Funktionen des Bearbeitungsmenüs { data-ctx="/Inventory/MainScreen/InventoryItem/ActionToolbar" }
 Inventargegenstand bearbeiten: Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle einen Gegenstand markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü.
 
 Inventar Gegenstand löschen: löscht einen in der Tabelle angewählten Inventargegenstand, immer mit Sicherheitsabfrage.

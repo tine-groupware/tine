@@ -1,8 +1,9 @@
 # Administration
-## Einleitung und Begriffsklärung
+## Einleitung und Begriffsklärung { data-ctx="/Admin" }
 
 Einleitend zum Kapitel „Administration“ lassen Sie uns bitte noch einmal kurz auf die zu Beginn des Buches besprochenen Unterscheidungskriterien zwischen Groupware und CRM zu sprechen kommen: Wir hatten festgehalten, dass eine Groupware vor allem auszeichnet, die komplexen Interaktionsprozesse zwischen Mitarbeitern ein und desselben Unternehmens zu organisieren und weniger die Beziehungen von Mitarbeitern zu potenziellen oder tatsächlichen Kunden oder Lieferanten.
 
+<a id="ctx:Admin.MainScreen.Group"></a><a id="ctx:Admin.MainScreen.Role"></a>
 Und eben jene komplexen Interaktionsprozesse machen es nötig, die Mitarbeiter in funktionelle Gruppen einzuteilen, die sich insbesondere dadurch voneinander unterscheiden, auf welche Art sie mit den im System gespeicherten Daten umgehen können und dürfen. tine hat, z.B. mit Adressverwaltung, Kalender, Aufgabenliste, Dateimanager u.a., verschiedene Teilprogramme (hier im Buch werden sie durchgehend "Anwendungen" genannt), auf welche die einzelnen Mitarbeiter oder Mitarbeitergruppen des Unternehmens unterschiedlich abgestufte Zugriffsberechtigungen haben sollen. Und der Administrationsteil des Programms hat hauptsächlich damit zu tun, genau diese Rechte und Berechtigungen zu verwalten.
 
 <!--Rechte-->
@@ -39,7 +40,7 @@ Fassen wir kurz zusammen:
 
 Starten Sie tine. Natürlich müssen Sie sich jetzt als ein Benutzer anmelden, der Administratorrechte hat, denn sonst (siehe oben!) wird Ihnen das folgende Menü gar nicht angezeigt. Rufen Sie über den Reiter ganz links tine den Menüpunkt Admin auf (wenn er nicht schon als Reiter angezeigt wird). Sie erhalten links eine Reihe von Menüpunkten, denen wir jetzt von oben nach unten jeweils einen Unterabschnitt widmen werden.
 
-## Benutzer
+## Benutzer { data-ctx="/Admin/MainScreen/User" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_desktop }}Administration/1_administration_benutzertabelle_light_1920x1020.png#only-light){.desktop-img}
@@ -47,7 +48,7 @@ Starten Sie tine. Natürlich müssen Sie sich jetzt als ein Benutzer anmelden, d
 ![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_administration_benutzertabelle_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_administration_benutzertabelle_dark_1280x720.png#only-dark){.mobile-img}
 
-<span id="user"></span>
+
 In der Benutzeransicht sehen Sie in tabellarischer Form, welche Benutzer in Ihrer tine-Installation angelegt wurden. Außerdem werden hier ihre grundlegenden Eigenschaften angezeigt. Wenn an der Standardansicht nichts geändert worden ist, dann sehen Sie ganz links den Status -- ein Haken signalisiert, dass der Benutzer aktiv ist, ein X entsprechend einen nicht aktiven. Apropos Standardansicht: Sie können, wie Sie das ja auch schon von anderen Tabellenansichten in tine kennen, die anzuzeigenden Tabellenfelder auswählen. Ganz rechts im Tabellenkopf finden Sie dazu das Spaltensymbol. Wenn Sie es anklicken, werden Ihnen die für diese Ansicht gültigen Tabellenfelder als Checkbuttons zum Auswählen angezeigt. Prüfen Sie bitte, ob für die jetzt erforderliche (Standard-)Ansicht die folgenden Felder markiert sind: Status, Bildschirmname, Anmeldename, E-Mail, Zuletzt eingeloggt um, Letzter Login von, Passwort geändert und Verfällt
 
 <!-- SCREENSHOT -->
@@ -58,7 +59,7 @@ In der Benutzeransicht sehen Sie in tabellarischer Form, welche Benutzer in Ihre
 
 Vielleicht fällt Ihnen jetzt ein Benutzer auf, der cronuser heißt. Dabei handelt es sich um einen Systemdienst, der immer vorhanden ist; beachten Sie ihn einfach nicht weiter.
 
-<span id="user-grid"></span>
+<a id="ctx:Admin.MainScreen.User.Grid"></a>
 Machen wir weiter mit einzelnen Spalten der Tabellenansicht, und hier dem Bildschirmnamen. Das ist die Bezeichnung, unter welcher Sie als eingeloggter Benutzer am Bildschirm angezeigt werden. Sie finden ihn immer ganz oben rechts, direkt unter der Begrenzung des Browserfensters -- oder, wenn Sie tine im  Vollbildmodus betreiben -- unter dem Bildschirmrand, links neben dem Knopf zum Abmelden.
 
 Der Anmeldename ist die Bezeichnung (eine zusammenhängende Zeichenkette, die aus Buchstaben und Zahlen bestehen kann), mit welcher Sie sich als Benutzer einloggen.
@@ -72,10 +73,10 @@ Die weiteren Felder sind Statusmeldungen: Zuletzt eingeloggt um liefert Datum un
 
 Passwort geändert zeigt Datum und Uhrzeit der letzten Passwortänderung an und Verfällt das Datum und die Uhrzeit, an dem das Benutzerkonto automatisch deaktiviert wird - eine Funktion, die vor allem für temporäre Mitarbeiter gedacht ist. Sollte letzterer Eintrag leer sein, dann verfällt das Benutzerkonto nie – eine Auswahl, die Sie im Folgenden selbst treffen können.
 
-<span id="user-actiontoolbar"></span>
+<a id="ctx:Admin.MainScreen.User.ActionToolbar"></a>
 Schauen wir uns nun die einzelnen Punkte des Bearbeitungsmenüs über der Tabelle an. Sie kennen das schon – die wichtigsten Aktionen in einem Programmteil von tine finden Sie immer als große Icons in der breiten blauen Leiste unter den Reitern für die Programmteile. Wir nennen es im ganzen Buch durchgängig "Bearbeitungsmenü". Sie erreichen übrigens alle diese Punkte auch über das Kontextmenü der rechten Maustaste, wenn Sie mit dem Zeiger auf dem entsprechenden Objekt stehen.
 
-<span id="editdialog-user"></span>
+<a id="ctx:Admin.EditDialog.User"></a>
 Hier sind es Benutzer hinzufügen, Benutzer bearbeiten, Benutzer löschen (letztere beide ausgegraut, wenn keine aktive Tabellenzeile markiert ist), Drucke Seite, Benutzer aktivieren, Benutzer deaktivieren (wechselseitig ausgegraut – je nachdem ob die aktuelle Tabellenspalte auf einem aktiven oder inaktiven Benutzer steht), und Passwort zurücksetzen.
 
 Lassen Sie uns probehalber einmal einen neuen Benutzer hinzufügen:
@@ -96,6 +97,7 @@ Ein Wort der Erklärung zu dazu: Wenn Ihre tine-Installation eine sog. Stand-Alo
 !!! note "Anmerkung"
     OpenID ist ein Protokoll, mit dem Sie sich nur einmal an tine anmelden müssen und danach auf andere Webdienste zugreifen können, ohne sich erneut anmelden zu müssen. Der englische Fachbegriff dafür ist "Single-Sign-On". Ein weiterer Vorteil ist, dass das Passwort nicht an den anderen Webdienst übergeben, sondern immer nur innerhalb von tine überprüft wird.
 
+<a id="ctx:Admin.MainScreen.Group"></a>
 Zu Beginn dieses Kapitels hatten wir schon besprochen, dass Benutzer zu Gruppen zusammengefasst werden können. Welchen Gruppen ein Benutzer insgesamt angehört, können Sie mit dem Reiter Gruppen festlegen, auf den wir weiter unten zu sprechen kommen. Hier in dieser Maske können Sie dem neu anzulegenden Benutzer innerhalb seiner Gruppen eine Stammgruppe zuweisen. Die Stammgruppe ist ein Begriff aus der LDAP-Welt: Wenn tine "stand-alone" - also ohne Kontakt zu Server-, Telefonanlagen- oder anderen Namensverzeichnissen betrieben wird, spielt die Stammgruppe keine Rolle. tine selbst benutzt diese Funktion nicht. Wenn es jedoch eine Verbindung zu einem LDAP-Namensverzeichnis in der Serverumgebung gibt, dann können Sie dem Benutzer von hier aus eine Stammgruppe innerhalb dieses Namensverzeichnisses zuweisen. Das Pulldown hinter diesem Menü bietet Ihnen dabei alle vorhandenen Benutzergruppen zur Auswahl an. Die Frage, welche Bedeutung eine Stammgruppe in der Welt der LDAP-Verzeichnisse hat, führt an dieser Stelle zu weit, nutzen Sie dazu bitte die entsprechende Fachliteratur oder wenden Sie sich an den bei Ihnen dafür verantwortlichen Systemadministrator.
 
 Als Status des Benutzers ist standardmäßig aktiviert vorgegeben; Sie können hier jedoch per Pulldown zwischen verschiedenen Status wählen: Der Status aktiviert ist der Normalzustand, wie er auch in der tabellarischen Ansicht mit dem Haken dargestellt wird. In den Status deaktiviert kann man den Benutzer außer über dieses Pulldown auch über das Bearbeitungsmenü oben überführen. Damit kann sich der betreffende Benutzer nicht mehr bei tine anmelden und ein bereits angemeldeter Benutzer kann nicht mehr weiterarbeiten.
@@ -134,6 +136,7 @@ Kommen wir zum nächsten Reiter -- Gruppen:
 ![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_administration_benutzer_gruppe_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_administration_benutzer_gruppe_dark_1280x720.png#only-dark){.mobile-img}
 
+<a id="ctx:Admin.MainScreen.Group"></a>
 Da die Bildung von Gruppen ein eigener Menüpunkt ist, wollen wir hier nur darauf eingehen, wie der Benutzer einer bereits definierten Gruppe zugewiesen werden kann: Sie sehen in der Maske das Pulldown Suche nach Gruppen... Wenn Sie es anklicken, dann werden Ihnen (ggf. nach kurzer Suche) die in Ihrer tine-Installation vorhandenen Benutzergruppen zur Auswahl angeboten. Je nachdem wie umfangreich Ihr System ist, können das wenige Einträge bis zu mehreren Seiten sein. Sie können den Benutzer hier einer oder der Reihe nach mehreren Gruppen zuweisen. Welche administratorischen Überlegungen dem zugrunde liegen, besprechen wir weiter unten, wenn wir die Gruppen anlegen.
 
 Im nächsten Reiter Rollen werden die dem Benutzer zugewiesenen Rollen angezeigt. Auch das können eine oder mehrere sein. Auf die Aspekte von Rollen kommen wir ebenfalls zu sprechen, wenn wir sie weiter unten definieren. Hier nur soviel: Da Rechte in Rollen "positiv", also einschließlich definiert werden, kann es bei der Zugehörigkeit eines Benutzers zu mehreren Rollen nicht zu Widersprüchen kommen. Achten Sie nur ggf. darauf, mit der Mehrfachzuweisung einem Benutzer nicht fälschlicherweise Rechte zuzuweisen, die er nicht haben sollte.
@@ -144,6 +147,7 @@ Mit dem Reiter Dateisystem können Sie dem Benutzer ein Kontingent an Datenvolum
 
 Schließen Sie die Eingabemaske mit Abbrechen, da wir jetzt keinen Benutzer anlegen wollen!
 
+<a id="ctx:Admin.EditDialog.User"></a>
 Wenn Sie nun die aktive Tabellenzeile auf einen beliebigen Benutzer stellen und Benutzer bearbeiten wählen (auch wie gewohnt über einen Doppelklick erreichbar), sehen Sie, dass die entsprechende Maske die gleichen Felder enthält wie die für Benutzer hinzufügen. Achten Sie hier auf die Felder unter Informationen – diese enthalten jetzt die Datums-, Uhrzeits- und IP-Adressinformationen, von denen wir oben sprachen.
 
 <!-- SCREENSHOT -->
@@ -152,6 +156,7 @@ Wenn Sie nun die aktive Tabellenzeile auf einen beliebigen Benutzer stellen und 
 ![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_administration_benutzer_editieren_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_administration_benutzer_editieren_dark_1280x720.png#only-dark){.mobile-img}
 
+<a id="ctx:Admin.MainScreen.User.ActionToolbar"></a>
 Benutzer löschen ist mit einer Sicherheitsabfrage versehen und ansonsten selbsterklärend.
 
 Drucke Seite erzeugt einen tabellarischen Ausdruck, der genau den auf dem Bildschirm angezeigten Tabellenfeldern entspricht. Damit haben Sie die Möglichkeit, sich eine komplette Liste aller angelegten Benutzer ausdrucken zu lassen. Werfen Sie vorher ggf. noch einen Blick auf die ausgeblendeten Tabellenspalten (wie bekannt über das Tabellenkopfsymbol rechts außen)!
@@ -161,7 +166,7 @@ Benutzer aktivieren und Benutzer deaktivieren - die dahinter liegenden Funktione
 Passwort zurücksetzen vergibt für den ausgewählten Benutzer ein neues Passwort.
 
 <!--Gruppen-->
-## Gruppen
+## Gruppen { data-ctx="/Admin/MainScreen/Group" }
 Bevor wir auf die Ansicht und Bedienelemente zu Gruppen zu sprechen kommen, müssen wir uns noch einmal kurz über den Sinn und Zweck von Benutzergruppen verständigen. Benutzergruppen dienen mehreren Zwecken:
 
 1. Man kann mit Ihnen die Rollenzuweisung und damit die Administration von Benutzerrechten vereinfachen. Es ist sicher einfacher, über Rollen Benutzerrechte ganzen Benutzergruppen zuzuweisen, als das umständlich mit jedem Benutzer einzeln zu tun.
@@ -171,7 +176,7 @@ Bevor wir auf die Ansicht und Bedienelemente zu Gruppen zu sprechen kommen, müs
 !!! info "Wichtig"
     Das erfordert natürlich, dass die Unternehmensstruktur in Benutzergruppen abgebildet wird. Sie müssen sich also an dieser Stelle, ehe Sie mit der Administration fortfahren, Gedanken über Ihre Unternehmensstruktur machen. Wahrscheinlich geht das, wie weiter oben bei den Überlegungen zur Sicherheit bereits erwähnt, nur in Zusammenarbeit mit Ihrer Unternehmensleitung. Verwenden Sie für diese strategischen Überlegungen lieber etwas mehr Zeit als zu wenig. Insbesondere, wenn es sich bei Ihrem Unternehmen um ein größeres handelt, ist eine gut durchdachte Benutzergruppenstruktur essenziell. Sie tun sich als Administrator einen großen Gefallen, wenn Sie gleich von Anfang an die richtigen Strukturen anlegen, bevor Sie sie später umständlich ändern müssen.
 
-<span id="mainscreen-group-grid"></span>
+<a id="ctx:Admin.MainScreen.Group.Grid"></a>
 Kommen wir nun wieder zurück zu unserem Programm und seinen Bedienelementen: Klicken Sie in der Admin-Oberfläche links auf den Menüpunkt Gruppen:
 
 <!-- SCREENSHOT -->
@@ -201,7 +206,7 @@ Das Pulldown Gruppenmitglieder dient der Neuaufnahme von Gruppenmitgliedern in d
 Schließen Sie nun das Bearbeitungsfenster mit Abbrechen. Die anderen beiden Punkte des Bearbeitungsmenüs, Gruppe hinzufügen (Bedienung identisch zu Gruppe bearbeiten) und Gruppe löschen, sind nicht erklärungsbedürftig.
 
 <!--Rollen-->
-## Rollen
+## Rollen { data-ctx="/Admin/MainScreen/Role" }
 Kommen wir nun zu einem der wichtigsten Teile des Administrierens einer Groupware, dem Definieren von "Rollen". Wie wir weiter oben schon besprochen haben, dienen Rollen dem Zuweisen von "Rechten" zur Benutzung der verschiedenen Programmteile von tine zu bestimmten Benutzern oder Benutzergruppen - also welche Rolle ein Benutzer im Gesamtsystem spielen darf. Schauen wir uns das praktisch an:
 
 Wählen Sie in der Admin-Oberfläche links per Mausklick den Menüpunkt Rollen aus. In der Tabelle gibt es nur zwei Spalten, Name und Beschreibung. Wie Sie das bereits von den Gruppen kennen, gibt es auch hier einen einfachen Suchfilter, der über das Feld Name wirkt.
@@ -359,7 +364,7 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine +-Zeichen vor d
 <a id="anmerkung"></a>
 !!! note "Anmerkung"
     <!--Samba-->
-    <span id="sambamachine"></span>
+    <a id="ctx:Admin.EditDialog.SambaMachine"></a>
     Bei einer Integration von tine in ein Active Directory[^2] können Sie an dieser Stelle die Konten für Computer verwalten, die sich am Active Directory anmelden dürfen. tine unterstützt die Integration in Samba[^3] oder Microsoft-basierte Active-Directory-Umgebungen.
     Bei einer "stand-alone"-Installation wird Ihnen unter diesem Menüpunkt nichts angezeigt.
 
@@ -369,7 +374,7 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine +-Zeichen vor d
 [^3]:
     Samba ist eine freie Software, die es u.a. ermöglicht, Linux-Server mit Microsoft-Windows-Clients laufen zu lassen, indem die Windows-Datei- und Druckdienste sowie -Domain-Controller emuliert werden.
 
-## Anwendungen
+## Anwendungen { data-ctx="/Admin/MainScreen/Application" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Die einzelnen Anwendungen von tine]({{ img_url_desktop }}Administration/10_administration_anwendungen_light_1920x1020.png#only-light){.desktop-img}
@@ -391,7 +396,7 @@ Admin – hier kann das Standardadressbuch für die Eintragung neuer Kontakte ei
 ![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_administration_admin_einstellung_light_1280x720.png#only-light){.mobile-img}
 ![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_administration_admin_einstellung_dark_1280x720.png#only-dark){.mobile-img}
 
-### Kalender
+### Kalender { data-ctx="/Calendar/EditDialog/Resource" }
 
 <!--Resource-->
 #### Ressourcen anlegen
@@ -574,7 +579,7 @@ Genau wie bei Aufgaben kann man im Drop-Down Menü einstellen, welcher Wert als 
 
 Tinebase: Unter dem einzigen Reiter, Profilinformation finden Sie eine Reihe von Feldern für Adressdaten und jeweils zwei zugehörige Checkbuttons: Lesen und Bearbeiten. Hier können Sie nach Bedarf, zusätzlich zu den Standardfeldern, die möglichen Dateneingaben in der Adressdatenbank erweitern. Die zusätzlichen Felder könnten insbesondere dann Bedeutung erlangen, wenn Sie Adressdaten aus anderen Programmen, wie z.B. Microsoft Outlook in tine einlesen. Outlook hat sehr viele mögliche Felder in der Adressdatenbank. Ob diese belegt sind, sehen Sie, wenn Sie sich die CSV-Tabelle anschauen, die Outlook beim Auslesen erzeugt. Schlagen Sie für nähere Erläuterungen hierzu bitte im [Adressverwaltung - Kontakte importieren](ba_Adressbuch.md/#kontakte-importieren) nach!
 
-## Container
+## Container { data-ctx="/Admin/MainScreen/Container" }
 <!--Container-->
 
 Kommen wir zu den weiteren Optionen auf der linken Seite.
@@ -592,7 +597,7 @@ Wenn Sie sich die nun angezeigten Container ansehen, dann werden Sie feststellen
     Wenn Sie an den Standardeinstellungen nichts ändern, dann werden an vielen Stellen im Programm (Adressbuch, Kalender usw.) neu angelegte Datensätze in diesen persönlichen Containern gespeichert. Es kann jedoch bspw. gewünscht und Firmendoktrin sein, dass ein Benutzer Adressen, Termine oder auch andere Daten vorzugsweise oder auch ausschließlich in einen anderen, z.B. einen gemeinsamen, Container speichern soll. Hierzu können Sie für sich selbst oder auch (sofern Sie die Berechtigung als Administrator haben) für alle tine-Benutzer, die Standardeinstellungen auf gemeinsame Container umschalten. Schlagen Sie dazu im [Benutzerspezifische Einstellungen](na_Benutzereinstellungen.md) nach und hier insbesondere im [Benutzerspezifische Einstellungen - Admin-Modus](na_Benutzereinstellungen.md/#admin-modus)!
 
 <!--Container-->
-### Container bearbeiten
+### Container bearbeiten { data-ctx="/Admin/EditDialog/Container" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_desktop }}Administration/24_administration_container_light_1920x1020.png#only-light){.desktop-img}
@@ -653,7 +658,7 @@ Container löschen löscht den markierten Container, nach Rückfrage.
 
 Drucke Seite erzeugt über den computerinternen Druckdialog eine Tabelle der in der aktiven Ansicht sichtbaren Container im DIN-A4-Hochformat.
 
-## Gemeinsame Tags
+## Gemeinsame Tags { data-ctx="/Admin/MainScreen/Tag" }
 
 <!--Tags,gemeinsame-->
 Tags sind die kleinen Markierungen an beliebigen Datensätzen, die es uns erlauben, bestimmte Daten aus einer großen Menge herauszufiltern. Dabei unterscheidet tine in Gemeinsame Tags und Persönliche Tags. Persönliche Tags können Sie als Benutzer in beliebigen Teilen des Programms setzen, ohne über Administratorrechte zu verfügen. Wir haben darüber bereits im [Adressverwaltung](ba_Adressbuch.md) gesprochen. Hier geht es jedoch um die gemeinsamen Tags, die für ganze Benutzergruppen eingerichtet werden und die nur ein Administrator verwalten darf.
@@ -695,7 +700,7 @@ Klicken Sie nun den Reiter Kontexte an:
 Sie sehen eine Reihe von Checkbuttons, die den einzelnen Programmbausteinen von tine entsprechen. Hier können Sie also die Gültigkeit des gerade definierten Tags auf einzelne Programmteile, bspw. das Adressbuch, beschränken. Standardmäßig sollten alle Anwendungen ausgewählt sein.
 
 <!--Zusatzfelder-->
-## Zusatzfelder
+## Zusatzfelder { data-ctx="/Admin/EditDialog/Customfield" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_desktop }}Administration/27_administration_zusatzfelder_light_1920x1020.png#only-light){.desktop-img}
@@ -757,7 +762,7 @@ Im unteren Teil des Eigenschaftsfensters haben Sie unter Zusätzliche Eigenschaf
 Die Funktion Kontingents-Nutzung bietet eine Übersicht darüber, wieviel Datenspeicher die unterschiedlichen Anwendungen von tine nutzen.
 
 <!--ActiveSync,Geräte-->
-## ActiveSync Geräte
+## ActiveSync Geräte { data-ctx="/Admin/MainScreen/SyncDevice" }
 Die unter diesem Menüpunkt angezeigte Tabelle listet Ihnen die für Ihre tine-Instanz angemeldeten Geräte auf, die sich über ActiveSync mit der tine-Datenbank abgleichen. Dabei werden alle Geräte angezeigt, die jemals angemeldet waren, sofern sie nicht hier gelöscht wurden.
 
 <!-- SCREENSHOT -->
@@ -771,6 +776,7 @@ Das Bearbeitungsmenü für diesen Programmteil enthält nur drei Funktionen: Syn
 !!! tip "Tipp"
     Sollte sich ein Gerät nicht mehr mit tine über ActiveSync synchronisieren, dann entfernen Sie das Gerät mit Klick auf Sync Gerät löschen aus dieser Liste. Das Gerät meldet sich daraufhin neu bei tine an, und die Synchronisation funktioniert wieder.
 
+<a id="ctx:ActiveSync.EditDialog.SyncDevice"></a>
 Wenn Sie eine Tabellenzeile markieren und Sync Gerät bearbeiten anklicken, erhalten Sie die folgende Maske:
 
 <!-- SCREENSHOT -->
@@ -806,7 +812,7 @@ Auf der Maske finden Sie einige Angaben, die nicht in jedem Falle vollständig s
 * Die Telefonnummer ist die Mobilfunknummer des Gerätes. Auch hier gilt wieder, dass die Telefonnummer nicht von allen Geräten übertragen wird.
 
 
-## Zugriffslog
+## Zugriffslog { data-ctx="/Admin/MainScreen/AccessLog" }
 
 <!-- SCREENSHOT -->
 ![Abbildung: Das Zugriffslog]({{ img_url_desktop }}Administration/20_administration_zugriffslog_light_1920x1020.png#only-light){.desktop-img}

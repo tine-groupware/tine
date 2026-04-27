@@ -13,25 +13,30 @@ $list = [
     'ActiveSync',
     'Addressbook',
     'Admin',
+    'Bookmarks',
     'Calendar',
     'Courses',
+    'CrewScheduling',
     'Crm',
     'DFCom',
     'EFile',
+    'EventManager',
     'Felamimail',
     'Filemanager',
     'GDPR',
     'HumanResources',
     'Inventory',
+    'MatrixSynapseIntegrator',
     'OnlyOfficeIntegrator',
     'Projects',
+    'Purchasing',
     'Sales',
     'Setup',
     'SimpleFAQ',
+    'SSO',
     'Tasks',
     'Timetracker',
-    'Tinebase',
-    'UserManual'
+    'Tinebase'
 ];
 
 $frontends = [
@@ -56,7 +61,7 @@ foreach ($list as $entry) {
 
 return (object)[
     'rootNamespace' => '',
-    'destDirectory' => '../docs/developers/api',
+    'destDirectory' => '../docs/developers/api/phpdoc',
     'format' => 'github',
     'classes' => $classes,
 ];

@@ -1,6 +1,6 @@
 # Adressverwaltung
 
-## Einleitung
+## Einleitung { data-ctx="/Addressbook" }
 
 Bei der Festlegung der Kapitelreihenfolge sind wir davon ausgegangen, dass die meisten von Ihnen dieses Buch mit dem Wunsch zur Hand genommen haben, schnell erste Erfolge mit tine zu erzielen. Daher haben wir die Adressverwaltung ganz bewusst an den Anfang gestellt, und nicht etwa [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md) zu den allgemeinen Bedienhinweisen. Auch als völlig unerfahrener Benutzer werden Sie nach der Lektüre dieses ersten Kapitels bereits mit dem Adressbuch und teilweise auch mit dem E-Mail-Client arbeiten können, ohne den Querverweisen auf andere Abschnitte folgen zu müssen. Eine Ausnahme bildet hier nur die mächtige Funktion des Filterns, die zwar in der Praxis hauptsächlich für Adressen verwendet wird, die wir aber erst im [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md) detailliert erklären.
 
@@ -184,7 +184,7 @@ In diesem Abschnitt soll es darum gehen, wie man Kontaktdaten anzeigen, bearbeit
 Öffnen Sie den Reiter Adressbuch und schauen Sie zunächst bitte nach links auf den Verzeichnisbaum. Dort können Sie unter ADRESSBÜCHER auswählen, welches Adressbuch Sie sich anzeigen lassen wollen. Oder Sie wählen unter FAVORITEN eine Ansicht über mehrere Adressbücher, beispielsweise Alle Kontakte.
 
 
-### Die Tabellenansicht für Kontakte
+### Die Tabellenansicht für Kontakte { data-ctx="/Addressbook/MainScreen/Contact/Grid" }
 
 <!-- Tabellenkopfsymbol -->
 Egal, wofür Sie sich entschieden haben: Sie sollten jetzt in der Tabelle eine Reihe von Kontakten sehen. Wenn Sie sich daran erinnern, wie wir weiter oben in diesem Kapitel die Importfunktion besprochen und Sie sich die Beispieldatei zum Kontakt-Import angesehen haben, wird Ihnen auffallen, dass es weit mehr Datenfelder in der Importtabelle gab, als jetzt auf Ihrem Bildschirm erscheinen. Klicken Sie darum am rechten Rand das kleine Tabellenkopfsymbol an!
@@ -199,7 +199,7 @@ Dahinter werden Ihnen als Checkbuttons alle verfügbaren Felder angezeigt – es
 
 Diese Menge an Datenfeldern ist dem Industriestandard, hier vor allem MS Outlook, geschuldet, dass zwar in der Standardmaske auch nur einige wenige Felder anbietet, aber die Speicherung vieler zusätzlicher Daten vorhält, weil es – im Gegensatz zum hier viel flexibleren Open-Source-System tine – als proprietäre Software das Definieren eigener zusätzlicher Felder nicht erlauben kann. In den meisten Fällen werden Sie diese vordefinierten Felder daher nicht benötigen, stattdessen lieber bei Bedarf auf selbst definierte Felder zurückgreifen. Schauen Sie sich dazu das Fallbeispiel zur Definition von Zusatzfeldern in [Administration - Zusatzfelder](oa_Administration.md/#zusatzfelder) an!
 
-### Kontakte in der Kontaktmaske bearbeiten
+### Kontakte in der Kontaktmaske bearbeiten { data-ctx="/Addressbook/EditDialog/Contact" }
 
 Nachdem Sie sich für eine Adressauswahl entschieden haben, klicken Sie bitte einen einzelnen Kontakt in der Tabellenansicht an! Es öffnet sich die Kontaktmaske mit diesem Kontakt. Das gleiche Ergebnis hätten Sie auch mit Markieren des Kontaktes und Klicken des Buttons Kontakt bearbeiten erzielt. Diese Prozedur funktioniert auch über mehrere Kontakte – dazu kommen wir weiter unten.
 
@@ -258,9 +258,10 @@ Wenn dieser Reiter ausgegraut ist, kann das mehrere Ursachen haben:
 
 * Oder tine hat auf diesen Dienst keinen Zugriff, z.B. weil Sie auf einem lokalen System ohne Internet-Zugang arbeiten. Fragen Sie Ihren zuständigen System-Administrator!
 
+<a id="ctx:Addressbook.EditDialog.Contact"></a>
 Der Reiter Termine bietet eine Verknüpfung zum Kalender von tine. Hier werden alle Termine des jeweiligen Kontakts angezeigt. Auch hier kann man das Filtersystem von tine nutzen. Die Funktionen des Kalenders werden ausführlich in [Kalender](da_Kalender.md) erläutert.
 
-<span id="contact-nodegrid"></span>
+<a id="ctx:Addressbook.EditDialog.Contact.NotesGrid"></a>
 Notizen: tine kennt drei Arten von Notizen: einfache Notizen (Klebezettel), Telefonnotizen und E-Mail-Notizen. Durch den Klick auf dem Button Notizen hinzufügen öffnet sich ein Fenster für die Notiz. Standardmäßig werden Einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben Notiz). Alle Notizen erhalten mit Speicherung automatisch einen Datums- und Zeiteintrag. Telefonnotizen dienen der Notierung von wichtigen Telefonaten mit diesem Kontakt. Um E-Mail-Notizen nutzen zu können, muss dieses Feature eingeschaltet sein. Sofern das der Fall ist, kann so ein Vermerk hinterlegt werden, dass der Kontakt eine E-Mail erhalten hat. Letztere müssen Sie hier an dieser Stelle nicht händisch eingeben, wenn Sie beim Schreiben von E-Mails daran denken, dort den Button E-Mail-Notiz anlegen zu klicken. In [Benutzerspezifische Einstellungen](na_Benutzereinstellungen.md) zeigen wir, wie dieser Vorgang als Automatismus angelegt wird. Das Arbeiten mit Notizen ist insbesondere bei externen Kontakten sehr bedeutsam: So kann jeder Mitarbeiter nachvollziehen, was mit diesem externen Kontakt zu welcher Zeit besprochen wurde. Hier weist tine eine der wichtigsten Funktionen eines CRM-Systems auf.
 
 Erwähnenswert ist noch, dass jegliche Notizen, die hier angelegt werden, nicht veränderbar sind. Grund dafür ist, dass dieses Feature ursprünglich aus der Historie (siehe dazu [Allgemeine Hinweise zur Bedienung - Historie](ca_StandardBedienhinweise.md/#historie)) kommt, welche per Definition nicht bearbeitbar sind.
@@ -268,15 +269,15 @@ Erwähnenswert ist noch, dass jegliche Notizen, die hier angelegt werden, nicht 
 !!! info "Wichtig"
     Sollten Sie E-Mail-Notizen aktiviert haben, denken Sie an den Datenschutz. Hierdurch kann jeder User, der Zugang zu dem Kontakt hat, den E-Mail-Verkehr mitschneiden.
 
-<span id="contact-attachmentsgrid"></span>
+<a id="ctx:Addressbook.EditDialog.Contact.AttachmentsGrid"></a>
 Der Reiter Anhänge dient dem Zuordnen von beliebigen Dateien zu einem Datensatz; eine Funktion, die Ihnen im Prinzip zu allen Datenbank-Objekten in tine angeboten wird. Wir behandeln sie ausführlich in [ Allgemeine Hinweise und Bedienung - Anhänge](ca_StandardBedienhinweise.md/#anhange).
 
-<span id="contact-historygrid"></span>
+<a id="ctx:Addressbook.EditDialog.Contact.HistoryGrid"></a>
 An dieser Stelle möchten wir kurz den Reiter Historie vorziehen, da der Bereich Verknüpfungen: sehr umfangreich ist.
 
 In Historie finden Sie Einträge über die Erstellung und Bearbeitung des betreffenden Kontakts. Wurde beispielsweise ein Datenfeld geändert, so können Sie nachvollziehen, was wie von welchem Benutzer zu welchem Zeitpunkt geändert wurde. Die Historie selber ist vor Änderungen geschützt, weshalb eine Bearbeitung dieser Einträge nicht möglich ist.
 
-<span id="contact-relationsgrid"></span>
+<a id="ctx:Addressbook.EditDialog.Contact.RelationsGrid"></a>
 Kommen wir nun zu den Verknüpfungen: Wie wir bei den Notizen schon besprochen haben und später mit anderen Objekten noch sehen werden, kann tine verschiedene Arten von Daten sinnvoll miteinander verknüpfen. Öffnen Sie dazu den Reiter Verknüpfungen. Wenn Ihre Version von tine noch ganz "frisch" ist, werden Sie jetzt eine leere Tabelle sehen. Oben links, direkt unter der Reiterleiste, sehen Sie ein Pulldown-Menü, das auf Kontakt (Adressbuch) steht. Klicken Sie es einmal an.
 
 <!-- SCREENSHOT -->
@@ -383,7 +384,7 @@ auch kennen. Praktisch ist der kleine Radiergummi ganz rechts außen, genannt Fo
 
 Wenn Sie oder Ihr Administrator beim Anlegen Ihrer E-Mail-Konten eine E-Mail-Signatur gespeichert haben ([E-Mail](ea_EMail.md)), so erscheint diese im Text der E-Mail automatisch nach Auswahl der E-Mail-Adresse, von der aus Sie die E-Mail versenden wollen. Sofern Sie über mehrere Signaturen verfügen, können diese unter dem Punkt Signatur geändert werden. Die Signatur muss vor dem Schreiben der Mail gewählt werden, ein nachträgliches Ändern der Signatur ist nicht möglich.
 
-### Kontakte filtern
+### Kontakte filtern { data-ctx="/Addressbook/MainScreen/Contact/Grid/FilterToolbar" }
 Damit sind alle "einfachen" Funktionen des Adressbuchs besprochen. Kommen wir nun zu den komplexen Auswahlalgorithmen. Sicher können Sie sich vorstellen, dass in einem Unternehmen, das über mehrere Standorte tätig ist und ein paar hundert Mitarbeiter hat, schnell mehrere tausend Kontaktdaten zusammenkommen. Nun hatten wir Ihnen versprochen, dass Sie die Übersicht auch dann behalten, wenn es nur wenige Adressbücher gibt. Dafür hat tine die Filterfunktionen vorgesehen:
 
 Wie schon weiter oben bemerkt, besitzt tine mächtige Werkzeuge zur Anzeige und Filterung von Daten, dem sog. _Data Mining_. Wiewohl Data-Mining unserer Erfahrung nach von den meisten tine-Anwendern mit Adressdaten betrieben wird (es gibt Nutzer, die Millionen Datensätze damit verwalten!), können Sie es nach den gleichen Prinzipien auch mit allen anderen in Ihrer tine-Datenbank gespeicherten Daten umsetzen. Daher erklären wir das Filtern hier an dieser Stelle nicht näher, sondern verweisen auf das [ Allgemeine Hinweise zur Bedienung - Suchfilter für die Tabellenansicht](ca_StandardBedienhinweise.md/#suchfilter-fur-die-tabellenansicht).

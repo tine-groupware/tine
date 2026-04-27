@@ -9,7 +9,7 @@
 
 Ext.ns('Tine.UserManual');
 Tine.UserManual.helpMap = null;
-Tine.UserManual.helpMapPath = '/UserManual/help-map.json';
+Tine.UserManual.helpMapPath = 'context-map.json';
 
 Tine.UserManual.UserManualDialog = Ext.extend(Ext.FormPanel, {
 
@@ -34,6 +34,11 @@ Tine.UserManual.UserManualDialog = Ext.extend(Ext.FormPanel, {
         this.i18n = this.app.i18n;
 
         this.helpBaseUrl = Tine.Tinebase.configManager.get('helpBaseUrl', 'UserManual');
+        this.helpBaseUrl = String(this.helpBaseUrl).endsWith('/') ? this.helpBaseUrl : this.helpBaseUrl + '/';
+        if (!!+Tine.Tinebase.configManager.get('autodetectVersionPath', 'UserManual')) {
+            const path = String(Tine.Tinebase.registry.get('version').packageString).match(/^(\d{4}\.\d{2}).+/)?.[1] || 'main';
+            this.helpBaseUrl = this.helpBaseUrl + path + '/';
+        }
 
         this.fbar = ['->', {
             text: this.app.i18n._('Close'),
@@ -68,12 +73,12 @@ Tine.UserManual.UserManualDialog = Ext.extend(Ext.FormPanel, {
         this.loadMask.show();
         frameEl.addEventListener("load", () => { this.loadMask.hide() });
 
-        const path = await this.resolveHelpUrl(this.context) || '/users/manual';
+        const path = ('/' + await this.resolveHelpUrl(this.context)) || '/users/manual';
         frameEl.src = this.helpBaseUrl + path;
     },
 
     resolveHelpUrl: async function(context) {
-        var map = Tine.UserManual.helpMap ?? await (fetch( Tine.Tinebase.common.getUrl() + Tine.UserManual.helpMapPath)
+        var map = Tine.UserManual.helpMap ?? await (fetch( this.helpBaseUrl + Tine.UserManual.helpMapPath)
             .then(r => r.json())
             .catch(e => console.error('Could not load help-map.json:', e))
         )

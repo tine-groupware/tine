@@ -24,7 +24,7 @@ class UserManual_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeContent()
     {
-        self::importManualContent();
+//        self::importManualContent();
     }
 
     public static function importManualContent($overwrite = false)
