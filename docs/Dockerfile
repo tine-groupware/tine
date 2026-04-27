@@ -2,6 +2,7 @@ FROM squidfunk/mkdocs-material AS base
 RUN pip install mkdocs-static-i18n
 RUN pip install mkdocs-awesome-pages-plugin
 RUN pip install pymdown-extensions
+RUN pip install mkdocs-macros-plugin
 RUN pip install mkdocs-enumerate-headings-plugin
 
 

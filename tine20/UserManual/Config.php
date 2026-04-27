@@ -43,7 +43,6 @@ class UserManual_Config extends Tinebase_Config_Abstract
             //_('Base url of the user manual')
             self::DESCRIPTION           => 'Base url of the user manual',
             self::TYPE                  => self::TYPE_STRING,
-//            self::DEFAULT_STR           => 'https://docs.local.tine-dev.de',
             self::DEFAULT_STR           => 'https://docs.tine-groupware.de/',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
