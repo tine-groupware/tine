@@ -82,9 +82,9 @@ Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
             const [cmp, bootstrapData] = values;
             this.bootstrapData = bootstrapData;
             const url = Tine.Tinebase.configManager.get('elementUrl', 'MatrixSynapseIntegrator', '')
-            // shortening hash to 63 chars. Domain labels must not be longer than 63 characters.
+            // shortening hash to 32 chars. Domain labels must not be longer than 63 characters.
             if (url) {
-                this.url = new URL(url.replace('{MATRIX_USER_ID}', (await this.sha256(this.bootstrapData?.mx_user_id)).slice(0, 63)));
+                this.url = new URL(url.replace('{MATRIX_USER_ID}', (await this.sha256(this.bootstrapData?.mx_user_id)).slice(0, 32)));
             }
 
             this.isAvailable = !!this.bootstrapData && !!url

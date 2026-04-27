@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Room controller for MatrixSynapseIntegrator application
- * 
+ *
  * @package     MatrixSynapseIntegrator
  * @subpackage  Controller
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -12,7 +13,7 @@
 
 /**
  * Room controller class for MatrixSynapseIntegrator application
- * 
+ *
  * @package     MatrixSynapseIntegrator
  * @subpackage  Controller
  *
@@ -51,7 +52,8 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        if (!$this->_doRightChecks
+        if (
+            !$this->_doRightChecks
             || !$this->_doContainerACLChecks
             || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS)
         ) {
@@ -81,10 +83,7 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
     {
         parent::_inspectBeforeCreate($_record);
 
-        if (!$this->_synapse) {
-            throw new Tinebase_Exception_Backend('Synapse not initialized');
-        }
-        $roomId = $this->_synapse->createRoom($_record);
+        $roomId = $this->getSynapseBackend()->createRoom($_record);
         $_record->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID} = $roomId;
     }
 
