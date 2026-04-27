@@ -3,8 +3,7 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2017-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.UserManual');
@@ -73,8 +72,11 @@ Tine.UserManual.UserManualDialog = Ext.extend(Ext.FormPanel, {
         this.loadMask.show();
         frameEl.addEventListener("load", () => { this.loadMask.hide() });
 
-        const path = ('/' + await this.resolveHelpUrl(this.context)) || '/users/manual';
-        frameEl.src = this.helpBaseUrl + path;
+        const path = await this.resolveHelpUrl(this.context) || 'users/manual';
+        const url = new URL(this.helpBaseUrl + path);
+        url.searchParams.set('theme', document.getElementsByTagName('body')[0].classList.contains('dark-mode') ? 'dark' : 'light');
+
+        window.document.location.href = url.toString()
     },
 
     resolveHelpUrl: async function(context) {

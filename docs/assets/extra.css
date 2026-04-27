@@ -1,0 +1,92 @@
+/* SVG Icons an light/dark mode anpassen */
+[data-md-color-scheme="slate"] img[src$=".svg"] {
+    filter: invert(1);
+}
+
+/* responsive Screenshots */
+@media (max-width: 768px) {
+    .desktop-img {
+        display: none;
+    }
+}
+@media (min-width: 768px) {
+    .mobile-img {
+        display: none;
+    }
+}
+
+/* Nur bei sehr großen Bildschirmen (>1600px) */
+@media (min-width: 1600px) {
+    .md-grid {
+        max-width: 1600px; /* Standard ist meist 1240px */
+    }
+}
+
+/* Optional: noch etwas mehr Luft geben bei Ultrawide */
+@media (min-width: 2000px) {
+    .md-grid {
+        max-width: 2000px;
+    }
+}
+
+/* Optional: noch etwas mehr Luft geben bei Ultrawide */
+@media (min-width: 2400px) {
+    .md-grid {
+        max-width: 2400px;
+    }
+}
+
+/* Manual index tile grid */
+.manual-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.manual-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--md-default-fg-color);
+    text-align: center;
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.manual-tile:hover {
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    border-color: var(--md-accent-fg-color);
+}
+
+.manual-tile-icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 0.75rem;
+    object-fit: contain;
+}
+
+.manual-tile-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+@media (max-width: 600px) {
+    .manual-tiles {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.grid .card {
+    background: #ffffff; /* helles Weiß */
+    color: #1a1a1a;
+    border: 1px solid #e0e0e0;
+}
+.grid .card.md-accent {
+    background: #f1f6ff; /* hellblauer Akzent */
+    border-color: #90caf9;
+}

@@ -1,3 +1,7 @@
+---
+render_macros: false
+---
+
 How to Customize GDOR Template
 ----
 

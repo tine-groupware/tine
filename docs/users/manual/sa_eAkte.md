@@ -1,4 +1,5 @@
 # eAkte
+<!-- icon: icon_drafts.svg -->
 
 Mit fortschreitender Digitalisierung inklusive deren gesetzlichen Rahmenbedingungen ist die Einführung einer elektronischen Aktenführung zunehmend erforderlich.
 Dies hat uns veranlasst, in enger Zusammenarbeit mit Kunden und in Anlehnung an die rechtlichen, fachlichen sowie funktionalen Anforderungen zum „Baustein E-Akte“ des „Organisationskonzepts elektronische Verwaltungsarbeit“ vom Bundesministerium des Innern (BMI), in tine die Anwendung eAkte zu entwickeln.

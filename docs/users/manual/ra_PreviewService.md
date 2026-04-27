@@ -1,4 +1,5 @@
 # Preview Service
+<!-- icon: icon_preview.svg -->
 
 Die "Preview"-Funktion ist nicht in der Standard Business Edition enthalten. Sollten Sie Interesse an dieser Funktion haben, muss Ihre Subscription kostenpflichtig erweitert werden.
 
