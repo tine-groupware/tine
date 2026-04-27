@@ -27,6 +27,7 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
     public const IDENTITY_SERVER_URL = 'identityServerUrl';
 
     public const CORPORAL_SHARED_AUTH_TOKEN = 'corporalSharedAuthToken';
+    public const CORPORAL_USER_ID = 'corporalUserId';
 
     public const MATRIX_DIRECTORY_ENABLED = 'matrixDirectoryEnabled';
     public const MATRIX_DIRECTORY_DATABASE_URL = 'matrixDirectoryDatabaseUrl';
@@ -100,6 +101,16 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
             self::LABEL                     => 'Corporal Shared Auth Token',
             //_('Corporal Shared Auth Token')
             self::DESCRIPTION               => 'Corporal Shared Auth Token',
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => false,
+            self::SETBYADMINMODULE          => false,
+            self::SETBYSETUPMODULE          => false,
+        ],
+        self::CORPORAL_USER_ID    => [
+            //_('Corporal User ID')
+            self::LABEL                     => 'Corporal User ID',
+            //_('Corporal User ID')
+            self::DESCRIPTION               => 'Corporal User ID',
             self::TYPE                      => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE     => false,
             self::SETBYADMINMODULE          => false,
@@ -267,7 +278,8 @@ class MatrixSynapseIntegrator_Config extends Tinebase_Config_Abstract
         $url = $this->get(MatrixSynapseIntegrator_Config::ELEMENT_URL);
 
         if (!empty($url)) {
-            $url = str_replace('{MATRIX_USER_ID}', '*', $url);
+            $url = preg_replace('/[\w-]*{MATRIX_USER_ID}[\w-]*/', '*', $url);
+
             $parsed = parse_url(rtrim($url, '/'));
             if ($parsed) {
                 $origin = $parsed['scheme'] . '://' . $parsed['host']
