@@ -82,11 +82,21 @@
 }
 
 .contact-image {
-    min-height: 50px;
-    width: 50px;
-    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     overflow: hidden;
-    margin: 0 auto;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    font-size: large;
+    border: 1px solid #B5B8C8;
+}
+
+.contact-image img {
+    width: 100%;
+    height: 100%;
 }
 
 .contact-title-row {

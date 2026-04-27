@@ -85,10 +85,35 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     oneColumnRenderer: function(folderId, metadata, record) {
         const block =  document.createElement('div');
         block.className = 'responsive-title';
-        
-        const iconEl = document.createElement('img');
-        iconEl.src = (record.data.jpegphoto || '');
+
+        const color = record.get('color');
+        const iconEl = document.createElement('div');
         iconEl.className = 'contact-image';
+        if (color) {
+            iconEl.style.border = `2px solid #${color}`;
+        }
+
+        const isSvg = (record.data.jpegphoto || '').includes('.svg') || (record.data.jpegphoto || '').includes('icon-set');
+
+        if (isSvg) {
+            iconEl.innerHTML = `<object type="image/svg+xml" style="margin: 5px;" data="${record.data.jpegphoto}"></object>`;
+        } else {
+            const imageEl = document.createElement('img');
+            imageEl.src = record.data.jpegphoto || '';
+            iconEl.appendChild(imageEl);
+        }
+        if (record.get('color')) {
+            iconEl.style.border = `2px solid ${record.get('color')}`;
+        }
+
+        const fn = record.data.n_given;
+        const ln = record.data.n_family;
+        const initials = [fn, ln].filter(val => val && val.length > 0).map(val => val.replace(/\s/g, "")[0]);
+        const abbreviatedName = initials.join('.');
+
+        if (abbreviatedName && record.data.jpegphoto.includes('icon-set')) {
+            iconEl.innerText = abbreviatedName.toUpperCase();
+        }
         
         // nameEl
         const nameEl = document.createElement('div');

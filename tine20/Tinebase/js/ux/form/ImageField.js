@@ -66,11 +66,9 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         
         Ext.ux.form.ImageField.superclass.initComponent.call(this);
         this.value = this.defaultImage;
-        
     },
     
     afterRender: function() {
-        
         this.imageCt = this.el.child('img');
         this.buttonCt = this.el.child('div[class=ux-imagefield-button]');
         this.textCt = this.el.child('div[class=ux-imagefield-text]');
@@ -88,15 +86,12 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         }
         
         this.loadMask = new Ext.LoadMask(this.buttonCt, {msg: i18n._('Loading'), msgCls: 'x-mask-loading'});
-        // this.textCt.setSize(this.width, this.height);
-        var clickToEditText = i18n._('Click to edit');
         // var tm = Ext.util.TextMetrics.createInstance(this.textCt);
         // tm.setFixedWidth(this.width);
         // this.textCt.applyStyles({
         //     top: ((this.height - tm.getHeight(clickToEditText)) / 2) + 'px'
         // });
-        this.textCt.insertHtml('afterBegin', clickToEditText);
-        
+
         Ext.apply(this.browsePlugin, {
             buttonCt: this.buttonCt,
             renderTo: this.buttonCt
@@ -350,7 +345,7 @@ Ext.ux.util.ImageURL = function (config) {
         application: 'Tinebase',
         location: 'tempFile',
         width: 90,
-        height: 120,
+        height: 90,
         ratiomode: 0,
         mtime: new Date().getTime()
     });
