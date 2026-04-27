@@ -1,4 +1,5 @@
 # Only Office Integration
+<!-- icon: icon_mime_docx.svg -->
 
 ## Anbindung der Only Office Installation
 

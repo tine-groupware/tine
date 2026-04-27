@@ -1,4 +1,5 @@
 # Vorwort
+<!-- icon: icon_resource_coffee.svg -->
 
 ## Was ist Groupware?
 

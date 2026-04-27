@@ -1,4 +1,5 @@
 # Stammdaten
+<!-- icon: icon_coreData_neg.svg -->
 
 <!-- SCREENSHOT -->
 ![Abbildung: Applikation: Stammdaten]({{ img_url_desktop }}Stammdaten/1_Stammdaten_light_1920x1020.png#only-light){.desktop-img}

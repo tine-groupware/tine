@@ -1,4 +1,5 @@
 # Anti-Viren Service
+<!-- icon: icon_virus.svg -->
 
 Um den Antivirus-Service zu nutzen, muss ClamAV (hierbei handelt es sich um einen Standard-Open-Source-Virenscanner) in tine konfiguriert werden.
 

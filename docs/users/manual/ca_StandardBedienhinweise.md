@@ -1,4 +1,5 @@
 # Allgemeine Hinweise zur Bedienung
+<!-- icon: icon_list_unselect.svg -->
 
 ## Einleitung, Anwählen von Anwendungen
 
@@ -68,7 +69,7 @@ Das daraufhin erscheinende Fenster zur Berechtigungsverwaltung sieht wie folgt a
 
 Welche Zugriffsrechte Sie hier nun mit welchen Konsequenzen vergeben, lesen Sie bitte im oben zitierten Abschnitt des Administrationskapitels nach. Wir wollen uns hier nur damit beschäftigen, wie Sie Berechtigungen sich selbst, sowie anderen Benutzern oder Benutzergruppen zuweisen können.
 
-Das Dialogfenster zur Container-Rechtevergabe steht bei Öffnung immer auf dem bearbeitenden Benutzer, also Ihnen selbst. Wenn Sie nun den entsprechenden Container zum Zugriff für andere Benutzer freigeben wollen, verfahren Sie wie folgt: Entscheiden Sie zunächst, ob die Berechtigung einzelnen Benutzern oder ganzen Benutzergruppen erteilt werden soll. Klicken Sie dazu oben links im Dialogfenster den Button mit den drei kleinen schwarzen Köpfen - <img src="{{icon_url}}1_icon_group_full.svg" alt="drawing" width="16"/> (das Symbol für eine Benutzergruppe, denn standardmäßig steht die Auswahl auf Gruppen) an! Dahinter verbirgt sich ein Pulldown mit Benutzersuche, Gruppensuche, Suche Rolle und Jeder hinzufügen. Treffen Sie Ihre Auswahl!
+Das Dialogfenster zur Container-Rechtevergabe steht bei Öffnung immer auf dem bearbeitenden Benutzer, also Ihnen selbst. Wenn Sie nun den entsprechenden Container zum Zugriff für andere Benutzer freigeben wollen, verfahren Sie wie folgt: Entscheiden Sie zunächst, ob die Berechtigung einzelnen Benutzern oder ganzen Benutzergruppen erteilt werden soll. Klicken Sie dazu oben links im Dialogfenster den Button mit den drei kleinen schwarzen Köpfen - <img src="{{icon_url}}icon_group_full.svg" alt="drawing" width="16"/> (das Symbol für eine Benutzergruppe, denn standardmäßig steht die Auswahl auf Gruppen) an! Dahinter verbirgt sich ein Pulldown mit Benutzersuche, Gruppensuche, Suche Rolle und Jeder hinzufügen. Treffen Sie Ihre Auswahl!
 
 Jetzt erhalten Sie (außer bei Jeder hinzufügen) mit dem Pulldown links außen die entsprechenden Benutzer, Benutzergruppen oder Rollen Ihrer tine-Installation, mit den üblichen Bedienelementen, zur Auswahl angeboten. Sie können auch, anstelle des Pulldowns, eine Zeichenkette (mindestens drei Zeichen) zur Suche eingeben.
 

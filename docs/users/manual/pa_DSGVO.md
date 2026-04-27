@@ -1,4 +1,5 @@
 # DSGVO
+<!-- icon: icon_security_advisory_modul_advisories.svg -->
 
 Die Anwendung DSGVO ist im eigentlichen Sinne keine eigene Anwendung, sondern ein modularer Teil des Adressbuchs sowie der Stammdaten und gibt so die Möglichkeit, die Herkunft und den Verwendungszweck von Daten zu erfassen und eine entsprechende Bearbeitungshistorie zu führen. Dies ermöglicht eine DSGVO-konforme Erfassung personenbezogener Daten.
 

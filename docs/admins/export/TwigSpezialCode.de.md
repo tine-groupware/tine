@@ -1,3 +1,7 @@
+---
+render_macros: false
+---
+
 Spezieller tine Twig-Code:
 ====
 

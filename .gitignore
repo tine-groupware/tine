@@ -43,3 +43,6 @@ tine20/vendor*
 /ci/dependency/library/
 /ci/source/tine20/
 /ci/dependency/npm-shrinkwrap.json
+docs/assets/icons/
+docs/users/manual/index.md
+docs/hooks/__pycache__*

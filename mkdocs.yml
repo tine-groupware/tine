@@ -24,7 +24,10 @@ theme:
     - navigation.indexes
 
 extra_css:
-  - stylesheets/extra.css
+  - assets/extra.css
+
+extra_javascript:
+  - assets/theme-param.js
 
 #nav:
 #  - 'User Guide': 'user-guide.md'
@@ -60,6 +63,7 @@ markdown_extensions:
 
 hooks:
   - docs/hooks/build_context_map.py
+  - docs/hooks/generate_manual_index.py
 
 extra:
   social:
