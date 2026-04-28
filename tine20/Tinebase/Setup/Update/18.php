@@ -36,6 +36,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE020 = self::class . '::update020';
     protected const RELEASE018_UPDATE021 = self::class . '::update021';
     protected const RELEASE018_UPDATE022 = self::class . '::update022';
+    protected const RELEASE018_UPDATE023 = self::class . '::update023';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -136,6 +137,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE018          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update018',
+            ],
+            self::RELEASE018_UPDATE023          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update023',
             ],
         ],
     ];
@@ -509,5 +514,23 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         $this->dropTable('jwt_access_routes');
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.22', self::RELEASE018_UPDATE022);
+    }
+
+    public function update023()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $db = $this->getDb();
+
+        $db->update(SQL_TABLE_PREFIX . 'container',
+            ['hierarchy' => null],
+            [
+                $db->quoteInto('model = ?', 'Addressbook_Model_Contact'),
+                'hierarchy IS NOT NULL',
+                'hierarchy != name',
+                'is_deleted = 0'
+            ]
+        );
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.23', self::RELEASE018_UPDATE023);
     }
 }
