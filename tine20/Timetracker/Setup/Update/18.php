@@ -91,6 +91,20 @@ class Timetracker_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update005(): void
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $db = $this->getDb();
+        // sanitize accounting time & duration
+        foreach ([
+            Timetracker_Model_Timesheet::FLD_DURATION,
+            Timetracker_Model_Timesheet::FLD_ACCOUNTING_TIME,
+         ] as $unsignedIntField) {
+            $db->update(SQL_TABLE_PREFIX . Timetracker_Model_Timesheet::TABLE_NAME,
+                [$unsignedIntField => 0],
+                [$db->quoteIdentifier($unsignedIntField) . ' < 0']
+            );
+        }
+
         Setup_SchemaTool::updateSchema([
             Timetracker_Model_Timesheet::class,
         ]);

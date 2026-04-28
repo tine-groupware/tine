@@ -27,6 +27,7 @@
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
+    public const TABLE_NAME = 'timetracker_timesheet';
     public const MODEL_NAME_PART = 'Timesheet';
 
     public const FLD_CLEARED_AMOUNT = 'cleared_amount';
@@ -34,6 +35,13 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
     public const FLD_END_DATE = 'end_date';
     public const FLD_START_DATE = 'start_date';
     public const FLD_CORRELATION_ID = 'correlation_id';
+    public const FLD_DURATION = 'duration';
+    public const FLD_ACCOUNTING_TIME = 'accounting_time';
+    public const FLD_ACCOUNTING_TIME_FACTOR = 'accounting_time_factor';
+    public const FLD_WORKINGTIME_IS_CLEARED = 'workingtime_is_cleared';
+    public const FLD_WORKINGTIME_CLEARED_IN = 'workingtime_cleared_in';
+    public const FLD_SOURCE = 'source';
+    public const FLD_SOURCE_MODEL = 'source_model';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -85,7 +93,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         ],
 
         'table'             => array(
-            'name'    => 'timetracker_timesheet',
+            'name'    => self::TABLE_NAME,
             'indexes' => array(
                 self::FLD_START_DATE => array(
                     'columns' => array(self::FLD_START_DATE)
@@ -251,7 +259,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'type'                  => 'time',
                 'shy'                   => TRUE
             ),
-            'duration'              => array(
+            self::FLD_DURATION    => array(
                 'label'                 => 'Duration', // _('Duration')
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
                 'type'                  => 'integer',
@@ -295,7 +303,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     ],
                 ],
             ),
-            'accounting_time'  => array(
+            self::FLD_ACCOUNTING_TIME   => array(
                 'label'                 => 'Invoiceable time', // _('Invoiceable time')
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'type'                  => 'integer',
