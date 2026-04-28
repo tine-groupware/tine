@@ -578,7 +578,7 @@ var combo = new Ext.form.ComboBox({
 
             if (this.ownerCt && !zindex){
                 this.findParentBy(function(ct){
-                    zindex = parseInt(ct.getPositionEl().getStyle('z-index'), 10);
+                    zindex = parseInt(ct.getPositionEl()?.getStyle('z-index'), 10);
                     return !!zindex;
                 });
             }
