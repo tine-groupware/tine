@@ -19,6 +19,7 @@ class Tinebase_Frontend_Http_CspRegistry
         'frame-src'   => [],
         'style-src'   => [],
         'object-src'  => [],
+        'font-src'    => [],
     ];
 
     public function addSource(string $directive, string $source): void

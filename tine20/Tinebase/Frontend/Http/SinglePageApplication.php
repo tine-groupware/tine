@@ -163,6 +163,10 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             ["'self'", 'blob:'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('object-src')
         );
+        $fontSrcs = array_merge(
+            ["'self'", 'data:'],
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('font-src')
+        );
 
         if (defined('TINE20_BUILDTYPE') && TINE20_BUILDTYPE === 'DEVELOPMENT') {
             $protocol  = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PROTOCOL);
@@ -185,6 +189,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             "frame-src " . implode(' ', $frameSrcs),
             "style-src " . implode(' ', $styleSrcs),
             "object-src " . implode(' ', $objectSrcs),
+            "font-src " . implode(' ', $fontSrcs),
             "frame-ancestors $frameAncestors",
         ]);
 
