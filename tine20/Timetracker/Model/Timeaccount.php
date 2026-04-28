@@ -17,9 +17,9 @@
  */
 class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 {
-    const TABLE_NAME = 'timetracker_timeaccount';
+    public const TABLE_NAME = 'timetracker_timeaccount';
 
-    const MODEL_NAME_PART = 'Timeaccount';
+    public const MODEL_NAME_PART = 'Timeaccount';
 
     /**
      * key in $_validators/$_properties array for the filed which 
