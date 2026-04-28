@@ -157,6 +157,21 @@ class HumanResources_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update008(): void
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $db = $this->getDb();
+        // sanitize unsigned int fields
+        foreach ([
+                     'break_time_deduction',
+                     'break_time_net',
+                     'working_time_target',
+                 ] as $unsignedIntField) {
+            $db->update(SQL_TABLE_PREFIX . HumanResources_Model_DailyWTReport::TABLE_NAME,
+                [$unsignedIntField => 0],
+                [$db->quoteIdentifier($unsignedIntField) . ' < 0']
+            );
+        }
+
         Setup_SchemaTool::updateSchema([
             HumanResources_Model_DailyWTReport::class,
             HumanResources_Model_MonthlyWTReport::class,
