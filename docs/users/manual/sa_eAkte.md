@@ -2,27 +2,27 @@
 <!-- icon: icon_drafts.svg -->
 
 Mit fortschreitender Digitalisierung inklusive deren gesetzlichen Rahmenbedingungen ist die Einführung einer elektronischen Aktenführung zunehmend erforderlich.
-Dies hat uns veranlasst, in enger Zusammenarbeit mit Kunden und in Anlehnung an die rechtlichen, fachlichen sowie funktionalen Anforderungen zum „Baustein E-Akte“ des „Organisationskonzepts elektronische Verwaltungsarbeit“ vom Bundesministerium des Innern (BMI), in tine die Anwendung eAkte zu entwickeln.
+Dies hat uns veranlasst, in enger Zusammenarbeit mit Kunden und in Anlehnung an die rechtlichen, fachlichen sowie funktionalen Anforderungen zum „Baustein E-Akte“ des „Organisationskonzepts elektronische Verwaltungsarbeit“ vom Bundesministerium des Innern (BMI), in {{ branding.title }} die Anwendung eAkte zu entwickeln.
 Die elektronische Abbildung entspricht dabei den Grundsätzen ordnungsgemäßer Aktenführung (gesetzlich nicht normiert) und der verwaltungs- bzw. behördlichen Schriftgutsammlung.
 
 Als E-Akte wird allgemein eine digitale Datensammlung bezeichnet, die nach dem Vorbild herkömmlicher Akten (auf Papier) aufgebaut ist.
 
 ## Aufbau und Struktur eAkte
 
-Die Anwendung eAkte ist integriert in der tine Anwendung [Dateimanager](ga_Dateimanager.md) und über den Button eAkte rechts im oberen Bearbeitungsmenue über der Tabelle aktiviert. In diesem Bereich des Handbuches konzentrieren wir uns auf die Spezifika der eAkte. Bitte entnehmen Sie Grundlegendes im Umgang mit dem Dateimanager der tine Anwendung [Dateimanager](ga_Dateimanager.md).
+Die Anwendung eAkte ist integriert in der {{ branding.title }} Anwendung [Dateimanager](ga_Dateimanager.md) und über den Button eAkte rechts im oberen Bearbeitungsmenue über der Tabelle aktiviert. In diesem Bereich des Handbuches konzentrieren wir uns auf die Spezifika der eAkte. Bitte entnehmen Sie Grundlegendes im Umgang mit dem Dateimanager der {{ branding.title }} Anwendung [Dateimanager](ga_Dateimanager.md).
 
 Voraussetzung für die Führung einer eAkte, ist die Anlage eines Hauptordners (z.B. "Aktenplan") im Dateimanager unter Gemeinsame Ordner.
-Dieser muss in den Konfigurationseinstellungen in der tine Anwendung admin unter eAkte hinterlegt werden. Erst dann erkennt das System diesen als eAkte.
+Dieser muss in den Konfigurationseinstellungen in der {{ branding.title }} Anwendung admin unter eAkte hinterlegt werden. Erst dann erkennt das System diesen als eAkte.
 
 <!-- SCREENSHOT -->
-![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_light.png#only-light){.desktop-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_dark.png#only-dark){.desktop-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_light.png#only-light){.mobile-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_dark.png#only-dark){.mobile-img}
 
 Der Aufbau und die Struktur einer eAkte besteht aus verschieden Ebenen. Diese werden über zur Verfügung stehende eAkte Ebenen-Typen gesteuert. Die eAkte Ebenen-Typen stehen dabei untereinander in festgelegten Abhängigkeiten und verfügen über bestimmte Merkmale und Konfigurationen. Diese Einstellungen werden dabei einmalig vor Anwendung der eAkte zentral auf Systemebene konfiguriert (entsprechend der jeweiligen Kundenbedürfnisse) und steuern u.a. die automatische Nummerierung mit den erforderlichen Trennzeichen zum Aufbau der Aktenzeichen.
 
-Im Umgang mit der eAkte unterstützt Sie tine, neben der automatischen Nummerierung, bei der Anlage neuer Ebenen in Form von Ordnern über den Button eAkte und zeigt nur die jeweils zulässigen eAkte Ebenen-Typen aktiv an. Dies immer in Abhängigkeit der Ebene, unterhalb welcher, weitere Ordner und Daten angelegt werden sollen.
+Im Umgang mit der eAkte unterstützt Sie {{ branding.title }}, neben der automatischen Nummerierung, bei der Anlage neuer Ebenen in Form von Ordnern über den Button eAkte und zeigt nur die jeweils zulässigen eAkte Ebenen-Typen aktiv an. Dies immer in Abhängigkeit der Ebene, unterhalb welcher, weitere Ordner und Daten angelegt werden sollen.
 Jeder eAkte Ebenen-Typen ist mit einem eigenen Icon versehen und somit optisch hervorgehoben und leicht erkennbar.
 
 Für einen einfachen Überblick werden nachfolgend die wichtigsten Fakten und Bedingungen bei der Anlage von Ebenen in Form von Ordnern und deren Daten innerhalb der eAkte pro eAkte Ebenen-Typen beschrieben.
@@ -33,10 +33,10 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager direkt auf der eAkte (Hauptordner) erhalten Sie nur die Option Rahmenaktenplan hinzufügen als aktive Option.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -52,10 +52,10 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Rahmenaktenplan:
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene eines Ordners vom eAkte Ebenen-Typ Aktengruppe öffnet sich, durch Klick auf den Button eAkte im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option Akte hinzufügen zur Anlage eines Unterordners.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -71,10 +71,10 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Aktengruppe:
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene eines Ordners vom eAkte Ebenen-Typ Akte öffnet sich, durch Klick auf den Button eAkte im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit den aktiven Optionen Teilkte hinzufügen, Vorgang hinzufügen und Dokumentenordner hinzufügen zur Anlage eines Unterordners.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -90,10 +90,10 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Akte:
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene eines Ordners vom eAkte Ebenen-Typ Teilakte öffnet sich, durch Klick auf den Button eAkte im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit den aktiven Optionen Teilkte hinzufügen, Vorgang hinzufügen und Dokumentenordner hinzufügen zur Anlage eines Unterordners.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -109,10 +109,10 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Teilakte:
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene eines Ordners vom eAkte Ebenen-Typ Vorgang öffnet sich, durch Klick auf den Button eAkte im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option Dokumentenordner hinzufügen zur Anlage eines Unterordners.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -132,10 +132,10 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Vorgang:
 Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene eines Ordners vom eAkte Ebenen-Typ Dokumentenordner öffnet sich, durch Klick auf den Button eAkte im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option Dokumentenordner hinzufügen zur Anlage eines Unterordners.
 
 <!-- SCREENSHOT -->
-![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_light.png#only-light){.desktop-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_light.png#only-light){.mobile-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_dark.png#only-dark){.mobile-img}
 
 Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer eAkten Ebenen-Nummer.
 
@@ -154,10 +154,10 @@ Die speziellen eAkte Eigenschaften sind in die bereits bestehenden Eigenschaften
 Folgendes Beispiel zeigt den Bearbeitendialog Datei bearbeiten mit den Basis Eigenschaften im Reiter Datei.
 
 <!-- SCREENSHOT -->
-![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_light.png#only-light){.desktop-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_dark.png#only-dark){.desktop-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_light.png#only-light){.mobile-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_dark.png#only-dark){.mobile-img}
 
 Die eAkte betreffenden grundlegenden Felder Aktenzeichen und eAkte Ebenen-Typ finden Sie im mittleren Bereich eAkte innerhalb des Reiters Datei. Der Bereich eAkte selbst ist für alle Datensätze unterhalb des Hauptordner aktiv und sichtbar.
 Beide Felder werden innerhalb der eAkte automatisch bei Anlage der Daten vom System gesetzt.
@@ -185,10 +185,10 @@ Ein Klick auf den Button Zur Akte springen im oberen Bereich des Bearbeitungsdia
 Nutzen Sie den Button, um schnell auf die richtige Ebene zur Bearbeitung der Akten-Metadaten zu springen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_light.png#only-light){.desktop-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_dark.png#only-dark){.desktop-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_light.png#only-light){.mobile-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_dark.png#only-dark){.mobile-img}
 
 Schauen wir uns nun die Metadaten einmal genauer an (die Daten sind informativ).
 

@@ -16,24 +16,24 @@ Die Anwendung CRM (_Customer Relationship Management_ oder _Kundenbeziehungsmana
 
 Jeder Mitarbeiter im Vertrieb hat durch die Hinterlegung dieser Informationen zu jeder Zeit die Möglichkeit, einen potenziellen Kundenkontakt fortzusetzen. Eine weitere wichtige Funktion eines CRM-Systems sind statistische Auswertungen – schließlich geht es um unternehmensrelevante Zahlen.
 
-Starten Sie nun das CRM im Reiter tine.com über CRM.
+Starten Sie nun das CRM im Reiter {{ branding.title }}.com über CRM.
 
 ## Favoriten und Leadlisten { data-ctx="/Crm/MainScreen/Lead/FavoritesPicker" }
 
 <a id="ctx:Crm.MainScreen.Lead.ContainerTree"></a>
-Oben links sehen Sie, wie gewohnt, mehrere Favoritenansichten. Als Standard bringt tine hier Alle Leads, Leads mit überfälligen Aufgaben, Meine Leads und Zuletzt von mir bearbeitet mit. Alle Leads listet Ihnen alle derzeit aktiven Leads des Unternehmens auf, also nicht die "akzeptierten" oder "verlorenen". Unter Leads mit überfälligen Aufgaben finden sie die Leads wo das Fälligkeitsdatum einer Aufgaben erreicht ist, und die Aufgabe noch offen ist. Meine Leads zeigt jene, für die Sie selbst als Kontakt vermerkt sind (wir kommen gleich darauf). Wie immer können Sie sich hier eigene Favoriten erstellen und abspeichern (vgl. [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)).
+Oben links sehen Sie, wie gewohnt, mehrere Favoritenansichten. Als Standard bringt {{ branding.title }} hier Alle Leads, Leads mit überfälligen Aufgaben, Meine Leads und Zuletzt von mir bearbeitet mit. Alle Leads listet Ihnen alle derzeit aktiven Leads des Unternehmens auf, also nicht die "akzeptierten" oder "verlorenen". Unter Leads mit überfälligen Aufgaben finden sie die Leads wo das Fälligkeitsdatum einer Aufgaben erreicht ist, und die Aufgabe noch offen ist. Meine Leads zeigt jene, für die Sie selbst als Kontakt vermerkt sind (wir kommen gleich darauf). Wie immer können Sie sich hier eigene Favoriten erstellen und abspeichern (vgl. [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)).
 
-Unter den Favoriten befindet sich der Verzeichnisbaum für Leadlisten mit Ihren eigenen, den gemeinsamen und den Leadlisten anderer Benutzer. Unter Meine Leadlisten werden Sie auf jeden Fall Ihre persönliche Leadliste finden, die bei der Erzeugung Ihres tine-Benutzerkontos automatisch angelegt wurde. Ob Sie unter den anderen beiden Ordnern Leadlisten sehen, hängt von Ihren persönlichen Zugriffsrechten ab. Sollten Sie im Vertrieb tätig sein, werden Sie vermutlich mindestens eine gemeinsame Leadliste im Zugriff haben.
+Unter den Favoriten befindet sich der Verzeichnisbaum für Leadlisten mit Ihren eigenen, den gemeinsamen und den Leadlisten anderer Benutzer. Unter Meine Leadlisten werden Sie auf jeden Fall Ihre persönliche Leadliste finden, die bei der Erzeugung Ihres {{ branding.title }}-Benutzerkontos automatisch angelegt wurde. Ob Sie unter den anderen beiden Ordnern Leadlisten sehen, hängt von Ihren persönlichen Zugriffsrechten ab. Sollten Sie im Vertrieb tätig sein, werden Sie vermutlich mindestens eine gemeinsame Leadliste im Zugriff haben.
 
 ## Das Bearbeitungsmenü
 
 Die Punkte im Bearbeitungsmenü besprechen wir im Folgenden ausführlich.
 
 <!-- SCREENSHOT -->
-![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_light.png#only-light){.desktop-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_dark.png#only-dark){.desktop-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_light.png#only-light){.mobile-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_dark.png#only-dark){.mobile-img}
 
 Die Tabelle umfasst – neben den wichtigsten Datenfeldern – im unteren Bereich die drei Felder Lead-Status, Lead-Quellen und Lead-Typen. Sie dienen der grafischen Auswertung; sollten Sie dort keine Tortendiagramme sehen, liegt das daran, dass Sie noch keine Leads gespeichert haben.
 
@@ -42,41 +42,41 @@ Die Tabelle umfasst – neben den wichtigsten Datenfeldern – im unteren Bereic
 Klicken Sie oben links im Bearbeitungsmenü auf Lead hinzufügen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_light.png#only-light){.desktop-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_light.png#only-light){.mobile-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_dark.png#only-dark){.mobile-img}
 
 Sie sehen, dass die Bearbeitungsmaske nur die üblichen vier Reiter enthält, sodass wir nur den ersten besprechen (zu den anderen drei vgl. [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)).
 
 Die Maske Lead enthält als einziges Pflichteingabefeld oben Leadname eingeben, alle anderen Angaben sind optional. Vergeben Sie nun probehalber einen beliebigen Namen.
 
-Über das Pulldown Kontakte zum Hinzufügen suchen ordnen Sie dem Lead beliebig viele Kontakte aus Ihrer tine-Adressdatenbank zu, die dann in der darunter befindlichen Tabelle erscheinen. Anstelle des Pulldowns über alle verfügbaren Kontakte können Sie auch die Volltextsuche nutzen, indem Sie mindestens drei Zeichen in das Feld eingeben und so die entsprechenden Kontakte herausfiltern.
-Sie sehen in der Tabelle, dass Sie selbst als Kontakt bereits automatisch zugeordnet wurden. Diese Zuordnung ist jedoch (wie jede weitere) über den unter dem Tabellenfenster mit einem Minuszeichen gekennzeichneten Button Entferne Kontakt lösbar. Sie können also auch Leads speichern und sie anderen Mitarbeitern oder sogar beliebigen anderen Kontakten zuordnen. Ist der gewünschte Kontakt nicht in Ihrem tine-Adressdatenbestand vorhanden, können Sie hier über den mit einem Pluszeichen versehenen Button Neuer Kontakt die aus der Adressverwaltung bekannte Kontakteingabemaske einblenden lassen, um einen neuen Kontakt anzulegen.
+Über das Pulldown Kontakte zum Hinzufügen suchen ordnen Sie dem Lead beliebig viele Kontakte aus Ihrer {{ branding.title }}-Adressdatenbank zu, die dann in der darunter befindlichen Tabelle erscheinen. Anstelle des Pulldowns über alle verfügbaren Kontakte können Sie auch die Volltextsuche nutzen, indem Sie mindestens drei Zeichen in das Feld eingeben und so die entsprechenden Kontakte herausfiltern.
+Sie sehen in der Tabelle, dass Sie selbst als Kontakt bereits automatisch zugeordnet wurden. Diese Zuordnung ist jedoch (wie jede weitere) über den unter dem Tabellenfenster mit einem Minuszeichen gekennzeichneten Button Entferne Kontakt lösbar. Sie können also auch Leads speichern und sie anderen Mitarbeitern oder sogar beliebigen anderen Kontakten zuordnen. Ist der gewünschte Kontakt nicht in Ihrem {{ branding.title }}-Adressdatenbestand vorhanden, können Sie hier über den mit einem Pluszeichen versehenen Button Neuer Kontakt die aus der Adressverwaltung bekannte Kontakteingabemaske einblenden lassen, um einen neuen Kontakt anzulegen.
 
 Schauen Sie sich nun den direkt darunter befindlichen Tabellenkopf an: Name, Anschrift und Daten sind klar – interessant ist hier die Rolle. Dass sich in der Tabellenzeile hinter dem kleinen Symbol, <img src="{{icon_url}}icon_responsible.svg" alt="drawing" width="18"/>, <img src="{{icon_url}}icon_client.svg" alt="drawing" width="18"/> oder <img src="{{icon_url}}icon_partner.svg" alt="drawing" width="18"/> ein Pulldown verbirgt, ist nicht sofort zu sehen – Sie müssen darauf klicken.
 
 <!-- SCREENSHOT -->
-![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_light.png#only-light){.desktop-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_dark.png#only-dark){.desktop-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_light.png#only-light){.mobile-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_dark.png#only-dark){.mobile-img}
 
-Das Pulldown bietet die drei Rollen Verantwortlicher, Kunde und Partner an. tine geht standardmäßig davon aus, dass Sie selbst als erster Kontakt der Verantwortliche sind. Alle weiteren Kontakte erhalten die Rolle Kunde, die Sie aber beliebig ändern können.
+Das Pulldown bietet die drei Rollen Verantwortlicher, Kunde und Partner an. {{ branding.title }} geht standardmäßig davon aus, dass Sie selbst als erster Kontakt der Verantwortliche sind. Alle weiteren Kontakte erhalten die Rolle Kunde, die Sie aber beliebig ändern können.
 
 Bleiben Sie in unserem Beispiel Verantwortlicher und weisen Sie nun testweise je einen weiteren Kontakt als Kunden und als Partner zu. Wir wollen uns später in der Lead-Tabelle anschauen, wo diese Kontakte erscheinen.
 
 Kommen wir nun zu einigen charakteristischen Eigenschaften eines Leads. Die drei Pulldowns Status, Typ und Quelle im linken Teil bezeichnen spezielle Parameter Ihrer Leads, die die oben erwähnten drei Tortendiagramme visualisieren. Klicken Sie das Pulldown Status an, erhalten Sie standardmäßig die Werte offen, kontaktiert, wartet auf Feedback, Quote gesendet, akzeptiert und verloren.
 
 <!-- SCREENSHOT -->
-![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_light.png#only-light){.desktop-img}
+![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_dark.png#only-dark){.desktop-img}
+![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_light.png#only-light){.mobile-img}
+![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_dark.png#only-dark){.mobile-img}
 
-Beim Typ bietet tine drei Varianten: Kunde, Partner und Reseller, d.h. Sie können hier noch einmal markieren, ob es sich um einen direkten Kundenkontakt handelt.
+Beim Typ bietet {{ branding.title }} drei Varianten: Kunde, Partner und Reseller, d.h. Sie können hier noch einmal markieren, ob es sich um einen direkten Kundenkontakt handelt.
 
-Als standardmäßige Quellen eines Leads gibt tine die Werte Markt, E-Mail, Telefon und Webseite vor.
+Als standardmäßige Quellen eines Leads gibt {{ branding.title }} die Werte Markt, E-Mail, Telefon und Webseite vor.
 
 Wenn diese drei Parameter nicht oder nur teilweise den Anforderungen im Vertrieb Ihres Unternehmens entsprechen, lesen Sie im [Administration - CRM](oa_Administration.md/#crm), wie man sie ändert oder ergänzt.
 
@@ -89,27 +89,27 @@ Sollten Sie nicht im Vertrieb tätig sein, fragen Sie sich jetzt vielleicht, war
 
 Kommen wir nun zu den beiden Reitern im unteren Teil der Bearbeitungsmaske, Aufgaben und Produkte.
 
-Wiewohl das Vergeben von Aufgaben in tine in einer eigenen Anwendung geschieht ([Aufgaben](fa_Aufgaben.md)), ist dies auch hier in CRM möglich. Das ist auch sinnvoll, weil sich ein Verkaufsprozess über einen längeren Zeitraum hinziehen und das Delegieren von Aufgaben, z.B. zur Erreichung von Zwischenzielen, erforderlich sein kann. Diese Aufgaben erscheinen automatisch auch in der Aufgabenverwaltung von tine, denn wir wollen sie ja in unserer To-Do-Liste sehen. Dort sind sie jedoch dem hier angelegten Lead zugeordnet. Wenn Sie [Aufgaben](fa_Aufgaben.md) schon gelesen haben, sind Ihnen die Felder der hier gezeigten Tabelle bekannt.
+Wiewohl das Vergeben von Aufgaben in {{ branding.title }} in einer eigenen Anwendung geschieht ([Aufgaben](fa_Aufgaben.md)), ist dies auch hier in CRM möglich. Das ist auch sinnvoll, weil sich ein Verkaufsprozess über einen längeren Zeitraum hinziehen und das Delegieren von Aufgaben, z.B. zur Erreichung von Zwischenzielen, erforderlich sein kann. Diese Aufgaben erscheinen automatisch auch in der Aufgabenverwaltung von {{ branding.title }}, denn wir wollen sie ja in unserer To-Do-Liste sehen. Dort sind sie jedoch dem hier angelegten Lead zugeordnet. Wenn Sie [Aufgaben](fa_Aufgaben.md) schon gelesen haben, sind Ihnen die Felder der hier gezeigten Tabelle bekannt.
 Eine Aufgabe legen Sie an, indem Sie links unter der Spalte Zusammenfassung in das Feld Aufgabe hinzufügen hineinklicken und Ihre Aufgabe formulieren. Fälligkeitsdatum, Priorität, Prozent und Status geben Sie an, wie in [Aufgaben](fa_Aufgaben.md) beschrieben.
 
-Auch hier können Sie übrigens Aufgaben einem anderen tine-Benutzer zuweisen, die entsprechenden Berechtigungen vorausgesetzt. Das ist allerdings in der Standardansicht dieser Tabelle aus Platzgründen nicht zu sehen. Klicken Sie einmal rechts außen das Tabellenkopf-Symbol an und aktivieren Sie den Checkbutton Organisator. Das daraufhin eingeblendete Tabellenfeld ist mit einem Pulldown hinterlegt, über das Sie die Aufgabe ggf. einem anderen Bearbeiter zuweisen. Sie müssen dazu nur das Tabellenfeld mit der Maus anklicken.
+Auch hier können Sie übrigens Aufgaben einem anderen {{ branding.title }}-Benutzer zuweisen, die entsprechenden Berechtigungen vorausgesetzt. Das ist allerdings in der Standardansicht dieser Tabelle aus Platzgründen nicht zu sehen. Klicken Sie einmal rechts außen das Tabellenkopf-Symbol an und aktivieren Sie den Checkbutton Organisator. Das daraufhin eingeblendete Tabellenfeld ist mit einem Pulldown hinterlegt, über das Sie die Aufgabe ggf. einem anderen Bearbeiter zuweisen. Sie müssen dazu nur das Tabellenfeld mit der Maus anklicken.
 
 Außerdem kann man einem Lead mit dem Reiter Produkte auch Produkte oder Dienstleistungen zuweisen.
 
 
 <!-- SCREENSHOT -->
-![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_light.png#only-light){.desktop-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_dark.png#only-dark){.desktop-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_light.png#only-light){.mobile-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_dark.png#only-dark){.mobile-img}
 
 Die Produkte müssen in der Produktverwaltung angelegt sein, ehe Sie sie hier über das Pulldown zuordnen können.
 
 <!-- SCREENSHOT -->
-![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_light.png#only-light){.desktop-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_dark.png#only-dark){.desktop-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_light.png#only-light){.mobile-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_dark.png#only-dark){.mobile-img}
 
 Die Produktverwaltung erreichen Sie über die Anwendung Sales ([Sales](ha_Sales.md)).
 

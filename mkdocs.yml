@@ -66,6 +66,8 @@ hooks:
   - docs/hooks/generate_manual_index.py
 
 extra:
+  branding:
+    title: tine ®
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tine-groupware/tine

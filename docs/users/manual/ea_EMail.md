@@ -1,12 +1,12 @@
 # E-Mail
 
 ## Einleitung { data-ctx="/Felamimail" }
-E-Mail gehört zu den Kernfunktionen einer Groupware. tine erlaubt die Einbindung beliebig vieler E-Mail-Konten, d.h. Sie können über Ihre bereits vorhandenen E-Mail-Konten innerhalb von tine E-Mails empfangen und senden. tine umfasst jedoch keinen E-Mail-Server. Die E-Mail-Konten müssen also bei einem externen Dienstleister oder auf einem firmeneigenen Mailserver angelegt sein. Wenn es die Firmenpolicy erlaubt, können Sie auch Ihre privaten E-Mail-Konten in tine einbinden.
+E-Mail gehört zu den Kernfunktionen einer Groupware. {{ branding.title }} erlaubt die Einbindung beliebig vieler E-Mail-Konten, d.h. Sie können über Ihre bereits vorhandenen E-Mail-Konten innerhalb von {{ branding.title }} E-Mails empfangen und senden. {{ branding.title }} umfasst jedoch keinen E-Mail-Server. Die E-Mail-Konten müssen also bei einem externen Dienstleister oder auf einem firmeneigenen Mailserver angelegt sein. Wenn es die Firmenpolicy erlaubt, können Sie auch Ihre privaten E-Mail-Konten in {{ branding.title }} einbinden.
 
 Hier ist ein kurzer Exkurs zu E-Mail-Clients und deren Besonderheiten hilfreich:
 
 <!--SMTP-->
-E-Mail ist einer der ältesten Dienste im Internet. Ein Teilnehmer dieses Dienstes versendet mit Hilfe einer Software, dem _E-Mail-Client_, eine Nachricht an einen anderen Teilnehmer. Beim Versenden übergibt der E-Mail-Client die Nachricht an den Internet-Dienst _Simple Mail Transfer Protocol_ (SMTP), der sie – wie die Post einen Brief – im "Briefkasten" des Empfängers deponiert. Dieser Briefkasten befindet sich auf dem E-Mail-Server, den der Empfänger der Nachricht nutzt. Das kann der Server eines öffentlichen E-Mail-Providers wie T-Online, Yahoo oder Google sein, aber auch der E-Mail-Server, der zu Ihrer Website bei einem Hosting-Dienstleister gehört oder den Ihr Unternehmen selbst betreibt. Zu einem E-Mail-Konto gehören eine Reihe von Angaben, auf die wir bei der Einrichtung von Konten in tine zu sprechen kommen und die Sie dann bereit haben sollten, wenn nicht Ihre benötigten Konten bereits eingerichtet wurden.
+E-Mail ist einer der ältesten Dienste im Internet. Ein Teilnehmer dieses Dienstes versendet mit Hilfe einer Software, dem _E-Mail-Client_, eine Nachricht an einen anderen Teilnehmer. Beim Versenden übergibt der E-Mail-Client die Nachricht an den Internet-Dienst _Simple Mail Transfer Protocol_ (SMTP), der sie – wie die Post einen Brief – im "Briefkasten" des Empfängers deponiert. Dieser Briefkasten befindet sich auf dem E-Mail-Server, den der Empfänger der Nachricht nutzt. Das kann der Server eines öffentlichen E-Mail-Providers wie T-Online, Yahoo oder Google sein, aber auch der E-Mail-Server, der zu Ihrer Website bei einem Hosting-Dienstleister gehört oder den Ihr Unternehmen selbst betreibt. Zu einem E-Mail-Konto gehören eine Reihe von Angaben, auf die wir bei der Einrichtung von Konten in {{ branding.title }} zu sprechen kommen und die Sie dann bereit haben sollten, wenn nicht Ihre benötigten Konten bereits eingerichtet wurden.
 
 Kommen wir zurück zum Vorgang der Zustellung einer E-Mail: Sie landet zunächst, wie schon gesagt, im elektronischen Briefkasten des Empfängers auf dem E-Mail-Server.
 
@@ -25,20 +25,20 @@ Was passiert nun mit der E-Mail, wenn sie beim Server abgeholt wurde? Sie landet
 POP3-Konten (_Post-Office-Protocol Version 3_) verhalten sich wie der gute alte Briefkasten: Wenn die Mail von einem Client abgeholt wird, ist sie auf dem Server verschwunden – der Briefkasten wurde also geleert. Sollte ein weiterer berechtigter Client anfragen, findet er diese E-Mail nicht mehr vor. In den Anfangsjahren des Internets, als alle Teilnehmer in der Regel nur ein Gerät benutzten, mit dem sie im Internet unterwegs waren, war das auch vollkommen ausreichend. Außerdem konnte man so die E-Mails auf seinem Client auch offline lesen.
 
 <!--IMAP-->
-Ganz anders heute: Die meisten Teilnehmer am E-Mail-Verkehr nutzen mehrere internetfähige Geräte und sind mit mindestens einem davon auch immer online: PC, Laptop, Smartphone oder Tablet. Wir stünden also mit einem POP3-E-Mail-Konto vor dem Problem, eine auf dem PC-E-Mail-Client abgerufene Mail auf dem Smartphone nicht lesen bzw. bearbeiten zu können. Abhilfe schaffen hier die sogenannten IMAP-Konten (_Internet Message Access Protocol_): Bei diesem Konto-Typ holt der E-Mail-Client die Nachricht nicht vom Server ab, sondern erzeugt bei sich nur einen Eintrag mit dem Betreff, d.h. er belässt die Originalnachricht auf dem Server. Somit haben andere E-Mail-Clients, wie zum Beispiel das Smartphone, die Chance, die Nachricht ebenfalls zu lesen. Auch das Anlegen von Unterordnern, das Abspeichern von Mails in denselben oder das Löschen von Mails geschieht immer auf dem Server. Das hat den unschätzbaren Vorteil, dass jede Aktion, die von irgendeinem berechtigten E-Mail-Client ausgeführt wird, für alle anderen Mail-Clients ebenfalls gültig ist. Natürlich kann man eine Nachricht nur dann lesen, wenn man mit dem Internet verbunden ist – auch das ist ein Unterschied zum oben genannten POP3-Konto, wo man Mails auch offline lesen kann. Darum haben sich IMAP-Konten erst durchgesetzt, seit Benutzer meist online sind. tine unterstützt ausschließlich IMAP-Konten für den E-Mail-Versand.
+Ganz anders heute: Die meisten Teilnehmer am E-Mail-Verkehr nutzen mehrere internetfähige Geräte und sind mit mindestens einem davon auch immer online: PC, Laptop, Smartphone oder Tablet. Wir stünden also mit einem POP3-E-Mail-Konto vor dem Problem, eine auf dem PC-E-Mail-Client abgerufene Mail auf dem Smartphone nicht lesen bzw. bearbeiten zu können. Abhilfe schaffen hier die sogenannten IMAP-Konten (_Internet Message Access Protocol_): Bei diesem Konto-Typ holt der E-Mail-Client die Nachricht nicht vom Server ab, sondern erzeugt bei sich nur einen Eintrag mit dem Betreff, d.h. er belässt die Originalnachricht auf dem Server. Somit haben andere E-Mail-Clients, wie zum Beispiel das Smartphone, die Chance, die Nachricht ebenfalls zu lesen. Auch das Anlegen von Unterordnern, das Abspeichern von Mails in denselben oder das Löschen von Mails geschieht immer auf dem Server. Das hat den unschätzbaren Vorteil, dass jede Aktion, die von irgendeinem berechtigten E-Mail-Client ausgeführt wird, für alle anderen Mail-Clients ebenfalls gültig ist. Natürlich kann man eine Nachricht nur dann lesen, wenn man mit dem Internet verbunden ist – auch das ist ein Unterschied zum oben genannten POP3-Konto, wo man Mails auch offline lesen kann. Darum haben sich IMAP-Konten erst durchgesetzt, seit Benutzer meist online sind. {{ branding.title }} unterstützt ausschließlich IMAP-Konten für den E-Mail-Versand.
 
-Damit haben wir die wichtigsten Grundlagen geklärt und können uns nun dem E-Mail-Client von tine zuwenden.
+Damit haben wir die wichtigsten Grundlagen geklärt und können uns nun dem E-Mail-Client von {{ branding.title }} zuwenden.
 
 ## Favoriten und E-Mail-Konten
 
 Wie immer finden Sie unter FAVORITEN einige vorgefertigte Ansichten: So erhalten Sie unter Alle markierten Nachrichten eine Aufstellung der E-Mails aller eingerichteten Konten, die als wichtig markiert wurden. Auch die anderen Standard-Ansichten gelten für alle Ihre gültigen E-Mail-Konten und sind damit für eine schnelle Übersicht geeignet. Natürlich können Sie sich beliebige eigene Ansichten als Favoriten schaffen und abspeichern ([Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)).
 <!-- SCREENSHOT -->
-![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_light.png#only-light){.desktop-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_dark.png#only-dark){.desktop-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_light.png#only-light){.mobile-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_dark.png#only-dark){.mobile-img}
 
-Unter E-MAIL-KONTEN finden Sie in einer Baumstruktur die von Ihnen angelegten E-Mail-Konten sowie deren Unterordner. Beachten Sie, dass sich alle diese Ordner auf Ihrem E-Mail-Server befinden. Es gibt immer einige Standardordner, wie Mülleimer, Papierkorb, Spam oder Gesendete Objekte. Manchmal kommt es vor, dass unter einem E-Mail-Konto Ordner mit derselben Funktion, aber verschiedenen Namen existieren, z.B. Gesendete Objekte und Gesendet. Das kann verwirrend sein, jedoch gibt es dafür eine einfache Erklärung: Wie bereits erwähnt, können auf IMAP-Konten mehrere Geräte zugreifen. Dabei kommt es vor, dass Ihr tine-E-Mail-Client und auch Ihr Smartphone selbstständig eigene Standardordner für z.B. gesendete oder gelöschte Nachrichten anlegen und dafür verschiedene Namen verwenden. Abhilfe schafft hier nur die korrekte Einstellung der einzelnen E-Mail-Clients, d.h. das Zuweisen einheitlicher Ordnernamen auf allen beteiligten Geräten. Für tine werden wir das hier erklären; für andere Geräte wie Smartphones empfiehlt es sich, in den entsprechenden Bedienhinweisen oder im Internet nachzulesen. Natürlich kann es auch eine Option sein, verschiedene Ordner ganz bewusst angelegt zu belassen, um etwa später sehen zu können, welche E-Mails von welchem Gerät versendet oder gelöscht wurden. Den Durchblick können Sie sich für diese Fälle wieder über selbstdefinierte Favoriten-Ansichten herstellen.
+Unter E-MAIL-KONTEN finden Sie in einer Baumstruktur die von Ihnen angelegten E-Mail-Konten sowie deren Unterordner. Beachten Sie, dass sich alle diese Ordner auf Ihrem E-Mail-Server befinden. Es gibt immer einige Standardordner, wie Mülleimer, Papierkorb, Spam oder Gesendete Objekte. Manchmal kommt es vor, dass unter einem E-Mail-Konto Ordner mit derselben Funktion, aber verschiedenen Namen existieren, z.B. Gesendete Objekte und Gesendet. Das kann verwirrend sein, jedoch gibt es dafür eine einfache Erklärung: Wie bereits erwähnt, können auf IMAP-Konten mehrere Geräte zugreifen. Dabei kommt es vor, dass Ihr {{ branding.title }}-E-Mail-Client und auch Ihr Smartphone selbstständig eigene Standardordner für z.B. gesendete oder gelöschte Nachrichten anlegen und dafür verschiedene Namen verwenden. Abhilfe schafft hier nur die korrekte Einstellung der einzelnen E-Mail-Clients, d.h. das Zuweisen einheitlicher Ordnernamen auf allen beteiligten Geräten. Für {{ branding.title }} werden wir das hier erklären; für andere Geräte wie Smartphones empfiehlt es sich, in den entsprechenden Bedienhinweisen oder im Internet nachzulesen. Natürlich kann es auch eine Option sein, verschiedene Ordner ganz bewusst angelegt zu belassen, um etwa später sehen zu können, welche E-Mails von welchem Gerät versendet oder gelöscht wurden. Den Durchblick können Sie sich für diese Fälle wieder über selbstdefinierte Favoriten-Ansichten herstellen.
 
 
 ## Die Tabelle
@@ -50,10 +50,10 @@ Fangen wir bei den Navigations-Optionen der Tabelle an. Mit den Symbolen <img sr
 Kommen wir nun kurz zu dem Balken mit der Prozentangabe im rechten Teil direkt über dem Tabellenkopf, unterhalb des Bearbeitungsmenüs; er erscheint allerdings nur, wenn Sie links keinen Favoriten (der ja über mehrere Konten definiert sein kann), sondern explizit den Ordner eines E-Mail-Kontos angewählt haben.
 
 <!-- SCREENSHOT -->
-![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_light.png#only-light){.desktop-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_dark.png#only-dark){.desktop-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_light.png#only-light){.mobile-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_dark.png#only-dark){.mobile-img}
 
 <!--Quota-->
 Die Prozentangabe zeigt Ihnen die Speicherauslastung Ihres IMAP-Kontos an. Wie bereits beschrieben, verbleiben bei einem IMAP-Konto alle E-Mails auf dem E-Mail-Server. Wenn Ihr externer Dienstleister oder auch der Administrator des Firmen-E-Mail-Servers zur Nutzung dieses Kontos aus Ressourcengründen eine maximale Speicherkapazität (_Quota_) festgelegt hat, entspricht die Prozentzahl der Auslastung dieses verfügbaren Speichers. Gelten für Ihr E-Mail-Konto keine solchen Beschränkungen, sehen Sie auch keinen Balken und können die folgende Bemerkung überspringen.
@@ -71,10 +71,10 @@ Standardmäßig benennt der Tabellenkopf die wichtigsten Spalten; wie Sie mit de
 Beachten Sie die beiden kleinen Spalten am linken Rand: Anhänge und Flags. Das graue Büroklammer-Symbol unter Anhänge signalisiert Ihnen, dass diese E-Mail einen Dateianhang besitzt. Unter Flags finden Sie zwei Symbole.
 
 <!-- SCREENSHOT -->
-![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_light.png#only-light){.desktop-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_dark.png#only-dark){.desktop-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_light.png#only-light){.mobile-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_dark.png#only-dark){.mobile-img}
 
 <img src="{{icon_url}}icon_email_answer.svg" alt="drawing" width="16"/>: Diese Mail wurde von Ihnen an einen oder alle Absender beantwortet.
 
@@ -87,10 +87,10 @@ Wir kommen weiter unten detailliert auf diese eben beschriebenen Funktionen zu s
 Ganz rechts im Menü (ungefähr in der Mitte des Bildschirms) finden Sie den Button Konto hinzufügen. Klicken Sie ihn bitte an; auch wenn für Sie bereits E-Mail-Konten vorhanden sind, werden wir hier kurz besprechen, wie man ein solches Konto anlegt.
 
 <!-- SCREENSHOT -->
-![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_light.png#only-light){.desktop-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_light.png#only-light){.mobile-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_dark.png#only-dark){.mobile-img}
 
 Die Bearbeitungsmaske enthält sieben Reiter, wobei nur auf Konto, IMAP, SMTP, Sieve und Andere Einstellungen eingegangen wird, da wir die anderen beiden schon aus dem [Allgemeine Hinweise zur Bedienung - Standard-Bedienalgorithmen im Dialogfenster](ca_StandardBedienhinweise.md/#standard-bedienalgorithmen-im-dialogfenster) kennen.
 
@@ -100,10 +100,10 @@ Ein E-Mail-Konto hat als Pflichteingabefelder den Kontonamen und eine E-Mail Adr
 Darunter finden Sie Signaturposition. Hier haben Sie die Möglichkeit zwischen über dem Zitat und unter dem Zitat zu wählen. Die Bedeutung ist folgende: Bei einer neuen E-Mail erscheint die E-Mail-Signatur, durch eine Leerzeile getrennt, unterhalb der Eingabe. Wenn Sie auf eine erhaltene E-Mail antworten oder eine solche weiterleiten, haben Sie bereits einen Text in Ihrem Mail-Editor – die Ausgangs-Mail oder auch "Zitat" genannt. Dieser Schalter bestimmt die Position Ihrer Signatur: Bei unter dem Zitat erscheint sie an der untersten Stelle der Antwort-Mail, also noch unter dem Zitat. Bei über dem Zitat erscheint sie über dem bereits vorhandenen Text, sodass sie das Ende Ihrer Antwort darstellt und das Zitat darunter steht. Die meisten Benutzer verwenden die Einstellung über dem Zitat, weil damit auf einen Blick das Ende der eigenen Nachricht zu erkennen ist – wenn Sie hier also nicht wissen, was Sie einstellen sollen, wählen Sie diese Option.
 
 <!-- SCREENSHOT -->
-![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_light.png#only-light){.desktop-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_dark.png#only-dark){.desktop-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_light.png#only-light){.mobile-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_dark.png#only-dark){.mobile-img}
 
 Die letzte Funktion in diesem Reiter ist Signaturen. Hier können Sie für Ihre zu versendenden E-Mails eine oder mehrere Signaturen festlegen und entsprechend formatieren.
 
@@ -116,17 +116,17 @@ Kommen wir zum Reiter IMAP: Die Maske enthält als Pflichteingabefeld eine Bezei
 <!--TLS-->
 Beim Port gibt Ihnen die Maske schon zwei Standardeinstellungen vor: `143` als Standard-IMAP-Port und `993` als SSL-Port. SSL steht für _Secure Socket Layer_ und ist ein für E-Mails verwendetes Verschlüsselungsprotokoll. Normalerweise werden E-Mails im Klartext durch das Internet geschickt und sind somit für jeden lesbar. Im Zuge der in der letzten Zeit bekannt gewordenen behördlichen Abhöraktionen sind mehr und mehr E-Mail-Dienstleister dazu übergegangen, verschlüsselte E-Mail-Postfächer anzubieten. Informieren Sie sich bei Ihrem E-Mail-Provider bzw. bei dem für Ihren eigenen E-Mail-Server zuständigen Netzwerkadministrator, ob das anzulegende E-Mail-Konto verschlüsselt mit dem Server kommunizieren kann und welchen Port Sie dafür benutzen müssen.
 
-Unter Sichere Verbindung wird Ihnen ein Pulldown angeboten, in dem Sie die Verschlüsselung einstellen. Neben dem schon erwähnten SSL-Protokoll bietet Ihnen tine auch die neuere Version TLS (_Transport Layer Security_) an.
+Unter Sichere Verbindung wird Ihnen ein Pulldown angeboten, in dem Sie die Verschlüsselung einstellen. Neben dem schon erwähnten SSL-Protokoll bietet Ihnen {{ branding.title }} auch die neuere Version TLS (_Transport Layer Security_) an.
 
 Zuletzt müssen Sie natürlich für die Kommunikation mit Ihrem Posteingangsserver einen Benutzernamen und ein Passwort angeben.
 
 Der Reiter SMTP dient dazu, Einstellungen für den Post__ausgangs__server vorzunehmen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_light.png#only-light){.desktop-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_dark.png#only-dark){.desktop-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_light.png#only-light){.mobile-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_dark.png#only-dark){.mobile-img}
 
 Sie finden hier wieder ein Feld für den Host, z.B. `smtp.example.com`. Analog dem Posteingangsserver müssen Sie wieder einen Port sowie die Art der Verbindung festlegen. Zudem finden Sie hier noch ein Pulldown Authentifizierung. Die möglichen Einstellungen sind Keine, Login oder Klartext. Die richtige Einstellung nennt Ihnen wieder Ihr E-Mail-Provider oder Netzwerkadministrator; im Zweifelsfall stellen Sie Login ein. In den meisten Fällen sind Benutzername und Passwort beim SMTP-Server, wenn überhaupt erforderlich, dieselben wie beim Posteingangsserver. Probieren Sie, nachdem Sie das Konto vollständig erstellt haben, in der Praxis einfach aus, ob eine E-Mail versendet wird, wenn Sie sich hier nicht ganz sicher sind.
 
@@ -136,10 +136,10 @@ Unter dem Reiter Sieve finden Sie die Parameter für den Zugang zum E-Mail-Serve
 Der Reiter Andere Einstellungen dient der Definition und Bezeichnung der oben angesprochenen Unterordner für Ihr IMAP-Konto.
 
 <!-- SCREENSHOT -->
-![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_light.png#only-light){.desktop-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_dark.png#only-dark){.desktop-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_light.png#only-light){.mobile-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_dark.png#only-dark){.mobile-img}
 
 Geben Sie hier die Bezeichnungen ein, die Sie für die reibungslose Funktion Ihres Kontos – v.a. auch die Interaktion verschiedener Geräte – benötigen und stimmen Sie sie gegebenenfalls mit den Einstellungen in diesen Geräten ab.
 
@@ -157,7 +157,7 @@ Hier haben wir die Optionen Ordner hinzufügen, Ordnerliste aktualisieren, Abwes
 Diese Option fügt dem E-Mail-Konto einen Ordner bzw. dem Ordner einen Unterordner hinzu. Da es sich um ein IMAP-Konto handelt, befindet sich ein so angelegter Ordner auf dem E-Mail-Server und ist damit auch auf anderen Geräten sichtbar und benutzbar, auf denen dieses Konto eingerichtet wurde.
 
 ### Ordnerliste aktualisieren
-Da es sich ja um ein IMAP-Konto handelt, können neue Orner auch von anderen E-Mail-Clients aus erstellt werden. Diese Funktion aktualisiert die Ordnerliste in tine.
+Da es sich ja um ein IMAP-Konto handelt, können neue Orner auch von anderen E-Mail-Clients aus erstellt werden. Diese Funktion aktualisiert die Ordnerliste in {{ branding.title }}.
 
 
 <!--Sieve--> <!--Abwesenheitsnotiz-->
@@ -165,49 +165,61 @@ Da es sich ja um ein IMAP-Konto handelt, können neue Orner auch von anderen E-M
 Die Kommunikation des E-Mail-Clients mit seinem Server über die Skriptsprache _Sieve_ haben wir bereits erwähnt. Wenn die Kommunikationsparameter unter dem Reiter Sieve von Ihrem Administrator in den Kontoeigenschaften korrekt eingerichtet wurden, öffnen Sie unter diesem Menüpunkt ein Fenster, in dem Sie eine automatische Abwesenheitsnotiz hinterlegen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/8_email_konto_kontextmenu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/8_email_konto_kontextmenu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/8_email_konto_kontextmenu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/8_email_konto_kontextmenu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/18_email_konto_kontextmenu_light.png#only-light){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/18_email_konto_kontextmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/18_email_konto_kontextmenu_light.png#only-light){.mobile-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/18_email_konto_kontextmenu_dark.png#only-dark){.mobile-img}
 
 Hier finden Sie unter Allgemein -> Status ein Pulldown mit zwei Einstellungen: Ich bin verfügbar (Abwesenheitsnotiz inaktiv) und Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv) vor. Stellen Sie es auf Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv), so erhält der Absender einer E-Mail an Sie von Ihrem E-Mail-Server eine Notiz. Den Text dieser Notiz geben Sie in das Freifeld ein und schließen Ihre Eingabe mit Ok ab.
 
-<!-- SCREENSHOT Abbildung 4.9 -->
-![Abbildung: Abwesenheitsnotiz setzen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/10_email_abwesenheitsnotiz_light.png#only-light){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/10_email_abwesenheitsnotiz_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/10_email_abwesenheitsnotiz_light.png#only-light){.mobile-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/10_email_abwesenheitsnotiz_dark.png#only-dark){.mobile-img}
 
 Über Erweitert -> Nur alle X Tage an den gleichen Absender schicken, das standardmäßig mit 1 ausgefüllt ist, verhindern Sie, dass derselbe Absender von Ihren automatischen Nachrichten belästigt wird. Sollte er mehrere E-Mails an einem Tag an Sie schicken, so erhält er nur auf die erste Ihre Abwesenheitsnotiz. Sie können das Intervall natürlich auch vergrößern.
 
 !!! note "Anmerkung"
-    Wenn eine Abwesenheitsnotiz aktiviert wurde, erscheint bei jedem Start von tine eine kurze Benachrichtigung darüber, bevor das eigentliche Programm startet.
+    Wenn eine Abwesenheitsnotiz aktiviert wurde, erscheint bei jedem Start von {{ branding.title }} eine kurze Benachrichtigung darüber, bevor das eigentliche Programm startet.
   
-    Wenn Sie wollen, können sie eine vorgefertigte Abwesenheitsnotiz für alle tine-User als Template hinterlegen. Diese wird in der Konfiguration abgelegt.
+    Wenn Sie wollen, können sie eine vorgefertigte Abwesenheitsnotiz für alle {{ branding.title }}-User als Template hinterlegen. Diese wird in der Konfiguration abgelegt.
 
 ### Filterregeln bearbeiten
 
 <!--E-Mail-Filterregeln-->
-Über das eben angesprochene Kontextmenü erreichen Sie mit Filterregeln bearbeiten eine Tabelle mit den evtl. eingestellten Filterregeln für den E-Mail-Empfang. Auch diese Funktion geht vom E-Mail-Server aus und ist daher auf das korrekte Funktionieren der Sieve-Skript-Übermittlung von tine an den Server angewiesen.
+Über das eben angesprochene Kontextmenü erreichen Sie mit Filterregeln bearbeiten eine Tabelle mit den evtl. eingestellten Filterregeln für den E-Mail-Empfang. Auch diese Funktion geht vom E-Mail-Server aus und ist daher auf das korrekte Funktionieren der Sieve-Skript-Übermittlung von {{ branding.title }} an den Server angewiesen.
 
-<!-- SCREENSHOT Abbildung 4.10 -->
-![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_desktop }}EMail/11_email_empfangsfilter_light.png#only-light){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_desktop }}EMail/11_email_empfangsfilter_dark.png#only-dark){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_mobile }}EMail/11_email_empfangsfilter_light.png#only-light){.mobile-img}
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_mobile }}EMail/11_email_empfangsfilter_dark.png#only-dark){.mobile-img}
 
 Wenn die Anzahl der Regeln die Größe des Tabellenfensters übersteigt, können Sie mit den Pfeilbuttons in den Tabellenzeilen blättern. Nach Markierung einer Filterregel stehen Ihnen die Funktionen Regel bearbeiten und Regel löschen zur Verfügung. Drucke Seite erzeugt einen Ausdruck der gespeicherten Filterregeln.
 
 Wir wollen uns nun das Anlegen bzw. Bearbeiten von Filterregeln näher ansehen. Klicken Sie dazu ganz links im Bearbeitungsmenü des Filterregelfensters den Button Regel hinzufügen. Es öffnet sich ein weiteres Fenster (siehe folgende Abbildung).
 
-<!-- SCREENSHOT Abbildung 4.11 -->
-![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_desktop }}EMail/12_email_filterregeln_editieren_light.png#only-light){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_desktop }}EMail/12_email_filterregeln_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_mobile }}EMail/12_email_filterregeln_editieren_light.png#only-light){.mobile-img}
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_mobile }}EMail/12_email_filterregeln_editieren_dark.png#only-dark){.mobile-img}
 
 Im oberen Bereich finden Sie eine Zeile Wende Filter an, wenn: Mit dem daneben befindlichen Pulldown wählen Sie, ob der Filter anzuwenden ist, wenn alle Bedingungen erfüllt sind oder wenn mindestens eine Bedingung erfüllt ist. In der Zeile darunter definieren Sie die Bedingungen.
 
-<!-- SCREENSHOT Abbildung 4.12 -->
-![Abbildung: Bedingung zum Filtern auswählen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_desktop }}EMail/13_email_filterregeln_auswahl_light.png#only-light){.desktop-img}
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_desktop }}EMail/13_email_filterregeln_auswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_mobile }}EMail/13_email_filterregeln_auswahl_light.png#only-light){.mobile-img}
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_mobile }}EMail/13_email_filterregeln_auswahl_dark.png#only-dark){.mobile-img}
 
 Sie können also explizit E-Mail-Adressen und/oder Namen angeben wie auch Zeichenketten aus der Betreffzeile, die E-Mail-Größe oder Ausdrücke aus dem E-Mail-Header[^2]. Je nachdem, welches Filterkriterium Sie ausgewählt haben, präsentieren sich der in der Mitte der Zeile befindliche Operator sowie das rechte Eingabefeld verschieden. Das Prinzip dieser Filter ist Ihnen bereits vom Adressbuch bekannt ([Adressverwaltung - Kontakte filtern](ba_Adressbuch.md/#kontakte-filtern)). Ziehen Sie ggf. vor dem Definieren von Filtern einen im Umgang mit E-Mails und insbesondere mit Spam erfahrenen Administrator zu Rate.
 
 [^2]:
     Eine E-Mail besteht immer aus _Header_ (Kopfzeile) und _Body_ (dem eigentlichen Inhalt der Nachricht). Der Header enthält als Pflichtangabe lediglich eine Absenderangabe und das Datum der Erstellung. Darüber hinaus kann der Header eine Reihe optionaler Angaben enthalten: den Weg, den die E-Mail genommen hat, Format des Inhalts, Angaben zu den Empfängern u.ä.
 
-Was soll aber nun mit den eingehenden E-Mails geschehen, auf die unsere Filterkriterien zutreffen? tine bietet Ihnen dazu die folgenden vier Optionen:
+Was soll aber nun mit den eingehenden E-Mails geschehen, auf die unsere Filterkriterien zutreffen? {{ branding.title }} bietet Ihnen dazu die folgenden vier Optionen:
 
 E-Mail in Ordner verschieben
 <div style="margin-left: 40px">
@@ -233,8 +245,11 @@ Nachricht mit folgendem Text beantworten
 beantwortet die E-Mail mit dem angegebenen Text. 
 </div>
 
-<!-- SCREENSHOT Abbildung 4.13 -->
-![Abbildung 4.13: Filter-Aktion auswählen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahl_light.png#only-light){.desktop-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahl_light.png#only-light){.mobile-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahl_dark.png#only-dark){.mobile-img}
 
 !!! info "Wichtig"
     Die Filterregeln E-Mail mit folgendem Text ablehnen und E-Mail verwerfen stehen über einer Abwesenheitsbenachrichtigung: Haben Sie die Filterregel E-Mail mit folgendem Text ablehnen und/oder E-Mail verwerfen definiert, wird ein Absender, auf den die jeweilige Regel zutrifft, im Falle der ebenfalls definierten Abwesenheitsbenachrichtigung keine solche erhalten.
@@ -245,17 +260,17 @@ Mit dem Menüpunkt Konto bearbeiten rufen Sie die gleiche Bearbeitungsmaske wie 
 
 ### Konto löschen
 
-Damit wird, nach einer Sicherheitsabfrage, das E-Mail-Konto in tine gelöscht. Auf dem E-Mail-Server existiert das Konto weiter, mit allen seinen Ordnern und den dort gespeicherten Nachrichten.
+Damit wird, nach einer Sicherheitsabfrage, das E-Mail-Konto in {{ branding.title }} gelöscht. Auf dem E-Mail-Server existiert das Konto weiter, mit allen seinen Ordnern und den dort gespeicherten Nachrichten.
 
 ### Weitere Kontextmenüs
 
 <!-- SCREENSHOT -->
-![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_light.png#only-light){.desktop-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_light.png#only-light){.mobile-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_dark.png#only-dark){.mobile-img}
 
-Bei den sogenannten _Standardordnern_, die fettgedruckt und unabdingbarer Bestandteil von IMAP-Konten sind (i.d.R. Posteingang und Mülleimer), werden die letzten beiden Menüpunkte nicht angeboten, da Sie die Berechtigungen für diese Funktionen von tine aus nicht haben. Stattdessen gibt es beim Mülleimer die Funktion Ordner leeren.
+Bei den sogenannten _Standardordnern_, die fettgedruckt und unabdingbarer Bestandteil von IMAP-Konten sind (i.d.R. Posteingang und Mülleimer), werden die letzten beiden Menüpunkte nicht angeboten, da Sie die Berechtigungen für diese Funktionen von {{ branding.title }} aus nicht haben. Stattdessen gibt es beim Mülleimer die Funktion Ordner leeren.
 
 Ordner als gelesen markieren
 <div style="margin-left: 40px">
@@ -281,12 +296,15 @@ löscht nur selbst angelegte Unterordner von Standardordnern. Dazu erhalten Sie 
 
 Zum Verfassen einer E-Mail müssen Sie zunächst das Konto auswählen, von dem aus Sie die E-Mail versenden wollen. Dazu klicken Sie einfach links neben der Tabelle auf eines der angelegten E-Mail-Konten. Wenn Sie nun im Bearbeitungsmenü auf Verfassen klicken, öffnet sich die entsprechende Maske mit dem automatisch eingestellten Absender:
 
-<!-- SCREENSHOT Abbildung 4.15 -->
-![Abbildung: Eine E-Mail verfassen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Eine E-Mail verfassen]({{ img_url_desktop }}EMail/15_email_neue_email_light.png#only-light){.desktop-img}
+![Abbildung: Eine E-Mail verfassen]({{ img_url_desktop }}EMail/15_email_neue_email_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine E-Mail verfassen]({{ img_url_mobile }}EMail/15_email_neue_email_light.png#only-light){.mobile-img}
+![Abbildung: Eine E-Mail verfassen]({{ img_url_mobile }}EMail/15_email_neue_email_dark.png#only-dark){.mobile-img}
 
-Zunächst werden Sie auf das Pflichteingabefeld An hingewiesen. Sie haben hier mehrere Möglichkeiten, E-Mail-Adressen einzugeben: Sie können einfach mit Schreiben beginnen (mindestens drei Zeichen), während tine für Sie nach der passenden E-Mail-Adresse in den gespeicherten Kontakten sucht und entsprechende Vorschläge macht. Wählen Sie mit Mausklick oder Pfeiltasten aus, oder – falls die gewünschte Adresse nicht unter Ihren Kontakten ist – schreiben Sie die E-Mail-Adresse vollständig. Eine andere Variante ist, die Pulldown-Funktion dieses Feldes zu nutzen. Hier werden Ihnen alle für Sie gültigen gespeicherten Kontakte in alphabetischer Reihenfolge angezeigt. Mit den Pfeiltasten können Sie vor- und zurückblättern. Wenn das Feld durch Auto-Vervollständigung eine fertige E-Mail-Adresse enthält, wird Ihnen automatisch ein zweites Feld An darunter angeboten. Sie können so die E-Mail an beliebig viele Empfänger verschicken. Im Falle, dass Sie eine dem System bisher unbekannte E-Mail-Adresse eingegeben haben, wird Ihnen nicht von allein ein neues An-Feld angeboten. Drücken Sie in diesem Fall einfach einmal die Enter-Taste, wenn Sie noch einen Adressaten eingeben müssen. Neben dem Hinzufügen einzelner E-Mail-Adressen, können Sie auch vorab definierte Gruppen hinzufügen. Dies empfiehlt sich, wenn Sie häufiger an die gleiche Personengruppe eine E-Mail verfassen wollen. Wie Gruppen eingerichtet werden, erfahren Sie im Abschnitt [Adressverwaltung - Gruppen](ba_Adressbuch.md/#gruppen).
+Zunächst werden Sie auf das Pflichteingabefeld An hingewiesen. Sie haben hier mehrere Möglichkeiten, E-Mail-Adressen einzugeben: Sie können einfach mit Schreiben beginnen (mindestens drei Zeichen), während {{ branding.title }} für Sie nach der passenden E-Mail-Adresse in den gespeicherten Kontakten sucht und entsprechende Vorschläge macht. Wählen Sie mit Mausklick oder Pfeiltasten aus, oder – falls die gewünschte Adresse nicht unter Ihren Kontakten ist – schreiben Sie die E-Mail-Adresse vollständig. Eine andere Variante ist, die Pulldown-Funktion dieses Feldes zu nutzen. Hier werden Ihnen alle für Sie gültigen gespeicherten Kontakte in alphabetischer Reihenfolge angezeigt. Mit den Pfeiltasten können Sie vor- und zurückblättern. Wenn das Feld durch Auto-Vervollständigung eine fertige E-Mail-Adresse enthält, wird Ihnen automatisch ein zweites Feld An darunter angeboten. Sie können so die E-Mail an beliebig viele Empfänger verschicken. Im Falle, dass Sie eine dem System bisher unbekannte E-Mail-Adresse eingegeben haben, wird Ihnen nicht von allein ein neues An-Feld angeboten. Drücken Sie in diesem Fall einfach einmal die Enter-Taste, wenn Sie noch einen Adressaten eingeben müssen. Neben dem Hinzufügen einzelner E-Mail-Adressen, können Sie auch vorab definierte Gruppen hinzufügen. Dies empfiehlt sich, wenn Sie häufiger an die gleiche Personengruppe eine E-Mail verfassen wollen. Wie Gruppen eingerichtet werden, erfahren Sie im Abschnitt [Adressverwaltung - Gruppen](ba_Adressbuch.md/#gruppen).
 
-Das nächste Feld ist der Betreff. Er ist kein Pflichtfeld; beachten Sie jedoch, dass ein E-Mail-Betreff zum guten Ton im Internet gehört und dem Empfänger die Orientierung im E-Mail-Postfach erleichtert. Fehlt der Betreff, wird tine Sie beim Absenden fragen, ob Sie die Mail ohne Betreff absenden möchten.
+Das nächste Feld ist der Betreff. Er ist kein Pflichtfeld; beachten Sie jedoch, dass ein E-Mail-Betreff zum guten Ton im Internet gehört und dem Empfänger die Orientierung im E-Mail-Postfach erleichtert. Fehlt der Betreff, wird {{ branding.title }} Sie beim Absenden fragen, ob Sie die Mail ohne Betreff absenden möchten.
 
 Unter der Betreffzeile finden Sie auf der rechten Seite das Feld Signatur, wo Sie, sofern Sie mehrere Signaturen angelegt haben, zwischen diesen auswählen können. Auf der linken Seite finden Sie eine Reihe mit typischen Texteditor-Einstellungen[^3] und darunter das eigentliche Textfeld.
 
@@ -301,8 +319,11 @@ Als Erstes wäre da das X-Icon mit Abbrechen. Dieses ist selbsterklärend. Beim 
 
 Sehr effektiv ist die Funktion Suche Empfänger: Beim Anklicken dieses Buttons wird Ihnen in einem separaten Fenster der komplette Adressbuchdialog mit den Filterfunktionen eingeblendet:
 
-<!-- SCREENSHOT Abbildung 4.16 -->
-![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_desktop }}EMail/16_email_auswahl_empfaenger_light.png#only-light){.desktop-img}
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_desktop }}EMail/16_email_auswahl_empfaenger_dark.png#only-dark){.desktop-img}
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_mobile }}EMail/16_email_auswahl_empfaenger_light.png#only-light){.mobile-img}
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_mobile }}EMail/16_email_auswahl_empfaenger_dark.png#only-dark){.mobile-img}
 
 <!--cc-->
 <!--bcc-->
@@ -316,7 +337,7 @@ Zurück zu unserem Fenster: Im linken Teil sehen Sie unter den Adressbüchern vi
 Schließen Sie nun das Empfängerfenster. Im Fenster E-Mail verfassen gibt es noch weitere Funktionen: Der Button Als Entwurf speichern versendet die E-Mail nicht, sondern speichert sie im Ordner Entwürfe auf Ihrem E-Mail-Server. Desgleichen der Button Als Vorlage speichern: hier wird der Ordner Vorlagen oder auch Templates benutzt. Für beide Ordnernamen sehen Sie in den Kontoeigenschaften unter Andere Einstellungen nach ([Das Bearbeitungsmenü](ea_EMail.md/#das-bearbeitungsmenu)). Nachricht speichern als bietet eine weitere Möglichkeit die Nachricht zu speichern. Hier können Sie entweder den Ort im Dateimanager aussuchen oder Sie speichern die Nachricht als Anhang in einer anderen Anwendung.
 
 !!! tip "Tipp"
-    Der Button Als Entwurf Speichern ist nur einer von zwei Wegen, wie man die E-Mail als Entwurf speichern kann. tine verfügt auch über eine Auto-Save-Funktion. Sollten Sie also eine E-Mail anfangen zu schreiben, wird diese automatisch auch als Entwurf abgespeichert. Dieser Auto-Save-Entwurf wird nach dem E-Mail-Versand gelöscht, sofern er nicht anderweitig gespeichert wurde.
+    Der Button Als Entwurf Speichern ist nur einer von zwei Wegen, wie man die E-Mail als Entwurf speichern kann. {{ branding.title }} verfügt auch über eine Auto-Save-Funktion. Sollten Sie also eine E-Mail anfangen zu schreiben, wird diese automatisch auch als Entwurf abgespeichert. Dieser Auto-Save-Entwurf wird nach dem E-Mail-Versand gelöscht, sofern er nicht anderweitig gespeichert wurde.
 
 Mit dem Button Lesebestätigung erhält die versendete E-Mail eine Zusatzfunktion, die den Empfänger beim Öffnen der E-Mail fragt, ob er eine Empfangsbestätigung an den Absender senden will.
 
@@ -325,15 +346,18 @@ Zuletzt der Punkt Massen-Mail. Wird diese Funktion aktiviert, bekommt jeder Empf
 ### E-Mail verschlüsseln
 
 Um diese Option zu nutzen, müssen zwei Einstellungen vorher eingerichtet sein.
-1. Sie müssen das "Mailvelope"-Plug-In installieren. Dieses steht für die Browser "Chrome" und "Firefox" auf der offiziellen Mailvelope-Webseite (https://www.mailvelope.com/de) zur Verfügung. Hier finden Sie auch die entsprechende Installationsanleitung. Mailvelope ist ein Verschlüsselungsdienst, welcher direkt in tine eingebunden wurde.
+1. Sie müssen das "Mailvelope"-Plug-In installieren. Dieses steht für die Browser "Chrome" und "Firefox" auf der offiziellen Mailvelope-Webseite (https://www.mailvelope.com/de) zur Verfügung. Hier finden Sie auch die entsprechende Installationsanleitung. Mailvelope ist ein Verschlüsselungsdienst, welcher direkt in {{ branding.title }} eingebunden wurde.
 2. Sie müssen Ihre Domain autorisieren. Wichtig ist das Sie "API" aktivieren.
 
 Sind beide dieser Einstellungen gegeben, können Sie Ihre ausgehenden und eingehenden E-Mails verschlüsseln.
 
 Wie Sie wahrscheinlich schon selbst entdeckt haben, haben Sie nun eine neue Funktion im oberen Bereich des Nachricht verfassen-Fensters; Nachricht verschlüsseln.
 
-<!-- SCREENSHOT Abbildung 4.17 -->
-![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_desktop }}EMail/19_email_nachricht_verschluesseln_light.png#only-light){.desktop-img}
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_desktop }}EMail/19_email_nachricht_verschluesseln_dark.png#only-dark){.desktop-img}
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_mobile }}EMail/19_email_nachricht_verschluesseln_light.png#only-light){.mobile-img}
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_mobile }}EMail/19_email_nachricht_verschluesseln_dark.png#only-dark){.mobile-img}
 
 Durch das Anklicken dieser Funktion wird Mailvelope automatisch gestartet. Um diese verschlüsselte Nachricht lesen zu können, muss der Empfänger die Verschlüsselungsfunktion ebenfalls aktiviert haben.
 
@@ -345,10 +369,10 @@ Durch das Anklicken dieser Funktion wird Mailvelope automatisch gestartet. Um di
 Diese Funktionen können Sie, bis auf Nachricht drucken, statt über das Bearbeitungsmenü auch mit einem Rechtsklick auf die betreffende E-Mail über das Kontextmenü aufrufen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_light.png#only-light){.desktop-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_dark.png#only-dark){.desktop-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_light.png#only-light){.mobile-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_dark.png#only-dark){.mobile-img}
 
 ### Löschen
 
@@ -367,7 +391,7 @@ Allen antworten versendet die Antwort-E-Mail nicht nur an den Absender, sondern 
 Diese Funktion öffnet ebenfalls ein neues E-Mail-Fenster mit dem Zitat einer bereits geöffneten oder markierten E-Mail. Hierbei bleibt jedoch der Eintrag An frei. Sie können, wie bei einer neu zu schreibenden E-Mail, einen oder mehrere Empfänger frei wählen, an den oder die Sie die E-Mail weiterleiten.
 
 !!! note "Anmerkung"
-    Standardmäßig wird beim Weiterleiten einer E-Mail die Original-E-Mail immer in eine .eml-Message (auch bekannt als RFC822-Attachment) verpackt. In tine kann man durch Klick auf den .eml-Anhang ebenfalls die weitergeleitete E-Mail inklusive ihrer Anhänge öffnen. Sofern man E-Mails in einem Standard-Mailprogramm liest, kann man durch ein erneutes Klicken auf die .eml Datei auch wieder auf die eingebetteten Anhänge zugreifen.
+    Standardmäßig wird beim Weiterleiten einer E-Mail die Original-E-Mail immer in eine .eml-Message (auch bekannt als RFC822-Attachment) verpackt. In {{ branding.title }} kann man durch Klick auf den .eml-Anhang ebenfalls die weitergeleitete E-Mail inklusive ihrer Anhänge öffnen. Sofern man E-Mails in einem Standard-Mailprogramm liest, kann man durch ein erneutes Klicken auf die .eml Datei auch wieder auf die eingebetteten Anhänge zugreifen.
   
     Wenn das Verhalten unerwartet sein sollte oder ein Benutzer das gern geändert hätte, ist dies in den Benutzereinstellungen änderbar. Hierfür navigieren Sie zu Benutzer -> Einstellungen dort dann auf E-Mail - .eml Dateianhang in weitergeleiteten Mails aus. Ändern Sie dort die Einstellung auf Nein. Nun werden die Anhänge beim Weiterleiten wieder einzeln an die Mail angehängt, so als würden Sie eine neue E-Mail schreiben.
 
@@ -377,54 +401,63 @@ Nachricht drucken öffnet das Drucker-Auswahlmenü Ihres Betriebssystems; Sie k�
 
 ### Nachricht speichern als
 
-Diese Funktion bietet mehrere Möglichkeiten. tine erkennt, sofern der Kontakt im Adressbuch vorhanden ist, wer Ihnen die Mail geschrieben hat. So sollten Sie, wenn Sie auf Nachricht speichern als klicken, zuerst den Namen des Kontaktes sehen. Klicken Sie auf diesen, wird die E-Mail als E-Mail-Notiz gespeichert. Mit Dateimanager kann man die E-Mail im vorhandenen Dateimanager abspeichern. Der Punkt Anhang bietet die Möglichkeit, eine Verknüpfung zwischen der E-Mail und einer anderen tine-Applikation zu erstellen. Zuletzt Herunterladen. Dies ermöglicht das Herunterladen der E-Mail lokal auf den Computer.
+Diese Funktion bietet mehrere Möglichkeiten. {{ branding.title }} erkennt, sofern der Kontakt im Adressbuch vorhanden ist, wer Ihnen die Mail geschrieben hat. So sollten Sie, wenn Sie auf Nachricht speichern als klicken, zuerst den Namen des Kontaktes sehen. Klicken Sie auf diesen, wird die E-Mail als E-Mail-Notiz gespeichert. Mit Dateimanager kann man die E-Mail im vorhandenen Dateimanager abspeichern. Der Punkt Anhang bietet die Möglichkeit, eine Verknüpfung zwischen der E-Mail und einer anderen {{ branding.title }}-Applikation zu erstellen. Zuletzt Herunterladen. Dies ermöglicht das Herunterladen der E-Mail lokal auf den Computer.
 
-Besonders mächtig wird diese Funktion, wenn es sich um Gruppen-Mails handelt. Wird eine E-Mail an mehrere tine-Usern geschickt, muss nur einer der User diese ablegen. Die E-Mail wird mit <img src="{{icon_url}}icon_download.svg" alt="drawing" width="16"/> gekennzeichnet, so das alle anderen User sehen, dass die E-Mail bereits abgelegt ist. Bewegt man die Maus über das Symbol, wird sichtbar, wo die E-Mail abgelegt wurde. Sollte der E-Mail-Verkehr weiter gehen und eine spätere E-Mail auch abgelegt werden, schlägt tine den vorherigen Speicherort automatisch vor.
+Besonders mächtig wird diese Funktion, wenn es sich um Gruppen-Mails handelt. Wird eine E-Mail an mehrere {{ branding.title }}-Usern geschickt, muss nur einer der User diese ablegen. Die E-Mail wird mit <img src="{{icon_url}}icon_download.svg" alt="drawing" width="16"/> gekennzeichnet, so das alle anderen User sehen, dass die E-Mail bereits abgelegt ist. Bewegt man die Maus über das Symbol, wird sichtbar, wo die E-Mail abgelegt wurde. Sollte der E-Mail-Verkehr weiter gehen und eine spätere E-Mail auch abgelegt werden, schlägt {{ branding.title }} den vorherigen Speicherort automatisch vor.
 
 ### (Un)gelesen markieren
 
-Kommen wir zu (Un)gelesen markieren. Dieser Button schaltet eine markierte ungelesene E-Mail auf "gelesen" und eine gelesene auf "ungelesen". Praktisch erkennen Sie das in der Tabellenzeile von tine als an- oder ausgeschalteten Fettdruck.
+Kommen wir zu (Un)gelesen markieren. Dieser Button schaltet eine markierte ungelesene E-Mail auf "gelesen" und eine gelesene auf "ungelesen". Praktisch erkennen Sie das in der Tabellenzeile von {{ branding.title }} als an- oder ausgeschalteten Fettdruck.
 
 ### Markierung an/aus
 
-Mit diesem Button erhält eine ausgewählte E-Mail eine Markierung. Diese Markierung soll die E-Mail für den Empfänger als besonders wichtig hervorheben. In tine erscheint die Betreffzeile der E-Mail daraufhin in der Tabellenzeile als roter Text; andere E-Mail-Clients arbeiten mit anderen Markierungen.
+Mit diesem Button erhält eine ausgewählte E-Mail eine Markierung. Diese Markierung soll die E-Mail für den Empfänger als besonders wichtig hervorheben. In {{ branding.title }} erscheint die Betreffzeile der E-Mail daraufhin in der Tabellenzeile als roter Text; andere E-Mail-Clients arbeiten mit anderen Markierungen.
 
-## tine und der Spam
+## {{ branding.title }} und der Spam
 
 ### Ordner
 
-Alle Mitarbeiter haben unterhalb des Posteingangs einen SPAM und HAM Ordner (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind). Sofern diese dort nicht angezeigt werden, liegt das daran, dass bisher keine E-Mail als SPAM bzw. HAM gekennzeichnet wurde. Beim erstmaligen Markieren von SPAM oder HAM legt tine diese Ordner automatisch an. Diese Ordner sind speziell für das Training des Filters gedacht, deshalb werden alle Mails, die in diese Ordner verschoben wurden, anschließend unwiederruflich gelöscht. Das gilt sowohl für SPAM als auch für HAM. tine untersucht jede E-Mail auf SPAM-auffällige Eigenschaften und bewertet diese entsprechend mit einem Score. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert tine die Mail als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist tine die E-Mail ab.
+Alle Mitarbeiter haben unterhalb des Posteingangs einen SPAM und HAM Ordner (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind). Sofern diese dort nicht angezeigt werden, liegt das daran, dass bisher keine E-Mail als SPAM bzw. HAM gekennzeichnet wurde. Beim erstmaligen Markieren von SPAM oder HAM legt {{ branding.title }} diese Ordner automatisch an. Diese Ordner sind speziell für das Training des Filters gedacht, deshalb werden alle Mails, die in diese Ordner verschoben wurden, anschließend unwiederruflich gelöscht. Das gilt sowohl für SPAM als auch für HAM. {{ branding.title }} untersucht jede E-Mail auf SPAM-auffällige Eigenschaften und bewertet diese entsprechend mit einem Score. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert {{ branding.title }} die Mail als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist {{ branding.title }} die E-Mail ab.
 
 ### Kein Spam
 
-<!-- SCREENSHOT Abbildung 4.19 -->
-![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_desktop }}EMail/20_email_kontextmenue_spam_ham_light.png#only-light){.desktop-img}
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_desktop }}EMail/20_email_kontextmenue_spam_ham_dark.png#only-dark){.desktop-img}
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_mobile }}EMail/20_email_kontextmenue_spam_ham_light.png#only-light){.mobile-img}
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_mobile }}EMail/20_email_kontextmenue_spam_ham_dark.png#only-dark){.mobile-img}
 
 Im Kontextmenü sollten Sie die Unterpunkte [Es ist SPAM] und [Kein SPAM] finden. Hiermit können Sie E-Mails als SPAM markieren oder umgekehrt SPAM markierte Mails als „kein SPAM“ markieren. Beim Klassifizieren sollten Sie ein wenig Vorsicht walten lassen. So verlockend es auch ist, jede uninteressante Mail automatisch ausfiltern zu lassen, kann das auch unliebsame Konsequenzen haben, wenn Sie dem Filter falsche Parameter „beibringen“. Dann landen schnell auch legitime Mails im Spam-Ordner oder werden im schlimmsten Fall direkt abgewiesen. Ein Tipp: Oft kann man ungewünschte Mail-Fluten eindämmen, indem man sich von Newsletter-Diensten abmeldet. Dafür gibt es am Ende der Mail einen Link mit „unsubscribe“, „abmelden“ oder ähnlich. Nutzen Sie besser diese Möglichkeit, anstatt den Spam-Filter falsch zu trainieren.
 
 ### Automatische Erkennung
 
-Neben dieser manuellen Möglichkeit der SPAM/HAM-Markierung hat tine auch eine automatische Erkennung.
+Neben dieser manuellen Möglichkeit der SPAM/HAM-Markierung hat {{ branding.title }} auch eine automatische Erkennung.
 
-<!-- SCREENSHOT Abbildung 4.20 -->
-![Abbildung: Automatische Erkennung von SPAM]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_desktop }}EMail/21_email_spam_message_light.png#only-light){.desktop-img}
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_desktop }}EMail/21_email_spam_message_dark.png#only-dark){.desktop-img}
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_mobile }}EMail/21_email_spam_message_light.png#only-light){.mobile-img}
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_mobile }}EMail/21_email_spam_message_dark.png#only-dark){.mobile-img}
 
-Auf der rechten Seite der SPAM markierten E-Mail haben Sie die Möglichkeit diese Einschätzung von tine zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“, bereinigt tine den Betreff, sodass die Spam-Meldung verschwindet.
+Auf der rechten Seite der SPAM markierten E-Mail haben Sie die Möglichkeit diese Einschätzung von {{ branding.title }} zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“, bereinigt {{ branding.title }} den Betreff, sodass die Spam-Meldung verschwindet.
 
-<!-- SCREENSHOT Abbildung 4.21 -->
-![Abbildung 4.21: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url }})
+<!-- SCREENSHOT -->
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_desktop }}EMail/22_email_kein_spam_light.png#only-light){.desktop-img}
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_desktop }}EMail/22_email_kein_spam_dark.png#only-dark){.desktop-img}
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_mobile }}EMail/22_email_kein_spam_light.png#only-light){.mobile-img}
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_mobile }}EMail/22_email_kein_spam_dark.png#only-dark){.mobile-img}
 
-### tine lernt
+### {{ branding.title }} lernt
 
-tine lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt den Algorithmus entsprechend an. So ist es von Vorteil, die SPAM-Vorschläge zu bestätigen oder zu verneinen, insbesondere bei den fälschlich identifizierten. Denn je mehr „Futter“ tine bekommt, desto besser wird tine mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
+{{ branding.title }} lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt den Algorithmus entsprechend an. So ist es von Vorteil, die SPAM-Vorschläge zu bestätigen oder zu verneinen, insbesondere bei den fälschlich identifizierten. Denn je mehr „Futter“ {{ branding.title }} bekommt, desto besser wird {{ branding.title }} mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
 
 ### Externe Mailprogramme
 
-Falls die E-Mails nicht direkt in tine verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
+Falls die E-Mails nicht direkt in {{ branding.title }} verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
 
 * Die Ordner SPAM und HAM unterhalb der INBOX (auf Deutsch „Posteingang“)
   anlegen.
 * SPAM-Mails in den Ordner SPAM verschieben.
 * HAM-Mails in den Ordner HAM kopieren. Auf das „Säubern“ des Betreffs muss man dann allerdings verzichten.
 
-In dem Fall, dass die Ordner SPAM/HAM bereits von tine angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-MailProgramm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
+In dem Fall, dass die Ordner SPAM/HAM bereits von {{ branding.title }} angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-MailProgramm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
