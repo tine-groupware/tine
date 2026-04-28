@@ -11,10 +11,13 @@
  */
 class Tinebase_Http_CC_CurlRequest
 {
+    public ?float $timeStarted = null;
+
     public function __construct(
         public string $uri,
         public string $clusterKey = '',
-        public ?bool $returnCurlGetInfo = null
+        public ?bool $returnCurlGetInfo = null,
+        public ?float $timeout = null
     ) {}
 
     public function createCurlHandle(): false|CurlHandle

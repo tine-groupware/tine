@@ -573,11 +573,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo merge overlapping events to one freebusy entry
      * 
      * @param  Calendar_Model_EventFilter                           $_periods
-     * @param  Tinebase_Record_RecordSet                            $_attendee
-     * @param  array                                                $_ignoreUIDs
-     * @return Tinebase_Record_RecordSet of Calendar_Model_FreeBusy
+     * @param  Tinebase_Record_RecordSet<Calendar_Model_Attender>   $_attendee
+     * @param  array<int, string>                                   $_ignoreUIDs
+     * @return Tinebase_Record_RecordSet<Calendar_Model_FreeBusy>
      */
-    public function getFreeBusyInfo($_periods, $_attendee, $_ignoreUIDs = array())
+    public function getFreeBusyInfo(Calendar_Model_EventFilter $_periods, Tinebase_Record_RecordSet $_attendee, array $_ignoreUIDs = [], bool $_getExternal = false)
     {
         $fbInfoSet = new Tinebase_Record_RecordSet('Calendar_Model_FreeBusy');
         

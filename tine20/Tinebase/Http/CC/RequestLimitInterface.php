@@ -9,8 +9,10 @@
  * @copyright   Copyright (c) 2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
-interface Tinebase_Http_CC_ClusterLimitInterface
+interface Tinebase_Http_CC_RequestLimitInterface
 {
+    public function hasFreeCapacity(): bool;
     public function checkKey(string $key): bool;
     public function freeKey(string $key): void;
+    public function reset(): void;
 }
