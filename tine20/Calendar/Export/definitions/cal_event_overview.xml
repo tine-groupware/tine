@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Calendar_Model_Event</model>
+    <name>cal_event_overview_xls</name>
+    <label>Excel Event Overview</label>
+    <type>export</type>
+    <plugin>Calendar_Export_CalendarXls</plugin>
+    <template>tine20:///Tinebase/folders/shared/export/templates/Calendar/calendar_event_overview.xlsx</template> 
+    <favorite>true</favorite>
+    <order>550</order>
+    <scope>multi</scope>
+</config>
+
