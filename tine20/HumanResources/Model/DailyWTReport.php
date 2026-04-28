@@ -54,11 +54,12 @@
  */
 class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
 {
-    const MODEL_NAME_PART = 'DailyWTReport';
+    public const TABLE_NAME = 'humanresources_wt_dailyreport';
+    public const MODEL_NAME_PART = 'DailyWTReport';
 
-    const FLDS_EMPLOYEE_ID = 'employee_id';
-    const FLDS_MONTHLYWTREPORT = 'monthlywtreport';
-    const FLDS_WORKING_TIMES = 'working_times';
+    public const FLDS_EMPLOYEE_ID = 'employee_id';
+    public const FLDS_MONTHLYWTREPORT = 'monthlywtreport';
+    public const FLDS_WORKING_TIMES = 'working_times';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -118,7 +119,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         ],
 
         'table'             => [
-            'name'    => 'humanresources_wt_dailyreport',
+            'name'    => self::TABLE_NAME,
             'indexes' => [
                 'employee_id' => [
                     'columns' => ['employee_id'],
