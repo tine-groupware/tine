@@ -27,6 +27,9 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
 `encryption_type` varchar(20) NOT NULL DEFAULT 'md5',
 `client_idnr` varchar(40) NOT NULL,
 `forward_only` tinyint(1) NOT NULL DEFAULT '0',
+`status` varchar(80) DEFAULT NULL,
+`expiry_date` datetime DEFAULT NULL,
+`last_modified_time` datetime DEFAULT NULL,
 PRIMARY KEY (`userid`,`client_idnr`),
 UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -42,6 +45,9 @@ CREATE TABLE IF NOT EXISTS `smtp_destinations` (
 `userid` varchar(80) NOT NULL,
 `source` varchar(80) NOT NULL,
 `destination` varchar(80) NOT NULL,
+`status` varchar(80) DEFAULT NULL,
+`expiry_date` datetime DEFAULT NULL,
+`last_modified_time` datetime DEFAULT NULL,
 KEY `smtp_destinations::userid--smtp_users::userid` (`userid`),
 CONSTRAINT `smtp_destinations::userid--smtp_users::userid` FOREIGN KEY (`userid`) REFERENCES `smtp_users` (`userid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -137,7 +143,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
         'emailForwardOnly'  => 'forward_only',
         'emailUsername'     => 'username',
         'emailAliases'      => 'source',
-        'emailForwards'     => 'destination'
+        'emailForwards'     => 'destination',
+        'emailStatus'       => 'status',
+        'emailExpiryDate'   => 'expiry_date',
+        'emailLastModified' => 'last_modified_time',
     );
     
     protected $_defaults = array(

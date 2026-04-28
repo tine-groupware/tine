@@ -364,6 +364,16 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             if (isset($this->_propertyMapping['emailPassword']) && empty($emailUserData[$this->_propertyMapping['emailPassword']])) {
                 $emailUserData[$this->_propertyMapping['emailPassword']] = $this->_addUserSetPassword($_addedUser);
             }
+
+            if (isset($this->_propertyMapping['emailStatus'])) {
+                $emailUserData[$this->_propertyMapping['emailStatus']] = $_addedUser->accountStatus;
+            }
+            if (isset($this->_propertyMapping['emailExpiryDate'])) {
+                $emailUserData[$this->_propertyMapping['emailExpiryDate']] = $_addedUser->accountExpires;
+            }
+            if (isset($this->_propertyMapping['emailLastModified'])) {
+                $emailUserData[$this->_propertyMapping['emailLastModified']] = Tinebase_DateTime::now();
+            }
             
             $insertData = $emailUserData;
             $this->_beforeAdd($insertData);
@@ -479,6 +489,16 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
             . ' emailUserData :  ' . print_r($emailUserData, true));
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
+
+        if (isset($this->_propertyMapping['emailStatus'])) {
+            $emailUserData[$this->_propertyMapping['emailStatus']] = $_newUserProperties->accountStatus;
+        }
+        if (isset($this->_propertyMapping['emailExpiryDate'])) {
+            $emailUserData[$this->_propertyMapping['emailExpiryDate']] = $_newUserProperties->accountExpires;
+        }
+        if (isset($this->_propertyMapping['emailLastModified'])) {
+            $emailUserData[$this->_propertyMapping['emailLastModified']] = Tinebase_DateTime::now();
+        }
 
         $updateData = $emailUserData;
 

@@ -35,6 +35,9 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
 `last_login` datetime DEFAULT NULL,
 `last_login_unix` int(11) DEFAULT NULL,
 `instancename` varchar(40) DEFAULT NULL,
+`status` varchar(80) DEFAULT NULL,
+`expiry_date` datetime DEFAULT NULL,
+`last_modified_time` datetime DEFAULT NULL,
 PRIMARY KEY (`userid`,`domain`),
 UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -224,7 +227,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         'emailSieveSize'    => 'messages',
 
         // makes mapping data to _config easier
-        'emailHome'            => 'home'
+        'emailHome'            => 'home',
+
+        'emailStatus'       => 'status',
+        'emailExpiryDate'   => 'expiry_date',
+        'emailLastModified' => 'last_modified_time',
     );
 
     protected $_tableMapping = array(
@@ -241,7 +248,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         'emailSieveSize'    => 'QUOTATABLE',
 
         // makes mapping data to _config easier
-        'emailHome'            => 'USERTABLE'
+        'emailHome'            => 'USERTABLE',
+
+        'emailStatus'       => 'USERTABLE',
+        'emailExpiryDate'   => 'USERTABLE',
+        'emailLastModified' => 'USERTABLE',
     );
     
     /**

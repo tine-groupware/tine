@@ -14,6 +14,9 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
     `last_login` datetime DEFAULT NULL,
     `last_login_unix` int(11) DEFAULT NULL,
     `instancename` varchar(40) DEFAULT NULL,
+    `status` varchar(80) DEFAULT NULL,
+    `expiry_date` datetime DEFAULT NULL,
+    `last_modified_time` datetime DEFAULT NULL,
     PRIMARY KEY (`userid`,`domain`),
     UNIQUE KEY `username` (`username`),
     UNIQUE KEY `loginname` (`loginname`)
