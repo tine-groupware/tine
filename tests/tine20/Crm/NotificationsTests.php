@@ -105,12 +105,9 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
     }
 
-    /**
-     * testNotificationToResponsible
-     */
     public function testNotificationWithOutResponsibles()
     {
-        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS, true);
 
         self::flushMailer();
         $lead = $this->_getLead();
@@ -122,18 +119,19 @@ class Crm_NotificationsTests extends Crm_AbstractTest
         $bodyText = $messages[0]->getBodyText()->getContent();
         $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
 
-        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,false);
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS, false);
         self::flushMailer();
 
         $lead['turnover'] = '235';
-        $lead = $this->_leadController->update($lead);
+        $this->_leadController->update($lead);
         $messages = self::getMessages();
-        // one message from the update user!
+        // one message from the updating user!
         $this->assertEquals(1, count($messages));
         $bodyText = $messages[0]->getBodyText()->getContent();
         $this->assertStringContainsString('PHPUnit LEAD', $bodyText);
-        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS,true);
+        Crm_Config::getInstance()->set(Crm_Config::SEND_NOTIFICATION_TO_ALL_ACCESS, true);
     }
+
     /**
      * testNoNotificationConfig
      */
