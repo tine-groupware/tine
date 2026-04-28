@@ -96,14 +96,14 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
             Calendar_Model_FreeBusyUrl::class,
         ]);
 
-        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.04', self::RELEASE018_UPDATE004);
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.4', self::RELEASE018_UPDATE004);
     }
 
     public function update005()
     {
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Calendar_Model_Resource::TABLE_NAME . ' SET location_address = name where location_address IS NULL');
 
-        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.05', self::RELEASE018_UPDATE005);
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
     }
 
     public function update006()
@@ -111,6 +111,6 @@ class Calendar_Setup_Update_18 extends Setup_Update_Abstract
         Calendar_Setup_Initialize::addContainerObserver();
         Calendar_Scheduler_Task::addSyncCloudAccountContainersTask(Tinebase_Core::getScheduler());
 
-        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.06', self::RELEASE018_UPDATE006);
+        $this->addApplicationUpdate(Calendar_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
     }
 }
