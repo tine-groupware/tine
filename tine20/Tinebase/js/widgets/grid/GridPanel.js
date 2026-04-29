@@ -13,18 +13,18 @@ Ext.ns('Tine.widgets.grid');
 
 /**
  * tine 2.0 app grid panel widget
- * 
+ *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.GridPanel
  * @extends     Ext.Panel
- * 
+ *
  * <p>Application Grid Panel</p>
  * <p>
  * </p>
- * 
+ *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
+ *
  * @param       {Object} config
  * @constructor
  * Create a new GridPanel
@@ -60,7 +60,7 @@ Tine.widgets.grid.GridPanel = function(config) {
         start: 0,
         limit: 50
     };
-    
+
     // allow to initialize with string
     this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
 
@@ -139,11 +139,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     storeRemoteSort: true,
     /**
-     * @cfg {Boolean} usePagingToolbar 
+     * @cfg {Boolean} usePagingToolbar
      */
     usePagingToolbar: true,
     /**
-     * @cfg {Object} defaultPaging 
+     * @cfg {Object} defaultPaging
      */
     defaultPaging: null,
     /**
@@ -153,7 +153,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     pagingConfig: null,
     /**
      * @cfg {Tine.widgets.grid.DetailsPanel} detailsPanel
-     * if set, it becomes rendered in region south 
+     * if set, it becomes rendered in region south
      */
     detailsPanel: null,
     /**
@@ -162,17 +162,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     actionToolbarItems: null,
     /**
-     * @cfg {Array} i18nDeleteQuestion 
+     * @cfg {Array} i18nDeleteQuestion
      * specialised strings for deleteQuestion
      */
     i18nDeleteQuestion: null,
     /**
-     * @cfg {String} i18nAddRecordAction 
+     * @cfg {String} i18nAddRecordAction
      * specialised strings for add action button
      */
     i18nAddActionText: null,
     /**
-     * @cfg {String} i18nEditRecordAction 
+     * @cfg {String} i18nEditRecordAction
      * specialised strings for edit action button
      */
     i18nEditActionText: null,
@@ -182,7 +182,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     i18nMoveActionText: null,
     /**
-     * @cfg {Array} i18nDeleteRecordAction 
+     * @cfg {Array} i18nDeleteRecordAction
      * specialised strings for delete action button
      */
     i18nDeleteActionText: null,
@@ -195,46 +195,46 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * if this resides in a editDialog, this property holds it
      * if it is so, the grid can't save records itsef, just update
      * the editDialogs record property holding these records
-     * 
+     *
      * @cfg {Tine.widgets.dialog.EditDialog} editDialog
      */
     editDialog: null,
-    
+
     /**
-     * if this resides in an editDialog, this property defines the 
+     * if this resides in an editDialog, this property defines the
      * property of the record of the editDialog, holding these records
-     * 
+     *
      * @type {String} editDialogRecordProperty
      */
     editDialogRecordProperty: null,
-    
+
     /**
      * config passed to edit dialog to open from this grid
-     * 
+     *
      * @cfg {Object} editDialogConfig
      */
     editDialogConfig: null,
 
     /**
      * the edit dialog class to open from this grid
-     * 
+     *
      * @cfg {String} editDialogClass
      */
     editDialogClass: null,
 
     /**
-     * @cfg {String} i18nEmptyText 
+     * @cfg {String} i18nEmptyText
      */
     i18nEmptyText: null,
 
     /**
-     * @cfg {String} newRecordIcon 
+     * @cfg {String} newRecordIcon
      * icon for adding new records button
      */
     newRecordIcon: null,
 
     /**
-     * @cfg {Boolean} i18nDeleteRecordAction 
+     * @cfg {Boolean} i18nDeleteRecordAction
      * update details panel if context menu is shown
      */
     updateDetailsPanelOnCtxMenu: true,
@@ -250,12 +250,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     listenMessageBus: true,
 
     /**
-     * @cfg {Boolean} hasFavoritesPanel 
+     * @cfg {Boolean} hasFavoritesPanel
      */
     hasFavoritesPanel: true,
-    
+
     /**
-     * @cfg {Boolean} hasQuickSearchFilterToolbarPlugin 
+     * @cfg {Boolean} hasQuickSearchFilterToolbarPlugin
      */
     hasQuickSearchFilterToolbarPlugin: true,
 
@@ -276,19 +276,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @cfg {Boolean} multipleEdit
      */
     multipleEdit: false,
-    
+
     /**
      * set if multiple edit requires special right
      * @type {String}  multipleEditRequiredRight
      */
     multipleEditRequiredRight: null,
-    
+
     /**
      * enable if selection of 2 records should allow merging
      * @cfg {Boolean} duplicateResolvable
      */
     duplicateResolvable: false,
-    
+
     /**
      * @property autoRefreshTask
      * @type Ext.util.DelayedTask
@@ -304,7 +304,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * @type Boolean
      * @property copyEditAction
-     * 
+     *
      * TODO activate this by default
      */
     copyEditAction: false,
@@ -358,17 +358,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type object
      */
     modelConfig: null,
-    
+
     /**
      * group grid by this property
-     * 
+     *
      * @type {String}
      */
     groupField: null,
-    
+
     /**
      * header template for the grouping view, if needed
-     * 
+     *
      * @type String
      */
     groupTextTpl: null,
@@ -402,11 +402,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type Tine.widgets.grid.FilterSelectionModel
      */
     selectionModel: null,
-    
+
     /**
      * add records from other applications using the split add button
      * - activated by default
-     * 
+     *
      * @type Boolean
      * @property splitAddButton
      */
@@ -431,7 +431,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * allow to delete records
      */
     allowDelete: true,
-    
+
     layout: 'border',
     border: false,
     stateful: true,
@@ -442,10 +442,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
      */
     readOnly: false,
-    
+
+    /**
+     * @cfg {Object} defaultColumnsState
+     * map of fieldName → column config overrides applied before user state
+     * e.g. { last_modified_time: { hidden: false, width: 140 } }
+     */
+    defaultColumnsState: null,
+    stateReady: false,
+
     /**
      * extend standard initComponent chain
-     * 
+     *
      * @private
      */
     initComponent: function(){
@@ -460,7 +468,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.i18nEmptyText = this.i18nEmptyText ||
-            this.i18nContainersName
+        this.i18nContainersName
             ? String.format(i18n._("No {0} could be found. Please try changing your filter criteria, view options, or the {1} you are searching in."), this.i18nRecordsName, (this.i18nContainersName ? this.i18nContainersName : this.i18nRecordsName))
             : String.format(i18n._("No {0} could be found. Please try changing your filter criteria, view options, or the module you are searching in."), this.i18nRecordsName);
 
@@ -471,18 +479,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.deleteQueue = [];
 
         this.hideColumns = this.hideColumns || [];
-        
+
         // init generic stuff
         if (this.modelConfig) {
             this.initGeneric();
         }
-        
+
         this.initFilterPanel();
 
         this.bufferedLoadGridData = Function.createBuffered(this.loadGridData, 100, this);
 
         this.initStore();
-        
+
         this.initGrid();
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
@@ -521,12 +529,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
-    
+
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return Tine.widgets.grid.GridPanel.superclass.onDestroy.call(this);
     },
-    
+
     initMessageBus: function() {
         this.postalSubscriptions = [];
         if (this.listenMessageBus) {
@@ -544,22 +552,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }));
         });
     },
-    
+
     onClick: function(e, target) {
         debugger
     },
-    
+
     getRecordByData(data) {
         const idProperty = this.recordClass.getMeta('idProperty');
         return this.store.getById(_.get(data, idProperty));
     },
-    
+
     /**
      * bus notified about record changes
      */
     onRecordChanges: function(data, e) {
         var existingRecord = this.getRecordByData(data);
-        
+
         if (e.topic.match(/\.create/) && false) {
             // we don't know if record belongs to filtering (e.g. form broadcast)
             this.onCreateRecord(data);
@@ -611,7 +619,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onContentResize: function() {
         // make sure details panel doesn't hide grid
         const layout = this.layout[this.detailsPanelRegion] ?? null;
-        
+
         if (this.detailsPanel && layout) {
             const isSmall = this.isSmallLayout();
             if (isSmall) {
@@ -646,6 +654,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.action_layout) this.action_layout.setHidden(isSmall);
             this.doLayout();
         }
+
+        this.saveState();
     },
 
     /**
@@ -677,8 +687,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
     },
     /**
-     * initialises the filter panel 
-     * 
+     * initialises the filter panel
+     *
      * @param {Object} config
      */
     initFilterPanel: function(config) {
@@ -701,9 +711,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 defaultFilter: this.recordClass.getMeta('defaultFilter') ? this.recordClass.getMeta('defaultFilter') : 'query',
                 filters: this.defaultFilters || []
             }, config));
-            
+
             this.plugins = this.plugins || [];
             this.plugins.push(this.filterToolbar);
+        }
+
+        if (this.hasQuickSearchFilterToolbarPlugin && this.stateful && !this.editDialog) {
+            this.filterToolbar.on('afterrender', () => {
+                // by afterrender the plugin has fully initialized filterPanel
+                const plugin = this.filterToolbar.getQuickFilterPlugin?.();
+                const filterPanel = plugin?.filterPanel;
+
+                if (!filterPanel) return;
+
+                const debouncedSave = Function.createBuffered(this.saveState, 500, this);
+                filterPanel.on('show', () => this.saveState(), this);
+                filterPanel.on('hide', () => this.saveState(), this);
+            }, this, { single: true });
         }
     },
 
@@ -728,7 +752,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     return;
                 }
                 const config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
-                
+
                 // @todo thats just a hotfix!
                 if (['relations', 'customfields'].indexOf(key) !== -1) {
                     return;
@@ -752,7 +776,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     columns.push(config);
                 }
             }, this);
-            
+
             if (this.modelConfig.hasCustomFields) {
                 columns = columns.concat(this.getCustomfieldColumns());
             }
@@ -762,19 +786,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 _.remove(columns, tagsCol);
                 columns.unshift(tagsCol);
             }
-            
+
             if (_.find(columns, {dataIndex: 'type'})) {
                 const typeCol = _.find(columns, {dataIndex: 'type'});
                 _.remove(columns, typeCol);
                 columns.unshift(typeCol);
             }
-            
+
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
                 columns.unshift(attachCol);
             }
-            
+
             _.forEachRight(_.filter(this.modelConfig.fields, {type: 'image'}), function(field) {
                 var imgCol = _.find(columns, {dataIndex: field.key});
                 if (imgCol) {
@@ -785,7 +809,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             columns = columns.concat(this.getCustomColumns ? this.getCustomColumns() : []);
             columns = this.customizeColumns ? this.customizeColumns(columns) || columns : columns;
-            
+
             gridConfig.cm = new Ext.grid.ColumnModel({
                 defaults: {
                     resizable: true
@@ -800,14 +824,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
             gridConfig.autoExpandColumn = this.recordClass.hasField(gridConfig.autoExpandColumn) ?
                 gridConfig.autoExpandColumn : null;
-            
+
         }
         return gridConfig;
     },
-    
+
     /**
      * template method to allow adding custom columns
-     * 
+     *
      * @return {Array}
      */
     getCustomColumns: function() {
@@ -839,7 +863,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * @private
-     * 
+     *
      * NOTE: Order of items matters! Ext.Layout.Border.SplitRegion.layout() does not
      *       fence the rendering correctly, as such it's impotant, so have the ftb
      *       defined after all other layout items
@@ -854,7 +878,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             tbar: this.pagingToolbar,
             items: this.grid
         }];
-        
+
         // add detail panel
         if (this.detailsPanel) {
             // register additional context menu actions
@@ -947,20 +971,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
     },
-    
+
     expandDetailsPanelRegion: function(target) {
         if (!this.detailsPanel) return;
         target = target ?? this.detailsPanelRegion;
         const source = this.detailsPanelRegion;
         if (!this.layout[target] || !this.layout[source]) return;
-        
+
         if (!this.layout[target].panel.isVisible()) {
             this.detailsPanel.ownerCt.remove(0, false);
             this.layout[target].panel.setVisible(true);
             this.layout[target].items.add(this.detailsPanel);
             this.layout[target].panel.expand();
         }
-        
+
         if (source !== target) {
             if (this.layout[source].panel.isVisible()) {
                 this.layout[source].panel.setVisible(false);
@@ -982,10 +1006,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     gridPrintRenderer: function() {
         Ext.ux.Printer.print(this.getGrid());
     },
-    
+
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
-     * 
+     *
      * @private
      */
     initActions: function() {
@@ -1002,7 +1026,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         var services = Tine.Tinebase.registry.get('serviceMap').services;
-        
+
         this.action_editInNewWindow = new Ext.Action({
             requiredGrant: 'readGrant',
             requiredMultipleGrant: 'editGrant',
@@ -1090,14 +1114,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.action_resolveDuplicates = new Ext.Action({
             requiredGrant: null,
             text: String.format(i18n._('Merge {0}'), this.i18nRecordsName),
-                iconCls: 'action_resolveDuplicates',
-                scope: this,
-                handler: this.onResolveDuplicates,
-                disabled: false,
-                actionUpdater: function(action, grants, records) {
-                    if (records && (records.length != 2)) action.setDisabled(true);
-                    else action.setDisabled(false);
-                }
+            iconCls: 'action_resolveDuplicates',
+            scope: this,
+            handler: this.onResolveDuplicates,
+            disabled: false,
+            actionUpdater: function(action, grants, records) {
+                if (records && (records.length != 2)) action.setDisabled(true);
+                else action.setDisabled(false);
+            }
         });
 
         this.initExports();
@@ -1159,10 +1183,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
 
         if (
-                // create items from available import formats (depricated -> use definitions)
-                this.modelConfig && this.modelConfig['import']
-                // imports from import definitions
-                || Tine.widgets.importAction.getImports(this.recordClass).length) {
+            // create items from available import formats (depricated -> use definitions)
+            this.modelConfig && this.modelConfig['import']
+            // imports from import definitions
+            || Tine.widgets.importAction.getImports(this.recordClass).length) {
 
             this.actions_import = new Ext.Action({
                 requiredGrant: 'addGrant',
@@ -1217,7 +1241,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * initializes the delete action
-     * 
+     *
      * @param {Object} services the rpc service map from the registry
      */
     initDeleteAction: function(services) {
@@ -1239,12 +1263,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.disableDeleteActionCheckServiceMap(services);
         }
     },
-    
+
     /**
      * disable delete action if no delete method was found in serviceMap
-     * 
+     *
      * @param {Object} services the rpc service map from the registry
-     * 
+     *
      * TODO this should be configurable as not all grids use remote delete
      */
     disableDeleteActionCheckServiceMap: function(services) {
@@ -1269,7 +1293,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // store is already initialized
             return;
         }
-        
+
         if (this.recordProxy) {
             if (! this.defaultSortInfo.field) {
                 if (this.modelConfig && this.modelConfig.defaultSortInfo) {
@@ -1327,11 +1351,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             className += 'tine-grid-row-nolongerinfilter';
         }
         return className;
-    },    
+    },
 
     /**
      * new entry event -> add new record to store
-     * 
+     *
      * @param {Object} recordData
      * @return {Boolean}
      */
@@ -1371,7 +1395,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * adds given record and starts editing
-     * 
+     *
      * @param localRecord
      * @param editProperty
      * @param proxyFn
@@ -1394,12 +1418,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         const onAfterEdit = async (o) => {
             ed.un('canceledit', onCancelEdit);
-            
+
             this.pagingToolbar.refresh.disable();
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
             const selectedIdx = this.store.indexOf(localRecord);
-            
+
             await proxyFn(localRecord)
                 .then((result) => {
                     this.grid.getSelectionModel().selectRow(selectedIdx);
@@ -1411,15 +1435,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         data: localRecord.data
                     });
                 });
-            
+
             this.pagingToolbar.refresh.enable();
         }
         this.grid.on('afteredit', onAfterEdit, this, {single: true, buffer: 100});
     },
-    
+
     /**
      * header is clicked
-     * 
+     *
      * @param {Object} grid
      * @param {Number} colIdx
      * @param {Event} e
@@ -1430,7 +1454,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Ext.apply(this.store.lastOptions, {
             preserveCursor:     true,
             preserveSelection:  true,
-            preserveScroller:   true, 
+            preserveScroller:   true,
             removeStrategy:     'default'
         });
     },
@@ -1444,7 +1468,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.updateInfo();
         }
     },
-    
+
     /**
      * called when a Record has been removed from the Store
      */
@@ -1454,10 +1478,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.updateInfo();
         }
     },
-    
+
     /**
      * called when the store gets updated, e.g. from editgrid
-     * 
+     *
      * @param {Ext.data.store} store
      * @param {Tine.Tinebase.data.Record} record
      * @param {String} operation
@@ -1467,7 +1491,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         switch (operation) {
             case Ext.data.Record.EDIT:
                 this.addToEditBuffer(record);
-                
+
                 if (this.usePagingToolbar) {
                     this.pagingToolbar.refresh.disable();
                 }
@@ -1477,7 +1501,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     store.each(function(item) {
                         items.push(item.data);
                     });
-                    
+
                     this.editDialog.record.set(this.editDialogRecordProperty, items);
                     this.editDialog.fireEvent('updateDependent');
                 } else if (this.recordProxy) {
@@ -1485,10 +1509,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         scope: this,
                         success: function(updatedRecord) {
                             store.commitChanges();
-    
+
                             // update record in store to prevent concurrency problems
                             record.data = updatedRecord.data;
-    
+
                             this.loadGridData({
                                 removeStrategy: 'keepBuffered'
                             });
@@ -1523,11 +1547,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
     },
-    
+
     async updateGridState() {
         if (!this.stateful) return;
         this.grid.stateId = this.getResolvedGridStateId();
-        
+
         if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
             await this.grid.saveState();
         }
@@ -1553,44 +1577,120 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         return stateId;
     },
-    
+
     getStateIdSuffix() {
         return this.stateIdSuffix;
     },
 
     getState() {
-        const state = {}
-        // @TODO get responsiveLevel as first key
-        // @TODO applyState on resize (have abstract mixin)
+        const state = {
+            responsiveLevel: this.grid?.getView?.().getResponsiveMode?.()?.name,
+            showFullText: !!this.regionConfig?.showFullText,
+        };
         if (this.detailsPanel) {
             state.detailsPanel = {
-                region: this.detailsPanelRegion,
-                collapsed: this.detailsPanel.isCollapsed(),
-                width: this.detailsPanel.getWidth(),
-                height: this.detailsPanel.getHeight()
+                region:    this.detailsPanelRegion,
+                collapsed: this.detailsPanel.isCollapsed?.() ?? false,
+                width:     this.detailsPanel.getWidth(),
+                height:    this.detailsPanel.getHeight()
+            };
+        }
+
+        if (this.hasQuickSearchFilterToolbarPlugin && this.filterToolbar) {
+            const plugin = this.filterToolbar.getQuickFilterPlugin?.();
+            if (plugin?.filterPanel) {
+                state.filterPanelShow = plugin.filterPanel.isVisible();
             }
         }
-        if(this.hasQuickSearchFilterToolbarPlugin) {
-            state.filterPanelShow = this.filterPanel.getQuickFilterPlugin().filterPanel.isVisible()
-        }
+
+        return state;
     },
 
-    applyState: function(state) {
-        // @TODO
-        // if (state.detailsPanel) {
-        //     this.detailsPanelRegion = state.detailsPanel.region;
-        //     this.detailsPanel.setCollapsed(state.detailsPanel.collapsed);
-        //     this.detailsPanel.setWidth(state.detailsPanel.width);
-        //     this.detailsPanel.setHeight(state.detailsPanel.height);
-        // }
-        // if (state.filterPanelShow) {
-        //     this.filterPanel.getQuickFilterPlugin().filterPanel.show();
-        // }
+    /**
+     * Template method — override in app GridPanel subclasses to return a
+     * preset state object that is applied when the user has no saved state.
+     * Return null to use model defaults only.
+     *
+     * @return {Object|null}
+     */
+    getDefaultState() {
+        return null;
+    },
+
+    /**
+     * Template method — override to supply per-field column defaults,
+     * e.g. { last_modified_time: { hidden: false, width: 140 } }
+     * Applied after getDefaultState() but before user-saved state.
+     *
+     * @return {Object}  map of fieldName → column config overrides
+     */
+    getDefaultColumnsState() {
+        return this.defaultColumnsState || {};
+    },
+
+    applyState: function (state) {
+        if (!state) {
+            return;
+        }
+
+        if (state.responsiveLevel && this.grid?.getView?.()) {
+            this.grid.getView().setResponsiveMode(state.responsiveLevel);
+        }
+
+        if (state.showFullText !== undefined) {
+            this.regionConfig = this.regionConfig || {};
+            this.regionConfig.showFullText = state.showFullText;
+            this.on('afterrender', () => {
+                this.grid?.view?.refresh();
+            }, this, { single: true });
+        }
+
+        if (state.detailsPanel) {
+            this.detailsPanelRegion = state.detailsPanel.region ?? this.detailsPanelRegion;
+
+            // defer until after layout so the panels exist
+            this.on('afterrender', () => {
+                this.expandDetailsPanelRegion(this.detailsPanelRegion);
+
+                const layout = this.layout[this.detailsPanelRegion];
+                if (layout && state.detailsPanel.collapsed) {
+                    layout.panel.collapse(false);
+                }
+                if (state.detailsPanel.width) {
+                    layout?.panel?.setWidth(state.detailsPanel.width);
+                }
+                if (state.detailsPanel.height) {
+                    layout?.panel?.setHeight(state.detailsPanel.height);
+                }
+            }, this, { single: true });
+        }
+
+        if (state.filterPanelShow !== undefined) {
+            this.on('afterrender', () => {
+                const plugin = this.filterToolbar?.getQuickFilterPlugin?.();
+                if (plugin?.filterPanel) {
+                    state.filterPanelShow ? plugin.filterPanel.show() : plugin.filterPanel.hide();
+                }
+            }, this, { single: true });
+        }
+
+        const defaults = this.getDefaultState() || {};
+        const colDefaults = this.getDefaultColumnsState();
+
+        if (state?.columns && !_.isEmpty(colDefaults)) {
+            state.columns = state.columns.map(col => {
+                return colDefaults[col.dataIndex]
+                    ? Ext.apply({}, colDefaults[col.dataIndex], col)
+                    : col;
+            });
+        }
+
+        state = Ext.apply({}, state, defaults);
     },
 
     /**
      * called after a new set of Records has been loaded
-     * 
+     *
      * @param  {Ext.data.Store} this.store
      * @param  {Array}          loaded records
      * @param  {Array}          load options
@@ -1602,12 +1702,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
 //        }
-        
+
         // update the latest filter here, make sure each gridPanel have their own latest filter
         const containerFilter = _.find(_.get(store, 'reader.jsonData.filter[0].filters[0].filters', {}), {field: this.recordClass.getMeta('containerProperty')});
         const operator = _.get(containerFilter, 'operator', '');
         this.latestFilter = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
-        
+
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -1643,13 +1743,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         const operator = _.get(containerFilter, 'operator', '');
         const filter = operator.match(/equals|in/) ? _.get(containerFilter, 'value', null) : null;
         const value = this.latestFilter ?? filter;
-        
+
         return value && _.isArray(value) ? [value] : value;
     },
 
     /**
      * on store load exception
-     * 
+     *
      * @param {Tine.Tinebase.data.RecordProxy} proxy
      * @param {String} type
      * @param {Object} error
@@ -1675,7 +1775,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * onStoreBeforeLoadRecords
-     * 
+     *
      * @param {Object} o
      * @param {Object} options
      * @param {Boolean} success
@@ -1723,7 +1823,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 recordsIds.push(currentRecord.id);
             }
         }, this);
-        
+
         // assemble adds
         recordToLoadCollection.each(function(record, idx) {
             if (recordsIds.indexOf(record.id) == -1 && this.deleteQueue.indexOf(record.id) == -1) {
@@ -1735,7 +1835,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }, this);
 
         o.records = records;
-        
+
         // hide current records from store.loadRecords()
         // @see 0008210: email grid: set flag does not work sometimes
         this.store.clearData();
@@ -1756,11 +1856,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             ),
             mainScreen = this.getMainScreen(),
             favoritesPanel = mainScreen
-                && typeof mainScreen.getWestPanel === 'function'
-                && typeof mainScreen.getWestPanel().getFavoritesPanel === 'function'
-                && this.hasFavoritesPanel
-                    ? mainScreen.getWestPanel().getFavoritesPanel()
-                    : null;
+            && typeof mainScreen.getWestPanel === 'function'
+            && typeof mainScreen.getWestPanel().getFavoritesPanel === 'function'
+            && this.hasFavoritesPanel
+                ? mainScreen.getWestPanel().getFavoritesPanel()
+                : null;
 
         if (defaultFavorite && favoritesPanel && favoritesPanel.recordClass === this.recordClass) {
             favoritesPanel.selectFilter(defaultFavorite);
@@ -1790,13 +1890,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGrid: async function () {
         var preferences = Tine.Tinebase.registry.get('preferences');
-        
+
         if (preferences) {
             this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
                 stripeRows: preferences.get('gridStripeRows') ? preferences.get('gridStripeRows') : false,
                 loadMask: preferences.get('gridLoadMask') ? preferences.get('gridLoadMask') : false
             });
-            
+
             // added paging number of result read from settings
             if (preferences.get('pageSize') != null) {
                 this.defaultPaging = {
@@ -1805,10 +1905,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 };
             }
         }
-        
+
         // generic empty text
         this.i18nEmptyText = i18n.gettext('No data to display');
-        
+
         // init sel model
         if (!this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
@@ -1817,7 +1917,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 gridPanel: this
             });
         }
-        
+
         this.selectionModel.on('selectionchange', function (sm) {
             this.actionUpdater.updateActions(sm, this.getFilteredContainers());
             this.latestSelection = sm;
@@ -1826,7 +1926,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
         }, this);
-        
+
         if (this.usePagingToolbar) {
             this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
                 pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
@@ -1874,41 +1974,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.stateful) {
                 this.gridConfig.stateful = true;
                 this.gridConfig.stateId = this.getStateId() + '-Grid';
-                // const gridStateId = this.getResolvedGridStateId();
-                // let gridState = Ext.state.Manager.get(gridStateId);
-                // if (gridState) this.defaultSortInfo = gridState.sort;
-                //
-                // const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
-                // this.regionStateId = `${stateId}_detailspanelregion`;
-                // this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-                //
-                // this.regionConfigStateId = `${stateId}_region_config`;
-                // this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
-                //     'south': {},
-                //     'east': {},
-                // });
-                //
-                // //update script , it should be removed after we make sure customer has the updateed state
-                // const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-                // const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
-                // if (oldDetailsPanelRegion) {
-                //     this.detailsPanelRegion = oldDetailsPanelRegion;
-                //     Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
-                //     Ext.state.Manager.clear(oldRegionStateId);
-                // }
-                // const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
-                // const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
-                // if (oldRegionConfig) {
-                //     this.regionConfig = oldRegionConfig;
-                //     Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
-                //     Ext.state.Manager.clear(oldRegionConfigStateId);
-                // }
+                const stateIdBase = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}${this.getStateIdSuffix()}`;
+                this.regionStateId        = `${stateIdBase}_detailspanelregion`;
+                this.regionConfigStateId  = `${stateIdBase}_region_config`;
+                this.detailsPanelRegion   = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+                this.regionConfig         = Ext.state.Manager.get(this.regionConfigStateId, { south: {}, east: {} });
             }
 
             // todo : hide the layout action if disableResponsiveLayout ?
             const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
             this.widthClasses = _.uniq(['auto', 'oneColumn', 'big'].concat(levels)); // @TODO sort by size!
-            
+
             const layoutActions = this.widthClasses.map((level) => {
                 const text = level === 'oneColumn' ? 'one column' : level;
                 return new Ext.Action({
@@ -1927,12 +2003,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             layoutMenuItems.push('-');
             layoutMenuItems.push(new Ext.menu.CheckItem({
                 text: Ext.util.Format.capitalize(i18n._('show full text')),
-                checked: this.regionConfig ? !!this.regionConfig.showFullText : null,
+                checked: !!this.regionConfig?.showFullText,
                 checkHandler: (item, checked) => {
+                    this.regionConfig = this.regionConfig || {};
                     this.regionConfig.showFullText = checked;
-                    Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
-
                     this.grid.view.refresh();
+                    this.saveState();
                 }
             }));
 
@@ -1965,12 +2041,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
             this.pagingToolbar.insert(11, this.sortingMenu);
             this.pagingToolbar.insert(12, this.layoutMenu);
-            
+
             // mark next grid refresh as paging-refresh
             this.pagingToolbar.on('beforechange', function () {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
-            
+
             if (this.recordClass) {
                 this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
                 if (this.localizedLangPicker) {
@@ -1983,7 +2059,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }
         }
-        
+
         // which grid to use?
         // TODO find a better way to configure quickadd grid
         var Grid = null;
@@ -1995,20 +2071,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         //we need the state configs before initial Grid
         this.gridConfig.store = this.store;
-        
+
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
 
         const configs = Tine.widgets.grid.ColumnManager.getResolvedColumnsConfig(
-            this.gridConfig?.cm?.config ?? this.gridConfig?.columns, 
-            this.recordClass.getMeta('appName'), 
+            this.gridConfig?.cm?.config ?? this.gridConfig?.columns,
+            this.recordClass.getMeta('appName'),
             this.recordClass.getMeta('modelName')
         );
         if (this.gridConfig?.cm) {
             this.gridConfig.cm.setConfig(configs, true);
         }
-        
+
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
@@ -2018,18 +2094,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass: this.recordClass,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
-        
 
-        
+
+
         this.grid.store.sortInfo = this.defaultSortInfo;
-        
+
         // init various grid / sm listeners
         this.grid.on('keydown', this.onKeyDown, this);
         this.grid.on('rowclick', this.onRowClick, this);
         this.grid.on('rowdblclick', this.onRowDblClick, this, {buffer: Ext.isTouchDevice ? 300 : null }); // NOTE: we buffer to prevent duplicate events if touch device has a pointer too. 300ms is the default interval of hammerjs
         this.grid.on('newentry', this.onStoreNewEntry, this);
         this.grid.on('headerclick', this.onHeaderClick, this);
-        
+
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
     },
 
@@ -2038,10 +2114,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! titleProperty) {
             return Ext.grid.GridView.prototype.getDragDropText.call(this.grid);
         }
-        
+
         const col = _.indexOf(this.grid.colModel.config, _.find(this.grid.colModel.config, {dataIndex: titleProperty}));
         const selections = this.grid.selModel.getSelections();
-        
+
         if (!col || selections.length > 10) {
             return formatMessage('{recordGender, select, male {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} female {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}} other {{recordCount, plural, one {# {recordName} selected} other {# {recordsName} selected}}}}', {
                 recordGender: this.recordClass.getRecordGender(),
@@ -2055,15 +2131,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             return html += '<tr>' + this.grid.getView().getCell(this.store.indexOf(node), col).cloneNode(true).outerHTML + '</tr>';
         }, '<table>') + '</table>';
     },
-    
+
     /**
      * creates and returns the view for the grid
-     * 
+     *
      * @return {Ext.grid.GridView}
      */
     createView: function() {
         // init view
-        
+
         if (this.groupField && ! this.groupTextTpl) {
             this.groupTextTpl = '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "' + i18n._("Records") + '" : "' + i18n._("Record") + '"]})';
         }
@@ -2086,7 +2162,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this)
         });
     },
-    
+
     /**
      * executed after outer panel rendering process
      */
@@ -2102,7 +2178,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
             Tine.Tinebase.areaLocks.manageMask(areaLock);
         });
-        
+
         if (this.initialLoadAfterRender) {
             this.initialLoad();
             this.afterIsRendered().then(() => {
@@ -2114,10 +2190,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * trigger store load with grid related options
-     * 
+     *
      * TODO rethink -> preserveCursor and preserveSelection might conflict on page breaks!
      * TODO don't reload details panel when selection is preserved
-     * 
+     *
      * @param {Object} options
      */
     loadGridData: function(options) {
@@ -2128,9 +2204,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope:              this,
             params:             {},
 
-            preserveCursor:     true, 
-            preserveSelection:  true, 
-            preserveScroller:   true, 
+            preserveCursor:     true,
+            preserveSelection:  true,
+            preserveScroller:   true,
             removeStrategy:     'default'
         });
 
@@ -2143,15 +2219,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * get action toolbar
-     * 
+     *
      * @return {Ext.Toolbar}
      */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             let additionalItems = this.getActionToolbarItems();
-            
+
             const items = [];
-            
+
             if (this.action_addInNewWindow) {
                 if (this.splitAddButton) {
                     items.push(Ext.apply(
@@ -2179,7 +2255,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     );
                 }
             }
-            
+
             if (this.action_editInNewWindow) {
                 items.push(Ext.apply(
                     new Ext.Button(this.action_editInNewWindow), {
@@ -2189,7 +2265,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-            
+
             if (this.action_deleteRecord) {
                 items.push(Ext.apply(
                     new Ext.Button(this.action_deleteRecord), {
@@ -2199,7 +2275,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-            
+
             if (this.actions_print) {
                 items.push(Ext.apply(
                     new (this.actions_print.initialConfig && this.actions_print.initialConfig.menu ? Ext.SplitButton : Ext.Button) (this.actions_print), {
@@ -2209,7 +2285,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-    
+
             const importExportButtons = [];
 
             if (this.actions_export) {
@@ -2257,7 +2333,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin && typeof this.filterToolbar.getQuickFilterField == 'function') {
                 this.actionToolbar.add('->', this.filterToolbar.getQuickFilterField());
             }
-            
+
             this.actionUpdater.addActions(this.actionToolbar.items);
         }
 
@@ -2286,7 +2362,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * template fn for subclasses to add custom items to action toolbar
-     * 
+     *
      * @return {Array/Object}
      */
     getActionToolbarItems: function() {
@@ -2302,7 +2378,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * returns rows context menu
-     * 
+     *
      * @param {Ext.grid.GridPanel} grid
      * @param {Number} row
      * @param {Ext.EventObject} e
@@ -2311,7 +2387,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     getContextMenu: function(grid, row, e) {
         if (! this.contextMenu) {
             var items = [];
-            
+
             if (this.action_addInNewWindow) items.push(this.action_addInNewWindow);
             if (this.action_editInNewWindow) items.push(this.action_editInNewWindow);
             if (this.action_editCopyInNewWindow) items.push(this.action_editCopyInNewWindow);
@@ -2370,7 +2446,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             items.push(this.addToRecordAction);
-            
+
             const plugins = [{
                 ptype: 'ux.itemregistry',
                 key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
@@ -2386,7 +2462,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             this.contextMenu.doLayout(false, true);
-            
+
             this.actionUpdater.addActions(this.contextMenu.items);
         }
 
@@ -2395,7 +2471,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * template fn for subclasses to add custom items to context menu
-     * 
+     *
      * @return {Array}
      */
     getContextMenuItems: function() {
@@ -2411,10 +2487,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * get modlog columns
-     * 
+     *
      * shouldn' be used anymore
      * @TODO: use applicationstarter and modelconfiguration
-     * 
+     *
      * @deprecated
      * @return {Array}
      */
@@ -2431,7 +2507,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * get custom field columns for column model
-     * 
+     *
      * @return {Array}
      */
     getCustomfieldColumns: function() {
@@ -2458,7 +2534,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * returns filter toolbar
      * @private
      * @deprecated
-     * 
+     *
      * TODO this seems to be legacy code that is only used in some apps (Calendar, Felamimail, ...)
      *   -> should be removed
      *   -> we use initFilterPanel() now
@@ -2473,11 +2549,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             filters: this.defaultFilters || []
         }));
     },
-    
+
 
     /**
      * return store from grid
-     * 
+     *
      * @return {Ext.data.Store}
      */
     getStore: function() {
@@ -2486,7 +2562,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * return view from grid
-     * 
+     *
      * @return {Ext.grid.GridView}
      */
     getView: function() {
@@ -2495,7 +2571,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * return grid
-     * 
+     *
      * @return {Ext.ux.grid.QuickaddGridPanel|Ext.grid.GridPanel}
      */
     getGrid: function() {
@@ -2572,9 +2648,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (e.browserEvent.key === '?') {
                     // TODO only show keys of actions that are available
-                    
+
                     const keyBindingData = this.getKeyBindingData();
-                    
+
                     Ext.MessageBox.show({
                         title: i18n._('Grid Panel Key Bindings'),
                         msg: keyBindingData.join('<br/>'),
@@ -2585,7 +2661,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
         }
     },
-    
+
     getKeyBindingData() {
         const data = [
             'A:  ' + i18n._('select all visible rows'),
@@ -2601,7 +2677,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * row click handler
-     * 
+     *
      */
     onRowClick: function(grid, row, e) {
         const sm = grid.getSelectionModel();
@@ -2648,14 +2724,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }
         }
     },
-    
+
     isSmallLayout() {
         if (this.grid.getView().disableResponsiveLayout) return false;
         const isWidthSmall = window.outerWidth < 700;
         const isHeightSmall = window.outerHeight < 500;
         return isWidthSmall || isHeightSmall;
     },
-    
+
     setFullScreen(fullScreen = true) {
         if (!this.detailsPanel) return;
         this.detailsPanel.isInFullScreenMode = fullScreen;
@@ -2669,7 +2745,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             // we should push state to prevent back action before popstate event
             history.pushState({ page: `${this.app.appName}-detailsPanel` }, "", "");
-            
+
             this.originalOwner = this.detailsPanel.ownerCt;
             this.originalOwner.remove(this.detailsPanel, false);
             Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
@@ -2677,21 +2753,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this.detailsPanel);
         }
     },
-    
+
     /**
      * row doubleclick handler
-     * 
+     *
      * @param {} grid
      * @param {} row
      * @param {} e
      */
     onRowDblClick: function(grid, row, e) {
         this.onEditInNewWindow.call(this, {actionType: 'edit'});
-    }, 
+    },
 
     /**
      * called on row context click
-     * 
+     *
      * @param {Ext.grid.GridPanel} grid
      * @param {Number} row
      * @param {Ext.EventObject} e
@@ -2714,7 +2790,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // reset preview update
         this.updateOnSelectionChange = true;
     },
-    
+
     /**
      * Opens the required EditDialog
      * @param {Object} actionButton the button the action was called from
@@ -2746,15 +2822,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             additionalConfig = additionalConfig ? additionalConfig : {},
             editDialogConfig = { ... this.editDialogConfig || {} },
             mode = editDialogConfig.mode || editDialogClass.prototype.mode;
-        
+
         // add "multiple_edit_dialog" plugin to dialog, if required
         if (((totalcount > 1) && (this.multipleEdit) && (button.actionType == 'edit'))) {
             Ext.each(this.selectionModel.getSelections(), function(record) {
                 selectedRecords.push(record.data);
             }, this );
-            
+
             plugins.push({
-                ptype: 'multiple_edit_dialog', 
+                ptype: 'multiple_edit_dialog',
                 selectedRecords: selectedRecords,
                 selectionFilter: this.selectionModel.getSelectionFilter(),
                 isFilterSelect: this.selectionModel.isFilterSelect,
@@ -2764,7 +2840,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         Tine.log.debug('GridPanel::onEditInNewWindow');
         Tine.log.debug(record);
-        
+
         var popupWindow = editDialogClass.openWindow(Object.assign({
                 openerCt: this,
                 plugins: Ext.encode(plugins),
@@ -2848,14 +2924,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record.id = 'new-' + Ext.id();
             record.setId(record.id);
         }
-        
+
         return record;
     },
 
 
     /**
      * on update after edit
-     * 
+     *
      * @param {String|Tine.Tinebase.data.Record} record
      * @param {String} mode
      */
@@ -2863,7 +2939,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! this.rendered) {
             return;
         }
-        
+
         record = this.createRecord(record, mode);
 
         Tine.log.debug('Tine.widgets.grid.GridPanel::onUpdateRecord() -> record:');
@@ -2892,7 +2968,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.getStore().add([record]);
             }
             //TODO: use this for msg bus
-            
+
             // sort new/edited record
             store.remoteSort = false;
             store.sort(
@@ -2968,24 +3044,24 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onResolveDuplicates: function() {
         // TODO: allow more than 2 records      
         if (this.grid.getSelectionModel().getSelections().length != 2) return;
-        
+
         var selections = [];
         Ext.each(this.grid.getSelectionModel().getSelections(), function(sel) {
             selections.push(sel.data);
         });
-        
+
         var window = Tine.widgets.dialog.DuplicateMergeDialog.getWindow({
             selections: Ext.encode(selections),
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName')
         });
-        
+
         window.on('contentschange', function() { this.store.reload(); }, this);
     },
-    
+
     /**
      * add record to edit buffer
-     * 
+     *
      * @param {String|Tine.Tinebase.data.Record} record
      */
     addToEditBuffer: function(record) {
@@ -3049,7 +3125,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     /**
      * delete records
-     * 
+     *
      * @param {SelectionModel} sm
      * @param {Array} records
      */
@@ -3128,7 +3204,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * do something after deletion of records
      * - reload the store
-     * 
+     *
      * @param {Array} [ids]
      */
     onAfterDelete: function(ids) {
