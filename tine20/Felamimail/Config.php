@@ -579,7 +579,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 'metaways\.(de|net)'   => [
                     'id' => 'Metaways',
-                    'value' => 'Metaways Infosystems GmbH',
+                    'name' => 'Metaways Infosystems GmbH',
                     'image' => 'images/icon-set/icon_flag_mw.png',
                 ],
             ],
@@ -634,22 +634,5 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     public static function getProperties()
     {
         return self::$_properties;
-    }
-
-    /**
-     * @throws Tinebase_Exception_InvalidArgument
-     * @see Tinebase_Frontend_Http_SinglePageApplication::getHeaders()
-     */
-    public function registerCspSources(): void
-    {
-        $supportedMailServers = $this->get(self::TRUSTED_MAIL_DOMAINS);
-        foreach ($supportedMailServers as  $data) {
-            if (!empty($data['image']) && !str_contains($data['image'], 'icon-set')) {
-                $parsed = parse_url(rtrim($data['image'], '/'));
-                $origin = $parsed['scheme'] . '://' . $parsed['host']
-                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
-                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('img-src', $origin);
-            }
-        }
     }
 }

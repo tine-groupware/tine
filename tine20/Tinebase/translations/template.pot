@@ -180,6 +180,9 @@ msgstr ""
 msgid "Database Configuration"
 msgstr ""
 
+msgid "Session Configuration"
+msgstr ""
+
 msgid "External Database Configuration"
 msgstr ""
 
@@ -292,6 +295,9 @@ msgid "Replication master configuration"
 msgstr ""
 
 msgid "Replication master configuration."
+msgstr ""
+
+msgid "Disable Owncloud permissions support"
 msgstr ""
 
 msgid "Report WebDAV issues"
@@ -2311,9 +2317,6 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
-msgid "Click to edit"
-msgstr ""
-
 msgid "Image Failed"
 msgstr ""
 
@@ -4318,6 +4321,25 @@ msgid "Filter"
 msgstr ""
 
 msgid "Skip Upstream Updates"
+msgstr ""
+
+msgid "Instance Domain"
+msgid_plural "Instance Domains"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Instance ID"
+msgstr ""
+
+msgid "Domain Name"
+msgstr ""
+
+msgid "Instance"
+msgid_plural "Instances"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Flag Icon File"
 msgstr ""
 
 msgid "LogEntry"

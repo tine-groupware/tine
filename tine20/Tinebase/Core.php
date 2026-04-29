@@ -1828,12 +1828,18 @@ class Tinebase_Core
         }
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-        
         try {
             $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
         } catch (Exception $e) {
             // unittests
             $assetHash = Tinebase_Record_Abstract::generateUID(8);
+        }
+
+        $trustedMailDomains = [];
+        try {
+            $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
         }
 
         $externalIdps = [];
@@ -1905,6 +1911,7 @@ class Tinebase_Core
             'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
             'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),
             'loginExternalIdps' => $externalIdps,
+            'trustedMailDomains'   => $trustedMailDomains,
         ];
 
         return $registryData;

@@ -566,7 +566,6 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      */
     public function testAddMessageCacheWithSenderFlag(): void
     {
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $filter = array(array(
             'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
@@ -575,7 +574,6 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $result = $json->searchMessages($filter, []);
 
         $this->assertEquals('Metaways', $result['results'][0]['flags'][1], 'Message should have sender tag');
-        Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
     }
 
     public function testAddMessageCacheWithSenderFlagInvalidCTag(): void

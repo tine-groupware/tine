@@ -37,8 +37,8 @@ class Tinebase_InstanceTest extends TestCase
 
         $regex = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
 
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        self::assertArrayHasKey($regex, $supportedMailServers, print_r($supportedMailServers, true));
+        $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+        self::assertArrayHasKey($regex, $trustedMailDomains, print_r($trustedMailDomains, true));
 
         $instanceRecord->{Tinebase_Model_Instance::FLD_MAIL_DOMAINS} = [
             [
@@ -46,12 +46,12 @@ class Tinebase_InstanceTest extends TestCase
             ]
         ];
         $instanceRecord = Tinebase_Controller_Instance::getInstance()->update($instanceRecord);
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        self::assertArrayNotHasKey('(d.de)', $supportedMailServers, print_r($supportedMailServers, true));
+        $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+        self::assertArrayNotHasKey('(d.de)', $trustedMailDomains, print_r($trustedMailDomains, true));
 
         Tinebase_Controller_Instance::getInstance()->delete($instanceRecord);
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        self::assertArrayNotHasKey('(d.de)', $supportedMailServers, print_r($supportedMailServers, true));
+        $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+        self::assertArrayNotHasKey('(d.de)', $trustedMailDomains, print_r($trustedMailDomains, true));
     }
 
     /**
@@ -70,7 +70,7 @@ class Tinebase_InstanceTest extends TestCase
         $domains = ['test1.primarydomain.de', 'test1.secondarydomains.de', 'test1.secondarydomains2.de'];
         $regex = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
 
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        self::assertArrayHasKey($regex, $supportedMailServers, print_r($supportedMailServers, true));
+        $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+        self::assertArrayHasKey($regex, $trustedMailDomains, print_r($trustedMailDomains, true));
     }
 }

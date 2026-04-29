@@ -21,6 +21,8 @@ class Tinebase_Model_Instance extends Tinebase_Record_NewAbstract
     public const FLD_NAME = 'name';
     public const FLD_URL = 'url';
     public const FLD_MAIL_DOMAINS = 'mail_domains';
+    public const FLD_FLAG_ICON_FILE = 'flag_icon_file';
+
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -34,8 +36,7 @@ class Tinebase_Model_Instance extends Tinebase_Record_NewAbstract
         self::RECORD_NAME           => 'Instance',
         self::RECORDS_NAME          => 'Instances', // ngettext('Instance', 'Instances', n)
         self::TITLE_PROPERTY        => '{{ name }}: {{ url }}',
-        self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_NAME],
-
+        self::DEFAULT_SORT_INFO     => [self::FIELD => self::FLD_NAME],
 
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
@@ -81,6 +82,11 @@ class Tinebase_Model_Instance extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::COLUMNS                     => [Tinebase_Model_InstanceMailDomain::FLD_DOMAIN_NAME],
                 ],
+            ],
+            self::FLD_FLAG_ICON_FILE         => [
+                self::LABEL                 => 'Flag Icon File', // _('Flag Icon File')
+                self::TYPE                  => self::TYPE_STRING,
+                self::NULLABLE          => true,
             ],
         ]
     ];

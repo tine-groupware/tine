@@ -33,6 +33,7 @@ class Tinebase_Model_InstanceMailDomain extends Tinebase_Record_NewAbstract
         self::RECORD_NAME           => 'Instance Domain',
         self::RECORDS_NAME          => 'Instance Domains', // ngettext('Instance Domain', 'Instance Domains', n)
         self::TITLE_PROPERTY        => self::FLD_DOMAIN_NAME,
+        self::DEFAULT_SORT_INFO     => [self::FIELD => self::FLD_DOMAIN_NAME],
 
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,

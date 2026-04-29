@@ -51,7 +51,7 @@ class Tinebase_Import_Instance_Yaml extends Tinebase_Import_Abstract
             . ' Found ' . count($existingInstances) . ' existing instances');
 
         foreach ($data['customers'] as $instanceName => $config) {
-            $existingInstance = $existingInstances->find('name', $instanceName);
+            $existingInstance = $existingInstances->find(Tinebase_Model_Instance::FLD_URL, $config['fqdn']);
             try {
                 $domains = array_filter(
                     array_merge(
