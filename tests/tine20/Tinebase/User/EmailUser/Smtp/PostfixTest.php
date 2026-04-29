@@ -136,6 +136,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
 
     /**
      * try to update an email account
+     *
+     * @group noupdate
      */
     public function testUpdateUser()
     {

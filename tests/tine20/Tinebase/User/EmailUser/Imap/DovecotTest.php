@@ -134,7 +134,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
     }
 
     /**
-     * try to update an email account
+     *  @group noupdate
      */
     public function testUpdateAccount()
     {
@@ -230,7 +230,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
     }
 
     /**
-     * try to set password
+     * @group noupdate
      */
     public function testSetPassword()
     {
@@ -312,6 +312,9 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         self::assertEquals($this->_config['instanceName'], $rawDovecotUser['instancename']);
     }
 
+    /**
+     * @group noupdate
+     */
     public function testDeactivateUser()
     {
         $this->_skipIfLDAPBackend();
