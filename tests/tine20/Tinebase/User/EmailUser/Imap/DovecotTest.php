@@ -108,6 +108,9 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
 
     /**
      * try to add an email account
+     *
+     * @group noupdate
+     * @return Tinebase_Model_FullUser
      */
     public function testAddEmailAccount()
     {
@@ -134,7 +137,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
     }
 
     /**
-     *  @group noupdate
+     * @group noupdate
      */
     public function testUpdateAccount()
     {
