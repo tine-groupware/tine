@@ -97,11 +97,11 @@ js-e2e-tests-source:
     - if: $JS_E2E_TESTS_SOURCE_SAVE_SCREENSHOTS == "true" || $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source-save-screenshots/ || $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - !reference [.js-e2e-tests-source, rules]
-js-e2e-tests-source-save-screenshots-720p:
+js-e2e-tests-source-save-screenshots-desktop:
   extends: .js-e2e-tests-source
   variables:
     TEST_RESOLUTION: '{"width": 1280, "height": 720}'
-    CI_RESOLUTION: '720p'
+    CI_RESOLUTION: 'desktop'
   artifacts:
     when: always
     reports:
@@ -118,11 +118,16 @@ js-e2e-tests-source-save-screenshots-720p:
       when: never
     - !reference [.js-e2e-tests-source, rules]
   allow_failure: true
-js-e2e-tests-source-save-screenshots-1080p:
-  extends: js-e2e-tests-source-save-screenshots-720p
+js-e2e-tests-source-save-screenshots-mobile:
+  extends: js-e2e-tests-source-save-screenshots-desktop
   variables:
-    TEST_RESOLUTION: '{"width": 1920, "height": 1020}'
-    CI_RESOLUTION: '1080p'
+    TEST_RESOLUTION: '{"width": 393, "height": 852}'
+    CI_RESOLUTION: 'mobile'
+js-e2e-tests-source-save-screenshots-tablet:
+  extends: js-e2e-tests-source-save-screenshots-desktop
+  variables:
+    TEST_RESOLUTION: '{"width": 768, "height": 1024}'
+    CI_RESOLUTION: 'tablet'
 js-e2e-tests-source-php-version-matrix:
   extends: .js-e2e-tests-source
   parallel:
