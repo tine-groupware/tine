@@ -1160,10 +1160,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!active && this.button_massMailing.pressed) this.button_massMailing.toggle();
         if (this.massMailingMode === active) return;
         this.record.set('massMailingFlag', active);
-        await this.switchMassMailingMode(active);
+        await this.switchMassMailingMode(active, e);
     },
     
-    async switchMassMailingMode(active) {
+    async switchMassMailingMode(active, e) {
         this.massMailingMode = active;
         if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.massMailingInfoText.setVisible(active);

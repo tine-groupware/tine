@@ -190,7 +190,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         const emailEl =  document.createElement('div');
         const renderEmail = token.email !== '' && token.name !== '' ? ` < ${token.email} >` : token.email;
         const note = token?.note && token.note !== '' ? ` ( ${token.note} )` : '';
-        if (token.qtip) emailEl.setAttribute('ext:qtip', token.qtip);
+
         emailEl.className = 'responsive-grid-text-small';
         emailEl.innerHTML = Ext.util.Format.htmlEncode(token.name)
             + '<b>' + Ext.util.Format.htmlEncode(renderEmail) + '</b>'
@@ -205,6 +205,13 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         preferredIconEl.className = `tine-combo-icon renderer_PreferredIcon`;
         preferredIconEl.setAttribute('ext:qtip', i18n._('Preferred Email'));
         if (isPreferred) el.append(preferredIconEl);
+
+        if (token?.qtip) {
+            const infoEl =  document.createElement('div');
+            infoEl.className = `tine-combo-icon x-dialog-info`;
+            infoEl.setAttribute('ext:qtip', token.qtip);
+            el.append(infoEl);
+        }
 
         return el.outerHTML;
     },

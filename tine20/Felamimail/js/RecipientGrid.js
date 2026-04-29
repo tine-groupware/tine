@@ -1007,23 +1007,27 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 contactsToResolve.push({result: result, token: token, record: record});
             }
         })
+        let result = false;
 
-        const result = await this.showInvalidContactDialog(contactsToResolve);
-        if (result && contactsToResolve.length > 0) {
-            const records = _.map(contactsToResolve, 'record');
-            await Promise.all(records.map((record) => {
-                const members = record?.data?.address?.emails;
-                const membersToUpdate = members && members?.length > 0 ? members : null;
-                return this.updateRecipientsToken(record, membersToUpdate, 'bcc', false, false);
-            }));
-            this.addEmptyRowAndDoLayout(true);
-        }
         if (this.massMailingMode) {
+            result = await this.showInvalidContactDialog(contactsToResolve);
+
+            if (result && contactsToResolve.length > 0) {
+                const records = _.map(contactsToResolve, 'record');
+                await Promise.all(records.map((record) => {
+                    const members = record?.data?.address?.emails;
+                    const membersToUpdate = members && members?.length > 0 ? members : null;
+                    return this.updateRecipientsToken(record, membersToUpdate, 'bcc', false, false);
+                }));
+                this.addEmptyRowAndDoLayout(true);
+            }
+
             this.store.each((record) => {
                 record.set('type', 'bcc');
                 record.commit();
             });
         }
+
         this.view.refresh();
         
         if (this.composeDlg) {
@@ -1033,21 +1037,14 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     showInvalidContactDialog(contactsToResolve,  buttonOptions = ['No', 'Yes']) {
         return new Promise((resolve) => {
-            if (!this.massMailingMode) return resolve(false);
             if (contactsToResolve.length === 0) return resolve(true);
-            const text = contactsToResolve.map((item) => {
-                item.token.qtip = Ext.util.Format.htmlEncode(item?.result?.tip ?? '');
-                const block =  document.createElement('div');
-                block.innerHTML = this.searchCombo.renderEmailAddressAndIcon(item.token);
-                return block.outerHTML;
-            })
             const dialog = Tine.widgets.dialog.FileListDialog.openWindow({
                 modal: true,
                 allowCancel: false,
                 height: 180,
                 width: 500,
                 title: this.app.i18n._('The following recipients will be removed from this mass mail'),
-                text: text.join('</br>'),
+                text: this.getInvalidContactData(contactsToResolve),
                 scope: this,
                 buttonOptions: buttonOptions,
                 handler: async (button) => {
@@ -1056,6 +1053,16 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             });
         });
     },
+
+    getInvalidContactData(contactsToResolve) {
+        const text = contactsToResolve.map((item) => {
+            item.token.qtip = Ext.util.Format.htmlEncode(item?.result?.tip ?? '');
+            const block =  document.createElement('div');
+            block.innerHTML = this.searchCombo.renderEmailAddressAndIcon(item.token);
+            return block.outerHTML;
+        })
+        return text.join('</br>');
+    }
 });
 
 Ext.reg('felamimailrecipientgrid', Tine.Felamimail.RecipientGrid);

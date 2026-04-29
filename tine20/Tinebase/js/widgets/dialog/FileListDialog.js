@@ -53,6 +53,8 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     bufferResize: 500,
     buttonOptions: ['Yes', 'No', 'Ok'],
 
+    alertText: null,
+
     initComponent: function() {
         // init buttons and tbar
         this.initButtons();
@@ -67,15 +69,26 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
                 align:'stretch'
             },
             items: [new PersonaContainer({
-                persona: Personas.WARNING,
+                region: 'west',
+                persona: Personas.QUESTION_INPUT,
                 flex: 0,
+                width: 100,
+                height: 200,
+                style: 'padding: 5px; align-content: center;',
             }),{
                 border: false,
                 layout: 'fit',
                 flex: 1,
                 autoScroll: true,
                 style: 'padding: 10px 0px;',
+                bodyStyle: 'display: flex; flex-direction: column; gap: 10px;',
                 items: [{
+                    xtype: 'v-alert',
+                    columnWidth: 1,
+                    variant: 'info',
+                    hidden: !this.alertText,
+                    label: this.alertText,
+                }, {
                     xtype: 'label',
                     border: false,
                     cls: 'ext-mb-text',
