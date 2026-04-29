@@ -364,7 +364,7 @@ module.exports = {
             for (const mode of modes) {
                 const filePath = basePath.replace(
                     /(\.\w+)$/,
-                    `_${mode}_${resolutionString}$1`
+                    `_${mode}$1`
                 );
 
                 await page.evaluate((m) => {
