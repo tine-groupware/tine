@@ -139,7 +139,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
         Tinebase_Frontend_Http_CspRegistry::getInstance()->registerAppSources();
 
         $scriptSrcs = array_merge(
-            ["'self'", "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
+            ["'self'", 'blob:', "'unsafe-eval'", "'unsafe-inline'", 'https://versioncheck.tine20.net'],
             Tinebase_Frontend_Http_CspRegistry::getInstance()->getSources('script-src')
         );
         $connectSrcs = array_merge(
