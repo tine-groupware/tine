@@ -26,9 +26,11 @@ trait Tinebase_Export_FileLocationTrait
 
     public function writeToFileLocation(): void
     {
-        // NOTE: target fm_path "placeholder" is ignored!
-        if (!$this->_fileLocation || $this->_fileLocation
-                ->{Tinebase_Model_Tree_FileLocation::FLD_FM_PATH} === 'placeholder') {
+        // NOTE: empty file location, empty type or target fm_path "placeholder" is ignored!
+        if (!$this->_fileLocation
+            || empty($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_TYPE})
+            || $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FM_PATH} === 'placeholder'
+        ) {
             return;
         }
         switch ($this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_TYPE}) {
@@ -91,7 +93,8 @@ trait Tinebase_Export_FileLocationTrait
 
             default:
                 throw new Tinebase_Exception_NotImplemented(
-                    'FileLocation type ' . $this->_fileLocation->type . ' not implemented yet');
+                    'FileLocation type '
+                    . $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_TYPE} . ' not implemented yet');
         }
     }
 
