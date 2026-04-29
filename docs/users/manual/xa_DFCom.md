@@ -3,23 +3,23 @@
 
 ## Einleitung
 
-DFCom steht für DataFox Communicator und ist genau das: ein Kommunikationstool zwischen tine und den DataFox-Terminals. Hier geht es in erster Linie, aber nicht ausschließlich, um die Arbeitszeiterfassungs-Terminals von DataFox. Das DFCom-Modul bietet auch die Option, andere DataFox-Endgeräte anzubinden.
+DFCom steht für DataFox Communicator und ist genau das: ein Kommunikationstool zwischen {{ branding.title }} und den DataFox-Terminals. Hier geht es in erster Linie, aber nicht ausschließlich, um die Arbeitszeiterfassungs-Terminals von DataFox. Das DFCom-Modul bietet auch die Option, andere DataFox-Endgeräte anzubinden.
 
 Wie in den meisten anderen Anwendungen haben wir auch hier die bekannte Darstellung der Funktionen. Auf der linken Seite befinden sich die unterschiedlichen Module und Favoriten, im oberen Bereich die Werkzeuge der unterschiedlichen Module.
 
 <!-- SCREENSHOT -->
-![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_light.png#only-light){.desktop-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_dark.png#only-dark){.desktop-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_light.png#only-light){.mobile-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_dark.png#only-dark){.mobile-img}
 
 Die Anbindung eines DataFox-Endgerätes geschieht über die Config und kann momentan nicht vom User Interface getätigt werden.
 
-Vor dem erstmaligen Verbinden des DataFox-Endgerätes muss sowohl in tine als auch auf dem Gerät der gleiche Setup-Key hinterlegt sein. In der Regel wird die Einrichtung des DataFox-Endgerätes von der Firma Metaways Infosystems GmbH übernommen. Hierzu werden die Installations-URL und der für Ihre tine-Installation spezifische Setup-Key benötigt. Sobald beide, tine und das DataFox-Endgerät, den gleichen Setup-Key haben und das Endgerät die URL kennt, bei der es sich melden soll, wird automatisch eine Verbindung hergestellt und das DataFox-Endgerät in der Anwendung DFCom sichtbar. tine generiert im Setup-Prozess einen, für dieses DataFox-Endgerät spezifischen, Security-Key, welcher den Setup-Key ersetzt.
+Vor dem erstmaligen Verbinden des DataFox-Endgerätes muss sowohl in {{ branding.title }} als auch auf dem Gerät der gleiche Setup-Key hinterlegt sein. In der Regel wird die Einrichtung des DataFox-Endgerätes von der Firma Metaways Infosystems GmbH übernommen. Hierzu werden die Installations-URL und der für Ihre {{ branding.title }}-Installation spezifische Setup-Key benötigt. Sobald beide, {{ branding.title }} und das DataFox-Endgerät, den gleichen Setup-Key haben und das Endgerät die URL kennt, bei der es sich melden soll, wird automatisch eine Verbindung hergestellt und das DataFox-Endgerät in der Anwendung DFCom sichtbar. {{ branding.title }} generiert im Setup-Prozess einen, für dieses DataFox-Endgerät spezifischen, Security-Key, welcher den Setup-Key ersetzt.
 
 ## Module
 
-Kommen wir nun zur Bedienung der DFCom-Anwendung. Grundsätzlich dient diese Anwendung, wie gesagt, nur der Anbindung von DataFox-Endgeräten in tine. Die Verbildlichung der gesammelten Informationen geschieht meist in anderen Anwendungen. Beispielsweise synchronisiert die Zeiterfassung die im DFCom gesammelten Informationen und gibt diese in einem übersichtlichen Format an den User (vorausgesetzt, dass hier ein DataFox-Zeiterfassungs-Terminal angebunden ist).
+Kommen wir nun zur Bedienung der DFCom-Anwendung. Grundsätzlich dient diese Anwendung, wie gesagt, nur der Anbindung von DataFox-Endgeräten in {{ branding.title }}. Die Verbildlichung der gesammelten Informationen geschieht meist in anderen Anwendungen. Beispielsweise synchronisiert die Zeiterfassung die im DFCom gesammelten Informationen und gibt diese in einem übersichtlichen Format an den User (vorausgesetzt, dass hier ein DataFox-Zeiterfassungs-Terminal angebunden ist).
 
 Schauen wir uns die unterschiedlichen Module nun einmal näher an.
 
@@ -29,10 +29,10 @@ Das erste Modul, das wir uns anschauen ist Gerät. Dieses dient der Verwaltung d
 
 ### Modul - Gerätelisten
 
-Gerätelisten ist das nächste Modul, das wir uns anschauen wollen. Hier werden alle Daten sichtbar, die auf dem DataFox-Endgerät lokal gespeichert sind. Dies könnte z.B. eine Liste der Personen sein, die an diesem Terminal stempeln dürfen, eine Liste der Stempel-Möglichkeiten (z.B. Arbeitsbeginn, Pause, Feierabend) oder auch andere Listen, die lokal gespeichert werden. In der momentanen Version von tine[^1] können diese Listen jedoch nicht von dem User Interface erstellt werden. Hier besteht nur die Möglichkeit, die Listen zu drucken.
+Gerätelisten ist das nächste Modul, das wir uns anschauen wollen. Hier werden alle Daten sichtbar, die auf dem DataFox-Endgerät lokal gespeichert sind. Dies könnte z.B. eine Liste der Personen sein, die an diesem Terminal stempeln dürfen, eine Liste der Stempel-Möglichkeiten (z.B. Arbeitsbeginn, Pause, Feierabend) oder auch andere Listen, die lokal gespeichert werden. In der momentanen Version von {{ branding.title }}[^1] können diese Listen jedoch nicht von dem User Interface erstellt werden. Hier besteht nur die Möglichkeit, die Listen zu drucken.
 
 [^1]:
-    tine-Version 2019.11.11
+    {{ branding.title }}-Version 2019.11.11
 
 ### Modul - Geräte Datensätze
 

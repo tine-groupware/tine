@@ -1,36 +1,36 @@
 # Sales { data-ctx="/Sales" }
-Die tine-Anwendung Sales (_Verkauf_) ist kein typischer Teil einer Groupware, sondern später als ERP-Baustein auf Kundenwunsch hinzugekommen. Sie dient dem Erfassen von Produkten (auch Dienstleistungen fallen darunter), Verträgen und Kundendatensätzen sowie einigen zugehörigen buchhalterischen Daten. Diese können durch Verknüpfungen miteinander und auch mit anderen Einträgen, wie z.B. einem extra für einen Verkaufsvorgang angelegten Zeitkonto samt Stundenzetteln, verbunden werden. Damit ist es möglich, Produktions-, Verkaufs- und Liefervorgänge insoweit vollständig zu erfassen, als dem Rechnungswesen alle Daten zur Rechnungslegung zur Verfügung stehen.
+Die {{ branding.title }}-Anwendung Sales (_Verkauf_) ist kein typischer Teil einer Groupware, sondern später als ERP-Baustein auf Kundenwunsch hinzugekommen. Sie dient dem Erfassen von Produkten (auch Dienstleistungen fallen darunter), Verträgen und Kundendatensätzen sowie einigen zugehörigen buchhalterischen Daten. Diese können durch Verknüpfungen miteinander und auch mit anderen Einträgen, wie z.B. einem extra für einen Verkaufsvorgang angelegten Zeitkonto samt Stundenzetteln, verbunden werden. Damit ist es möglich, Produktions-, Verkaufs- und Liefervorgänge insoweit vollständig zu erfassen, als dem Rechnungswesen alle Daten zur Rechnungslegung zur Verfügung stehen.
 
-Zu Beginn dieses Buches haben wir die Aufgabe einer Groupware in Abgrenzung vom reinen Kundenbeziehungsmanagementsystem (CRM) beschrieben: Im Vordergrund steht die Kommunikation in Unternehmen mit vergleichsweise längeren Wertschöpfungsprozessen, die zudem die Zusammenarbeit mehrerer Mitarbeiter erfordern. Bei solch komplexen Prozessen kann der Gesamtaufwand, der zur Lieferung eines Produktes und/oder einer Dienstleistung aufgewendet wurde, leicht aus dem Blick geraten. Damit das nicht geschieht, verfügt tine über die Anwendungen Sales, Zeiterfassung und HumanResources.
+Zu Beginn dieses Buches haben wir die Aufgabe einer Groupware in Abgrenzung vom reinen Kundenbeziehungsmanagementsystem (CRM) beschrieben: Im Vordergrund steht die Kommunikation in Unternehmen mit vergleichsweise längeren Wertschöpfungsprozessen, die zudem die Zusammenarbeit mehrerer Mitarbeiter erfordern. Bei solch komplexen Prozessen kann der Gesamtaufwand, der zur Lieferung eines Produktes und/oder einer Dienstleistung aufgewendet wurde, leicht aus dem Blick geraten. Damit das nicht geschieht, verfügt {{ branding.title }} über die Anwendungen Sales, Zeiterfassung und HumanResources.
 
 <!--Rechnungswesen-->
-Das Rechnungswesen selbst ist (noch) nicht Bestandteil von tine. Aber es lassen sich, da wir es ja mit einer quelloffenen Software zu tun haben, bei Bedarf entsprechende Schnittstellen einrichten, welche die hier gespeicherten Daten an ein Fakturierungsprogramm übergeben.
+Das Rechnungswesen selbst ist (noch) nicht Bestandteil von {{ branding.title }}. Aber es lassen sich, da wir es ja mit einer quelloffenen Software zu tun haben, bei Bedarf entsprechende Schnittstellen einrichten, welche die hier gespeicherten Daten an ein Fakturierungsprogramm übergeben.
 
 Im Folgenden werden Sie feststellen, dass Sales unter den o.g. Programmteilen mit ERP-Funktion eine Sonderstellung einnimmt, da es auch die Untermodule Kostenstellen und Abteilung enthält, die nicht unmittelbar dem Verkaufsprozess zuzuordnen sind.[^1]
 
 [^1]:
-    Die Anordnung hier hat historische Gründe und wird in einer der nächsten Versionen von tine korrigiert werden.
+    Die Anordnung hier hat historische Gründe und wird in einer der nächsten Versionen von {{ branding.title }} korrigiert werden.
 
-Rufen Sie über den Reiter tinenet oder tinecom die Anwendung Sales auf (wenn sie nicht schon als Reiter angezeigt wird – in diesem Falle klicken Sie den Reiter an).
+Rufen Sie über den Reiter {{ branding.title }}net oder {{ branding.title }}com die Anwendung Sales auf (wenn sie nicht schon als Reiter angezeigt wird – in diesem Falle klicken Sie den Reiter an).
 
 ## Untermodule und Favoriten
 
 Die Ansicht der linken Seite dieses Programmteils unterscheidet sich von den klassischen Groupware-Anwendungen, denn Sales kennt z.B. keine Unterteilung in Datenbanken für "persönliche", "gemeinsame" oder Objekte "anderer Benutzer".
 
 <!-- SCREENSHOT -->
-![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_light.png#only-light){.desktop-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_light.png#only-light){.mobile-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_dark.png#only-dark){.mobile-img}
 
 <!--ERP-->
 Auch daran erkennen Sie, dass es sich hier eigentlich um ein Tool zur Ressourcenplanung und -erfassung (ERP) handelt. Im oberen Teil der linken Seite unter Module finden Sie dafür mehrere Unterprogramme.
 
 <!-- SCREENSHOT -->
-![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_light.png#only-light){.desktop-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_dark.png#only-dark){.desktop-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_light.png#only-light){.mobile-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_dark.png#only-dark){.mobile-img}
 
 Die Einträge unter Favoriten wechseln je nach Modul. In Produkte und Verträge gibt es in der Standardvariante nur eine Ansicht, nämlich Meine Produkte (also jene, die Sie selbst angelegt haben) bzw. Meine Verträge (analog). Kunden, Kostenstellen und Abteilung haben gar keine Favoriten-Ansichten, da sie der Eingabe zentral verwalteter Daten (Kunden) bzw. Parameter für die Aufwandserfassung dienen.
 
@@ -46,10 +46,10 @@ Was Sie auch schon kennen, ist die Verfahrensweise mit der Tabellenansicht. Rech
 Sollten im System bisher keine Produkte gespeichert sein, fügen wir jetzt eines hinzu, denn im weiteren Verlauf des Kapitels benötigen wir es für Verkettungs-Funktionen mit Verträgen und Kunden. Klicken Sie darum jetzt Produkt hinzufügen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_light.png#only-light){.desktop-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_light.png#only-light){.mobile-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_dark.png#only-dark){.mobile-img}
 
 In der Bearbeitungsmaske unter dem geöffneten Reiter Produkt finden Sie die in der Standardansicht der Tabelle angezeigten Felder wieder. Die oben erwähnten Daten zum Bearbeitungsverlauf finden Sie nicht, da sie, wie schon erwähnt, automatisch erstellt werden.
 
@@ -57,7 +57,7 @@ In der Bearbeitungsmaske unter dem geöffneten Reiter Produkt finden Sie die in 
 Kommen wir zu den Feldern zur Charakterisierung eines Produktes: Sie müssen sie nicht alle ausfüllen – nur Name und Preis sind Pflichtfelder. Beachten Sie bei Eingabe eines Preises, dass dieser in englischer Notation, also mit einem _Dezimalpunkt_ anstelle eines Kommas, eingegeben werden muss. Wenn Sie das Produkt zukaufen, d.h. der Hersteller ein anderes Unternehmen ist, können Sie das hier vermerken.
 
 
-Ist der Hersteller des Produktes als Kontaktdatensatz in Ihrer tine-Adressdatenbank erfasst, können Sie ihn mit dem Produktdatensatz verknüpfen. Da diese Verknüpfung nicht als Programmfunktion in Sales vorgesehen ist, nutzen Sie dazu die allgemeine Verknüpfungsfunktion.
+Ist der Hersteller des Produktes als Kontaktdatensatz in Ihrer {{ branding.title }}-Adressdatenbank erfasst, können Sie ihn mit dem Produktdatensatz verknüpfen. Da diese Verknüpfung nicht als Programmfunktion in Sales vorgesehen ist, nutzen Sie dazu die allgemeine Verknüpfungsfunktion.
 
 
 !!! info "Wichtig"
@@ -74,7 +74,7 @@ Beim Klick auf Produkt bearbeiten öffnet sich die gleiche Maske, wie Sie sie sc
 Der Menüpunkt löscht ein in der Tabelle angewähltes Produkt, immer mit Sicherheitsabfrage.[^2]
 
 [^2]:
-    Beachten Sie, dass Produkte auch dann gelöscht werden, wenn Sie z.B. mit Verträgen verknüpft sind, was natürlich zu unerwünschten Inkonsistenzen führen kann. Diese Unzulänglichkeit wird in einer künftigen Version von tine sicher behoben.
+    Beachten Sie, dass Produkte auch dann gelöscht werden, wenn Sie z.B. mit Verträgen verknüpft sind, was natürlich zu unerwünschten Inkonsistenzen führen kann. Diese Unzulänglichkeit wird in einer künftigen Version von {{ branding.title }} sicher behoben.
 
 ### Drucke Seite
 
@@ -92,10 +92,10 @@ Unter Kunden finden Sie im Bearbeitungsmenü analog zu Produkte die Einträge Ku
 Klicken Sie im Bearbeitungsmenü Kunde hinzufügen an. Unter dem Reiter Kunde finden Sie eine Maske mit den Feldern, die auch in der Tabellenansicht zu sehen waren. Beachten Sie, dass jetzt die Felder Währung, Zahlungsziel in Tagen, Wechselkurs und Rabatt in Prozent bereits mit Standardwerten gefüllt sind.
 
 <!-- SCREENSHOT -->
-![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_light.png#only-light){.desktop-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_light.png#only-light){.mobile-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_dark.png#only-dark){.mobile-img}
 
 Zuerst weisen Sie, als Pflichteingabe und mit zwei Pfeilen zum Hoch- und Herunterzählen versehen, die Kundennummer zu. Sie können zwar beliebige Einträge vornehmen, im Hochzählen über den Pfeil wird aber die nächste Ganzzahl (ohne evtl. vorangestellte Nullen oder Buchstaben) eingetragen.
 
@@ -103,7 +103,7 @@ Bei Name tragen Sie die Firmenbezeichnung Ihres Kunden ein.
 
 Das Auswählen einer Kontaktperson (extern) über das Pulldown aus allen gespeicherten Kontaktdatensätzen ergänzt im Sektor Postanschrift automatisch die Felder Straße, Postleitzahl, Ort, Region und Land gemäß den dortigen Eintragungen. In diesem Block stehen Ihnen noch zwei Felder Zusatz und Zusatz 2 zur Verfügung. Rechts daneben finden Sie einen kleinen rechteckigen Button, hinter dem sich die praktische Funktion Adresse in die Zwischenablage kopieren befindet, die Sie z.B. zum schnellen Ausfüllen einer Adresse in einem Musterbrief-Formular verwenden können.
 
-Kontaktperson intern ist ein Pulldown, mit dem Sie aus dem gesamten Adressdatenbestand Ihrer tine-Installation eine interne Kontaktperson für diesen Kunden auswählen.
+Kontaktperson intern ist ein Pulldown, mit dem Sie aus dem gesamten Adressdatenbestand Ihrer {{ branding.title }}-Installation eine interne Kontaktperson für diesen Kunden auswählen.
 
 Damit haben Sie einen Großteil der Maske schon ausgefüllt. Sie sollten, wenn aus diesen Daten die Rechnungserstellung geplant ist, noch unter Abrechnung die USt.-ID sowie IBAN und BIC eingeben sowie die Standardeinstellungen für Zahlungsziel in Tagen, Wechselkurs und Rabatt in Prozent prüfen und bei Bedarf ändern.
 
@@ -138,7 +138,7 @@ Der Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmä
 Wir gehen weiter in den Menüpunkten unterhalb von Kunden, denn auch Kostenstellen sollten wir vor Verträgen angelegt haben, damit wir dort dann die Verknüpfung vornehmen können.
 
 !!! info "Wichtig"
-    Die Nomenklatur von Kostenstellen wird branchen- und/oder unternehmensspezifisch nach verschiedenen Kriterien definiert und gilt i.d.R. für das ganze Unternehmen verbindlich. Das entsprechende Verzeichnis sollte Ihnen also bei der Anlage in tine vorliegen.
+    Die Nomenklatur von Kostenstellen wird branchen- und/oder unternehmensspezifisch nach verschiedenen Kriterien definiert und gilt i.d.R. für das ganze Unternehmen verbindlich. Das entsprechende Verzeichnis sollte Ihnen also bei der Anlage in {{ branding.title }} vorliegen.
 
 ### Kostenstelle hinzufügen
 
@@ -166,10 +166,10 @@ Unter Verträge finden Sie im Bearbeitungsmenü analog zu Produkte die Einträge
 Klicken Sie Vertrag hinzufügen, finden Sie unter dem Reiter Vertrag eine Maske mit den Feldern, die auch in der Tabellenansicht zu sehen waren. Die vier ausgeblendeten Felder sind hier auch nicht in der Maske zu finden, denn sie enthalten vom System automatisch ausgefüllte Daten.
 
 <!-- SCREENSHOT -->
-![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_light.png#only-light){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_light.png#only-light){.mobile-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.mobile-img}
 
 Nummer ist ein Pflichtfeld und zur manuellen Eingabe oder automatischen Vergabe einer Vertragsnummer vorgesehen, d.h. Sie können (wenn Sie über die entsprechende Berechtigung verfügen) einstellen, ob hier eine Vertragsnummer frei eingegeben oder vom System automatisch hochgezählt werden soll. Die dazu erforderlichen Einstellungsmöglichkeiten finden Sie in der Anwendung Admin unter Anwendungen -> Sales -> Settings (vgl. [Administration - Sales](oa_Administration.md/#sales)). Außerdem wird dort auch festgelegt, welche Formen einer Vertragsnummer (nur Ziffern oder auch Text) erlaubt sein sollen.
 
@@ -182,7 +182,7 @@ Unter Kunde erhalten Sie ein Pulldown, das Ihnen die im System bereits angelegte
 
 Anfang und Ende sind Datumsfelder, die für Vertragsanfang und -ende stehen.
 
-Über Kontaktperson (extern) und Kontaktperson (intern) weisen Sie per Pulldown einen beliebigen in tine gespeicherten Kontakt zu. In beiden Fällen ist es möglich, sowohl einen Kontakt aus einem beliebigen Adressbuch als auch einen Benutzer von tine auszuwählen.
+Über Kontaktperson (extern) und Kontaktperson (intern) weisen Sie per Pulldown einen beliebigen in {{ branding.title }} gespeicherten Kontakt zu. In beiden Fällen ist es möglich, sowohl einen Kontakt aus einem beliebigen Adressbuch als auch einen Benutzer von {{ branding.title }} auszuwählen.
 
 Über Hauptkostenstelle weisen Sie dem Vertrag eine Kostenstelle zu. Das funktioniert natürlich ebenfalls nur, wenn im System bereits Kostenstellen angelegt wurden (vgl. [Kostenstellen](ha_Sales.md/#kostenstellen)).
 
@@ -191,10 +191,10 @@ Im Feld Beschreibung speichern Sie beliebige Informationen über den Vertrag.
 Klicken Sie nun den Reiter Produkte an.
 
 <!-- SCREENSHOT -->
-![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_light.png#only-light){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_dark.png#only-dark){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_light.png#only-light){.mobile-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_dark.png#only-dark){.mobile-img}
 
 Sie sehen, dass Sie per Pulldown dem Vertrag beliebig viele Produkte in beliebiger Anzahl zuweisen können.
 

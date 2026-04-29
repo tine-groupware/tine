@@ -4,10 +4,10 @@
 Über die Dienstplanung lassen sich die verschiedenen Teilnehmerrollen für Termine planen, in dem Benutzer einfach per Drag and Drop in entsprechende Rollen verteilt werden. Beim Speichern werden diese dann direkt in den Termin übertragen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_light.png#only-light){.desktop-img}
+![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_light.png#only-light){.mobile-img}
+![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_dark.png#only-dark){.mobile-img}
 
 Es gibt jedoch einige Ergänzungen, die eingestellt werden müssen, um dies zu ermöglichen. Diese sollen im folgenden Kapitel erläutert werden.
 
@@ -17,26 +17,26 @@ Es gibt jedoch einige Ergänzungen, die eingestellt werden müssen, um dies zu e
 Mit der Anwendung Dienstplanung wird die Kalender- und Adressbuch-Anwendung erweitert. Im Kalender gibt es zwei Änderungen. Zum einen kann nun beim Erstellen eines Termins auch eine Terminart eingestellt werden. Nur die Termine, die einer Terminart zugeordnet sind, werden innerhalb der Dienstplanungs-Anwendung angezeigt.
 
 <!-- SCREENSHOT -->
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_light.png#only-light){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_light.png#only-light){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_dark.png#only-dark){.mobile-img}
 
 Des weiteren gibt es nun auch den Reiter Dienstplanung. Hier kann eingestellt werden, wieviele unterschiedliche Mitarbeiter für diesen Termin benötigt werden.
 
 <!-- SCREENSHOT -->
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light.png#only-light){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light.png#only-light){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark.png#only-dark){.mobile-img}
 
 In der Adressbuch Anwendung gibt es ebenso zwei kleine Änderungen. Zum einen gibt es im Modul Gruppen nun auch die Möglichkeit Gruppen für die Dienstplanung zu erstellen. Diese Gruppe kann nun einer Dienstplanungs-Rolle zugeordnet werden. Dies geschieht über den Reiter Dienstplanung. Mit dieser Funktion kann dann ein Mitarbeiter dieser Gruppe zugeordnet werden, und die Anwendung Dienstplanung weiß, welche Person was für eine Tätigkeit hat.
 
 <!-- SCREENSHOT -->
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light.png#only-light){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light.png#only-light){.mobile-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark.png#only-dark){.mobile-img}
 
 Mitglieder dieser Gruppe zuordnen passiert, wie gewohnt, im ersten Reiter Gruppe unter dem Punkt Mitglieder.
 
@@ -59,10 +59,10 @@ Jede Rolle besitzt eine Box mit einem farbigen Rahmen sowie einem Anzahl-Feld. D
 Durch einen Klick auf einzelne Felder oder den Spaltenkopf einer Rolle werden die verfügbaren Benutzer gefiltert. Es werden nur jene Benutzer angezeigt, die den entsprechenden Feldern zugeordnet werden können.
 
 <!-- SCREENSHOT -->
-![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_light.png#only-light){.desktop-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_light.png#only-light){.mobile-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_dark.png#only-dark){.mobile-img}
 
 
 ## Die Teilnehmeransicht
@@ -76,10 +76,10 @@ Im oberen Bereich befinden sich die verfügbaren Teilnehmer in Form von Tokens. 
 * Ein oder mehrere Rollensymbole, für die dieser Teilnehmer verfügbar ist. Die Symbole finden sich auch entsprechend im Kopf der Terminansicht.
 
 <!-- SCREENSHOT -->
-![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_light_1920x1020.png#only-light){.desktop-img}
-![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_dark_1920x1020.png#only-dark){.desktop-img}
-![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_light_1280x720.png#only-light){.mobile-img}
-![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_dark_1280x720.png#only-dark){.mobile-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_light.png#only-light){.desktop-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_dark.png#only-dark){.desktop-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_light.png#only-light){.mobile-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_dark.png#only-dark){.mobile-img}
 
 
 ## Einen Termin planen
