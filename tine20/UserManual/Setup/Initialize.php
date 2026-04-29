@@ -27,6 +27,29 @@ class UserManual_Setup_Initialize extends Setup_Initialize
         self::importManualContent();
     }
 
+    /**
+     * imports the file tine20/UserManual/Setup/files/bk01-toc.html into the database usermanual_manualpage
+     *  where file = bk01-toc.html
+     *
+     * @return void
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public static function importUpdatedToc()
+    {
+        $filename = 'bk01-toc.html';
+        $path = dirname(__FILE__) . '/files/' . $filename;
+
+        if (file_exists($path)) {
+            $content = file_get_contents($path);
+
+            $db = Tinebase_Core::getDb();
+            $db->update(SQL_TABLE_PREFIX . 'usermanual_manualpage', [
+                    'content' => $content
+                ], $db->quoteInto($db->quoteIdentifier('file') . ' = ?', $filename)
+            );
+        }
+    }
+
     public static function importManualContent($overwrite = false)
     {
         $state = Tinebase_Application::getInstance()->getApplicationState('UserManual',
@@ -73,6 +96,9 @@ class UserManual_Setup_Initialize extends Setup_Initialize
                     'version' => self::CONTENT_VERSION,
                     'date' => Tinebase_DateTime::now()->toString(),
                 ]));
+
+            self::importUpdatedToc();
+
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' Could not import manual content: ' . $e->getMessage()
