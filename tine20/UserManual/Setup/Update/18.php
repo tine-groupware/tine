@@ -36,7 +36,6 @@ class UserManual_Setup_Update_18 extends Setup_Update_Abstract
 
     public function update001(): void
     {
-        UserManual_Setup_Initialize::importUpdatedToc();
         $this->addApplicationUpdate(UserManual_Config::APP_NAME, '18.1', self::RELEASE018_UPDATE001);
     }
 }
