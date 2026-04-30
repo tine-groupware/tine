@@ -4,7 +4,7 @@
 
 https://github.com/tine-groupware/icon-set
 
-## add new icon and update icon-set in tine repo
+## add new icon and update icon-set in {{ branding.title }} repo
 
 - [icon-set repo] push new icon 
 - [tine repo]

@@ -17,7 +17,7 @@ providing secure and seamless access to websites, apps, and devices.
 
 To use this feature, a user must first **set up a `WebAuthn/FIDO2` device** by following these steps:
 
-1. Log in your **tine** account.
+1. Log in your **{{ branding.title }}** account.
 
 2. Click on the **User Avatar** at the top of the **TineBar**.
 
@@ -28,10 +28,10 @@ To use this feature, a user must first **set up a `WebAuthn/FIDO2` device** by f
 5. Follow the prompts to create a new passkey.
 
 ## **Using Passkey for Login**
-Once a passkey has been set up, users can log into their **tine** account without entering their username and password.
-If **passkey-login** is enabled for the **tine** instance:
+Once a passkey has been set up, users can log into their **{{ branding.title }}** account without entering their username and password.
+If **passkey-login** is enabled for the **{{ branding.title }}** instance:
 
 - **Clicking the "Username"** field on the `Login` page will display **autofill options**, showing stored **passwords** and
-`passkeys`. Selecting a stored `passkey` will log the user into their `tine` account automatically.
+`passkeys`. Selecting a stored `passkey` will log the user into their `{{ branding.title }}` account automatically.
 
 - Alternatively, users can **click on `Login with Passkey`** on the `Login` page to choose from stored `passkeys` and log in.

@@ -1,6 +1,6 @@
 # Welcome Operators
 
-Technical administrators who have root access to the server systems tine groupware runs on.
+Technical administrators who have root access to the server systems {{ branding.title }} groupware runs on.
 
 You should start with
 

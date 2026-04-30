@@ -1,7 +1,7 @@
-# Configuring tine for Single Sign On (SSO)
-## tine as Single Sign On Identity Provider (SSO IdP)
+# Configuring {{ branding.title }} for Single Sign On (SSO)
+## {{ branding.title }} as Single Sign On Identity Provider (SSO IdP)
 
-tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity provider for [oidc](https://openid.net/connect/) and [SAML2](https://en.wikipedia.org/wiki/SAML_2.0)
+{{ branding.title }} can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity provider for [oidc](https://openid.net/connect/) and [SAML2](https://en.wikipedia.org/wiki/SAML_2.0)
 
 ### 1) Install SSO application
 * Go to `setup.php` and make sure SSO is installed
@@ -12,7 +12,7 @@ tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity pro
 
 ### 2) Generate keys manually
 
-call the tine cli:
+call the {{ branding.title }} cli:
 tine20.php --method=SSO.generateKey
 
 To check if you have valid certificates, you can call these URLs:
@@ -43,14 +43,14 @@ Go to `Admin` > `Applications` > `SSO` and open the tab `RELYING PARTIES` in the
 ```
 
 ##### - SAML2
-The metadata URL of the tine idp (needed in config of the rp) is <https://YOURTINEURL/sso/saml2/idpmetadata> .
+The metadata URL of the {{ branding.title }} idp (needed in config of the rp) is <https://YOURTINEURL/sso/saml2/idpmetadata> .
 
-If not given tine fetches the `AssertionConsumerService*` and `singleLogoutService*` properties from the optional `metaUrl`.
+If not given {{ branding.title }} fetches the `AssertionConsumerService*` and `singleLogoutService*` properties from the optional `metaUrl`.
 ``` sh title="Add SAML2 RP"
 --8<-- "scripts/curl/admin_SSOAddRP_SAML2"
 ```
 !!! note "Custom attributes mappings"
-    The mapping `tine user attributes` => `SAML2 attributes` can be customized the rp's `attributeMapping` property (JSON formatted)
+    The mapping `{{ branding.title }} user attributes` => `SAML2 attributes` can be customized the rp's `attributeMapping` property (JSON formatted)
     ``` json title="Example to map user email to SAML2 uid"
     {
         "uid": "accountEmailAddress"
@@ -64,14 +64,14 @@ If not given tine fetches the `AssertionConsumerService*` and `singleLogoutServi
     ```
 
 ##### - OIDC
-The OIDC provider url of the tine idp (needed in the config of the rp) is <https://YOURTINEURL> (no trailing slash). 
+The OIDC provider url of the {{ branding.title }} idp (needed in the config of the rp) is <https://YOURTINEURL> (no trailing slash). 
 ``` sh title="Add OIDC RP"
 --8<-- "scripts/curl/admin_SSOAddRP_oidc"
 ```
 
-## tine as Single Sign On Relaying Party (SSO RP)
+## {{ branding.title }} as Single Sign On Relaying Party (SSO RP)
 
-tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) Relaying Party for [OIDC](https://openid.net/connect/)
+{{ branding.title }} can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) Relaying Party for [OIDC](https://openid.net/connect/)
 
 ### 1) Install SSO application
 * Go to `setup.php` and make sure SSO is installed
