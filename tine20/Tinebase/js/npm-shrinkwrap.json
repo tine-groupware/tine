@@ -61,7 +61,7 @@
         "store2": "^2.14.2",
         "stream-browserify": "^3.0.0",
         "twing": "^5.1.2",
-        "twing-intl": "0.0.2",
+        "twing-intl": "^0.0.4",
         "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
         "util": "^0.12.5",
         "vue": "^3.2.45",
@@ -17504,9 +17504,9 @@
       }
     },
     "node_modules/twing-intl": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/twing-intl/-/twing-intl-0.0.2.tgz",
-      "integrity": "sha512-dvbtin5CCkfsaqXvDpcWd8sSIDVuYx4DXp5EvK6XDpHlxYooQxb5i+KzLOP4b7ijAmNzD6hpNzETfD8Sy9zFAg==",
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/twing-intl/-/twing-intl-0.0.4.tgz",
+      "integrity": "sha512-/t2apEsucI5GbzZZb6/y6wZHuTN3sgnBXP7Crjk9MWTJJNZ48hRIFtmiwc312OT13LP8pQFor/1k9fqqELxd3w==",
       "dependencies": {
         "format-message-formats": "^6.2.4"
       }
@@ -31566,9 +31566,9 @@
       }
     },
     "twing-intl": {
-      "version": "0.0.2",
-      "resolved": "https://registry.npmjs.org/twing-intl/-/twing-intl-0.0.2.tgz",
-      "integrity": "sha512-dvbtin5CCkfsaqXvDpcWd8sSIDVuYx4DXp5EvK6XDpHlxYooQxb5i+KzLOP4b7ijAmNzD6hpNzETfD8Sy9zFAg==",
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/twing-intl/-/twing-intl-0.0.4.tgz",
+      "integrity": "sha512-/t2apEsucI5GbzZZb6/y6wZHuTN3sgnBXP7Crjk9MWTJJNZ48hRIFtmiwc312OT13LP8pQFor/1k9fqqELxd3w==",
       "requires": {
         "format-message-formats": "^6.2.4"
       }

@@ -172,7 +172,7 @@ class Sales_Controller extends Tinebase_Controller_Event
             'id' => 'cs_boilerplate',
             'application_id' => $application,
             'model' => 'Sales_Model_Boilerplate',
-            'label' => 'Boilerplate' // _('Boilerplate')
+            'label' => 'Boilerplates' // _('Boilerplates')
         )));
 
         return $result;

@@ -880,6 +880,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return Sales_Controller_Document_Abstract::createPrecursorTree($documentModel, [$documentId], $resolvedIds, [
                 Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                     Sales_Model_Document_Abstract::FLD_POSITIONS => [],
+                    Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => [],
                 ],
             ])->toArray();
     }
