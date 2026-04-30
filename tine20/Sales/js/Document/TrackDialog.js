@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import asString from "../../../Tinebase/js/ux/asString";
+import * as async from 'async'
+
 Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     width: 800,
     height: 600,
@@ -25,7 +28,11 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.documentModel);
         this.record = Tine.Tinebase.data.Record.setFromJson(this.document, this.recordClass);
 
-        this.window.setTitle(this.app.formatMessage('Trac Document { title }', { title: this.record.getTitle() }));
+        (async () => {
+            const title = await asString(this.record.getTitle());
+            this.window.setTitle(this.app.formatMessage('Trac Document { title }', { title }));
+        })();
+
 
         this.cyImport = import(/* webpackChunkName: "Tinebase/js/cytoscape" */ 'cytoscape')
         this.cyPanel = new Ext.Panel({
@@ -199,12 +206,12 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         }
     },
 
-    onTracDataLoad() {
+    async onTracDataLoad() {
         // docuemnt or position based?
         // -> start with document
         // console.error(tracData);
         const elements = {nodes: [], edges: []};
-        this.tracData.forEach((dynamicRecordWrapper) => {
+        await async.forEach(this.tracData, (async (dynamicRecordWrapper) => {
             const {model_name: modelName, record: recordData} = dynamicRecordWrapper;
             const document = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Tinebase.data.RecordMgr.get(modelName));
             // const precursor_documents
@@ -214,7 +221,8 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             const cols = {Sales_Model_Document_Offer: 0, Sales_Model_Document_Order: 1, Sales_Model_Document_Delivery: 2, Sales_Model_Document_Invoice: 3};
 
             const documentId = `${modelName}-${document.id}`;
-            elements.nodes.push({data: {id: documentId, name: document.getTitle(), col: cols[modelName], modelName, collapsed: this.cyNodesCollapsed } });
+            const title = await asString(document.getTitle());
+            elements.nodes.push({data: {id: documentId, name: title, col: cols[modelName], modelName, collapsed: this.cyNodesCollapsed } });
 
             if (this.cyNodesCollapsed) {
                 _.forEach(document.get('precursor_documents'), (precursorDynamicRecordWrapper) => {
@@ -233,7 +241,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                     }
                 });
             }
-        })
+        }));
 
         this.cy.startBatch();
         this.cy.remove('*');
