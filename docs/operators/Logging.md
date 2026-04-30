@@ -1,6 +1,6 @@
 # Logging
 
-You can customize logging in tine either by changing the `logger` section in your `config.inc.php` or by adding 
+You can customize logging in {{ branding.title }} either by changing the `logger` section in your `config.inc.php` or by adding 
 a customized logger config in your `conf.d` directory:
 
 ``` php title="./conf.d/logger.inc.php"

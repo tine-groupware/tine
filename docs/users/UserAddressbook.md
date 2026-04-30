@@ -3,7 +3,7 @@ Tine User Schulung: Adressbuch
 
 Version: Pino 2022.11
 
-Problemlösungen im Adressbuch-Modul von tine
+Problemlösungen im Adressbuch-Modul von {{ branding.title }}
 
 HowTo: Suchen von allen Kontakten, die mit _keinem_ Lead verknüpft sind
 =================

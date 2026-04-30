@@ -5,7 +5,7 @@ Installation Guide
 
 ## Schnellstart
 
-Dies ist eine schnelle und leichte Möglichkeit, tine auszuprobieren. Hierfür benötigen Sie Docker und Docker Compose (https://docs.docker.com/compose/).
+Dies ist eine schnelle und leichte Möglichkeit, {{ branding.title }} auszuprobieren. Hierfür benötigen Sie Docker und Docker Compose (https://docs.docker.com/compose/).
 
 Erstellen Sie im ersten Schritt einen Ordner. Docker Compose verwendet die Ordnernamen zur Identifizierung.
 

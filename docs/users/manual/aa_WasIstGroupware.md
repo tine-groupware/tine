@@ -69,12 +69,12 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {{ branding.title }}. In di
 
 ### Wo findet man weitere/andere Informationen (der Firma Metaways bzw. der Community)?
 
-Weitere Informationen, besonders die Installation von {{ branding.title }} betreffend, erhalten Sie auf https://www.{{ branding.title }}-groupware.de. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
+Weitere Informationen, besonders die Installation von {{ branding.title }} betreffend, erhalten Sie auf {{ branding.weburl }}. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
-Als Softwareentwickler haben Sie über https://github.com/{{ branding.title }}-groupware/{{ branding.title }} den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
+Als Softwareentwickler haben Sie über {{ branding.repo_url }} {{ branding.title }} den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
 ### Wie Sie dieses Buch lesen sollten
 
-Wenn Sie noch nie mit {{ branding.title }} zu tun hatten, sollten Sie zuerst das <<chap.adressverwaltung>> und danach das <<chapter.Standard-Bedienhinweise>> durcharbeiten. Die weitere Reihenfolge ist nicht vorgegeben und hängt sicher auch davon ab, mit welchen Anwendungen von {{ branding.title }} Sie überhaupt arbeiten möchten – sofern Sie ein "normaler" Benutzer sind und keine administrativen Aufgaben, wie z.B. das Anlegen von anderen Benutzern oder Ressourcen, ausführen wollen. Beachten Sie auch, dass das Handbuch bei der Beschreibung der Funktionen i.d.R. von weitreichenden, d.h. Administratorrechten, ausgeht. Sollten Sie bestimmte beschriebene Funktionen nicht ausführen können, so liegt das wahrscheinlich an eingeschränkten Rechten - darauf weisen wir dann im Text hin.
+Wenn Sie noch nie mit {{ branding.title }} zu tun hatten, sollten Sie zuerst das [Addressverwaltung](ba_Adressbuch.md) und danach das [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md) durcharbeiten. Die weitere Reihenfolge ist nicht vorgegeben und hängt sicher auch davon ab, mit welchen Anwendungen von {{ branding.title }} Sie überhaupt arbeiten möchten – sofern Sie ein "normaler" Benutzer sind und keine administrativen Aufgaben, wie z.B. das Anlegen von anderen Benutzern oder Ressourcen, ausführen wollen. Beachten Sie auch, dass das Handbuch bei der Beschreibung der Funktionen i.d.R. von weitreichenden, d.h. Administratorrechten, ausgeht. Sollten Sie bestimmte beschriebene Funktionen nicht ausführen können, so liegt das wahrscheinlich an eingeschränkten Rechten - darauf weisen wir dann im Text hin.
 
-Als Mitarbeiter mit Administratoraufgaben für {{ branding.title }} sollten Sie nach dem <<chap.adressverwaltung>> und dem <<chapter.Standard-Bedienhinweise>> zunächst zum  <<chapter.Einstellungen>> springen und danach <<chapter.administration>> lesen.
+Als Mitarbeiter mit Administratoraufgaben für {{ branding.title }} sollten Sie nach dem [Addressverwaltung](ba_Adressbuch.md) und dem [Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md) zunächst zum  [Benutzereinstellungen](na_Benutzereinstellungen.md) springen und danach [Administration](oa_Administration.md) lesen.

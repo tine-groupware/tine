@@ -3,7 +3,7 @@ Tine User Schulung: Felamimail
 
 Version: 2024.11
 
-Problemlösungen im Felamimail-Modul von tine
+Problemlösungen im Felamimail-Modul von {{ branding.title }}
 
 HowTo: Suchen aller Nachrichten suchen, die dem Glob Filter entsprechen
 

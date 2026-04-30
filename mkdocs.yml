@@ -68,6 +68,8 @@ hooks:
 extra:
   branding:
     title: tine ®
+    weburl: https://www.tine-groupware.de
+    repo_url: https://github.com/tine-groupware/tine
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/tine-groupware/tine

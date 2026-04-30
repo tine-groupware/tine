@@ -4,7 +4,7 @@ Server Requirements
 General
 -------
 
-Generally tine supports all officially supported PHP versions. For Database server [MySQL] or [MariaDB] is recommended.
+Generally {{ branding.title }} supports all officially supported PHP versions. For Database server [MySQL] or [MariaDB] is recommended.
 Support for others has been discontinued.
 
 ### Overview
@@ -67,7 +67,7 @@ Client requirements
 
 ### Supported browsers
 
-Current versions of the following browsers on the date of the tine release
+Current versions of the following browsers on the date of the {{ branding.title }} release
 
 -   Mozilla Firefox
 -   Browser with Chrome engine (Microsoft Edge, Opera, Chromium, Brave, ...)
