@@ -763,9 +763,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $attendee);
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage() . ' attendee: '
-                . print_r($attendee, true));
+            Tinebase_Exception::log($terv, additionalData: print_r($attendee, true));
             return $fbInfo;
         }
 
