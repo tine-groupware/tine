@@ -236,12 +236,9 @@ describe('Contacts', () => {
             //await expectPuppeteer(popupWindow).toFill('input[name=title]', 'CEO');
             await expectPuppeteer(popupWindow).toFill('input[name=bday]', '12.03.1956');
 
-            const tel = await popupWindow.$x("//div[contains(text(), 'Telefon')]");
-            tel[0].click();
-            await expectPuppeteer(popupWindow).toFill('input[class*=x-grid-editor-tel_work]', '040734662533');
-
-            const tel_cel = await popupWindow.$x("//div[contains(text(), 'Handy')]");
-            tel_cel[0].click();
+            await expectPuppeteer(popupWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text:'Telefon'})
+            await expectPuppeteer(popupWindow).toFill('input[class*=x-grid-editor-tel_work]', '0179461021');
+            await expectPuppeteer(popupWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text:'Handy'})
             await expectPuppeteer(popupWindow).toFill('input[class*=x-grid-editor-tel_cell]', '0179461021');
 
             await expectPuppeteer(popupWindow).toFill('input[name=adr_one_postalcode]', '20475');
@@ -257,7 +254,10 @@ describe('Contacts', () => {
             await expectPuppeteer(popupWindow).toMatchElement('button', {text: 'Adresse einlesen'});
             await expectPuppeteer(popupWindow).toClick('button', {text: 'Adresse einlesen'});
             await popupWindow.waitForSelector('.ext-mb-textarea');
-            await expectPuppeteer(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann Beispielweg 1 354234 Musterdorf !');
+            await expectPuppeteer(popupWindow).toFill(
+                '.ext-mb-textarea textarea',
+                'Max Mustermann Beispielweg 1 354234 Musterdorf !'
+            );
             await lib.makeScreenshot(popupWindow,{path: 'screenshots/Adressbuch/11_adressbuch_kontakt_neu_einlesen.png'});
             await expectPuppeteer(popupWindow).toClick('button.btn-close');
         });
