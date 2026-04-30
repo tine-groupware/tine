@@ -72,7 +72,7 @@
     "store2": "^2.14.2",
     "stream-browserify": "^3.0.0",
     "twing": "^5.1.2",
-    "twing-intl": "0.0.2",
+    "twing-intl": "^0.0.4",
     "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin#1a75e0e03c3ed2a92b51c0bfb1245ea8c73db437",
     "util": "^0.12.5",
     "vue": "^3.2.45",

@@ -10,6 +10,7 @@ import { TwingEnvironment, TwingLoaderArray, TwingFilter, TwingFunction } from '
 import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
 import { filter, upperFirst, compact } from 'lodash'
+import asString from './ux/asString'
 
 const { date: dateFormat } = require('Ext/util/Format')
 
@@ -205,7 +206,7 @@ const getTwingEnv = function () {
 
     twingEnv.addFunction(new TwingFunction('renderTitle', function (recordData, modelName) {
       const title = Tine.Tinebase.data.Record.setFromJson(recordData, modelName)?.getTitle()
-      return Promise.resolve(title.asString())
+      return Promise.resolve(asString(title))
     }))
 
     twingEnv.addFunction(new TwingFunction('dateFormat', function (date, format) {

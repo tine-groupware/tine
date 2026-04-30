@@ -132,7 +132,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::APP_NAME                      => Sales_Config::APP_NAME,
         self::RECORD_NAME                   => 'Document', // ngettext('Document', 'Documents', n)
         self::RECORDS_NAME                  => 'Documents', // gettext('GENDER_Document')
-        self::TITLE_PROPERTY                => '{{'. self::FLD_DOCUMENT_NUMBER . '}}: {% if '. self::FLD_DOCUMENT_DATE . '%}{{'. self::FLD_DOCUMENT_DATE .'|localizeddate("short", "none", app.user.locale )}} - {% endif %}{{ renderTitle('.self::FLD_CUSTOMER_ID.', "'.Sales_Model_Document_Customer::class.'") }}',
+        self::TITLE_PROPERTY                => '{{'. self::FLD_DOCUMENT_NUMBER . '}} [{{ renderTitle('.self::FLD_CUSTOMER_ID.', "'.Sales_Model_Document_Customer::class.'") }}]{% if '. self::FLD_DOCUMENT_TITLE . '%} {{' . self::FLD_DOCUMENT_TITLE .'}}{% endif %}{% if '. self::FLD_DOCUMENT_DATE . '%} ({{'. self::FLD_DOCUMENT_DATE .'|localizeddate("short", "none", app.user.locale )}}){% endif %}',
         self::MODLOG_ACTIVE                 => true,
         self::EXPOSE_JSON_API               => true,
         self::EXPOSE_HTTP_API               => true,
