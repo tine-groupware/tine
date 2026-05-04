@@ -416,6 +416,30 @@
           docker tag $image $target:$tag
           docker push $target:$tag
       }
+      
+      function docs_find_missing_screenshots() {
+          touch ${CI_PROJECT_DIR}/missing-screenshots.txt
+      
+          for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq -u); do
+              if ! [[ -f ${CI_PROJECT_DIR}/tests/e2etests/screenshots/$f ]]; then
+                  echo ${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/$f >> ${CI_PROJECT_DIR}/missing-screenshots.txt
+              fi
+          done
+      }
+      
+      function docs_update_screenshots() {
+          if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ] && [ -n "${CI_RESOLUTION}" ]; then
+              s3cmd sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/ \
+                  --access_key=${SCREENSHOTS_S3_ACCESS_KEY} \
+                  --secret_key=${SCREENSHOTS_S3_SECRET_KEY} \
+                  --host ${SCREENSHOTS_S3_HOST} \
+                  --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" \
+                  --acl-public \
+                  --no-mime-magic
+          else
+              echo skipping screenshot upload
+          fi
+      }
 
     - |
       # lib/scripts/git_repo.sh
@@ -1867,6 +1891,30 @@
         
             docker tag $image $target:$tag
             docker push $target:$tag
+        }
+        
+        function docs_find_missing_screenshots() {
+            touch ${CI_PROJECT_DIR}/missing-screenshots.txt
+        
+            for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq -u); do
+                if ! [[ -f ${CI_PROJECT_DIR}/tests/e2etests/screenshots/$f ]]; then
+                    echo ${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/$f >> ${CI_PROJECT_DIR}/missing-screenshots.txt
+                fi
+            done
+        }
+        
+        function docs_update_screenshots() {
+            if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ] && [ -n "${CI_RESOLUTION}" ]; then
+                s3cmd sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/ \
+                    --access_key=${SCREENSHOTS_S3_ACCESS_KEY} \
+                    --secret_key=${SCREENSHOTS_S3_SECRET_KEY} \
+                    --host ${SCREENSHOTS_S3_HOST} \
+                    --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" \
+                    --acl-public \
+                    --no-mime-magic
+            else
+                echo skipping screenshot upload
+            fi
         }
 
         # lib/scripts/git_repo.sh
@@ -3350,6 +3398,30 @@
         
             docker tag $image $target:$tag
             docker push $target:$tag
+        }
+        
+        function docs_find_missing_screenshots() {
+            touch ${CI_PROJECT_DIR}/missing-screenshots.txt
+        
+            for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq -u); do
+                if ! [[ -f ${CI_PROJECT_DIR}/tests/e2etests/screenshots/$f ]]; then
+                    echo ${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/$f >> ${CI_PROJECT_DIR}/missing-screenshots.txt
+                fi
+            done
+        }
+        
+        function docs_update_screenshots() {
+            if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ] && [ -n "${CI_RESOLUTION}" ]; then
+                s3cmd sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/ \
+                    --access_key=${SCREENSHOTS_S3_ACCESS_KEY} \
+                    --secret_key=${SCREENSHOTS_S3_SECRET_KEY} \
+                    --host ${SCREENSHOTS_S3_HOST} \
+                    --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" \
+                    --acl-public \
+                    --no-mime-magic
+            else
+                echo skipping screenshot upload
+            fi
         }
 
         # lib/scripts/git_repo.sh
