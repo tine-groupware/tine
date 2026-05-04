@@ -52,20 +52,20 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        if (
-            !$this->_doRightChecks
-            || !$this->_doContainerACLChecks
-            || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS)
-        ) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' ACL / right checks disabled for ' . $_filter->getModelName() . '.');
-            }
-            return;
-        }
-
         // TODO add list_id filter - only allow lists user has access to?
-        // TODO also add more acl checking to \MatrixSynapseIntegrator_Controller_Abstract::_checkRight?
+
+//        if (
+//            !$this->_doRightChecks
+//            || !$this->_doContainerACLChecks
+//            || $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS, false)
+//        ) {
+//            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+//                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+//                    . ' ACL / right checks disabled for ' . $_filter->getModelName() . '.');
+//            }
+//            return;
+//        }
+
 //        $_filter->addFilter(new Tinebase_Model_Filter_User(
 //            MatrixSynapseIntegrator_Model_MatrixAccount::FLD_ACCOUNT_ID,
 //            Tinebase_Model_Filter_Abstract::OPERATOR_EQUALS,
