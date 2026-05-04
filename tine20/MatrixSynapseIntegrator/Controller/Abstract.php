@@ -39,31 +39,6 @@ class MatrixSynapseIntegrator_Controller_Abstract extends Tinebase_Controller_Re
         $this->_doContainerACLChecks = true;
     }
 
-    /**
-     * check if user has the right to manage records
-     *
-     * @param string $_action {get|create|update|delete}
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _checkRight($_action)
-    {
-        if (! $this->_doRightChecks) {
-            return;
-        }
-
-        switch ($_action) {
-            case 'get':
-            case 'create':
-            case 'update':
-            case 'delete':
-                $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
-                break;
-        }
-
-        parent::_checkRight($_action);
-    }
-
     protected function _getApplicationRightsClass(): string
     {
         return Admin_Acl_Rights::class;

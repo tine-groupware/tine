@@ -39,7 +39,32 @@ class MatrixSynapseIntegrator_Controller_MatrixAccount extends MatrixSynapseInte
     }
 
     /**
-     * Removes records where current user has no access to
+     * check if a user has the right to manage records
+     *
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
+        switch ($_action) {
+            case 'get':
+            case 'create':
+            case 'update':
+            case 'delete':
+                $this->checkRight(Admin_Acl_Rights::MANAGE_ACCOUNTS);
+                break;
+        }
+
+        parent::_checkRight($_action);
+    }
+
+    /**
+     * Removes records where the current user has no access to
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
