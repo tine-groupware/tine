@@ -115,7 +115,8 @@ function docs_update_screenshots() {
             --host ${SCREENSHOTS_S3_HOST} \
             --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" \
             --acl-public \
-            --no-mime-magic
+            --no-mime-magic \
+            --no-delete-removed
     else
         echo skipping screenshot upload
     fi

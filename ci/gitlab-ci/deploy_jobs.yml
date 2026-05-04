@@ -311,6 +311,8 @@ mkdocs-deploy:
   stage: deploy
   image: ${UTIL_REGISTRY}/mkdocs:2
   needs: []
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
   script:
     - !reference [.lib, script]
     - docs_deploy
