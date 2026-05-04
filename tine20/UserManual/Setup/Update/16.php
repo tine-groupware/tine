@@ -36,7 +36,6 @@ class UserManual_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
-        UserManual_Setup_Initialize::importManualContent(true);
         $this->addApplicationUpdate('UserManual', '16.1', self::RELEASE016_UPDATE001);
     }
 }

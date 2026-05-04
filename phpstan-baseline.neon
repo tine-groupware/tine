@@ -6191,26 +6191,6 @@ parameters:
 			path: tine20/Tinebase/views/deactivationNotification.php
 
 		-
-			message: "#^Unsafe access to private property UserManual_Controller_ManualContext\\:\\:\\$_instance through static\\:\\:\\.$#"
-			count: 3
-			path: tine20/UserManual/Controller/ManualContext.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Abstract\\:\\:clearTable\\(\\)\\.$#"
-			count: 1
-			path: tine20/UserManual/Controller/ManualPage.php
-
-		-
-			message: "#^Unsafe access to private property UserManual_Controller_ManualPage\\:\\:\\$_instance through static\\:\\:\\.$#"
-			count: 3
-			path: tine20/UserManual/Controller/ManualPage.php
-
-		-
-			message: "#^Variable \\$title in empty\\(\\) always exists and is always falsy\\.$#"
-			count: 1
-			path: tine20/UserManual/Import/ManualPage.php
-
-		-
 			message: "#^Function generateNewTranslationFile not found\\.$#"
 			count: 5
 			path: tine20/langHelper.php
