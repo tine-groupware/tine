@@ -72,7 +72,7 @@ Tine.UserManual.UserManualDialog = Ext.extend(Ext.FormPanel, {
         this.loadMask.show();
         frameEl.addEventListener("load", () => { this.loadMask.hide() });
 
-        const path = await this.resolveHelpUrl(this.context) || 'users/manual';
+        const path = await this.resolveHelpUrl(this.context) || 'users/manual/';
         const url = new URL(this.helpBaseUrl + path);
         url.searchParams.set('theme', document.getElementsByTagName('body')[0].classList.contains('dark-mode') ? 'dark' : 'light');
 
