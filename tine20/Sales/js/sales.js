@@ -72,7 +72,7 @@ import './BillingDateDialog';
 import './OfferEditDialog';
 import './PurchaseInvoiceApproverFilterModel';
 import './ProductAggregateGridPanel';
-    
+
 Ext.namespace('Tine.Sales');
 
 /**
