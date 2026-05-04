@@ -43,19 +43,19 @@ Starten Sie {{ branding.title }}. Natürlich müssen Sie sich jetzt als ein Benu
 ## Benutzer { data-ctx="/Admin/MainScreen/User" }
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_desktop }}Administration/1_administration_benutzertabelle_light.png#only-light){.desktop-img}
-![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_desktop }}Administration/1_administration_benutzertabelle_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_administration_benutzertabelle_light.png#only-light){.mobile-img}
-![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_administration_benutzertabelle_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_desktop }}Administration/1_admin_benutzertabelle_light.png#only-light){.desktop-img}
+![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_desktop }}Administration/1_admin_benutzertabelle_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_admin_benutzertabelle_light.png#only-light){.mobile-img}
+![Abbildung: Die Benutzertabelle in der Admin-Anwendung]({{ img_url_mobile }}Administration/1_admin_benutzertabelle_dark.png#only-dark){.mobile-img}
 
 
 In der Benutzeransicht sehen Sie in tabellarischer Form, welche Benutzer in Ihrer {{ branding.title }}-Installation angelegt wurden. Außerdem werden hier ihre grundlegenden Eigenschaften angezeigt. Wenn an der Standardansicht nichts geändert worden ist, dann sehen Sie ganz links den Status -- ein Haken signalisiert, dass der Benutzer aktiv ist, ein X entsprechend einen nicht aktiven. Apropos Standardansicht: Sie können, wie Sie das ja auch schon von anderen Tabellenansichten in {{ branding.title }} kennen, die anzuzeigenden Tabellenfelder auswählen. Ganz rechts im Tabellenkopf finden Sie dazu das Spaltensymbol. Wenn Sie es anklicken, werden Ihnen die für diese Ansicht gültigen Tabellenfelder als Checkbuttons zum Auswählen angezeigt. Prüfen Sie bitte, ob für die jetzt erforderliche (Standard-)Ansicht die folgenden Felder markiert sind: Status, Bildschirmname, Anmeldename, E-Mail, Zuletzt eingeloggt um, Letzter Login von, Passwort geändert und Verfällt
 
 <!-- SCREENSHOT -->
-![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_desktop }}Administration/2_administration_spaltenauswahl_light.png#only-light){.desktop-img}
-![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_desktop }}Administration/2_administration_spaltenauswahl_dark.png#only-dark){.desktop-img}
-![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_mobile }}Administration/2_administration_spaltenauswahl_light.png#only-light){.mobile-img}
-![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_mobile }}Administration/2_administration_spaltenauswahl_dark.png#only-dark){.mobile-img}
+![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_desktop }}Administration/2_admin_spaltenauswahl_light.png#only-light){.desktop-img}
+![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_desktop }}Administration/2_admin_spaltenauswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_mobile }}Administration/2_admin_spaltenauswahl_light.png#only-light){.mobile-img}
+![Abbildung: Eine Auswahl an Spalten, die in der Benutzertabelle angezeigt werden können]({{ img_url_mobile }}Administration/2_admin_spaltenauswahl_dark.png#only-dark){.mobile-img}
 
 Vielleicht fällt Ihnen jetzt ein Benutzer auf, der cronuser heißt. Dabei handelt es sich um einen Systemdienst, der immer vorhanden ist; beachten Sie ihn einfach nicht weiter.
 
@@ -82,10 +82,10 @@ Hier sind es Benutzer hinzufügen, Benutzer bearbeiten, Benutzer löschen (letzt
 Lassen Sie uns probehalber einmal einen neuen Benutzer hinzufügen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_desktop }}Administration/3_administration_benutzer_neu_light.png#only-light){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_desktop }}Administration/3_administration_benutzer_neu_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_mobile }}Administration/3_administration_benutzer_neu_light.png#only-light){.mobile-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_mobile }}Administration/3_administration_benutzer_neu_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_desktop }}Administration/3_admin_benutzer_neu_light.png#only-light){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_desktop }}Administration/3_admin_benutzer_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_mobile }}Administration/3_admin_benutzer_neu_light.png#only-light){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Benutzers]({{ img_url_mobile }}Administration/3_admin_benutzer_neu_dark.png#only-dark){.mobile-img}
 
 <!--Passwort-->
 <!--OpenID-->
@@ -131,10 +131,10 @@ Unten schließlich sehen Sie, eingerahmt im Feld Informationen, die Login- und P
 Kommen wir zum nächsten Reiter -- Gruppen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_desktop }}Administration/4_administration_benutzer_gruppe_light.png#only-light){.desktop-img}
-![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_desktop }}Administration/4_administration_benutzer_gruppe_dark.png#only-dark){.desktop-img}
-![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_administration_benutzer_gruppe_light.png#only-light){.mobile-img}
-![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_administration_benutzer_gruppe_dark.png#only-dark){.mobile-img}
+![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_desktop }}Administration/4_admin_benutzer_gruppe_light.png#only-light){.desktop-img}
+![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_desktop }}Administration/4_admin_benutzer_gruppe_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_admin_benutzer_gruppe_light.png#only-light){.mobile-img}
+![Abbildung: Das Zuweisen eines neuen Benutzers zu einer Gruppe]({{ img_url_mobile }}Administration/4_admin_benutzer_gruppe_dark.png#only-dark){.mobile-img}
 
 <a id="ctx:Admin.MainScreen.Group"></a>
 Da die Bildung von Gruppen ein eigener Menüpunkt ist, wollen wir hier nur darauf eingehen, wie der Benutzer einer bereits definierten Gruppe zugewiesen werden kann: Sie sehen in der Maske das Pulldown Suche nach Gruppen... Wenn Sie es anklicken, dann werden Ihnen (ggf. nach kurzer Suche) die in Ihrer {{ branding.title }}-Installation vorhandenen Benutzergruppen zur Auswahl angeboten. Je nachdem wie umfangreich Ihr System ist, können das wenige Einträge bis zu mehreren Seiten sein. Sie können den Benutzer hier einer oder der Reihe nach mehreren Gruppen zuweisen. Welche administratorischen Überlegungen dem zugrunde liegen, besprechen wir weiter unten, wenn wir die Gruppen anlegen.
@@ -151,10 +151,10 @@ Schließen Sie die Eingabemaske mit Abbrechen, da wir jetzt keinen Benutzer anle
 Wenn Sie nun die aktive Tabellenzeile auf einen beliebigen Benutzer stellen und Benutzer bearbeiten wählen (auch wie gewohnt über einen Doppelklick erreichbar), sehen Sie, dass die entsprechende Maske die gleichen Felder enthält wie die für Benutzer hinzufügen. Achten Sie hier auf die Felder unter Informationen – diese enthalten jetzt die Datums-, Uhrzeits- und IP-Adressinformationen, von denen wir oben sprachen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_desktop }}Administration/5_administration_benutzer_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_desktop }}Administration/5_administration_benutzer_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_administration_benutzer_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_administration_benutzer_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_desktop }}Administration/5_admin_benutzer_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_desktop }}Administration/5_admin_benutzer_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_admin_benutzer_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Editieren eines Benutzerkontos]({{ img_url_mobile }}Administration/5_admin_benutzer_editieren_dark.png#only-dark){.mobile-img}
 
 <a id="ctx:Admin.MainScreen.User.ActionToolbar"></a>
 Benutzer löschen ist mit einer Sicherheitsabfrage versehen und ansonsten selbsterklärend.
@@ -180,10 +180,10 @@ Bevor wir auf die Ansicht und Bedienelemente zu Gruppen zu sprechen kommen, müs
 Kommen wir nun wieder zurück zu unserem Programm und seinen Bedienelementen: Klicken Sie in der Admin-Oberfläche links auf den Menüpunkt Gruppen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_desktop }}Administration/6_administration_gruppen_light.png#only-light){.desktop-img}
-![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_desktop }}Administration/6_administration_gruppen_dark.png#only-dark){.desktop-img}
-![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_mobile }}Administration/6_administration_gruppen_light.png#only-light){.mobile-img}
-![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_mobile }}Administration/6_administration_gruppen_dark.png#only-dark){.mobile-img}
+![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_desktop }}Administration/6_admin_gruppen_light.png#only-light){.desktop-img}
+![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_desktop }}Administration/6_admin_gruppen_dark.png#only-dark){.desktop-img}
+![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_mobile }}Administration/6_admin_gruppen_light.png#only-light){.mobile-img}
+![Abbildung: Verwaltung der Gruppen in {{ branding.title }}.]({{ img_url_mobile }}Administration/6_admin_gruppen_dark.png#only-dark){.mobile-img}
 
 Die Tabelle in der Hauptanzeige ist diesmal sehr einfach und enthält nur drei Spalten. In der Standard-Ansicht sind das Name, E-Mail und Beschreibung. Wie üblich können Sie die Tabelle durch das kleine Spaltensymbol am rechten Rand entsprechend verändern.
 
@@ -192,10 +192,10 @@ Wenn {{ branding.title }} in einer unveränderten Erstinstallation vorliegt, dan
 Schauen wir uns zunächst an, welche Eigenschaften eine Gruppe haben kann. Markieren Sie dazu in der Tabelle eine beliebige Gruppe und klicken Sie im Bearbeitungsmenü Gruppe bearbeiten an:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_desktop }}Administration/7_administration_gruppen_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_desktop }}Administration/7_administration_gruppen_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_mobile }}Administration/7_administration_gruppen_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_mobile }}Administration/7_administration_gruppen_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_desktop }}Administration/7_admin_gruppen_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_desktop }}Administration/7_admin_gruppen_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_mobile }}Administration/7_admin_gruppen_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zum Bearbeiten einer Benutzergruppe]({{ img_url_mobile }}Administration/7_admin_gruppen_editieren_dark.png#only-dark){.mobile-img}
 
 Das folgende Bearbeitungsfenster zeigt Ihnen zunächst den Gruppennamen, dann eine Beschreibung der Gruppe und die Sichtbarkeit sowie in welchem Adressbuch die Gruppe gespeichert ist. Sie können also hier über das Gruppenmenü, genauso wie bei Einzelbenutzern, festlegen, ob bestimmte Benutzer im jeweiligen Adressbuch zu sehen sein sollen bzw. eine gesamte Gruppe von Benutzern in ein anderes Adressbuch verschieben. Beachten Sie das Feld Beschreibung und denken Sie dabei daran, dass auch andere Administratoren ihre Arbeit nachvollziehen können sollten. Hier ist es also wichtig, dass Sie die Eigenschaften dieser Benutzergruppe korrekt beschreiben.
 
@@ -214,10 +214,10 @@ Wählen Sie in der Admin-Oberfläche links per Mausklick den Menüpunkt Rollen a
 Markieren Sie jetzt eine beliebige angezeigte Rolle und klicken Sie (entweder im Bearbeitungsmenü links über der Tabelle oder per Rechtsklick und Kontextmenü) Rolle bearbeiten:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_desktop }}Administration/8_administration_rolle_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_desktop }}Administration/8_administration_rolle_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_mobile }}Administration/8_administration_rolle_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_mobile }}Administration/8_administration_rolle_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_desktop }}Administration/8_admin_rolle_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_desktop }}Administration/8_admin_rolle_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_mobile }}Administration/8_admin_rolle_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zum Zuweisen von Benutzern oder Gruppen zu einer Rolle (Reiter "Mitglieder")".]({{ img_url_mobile }}Administration/8_admin_rolle_editieren_dark.png#only-dark){.mobile-img}
 
 Sie sehen, dass es auch hier wieder ein Beschreibungsfeld gibt. Wie bereits weiter oben bei den Gruppen erwähnt, ist es wichtig, dass Sie bei einer neuen Rollendefinition die Beschreibung der definierten Rolle nachvollziehbar notieren, um anderen Administratoren nachfolgend die Arbeit zu erleichtern.
 
@@ -228,10 +228,10 @@ Das Bearbeitungsfenster für Rollen hat zwei Reiter: Mitglieder und Rechte. Unte
 Klicken Sie nun den Reiter Rechte an:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_desktop }}Administration/9_administration_rolle_rechte_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_desktop }}Administration/9_administration_rolle_rechte_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_mobile }}Administration/9_administration_rolle_rechte_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_mobile }}Administration/9_administration_rolle_rechte_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_desktop }}Administration/9_admin_rolle_rechte_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_desktop }}Administration/9_admin_rolle_rechte_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_mobile }}Administration/9_admin_rolle_rechte_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zum Definieren der Rechte einer Rolle (Reiter "Rechte")".]({{ img_url_mobile }}Administration/9_admin_rolle_rechte_editieren_dark.png#only-dark){.mobile-img}
 
 Sie sehen im Fenster eine Baumstruktur, die den Anwendungen von {{ branding.title }} entspricht. Hier können Sie also jeder Rolle genauestens zuweisen, welche Anwendungen sie benutzen darf.
 
@@ -377,10 +377,10 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine +-Zeichen vor d
 ## Anwendungen { data-ctx="/Admin/MainScreen/Application" }
 
 <!-- SCREENSHOT -->
-![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_desktop }}Administration/10_administration_anwendungen_light.png#only-light){.desktop-img}
-![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_desktop }}Administration/10_administration_anwendungen_dark.png#only-dark){.desktop-img}
-![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_mobile }}Administration/10_administration_anwendungen_light.png#only-light){.mobile-img}
-![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_mobile }}Administration/10_administration_anwendungen_dark.png#only-dark){.mobile-img}
+![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_desktop }}Administration/10_admin_anwendungen_light.png#only-light){.desktop-img}
+![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_desktop }}Administration/10_admin_anwendungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_mobile }}Administration/10_admin_anwendungen_light.png#only-light){.mobile-img}
+![Abbildung: Die einzelnen Anwendungen von {{ branding.title }}]({{ img_url_mobile }}Administration/10_admin_anwendungen_dark.png#only-dark){.mobile-img}
 
 Das grundlegende Ziel des Moduls Anwendungen ist sehr schnell erklärt: Die Tabelle zeigt Ihnen alle in ihrer {{ branding.title }}-Installation aktiven Anwendungen, die Sie als Administrator hier einzeln und für alle Benutzer aktivieren oder deaktivieren können. Damit können Sie an dieser Stelle nicht nur Rollen-bezogen, sondern für die gesamte {{ branding.title }}-Installation das Aussehen und die Funktion des Systems anpassen. Ausgenommen von dieser Funktion sind das Adressbuch sowie die Anwendungen Admin und {{ branding.title }}base (die grundlegende Datenbank), da es sich hier um die elementarsten Funktionen der Groupware handelt, die nicht ausgeschaltet werden können.
 
@@ -391,10 +391,10 @@ Bei folgenden Anwendungen gibt es darüber hinaus noch Einstellungen; Sie erkenn
 Admin – hier kann das Standardadressbuch für die Eintragung neuer Kontakte eingestellt werden:
 
 <!-- SCREENSHOT -->
-![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_desktop }}Administration/11_administration_admin_einstellung_light.png#only-light){.desktop-img}
-![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_desktop }}Administration/11_administration_admin_einstellung_dark.png#only-dark){.desktop-img}
-![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_administration_admin_einstellung_light.png#only-light){.mobile-img}
-![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_administration_admin_einstellung_dark.png#only-dark){.mobile-img}
+![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_desktop }}Administration/11_admin_admin_einstellung_light.png#only-light){.desktop-img}
+![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_desktop }}Administration/11_admin_admin_einstellung_dark.png#only-dark){.desktop-img}
+![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_admin_admin_einstellung_light.png#only-light){.mobile-img}
+![Abbildung: Einstellungen der Admin-Anwendung]({{ img_url_mobile }}Administration/11_admin_admin_einstellung_dark.png#only-dark){.mobile-img}
 
 ### Kalender { data-ctx="/Calendar/EditDialog/Resource" }
 
@@ -402,10 +402,10 @@ Admin – hier kann das Standardadressbuch für die Eintragung neuer Kontakte ei
 #### Ressourcen anlegen
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_desktop }}Administration/13_administration_kalender_ressource_neu_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_desktop }}Administration/13_administration_kalender_ressource_neu_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_mobile }}Administration/13_administration_kalender_ressource_neu_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_mobile }}Administration/13_administration_kalender_ressource_neu_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_desktop }}Administration/13_admin_kalender_ressource_neu_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_desktop }}Administration/13_admin_kalender_ressource_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_mobile }}Administration/13_admin_kalender_ressource_neu_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zum Anlegen einer neuen Ressource für die Kalender-Anwendung]({{ img_url_mobile }}Administration/13_admin_kalender_ressource_neu_dark.png#only-dark){.mobile-img}
 
 In diesem Dialog können Sie eine neue Ressource anlegen.
 Geben Sie Ihr hierfür zunächst einen Namen an, zum Beispiel „Meeting-Raum 1“. Als nächstes benötigt die Ressource eine eindeutige E-Mail Adresse, dies ist für die Synchronisation mit anderen Kalendersystemen wichtig. An diese Adresse werden außerdem Benachrichtigungen an die Ressource versendet, wie Termineinladungen. Für den Typ wählen wir passend zu unserem Meeting-Raum den „Raum“ aus.
@@ -424,10 +424,10 @@ Abschließend können Sie auswählen, ob Sie alle Benachrichtigungen zu dieser R
 #### Ressourcen Zugriffsrechte
 
 <!-- SCREENSHOT -->
-![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_desktop }}Administration/14_administration_kalender_ressource_rechte_light.png#only-light){.desktop-img}
-![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_desktop }}Administration/14_administration_kalender_ressource_rechte_dark.png#only-dark){.desktop-img}
-![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_mobile }}Administration/14_administration_kalender_ressource_rechte_light.png#only-light){.mobile-img}
-![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_mobile }}Administration/14_administration_kalender_ressource_rechte_dark.png#only-dark){.mobile-img}
+![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_desktop }}Administration/14_admin_kalender_ressource_rechte_light.png#only-light){.desktop-img}
+![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_desktop }}Administration/14_admin_kalender_ressource_rechte_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_mobile }}Administration/14_admin_kalender_ressource_rechte_light.png#only-light){.mobile-img}
+![Abbildung: Das Zuweisen von Zugriffsrechten zu einer angelegten Ressource]({{ img_url_mobile }}Administration/14_admin_kalender_ressource_rechte_dark.png#only-dark){.mobile-img}
 
 Im Reiter „Zugriffsrechte“ werden zuletzt die Rechte der Ressource festgelegt. In ihren Rechten unterscheiden sich Ressourcen von anderen Datensätzen: Ressourcen verfügen über Zugriffsrechte, die Sie selbst betreffen und solche die Ihren Kalender betreffen. Im Folgenden finden Sie eine Auflistung aller Ressourcen-Rechte:
 
@@ -503,28 +503,28 @@ Um Ressourcen in den Stammdaten hinzufügen oder löschen zu können, wird das R
 CRM – Sie finden sie in der Tabelle unter Bezeichner, Verfügbare Lead Status, Verfügbare Lead Quellen und Verfügbare Lead Typen. Gehen Sie in der Tabelle einen nach links unter Werte} finden Sie die jeweiligen Einstellungsmöglichkeiten. Details hierzu finden Sie unter [Kundenbeziehungsmanagement (CRM)](ia_CRM.md) und dort insbesondere im Abschnitt [Kundenbeziehungsmanagement (CRM) - Lead hinzufügen](ia_CRM.md/#lead-hinzufugen). Dort wird auch darauf hingewiesen, dass Sie, sollten Ihnen die standardmäßig angebotenen Klassifizierungskriterien für Ihre Leads nicht ausreichen oder Sie andere benötigen, dieselben hier ändern oder ergänzen können.
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_desktop }}Administration/15_administration_crm_einstellungen_light.png#only-light){.desktop-img}
-![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_desktop }}Administration/15_administration_crm_einstellungen_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_mobile }}Administration/15_administration_crm_einstellungen_light.png#only-light){.mobile-img}
-![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_mobile }}Administration/15_administration_crm_einstellungen_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_desktop }}Administration/15_admin_crm_einstellungen_light.png#only-light){.desktop-img}
+![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_desktop }}Administration/15_admin_crm_einstellungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_mobile }}Administration/15_admin_crm_einstellungen_light.png#only-light){.mobile-img}
+![Abbildung: Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ]({{ img_url_mobile }}Administration/15_admin_crm_einstellungen_dark.png#only-dark){.mobile-img}
 
 Dazu dienen die drei Drop-Down Menüs. Bei den Einstellungsmöglichkeiten für Verfügbare Lead Status können Sie, neben dem Definieren eigener Lead-Status, auch die damit verbundenen Umsatz-Wahrscheinlichkeiten (probability) festlegen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_desktop }}Administration/16_administration_crm_lead_status_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_desktop }}Administration/16_administration_crm_lead_status_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_mobile }}Administration/16_administration_crm_lead_status_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_mobile }}Administration/16_administration_crm_lead_status_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_desktop }}Administration/16_admin_crm_lead_status_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_desktop }}Administration/16_admin_crm_lead_status_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_mobile }}Administration/16_admin_crm_lead_status_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung]({{ img_url_mobile }}Administration/16_admin_crm_lead_status_dark.png#only-dark){.mobile-img}
 
 Unter den anderen beiden Drop-Down-Menüs haben Sie die Möglichkeit, die verfügbaren Lead-Typen und -Quellen neu anzulegen oder vorhandene zu löschen, wenn Sie diese in Ihrem Vertriebskontext nicht benötigen.
 
 ### HumanResources
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_desktop }}Administration/17_administration_hr_einstellungen_light.png#only-light){.desktop-img}
-![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_desktop }}Administration/17_administration_hr_einstellungen_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_mobile }}Administration/17_administration_hr_einstellungen_light.png#only-light){.mobile-img}
-![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_mobile }}Administration/17_administration_hr_einstellungen_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_desktop }}Administration/17_admin_hr_einstellungen_light.png#only-light){.desktop-img}
+![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_desktop }}Administration/17_admin_hr_einstellungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_mobile }}Administration/17_admin_hr_einstellungen_light.png#only-light){.mobile-img}
+![Abbildung: Die Einstellungen der HumanResources-Anwendung]({{ img_url_mobile }}Administration/17_admin_hr_einstellungen_dark.png#only-dark){.mobile-img}
 
 <!--Feiertagskalender-->
 HumanResources – hier finden Sie zwei Einstellungen: Standard-Feiertagskalender als Pulldown, sowie Urlaub verfällt als Eingabefeld.
@@ -539,10 +539,10 @@ HumanResources – hier finden Sie zwei Einstellungen: Standard-Feiertagskalende
 ### Sales
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_desktop }}Administration/18_administration_sales_einstellungen_light.png#only-light){.desktop-img}
-![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_desktop }}Administration/18_administration_sales_einstellungen_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_mobile }}Administration/18_administration_sales_einstellungen_light.png#only-light){.mobile-img}
-![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_mobile }}Administration/18_administration_sales_einstellungen_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_desktop }}Administration/18_admin_sales_einstellungen_light.png#only-light){.desktop-img}
+![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_desktop }}Administration/18_admin_sales_einstellungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_mobile }}Administration/18_admin_sales_einstellungen_light.png#only-light){.mobile-img}
+![Abbildung: Die Einstellungen der Sales-Anwendung]({{ img_url_mobile }}Administration/18_admin_sales_einstellungen_dark.png#only-dark){.mobile-img}
 
 Sales – Hier erhalten Sie mehrere Pulldown-Schalter.
 
@@ -572,10 +572,10 @@ Genau wie bei Aufgaben kann man im Drop-Down Menü einstellen, welcher Wert als 
 ### {{ branding.title }}base
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_desktop }}Administration/19_administration_{{ branding.title }}base_einstellungen_light.png#only-light){.desktop-img}
-![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_desktop }}Administration/19_administration_{{ branding.title }}base_einstellungen_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_mobile }}Administration/19_administration_{{ branding.title }}base_einstellungen_light.png#only-light){.mobile-img}
-![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_mobile }}Administration/19_administration_{{ branding.title }}base_einstellungen_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_desktop }}Administration/19_admin_tinebase_einstellungen_light.png#only-light){.desktop-img}
+![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_desktop }}Administration/19_admin_tinebase_einstellungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_mobile }}Administration/19_admin_tinebase_einstellungen_light.png#only-light){.mobile-img}
+![Abbildung: Die Profil-Einstellungen der {{ branding.title }}base-Anwendung.]({{ img_url_mobile }}Administration/19_admin_tinebase_einstellungen_dark.png#only-dark){.mobile-img}
 
 {{ branding.title }}base: Unter dem einzigen Reiter, Profilinformation finden Sie eine Reihe von Feldern für Adressdaten und jeweils zwei zugehörige Checkbuttons: Lesen und Bearbeiten. Hier können Sie nach Bedarf, zusätzlich zu den Standardfeldern, die möglichen Dateneingaben in der Adressdatenbank erweitern. Die zusätzlichen Felder könnten insbesondere dann Bedeutung erlangen, wenn Sie Adressdaten aus anderen Programmen, wie z.B. Microsoft Outlook in {{ branding.title }} einlesen. Outlook hat sehr viele mögliche Felder in der Adressdatenbank. Ob diese belegt sind, sehen Sie, wenn Sie sich die CSV-Tabelle anschauen, die Outlook beim Auslesen erzeugt. Schlagen Sie für nähere Erläuterungen hierzu bitte im [Adressverwaltung - Kontakte importieren](ba_Adressbuch.md/#kontakte-importieren) nach!
 
@@ -600,18 +600,18 @@ Wenn Sie sich die nun angezeigten Container ansehen, dann werden Sie feststellen
 ### Container bearbeiten { data-ctx="/Admin/EditDialog/Container" }
 
 <!-- SCREENSHOT -->
-![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_desktop }}Administration/24_administration_container_light.png#only-light){.desktop-img}
-![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_desktop }}Administration/24_administration_container_dark.png#only-dark){.desktop-img}
-![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_mobile }}Administration/24_administration_container_light.png#only-light){.mobile-img}
-![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_mobile }}Administration/24_administration_container_dark.png#only-dark){.mobile-img}
+![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_desktop }}Administration/24_admin_container_light.png#only-light){.desktop-img}
+![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_desktop }}Administration/24_admin_container_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_mobile }}Administration/24_admin_container_light.png#only-light){.mobile-img}
+![Abbildung: Eine Übersicht der angelegten Container (gefiltert)]({{ img_url_mobile }}Administration/24_admin_container_dark.png#only-dark){.mobile-img}
 
 Schauen wir uns einmal an, welche allgemeingültigen Daten so ein Container enthält. Klicken Sie dazu einen in der Tabelle vorhandenen Container doppelt an, oder markieren einen vorhandenen und klicken dann im Bearbeitungsmenü Container bearbeiten:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_desktop }}Administration/25_administration_container_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_desktop }}Administration/25_administration_container_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_mobile }}Administration/25_administration_container_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_mobile }}Administration/25_administration_container_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_desktop }}Administration/25_admin_container_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_desktop }}Administration/25_admin_container_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_mobile }}Administration/25_admin_container_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Die Maske zur Container-Bearbeitung enthält nicht nur Angaben zum Datenmodell, sondern auch die Benutzer- oder Gruppenzuweisung sowie die zugehörige Vergabe von Berechtigungen.]({{ img_url_mobile }}Administration/25_admin_container_editieren_dark.png#only-dark){.mobile-img}
 
 Sie sehen als oberste Eingabefelder den Namen des Containers, die Anwendung, in welcher der Container läuft, das Modell (eine weitere Unterteilung, denn manche Anwendungen, wie z.B. Sales, beinhalten mehrere Arten von Containern), den Typ (gemeinsam oder persönlich) und die Farbe des Containers.
 
@@ -643,10 +643,10 @@ Mit dem Button Entferne Eintrag unten links können Sie einen Benutzer bzw. eine
 Sie können hier jedoch auch Container neu anlegen und müssen dazu nicht in die jeweilige Anwendung wechseln. Klicken Sie dazu in der Bedienzeile auf Container hinzufügen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_desktop }}Administration/26_administration_container_neu_light.png#only-light){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_desktop }}Administration/26_administration_container_neu_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_mobile }}Administration/26_administration_container_neu_light.png#only-light){.mobile-img}
-![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_mobile }}Administration/26_administration_container_neu_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_desktop }}Administration/26_admin_container_neu_light.png#only-light){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_desktop }}Administration/26_admin_container_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_mobile }}Administration/26_admin_container_neu_light.png#only-light){.mobile-img}
+![Abbildung: Die Bearbeitungsmaske zum Anlegen eines neuen Containers]({{ img_url_mobile }}Administration/26_admin_container_neu_dark.png#only-dark){.mobile-img}
 
 Sie erhalten die gleiche Maske wie oben, nur dass Sie hier die Felder in der ersten Zeile natürlich erst füllen müssen. Für Anwendung und Typ erhalten Sie per Pulldown Vorgaben. Die Benutzer bzw. Benutzergruppen wählen Sie aus und die Berechtigungen weisen Sie zu wie oben beschrieben.
 
@@ -666,18 +666,18 @@ Tags sind die kleinen Markierungen an beliebigen Datensätzen, die es uns erlaub
 Klicken Sie in der Admin-Oberfläche links auf Gemeinsame Tags:
 
 <!-- SCREENSHOT -->
-![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_desktop }}Administration/21_administration_gemeinsame_tags_light.png#only-light){.desktop-img}
-![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_desktop }}Administration/21_administration_gemeinsame_tags_dark.png#only-dark){.desktop-img}
-![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_mobile }}Administration/21_administration_gemeinsame_tags_light.png#only-light){.mobile-img}
-![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_mobile }}Administration/21_administration_gemeinsame_tags_dark.png#only-dark){.mobile-img}
+![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_desktop }}Administration/21_admin_gemeinsame_tags_light.png#only-light){.desktop-img}
+![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_desktop }}Administration/21_admin_gemeinsame_tags_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_mobile }}Administration/21_admin_gemeinsame_tags_light.png#only-light){.mobile-img}
+![Abbildung: Eine Liste der gemeinsamen Tags, die jeder Nutzer verwenden kann]({{ img_url_mobile }}Administration/21_admin_gemeinsame_tags_dark.png#only-dark){.mobile-img}
 
 In der Tabelle sehen Sie drei Spalten: Farbe, Name und Beschreibung. Sollten Sie in der Tabelle keine tatsächlich angelegten Tags sehen, dann klicken Sie in der Bedienzeile auf Tag hinzufügen:
 
 <!-- SCREENSHOT -->
-![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_desktop }}Administration/22_administration_gemeinsame_tags_rechte_light.png#only-light){.desktop-img}
-![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_desktop }}Administration/22_administration_gemeinsame_tags_rechte_dark.png#only-dark){.desktop-img}
-![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_administration_gemeinsame_tags_rechte_light.png#only-light){.mobile-img}
-![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_administration_gemeinsame_tags_rechte_dark.png#only-dark){.mobile-img}
+![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_desktop }}Administration/22_admin_gemeinsame_tags_rechte_light.png#only-light){.desktop-img}
+![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_desktop }}Administration/22_admin_gemeinsame_tags_rechte_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_admin_gemeinsame_tags_rechte_light.png#only-light){.mobile-img}
+![Abbildung: Das Zuweisen von Benutzern oder Gruppen zu einem gemeinsamen Tag und die Definition der entsprechenden Benutzerrechte]({{ img_url_mobile }}Administration/22_admin_gemeinsame_tags_rechte_dark.png#only-dark){.mobile-img}
 
 Oben links können Sie einen beliebigen Tag-Namen vergeben. Bevor sie das daneben liegende Feld Beschreibung ausfüllen, denken Sie bitte einmal kurz daran, dass es sich hierbei um einen gemeinsamen Tag handelt. Es gilt das bereits an mehreren Stellen Gesagte: Eine Beschreibung muss so nachvollziehbar sein, dass alle anderen Administratoren und in diesem Falle auch alle anderen Benutzer des Tags wissen, wofür er eingerichtet wurde. Die Farbe, die Sie einem Tag zuweisen und mit der dann Ihre Datenbank-Objekte in den entsprechenden Tabellenansichten mit einen kleinen farbigen Punkt markiert sind, können Sie über das Pulldown-Menü ganz rechts außen auswählen. Es werden Ihnen die üblichen HTML-Systemfarben angezeigt.
 
@@ -692,10 +692,10 @@ Verwenden bedeutet hingegen, dass der entsprechende Benutzer auch das Recht hat,
 Klicken Sie nun den Reiter Kontexte an:
 
 <!-- SCREENSHOT -->
-![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_desktop }}Administration/23_administration_gemeinsame_tags_kontexte_light.png#only-light){.desktop-img}
-![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_desktop }}Administration/23_administration_gemeinsame_tags_kontexte_dark.png#only-dark){.desktop-img}
-![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_administration_gemeinsame_tags_kontexte_light.png#only-light){.mobile-img}
-![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_administration_gemeinsame_tags_kontexte_dark.png#only-dark){.mobile-img}
+![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_desktop }}Administration/23_admin_gemeinsame_tags_kontexte_light.png#only-light){.desktop-img}
+![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_desktop }}Administration/23_admin_gemeinsame_tags_kontexte_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_admin_gemeinsame_tags_kontexte_light.png#only-light){.mobile-img}
+![Abbildung: Die Einstellung, in welchen Anwendungen ein gemeinsamer Tag anwendbar und gültig sein soll]({{ img_url_mobile }}Administration/23_admin_gemeinsame_tags_kontexte_dark.png#only-dark){.mobile-img}
 
 Sie sehen eine Reihe von Checkbuttons, die den einzelnen Programmbausteinen von {{ branding.title }} entsprechen. Hier können Sie also die Gültigkeit des gerade definierten Tags auf einzelne Programmteile, bspw. das Adressbuch, beschränken. Standardmäßig sollten alle Anwendungen ausgewählt sein.
 
@@ -703,20 +703,20 @@ Sie sehen eine Reihe von Checkbuttons, die den einzelnen Programmbausteinen von 
 ## Zusatzfelder { data-ctx="/Admin/EditDialog/Customfield" }
 
 <!-- SCREENSHOT -->
-![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_desktop }}Administration/27_administration_zusatzfelder_light.png#only-light){.desktop-img}
-![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_desktop }}Administration/27_administration_zusatzfelder_dark.png#only-dark){.desktop-img}
-![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_mobile }}Administration/27_administration_zusatzfelder_light.png#only-light){.mobile-img}
-![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_mobile }}Administration/27_administration_zusatzfelder_dark.png#only-dark){.mobile-img}
+![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_desktop }}Administration/27_admin_zusatzfelder_light.png#only-light){.desktop-img}
+![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_desktop }}Administration/27_admin_zusatzfelder_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_mobile }}Administration/27_admin_zusatzfelder_light.png#only-light){.mobile-img}
+![Abbildung: Eine Übersicht aller im System angelegten Zusatzfelder]({{ img_url_mobile }}Administration/27_admin_zusatzfelder_dark.png#only-dark){.mobile-img}
 
 {{ branding.title }} erlaubt Ihnen, bei Bedarf in den Datenbanken Zusatzfelder zu definieren, die in der Standardvariante nicht angeboten werden.
 
 Klicken Sie Zusatzfelder -> Zusatzfeld hinzufügen an:
 
 <!-- SCREENSHOT -->
-![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_desktop }}Administration/28_administration_zusatzfelder_neu_light.png#only-light){.desktop-img}
-![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_desktop }}Administration/28_administration_zusatzfelder_neu_dark.png#only-dark){.desktop-img}
-![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_mobile }}Administration/28_administration_zusatzfelder_neu_light.png#only-light){.mobile-img}
-![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_mobile }}Administration/28_administration_zusatzfelder_neu_dark.png#only-dark){.mobile-img}
+![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_desktop }}Administration/28_admin_zusatzfelder_neu_light.png#only-light){.desktop-img}
+![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_desktop }}Administration/28_admin_zusatzfelder_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_mobile }}Administration/28_admin_zusatzfelder_neu_light.png#only-light){.mobile-img}
+![Abbildung: Das Bearbeitungsfenster zum Anlegen eines neuen Zusatzfeldes]({{ img_url_mobile }}Administration/28_admin_zusatzfelder_neu_dark.png#only-dark){.mobile-img}
 
 In der Eingabemaske erhalten Sie eine Reihe von Merkmalen zur Definition eines Zusatzfeldes angeboten, wovon die meisten (Anwendung, Modell, Typ, Name und Bezeichner) Pflichteingaben sind.
 
@@ -766,10 +766,10 @@ Die Funktion Kontingents-Nutzung bietet eine Übersicht darüber, wieviel Datens
 Die unter diesem Menüpunkt angezeigte Tabelle listet Ihnen die für Ihre {{ branding.title }}-Instanz angemeldeten Geräte auf, die sich über ActiveSync mit der {{ branding.title }}-Datenbank abgleichen. Dabei werden alle Geräte angezeigt, die jemals angemeldet waren, sofern sie nicht hier gelöscht wurden.
 
 <!-- SCREENSHOT -->
-![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_desktop }}Administration/30_administration_activesync_devices_light.png#only-light){.desktop-img}
-![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_desktop }}Administration/30_administration_activesync_devices_dark.png#only-dark){.desktop-img}
-![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_mobile }}Administration/30_administration_activesync_devices_light.png#only-light){.mobile-img}
-![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_mobile }}Administration/30_administration_activesync_devices_dark.png#only-dark){.mobile-img}
+![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_desktop }}Administration/30_admin_activesync_devices_light.png#only-light){.desktop-img}
+![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_desktop }}Administration/30_admin_activesync_devices_dark.png#only-dark){.desktop-img}
+![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_mobile }}Administration/30_admin_activesync_devices_light.png#only-light){.mobile-img}
+![Abbildung: Übersicht aller ActiveSync Geräte]({{ img_url_mobile }}Administration/30_admin_activesync_devices_dark.png#only-dark){.mobile-img}
 
 Das Bearbeitungsmenü für diesen Programmteil enthält nur drei Funktionen: Sync Gerät bearbeiten, Sync Gerät löschen und Drucke Seite. Eine Funktion zum Erstellen fehlt hier, denn die Einträge kommen ausschließlich durch das Anmelden eines ActiveSync-Gerätes zustande.
 
@@ -780,10 +780,10 @@ Das Bearbeitungsmenü für diesen Programmteil enthält nur drei Funktionen: Syn
 Wenn Sie eine Tabellenzeile markieren und Sync Gerät bearbeiten anklicken, erhalten Sie die folgende Maske:
 
 <!-- SCREENSHOT -->
-![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_desktop }}Administration/31_administration_activesync_devices_editieren_light.png#only-light){.desktop-img}
-![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_desktop }}Administration/31_administration_activesync_devices_editieren_dark.png#only-dark){.desktop-img}
-![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_mobile }}Administration/31_administration_activesync_devices_editieren_light.png#only-light){.mobile-img}
-![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_mobile }}Administration/31_administration_activesync_devices_editieren_dark.png#only-dark){.mobile-img}
+![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_desktop }}Administration/31_admin_activesync_devices_editieren_light.png#only-light){.desktop-img}
+![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_desktop }}Administration/31_admin_activesync_devices_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_mobile }}Administration/31_admin_activesync_devices_editieren_light.png#only-light){.mobile-img}
+![Abbildung: Angaben eines ActiveSync Gerätes bearbeiten.]({{ img_url_mobile }}Administration/31_admin_activesync_devices_editieren_dark.png#only-dark){.mobile-img}
 
 Auf der Maske finden Sie einige Angaben, die nicht in jedem Falle vollständig sein müssen, da das Übermitteln der zugehörigen Daten von den entsprechenden Geräten abhängt und nicht durchgängig standardisiert ist.
 
@@ -815,10 +815,10 @@ Auf der Maske finden Sie einige Angaben, die nicht in jedem Falle vollständig s
 ## Zugriffslog { data-ctx="/Admin/MainScreen/AccessLog" }
 
 <!-- SCREENSHOT -->
-![Abbildung: Das Zugriffslog]({{ img_url_desktop }}Administration/20_administration_zugriffslog_light.png#only-light){.desktop-img}
-![Abbildung: Das Zugriffslog]({{ img_url_desktop }}Administration/20_administration_zugriffslog_dark.png#only-dark){.desktop-img}
-![Abbildung: Das Zugriffslog]({{ img_url_mobile }}Administration/20_administration_zugriffslog_light.png#only-light){.mobile-img}
-![Abbildung: Das Zugriffslog]({{ img_url_mobile }}Administration/20_administration_zugriffslog_dark.png#only-dark){.mobile-img}
+![Abbildung: Das Zugriffslog]({{ img_url_desktop }}Administration/20_admin_zugriffslog_light.png#only-light){.desktop-img}
+![Abbildung: Das Zugriffslog]({{ img_url_desktop }}Administration/20_admin_zugriffslog_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Zugriffslog]({{ img_url_mobile }}Administration/20_admin_zugriffslog_light.png#only-light){.mobile-img}
+![Abbildung: Das Zugriffslog]({{ img_url_mobile }}Administration/20_admin_zugriffslog_dark.png#only-dark){.mobile-img}
 
 <!--JSON-->
 Das "Zugriffslog" bietet dem Administrator die Möglichkeit, sich alle Logins der berechtigten Benutzer anzeigen zu lassen. Das können ganz schnell sehr viele werden - hier spielt also die Filterfunktion eine wichtige Rolle. Wenn Sie das Modul Zugriffslog] nach Ihrem eigenen Login das erste Mal aufrufen, ist deshalb standardmäßig ein Filter gesetzt, der Ihnen nur die Logins der letzten Woche und diejenigen vom Client-Typ {{ branding.title }}Json anzeigt. Was hat es mit dem Letzteren auf sich? "JSON" bedeutet "JavaScript Object Notation" und ist ein definiertes Datenaustauschformat in der IT. In unserem konkreten Fall steht der Client-Typ {{ branding.title }}Json für ein Login über den Webbrowser des PCs, also auch das Login, mit dem Sie heute Ihre {{ branding.title }}-Sitzung begonnen haben.
@@ -831,10 +831,10 @@ Was passiert, wenn wir die gesetzten Filter entfernen? Gehen Sie probehalber bit
 ## Server-Informationen
 
 <!-- SCREENSHOT -->
-![Abbildung: Informationen zum Server]({{ img_url_desktop }}Administration/29_administration_serverinfo_light.png#only-light){.desktop-img}
-![Abbildung: Informationen zum Server]({{ img_url_desktop }}Administration/29_administration_serverinfo_dark.png#only-dark){.desktop-img}
-![Abbildung: Informationen zum Server]({{ img_url_mobile }}Administration/29_administration_serverinfo_light.png#only-light){.mobile-img}
-![Abbildung: Informationen zum Server]({{ img_url_mobile }}Administration/29_administration_serverinfo_dark.png#only-dark){.mobile-img}
+![Abbildung: Informationen zum Server]({{ img_url_desktop }}Administration/29_admin_serverinfo_light.png#only-light){.desktop-img}
+![Abbildung: Informationen zum Server]({{ img_url_desktop }}Administration/29_admin_serverinfo_dark.png#only-dark){.desktop-img}
+![Abbildung: Informationen zum Server]({{ img_url_mobile }}Administration/29_admin_serverinfo_light.png#only-light){.mobile-img}
+![Abbildung: Informationen zum Server]({{ img_url_mobile }}Administration/29_admin_serverinfo_dark.png#only-dark){.mobile-img}
 
 Der Menüpunkt Server-Informationen dient der Anzeige von Informationen für den Systemadministrator; darauf gehen wir im Rahmen dieses Buches nicht näher ein.
 
