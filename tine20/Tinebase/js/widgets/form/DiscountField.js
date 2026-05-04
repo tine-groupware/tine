@@ -116,8 +116,9 @@ Tine.widgets.form.DiscountField = Ext.extend(Ext.ux.form.MoneyField, {
 
         // console.error(form ? 'form' : 'editorgrid', modified)
 
-        if (this.autoValuesReverseMode || (modified.hasOwnProperty([config.net_field]) && currentValues[config.net_field])) {
+        if (this.autoValuesReverseMode || (Object.keys(this.lastValues).length && modified.hasOwnProperty([config.net_field]) && currentValues[config.net_field])) {
             // reverse calculations
+            debugger
             this.autoValuesReverseMode = true;
             let price
 
