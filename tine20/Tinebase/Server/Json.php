@@ -167,16 +167,18 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      *
      * @param array $requestData
      */
-    protected function _logRequests($requestData)
+    protected function _logRequests(array $requestData): void
     {
         if (! Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             return;
         }
 
         $requestData = $this->_stripPasswordsFromRequestData($requestData);
+        $requestData = var_export($requestData, true);
+        $requestData = mb_substr($requestData, 0, 2 * 1024 * 1024); // limit log size to ~2 MB
 
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' JSON request - raw data: ' . var_export($requestData, true));
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' JSON request - raw data: ' . $requestData);
     }
 
     /**
