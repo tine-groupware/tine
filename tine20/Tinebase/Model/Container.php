@@ -378,7 +378,9 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         try {
             $container = Tinebase_Container::getInstance()->getContainerById($_record->{$_containerProperty});
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            }
             return;
         }
         
@@ -457,7 +459,16 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
             return false;
         }
 
-        $user = Tinebase_User::getInstance()->getFullUserById($this->owner_id);
+        try {
+            $user = Tinebase_User::getInstance()->getFullUserById($this->owner_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // user not found, so we assume that the owner is disabled
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' User could not be found, so we assume that the owner is disabled: ' . $tenf->getMessage());
+            }
+            return true;
+        }
         return $user->accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
     }
 }
