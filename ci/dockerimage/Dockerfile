@@ -133,6 +133,7 @@ RUN apt-mirror activate \
     lsb-release \
     ca-certificates \
  && add-apt-repository ppa:ondrej/php \
+ && apt-mirror activate \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php8.4 \

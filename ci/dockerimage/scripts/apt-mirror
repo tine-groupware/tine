@@ -5,11 +5,20 @@ if [ -n "$APT_MIRROR" ]; then
         mv /etc/apt/sources.list /etc/apt/sources.list.save || true
         mv /etc/apt/sources.list.d/ubuntu.sources /etc/apt/sources.list.d/ubuntu.sources.save || true
         sed s#APT_MIRROR#${APT_MIRROR}#g /etc/apt/sources.list.d/ubuntu-mirror.list.save > /etc/apt/sources.list.d/ubuntu-mirror.list
+
+        source /etc/lsb-release
+        if [ -f /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources ] || [ /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources.save ]; then
+            mv /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources.save || true
+
+            sed s#https://ppa.launchpadcontent.net#${APT_MIRROR}/ppa#g /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources* > /etc/apt/sources.list.d/ondrej-php-mirror.sources
+        fi
     fi
 
     if [ "$1" == "deactivate" ]; then
         mv /etc/apt/sources.list.save /etc/apt/sources.list || true
         mv /etc/apt/sources.list.d/ubuntu.sources.save /etc/apt/sources.list.d/ubuntu.sources || true
-        rm /etc/apt/sources.list.d/ubuntu-mirror.list
+        mv /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources.save /etc/apt/sources.list.d/ondrej-ubuntu-php-$DISTRIB_CODENAME.sources || true
+        rm -f /etc/apt/sources.list.d/ubuntu-mirror.list
+        rm -f /etc/apt/sources.list.d/ondrej-php-mirror.sources
     fi
 fi
