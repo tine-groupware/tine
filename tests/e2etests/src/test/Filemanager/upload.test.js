@@ -53,7 +53,8 @@ describe('filemanager', () => {
                 await expectPuppeteer(editDialog).toClick('.x-combo-list-item', {text:'Users'});
             });
             test('give new user rights', async () => {
-                await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');
+                const checkboxElement = editDialog.locator('xpath=//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');
+                await checkboxElement.wait();
                 await clickCheckBox(editDialog,'x-grid3-cc-add');
                 await clickCheckBox(editDialog,'x-grid3-cc-edit');
                 await clickCheckBox(editDialog,'x-grid3-cc-delete');
@@ -78,6 +79,9 @@ afterAll(async () => {
 
 async function clickCheckBox(page, checkbox) {
     await new Promise(r => setTimeout(r, 500));
-    const elements = await page.$x('//div[contains(@class, "x-grid3-row") and contains(., "Users")] //div[contains(@class, "'+ checkbox +'")]');
-    await elements[0].click();
+    const checkboxElement = page.locator(
+        `xpath=//div[contains(@class, "x-grid3-row") and contains(., "Users")]//div[contains(@class, "${checkbox}")]`
+    );
+    await checkboxElement.wait();
+    await checkboxElement.click();
 }
