@@ -163,19 +163,11 @@ RUN apt-mirror activate \
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.5
+FROM ${DOCKER_HUB_PROXY}library/ubuntu:resolute AS php8.5
 ARG APT_MIRROR=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
- && apt-get update \
- && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
-    software-properties-common \
-    gnupg2 \
-    apt-transport-https \
-    lsb-release \
-    ca-certificates \
- && add-apt-repository ppa:ondrej/php \
  && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php8.5 \
