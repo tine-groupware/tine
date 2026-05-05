@@ -903,7 +903,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $supportedFlags = Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags();
-        
         $result = array(
             'supportedFlags'        => array(
                 'results'       => $supportedFlags,

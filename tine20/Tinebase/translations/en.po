@@ -180,6 +180,9 @@ msgstr "Configured Area Locks"
 msgid "Database Configuration"
 msgstr "Database Configuration"
 
+msgid "Session Configuration"
+msgstr "Session Configuration"
+
 msgid "External Database Configuration"
 msgstr "External Database Configuration"
 
@@ -293,6 +296,9 @@ msgstr "Replication master configuration"
 
 msgid "Replication master configuration."
 msgstr "Replication master configuration."
+
+msgid "Disable Owncloud permissions support"
+msgstr "Disable Owncloud permissions support"
 
 msgid "Report WebDAV issues"
 msgstr "Report WebDAV issues"
@@ -2311,9 +2317,6 @@ msgstr "Convert to pure text"
 msgid "Loading"
 msgstr "Loading"
 
-msgid "Click to edit"
-msgstr "Click to edit"
-
 msgid "Image Failed"
 msgstr "Image Failed"
 
@@ -4319,6 +4322,25 @@ msgstr "Filter"
 
 msgid "Skip Upstream Updates"
 msgstr "Skip Upstream Updates"
+
+msgid "Instance Domain"
+msgid_plural "Instance Domains"
+msgstr[0] "Instance Domain"
+msgstr[1] "Instance Domains"
+
+msgid "Instance ID"
+msgstr "Instance ID"
+
+msgid "Domain Name"
+msgstr "Domain Name"
+
+msgid "Instance"
+msgid_plural "Instances"
+msgstr[0] "Instance"
+msgstr[1] "Instances"
+
+msgid "Flag Icon File"
+msgstr "Flag Icon File"
 
 msgid "LogEntry"
 msgid_plural "LogEntries"

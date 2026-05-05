@@ -85,13 +85,14 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      * @returns {String}
      */
     getMailSenderIcon: function() {
-        const trustedDomainRegexData = Tine.Tinebase.configManager.get('trustedMailDomains', 'Felamimail');
+        const trustedDomainRegexData = Tine.Tinebase.registry.get('trustedMailDomains');
         const flags = this.get('flags');
         let result = null;
 
         if (trustedDomainRegexData) {
             Object.entries(trustedDomainRegexData).forEach((data) => {
                 if (flags.includes(data[1].id)) {
+                    data[1].qtip = this.get('from_name');
                     result = data[1];
                 }
             })
@@ -126,8 +127,8 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         }
 
         const mailServerIcon = this.getMailSenderIcon();
-        if (mailServerIcon) {
-            icons.push({name: mailServerIcon.id, src: mailServerIcon.image, qtip: mailServerIcon.value});
+        if (mailServerIcon && mailServerIcon.image) {
+            icons.push({name: mailServerIcon.id, src: mailServerIcon.image, qtip: mailServerIcon.qtip});
         }
         return icons;
     },

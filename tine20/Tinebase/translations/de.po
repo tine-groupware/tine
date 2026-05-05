@@ -196,6 +196,9 @@ msgstr "Konfigurierte Bereichs Sperren"
 msgid "Database Configuration"
 msgstr "Datenbankkonfiguration"
 
+msgid "Session Configuration"
+msgstr ""
+
 msgid "External Database Configuration"
 msgstr "Externe Datenbankkonfiguration"
 
@@ -309,6 +312,9 @@ msgstr "Replikation Master Konfiguration"
 
 msgid "Replication master configuration."
 msgstr "Replikation Master Konfiguration."
+
+msgid "Disable Owncloud permissions support"
+msgstr ""
 
 msgid "Report WebDAV issues"
 msgstr ""
@@ -2327,9 +2333,6 @@ msgstr "In reinen Text converteiren"
 msgid "Loading"
 msgstr "lädt"
 
-msgid "Click to edit"
-msgstr "Zum Bearbeiten klicken"
-
 msgid "Image Failed"
 msgstr "Fehler bei Bildverarbeitung"
 
@@ -4337,6 +4340,25 @@ msgstr "Filter"
 msgid "Skip Upstream Updates"
 msgstr "Upstream-Aktualisierungen unterdrücken"
 
+msgid "Instance Domain"
+msgid_plural "Instance Domains"
+msgstr[0] "Instanz Domain"
+msgstr[1] "Instanz-Domänen"
+
+msgid "Instance ID"
+msgstr "Instanz ID"
+
+msgid "Domain Name"
+msgstr ""
+
+msgid "Instance"
+msgid_plural "Instances"
+msgstr[0] "Instanz"
+msgstr[1] "Instanzen"
+
+msgid "Flag Icon File"
+msgstr "Flag Icon Datei"
+
 msgid "LogEntry"
 msgid_plural "LogEntries"
 msgstr[0] "Protokolleintrag"
@@ -4794,14 +4816,3 @@ msgstr "Nur Nachbarn"
 msgid "Preview"
 msgstr "Vorschau"
 
-#~ msgid "show markdown"
-#~ msgstr "Markdown anzeigen"
-
-#~ msgid "Setting new timezone..."
-#~ msgstr "Neue Zeitzone setzen..."
-
-#~ msgid "Confirm Logout"
-#~ msgstr "Ausloggen bestätigen"
-
-#~ msgid "Show confirmation dialog on logout."
-#~ msgstr "Bestätigungsdialog beim Ausloggen anzeigen."

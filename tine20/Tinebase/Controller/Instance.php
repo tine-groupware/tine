@@ -37,63 +37,43 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
         ]);
     }
 
-    protected function _inspectAfterSetRelatedDataCreate($createdRecordWithRelated, $_record)
+    public function getTrustedMailDomains(): array
     {
-        parent::_inspectAfterSetRelatedDataCreate($createdRecordWithRelated, $_record);
-
-        $this->_updateTrustedMailDomains($createdRecordWithRelated, $_record);
-    }
-
-    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
-    {
-        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
-
-        $this->_updateTrustedMailDomains($updatedRecord, $record);
-    }
-
-    /**
-     *
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
-    {
-        parent::_inspectAfterDelete($record);
-
-        $this->_updateTrustedMailDomains(null, $record);
-    }
-
-    protected function _updateTrustedMailDomains($updatedRecord, $record)
-    {
-        if ($this->_doContainerACLChecks && Tinebase_Core::isReplica()) {
-            return;
-        }
-
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-
-        if ($record) {
-            $oldInstanceName = $record[Tinebase_Model_Instance::FLD_NAME];
-            foreach ($supportedMailServers as $key => $data) {
-                if ($data['id'] === $oldInstanceName) {
-                    unset($supportedMailServers[$key]);
-                }
-            }
-        }
-
-        if ($updatedRecord) {
-            $domains = $updatedRecord[Tinebase_Model_Instance::FLD_MAIL_DOMAINS]->domain_name;
+        $trustedMailDomains = [];
+        $records =  $this->getAll();
+        $expander = new Tinebase_Record_Expander(Tinebase_Model_Instance::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Tinebase_Model_Instance::FLD_MAIL_DOMAINS   => [],
+            ],
+        ]);
+        $expander->expand($records);
+        foreach ($records as $instance) {
+            $domains = $instance[Tinebase_Model_Instance::FLD_MAIL_DOMAINS]->sort(Tinebase_Model_InstanceMailDomain::FLD_DOMAIN_NAME)->domain_name;
 
             if (count($domains) > 0) {
                 $pattern = '(' . implode('|', array_map(fn($d) => preg_quote($d, '/'), $domains)) . ')';
-                $newInstanceName = $updatedRecord[Tinebase_Model_Instance::FLD_NAME];
-                $url = $updatedRecord[Tinebase_Model_Instance::FLD_URL];
+                $image = $instance[Tinebase_Model_Instance::FLD_FLAG_ICON_FILE];
 
-                $supportedMailServers[$pattern] = [
-                    'id'    => $newInstanceName,
-                    'value' => $newInstanceName,
-                    'image' => "https://$url/favicon",
+                if (!empty($image) && !str_contains($image, 'icon-set')) {
+                    try {
+                        $image = Tinebase_ImageHelper::getDataUrl($image);
+                    } catch (Exception $e){
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                            Tinebase_Core::getLogger()->warn(
+                                __METHOD__ . '::' . __LINE__ . ' Failed to load the flag icon from : ' . $image);
+                        }
+                    }
+                }
+
+                $trustedMailDomains[$pattern] = [
+                    'id'    => $instance[Tinebase_Model_Instance::FLD_URL],
+                    'name' => $instance[Tinebase_Model_Instance::FLD_NAME],
+                    'image' => $image,
                 ];
             }
-            Felamimail_Config::getInstance()->set(Felamimail_Config::TRUSTED_MAIL_DOMAINS, $supportedMailServers);
         }
+
+        $trustedMailDomainConfig = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
+        return array_merge($trustedMailDomainConfig, $trustedMailDomains);
     }
 }

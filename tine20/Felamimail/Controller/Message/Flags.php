@@ -49,10 +49,6 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         $this->_modelName = 'Felamimail_Model_Message';
         $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
 
-        $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        foreach ($supportedMailServers as $data) {
-            self::$_allowedFlags[$data['id']] = $data['id'];
-        }
         self::$_allowedFlags['Tine20'] = 'Tine20';
         self::$_allowedFlags['SPAM'] = 'SPAM';
     }
@@ -412,8 +408,8 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
 
             if ($dkimValidator->validateBoolean()) {
                 [, $domain] = explode('@', $_message->from_email, 2);
-                $supportedMailServers = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-                foreach ($supportedMailServers as $server => $data) {
+                $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+                foreach ($trustedMailDomains as $server => $data) {
                     if (preg_match("/^$server$/", $domain)) {
                         $flag = $data['id'];
                     }
@@ -454,10 +450,9 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             }
             if (preg_match('/d=([^;]+)/', $dkimHeader, $matches)) {
                 $domain = trim($matches[1]);
-                $supportedMailServers = Felamimail_Config::getInstance()->get(
-                    Felamimail_Config::TRUSTED_MAIL_DOMAINS);
+                $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
 
-                foreach ($supportedMailServers as $server => $data) {
+                foreach ($trustedMailDomains as $server => $data) {
                     if (preg_match("/^$server$/", $domain)) {
                         $result = $data['id'];
                         break 2;
