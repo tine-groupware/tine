@@ -100,7 +100,7 @@ function docs_push_docker_image() {
 function docs_find_missing_screenshots() {
     touch ${CI_PROJECT_DIR}/missing-screenshots.txt
 
-    for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq -u); do
+    for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq ); do
         if ! [[ -f ${CI_PROJECT_DIR}/tests/e2etests/screenshots/$f ]]; then
             echo ${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/$f >> ${CI_PROJECT_DIR}/missing-screenshots.txt
         fi
