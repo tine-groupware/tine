@@ -232,9 +232,9 @@
     KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_DOCKER_KUBERNETES_SERVICE_MEMORY_REQUEST
     KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_DOCKER_KUBERNETES_SERVICE_MEMORY_LIMIT
   services:
-    - name: ${UTIL_REGISTRY}/docker:27.0.3-dind
+    - name: ${CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind
       alias: docker
-  image: ${UTIL_REGISTRY}/docker:27.0.3-r1
+  image: ${UTIL_REGISTRY}/docker:29.3.0-0mw1
   before_script:
     - export DOCKER_BUILDKIT=1
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
