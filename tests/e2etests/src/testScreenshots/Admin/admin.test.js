@@ -53,9 +53,9 @@ describe('groups', () => {
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/6_admin_gruppen.png'});
     });
-    test.skip('edit group', async () => {
+    test('edit group', async () => {
         let groupDialog = lib.getNewWindow();
-        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Administrators', clickCount: 2});
+        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Administrators', count: 2});
         groupDialog = await groupDialog;
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(groupDialog, {path: 'screenshots/Administration/7_admin_gruppen_editieren.png'});
@@ -72,7 +72,7 @@ describe('roles', () => {
     });
     test('edit roles', async () => {
         let roleDialog = lib.getNewWindow();
-        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'user role', clickCount: 2});
+        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'user role', count: 2});
         roleDialog = await roleDialog;
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(roleDialog, {path: 'screenshots/Administration/8_admin_rolle_editieren.png'});
@@ -114,7 +114,7 @@ describe('application', () => {
         let editDialog = await getAppConfigDialog('Crm');
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/15_admin_crm_einstellungen.png'});
         let rows = await editDialog.$$('.x-grid3-cell-inner.x-grid3-col-value');
-        await rows[3].click({clickCount: 2, delay: 500});
+        await rows[3].click({count: 2, delay: 500});
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/16_admin_crm_lead_status.png'});
         await editDialog.close();
@@ -145,7 +145,7 @@ describe('container', () => {
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/24_admin_container.png'});
         let containerDialog = lib.getNewWindow();
-        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Internal Contacts', clickCount: 2});
+        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Internal Contacts', count: 2});
         containerDialog = await containerDialog;
         await new Promise(r => setTimeout(r, 3000));
         await lib.makeScreenshot(containerDialog,{path: 'screenshots/Administration/25_admin_container_editieren.png'});
@@ -167,7 +167,7 @@ describe('shared tags', () => {
         await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/21_admin_gemeinsame_tags.png'});
         let tagDialog = lib.getNewWindow();
-        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', clickCount: 2});
+        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', count: 2});
         tagDialog = await tagDialog;
         await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/22_admin_gemeinsame_tags_rechte.png'});
@@ -204,7 +204,7 @@ describe('activSync', () => {
         let activSyncDialog = lib.getNewWindow();
         await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-devicetype', {
             text: 'android',
-            clickCount: 2
+            count: 2
         });
         activSyncDialog = await activSyncDialog;
         await new Promise(r => setTimeout(r, 3000));
@@ -237,7 +237,7 @@ afterAll(async () => {
 async function getAppConfigDialog(text) {
     await new Promise(r => setTimeout(r, 1000));
     let popupWindow = lib.getNewWindow();
-    await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: text, clickCount: 2});
+    await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: text, count: 2});
     popupWindow = await popupWindow;
     try {
         await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});
