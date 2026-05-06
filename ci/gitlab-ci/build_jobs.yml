@@ -99,6 +99,7 @@ docker_build_test:
           - "8.4"
           - "8.5"
   before_script:
+    # disabling buildkit causes all docker versions to be build, but is is still faster than using buildkit
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
     - !reference [.lib, script]
