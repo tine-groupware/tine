@@ -56,6 +56,8 @@ RUN apt-mirror activate \
  && apt-get update \
  && apt-get install -y software-properties-common \
  && add-apt-repository -y ppa:ondrej/php \
+ && apt-mirror activate \
+ && apt-get update \
  && DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     php8.2 \
     php8.2-apcu \
