@@ -1173,10 +1173,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters, $this->convertDates);
         }
 
-        if (isset($_data['rrule_constraints']) && ! empty($_data['rrule_constraints']) && ! $_data['rrule_constraints'] instanceof Calendar_Model_EventFilter) {
-            // rrule can be array or string
+        if (isset($_data['rrule_constraints']) && !empty($_data['rrule_constraints']) && !$_data['rrule_constraints'] instanceof Calendar_Model_EventFilter) {
+            // rrule can be an array or string - filter only accepts array
+            if (!is_array($_data['rrule_constraints'])) {
+                throw new Tinebase_Exception_Record_Validation('rrule_constraints must be an array: '
+                    . print_r($_data['rrule_constraints'], true));
+            }
             $_data['rrule_constraints'] = new Calendar_Model_EventFilter($_data['rrule_constraints']);
-
         }
 
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {
