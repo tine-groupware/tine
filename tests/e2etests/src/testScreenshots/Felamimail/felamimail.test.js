@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -7,15 +7,15 @@ beforeAll(async () => {
     //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('E-Mail');
     const currenUser = await lib.getCurrentUser(page);
-    await expect(page).toClick('span', {text: currenUser.accountEmailAddress, button: 'right'});
+    await expectPuppeteer(page).toClick('span', {text: currenUser.accountEmailAddress, button: 'right'});
     await page.waitForSelector('.x-menu-item-icon.action_update_cache', {visible: true});
     await page.click('.x-menu-item-icon.action_update_cache');
     try {
         await page.waitForSelector('.x-tree-node-el.x-unselectable.felamimail-node-account.x-tree-node-expanded.x-tree-node-loading');
     } catch {}
-    await expect(page).not.toMatchElement('.x-tree-node-el.x-unselectable.felamimail-node-account.x-tree-node-expanded.x-tree-node-loading');
+    await expectPuppeteer(page).not.toMatchElement('.x-tree-node-el.x-unselectable.felamimail-node-account.x-tree-node-expanded.x-tree-node-loading');
     await page.waitForSelector('a span',{text: "Posteingang"});
-    await expect(page).toClick('a span',{text: "Posteingang"});
+    await expectPuppeteer(page).toClick('a span',{text: "Posteingang"});
 });
 
 describe('MainScreen', () => {
@@ -29,7 +29,7 @@ describe('MainScreen', () => {
     });
 
     test('choose grid fields', async () => {
-        await expect(page).toMatchElement('span', {text: process.env.TEST_USER});
+        await expectPuppeteer(page).toMatchElement('span', {text: process.env.TEST_USER});
         //await app.click('.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn');
         await page.click('.t-app-felamimail .ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn');
         await page.waitForSelector('.x-menu-list');
@@ -47,27 +47,27 @@ describe('MainScreen', () => {
 describe('editDialog', () => {
     let newPage;
     test('open editDialog', async () => {
-        await expect(page).toClick('button', {text: 'Konto hinzufügen'});
+        await expectPuppeteer(page).toClick('button', {text: 'Konto hinzufügen'});
         newPage = await lib.getNewWindow();
-        await newPage.waitForTimeout(2000);
-        await expect(newPage).toFill('input[name=from]', 'Rauch, Tim');
+        await new Promise(r => setTimeout(r, 2000));
+        await expectPuppeteer(newPage).toFill('input[name=from]', 'Rauch, Tim');
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/4_email_neues_konto.png'});
     });
     test('imap', async () => {
-        await expect(newPage).toClick('span', {text: 'IMAP'});
-        await newPage.waitForTimeout(1000);
-        await expect(newPage).toFill('input[name=host]', 'mail.tine20.net');
+        await expectPuppeteer(newPage).toClick('span', {text: 'IMAP'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(newPage).toFill('input[name=host]', 'mail.tine20.net');
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/5_email_neues_konto_imap.png'});
     });
     test('smtp', async () => {
-        await expect(newPage).toClick('span', {text: 'SMTP'});
-        await newPage.waitForTimeout(1000);
-        await expect(newPage).toFill('input[name=smtp_hostname]', 'mail.tine20.net');
+        await expectPuppeteer(newPage).toClick('span', {text: 'SMTP'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(newPage).toFill('input[name=smtp_hostname]', 'mail.tine20.net');
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/6_email_neues_konto_smtp.png'});
     });
     test('other settings', async () => {
-        await newPage.waitForTimeout(1000);
-        await expect(newPage).toClick('span', {text: 'Andere Einstellungen'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(newPage).toClick('span', {text: 'Andere Einstellungen'});
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/7_email_neues_konto_andere.png'});
         await newPage.close()
     })
@@ -76,10 +76,10 @@ describe('editDialog', () => {
 describe('context menu', () => {
     let mail;
     test('open context menu', async () => {
-        await page.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
         mail = await lib.getCurrentUser(page);
-        await expect(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'}); // @todo currten user mail
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'}); // @todo currten user mail
+        await new Promise(r => setTimeout(r, 1000));
         await page.hover('.x-menu-item-icon.action_add');
         await lib.makeScreenshot(page, {path: 'screenshots/EMail/8_email_konto_kontextmenu.png'});
     });
@@ -88,21 +88,21 @@ describe('context menu', () => {
         await lib.makeScreenshot(page, {path: 'screenshots/EMail/18_email_server_kontextmenu.png'});
         await page.click('.x-menu-item-icon.action_email_replyAll');
         let newPage = await lib.getNewWindow();
-        await newPage.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await newPage.click('.x-form-text.x-form-field.x-trigger-noedit[name=enabled]');
-        await newPage.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/10_email_abwesenheitsnotiz.png'});
         await newPage.close();
     });
     test.skip('add mail filter', async () => {
-        await expect(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'});
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.x-menu-item-icon.action_email_forward');
+        await expectPuppeteer(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(page).toClick('.x-menu-item-icon.action_email_forward');
         let newPage = await lib.getNewWindow();
-        await newPage.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await newPage.click('.x-btn-image.action_add');
         let popup = await lib.getNewWindow();
-        await popup.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(popup,{path: 'screenshots/EMail/12_email_filterregeln_editieren.png'});
         let combo = await popup.$$('.x-form-trigger.x-form-arrow-trigger');
         await combo[1].click();
@@ -113,15 +113,15 @@ describe('context menu', () => {
         await popup.keyboard.press('Enter');
         combo = await popup.$$('.x-form-trigger.x-form-arrow-trigger');
         await combo[3].click();
-        await popup.waitForTimeout(1000);
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(popup,{path: 'screenshots/EMail/14_email_filteraktion_auswahl.png'});
         await popup.close();
         await lib.makeScreenshot(newPage, {path: 'screenshots/EMail/11_email_empfangsfilter.png'});
         await newPage.close();
     });
     test('create folder', async () => {
-        await expect(page).toClick('span', {text: 'Posteingang', button: 'right'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('span', {text: 'Posteingang', button: 'right'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/EMail/9_email_ordner_kontextmenu.png'});
         await page.keyboard.press('Escape')
     });
@@ -131,8 +131,8 @@ describe('filterBar', () => {
 
     test('default search', async () => {
         try {
-            await expect(page).toClick('.t-app-felamimail button', {text: 'Details verbergen'});
-            await page.waitForTimeout(2000);
+            await expectPuppeteer(page).toClick('.t-app-felamimail button', {text: 'Details verbergen'});
+            await new Promise(r => setTimeout(r, 2000));
         } catch (e) {
             console.log('details also not activate')
         }
@@ -141,26 +141,26 @@ describe('filterBar', () => {
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
         await page.type('.t-app-felamimail .x-toolbar-right-row .x-form-text.x-form-field.x-form-empty-field', 'Test Search');
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await page.click('div.t-app-felamimail .x-form-trigger.x-form-search-trigger')
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(
             page, {path: 'screenshots/StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button.png'
             , clip: {x: 1000, y: 0, width: 1366 - 1000, height: 100}}
         );
         await page.click('div.t-app-felamimail .x-form-trigger.x-form-clear-trigger');
         await page.click('div.t-app-felamimail .x-form-trigger.x-form-search-trigger');
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
     });
 
     test('details display', async () => {
         try {
-            await expect(page).toClick('.t-app-felamimail button', {text: 'Details anzeigen'});
-            await page.waitForTimeout(2000);
+            await expectPuppeteer(page).toClick('.t-app-felamimail button', {text: 'Details anzeigen'});
+            await new Promise(r => setTimeout(r, 2000));
         } catch (e) {
             console.log('details also activate')
         }
-        await expect(page).toMatchElement('button', {text: 'Suche starten', visible: true})
+        await expectPuppeteer(page).toMatchElement('button', {text: 'Suche starten', visible: true})
         let arrowtrigger = await page.$$('.t-app-felamimail .tw-filtertoolbar .x-form-arrow-trigger');
         await arrowtrigger[0].click();
         await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen.png'});
@@ -181,27 +181,27 @@ describe('filterBar', () => {
     });
 
     test('operator for filter', async () => {
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         let arrowtrigger = await page.$$('.t-app-felamimail .x-form-arrow-trigger');
         await arrowtrigger[0].click();
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await page.click('.x-combo-list-item.tw-ftb-field-path');
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         arrowtrigger = await page.$$('.t-app-felamimail .x-form-arrow-trigger');
         await arrowtrigger[1].click();
         await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren.png'});
     });
 
     test('alternate filter', async () => {
-        await expect(page).toClick('.t-app-felamimail span', {text: 'oder alternativ'});
+        await expectPuppeteer(page).toClick('.t-app-felamimail span', {text: 'oder alternativ'});
         await page.hover('.t-app-felamimail .action_addFilter');
-        await page.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(
             page, {path: 'screenshots/StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter.png',
             clip: {x: 850, y: 0, width: 1366 - 850, height: 200}}
         );
-        await expect(page).toClick('.t-app-felamimail span', {text: 'Alternativen Filter hinzufügen'});
-        await page.waitForTimeout(500);
+        await expectPuppeteer(page).toClick('.t-app-felamimail span', {text: 'Alternativen Filter hinzufügen'});
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(
             page, {path: 'screenshots/StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter.png',
             clip: {x: 850, y: 0, width: 1366 - 850, height: 200}}
@@ -220,12 +220,12 @@ describe('filterBar', () => {
 
         await page.click('.t-app-felamimail .action_addFilter');
         await page.click('.t-app-felamimail .action_saveFilter');
-        await page.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         await page.type('.x-form-text.x-form-field.x-form-invalid', 'Filter');
         await lib.makeScreenshot(page, {path: 'screenshots/EMail/15_allgemein_email_filter_favoriten.png'});
         await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten.png'});
         await page.keyboard.press('Escape');
-        await page.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         try {
             await page.click('.x-btn-image.action_delAllFilter');
         } catch (e) {
@@ -237,10 +237,10 @@ describe('filterBar', () => {
 describe.skip('write E-Mail', () => {
     test('open editDialog', async () => {
         let popupWindow = await lib.getEditDialog('Verfassen');
-        await popupWindow.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await popupWindow.click('.x-btn-image.AddressbookIconCls');
         let popup = await lib.getNewWindow();
-        await popup.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(popup,{path: 'screenshots/EMail/16_email_auswahl_empfaenger.png'});
         await popup.close();
         await popupWindow.close();

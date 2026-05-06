@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 require('dotenv').config();
 
@@ -19,18 +19,18 @@ describe.skip('ColorPicker', () => {
             console.log('tree also expand');
         }
 
-        await page.waitForTimeout(1000); //wait to expand tree
+        await new Promise(r => setTimeout(r, 1000)); //wait to expand tree
         await addTestCalendar(page,'Gemeinsame Kalender', shared);
-        await page.waitForTimeout(1000);  //wait to expand tree
+        await new Promise(r => setTimeout(r, 1000));  //wait to expand tree
         await addTestCalendar(page,'Meine Kalender', privat);
     });
     test.skip('change color on private calendar', async () => {
-        await expect(page).toMatchElement('span', {text: privat});
+        await expectPuppeteer(page).toMatchElement('span', {text: privat});
         await changeColor(page, privat,'008080');
         await changeColor(page, privat,'008080', true);
     });
     test.skip('change color on shared calendar', async () => {
-        await expect(page).toMatchElement('span', {text: shared});
+        await expectPuppeteer(page).toMatchElement('span', {text: shared});
         await changeColor(page, shared,'008080');
         await changeColor(page, shared,'008080', true);
     })
@@ -46,18 +46,18 @@ describe.skip('keyFields', () => {
 
             if(rollTd == 'none') {
                 await popupWindow.click('.ext-ux-grid-gridviewmenuplugin-menuBtn.x-grid3-hd-btn');
-                await expect(popupWindow).toClick('span', {text: 'Rolle'});
+                await expectPuppeteer(popupWindow).toClick('span', {text: 'Rolle'});
             }
 
             await popupWindow.waitForSelector('.x-grid3-cell-inner.x-grid3-col-role');
-            let element = await expect(popupWindow).toMatchElement('.x-grid3-row.x-grid3-row-first .x-grid3-cell-inner.x-grid3-col-role', {text: 'Erforderlich'});
+            let element = await expectPuppeteer(popupWindow).toMatchElement('.x-grid3-row.x-grid3-row-first .x-grid3-cell-inner.x-grid3-col-role', {text: 'Erforderlich'});
             await element.click();
-            await expect(popupWindow).toMatchElement('.x-combo-list-item ', {text: 'Freiwillig'});
+            await expectPuppeteer(popupWindow).toMatchElement('.x-combo-list-item ', {text: 'Freiwillig'});
             await popupWindow.keyboard.press('Escape');
         });
         test('event status field', async () => {
             await popupWindow.waitForSelector('.x-grid3-cell-inner.x-grid3-col-status');
-            await expect(popupWindow).toMatchElement('.x-grid3-row.x-grid3-row-first .x-grid3-cell-inner.x-grid3-col-status .tine-keyfield-icon');
+            await expectPuppeteer(popupWindow).toMatchElement('.x-grid3-row.x-grid3-row-first .x-grid3-cell-inner.x-grid3-col-status .tine-keyfield-icon');
             await popupWindow.close();
         });
     })
@@ -70,7 +70,7 @@ describe.skip('changeViews', () => {
         // await page.waitForTimeout(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         // await page.waitForTimeout(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
 
-        await expect(page).toClick('button', {text: 'Tag'});
+        await expectPuppeteer(page).toClick('button', {text: 'Tag'});
         await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         
@@ -82,7 +82,7 @@ describe.skip('changeViews', () => {
     });
     
     test('week View', async () => {
-        await expect(page).toClick('button', {text: 'Woche'});
+        await expectPuppeteer(page).toClick('button', {text: 'Woche'});
         await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
 
@@ -94,8 +94,8 @@ describe.skip('changeViews', () => {
     test('week View custom days', async () => {
         await lib.clickSlitButton(page, "Woche");
 
-        await expect(page).toClick('button', {text: 'Sa'});
-        await expect(page).toClick('.cal-wkperiod-config-menu button', {text: 'OK'});
+        await expectPuppeteer(page).toClick('button', {text: 'Sa'});
+        await expectPuppeteer(page).toClick('.cal-wkperiod-config-menu button', {text: 'OK'});
 
         await page.waitForFunction(() => document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
         await page.waitForFunction(() => !document.querySelector('.x-mask-loading.cal-ms-panel-mask'));
@@ -111,26 +111,26 @@ afterAll(async () => {
 
 
 async function addTestCalendar(page, root, calName) {
-    await expect(page).toClick('span', {text:root, button:'right'});
-    await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
-    await expect(page).toClick('span', {text:'Kalender hinzufügen'});
+    await expectPuppeteer(page).toClick('span', {text:root, button:'right'});
+    await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
+    await expectPuppeteer(page).toClick('span', {text:'Kalender hinzufügen'});
     await page.waitForSelector('.x-window.x-window-plain.x-window-dlg');
     await page.type('.ext-mb-text', calName);
     await page.keyboard.press('Enter');
 }
 
 async function changeColor(page, calName, color, colorPicker = false) {
-    await expect(page).toClick('span', {text: calName, button: 'right'});
-    await expect(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
+    await expectPuppeteer(page).toClick('span', {text: calName, button: 'right'});
+    await expectPuppeteer(page).toMatchElement('.x-menu.x-menu-floating.x-layer', {visible: true});
     let picker = await page.$x('//span[contains(@class,"x-menu-item-text") and contains(.,"Kalender Farbe einstellen")]');
     await picker[0].hover();
     await page.waitForSelector('.x-color-palette');
     if(colorPicker) {
-        await expect(page).toClick('.color-picker', {visible: true});
+        await expectPuppeteer(page).toClick('.color-picker', {visible: true});
         await page.waitForSelector('.hu-color-picker.light');
         //@todo change color!
-        await expect(page).toClick('.x-window.x-resizable-pinned button', {text:'Ok', visible: true});
+        await expectPuppeteer(page).toClick('.x-window.x-resizable-pinned button', {text:'Ok', visible: true});
     }else {
-        await expect(page).toClick('.color-' + color, {visible: true});
+        await expectPuppeteer(page).toClick('.color-' + color, {visible: true});
     }
 }

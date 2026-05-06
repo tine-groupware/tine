@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -18,9 +18,9 @@ describe('Edit Contact', () => {
     });
 
     test.skip('notification', async () => {
-        await expect(popupWindow).toClick('span', {text: 'Alarm', clickCount: 1});
+        await expectPuppeteer(popupWindow).toClick('span', {text: 'Alarm', clickCount: 1});
         await popupWindow.click('.new-row .x-form-trigger.x-form-arrow-trigger');
-        await popupWindow.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(popupWindow,{path: 'screenshots/Aufgaben/3_aufgaben_alarm.png'});
     });
 });

@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 require('dotenv').config();
 
@@ -9,12 +9,12 @@ beforeAll(async () => {
 
 describe('accounts', () => {
     test('User Mainpage', async () => {
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Benutzer'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Benutzer'});
         await lib.makeScreenshot(page, {path:'screenshots/Administration/1_admin_benutzertabelle.png'});
     });
     test('choose grid fields', async () => {
-        await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-accountLoginName', {text: 'tine20admin'});
+        await expectPuppeteer(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-accountLoginName', {text: 'tine20admin'});
         await page.click('.t-app-admin .ext-ux-grid-gridviewmenuplugin-menuBtn');
         await page.waitForSelector('.x-menu-list');
         await lib.makeScreenshot(page ,{path: 'screenshots/Administration/2_admin_spaltenauswahl.png'});
@@ -22,73 +22,73 @@ describe('accounts', () => {
     let newUserDialog;
     test('new user', async () => {
         newUserDialog = lib.getNewWindow();
-        await expect(page).toClick('button', {text: 'Benutzer hinzufügen'});
+        await expectPuppeteer(page).toClick('button', {text: 'Benutzer hinzufügen'});
         newUserDialog = await newUserDialog;
-        await newUserDialog.waitForTimeout(2500);
+        await new Promise(r => setTimeout(r, 2500));
         await lib.makeScreenshot(newUserDialog,{path: 'screenshots/Administration/3_admin_benutzer_neu.png'});
     });
     test('groups', async () => {
-        await newUserDialog.waitForTimeout(1000);
-        await expect(newUserDialog).toClick('span', {text: 'Gruppen'});
-        await newUserDialog.waitForTimeout(500);
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(newUserDialog).toClick('span', {text: 'Gruppen'});
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(newUserDialog,{path: 'screenshots/Administration/4_admin_benutzer_gruppe.png'});
-        await expect(newUserDialog).toClick('button', {text: 'Abbrechen', visible: true});
+        await expectPuppeteer(newUserDialog).toClick('button', {text: 'Abbrechen', visible: true});
     });
     test('edit user', async () => {
         let row = await page.$$('#gridAdminUsers .x-grid3-row');
         let userDialog = lib.getNewWindow();
         await row[3].click({clickCount: 2});
         userDialog = await userDialog;
-        await userDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(userDialog,{path: 'screenshots/Administration/5_admin_benutzer_editieren.png'});
-        await userDialog.waitForTimeout(500);
-        await expect(userDialog).toClick('button', {text: 'Abbrechen', visible: true});
+        await new Promise(r => setTimeout(r, 500));
+        await expectPuppeteer(userDialog).toClick('button', {text: 'Abbrechen', visible: true});
     });
 });
 
 describe('groups', () => {
     test('group mainpage', async () => {
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gruppen'});
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/6_admin_gruppen.png'});
     });
-    test.skip('edit group', async () => {
+    test('edit group', async () => {
         let groupDialog = lib.getNewWindow();
-        await expect(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Administrators', clickCount: 2});
+        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'Administrators', count: 2});
         groupDialog = await groupDialog;
-        await groupDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(groupDialog, {path: 'screenshots/Administration/7_admin_gruppen_editieren.png'});
-        await groupDialog.waitForTimeout(500);
-        await expect(groupDialog).toClick('button', {text: 'Abbrechen'});
+        await new Promise(r => setTimeout(r, 500));
+        await expectPuppeteer(groupDialog).toClick('button', {text: 'Abbrechen'});
     })
 });
 
 describe('roles', () => {
     test('roles mainpage', async () => {
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Rollen'});
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Rollen'});
         //await lib.makeScreenshot(page, {path: 'screenshots/Administration/6_admin_gruppen.png'});
     });
     test('edit roles', async () => {
         let roleDialog = lib.getNewWindow();
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'user role', clickCount: 2});
+        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: 'user role', count: 2});
         roleDialog = await roleDialog;
-        await roleDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(roleDialog, {path: 'screenshots/Administration/8_admin_rolle_editieren.png'});
-        await expect(roleDialog).toClick('span', {text: 'Rechte'});
-        await roleDialog.waitForTimeout(500);
+        await expectPuppeteer(roleDialog).toClick('span', {text: 'Rechte'});
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(roleDialog, {path: 'screenshots/Administration/9_admin_rolle_rechte_editieren.png'});
-        await roleDialog.waitForTimeout(500);
-        await expect(roleDialog).toClick('button', {text: 'Abbrechen'});
+        await new Promise(r => setTimeout(r, 500));
+        await expectPuppeteer(roleDialog).toClick('button', {text: 'Abbrechen'});
     })
 });
 
 describe('application', () => {
     test('apps mainpage', async () => {
-        await page.waitForTimeout(1000);
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Anwendungen'});
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 1000));
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Anwendungen'});
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/10_admin_anwendungen.png'});
     });
     test('addressbook settings', async () => {
@@ -100,12 +100,12 @@ describe('application', () => {
         let editDialog = await getAppConfigDialog('Kalender');
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/12_admin_kalender_einstellung.png'});
         let popup = lib.getNewWindow();
-        await expect(editDialog).toClick('button', {text: 'Ressource hinzufügen'});
+        await expectPuppeteer(editDialog).toClick('button', {text: 'Ressource hinzufügen'});
         popup = await popup;
-        await popup.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(popup,{path: 'screenshots/Administration/13_admin_kalender_ressource_neu.png'});
-        await expect(popup).toClick('span', {text: 'Zugriffsrechte'});
-        await popup.waitForTimeout(1000);
+        await expectPuppeteer(popup).toClick('span', {text: 'Zugriffsrechte'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(popup, {path: 'screenshots/Administration/14_admin_kalender_ressource_rechte.png'});
         await popup.close();
         await editDialog.close();
@@ -114,8 +114,8 @@ describe('application', () => {
         let editDialog = await getAppConfigDialog('Crm');
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/15_admin_crm_einstellungen.png'});
         let rows = await editDialog.$$('.x-grid3-cell-inner.x-grid3-col-value');
-        await rows[3].click({clickCount: 2, delay: 500});
-        await editDialog.waitForTimeout(2000);
+        await rows[3].click({count: 2, delay: 500});
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/16_admin_crm_lead_status.png'});
         await editDialog.close();
     });
@@ -126,14 +126,14 @@ describe('application', () => {
     });
     test('sales settings', async () => {
         let editDialog = await getAppConfigDialog('Sales');
-        await editDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/18_admin_sales_einstellungen.png'});
         await editDialog.close();
     });
     test('tinebase settings', async () => {
         let editDialog = await getAppConfigDialog('Tinebase');
-        await expect(editDialog).toClick('span', {text: 'Profilinformation'});
-        await editDialog.waitForTimeout(500);
+        await expectPuppeteer(editDialog).toClick('span', {text: 'Profilinformation'});
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(editDialog,{path: 'screenshots/Administration/19_admin_tinebase_einstellungen.png'});
         await editDialog.close();
     });
@@ -141,21 +141,21 @@ describe('application', () => {
 
 describe('container', () => {
     test('container mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Container'});
-        await page.waitForTimeout(2000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Container'});
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/24_admin_container.png'});
         let containerDialog = lib.getNewWindow();
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Internal Contacts', clickCount: 2});
+        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Internal Contacts', count: 2});
         containerDialog = await containerDialog;
-        await containerDialog.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
         await lib.makeScreenshot(containerDialog,{path: 'screenshots/Administration/25_admin_container_editieren.png'});
         await containerDialog.close();
     });
     test('add container', async () => {
         let containerDialog = lib.getNewWindow();
-        await expect(page).toClick('button', {text: 'Container hinzufügen'});
+        await expectPuppeteer(page).toClick('button', {text: 'Container hinzufügen'});
         containerDialog = await containerDialog;
-        await containerDialog.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
         await lib.makeScreenshot(containerDialog,{path: 'screenshots/Administration/26_admin_container_neu.png'});
         await containerDialog.close();
     })
@@ -163,16 +163,16 @@ describe('container', () => {
 
 describe('shared tags', () => {
     test('tag mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gemeinsame Tags'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Gemeinsame Tags'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/21_admin_gemeinsame_tags.png'});
         let tagDialog = lib.getNewWindow();
-        await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', clickCount: 2});
+        await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'internal', count: 2});
         tagDialog = await tagDialog;
-        await tagDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/22_admin_gemeinsame_tags_rechte.png'});
-        await expect(tagDialog).toClick('span', {text: 'Kontexte'});
-        await tagDialog.waitForTimeout(500);
+        await expectPuppeteer(tagDialog).toClick('span', {text: 'Kontexte'});
+        await new Promise(r => setTimeout(r, 500));
         await lib.makeScreenshot(tagDialog,{path: 'screenshots/Administration/23_admin_gemeinsame_tags_kontexte.png'});
         await tagDialog.close();
     });
@@ -180,15 +180,15 @@ describe('shared tags', () => {
 
 describe('custom fields', () => {
     test('mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zusatzfelder'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zusatzfelder'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/27_admin_zusatzfelder.png'});
     });
     test('edit custom fields', async () => {
         let cfDialog = lib.getNewWindow();
-        await expect(page).toClick('.t-app-admin button', {text: 'Zusatzfeld hinzufügen'});
+        await expectPuppeteer(page).toClick('.t-app-admin button', {text: 'Zusatzfeld hinzufügen'});
         cfDialog = await cfDialog;
-        await cfDialog.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(cfDialog,{path: 'screenshots/Administration/28_admin_zusatzfelder_neu.png'});
         cfDialog.close();
     });
@@ -196,18 +196,18 @@ describe('custom fields', () => {
 
 describe('activSync', () => {
     test('mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'ActiveSync Geräte'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'ActiveSync Geräte'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/30_admin_activesync_devices.png'});
     });
     test('edit dialog', async () => {
         let activSyncDialog = lib.getNewWindow();
-        await expect(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-devicetype', {
+        await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-devicetype', {
             text: 'android',
-            clickCount: 2
+            count: 2
         });
         activSyncDialog = await activSyncDialog;
-        await activSyncDialog.waitForTimeout(3000);
+        await new Promise(r => setTimeout(r, 3000));
         await lib.makeScreenshot(activSyncDialog,{path: 'screenshots/Administration/31_admin_activesync_devices_editieren.png'});
         await activSyncDialog.close()
     });
@@ -216,16 +216,16 @@ describe('activSync', () => {
 
 describe('access log', () => {
     test('mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zugriffslog'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Zugriffslog'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/20_admin_zugriffslog.png'});
     })
 });
 
 describe('server info', () => {
     test('mainpage', async () => {
-        await expect(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Server Informationen'});
-        await page.waitForTimeout(1000);
+        await expectPuppeteer(page).toClick('.t-app-admin .tine-mainscreen-centerpanel-west span', {text: 'Server Informationen'});
+        await new Promise(r => setTimeout(r, 1000));
         await lib.makeScreenshot(page, {path: 'screenshots/Administration/29_admin_serverinfo.png'});
     })
 });
@@ -235,9 +235,9 @@ afterAll(async () => {
 });
 
 async function getAppConfigDialog(text) {
-    await page.waitForTimeout(1000);
+    await new Promise(r => setTimeout(r, 1000));
     let popupWindow = lib.getNewWindow();
-    await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: text, clickCount: 2});
+    await expectPuppeteer(page).toClick('.t-app-admin .x-grid3-cell-inner.x-grid3-col-name', {text: text, count: 2});
     popupWindow = await popupWindow;
     try {
         await popupWindow.waitForSelector('.ext-el-mask', {timeout: 5000});

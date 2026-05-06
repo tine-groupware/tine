@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 require('dotenv').config();
 
@@ -33,16 +33,16 @@ describe('mainScreen', () => {
     test('all apps', async () => {
         await page.waitForSelector('.action_menu.application-menu-btn');
         for (let i = 0; i < Apps.length; i++) {
-            await expect(page).toClick('.action_menu.application-menu-btn');
+            await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
             await page.waitForSelector('.popover-body');
             try {
-                await expect(page).toClick('.application-menu-item__text', {text: Apps[i].text});
+                await expectPuppeteer(page).toClick('.application-menu-item__text', {text: Apps[i].text});
                 await page.waitForSelector('#tine-docked-app-'+Apps[i].id);
             } catch (e) {
                 //console.log('Application ' + Apps[i] + ' isn\'t install');
             }
         }
-        await expect(page).toClick('#tine-docked-app-addressbook');
+        await expectPuppeteer(page).toClick('#tine-docked-app-addressbook');
         await page.waitForSelector('.tine-bar__active-app' , {text: 'Adressbuch'});
         await lib.makeScreenshot(page, {path: 'screenshots/StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png'});
     })
@@ -52,10 +52,10 @@ describe('usersettings', () => {
     let newPage;
     let settings;
     test('open usersettings', async () => {
-        await page.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await page.click('.account-user-avatar');
-        await page.waitForTimeout(2000);
-        settings = await expect(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
+        await new Promise(r => setTimeout(r, 2000));
+        settings = await expectPuppeteer(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
         await settings.hover();
         await lib.makeScreenshot(
             page, {path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png',
@@ -66,7 +66,7 @@ describe('usersettings', () => {
         newPage = lib.getNewWindow();
         await settings.click();
         newPage = await newPage;
-        await newPage.waitForTimeout(5000);
+        await new Promise(r => setTimeout(r, 5000));
         await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png'});
     });
 
@@ -84,12 +84,12 @@ describe('usersettings', () => {
 
 
     test('admin mode', async () => {
-        await expect(newPage).toClick('span', {text: 'Generelle Einstellungen'});
-        await newPage.waitForTimeout(2000);
+        await expectPuppeteer(newPage).toClick('span', {text: 'Generelle Einstellungen'});
+        await new Promise(r => setTimeout(r, 2000));
         await newPage.click('.x-btn-image.action_adminMode');
-        await newPage.waitForTimeout(2000);
+        await new Promise(r => setTimeout(r, 2000));
         await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});
-        await expect(newPage).toClick('button', {text: 'Abbrechen'});
+        await expectPuppeteer(newPage).toClick('button', {text: 'Abbrechen'});
     });
 });
 
@@ -98,7 +98,7 @@ afterAll(async () => {
 });
 
 async function getSettingScreenshots(newPage, text, screenName) {
-    await expect(newPage).toClick('span', {text: text});
-    await newPage.waitForTimeout(1000);
+    await expectPuppeteer(newPage).toClick('span', {text: text});
+    await new Promise(r => setTimeout(r, 1000));
     await lib.makeScreenshot(newPage, {path: 'screenshots/Benutzereinstellungen/' + screenName + '.png'});
 }

@@ -1,4 +1,4 @@
-const expect = require('expect-puppeteer');
+const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
 require('dotenv').config();
@@ -14,26 +14,26 @@ describe('internal contacts', () => {
         if (await page.$('#Addressbook_Contact_Tree.x-panel-collapsed .x-tool.x-tool-toggle') !== null) {
             await page.click('#Addressbook_Contact_Tree.x-panel-collapsed .x-tool.x-tool-toggle')
         }
-        await expect(page).toClick('span' , {text: 'Gemeinsame Adressbücher', button: 'right'});
-        await expect(page).toClick('span' , {text: 'Adressbuch hinzufügen'});
-        await expect(page).toFill('.ext-mb-input', 'test');
+        await expectPuppeteer(page).toClick('span' , {text: 'Gemeinsame Adressbücher', button: 'right'});
+        await expectPuppeteer(page).toClick('span' , {text: 'Adressbuch hinzufügen'});
+        await expectPuppeteer(page).toFill('.ext-mb-input', 'test');
         await page.keyboard.press('Enter');
 
         await page.waitForSelector('.x-window-plain', {hidden: true});
 
-        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
-        await expect(page).toClick('.x-menu-item-text', {text: 'Admin'});
-        await expect(page).toClick('.x-grid3-col-accountLoginName', {text: 'sclever', clickCount: 2});
+        await expectPuppeteer(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await expectPuppeteer(page).toClick('.x-menu-item-text', {text: 'Admin'});
+        await expectPuppeteer(page).toClick('.x-grid3-col-accountLoginName', {text: 'sclever', clickCount: 2});
 
         let popupWindow = await lib.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
         let elementValue = await popupWindow.evaluate(() => document.querySelector("input[name=container_id]").value);
         await popupWindow.click('input[name=container_id]');
         await popupWindow.click('.x-form-field-wrap.x-form-field-trigger-wrap.x-trigger-wrap-focus .x-form-trigger.x-form-arrow-trigger');
-        await expect(popupWindow).toClick('.x-combo-list-item', {text: 'test'});
-        await expect(popupWindow).toClick('button', {text: 'Ok'});
-        await page.waitForTimeout(2000); // need wait to close editDialog
-        await expect(page).toClick('.x-grid3-col-accountLoginName', {text: 'sclever', clickCount: 2});
+        await expectPuppeteer(popupWindow).toClick('.x-combo-list-item', {text: 'test'});
+        await expectPuppeteer(popupWindow).toClick('button', {text: 'Ok'});
+        await new Promise(r => setTimeout(r, 2000)); // need wait to close editDialog
+        await expectPuppeteer(page).toClick('.x-grid3-col-accountLoginName', {text: 'sclever', clickCount: 2});
         popupWindow = await lib.getNewWindow();
         await popupWindow.waitForSelector('.ext-el-mask');
         let elementValue2 = await popupWindow.evaluate(() => document.querySelector("input[name=container_id]").value);
