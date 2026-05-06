@@ -224,24 +224,21 @@ Tine.widgets.dialog.DuplicateResolveGridPanel = Ext.extend(Ext.grid.EditorGridPa
             menuDisabled:true
         }, {
             header: i18n._('My Value'),
-            width:50, 
-            resizable:false, 
+            resizable:true,
             dataIndex: 'clientValue', 
             id: 'clientValue', 
             menuDisabled:true, 
             renderer: valueRendererDelegate
         }, {
             header: i18n._('Existing Value'),
-            width:50, 
-            resizable:false, 
+            resizable:true,
             dataIndex: 'value' + this.store.duplicateIdx, 
             id: 'value' + this.store.duplicateIdx, 
             menuDisabled:true, 
             renderer: valueRendererDelegate
         }, {
             header: i18n._('Final Value'),
-            width:50, 
-            resizable:false, 
+            resizable:true,
             dataIndex: 'finalValue', 
             id: 'finalValue', 
             menuDisabled:true,
