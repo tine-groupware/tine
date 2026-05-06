@@ -1,0 +1,22 @@
+{#
+available parameters:
+    from
+    recipients
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ _('You have new mail from: %1$s.') | format(from) | raw }}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-5">
+        <p class="text-start">
+            {{ _('You have received a new mail from %1$s') | format(from) | raw }}
+        </p>
+    </div>
+    <div class="ax-center my-3">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('E-Mail Link') }}</a>
+    </div>
+{% endblock %}
