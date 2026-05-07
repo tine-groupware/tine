@@ -545,7 +545,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL   => null,
             ],
             'rrule_constraints'      => [
-                self::TYPE          => self::TYPE_TEXT,
+                self::TYPE          => self::TYPE_JSON,
                 self::INPUT_FILTERS => [], // we need this to overwrite default text filter!
                 self::NULLABLE      => true,
             ],
