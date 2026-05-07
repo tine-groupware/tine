@@ -1465,9 +1465,6 @@ msgstr "Arbeitszeiterfassung"
 msgid "Vacation Corrections"
 msgstr "Urlaubs Korrektur"
 
-msgid "After exceeding {{time_worked|date(\"H:i\", \"GMT\")}} of working time {{break_time|date(\"H:i\", \"GMT\")}} break time gets deducted automatically."
-msgstr "Wenn {{time_worked|date(\"H:i\", \"GMT\")}} Arbeitszeit überschritten sind, werden {{break_time|date(\"H:i\", \"GMT\")}} Pausenzeit automatisch abgezogen."
-
 msgid "Vacation Days Base"
 msgstr "Urlaubsanspruch: Basistage"
 

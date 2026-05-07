@@ -335,8 +335,8 @@ describe('employee', () => {
         });
 
         test('edit workingtimeschema', async () => {
-            await contractEditDialog.type('[class=new-row] input', 'Arbeitzeitlimitierung');
-            await new Promise(r => setTimeout(r, 1000));
+            await contractEditDialog.type('[class=new-row] input', 'Arbeitszeitlimitierung');
+            await contractEditDialog.waitForTimeout(1000);
             let workingtimeschema = lib.getNewWindow();
             await contractEditDialog.keyboard.press('Enter')
             workingtimeschema = await workingtimeschema;
@@ -370,7 +370,7 @@ describe('employee', () => {
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(1) .x-grid3-col-configRecord').textContent))
                 .toEqual(' Wenn 06:00 Arbeitszeit überschritten sind, werden 01:00 Pausenzeit automatisch abgezogen. (Pausenzeit)');
             expect(await contractEditDialog.evaluate(() => document.querySelector('.x-grid3-body div:nth-child(2) .x-grid3-col-configRecord').textContent))
-                .toEqual(' Arbeitszeit wird ausgewertet von 06:00 bis 20:00. (Arbeitzeitlimitierung)');
+                .toEqual(' Arbeitszeit wird ausgewertet von 06:00 bis 20:00. (Arbeitszeitlimitierung)');
 
         })
     });
