@@ -36,7 +36,7 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
             }
         } else {
             $_select->joinLeft(
-                /* table  */ array('groupvisibility' => $db->table_prefix . 'groups'), 
+                /* table  */ array('groupvisibility' => $_backend->getTablePrefix() . 'groups'),
                 /* on     */ $db->quoteIdentifier('groupvisibility.list_id') . ' = ' . $db->quoteIdentifier('addressbook_lists.id'),
                 /* select */ array()
             );
@@ -45,5 +45,3 @@ class Addressbook_Model_ListHiddenFilter extends Tinebase_Model_Filter_Bool
         }
     }
 }
-
-

@@ -1694,12 +1694,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * get db adapter
      *
-     * @return Tinebase_Backend_Sql_Adapter_Pdo_Mysql
+     * @return Zend_Db_Adapter_Abstract
      * @throws Tinebase_Exception_Backend_Database
      */
     public function getAdapter()
     {
-        if (! $this->_db instanceof Tinebase_Backend_Sql_Adapter_Pdo_Mysql) {
+        if (! $this->_db instanceof Zend_Db_Adapter_Abstract) {
             throw new Tinebase_Exception_Backend_Database('Could not fetch database adapter');
         }
         
