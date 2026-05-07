@@ -171,7 +171,7 @@ Klicken Sie Vertrag hinzufügen, finden Sie unter dem Reiter Vertrag eine Maske 
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.mobile-img}
 
-Nummer ist ein Pflichtfeld und zur manuellen Eingabe oder automatischen Vergabe einer Vertragsnummer vorgesehen, d.h. Sie können (wenn Sie über die entsprechende Berechtigung verfügen) einstellen, ob hier eine Vertragsnummer frei eingegeben oder vom System automatisch hochgezählt werden soll. Die dazu erforderlichen Einstellungsmöglichkeiten finden Sie in der Anwendung Admin unter Anwendungen -> Sales -> Settings (vgl. [Administration - Sales](oa_Administration.md/#sales)). Außerdem wird dort auch festgelegt, welche Formen einer Vertragsnummer (nur Ziffern oder auch Text) erlaubt sein sollen.
+Nummer ist ein Pflichtfeld und zur manuellen Eingabe oder automatischen Vergabe einer Vertragsnummer vorgesehen, d.h. Sie können (wenn Sie über die entsprechende Berechtigung verfügen) einstellen, ob hier eine Vertragsnummer frei eingegeben oder vom System automatisch hochgezählt werden soll. Die dazu erforderlichen Einstellungsmöglichkeiten finden Sie in der Anwendung Admin unter Anwendungen -> Sales -> Settings (vgl. [Administration - Sales](oa_Admin.md/#sales)). Außerdem wird dort auch festgelegt, welche Formen einer Vertragsnummer (nur Ziffern oder auch Text) erlaubt sein sollen.
 
 !!! info "Wichtig"
     Diese Vorgaben sollten vor der Anlage erster Verträge erfolgen und danach nicht mehr verändert werden können.

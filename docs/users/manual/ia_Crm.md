@@ -78,7 +78,7 @@ Beim Typ bietet {{ branding.title }} drei Varianten: Kunde, Partner und Reseller
 
 Als standardmäßige Quellen eines Leads gibt {{ branding.title }} die Werte Markt, E-Mail, Telefon und Webseite vor.
 
-Wenn diese drei Parameter nicht oder nur teilweise den Anforderungen im Vertrieb Ihres Unternehmens entsprechen, lesen Sie im [Administration - CRM](oa_Administration.md/#crm), wie man sie ändert oder ergänzt.
+Wenn diese drei Parameter nicht oder nur teilweise den Anforderungen im Vertrieb Ihres Unternehmens entsprechen, lesen Sie im [Administration - CRM](oa_Admin.md/#crm), wie man sie ändert oder ergänzt.
 
 Im optionalen Feld Erwarteter Umsatz tragen Sie einen geschätzten Umsatz ein, über das Pulldown darunter eine geschätzte (Verkaufs-)Wahrscheinlichkeit in 10-Prozent-Schritten.
 Als Start wird Ihnen das Tagesdatum vorgegeben; als Geplantes Ende geben Sie ebenfalls ein geschätztes Datum ein. Mit dem Feld Ende darunter ist das tatsächliche Ende gemeint, das Sie folglich jetzt noch freilassen.
@@ -89,8 +89,8 @@ Sollten Sie nicht im Vertrieb tätig sein, fragen Sie sich jetzt vielleicht, war
 
 Kommen wir nun zu den beiden Reitern im unteren Teil der Bearbeitungsmaske, Aufgaben und Produkte.
 
-Wiewohl das Vergeben von Aufgaben in {{ branding.title }} in einer eigenen Anwendung geschieht ([Aufgaben](fa_Aufgaben.md)), ist dies auch hier in CRM möglich. Das ist auch sinnvoll, weil sich ein Verkaufsprozess über einen längeren Zeitraum hinziehen und das Delegieren von Aufgaben, z.B. zur Erreichung von Zwischenzielen, erforderlich sein kann. Diese Aufgaben erscheinen automatisch auch in der Aufgabenverwaltung von {{ branding.title }}, denn wir wollen sie ja in unserer To-Do-Liste sehen. Dort sind sie jedoch dem hier angelegten Lead zugeordnet. Wenn Sie [Aufgaben](fa_Aufgaben.md) schon gelesen haben, sind Ihnen die Felder der hier gezeigten Tabelle bekannt.
-Eine Aufgabe legen Sie an, indem Sie links unter der Spalte Zusammenfassung in das Feld Aufgabe hinzufügen hineinklicken und Ihre Aufgabe formulieren. Fälligkeitsdatum, Priorität, Prozent und Status geben Sie an, wie in [Aufgaben](fa_Aufgaben.md) beschrieben.
+Wiewohl das Vergeben von Aufgaben in {{ branding.title }} in einer eigenen Anwendung geschieht ([Aufgaben](fa_Tasks.md)), ist dies auch hier in CRM möglich. Das ist auch sinnvoll, weil sich ein Verkaufsprozess über einen längeren Zeitraum hinziehen und das Delegieren von Aufgaben, z.B. zur Erreichung von Zwischenzielen, erforderlich sein kann. Diese Aufgaben erscheinen automatisch auch in der Aufgabenverwaltung von {{ branding.title }}, denn wir wollen sie ja in unserer To-Do-Liste sehen. Dort sind sie jedoch dem hier angelegten Lead zugeordnet. Wenn Sie [Aufgaben](fa_Tasks.md) schon gelesen haben, sind Ihnen die Felder der hier gezeigten Tabelle bekannt.
+Eine Aufgabe legen Sie an, indem Sie links unter der Spalte Zusammenfassung in das Feld Aufgabe hinzufügen hineinklicken und Ihre Aufgabe formulieren. Fälligkeitsdatum, Priorität, Prozent und Status geben Sie an, wie in [Aufgaben](fa_Tasks.md) beschrieben.
 
 Auch hier können Sie übrigens Aufgaben einem anderen {{ branding.title }}-Benutzer zuweisen, die entsprechenden Berechtigungen vorausgesetzt. Das ist allerdings in der Standardansicht dieser Tabelle aus Platzgründen nicht zu sehen. Klicken Sie einmal rechts außen das Tabellenkopf-Symbol an und aktivieren Sie den Checkbutton Organisator. Das daraufhin eingeblendete Tabellenfeld ist mit einem Pulldown hinterlegt, über das Sie die Aufgabe ggf. einem anderen Bearbeiter zuweisen. Sie müssen dazu nur das Tabellenfeld mit der Maus anklicken.
 

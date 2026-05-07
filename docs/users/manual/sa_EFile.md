@@ -9,7 +9,7 @@ Als E-Akte wird allgemein eine digitale Datensammlung bezeichnet, die nach dem V
 
 ## Aufbau und Struktur eAkte
 
-Die Anwendung eAkte ist integriert in der {{ branding.title }} Anwendung [Dateimanager](ga_Dateimanager.md) und über den Button eAkte rechts im oberen Bearbeitungsmenue über der Tabelle aktiviert. In diesem Bereich des Handbuches konzentrieren wir uns auf die Spezifika der eAkte. Bitte entnehmen Sie Grundlegendes im Umgang mit dem Dateimanager der {{ branding.title }} Anwendung [Dateimanager](ga_Dateimanager.md).
+Die Anwendung eAkte ist integriert in der {{ branding.title }} Anwendung [Dateimanager](ga_Filemanager.md) und über den Button eAkte rechts im oberen Bearbeitungsmenue über der Tabelle aktiviert. In diesem Bereich des Handbuches konzentrieren wir uns auf die Spezifika der eAkte. Bitte entnehmen Sie Grundlegendes im Umgang mit dem Dateimanager der {{ branding.title }} Anwendung [Dateimanager](ga_Filemanager.md).
 
 Voraussetzung für die Führung einer eAkte, ist die Anlage eines Hauptordners (z.B. "Aktenplan") im Dateimanager unter Gemeinsame Ordner.
 Dieser muss in den Konfigurationseinstellungen in der {{ branding.title }} Anwendung admin unter eAkte hinterlegt werden. Erst dann erkennt das System diesen als eAkte.
@@ -148,7 +148,7 @@ Zusammenfassend die Merkmale eines Ordners vom eAkte Ebenen-Typ Dokumentenordner
 
 ## Metadaten und Eigenschaften
 
-Die speziellen eAkte Eigenschaften sind in die bereits bestehenden Eigenschaften der Daten in der Anwendung [Dateimanager](ga_Dateimanager.md) integriert. Jeder Ordner und Datei innerhalb der eAkte verfügt über verschiedene Eigenschaften und enthält Informationen aus den übergeordneten Daten sowie Metadaten der Akte.
+Die speziellen eAkte Eigenschaften sind in die bereits bestehenden Eigenschaften der Daten in der Anwendung [Dateimanager](ga_Filemanager.md) integriert. Jeder Ordner und Datei innerhalb der eAkte verfügt über verschiedene Eigenschaften und enthält Informationen aus den übergeordneten Daten sowie Metadaten der Akte.
 Öffnen Sie die Eigenschaften über den Button Eigenschaften bearbeiten oder mit der rechten Maustaste über das Kontextmenü auf dem jeweiligen Ordner bzw. der ausgewählten Datei.
 
 Folgendes Beispiel zeigt den Bearbeitendialog Datei bearbeiten mit den Basis Eigenschaften im Reiter Datei.
@@ -174,7 +174,7 @@ Beispiel Aktenzeichen: //08.08.01.04//000002/003/001-000001
 * (Trennzeichen + Teilakte)             /001
 * (Trennzeichen + Dokumentennummer)     -000001
 
-Der eAkte Ebenen-Typ wurde unter [Aufbau und Struktur eAkte](sa_eAkte.md/#aufbau-und-struktur-eakte) für die einzelnen Ebenen erklärt und wird vom System automatisch gesetzt.
+Der eAkte Ebenen-Typ wurde unter [Aufbau und Struktur eAkte](sa_EFile.md/#aufbau-und-struktur-eakte) für die einzelnen Ebenen erklärt und wird vom System automatisch gesetzt.
 
 Eine für Sie interessante Information in den Eigenschaften ist der Pfad, welcher unabhängig der eAkte in der Anwendung Dateimanger, bei allen Datensätzen den exakten Namen der gesamten Ordnerstruktur bis zum aktuellen ausgewählten Datensatz enthält. Dies entspricht auch der Navigation in der Baumstruktur links im Dateimanager und wird oberhalb der Tabelle im Dateimanger als Filter gesetzt.
 

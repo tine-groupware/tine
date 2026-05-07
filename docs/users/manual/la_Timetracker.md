@@ -85,7 +85,7 @@ Drucke Seite öffnet Ihren systemeigenen Druckerdialog und erzeugt standardmäß
 
 Exportiere Zeitkonto ist zwar ein Pulldown; momentan ist aber nur der Export in das Open-/Libre-Office-Format (ODS) implementiert.
 
-Einträge importieren - Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Adressbuch.md/#kontakte-importieren)).
+Einträge importieren - Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Addressbook.md/#kontakte-importieren)).
 
 ## Stundenzettel hinzufügen { data-ctx="/Timetracker/EditDialog/Timesheet" }
 <a id="ctx:Timetracker.MainScreen.Timesheet.ActionToolbar"></a>
