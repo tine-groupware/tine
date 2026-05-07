@@ -1323,7 +1323,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     // TODO remove the runConvert methods when migration to Modelconfig!
     public function runConvertToRecord()
     {
-        if (isset($this->_properties['xprops'])) {
+        if (isset($this->_properties['xprops']) && is_string($this->_properties['xprops'])) {
             $this->_properties['xprops'] = json_decode($this->_properties['xprops'], true);
         }
     }
