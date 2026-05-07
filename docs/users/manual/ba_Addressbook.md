@@ -40,6 +40,8 @@ Lesen Sie zunächst die Quelldatei aus Ihrem Altsystem aus. Benutzen Sie dazu (d
 <!-- SCREENSHOT -->
 ![Abbildung: Adressbuch mit Importfenster]({{ img_url_desktop }}Adressbuch/1_adressbuch_importfenster_light.png#only-light){.desktop-img}
 ![Abbildung: Adressbuch mit Importfenster]({{ img_url_desktop }}Adressbuch/1_adressbuch_importfenster_dark.png#only-dark){.desktop-img}
+![Abbildung: Adressbuch mit Importfenster]({{ img_url_tablet }}Adressbuch/1_adressbuch_importfenster_light.png#only-light){.tablet-img}
+![Abbildung: Adressbuch mit Importfenster]({{ img_url_tablet }}Adressbuch/1_adressbuch_importfenster_dark.png#only-dark){.tablet-img}
 ![Abbildung: Adressbuch mit Importfenster]({{ img_url_mobile }}Adressbuch/1_adressbuch_importfenster_light.png#only-light){.mobile-img}
 ![Abbildung: Adressbuch mit Importfenster]({{ img_url_mobile }}Adressbuch/1_adressbuch_importfenster_dark.png#only-dark){.mobile-img}
 
@@ -109,8 +111,11 @@ Wenn Sie sich nun über das passende Adressbuch für Ihre Daten im Klaren sind u
 <!-- SCREENSHOT -->
 ![Abbildung: Import-Optionen setzen]({{ img_url_desktop }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_light.png#only-light){.desktop-img}
 ![Abbildung: Import-Optionen setzen]({{ img_url_desktop }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_dark.png#only-dark){.desktop-img}
+![Abbildung: Import-Optionen setzen]({{ img_url_tablet }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_light.png#only-light){.tablet-img}
+![Abbildung: Import-Optionen setzen]({{ img_url_tablet }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Import-Optionen setzen]({{ img_url_mobile }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_light.png#only-light){.mobile-img}
 ![Abbildung: Import-Optionen setzen]({{ img_url_mobile }}Adressbuch/4_adressbuch_mit_import_optionen_setzen_dark.png#only-dark){.mobile-img}
+
 
 In der nächsten Ansicht (Import-Optionen setzen) wählen Sie das Adressbuch aus, in das die Kontakte importiert werden sollen. Als Voreinstellung finden Sie jeweils das zuletzt verwendete Adressbuch. Darunter wird Ihnen standardmäßig ein _Tag_ vorgegeben – Importliste (Tagesdatum). Dieser dient dazu, Ihre jetzt einzulesenden Kontakte als Ganzes zu markieren, um diesen Einlesevorgang später eingrenzen und ggf. rückgängig machen zu können. Natürlich können Sie diesen Tag später, wenn Sie sich davon überzeugt haben, dass der Einlesevorgang korrekt abgelaufen ist, wieder löschen. Außerdem können Sie hier auf dieser Maske ggf. auch noch weitere Tags vergeben, mit denen die einzulesenden Kontakte versehen werden sollen – darauf kommen wir gleich.
 
@@ -134,8 +139,11 @@ Sollte diese Meldung nicht erscheinen, erhalten Sie stattdessen:
 <!-- SCREENSHOT -->
 ![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_desktop }}Adressbuch/6_adressbuch_import_einlesefehler_light.png#only-light){.desktop-img}
 ![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_desktop }}Adressbuch/6_adressbuch_import_einlesefehler_dark.png#only-dark){.desktop-img}
+![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_tablet }}Adressbuch/6_adressbuch_import_einlesefehler_light.png#only-light){.tablet-img}
+![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_tablet }}Adressbuch/6_adressbuch_import_einlesefehler_dark.png#only-dark){.tablet-img}
 ![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_mobile }}Adressbuch/6_adressbuch_import_einlesefehler_light.png#only-light){.mobile-img}
 ![Abbildung: Import einer CSV-Datei in {{ branding.title }} mit Einlesefehlern]({{ img_url_mobile }}Adressbuch/6_adressbuch_import_einlesefehler_dark.png#only-dark){.mobile-img}
+
 
 Die genaue Fehlerbeschreibung bekommen Sie, wenn Sie das + aufklappen. Mögliche Fehler haben ihre Ursache regelmäßig in der Nichteinhaltung der oben erläuterten Konventionen (sind Feldbegrenzer (,) und Textbegrenzer (") richtig gesetzt?). Brechen Sie den Einlesevorgang ab (unten rechts Abbrechen) und schauen Sie sich zur Kontrolle die Einlesedatei einmal mit einem normalen Textprogramm an (sind die Text- und Feldbegrenzer vorhanden?). Lesen Sie gegebenenfalls oben noch einmal nach.
 
@@ -144,8 +152,11 @@ Die genaue Fehlerbeschreibung bekommen Sie, wenn Sie das + aufklappen. Mögliche
 <!-- SCREENSHOT -->
 ![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_desktop }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_light.png#only-light){.desktop-img}
 ![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_desktop }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_dark.png#only-dark){.desktop-img}
+![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_tablet }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_light.png#only-light){.tablet-img}
+![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_tablet }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_mobile }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_light.png#only-light){.mobile-img}
 ![Abbildung: Konflikte auflösen beim Import fehlerhafter Datensätze]({{ img_url_mobile }}Adressbuch/7_adressbuch_mit_import_konflikte_aufloesen_dark.png#only-dark){.mobile-img}
+
 
 In diesem Fall gab es keine Formatfehler, jedoch Konflikte (Dubletten-Datensätze). Diese Funktion ist sehr mächtig und komfortabel: Das System zeigt Ihnen oben links die Anzahl der konfliktbehafteten Kontaktdatensätze. Dabei gibt es für {{ branding.title }} eine genaue Definition, wann ein Kontaktdatensatz einen Konflikt aufweist. Standardmäßig ist ein Konflikt dann vorhanden, wenn ein einzulesender Datensatz entweder bei der E-Mail-Adresse oder gemeinsam beim Vornamen, Namen und der Firmenbezeichnung mit einem bereits vorhandenen Datensatz identisch ist. Diese Definition kann der Administrator jedoch unternehmensspezifisch anpassen. Die Prüfung auf Dubletten erfolgt konsequenterweise über alle Adressbücher.
 
@@ -168,8 +179,11 @@ Hat Ihr System keine weiteren Fehler festgestellt? Dann sind Sie jetzt bereit, d
 <!-- SCREENSHOT -->
 ![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_desktop }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_light.png#only-light){.desktop-img}
 ![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_desktop }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_tablet }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_light.png#only-light){.tablet-img}
+![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_tablet }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_mobile }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_light.png#only-light){.mobile-img}
 ![Abbildung: Die Einlese-Zusammenfassung mit einer Auflistung von Einlesefehlern]({{ img_url_mobile }}Adressbuch/8_adressbuch_mit_import_zusammenfassung_dark.png#only-dark){.mobile-img}
+
 
 Sie können wieder über das Aufklappen des Pluszeichens kontrollieren, welche Fehler aufgetreten sind: Dopplungen werden nach demselben Prinzip gefunden, wie oben bereits beschrieben. Wichtig: Hier wird immer der zweite Datensatz, in dem die Dopplung gefunden wurde, verworfen.
 
@@ -195,8 +209,11 @@ Egal, wofür Sie sich entschieden haben: Sie sollten jetzt in der Tabelle eine R
 <!-- SCREENSHOT -->
 ![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_desktop }}Adressbuch/9_adressbuch_mit_spaltenauswahl_light.png#only-light){.desktop-img}
 ![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_desktop }}Adressbuch/9_adressbuch_mit_spaltenauswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_tablet }}Adressbuch/9_adressbuch_mit_spaltenauswahl_light.png#only-light){.tablet-img}
+![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_tablet }}Adressbuch/9_adressbuch_mit_spaltenauswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_mobile }}Adressbuch/9_adressbuch_mit_spaltenauswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Die ausgeklappte Leiste mit den Checkbuttons zur Auswahl als anzuzeigende Tabellenspalten]({{ img_url_mobile }}Adressbuch/9_adressbuch_mit_spaltenauswahl_dark.png#only-dark){.mobile-img}
+
 
 Dahinter werden Ihnen als Checkbuttons alle verfügbaren Felder angezeigt – es sind insgesamt 42 (allerdings werden aus Platzgründen, je nach Bildschirmauflösung, wahrscheinlich auch jetzt nicht alle angezeigt – dann können Sie mit den kleinen Pfeiltasten nach unten und oben scrollen)! Dabei dienen die letzten vier Felder (Erstelldatum, Erstellt von, Letztes Modifikationsdatum und Zuletzt geändert von) zum Dokumentieren des Bearbeitungsverlaufs des Kontaktdatensatzes; sie werden daher vom System automatisch ausgefüllt.
 
@@ -209,8 +226,11 @@ Nachdem Sie sich für eine Adressauswahl entschieden haben, klicken Sie bitte ei
 <!-- SCREENSHOT -->
 ![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_desktop }}Adressbuch/10_adressbuch_kontakt_bearbeiten_light.png#only-light){.desktop-img}
 ![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_desktop }}Adressbuch/10_adressbuch_kontakt_bearbeiten_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_tablet }}Adressbuch/10_adressbuch_kontakt_bearbeiten_light.png#only-light){.tablet-img}
+![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_tablet }}Adressbuch/10_adressbuch_kontakt_bearbeiten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_mobile }}Adressbuch/10_adressbuch_kontakt_bearbeiten_light.png#only-light){.mobile-img}
 ![Abbildung: Die Eingabemaske zum Bearbeiten eines bestehenden Kontaktes]({{ img_url_mobile }}Adressbuch/10_adressbuch_kontakt_bearbeiten_dark.png#only-dark){.mobile-img}
+
 
 Gehen wir zunächst in die Buttonleiste über den Reitern in der Kontaktmaske. Dort finden Sie (von links beginnend):
 
@@ -222,8 +242,11 @@ Starten Sie nun die Funktion Adresse einlesen mit Klick auf den Button über der
 <!-- SCREENSHOT -->
 ![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_desktop }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_light.png#only-light){.desktop-img}
 ![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_desktop }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_dark.png#only-dark){.desktop-img}
+![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_tablet }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_light.png#only-light){.tablet-img}
+![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_tablet }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_mobile }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_light.png#only-light){.mobile-img}
 ![Abbildung: Kontakte können per Drag & Drop über die Zwischenablage bequem eingelesen werden.]({{ img_url_mobile }}Adressbuch/11_adressbuch_kontakt_neu_einlesen_dark.png#only-dark){.mobile-img}
+
 
 Dort hinein können Sie über die Zwischenablage eine beliebige Adresse per Copy & Paste aus einer beliebigen Datei einlesen, beispielsweise aus einem Brief im PDF-Format. Probieren Sie das jetzt einmal aus! Wenn Sie gerade nichts Passendes parat haben, können Sie auch – nur um die Funktion zu demonstrieren – einfach eine Adresse in das Fenster eintippen. Auf die "genormte" Reihenfolge (Name / Straße Nr. / PLZ Ort) kommt es dabei gar nicht an – das ist gerade das Clevere an dieser Funktion! Wenn Sie OK drücken, liest {{ branding.title }} die Teile, die es unmissverständlich versteht (i.d.R. die PLZ und den Ort) gleich selbstständig in die entsprechenden Felder Ihres neuen Kontaktes ein. Was nicht automatisch zuzuordnen ist, wird als einzelne Zeichenketten rechts im Fenster Beschreibung zwischengeparkt. Von dort können Sie die einzelnen Teile ganz leicht mit der Maus "anfassen" (linke Taste gedrückt halten) und dann in das richtige Eingabefeld der Kontaktmaske ablegen. Achten Sie beim Navigieren auf den Cursor und das kleine Symbol links neben der Zeichenkette: Kreis mit einem X heißt "Feld nicht gefunden", Kreis mit einem Häkchen bedeutet "Gefunden, bereit zur Ablage" – lassen Sie dann einfach die Maustaste los! Wenn Sie fertig sind und noch einmal alles geprüft haben (es sollten sich keine Adressfragmente mehr im Feld Beschreibung befinden), schließen Sie die Funktion mit Klick auf den Button Beende Merkmalsmodus ab. Normalerweise müssen Sie jetzt natürlich auch noch Ihren neu angelegten Kontakt abspeichern.
 
@@ -255,8 +278,11 @@ Mit Klick auf Karte können Sie sich die geografische Lage des Kontaktes auf ein
 <!-- SCREENSHOT -->
 ![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_desktop }}Adressbuch/12_adressbuch_kontakt_karte_light.png#only-light){.desktop-img}
 ![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_desktop }}Adressbuch/12_adressbuch_kontakt_karte_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_tablet }}Adressbuch/12_adressbuch_kontakt_karte_light.png#only-light){.tablet-img}
+![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_tablet }}Adressbuch/12_adressbuch_kontakt_karte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_mobile }}Adressbuch/12_adressbuch_kontakt_karte_light.png#only-light){.mobile-img}
 ![Abbildung: Das Anzeigen der Adresse mittels OpenStreetMap.]({{ img_url_mobile }}Adressbuch/12_adressbuch_kontakt_karte_dark.png#only-dark){.mobile-img}
+
 
 Wenn dieser Reiter ausgegraut ist, kann das mehrere Ursachen haben:
 
@@ -289,16 +315,22 @@ Kommen wir nun zu den Verknüpfungen: Wie wir bei den Notizen schon besprochen h
 <!-- SCREENSHOT -->
 ![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_desktop }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_light.png#only-light){.desktop-img}
 ![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_desktop }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_dark.png#only-dark){.desktop-img}
+![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_tablet }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_light.png#only-light){.tablet-img}
+![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_tablet }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_dark.png#only-dark){.tablet-img}
 ![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_mobile }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_light.png#only-light){.mobile-img}
 ![Eine Verknüpfung eines Adresseintrags mit einem Objekt einer anderen Anwendung erstellen]({{ img_url_mobile }}1_adressverwaltung/13_adressbuch_kontakt_bearbeiten_verknuepfung_links_dark.png#only-dark){.mobile-img}
+
 
 Die Auswahl enthält alle anderen {{ branding.title }}-Objekte, mit denen Kontakte sinnvoll verknüpft werden können, wie Mitarbeiter (HumanResources), Zeitkonto (Zeiterfassung), Inventar Gegenstand (Inventarisierung) usw. Nur ein Beispiel soll jetzt genügen; wir gehen im Laufe der weiteren Beschreibung immer wieder auf Verknüpfungen ein: Sie können natürlich auch Kontakte mit anderen Kontakten verknüpfen, um damit beispielsweise eine Lieferantenkette darzustellen. Stellen Sie die Auswahl links dazu wieder auf Kontakt (Adressbuch). Klicken Sie das rechte Pulldown-Menü an. Es werden Ihnen alle verfügbaren Kontakte in einer auf den ersten Blick eher "chaotischen" Reihenfolge angezeigt.
 
 <!-- SCREENSHOT -->
 ![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_desktop }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_light.png#only-light){.desktop-img}
 ![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_desktop }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_dark.png#only-dark){.desktop-img}
+![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_tablet }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_light.png#only-light){.tablet-img}
+![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_tablet }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_dark.png#only-dark){.tablet-img}
 ![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_mobile }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_light.png#only-light){.mobile-img}
 ![Abbildung: Verknüpfung eines Kontaktes mit einem anderen Kontakt]({{ img_url_mobile }}1_adressverwaltung/14_adressbuch_kontakt_bearbeiten_verknuepfung_rechts_dark.png#only-dark){.mobile-img}
+
 
 Nicht verzweifeln! Geben Sie einfach mindestens drei Buchstaben eines zu suchenden Kontaktes ein, und das System beginnt selbständig zu filtern. Wichtig: Das ist eine Volltextsuche, und sie beginnt erst bei drei Zeichen! Probieren Sie es einfach aus: Wenn Sie den richtigen Kontakt gefunden haben, klicken Sie ihn an, und die Verknüpfung ist hergestellt. So können Sie beliebig viele Verknüpfungen anlegen. Ein Klick mit der rechten Maustaste auf einen Verknüpfungseintrag in der Tabelle öffnet ein Kontextmenü, mit dem Sie den verknüpften Datensatz entweder bearbeiten oder die Verknüpfung wieder lösen können.
 
@@ -311,6 +343,8 @@ Zu den _Tags_ haben wir in [Kontakte importieren](ba_Addressbook.md/#kontakte-im
 <!-- SCREENSHOT -->
 ![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_desktop }}Adressbuch/15_adressbuch_tag_hinzu_light.png#only-light){.desktop-img}
 ![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_desktop }}Adressbuch/15_adressbuch_tag_hinzu_dark.png#only-dark){.desktop-img}
+![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_tablet }}Adressbuch/15_adressbuch_tag_hinzu_light.png#only-light){.tablet-img}
+![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_tablet }}Adressbuch/15_adressbuch_tag_hinzu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_mobile }}Adressbuch/15_adressbuch_tag_hinzu_light.png#only-light){.mobile-img}
 ![Abbildung: Einen Kontakt mit einem vorhandenen Tag markieren]({{ img_url_mobile }}Adressbuch/15_adressbuch_tag_hinzu_dark.png#only-dark){.mobile-img}
 
@@ -323,6 +357,8 @@ Zu den _Tags_ haben wir in [Kontakte importieren](ba_Addressbook.md/#kontakte-im
 <!-- SCREENSHOT -->
 ![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_desktop }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_light.png#only-light){.desktop-img}
 ![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_desktop }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_tablet }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_light.png#only-light){.tablet-img}
+![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_tablet }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_mobile }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_light.png#only-light){.mobile-img}
 ![Abbildung: Das Hinzufügen eines persönlichen Tags.]({{ img_url_mobile }}Adressbuch/16_adressbuch_persoenlicher_tag_hinzu_dark.png#only-dark){.mobile-img}
 
@@ -349,8 +385,11 @@ Kommen wir nun zur Bearbeitung von Kontakten aus der Tabelle heraus: Oben links,
 <!-- SCREENSHOT -->
 ![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_desktop }}Adressbuch/17_adressbuch_email_viele_empfaenger_light.png#only-light){.desktop-img}
 ![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_desktop }}Adressbuch/17_adressbuch_email_viele_empfaenger_dark.png#only-dark){.desktop-img}
+![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_tablet }}Adressbuch/17_adressbuch_email_viele_empfaenger_light.png#only-light){.tablet-img}
+![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_tablet }}Adressbuch/17_adressbuch_email_viele_empfaenger_dark.png#only-dark){.tablet-img}
 ![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_mobile }}Adressbuch/17_adressbuch_email_viele_empfaenger_light.png#only-light){.mobile-img}
 ![Abbildung: Versenden von Massenmails über Filterkriterien]({{ img_url_mobile }}Adressbuch/17_adressbuch_email_viele_empfaenger_dark.png#only-dark){.mobile-img}
+
 
 Sie wollten immer schon einmal wissen, wie Spammer arbeiten? Markieren Sie das gesamte Adressbuch (mit dem kleinen Pulldown-Menü n ausgewählt rechts am Rand, oberhalb des Tabellenkopfes, indem Sie die Option Alle Seiten auswählen verwenden) und drücken Sie auf E-Mail verfassen... Aber bitte nicht abschicken! Zum E-Mail-Fenster kommen wir weiter unten noch detailliert.
 
@@ -359,8 +398,11 @@ Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist da
 <!-- SCREENSHOT -->
 ![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.desktop-img}
 ![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_desktop }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.desktop-img}
+![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.tablet-img}
+![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_tablet }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_light.png#only-light){.mobile-img}
 ![Abbildung: Einen Tag auswählen und mehreren markierten Kontakten zuweisen]({{ img_url_mobile }}Adressbuch/18_adressbuch_kontakten_tags_zuweisen_dark.png#only-dark){.mobile-img}
+
 
 Über das Pulldown werden Ihnen alle für Sie gültigen, d.h. sowohl die gemeinsamen als auch die persönlichen, Tags angeboten. Sie können nur jeweils einen Tag je Arbeitsgang zuweisen. Rückwärts funktioniert dies mit Tag(s) entfernen analog, nur dass Sie hier über Checkbuttons mehrere Tags zum Entfernen auswählen können.
 
@@ -385,8 +427,11 @@ Interessant ist Nachricht ablegen. Mit einem Klick auf den Menüpunkt legen sie 
 <!-- SCREENSHOT -->
 ![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_desktop }}Adressbuch/20_adressbuch_email_als_notiz_light.png#only-light){.desktop-img}
 ![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_desktop }}Adressbuch/20_adressbuch_email_als_notiz_dark.png#only-dark){.desktop-img}
+![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_tablet }}Adressbuch/20_adressbuch_email_als_notiz_light.png#only-light){.tablet-img}
+![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_tablet }}Adressbuch/20_adressbuch_email_als_notiz_dark.png#only-dark){.tablet-img}
 ![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_mobile }}Adressbuch/20_adressbuch_email_als_notiz_light.png#only-light){.mobile-img}
 ![Abbildung: Dem Empfänger einer E-Mail diese als Notiz zuweisen.]({{ img_url_mobile }}Adressbuch/20_adressbuch_email_als_notiz_dark.png#only-dark){.mobile-img}
+
 
 Mit einem Klick auf kleinen Pfeil neben Nachricht ablegen öffnet sich ein Dropdown-Menü. Die erste Checkbox würde wiederum eine E-Mail-Notiz bei dem Kontakt anlegen. Die Option Dateimanager bietet die Möglichkeit, die E-Mail an eine gewünschte Stelle im Datenmanager zu sichern. Mit Anhang kann die E-Mail z.B. mit Lieferanten oder einer Rechnung verlinkt werden.
 
@@ -395,8 +440,11 @@ Kommen wir zu den Versende-Daten für Ihre E-Mail: {{ branding.title }} hat kein
 <!-- SCREENSHOT -->
 ![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_desktop }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_light.png#only-light){.desktop-img}
 ![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_desktop }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_dark.png#only-dark){.desktop-img}
+![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_tablet }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_light.png#only-light){.tablet-img}
+![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_tablet }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_dark.png#only-dark){.tablet-img}
 ![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_mobile }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_light.png#only-light){.mobile-img}
 ![Abbildung: Empfänger aus dem Adressbuch auswählen]({{ img_url_mobile }}Adressbuch/21_adressbuch_email_empfaenger_adressbuchliste_dark.png#only-dark){.mobile-img}
+
 
 Die Zeile An enthält schon eine Zieladresse, wenn Sie den E-Mail-Editor nach Auswahl einer oder mehrerer Kontakte in der Tabelle aufgerufen haben; andernfalls ist die Zeile leer. Direkt rechts neben An gibt es ein kleines Pulldown-Menü; es dient der Auswahl, ob die Adresse direkt, als Cc oder als Bcc angeschrieben werden soll.
 
@@ -417,13 +465,16 @@ Wie schon weiter oben bemerkt, besitzt {{ branding.title }} mächtige Werkzeuge 
 ## Gruppen
 
 {{ branding.title }} hat zwei verschiedene Arten von Gruppen. Systemgruppen <img src="{{icon_url}}icon_group_full.svg" alt="drawing" width="16"/> und Gruppen <img src="{{icon_url}}icon_address_group.svg" alt="drawing" width="16"/>, wobei beide vereinfacht in {{ branding.title }} als "Gruppe" dargestellt werden und sich nur anhand des Symbols unterscheiden lassen.
-<!-- `<img src="../../../../{{ branding.title }}20/images/icon-set/icon_address_group.svg" alt="drawing"/>` -->
+<!-- `<img src="../../../../tine20/images/icon-set/icon_address_group.svg" alt="drawing"/>` -->
 
 <!-- SCREENSHOT -->
 ![Abbildung: Gruppen Übersicht]({{ img_url_desktop }}Adressbuch/22_adressbuch_gruppen_uebersicht_light.png#only-light){.desktop-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_desktop }}Adressbuch/22_adressbuch_gruppen_uebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Gruppen Übersicht]({{ img_url_tablet }}Adressbuch/22_adressbuch_gruppen_uebersicht_light.png#only-light){.tablet-img}
+![Abbildung: Gruppen Übersicht]({{ img_url_tablet }}Adressbuch/22_adressbuch_gruppen_uebersicht_dark.png#only-dark){.tablet-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_mobile }}Adressbuch/22_adressbuch_gruppen_uebersicht_light.png#only-light){.mobile-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_mobile }}Adressbuch/22_adressbuch_gruppen_uebersicht_dark.png#only-dark){.mobile-img}
+
 
 Systemgruppen <img src="{{icon_url}}icon_group_full.svg" alt="drawing" width="16"/> werden ausführlich im [Administration - Gruppen](oa_Admin.md/#gruppen) erklärt. Es handelt sich hierbei um eine Funktion der Rechteverteilung. Einzelne User können in Systemgruppen zusammengefasst werden, unterschiedlichen Systemgruppen können verschiedene Rechte und Rollen zugewiesen werden.
 
@@ -436,8 +487,11 @@ Um eine Gruppe einzurichten, muss man sich innerhalb des Adressbuches im Gruppen
 <!-- SCREENSHOT -->
 ![Abbildung: Gruppen Übersicht]({{ img_url_desktop }}Adressbuch/23_adressbuch_gruppen_modul_light.png#only-light){.desktop-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_desktop }}Adressbuch/23_adressbuch_gruppen_modul_dark.png#only-dark){.desktop-img}
+![Abbildung: Gruppen Übersicht]({{ img_url_tablet }}Adressbuch/23_adressbuch_gruppen_modul_light.png#only-light){.tablet-img}
+![Abbildung: Gruppen Übersicht]({{ img_url_tablet }}Adressbuch/23_adressbuch_gruppen_modul_dark.png#only-dark){.tablet-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_mobile }}Adressbuch/23_adressbuch_gruppen_modul_light.png#only-light){.mobile-img}
 ![Abbildung: Gruppen Übersicht]({{ img_url_mobile }}Adressbuch/23_adressbuch_gruppen_modul_dark.png#only-dark){.mobile-img}
+
 
 Klicken Sie hier oben links auf Gruppe hinzufügen. Es öffnet sich ein neues Fenster, wo Sie die gewünschten Gruppeninformationen eingeben können.
 

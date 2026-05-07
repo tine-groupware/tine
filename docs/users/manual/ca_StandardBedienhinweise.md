@@ -3,11 +3,13 @@
 
 ## Einleitung, Anwählen von Anwendungen
 
-Wenn Sie der von uns empfohlenen Reihenfolge zum Durcharbeiten dieses Handbuchs gefolgt sind, dann haben Sie sich nach der Einleitung mit der Adressverwaltung beschäftigt und somit jetzt eine {{ branding.title }}-Installation vorliegen, die mindestens über einen importierten Adressbestand verfügt. In diesem Kapitel haben Sie sich bereits mit einem Teil der hier zu besprechenden Standardrou{{ branding.title }}n befasst. Sie kennen den Aufbau des Bildschirms aus den oben von links beginnenden Reitern, mit denen Sie die einzelnen Anwendungen aufrufen. Dabei werden beim Start von {{ branding.title }} immer nur jene Anwendungen als Reiter angezeigt, mit denen Sie bereits gearbeitet haben. Der erste Reiter ganz links heißt {{ branding.title }}.
+Wenn Sie der von uns empfohlenen Reihenfolge zum Durcharbeiten dieses Handbuchs gefolgt sind, dann haben Sie sich nach der Einleitung mit der Adressverwaltung beschäftigt und somit jetzt eine {{ branding.title }}-Installation vorliegen, die mindestens über einen importierten Adressbestand verfügt. In diesem Kapitel haben Sie sich bereits mit einem Teil der hier zu besprechenden Standardroutinen befasst. Sie kennen den Aufbau des Bildschirms aus den oben von links beginnenden Reitern, mit denen Sie die einzelnen Anwendungen aufrufen. Dabei werden beim Start von {{ branding.title }} immer nur jene Anwendungen als Reiter angezeigt, mit denen Sie bereits gearbeitet haben. Der erste Reiter ganz links heißt {{ branding.title }}.
 
 <!-- SCREENSHOT -->
 ![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_desktop }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_light.png#only-light){.desktop-img}
 ![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_desktop }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_tablet }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_light.png#only-light){.tablet-img}
+![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_tablet }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_mobile }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_light.png#only-light){.mobile-img}
 ![Abbildung: Eine Übersicht über alle {{ branding.title }}-Anwendungen.]({{ img_url_mobile }}StandardBedienhinweise/1_standardbedienhinweise_alle_reiter_dark.png#only-dark){.mobile-img}
 
@@ -22,6 +24,8 @@ Unterhalb der erwähnten Reiter für die einzelnen Anwendungen sich die anwendun
 <!-- SCREENSHOT -->
 ![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_desktop }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_light.png#only-light){.desktop-img}
 ![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_desktop }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_tablet }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_light.png#only-light){.tablet-img}
+![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_tablet }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_mobile }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_light.png#only-light){.mobile-img}
 ![Abbildung: Die Liste mit den Filtern sieht in {{ branding.title }} überall gleich aus. Hier exemplarisch die Anwendung Kalender.]({{ img_url_mobile }}StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste_dark.png#only-dark){.mobile-img}
 
@@ -34,6 +38,7 @@ In allen Anwendungen, außer dem Kalender, enthält er ein Eingabefeld Seite x v
 Rechts daneben befindet sich der Refresh-Button (<img src="{{icon_url}}icon_return.svg" alt="drawing" width="16"/>), mit dem Sie z.B. eine aktuelle Ansicht in die Tabelle nachladen oder E-Mails abrufen können.
 
 Das Element rechts Zeige Datensätze x – y von n informiert Sie über die Anzahl der im Augenblick in der Tabelle angezeigten Elemente (die Standardanzahl ist 50; wie Sie diese ändern können, finden Sie in [Benutzerspezifische Einstellungen - Generelle Einstellungen](na_Benutzereinstellungen.md/#generelle-einstellungen)), sowie deren Gesamtzahl in der Datenbank. Der daneben befindliche Button n ausgewählt, dient der massenhaften Markierung einzelner Elemente aus der Tabelle. Das darunter vorhandene Pulldown hat drei Menüpunkte: Auswahl aufheben, Alle Seiten auswählen (n Einträge) und Auswahl umkehren. Auch hier sieht der Kalender wieder, entsprechend seiner spezifischen Funktion, anders aus: Er bietet mit den ersten drei Buttons den Wechsel zwischen Tages-, Wochen- und Monatsansicht an. Der vierte Button (der nach oben gerichtete Pfeil) dient dem Wechsel in die Vollbildansicht des Kalenders.
+
 
 ### Der Favoriten- und Ordnerbaum
 
@@ -56,6 +61,8 @@ Allerdings geht das im einzelnen Bedarfsfall auch aus jeder Anwendung heraus: Kl
 <!-- SCREENSHOT -->
 ![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_desktop }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_light.png#only-light){.desktop-img}
 ![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_desktop }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_tablet }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_light.png#only-light){.tablet-img}
+![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_tablet }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_mobile }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_light.png#only-light){.mobile-img}
 ![Abbildung: Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü]({{ img_url_mobile }}StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen_dark.png#only-dark){.mobile-img}
 
@@ -64,6 +71,8 @@ Das daraufhin erscheinende Fenster zur Berechtigungsverwaltung sieht wie folgt a
 <!-- SCREENSHOT -->
 ![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_desktop }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_light.png#only-light){.desktop-img}
 ![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_desktop }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_tablet }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_light.png#only-light){.tablet-img}
+![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_tablet }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_mobile }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_light.png#only-light){.mobile-img}
 ![Abbildung: Die Berechtigungsverwaltung eines Adressbuches]({{ img_url_mobile }}StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten_dark.png#only-dark){.mobile-img}
 
@@ -82,6 +91,8 @@ Kommen wir nun zum größten Teil des Bildschirms, der Tabelle selbst:
 <!-- SCREENSHOT -->
 ![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_desktop }}StandardBedienhinweise/5_standardbedienhinweise_email_light.png#only-light){.desktop-img}
 ![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_desktop }}StandardBedienhinweise/5_standardbedienhinweise_email_dark.png#only-dark){.desktop-img}
+![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_tablet }}StandardBedienhinweise/5_standardbedienhinweise_email_light.png#only-light){.tablet-img}
+![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_tablet }}StandardBedienhinweise/5_standardbedienhinweise_email_dark.png#only-dark){.tablet-img}
 ![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_mobile }}StandardBedienhinweise/5_standardbedienhinweise_email_light.png#only-light){.mobile-img}
 ![Abbildung: {{ branding.title }}-Tabelle am Beispiel der E-Mail-Anwendung]({{ img_url_mobile }}StandardBedienhinweise/5_standardbedienhinweise_email_dark.png#only-dark){.mobile-img}
 
@@ -93,11 +104,12 @@ Am rechten äußeren Rand des Tabellenkopfes finden Sie immer einen kleinen Butt
 <!-- SCREENSHOT -->
 ![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_desktop }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_light.png#only-light){.desktop-img}
 ![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_desktop }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_tablet }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_light.png#only-light){.tablet-img}
+![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_tablet }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_mobile }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Alle anzeigbaren Spalten der E-Mail-Anwendung]({{ img_url_mobile }}StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl_dark.png#only-dark){.mobile-img}
 
 Aus Praktikabilitäts- und Platzgründen wurden für jede Anwendung Standard-Tabellenspalten festgelegt, die Sie in aller Regel auch nicht ändern müssen. Sollte für einen im Buch beschriebenen Arbeitsalgorithmus eine in der Standardansicht ausgeblendete Tabellenspalte sichtbar gemacht werden müssen, weisen wir Sie an der entsprechenden Stelle konkret darauf hin.
-
 
 ### Suchfilter für die Tabellenansicht
 
@@ -114,6 +126,8 @@ Auch beim Klick auf das + (Plus)-Symbol zur Erstellung eines neuen Filters wird 
 <!-- SCREENSHOT -->
 ![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_desktop }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_light.png#only-light){.desktop-img}
 ![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_desktop }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_dark.png#only-dark){.desktop-img}
+![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_tablet }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_light.png#only-light){.tablet-img}
+![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_tablet }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_mobile }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_light.png#only-light){.mobile-img}
 ![Abbildung: Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann]({{ img_url_mobile }}StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen_dark.png#only-dark){.mobile-img}
 
@@ -125,6 +139,8 @@ Sehen wir uns nun das Suchfilterfenster ganz rechts näher an:
 <!-- SCREENSHOT -->
 ![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_desktop }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_light.png#only-light){.desktop-img}
 ![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_desktop }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_tablet }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_light.png#only-light){.tablet-img}
+![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_tablet }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_mobile }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_light.png#only-light){.mobile-img}
 ![Abbildung: Das Suchfenster auf der rechten Seite über der Tabelle]({{ img_url_mobile }}StandardBedienhinweise/8_standardbedienhinweise_suchfilter_dark.png#only-dark){.mobile-img}
 
@@ -138,6 +154,8 @@ Wenn Sie über diese Funktion einen Suchfilter gesetzt haben, können Sie das *X
 <!-- SCREENSHOT -->
 ![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_desktop }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_light.png#only-light){.desktop-img}
 ![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_desktop }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_dark.png#only-dark){.desktop-img}
+![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_tablet }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_light.png#only-light){.tablet-img}
+![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_tablet }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_dark.png#only-dark){.tablet-img}
 ![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_mobile }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_light.png#only-light){.mobile-img}
 ![Abbildung: Der x-Button zum Löschen einer Such-Zeichenkette]({{ img_url_mobile }}StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button_dark.png#only-dark){.mobile-img}
 
@@ -146,6 +164,8 @@ Hier auch noch einmal der Vollständigkeit halber die Funktion zum Löschen von 
 <!-- SCREENSHOT -->
 ![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_desktop }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_light.png#only-light){.desktop-img}
 ![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_desktop }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_dark.png#only-dark){.desktop-img}
+![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_tablet }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_light.png#only-light){.tablet-img}
+![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_tablet }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_mobile }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_light.png#only-light){.mobile-img}
 ![Abbildung: Zurücksetzen aller angelegten Filter in einem Arbeitsgang.]({{ img_url_mobile }}StandardBedienhinweise/110_standardbedienhinweise_alle_filter_zuruecksetzen_dark.png#only-dark){.mobile-img}
 
@@ -159,6 +179,8 @@ Klicken Sie nun das linke Pulldown (Schnellsuche oder anderes) an und schauen si
 <!-- SCREENSHOT -->
 ![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_desktop }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_light.png#only-light){.desktop-img}
 ![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_desktop }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_dark.png#only-dark){.desktop-img}
+![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_tablet }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_light.png#only-light){.tablet-img}
+![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_tablet }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_dark.png#only-dark){.tablet-img}
 ![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_mobile }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_light.png#only-light){.mobile-img}
 ![Abbildung: Operator-Elemente, nach denen gefiltert werden kann.]({{ img_url_mobile }}StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren_dark.png#only-dark){.mobile-img}
 
@@ -178,6 +200,8 @@ In der praktischen Tätigkeit werden Ihnen jedoch auch Anwendungsfälle begegnen
 <!-- SCREENSHOT -->
 ![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_desktop }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_light.png#only-light){.desktop-img}
 ![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_desktop }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_dark.png#only-dark){.desktop-img}
+![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_tablet }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_light.png#only-light){.tablet-img}
+![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_tablet }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_mobile }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_light.png#only-light){.mobile-img}
 ![Abbildung: Alternative "Oder"-Filter-Möglichkeiten]({{ img_url_mobile }}StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter_dark.png#only-dark){.mobile-img}
 
@@ -188,6 +212,8 @@ Wollen Sie nun einen zweiten, alternativen, Filter erstellen, klicken Sie auf de
 <!-- SCREENSHOT -->
 ![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_desktop }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_light.png#only-light){.desktop-img}
 ![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_desktop }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_dark.png#only-dark){.desktop-img}
+![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_tablet }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_light.png#only-light){.tablet-img}
+![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_tablet }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_mobile }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_light.png#only-light){.mobile-img}
 ![Abbildung: Weitere "Oder"-Filter hinzufügen]({{ img_url_mobile }}StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter_dark.png#only-dark){.mobile-img}
 
@@ -200,6 +226,8 @@ Wie löschen Sie alternative Filter dauerhaft? Sie könnten das wieder mit Klick
 <!-- SCREENSHOT -->
 ![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_desktop }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_light.png#only-light){.desktop-img}
 ![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_desktop }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_dark.png#only-dark){.desktop-img}
+![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_tablet }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_light.png#only-light){.tablet-img}
+![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_tablet }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_mobile }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_light.png#only-light){.mobile-img}
 ![Abbildung: Dauerhaftes Entfernen eines kompletten "Oder"-Filters]({{ img_url_mobile }}StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen_dark.png#only-dark){.mobile-img}
 
@@ -218,6 +246,8 @@ Hier noch eine ganz wesentliche Funktion: Nachdem Sie sich, vielleicht durch lä
 <!-- SCREENSHOT -->
 ![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_desktop }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_light.png#only-light){.desktop-img}
 ![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_desktop }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_dark.png#only-dark){.desktop-img}
+![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_tablet }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_light.png#only-light){.tablet-img}
+![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_tablet }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_mobile }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_light.png#only-light){.mobile-img}
 ![Abbildung: Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.]({{ img_url_mobile }}StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten_dark.png#only-dark){.mobile-img}
 
@@ -237,6 +267,8 @@ Mit diesen Einstellungen können Sie nun Ihre gefilterte Ansicht im Verzeichnisb
 <!-- SCREENSHOT -->
 ![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_desktop }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_desktop }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_tablet }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_light.png#only-light){.tablet-img}
+![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_tablet }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_mobile }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Eine typische Eingabemaske in {{ branding.title }} am Beispiel "Neuen Mitarbeiter hinzufügen"]({{ img_url_mobile }}StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu_dark.png#only-dark){.mobile-img}
 
@@ -254,6 +286,8 @@ Wie wir schon in [Adressverwaltung - Kontakte in der Kontaktmaske bearbeiten](ba
 <!-- SCREENSHOT -->
 ![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_desktop }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_light.png#only-light){.desktop-img}
 ![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_desktop }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_dark.png#only-dark){.desktop-img}
+![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_tablet }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_light.png#only-light){.tablet-img}
+![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_tablet }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_dark.png#only-dark){.tablet-img}
 ![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_mobile }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_light.png#only-light){.mobile-img}
 ![Abbildung: Übersicht- Reiter "Notizen"]({{ img_url_mobile }}StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz_dark.png#only-dark){.mobile-img}
 
@@ -262,6 +296,8 @@ Durch den Klick auf dem Button Notizen hinzufügen öffnet sich ein Fenster, in 
 <!-- SCREENSHOT -->
 ![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_desktop }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_light.png#only-light){.desktop-img}
 ![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_desktop }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_dark.png#only-dark){.desktop-img}
+![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_tablet }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_light.png#only-light){.tablet-img}
+![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_tablet }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_dark.png#only-dark){.tablet-img}
 ![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_mobile }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_light.png#only-light){.mobile-img}
 ![Abbildung: Verschiedene Arten von Notizen, die hinzugefügt werden können]({{ img_url_mobile }}StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz_dark.png#only-dark){.mobile-img}
 
@@ -278,6 +314,8 @@ Mit Anhängen sind Dateien beliebigen Formats gemeint, demzufolge enthält die h
 <!-- SCREENSHOT -->
 ![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_desktop }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_light.png#only-light){.desktop-img}
 ![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_desktop }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_dark.png#only-dark){.desktop-img}
+![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_tablet }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_light.png#only-light){.tablet-img}
+![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_tablet }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_dark.png#only-dark){.tablet-img}
 ![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_mobile }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_light.png#only-light){.mobile-img}
 ![Abbildung: Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.]({{ img_url_mobile }}2_allgemeines/22_allgemein_hr_mitarbeiter_anhang_dark.png#only-dark){.mobile-img}
 
@@ -304,6 +342,8 @@ Eine Verknüpfung stellt eine Verbindung zwischen Objekten verschiedener oder au
 <!-- SCREENSHOT -->
 ![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_desktop }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_light.png#only-light){.desktop-img}
 ![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_desktop }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_tablet }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_light.png#only-light){.tablet-img}
+![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_tablet }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_mobile }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_light.png#only-light){.mobile-img}
 ![Abbildung: Mit einem Objekt verknüpfte Objekte anderer {{ branding.title }}-Anwendungen]({{ img_url_mobile }}2_allgemeines/23_allgemein_hr_mitarbeiter_verknuepfungen_dark.png#only-dark){.mobile-img}
 
@@ -325,6 +365,8 @@ Dabei können Sie, der Praktikabilität geschuldet, Verknüpfungen zwischen den 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_desktop }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_light.png#only-light){.desktop-img}
 ![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_desktop }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_tablet }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_light.png#only-light){.tablet-img}
+![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_tablet }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_mobile }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_light.png#only-light){.mobile-img}
 ![Abbildung: Die Auswahl der Objektgruppe einer {{ branding.title }}-Anwendung zum Verknüpfen]({{ img_url_mobile }}StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu_dark.png#only-dark){.mobile-img}
 
@@ -341,6 +383,8 @@ Den Reiter Historie finden Sie immer als letzten in der Objekt-Bearbeitungsmaske
 <!-- SCREENSHOT -->
 ![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_desktop }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_light.png#only-light){.desktop-img}
 ![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_desktop }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_tablet }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_light.png#only-light){.tablet-img}
+![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_tablet }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_mobile }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_light.png#only-light){.mobile-img}
 ![Abbildung: Die Bearbeitungs-Historie eines Datenbankobjektes]({{ img_url_mobile }}2_allgemeines/21_allgemein_hr_mitarbeiter_historie_dark.png#only-dark){.mobile-img}
 
@@ -354,6 +398,8 @@ Kommen wir nun zu den Tags. {{ branding.title }} unterscheidet zwischen persönl
 <!-- SCREENSHOT -->
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_desktop }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_light.png#only-light){.desktop-img}
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_desktop }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_dark.png#only-dark){.desktop-img}
+![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_tablet }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_light.png#only-light){.tablet-img}
+![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_tablet }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_dark.png#only-dark){.tablet-img}
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_mobile }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_light.png#only-light){.mobile-img}
 ![Abbildung: Das Eingabefeld für einen persönlichen Tag]({{ img_url_mobile }}StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag_dark.png#only-dark){.mobile-img}
 
@@ -362,5 +408,7 @@ Mit dem Anlegen eines solchen persönlichen Tags ist dann automatisch das entspr
 <!-- SCREENSHOT -->
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_desktop }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_light.png#only-light){.desktop-img}
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_desktop }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Auswahl bestehender Tags]({{ img_url_tablet }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_light.png#only-light){.tablet-img}
+![Abbildung: Die Auswahl bestehender Tags]({{ img_url_tablet }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_mobile }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Die Auswahl bestehender Tags]({{ img_url_mobile }}StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl_dark.png#only-dark){.mobile-img}

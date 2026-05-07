@@ -9,10 +9,12 @@ Die Anwendung Inventarisierung gehört – wie Sales, HumanResources und Zeiterf
 Wie gewohnt finden Sie auf der linken Seite unter Favoriten nützliche Standardansichten. Hier ist es nur eine: Alle Inventargegenstände.
 
 <!-- SCREENSHOT -->
-![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_desktop }}Inventarisierung/1_inventar_uebersicht_light.png#only-light){.desktop-img}
-![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_desktop }}Inventarisierung/1_inventar_uebersicht_dark.png#only-dark){.desktop-img}
-![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_mobile }}Inventarisierung/1_inventar_uebersicht_light.png#only-light){.mobile-img}
-![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_mobile }}Inventarisierung/1_inventar_uebersicht_dark.png#only-dark){.mobile-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_desktop }}Inventarisierung/1_inventarisierung_uebersicht_light.png#only-light){.desktop-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_desktop }}Inventarisierung/1_inventarisierung_uebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_tablet }}Inventarisierung/1_inventarisierung_uebersicht_light.png#only-light){.tablet-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_tablet }}Inventarisierung/1_inventarisierung_uebersicht_dark.png#only-dark){.tablet-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_mobile }}Inventarisierung/1_inventarisierung_uebersicht_light.png#only-light){.mobile-img}
+![Abbildung: Inventarisierung in {{ branding.title }}]({{ img_url_mobile }}Inventarisierung/1_inventarisierung_uebersicht_dark.png#only-dark){.mobile-img}
 
 <a id="ctx:Inventory.MainScreen.InventoryItem.ContainerTree"></a>
 Die unter den Favoriten zu findenden Inventarlisten, enthalten standardmäßig die drei üblichen Ordner Meine Inventarlisten, Gemeinsame Inventarlisten und Inventarlisten anderer Benutzer, wobei der Inhalt der letztgenannten beiden Ordner von dem Vorhandensein solcher Listen in Ihrem speziellen {{ branding.title }}-System sowie von Ihren Zugriffsrechten abhängt. Im Ordner Meine Inventarlisten finden Sie auf jeden Fall Ihre persönliche Inventarliste vor, denn diese erzeugt {{ branding.title }} mit der Anlage des Benutzers automatisch.
@@ -23,20 +25,24 @@ Die unter den Favoriten zu findenden Inventarlisten, enthalten standardmäßig d
 Klicken Sie im Bearbeitungsmenü ganz links den Button Inventar Gegenstand hinzufügen.
 
 <!-- SCREENSHOT -->
-![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_desktop }}Inventarisierung/2_inventar_gegenstand_neu_light.png#only-light){.desktop-img}
-![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_desktop }}Inventarisierung/2_inventar_gegenstand_neu_dark.png#only-dark){.desktop-img}
-![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_mobile }}Inventarisierung/2_inventar_gegenstand_neu_light.png#only-light){.mobile-img}
-![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_mobile }}Inventarisierung/2_inventar_gegenstand_neu_dark.png#only-dark){.mobile-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_desktop }}Inventarisierung/2_inventarisierung_gegenstand_neu_light.png#only-light){.desktop-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_desktop }}Inventarisierung/2_inventarisierung_gegenstand_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_tablet }}Inventarisierung/2_inventarisierung_gegenstand_neu_light.png#only-light){.tablet-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_tablet }}Inventarisierung/2_inventarisierung_gegenstand_neu_dark.png#only-dark){.tablet-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_mobile }}Inventarisierung/2_inventarisierung_gegenstand_neu_light.png#only-light){.mobile-img}
+![Abbildung: Neuen Inventargegenstand hinzufügen]({{ img_url_mobile }}Inventarisierung/2_inventarisierung_gegenstand_neu_dark.png#only-dark){.mobile-img}
 
 Die Bearbeitungsmaske enthält unter dem Reiter Allgemein zwei Pflichteingabefelder: ID und Name. Die Identifikationsnummer können Sie händisch vergeben oder vom System erzeugen lassen; im letzteren Fall klicken Sie den kleinen Zauberstab-Button an der rechten Seite des Feldes an, und es wird eine eindeutige ID generiert.
 
 Darunter folgt das Textfeld Beschreibung. Bevor Sie hier etwas eingeben, sehen Sie sich die anderen Felder an: Es gibt einen Standort und drei Datumsfelder: Hinzugefügt, Garantie und Entfernt. Dazu finden Sie in der untersten Spalte zwei numerische Felder, Totale Anzahl und Verfügbare Anzahl, die beide mit 1 vorbelegt sind, sowie rechts unten ein Pulldown Status. Dieses Statusfeld dient der Beschreibung einiger definierter Zustände, die ein Inventargegenstand annehmen kann.
 
 <!-- SCREENSHOT -->
-![Abbildung: Status zuweisen]({{ img_url_desktop }}Inventarisierung/3_inventar_gegenstand_status_light.png#only-light){.desktop-img}
-![Abbildung: Status zuweisen]({{ img_url_desktop }}Inventarisierung/3_inventar_gegenstand_status_dark.png#only-dark){.desktop-img}
-![Abbildung: Status zuweisen]({{ img_url_mobile }}Inventarisierung/3_inventar_gegenstand_status_light.png#only-light){.mobile-img}
-![Abbildung: Status zuweisen]({{ img_url_mobile }}Inventarisierung/3_inventar_gegenstand_status_dark.png#only-dark){.mobile-img}
+![Abbildung: Status zuweisen]({{ img_url_desktop }}Inventarisierung/3_inventarisierung_gegenstand_status_light.png#only-light){.desktop-img}
+![Abbildung: Status zuweisen]({{ img_url_desktop }}Inventarisierung/3_inventarisierung_gegenstand_status_dark.png#only-dark){.desktop-img}
+![Abbildung: Status zuweisen]({{ img_url_tablet }}Inventarisierung/3_inventarisierung_gegenstand_status_light.png#only-light){.tablet-img}
+![Abbildung: Status zuweisen]({{ img_url_tablet }}Inventarisierung/3_inventarisierung_gegenstand_status_dark.png#only-dark){.tablet-img}
+![Abbildung: Status zuweisen]({{ img_url_mobile }}Inventarisierung/3_inventarisierung_gegenstand_status_light.png#only-light){.mobile-img}
+![Abbildung: Status zuweisen]({{ img_url_mobile }}Inventarisierung/3_inventarisierung_gegenstand_status_dark.png#only-dark){.mobile-img}
 
 Tragen Sie also in Beschreibung nur solche Informationen ein, die nicht bereits durch andere Felder vorgesehen sind.
 
@@ -45,10 +51,12 @@ Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pu
 Neben den bereits aus anderen Anwendungen bekannten Reitern  Historie, Anhänge und Verknüpfungen ([Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)) finden Sie hier noch einen Reiter Buchhaltung.
 
 <!-- SCREENSHOT -->
-![Abbildung: Buchhaltungsinformationen]({{ img_url_desktop }}Inventarisierung/4_inventar_gegenstand_buchhaltung_light.png#only-light){.desktop-img}
-![Abbildung: Buchhaltungsinformationen]({{ img_url_desktop }}Inventarisierung/4_inventar_gegenstand_buchhaltung_dark.png#only-dark){.desktop-img}
-![Abbildung: Buchhaltungsinformationen]({{ img_url_mobile }}Inventarisierung/4_inventar_gegenstand_buchhaltung_light.png#only-light){.mobile-img}
-![Abbildung: Buchhaltungsinformationen]({{ img_url_mobile }}Inventarisierung/4_inventar_gegenstand_buchhaltung_dark.png#only-dark){.mobile-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_desktop }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_light.png#only-light){.desktop-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_desktop }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_dark.png#only-dark){.desktop-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_tablet }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_light.png#only-light){.tablet-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_tablet }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_dark.png#only-dark){.tablet-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_mobile }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_light.png#only-light){.mobile-img}
+![Abbildung: Buchhaltungsinformationen]({{ img_url_mobile }}Inventarisierung/4_inventarisierung_gegenstand_buchhaltung_dark.png#only-dark){.mobile-img}
 
 Neben dem Preis hinterlegen Sie über ein Pulldown die Kostenstelle des Gegenstands. Bedingung dafür ist natürlich, dass in Ihrem {{ branding.title }}-System Kostenstellen angelegt wurden ([Sales](ha_Sales.md)).
 
@@ -72,7 +80,9 @@ Exportieren als...; öffnet ein Fenster mit einem weiteren Pulldown. In der Stan
 Gegenstände importieren: Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Addressbook.md/#kontakte-importieren)).
 
 <!-- SCREENSHOT -->
-![Abbildung: Inventargegenstände importieren]({{ img_url_desktop }}Inventarisierung/5_inventar_import_light.png#only-light){.desktop-img}
-![Abbildung: Inventargegenstände importieren]({{ img_url_desktop }}Inventarisierung/5_inventar_import_dark.png#only-dark){.desktop-img}
-![Abbildung: Inventargegenstände importieren]({{ img_url_mobile }}Inventarisierung/5_inventar_import_light.png#only-light){.mobile-img}
-![Abbildung: Inventargegenstände importieren]({{ img_url_mobile }}Inventarisierung/5_inventar_import_dark.png#only-dark){.mobile-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_desktop }}Inventarisierung/5_inventarisierung_import_light.png#only-light){.desktop-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_desktop }}Inventarisierung/5_inventarisierung_import_dark.png#only-dark){.desktop-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_tablet }}Inventarisierung/5_inventarisierung_import_light.png#only-light){.tablet-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_tablet }}Inventarisierung/5_inventarisierung_import_dark.png#only-dark){.tablet-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_mobile }}Inventarisierung/5_inventarisierung_import_light.png#only-light){.mobile-img}
+![Abbildung: Inventargegenstände importieren]({{ img_url_mobile }}Inventarisierung/5_inventarisierung_import_dark.png#only-dark){.mobile-img}

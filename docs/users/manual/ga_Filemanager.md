@@ -29,6 +29,8 @@ Klicken Sie auf Gemeinsame Ordner, öffnet sich die darunterliegende Baumstruktu
 <!-- SCREENSHOT -->
 ![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_desktop }}Dateimanager/1_dateimanager_baumstruktur_light.png#only-light){.desktop-img}
 ![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_desktop }}Dateimanager/1_dateimanager_baumstruktur_dark.png#only-dark){.desktop-img}
+![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_tablet }}Dateimanager/1_dateimanager_baumstruktur_light.png#only-light){.tablet-img}
+![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_tablet }}Dateimanager/1_dateimanager_baumstruktur_dark.png#only-dark){.tablet-img}
 ![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_mobile }}Dateimanager/1_dateimanager_baumstruktur_light.png#only-light){.mobile-img}
 ![Abbildung: Baumstruktur des Dateimanagers]({{ img_url_mobile }}Dateimanager/1_dateimanager_baumstruktur_dark.png#only-dark){.mobile-img}
 
@@ -41,6 +43,8 @@ Wir wollen hier noch einen neuen Ordner anlegen; klicken Sie also Ordner hinzuf�
 <!-- SCREENSHOT -->
 ![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_desktop }}Dateimanager/2_dateimanager_neuer_ordner_light.png#only-light){.desktop-img}
 ![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_desktop }}Dateimanager/2_dateimanager_neuer_ordner_dark.png#only-dark){.desktop-img}
+![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_tablet }}Dateimanager/2_dateimanager_neuer_ordner_light.png#only-light){.tablet-img}
+![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_tablet }}Dateimanager/2_dateimanager_neuer_ordner_dark.png#only-dark){.tablet-img}
 ![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_mobile }}Dateimanager/2_dateimanager_neuer_ordner_light.png#only-light){.mobile-img}
 ![Abbildung: Hinzufügen eines neuen Ordners]({{ img_url_mobile }}Dateimanager/2_dateimanager_neuer_ordner_dark.png#only-dark){.mobile-img}
 
@@ -55,6 +59,8 @@ Klicken Sie nun den eben erzeugten Ordner wieder mit der rechten Maustaste an �
 <!-- SCREENSHOT -->
 ![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_desktop }}Dateimanager/3_dateimanager_ordner_kontextmenu_light.png#only-light){.desktop-img}
 ![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_desktop }}Dateimanager/3_dateimanager_ordner_kontextmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_tablet }}Dateimanager/3_dateimanager_ordner_kontextmenu_light.png#only-light){.tablet-img}
+![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_tablet }}Dateimanager/3_dateimanager_ordner_kontextmenu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_mobile }}Dateimanager/3_dateimanager_ordner_kontextmenu_light.png#only-light){.mobile-img}
 ![Abbildung: Kontextmenü zu einem selbst angelegten Ordner]({{ img_url_mobile }}Dateimanager/3_dateimanager_ordner_kontextmenu_dark.png#only-dark){.mobile-img}
 
@@ -65,6 +71,8 @@ Ordner löschen und Ordner umbenennen sind selbsterklärend; klicken Sie daher j
 <!-- SCREENSHOT -->
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_desktop }}Dateimanager/5_dateimanager_ordner_rechte_light.png#only-light){.desktop-img}
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_desktop }}Dateimanager/5_dateimanager_ordner_rechte_dark.png#only-dark){.desktop-img}
+![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_tablet }}Dateimanager/5_dateimanager_ordner_rechte_light.png#only-light){.tablet-img}
+![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_tablet }}Dateimanager/5_dateimanager_ordner_rechte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_mobile }}Dateimanager/5_dateimanager_ordner_rechte_light.png#only-light){.mobile-img}
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_mobile }}Dateimanager/5_dateimanager_ordner_rechte_dark.png#only-dark){.mobile-img}
 
@@ -93,6 +101,8 @@ Kommen wir zurück zu unserem Fallbeispiel. Im Bearbeitungsmenü auf der linken 
 <!-- SCREENSHOT -->
 ![Abbildung: Bearbeitungsmenü]({{ img_url_desktop }}Dateimanager/6_dateimanager_bearbeitungsmenu_light.png#only-light){.desktop-img}
 ![Abbildung: Bearbeitungsmenü]({{ img_url_desktop }}Dateimanager/6_dateimanager_bearbeitungsmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Bearbeitungsmenü]({{ img_url_tablet }}Dateimanager/6_dateimanager_bearbeitungsmenu_light.png#only-light){.tablet-img}
+![Abbildung: Bearbeitungsmenü]({{ img_url_tablet }}Dateimanager/6_dateimanager_bearbeitungsmenu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Bearbeitungsmenü]({{ img_url_mobile }}Dateimanager/6_dateimanager_bearbeitungsmenu_light.png#only-light){.mobile-img}
 ![Abbildung: Bearbeitungsmenü]({{ img_url_mobile }}Dateimanager/6_dateimanager_bearbeitungsmenu_dark.png#only-dark){.mobile-img}
 
@@ -104,6 +114,8 @@ Um die Eigenschaften gespeicherter Dateien zu ändern, gibt es wieder zwei Wege:
 <!-- SCREENSHOT -->
 ![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_desktop }}Dateimanager/8_dateimanager_eigenschaften_datei_light.png#only-light){.desktop-img}
 ![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_desktop }}Dateimanager/8_dateimanager_eigenschaften_datei_dark.png#only-dark){.desktop-img}
+![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_tablet }}Dateimanager/8_dateimanager_eigenschaften_datei_light.png#only-light){.tablet-img}
+![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_tablet }}Dateimanager/8_dateimanager_eigenschaften_datei_dark.png#only-dark){.tablet-img}
 ![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_mobile }}Dateimanager/8_dateimanager_eigenschaften_datei_light.png#only-light){.mobile-img}
 ![Abbildung: Der Reiter "Datei" zeigt Name (änderbar) und Datumsangaben]({{ img_url_mobile }}Dateimanager/8_dateimanager_eigenschaften_datei_dark.png#only-dark){.mobile-img}
 

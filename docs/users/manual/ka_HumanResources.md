@@ -15,6 +15,8 @@ Starten Sie die Anwendung über den Reiter {{ branding.title }}, indem Sie dort 
 <!-- SCREENSHOT -->
 ![Abbildung: Module unter HumanResources]({{ img_url_desktop }}HumanResources/1_humanresources_module_light.png#only-light){.desktop-img}
 ![Abbildung: Module unter HumanResources]({{ img_url_desktop }}HumanResources/1_humanresources_module_dark.png#only-dark){.desktop-img}
+![Abbildung: Module unter HumanResources]({{ img_url_tablet }}HumanResources/1_humanresources_module_light.png#only-light){.tablet-img}
+![Abbildung: Module unter HumanResources]({{ img_url_tablet }}HumanResources/1_humanresources_module_dark.png#only-dark){.tablet-img}
 ![Abbildung: Module unter HumanResources]({{ img_url_mobile }}HumanResources/1_humanresources_module_light.png#only-light){.mobile-img}
 ![Abbildung: Module unter HumanResources]({{ img_url_mobile }}HumanResources/1_humanresources_module_dark.png#only-dark){.mobile-img}
 
@@ -37,6 +39,8 @@ Die Angabe in System steuert, ob es sich dabei um eine systemnotwendige Lohnart 
 <!-- SCREENSHOT -->
 ![Abbildung: Lohnarten]({{ img_url_desktop }}HumanResources/2_humanresources_stammdaten_lohnarten_light.png#only-light){.desktop-img}
 ![Abbildung: Lohnarten]({{ img_url_desktop }}HumanResources/2_humanresources_stammdaten_lohnarten_dark.png#only-dark){.desktop-img}
+![Abbildung: Lohnarten]({{ img_url_tablet }}HumanResources/2_humanresources_stammdaten_lohnarten_light.png#only-light){.tablet-img}
+![Abbildung: Lohnarten]({{ img_url_tablet }}HumanResources/2_humanresources_stammdaten_lohnarten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Lohnarten]({{ img_url_mobile }}HumanResources/2_humanresources_stammdaten_lohnarten_light.png#only-light){.mobile-img}
 ![Abbildung: Lohnarten]({{ img_url_mobile }}HumanResources/2_humanresources_stammdaten_lohnarten_dark.png#only-dark){.mobile-img}
 
@@ -61,6 +65,8 @@ Wählen Sie ein Zeitkonto aus (über das Pulldown Menü), wenn Sie alle erfasste
 <!-- SCREENSHOT -->
 ![Abbildung: Abwesenheitsarten]({{ img_url_desktop }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_light.png#only-light){.desktop-img}
 ![Abbildung: Abwesenheitsarten]({{ img_url_desktop }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsarten]({{ img_url_tablet }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_light.png#only-light){.tablet-img}
+![Abbildung: Abwesenheitsarten]({{ img_url_tablet }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Abwesenheitsarten]({{ img_url_mobile }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_light.png#only-light){.mobile-img}
 ![Abbildung: Abwesenheitsarten]({{ img_url_mobile }}HumanResources/3_humanresources_stammdaten_abwesenheitsarten_dark.png#only-dark){.mobile-img}
 
@@ -78,6 +84,8 @@ Diese Vorlagen werden in 3 Typen unterschieden:
 <!-- SCREENSHOT -->
 ![Abbildung: Arbeitszeitschemata]({{ img_url_desktop }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_light.png#only-light){.desktop-img}
 ![Abbildung: Arbeitszeitschemata]({{ img_url_desktop }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_dark.png#only-dark){.desktop-img}
+![Abbildung: Arbeitszeitschemata]({{ img_url_tablet }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_light.png#only-light){.tablet-img}
+![Abbildung: Arbeitszeitschemata]({{ img_url_tablet }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_dark.png#only-dark){.tablet-img}
 ![Abbildung: Arbeitszeitschemata]({{ img_url_mobile }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_light.png#only-light){.mobile-img}
 ![Abbildung: Arbeitszeitschemata]({{ img_url_mobile }}HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste_dark.png#only-dark){.mobile-img}
 
@@ -86,6 +94,8 @@ Klicken Sie im Bearbeitungsmenü links auf Arbeitszeitschema hinzufügen und erh
 <!-- SCREENSHOT -->
 ![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_desktop }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_desktop }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_tablet }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_tablet }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_mobile }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Arbeitszeitschemata hinzufügen]({{ img_url_mobile }}HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog_dark.png#only-dark){.mobile-img}
 
@@ -104,6 +114,8 @@ Wenn Sie links unter Module auf Mitarbeiter klicken, erhalten Sie rechts in der 
 <!-- SCREENSHOT -->
 ![Abbildung: Mitarbeiter Liste]({{ img_url_desktop }}HumanResources/1_humanresources_module_light.png#only-light){.desktop-img}
 ![Abbildung: Mitarbeiter Liste]({{ img_url_desktop }}HumanResources/1_humanresources_module_dark.png#only-dark){.desktop-img}
+![Abbildung: Mitarbeiter Liste]({{ img_url_tablet }}HumanResources/1_humanresources_module_light.png#only-light){.tablet-img}
+![Abbildung: Mitarbeiter Liste]({{ img_url_tablet }}HumanResources/1_humanresources_module_dark.png#only-dark){.tablet-img}
 ![Abbildung: Mitarbeiter Liste]({{ img_url_mobile }}HumanResources/1_humanresources_module_light.png#only-light){.mobile-img}
 ![Abbildung: Mitarbeiter Liste]({{ img_url_mobile }}HumanResources/1_humanresources_module_dark.png#only-dark){.mobile-img}
 
@@ -115,6 +127,8 @@ Klicken Sie im Bearbeitungsmenü links außen den Button Mitarbeiter hinzufügen
 <!-- SCREENSHOT -->
 ![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_desktop }}HumanResources/6_humanresources_mitarbeiter_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_desktop }}HumanResources/6_humanresources_mitarbeiter_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_tablet }}HumanResources/6_humanresources_mitarbeiter_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_tablet }}HumanResources/6_humanresources_mitarbeiter_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_mobile }}HumanResources/6_humanresources_mitarbeiter_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Anlegen eines neuen Mitarbeiters]({{ img_url_mobile }}HumanResources/6_humanresources_mitarbeiter_dialog_dark.png#only-dark){.mobile-img}
 
@@ -123,6 +137,8 @@ Zu beachten sind hier die beiden Reiter Kostenstellen und Verträge – dazu sp�
 <!-- SCREENSHOT -->
 ![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_desktop }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_light.png#only-light){.desktop-img}
 ![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_desktop }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_dark.png#only-dark){.desktop-img}
+![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_tablet }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_light.png#only-light){.tablet-img}
+![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_tablet }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_dark.png#only-dark){.tablet-img}
 ![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_mobile }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_light.png#only-light){.mobile-img}
 ![Abbildung: Mit dem Zauberstab Daten übernehmen]({{ img_url_mobile }}HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab_dark.png#only-dark){.mobile-img}
 
@@ -141,6 +157,8 @@ Klicken Sie nun den Reiter Kostenstellen an.
 <!-- SCREENSHOT -->
 ![Abbildung: Kostenstellen]({{ img_url_desktop }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_light.png#only-light){.desktop-img}
 ![Abbildung: Kostenstellen]({{ img_url_desktop }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_dark.png#only-dark){.desktop-img}
+![Abbildung: Kostenstellen]({{ img_url_tablet }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_light.png#only-light){.tablet-img}
+![Abbildung: Kostenstellen]({{ img_url_tablet }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kostenstellen]({{ img_url_mobile }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_light.png#only-light){.mobile-img}
 ![Abbildung: Kostenstellen]({{ img_url_mobile }}HumanResources/8_humanresources_mitarbeiter_kostenstellen_dark.png#only-dark){.mobile-img}
 
@@ -161,6 +179,8 @@ Arbeitsverträge legen Sie unter dem Reiter Verträge an. Klicken Sie im unteren
 <!-- SCREENSHOT -->
 ![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_desktop }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_light.png#only-light){.desktop-img}
 ![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_desktop }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_tablet }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_light.png#only-light){.tablet-img}
+![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_tablet }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_mobile }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_light.png#only-light){.mobile-img}
 ![Abbildung: Mitarbeiter einen Vertrag zuweisen]({{ img_url_mobile }}HumanResources/10_humanresources_mitarbeiter_vertragsdialog_dark.png#only-dark){.mobile-img}
 
@@ -176,6 +196,8 @@ Haben Sie einen Arbeitsvertrag angelegt, klicken Sie in der Übersichtstabelle r
 <!-- SCREENSHOT -->
 ![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_desktop }}HumanResources/9_humanresources_mitarbeiter_vertraege_light.png#only-light){.desktop-img}
 ![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_desktop }}HumanResources/9_humanresources_mitarbeiter_vertraege_dark.png#only-dark){.desktop-img}
+![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_tablet }}HumanResources/9_humanresources_mitarbeiter_vertraege_light.png#only-light){.tablet-img}
+![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_tablet }}HumanResources/9_humanresources_mitarbeiter_vertraege_dark.png#only-dark){.tablet-img}
 ![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_mobile }}HumanResources/9_humanresources_mitarbeiter_vertraege_light.png#only-light){.mobile-img}
 ![Abbildung: Liste Mitarbeiter Verträge]({{ img_url_mobile }}HumanResources/9_humanresources_mitarbeiter_vertraege_dark.png#only-dark){.mobile-img}
 
@@ -190,6 +212,8 @@ Die erste Tabellenspalte entspricht dem Benutzerkonto, d.h. Sie sehen das Kalend
 <!-- SCREENSHOT -->
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_desktop }}HumanResources/12_humanresources_mitarbeiter_urlaub_light.png#only-light){.desktop-img}
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_desktop }}HumanResources/12_humanresources_mitarbeiter_urlaub_dark.png#only-dark){.desktop-img}
+![Abbildung: Urlaubstage hinzufügen]({{ img_url_tablet }}HumanResources/12_humanresources_mitarbeiter_urlaub_light.png#only-light){.tablet-img}
+![Abbildung: Urlaubstage hinzufügen]({{ img_url_tablet }}HumanResources/12_humanresources_mitarbeiter_urlaub_dark.png#only-dark){.tablet-img}
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_mobile }}HumanResources/12_humanresources_mitarbeiter_urlaub_light.png#only-light){.mobile-img}
 ![Abbildung: Urlaubstage hinzufügen]({{ img_url_mobile }}HumanResources/12_humanresources_mitarbeiter_urlaub_dark.png#only-dark){.mobile-img}
 
@@ -205,6 +229,8 @@ Der Reiter Krankheit funktioniert analog, nur dass es hier natürlich das Differ
 <!-- SCREENSHOT -->
 ![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_desktop }}HumanResources/13_humanresources_mitarbeiter_krankheit_light.png#only-light){.desktop-img}
 ![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_desktop }}HumanResources/13_humanresources_mitarbeiter_krankheit_dark.png#only-dark){.desktop-img}
+![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_tablet }}HumanResources/13_humanresources_mitarbeiter_krankheit_light.png#only-light){.tablet-img}
+![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_tablet }}HumanResources/13_humanresources_mitarbeiter_krankheit_dark.png#only-dark){.tablet-img}
 ![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_mobile }}HumanResources/13_humanresources_mitarbeiter_krankheit_light.png#only-light){.mobile-img}
 ![Abbildung: Krankheit und Krankheitsstage hinzufügen]({{ img_url_mobile }}HumanResources/13_humanresources_mitarbeiter_krankheit_dark.png#only-dark){.mobile-img}
 
@@ -231,6 +257,8 @@ Klicken Sie nun Personalkonto bearbeiten im Bearbeitungsmenü oder im Kontextmen
 <!-- SCREENSHOT -->
 ![Abbildung: Personalkonto bearbeiten]({{ img_url_desktop }}HumanResources/14_humanresources_personalkonten_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Personalkonto bearbeiten]({{ img_url_desktop }}HumanResources/14_humanresources_personalkonten_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Personalkonto bearbeiten]({{ img_url_tablet }}HumanResources/14_humanresources_personalkonten_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Personalkonto bearbeiten]({{ img_url_tablet }}HumanResources/14_humanresources_personalkonten_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Personalkonto bearbeiten]({{ img_url_mobile }}HumanResources/14_humanresources_personalkonten_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Personalkonto bearbeiten]({{ img_url_mobile }}HumanResources/14_humanresources_personalkonten_dialog_dark.png#only-dark){.mobile-img}
 
@@ -248,6 +276,8 @@ Bereits in der Listenansicht erhalten Sie einen guten und schnellen Überblick �
 <!-- SCREENSHOT -->
 ![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_desktop }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_light.png#only-light){.desktop-img}
 ![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_desktop }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_dark.png#only-dark){.desktop-img}
+![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_tablet }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_light.png#only-light){.tablet-img}
+![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_tablet }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_dark.png#only-dark){.tablet-img}
 ![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_mobile }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_light.png#only-light){.mobile-img}
 ![Abbildung: Übersicht Tägliche Arbeitszeitberichte]({{ img_url_mobile }}HumanResources/17_humanresources_tagesarbeitszeitberichte_liste_dark.png#only-dark){.mobile-img}
 
@@ -256,6 +286,8 @@ Schauen wir uns nun einen der generierten Datensätze unter Tägliche Arbeitszei
 <!-- SCREENSHOT -->
 ![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_desktop }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_desktop }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_tablet }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_tablet }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_mobile }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Täglicher Arbeitszeitbericht bearbeiten]({{ img_url_mobile }}HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog_dark.png#only-dark){.mobile-img}
 
@@ -294,6 +326,8 @@ Bereits in der Listenansicht erhalten Sie einen guten und schnellen Überblick �
 <!-- SCREENSHOT -->
 ![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_desktop }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_light.png#only-light){.desktop-img}
 ![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_desktop }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_dark.png#only-dark){.desktop-img}
+![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_tablet }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_light.png#only-light){.tablet-img}
+![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_tablet }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_dark.png#only-dark){.tablet-img}
 ![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_mobile }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_light.png#only-light){.mobile-img}
 ![Abbildung: Übersicht Monatliche Arbeitszeitberichte]({{ img_url_mobile }}HumanResources/19_humanresources_montasarbeitszeitberichte_liste_dark.png#only-dark){.mobile-img}
 
@@ -302,6 +336,8 @@ Schauen wir uns nun einen der generierten Datensätze unter Monatliche Arbeitsze
 <!-- SCREENSHOT -->
 ![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_desktop }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_desktop }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_tablet }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_tablet }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_mobile }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Monatlicher Arbeitszeitbericht bearbeiten]({{ img_url_mobile }}HumanResources/20_humanresources_montasarbeitszeitberichte_dialog_dark.png#only-dark){.mobile-img}
 
@@ -329,6 +365,8 @@ Für die monatliche Auswertung der Arbeitszeitdaten des Mitarbeiters wählen Sie
 <!-- SCREENSHOT -->
 ![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_desktop }}HumanResources/21_humanresources_export_monatsprotokoll_light.png#only-light){.desktop-img}
 ![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_desktop }}HumanResources/21_humanresources_export_monatsprotokoll_dark.png#only-dark){.desktop-img}
+![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_tablet }}HumanResources/21_humanresources_export_monatsprotokoll_light.png#only-light){.tablet-img}
+![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_tablet }}HumanResources/21_humanresources_export_monatsprotokoll_dark.png#only-dark){.tablet-img}
 ![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_mobile }}HumanResources/21_humanresources_export_monatsprotokoll_light.png#only-light){.mobile-img}
 ![Abbildung: Beispiel Export Monatlicher Arbeitszeitbericht]({{ img_url_mobile }}HumanResources/21_humanresources_export_monatsprotokoll_dark.png#only-dark){.mobile-img}
 
@@ -345,6 +383,8 @@ Zur schnellen und einfachen Plannung von An- und Abwesenheitszeiten der Mitarbei
 <!-- SCREENSHOT -->
 ![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_desktop }}HumanResources/22_humanresources_free_time_planning_matrix_light.png#only-light){.desktop-img}
 ![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_desktop }}HumanResources/22_humanresources_free_time_planning_matrix_dark.png#only-dark){.desktop-img}
+![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_tablet }}HumanResources/22_humanresources_free_time_planning_matrix_light.png#only-light){.tablet-img}
+![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_tablet }}HumanResources/22_humanresources_free_time_planning_matrix_dark.png#only-dark){.tablet-img}
 ![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_mobile }}HumanResources/22_humanresources_free_time_planning_matrix_light.png#only-light){.mobile-img}
 ![Abbildung: Matrix Abwesenheitsplanung]({{ img_url_mobile }}HumanResources/22_humanresources_free_time_planning_matrix_dark.png#only-dark){.mobile-img}
 
@@ -359,6 +399,8 @@ Haben Sie keinen Mitarbeiter (Matrixzeile) in der Matrix angeklickt, öffnet sic
 <!-- SCREENSHOT -->
 ![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_desktop }}HumanResources/23_humanresources_free_time_planning_dialog_light.png#only-light){.desktop-img}
 ![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_desktop }}HumanResources/23_humanresources_free_time_planning_dialog_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_tablet }}HumanResources/23_humanresources_free_time_planning_dialog_light.png#only-light){.tablet-img}
+![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_tablet }}HumanResources/23_humanresources_free_time_planning_dialog_dark.png#only-dark){.tablet-img}
 ![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_mobile }}HumanResources/23_humanresources_free_time_planning_dialog_light.png#only-light){.mobile-img}
 ![Abbildung: Abwesenheitsplanung bearbeiten]({{ img_url_mobile }}HumanResources/23_humanresources_free_time_planning_dialog_dark.png#only-dark){.mobile-img}
 

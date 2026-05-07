@@ -10,6 +10,8 @@ Wie in den meisten anderen Anwendungen haben wir auch hier die bekannte Darstell
 <!-- SCREENSHOT -->
 ![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_light.png#only-light){.desktop-img}
 ![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_desktop }}Dfcom/1_Dfcom_dark.png#only-dark){.desktop-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_tablet }}Dfcom/1_Dfcom_light.png#only-light){.tablet-img}
+![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_tablet }}Dfcom/1_Dfcom_dark.png#only-dark){.tablet-img}
 ![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_light.png#only-light){.mobile-img}
 ![Abbildung: DFCom beim Erstmaligen öffnen]({{ img_url_mobile }}Dfcom/1_Dfcom_dark.png#only-dark){.mobile-img}
 

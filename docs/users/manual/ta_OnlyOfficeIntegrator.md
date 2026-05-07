@@ -29,6 +29,8 @@ Sofern Sie ein Bild in Ihre Datei einfügen wollen, haben Sie die Wahl zwischen 
 <!-- SCREENSHOT -->
 ![Abbildung: Bild hinzufügen in Only Office]({{ img_url_desktop }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_light.png#only-light){.desktop-img}
 ![Abbildung: Bild hinzufügen in Only Office]({{ img_url_desktop }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_dark.png#only-dark){.desktop-img}
+![Abbildung: Bild hinzufügen in Only Office]({{ img_url_tablet }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_light.png#only-light){.tablet-img}
+![Abbildung: Bild hinzufügen in Only Office]({{ img_url_tablet }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Bild hinzufügen in Only Office]({{ img_url_mobile }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_light.png#only-light){.mobile-img}
 ![Abbildung: Bild hinzufügen in Only Office]({{ img_url_mobile }}OnlyOffice/0_onlyoffice_bild_hinzufuegen_dark.png#only-dark){.mobile-img}
 
@@ -48,6 +50,8 @@ Kommen wir nun zu den Bereichen, in denen OnlyOffice eingebunden ist.
 <!-- SCREENSHOT -->
 ![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_desktop }}OnlyOffice/1_onlyoffice_dataimanager_light.png#only-light){.desktop-img}
 ![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_desktop }}OnlyOffice/1_onlyoffice_dataimanager_dark.png#only-dark){.desktop-img}
+![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_tablet }}OnlyOffice/1_onlyoffice_dataimanager_light.png#only-light){.tablet-img}
+![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_tablet }}OnlyOffice/1_onlyoffice_dataimanager_dark.png#only-dark){.tablet-img}
 ![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_mobile }}OnlyOffice/1_onlyoffice_dataimanager_light.png#only-light){.mobile-img}
 ![Abbildung: Dateimanagers mit Only Office Integriert]({{ img_url_mobile }}OnlyOffice/1_onlyoffice_dataimanager_dark.png#only-dark){.mobile-img}
 
@@ -60,6 +64,8 @@ Klicken Sie auf Neues Dokument, öffnet sich ein Drop-Down Menü. Hier können S
 <!-- SCREENSHOT -->
 ![Abbildung: Only Office Text Datei]({{ img_url_desktop }}OnlyOffice/2_onlyoffice_light.png#only-light){.desktop-img}
 ![Abbildung: Only Office Text Datei]({{ img_url_desktop }}OnlyOffice/2_onlyoffice_dark.png#only-dark){.desktop-img}
+![Abbildung: Only Office Text Datei]({{ img_url_tablet }}OnlyOffice/2_onlyoffice_light.png#only-light){.mobile-img}
+![Abbildung: Only Office Text Datei]({{ img_url_tablet }}OnlyOffice/2_onlyoffice_dark.png#only-dark){.mobile-img}
 ![Abbildung: Only Office Text Datei]({{ img_url_mobile }}OnlyOffice/2_onlyoffice_light.png#only-light){.mobile-img}
 ![Abbildung: Only Office Text Datei]({{ img_url_mobile }}OnlyOffice/2_onlyoffice_dark.png#only-dark){.mobile-img}
 
@@ -75,6 +81,8 @@ Klicken Sie dafür auf den kleinen Pfeil im unteren Bereich.
 <!-- SCREENSHOT -->
 ![Abbildung: ]({{ img_url_desktop }}OnlyOffice/3_onlyoffice_email_anhaenge_01_light.png#only-light){.desktop-img}
 ![Abbildung: ]({{ img_url_desktop }}OnlyOffice/3_onlyoffice_email_anhaenge_01_dark.png#only-dark){.desktop-img}
+![Abbildung: ]({{ img_url_tablet }}OnlyOffice/3_onlyoffice_email_anhaenge_01_light.png#only-light){.tablet-img}
+![Abbildung: ]({{ img_url_tablet }}OnlyOffice/3_onlyoffice_email_anhaenge_01_dark.png#only-dark){.tablet-img}
 ![Abbildung: ]({{ img_url_mobile }}OnlyOffice/3_onlyoffice_email_anhaenge_01_light.png#only-light){.mobile-img}
 ![Abbildung: ]({{ img_url_mobile }}OnlyOffice/3_onlyoffice_email_anhaenge_01_dark.png#only-dark){.mobile-img}
 
@@ -83,6 +91,8 @@ Nun öffnet sich der Bereich, wo all Ihre Anhänge aufgelistet werden. Dort sehe
 <!-- SCREENSHOT -->
 ![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_desktop }}OnlyOffice/4_onlyoffice_email_anhaenge_02_light.png#only-light){.desktop-img}
 ![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_desktop }}OnlyOffice/4_onlyoffice_email_anhaenge_02_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_tablet }}OnlyOffice/4_onlyoffice_email_anhaenge_02_light.png#only-light){.tablet-img}
+![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_tablet }}OnlyOffice/4_onlyoffice_email_anhaenge_02_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_mobile }}OnlyOffice/4_onlyoffice_email_anhaenge_02_light.png#only-light){.mobile-img}
 ![Abbildung: Neues Dokument direkt aus der E-Mail Anwendung erstellen]({{ img_url_mobile }}OnlyOffice/4_onlyoffice_email_anhaenge_02_dark.png#only-dark){.mobile-img}
 
@@ -93,6 +103,8 @@ Zum einen kann ein Dokument aus jeder Anwendung heraus direkt erstellt werden. H
 <!-- SCREENSHOT -->
 ![Abbildung: Neues Dokument erstellen]({{ img_url_desktop }}OnlyOffice/5_onlyoffice_neues_dokument_light.png#only-light){.desktop-img}
 ![Abbildung: Neues Dokument erstellen]({{ img_url_desktop }}OnlyOffice/5_onlyoffice_neues_dokument_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues Dokument erstellen]({{ img_url_tablet }}OnlyOffice/5_onlyoffice_neues_dokument_light.png#only-light){.tablet-img}
+![Abbildung: Neues Dokument erstellen]({{ img_url_tablet }}OnlyOffice/5_onlyoffice_neues_dokument_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neues Dokument erstellen]({{ img_url_mobile }}OnlyOffice/5_onlyoffice_neues_dokument_light.png#only-light){.mobile-img}
 ![Abbildung: Neues Dokument erstellen]({{ img_url_mobile }}OnlyOffice/5_onlyoffice_neues_dokument_dark.png#only-dark){.mobile-img}
 
@@ -101,5 +113,7 @@ Zum anderen ist OnlyOffice bei allen Modulen, wo Anhänge hinzugefügt werden k�
 <!-- SCREENSHOT -->
 ![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_desktop }}OnlyOffice/6_onlyoffice_anhaenge_light.png#only-light){.desktop-img}
 ![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_desktop }}OnlyOffice/6_onlyoffice_anhaenge_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_tablet }}OnlyOffice/6_onlyoffice_anhaenge_light.png#only-light){.tablet-img}
+![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_tablet }}OnlyOffice/6_onlyoffice_anhaenge_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_mobile }}OnlyOffice/6_onlyoffice_anhaenge_light.png#only-light){.mobile-img}
 ![Abbildung: Neues Dokument direkt bei den Anhängen]({{ img_url_mobile }}OnlyOffice/6_onlyoffice_anhaenge_dark.png#only-dark){.mobile-img}

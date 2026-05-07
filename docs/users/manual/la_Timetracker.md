@@ -13,9 +13,10 @@ Die Ansicht der linken Seite ist in diesem Programmteil eine etwas andere als in
 <!-- SCREENSHOT -->
 ![Abbildung: Module der Zeiterfassung]({{ img_url_desktop }}Zeiterfassung/1_zeiterfassung_module_light.png#only-light){.desktop-img}
 ![Abbildung: Module der Zeiterfassung]({{ img_url_desktop }}Zeiterfassung/1_zeiterfassung_module_dark.png#only-dark){.desktop-img}
+![Abbildung: Module der Zeiterfassung]({{ img_url_tablet }}Zeiterfassung/1_zeiterfassung_module_light.png#only-light){.tablet-img}
+![Abbildung: Module der Zeiterfassung]({{ img_url_tablet }}Zeiterfassung/1_zeiterfassung_module_dark.png#only-dark){.tablet-img}
 ![Abbildung: Module der Zeiterfassung]({{ img_url_mobile }}Zeiterfassung/1_zeiterfassung_module_light.png#only-light){.mobile-img}
 ![Abbildung: Module der Zeiterfassung]({{ img_url_mobile }}Zeiterfassung/1_zeiterfassung_module_dark.png#only-dark){.mobile-img}
-
 
 Zeiterfassung hat zwei Untermodule: Stundenzettel und Zeitkonten. Die Stundenzettel sind immer eine Teilmenge eines Zeitkontos, d.h. Sie müssen zunächst Zeitkonten anlegen, um im zweiten Schritt Stundenzettel abspeichern zu können. Unter Module finden Sie diese beiden Programmteile zum Starten.
 

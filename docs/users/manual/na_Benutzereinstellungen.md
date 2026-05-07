@@ -3,13 +3,15 @@
 
 In diesem Kapitel beschäftigen wir uns "nicht" mit den systemübergreifend für einzelne Anwendungen zu definierenden Parametern, wie z.B. Anwendungsverfügbarkeit oder Zugriffsrechten - diese werden im [Administration](oa_Admin.md) behandelt!
 
-Thema dieses Kapitels sind stattdessen Systemeinstellungen, die sich auf den einzelnen Benutzer beziehen und die jeder {{ branding.title }}-Benutzer auch nur für sich selbst definieren kann. Diese Parameter sind standardmäßig auf gängige Werte voreingestellt, sodass {{ branding.title }} auch ohne Veränderung von hier beschriebenen Einstellungen normal lauffähig ist. Dennoch sollten Sie das Kapitel durcharbeiten, denn hiermit können Sie sich die tägliche Arbeit erleichtern und bspw. Rou{{ branding.title }}prozesse so anpassen, wie Sie es möchten und vielleicht auch von anderen Systemen gewöhnt sind.
+Thema dieses Kapitels sind stattdessen Systemeinstellungen, die sich auf den einzelnen Benutzer beziehen und die jeder {{ branding.title }}-Benutzer auch nur für sich selbst definieren kann. Diese Parameter sind standardmäßig auf gängige Werte voreingestellt, sodass {{ branding.title }} auch ohne Veränderung von hier beschriebenen Einstellungen normal lauffähig ist. Dennoch sollten Sie das Kapitel durcharbeiten, denn hiermit können Sie sich die tägliche Arbeit erleichtern und bspw. Routineprozesse so anpassen, wie Sie es möchten und vielleicht auch von anderen Systemen gewöhnt sind.
 
 Das zugehörige Programmmenü erreichen Sie nicht wie gewöhnlich über den Reiter {{ branding.title }}, sondern über einen Klick (aus jedem beliebigen Programmteil erreichbar) auf die Anzeige des eingeloggten Benutzers (Benutzer: Nachname, Vorname) rechts oben vor dem Abmelden-Knopf. Beim Anklicken erhalten Sie ein Menü mit den Einträgen Profil bearbeiten, Einstellungen, Passwort ändern und Benachrichtigungen erlauben.
 
 <!-- SCREENSHOT -->
 ![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_desktop }}Benutzereinstellungen/1_benutzereinstellungen_link_light.png#only-light){.desktop-img}
 ![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_desktop }}Benutzereinstellungen/1_benutzereinstellungen_link_dark.png#only-dark){.desktop-img}
+![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_tablet }}Benutzereinstellungen/1_benutzereinstellungen_link_light.png#only-light){.tablet-img}
+![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_tablet }}Benutzereinstellungen/1_benutzereinstellungen_link_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_mobile }}Benutzereinstellungen/1_benutzereinstellungen_link_light.png#only-light){.mobile-img}
 ![Abbildung: Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.]({{ img_url_mobile }}Benutzereinstellungen/1_benutzereinstellungen_link_dark.png#only-dark){.mobile-img}
 
@@ -18,6 +20,8 @@ Das zugehörige Programmmenü erreichen Sie nicht wie gewöhnlich über den Reit
 <!-- SCREENSHOT -->
 ![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_desktop }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_light.png#only-light){.desktop-img}
 ![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_desktop }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_dark.png#only-dark){.desktop-img}
+![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_tablet }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_light.png#only-light){.tablet-img}
+![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_tablet }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_mobile }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_light.png#only-light){.mobile-img}
 ![Abbildung: Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.]({{ img_url_mobile }}Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen_dark.png#only-dark){.mobile-img}
 
@@ -30,6 +34,8 @@ Wenn Sie den Button Admin-Modus anklicken, werden zur Kontrolle alle verfügbare
 <!-- SCREENSHOT -->
 ![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_desktop }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_light.png#only-light){.desktop-img}
 ![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_desktop }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_dark.png#only-dark){.desktop-img}
+![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_tablet }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_light.png#only-light){.tablet-img}
+![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_tablet }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_mobile }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_light.png#only-light){.mobile-img}
 ![Abbildung: Die rote Schrift und das Schloss signalisieren den Admin-Modus.]({{ img_url_mobile }}Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus_dark.png#only-dark){.mobile-img}
 
@@ -67,6 +73,8 @@ In Ihren persönlichen Profileinstellungen (die Sie auch über den "kurzen Weg",
 <!-- SCREENSHOT -->
 ![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_desktop }}Benutzereinstellungen/4_benutzereinstellungen_profil_light.png#only-light){.desktop-img}
 ![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_desktop }}Benutzereinstellungen/4_benutzereinstellungen_profil_dark.png#only-dark){.desktop-img}
+![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_tablet }}Benutzereinstellungen/4_benutzereinstellungen_profil_light.png#only-light){.tablet-img}
+![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_tablet }}Benutzereinstellungen/4_benutzereinstellungen_profil_dark.png#only-dark){.tablet-img}
 ![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_mobile }}Benutzereinstellungen/4_benutzereinstellungen_profil_light.png#only-light){.mobile-img}
 ![Abbildung: Unter "Mein Profil" können persönliche Adressdaten gespeichert werden.]({{ img_url_mobile }}Benutzereinstellungen/4_benutzereinstellungen_profil_dark.png#only-dark){.mobile-img}
 
@@ -80,9 +88,10 @@ Gehen wir nun weiter. Links im Bearbeitungsfenster sehen Sie unter Anwendungen a
 <!-- SCREENSHOT -->
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_desktop }}Benutzereinstellungen/5_benutzereinstellungen_activesync_light.png#only-light){.desktop-img}
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_desktop }}Benutzereinstellungen/5_benutzereinstellungen_activesync_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_tablet }}Benutzereinstellungen/5_benutzereinstellungen_activesync_light.png#only-light){.tablet-img}
+![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_tablet }}Benutzereinstellungen/5_benutzereinstellungen_activesync_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_mobile }}Benutzereinstellungen/5_benutzereinstellungen_activesync_light.png#only-light){.mobile-img}
 ![Abbildung: Die Einstellungen zur Synchronisation mobiler Geräte]({{ img_url_mobile }}Benutzereinstellungen/5_benutzereinstellungen_activesync_dark.png#only-dark){.mobile-img}
-
 
 Die hier vorgenommenen Einstellungen gelten für das Synchronisieren Ihres {{ branding.title }}-Datenbestandes mit Ihrem Mobilfunkgerät. Sie können ein Standard-Adressbuch, einen Standard-Kalender sowie eine Standard-Aufgabenliste einstellen, mit denen sich {{ branding.title }} mit Ihrem Mobilfunkgerät über die ActiveSync-Schnittstelle synchronisiert, d.h. Ihr Mobilfunkgerät überträgt dort eingegebene Daten an die hier angegebenen Standardanwendungen.
 
@@ -93,6 +102,8 @@ Die hier vorgenommenen Einstellungen gelten für das Synchronisieren Ihres {{ br
 <!-- SCREENSHOT -->
 ![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_desktop }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_light.png#only-light){.desktop-img}
 ![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_desktop }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_dark.png#only-dark){.desktop-img}
+![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_tablet }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_light.png#only-light){.tablet-img}
+![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_tablet }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_mobile }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_light.png#only-light){.mobile-img}
 ![Abbildung: Die einzige Einstellung für die "Zeiterfassung" - zum Stundenzettel-Export]({{ img_url_mobile }}Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung_dark.png#only-dark){.mobile-img}
 
@@ -103,6 +114,8 @@ Die hier angebotene Einstellung (Standard (ts_default_ods)) dient der Zuweisung 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_desktop }}Benutzereinstellungen/7_benutzereinstellungen_inventar_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_desktop }}Benutzereinstellungen/7_benutzereinstellungen_inventar_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_tablet }}Benutzereinstellungen/7_benutzereinstellungen_inventar_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_tablet }}Benutzereinstellungen/7_benutzereinstellungen_inventar_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_mobile }}Benutzereinstellungen/7_benutzereinstellungen_inventar_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellung für die "Inventarisierung" - welche Inventarliste soll benutzt werden?]({{ img_url_mobile }}Benutzereinstellungen/7_benutzereinstellungen_inventar_dark.png#only-dark){.mobile-img}
 
@@ -117,6 +130,8 @@ In diesen Programmteilen können derzeit keine nutzerspezifischen Einstellungen 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_desktop }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_desktop }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_tablet }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_tablet }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_mobile }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellungen für die "Aufgaben"-Anwendung]({{ img_url_mobile }}Benutzereinstellungen/8_benutzereinstellungen_aufgaben_dark.png#only-dark){.mobile-img}
 
@@ -130,6 +145,8 @@ Unter Standard-Aufgabenliste ist die Aufgabenliste eingestellt, in welche neu an
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_desktop }}Benutzereinstellungen/9_benutzereinstellungen_email_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_desktop }}Benutzereinstellungen/9_benutzereinstellungen_email_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_tablet }}Benutzereinstellungen/9_benutzereinstellungen_email_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_tablet }}Benutzereinstellungen/9_benutzereinstellungen_email_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_mobile }}Benutzereinstellungen/9_benutzereinstellungen_email_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellungen für den E-Mail-Client.]({{ img_url_mobile }}Benutzereinstellungen/9_benutzereinstellungen_email_dark.png#only-dark){.mobile-img}
 
@@ -149,6 +166,8 @@ Löschen bestätigen steht standardmäßig auf ja und das bedeutet, dass Ihnen v
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_desktop }}Benutzereinstellungen/10_benutzereinstellungen_crm_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_desktop }}Benutzereinstellungen/10_benutzereinstellungen_crm_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_tablet }}Benutzereinstellungen/10_benutzereinstellungen_crm_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_tablet }}Benutzereinstellungen/10_benutzereinstellungen_crm_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_mobile }}Benutzereinstellungen/10_benutzereinstellungen_crm_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellungen für die "CRM"-Anwendung.]({{ img_url_mobile }}Benutzereinstellungen/10_benutzereinstellungen_crm_dark.png#only-dark){.mobile-img}
 
@@ -161,6 +180,8 @@ Sende Benachrichtigungen über eigene Änderungen steht standardmäßig auf ja; 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_desktop }}Benutzereinstellungen/11_benutzereinstellungen_kalender_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_desktop }}Benutzereinstellungen/11_benutzereinstellungen_kalender_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_tablet }}Benutzereinstellungen/11_benutzereinstellungen_kalender_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_tablet }}Benutzereinstellungen/11_benutzereinstellungen_kalender_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_mobile }}Benutzereinstellungen/11_benutzereinstellungen_kalender_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellungen für den "Kalender".]({{ img_url_mobile }}Benutzereinstellungen/11_benutzereinstellungen_kalender_dark.png#only-dark){.mobile-img}
 
@@ -191,6 +212,8 @@ In diesen Programmteilen können derzeit keine nutzerspezifischen Einstellungen 
 <!-- SCREENSHOT -->
 ![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_desktop }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_light.png#only-light){.desktop-img}
 ![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_desktop }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_tablet }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_light.png#only-light){.tablet-img}
+![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_tablet }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_mobile }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_light.png#only-light){.mobile-img}
 ![Abbildung: Die Nutzereinstellungen für das "Adressbuch".]({{ img_url_mobile }}Benutzereinstellungen/12_benutzereinstellungen_adressbuch_dark.png#only-dark){.mobile-img}
 
