@@ -115,7 +115,7 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_ForeignRe
         foreach ($values as $value) {
             $correlationName = Tinebase_Record_Abstract::generateUID(30);
             $_select->joinLeft(
-            /* table  */ array($correlationName => $db->table_prefix . 'addressbook_list_members'),
+            /* table  */ array($correlationName => $_backend->getTablePrefix() . 'addressbook_list_members'),
                 /* on     */ $db->quoteIdentifier($correlationName . '.' . $myField)
                 . ' = ' . $db->quoteIdentifier($_backend->getTableName() . '.id') .
                 ($notOperator && null !== $value ? ' AND ' . $db->quoteInto(
