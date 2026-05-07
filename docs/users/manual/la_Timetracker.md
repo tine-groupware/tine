@@ -30,6 +30,8 @@ Starten Sie das Modul durch Anklicken von Zeitkonten unter Module. Wir wollen ei
 <!-- SCREENSHOT -->
 ![Abbildung: Zeitkonto anlegen]({{ img_url_desktop }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Zeitkonto anlegen]({{ img_url_desktop }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Zeitkonto anlegen]({{ img_url_tablet }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_light.png#only-light){.tablet-img}
+![Abbildung: Zeitkonto anlegen]({{ img_url_tablet }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Zeitkonto anlegen]({{ img_url_mobile }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Zeitkonto anlegen]({{ img_url_mobile }}Zeiterfassung/2_zeiterfassung_zeitkonto_neu_dark.png#only-dark){.mobile-img}
 
@@ -58,6 +60,8 @@ Der zweite Reiter, Zugang, regelt die Zugangsberechtigungen für das anzulegende
 <!-- SCREENSHOT -->
 ![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_desktop }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_light.png#only-light){.desktop-img}
 ![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_desktop }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_tablet }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_light.png#only-light){.tablet-img}
+![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_tablet }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_mobile }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_light.png#only-light){.mobile-img}
 ![Abbildung: Die Vergabe von Benutzerrechten für ein Zeitkonto]({{ img_url_mobile }}Zeiterfassung/3_zeiterfassung_zeitkonto_rechte_dark.png#only-dark){.mobile-img}
 
@@ -95,6 +99,8 @@ Ein Stundenzettel ist, in Anlehnung an diesen Begriff aus der "alten" Produktion
 <!-- SCREENSHOT -->
 ![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_desktop }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_desktop }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_tablet }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_light.png#only-light){.tablet-img}
+![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_tablet }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_mobile }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Einen Stundenzettel zur Zeiterfassung erstellen]({{ img_url_mobile }}Zeiterfassung/4_zeiterfassung_stundenzettel_neu_dark.png#only-dark){.mobile-img}
 
