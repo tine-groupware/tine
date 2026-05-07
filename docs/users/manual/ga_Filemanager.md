@@ -48,7 +48,7 @@ Schreiben Sie "Vorlagen" in das angebotene Feld, wenn es diesen Ordner nicht sch
 
 Sie sollten jetzt als Unterordner von Gemeinsame Ordner einen Ordner Vorlagen haben. Übrigens lassen sich – wie im Dateisystem auf Ihrem PC – Ordner auch per Drag&Drop verschieben.
 
-Nun geben wir diesem Ordner die passenden Berechtigungen, sodass alle Mitarbeiter des Unternehmens die Vorlagen aufrufen, bearbeiten und ausdrucken können. Letzteres umfasst i.d.R. auch das Erzeugen von PDF-Dokumenten, die dann, z.B. auftrags- oder kundenbezogen, an anderen Stellen in {{ branding.title }} wieder abgelegt werden. Welche Berechtigungen darüber hinaus erteilt werden, erfordert hier, wie überall in {{ branding.title }} beim Anlegen von sog. Containern, grundsätzliche Überlegungen. Dazu mehr in [Administration - Container](oa_Administration.md/#container).
+Nun geben wir diesem Ordner die passenden Berechtigungen, sodass alle Mitarbeiter des Unternehmens die Vorlagen aufrufen, bearbeiten und ausdrucken können. Letzteres umfasst i.d.R. auch das Erzeugen von PDF-Dokumenten, die dann, z.B. auftrags- oder kundenbezogen, an anderen Stellen in {{ branding.title }} wieder abgelegt werden. Welche Berechtigungen darüber hinaus erteilt werden, erfordert hier, wie überall in {{ branding.title }} beim Anlegen von sog. Containern, grundsätzliche Überlegungen. Dazu mehr in [Administration - Container](oa_Admin.md/#container).
 
 Klicken Sie nun den eben erzeugten Ordner wieder mit der rechten Maustaste an – das Kontextmenü ist jetzt, da Sie in diesem Bereich Administratorrechte haben, wesentlich umfangreicher:
 
@@ -68,7 +68,7 @@ Ordner löschen und Ordner umbenennen sind selbsterklärend; klicken Sie daher j
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_mobile }}Dateimanager/5_dateimanager_ordner_rechte_light.png#only-light){.mobile-img}
 ![Abbildung: Vergeben von Berechtigungen für Ordner]({{ img_url_mobile }}Dateimanager/5_dateimanager_ordner_rechte_dark.png#only-dark){.mobile-img}
 
-Fahren Sie mit der Maus der Reihe nach über die einzelnen Felder. Im Kontext sehen Sie dabei kurze Definitionen der Berechtigungen. Sollte Ihnen jetzt nicht absolut klar sein, was die einzelnen Berechtigungen bedeuten, schlagen Sie dazu bitte in [Administration - Container](oa_Administration.md/#container) nach.
+Fahren Sie mit der Maus der Reihe nach über die einzelnen Felder. Im Kontext sehen Sie dabei kurze Definitionen der Berechtigungen. Sollte Ihnen jetzt nicht absolut klar sein, was die einzelnen Berechtigungen bedeuten, schlagen Sie dazu bitte in [Administration - Container](oa_Admin.md/#container) nach.
 
 An dieser Stelle müssen Sie sich zunächst entscheiden, wer diesen Ordner überhaupt sehen soll. Das werden wohl Benutzergruppen sein (weshalb die Gruppenauswahl auch als Standard angeboten wird), Sie können aber auch nur einzelne Benutzer zuweisen. Dazu würden Sie jetzt oben am linken Rand das Pulldown-Menü mit den drei schwarzen Köpfen betätigen und die Auswahl auf Benutzersuche stellen.
 
@@ -119,4 +119,4 @@ Natürlich stehen auch in dieser Anwendung bei vielen Dateieinträgen Suchfilter
 
 ## Anti-Virus, Vorschau & Only Office
 
-Sollten Sie Ihre {{ branding.title }}-Lizenz durch den OnlyOffice-Integrator, den Preview-Service und/oder Anti-Virus erweitert haben, stehen diese unter anderem auch im Dateimanager zur Verfügung. Was diese sind und wie Sie von den Erweiterungen Gebrauch machen können, entnehmen Sie den speziellen Kapiteln [Only Office Integration](ta_OnlyOffice.md), [Preview Service](ra_PreviewService.md) und [Anti-Viren Service](qa_AntiVirus.md).
+Sollten Sie Ihre {{ branding.title }}-Lizenz durch den OnlyOffice-Integrator, den Preview-Service und/oder Anti-Virus erweitert haben, stehen diese unter anderem auch im Dateimanager zur Verfügung. Was diese sind und wie Sie von den Erweiterungen Gebrauch machen können, entnehmen Sie den speziellen Kapiteln [Only Office Integration](ta_OnlyOfficeIntegrator.md), [Preview Service](ra_PreviewService.md) und [Anti-Viren Service](qa_AntiVirus.md).

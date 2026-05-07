@@ -40,7 +40,7 @@ Darunter folgt das Textfeld Beschreibung. Bevor Sie hier etwas eingeben, sehen S
 
 Tragen Sie also in Beschreibung nur solche Informationen ein, die nicht bereits durch andere Felder vorgesehen sind.
 
-Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pulldown Gespeichert in. Hier wählen Sie die Inventarliste, in der der Gegenstand landen soll. Je nach Berechtigungen finden Sie hier Inventarlisten anderer Benutzer sowie gemeinsame Inventarlisten. Sollten Sie hier nicht die Inventarlisten finden, die Sie suchen, schauen Sie sich die vorhandenen Inventarlisten und die zugehörigen Rechtevergaben in der Anwendung Admin an ([Administration - Container](oa_Administration.md/#container)).
+Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pulldown Gespeichert in. Hier wählen Sie die Inventarliste, in der der Gegenstand landen soll. Je nach Berechtigungen finden Sie hier Inventarlisten anderer Benutzer sowie gemeinsame Inventarlisten. Sollten Sie hier nicht die Inventarlisten finden, die Sie suchen, schauen Sie sich die vorhandenen Inventarlisten und die zugehörigen Rechtevergaben in der Anwendung Admin an ([Administration - Container](oa_Admin.md/#container)).
 
 Neben den bereits aus anderen Anwendungen bekannten Reitern  Historie, Anhänge und Verknüpfungen ([Allgemeine Hinweise zur Bedienung](ca_StandardBedienhinweise.md)) finden Sie hier noch einen Reiter Buchhaltung.
 
@@ -69,7 +69,7 @@ Exportieren als CSV; erzeugt eine CSV-Textdatei, um z.B. die Tabelle in neueren 
 
 Exportieren als...; öffnet ein Fenster mit einem weiteren Pulldown. In der Standardausführung von {{ branding.title }} finden Sie hier ebenfalls das ODS-Format sowie das XLS-Format (MS Excel bis Version 2000/XP). Der Menüpunkt ist auch zum Ausbau für kundenspezifische Sonderformate vorgesehen.
 
-Gegenstände importieren: Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Adressbuch.md/#kontakte-importieren)).
+Gegenstände importieren: Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster Datei und Format wählen unter dem Link Beispieldatei herunterladen finden (vgl. [Adressverwaltung - Kontakte importieren](ba_Addressbook.md/#kontakte-importieren)).
 
 <!-- SCREENSHOT -->
 ![Abbildung: Inventargegenstände importieren]({{ img_url_desktop }}Inventarisierung/5_inventar_import_light.png#only-light){.desktop-img}
