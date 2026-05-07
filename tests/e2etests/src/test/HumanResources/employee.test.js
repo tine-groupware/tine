@@ -268,9 +268,18 @@ describe('employee', () => {
     describe('edit contract', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
-            await new Promise(r => setTimeout(r, 1000));
-            await page.waitForSelector('.x-grid3-col-account_id');
-            await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
+            await page.waitForNetworkIdle();
+            await page.waitForFunction(() => {
+                return [...document.querySelectorAll('.x-grid3-col-account_id')]
+                    .some(el => el.innerText.includes('test'));
+            });
+
+            await page.evaluate(() => {
+                const el = [...document.querySelectorAll('.x-grid3-col-account_id')]
+                    .find(el => el.innerText.includes('test'));
+
+                el.click();
+            });
             await new Promise(r => setTimeout(r, 1000));
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await new Promise(r => setTimeout(r, 3000));
