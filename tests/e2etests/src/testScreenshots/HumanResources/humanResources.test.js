@@ -20,8 +20,8 @@ describe('MainScreen', () => {
 describe.skip('employee', () => {
     let newPage;
     test('open EditDialog', async () => {
-        await expectPuppeteer(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
-        var [button] = await lib.getElement('button', page, 'Mitarbeiter hinzufügen');
+        await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeitende'});
+        var [button] = await lib.getElement('button', page, 'Mitarbeitende hinzufügen');
         await button.click();
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
@@ -53,8 +53,8 @@ describe.skip('employee', () => {
     });
 
     test('add Tag', async () => {
-        await expectPuppeteer(newPage).toClick('span', {text: 'Mitarbeiter'});
-        //await new Promise(r => setTimeout(r, 1000));
+        await expect(newPage).toClick('span', {text: 'Mitarbeitende'});
+        //await newPage.waitForTimeout(1000);
         let arrowtrigger = await newPage.$$('.x-form-arrow-trigger');
         arrowtrigger.forEach(async function (element, index) {
             //console.log(index + ' \n ' + element);
