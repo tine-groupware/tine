@@ -20,6 +20,8 @@ Die Ansicht der linken Seite dieses Programmteils unterscheidet sich von den kla
 <!-- SCREENSHOT -->
 ![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_light.png#only-light){.desktop-img}
 ![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_desktop }}Sales/1_sales_uebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_tablet }}Sales/1_sales_uebersicht_light.png#only-light){.tablet-img}
+![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_tablet }}Sales/1_sales_uebersicht_dark.png#only-dark){.tablet-img}
 ![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_light.png#only-light){.mobile-img}
 ![Abbildung: Sales-Anwendung als Gesamtansicht]({{ img_url_mobile }}Sales/1_sales_uebersicht_dark.png#only-dark){.mobile-img}
 
@@ -29,6 +31,8 @@ Auch daran erkennen Sie, dass es sich hier eigentlich um ein Tool zur Ressourcen
 <!-- SCREENSHOT -->
 ![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_light.png#only-light){.desktop-img}
 ![Abbildung: Module der Sales-Anwendung]({{ img_url_desktop }}Sales/2_sales_module_dark.png#only-dark){.desktop-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_tablet }}Sales/2_sales_module_light.png#only-light){.tablet-img}
+![Abbildung: Module der Sales-Anwendung]({{ img_url_tablet }}Sales/2_sales_module_dark.png#only-dark){.tablet-img}
 ![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_light.png#only-light){.mobile-img}
 ![Abbildung: Module der Sales-Anwendung]({{ img_url_mobile }}Sales/2_sales_module_dark.png#only-dark){.mobile-img}
 
@@ -48,6 +52,8 @@ Sollten im System bisher keine Produkte gespeichert sein, fügen wir jetzt eines
 <!-- SCREENSHOT -->
 ![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Neues Produkt anlegen]({{ img_url_desktop }}Sales/3_sales_produkt_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_tablet }}Sales/3_sales_produkt_neu_light.png#only-light){.tablet-img}
+![Abbildung: Neues Produkt anlegen]({{ img_url_tablet }}Sales/3_sales_produkt_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Neues Produkt anlegen]({{ img_url_mobile }}Sales/3_sales_produkt_neu_dark.png#only-dark){.mobile-img}
 
@@ -94,6 +100,8 @@ Klicken Sie im Bearbeitungsmenü Kunde hinzufügen an. Unter dem Reiter Kunde fi
 <!-- SCREENSHOT -->
 ![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Kunden hinzufügen]({{ img_url_desktop }}Sales/4_sales_kunden_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_tablet }}Sales/4_sales_kunden_neu_light.png#only-light){.tablet-img}
+![Abbildung: Kunden hinzufügen]({{ img_url_tablet }}Sales/4_sales_kunden_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Kunden hinzufügen]({{ img_url_mobile }}Sales/4_sales_kunden_neu_dark.png#only-dark){.mobile-img}
 
@@ -168,6 +176,8 @@ Klicken Sie Vertrag hinzufügen, finden Sie unter dem Reiter Vertrag eine Maske 
 <!-- SCREENSHOT -->
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_desktop }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_tablet }}Sales/5_sales_vertrag_neu_light.png#only-light){.tablet-img}
+![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_tablet }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Neuen Vertrag hinzufügen]({{ img_url_mobile }}Sales/5_sales_vertrag_neu_dark.png#only-dark){.mobile-img}
 
@@ -193,6 +203,8 @@ Klicken Sie nun den Reiter Produkte an.
 <!-- SCREENSHOT -->
 ![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_light.png#only-light){.desktop-img}
 ![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_desktop }}Sales/6_sales_vertrag_neu_produkte_dark.png#only-dark){.desktop-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_tablet }}Sales/6_sales_vertrag_neu_produkte_light.png#only-light){.tablet-img}
+![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_tablet }}Sales/6_sales_vertrag_neu_produkte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_light.png#only-light){.mobile-img}
 ![Abbildung: Neuen Vertrag hinzufügen – hier für Produkte]({{ img_url_mobile }}Sales/6_sales_vertrag_neu_produkte_dark.png#only-dark){.mobile-img}
 

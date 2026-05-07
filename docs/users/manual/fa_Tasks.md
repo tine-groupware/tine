@@ -5,6 +5,8 @@ Mit der Anwendung Aufgaben weisen Sie sich selbst oder einem beliebigen anderen 
 <!-- SCREENSHOT -->
 ![Abbildung: Tabelle mit Aufgaben]({{ img_url_desktop }}Aufgaben/1_aufgaben_uebersicht_light.png#only-light){.desktop-img}
 ![Abbildung: Tabelle mit Aufgaben]({{ img_url_desktop }}Aufgaben/1_aufgaben_uebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Tabelle mit Aufgaben]({{ img_url_tablet }}Aufgaben/1_aufgaben_uebersicht_light.png#only-light){.tablet-img}
+![Abbildung: Tabelle mit Aufgaben]({{ img_url_tablet }}Aufgaben/1_aufgaben_uebersicht_dark.png#only-dark){.tablet-img}
 ![Abbildung: Tabelle mit Aufgaben]({{ img_url_mobile }}Aufgaben/1_aufgaben_uebersicht_light.png#only-light){.mobile-img}
 ![Abbildung: Tabelle mit Aufgaben]({{ img_url_mobile }}Aufgaben/1_aufgaben_uebersicht_dark.png#only-dark){.mobile-img}
 
@@ -40,6 +42,8 @@ Klicken Sie im Bearbeitungsmenü ganz links den Button Aufgabe hinzufügen an:
 <!-- SCREENSHOT -->
 ![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_desktop }}Aufgaben/2_aufgaben_neue_aufgabe_light.png#only-light){.desktop-img}
 ![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_desktop }}Aufgaben/2_aufgaben_neue_aufgabe_dark.png#only-dark){.desktop-img}
+![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_tablet }}Aufgaben/2_aufgaben_neue_aufgabe_light.png#only-light){.tablet-img}
+![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_tablet }}Aufgaben/2_aufgaben_neue_aufgabe_dark.png#only-dark){.tablet-img}
 ![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_mobile }}Aufgaben/2_aufgaben_neue_aufgabe_light.png#only-light){.mobile-img}
 ![Abbildung: Anlegen einer neuen Aufgabe]({{ img_url_mobile }}Aufgaben/2_aufgaben_neue_aufgabe_dark.png#only-dark){.mobile-img}
 
@@ -59,6 +63,8 @@ Neben den bereits von anderen Anwendungen bekannten und in [Allgemeine Hinweise 
 <!-- SCREENSHOT -->
 ![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_desktop }}Aufgaben/3_aufgaben_alarm_light.png#only-light){.desktop-img}
 ![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_desktop }}Aufgaben/3_aufgaben_alarm_dark.png#only-dark){.desktop-img}
+![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_tablet }}Aufgaben/3_aufgaben_alarm_light.png#only-light){.tablet-img}
+![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_tablet }}Aufgaben/3_aufgaben_alarm_dark.png#only-dark){.tablet-img}
 ![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_mobile }}Aufgaben/3_aufgaben_alarm_light.png#only-light){.mobile-img}
 ![Abbildung: Alarm zur Erfüllung einer Aufgabe]({{ img_url_mobile }}Aufgaben/3_aufgaben_alarm_dark.png#only-dark){.mobile-img}
 

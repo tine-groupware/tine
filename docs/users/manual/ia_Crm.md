@@ -32,6 +32,8 @@ Die Punkte im Bearbeitungsmenü besprechen wir im Folgenden ausführlich.
 <!-- SCREENSHOT -->
 ![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_light.png#only-light){.desktop-img}
 ![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_desktop }}Crm/1_crm_leadtabellen_dark.png#only-dark){.desktop-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_tablet }}Crm/1_crm_leadtabellen_light.png#only-light){.tablet-img}
+![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_tablet }}Crm/1_crm_leadtabellen_dark.png#only-dark){.tablet-img}
 ![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_light.png#only-light){.mobile-img}
 ![Abbildung: CRM mit Lead-Tabelle und Diagrammen]({{ img_url_mobile }}Crm/1_crm_leadtabellen_dark.png#only-dark){.mobile-img}
 
@@ -44,6 +46,8 @@ Klicken Sie oben links im Bearbeitungsmenü auf Lead hinzufügen.
 <!-- SCREENSHOT -->
 ![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_light.png#only-light){.desktop-img}
 ![Abbildung: Anlegen eines neuen Leads]({{ img_url_desktop }}Crm/2_crm_lead_neu_dark.png#only-dark){.desktop-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_tablet }}Crm/2_crm_lead_neu_light.png#only-light){.tablet-img}
+![Abbildung: Anlegen eines neuen Leads]({{ img_url_tablet }}Crm/2_crm_lead_neu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_light.png#only-light){.mobile-img}
 ![Abbildung: Anlegen eines neuen Leads]({{ img_url_mobile }}Crm/2_crm_lead_neu_dark.png#only-dark){.mobile-img}
 
@@ -59,6 +63,8 @@ Schauen Sie sich nun den direkt darunter befindlichen Tabellenkopf an: Name, Ans
 <!-- SCREENSHOT -->
 ![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_light.png#only-light){.desktop-img}
 ![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_desktop }}Crm/3_crm_lead_rolle_dark.png#only-dark){.desktop-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_tablet }}Crm/3_crm_lead_rolle_light.png#only-light){.tablet-img}
+![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_tablet }}Crm/3_crm_lead_rolle_dark.png#only-dark){.tablet-img}
 ![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_light.png#only-light){.mobile-img}
 ![Abbildung: Rolle in einem Lead zuweisen]({{ img_url_mobile }}Crm/3_crm_lead_rolle_dark.png#only-dark){.mobile-img}
 
@@ -71,6 +77,8 @@ Kommen wir nun zu einigen charakteristischen Eigenschaften eines Leads. Die drei
 <!-- SCREENSHOT -->
 ![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_light.png#only-light){.desktop-img}
 ![Abbildung: Status eines Leads]({{ img_url_desktop }}Crm/4_crm_lead_status_dark.png#only-dark){.desktop-img}
+![Abbildung: Status eines Leads]({{ img_url_tablet }}Crm/4_crm_lead_status_light.png#only-light){.tablet-img}
+![Abbildung: Status eines Leads]({{ img_url_tablet }}Crm/4_crm_lead_status_dark.png#only-dark){.tablet-img}
 ![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_light.png#only-light){.mobile-img}
 ![Abbildung: Status eines Leads]({{ img_url_mobile }}Crm/4_crm_lead_status_dark.png#only-dark){.mobile-img}
 
@@ -100,6 +108,8 @@ Außerdem kann man einem Lead mit dem Reiter Produkte auch Produkte oder Dienstl
 <!-- SCREENSHOT -->
 ![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_light.png#only-light){.desktop-img}
 ![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_desktop }}Crm/5_crm_lead_produkte_zugewiesen_dark.png#only-dark){.desktop-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_tablet }}Crm/5_crm_lead_produkte_zugewiesen_light.png#only-light){.tablet-img}
+![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_tablet }}Crm/5_crm_lead_produkte_zugewiesen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_light.png#only-light){.mobile-img}
 ![Abbildung: Mit einem Lead verknüpfte Produkte]({{ img_url_mobile }}Crm/5_crm_lead_produkte_zugewiesen_dark.png#only-dark){.mobile-img}
 
@@ -108,6 +118,8 @@ Die Produkte müssen in der Produktverwaltung angelegt sein, ehe Sie sie hier ü
 <!-- SCREENSHOT -->
 ![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_light.png#only-light){.desktop-img}
 ![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_desktop }}Crm/6_crm_lead_produkte_zuweisen_dark.png#only-dark){.desktop-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_tablet }}Crm/6_crm_lead_produkte_zuweisen_light.png#only-light){.tablet-img}
+![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_tablet }}Crm/6_crm_lead_produkte_zuweisen_dark.png#only-dark){.tablet-img}
 ![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_light.png#only-light){.mobile-img}
 ![Abbildung: Lead mit Produkten verknüpfen]({{ img_url_mobile }}Crm/6_crm_lead_produkte_zuweisen_dark.png#only-dark){.mobile-img}
 

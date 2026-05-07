@@ -6,11 +6,12 @@
 <!-- SCREENSHOT -->
 ![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_light.png#only-light){.desktop-img}
 ![Abbildung: Die Dienstplanung]({{ img_url_desktop }}Dienstplanung/1_dienstplanung_overview_dark.png#only-dark){.desktop-img}
+![Abbildung: Die Dienstplanung]({{ img_url_tablet }}Dienstplanung/1_dienstplanung_overview_light.png#only-light){.tablet-img}
+![Abbildung: Die Dienstplanung]({{ img_url_tablet }}Dienstplanung/1_dienstplanung_overview_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_light.png#only-light){.mobile-img}
 ![Abbildung: Die Dienstplanung]({{ img_url_mobile }}Dienstplanung/1_dienstplanung_overview_dark.png#only-dark){.mobile-img}
 
 Es gibt jedoch einige Ergänzungen, die eingestellt werden müssen, um dies zu ermöglichen. Diese sollen im folgenden Kapitel erläutert werden.
-
 
 ## Vorbereitung
 
@@ -19,6 +20,8 @@ Mit der Anwendung Dienstplanung wird die Kalender- und Adressbuch-Anwendung erwe
 <!-- SCREENSHOT -->
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_light.png#only-light){.desktop-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/4_dienstplanung_terminarten_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/4_dienstplanung_terminarten_light.png#only-light){.tablet-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/4_dienstplanung_terminarten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_light.png#only-light){.mobile-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/4_dienstplanung_terminarten_dark.png#only-dark){.mobile-img}
 
@@ -27,6 +30,8 @@ Des weiteren gibt es nun auch den Reiter Dienstplanung. Hier kann eingestellt we
 <!-- SCREENSHOT -->
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light.png#only-light){.desktop-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light.png#only-light){.tablet-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_light.png#only-light){.mobile-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/5_dienstplanung_termineinstellungen_dienstplanungsreiter_dark.png#only-dark){.mobile-img}
 
@@ -35,6 +40,8 @@ In der Adressbuch Anwendung gibt es ebenso zwei kleine Änderungen. Zum einen gi
 <!-- SCREENSHOT -->
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light.png#only-light){.desktop-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_desktop }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark.png#only-dark){.desktop-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light.png#only-light){.tablet-img}
+![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_tablet }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_light.png#only-light){.mobile-img}
 ![Abbildung: Terminarten in der Termin Einstellung]({{ img_url_mobile }}Dienstplanung/6_dienstplanung_gruppen_dienstplanungsreiter_dark.png#only-dark){.mobile-img}
 
@@ -45,7 +52,6 @@ Dies führt uns direkt zur zweiten Änderung. Im Modul Kontakte in den Einstellu
 Kommen wir zurück zur Anwendung Dienstplanung.
 Über die Filter im linken, oberen Bereich lassen sich die Termine feiner filtern. Dies ist besonders nützlich, wenn sehr viele Termine zur Auswahl stehen. So können Sie zum Beispiel nur Termine für einen bestimmten Standort oder Zeitraum anzeigen lassen.
 Im oberen Bereich der Dienstplanung finden Sie die Benutzer, die eingeplant werden können. Damit ein Benutzer zu einer Rolle zugewiesen werden kann, muss dieser zunächst einer entsprechenden Gruppe zugeordnet werden. Die Gruppe wiederum muss mit einer entsprechenden Dienstplanungsrolle verknüpft sein. Diese lässt sich sich im Gruppen-Bearbeitungsdialog unter dem Reiter Dienstplanung auswählen.
-
 
 ## Die Terminansicht
 
@@ -61,9 +67,10 @@ Durch einen Klick auf einzelne Felder oder den Spaltenkopf einer Rolle werden di
 <!-- SCREENSHOT -->
 ![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_light.png#only-light){.desktop-img}
 ![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_desktop }}Dienstplanung/2_dienstplanung_filter_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_tablet }}Dienstplanung/2_dienstplanung_filter_light.png#only-light){.tablet-img}
+![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_tablet }}Dienstplanung/2_dienstplanung_filter_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_light.png#only-light){.mobile-img}
 ![Abbildung: Eine Unterfilterung nach Küstern]({{ img_url_mobile }}Dienstplanung/2_dienstplanung_filter_dark.png#only-dark){.mobile-img}
-
 
 ## Die Teilnehmeransicht
 
@@ -78,21 +85,20 @@ Im oberen Bereich befinden sich die verfügbaren Teilnehmer in Form von Tokens. 
 <!-- SCREENSHOT -->
 ![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_light.png#only-light){.desktop-img}
 ![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_desktop }}Dienstplanung/3_dienstplanung_token_dark.png#only-dark){.desktop-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_tablet }}Dienstplanung/3_dienstplanung_token_light.png#only-light){.tablet-img}
+![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_tablet }}Dienstplanung/3_dienstplanung_token_dark.png#only-dark){.tablet-img}
 ![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_light.png#only-light){.mobile-img}
 ![Abbildung: Verschiedene Teilnehmer Token]({{ img_url_mobile }}Dienstplanung/3_dienstplanung_token_dark.png#only-dark){.mobile-img}
-
 
 ## Einen Termin planen
 
 Um einen Termin zu planen, führen Sie einfach eine Drag&Drop-Geste auf den Teilnehmer-Token aus, den Sie verplanen möchten. Sobald Sie den Token „halten“, werden alle Felder, die unzulässig sind, ausgegraut. Dies können auf der einen Seite Rollen sein, für die dieser Teilnehmer nicht zuständig ist, aber auch Termine, die außerhalb der Tage liegt, zu denen dieser Teilnehmer zur Verfügung steht.
 Ziehen Sie nun den Token in das gewünschte Feld.
 
-
 ### Lieblingspartner
 
 Ein Benutzer verfügt möglicherweise über Lieblingspartner. Dies wird durch ein Herzsymbol angezeigt. Wenn Sie den Token an diesem Herzsymbol greifen, werden nicht nur dieser Token, sondern auch die Token der Lieblingspartner gegriffen. Diese können dann gemeinsam geplant werden.
 Ob und welche Lieblingspartner ein Teilnehmer hat, kann im Adressbuch-Eintrag des Teilnehmers eingestellt werden. Wählen Sie hierfür im Kontakt-Bearbeitungsdialog den Reiter Dienstplanung aus.
-
 
 ### Zeitliche Beschränkung
 

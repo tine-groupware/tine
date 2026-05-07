@@ -71,7 +71,7 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {{ branding.title }}. In di
 
 Weitere Informationen, besonders die Installation von {{ branding.title }} betreffend, erhalten Sie auf {{ branding.weburl }}. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
-Als Softwareentwickler haben Sie über {{ branding.repo_url }} {{ branding.title }} den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
+Als Softwareentwickler haben Sie über {{ branding.repo_url }} den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
 ### Wie Sie dieses Buch lesen sollten
 

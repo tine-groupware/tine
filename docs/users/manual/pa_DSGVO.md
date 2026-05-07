@@ -12,6 +12,8 @@ Für die Datenherkunft ist ein Ablaufdatum auswählbar. Wenn dieses Datum übers
 <!-- SCREENSHOT -->
 ![Abbildung: DSGVO Datenherkunft]({{ img_url_desktop }}Dsgvo/1_dsgvo_datenherkunft_light.png#only-light){.desktop-img}
 ![Abbildung: DSGVO Datenherkunft]({{ img_url_desktop }}Dsgvo/1_dsgvo_datenherkunft_dark.png#only-dark){.desktop-img}
+![Abbildung: DSGVO Datenherkunft]({{ img_url_tablet }}Dsgvo/1_dsgvo_datenherkunft_light.png#only-light){.tablet-img}
+![Abbildung: DSGVO Datenherkunft]({{ img_url_tablet }}Dsgvo/1_dsgvo_datenherkunft_dark.png#only-dark){.tablet-img}
 ![Abbildung: DSGVO Datenherkunft]({{ img_url_mobile }}Dsgvo/1_dsgvo_datenherkunft_light.png#only-light){.mobile-img}
 ![Abbildung: DSGVO Datenherkunft]({{ img_url_mobile }}Dsgvo/1_dsgvo_datenherkunft_dark.png#only-dark){.mobile-img}
 
@@ -24,6 +26,8 @@ Verwendungszwecke können nur Widerrufen und nicht direkt gelöscht werden. Dies
 <!-- SCREENSHOT -->
 ![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_desktop }}Dsgvo/2_dsgvo_koontaktreiter_light.png#only-light){.desktop-img}
 ![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_desktop }}Dsgvo/2_dsgvo_koontaktreiter_dark.png#only-dark){.desktop-img}
+![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_tablet }}Dsgvo/2_dsgvo_koontaktreiter_light.png#only-light){.tablet-img}
+![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_tablet }}Dsgvo/2_dsgvo_koontaktreiter_dark.png#only-dark){.tablet-img}
 ![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_mobile }}Dsgvo/2_dsgvo_koontaktreiter_light.png#only-light){.mobile-img}
 ![Abbildung: DSGVO Reiter in Kontakten]({{ img_url_mobile }}Dsgvo/2_dsgvo_koontaktreiter_dark.png#only-dark){.mobile-img}
 
@@ -33,5 +37,7 @@ Diese Einträge sind im Kontakt unter dem Reiter Historie einsehbar.
 <!-- SCREENSHOT -->
 ![Abbildung: DSGVO Historie]({{ img_url_desktop }}Dsgvo/3_dsgvo_historie_light.png#only-light){.desktop-img}
 ![Abbildung: DSGVO Historie]({{ img_url_desktop }}Dsgvo/3_dsgvo_historie_dark.png#only-dark){.desktop-img}
+![Abbildung: DSGVO Historie]({{ img_url_tablet }}Dsgvo/3_dsgvo_historie_light.png#only-light){.tablet-img}
+![Abbildung: DSGVO Historie]({{ img_url_tablet }}Dsgvo/3_dsgvo_historie_dark.png#only-dark){.tablet-img}
 ![Abbildung: DSGVO Historie]({{ img_url_mobile }}Dsgvo/3_dsgvo_historie_light.png#only-light){.mobile-img}
 ![Abbildung: DSGVO Historie]({{ img_url_mobile }}Dsgvo/3_dsgvo_historie_dark.png#only-dark){.mobile-img}

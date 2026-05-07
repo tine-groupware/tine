@@ -17,6 +17,8 @@ Dieser muss in den Konfigurationseinstellungen in der {{ branding.title }} Anwen
 <!-- SCREENSHOT -->
 ![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_light.png#only-light){.desktop-img}
 ![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_desktop }}EAkte/1_eakte_dateimanager_dark.png#only-dark){.desktop-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_tablet }}EAkte/1_eakte_dateimanager_light.png#only-light){.tablet-img}
+![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_tablet }}EAkte/1_eakte_dateimanager_dark.png#only-dark){.tablet-img}
 ![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_light.png#only-light){.mobile-img}
 ![Abbildung: Einbindung eAkte in Dateimanager]({{ img_url_mobile }}EAkte/1_eakte_dateimanager_dark.png#only-dark){.mobile-img}
 
@@ -35,6 +37,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager direkt auf der eA
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Rahmenaktenplan]({{ img_url_desktop }}EAkte/2_eakte_rahmenaktenplan_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_tablet }}EAkte/2_eakte_rahmenaktenplan_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Rahmenaktenplan]({{ img_url_tablet }}EAkte/2_eakte_rahmenaktenplan_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Rahmenaktenplan]({{ img_url_mobile }}EAkte/2_eakte_rahmenaktenplan_dark.png#only-dark){.mobile-img}
 
@@ -54,6 +58,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Aktengruppe]({{ img_url_desktop }}EAkte/3_eakte_aktengruppe_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_tablet }}EAkte/3_eakte_aktengruppe_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Aktengruppe]({{ img_url_tablet }}EAkte/3_eakte_aktengruppe_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Aktengruppe]({{ img_url_mobile }}EAkte/3_eakte_aktengruppe_dark.png#only-dark){.mobile-img}
 
@@ -73,6 +79,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Akte]({{ img_url_desktop }}EAkte/4_eakte_akte_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Akte]({{ img_url_tablet }}EAkte/4_eakte_akte_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Akte]({{ img_url_tablet }}EAkte/4_eakte_akte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Akte]({{ img_url_mobile }}EAkte/4_eakte_akte_dark.png#only-dark){.mobile-img}
 
@@ -92,6 +100,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Teilakte]({{ img_url_desktop }}EAkte/5_eakte_teilakte_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Teilakte]({{ img_url_tablet }}EAkte/5_eakte_teilakte_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Teilakte]({{ img_url_tablet }}EAkte/5_eakte_teilakte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Teilakte]({{ img_url_mobile }}EAkte/5_eakte_teilakte_dark.png#only-dark){.mobile-img}
 
@@ -111,6 +121,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Vorgang]({{ img_url_desktop }}EAkte/6_eakte_vorgang_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Vorgang]({{ img_url_tablet }}EAkte/6_eakte_vorgang_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Vorgang]({{ img_url_tablet }}EAkte/6_eakte_vorgang_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Vorgang]({{ img_url_mobile }}EAkte/6_eakte_vorgang_dark.png#only-dark){.mobile-img}
 
@@ -134,6 +146,8 @@ Befinden Sie sich im linken Bearbeitungsmenü des Dateimanager auf der Ebene ein
 <!-- SCREENSHOT -->
 ![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_light.png#only-light){.desktop-img}
 ![Abbildung: Ebene Dokumentenordner]({{ img_url_desktop }}EAkte/7_eakte_dokumentenordner_dark.png#only-dark){.desktop-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_tablet }}EAkte/7_eakte_dokumentenordner_light.png#only-light){.tablet-img}
+![Abbildung: Ebene Dokumentenordner]({{ img_url_tablet }}EAkte/7_eakte_dokumentenordner_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_light.png#only-light){.mobile-img}
 ![Abbildung: Ebene Dokumentenordner]({{ img_url_mobile }}EAkte/7_eakte_dokumentenordner_dark.png#only-dark){.mobile-img}
 
@@ -156,6 +170,8 @@ Folgendes Beispiel zeigt den Bearbeitendialog Datei bearbeiten mit den Basis Eig
 <!-- SCREENSHOT -->
 ![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_light.png#only-light){.desktop-img}
 ![Abbildung: Eigenschaften Reiter Datei]({{ img_url_desktop }}EAkte/8_eakte_eigenschaften_datei_dark.png#only-dark){.desktop-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_tablet }}EAkte/8_eakte_eigenschaften_datei_light.png#only-light){.tablet-img}
+![Abbildung: Eigenschaften Reiter Datei]({{ img_url_tablet }}EAkte/8_eakte_eigenschaften_datei_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_light.png#only-light){.mobile-img}
 ![Abbildung: Eigenschaften Reiter Datei]({{ img_url_mobile }}EAkte/8_eakte_eigenschaften_datei_dark.png#only-dark){.mobile-img}
 
@@ -187,6 +203,8 @@ Nutzen Sie den Button, um schnell auf die richtige Ebene zur Bearbeitung der Akt
 <!-- SCREENSHOT -->
 ![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_light.png#only-light){.desktop-img}
 ![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_desktop }}EAkte/9_eakte_eigenschaften_eakte_dark.png#only-dark){.desktop-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_tablet }}EAkte/9_eakte_eigenschaften_eakte_light.png#only-light){.tablet-img}
+![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_tablet }}EAkte/9_eakte_eigenschaften_eakte_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_light.png#only-light){.mobile-img}
 ![Abbildung: Eigenschaften Reiter eAkte]({{ img_url_mobile }}EAkte/9_eakte_eigenschaften_eakte_dark.png#only-dark){.mobile-img}
 

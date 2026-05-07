@@ -26,10 +26,12 @@ Eine weitere Möglichkeit, andere Kalender anzubinden, ist _CalDAV_, ein Protoko
 Klicken Sie nun den Reiter Kalender an oder aktivieren Sie ihn über den Reiter {{ branding.title }}.
 
 <!-- SCREENSHOT -->
-![Abbildung 3.1: Monatsansicht des Kalenders]({{ img_url_desktop }}Kalender/1_kalender_monatsuebersicht_light.png#only-light){.desktop-img}
-![Abbildung 3.1: Monatsansicht des Kalenders]({{ img_url_desktop }}Kalender/1_kalender_monatsuebersicht_dark.png#only-dark){.desktop-img}
-![Abbildung 3.1: Monatsansicht des Kalenders]({{ img_url_mobile }}Kalender/1_kalender_monatsuebersicht_light.png#only-light){.mobile-img}
-![Abbildung 3.1: Monatsansicht des Kalenders]({{ img_url_mobile }}Kalender/1_kalender_monatsuebersicht_dark.png#only-dark){.mobile-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_desktop }}Kalender/1_kalender_monatsuebersicht_light.png#only-light){.desktop-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_desktop }}Kalender/1_kalender_monatsuebersicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_tablet }}Kalender/1_kalender_monatsuebersicht_light.png#only-light){.tablet-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_tablet }}Kalender/1_kalender_monatsuebersicht_dark.png#only-dark){.tablet-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_mobile }}Kalender/1_kalender_monatsuebersicht_light.png#only-light){.mobile-img}
+![Abbildung: Monatsansicht des Kalenders]({{ img_url_mobile }}Kalender/1_kalender_monatsuebersicht_dark.png#only-dark){.mobile-img}
 
 Die Ansicht ist unspektakulär, wie bei jedem Kalender. Allerdings handelt es sich hier um eine Groupware; es stehen Ihnen also neben der Eingabe eigener Termine eine ganze Reihe weiterer, Personen-übergreifender Funktionen zur Verfügung, wie zum Beispiel das Einladen anderer Teilnehmer zu Terminen, das Buchen von Ressourcen für Besprechungen, das Anzeigen von Terminen anderer Benutzer (sofern Sie über die Rechte dazu verfügen) oder das Filtern von Kalendereinträgen (auch anderer Benutzer) nach verschiedenen Kriterien in speziell dafür definierten Ansichten.
 
@@ -41,6 +43,8 @@ Auch im Kalender können Sie bestimmte gefilterte Ansichten als FAVORITEN speich
 <!-- SCREENSHOT -->
 ![Abbildung: Favoriten des Kalenders]({{ img_url_desktop }}Kalender/2_kalender_favoriten_ausschnit_light.png#only-light){.desktop-img}
 ![Abbildung: Favoriten des Kalenders]({{ img_url_desktop }}Kalender/2_kalender_favoriten_ausschnit_dark.png#only-dark){.desktop-img}
+![Abbildung: Favoriten des Kalenders]({{ img_url_tablet }}Kalender/2_kalender_favoriten_ausschnit_light.png#only-light){.tablet-img}
+![Abbildung: Favoriten des Kalenders]({{ img_url_tablet }}Kalender/2_kalender_favoriten_ausschnit_dark.png#only-dark){.tablet-img}
 ![Abbildung: Favoriten des Kalenders]({{ img_url_mobile }}Kalender/2_kalender_favoriten_ausschnit_light.png#only-light){.mobile-img}
 ![Abbildung: Favoriten des Kalenders]({{ img_url_mobile }}Kalender/2_kalender_favoriten_ausschnit_dark.png#only-dark){.mobile-img}
 
@@ -53,6 +57,8 @@ Die Besonderheit im Kalender besteht in zwei weiteren Einstellkriterien auf der 
 <!-- SCREENSHOT -->
 ![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_desktop }}Kalender/Kalender_teilnehmer_hinzu_light.png#only-light){.desktop-img}
 ![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_desktop }}Kalender/Kalender_teilnehmer_hinzu_dark.png#only-dark){.desktop-img}
+![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_tablet }}Kalender/Kalender_teilnehmer_hinzu_light.png#only-light){.tablet-img}
+![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_tablet }}Kalender/Kalender_teilnehmer_hinzu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_mobile }}Kalender/Kalender_teilnehmer_hinzu_light.png#only-light){.mobile-img}
 ![Abbildung: Kalender anderer {{ branding.title }}-Benutzer hinzufügen]({{ img_url_mobile }}Kalender/Kalender_teilnehmer_hinzu_dark.png#only-dark){.mobile-img}
 
@@ -68,6 +74,8 @@ Letzte angebotene Einstellmöglichkeit auf der linken Seite ist der Minikalender
 <!-- SCREENSHOT -->
 ![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_desktop }}Kalender/4_kalender_minikalender_light.png#only-light){.desktop-img}
 ![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_desktop }}Kalender/4_kalender_minikalender_dark.png#only-dark){.desktop-img}
+![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_tablet }}Kalender/4_kalender_minikalender_light.png#only-light){.tablet-img}
+![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_tablet }}Kalender/4_kalender_minikalender_dark.png#only-dark){.tablet-img}
 ![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_mobile }}Kalender/4_kalender_minikalender_light.png#only-light){.mobile-img}
 ![Abbildung: Minikalender mit KW-Auswahl]({{ img_url_mobile }}Kalender/4_kalender_minikalender_dark.png#only-dark){.mobile-img}
 
@@ -78,6 +86,8 @@ Das Ändern der Ansicht geht alternativ auch mit einem Klick auf die Buttons Tag
 <!-- SCREENSHOT -->
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_desktop }}Kalender/14_kalender_ansicht_light.png#only-light){.desktop-img}
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_desktop }}Kalender/14_kalender_ansicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Ändern der Kalenderansicht]({{ img_url_tablet }}Kalender/14_kalender_ansicht_light.png#only-light){.tablet-img}
+![Abbildung: Ändern der Kalenderansicht]({{ img_url_tablet }}Kalender/14_kalender_ansicht_dark.png#only-dark){.tablet-img}
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_mobile }}Kalender/14_kalender_ansicht_light.png#only-light){.mobile-img}
 ![Abbildung: Ändern der Kalenderansicht]({{ img_url_mobile }}Kalender/14_kalender_ansicht_dark.png#only-dark){.mobile-img}
 
@@ -91,6 +101,8 @@ Mit Split, Blatt und Liste wählen Sie verschiedene Ansichten für den Kalender.
 <!-- SCREENSHOT -->
 ![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_desktop }}Kalender/5_kalender_termine_listenansicht_light.png#only-light){.desktop-img}
 ![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_desktop }}Kalender/5_kalender_termine_listenansicht_dark.png#only-dark){.desktop-img}
+![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_tablet }}Kalender/5_kalender_termine_listenansicht_light.png#only-light){.tablet-img}
+![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_tablet }}Kalender/5_kalender_termine_listenansicht_dark.png#only-dark){.tablet-img}
 ![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_mobile }}Kalender/5_kalender_termine_listenansicht_light.png#only-light){.mobile-img}
 ![Abbildung: Der Kalender mit Terminen in der Listenansicht]({{ img_url_mobile }}Kalender/5_kalender_termine_listenansicht_dark.png#only-dark){.mobile-img}
 
@@ -109,6 +121,8 @@ Klicken Sie nun den ersten Button des Bearbeitungsmenüs, Termin hinzufügen.
 <!-- SCREENSHOT -->
 ![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_desktop }}Kalender/6_kalender_neuer_termin_light.png#only-light){.desktop-img}
 ![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_desktop }}Kalender/6_kalender_neuer_termin_dark.png#only-dark){.desktop-img}
+![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_tablet }}Kalender/6_kalender_neuer_termin_light.png#only-light){.tablet-img}
+![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_tablet }}Kalender/6_kalender_neuer_termin_dark.png#only-dark){.tablet-img}
 ![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_mobile }}Kalender/6_kalender_neuer_termin_light.png#only-light){.mobile-img}
 ![Abbildung: Bearbeitungsmaske zum Anlegen eines Termins]({{ img_url_mobile }}Kalender/6_kalender_neuer_termin_dark.png#only-dark){.mobile-img}
 
@@ -129,6 +143,8 @@ Das Pulldown Gespeichert in dient zur Auswahl eines Kalenders für die Speicheru
 <!-- SCREENSHOT -->
 ![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_desktop }}Kalender/7_kalender_neuer_termin_kalenderauswahl_light.png#only-light){.desktop-img}
 ![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_desktop }}Kalender/7_kalender_neuer_termin_kalenderauswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_tablet }}Kalender/7_kalender_neuer_termin_kalenderauswahl_light.png#only-light){.tablet-img}
+![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_tablet }}Kalender/7_kalender_neuer_termin_kalenderauswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_mobile }}Kalender/7_kalender_neuer_termin_kalenderauswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Auswahl, in welchem Kalender ein Termin gespeichert werden soll]({{ img_url_mobile }}Kalender/7_kalender_neuer_termin_kalenderauswahl_dark.png#only-dark){.mobile-img}
 
@@ -150,6 +166,8 @@ Als ersten Teilnehmer sehen Sie natürlich sich selbst.
 <!-- SCREENSHOT -->
 ![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_desktop }}Kalender/8_kalender_teilnehmer_hinzu_light.png#only-light){.desktop-img}
 ![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_desktop }}Kalender/8_kalender_teilnehmer_hinzu_dark.png#only-dark){.desktop-img}
+![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_tablet }}Kalender/8_kalender_teilnehmer_hinzu_light.png#only-light){.tablet-img}
+![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_tablet }}Kalender/8_kalender_teilnehmer_hinzu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_mobile }}Kalender/8_kalender_teilnehmer_hinzu_light.png#only-light){.mobile-img}
 ![Abbildung: Hinzufügen von Teilnehmern zu einem Termin]({{ img_url_mobile }}Kalender/8_kalender_teilnehmer_hinzu_dark.png#only-dark){.mobile-img}
 
@@ -163,6 +181,8 @@ Sie können dieses Feld auch als "Vorab-Filter" nutzen. Klicken Sie dazu auf das
 <!-- SCREENSHOT -->
 ![Abbildung: Typen von Teilnehmern]({{ img_url_desktop }}Kalender/9_kalender_termin_teilnehmertyp_light.png#only-light){.desktop-img}
 ![Abbildung: Typen von Teilnehmern]({{ img_url_desktop }}Kalender/9_kalender_termin_teilnehmertyp_dark.png#only-dark){.desktop-img}
+![Abbildung: Typen von Teilnehmern]({{ img_url_tablet }}Kalender/9_kalender_termin_teilnehmertyp_light.png#only-light){.tablet-img}
+![Abbildung: Typen von Teilnehmern]({{ img_url_tablet }}Kalender/9_kalender_termin_teilnehmertyp_dark.png#only-dark){.tablet-img}
 ![Abbildung: Typen von Teilnehmern]({{ img_url_mobile }}Kalender/9_kalender_termin_teilnehmertyp_light.png#only-light){.mobile-img}
 ![Abbildung: Typen von Teilnehmern]({{ img_url_mobile }}Kalender/9_kalender_termin_teilnehmertyp_dark.png#only-dark){.mobile-img}
 
@@ -201,6 +221,8 @@ Darüber hinaus wird, ebenfalls vollautomatisch, der Termin bereits mit Einladun
 <!-- SCREENSHOT -->
 ![Abbildung: Termin eines anderen Organisators]({{ img_url_desktop }}Kalender/10_kalender_termin_anderer_organisator_light.png#only-light){.desktop-img}
 ![Abbildung: Termin eines anderen Organisators]({{ img_url_desktop }}Kalender/10_kalender_termin_anderer_organisator_dark.png#only-dark){.desktop-img}
+![Abbildung: Termin eines anderen Organisators]({{ img_url_tablet }}Kalender/10_kalender_termin_anderer_organisator_light.png#only-light){.tablet-img}
+![Abbildung: Termin eines anderen Organisators]({{ img_url_tablet }}Kalender/10_kalender_termin_anderer_organisator_dark.png#only-dark){.tablet-img}
 ![Abbildung: Termin eines anderen Organisators]({{ img_url_mobile }}Kalender/10_kalender_termin_anderer_organisator_light.png#only-light){.mobile-img}
 ![Abbildung: Termin eines anderen Organisators]({{ img_url_mobile }}Kalender/10_kalender_termin_anderer_organisator_dark.png#only-dark){.mobile-img}
 
@@ -216,6 +238,8 @@ Darüber hinaus haben Sie als Organisator die Möglichkeit, allen eingeladenen P
 <!-- SCREENSHOT -->
 ![Abbildung: Kontextmenü eines Termins]({{ img_url_desktop }}Kalender/11_kalender_termin_kontextmenue_light.png#only-light){.desktop-img}
 ![Abbildung: Kontextmenü eines Termins]({{ img_url_desktop }}Kalender/11_kalender_termin_kontextmenue_dark.png#only-dark){.desktop-img}
+![Abbildung: Kontextmenü eines Termins]({{ img_url_tablet }}Kalender/11_kalender_termin_kontextmenue_light.png#only-light){.tablet-img}
+![Abbildung: Kontextmenü eines Termins]({{ img_url_tablet }}Kalender/11_kalender_termin_kontextmenue_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kontextmenü eines Termins]({{ img_url_mobile }}Kalender/11_kalender_termin_kontextmenue_light.png#only-light){.mobile-img}
 ![Abbildung: Kontextmenü eines Termins]({{ img_url_mobile }}Kalender/11_kalender_termin_kontextmenue_dark.png#only-dark){.mobile-img}
 
@@ -231,6 +255,8 @@ Als eingeladener Benutzer sehen Sie den Termin zunächst wie einen eigenen. Rufe
 <!-- SCREENSHOT -->
 ![Abbildung: Antwort des Eingeladenen]({{ img_url_desktop }}Kalender/12_kalender_termin_antworten_light.png#only-light){.desktop-img}
 ![Abbildung: Antwort des Eingeladenen]({{ img_url_desktop }}Kalender/12_kalender_termin_antworten_dark.png#only-dark){.desktop-img}
+![Abbildung: Antwort des Eingeladenen]({{ img_url_tablet }}Kalender/12_kalender_termin_antworten_light.png#only-light){.tablet-img}
+![Abbildung: Antwort des Eingeladenen]({{ img_url_tablet }}Kalender/12_kalender_termin_antworten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Antwort des Eingeladenen]({{ img_url_mobile }}Kalender/12_kalender_termin_antworten_light.png#only-light){.mobile-img}
 ![Abbildung: Antwort des Eingeladenen]({{ img_url_mobile }}Kalender/12_kalender_termin_antworten_dark.png#only-dark){.mobile-img}
 
@@ -241,6 +267,8 @@ Sie müssen das Termin-Bearbeitungsfenster gar nicht erst öffnen, sondern könn
 <!-- SCREENSHOT -->
 ![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_desktop }}Kalender/13_kalender_termin_info_light.png#only-light){.desktop-img}
 ![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_desktop }}Kalender/13_kalender_termin_info_dark.png#only-dark){.desktop-img}
+![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_tablet }}Kalender/13_kalender_termin_info_light.png#only-light){.tablet-img}
+![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_tablet }}Kalender/13_kalender_termin_info_dark.png#only-dark){.tablet-img}
 ![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_mobile }}Kalender/13_kalender_termin_info_light.png#only-light){.mobile-img}
 ![Abbildung: Alle Informationen zu einem Termin unterhalb der Kalenderansicht]({{ img_url_mobile }}Kalender/13_kalender_termin_info_dark.png#only-dark){.mobile-img}
 
@@ -287,6 +315,8 @@ Der Link zur Umfrage wird an alle Teilnehmer automatisch per E-Mail gesendet.
 <!-- SCREENSHOT -->
 ![Abbildung: Umfrage Übersicht]({{ img_url_desktop }}Kalender/15_kalender_umfrage_link_light.png#only-light){.desktop-img}
 ![Abbildung: Umfrage Übersicht]({{ img_url_desktop }}Kalender/15_kalender_umfrage_link_dark.png#only-dark){.desktop-img}
+![Abbildung: Umfrage Übersicht]({{ img_url_tablet }}Kalender/15_kalender_umfrage_link_light.png#only-light){.tablet-img}
+![Abbildung: Umfrage Übersicht]({{ img_url_tablet }}Kalender/15_kalender_umfrage_link_dark.png#only-dark){.tablet-img}
 ![Abbildung: Umfrage Übersicht]({{ img_url_mobile }}Kalender/15_kalender_umfrage_link_light.png#only-light){.mobile-img}
 ![Abbildung: Umfrage Übersicht]({{ img_url_mobile }}Kalender/15_kalender_umfrage_link_dark.png#only-dark){.mobile-img}
 
@@ -336,7 +366,7 @@ Das Eingabefeld mit der Inschrift `http://example.ics` dient der Eingabe einer v
 Beim erfolgreichen Einlesen der Quelldatei werden Ihnen die importierten Termine in Ihrem im o.g. Dialog eingestellten Kalender angezeigt. Sollten Sie nicht einmaliges Einlesen, sondern eines der o.a. Replikations-Intervalle eingestellt haben, läuft dieses ab sofort automatisch ab.
 
 !!! warning "Achtung"
-    In der Systemmeldung über das erfolgreiche Einlesen ist von einem sog. "Cronjob" die Rede. Das ist eine Rou{{ branding.title }}, die die hier eingegebene Webadresse abfragt und die Daten einliest. Diese Rou{{ branding.title }} ist nicht ständig aktiv, sondern nur in z.T. größeren Zeitintervallen. Haben Sie also beim Warten auf Ihre einzulesenden Termine Geduld - es kann im Einzelfall durchaus mehr als eine Stunde dauern, ehe ein Ergebnis zu sehen ist.
+    In der Systemmeldung über das erfolgreiche Einlesen ist von einem sog. "Cronjob" die Rede. Das ist eine Routine, die die hier eingegebene Webadresse abfragt und die Daten einliest. Diese Routine ist nicht ständig aktiv, sondern nur in z.T. größeren Zeitintervallen. Haben Sie also beim Warten auf Ihre einzulesenden Termine Geduld - es kann im Einzelfall durchaus mehr als eine Stunde dauern, ehe ein Ergebnis zu sehen ist.
 
 Die Option Remote / CalDAV (BETA) ist noch als Beta eingestuft. Hier ist der Vorgang ähnlich wie bei der Option Entfernt/ICS. Der einzige Unterschied liegt darin, dass CalDav einen Benutzernamen und das dazugehörige Passwort braucht, um auf die Termindaten zugreifen zu können.
 

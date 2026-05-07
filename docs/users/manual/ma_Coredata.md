@@ -4,6 +4,8 @@
 <!-- SCREENSHOT -->
 ![Abbildung: Applikation: Stammdaten]({{ img_url_desktop }}Stammdaten/1_Stammdaten_light.png#only-light){.desktop-img}
 ![Abbildung: Applikation: Stammdaten]({{ img_url_desktop }}Stammdaten/1_Stammdaten_dark.png#only-dark){.desktop-img}
+![Abbildung: Applikation: Stammdaten]({{ img_url_tablet }}Stammdaten/1_Stammdaten_light.png#only-light){.tablet-img}
+![Abbildung: Applikation: Stammdaten]({{ img_url_tablet }}Stammdaten/1_Stammdaten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Applikation: Stammdaten]({{ img_url_mobile }}Stammdaten/1_Stammdaten_light.png#only-light){.mobile-img}
 ![Abbildung: Applikation: Stammdaten]({{ img_url_mobile }}Stammdaten/1_Stammdaten_dark.png#only-dark){.mobile-img}
 

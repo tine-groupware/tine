@@ -35,6 +35,8 @@ Wie immer finden Sie unter FAVORITEN einige vorgefertigte Ansichten: So erhalten
 <!-- SCREENSHOT -->
 ![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_light.png#only-light){.desktop-img}
 ![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_desktop }}EMail/1_email_favoriten_und_konten_dark.png#only-dark){.desktop-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_tablet }}EMail/1_email_favoriten_und_konten_light.png#only-light){.tablet-img}
+![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_tablet }}EMail/1_email_favoriten_und_konten_dark.png#only-dark){.tablet-img}
 ![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_light.png#only-light){.mobile-img}
 ![Abbildung: Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten]({{ img_url_mobile }}EMail/1_email_favoriten_und_konten_dark.png#only-dark){.mobile-img}
 
@@ -52,6 +54,8 @@ Kommen wir nun kurz zu dem Balken mit der Prozentangabe im rechten Teil direkt �
 <!-- SCREENSHOT -->
 ![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_light.png#only-light){.desktop-img}
 ![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_desktop }}EMail/3_email_posteingang_speicherplatz_dark.png#only-dark){.desktop-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_tablet }}EMail/3_email_posteingang_speicherplatz_light.png#only-light){.tablet-img}
+![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_tablet }}EMail/3_email_posteingang_speicherplatz_dark.png#only-dark){.tablet-img}
 ![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_light.png#only-light){.mobile-img}
 ![Abbildung: Auslastung des Speicherplatzes eines IMAP-Kontos]({{ img_url_mobile }}EMail/3_email_posteingang_speicherplatz_dark.png#only-dark){.mobile-img}
 
@@ -73,6 +77,8 @@ Beachten Sie die beiden kleinen Spalten am linken Rand: Anhänge und Flags. Das 
 <!-- SCREENSHOT -->
 ![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_light.png#only-light){.desktop-img}
 ![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_desktop }}EMail/2_email_posteingang_geflaggt_dark.png#only-dark){.desktop-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_tablet }}EMail/2_email_posteingang_geflaggt_light.png#only-light){.tablet-img}
+![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_tablet }}EMail/2_email_posteingang_geflaggt_dark.png#only-dark){.tablet-img}
 ![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_light.png#only-light){.mobile-img}
 ![Abbildung: Posteingang mit geflaggten E-Mails]({{ img_url_mobile }}EMail/2_email_posteingang_geflaggt_dark.png#only-dark){.mobile-img}
 
@@ -89,6 +95,8 @@ Ganz rechts im Menü (ungefähr in der Mitte des Bildschirms) finden Sie den But
 <!-- SCREENSHOT -->
 ![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_light.png#only-light){.desktop-img}
 ![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_desktop }}EMail/4_email_neues_konto_dark.png#only-dark){.desktop-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_tablet }}EMail/4_email_neues_konto_light.png#only-light){.tablet-img}
+![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_tablet }}EMail/4_email_neues_konto_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_light.png#only-light){.mobile-img}
 ![Abbildung: Neues E-Mail-Konto anlegen]({{ img_url_mobile }}EMail/4_email_neues_konto_dark.png#only-dark){.mobile-img}
 
@@ -102,6 +110,8 @@ Darunter finden Sie Signaturposition. Hier haben Sie die Möglichkeit zwischen �
 <!-- SCREENSHOT -->
 ![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_light.png#only-light){.desktop-img}
 ![Abbildung: Daten des Posteingangsservers]({{ img_url_desktop }}EMail/5_email_neues_konto_imap_dark.png#only-dark){.desktop-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_tablet }}EMail/5_email_neues_konto_imap_light.png#only-light){.tablet-img}
+![Abbildung: Daten des Posteingangsservers]({{ img_url_tablet }}EMail/5_email_neues_konto_imap_dark.png#only-dark){.tablet-img}
 ![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_light.png#only-light){.mobile-img}
 ![Abbildung: Daten des Posteingangsservers]({{ img_url_mobile }}EMail/5_email_neues_konto_imap_dark.png#only-dark){.mobile-img}
 
@@ -125,6 +135,8 @@ Der Reiter SMTP dient dazu, Einstellungen für den Post__ausgangs__server vorzun
 <!-- SCREENSHOT -->
 ![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_light.png#only-light){.desktop-img}
 ![Abbildung: Daten des Postausgangsservers]({{ img_url_desktop }}EMail/6_email_neues_konto_smtp_dark.png#only-dark){.desktop-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_tablet }}EMail/6_email_neues_konto_smtp_light.png#only-light){.tablet-img}
+![Abbildung: Daten des Postausgangsservers]({{ img_url_tablet }}EMail/6_email_neues_konto_smtp_dark.png#only-dark){.tablet-img}
 ![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_light.png#only-light){.mobile-img}
 ![Abbildung: Daten des Postausgangsservers]({{ img_url_mobile }}EMail/6_email_neues_konto_smtp_dark.png#only-dark){.mobile-img}
 
@@ -138,6 +150,8 @@ Der Reiter Andere Einstellungen dient der Definition und Bezeichnung der oben an
 <!-- SCREENSHOT -->
 ![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_light.png#only-light){.desktop-img}
 ![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_desktop }}EMail/7_email_neues_konto_andere_dark.png#only-dark){.desktop-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_tablet }}EMail/7_email_neues_konto_andere_light.png#only-light){.tablet-img}
+![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_tablet }}EMail/7_email_neues_konto_andere_dark.png#only-dark){.tablet-img}
 ![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_light.png#only-light){.mobile-img}
 ![Abbildung: Unter „Andere Einstellungen“ werden die Unterordner des IMAP-Kontos definiert]({{ img_url_mobile }}EMail/7_email_neues_konto_andere_dark.png#only-dark){.mobile-img}
 
@@ -167,6 +181,8 @@ Die Kommunikation des E-Mail-Clients mit seinem Server über die Skriptsprache _
 <!-- SCREENSHOT -->
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/18_email_konto_kontextmenu_light.png#only-light){.desktop-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/18_email_konto_kontextmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_tablet }}EMail/18_email_konto_kontextmenu_light.png#only-light){.tablet-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_tablet }}EMail/18_email_konto_kontextmenu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/18_email_konto_kontextmenu_light.png#only-light){.mobile-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/18_email_konto_kontextmenu_dark.png#only-dark){.mobile-img}
 
@@ -175,6 +191,8 @@ Hier finden Sie unter Allgemein -> Status ein Pulldown mit zwei Einstellungen: I
 <!-- SCREENSHOT -->
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/10_email_abwesenheitsnotiz_light.png#only-light){.desktop-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_desktop }}EMail/10_email_abwesenheitsnotiz_dark.png#only-dark){.desktop-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_tablet }}EMail/10_email_abwesenheitsnotiz_light.png#only-light){.tablet-img}
+![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_tablet }}EMail/10_email_abwesenheitsnotiz_dark.png#only-dark){.tablet-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/10_email_abwesenheitsnotiz_light.png#only-light){.mobile-img}
 ![Abbildung: Abwesenheitsnotiz setzen]({{ img_url_mobile }}EMail/10_email_abwesenheitsnotiz_dark.png#only-dark){.mobile-img}
 
@@ -193,6 +211,8 @@ Hier finden Sie unter Allgemein -> Status ein Pulldown mit zwei Einstellungen: I
 <!-- SCREENSHOT -->
 ![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_desktop }}EMail/11_email_empfangsfilter_light.png#only-light){.desktop-img}
 ![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_desktop }}EMail/11_email_empfangsfilter_dark.png#only-dark){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_tablet }}EMail/11_email_empfangsfilter_light.png#only-light){.tablet-img}
+![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_tablet }}EMail/11_email_empfangsfilter_dark.png#only-dark){.tablet-img}
 ![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_mobile }}EMail/11_email_empfangsfilter_light.png#only-light){.mobile-img}
 ![Abbildung: E-Mail-Empfangs-Filterregeln aufstellen]({{ img_url_mobile }}EMail/11_email_empfangsfilter_dark.png#only-dark){.mobile-img}
 
@@ -203,6 +223,8 @@ Wir wollen uns nun das Anlegen bzw. Bearbeiten von Filterregeln näher ansehen. 
 <!-- SCREENSHOT -->
 ![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_desktop }}EMail/12_email_filterregeln_editieren_light.png#only-light){.desktop-img}
 ![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_desktop }}EMail/12_email_filterregeln_editieren_dark.png#only-dark){.desktop-img}
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_tablet }}EMail/12_email_filterregeln_editieren_light.png#only-light){.tablet-img}
+![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_tablet }}EMail/12_email_filterregeln_editieren_dark.png#only-dark){.tablet-img}
 ![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_mobile }}EMail/12_email_filterregeln_editieren_light.png#only-light){.mobile-img}
 ![Abbildung: E-Mail-Empfangs-Filterregel editieren]({{ img_url_mobile }}EMail/12_email_filterregeln_editieren_dark.png#only-dark){.mobile-img}
 
@@ -211,6 +233,8 @@ Im oberen Bereich finden Sie eine Zeile Wende Filter an, wenn: Mit dem daneben b
 <!-- SCREENSHOT -->
 ![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_desktop }}EMail/13_email_filterregeln_auswahl_light.png#only-light){.desktop-img}
 ![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_desktop }}EMail/13_email_filterregeln_auswahl_dark.png#only-dark){.desktop-img}
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_tablet }}EMail/13_email_filterregeln_auswahl_light.png#only-light){.tablet-img}
+![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_tablet }}EMail/13_email_filterregeln_auswahl_dark.png#only-dark){.tablet-img}
 ![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_mobile }}EMail/13_email_filterregeln_auswahl_light.png#only-light){.mobile-img}
 ![Abbildung: Bedingung zum Filtern auswählen]({{ img_url_mobile }}EMail/13_email_filterregeln_auswahl_dark.png#only-dark){.mobile-img}
 
@@ -246,10 +270,12 @@ beantwortet die E-Mail mit dem angegebenen Text.
 </div>
 
 <!-- SCREENSHOT -->
-![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahl_light.png#only-light){.desktop-img}
-![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahl_dark.png#only-dark){.desktop-img}
-![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahl_light.png#only-light){.mobile-img}
-![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahl_dark.png#only-dark){.mobile-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahlx_light.png#only-light){.desktop-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_desktop }}EMail/14_email_filteraktion_auswahlx_dark.png#only-dark){.desktop-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_tablet }}EMail/14_email_filteraktion_auswahlx_light.png#only-light){.tablet-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_tablet }}EMail/14_email_filteraktion_auswahlx_dark.png#only-dark){.tablet-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahlx_light.png#only-light){.mobile-img}
+![Abbildung: Filter-Aktion auswählen]({{ img_url_mobile }}EMail/14_email_filteraktion_auswahlx_dark.png#only-dark){.mobile-img}
 
 !!! info "Wichtig"
     Die Filterregeln E-Mail mit folgendem Text ablehnen und E-Mail verwerfen stehen über einer Abwesenheitsbenachrichtigung: Haben Sie die Filterregel E-Mail mit folgendem Text ablehnen und/oder E-Mail verwerfen definiert, wird ein Absender, auf den die jeweilige Regel zutrifft, im Falle der ebenfalls definierten Abwesenheitsbenachrichtigung keine solche erhalten.
@@ -267,6 +293,8 @@ Damit wird, nach einer Sicherheitsabfrage, das E-Mail-Konto in {{ branding.title
 <!-- SCREENSHOT -->
 ![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_light.png#only-light){.desktop-img}
 ![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_desktop }}EMail/9_email_ordner_kontextmenu_dark.png#only-dark){.desktop-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_tablet }}EMail/9_email_ordner_kontextmenu_light.png#only-light){.tablet-img}
+![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_tablet }}EMail/9_email_ordner_kontextmenu_dark.png#only-dark){.tablet-img}
 ![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_light.png#only-light){.mobile-img}
 ![Abbildung: Weitere Funktionen im Kontextmenü eines E-Mail-Ordners]({{ img_url_mobile }}EMail/9_email_ordner_kontextmenu_dark.png#only-dark){.mobile-img}
 
@@ -299,6 +327,8 @@ Zum Verfassen einer E-Mail müssen Sie zunächst das Konto auswählen, von dem a
 <!-- SCREENSHOT -->
 ![Abbildung: Eine E-Mail verfassen]({{ img_url_desktop }}EMail/15_email_neue_email_light.png#only-light){.desktop-img}
 ![Abbildung: Eine E-Mail verfassen]({{ img_url_desktop }}EMail/15_email_neue_email_dark.png#only-dark){.desktop-img}
+![Abbildung: Eine E-Mail verfassen]({{ img_url_tablet }}EMail/15_email_neue_email_light.png#only-light){.tablet-img}
+![Abbildung: Eine E-Mail verfassen]({{ img_url_tablet }}EMail/15_email_neue_email_dark.png#only-dark){.tablet-img}
 ![Abbildung: Eine E-Mail verfassen]({{ img_url_mobile }}EMail/15_email_neue_email_light.png#only-light){.mobile-img}
 ![Abbildung: Eine E-Mail verfassen]({{ img_url_mobile }}EMail/15_email_neue_email_dark.png#only-dark){.mobile-img}
 
@@ -322,6 +352,8 @@ Sehr effektiv ist die Funktion Suche Empfänger: Beim Anklicken dieses Buttons w
 <!-- SCREENSHOT -->
 ![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_desktop }}EMail/16_email_auswahl_empfaenger_light.png#only-light){.desktop-img}
 ![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_desktop }}EMail/16_email_auswahl_empfaenger_dark.png#only-dark){.desktop-img}
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_tablet }}EMail/16_email_auswahl_empfaenger_light.png#only-light){.tablet-img}
+![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_tablet }}EMail/16_email_auswahl_empfaenger_dark.png#only-dark){.tablet-img}
 ![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_mobile }}EMail/16_email_auswahl_empfaenger_light.png#only-light){.mobile-img}
 ![Abbildung: Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter]({{ img_url_mobile }}EMail/16_email_auswahl_empfaenger_dark.png#only-dark){.mobile-img}
 
@@ -356,6 +388,8 @@ Wie Sie wahrscheinlich schon selbst entdeckt haben, haben Sie nun eine neue Funk
 <!-- SCREENSHOT -->
 ![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_desktop }}EMail/19_email_nachricht_verschluesseln_light.png#only-light){.desktop-img}
 ![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_desktop }}EMail/19_email_nachricht_verschluesseln_dark.png#only-dark){.desktop-img}
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_tablet }}EMail/19_email_nachricht_verschluesseln_light.png#only-light){.tablet-img}
+![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_tablet }}EMail/19_email_nachricht_verschluesseln_dark.png#only-dark){.tablet-img}
 ![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_mobile }}EMail/19_email_nachricht_verschluesseln_light.png#only-light){.mobile-img}
 ![Abbildung: Neue Funktion Nachricht Verschlüsseln nun sichtbar]({{ img_url_mobile }}EMail/19_email_nachricht_verschluesseln_dark.png#only-dark){.mobile-img}
 
@@ -371,6 +405,8 @@ Diese Funktionen können Sie, bis auf Nachricht drucken, statt über das Bearbei
 <!-- SCREENSHOT -->
 ![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_light.png#only-light){.desktop-img}
 ![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_desktop }}EMail/17_email_kontextmenu_email_dark.png#only-dark){.desktop-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_tablet }}EMail/17_email_kontextmenu_email_light.png#only-light){.tablet-img}
+![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_tablet }}EMail/17_email_kontextmenu_email_dark.png#only-dark){.tablet-img}
 ![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_light.png#only-light){.mobile-img}
 ![Abbildung: Kontextmenü beim Rechtsklick auf eine E-Mail]({{ img_url_mobile }}EMail/17_email_kontextmenu_email_dark.png#only-dark){.mobile-img}
 
@@ -424,6 +460,8 @@ Alle Mitarbeiter haben unterhalb des Posteingangs einen SPAM und HAM Ordner (HAM
 <!-- SCREENSHOT -->
 ![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_desktop }}EMail/20_email_kontextmenue_spam_ham_light.png#only-light){.desktop-img}
 ![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_desktop }}EMail/20_email_kontextmenue_spam_ham_dark.png#only-dark){.desktop-img}
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_tablet }}EMail/20_email_kontextmenue_spam_ham_light.png#only-light){.tablet-img}
+![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_tablet }}EMail/20_email_kontextmenue_spam_ham_dark.png#only-dark){.tablet-img}
 ![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_mobile }}EMail/20_email_kontextmenue_spam_ham_light.png#only-light){.mobile-img}
 ![Abbildung: Manuelles markieren von SPAM, kein SPAM]({{ img_url_mobile }}EMail/20_email_kontextmenue_spam_ham_dark.png#only-dark){.mobile-img}
 
@@ -436,6 +474,8 @@ Neben dieser manuellen Möglichkeit der SPAM/HAM-Markierung hat {{ branding.titl
 <!-- SCREENSHOT -->
 ![Abbildung: Automatische Erkennung von SPAM]({{ img_url_desktop }}EMail/21_email_spam_message_light.png#only-light){.desktop-img}
 ![Abbildung: Automatische Erkennung von SPAM]({{ img_url_desktop }}EMail/21_email_spam_message_dark.png#only-dark){.desktop-img}
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_tablet }}EMail/21_email_spam_message_light.png#only-light){.tablet-img}
+![Abbildung: Automatische Erkennung von SPAM]({{ img_url_tablet }}EMail/21_email_spam_message_dark.png#only-dark){.tablet-img}
 ![Abbildung: Automatische Erkennung von SPAM]({{ img_url_mobile }}EMail/21_email_spam_message_light.png#only-light){.mobile-img}
 ![Abbildung: Automatische Erkennung von SPAM]({{ img_url_mobile }}EMail/21_email_spam_message_dark.png#only-dark){.mobile-img}
 
@@ -444,6 +484,8 @@ Auf der rechten Seite der SPAM markierten E-Mail haben Sie die Möglichkeit dies
 <!-- SCREENSHOT -->
 ![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_desktop }}EMail/22_email_kein_spam_light.png#only-light){.desktop-img}
 ![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_desktop }}EMail/22_email_kein_spam_dark.png#only-dark){.desktop-img}
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_tablet }}EMail/22_email_kein_spam_light.png#only-light){.tablet-img}
+![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_tablet }}EMail/22_email_kein_spam_dark.png#only-dark){.tablet-img}
 ![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_mobile }}EMail/22_email_kein_spam_light.png#only-light){.mobile-img}
 ![Abbildung: Automatische SPAM Einschätzung bestätigen oder verneinen]({{ img_url_mobile }}EMail/22_email_kein_spam_dark.png#only-dark){.mobile-img}
 

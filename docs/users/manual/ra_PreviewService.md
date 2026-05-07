@@ -8,6 +8,8 @@ Sofern diese Funktion aktiviert ist, können Sie durch das Tippen der Leertaste 
 <!-- SCREENSHOT -->
 ![Abbildung: Vorschau geöffnet]({{ img_url_desktop }}PreviewService/1_previewservice_vorschau_light.png#only-light){.desktop-img}
 ![Abbildung: Vorschau geöffnet]({{ img_url_desktop }}PreviewService/1_previewservice_vorschau_dark.png#only-dark){.desktop-img}
+![Abbildung: Vorschau geöffnet]({{ img_url_tablet }}PreviewService/1_previewservice_vorschau_light.png#only-light){.tablet-img}
+![Abbildung: Vorschau geöffnet]({{ img_url_tablet }}PreviewService/1_previewservice_vorschau_dark.png#only-dark){.tablet-img}
 ![Abbildung: Vorschau geöffnet]({{ img_url_mobile }}PreviewService/1_previewservice_vorschau_light.png#only-light){.mobile-img}
 ![Abbildung: Vorschau geöffnet]({{ img_url_mobile }}PreviewService/1_previewservice_vorschau_dark.png#only-dark){.mobile-img}
 
@@ -18,5 +20,7 @@ In manchen {{ branding.title }} Anwendungen, z.B. im Dateimanager, besteht auch 
 <!-- SCREENSHOT -->
 ![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_desktop }}PreviewService/2_previewservice_vorschau_dateimanager_light.png#only-light){.desktop-img}
 ![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_desktop }}PreviewService/2_previewservice_vorschau_dateimanager_dark.png#only-dark){.desktop-img}
+![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_tablet }}PreviewService/2_previewservice_vorschau_dateimanager_light.png#only-light){.tablet-img}
+![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_tablet }}PreviewService/2_previewservice_vorschau_dateimanager_dark.png#only-dark){.tablet-img}
 ![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_mobile }}PreviewService/2_previewservice_vorschau_dateimanager_light.png#only-light){.mobile-img}
 ![Abbildung: Option "Vorschau" im Dateimanager]({{ img_url_mobile }}PreviewService/2_previewservice_vorschau_dateimanager_dark.png#only-dark){.mobile-img}
