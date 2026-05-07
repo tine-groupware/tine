@@ -75,8 +75,9 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             $value = $customData['value'];
             if ($customData['field'] == 'is_cleared') {
                 $_select->joinLeft(
-                    /* table  */ array('ta' => $db->table_prefix . 'timetracker_timeaccount'), 
-                    /* on     */ $db->quoteIdentifier('ta.id') . ' = ' . $db->quoteIdentifier('timetracker_timesheet.timeaccount_id'),
+                    /* table  */ array('ta' => $_backend->getTablePrefix() . 'timetracker_timeaccount'),
+                    /* on     */ $db->quoteIdentifier('ta.id') . ' = '
+                        . $db->quoteIdentifier('timetracker_timesheet.timeaccount_id'),
                     /* select */ array()
                 );
                 
