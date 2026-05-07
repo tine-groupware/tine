@@ -3419,17 +3419,25 @@ class Tinebase_FileSystem implements
     public function checkPathACL(Tinebase_Model_Tree_Node_Path $_path, string $_action = 'get', bool $_topLevelAllowed = true, bool $_throw = true): bool
     {
         $hasPermission = false;
+        $user = Tinebase_Core::getUser();
+        if (!$user) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
+                    . __LINE__ . ' No user set ... we might be in setup - skip acl check');
+            }
+            return true;
+        }
         if ($_topLevelAllowed || !$_path->isToplevelPath()) {
             switch ($_path->containerType) {
                 case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
                     $hasPermission = $_path->isToplevelPath() ?
-                        ($_path->containerOwner === Tinebase_Core::getUser()->accountLoginName || $_action === 'get') :
+                        ($_path->containerOwner === $user->accountLoginName || $_action === 'get') :
                         $this->_checkACLNode($_path->getNode(), $_action);
                     break;
                 case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
                     if ($hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                         $_path->application->name,
-                        Tinebase_Core::getUser()->getId(),
+                        $user->getId(),
                         Tinebase_Acl_Rights::ADMIN
                     )) {
                         // admin, go ahead
@@ -3439,7 +3447,7 @@ class Tinebase_FileSystem implements
                         if ('add' === $_action) {
                             $hasPermission = Tinebase_Acl_Roles::getInstance()->hasRight(
                                 $_path->application->name,
-                                Tinebase_Core::getUser()->getId(),
+                                $user->getId(),
                                 Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS
                             );
                             break;
@@ -3474,7 +3482,7 @@ class Tinebase_FileSystem implements
             if ($parentPath->isToplevelPath()) {
                 switch ($parentPath->containerType) {
                     case Tinebase_FileSystem::FOLDER_TYPE_PERSONAL:
-                        $hasPermission = $parentPath->containerOwner && ($parentPath->containerOwner === Tinebase_Core::getUser()->accountLoginName ||
+                        $hasPermission = $parentPath->containerOwner && ($parentPath->containerOwner === $user->accountLoginName ||
                             $this->_checkACLNode($_path->getNode(), 'admin'));
                         break;
                     case Tinebase_FileSystem::FOLDER_TYPE_SHARED:
@@ -3495,7 +3503,8 @@ class Tinebase_FileSystem implements
         }
 
         if (true === $_throw && ! $hasPermission) {
-            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' nodes in path ' . $_path->flatpath);
+            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action
+                . ' nodes in path ' . $_path->flatpath);
         }
 
         return $hasPermission;
@@ -3547,7 +3556,8 @@ class Tinebase_FileSystem implements
             if ($allChildIds != $deleteGrantChildIds) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                        . __LINE__ . ' the following child nodes has no ' . $requiredGrant . ' grant for node : ' . $_node->name . ' : ' . print_r(array_diff($allChildIds, $deleteGrantChildIds), true));
+                        . __LINE__ . ' the following child nodes has no ' . $requiredGrant . ' grant for node : '
+                        . $_node->name . ' : ' . print_r(array_diff($allChildIds, $deleteGrantChildIds), true));
                 }
                 $result = false;
             }
