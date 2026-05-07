@@ -4,14 +4,27 @@
 }
 
 /* responsive Screenshots */
-@media (max-width: 768px) {
-    .desktop-img {
-        display: none;
+.desktop-img,
+.tablet-img,
+.mobile-img {
+    display: none;
+}
+
+@media (max-width: 599px) {
+    .mobile-img {
+        display: block;
     }
 }
-@media (min-width: 768px) {
-    .mobile-img {
-        display: none;
+
+@media (min-width: 600px) and (max-width: 1023px) {
+    .tablet-img {
+        display: block;
+    }
+}
+
+@media (min-width: 1024px) {
+    .desktop-img {
+        display: block;
     }
 }
 
