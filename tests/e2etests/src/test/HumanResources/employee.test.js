@@ -336,7 +336,7 @@ describe('employee', () => {
 
         test('edit workingtimeschema', async () => {
             await contractEditDialog.type('[class=new-row] input', 'Arbeitszeitlimitierung');
-            await contractEditDialog.waitForTimeout(1000);
+            await new Promise(r => setTimeout(r, 1000));
             let workingtimeschema = lib.getNewWindow();
             await contractEditDialog.keyboard.press('Enter')
             workingtimeschema = await workingtimeschema;
@@ -353,7 +353,7 @@ describe('employee', () => {
         test('check contract', async () => {
             await new Promise(r => setTimeout(r, 2000));
             await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'test'});
-            await page.waitForTimeout(2000);
+            await new Promise(r => setTimeout(r, 2000));
             employeeEditDialog = await lib.getEditDialog('Mitarbeitende bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge'});
             await new Promise(r => setTimeout(r, 5000))
