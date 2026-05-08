@@ -17,3 +17,14 @@
         window.location.replace(url.toString());
     }
 })();
+
+
+// open all external links in a new tab (to not confuse the user in popup manual)
+document$.subscribe(() => {
+    document.querySelectorAll('a[href^="http"], a[href^="//"]').forEach(link => {
+        if (link.hostname !== window.location.hostname) {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        }
+    });
+});
