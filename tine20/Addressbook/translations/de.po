@@ -116,7 +116,7 @@ msgid "Contact duplicate check fields"
 msgstr "Kontaktfelder für den Dublettencheck"
 
 msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr "Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
+msgstr "Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird eine Fehlermeldung angezeigt, auf die der Benutzer oder die Benutzerin reagieren kann."
 
 msgid "Contact Hidden Criteria"
 msgstr "Kriterium zum ausblenden von Kontakten"
@@ -208,7 +208,7 @@ msgid "Record)icon"
 msgstr ""
 
 msgid "It is not allowed to delete a contact linked to an user account!"
-msgstr "Es ist nicht erlaubt, einen Kontakt zu Löschen, der zu einem Benutzerkonto gehört!"
+msgstr "Es ist nicht erlaubt, einen Kontakt zu Löschen, der zu einem Benutzer*innenkonto gehört!"
 
 msgid "It is not allowed to delete email account type contact!"
 msgstr "Es ist nicht erlaubt, einen Kontakt vom Typ E-Mail-Konto zu löschen!"
@@ -221,7 +221,7 @@ msgid "It is not allowed to delete a list linked to admin group!"
 msgstr "Es ist nicht erlaubt, eine Gruppe zu Löschen, die zu einer Systemgruppe gehört!"
 
 msgid "It is not allowed to add non-account contacts to this list"
-msgstr "Es ist nicht erlaubt, Nichtbenutzer zu dieser Liste hinzuzufügen"
+msgstr "Es ist nicht erlaubt, Kontakte ohne Benutzer*innenkonto zu dieser Liste hinzuzufügen"
 
 msgid "E-Mail address is already given. Please choose another one."
 msgstr "Die E-Mail-Adresse ist bereits vergeben. Bitte wählen Sie eine andere."
@@ -335,14 +335,11 @@ msgstr "Importiere CSV-formatierte Kontakte aus einem Exchange-/ Outlook-Adressb
 msgid "Contact CSV import from Outlook address book"
 msgstr "CSV-Kontaktimport aus dem Outlook-Adressbuch"
 
-msgid "Tine contact CSV import all data"
-msgstr ""
+msgid "Tine contact CSV import"
+msgstr "Tine Kontakt CSV-Import"
 
 msgid "Import CSV formated contacts from tine address book"
 msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
-
-msgid "Tine contact CSV import"
-msgstr "Tine Kontakt CSV-Import"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importliste (###CURRENTDATE###)"
@@ -383,16 +380,6 @@ msgstr "Das Recht auf private Informationen des Kontaktes zuzugreifen"
 
 msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
-
-msgid "Copy Postal Address to Clipboard"
-msgstr "Post Anschrift in die Zwischenablage kopieren"
-
-msgid "Copied to clipboard"
-msgstr "In die Zwischenablage kopiert"
-
-#, python-brace-format
-msgid "\"{value}\" was copied to clipboard"
-msgstr "\"{value}\" wurde in die Zwischenablage kopiert"
 
 msgid "Street"
 msgstr "Straße"
@@ -626,7 +613,7 @@ msgid "Set as preferred E-Mail"
 msgstr "Als bevorzugte E-Mail setzen"
 
 msgid "Search for users ..."
-msgstr "Suche nach Benutzern ..."
+msgstr "Suche nach Benutzer*innen ..."
 
 msgid "Search for Contacts ..."
 msgstr "Suche nach Kontakten ..."
@@ -634,18 +621,11 @@ msgstr "Suche nach Kontakten ..."
 msgid "Group Information"
 msgstr "Gruppeninformationen"
 
-msgid "You do not have the grant to manage mailing list with internal domain"
-msgstr "Sie haben keine Berechtigung, die Verteilerliste mit interner Domain zu verwalten."
-
-#, python-brace-format
-msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
-msgstr "Die Verteilerliste mit der Adresse {0} wird in einem externen Prozess verwaltet. Die Änderung der Gruppenmitglieder hier hat keine Auswirkungen auf die Empfänger dieser Verteilerliste"
-
 msgid "List type"
 msgstr "Listen Typ"
 
 msgid "System accounts only"
-msgstr "Nur Systembenutzer"
+msgstr "Nur Systembenutzer*innen"
 
 msgid "Enter description"
 msgstr "Bitte geben Sie eine Beschreibung an"
@@ -655,7 +635,7 @@ msgid "{0} must be given"
 msgstr "{0} muss gegeben sein"
 
 msgid "This is a system group. To edit this group you need the Admin.ManageAccounts right."
-msgstr "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das Recht 'Benutzerkonten verwalten‘."
+msgstr "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das Recht 'Benutzer*innenkonten verwalten‘."
 
 msgid "Members"
 msgstr "Mitglieder"
@@ -686,9 +666,6 @@ msgstr "E-Mail-Verteiler"
 msgid "This group is a mailing list"
 msgstr "Diese Gruppe ist ein E-Mail-Verteiler"
 
-msgid "You do not have the grant to enter internal domain"
-msgstr "Sie haben keine Berechtigung, interne Domänen einzugeben"
-
 msgid "Reply to"
 msgstr "Antwortmails an"
 
@@ -712,18 +689,6 @@ msgstr "Nur E-Mails von Gruppenmitgliedern weiterleiten"
 
 msgid "Only forward to system email accounts"
 msgstr "E-Mails nur an Nutzer mit Systemkonto verteilen"
-
-msgid "Email distribution list function required"
-msgstr "E-Mail-Verteiler Funktion benötigt"
-
-msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
-msgstr "E-Mail Konten der Domain der angegebene E-Mail Adresse werden automatisch durch diese Installation verwaltet. Sie können Adressen dieser Domain hier nur verwenden wenn die “E-Mail-Verteiler” Funktion für diese Gruppe aktiviert ist."
-
-msgid "Would you like to enable this function now?"
-msgstr "Soll diese Funktion nun aktiviert werden?"
-
-msgid "E-Mail can not be empty when mailing list is enabled"
-msgstr "Die E-Mail-Adresse darf nicht leer sein, wenn die E-Mail-Verteiler aktiviert ist."
 
 msgid "Company address"
 msgstr "Firmenadresse"
@@ -780,7 +745,7 @@ msgid "This module visualises hierarchically depended relations between records 
 msgstr "Dieses Modul visualisiert hierarchisch abhängige Beziehungen zwischen Einträgen verschiedener Typen."
 
 msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr "Hierarchisch abhängige Beziehungen werden von einigen Datentypen wie z.B. Benutzern und Gruppen automatisch  erstellt. Sie können aber auch manuell mit den entsprechenden Verknüpfungstypen erzeugt werden."
+msgstr "Hierarchisch abhängige Beziehungen werden von einigen Datentypen wie z.B. Benutzer*innen und Gruppen automatisch  erstellt. Sie können aber auch manuell mit den entsprechenden Verknüpfungstypen erzeugt werden."
 
 msgid "Loading Structure data..."
 msgstr "Lade Strukturdaten..."
@@ -846,9 +811,6 @@ msgstr ""
 
 msgid "Label"
 msgstr "Bezeichner"
-
-msgid "Calendar Free Busy URLs"
-msgstr "Kalender Frei Belegt URLs"
 
 msgid "GENDER_Address"
 msgstr "female"
@@ -919,11 +881,6 @@ msgid "Site"
 msgid_plural "Sites"
 msgstr[0] "Standort"
 msgstr[1] "Standorte"
-
-msgid "External FreeBusy Url"
-msgid_plural "External FreeBusy Urls"
-msgstr[0] "Externe Frei Belegt URL"
-msgstr[1] "Externe Frei Belegt URLs"
 
 msgid "GENDER_Group"
 msgstr "female"
@@ -1080,11 +1037,48 @@ msgstr "Anzeigename - Firma/Organisation"
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr ""
 
+msgid "Copy Postal Address to Clipboard"
+msgstr "Post Anschrift in die Zwischenablage kopieren"
+
+msgid "Copied to clipboard"
+msgstr "In die Zwischenablage kopiert"
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr "\"{value}\" wurde in die Zwischenablage kopiert"
+
+msgid "You do not have the grant to manage mailing list with internal domain"
+msgstr "Sie haben keine Berechtigung, die Verteilerliste mit interner Domain zu verwalten."
+
+#, python-brace-format
+msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+msgstr "Die Verteilerliste mit der Adresse {0} wird in einem externen Prozess verwaltet. Die Änderung der Gruppenmitglieder hier hat keine Auswirkungen auf die Empfänger dieser Verteilerliste"
+
+msgid "You do not have the grant to enter internal domain"
+msgstr "Sie haben keine Berechtigung, interne Domänen einzugeben"
+
+msgid "Email distribution list function required"
+msgstr "E-Mail-Verteiler Funktion benötigt"
+
+msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+msgstr "E-Mail Konten der Domain der angegebene E-Mail Adresse werden automatisch durch diese Installation verwaltet. Sie können Adressen dieser Domain hier nur verwenden wenn die “E-Mail-Verteiler” Funktion für diese Gruppe aktiviert ist."
+
+msgid "Would you like to enable this function now?"
+msgstr "Soll diese Funktion nun aktiviert werden?"
+
+msgid "E-Mail can not be empty when mailing list is enabled"
+msgstr "Die E-Mail-Adresse darf nicht leer sein, wenn die E-Mail-Verteiler aktiviert ist."
+
+msgid "Calendar Free Busy URLs"
+msgstr "Kalender Frei Belegt URLs"
+
+msgid "External FreeBusy Url"
+msgid_plural "External FreeBusy Urls"
+msgstr[0] "Externe Frei Belegt URL"
+msgstr[1] "Externe Frei Belegt URLs"
+
 msgid "Additional properties"
 msgstr "Zusätzliche Eigenschaften"
-
-msgid "Public Key"
-msgstr ""
 
 msgid "Please enable \"This group is a mailing list\" in mailing list panel."
 msgstr "Bitte aktivieren Sie \"Diese Gruppe ist ein E-Mail-Verteiler\" im E-Mail-Verteiler Karteireiter"

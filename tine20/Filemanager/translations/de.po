@@ -66,7 +66,7 @@ msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
 msgid "Folders of other users"
-msgstr "Ordner anderer Benutzer"
+msgstr "Ordner anderer Benutzer*innen"
 
 msgid "Received"
 msgstr "Erhalten"
@@ -293,7 +293,7 @@ msgid "Download"
 msgstr "Herunterladen"
 
 msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer oder einer anderen Systembenutzerin zu teilen"
 
 msgid "Grants"
 msgstr "Berechtigungen"
@@ -526,7 +526,7 @@ msgid "Once a year"
 msgstr "Einmal pro Jahr"
 
 msgid "Search for users..."
-msgstr "Suche nach Benutzern..."
+msgstr "Suche nach Benutzer*innen..."
 
 msgid "No permission"
 msgstr "Keine Berechtigung"
@@ -595,10 +595,10 @@ msgid "Usage by File Type"
 msgstr "Verbrauch nach Dateityp"
 
 msgid "User"
-msgstr "Benutzer"
+msgstr "Benutzer*in"
 
 msgid "Usage by User"
-msgstr "Verbrauch nach Benutzer"
+msgstr "Verbrauch nach Benutzer*innen"
 
 msgid "unknown"
 msgstr "unbekannt"

@@ -60,7 +60,7 @@ msgid "Disable Remote Reset Action AdminPanel"
 msgstr "Deaktiviere die „Entferntes Löschen“ Aktion im Admin Bereich"
 
 msgid "Disable Access Log"
-msgstr "Zugriffe nicht protokolieren"
+msgstr "Zugriffe nicht protokollieren"
 
 msgid "Disable ActiveSync Access Log creation."
 msgstr "Zugriffe per ActiveSync nicht im Zugriffslog speichern."

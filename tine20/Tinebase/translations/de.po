@@ -164,7 +164,7 @@ msgid "Account Deletion Event"
 msgstr "Account Löschungs Event"
 
 msgid "Configure what should happen to data of deleted users"
-msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
+msgstr "Konfiguriere was mit den Daten gelöschter Benutzer*innen geschehen soll"
 
 msgid "Delete personal containers"
 msgstr "Lösche persönliche Ordner"
@@ -284,7 +284,7 @@ msgid "Authentication Backend"
 msgstr "Authentifizierungs-Backend"
 
 msgid "Backend adapter for user authentication."
-msgstr "Backend zur Benutzer-Authentifizierung"
+msgstr "Backend zur Benutzer*innen-Authentifizierung"
 
 msgid "Authentication Configuration"
 msgstr "Konfiguration der Authentifizierung"
@@ -302,10 +302,10 @@ msgid "Skip maximum license user check in setup"
 msgstr "Prüfung der maximalen Benutzer*innenanzahl im Setup überspringen"
 
 msgid "User Backend"
-msgstr "Benutzer-Backend"
+msgstr "Benutzer*innen-Backend"
 
 msgid "Backend adapter for user data."
-msgstr "Backend für Benutzerdaten"
+msgstr "Backend für Benutzer*innendaten"
 
 msgid "Replication master configuration"
 msgstr "Replikation Master Konfiguration"
@@ -338,22 +338,22 @@ msgid "Action queue configuration."
 msgstr "Action Queue Konfiguration."
 
 msgid "User Configuration"
-msgstr "Benutzerkonfiguration"
+msgstr "Benutzer*innenkonfiguration"
 
 msgid "User backend configuration."
-msgstr "Benutzer-Backend Konfiguration"
+msgstr "Benutzer*innen-Backend Konfiguration"
 
 msgid "Sync contact data from sync backend"
 msgstr "Kontaktdaten vom synchronisierten Backend synchronisieren"
 
 msgid "Sync user contact data from sync backend"
-msgstr "Benutzer Kontaktdaten vom synchronisierten Backend synchronisieren"
+msgstr "Benutzer*innenkontaktdaten vom synchronisierten Backend synchronisieren"
 
 msgid "Sync contact photo from sync backend"
 msgstr "Kontaktphoto vom Sync-Backend Synchronisieren"
 
 msgid "Sync user contact photo from sync backend"
-msgstr "Das Benutzer Kontaktphoto vom Sync-Backend Synchronisieren"
+msgstr "Das Benutzer*innenkontaktphoto vom Sync-Backend Synchronisieren"
 
 msgid "Sync deleted users from sync backend"
 msgstr "Im Sync-Backend gelöschte Nutzer entfernen"
@@ -436,7 +436,7 @@ msgid "Cronuser ID"
 msgstr "Cronuser-ID"
 
 msgid "User ID of the cron user."
-msgstr "ID des Cronjob-Benutzers"
+msgstr "ID der Cronjob-Benutzer*innen"
 
 msgid "Import/Export Default Container"
 msgstr "Standard-Container für Import/Export"
@@ -550,7 +550,7 @@ msgid "Configure PHP hook class for custom event handling"
 msgstr "PHP-Hook-Klasse für benutzer*innendefinierte Ereignisverarbeitung konfigurieren"
 
 msgid "Configure hook class for user sync"
-msgstr "Konfiguriere Hook-Klasse für die Synchronisation durch den Benutzer"
+msgstr "Konfiguriere Hook-Klasse für die Synchronisation durch den Benutzer oder die Benutzerin"
 
 msgid "Allows changing data after fetching user from sync backend"
 msgstr "Änderung der Daten erlauben, nachdem ein Benutzer oder eine Benutzerin von einem synchronisierten Backend geladen wurde"
@@ -565,7 +565,7 @@ msgid "IP Session Validator"
 msgstr "IP-Sitzungsüberwachung"
 
 msgid "Destroy session if the users IP changes."
-msgstr "Sitzung abbrechen, wenn der Benutzer seine IP ändert."
+msgstr "Sitzung abbrechen, wenn die IP-Adresse des Benutzers oder der Benutzerin geändert wird."
 
 msgid "UA Session Validator"
 msgstr "UA-Sitzungsüberwachung"
@@ -577,13 +577,13 @@ msgid "Files Directory"
 msgstr "Verzeichnis für Dateien"
 
 msgid "Directory with web server write access for user files."
-msgstr "Verzeichnis für Benutzerdateien, zu dem der Webserver Schreibzugriff hat."
+msgstr "Verzeichnis für Benutzer*innendateien, zu dem der Webserver Schreibzugriff hat."
 
 msgid "Reuse username from last login"
 msgstr "Den zuletzt benutzten Benutzer*innennamen verwenden"
 
 msgid "User may change password"
-msgstr "Benutzer kann Passwort ändern"
+msgstr "Benutzer*in kann Passwort ändern"
 
 msgid "Browser password manager can be used"
 msgstr "Passwortmanager des Browsers kann verwendet werden"
@@ -658,10 +658,10 @@ msgid "Minimum numbers in password"
 msgstr "Minimale Anzahl Zahlen im Passwort"
 
 msgid "Forbid part of username"
-msgstr "Verbiete einen Teil des Benutzernamens"
+msgstr "Verbiete einen Teil des Benutzer*innennamens"
 
 msgid "Forbid part of username in password"
-msgstr "Verbiete einen Teil des Benutzernamens im Passwort"
+msgstr "Verbiete einen Teil des Benutzer*innennamens im Passwort"
 
 msgid "Change Password After ... Days"
 msgstr "Passwort nach … Tagen ändern"
@@ -721,10 +721,10 @@ msgid "Allows configuration of which user is allowed to switch to another user's
 msgstr "Erlaubt es zu konfigurieren, welchem Benutzer oder welcher Benutzerin es erlaubt ist sich in einem anderen Konto anzumelden"
 
 msgid "Max username length"
-msgstr "Maximale Benutzernamen Länge"
+msgstr "Maximale Benutzer*innennamen Länge"
 
 msgid "User PIN"
-msgstr "Benutzer PIN"
+msgstr "Benutzer*in PIN"
 
 msgid "Users can have a PIN"
 msgstr "Nutzer können einen PIN haben"
@@ -766,10 +766,10 @@ msgid "Custom title for branding."
 msgstr "Angepasster Titel fürs Branding."
 
 msgid "custom logo path"
-msgstr "Benutzerdefinierter Logo-Pfad"
+msgstr "Benutzer*innendefinierter Logo-Pfad"
 
 msgid "Path to custom logo."
-msgstr "Pfad zu einem benutzerdefinierten Logo."
+msgstr "Pfad zu einem benutzer*innendefinierten Logo."
 
 msgid "custom description"
 msgstr "Eingene Beschreibung"
@@ -848,6 +848,12 @@ msgstr "SyncToken Plugin aktivieren"
 
 msgid "Enable the use of the SyncToken plugin."
 msgstr "Aktiviere die Nutzung des SyncToken Plugins."
+
+msgid "currency symbol"
+msgstr "Währungssymbol"
+
+msgid "Path to custom favicon."
+msgstr "Pfad zu einem benutzer*innendefinierten Favicon."
 
 msgid "Role receiving support requests"
 msgstr "Rolle, die Supportanfragen erhält"
@@ -1000,10 +1006,10 @@ msgid "Filesystem total quota in MB (0 for unlimited)"
 msgstr "Gesamtes Dateisystem-Kontingent in MB (0 = unbegrenzt)"
 
 msgid "Total quota by user in MB"
-msgstr "Gesamte Quota nach Benutzer in MB"
+msgstr "Gesamte Quota nach Benutzer*in in MB"
 
 msgid "Total quota by user in MB (0 for unlimited)"
-msgstr "Gesamte Quota nach Benutzer in MB (0 für unlimitiert)"
+msgstr "Gesamte Quota nach Benutzer*in in MB (0 für unlimitiert)"
 
 msgid "Soft quota in %"
 msgstr "Soft-Quota in %"
@@ -1171,7 +1177,7 @@ msgid "%s's personal files"
 msgstr "Persönliche Dateien von %s"
 
 msgid "Maximum number of users reached."
-msgstr "Maximale Anzahl von Benutzern erreicht."
+msgstr "Maximale Anzahl von Benutzer*innen erreicht."
 
 msgid "The new password must be different from the old one."
 msgstr "Das neue Passwort muss sich vom alten unterscheiden."
@@ -1324,13 +1330,13 @@ msgid "filemanager soft quota notification"
 msgstr "Dateimanager Fließ-Kontingent Benachrichtigungen"
 
 msgid "Number of distinct users"
-msgstr "Anzahl der einzelnen Benutzer"
+msgstr "Anzahl der einzelnen Benutzer*innen"
 
 msgid "Number of users"
-msgstr "Anzahl der Benutzer"
+msgstr "Anzahl der Benutzer*innen"
 
 msgid "  User Accounts:\n"
-msgstr "  Benutzerkonten:\n"
+msgstr "  Benutzer*innenkonten:\n"
 
 msgid "Feature is not available. Please ask admin to enable public page config"
 msgstr "Die Funktion ist nicht verfügbar. Bitte kontaktieren Sie Ihren Administrator, die Konfiguration der öffentlichen Seite zu aktivieren."
@@ -1564,7 +1570,7 @@ msgstr "Gemeinsame {0}"
 
 #, python-brace-format
 msgid "Other Users {0}"
-msgstr "{0} anderer Benutzer"
+msgstr "{0} andere Benutzer*innen"
 
 #, python-brace-format
 msgid "My {0}"
@@ -1698,7 +1704,7 @@ msgid "No Role Memberships"
 msgstr "Keine Rollen-Mitgliedschaften vorhanden"
 
 msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "Ihr Benutzerkonto besitzt keine Mitgliedschaften in Rollen. Bitte kontaktieren Sie Ihren Administrator."
+msgstr "Ihr Benutzer*innenkonto besitzt keine Mitgliedschaften in Rollen. Bitte kontaktieren Sie Ihren Administrator."
 
 msgid "Method Not Found / Insufficient Permissions"
 msgstr "Methode nicht gefunden oder fehlende Rechte"
@@ -1815,10 +1821,10 @@ msgstr "Powered by:"
 
 #, python-brace-format
 msgid "User: {0}"
-msgstr "Benutzer: {0}"
+msgstr "Benutzer*in: {0}"
 
 msgid "Return to original user account"
-msgstr "Kehre zurück zum ursprünglichen Benutzer-Konto"
+msgstr "Kehre zurück zum ursprünglichen Benutzer*innenkonto"
 
 msgid "Help"
 msgstr "Hilfe"
@@ -2015,7 +2021,7 @@ msgid "FIDO2 WebAuthn Device is configured."
 msgstr "FIDO2 WebAuthn Gerät ist konfiguriert."
 
 msgid "This installation requires user verification for FIDO2 devices. Firefox does not support user verification. You need to use a different browser to use FIDO2."
-msgstr "Diese Installation erfordert eine Benutzerverifizierung für FIDO2-Geräte. Firefox unterstützt keine Benutzerverifizierung. Sie müssen einen anderen Browser verwenden, um FIDO2 zu nutzen."
+msgstr "Diese Installation erfordert eine Benutzer*innenverifizierung für FIDO2-Geräte. Firefox unterstützt keine Benutzer*innenverifizierung. Sie müssen einen anderen Browser verwenden, um FIDO2 zu nutzen."
 
 msgid "Unsupported Configuration"
 msgstr "Nicht unterstützte Konfiguration"
@@ -2158,7 +2164,7 @@ msgid "Activation Key"
 msgstr "Aktivierungsschlüssel"
 
 msgid "Maximum Users (0=unlimited)"
-msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+msgstr "Maximale Benutzer*innenzahl (0=Unbegrenzt)"
 
 msgid "Organization"
 msgstr "Lizenznehmer"
@@ -2474,10 +2480,10 @@ msgid "Changes you made may not be saved."
 msgstr "Ihre Änderungen wurden möglicherweise nicht gespeichert."
 
 msgid "Change user account"
-msgstr "Wechsel Benutzerkonto"
+msgstr "Wechsel Benutzer*innenkonto"
 
 msgid "Switch to another user's account"
-msgstr "Zu einem anderen Benutzerkonto wechseln"
+msgstr "Zu einem anderen Benutzer*innenkonto wechseln"
 
 msgid "Switch to this user account:"
 msgstr "Wechsel zu diesem Konto:"
@@ -2489,7 +2495,7 @@ msgid "Changing user account..."
 msgstr "Wechsel Benutzer*innenkonto..."
 
 msgid "Search User"
-msgstr "Benutzersuche"
+msgstr "Benutzer*innensuche"
 
 msgid "Search Group"
 msgstr "Gruppensuche"
@@ -2723,7 +2729,7 @@ msgid "2 days before"
 msgstr "2 Tage davor"
 
 msgid "Custom Datetime"
-msgstr "Benutzerdefinierter Zeitpunkt"
+msgstr "Benutzer*innendefinierter Zeitpunkt"
 
 msgid "Alarm Time"
 msgstr "Alarmzeit"
@@ -3104,7 +3110,7 @@ msgid "Admin Mode"
 msgstr "Adminmodus"
 
 msgid "All Users"
-msgstr "Alle Benutzer"
+msgstr "Alle Benutzer*innen"
 
 msgid "Applications"
 msgstr "Anwendungen"
@@ -3766,7 +3772,7 @@ msgid "Title"
 msgstr "Bezeichnung"
 
 msgid "Shared Favorite (visible by other users)"
-msgstr "Gemeinsame Favoriten (sichtbar für andere Benutzer)"
+msgstr "Gemeinsame Favoriten (sichtbar für andere Benutzer*innen)"
 
 msgid "The grant to see and use this filter"
 msgstr "Das Recht diesen Filter zu sehen und zu bearbeiten"
@@ -4772,7 +4778,7 @@ msgid "Redirecting..."
 msgstr ""
 
 msgid "Your user account has been deactivated"
-msgstr "Ihr Benutzerkonto würde deaktiviert"
+msgstr "Ihr Benutzer*innenkonto würde deaktiviert"
 
 msgid "Deactivation date"
 msgstr "Deaktivierungsdatum"
