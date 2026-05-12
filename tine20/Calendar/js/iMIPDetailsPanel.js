@@ -221,6 +221,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         // Create the static text display with hover functionality
         this.attendeeComboContainer = new Ext.Container({
             hidden: true,
+            cls: 'felamimail-action-invitation',
             items: [this.attendeeCombo]
         });
 
@@ -238,6 +239,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
                 icon: status.get('icon'),
                 hidden: true,
                 toggleGroup: 'attendee-status-tglgroup',
+                cls: 'felamimail-action-invitation',
                 tooltip: status.id === 'NEEDS-ACTION' ? this.app.i18n._('Save to calendar without responding') : status.get('i18nValue'),
             })));
         });
