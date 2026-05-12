@@ -105,6 +105,19 @@
     filter: brightness(1.2);
 }
 
+.felamimail-action-invitation {
+    cursor: pointer;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    overflow: hidden;
+}
+
+.felamimail-action-invitation:hover {
+    filter: brightness(1.2);
+}
+
 .felamimail-action {
     padding: 5px;
     margin: 5px;
