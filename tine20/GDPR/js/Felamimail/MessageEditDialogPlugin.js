@@ -12,7 +12,6 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         this.editDialog = editDialog;
         this.recipientGrid = this.editDialog.recipientGrid;
         if (!this.recipientGrid) return;
-        this.recipientGrid.searchCombo.listEmptyText = this.app.i18n._('No matching email address found which agreed to the selected intended purpose.');
         if (this.editDialog.massMailingPlugins.includes('poll')) return;
         this.selectedDataIntendedPurpose = '';
 
@@ -49,11 +48,35 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         this.editDialog.messageInfoFormPanel.add(this.massmailingInfo);
         this.editDialog.switchMassMailingMode = this.switchMassMailingMode.createDelegate(this);
         this.recipientGrid.validateRecipientToken = this.validateRecipientToken.createDelegate(this);
+        this.recipientGrid.startEditing = this.startEditing.createDelegate(this);
+    },
+
+    startEditing: function(row, col) {
+        this.lastEditedRecord = this.recipientGrid.store.getAt(row);
+        if (this.recipientGrid.massMailingMode && col === 0) return;
+
+        const ed = this.recipientGrid.colModel.getCellEditor(col, row);
+
+        if (ed.field?.view) {
+            const emptyText = this.sendMassMailWithDIP
+                ? this.app.i18n._('No matching email address found which agreed to the selected intended purpose.')
+                : this.recipientGrid.searchCombo.listEmptyText;
+
+            if (ed.field.view.emptyText !== emptyText) {
+                ed.field.view.emptyText = emptyText;
+                ed.field.view.el.update(emptyText);
+            }
+        }
+
+        if (! this.recipientGrid.composeDlg || ! this.recipientGrid.composeDlg.saving) {
+            Tine.Felamimail.RecipientGrid.superclass.startEditing.apply(this.recipientGrid, arguments);
+        }
     },
     
     switchMassMailingMode(active) {
         if (active) this.showDipSelectPicker();
 
+        this.sendMassMailWithDIP = active;
         this.editDialog.massMailingMode = active;
         if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.editDialog.massMailingInfoText.setVisible(active);
@@ -197,6 +220,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
             windowTitle: this.app.getTitle() + ': ' + this.app.i18n._('Please select a purpose of processing'),
             listeners: {
                 beforeapply: (data) => {
+                    this.sendMassMailWithDIP = data.sendMassMailWithDIP;
                     if (this.selectedDataIntendedPurpose?.id && !data.recipientMode) {
                         Ext.MessageBox.alert(i18n._('Errors'), i18n._('You need to select an option!'));
                         return false;
@@ -228,6 +252,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                 const option = this.getForm().findField('optionGroup').getValue();
                 if (eventName === 'apply') return {
                     recipientMode: option || '',
+                    sendMassMailWithDIP: !this.ownerCt.sendMassMailWithoutDIP.getValue()
                 }
             },
             items: [{
