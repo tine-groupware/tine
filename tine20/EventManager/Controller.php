@@ -49,6 +49,19 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 'publicApiGetFile',
                 [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
             ))->toArray());
+            $routeCollector->get(
+                '/get/eventmanager/image/{imageId}[/{width}/{height}/{ratiomode}]',
+                (new Tinebase_Expressive_RouteHandler(
+                    EventManager_Controller_Event::class,
+                    'publicApiGetImage',
+                    [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+                ))->toArray()
+            );
+            $routeCollector->get('/get/eventmanager/images', (new Tinebase_Expressive_RouteHandler(
+                EventManager_Controller_Event::class,
+                'publicApiGetImages',
+                [Tinebase_Expressive_RouteHandler::IS_PUBLIC => true]
+            ))->toArray());
             $routeCollector->get('/events', (new Tinebase_Expressive_RouteHandler(
                 EventManager_Controller_Event::class,
                 'publicApiEvents',

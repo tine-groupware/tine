@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-/**
- * Tine 2.0 - https://www.tine20.org
+/*
+ * tine Groupware
  *
  * @package     EventManager
  * @license     https://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (https://www.metaways.de)
- * @author      Tonia Wulff <t.leuschel@metaways.de>
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Tonia Wulff <t.wulff@metaways.de>
  *
  */
 
@@ -63,6 +63,17 @@ class EventManager_Frontend_RssFeed
         ]);
 
         $events = EventManager_Controller_Event::getInstance()->getAll();
+
+        $imagesMetadata = EventManager_Controller_ImageMetadata::getInstance()->search();
+        foreach ($imagesMetadata as $image) {
+            $image->image_vfs = EventManager_Controller_ImageMetadata::getImageUrl(
+                EventManager_Config::APP_NAME,
+                $image->node_id,
+                -1,
+                -1
+            );
+        }
+
         $ab_controller = Addressbook_Controller_Contact::getInstance();
         $ab_controller->assertPublicUsage();
         foreach ($events as $event) {
@@ -94,9 +105,10 @@ class EventManager_Frontend_RssFeed
                 ->get(EventManager_Config::EVENT_STATUS)->records->getById($event['status'])->value;
             $status = $translate->_($status);
             $fee = $event['fee'];
-            $total_places = $event['total_places'];
+            // places are not necessary for now:
+            /*$total_places = $event['total_places'];
             $booked_places = $event['booked_places'];
-            $available_places = $event['available_places'];
+            $available_places = $event['available_places'];*/
             $registration_possible_until = $event['registration_possible_until'];
             $last_modified_time = $event['last_modified_time'] ?? $event['creation_time'];
             $event_id = $event['id'];
@@ -105,6 +117,14 @@ class EventManager_Frontend_RssFeed
             if (count($tags) > 0) {
                 foreach ($tags as $tag) {
                     $categories[] = $tag['name'];
+                }
+            }
+            $images = [];
+            if ($imagesMetadata) {
+                foreach ($imagesMetadata as $image) {
+                    if ($image->event === $event_id) {
+                        $images[] = Tinebase_Core::getUrl() . '/' . $image->image_vfs;
+                    }
                 }
             }
 
@@ -119,13 +139,11 @@ class EventManager_Frontend_RssFeed
                 'type' => $type,
                 'status' => $status,
                 'fee' => $fee,
-                'total_places' => $total_places,
-                'booked_places' => $booked_places,
-                'available_places' => $available_places,
                 'registration_possible_until' => $registration_possible_until,
                 'pubDate' => $last_modified_time,
                 'link' => $url,
                 'categories' => $categories,
+                'images' => $images,
             ]);
         }
         return $feed;
