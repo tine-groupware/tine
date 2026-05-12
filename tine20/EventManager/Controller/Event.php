@@ -333,7 +333,12 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                             ->get(EventManager_Config::REGISTRATION_STATUS)->records
                             ->getById($registration->{EventManager_Model_Registration::FLD_STATUS});
                         $registration->{EventManager_Model_Registration::FLD_STATUS} = $status->value;
-                        $registrations_data[] = $registration->toArray();
+                        if (
+                            $registration->{EventManager_Model_Registration::FLD_REGISTRANT}
+                                ->email === $email_registrant
+                        ) {
+                            $registrations_data[] = $registration->toArray();
+                        }
                     }
 
                     if (count($registrations_data) === 0) {
