@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-04-08 11:03+0200\n"
+"PO-Revision-Date: 2026-05-13 15:09+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -193,6 +193,9 @@ msgstr "Nur sich selbst"
 
 msgid "Dependants"
 msgstr "Berechtigte"
+
+msgid "Pastoral Erzbistum Hamburg URL to events"
+msgstr "Pastoral Erzbistum Hamburg URL zu Veranstaltungen"
 
 msgid "Options"
 msgstr "Optionen"
@@ -456,14 +459,8 @@ msgstr "Herr"
 msgid "Ms"
 msgstr "Frau"
 
-msgid "Company"
-msgstr "Firma / Organisation"
-
 msgid "Person"
 msgstr "Person"
-
-msgid "Deutschland"
-msgstr "Deutschland"
 
 msgid "Registration for"
 msgstr "Anmeldung für"
@@ -558,6 +555,12 @@ msgstr "Erstellungszeit"
 msgid "Last Modified Time"
 msgstr "Letzte Änderungszeit"
 
+msgid "Sort"
+msgstr "Sortierung"
+
+msgid "Consent"
+msgstr "Einwilligung"
+
 msgid "Information regarding your involvement"
 msgstr "Informationen zu Ihrer Anmeldung"
 
@@ -589,6 +592,12 @@ msgstr "Fehlende Teilnehmende"
 
 msgid "Please select a participant first"
 msgstr "Bitte wählen Sie zuerst eine teilnehmende Person aus"
+
+msgid "Go to Homepage"
+msgstr "Zur Startseite"
+
+msgid "Go to Event Details page"
+msgstr "Zur Veranstaltungsseite"
 
 msgid "GENDER_Appointment"
 msgstr "female"
@@ -665,6 +674,9 @@ msgstr "Veranstaltungsanmeldungen"
 msgid "Event Appointments"
 msgstr "Veranstaltungstermine"
 
+msgid "Images"
+msgstr "Bilder"
+
 msgid "GENDER_File"
 msgstr "female"
 
@@ -678,6 +690,23 @@ msgstr "Nur die Bestätigung der Teilnehmer ist erforderlich (kein Hochladen von
 
 msgid "Participant should upload a file"
 msgstr "Die Teilnehmer sollten eine Datei hochladen"
+
+msgid "Image Metadata"
+msgid_plural "Images Metadata"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "I have checked the rights to this image and hereby confirm that the image may be published on the Internet"
+msgstr "Ich habe die Rechte an diesem Bild geprüft und bestätige hiermit, dass das Bild im Internet veröffentlicht werden darf"
+
+msgid "If you do not confirm that you have the right to publish the image, it will not be published on the Website"
+msgstr "Wenn Sie nicht bestätigen, dass Sie das Recht zur Veröffentlichung des Bildes haben, wird es nicht auf der Website veröffentlicht"
+
+msgid "This is the source of the image, it will be the text of the watermark for the image"
+msgstr "Dies ist die Bildquelle; hier steht der Text des Wasserzeichens für das Bild"
+
+msgid "Task"
+msgstr "Aufgabe"
 
 msgid "GENDER_Option"
 msgstr "female"
@@ -826,51 +855,6 @@ msgstr "Wählen Sie eine Person aus"
 msgid "Select a Participant"
 msgstr "Wählen Sie eine Person aus"
 
-msgid "Salutation"
-msgstr "Anrede"
-
-msgid "Title"
-msgstr "Titel"
-
-msgid "First Name"
-msgstr "Vorname"
-
-msgid "Middle Name"
-msgstr "Zweiter Vorname"
-
-msgid "Last Name"
-msgstr "Nachname"
-
-msgid "Day of Birth"
-msgstr "Geburtstag"
-
-msgid "E-mail"
-msgstr "E-mail"
-
-msgid "Mobile"
-msgstr "Handy"
-
-msgid "Telephone"
-msgstr "Telefon"
-
-msgid "Street"
-msgstr "Straße"
-
-msgid "House Nr."
-msgstr "Hsnr."
-
-msgid "Postal Code"
-msgstr "Postleitzahl"
-
-msgid "City"
-msgstr "Ort"
-
-msgid "Region"
-msgstr "Bundesland"
-
-msgid "Country"
-msgstr "Land"
-
 msgid "Confirmation E-mail"
 msgstr "Anmeldebestätigung E-Mail"
 
@@ -915,6 +899,57 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Company"
+#~ msgstr "Firma / Organisation"
+
+#~ msgid "Deutschland"
+#~ msgstr "Deutschland"
+
+#~ msgid "Salutation"
+#~ msgstr "Anrede"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "First Name"
+#~ msgstr "Vorname"
+
+#~ msgid "Middle Name"
+#~ msgstr "Zweiter Vorname"
+
+#~ msgid "Last Name"
+#~ msgstr "Nachname"
+
+#~ msgid "Day of Birth"
+#~ msgstr "Geburtstag"
+
+#~ msgid "E-mail"
+#~ msgstr "E-mail"
+
+#~ msgid "Mobile"
+#~ msgstr "Handy"
+
+#~ msgid "Telephone"
+#~ msgstr "Telefon"
+
+#~ msgid "Street"
+#~ msgstr "Straße"
+
+#~ msgid "House Nr."
+#~ msgstr "Hsnr."
+
+#~ msgid "Postal Code"
+#~ msgstr "Postleitzahl"
+
+#~ msgid "City"
+#~ msgstr "Ort"
+
+#~ msgid "Region"
+#~ msgstr "Bundesland"
+
+#~ msgid "Country"
+#~ msgstr "Land"
 
 #~ msgid "You don't have any registrations for yourself yet. Get started by creating one!"
 #~ msgstr "Sie haben noch keine Anmeldungen für sich selbst. Legen Sie los und erstellen Sie eine!"
