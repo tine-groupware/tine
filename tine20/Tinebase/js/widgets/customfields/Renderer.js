@@ -46,16 +46,24 @@ Tine.widgets.customfields.Renderer = function(){
                         var customfields = _.get(record, 'data.customfields', {});
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
-                    
                 } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1 &&
                     _.get(window, cfDefinition.recordConfig.value.records)) {
-                    renderers[key] = function(value, metaData, record) {
+                    renderers[key] = function (value, metaData, record) {
                         var customfields = _.get(record, 'data.customfields', {}),
                             recordClass = eval(cfDefinition.recordConfig.value.records),
-                            cfData = _.get(customfields, cfName, customfields),
-                            record = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
+                            cfData = _.get(customfields, cfName);
 
-                        return record.getTitle();
+                        if (!cfData) return '';
+
+                        if (!Ext.isString(cfData) || cfData.trim() === '') return '';
+
+                        try {
+                            var r = Tine.Tinebase.data.Record.setFromJson(cfData, recordClass);
+                            return r ? r.getTitle() : '';
+                        } catch (e) {
+                            Tine.log.warn('customfields.Renderer: could not parse record cf "' + cfName + '"', e);
+                            return '';
+                        }
                     };
                 } else {
                     renderers[key] = function(value, metaData, record) {
