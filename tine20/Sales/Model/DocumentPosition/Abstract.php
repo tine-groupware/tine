@@ -572,7 +572,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             $source->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
 
             // make document_id dirty
-            $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS};
+            $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} = $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS};
         } elseif ($reversalOfReversal) {
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));

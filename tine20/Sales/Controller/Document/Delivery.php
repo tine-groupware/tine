@@ -51,7 +51,7 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
             Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Delivery::FLD_DESCRIPTION,
-            Sales_Model_Document_Delivery::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Delivery::FLD_REVERSED_STATUS,
             Sales_Model_Document_Delivery::FLD_PAYMENT_MEANS,
             Sales_Model_Document_Delivery::FLD_DISPATCH_HISTORY,
             Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,

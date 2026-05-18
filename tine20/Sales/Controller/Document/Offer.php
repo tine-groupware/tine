@@ -53,7 +53,7 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Offer::FLD_DESCRIPTION,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS,
-            Sales_Model_Document_Offer::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Offer::FLD_REVERSED_STATUS,
             Sales_Model_Document_Offer::FLD_PAYMENT_MEANS,
             Sales_Model_Document_Offer::FLD_DISPATCH_HISTORY,
             Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,

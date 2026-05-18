@@ -496,10 +496,10 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         ]);
 
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSAL_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSED_STATUS]);
         $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_DISPATCHED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSAL_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSED_STATUS]);
 
         /*Tinebase_Record_Expander_DataRequest::clearCache();
 

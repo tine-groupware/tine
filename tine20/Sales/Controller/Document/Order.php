@@ -61,7 +61,7 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
             Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS,
             Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS,
             Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS,
-            Sales_Model_Document_Order::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Order::FLD_REVERSED_STATUS,
             Sales_Model_Document_Order::FLD_PAYMENT_MEANS,
             Sales_Model_Document_Order::FLD_DISPATCH_HISTORY,
             Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,
