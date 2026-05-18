@@ -39,6 +39,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_REGISTRATION_POSSIBLE_UNTIL = 'registration_possible_until';
     public const FLD_REGISTER_OTHERS = 'register_others';
     public const FLD_CONTACT_FIELDS = 'contact_fields';
+    public const FLD_IMAGES = 'images';
 
     const MODEL_NAME_PART = 'Event';
     const TABLE_NAME = 'eventmanager_event';
@@ -49,7 +50,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION                   => 3,
         self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
         self::TITLE_PROPERTY            => 'name',
@@ -58,6 +59,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
         self::HAS_NOTES                 => true,
         self::HAS_TAGS                  => true,
+        self::HAS_ATTACHMENTS           => true,
         self::MODLOG_ACTIVE             => true,
 
         self::CREATE_MODULE             => true,
@@ -91,6 +93,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::FLD_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [],
                 ],
+                self::FLD_IMAGES => [],
             ],
         ],
 
@@ -282,6 +285,23 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
                 self::NULLABLE              => true,
+            ],
+            self::FLD_IMAGES => [
+                self::LABEL                         => 'Images', // _('Images')
+                self::TYPE                          => self::TYPE_RECORDS,
+                self::CONFIG                        => [
+                    self::DEPENDENT_RECORDS             => true,
+                    self::APP_NAME                      => EventManager_Config::APP_NAME,
+                    self::MODEL_NAME                    => EventManager_Model_ImageMetadata::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => EventManager_Model_ImageMetadata::FLD_EVENT,
+                ],
+                self::NULLABLE              => true,
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => true,
+                ],
+                self::UI_CONFIG     => [
+                    self::DISABLED                      => true,
+                ],
             ],
         ]
     ];

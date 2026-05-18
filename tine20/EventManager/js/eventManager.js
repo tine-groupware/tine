@@ -1,8 +1,8 @@
 /*
- * Tine 2.0
+ * tine Groupware
  *
  * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schüle <p.schuele@metaways.de> Tonia Wulff <t.leuschel@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de> Tonia Wulff <t.wulff@metaways.de>
  * @copyright   Copyright (c) 2021-2025 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
@@ -22,3 +22,4 @@ import './TextInputOptionEditDialog.js';
 import './EventGridPanel.js';
 import './notifyAction';
 
+import './Image/typeColumnPlugin';
