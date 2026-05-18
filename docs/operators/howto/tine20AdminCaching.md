@@ -1,6 +1,9 @@
 Tine Admin HowTo: Caching-Settings
 =================
 
+!!! note
+    For current Redis cache configuration (Docker variables, prefixes, troubleshooting), see **[Redis application cache](../Setup_Redis_Cache.md)**.
+
 Version: Caroline 2017.11
 Version: Nele 2018.11
 
