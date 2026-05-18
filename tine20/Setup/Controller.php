@@ -392,26 +392,22 @@ class Setup_Controller
     public function checkConfigCaching()
     {
         $result = false;
-        
         $config = Setup_Core::get(Setup_Core::CONFIG);
         
         if (! isset($config->caching) || !$config->caching->active) {
             $result = true;
-            
         } else if (! isset($config->caching->backend) || ucfirst($config->caching->backend) === 'File') {
             $result = $this->checkDir('path', 'caching', false);
-            
         } else if (ucfirst($config->caching->backend) === 'Redis') {
             try {
-                $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+                $result = $this->_checkRedisConnect(isset($config->caching->redis)
+                    ? $config->caching->redis->toArray() : array());
             } catch (RedisException $re) {
                 Tinebase_Exception::log($re);
-                $result = false;
             }
-            
         } else if (ucfirst($config->caching->backend) === 'Memcached') {
-            $result = $this->_checkMemcacheConnect(isset($config->caching->memcached) ? $config->caching->memcached->toArray() : array());
-            
+            $result = $this->_checkMemcacheConnect(isset($config->caching->memcached)
+                ? $config->caching->memcached->toArray() : array());
         }
         
         return $result;
@@ -421,23 +417,34 @@ class Setup_Controller
      * checks redis extension and connection
      * 
      * @param array $config
-     * @return boolean
+     * @return bool
      */
-    protected function _checkRedisConnect($config)
+    protected function _checkRedisConnect($config): bool
     {
         if (! extension_loaded('redis')) {
             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' redis extension not loaded');
-            return FALSE;
+            return false;
         }
         $redis = new Redis;
         $host = isset($config['host']) ? $config['host'] : 'localhost';
         $port = isset($config['port']) ? $config['port'] : 6379;
-        
-        $result = $redis->connect($host, $port);
+
+        try {
+            $result = $redis->connect($host, $port);
+        } catch (RedisException $re) {
+            $result = false;
+            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' ' . $re);
+            }
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not connect to redis server at ' . $host . ':' . $port);
+        }
         if ($result) {
             $redis->close();
         } else {
-            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not connect to redis server at ' . $host . ':' . $port);
+            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' Could not connect to redis server at ' . $host . ':' . $port);
         }
         
         return $result;
@@ -471,10 +478,12 @@ class Setup_Controller
     public function checkConfigQueue()
     {
         $config = Setup_Core::get(Setup_Core::CONFIG);
-        if (! isset($config->actionqueue) || ! $config->actionqueue->active) {
-            $result = TRUE;
+        if (! isset($config->actionqueue) || ! $config->actionqueue->active || empty($config->actionqueue->host)) {
+            $result = true;
         } else {
-            $result = $this->_checkRedisConnect($config->actionqueue->toArray());
+            /** @var Zend_Config $queueConfig */
+            $queueConfig = $config->actionqueue;
+            $result = $this->_checkRedisConnect($queueConfig->toArray());
         }
         
         return $result;
@@ -566,8 +575,10 @@ class Setup_Controller
         $updatesByPrio = [];
         $maxMajorV = Tinebase_Config::TINEBASE_VERSION;
 
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Checking for updates up to major version: ' . $maxMajorV);
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Checking for updates up to major version: ' . $maxMajorV);
+        }
 
         /** @var Tinebase_Model_Application $application */
         foreach ($applicationController->getApplications() as $application) {
