@@ -190,6 +190,9 @@ msgstr ""
 msgid "Dependants"
 msgstr ""
 
+msgid "Pastoral Erzbistum Hamburg URL to events"
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -452,13 +455,7 @@ msgstr ""
 msgid "Ms"
 msgstr ""
 
-msgid "Company"
-msgstr ""
-
 msgid "Person"
-msgstr ""
-
-msgid "Deutschland"
 msgstr ""
 
 msgid "Registration for"
@@ -554,6 +551,12 @@ msgstr ""
 msgid "Last Modified Time"
 msgstr ""
 
+msgid "Sort"
+msgstr ""
+
+msgid "Consent"
+msgstr ""
+
 msgid "Information regarding your involvement"
 msgstr ""
 
@@ -584,6 +587,12 @@ msgid "Missing Participant"
 msgstr ""
 
 msgid "Please select a participant first"
+msgstr ""
+
+msgid "Go to Homepage"
+msgstr ""
+
+msgid "Go to Event Details page"
 msgstr ""
 
 msgid "GENDER_Appointment"
@@ -661,6 +670,9 @@ msgstr ""
 msgid "Event Appointments"
 msgstr ""
 
+msgid "Images"
+msgstr ""
+
 msgid "GENDER_File"
 msgstr ""
 
@@ -673,6 +685,23 @@ msgid "Only participant acknowledgement is necessary (no participant document up
 msgstr ""
 
 msgid "Participant should upload a file"
+msgstr ""
+
+msgid "Image Metadata"
+msgid_plural "Images Metadata"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "I have checked the rights to this image and hereby confirm that the image may be published on the Internet"
+msgstr ""
+
+msgid "If you do not confirm that you have the right to publish the image, it will not be published on the Website"
+msgstr ""
+
+msgid "This is the source of the image, it will be the text of the watermark for the image"
+msgstr ""
+
+msgid "Task"
 msgstr ""
 
 msgid "GENDER_Option"
@@ -820,51 +849,6 @@ msgid "Select a Person"
 msgstr ""
 
 msgid "Select a Participant"
-msgstr ""
-
-msgid "Salutation"
-msgstr ""
-
-msgid "Title"
-msgstr ""
-
-msgid "First Name"
-msgstr ""
-
-msgid "Middle Name"
-msgstr ""
-
-msgid "Last Name"
-msgstr ""
-
-msgid "Day of Birth"
-msgstr ""
-
-msgid "E-mail"
-msgstr ""
-
-msgid "Mobile"
-msgstr ""
-
-msgid "Telephone"
-msgstr ""
-
-msgid "Street"
-msgstr ""
-
-msgid "House Nr."
-msgstr ""
-
-msgid "Postal Code"
-msgstr ""
-
-msgid "City"
-msgstr ""
-
-msgid "Region"
-msgstr ""
-
-msgid "Country"
 msgstr ""
 
 msgid "Confirmation E-mail"
