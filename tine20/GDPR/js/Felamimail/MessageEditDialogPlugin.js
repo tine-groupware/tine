@@ -51,12 +51,12 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
     },
 
     startEditing: function(row, col) {
-        this.lastEditedRecord = this.recipientGrid.store.getAt(row);
+        this.recipientGrid.lastEditedRecord = this.recipientGrid.store.getAt(row);
         if (this.recipientGrid.massMailingMode && col === 0) return;
 
         const ed = this.recipientGrid.colModel.getCellEditor(col, row);
 
-        if (ed.field?.view) {
+        if (ed.field?.view && col === 1) {
             const emptyText = this.sendMassMailWithDIP
                 ? this.app.i18n._('No matching email address found which agreed to the selected intended purpose.')
                 : this.recipientGrid.searchCombo.listEmptyText;
