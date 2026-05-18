@@ -1,5 +1,7 @@
 ### Running Tests in tine Groupware
 
+> **AI agents:** See [AGENTS.md](../AGENTS.md) at the repository root for full project guidance (layout, dev setup, linting, contribution workflow). This file covers PHPUnit via tine-dev only.
+
 TODO: this is also referenced in the developer documentation (docs/developers/server/phpunit.md) - we should make sure they're in sync.
 
 To run tests in the tine Groupware environment, use the `console` script located in the `tine-docker` directory.
