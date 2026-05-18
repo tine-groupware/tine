@@ -1,5 +1,7 @@
 # Tine 2.0 - Contributing
 
+**AI coding agents:** see [AGENTS.md](AGENTS.md) at the repository root for project-specific guidance (development setup, tests, conventions, and workflow).
+
 ## Write Code
 
 You might find this wiki page helpful for setting up a development environment for Tine 2.0:

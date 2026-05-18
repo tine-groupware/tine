@@ -43,6 +43,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const EVENT_FOLDER_FILEMANAGER_PATH = 'eventFolderFileManagerPath';
     public const JWT_SECRET = 'jwtSecret';
     public const EVENT_REGISTER_OTHERS = 'eventRegisterOthers';
+    public const EVENT_PASTORAL_URL = 'eventPastoralUrl';
 
 
 
@@ -315,6 +316,14 @@ class EventManager_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR => 1
             ]
+        ],
+        self::EVENT_PASTORAL_URL => [
+            self::LABEL                 => 'Pastoral Erzbistum Hamburg URL to events',
+            //_('Pastoral Erzbistum Hamburg URL to events')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
         ],
     ];
 

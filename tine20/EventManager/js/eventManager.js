@@ -21,5 +21,5 @@ import './OptionRelationEditDialog.js';
 import './TextInputOptionEditDialog.js';
 import './EventGridPanel.js';
 import './notifyAction';
-
+import './websiteReferralAction.js';
 import './Image/typeColumnPlugin';
