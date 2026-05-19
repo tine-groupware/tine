@@ -31,6 +31,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE012 = __CLASS__ . '::update012';
     protected const RELEASE018_UPDATE013 = __CLASS__ . '::update013';
     protected const RELEASE018_UPDATE014 = __CLASS__ . '::update014';
+    protected const RELEASE018_UPDATE015 = __CLASS__ . '::update015';
 
 
     static protected $_allUpdates = [
@@ -96,6 +97,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE018_UPDATE015          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update015',
             ],
         ],
     ];
@@ -429,5 +434,23 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         ], Sales_Model_Document_Order::getStatusField() . ' = "DONE"');
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.14', self::RELEASE018_UPDATE014);
+    }
+
+    public function update015(): void
+    {
+        if ($filter = Tinebase_PersistentFilter::getInstance()->search(new Tinebase_Model_PersistentFilterFilter([
+                    [TMFA::FIELD => 'application_id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId()],
+                    [TMFA::FIELD => 'account_id', TMFA::OPERATOR => 'isnull', TMFA::VALUE => true],
+                    [TMFA::FIELD => 'name', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'Unpaid Purchase Invoices'],
+                ]))->getFirstRecord()) {
+            $filter->filters->addFilter($filter->filters->createFilter(
+                Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS,
+                TMFA::OPERATOR_NOT,
+                Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED
+            ));
+
+            Tinebase_PersistentFilter::getInstance()->update($filter);
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
     }
 }
