@@ -38,7 +38,6 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
      */
     public const STATUS_RECEIVED = 'RECEIVED';
     public const STATUS_ACCEPTED = 'ACCEPTED';
-    public const STATUS_DONE = 'DONE';
 
     /**
      * @param array $_definition

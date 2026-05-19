@@ -67,6 +67,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_inspectReversal($_record);
         if (!$_record->isBooked() && $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
             /** @var Sales_Model_DocumentPosition_Abstract $position */
             foreach($_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
@@ -102,6 +103,18 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $this->_inspectCustomerDebitor($_record);
 
         $this->_inspectServicePeriod($_record);
+    }
+
+    protected function _inspectReversal(Sales_Model_Document_Abstract $record): void
+    {
+        if (!$record->{Sales_Model_Document_Abstract::FLD_REVERSAL} && $record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
+            /** @var Sales_Model_DocumentPosition_Abstract $position */
+            foreach ($record->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
+                if ($position->{Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL}) {
+                    throw new Tinebase_Exception_Record_Validation('if a position is a reversal, the whole document needs to be a reversal');
+                }
+            }
+        }
     }
 
     protected function _inspectVAT(Sales_Model_Document_Abstract $_record): void
@@ -327,6 +340,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_inspectReversal($_record);
+
         $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = $_oldRecord
             ->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS};
 
@@ -524,8 +539,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     protected function _inspectFollowUpStati(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
     {
         if ($_oldRecord && $_oldRecord->isBooked() &&
-                (Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED !== $_oldRecord->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} ||
-                Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED === $_record->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS})) {
+                (Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED !== $_oldRecord->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} ||
+                Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED === $_record->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS})) {
             // nothing to do if we were already booked, not much is allowed to change -> no change -> nothing to do
             return;
         }

@@ -26,7 +26,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
 
-    public const STATUS_REVERSAL = 'REVERSAL';
+    public const STATUS_COMPLETED = 'COMPLETED';
     public const STATUS_DISPATCHED = 'DISPATCHED';
     public const STATUS_MANUAL_DISPATCH = 'MANUAL_DISPATCH';
 
@@ -82,7 +82,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_DESCRIPTION = 'description';
 
-    public const FLD_REVERSAL_STATUS = 'reversal_status';
+    public const FLD_REVERSED_STATUS = 'reversed_status';
+    public const FLD_REVERSAL = 'reversal';
 
     public const FLD_CONTRACT_ID = 'contract_id';
 
@@ -249,13 +250,21 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ]*/
             ],
-            self::FLD_REVERSAL_STATUS           => [
-                self::LABEL                         => 'Reversal', // _('Reversal')
+            self::FLD_REVERSED_STATUS           => [
+                self::LABEL                         => 'Reversed', // _('Reversed')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
-                self::NAME                          => Sales_Config::DOCUMENT_REVERSAL_STATUS,
+                self::NAME                          => Sales_Config::DOCUMENT_REVERSED_STATUS,
                 self::CONFIG                        => [
                     self::NO_DEFAULT_VALIDATOR          => true,
                 ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
+            ],
+            self::FLD_REVERSAL                  => [
+                self::LABEL                         => 'Reversal', // _('Reversal')
+                self::TYPE                          => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL                   => false,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -732,7 +741,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             if (!$doc->isBooked()) {
                 throw new Tinebase_Exception_Record_Validation('source document is not booked');
             }
-            $docReversed = $doc->{$doc::getStatusField()} === Sales_Config::getInstance()->{$doc::getStatusConfigKey()}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)?->getId();
+            $docReversed = (bool)$doc->{Sales_Model_Document_Abstract::FLD_REVERSAL};
             if (null === $sourcesAreReversals) {
                 $sourcesAreReversals = $docReversed;
             } elseif ($sourcesAreReversals !== $docReversed) {
@@ -758,7 +767,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
                 if ($isReversal) {
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
-                        ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED;
+                        ->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} = Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED;
                 }
 
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
@@ -813,9 +822,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     ++$addedPositions;
 
                     if ($isReversal && $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
-                                ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} !== Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED) {
+                                ->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} !== Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED) {
                         $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
-                            ->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED;
+                            ->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS} = Sales_Config::DOCUMENT_REVERSED_STATUS_PARTIALLY_REVERSED;
                     }
                 }
             }
@@ -928,7 +937,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 }
             }
 
-            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)->getId();
+            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, true)->find(Sales_Model_Document_Status::FLD_CLOSED, false)->getId();
+            $this->{self::FLD_REVERSAL} = true;
         } else {
             if ($sourcesAreReversals) {
                 $this->{self::FLD_DOCUMENT_TITLE} =
@@ -1109,7 +1119,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         unset($_data[self::FLD_DISPATCH_HISTORY]);
         unset($_data[self::FLD_PRECURSOR_DOCUMENTS]);
-        unset($_data[self::FLD_REVERSAL_STATUS]);
+        unset($_data[self::FLD_REVERSED_STATUS]);
     }
 
     public function updateFollowupStati(bool $booked): void
@@ -1126,8 +1136,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public function isValid($_throwExceptionOnInvalidData = false)
     {
-        if (array_key_exists(self::FLD_REVERSAL_STATUS, $this->_data) && empty($this->_data[self::FLD_REVERSAL_STATUS])) {
-            $this->_data[self::FLD_REVERSAL_STATUS] = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_REVERSAL_STATUS}->default;
+        if (array_key_exists(self::FLD_REVERSED_STATUS, $this->_data) && empty($this->_data[self::FLD_REVERSED_STATUS])) {
+            $this->_data[self::FLD_REVERSED_STATUS] = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_REVERSED_STATUS}->default;
         }
         return parent::isValid($_throwExceptionOnInvalidData);
     }
@@ -1318,7 +1328,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $this->{self::FLD_PRECURSOR_DOCUMENTS} = null;
         $this->{static::getStatusField()} = null;
-        $this->{self::FLD_REVERSAL_STATUS} = null;
+        $this->{self::FLD_REVERSED_STATUS} = null;
         $this->{self::FLD_DISPATCH_HISTORY} = null;
         $this->{self::FLD_DOCUMENT_SEQ} = 1;
 

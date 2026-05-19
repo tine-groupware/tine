@@ -244,7 +244,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED, $invoice->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED, $invoice->{Sales_Model_Document_Abstract::FLD_REVERSED_STATUS});
 
         $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
@@ -1498,7 +1498,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $result = Sales_Controller_Customer::getInstance()->search($filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Sales_Model_Customer::class, $filterArray = [
             ['field' => 'document_order', 'operator' => 'definedBy', 'value' => [
-                ['field' => Sales_Model_Document_Order::FLD_ORDER_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Order::STATUS_DONE],
+                ['field' => Sales_Model_Document_Order::FLD_ORDER_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Order::STATUS_COMPLETED],
             ]],
         ]));
         $this->assertSame(0, $result->count());

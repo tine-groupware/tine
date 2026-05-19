@@ -1025,14 +1025,14 @@ class Sales_JsonTest extends Sales_Document_Abstract
     public function testInvoiceReversalStatusUpdate()
     {
         $invoice = $this->_createInvoice();
-        $invoice->{Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS} = Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED;
+        $invoice->{Sales_Model_Document_Invoice::FLD_REVERSED_STATUS} = Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED;
         $updatedInvoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
-        self::assertEquals(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED,
-            $updatedInvoice->{Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS});
+        self::assertEquals(Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED,
+            $updatedInvoice->{Sales_Model_Document_Invoice::FLD_REVERSED_STATUS});
 
         $invoiceUpdatedViaJsonFE = $this->_instance->saveDocument_Invoice($updatedInvoice->toArray());
-        self::assertEquals(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED,
-            $invoiceUpdatedViaJsonFE[Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS],
+        self::assertEquals(Sales_Config::DOCUMENT_REVERSED_STATUS_REVERSED,
+            $invoiceUpdatedViaJsonFE[Sales_Model_Document_Invoice::FLD_REVERSED_STATUS],
             'reversal status should stay the same');
     }
 }

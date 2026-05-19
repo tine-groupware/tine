@@ -51,7 +51,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_CENTER,
             Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Invoice::FLD_DESCRIPTION,
-            Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS,
+            Sales_Model_Document_Invoice::FLD_REVERSED_STATUS,
             Sales_Model_Document_Invoice::FLD_DISPATCH_HISTORY,
             Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,
             Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE,
