@@ -28,9 +28,18 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE018_UPDATE010 = __CLASS__ . '::update010';
     protected const RELEASE018_UPDATE011 = __CLASS__ . '::update011';
+    protected const RELEASE018_UPDATE012 = __CLASS__ . '::update012';
+    protected const RELEASE018_UPDATE013 = __CLASS__ . '::update013';
+    protected const RELEASE018_UPDATE014 = __CLASS__ . '::update014';
 
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
+            self::RELEASE018_UPDATE012          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update012',
+            ],
+        ],
         self::PRIO_TINEBASE_STRUCTURE       => [
             self::RELEASE018_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
@@ -73,6 +82,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE011          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update011',
+            ],
+            self::RELEASE018_UPDATE013          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update013',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -359,5 +372,62 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Document_PurchaseInvoice::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.11', self::RELEASE018_UPDATE011);
+    }
+
+    public function update012(): void
+    {
+        $db = $this->getDb();
+        foreach ([
+                    Sales_Model_Document_Delivery::TABLE_NAME,
+                    Sales_Model_Document_Invoice::TABLE_NAME,
+                    Sales_Model_Document_Offer::TABLE_NAME,
+                    Sales_Model_Document_Order::TABLE_NAME,
+                    Sales_Model_Document_PurchaseInvoice::TABLE_NAME,
+                 ] as $tableName) {
+            $tableName = SQL_TABLE_PREFIX . $tableName;
+            if ($db->query('SHOW TABLES LIKE "' . $tableName . '"')->rowCount() > 0) {
+                $db->query('ALTER TABLE ' . $tableName . ' RENAME COLUMN reversal_status TO reversed_status');
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.12', self::RELEASE018_UPDATE012);
+    }
+
+    public function update013(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_Document_PurchaseInvoice::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.13', self::RELEASE018_UPDATE013);
+    }
+
+    public function update014(): void
+    {
+        $db = $this->getDb();
+        /** @var Sales_Model_Document_Abstract $doc */
+        foreach ([
+                     Sales_Model_Document_Delivery::class,
+                     Sales_Model_Document_Invoice::class,
+                     Sales_Model_Document_Offer::class,
+                     Sales_Model_Document_Order::class,
+                     Sales_Model_Document_PurchaseInvoice::class,
+                 ] as $doc) {
+            /** @phpstan-ignore-next-line */
+            $tableName = SQL_TABLE_PREFIX . $doc::TABLE_NAME;
+            $db->update($tableName, [
+                $doc::getStatusField() => Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                Sales_Model_Document_Abstract::FLD_REVERSAL => 1,
+            ], $doc::getStatusField() . ' = "REVERSAL"');
+        }
+
+        $db->update(SQL_TABLE_PREFIX . Sales_Model_Document_Order::TABLE_NAME, [
+            Sales_Model_Document_Order::getStatusField() => Sales_Model_Document_Abstract::STATUS_COMPLETED,
+        ], Sales_Model_Document_Order::getStatusField() . ' = "DONE"');
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.14', self::RELEASE018_UPDATE014);
     }
 }

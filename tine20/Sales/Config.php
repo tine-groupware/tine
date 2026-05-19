@@ -175,10 +175,10 @@ class Sales_Config extends Tinebase_Config_Abstract
     /**
      * reversal status
      */
-    public const DOCUMENT_REVERSAL_STATUS = 'reversalStatus';
-    public const DOCUMENT_REVERSAL_STATUS_NOT_REVERSED = 'notReversed';
-    public const DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED = 'partiallyReversed';
-    public const DOCUMENT_REVERSAL_STATUS_REVERSED = 'reversed';
+    public const DOCUMENT_REVERSED_STATUS = 'reversedStatus';
+    public const DOCUMENT_REVERSED_STATUS_NOT_REVERSED = 'notReversed';
+    public const DOCUMENT_REVERSED_STATUS_PARTIALLY_REVERSED = 'partiallyReversed';
+    public const DOCUMENT_REVERSED_STATUS_REVERSED = 'reversed';
 
     public const DOCUMENT_PURCHASE_INVOICE_STATUS = 'documentPurchaseInvoiceStatus';
     public const DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS = 'documentPurchaseInvoiceStatusTransitions';
@@ -394,7 +394,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR => self::DOCUMENT_FOLLOWUP_STATUS_NONE,
             ],
         ],
-        self::DOCUMENT_REVERSAL_STATUS => [
+        self::DOCUMENT_REVERSED_STATUS => [
             //_('Reversal Status')
             self::LABEL              => 'Reversal Status',
             //_('Possible Reversal Status')
@@ -406,26 +406,26 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 self::RECORDS => [
                     [
-                        'id' => self::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED,
+                        'id' => self::DOCUMENT_REVERSED_STATUS_NOT_REVERSED,
                         //_('Not reversed')
                         'value' => 'Not reversed',
                         'icon' => null,
                         'system' => true,
                     ], [
-                        'id' => self::DOCUMENT_REVERSAL_STATUS_PARTIALLY_REVERSED,
+                        'id' => self::DOCUMENT_REVERSED_STATUS_PARTIALLY_REVERSED,
                         //_('Partially reversed')
                         'value' => 'Partially reversed',
                         'icon' => null,
                         'system' => true,
                     ], [
-                        'id' => self::DOCUMENT_REVERSAL_STATUS_REVERSED,
+                        'id' => self::DOCUMENT_REVERSED_STATUS_REVERSED,
                         //_('Reversed')
                         'value' => 'Reversed',
                         'icon' => null,
                         'system' => true,
                     ],
                 ],
-                self::DEFAULT_STR => self::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED,
+                self::DEFAULT_STR => self::DOCUMENT_REVERSED_STATUS_NOT_REVERSED,
             ],
         ],
         self::DEFAULT_DEBITOR_EDOCUMENT_DISPATCH_TYPE => [
@@ -467,7 +467,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => false,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
@@ -476,7 +475,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
@@ -485,7 +483,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
+                        //_('Done (booked, closed)')
+                        'value' => 'Done (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         'system' => true
                     ],
                 ],
@@ -507,19 +512,28 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
                         Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
                         Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED, // till we have a better (storno) solution
                         Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
                     ]
+                ],
+                Sales_Model_Document_PurchaseInvoice::STATUS_PAID => [
+                    self::TRANSITION_TARGET_STATUS => [],
+                ],
+                Sales_Model_Document_Abstract::STATUS_COMPLETED => [
+                    self::TRANSITION_TARGET_STATUS => [],
                 ],
             ]
         ],
@@ -546,7 +560,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => false,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_MANUAL_DISPATCH,
@@ -555,7 +568,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         // 'id' => Sales_Model_Document_Offer::STATUS_RELEASED, => RELEASED
@@ -565,7 +577,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_ORDERED,
@@ -574,7 +585,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Offer::STATUS_REJECTED,
@@ -583,7 +593,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ],
                 ],
@@ -666,7 +675,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => false,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Order::STATUS_ACCEPTED,
@@ -675,7 +683,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH,
@@ -684,7 +691,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Order::STATUS_DISPATCHED,
@@ -693,27 +699,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
-                        'id' => Sales_Model_Document_Order::STATUS_DONE,
+                        'id' => Sales_Model_Document_Order::STATUS_COMPLETED,
                         //_('Done (booked, closed)')
                         'value' => 'Done (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
-                        'system' => true
-                    ],
-                    [
-                        'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, closed)')
-                        'value' => 'Reversal (booked, closed)',
-                        'icon' => null,
-                        Sales_Model_Document_Status::FLD_BOOKED => true,
-                        Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => true,
-                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],
@@ -736,8 +729,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_Order::STATUS_ACCEPTED,
                         Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH,
                         Sales_Model_Document_Order::STATUS_DISPATCHED,
-                        Sales_Model_Document_Order::STATUS_DONE,
-                        Sales_Model_Document_Abstract::STATUS_REVERSAL,
+                        Sales_Model_Document_Order::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Order::STATUS_RECEIVED => [
@@ -745,32 +737,29 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_Order::STATUS_ACCEPTED,
                         Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH,
                         Sales_Model_Document_Order::STATUS_DISPATCHED,
-                        Sales_Model_Document_Order::STATUS_DONE,
+                        Sales_Model_Document_Order::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Order::STATUS_ACCEPTED => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH,
                         Sales_Model_Document_Order::STATUS_DISPATCHED,
-                        Sales_Model_Document_Order::STATUS_DONE,
+                        Sales_Model_Document_Order::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Order::STATUS_DISPATCHED,
-                        Sales_Model_Document_Order::STATUS_DONE,
+                        Sales_Model_Document_Order::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Order::STATUS_DISPATCHED => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH,
-                        Sales_Model_Document_Order::STATUS_DONE,
+                        Sales_Model_Document_Order::STATUS_COMPLETED,
                     ]
                 ],
-                Sales_Model_Document_Order::STATUS_DONE => [
-                    self::TRANSITION_TARGET_STATUS => [],
-                ],
-                Sales_Model_Document_Abstract::STATUS_REVERSAL => [
+                Sales_Model_Document_Order::STATUS_COMPLETED => [
                     self::TRANSITION_TARGET_STATUS => [],
                 ],
             ]
@@ -800,7 +789,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => false,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Delivery::STATUS_MANUAL_DISPATCH,
@@ -809,7 +797,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Delivery::STATUS_DISPATCHED,
@@ -818,7 +805,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Delivery::STATUS_DELIVERED,
@@ -827,17 +813,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
-                        'system' => true
-                    ], [
-                        'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, closed)')
-                        'value' => 'Reversal (booked, closed)',
-                        'icon' => null,
-                        Sales_Model_Document_Status::FLD_BOOKED => true,
-                        Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => true,
-                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],
@@ -922,9 +897,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                 Sales_Model_Document_Delivery::STATUS_DELIVERED => [
                     self::TRANSITION_TARGET_STATUS => [],
                 ],
-                Sales_Model_Document_Abstract::STATUS_REVERSAL => [
-                    self::TRANSITION_TARGET_STATUS => [],
-                ],
             ]
         ],
 
@@ -951,7 +923,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => false,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Invoice::STATUS_BOOKED,
@@ -960,7 +931,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH,
@@ -969,7 +939,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         //'id' => Sales_Model_Document_Invoice::STATUS_SHIPPED, => SHIPPED
@@ -979,7 +948,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => false,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Invoice::STATUS_PAID,
@@ -988,17 +956,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => false,
                         'system' => true
                     ], [
-                        'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, closed)')
-                        'value' => 'Reversal (booked, closed)',
+                        'id' => Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                        //_('Done (booked, closed)')
+                        'value' => 'Done (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
                         Sales_Model_Document_Status::FLD_CLOSED => true,
-                        Sales_Model_Document_Status::FLD_REVERSAL => true,
-                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],
@@ -1021,7 +986,6 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_Invoice::STATUS_BOOKED,
                         Sales_Model_Document_Invoice::STATUS_DISPATCHED,
                         Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH,
-                        Sales_Model_Document_Abstract::STATUS_REVERSAL,
                     ]
                 ],
                 Sales_Model_Document_Invoice::STATUS_PROFORMA => [
@@ -1041,18 +1005,20 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH,
                         Sales_Model_Document_Invoice::STATUS_PAID,
+                        Sales_Model_Document_Abstract::STATUS_COMPLETED,
                     ],
                 ],
                 Sales_Model_Document_Invoice::STATUS_MANUAL_DISPATCH => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Invoice::STATUS_DISPATCHED,
                         Sales_Model_Document_Invoice::STATUS_PAID,
+                        Sales_Model_Document_Abstract::STATUS_COMPLETED,
                     ],
                 ],
                 Sales_Model_Document_Invoice::STATUS_PAID => [
                     self::TRANSITION_TARGET_STATUS => [],
                 ],
-                Sales_Model_Document_Abstract::STATUS_REVERSAL => [
+                Sales_Model_Document_Abstract::STATUS_COMPLETED => [
                     self::TRANSITION_TARGET_STATUS => [],
                 ],
             ]
