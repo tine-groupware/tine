@@ -128,7 +128,7 @@ class EventManager_Frontend_RssFeed
                 }
             }
 
-            $url = Tinebase_Core::getUrl() . '/EventManager/view/#/event/' . $event_id;
+            $url = Tinebase_Core::getUrl() . '/EventManager/view/event/' . $event_id;
 
             $feed->entry([
                 'title' => $title,
