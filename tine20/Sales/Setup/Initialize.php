@@ -122,6 +122,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 'description'       => 'All Purchase Invoices that have not yet been paid', // _('All Purchase Invoices that have not yet been paid')
                 'filters'           => [
                     [TMFA::FIELD => Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS, TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => Sales_Model_Document_PurchaseInvoice::STATUS_PAID],
+                    [TMFA::FIELD => Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS, TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED],
                 ],
             ])
         ));
