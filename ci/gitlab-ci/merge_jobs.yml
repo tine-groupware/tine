@@ -15,6 +15,8 @@
     - git config --global user.name "gitlabci"
     - git_repo_clone_cached ${CI_BUILDS_DIR}/merge
     - cd ${CI_BUILDS_DIR}/merge
+    - git config merge.setupxml.name "merge setup.xml driver"
+    - git config merge.setupxml.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-setupxml-files %A %O %B"
     - git config merge.pofile.name "merge po-files driver"
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
     - git config merge.pofile.recursive "binary"

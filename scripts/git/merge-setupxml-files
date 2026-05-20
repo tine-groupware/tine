@@ -1,0 +1,27 @@
+#!/bin/sh
+#
+# Three-way merge driver for setup.xml files
+#
+set -e
+
+# given a file, find the path that matches its contents
+show_file() {
+  hash=`git hash-object "${1}"`
+  git ls-tree -r HEAD | fgrep "$hash" | cut -b54-
+}
+
+BASE=$2
+LOCAL=$1
+REMOTE=$3
+
+echo "Using custom setup.xml merge driver (`show_file ${LOCAL}`)"
+
+if [ 4 -eq `diff "$BASE" "$REMOTE" | wc -l` ]; then
+  if [ 2 -eq `diff "$BASE" "$REMOTE" | grep -c '<version>'` ]; then
+    if [ 2 -eq `diff "$BASE" "$REMOTE" | grep -c '</version>'` ]; then
+      exit 0
+    fi
+  fi
+fi
+
+exit 1
