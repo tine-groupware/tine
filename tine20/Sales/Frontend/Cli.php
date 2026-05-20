@@ -84,27 +84,17 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             // if day argument is given, validate
             if (array_key_exists('day', $args)) {
-                $split = explode('-', (string)$args['day']);
-                if (!count($split == 3)) {
-                    // failure
-                } else {
-                    if ((strlen($split[0]) != 4) || (strlen($split[1]) != 2) || (strlen($split[2]) != 2)) {
-                        // failure
-                    } elseif ((intval($split[1]) == 0) || (intval($split[2]) == 0)) {
-                        // failure
-                    } else {
-                        // other errors are caught by datetime
-                        try {
-
-                            $date = Tinebase_DateTime::today();
-                            $date->setDate($split[0], $split[1], $split[2]);
-                        } catch (Exception $e) {
-                            Tinebase_Exception::log($e);
-                        }
+                $split = explode('-', $args['day']);
+                if ($split) {
+                    try {
+                        $date = Tinebase_DateTime::today();
+                        $date->setDate($split[0], $split[1], $split[2]);
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
                     }
                 }
                 if (!$date) {
-                    die('The day must have the following format: YYYY-MM-DD!' . PHP_EOL);
+                    die('The day must have the following format: YYYY-MM-DD (got: ' . $args['day'] .')!' . PHP_EOL);
                 }
             }
 
