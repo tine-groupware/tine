@@ -1201,8 +1201,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                             'event' => $event,
                         ]);
                     } else {
+                        $tempContact = new Addressbook_Model_Contact([
+                            'n_given' => 'tempContact',
+                            'email' => $request['email'],
+                        ]);
                         $this->_sendMessageWithTemplate($template, [
                             'link' => Tinebase_Core::getUrl() . $link,
+                            'contact' => $tempContact,
                             'email' => $request['email'],
                             'event' => $event,
                         ]);
