@@ -201,6 +201,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'sieve_notification_email':
                 case 'sieve_notification_move':
                 case 'sieve_notification_move_folder':
+                case 'sieve_spam_move':
                 case 'enabled':
                     // always disabled for non-system accounts
                     item.setDisabled(! this.isSystemAccount());
@@ -798,6 +799,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ],
                     checkState: function () {
                         this.setDisabled(me.isSystemAccount());
+                    }
+                }], [{
+                    fieldLabel: this.app.i18n._('Auto-move SPAM Message'),
+                    name: 'sieve_spam_move',
+                    xtype: 'checkbox',
+                    hidden: !Tine.Tinebase.configManager.get('spamMoveFolder', 'Felamimail'),
+                    checkState: function () {
+                        this.setDisabled(!me.isSystemAccount());
                     }
                 }], [
                     this.sieveNotifyGrid

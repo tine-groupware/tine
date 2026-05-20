@@ -16,9 +16,9 @@
 Interface Felamimail_Spam_SuspicionStrategy_Interface
 {
     /**
-     * @param Felamimail_Model_Message $message
+     * @param mixed $message
      * @return mixed
      */
 
-    public function apply(Felamimail_Model_Message $message);
+    public function apply($message);
 }

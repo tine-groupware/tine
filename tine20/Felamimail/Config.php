@@ -96,6 +96,13 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const SPAM_SUSPICION_STRATEGY_CONFIG = 'spamSuspicionStrategyConfig';
 
     /**
+     * Create spam suspicion header strategy config
+     *
+     * @var string
+     */
+    const SPAM_SUSPICION_HEADER_STRATEGY_CONFIG = 'spamSuspicionHeaderStrategyConfig';
+
+    /**
      * Create spam user processing pipeline config
      *
      * @var string
@@ -108,7 +115,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SPAM_INFO_DIALOG_CONTENT = 'spamInfoDialogContent';
-    
+
     /**
      * Tine 2.0 filter message uris (only allow <a> uris)
      *
@@ -193,6 +200,8 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const MAIL_ACCOUNT_TYPE = 'mailAccountType';
 
     const SIEVE_NOTIFICATION_MOVE_STATUS = 'sieveNotificationMoveStatus';
+
+    const SPAM_MOVE_FOLDER = 'spamMoveFolder';
 
     const TRUSTED_MAIL_DOMAINS = 'trustedMailDomains';
 
@@ -437,6 +446,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => null,
         ),
+        self::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG => array(
+            //_('Spam Suspicion Header Strategy Config')
+            'label'                 => 'Spam Suspicion Header Strategy Config',
+            // _('Spam Suspicion Header Strategy Config')
+            'description'           => 'Spam Suspicion Header Strategy Config',
+            'type'                  => Tinebase_Config_Abstract::TYPE_ARRAY,
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => FALSE,
+            'default'               => null,
+        ),
         self::SPAM_USERPROCESSING_PIPELINE => array(
             //_('Spam User Processing Pipeline')
             'label'                 => 'Spam User Processing Pipeline',
@@ -566,6 +586,17 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR => Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_AUTO,
             ],
+        ],
+        self::SPAM_MOVE_FOLDER => [
+            //_('Spam move folder')
+            self::LABEL                 => 'Spam move folder',
+            //_('The target folder for the sieve spam move rule.')
+            self::DESCRIPTION           => 'The target folder for the sieve spam move rule.',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => '',
         ],
         self::TRUSTED_MAIL_DOMAINS => array(
             //_('Trusted Mail Servers (via DKIM)')

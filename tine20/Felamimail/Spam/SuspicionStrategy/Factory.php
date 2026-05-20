@@ -17,9 +17,10 @@ class Felamimail_Spam_SuspicionStrategy_Factory
 {
 
     const SUBJECT = 'subject';
+    const HEADER = 'header';
 
     /**
-     * @return Felamimail_Spam_SuspicionStrategy_Subject
+     * @return Felamimail_Spam_SuspicionStrategy_Interface
      * @throws Exception
      */
     public static function factory()
@@ -29,9 +30,14 @@ class Felamimail_Spam_SuspicionStrategy_Factory
 
         switch ($strategy) {
             case self::SUBJECT:
-
                 return new Felamimail_Spam_SuspicionStrategy_Subject($felamimailConfig
                     ->{Felamimail_Config::SPAM_SUSPICION_STRATEGY_CONFIG});
+                break;
+
+            case self::HEADER:
+                return new Felamimail_Spam_SuspicionStrategy_Header($felamimailConfig
+                    ->{Felamimail_Config::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG});
+
                 break;
 
             default:

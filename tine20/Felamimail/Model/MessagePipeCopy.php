@@ -60,7 +60,7 @@ class Felamimail_Model_MessagePipeCopy implements Tinebase_BL_ElementInterface, 
             $accountId = $this->_config['target']['accountid'] ??
                 Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
             $account = Felamimail_Controller_Account::getInstance()->get($accountId);
-            $folder = Felamimail_Model_MessagePipeMove::getTargetFolder($account, $this->_config['target']['folder']);
+            $folder = Felamimail_Model_MessagePipeConfig::getTargetFolder($account, $this->_config['target']['folder']);
 
             if (isset($this->_config['addFlags']) && is_array($this->_config['addFlags'])) {
                 try {

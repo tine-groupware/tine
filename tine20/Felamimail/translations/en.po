@@ -142,6 +142,9 @@ msgstr "Spam Suspicion Strategy"
 msgid "Spam Suspicion Strategy Config"
 msgstr "Spam Suspicion Strategy Config"
 
+msgid "Spam Suspicion Header Strategy Config"
+msgstr "Spam Suspicion Header Strategy Config"
+
 msgid "Spam User Processing Pipeline"
 msgstr "Spam User Processing Pipeline"
 
@@ -198,6 +201,12 @@ msgstr "Auto"
 
 msgid "Inactive"
 msgstr "Inactive"
+
+msgid "Spam move folder"
+msgstr "Spam move folder"
+
+msgid "The target folder for the sieve spam move rule."
+msgstr "The target folder for the sieve spam move rule."
 
 msgid "Trusted Mail Servers (via DKIM)"
 msgstr "Trusted Mail Servers (via DKIM)"
@@ -490,6 +499,9 @@ msgstr "Sieve"
 msgid "Port (Default: 2000)"
 msgstr "Port (Default: 2000)"
 
+msgid "Auto-move SPAM Message"
+msgstr "Auto-move SPAM Message"
+
 msgid "Auto-move notifications"
 msgstr "Auto-move notifications"
 
@@ -609,6 +621,59 @@ msgstr "Edit Filter Rules"
 msgid "Email usage"
 msgstr "Email usage"
 
+msgid "New Mail"
+msgstr "New Mail"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Active Vacation Message"
+msgstr "Active Vacation Message"
+
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Email account \"{0}\" has an active vacation message."
+
+msgid "Loading Recipients..."
+msgstr "Loading Recipients..."
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr "Poll URL: {0}"
+
+msgid "Mass Mailing"
+msgstr "Mass Mailing"
+
+msgid "All Recipients"
+msgstr "All Recipients"
+
+msgid "Compose email"
+msgstr "Compose email"
+
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr "{0} as default mailer"
+
+msgid "No email account has been assigned"
+msgstr "No email account has been assigned"
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr "You have not yet been assigned an e-mail account. This view is therefore empty"
+
+msgid "New mails"
+msgstr "New mails"
+
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "You got {0} new mail(s) in folder {1} ({2})."
+
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr "IMAP Credentials for {0}"
+
+msgid "Credentials"
+msgstr "Credentials"
+
 msgid "Save As"
 msgstr "Save As"
 
@@ -679,59 +744,6 @@ msgstr "Loading Email Addresses"
 
 msgid "Preferred Email"
 msgstr "Preferred Email"
-
-msgid "New Mail"
-msgstr "New Mail"
-
-msgid "Email"
-msgstr "Email"
-
-msgid "Active Vacation Message"
-msgstr "Active Vacation Message"
-
-#, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "Email account \"{0}\" has an active vacation message."
-
-msgid "Loading Recipients..."
-msgstr "Loading Recipients..."
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr "Poll URL: {0}"
-
-msgid "Mass Mailing"
-msgstr "Mass Mailing"
-
-msgid "All Recipients"
-msgstr "All Recipients"
-
-msgid "Compose email"
-msgstr "Compose email"
-
-#, python-brace-format
-msgid "{0} as default mailer"
-msgstr "{0} as default mailer"
-
-msgid "No email account has been assigned"
-msgstr "No email account has been assigned"
-
-msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
-msgstr "You have not yet been assigned an e-mail account. This view is therefore empty"
-
-msgid "New mails"
-msgstr "New mails"
-
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "You got {0} new mail(s) in folder {1} ({2})."
-
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr "IMAP Credentials for {0}"
-
-msgid "Credentials"
-msgstr "Credentials"
 
 msgid "IMAP Error"
 msgstr "IMAP Error"
@@ -1623,6 +1635,9 @@ msgstr "Sieve Port"
 
 msgid "Sieve SSL"
 msgstr "Sieve SSL"
+
+msgid "Auto-move spam"
+msgstr "Auto-move spam"
 
 msgid "File Location"
 msgid_plural "File Locations"

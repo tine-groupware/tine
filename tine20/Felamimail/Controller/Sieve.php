@@ -987,6 +987,54 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     }
 
     /**
+     * update auto move spam script for account
+     *
+     * @param string|Felamimail_Model_Account $_account
+     */
+    public function updateAutoMoveSpamScript($_account)
+    {
+        if (! isset($_account->sieve_spam_move)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    'Skip update sieve script: ' . $this->_scriptName .
+                    ', Invalid sieve spam move setting : ' . print_r($_account, true)
+                );
+            }
+            return;
+        }
+
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+
+        if ($_account->sieve_spam_move) {
+            $spamMoveFolderName = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_MOVE_FOLDER);
+            $spamMoveFolder = Felamimail_Model_MessagePipeConfig::getTargetFolder($_account, $spamMoveFolderName);
+            $config = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG);
+            $header = $config['header'] ?? null;
+            $value = $config['value'] ?? null;
+
+            if (empty($header) || empty($value)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        'Skip update sieve script: ' . $this->_scriptName .
+                        ', Invalid header or value : ' . print_r($config, true)
+                    );
+                }
+                return;
+            }
+
+            $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
+                'account_id' => $_account,
+                'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_SPAM,
+                'script' => 'if header :contains "' . $header . '" "' . $value . '" {fileinto :create "' . $spamMoveFolder->globalname . '";}',
+                'name' => 'auto_move_spam',
+                'requires' => ['"fileinto"', '"mailbox"'],
+            ]));
+        }
+
+        $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_SPAM);
+    }
+
+    /**
      * set adb list script for account
      *
      * @param Felamimail_Model_Account $_account
