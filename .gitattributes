@@ -1,3 +1,4 @@
 *.po merge=pofile
 *.pot merge=pofile
+setup.xml merge=setupxml
 /tine20/composer.lock -merge
