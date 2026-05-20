@@ -590,22 +590,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     self::MODEL_NAME                => 'EventTypes',
                     self::REF_ID_FIELD              => 'record',
                     self::DEPENDENT_RECORDS         => true,
+                    self::CONFIG => [
+                        self::APP_NAME                  => 'Calendar',
+                        self::MODEL_NAME                => 'EventTypes',
+                        self::REF_ID_FIELD              => 'record',
+                        self::DEPENDENT_RECORDS         => true,
+                    ],
                 ],
                 self::RECURSIVE_RESOLVING => true,
                 self::UI_CONFIG         => [
                     'searchComboConfig'     => [
                         'useEditPlugin'         => false,
-                    ],
-                ],
-                self::FILTER_DEFINITION => [
-                    self::FILTER                    => Tinebase_Model_Filter_ForeignRecords::class,
-                    self::OPTIONS                   => [
-                        self::FILTER_GROUP              => Calendar_Model_EventTypes::class . 'Filter',
-                        self::CONTROLLER                => Calendar_Controller_EventTypes::class,
-                        self::REF_ID_FIELD              => Calendar_Model_EventTypes::FLD_RECORD,
-                        self::FILTER_OPTIONS            => [
-                            'doJoin'                        => true,
-                        ],
                     ],
                 ],
             ],
