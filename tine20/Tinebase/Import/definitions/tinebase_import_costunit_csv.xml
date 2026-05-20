@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <name>tinebase_import_costunit_csv</name>
-    <model>Tinebase_Model_CostUnit</model>
+    <model>Tinebase_Model_EvaluationDimension</model>
     <plugin>Tinebase_Import_Csv_Generic</plugin>
     <type>import</type>
     <headline>1</headline>
