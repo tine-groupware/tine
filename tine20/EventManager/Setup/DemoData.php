@@ -124,7 +124,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_editem_csv');
 
             $importer = call_user_func_array($definition->plugin . '::createFromDefinition', array($definition, []));
-            $importer->importFile(__DIR__ . '/DemoData/files/kostenstellen_ebhh.csv');
+            $importer->importFile(__DIR__ . '/DemoData/files/costcenter.csv');
         }
 
         EventManager_Config::getInstance()

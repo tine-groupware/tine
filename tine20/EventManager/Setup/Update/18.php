@@ -28,6 +28,7 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE012 = __CLASS__ . '::update012';
     protected const RELEASE018_UPDATE013 = __CLASS__ . '::update013';
     protected const RELEASE018_UPDATE014 = __CLASS__ . '::update014';
+    protected const RELEASE018_UPDATE015 = __CLASS__ . '::update015';
 
 
     protected static $_allUpdates = [
@@ -46,6 +47,10 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE018_UPDATE015          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update015',
+            ],
             self::RELEASE018_UPDATE014          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update014',
@@ -234,5 +239,11 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.14', self::RELEASE018_UPDATE014);
+    }
+
+    public function update015()
+    {
+        EventManager_Setup_Initialize::initializeCostCenterCostBearer();
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
     }
 }
