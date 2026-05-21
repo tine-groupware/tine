@@ -84,13 +84,17 @@ class EventManager_Setup_Initialize extends Setup_Initialize
             EventManager_Model_Event::class,
         ]);
 
-        $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_costcenter_csv');
-        $importer = Tinebase_Import_Csv_Generic::createFromDefinition($def);
-        $importer->importFile(__DIR__ . '/DemoData/files/costcenter.csv');
-
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
             EventManager_Model_Event::class,
         ]);
+
+        try {
+            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tinebase_import_costcenter_csv');
+            $importer = Tinebase_Import_Csv_Generic::createFromDefinition($def);
+            $importer->importFile(__DIR__ . '/DemoData/files/costcenter.csv');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Exception::log($tenf);
+        }
     }
 
     /**
