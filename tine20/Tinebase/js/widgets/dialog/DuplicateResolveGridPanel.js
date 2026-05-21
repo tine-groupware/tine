@@ -490,6 +490,10 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
             if (! groupConflictScore.hasOwnProperty(group)) {
                 groupConflictScore[group] = 990;
             }
+
+            if (r.get('fieldName') === this.recordClass.getMeta('containerProperty')) {
+                groupConflictScore[group] -= 100;
+            }
             
             if (myValue || theirValue) {
                 groupConflictScore[group] -= 1;
