@@ -166,7 +166,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             this.afterEdit();
         }
     },
-    
+
     /**
      * returns title of this record
      * 
@@ -531,7 +531,7 @@ Tine.Tinebase.data.Record.getDefaultData = function(recordClass, defaults) {
 
     // find container by selection or use defaultContainer by registry
     if (modelConfig.containerProperty) {
-        if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
+        if (! dd.hasOwnProperty(modelConfig.containerProperty) || ! dd[modelConfig.containerProperty]) {
             var app = Tine.Tinebase.appMgr.get(appName),
                 registry = app.getRegistry(),
                 ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
@@ -566,14 +566,14 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         }
         var appName = record.getMeta('appName'),
             modelName = record.getMeta('modelName');
-            
+
         if (! appName && modelName) {
             throw new Ext.Error('appName and modelName must be in the metadatas');
         }
 
         Tine.Tinebase.data.RecordManager.superclass.add.call(this, appName + '.' + modelName, record);
     },
-    
+
     get: function(appName, modelName) {
         if (! appName && _.isFunction(_.get(modelName, 'getMeta'))) {
             return modelName;
@@ -603,7 +603,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
         if (! Ext.isString(appName)) {
             throw new Ext.Error('appName must be a string');
         }
-        
+
         Ext.each([appName, modelName], function(what) {
             if (! Ext.isString(what)) return;
             var parts = what.split(/(?:_Model_)|(?:\.)/);
@@ -612,7 +612,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
                 modelName = parts[1];
             }
         });
-        
+
         return Tine.Tinebase.data.RecordManager.superclass.get.call(this, appName + '.' + modelName);
     }
 });
