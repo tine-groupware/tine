@@ -772,7 +772,7 @@ Record.getDefaultData = function(recordClass, defaults) {
 
     // find container by selection or use defaultContainer by registry
     if (modelConfig.containerProperty &&! modelConfig.extendsContainer) {
-        if (! dd.hasOwnProperty(modelConfig.containerProperty)) {
+        if (! dd.hasOwnProperty(modelConfig.containerProperty) || ! dd[modelConfig.containerProperty]) {
             var app = Tine.Tinebase.appMgr.get(appName),
                 registry = app.getRegistry(),
                 ctp = app.getMainScreen().getWestPanel().getContainerTreePanel();
