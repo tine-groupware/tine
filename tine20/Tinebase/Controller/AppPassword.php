@@ -166,8 +166,7 @@ class Tinebase_Controller_AppPassword extends Tinebase_Controller_Record_Abstrac
                 } catch (Exception) {
                     continue;
                 }
-                if ($jwt->account_id !== $appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID}
-                    /* legacy, remove: */ && (!isset($jwt->iss) ||  40 !== strlen($jwt->iss))) {
+                if ($jwt->account_id !== $appPwd->{Tinebase_Model_AppPassword::FLD_ACCOUNT_ID}) {
                     continue;
                 }
                 return $appPwd;
