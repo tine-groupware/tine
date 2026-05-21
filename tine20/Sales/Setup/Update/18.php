@@ -32,6 +32,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE013 = __CLASS__ . '::update013';
     protected const RELEASE018_UPDATE014 = __CLASS__ . '::update014';
     protected const RELEASE018_UPDATE015 = __CLASS__ . '::update015';
+    protected const RELEASE018_UPDATE016 = __CLASS__ . '::update016';
 
 
     static protected $_allUpdates = [
@@ -101,6 +102,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE015          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update015',
+            ],
+            self::RELEASE018_UPDATE016          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update016',
             ],
         ],
     ];
@@ -451,6 +456,14 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
             Tinebase_PersistentFilter::getInstance()->update($filter);
         }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
+    }
+
+    public function update016(): void
+    {
+        $this->getDb()->update(Tinebase_PersistentFilter::getInstance()->getBackend()->getPrefixedTableName(), [
+            'filters' => new Zend_Db_Expr('REPLACE(`model`, \'"field":"reversal_status"\', \'"field":"reversed_status"\')'),
+        ], '`model` LIKE "Sales_Model_Document_%"');
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
     }
 }
