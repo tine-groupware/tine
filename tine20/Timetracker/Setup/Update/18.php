@@ -6,7 +6,7 @@
  * @package     Timetracker
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2025.11 (ONLY!)
@@ -19,6 +19,7 @@ class Timetracker_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE018_UPDATE004 = __CLASS__ . '::update004';
     protected const RELEASE018_UPDATE005 = __CLASS__ . '::update005';
+    protected const RELEASE018_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -47,6 +48,10 @@ class Timetracker_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE018_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -109,5 +114,25 @@ class Timetracker_Setup_Update_18 extends Setup_Update_Abstract
             Timetracker_Model_Timesheet::class,
         ]);
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '18.5', self::RELEASE018_UPDATE005);
+    }
+
+    /**
+     * @return void
+     *
+     * Background: process_status was introduced in 2022.11 with lowercase IDs (requested, accepted, declined),
+     * then switched to uppercase (REQUESTED, etc.) shortly after. Existing rows in timetracker_timesheet were never
+     * migrated.
+     *
+     */
+    public function update006(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->query(
+            'UPDATE ' . SQL_TABLE_PREFIX . Timetracker_Model_Timesheet::TABLE_NAME
+            . " SET process_status = UPPER(process_status) WHERE BINARY process_status in ('accepted','declined','requested')"
+        );
+
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '18.6', self::RELEASE018_UPDATE006);
     }
 }

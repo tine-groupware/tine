@@ -18,40 +18,40 @@
  */
 class Timetracker_Config extends Tinebase_Config_Abstract
 {
-    const APP_NAME = 'Timetracker';
+    public const APP_NAME = 'Timetracker';
 
     /**
      * Feature bookmark for timeaccounts
      */
-    const FEATURE_TIMEACCOUNT_BOOKMARK = 'featureTimeaccountBookmark';
+    public const FEATURE_TIMEACCOUNT_BOOKMARK = 'featureTimeaccountBookmark';
 
     /**
      * deadline
      * 
      * @var string
      */
-    const DEADLINE = 'deadline';
+    public const DEADLINE = 'deadline';
 
     /**
      * status
      *
      * @var string
      */
-    const STATUS ='status';
+    public const STATUS ='status';
 
-    const TS_CLEARED_AMOUNT_DELEGATOR = 'tsClearedAmountDelegator';
+    public const TS_CLEARED_AMOUNT_DELEGATOR = 'tsClearedAmountDelegator';
 
-    const TS_PROCESS_STATUS = 'tsProcessStatus';
-    const TS_PROCESS_STATUS_REQUESTED = 'REQUESTED';
-    const TS_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
-    const TS_PROCESS_STATUS_DECLINED = 'DECLINED';
+    public const TS_PROCESS_STATUS = 'tsProcessStatus';
+    public const TS_PROCESS_STATUS_REQUESTED = 'REQUESTED';
+    public const TS_PROCESS_STATUS_ACCEPTED = 'ACCEPTED';
+    public const TS_PROCESS_STATUS_DECLINED = 'DECLINED';
 
-    const ACCOUNTING_TIME_ROUNDING_MINUTES = 'accountingTimeRoundingMinutes';
-    const ACCOUNTING_TIME_ROUNDING_METHOD = 'accountingTimeRoundingMethod';
-    const ACCOUNTING_TIME_ROUNDING_METHOD_CEIL = 'ceil';
-    const ACCOUNTING_TIME_ROUNDING_METHOD_FLOOR = 'floor';
-    const ACCOUNTING_TIME_ROUNDING_METHOD_ROUND = 'round';
-    //const CALCULATE_BUDGET_BILLABLE_ONLY = 'calculateBudgetBillableOnly';
+    public const ACCOUNTING_TIME_ROUNDING_MINUTES = 'accountingTimeRoundingMinutes';
+    public const ACCOUNTING_TIME_ROUNDING_METHOD = 'accountingTimeRoundingMethod';
+    public const ACCOUNTING_TIME_ROUNDING_METHOD_CEIL = 'ceil';
+    public const ACCOUNTING_TIME_ROUNDING_METHOD_FLOOR = 'floor';
+    public const ACCOUNTING_TIME_ROUNDING_METHOD_ROUND = 'round';
+    //public const CALCULATE_BUDGET_BILLABLE_ONLY = 'calculateBudgetBillableOnly';
 
     /**
      * @var array
