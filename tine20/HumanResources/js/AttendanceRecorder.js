@@ -199,6 +199,11 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                         }
                     })],
                     getColumnModel: function() {
+                        const qtipStart = me.app.i18n._('Start. If button is disabled, please configure a recorder device in Human Resources');
+                        const qtipPause = me.app.i18n._('Pause');
+                        const qtipStop  = me.app.i18n._('Stop');
+                        const qtipEdit  = me.app.i18n._('Edit Timesheet');
+
                         const colModel = Tine.widgets.grid.PickerGridPanel.prototype.getColumnModel.call(this);
                         if (colModel.columns) {
                             colModel.columns.unshift({
@@ -208,9 +213,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                     const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
                                     
                                     return `<div class="tine-row-action-icons" style="width: 58px;">
-                                            <div class="tine-recordclass-gridicon ${(!SYSTEM_PROJECT_TIME_ID && type === TYPE_CLOCK_OUT) || type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in" data-action="clockIn" ext:qtip="${me.app.i18n._('Start')}">&nbsp;</div>
-                                            <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause" data-action="clockPause" ext:qtip="${me.app.i18n._('Pause')}">&nbsp;</div>
-                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out" data-action="clockOut" ext:qtip="${me.app.i18n._('Stop')}">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${(!SYSTEM_PROJECT_TIME_ID && type === TYPE_CLOCK_OUT) || type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in" data-action="clockIn" ext:qtip="${qtipStart}">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause" data-action="clockPause" ext:qtip="${qtipPause}">&nbsp;</div>
+                                            <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out" data-action="clockOut" ext:qtip="${qtipStop}">&nbsp;</div>
                                         </div>`;
                                 }
                             }, {
@@ -235,7 +240,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                                     
                                     return `<div class="tine-row-action-icons"><div style="float: left;">` + Ext.ux.form.DurationSpinner.durationRenderer(duration, { baseUnit: 'milliseconds' }).replace(':',
                                         `<span style="font-weight: bolder;" class="${type === TYPE_CLOCK_IN ? 'attendance-clock-blink' : 'attendance-clock-stale'}">\u2236</span>`) + `
-                                        </div><div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} action_pencil" data-action="editTimesheet" ext:qtip="${me.app.i18n._('Edit Timesheet')}">&nbsp;</div>
+                                        </div><div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} action_pencil" data-action="editTimesheet" ext:qtip="${qtipEdit}">&nbsp;</div>
                                     </div>`;
                                 }
                             })
