@@ -23,7 +23,7 @@ const colorLegend = Ext.extend(Ext.Panel, {
             showColumns: ['color', 'name'],
             hideMode: 'delete',
             gridConfig: {
-                disableResponsiveLayout: true,
+                disableResponsiveLayout: true, // we need the color column!
             },
             initComponent: function() {
                 this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('HumanResources');
@@ -33,6 +33,7 @@ const colorLegend = Ext.extend(Ext.Panel, {
 
                 Tine.HumanResources.FreeTimeTypeGridPanel.prototype.initComponent.call(this);
                 this.store.on('load', () => {
+                    // NOTE: we are a border layout (not responsive to keep cols) -> so we need to do height management
                     this.setHeight(this.grid.view.el.child('.x-grid3-body').getHeight() + this.grid.view.el.child('.x-grid3-header').getHeight());
                 })
             },
