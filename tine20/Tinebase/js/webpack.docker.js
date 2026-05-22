@@ -10,12 +10,14 @@ var assetsPluginInstance = new AssetsPlugin({
     prettyPrint: true
 });
 
-module.exports = merge(prod, {
-    output: {
-        path: '/out/tine20'
-    },
-    plugins: [
-        assetsPluginInstance
-    ]
-});
-
+module.exports = async () => {
+    const prodConfig = await prod();
+    return merge(prodConfig, {
+        output: {
+            path: '/out/tine20'
+        },
+        plugins: [
+            assetsPluginInstance
+        ]
+    });
+};

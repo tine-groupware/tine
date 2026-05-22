@@ -1,3 +1,5 @@
+module.exports = async () => {
+
 var fs = require('fs');
 var _ = require('lodash');
 var path = require('path');
@@ -17,6 +19,9 @@ var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 var ESLintPlugin = require('eslint-webpack-plugin');
 var CopyPlugin = require("copy-webpack-plugin");
+// const { default: Icons } = await import('unplugin-icons/webpack');
+// const IconLicenseCheckerPlugin = require('./webpack.icon-license-checker-plugin');
+
 
 var eslintPluginInstance = new ESLintPlugin({
     formatter: require('eslint-friendly-formatter'),
@@ -76,7 +81,7 @@ fs.readdirSync(baseDir).forEach(function (baseName) {
     }
 });
 
-module.exports = {
+return {
     target: ['web', 'es6'],
     entry: entryPoints,
     optimization: {
@@ -118,7 +123,13 @@ module.exports = {
         new VueLoaderPlugin(),
         new ChunkNamePlugin(),
         providePlugin,
-        eslintPluginInstance
+        eslintPluginInstance,
+        // require('unplugin-vue-components/webpack')({ /* options @TODO*/ }),
+        // Icons({ /* options */ }),
+        // new IconLicenseCheckerPlugin({
+        //     allowedLicenses: ['MIT', 'Apache-2.0', 'ISC', 'CC0-1.0'],
+        //     severity: 'error', // or 'warn'
+        // }),
     ],
     module: {
         rules: [
@@ -228,3 +239,4 @@ module.exports = {
 };
 
 // console.error(module.exports.resolve.alias)
+};
