@@ -24,6 +24,7 @@ class Timetracker_Model_TimesheetNotBillable extends Timetracker_Model_Timesheet
         parent::inheritModelConfigHook($_definition);
         unset($_definition[self::VERSION]);
         unset($_definition[self::TABLE]);
+        unset($_definition[self::CREATE_MODULE]);
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
     }
     
