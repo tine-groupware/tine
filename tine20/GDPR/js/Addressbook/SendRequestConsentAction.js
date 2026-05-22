@@ -14,7 +14,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('GDPR'),
         return new Ext.Action(Object.assign({
             text: config.text || app.formatMessage('Request Consent'),
             qtip: config.qtip || app.formatMessage('Send Request Consent message to contacts'),
+            width: 140,
             iconCls: `FelamimailIconCls`,
+            cls: 'gdpr-request-consent-btn',
             requiredGrant: 'readGrant',
             async handler(cmp) {
                 const editDialog = cmp.findParentBy((c) => {return c instanceof Tine.widgets.dialog.EditDialog})
