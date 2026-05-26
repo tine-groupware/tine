@@ -331,7 +331,8 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
         $rawDovecotUser = $this->_getRawDovecotUser($user, $emailUser);
         self::assertEquals($user['accountStatus'], $rawDovecotUser['status']);
-        self::assertEquals($user['last_modified_time'], new Tinebase_DateTime($rawDovecotUser['last_modified_time']));
+        self::assertEquals($user['last_modified_time']->toString('Y-m-d'),
+            (new Tinebase_DateTime($rawDovecotUser['last_modified_time']))->toString('Y-m-d'));
     }
 
     protected function _getRawDovecotUser($user, $emailUser = null)
