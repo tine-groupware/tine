@@ -656,17 +656,6 @@ msgstr "Bestätigung"
 msgid "Legend"
 msgstr "Legende"
 
-msgid "Absence Planning"
-msgstr "Abwesenheitsplanung"
-
-msgid "Revenue Analysis"
-msgstr "Umsatzanalyse"
-
-msgid "Human Resources"
-msgid_plural "Human Resources"
-msgstr[0] "Human Resources"
-msgstr[1] "Human Resources"
-
 msgid "Template"
 msgstr "Vorlage"
 
