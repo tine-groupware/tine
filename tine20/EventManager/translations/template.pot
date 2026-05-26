@@ -28,31 +28,28 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Open"
+msgid "Active"
 msgstr ""
 
-msgid "Closed"
+msgid "Draft"
 msgstr ""
 
-msgid "Cancelled"
+msgid "Completed"
 msgstr ""
 
-msgid "Planning"
+msgid "Canceled"
 msgstr ""
 
 msgid "Function"
 msgstr ""
 
-msgid "Attendee"
+msgid "Participant"
+msgstr ""
+
+msgid "Chair"
 msgstr ""
 
 msgid "Speaker"
-msgstr ""
-
-msgid "Moderator"
-msgstr ""
-
-msgid "Employee"
 msgstr ""
 
 msgid "Source"
@@ -68,6 +65,9 @@ msgid "Confirmed"
 msgstr ""
 
 msgid "Waiting list"
+msgstr ""
+
+msgid "Cancelled"
 msgstr ""
 
 msgid "Reason Waiting List"
@@ -362,6 +362,9 @@ msgstr ""
 msgid "Fee:"
 msgstr ""
 
+msgid "from "
+msgstr ""
+
 msgid "Registration possible until:"
 msgstr ""
 
@@ -569,6 +572,15 @@ msgstr ""
 msgid "Notify Participants"
 msgstr ""
 
+msgid "Attendee"
+msgstr ""
+
+msgid "Moderator"
+msgstr ""
+
+msgid "Employee"
+msgstr ""
+
 msgid "All"
 msgstr ""
 
@@ -746,9 +758,6 @@ msgid "Value"
 msgstr ""
 
 msgid "GENDER_Registration"
-msgstr ""
-
-msgid "Participant"
 msgstr ""
 
 msgid "This participant has been registered by another person"

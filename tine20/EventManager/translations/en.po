@@ -28,32 +28,29 @@ msgstr "Project Event"
 msgid "Status"
 msgstr "Status"
 
-msgid "Open"
-msgstr "Open"
+msgid "Active"
+msgstr "Active"
 
-msgid "Closed"
-msgstr "Closed"
+msgid "Draft"
+msgstr "Draft"
 
-msgid "Cancelled"
-msgstr "Cancelled"
+msgid "Completed"
+msgstr "Completed"
 
-msgid "Planning"
-msgstr "Planning"
+msgid "Canceled"
+msgstr "Canceled"
 
 msgid "Function"
 msgstr "Function"
 
-msgid "Attendee"
-msgstr "Attendee"
+msgid "Participant"
+msgstr "Participant"
+
+msgid "Chair"
+msgstr "Chair"
 
 msgid "Speaker"
 msgstr "Speaker"
-
-msgid "Moderator"
-msgstr "Moderator"
-
-msgid "Employee"
-msgstr "Employee"
 
 msgid "Source"
 msgstr "Source"
@@ -69,6 +66,9 @@ msgstr "Confirmed"
 
 msgid "Waiting list"
 msgstr "Waiting list"
+
+msgid "Cancelled"
+msgstr "Cancelled"
 
 msgid "Reason Waiting List"
 msgstr "Reason Waiting List"
@@ -362,6 +362,9 @@ msgstr "Address:"
 msgid "Fee:"
 msgstr "Fee:"
 
+msgid "from "
+msgstr "from "
+
 msgid "Registration possible until:"
 msgstr "Registration possible until:"
 
@@ -569,6 +572,15 @@ msgstr "Currently there are no participants signed for this event"
 msgid "Notify Participants"
 msgstr "Notify Participants"
 
+msgid "Attendee"
+msgstr "Attendee"
+
+msgid "Moderator"
+msgstr "Moderator"
+
+msgid "Employee"
+msgstr "Employee"
+
 msgid "All"
 msgstr "All"
 
@@ -747,9 +759,6 @@ msgstr "Value"
 
 msgid "GENDER_Registration"
 msgstr "GENDER_Registration"
-
-msgid "Participant"
-msgstr "Participant"
 
 msgid "This participant has been registered by another person"
 msgstr "This participant has been registered by another person"

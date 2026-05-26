@@ -218,10 +218,22 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $assertAclUsage = $this->assertPublicUsage();
         try {
             $response = new \Laminas\Diactoros\Response();
-            $events = $this->search();
-            $event = $events->getFirstRecord();
-            $converter = Tinebase_Convert_Factory::factory($event);
-            $eventArray = $converter->fromTine20RecordSet($events);
+
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                EventManager_Model_Event::class,
+                [
+                    [
+                        'field' => EventManager_Model_Event::FLD_STATUS,
+                        'operator' => 'equals',
+                        'value' => '1' // active events
+                    ],
+                ],
+            );
+            $eventListOfRecords = EventManager_Controller_Event::getInstance()
+                ->search($filter);
+            $events = $eventListOfRecords->getFirstRecord();
+            $converter = Tinebase_Convert_Factory::factory($events);
+            $eventArray = $converter->fromTine20RecordSet($eventListOfRecords);
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
