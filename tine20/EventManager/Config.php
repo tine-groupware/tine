@@ -82,10 +82,10 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR               => [
                 self::RECORDS  => [
-                    ['id' => 1,      'value' => 'Open'], //_('Open')
-                    ['id' => 2,      'value' => 'Closed'], //_('Closed')
-                    ['id' => 3,      'value' => 'Cancelled'], //_('Cancelled')
-                    ['id' => 4,      'value' => 'Planning'], //_('Planning')
+                    ['id' => 1,      'value' => 'Active'], //_('Active')
+                    ['id' => 2,      'value' => 'Draft'], //_('Draft')
+                    ['id' => 3,      'value' => 'Completed'], //_('Completed')
+                    ['id' => 4,      'value' => 'Canceled'], //_('Canceled')
                 ],
                 self::DEFAULT_STR => 1
             ]
@@ -99,10 +99,9 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR               => [
                 self::RECORDS  => [
-                    ['id' => 1,      'value' => 'Attendee'], //_('Attendee')
-                    ['id' => 2,      'value' => 'Speaker'], //_('Speaker')
-                    ['id' => 3,      'value' => 'Moderator'], //_('Moderator')
-                    ['id' => 4,      'value' => 'Employee'], //_('Employee')
+                    ['id' => 1,      'value' => 'Participant'], //_('Participant')
+                    ['id' => 2,      'value' => 'Chair'], //_('Chair')
+                    ['id' => 3,      'value' => 'Speaker'], //_('Speaker')
                 ],
                 self::DEFAULT_STR => 1
             ]

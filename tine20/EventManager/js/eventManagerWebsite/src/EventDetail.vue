@@ -52,7 +52,7 @@
 
         <div class="info-row" v-if="eventDetails.fee">
           <div class="info-label">{{formatMessage('Fee:')}}</div>
-          <div class="info-value">{{eventDetails.fee}} Euros</div>
+          <div class="info-value">{{formatMessage('from ')}}{{eventDetails.fee}} €</div>
         </div>
 
         <div class="info-row" v-if="eventDetails.registration_possible_until && eventDetails.registration_possible_until !== '1.1.1970'">
@@ -280,6 +280,10 @@ async function getEvent() {
             formattedEndTime: endTime
           };
         });
+      }
+
+      if (data.fee) {
+        data.fee = data.fee.toFixed(2).replace('.', ',');
       }
 
       eventDetails.value = data;
