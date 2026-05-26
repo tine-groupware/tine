@@ -135,7 +135,7 @@ export default (config) => {
 
     const onRecordLoad = (editDialog, record) => {
         let recordGrants = _.get(record, record.constructor.getMeta('grantsPath'));
-        if (!record.id) recordGrants = record?.json?.container_id?.account_grants ?? record?.json?.account_grants;
+        if (record.phantom) recordGrants = record?.json?.container_id?.account_grants ?? record?.json?.account_grants;
 
         propertyGrid.setSource(config.fields.reduce((source, field, idx) => {
             const requiredGrants = field.requiredGrants; // NOTE: at the moment this means rw!
