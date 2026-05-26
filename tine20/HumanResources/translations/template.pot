@@ -361,6 +361,17 @@ msgstr ""
 msgid "Create new accounts"
 msgstr ""
 
+msgid "Absence Planning"
+msgstr ""
+
+msgid "Revenue Analysis"
+msgstr ""
+
+msgid "Human Resources"
+msgid_plural "Human Resources"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Clock in"
 msgstr ""
 
@@ -629,17 +640,6 @@ msgstr ""
 
 msgid "Legend"
 msgstr ""
-
-msgid "Absence Planning"
-msgstr ""
-
-msgid "Revenue Analysis"
-msgstr ""
-
-msgid "Human Resources"
-msgid_plural "Human Resources"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "Template"
 msgstr ""

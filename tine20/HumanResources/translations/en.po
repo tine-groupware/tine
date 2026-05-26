@@ -361,6 +361,17 @@ msgstr "{0} accounts for the year {1} have been created successfully!"
 msgid "Create new accounts"
 msgstr "Create new accounts"
 
+msgid "Absence Planning"
+msgstr "Absence Planning"
+
+msgid "Revenue Analysis"
+msgstr "Revenue Analysis"
+
+msgid "Human Resources"
+msgid_plural "Human Resources"
+msgstr[0] "Human Resources"
+msgstr[1] "Human Resources"
+
 msgid "Clock in"
 msgstr "Clock in"
 
@@ -629,17 +640,6 @@ msgstr "Confirm"
 
 msgid "Legend"
 msgstr "Legend"
-
-msgid "Absence Planning"
-msgstr "Absence Planning"
-
-msgid "Revenue Analysis"
-msgstr "Revenue Analysis"
-
-msgid "Human Resources"
-msgid_plural "Human Resources"
-msgstr[0] "Human Resources"
-msgstr[1] "Human Resources"
 
 msgid "Template"
 msgstr "Template"
