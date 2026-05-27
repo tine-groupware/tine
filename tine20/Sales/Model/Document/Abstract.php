@@ -1041,7 +1041,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
-            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = (float)$this->{self::FLD_INVOICE_DISCOUNT_SUM};
+            $this->{self::FLD_INVOICE_DISCOUNT_SUM} = round((float)$this->{self::FLD_INVOICE_DISCOUNT_SUM}, 2);
         } else {
             $posSumFld = $documentPriceType === Sales_Config::PRICE_TYPE_GROSS ?
                 self::FLD_POSITIONS_GROSS_SUM : self::FLD_POSITIONS_NET_SUM;
