@@ -30,3 +30,19 @@ $autoloader = require __DIR__ . '/vendor/autoload.php';
 
 // activate our own error handler after autoloader initialization
 set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_DEPRECATED);
+
+$memoryReserve = str_repeat('x', 1024 * 1024 * 1); // reserve 1 MB of memory
+register_shutdown_function(function () use (&$memoryReserve) {
+    $memoryReserve = null; // release reserved memory
+    $error = error_get_last();
+    if ($error !== null && str_contains($error['message'], 'Allowed memory size')) {
+
+        Tinebase_Exception::log(new Tinebase_Exception('OOM aufgetreten: ' . print_r($error, true)));
+        
+        if (!headers_sent()) {
+            http_response_code(200);
+            header('Content-Type: application/json');
+            echo '{"error":{"code":-32000,"message":"Out Of Memory","data":{"message":"Out Of Memory","code":550}},"jsonrpc":"2.0"}';
+        }
+    }
+});
