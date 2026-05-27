@@ -748,7 +748,7 @@ abstract class Tinebase_EmailUser_Sql extends Tinebase_User_Plugin_SqlAbstract
      * @param string $newId
      * @throws Tinebase_Exception
      * @throws Zend_Db_Statement_Exception
-     * @return array
+     * @return mixed
      */
     public function copyUser(Tinebase_Model_FullUser $_user, $newId)
     {
