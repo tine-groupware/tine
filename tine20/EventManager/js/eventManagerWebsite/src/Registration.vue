@@ -77,7 +77,7 @@
               }">
                 <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
                   <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
-                    <h6 class="option-group">{{option.name_option}}</h6>
+                    <div>{{option.name_option}}</div>
                     <MarkdownRenderer :content="option.option_config.text_option" />
                   </div>
                   <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
@@ -86,8 +86,7 @@
                       label-cols-lg="3"
                       content-cols-sm
                       content-cols-lg="7"
-                      :label="`${option.name_option}${option.option_config?.text ? ' : ' + option.option_config.text : ''}`"
-                      class="option-group"
+                      :label="`${option.name_option}`"
                     >
                       <b-form-textarea
                         v-if="option.option_config.multiple_lines"
@@ -120,7 +119,7 @@
                       unchecked-value="false"
                       @click="singleSelection(option)"
                     >
-                      <h6 class="option-group">{{option.name_option}}</h6>
+                      <div>{{option.name_option}}</div>
                       <div v-if="option.option_config">
                         <MarkdownRenderer v-if="option.option_config.description" :content="option.option_config.description" />
                         <div v-if="option.option_config.price">{{formatMessage('Price')}} {{option.option_config.price}}</div>
@@ -130,7 +129,7 @@
                   <div v-if="option.option_config_class === 'EventManager_Model_FileOption'"
                        :class="{ 'required-field-error-container': (!option.group || option.group.trim() === '') && validationErrors.includes(option.id)}">
                     <div class="m-3">
-                      <h6 class="option-group">{{option.name_option}}</h6>
+                      <div>{{option.name_option}}</div>
                       <div v-if="option.option_config && option.option_config.node_id !== ''">
                         <b-button class="action-button" @click="downloadFile(option.option_config.node_id , option.option_config.file_name, option.option_config.file_type)">{{formatMessage('Download file')}}</b-button>
                       </div>
@@ -142,7 +141,7 @@
                           @click="singleSelection(option)"
                         >{{formatMessage('I have read the document and accept the terms and conditions')}}</b-form-checkbox>
                       </div>
-                      <div v-else-if="option.option_config && option.option_config.file_upload" class="m-3">
+                      <div v-else-if="option.option_config" class="m-3">
                         <input
                           id="file-input"
                           type="file"

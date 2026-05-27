@@ -202,6 +202,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
                 self::UI_CONFIG         => [
                     self::COLUMNS           => [
+                        EventManager_Model_Option::FLD_GROUP,
                         EventManager_Model_Option::FLD_NAME_OPTION,
                         EventManager_Model_Option::FLD_OPTION_CONFIG_CLASS,
                         EventManager_Model_Option::FLD_OPTION_CONFIG,

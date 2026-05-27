@@ -26,6 +26,56 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.setupOptionRequiredTrigger();
     },
 
+    onAfterRecordLoad: function () {
+        Tine.EventManager.OptionEditDialog.superclass.onAfterRecordLoad.apply(this, arguments);
+
+        const typeField = this.form.findField('option_config_class');
+        if (typeField?.getValue()) {
+            this.updateTypeDescription(typeField.getValue());
+        }
+    },
+
+    afterRender: function () {
+        Tine.EventManager.OptionsRuleEditDialog.superclass.afterRender.call(this);
+        this.setOptionConfigClassTypeListener();
+    },
+
+    setOptionConfigClassTypeListener: function () {
+        const typeField = this.form.findField('option_config_class');
+        typeField.on('select', function () {
+            let value = typeField.value;
+            this.updateTypeDescription(value);
+        }, this);
+    },
+
+    getTypeDescriptions: function () {
+        return {
+            'EventManager_Model_TextOption':      this.app.i18n._('A simple text option that displays a fixed text to the participant in the registration form.'),
+            'EventManager_Model_CheckboxOption':  this.app.i18n._('A checkbox option that allows participants to opt in or out of something, e.g. a dietary preference. The name will be displayed next to the checkbox. If the price and description have a value, they will be displayed underneath the checkbox on the website. Die remaining available spaces will not be displayed for the participants, this is set for internal information purposes.'),
+            'EventManager_Model_FileOption':      this.app.i18n._('A file option that allows participants to acknowledge a document or upload a file, such as a document or image. If in the configuration the acknowledge checkbox is set, participants will be able to download the file and asked to acknowledge the document with a checkbox. If the participant should upload a file they will be able to download the file set in the configuration and upload a new one e.g. the same document signed.'),
+            'EventManager_Model_TextInputOption': this.app.i18n._('A text input option that allows participants to enter free-form text, such as a name or comment. E.g. allergies.'),
+        };
+    },
+
+    updateTypeDescription: function (value) {
+        if (!this.typeDescriptionPanel) return;
+        const descriptions = this.getTypeDescriptions();
+        const description = descriptions[value];
+
+        value = value.replace('EventManager_Model_', '');
+        value = value.replace('Option', '');
+        const type = this.app.i18n._(value);
+
+        if (description) {
+            this.typeDescriptionPanel.update('<b>' + this.app.i18n._('Option type') + ' ' + type + ':</b> ' + description);
+            this.typeDescriptionPanel.show();
+        } else {
+            this.typeDescriptionPanel.hide();
+        }
+
+        this.typeDescriptionPanel.ownerCt?.doLayout();
+    },
+
     setupDisplayTrigger: function () {
         const displayField = this.form.findField('display');
         displayField.on('select', function () {
@@ -115,6 +165,14 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG
         );
 
+        this.typeDescriptionPanel = new Ext.Panel({
+            xtype: 'panel',
+            border: false,
+            hidden: true,
+            bodyStyle: 'padding: 8px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; color: #555;',
+            html: ''
+        });
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -143,7 +201,9 @@ Tine.EventManager.OptionEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         [fieldManager('option_required')],
                         [fieldManager('display')],
                     ]
-                }]
+                },
+                    this.typeDescriptionPanel
+                ]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,

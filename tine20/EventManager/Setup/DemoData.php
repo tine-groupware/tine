@@ -156,7 +156,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $fileoption_upload = $this->setOptionConfigFileDemoData(false);
 
         //text input
-        $allergien = $this->setOptionConfigTextInputDemoData(null, true, 50);
+        $allergien = $this->setOptionConfigTextInputDemoData( true, 50);
 
         //text output
         $unterscheriben = $this->setOptionConfigTextDemoData('Bitte laden Sie das unterschriebene Dokument hoch');
@@ -666,10 +666,9 @@ Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach 
         return $tempfile;
     }
 
-    protected function setOptionConfigTextInputDemoData($text, $multiple_lines = true, $max_characters = 0): EventManager_Model_TextInputOption
+    protected function setOptionConfigTextInputDemoData($multiple_lines = true, $max_characters = 0): EventManager_Model_TextInputOption
     {
         return new EventManager_Model_TextInputOption([
-            'text' => $text,
             'multiple_lines' => $multiple_lines,
             'max_characters' => $max_characters,
             'only_numbers' => !$multiple_lines,

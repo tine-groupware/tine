@@ -148,6 +148,9 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL       => 1,
                 self::NAME              => EventManager_Config::OPTION_LEVEL,
                 self::NULLABLE          => true,
+                self::DESCRIPTION       => 'The higher the level, the greater the indentation on the website.',
+                // _('The higher the level, the greater the indentation on the website.')
+
             ],
             self::FLD_OPTION_REQUIRED       => [
                 self::TYPE                      => self::TYPE_KEY_FIELD,
