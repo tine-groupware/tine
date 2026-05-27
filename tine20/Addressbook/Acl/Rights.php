@@ -55,6 +55,13 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_LIST_EMAIL_OPTIONS = 'manage_list_email_options';
 
     /**
+     * the right to manage shared list favorites
+     *
+     * @staticvar string
+     */
+    const MANAGE_SHARED_LIST_FAVORITES = 'manage_shared_list_favorites';
+
+    /**
      * holds the instance of the singleton
      *
      * @var Addressbook_Acl_Rights
@@ -109,6 +116,7 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CORE_DATA_LISTS,
             self::MANAGE_CORE_DATA_LIST_ROLES,
             self::MANAGE_LIST_EMAIL_OPTIONS,
+            self::MANAGE_SHARED_LIST_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -130,8 +138,8 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'description'   => $translate->_('Create new shared addressbook folders'),
             ),
             self::MANAGE_SHARED_CONTACT_FAVORITES => array(
-                'text'          => $translate->_('manage shared addressbook favorites'),
-                'description'   => $translate->_('Create or update shared addressbook favorites'),
+                'text'          => $translate->_('manage shared contact favorites'),
+                'description'   => $translate->_('Create or update shared contact favorites'),
             ),
             self::MANAGE_CORE_DATA_LISTS => array(
                 'text'          => $translate->_('Manage lists in CoreData'),
@@ -144,6 +152,10 @@ class Addressbook_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_LIST_EMAIL_OPTIONS => array(
                 'text'          => $translate->_('Manage list email options'),
                 'description'   => $translate->_('Manage list email options like mailing lists'),
+            ),
+            self::MANAGE_SHARED_LIST_FAVORITES => array(
+                'text'          => $translate->_('manage shared list favorites'),
+                'description'   => $translate->_('Create or update shared list favorites'),
             ),
         );
         

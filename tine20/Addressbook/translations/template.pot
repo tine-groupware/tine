@@ -19,10 +19,10 @@ msgstr ""
 msgid "Create new shared addressbook folders"
 msgstr ""
 
-msgid "manage shared addressbook favorites"
+msgid "manage shared contact favorites"
 msgstr ""
 
-msgid "Create or update shared addressbook favorites"
+msgid "Create or update shared contact favorites"
 msgstr ""
 
 msgid "Manage lists in CoreData"
@@ -41,6 +41,12 @@ msgid "Manage list email options"
 msgstr ""
 
 msgid "Manage list email options like mailing lists"
+msgstr ""
+
+msgid "manage shared list favorites"
+msgstr ""
+
+msgid "Create or update shared list favorites"
 msgstr ""
 
 msgid "CardDAV readonly policy"
@@ -338,31 +344,6 @@ msgstr ""
 msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr ""
 
-msgid "New Contact"
-msgstr ""
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "ID"
-msgstr ""
-
-msgid "Name"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Resources"
-msgstr ""
-
 msgid "Private"
 msgstr ""
 
@@ -403,6 +384,23 @@ msgstr ""
 msgid "Contact Properties"
 msgstr ""
 
+msgid "New Contact"
+msgstr ""
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "ID"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Description"
+msgstr ""
+
 msgid "CardDAV URL"
 msgstr ""
 
@@ -410,6 +408,9 @@ msgid "Map"
 msgstr ""
 
 msgid "This field is automatically taken from the email account and therefore cannot be edited here."
+msgstr ""
+
+msgid "Color"
 msgstr ""
 
 msgid "Personal Information"
@@ -443,9 +444,6 @@ msgid "Sites"
 msgstr ""
 
 msgid "Search for sites ... (leave empty for all sites)"
-msgstr ""
-
-msgid "Color"
 msgstr ""
 
 msgid "Display Name"
@@ -714,6 +712,14 @@ msgid "Would you like to enable this function now?"
 msgstr ""
 
 msgid "E-Mail can not be empty when mailing list is enabled"
+msgstr ""
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Resources"
 msgstr ""
 
 msgid "Company address"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-04-02 13:30+0000\n"
+"PO-Revision-Date: 2026-05-27 13:47+0200\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012-2013\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -21,9 +21,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid "manage shared addressbooks"
 msgstr "Gemeinsame Adressbücher verwalten"
@@ -31,11 +30,11 @@ msgstr "Gemeinsame Adressbücher verwalten"
 msgid "Create new shared addressbook folders"
 msgstr "Neue gemeinsame Adressbücher anlegen"
 
-msgid "manage shared addressbook favorites"
-msgstr "Gemeinsame Adressbuch-Favoriten verwalten"
+msgid "manage shared contact favorites"
+msgstr "Gemeinsame Kontaktfavoriten verwalten"
 
-msgid "Create or update shared addressbook favorites"
-msgstr "Gemeinsame Adressbuch-Favoriten erstellen oder bearbeiten"
+msgid "Create or update shared contact favorites"
+msgstr "Gemeinsame Kontaktfavoriten erstellen oder aktualisieren"
 
 msgid "Manage lists in CoreData"
 msgstr "Verwalte Listen in den Stammdaten"
@@ -54,6 +53,12 @@ msgstr "E-Mail Optionen von Listen verwalten"
 
 msgid "Manage list email options like mailing lists"
 msgstr "Bearbeitung von Gruppenoptionen (z.B. Mailinglisten)"
+
+msgid "manage shared list favorites"
+msgstr "Gemeinsame Gruppenfavoriten verwalten"
+
+msgid "Create or update shared list favorites"
+msgstr "Gemeinsame Gruppenfavoriten erstellen oder aktualisieren"
 
 msgid "CardDAV readonly policy"
 msgstr "CardDAV Nur-Lesen Richtlinie"
@@ -335,42 +340,20 @@ msgstr "Importiere CSV-formatierte Kontakte aus einem Exchange-/ Outlook-Adressb
 msgid "Contact CSV import from Outlook address book"
 msgstr "CSV-Kontaktimport aus dem Outlook-Adressbuch"
 
-msgid "Tine contact CSV import"
-msgstr "Tine Kontakt CSV-Import"
+msgid "Tine contact CSV import all data"
+msgstr ""
 
 msgid "Import CSV formated contacts from tine address book"
 msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
+
+msgid "Tine contact CSV import"
+msgstr "Tine Kontakt CSV-Import"
 
 msgid "Import list (###CURRENTDATE###)"
 msgstr "Importliste (###CURRENTDATE###)"
 
 msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
-
-msgid "New Contact"
-msgstr "Neuer Kontakt"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Adressbuch"
-msgstr[1] "Adressbücher"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] "Struktur"
-msgstr[1] "Strukturen"
-
-msgid "Resources"
-msgstr "Ressourcen"
 
 msgid "Private"
 msgstr "Privat"
@@ -380,6 +363,16 @@ msgstr "Das Recht auf private Informationen des Kontaktes zuzugreifen"
 
 msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
+
+msgid "Copy Postal Address to Clipboard"
+msgstr "Post Anschrift in die Zwischenablage kopieren"
+
+msgid "Copied to clipboard"
+msgstr "In die Zwischenablage kopiert"
+
+#, python-brace-format
+msgid "\"{value}\" was copied to clipboard"
+msgstr "\"{value}\" wurde in die Zwischenablage kopiert"
 
 msgid "Street"
 msgstr "Straße"
@@ -402,6 +395,23 @@ msgstr "Land"
 msgid "Contact Properties"
 msgstr "Kontakt-Felder"
 
+msgid "New Contact"
+msgstr "Neuer Kontakt"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Adressbuch"
+msgstr[1] "Adressbücher"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Beschreibung"
+
 msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
@@ -410,6 +420,9 @@ msgstr "Karte"
 
 msgid "This field is automatically taken from the email account and therefore cannot be edited here."
 msgstr "Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher hier nicht bearbeitet werden."
+
+msgid "Color"
+msgstr "Farbe"
 
 msgid "Personal Information"
 msgstr "Persönliche Informationen"
@@ -444,9 +457,6 @@ msgstr "Standorte"
 msgid "Search for sites ... (leave empty for all sites)"
 msgstr "Suche nach Standorten ... (leer lassen für alle Standorte)"
 
-msgid "Color"
-msgstr "Farbe"
-
 msgid "Display Name"
 msgstr "Angezeigter Name"
 
@@ -469,6 +479,9 @@ msgstr "Notizen"
 
 msgid "Enter Note"
 msgstr "Notiz eingeben"
+
+msgid "Additional properties"
+msgstr "Zusätzliche Eigenschaften"
 
 msgid "Parse address"
 msgstr "Adresse einlesen"
@@ -621,6 +634,13 @@ msgstr "Suche nach Kontakten ..."
 msgid "Group Information"
 msgstr "Gruppeninformationen"
 
+msgid "You do not have the grant to manage mailing list with internal domain"
+msgstr "Sie haben keine Berechtigung, die Verteilerliste mit interner Domain zu verwalten."
+
+#, python-brace-format
+msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
+msgstr "Die Verteilerliste mit der Adresse {0} wird in einem externen Prozess verwaltet. Die Änderung der Gruppenmitglieder hier hat keine Auswirkungen auf die Empfänger dieser Verteilerliste"
+
 msgid "List type"
 msgstr "Listen Typ"
 
@@ -666,6 +686,9 @@ msgstr "E-Mail-Verteiler"
 msgid "This group is a mailing list"
 msgstr "Diese Gruppe ist ein E-Mail-Verteiler"
 
+msgid "You do not have the grant to enter internal domain"
+msgstr "Sie haben keine Berechtigung, interne Domänen einzugeben"
+
 msgid "Reply to"
 msgstr "Antwortmails an"
 
@@ -689,6 +712,26 @@ msgstr "Nur E-Mails von Gruppenmitgliedern weiterleiten"
 
 msgid "Only forward to system email accounts"
 msgstr "E-Mails nur an Nutzer mit Systemkonto verteilen"
+
+msgid "Email distribution list function required"
+msgstr "E-Mail-Verteiler Funktion benötigt"
+
+msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
+msgstr "E-Mail Konten der Domain der angegebene E-Mail Adresse werden automatisch durch diese Installation verwaltet. Sie können Adressen dieser Domain hier nur verwenden wenn die “E-Mail-Verteiler” Funktion für diese Gruppe aktiviert ist."
+
+msgid "Would you like to enable this function now?"
+msgstr "Soll diese Funktion nun aktiviert werden?"
+
+msgid "E-Mail can not be empty when mailing list is enabled"
+msgstr "Die E-Mail-Adresse darf nicht leer sein, wenn die E-Mail-Verteiler aktiviert ist."
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] "Struktur"
+msgstr[1] "Strukturen"
+
+msgid "Resources"
+msgstr "Ressourcen"
 
 msgid "Company address"
 msgstr "Firmenadresse"
@@ -806,11 +849,17 @@ msgstr "Pfade"
 msgid "Preferred Email"
 msgstr "Bevorzugte E-Mail"
 
+msgid "Public Key"
+msgstr ""
+
 msgid "syncBackendIds"
 msgstr ""
 
 msgid "Label"
 msgstr "Bezeichner"
+
+msgid "Calendar Free Busy URLs"
+msgstr "Kalender Frei Belegt URLs"
 
 msgid "GENDER_Address"
 msgstr "female"
@@ -881,6 +930,11 @@ msgid "Site"
 msgid_plural "Sites"
 msgstr[0] "Standort"
 msgstr[1] "Standorte"
+
+msgid "External FreeBusy Url"
+msgid_plural "External FreeBusy Urls"
+msgstr[0] "Externe Frei Belegt URL"
+msgstr[1] "Externe Frei Belegt URLs"
 
 msgid "GENDER_Group"
 msgstr "female"
@@ -1037,51 +1091,14 @@ msgstr "Anzeigename - Firma/Organisation"
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr ""
 
-msgid "Copy Postal Address to Clipboard"
-msgstr "Post Anschrift in die Zwischenablage kopieren"
+#~ msgid "manage shared addressbook favorites"
+#~ msgstr "Gemeinsame Adressbuch-Favoriten verwalten"
 
-msgid "Copied to clipboard"
-msgstr "In die Zwischenablage kopiert"
+#~ msgid "Create or update shared addressbook favorites"
+#~ msgstr "Gemeinsame Adressbuch-Favoriten erstellen oder bearbeiten"
 
-#, python-brace-format
-msgid "\"{value}\" was copied to clipboard"
-msgstr "\"{value}\" wurde in die Zwischenablage kopiert"
+#~ msgid "Please enable \"This group is a mailing list\" in mailing list panel."
+#~ msgstr "Bitte aktivieren Sie \"Diese Gruppe ist ein E-Mail-Verteiler\" im E-Mail-Verteiler Karteireiter"
 
-msgid "You do not have the grant to manage mailing list with internal domain"
-msgstr "Sie haben keine Berechtigung, die Verteilerliste mit interner Domain zu verwalten."
-
-#, python-brace-format
-msgid "Mailinglist with address {0} is managed in an external process. Changing group members here will not change the recipients of that list."
-msgstr "Die Verteilerliste mit der Adresse {0} wird in einem externen Prozess verwaltet. Die Änderung der Gruppenmitglieder hier hat keine Auswirkungen auf die Empfänger dieser Verteilerliste"
-
-msgid "You do not have the grant to enter internal domain"
-msgstr "Sie haben keine Berechtigung, interne Domänen einzugeben"
-
-msgid "Email distribution list function required"
-msgstr "E-Mail-Verteiler Funktion benötigt"
-
-msgid "E-Mail accounts for the domain of the specified email address are automatically managed by this installation. You can only use addresses from this domain here if the “Mailing list” support is enabled for this group."
-msgstr "E-Mail Konten der Domain der angegebene E-Mail Adresse werden automatisch durch diese Installation verwaltet. Sie können Adressen dieser Domain hier nur verwenden wenn die “E-Mail-Verteiler” Funktion für diese Gruppe aktiviert ist."
-
-msgid "Would you like to enable this function now?"
-msgstr "Soll diese Funktion nun aktiviert werden?"
-
-msgid "E-Mail can not be empty when mailing list is enabled"
-msgstr "Die E-Mail-Adresse darf nicht leer sein, wenn die E-Mail-Verteiler aktiviert ist."
-
-msgid "Calendar Free Busy URLs"
-msgstr "Kalender Frei Belegt URLs"
-
-msgid "External FreeBusy Url"
-msgid_plural "External FreeBusy Urls"
-msgstr[0] "Externe Frei Belegt URL"
-msgstr[1] "Externe Frei Belegt URLs"
-
-msgid "Additional properties"
-msgstr "Zusätzliche Eigenschaften"
-
-msgid "Please enable \"This group is a mailing list\" in mailing list panel."
-msgstr "Bitte aktivieren Sie \"Diese Gruppe ist ein E-Mail-Verteiler\" im E-Mail-Verteiler Karteireiter"
-
-msgid "Invalid"
-msgstr "Ungültig"
+#~ msgid "Invalid"
+#~ msgstr "Ungültig"

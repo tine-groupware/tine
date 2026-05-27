@@ -19,11 +19,11 @@ msgstr "manage shared addressbooks"
 msgid "Create new shared addressbook folders"
 msgstr "Create new shared addressbook folders"
 
-msgid "manage shared addressbook favorites"
-msgstr "manage shared addressbook favorites"
+msgid "manage shared contact favorites"
+msgstr "manage shared contact favorites"
 
-msgid "Create or update shared addressbook favorites"
-msgstr "Create or update shared addressbook favorites"
+msgid "Create or update shared contact favorites"
+msgstr "Create or update shared contact favorites"
 
 msgid "Manage lists in CoreData"
 msgstr "Manage lists in CoreData"
@@ -42,6 +42,12 @@ msgstr "Manage list email options"
 
 msgid "Manage list email options like mailing lists"
 msgstr "Manage list email options like mailing lists"
+
+msgid "manage shared list favorites"
+msgstr "manage shared list favorites"
+
+msgid "Create or update shared list favorites"
+msgstr "Create or update shared list favorites"
 
 msgid "CardDAV readonly policy"
 msgstr "CardDAV readonly policy"
@@ -338,31 +344,6 @@ msgstr "Import list (###CURRENTDATE###)"
 msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 msgstr "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
 
-msgid "New Contact"
-msgstr "New Contact"
-
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Addressbook"
-msgstr[1] "Addressbooks"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Structure"
-msgid_plural "Structures"
-msgstr[0] "Structure"
-msgstr[1] "Structures"
-
-msgid "Resources"
-msgstr "Resources"
-
 msgid "Private"
 msgstr "Private"
 
@@ -403,6 +384,23 @@ msgstr "Country"
 msgid "Contact Properties"
 msgstr "Contact Properties"
 
+msgid "New Contact"
+msgstr "New Contact"
+
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Addressbook"
+msgstr[1] "Addressbooks"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Description"
+msgstr "Description"
+
 msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
@@ -411,6 +409,9 @@ msgstr "Map"
 
 msgid "This field is automatically taken from the email account and therefore cannot be edited here."
 msgstr "This field is automatically taken from the email account and therefore cannot be edited here."
+
+msgid "Color"
+msgstr "Color"
 
 msgid "Personal Information"
 msgstr "Personal Information"
@@ -444,9 +445,6 @@ msgstr "Sites"
 
 msgid "Search for sites ... (leave empty for all sites)"
 msgstr "Search for sites ... (leave empty for all sites)"
-
-msgid "Color"
-msgstr "Color"
 
 msgid "Display Name"
 msgstr "Display Name"
@@ -715,6 +713,14 @@ msgstr "Would you like to enable this function now?"
 
 msgid "E-Mail can not be empty when mailing list is enabled"
 msgstr "E-Mail can not be empty when mailing list is enabled"
+
+msgid "Structure"
+msgid_plural "Structures"
+msgstr[0] "Structure"
+msgstr[1] "Structures"
+
+msgid "Resources"
+msgstr "Resources"
 
 msgid "Company address"
 msgstr "Company address"
