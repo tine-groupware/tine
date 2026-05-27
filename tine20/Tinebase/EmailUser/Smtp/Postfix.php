@@ -837,6 +837,9 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Sql implements 
     public function copyUser(Tinebase_Model_FullUser $_user, $newId)
     {
         $rawUser = parent::copyUser($_user, $newId);
+        if ($rawUser === false) {
+            throw new Tinebase_Exception_Backend('Failed to copy postfix user - no existing system account found');
+        }
         $this->_createDefaultDestinations($rawUser);
         return $rawUser;
     }
