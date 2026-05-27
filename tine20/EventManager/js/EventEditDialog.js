@@ -21,12 +21,45 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     windowNamePrefix: 'EventEditWindow_',
 
+    optionTemplates: [
+        // Verpflegung
+        { name_option: 'Konventionell', group: 'Verpflegung', sorting: 1, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Vegetarisch', group: 'Verpflegung', sorting: 2, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Vegan', group: 'Verpflegung', sorting: 3, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Ich nehme nicht an den Mahlzeiten teil', group: 'Verpflegung', sorting: 4, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Allergien und Unverträglichkeiten',group: 'Verpflegung', sorting: 5, option_config_class: 'EventManager_Model_TextInputOption', option_config: {multiple_lines: true, max_characters: 255}},
+        // Unterbringung
+        { name_option: 'Einzelzimmer', group: 'Unterbringung', sorting: 6, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Doppelzimmer', group: 'Unterbringung', sorting: 7, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Keine Übernachtung', group: 'Unterbringung', sorting: 8, option_config_class: 'EventManager_Model_CheckboxOption', option_config: {price: 0, description: ''}},
+        { name_option: 'Doppelzimmer mit...', group: 'Unterbringung', sorting: 9, option_config_class: 'EventManager_Model_TextInputOption', option_config: {multiple_lines: true, max_characters: 255}},
+    ],
+
     initComponent: function () {
         this.app = Tine.Tinebase.appMgr.get('EventManager');
         this.supr().initComponent.apply(this, arguments);
 
         this.rrulePanel = new Tine.Calendar.RrulePanel({
             eventEditDialog : this
+        });
+    },
+
+    onRecordLoad: function () {
+        this.supr().onRecordLoad.apply(this, arguments);
+
+        if (this.record.id === null || this.record.phantom) {
+            const optionsField = this.form.findField('options');
+            if (optionsField && optionsField.store.getCount() === 0) {
+                this._applyOptionTemplates(optionsField);
+            }
+        }
+    },
+
+    _applyOptionTemplates: function (optionsField) {
+        const RecordType = optionsField.store.recordType;
+        _.each(this.optionTemplates, function (tpl) {
+            const record = new RecordType(Ext.apply({ id: Ext.id(null, 'new-') }, tpl));
+            optionsField.store.add(record);
         });
     },
 

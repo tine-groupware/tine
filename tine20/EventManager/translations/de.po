@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-05-21 10:26+0200\n"
+"PO-Revision-Date: 2026-05-27 09:00+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -183,7 +183,7 @@ msgid "The EventManager JWT secret string"
 msgstr "Veranstaltungsmanager JWT geheim string"
 
 msgid "Participants are allowed to register"
-msgstr "Die Teilnehmer dürfen anmelden"
+msgstr "Die Teilnehmende dürfen anmelden"
 
 msgid "Anyone"
 msgstr "Jeder"
@@ -432,6 +432,9 @@ msgstr "Veranstaltungsinformationen:"
 msgid "characters"
 msgstr "Zeichen"
 
+msgid "Price"
+msgstr "Preis"
+
 msgid "Download file"
 msgstr "Datei herunterladen"
 
@@ -588,6 +591,21 @@ msgstr "Mitarbeiter*in"
 msgid "All"
 msgstr "Alle"
 
+msgid "A simple text option that displays a fixed text to the participant in the registration form."
+msgstr "Eine einfache Textoption, die dem Teilnehmende im Anmeldeformular einen festen Text anzeigt."
+
+msgid "A checkbox option that allows participants to opt in or out of something, e.g. a dietary preference. The name will be displayed next to the checkbox. If the price and description have a value, they will be displayed underneath the checkbox on the website. Die remaining available spaces will not be displayed for the participants, this is set for internal information purposes."
+msgstr "Ein Kästchen, über das die Teilnehmende eine Option aktivieren oder deaktivieren können, z. B. eine Ernährungspräferenz. Der Name wird neben dem Kästchen angezeigt. Wenn für „Preis“ und „Beschreibung“ Werte eingegeben wurden, werden diese auf der Website unterhalb des Kästchens angezeigt. Die verbleibenden freien Plätze werden den Teilnehmenden nicht angezeigt; diese Angabe dient internen Informationszwecken."
+
+msgid "A file option that allows participants to acknowledge a document or upload a file, such as a document or image. If in the configuration the acknowledge checkbox is set, participants will be able to download the file and asked to acknowledge the document with a checkbox. If the participant should upload a file they will be able to download the file set in the configuration and upload a new one e.g. the same document signed."
+msgstr "Eine Dateioption, die es den Teilnehmenden ermöglicht, ein Dokument in Kenntnis zu nehmen oder eine Datei hochzuladen, z . B. ein Dokument oder ein Bild. Wenn in der Konfiguration das Kästchen „Nur die Bestätigung die Teilnehmende ist erforderlich“ aktiviert ist, können die Teilnehmende die Datei herunterladen und werden aufgefordert über ein Kästchen zu bestätigen, dass sie das Dokument akzeptieren. Sollen die Teilnehmende eine Datei hochladen, können, die in der Konfiguration festgelegte Datei herunterladen und eine neue hochladen, z. B. dasselbe Dokument mit Unterschrift."
+
+msgid "A text input option that allows participants to enter free-form text, such as a name or comment. E.g. allergies."
+msgstr "Ein Textfeld, in das die Teilnehmende frei formulierte Texte wie beispielsweise einen Namen oder einen Kommentar eingeben können. Z. B. Allergien."
+
+msgid "Option type"
+msgstr "Optionstyp"
+
 msgid "Edit Rules"
 msgstr "Regeln bearbeiten"
 
@@ -650,9 +668,6 @@ msgid_plural "Checkboxes"
 msgstr[0] "Checkbox"
 msgstr[1] "Checkboxes"
 
-msgid "Price"
-msgstr "Preis"
-
 msgid "Total places"
 msgstr "Gesamtzahl der Plätze"
 
@@ -698,10 +713,10 @@ msgstr[0] "Datei"
 msgstr[1] "Dateien"
 
 msgid "Only participant acknowledgement is necessary (no participant document upload)"
-msgstr "Nur die Bestätigung der Teilnehmer ist erforderlich (kein Hochladen von Teilnehmerdokumenten)."
+msgstr "Nur die Bestätigung die Teilnehmende ist erforderlich (kein Hochladen von Teilnehmerdokumenten)."
 
 msgid "Participant should upload a file"
-msgstr "Die Teilnehmer sollten eine Datei hochladen"
+msgstr "Die Teilnehmende sollten eine Datei hochladen"
 
 msgid "Image Metadata"
 msgid_plural "Images Metadata"
@@ -735,11 +750,14 @@ msgstr "Wenn Sie mehrere Optionen als Gruppe wünschen, sodass nur eine Option d
 msgid "Display Sorting"
 msgstr "Anzeigesortierung"
 
+msgid "The higher the level, the greater the indentation on the website."
+msgstr "Je höher die Ebene, desto stärker ist die Einrückung auf der Website."
+
 msgid "Option required"
 msgstr "Option erforderlich"
 
 msgid "The participant must give an answer"
-msgstr "Der Teilnehmer muss eine Antwort geben"
+msgstr "Die Teilnehmende muss eine Antwort geben"
 
 msgid "Display on website"
 msgstr "Anzeige auf der Website"
@@ -805,10 +823,10 @@ msgstr[0] "Dateiauswahl"
 msgstr[1] "Dateiauswahl"
 
 msgid "Participant acknowledged the document"
-msgstr "Der Teilnehmer hat das Dokument zur Kenntnis genommen"
+msgstr "Die Teilnehmende hat das Dokument zur Kenntnis genommen"
 
 msgid "Participant uploaded a file"
-msgstr "Teilnehmer hat eine Datei hochgeladen"
+msgstr "Teilnehmende hat eine Datei hochgeladen"
 
 msgid "GENDER_TextInput"
 msgstr "female"
@@ -829,12 +847,6 @@ msgid_plural "Text Input"
 msgstr[0] "Texteingabe"
 msgstr[1] "Texteingabe"
 
-msgid "Text"
-msgstr "Text"
-
-msgid "Here you can ask the participant for relevant information for the event"
-msgstr "Hier können Sie den Teilnehmer um relevante Informationen für die Veranstaltung bitten"
-
 msgid "Reply can only be a number"
 msgstr "Die Antwort kann nur eine Zahl sein"
 
@@ -851,6 +863,9 @@ msgid "Text Output"
 msgid_plural "Text Outputs"
 msgstr[0] "Textausgabe"
 msgstr[1] "Textausgaben"
+
+msgid "Text"
+msgstr "Text"
 
 msgid "EventManager"
 msgstr "Veranstaltungsmanager"
@@ -908,6 +923,12 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Option type "
+#~ msgstr "Optionstyp"
+
+#~ msgid "Here you can ask the participant for relevant information for the event"
+#~ msgstr "Hier können Sie den Teilnehmer um relevante Informationen für die Veranstaltung bitten"
 
 #~ msgid "Open"
 #~ msgstr "Offen"

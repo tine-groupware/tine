@@ -408,7 +408,7 @@ class EventManager_ControllerTest extends TestCase
             'description' => 'description checkbox phpunit',
         ]);
         $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE)->records->getById('1');
-        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE)
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE)
             ->records->getById('2');
         $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL)->records->getById('1');
         $rule_type = EventManager_Config::getInstance()->get(EventManager_Config::RULE_TYPE)->records->getById('1');
@@ -421,7 +421,6 @@ class EventManager_ControllerTest extends TestCase
             'display'                   => $display,
             'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
-            'group_sorting'             => 1,
             'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],
@@ -445,7 +444,7 @@ class EventManager_ControllerTest extends TestCase
         ]);
         $display = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
         $display = $display->records->getById('1');
-        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::DISPLAY_TYPE);
+        $option_required = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_REQUIRED_TYPE);
         $option_required = $option_required->records->getById('2');
         $level = EventManager_Config::getInstance()->get(EventManager_Config::OPTION_LEVEL);
         $level = $level->records->getById('1');
@@ -460,7 +459,6 @@ class EventManager_ControllerTest extends TestCase
             'display'                   => $display,
             'option_required'           => $option_required,
             'group'                     => 'test phpunit group',
-            'group_sorting'             => 1,
             'level'                     => $level,
             'sorting'                   => 1,
             'option_rule'               => [],

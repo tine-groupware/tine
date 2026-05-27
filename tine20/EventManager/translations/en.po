@@ -428,6 +428,9 @@ msgstr "Event Information:"
 msgid "characters"
 msgstr "characters"
 
+msgid "Price"
+msgstr "Price"
+
 msgid "Download file"
 msgstr "Download file"
 
@@ -584,6 +587,21 @@ msgstr "Employee"
 msgid "All"
 msgstr "All"
 
+msgid "A simple text option that displays a fixed text to the participant in the registration form."
+msgstr "A simple text option that displays a fixed text to the participant in the registration form."
+
+msgid "A checkbox option that allows participants to opt in or out of something, e.g. a dietary preference. The name will be displayed next to the checkbox. If the price and description have a value, they will be displayed underneath the checkbox on the website. Die remaining available spaces will not be displayed for the participants, this is set for internal information purposes."
+msgstr "A checkbox option that allows participants to opt in or out of something, e.g. a dietary preference. The name will be displayed next to the checkbox. If the price and description have a value, they will be displayed underneath the checkbox on the website. Die remaining available spaces will not be displayed for the participants, this is set for internal information purposes."
+
+msgid "A file option that allows participants to acknowledge a document or upload a file, such as a document or image. If in the configuration the acknowledge checkbox is set, participants will be able to download the file and asked to acknowledge the document with a checkbox. If the participant should upload a file they will be able to download the file set in the configuration and upload a new one e.g. the same document signed."
+msgstr "A file option that allows participants to acknowledge a document or upload a file, such as a document or image. If in the configuration the acknowledge checkbox is set, participants will be able to download the file and asked to acknowledge the document with a checkbox. If the participant should upload a file they will be able to download the file set in the configuration and upload a new one e.g. the same document signed."
+
+msgid "A text input option that allows participants to enter free-form text, such as a name or comment. E.g. allergies."
+msgstr "A text input option that allows participants to enter free-form text, such as a name or comment. E.g. allergies."
+
+msgid "Option type"
+msgstr "Option type"
+
 msgid "Edit Rules"
 msgstr "Edit Rules"
 
@@ -645,9 +663,6 @@ msgid "Checkbox"
 msgid_plural "Checkboxes"
 msgstr[0] "Checkbox"
 msgstr[1] "Checkboxes"
-
-msgid "Price"
-msgstr "Price"
 
 msgid "Total places"
 msgstr "Total places"
@@ -730,6 +745,9 @@ msgstr "If you want multiple options as a group so that only one option of the g
 
 msgid "Display Sorting"
 msgstr "Display Sorting"
+
+msgid "The higher the level, the greater the indentation on the website."
+msgstr "The higher the level, the greater the indentation on the website."
 
 msgid "Option required"
 msgstr "Option required"
@@ -825,12 +843,6 @@ msgid_plural "Text Input"
 msgstr[0] "Text Input"
 msgstr[1] "Text Input"
 
-msgid "Text"
-msgstr "Text"
-
-msgid "Here you can ask the participant for relevant information for the event"
-msgstr "Here you can ask the participant for relevant information for the event"
-
 msgid "Reply can only be a number"
 msgstr "Reply can only be a number"
 
@@ -847,6 +859,9 @@ msgid "Text Output"
 msgid_plural "Text Outputs"
 msgstr[0] "Text Output"
 msgstr[1] "Text Outputs"
+
+msgid "Text"
+msgstr "Text"
 
 msgid "EventManager"
 msgstr "EventManager"
