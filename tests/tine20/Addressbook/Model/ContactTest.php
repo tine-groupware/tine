@@ -31,4 +31,14 @@ class Addressbook_Model_ContactTest extends TestCase
         static::assertSame('+4440234556', Addressbook_Model_Contact::normalizeTelephoneNum('0044(40) 2345 #56'));
         static::assertSame('+4440234556', Addressbook_Model_Contact::normalizeTelephoneNum('0044 (40) 2345 #s56'));
     }
+
+    public function testGetEmailField() {
+        $contact = new Addressbook_Model_Contact([
+            'email' => 'email@mail.test',
+            'email_home' => 'email_home@mail.test',
+        ]);
+
+        $this->assertEquals('email_home', $contact->getEmailField('email_home@mail.test'));
+        $this->assertNull($contact->getEmailField('notInContact@mail.test'));
+    }
 }
