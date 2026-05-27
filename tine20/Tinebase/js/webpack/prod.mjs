@@ -1,12 +1,12 @@
 global.mode = 'production';
-const { merge } = require('webpack-merge');
-const webpack = require('webpack');
-const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin')
-const common = require('./webpack.common.js');
-const BrotliPlugin = require('brotli-webpack-plugin');
+import { merge } from 'webpack-merge';
+import webpack from 'webpack';
+import UnminifiedWebpackPlugin from 'unminified-webpack-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import common from './common.mjs';
+import BrotliPlugin from 'brotli-webpack-plugin';
 
-module.exports = async () => {
+export default async () => {
     const commonConfig = await common();
 
     return merge(commonConfig, {

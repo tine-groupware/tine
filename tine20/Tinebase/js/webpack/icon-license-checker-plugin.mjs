@@ -15,9 +15,9 @@
  *   ~icons/{collection}/{icon}          (unplugin-icons Webpack/Rollup alias)
  *   virtual:icons/{collection}/{icon}   (Vite-style alias)
  *
- * Usage in webpack.config.js:
+ * Usage in webpack.config.mjs:
  *
- *   const IconLicenseCheckerPlugin = require('./icon-license-checker-plugin');
+ *   import IconLicenseCheckerPlugin from './webpack.icon-license-checker-plugin';
  *
  *   plugins: [
  *     new IconLicenseCheckerPlugin({
@@ -31,7 +31,9 @@
 
 'use strict';
 
-const path = require('path');
+import path from 'path';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 
 // Matches ~icons/mdi/home  and  virtual:icons/mdi/home
 const ICON_IMPORT_RE = /^(?:~icons|virtual:icons)\/([^/]+)\//;
@@ -203,4 +205,4 @@ class IconLicenseCheckerPlugin {
     }
 }
 
-module.exports = IconLicenseCheckerPlugin;
+export default IconLicenseCheckerPlugin;

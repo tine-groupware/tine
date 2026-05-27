@@ -1,8 +1,9 @@
-const { merge } = require('webpack-merge');
-const prod = require('./webpack.prod.js');
+import { merge } from 'webpack-merge';
+import prod from './prod.mjs';
 
-var AssetsPlugin = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin({
+
+const AssetsPlugin = require('assets-webpack-plugin');
+const assetsPluginInstance = new AssetsPlugin({
     path: '/out/tine20/Tinebase/js',
     keepInMemory: false,
     removeFullPathAutoPrefix: true,
@@ -10,7 +11,7 @@ var assetsPluginInstance = new AssetsPlugin({
     prettyPrint: true
 });
 
-module.exports = async () => {
+export default async () => {
     const prodConfig = await prod();
     return merge(prodConfig, {
         output: {

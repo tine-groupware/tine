@@ -30,7 +30,7 @@ module.exports = function (config) {
         },
 
         // webpack configuration
-        webpack: require("./webpack.unittest.js"),
+        webpack: require("./webpack/unittest.mjs"),
         webpackMiddleware: {
             stats: "errors-only",
             // devtool: 'inline-source-map'

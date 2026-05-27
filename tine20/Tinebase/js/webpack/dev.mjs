@@ -1,9 +1,8 @@
-const { merge } = require('webpack-merge');
-const common = require('./webpack.common.js');
-const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
+import { merge } from 'webpack-merge';
+import common from './common.mjs';
+import webpack from 'webpack';
 
-module.exports = async () => {
+export default async () => {
     const commonConfig = await common();
 
     return merge(commonConfig, {

@@ -28,7 +28,7 @@ module.exports = function (config) {
         },
 
         // webpack configuration
-        webpack: require("./webpack.unittest.noreports.js"),
+        webpack: require("./webpack/unittest.noreports.mjs"),
         webpackMiddleware: {
             stats: "errors-only"
         },

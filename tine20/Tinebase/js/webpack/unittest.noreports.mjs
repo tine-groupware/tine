@@ -1,8 +1,8 @@
-let path = require('path')
-const { merge } = require('webpack-merge');
-const prod = require('./webpack.prod.js');
+import path from 'path';
+import { merge } from 'webpack-merge';
+import prod from './prod.mjs';
 
-module.exports = async () => {
+export default async () => {
     const prodConfig = await prod();
     return merge(prodConfig, {
         // entry: null,
