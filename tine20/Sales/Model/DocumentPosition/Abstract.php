@@ -655,7 +655,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         }
 
         $total = is_null($this->{self::FLD_POSITION_PRICE}) ? null
-            : $this->{self::FLD_POSITION_PRICE} - $discount;
+            : round($this->{self::FLD_POSITION_PRICE} - $discount, 2);
 
         if ($this->{self::FLD_UNIT_PRICE_TYPE} === Sales_Config::PRICE_TYPE_GROSS) {
             $this->{self::FLD_GROSS_PRICE} = $total;
