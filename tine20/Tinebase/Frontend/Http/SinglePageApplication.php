@@ -173,9 +173,11 @@ class Tinebase_Frontend_Http_SinglePageApplication {
             $host      = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST);
             $wsScheme  = $protocol === 'https' ? 'wss' : 'ws';
 
-            $scriptSrcs[]  = "$protocol://$host:10443";
-            $connectSrcs[] = "$protocol://$host:10443";
-            $connectSrcs[] = "$wsScheme://$host:10443";
+            $hostname  = parse_url('scheme://' . $host, PHP_URL_HOST) ?? $host;
+
+            $scriptSrcs[]  = "$protocol://$hostname:10443";
+            $connectSrcs[] = "$protocol://$hostname:10443";
+            $connectSrcs[] = "$wsScheme://$hostname:10443";
             $connectSrcs[] = 'webpack:';
         }
 
