@@ -28,6 +28,7 @@
 	width: 16px;
 	background-position:center;
     background-repeat: no-repeat;
+    background-size: 16px 16px !important;
 }
 
 .ext-ie .x-tree-node-indent img, .ext-ie .x-tree-node-icon, .ext-ie .x-tree-ec-icon {
@@ -215,4 +216,8 @@ input.x-tree-node-cb {
 /* Fix for ie rootVisible:false issue */
 .x-tree-root-ct {
     zoom:1;
+}
+
+a.x-tree-node-anchor {
+  -webkit-touch-callout: none;
 }

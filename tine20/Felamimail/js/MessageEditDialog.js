@@ -294,7 +294,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         this.tbar = new Ext.Toolbar({
-            defaults: {height: 43},
+            defaults: {height: 55},
             enableOverflow: true,
                 items: [
                     {

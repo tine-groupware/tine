@@ -4,6 +4,9 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+@use "../styles/bootstrap-vue/variables" as bs;
+
 .x-btn{
 	cursor:pointer;
 	white-space: nowrap;
@@ -85,6 +88,7 @@
 .x-btn-text-icon .x-btn-icon-small-left .x-btn-text{
     background-position: 0 center;
 	background-repeat: no-repeat;
+    background-size: 16px 16px !important;
     padding-left:18px;
     height:16px;
 }
@@ -110,11 +114,17 @@
     padding-top:18px;
 }
 
-.x-btn-text-icon .x-btn-icon-medium-top .x-btn-text{
+.x-btn-text-icon .x-btn-icon-medium-top {
+  display: inline-block;
+  .x-btn-text{
     background-position: center 0;
 	background-repeat: no-repeat;
     padding-top:26px;
-}
+
+    //&tbody {
+    //  display: inline-block;
+    //}
+}}
 
 .x-btn-text-icon .x-btn-icon-large-top .x-btn-text{
     background-position: center 0;
@@ -163,150 +173,9 @@
     padding-bottom:34px;
 }
 
-/* background positioning */
-.x-btn-tr i, .x-btn-tl i, .x-btn-mr i, .x-btn-ml i, .x-btn-br i, .x-btn-bl i{
-	font-size:1px;
-    line-height:1px;
-    width:3px;
-    display:block;
-    overflow:hidden;
-}
-
-.x-btn-tr i, .x-btn-tl i, .x-btn-br i, .x-btn-bl i{
-	height:3px;
-}
-
-.x-btn-tl{
-	width:3px;
-	height:3px;
-	background:no-repeat 0 0;
-}
-.x-btn-tr{
-	width:3px;
-	height:3px;
-	background:no-repeat -3px 0;
-}
-.x-btn-tc{
-	height:3px;
-	background:repeat-x 0 -6px;
-}
-
-.x-btn-ml{
-	width:3px;
-	background:no-repeat 0 -24px;
-}
-.x-btn-mr{
-	width:3px;
-	background:no-repeat -3px -24px;
-}
-
-.x-btn-mc{
-	background:repeat-x 0 -1096px;
-    vertical-align: middle;
-	text-align:center;
-	padding:0 5px;
-	cursor:pointer;
-	white-space:nowrap;
-}
-
-/* Fixes an issue with the button height */
-.ext-strict .ext-ie6 .x-btn-mc, .ext-strict .ext-ie7 .x-btn-mc {
-    height: 100%;
-}
-
-.x-btn-bl{
-	width:3px;
-	height:3px;
-	background:no-repeat 0 -3px;
-}
-
-.x-btn-br{
-	width:3px;
-	height:3px;
-	background:no-repeat -3px -3px;
-}
-
-.x-btn-bc{
-	height:3px;
-	background:repeat-x 0 -15px;
-}
-
-.x-btn-over .x-btn-tl{
-	background-position: -6px 0;
-}
-
-.x-btn-over .x-btn-tr{
-	background-position: -9px 0;
-}
-
-.x-btn-over .x-btn-tc{
-	background-position: 0 -9px;
-}
-
-.x-btn-over .x-btn-ml{
-	background-position: -6px -24px;
-}
-
-.x-btn-over .x-btn-mr{
-	background-position: -9px -24px;
-}
-
-.x-btn-over .x-btn-mc{
-	background-position: 0 -2168px;
-}
-
-.x-btn-over .x-btn-bl{
-	background-position: -6px -3px;
-}
-
-.x-btn-over .x-btn-br{
-	background-position: -9px -3px;
-}
-
-.x-btn-over .x-btn-bc{
-	background-position: 0 -18px;
-}
-
-.x-btn-click .x-btn-tl, .x-btn-menu-active .x-btn-tl, .x-btn-pressed .x-btn-tl{
-	background-position: -12px 0;
-}
-
-.x-btn-click .x-btn-tr, .x-btn-menu-active .x-btn-tr, .x-btn-pressed .x-btn-tr{
-	background-position: -15px 0;
-}
-
-.x-btn-click .x-btn-tc, .x-btn-menu-active .x-btn-tc, .x-btn-pressed .x-btn-tc{
-	background-position: 0 -12px;
-}
-
-.x-btn-click .x-btn-ml, .x-btn-menu-active .x-btn-ml, .x-btn-pressed .x-btn-ml{
-	background-position: -12px -24px;
-}
-
-.x-btn-click .x-btn-mr, .x-btn-menu-active .x-btn-mr, .x-btn-pressed .x-btn-mr{
-	background-position: -15px -24px;
-}
-
-.x-btn-click .x-btn-mc, .x-btn-menu-active .x-btn-mc, .x-btn-pressed .x-btn-mc{
-	background-position: 0 -3240px;
-}
-
-.x-btn-click .x-btn-bl, .x-btn-menu-active .x-btn-bl, .x-btn-pressed .x-btn-bl{
-	background-position: -12px -3px;
-}
-
-.x-btn-click .x-btn-br, .x-btn-menu-active .x-btn-br, .x-btn-pressed .x-btn-br{
-	background-position: -15px -3px;
-}
-
-.x-btn-click .x-btn-bc, .x-btn-menu-active .x-btn-bc, .x-btn-pressed .x-btn-bc{
-	background-position: 0 -21px;
-}
-
 .x-btn-disabled *{
 	cursor:default !important;
 }
-
 
 /* With a menu arrow */
 /* right */
@@ -438,3 +307,102 @@
 	overflow:hidden;
     height:2px;
 }
+
+/* only works for small btns as we don't have to align them*/
+.x-btn {
+  position: relative;
+}
+
+.x-btn-image {
+  top: var(--bs-btn-padding-y);
+  left: var(--bs-btn-padding-x);
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  mask-size: cover;
+  mask-repeat: no-repeat;
+  mask-position: center center;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-arrow .x-btn-image {
+  margin-left: -5px;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-split .x-btn-image {
+  margin-left: -7px;
+}
+
+.x-btn-medium.x-btn-icon-medium-top .x-btn-image {
+  background-repeat: no-repeat;
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: 29px 29px;
+  background-position-x: center;
+}
+
+/* START svg fixes */
+.x-btn-icon {
+  background-size: 16px 16px !important;
+  background-position: top !important;
+  background-repeat: no-repeat;
+}
+
+.x-btn-icon-medium-top button {
+  background-size: 22px 22px;
+  background-position: top !important;
+  background-repeat: no-repeat;
+}
+
+.x-btn-icon-medium-top div.x-btn-image {
+  background-position-y: 2px;
+}
+
+.x-btn-icon-medium-top .x-btn-split div.x-btn-image {
+  background-position-y: 2px;
+}
+
+.x-btn-icon-large-top button {
+  background-size: 32px 32px;
+  background-position: top !important;
+  background-repeat: no-repeat;
+}
+.x-btn-icon-large-top .x-btn-image {
+  width: 32px;
+  height: 32px;
+}
+
+.x-btn-mc em.x-btn-arrow, .x-toolbar .x-btn-mc em.x-btn-split {
+  background-image: none !important;
+  .x-btn-arrow {
+    position: absolute;
+    top: 0px;
+    right: calc(bs.$btn-padding-x / 2); //var(--bs-btn-padding-x);
+    width: 15px;
+    height: 100%;
+    mask-image:url('../../../../images/icon-set/icon_arrow_down.svg') !important;
+    mask-size: 10px;
+    mask-repeat: no-repeat;
+    mask-position: 2px center;
+    -webkit-mask-image:url('../../../../images/icon-set/icon_arrow_down.svg') !important;
+    -webkit-mask-size: 10px;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 2px center;
+    background-color: black;
+  }
+}
+/* END svg fixes */
+
+.x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-bl, .x-btn-br, .x-btn-bc {
+  height: 0;
+  display: none;
+}
+
+//.x-btn.waves-effect {
+//  display: table;
+//}

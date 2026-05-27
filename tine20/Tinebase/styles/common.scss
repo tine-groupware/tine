@@ -9,7 +9,7 @@
   .x-btn-bl,
   .x-btn-bc,
   .x-btn-br {
-    background-color: $tbColor;
+    //background-color: $tbColor;
     background-image: none;
     transition: background-color .2s ease-out;
   }
@@ -24,7 +24,7 @@
     .x-btn-bl,
     .x-btn-bc,
     .x-btn-br {
-      background-color: darken($tbColor, 10%);
+      //background-color: darken($tbColor, 10%);
       transition: background-color .2s;
     }
   }
@@ -54,7 +54,7 @@
     .x-btn-bl,
     .x-btn-bc,
     .x-btn-br {
-      background-color: darken($tbColor, 20%);
+      //background-color: darken($tbColor, 20%);
     }
   }
 }

@@ -137,6 +137,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
      */
     scale : 'small',
 
+    variant : 'light',
     /**
      * @cfg {Object} scope The scope (<tt><b>this</b></tt> reference) in which the
      * <code>{@link #handler}</code> and <code>{@link #toggleHandler}</code> is
@@ -273,7 +274,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
   * @return {Array} Substitution data for a Template.
  */
     getTemplateArgs : function(){
-        return [this.type, 'x-btn-' + this.scale + ' x-btn-icon-' + this.scale + '-' + this.iconAlign, this.getMenuClass(), this.cls, this.id];
+        return [this.type, 'x-btn-' + this.scale + ' x-btn-icon-' + this.scale + '-' + this.iconAlign, this.getMenuClass(), this.cls, this.id, this.variant];
     },
 
     // private
@@ -298,9 +299,9 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
             if(!Ext.Button.buttonTemplate){
                 // hideous table template
                 Ext.Button.buttonTemplate = new Ext.Template(
-                    '<table id="{4}" cellspacing="0" class="x-btn {3}"><tbody class="{1}">',
+                    '<table id="{4}" cellspacing="0" class="btn x-btn {3} btn-{5}"><tbody class="{1}">',
                     '<tr><td class="x-btn-tl"><i>&#160;</i></td><td class="x-btn-tc"></td><td class="x-btn-tr"><i>&#160;</i></td></tr>',
-                    '<tr><td class="x-btn-ml"><i>&#160;</i></td><td class="x-btn-mc"><em class="{2}" unselectable="on"><button type="{0}"></button></em></td><td class="x-btn-mr"><i>&#160;</i></td></tr>',
+                    '<tr><td class="x-btn-ml"><i>&#160;</i></td><td class="x-btn-mc"><em class="{2}" unselectable="on"><button type="{0}"></button><div class="x-btn-image"></div><div class="x-btn-arrow"></div></em></td><td class="x-btn-mr"><i>&#160;</i></td></tr>',
                     '<tr><td class="x-btn-bl"><i>&#160;</i></td><td class="x-btn-bc"></td><td class="x-btn-br"><i>&#160;</i></td></tr>',
                     '</tbody></table>');
                 Ext.Button.buttonTemplate.compile();

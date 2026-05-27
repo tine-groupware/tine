@@ -100,41 +100,22 @@
     margin: -2px 2px -2px 0;
 }
 
-.attendance-clock-menu-button.x-btn {
-    filter: none;
-}
-
-.attendance-clock-menu-button div.x-btn-arrow {
-    display: none !important;
-}
-
-.attendance-clock-menu-button button {
-    color: white !important;
-}
-
-.attendance-clock-menu-button .x-btn-image.attendance-clock{
-    width: 30px;
-    height: 30px;
-}
-
-.attendance-clock-menu-button td{
-    background-color: inherit;
-}
-
-.attendance-clock-menu-button.x-btn-over .x-btn-mc{
-    background-color: inherit;
-}
-
-.attendance-clock-menu-button.x-btn-over .x-btn-tl{
-    display: none;
-}
-
 .attendance-clock {
     mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
     mask-size: 28px 28px;
     -webkit-mask-image:url(../../images/icon-set/icon_attendanceclock.svg) !important;
     -webkit-mask-size: 28px 28px;
     background-color: white;
+  //filter: none !important;
+}
+
+.attendance-clock-menu-button {
+  .x-btn-image {
+    filter: invert(0) !important;
+  }
+  div.x-btn-arrow {
+    background-color: white;
+  }
 }
 
 .attendance-clock-menu-button-clock_in .attendance-clock{

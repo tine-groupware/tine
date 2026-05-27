@@ -1,0 +1,17 @@
+// NOTE: we import bootstrap variables here so they are present with
+//       @use "../styles/bootstrap-vue/variables" as bs;
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/utilities";
+
+@import "../variables";
+
+$theme-colors: map-merge(
+                $theme-colors,
+                (
+                        "ftb":   darken($filterTbColor, 5%)
+                  //"ftb":   $filterTbColor
+                )
+);

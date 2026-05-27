@@ -174,6 +174,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     initActions: function() {
         this.actions = {
             addFilterRow: new Ext.Button({
+                variant: 'ftb',
                 //disabled: true,
                 tooltip: i18n._('add new filter'),
                 iconCls: 'action_addFilter',
@@ -181,12 +182,14 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 handler: this.addFilter
             }),
             removeAllFilters: new Ext.Button({
+                variant: 'ftb',
                 tooltip: i18n._('reset all filters'),
                 iconCls: 'action_delAllFilter',
                 scope: this,
                 handler: this.deleteAllFilters
             }),
             startSearch: new Ext.Button({
+                variant: 'ftb',
                 text: i18n._('start search'),
                 iconCls: 'action_startFilter',
                 scope: this,
@@ -198,6 +201,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 }
             }),
             saveFilter: new Ext.Button({
+                variant: 'ftb',
                 tooltip: i18n._('save as favorite'),
                 iconCls: 'action_saveFilter',
                 handler: this.onSaveFilter.createDelegate(this)
@@ -205,6 +209,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         };
 
         this.action_loadFilter = new Ext.Action({
+            variant: 'ftb',
             text: i18n._('Load a favorite'),
             hidden: true,
             iconCls: 'action-tinebase-favorite',
@@ -422,6 +427,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         filter.formFields.value = filterModel.valueRenderer(filter, fRow.child('td[class^=tw-ftb-frow-value]'));
         
         filter.deleteRowButton = new Ext.Button({
+            variant: 'ftb',
             id: 'tw-ftb-frow-deletebutton-' + filter.id,
             tooltip: i18n._('Delete this filter'),
             filter: filter,
@@ -517,7 +523,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     },
 
     fixWidths: function() {
-        var aw = this.getWidth()-250,
+        var aw = this.getWidth()-300,
             dim = {
                 'tw-ftb-frow-field': Math.floor(aw*0.45),
                 'tw-ftb-frow-operator': Math.floor(aw*0.17),

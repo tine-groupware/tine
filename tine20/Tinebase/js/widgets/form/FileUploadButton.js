@@ -45,6 +45,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
     iconCls: 'action_upload',
 
     multiple: false,
+    variant: 'primary',
     
     /**
      * init this upload button

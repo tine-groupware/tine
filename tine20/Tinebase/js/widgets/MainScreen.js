@@ -42,7 +42,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     /**
      * @cfg {Number} northHeight
      */
-    northHeight: 44,
+    northHeight: 55,
     /**
      * @cfg {Number} westWidth
      */
@@ -205,10 +205,10 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
     applyState: function(state) {
         this.westRegionPanel.setWidth(state.westWidth);
-        if (state.northHeight > 0) {
-            // NOTE: in some wired cases the state is 0 - and the user has no option to resize it
-            this.northCardPanel.setHeight(state.northHeight);
-        }
+        // if (state.northHeight > 0) {
+        //     // NOTE: in some wired cases the state is 0 - and the user has no option to resize it
+        //     this.northCardPanel.setHeight(Math.max(this.northHeight, state.northHeight));
+        // }
     },
     
     /**

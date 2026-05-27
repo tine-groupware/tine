@@ -10,8 +10,11 @@
 Ext.ns('Tine.UserManual');
 
 Tine.UserManual.UserManualAction = function(config) {
-    return new Ext.Action({
-        text: String.format(i18n._('User Manual')),
+    return new Ext.Button({
+        showIcon: true,
+        variant: 'primary',
+        scale: 'medium',
+        iconAlign: 'top',
         iconCls: 'UserManualIconCls',
         handler: function () {
             Tine.UserManual.UserManualDialog.openWindow({});

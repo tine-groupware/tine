@@ -840,6 +840,7 @@ new Ext.Panel({
          */
         this.fbar.items.each(function(c){
             c.minWidth = c.minWidth || this.minButtonWidth;
+            c.variant = c.hasOwnProperty('variant') ? c.variant : 'secondary';
         }, this);
         this.buttons = this.fbar.items.items;
     },
