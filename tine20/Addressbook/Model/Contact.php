@@ -1254,6 +1254,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         return $preferredEmail;
     }
 
+    public function getEmailField(string $email) : ?string {
+        foreach(array_keys(self::getEmailFields()) as $field) {
+            if ($this->{$field} == $email) {
+                return $field;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * check if the email require private grant in addressbook contact property
      *
