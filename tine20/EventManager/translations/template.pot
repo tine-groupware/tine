@@ -428,6 +428,9 @@ msgstr ""
 msgid "characters"
 msgstr ""
 
+msgid "Price"
+msgstr ""
+
 msgid "Download file"
 msgstr ""
 
@@ -584,6 +587,21 @@ msgstr ""
 msgid "All"
 msgstr ""
 
+msgid "A simple text option that displays a fixed text to the participant in the registration form."
+msgstr ""
+
+msgid "A checkbox option that allows participants to opt in or out of something, e.g. a dietary preference. The name will be displayed next to the checkbox. If the price and description have a value, they will be displayed underneath the checkbox on the website. Die remaining available spaces will not be displayed for the participants, this is set for internal information purposes."
+msgstr ""
+
+msgid "A file option that allows participants to acknowledge a document or upload a file, such as a document or image. If in the configuration the acknowledge checkbox is set, participants will be able to download the file and asked to acknowledge the document with a checkbox. If the participant should upload a file they will be able to download the file set in the configuration and upload a new one e.g. the same document signed."
+msgstr ""
+
+msgid "A text input option that allows participants to enter free-form text, such as a name or comment. E.g. allergies."
+msgstr ""
+
+msgid "Option type"
+msgstr ""
+
 msgid "Edit Rules"
 msgstr ""
 
@@ -645,9 +663,6 @@ msgid "Checkbox"
 msgid_plural "Checkboxes"
 msgstr[0] ""
 msgstr[1] ""
-
-msgid "Price"
-msgstr ""
 
 msgid "Total places"
 msgstr ""
@@ -729,6 +744,9 @@ msgid "If you want multiple options as a group so that only one option of the gr
 msgstr ""
 
 msgid "Display Sorting"
+msgstr ""
+
+msgid "The higher the level, the greater the indentation on the website."
 msgstr ""
 
 msgid "Option required"
@@ -825,12 +843,6 @@ msgid_plural "Text Input"
 msgstr[0] ""
 msgstr[1] ""
 
-msgid "Text"
-msgstr ""
-
-msgid "Here you can ask the participant for relevant information for the event"
-msgstr ""
-
 msgid "Reply can only be a number"
 msgstr ""
 
@@ -847,6 +859,9 @@ msgid "Text Output"
 msgid_plural "Text Outputs"
 msgstr[0] ""
 msgstr[1] ""
+
+msgid "Text"
+msgstr ""
 
 msgid "EventManager"
 msgstr ""
