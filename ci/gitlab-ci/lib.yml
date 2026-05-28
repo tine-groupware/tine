@@ -1011,7 +1011,7 @@
               fi
       
               if ! release_is_patch_level_release; then
-                  matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                  matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases/tag/${version} for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
               fi
       
           fi
@@ -1557,6 +1557,50 @@
                 cache_cleanup_atomic_dir_cache $MAX_AGE_USED_CACHE $MAX_AGE_CACHE
             done
         }
+        
+        function cache_cleanup_metrics_lifetime_atomic_dir_cache() {
+            dirs=$(find . -type d -path './*' -prune -print)
+        
+            now=$(date +%s)
+        
+            for dir in $dirs; do
+                lastusediff=NaN
+                if [ -f $dir-lastused ]; then
+                    lastused=$(date -d $(cat $dir-lastused) +%s)
+        
+                    lastusediff=$(echo "($now - $lastused) / 60 / 60" | bc)
+                fi
+        
+                modified=$(stat -c %Y $dir)
+                modifieddiff=$(echo "($now - $modified) / 60 / 60" | bc)
+        
+                echo "$(pwd)$(echo $dir | cut -d. -f2), $lastusediff, $modifieddiff"
+            done
+        }
+        
+        function cache_cleanup_metrics_lifetime() {
+            set +x
+        
+            echo path lastused modified
+        
+            dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
+            for dir in $dirs; do
+                if ! [ -d $dir/phpstan-cache/v2/ ]; then
+                    continue
+                fi
+        
+                cd $dir/phpstan-cache/v2/
+                cache_cleanup_metrics_lifetime_atomic_dir_cache
+            done
+        
+            cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
+            cache_cleanup_metrics_lifetime_atomic_dir_cache
+        
+            cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
+        
+            cache_cleanup_metrics_lifetime_atomic_dir_cache
+            set -x
+        }
 
         # lib/scripts/docker_build_image.sh
         docker_build_image_dev() {
@@ -1662,6 +1706,7 @@
                 .
         }
 
+
         # lib/scripts/docker_hub.sh
         docker_hub_deploy () {
             set -e
@@ -1755,6 +1800,131 @@
         
             # create multi platform manifest, for platform specific images, available during runtime. Overwrites existing manifest.
             manifest-tool push from-args --platforms linux/amd64,linux/arm64 --template ${to}-ARCH --target ${to} --ignore-missing
+        }
+
+        # lib/scripts/docs.sh
+        function docs_deploy () {
+            set -x
+        
+            # determine alias based on BASE_MAJOR_COMMIT_REF_NAME. Using BASE_MAJOR_COMMIT_REF_NAME instead of CI_COMMIT_REF_NAME makes the code work for ecclesias too 
+            if [[ "$BASE_MAJOR_COMMIT_REF_NAME" == "$TINE_VERSION_NEXT" ]]; then
+                alias=next
+            elif [[ "$BASE_MAJOR_COMMIT_REF_NAME" == "$TINE_VERSION_BETA" ]] && [[ "$TINE_VERSION_BETA" != "" ]]; then
+                alias=beta
+            elif [[ "$BASE_MAJOR_COMMIT_REF_NAME" == "$TINE_VERSION_BE" ]]; then
+                alias=be
+            elif [[ "$BASE_MAJOR_COMMIT_REF_NAME" == "$TINE_VERSION_LTS" ]]; then
+                alias=lts
+            else
+                echo "$BASE_MAJOR_COMMIT_REF_NAME not supported"
+                exit 1
+            fi
+        
+            version=$BASE_MAJOR_COMMIT_REF_NAME
+        
+            echo $version $alias
+        
+            docs_build_php_doc
+        
+            # build and sync doc with correct site url for version an alias
+            docs_build_and_sync $version
+            docs_build_and_sync $alias
+        
+            s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ./site/ s3://${DOCS_S3_BUCKET}/$alias/
+        
+            docs_update_versions $version $alias
+        }
+        
+        function docs_build_php_doc() {
+            cd tine20
+            composer install --ignore-platform-reqs
+            vendor/bin/phpdoc-md
+            cd ..
+        
+        }
+        
+        function docs_build_and_sync() {
+            target=$1
+        
+            sed -e "s%^site_url:.*$%site_url: $DOCS_URL/$target%g" -i mkdocs.yml
+        
+            mkdocs build
+        
+            s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ./site/ s3://${DOCS_S3_BUCKET}/$target/
+        }
+        
+        function docs_update_versions() {
+            version=$1
+            alias=$2
+        
+            versions_path=./versions.json
+        
+            s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" sync s3://${DOCS_S3_BUCKET}/versions.json $versions_path
+        
+            # create or update version entry for this version
+            if [[ $(jq --arg version $version '.[] | select(.version == $version)' $versions_path) == "" ]]; then
+                jq --arg version $version --arg alias $alias '.[ . | length ] = {"version": $version, "title": $version, "aliases": [$alias]}' $versions_path > $versions_path.tmp
+            else
+                jq --arg version $version --arg alias $alias '(.[] | select(.version == $version)) = {"version": $version, "title": $version, "aliases": [$alias]}' $versions_path > $versions_path.tmp
+            fi
+        
+            # remove this alias from other versions
+            jq --arg version $version --arg alias $alias 'del((.[] | select(.version != $version)).aliases[] | select(. == $alias))' $versions_path.tmp > $versions_path
+        
+            rm $versions_path.tmp
+        
+            cat $versions_path
+        
+            s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync $versions_path s3://${DOCS_S3_BUCKET}/versions.json
+        }
+        
+        function docs_build_docker_image() {
+            image="${REGISTRY}/docs-commit:${IMAGE_TAG}"
+        
+            docker build \
+                --target manual \
+                --tag $image \
+                --file ./docs/Dockerfile \
+                --build-arg SCREENSHOTS_S3_BUCKET \
+                --build-arg SCREENSHOTS_S3_HOST \
+                --build-arg SCREENSHOTS_S3_ACCESS_KEY \
+                --build-arg SCREENSHOTS_S3_SECRET_KEY \
+                .
+        
+        }
+        
+        function docs_push_docker_image() {
+            target=$1
+            tag=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+            image="${REGISTRY}/docs-commit:${IMAGE_TAG}"
+        
+            docker tag $image $target:$tag
+            docker push $target:$tag
+        }
+        
+        function docs_find_missing_screenshots() {
+            touch ${CI_PROJECT_DIR}/missing-screenshots.txt
+        
+            for f in $(grep --recursive --no-filename --only-matching --perl-regexp '(?<=img_url_desktop }}).*(?=#only-light)' ${CI_PROJECT_DIR}/docs | tail -n +2 | sort | uniq ); do
+                if ! [[ -f ${CI_PROJECT_DIR}/tests/e2etests/screenshots/$f ]]; then
+                    echo ${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/$f >> ${CI_PROJECT_DIR}/missing-screenshots.txt
+                fi
+            done
+        }
+        
+        function docs_update_screenshots() {
+            if [ "${CI_COMMIT_REF_NAME}" == "${MAJOR_COMMIT_REF_NAME}" ] && [ -n "${CI_RESOLUTION}" ]; then
+                s3cmd sync ${CI_PROJECT_DIR}/tests/e2etests/screenshots/ s3://${SCREENSHOTS_S3_BUCKET}/${CI_COMMIT_REF_NAME}/${CI_RESOLUTION}/ \
+                    --access_key=${SCREENSHOTS_S3_ACCESS_KEY} \
+                    --secret_key=${SCREENSHOTS_S3_SECRET_KEY} \
+                    --host ${SCREENSHOTS_S3_HOST} \
+                    --host-bucket "%(bucket)s.${SCREENSHOTS_S3_HOST}" \
+                    --acl-public \
+                    --no-mime-magic \
+                    --no-delete-removed
+            else
+                echo skipping screenshot upload
+            fi
         }
 
         # lib/scripts/git_repo.sh
@@ -2125,21 +2295,77 @@
         
             changes="$(git diff --name-only -r --diff-filter=a origin/$downstream)"
         
-            for allowed in $(cat ci/upstream-change-global-whitelist.txt) $(cat ci/upstream-change-whitelist.txt || true); do
-                changes="$(echo "$changes" | grep -v -E "^$allowed$" || true)"
+            for f in ci/upstream-change-global-whitelist.txt ci/upstream-change-whitelist.txt; do
+                if [ -f $f ]; then
+                    while read allowed; do
+                        changes="$(echo "$changes" | grep -v -E "^$allowed$" || true)"
+                    done < <(grep "" $f) # using grep as it adds a new line to the end of the file. If there is no newline at the end of the last line, the loop will skip it
+                fi
             done
         
             if [[ -z "$changes" ]]; then
                 return
             fi
         
+            echo -e "\033[0;31m"
             echo 'Changing downstream files upstream is not encouraged! If changing them is necessary, either:'
             echo '* disable this job with the merge request label "allow-failure-prevent-upstream-changes"'
             echo '* or add an permanent exception to "ci/upstream-change-whitelist.txt".'
+            echo -n -e "\033[0m"
             echo Changes:
             echo "$changes"
         
             return 1
+        }
+
+        # lib/scripts/prevent_wrong_update_script_changes.sh
+        prevent_wrong_update_script_changes() {
+            wrong=""
+            unset failed
+        
+            if [[ "$BASE_MAJOR_COMMIT_REF_NAME" != "main" ]]; then
+                if ! branchVersion=$(echo "$BASE_MAJOR_COMMIT_REF_NAME" | grep -Po 20..); then
+                    echo -e -n "\033[1;31m"
+                    echo Error: Can not determine branch version. BASE_MAJOR_COMMIT_REF_NAME=$BASE_MAJOR_COMMIT_REF_NAME
+                    echo -n -e "\033[0m"
+                    return 1
+                fi
+            else
+                if [[ "$TINE_VERSION_BETA" != "" ]]; then
+                    branchVersion=$(($(echo "$TINE_VERSION_BETA" | grep -Po 20..) + 1 ))
+                else
+                    branchVersion=$(($(echo "$TINE_VERSION_BE" | grep -Po 20..) + 1 ))
+                fi
+            fi
+        
+            for f in $(find tine20/*/Setup/Update/*.php); do
+                if ! versionLine=$(cat $f | grep -P '^ \* this ist? 20..\.11 \(ONLY!\)$'); then
+                    continue
+                fi
+        
+                version=$(echo "$versionLine" | grep -Po 20..)
+                if (( $version >= $branchVersion )); then
+                    continue
+                fi
+        
+                if ! git diff origin/$CUSTOMER_MAJOR_COMMIT_REF_NAME$BASE_MAJOR_COMMIT_REF_NAME --quiet -- $f; then
+                    failed=1
+                    wrong="$wrong\n$f"
+                    git --no-pager diff origin/$CUSTOMER_MAJOR_COMMIT_REF_NAME$BASE_MAJOR_COMMIT_REF_NAME -- $f
+                fi
+            done
+        
+            if [ $failed ]; then
+                echo
+                echo -e -n "\033[1;31m"
+                echo Update scripts should only be changed, on the corresponding versions branch.
+                echo If you are sure you need to update this update script, you can skip this job,
+                echo 'by setting the merge request label "allow-failure-prevent-wrong-update-script-changes"'.
+                echo -e -n "\033[0;31m"
+                echo -e "Changes: $wrong"
+                echo -n -e "\033[0m"
+                return 1
+            fi
         }
 
         # lib/scripts/release.sh
@@ -2259,7 +2485,7 @@
                 fi
         
                 if ! release_is_patch_level_release; then
-                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases/tag/${version} for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
                 fi
         
             fi
@@ -2463,7 +2689,7 @@
                 # do not return here, we need to run composer install, so it creates the customapps links for us
             fi
         
-            log "prepearing composer cache ..."
+            log "preparing composer cache ..."
             # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
             export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
             mkdir -p ${COMPOSER_CACHE_DIR}
@@ -2475,7 +2701,9 @@
             COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
             popd
         
-            if [ ! -d $VENDOR_CACHE_DIR ]; then
+            # Store cache, but not for custom apps. composer.lock contains commit specific data. Therefor the cache will be never reused.
+            # Unless the pipeline is rerun for the same commit.
+            if [ ! -d $VENDOR_CACHE_DIR ] && [ "${CI_IS_CUSTOMAPP}" != "true" ]; then
                 log "storing vendor dir as cache"
                 cp -r ${TINE20ROOT}/tine20/vendor $VENDOR_CACHE_DIR || log "storing vendor dir failed. continuing"
             fi
@@ -2592,8 +2820,34 @@
 
 
         # lib/scripts/test_cloud.sh
+        # DEPLOYMENT_NAME should a an dns label
+        # DEPLOYMENT_NAME must not excide a specific length. The limiting factor is that the email user name is not allowed
+        # to be longer than 80 charts. The email user name contains a 40 char hash and an @ leaving 39 for DEPLOYMENT_NAME and
+        # DEPLOYMENT_BASE_DOMAIN (and a dot).
         test_cloud_generate_deployment_name() {
-            echo -n $DEPLOYMENT_NAME_RAW | sed 's/\./-/g' | sed 's/\//-/g'
+            DEPLOYMENT_NAME=$(echo -n $CI_ENVIRONMENT_NAME | sed 's/\./-/g' | sed 's/\//-/g' | awk '{print tolower($0)}')
+        
+            if [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 39 ]]; then
+                echo $DEPLOYMENT_NAME
+                return
+            fi
+        
+            # replace nightly- with n-, if it is enough to stay under the limit 
+            if [[ "$DEPLOYMENT_NAME" == "nightly-"* ]] && [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 45 ]]; then
+                echo n${DEPLOYMENT_NAME#"nightly"}
+                return
+            fi
+        
+            # replace review- with r-, if it is enough to stay under the limit 
+            if [[ "$DEPLOYMENT_NAME" == "review-"* ]] && [[ $(echo -n $DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN | wc -c) -le 44 ]]; then
+                echo r${DEPLOYMENT_NAME#"review"}
+                return
+            fi
+        
+            #add hash to prevent name collisions
+            HASH=$(echo -n $DEPLOYMENT_NAME | md5sum | cut -c -4)
+        
+            echo $(echo -n $DEPLOYMENT_NAME | cut -c -$((80-41-$(echo -n "-$HASH.$DEPLOYMENT_BASE_DOMAIN" | wc -c))))-$HASH
         }
         
         test_cloud_deploy() {
@@ -2602,12 +2856,12 @@
         
             echo $DEPLOYMENT_NAME $DEPLOYMENT_IMAGE_TAG
         
-            # todo: but later (is not mvp)
-            # if [ "$RELEASE_TYPE" == "nightly" ]; then
-            #     helmfile -f path/to/helmfile.yaml destroy
-            #     # remove jobs 
-            #     # fail for pvc to be deleted
-            # fi
+            if [ "$DEPLOY_TYPE" == "nightly" ]; then
+                test_cloud_teardown
+                if kubectl --context tine20/gitlab-agent:k8s-se01 -n test-tine get pvc tine-$DEPLOYMENT_NAME-tine-data; then
+                    kubectl --context tine20/gitlab-agent:k8s-se01 -n test-tine wait pvc tine-$DEPLOYMENT_NAME-tine-data --for=delete --timeout 5m
+                fi
+            fi
         
             # other functions need thees values
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
@@ -2615,6 +2869,8 @@
             test_cloud_setup_database
         
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml sync
+        
+            echo DYNAMIC_ENVIRONMENT_URL=https://$DEPLOYMENT_NAME.$DEPLOYMENT_BASE_DOMAIN/ > deploy.env
         }
         
         test_cloud_teardown() {
@@ -2626,7 +2882,9 @@
             # other functions need thees values
             helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml write-values --output-file-template=/tmp/values.yaml
         
-            helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+            if helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml status; then
+                helmfile -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/test-cloud/helmfile.yaml destroy
+            fi
         
             test_cloud_teardown_database
         
@@ -2643,6 +2901,27 @@
             mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl
         }
         
+        test_cloud_imap_mariadb() {
+            # helmfile write-values needs to run before!
+            db_host=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.host)
+            db_name=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.dbname)
+            db_username=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.username)
+            db_password=$(cat /tmp/values.yaml | yq .tine.features.mail.imap.dovecot.password)
+        
+            mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl ${db_name}
+        }
+        
+        test_cloud_smtp_mariadb() {
+            # helmfile write-values needs to run before!
+        
+            db_host=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.host)
+            db_name=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.dbname)
+            db_username=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.username)
+            db_password=$(cat /tmp/values.yaml | yq .tine.features.mail.smtp.postfix.password)
+        
+            mysql -h ${db_host} -u ${db_username} -p${db_password} --skip-ssl ${db_name}
+        }
+        
         test_cloud_setup_database() {
             db_name=$(cat /tmp/values.yaml | yq .database.name)
         
@@ -2653,6 +2932,12 @@
             db_name=$(cat /tmp/values.yaml | yq .database.name)
         
             echo 'DROP DATABASE IF EXISTS `'${db_name}'`;' | test_cloud_mariadb
+        
+            # delete artifacts in mail db if they exists
+            echo "DELETE FROM dovecot_users WHERE domain='${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_imap_mariadb
+            echo "DELETE FROM smtp_destinations WHERE destination LIKE '%${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
+            echo "DELETE FROM smtp_users WHERE email LIKE '%${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
+            echo "DELETE FROM smtp_virtual_domains WHERE domain='${DEPLOYMENT_NAME}.${DEPLOYMENT_BASE_DOMAIN}';" | test_cloud_smtp_mariadb
         }
 
         # lib/scripts/version_check.sh
@@ -3680,7 +3965,7 @@
                 fi
         
                 if ! release_is_patch_level_release; then
-                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases/tag/${version} for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
                 fi
         
             fi
@@ -5196,7 +5481,7 @@
                 fi
         
                 if ! release_is_patch_level_release; then
-                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
+                    matrix_send_message "${matrix_room}" "We just released the new version ${CODENAME} ${version} 🎉\\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases/tag/${version} for more information and the downloads.\\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine"
                 fi
         
             fi
