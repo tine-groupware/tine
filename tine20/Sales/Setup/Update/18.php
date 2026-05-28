@@ -462,7 +462,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     public function update016(): void
     {
         $this->getDb()->update(Tinebase_PersistentFilter::getInstance()->getBackend()->getPrefixedTableName(), [
-            'filters' => new Zend_Db_Expr('REPLACE(`model`, \'"field":"reversal_status"\', \'"field":"reversed_status"\')'),
+            'filters' => new Zend_Db_Expr('REPLACE(`filters`, \'"field":"reversal_status"\', \'"field":"reversed_status"\')'),
         ], '`model` LIKE "Sales_Model_Document_%"');
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.16', self::RELEASE018_UPDATE016);
     }
