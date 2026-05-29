@@ -1,5 +1,5 @@
 Tine.Calendar.Printer.EventRenderer = Ext.extend(Ext.ux.Printer.EditDialogRenderer, {
-    stylesheetPath: 'Calendar/css/print.css',
+    stylesheetPath: 'Calendar/styles/print.css',
 
     generateBody: function(component, data) {
         var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
