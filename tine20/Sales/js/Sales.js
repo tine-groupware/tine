@@ -59,7 +59,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         // TODO add migration to new documents
         // {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         // {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
-        // {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
+        {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
 
         // new documents
         {modelName: 'Document_Offer', requiredRight: 'manage_offers', singularContainerMode: true},
