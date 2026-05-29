@@ -8,7 +8,7 @@ Ext.ns('Tine.Calendar.Printer');
  * Printig renderer for Ext.ux.printing
  */
 Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
-    stylesheetPath: 'Calendar/css/print.css',
+    stylesheetPath: 'Calendar/styles/print.css',
     
     extraTitle: '',
     titleStyle: '',
