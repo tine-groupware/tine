@@ -213,6 +213,11 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (!$this->{self::FLD_SALES_TAX_BY_RATE} instanceof Tinebase_Record_RecordSet) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_SALES_TAX_BY_RATE . ' not resolved');
         }
+        if (null === $debitor->{Sales_Model_Debitor::FLD_EAS_ID}) {
+            $orgDebitor = Sales_Controller_Debitor::getInstance()->get($debitor->getIdFromProperty(Sales_Model_Debitor::FLD_ORIGINAL_ID));
+            $debitor->{Sales_Model_Debitor::FLD_EAS_ID} = $orgDebitor->{Sales_Model_Debitor::FLD_EAS_ID};
+            $debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS} = $orgDebitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS};
+        }
         $pm = $pm->getFirstRecord();
         /** @var Sales_Model_PaymentMeans $pm */
 
