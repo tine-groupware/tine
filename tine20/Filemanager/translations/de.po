@@ -107,6 +107,18 @@ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausg
 msgid "Quarantined File"
 msgstr "In Quarantäne gestellte Datei"
 
+msgid "The Download link has expired"
+msgstr "Der Download Link ist abgelaufen"
+
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+msgid "Show in Filemanager"
+msgstr "Im Dateimanager anzeigen"
+
+msgid "Save locally"
+msgstr "Lokal speichern"
+
 msgid "Loading"
 msgstr "Laden"
 
@@ -207,15 +219,6 @@ msgstr "Beim Erstellen dieses Ordners ist ein Fehler aufgetreten"
 
 msgid "An item with this name already exists!"
 msgstr "Ein Item mit diesem Namen ist schon vorhanden!"
-
-msgid "Filemanager"
-msgstr "Dateimanager"
-
-msgid "Show in Filemanager"
-msgstr "Im Dateimanager anzeigen"
-
-msgid "Save locally"
-msgstr "Lokal speichern"
 
 msgid "Select a file"
 msgstr "Wähle eine Datei"
@@ -611,6 +614,9 @@ msgstr[1] ""
 msgid "GENDER_File Location"
 msgstr ""
 
+msgid "File not found!"
+msgstr "Datei nicht gefunden!"
+
 msgid "Action"
 msgstr "Aktion"
 
@@ -620,11 +626,11 @@ msgstr "Keine Dateien gefunden"
 msgid "This folder appears to be empty."
 msgstr "Dieser Ordner scheint leer zu sein."
 
-msgid "File not found!"
-msgstr "Datei nicht gefunden!"
-
 msgid "Password required for download"
 msgstr "Zum Herunterladen Passwort eingeben"
 
 msgid "Submit"
 msgstr "Abschicken"
+
+#~ msgid "Download link has expired:"
+#~ msgstr "Der Download Link ist abgelaufen:"
