@@ -149,12 +149,6 @@ msgstr "Storno-Status"
 msgid "Possible Reversal Status"
 msgstr "Mögliche Storno-Status"
 
-msgid "PC-"
-msgstr "PG-"
-
-msgid "CR-"
-msgstr "GS-"
-
 msgid "Not reversed"
 msgstr "Nicht storniert"
 
@@ -179,17 +173,35 @@ msgstr "Genehmigt (gebucht, offen)"
 msgid "Paid (booked, closed)"
 msgstr "Bezahlt (gebucht, geschlossen)"
 
+msgid "Done (booked, closed)"
+msgstr "Erledigt (gebucht, geschlossen)"
+
 msgid "Purchase Invoice Status Transitions"
 msgstr "Eingangs-Rechnungs Status Übergänge"
+
+msgid "Credit Status"
+msgstr "Gutschrift Status"
+
+msgid "Possible Credit Status"
+msgstr "Verfügbare Gutschrift Status"
+
+msgid "Draft (unbooked, open)"
+msgstr "Entwurf (ungebucht, offen)"
+
+msgid "Booked (booked, open)"
+msgstr "Gebucht (gebucht, offen)"
+
+msgid "Credit Status Transitions"
+msgstr "Gutschrift Status Übergänge"
+
+msgid "Possible Credit Status Transitions"
+msgstr "Verfügbare Gutschrift Status Übergänge"
 
 msgid "Offer Status"
 msgstr "Angebotsstatus"
 
 msgid "Possible Offer Status"
 msgstr "Mögliche Angebotsstatus"
-
-msgid "Draft (unbooked, open)"
-msgstr "Entwurf (ungebucht, offen)"
 
 msgid "Manual dispatch required (booked, open)"
 msgstr "Manueller Versand erforderlich (gebucht, offen)"
@@ -220,12 +232,6 @@ msgstr "Eingegangen (ungebucht, offen)"
 
 msgid "Accepted (booked, open)"
 msgstr "Angenommen (gebucht, offen)"
-
-msgid "Done (booked, closed)"
-msgstr "Erledigt (gebucht, geschlossen)"
-
-msgid "Reversal (booked, closed)"
-msgstr "Storno (gebucht, geschlossen)"
 
 msgid "Order Status Transitions"
 msgstr "Auftragsstatus-Übergänge"
@@ -262,9 +268,6 @@ msgstr "Mögliche Rechnungsstatus"
 
 msgid "Proforma (unbooked, open)"
 msgstr "Proforma (ungebucht, offen)"
-
-msgid "Booked (booked, open)"
-msgstr "Gebucht (gebucht, offen)"
 
 msgid "Invoice Status Transitions"
 msgstr "Rechnungsstatus-Übergänge"
@@ -335,7 +338,9 @@ msgid "Reversal"
 msgstr "Storno"
 
 msgid "Credit"
-msgstr "Gutschrift"
+msgid_plural "Credits"
+msgstr[0] "Gutschrift"
+msgstr[1] "Gutschriften"
 
 msgid "Price Type"
 msgstr "Preistyp"
@@ -608,10 +613,8 @@ msgstr "Geschäftsbereiche"
 msgid "Categories"
 msgstr "Kategorien"
 
-msgid "Boilerplate"
-msgid_plural "Boilerplates"
-msgstr[0] "Textbaustein"
-msgstr[1] "Textbausteine"
+msgid "Boilerplates"
+msgstr "Textbausteine"
 
 msgid "No Right to alter the Number"
 msgstr "Keine Berechtigung die Nummer zu verändern"
@@ -694,7 +697,6 @@ msgstr "Postanschrift anwenden"
 msgid "Number Debit"
 msgstr "Debitorennummer"
 
-#, fuzzy
 msgid "Address"
 msgid_plural "Addresses"
 msgstr[0] "Anschrift"
@@ -853,7 +855,6 @@ msgstr "Debitoren"
 msgid "Postal Address"
 msgstr "Postanschrift"
 
-#, fuzzy
 msgid "Email"
 msgid_plural "Emails"
 msgstr[0] "E-Mail"
@@ -907,6 +908,9 @@ msgstr "Belegdatum ändern?"
 msgid "Change document date from { date } to today?"
 msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
 
+msgid "Document is booked. Accounting data is write-protected."
+msgstr "Der Beleg ist gebucht. Die Buchhaltungsdaten sind schreibgeschützt."
+
 msgid "Service Start Extended"
 msgstr "Leistungszeitraum erweitert"
 
@@ -926,6 +930,11 @@ msgstr "Der/die Kund*in <b>{customer}</b> kann nicht ausgewählt werden, da er k
 
 msgid "Open Debitor"
 msgstr "Offener Debitor"
+
+msgid "Boilerplate"
+msgid_plural "Boilerplates"
+msgstr[0] "Textbaustein"
+msgstr[1] "Textbausteine"
 
 msgid "Include to Dispatch Document"
 msgstr "In Belegversandt aufnehmen"
@@ -1044,6 +1053,9 @@ msgstr "Es wurde nichts versendet"
 msgid "Do you want to dispatch manually by email?"
 msgstr "Möchten Sie manuell per E-Mail versenden?"
 
+msgid "Document successfully dispatched."
+msgstr "Beleg erfolgreich versendet."
+
 msgid "Dispatching not Possible"
 msgstr "Versand nicht möglich"
 
@@ -1158,6 +1170,15 @@ msgstr "Benötigte Daten fehlen"
 
 msgid "Please provide the required data before changing the workflow status."
 msgstr "Bitte tragen sie die benötigten Daten ein bevor sie den Workflow-Status ändern."
+
+msgid "This is an imported e-invoice. Accounting data is write-protected. "
+msgstr "Dies ist eine eingelesene eRechnung. Die Buchhaltungsdaten sind schreibgeschützt. "
+
+msgid "Update Supplier Data?"
+msgstr "Lieferantendaten Aktualisieren?"
+
+msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
+msgstr "Der ausgewählte Lieferant hat keine Elektronische-Adresse. Möchten Sie diese nun mit den Daten aus dieser eRechnung aktualisieren?"
 
 msgid "Import as Purchase Invoice"
 msgstr "Als Eingangsrechnung importieren"
@@ -1417,6 +1438,9 @@ msgstr "Gezahlt am"
 msgid "Method of payment"
 msgstr "Zahlungsart"
 
+msgid "Document lines"
+msgstr "Belegpositionen"
+
 msgid "Clipboard"
 msgstr "Zwischenablage"
 
@@ -1425,9 +1449,6 @@ msgstr "Lieferant*in auswählen"
 
 msgid "Supplier Number"
 msgstr "Lieferant*innennummer"
-
-msgid "Either postal code or postbox is required!"
-msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
 
 msgid "Copy Supplier"
 msgstr "Lieferant*in kopieren"
@@ -1438,12 +1459,6 @@ msgstr "Neue*n Lieferant*in hinzufügen"
 #, python-brace-format
 msgid "Edit Supplier \"{0}\""
 msgstr "Lieferant*in \"{0}\" bearbeiten"
-
-msgid "Prefix"
-msgstr "Zusatz"
-
-msgid "Additional Prefix"
-msgstr "Weiterer Zusatz"
 
 msgid "without supplier"
 msgstr "ohne Lieferant*in"
@@ -1523,14 +1538,17 @@ msgstr "Kundenreferenz / Leitweg-ID"
 msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
 msgstr "Ein vom Erwerbenden zugewiesener und für interne Lenkungszwecke benutzter Bezeichner (BT-10 [EN 16931])."
 
+msgid "Buyer Contract Number"
+msgstr "Vertragsnummer des Käufers"
+
+msgid "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
+msgstr "Eine eindeutige Bezeichnung des Vertrages (z. B. Vertragsnummer).  (BT-12 [EN 16931])."
+
 msgid "Purchase Order Reference"
 msgstr "Bestellnummer"
 
 msgid "An identifier issued by the purchaser for a referenced order (BT-13 [EN 16931])."
 msgstr "Eine vom Erwerbenden ausgegebene Kennung für eine referenzierte Bestellung (BT-13 [EN 16931])."
-
-msgid "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
-msgstr "Eine eindeutige Bezeichnung des Vertrages (z. B. Vertragsnummer).  (BT-12 [EN 16931])."
 
 msgid "Project Reference"
 msgstr "Projektkennung"
@@ -1637,6 +1655,18 @@ msgstr "Debitoren verwalten"
 
 msgid "The permission to administrate the division's debitors."
 msgstr "Die Berechtigung die Debitoren dieses Geschäftsbereiches zu verwalten."
+
+msgid "Read Credits"
+msgstr "Gutschriften lesen"
+
+msgid "The permission to read the division's credit documents."
+msgstr "Die Berechtigung Gutschriften dieses Geschäftsbereiches zu lesen."
+
+msgid "Admin Credits"
+msgstr "Gutschriften verwalten"
+
+msgid "The permission to administrate the division's credit documents."
+msgstr "Die Berechtigung Gutschriften dieses Geschäftsbereiches zu verwalten."
 
 msgid "Read Offers"
 msgstr "Angebote lesen"
@@ -1784,9 +1814,6 @@ msgstr "male"
 msgid "Document Number"
 msgstr "Belegnummer"
 
-msgid "Boilerplates"
-msgstr "Textbausteine"
-
 msgid "Document Date"
 msgstr "Belegdatum"
 
@@ -1826,7 +1853,6 @@ msgstr "Netto"
 msgid "VAT Exemption"
 msgstr "Umsatzsteuerbefreiung"
 
-#, fuzzy
 msgid "Sales Tax"
 msgid_plural "Sales Taxes"
 msgstr[0] "Mehrwertsteuer"
@@ -1864,6 +1890,21 @@ msgstr "Erzeugt für Version"
 msgid "GENDER_Category"
 msgstr "female"
 
+msgid "GENDER_Credit"
+msgstr "female"
+
+msgid "Proforma Number"
+msgstr "Proforma Nummer"
+
+msgid "PC-"
+msgstr "PG-"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "CR-"
+msgstr "GS-"
+
 msgid "GENDER_Delivery"
 msgstr "female"
 
@@ -1871,12 +1912,6 @@ msgid "Delivery"
 msgid_plural "Deliveries"
 msgstr[0] "Lieferung"
 msgstr[1] "Lieferungen"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Proforma Number"
-msgstr "Proforma Nummer"
 
 msgid "PD-"
 msgstr "PL-"
@@ -1916,11 +1951,11 @@ msgstr "female"
 msgid "PI-"
 msgstr "PR-"
 
-msgid "Last Datev send date"
-msgstr "Letztes Datev Sende-Datum"
-
 msgid "Payment Reminders"
 msgstr "Zahlungserinnerungen"
+
+msgid "Last Datev send date"
+msgstr "Letztes Datev Sende-Datum"
 
 msgid "IN-"
 msgstr "RE-"
@@ -2051,6 +2086,14 @@ msgstr "Mehrwertsteuersatz"
 
 msgid "Gross Price"
 msgstr "Bruttopreis"
+
+msgid "Credit Position"
+msgid_plural "Credit Positions"
+msgstr[0] "Gutschrifts-Position"
+msgstr[1] "Gutschrifts-Positionen"
+
+msgid "GENDER_Credit Position"
+msgstr "female"
 
 msgid "Delivery Position"
 msgid_plural "Delivery Positions"
@@ -2512,8 +2555,3 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
 
-msgid "Document lines"
-msgstr "Belegpositionen"
-
-msgid "Document is booked. Accounting data is write-protected."
-msgstr "Der Beleg ist gebucht. Die Buchhaltungsdaten sind schreibgeschützt."

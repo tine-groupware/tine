@@ -99,7 +99,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
             }
         })
     }
-    ['Offer', 'Order', 'Delivery', 'Invoice'].forEach((type) => {
+    ['Offer', 'Order', 'Delivery', 'Invoice', 'Credit', 'PurchaseInvoice'].forEach((type) => {
         const action = getAction(type, {})
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
         Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-GridPanel-ContextMenu`, { xtype: 'menuseparator'}, 40)

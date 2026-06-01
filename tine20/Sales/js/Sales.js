@@ -11,14 +11,17 @@
 Ext.namespace('Tine.Sales');
 
 import './Model/Document/AbstractMixin';
+import './Model/Document/Credit';
 import './Model/DocumentPosition/Offer';
 import './Model/DocumentPosition/Order';
 import './Model/DocumentPosition/Delivery';
 import './Model/DocumentPosition/Invoice';
+import './Model/DocumentPosition/Credit';
 import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
+import './Document/CreditEditDialog';
 import './Document/BookDocumentAction';
 import './Document/CopyDocumentAction';
 import './Document/CreateFollowUpAction';
@@ -66,12 +69,14 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
         {modelName: 'Document_Order', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
         {modelName: 'Document_Delivery', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
         {modelName: 'Document_Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
+        {modelName: 'Document_Credit', requiredRight: 'manage_credits', singularContainerMode: true},
 
         // special/advanced lists
         {modelName: 'DocumentPosition_Offer', requiredRight: 'manage_offers', singularContainerMode: true, group: 'Document lines'}, // _('Document lines')
         {modelName: 'DocumentPosition_Order', requiredRight: 'manage_orderconfirmations', singularContainerMode: true, group: 'Document lines'},
         {modelName: 'DocumentPosition_Delivery', requiredRight: 'manage_orderconfirmations', singularContainerMode: true, group: 'Document lines'},
         {modelName: 'DocumentPosition_Invoice', requiredRight: 'manage_invoices', singularContainerMode: true, group: 'Document lines'},
+        {modelName: 'DocumentPosition_Credit', requiredRight: 'manage_credits', singularContainerMode: true, group: 'Document lines'},
     ]
 });
 

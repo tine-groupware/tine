@@ -59,6 +59,8 @@ class Sales_Controller_Document_Credit extends Sales_Controller_Document_Abstrac
             Sales_Model_Document_Abstract::FLD_PURCHASE_ORDER_REFERENCE,
             Sales_Model_Document_Abstract::FLD_REVERSED_STATUS,
             Sales_Model_Document_Credit::FLD_CREDIT_STATUS,
+            Sales_Model_Document_Credit::FLD_PAY_AT,
+            Sales_Model_Document_Credit::FLD_PAID_AT,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

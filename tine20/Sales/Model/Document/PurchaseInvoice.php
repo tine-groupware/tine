@@ -51,7 +51,8 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
         $_definition[self::CREATE_MODULE] = true;
         $_definition[self::RECORD_NAME] = 'Purchase Invoice'; // gettext('GENDER_Purchase Invoice')
         $_definition[self::RECORDS_NAME] = 'Purchase Invoices'; // ngettext('Purchase Invoice', 'Purchase Invoices', n)
-        $_definition[self::TITLE_PROPERTY] = '{{ supplier_id.getTitle() }} {{ dateFormat(date, "date") }}';
+        $_definition[self::TITLE_PROPERTY] = '{{'. self::FLD_DOCUMENT_NUMBER . '}} [{{ renderTitle('.self::FLD_SUPPLIER_ID.', "'.Sales_Model_Document_Customer::class.'") }}]{% if '. self::FLD_DOCUMENT_TITLE . '%} {{' . self::FLD_DOCUMENT_TITLE .'}}{% endif %}{% if '. self::FLD_DOCUMENT_DATE . '%} ({{'. self::FLD_DOCUMENT_DATE .'|localizeddate("short", "none", app.user.locale )}}){% endif %}';
+
         $_definition[self::DEFAULT_SORT_INFO] = [self::FIELD => self::FLD_DOCUMENT_NUMBER];
         $_definition[self::HAS_XPROPS] = true;
 

@@ -22,6 +22,8 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
 
     public const FLD_CREDIT_STATUS = 'credit_status';
     public const FLD_DOCUMENT_PROFORMA_NUMBER = 'document_proforma_number';
+    public const FLD_PAY_AT = 'pay_at';
+    public const FLD_PAID_AT = 'paid_at';
 
 
     /**
@@ -34,7 +36,7 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
         $_definition[self::CREATE_MODULE] = true;
         $_definition[self::RECORD_NAME] = 'Credit'; // gettext('GENDER_Credit')
         $_definition[self::RECORDS_NAME] = 'Credits'; // ngettext('Credit', 'Credits', n)
-        
+
         $_definition[self::VERSION] = 1;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
@@ -46,6 +48,9 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
         unset($_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE]);
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             Sales_Controller_Document_Credit::class . '::documentNumberConfigOverride';
+
+        unset($_definition[self::FIELDS][self::FLD_PAYMENT_TERMS]);
+//        $_definition[self::FIELDS][self::FLD_PAYMENT_MEANS][self::TYPE] = self::TYPE_RECORD;
 
         $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_DOCUMENT_NUMBER, [
@@ -68,6 +73,19 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_CREDIT_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
+            ],
+        ]);
+
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_GROSS_SUM, [
+            self::FLD_PAY_AT => [
+                self::LABEL             => 'Pay at', // _('Pay at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
+            ],
+            self::FLD_PAID_AT => [
+                self::LABEL             => 'Paid at', // _('Paid at')
+                self::TYPE              => self::TYPE_DATE,
+                self::NULLABLE          => true,
             ],
         ]);
 /*
