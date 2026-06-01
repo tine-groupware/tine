@@ -1,0 +1,27 @@
+@import '../../Tinebase/styles/common';
+
+$highlightBtnColor: #c7c7c7;
+
+@mixin standalone-button($tbColor) {
+    @include button($tbColor);
+
+    &.x-btn-over {
+        .x-btn-tl, .x-btn-tc, .x-btn-tr,
+        .x-btn-ml, .x-btn-mc, .x-btn-mr,
+        .x-btn-bl, .x-btn-bc, .x-btn-br {
+            background-color: darken($tbColor, 10%);
+            transition: background-color .2s;
+        }
+    }
+}
+
+.gdpr-request-consent-btn {
+    @include standalone-button($highlightBtnColor);
+    border-radius: 5px;
+    border-collapse: separate;
+    overflow: hidden;
+
+    .x-btn-image {
+        left: 4px;
+    }
+}

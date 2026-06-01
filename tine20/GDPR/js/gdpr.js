@@ -12,3 +12,4 @@ import './Addressbook/ContactEditDialogPlugin';
 import './Felamimail/MessageEditDialogPlugin';
 import './Addressbook/SendRequestConsentAction';
 import './DataIntendedPurposeEditDialog';
+import '../styles/GDPR.scss';
