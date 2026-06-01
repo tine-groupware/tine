@@ -196,7 +196,7 @@ const participantsDropdownOptions = computed(() => {
   const seen = new Set();
 
   if (accountOwner.value && accountOwner.value.n_fileas) {
-    const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+    const ownerId = accountOwner.value?.id;
     if (ownerId && !seen.has(ownerId)) {
       options.push({
         value: ownerId,
@@ -209,9 +209,9 @@ const participantsDropdownOptions = computed(() => {
   if (registerOthersNum === 1 || registerOthersNum === 3) {
     if (registrations.value && Array.isArray(registrations.value)) {
       registrations.value.forEach(registration => {
-        const participantId = registration.participant?.original_id || registration.participant?.id;
+        const participantId = registration.participant?.id;
         const participantName = registration.participant?.n_fileas;
-        const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+        const ownerId = accountOwner.value?.id;
         const isNotSelf = participantId !== ownerId;
 
         if (isNotSelf && participantId && participantName && !seen.has(participantName)) {
@@ -226,7 +226,7 @@ const participantsDropdownOptions = computed(() => {
 
     if (dependantParticipants.value && dependantParticipants.value.length > 0) {
       dependantParticipants.value.forEach(p => {
-        const participantId = p.original_id || p.id;
+        const participantId = p.id;
         if (participantId && p.n_fileas && !seen.has(p.n_fileas)) {
           options.push({
             value: participantId,
@@ -266,18 +266,18 @@ const allParticipants = computed(() => {
   const participantsMap = new Map();
 
   registrations.value.forEach(registration => {
-    const participantId = registration.participant?.original_id;
+    const participantId = registration.participant?.id;
     const participantName = registration.participant?.n_fn || registration.participant?.n_fileas;
 
-    if (!participantsMap.has(participantId)) {
-      participantsMap.set(participantId, {
+    if (!participantsMap.has(participantName)) {
+      participantsMap.set(participantName, {
         id: participantId,
         name: participantName,
         events: []
       });
     }
 
-    participantsMap.get(participantId).events.push(registration);
+    participantsMap.get(participantName).events.push(registration);
   });
 
   participantsMap.forEach(participant => {
@@ -360,7 +360,7 @@ async function registerAgain(registration, isReregistered) {
   const baseUrl = window.location.origin;
   const eventId = registration.event_id;
   const token = route.params.token;
-  const participantId = registration.participant?.original_id || registration.participant?.id;
+  const participantId = registration.participant?.id;
   const registrationId = registration.id;
 
   window.location.href = `${baseUrl}/EventManager/view/event/${eventId}/registration/${token}?registrationId=${registrationId}&participantId=${participantId}&isReregistered=${isReregistered}`;
@@ -368,7 +368,7 @@ async function registerAgain(registration, isReregistered) {
 
 function openCreateNewProfile() {
   selectedEventId.value = null;
-  selectedParticipantId.value = accountOwner.value?.original_id || accountOwner.value?.id;
+  selectedParticipantId.value = accountOwner.value?.id;
 
   showModal({
     title: formatMessage('New Registration'),
@@ -388,7 +388,7 @@ const handleProfileSubmit = async () => {
   }
   const baseUrl = window.location.origin;
   const token = route.params.token;
-  const ownerId = accountOwner.value?.original_id || accountOwner.value?.id;
+  const ownerId = accountOwner.value?.id;
   const isSelfRegistration = String(selectedParticipantId.value) === String(ownerId);
   const newProfileParam = isSelfRegistration ? 'false' : 'true';
   window.location.href = `${baseUrl}/EventManager/view/event/${selectedEventId.value}/registration/${token}?newProfile=${newProfileParam}&participantId=${selectedParticipantId.value}`;
