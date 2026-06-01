@@ -403,21 +403,34 @@ class Calendar_Frontend_iMIP
         $eventAttenderStatus = $eventAttender ? $eventAttender->status : null;
 
         if ($_event->isRecurException() && !$existingEvent->isRecurException()) {
-            $orgException = Calendar_Model_Rrule::computeRecurrenceSet($existingEvent, $existingEvent->exdate, $_event->dtstart->getClone(), $_event->dtend->getClone())
-                ->getFirstRecord();
-
-            if (null === $orgException || !$orgException->dtstart->equals($_event->dtstart) ||
-                    !$orgException->dtend->equals($_event->dtend)) {
-                $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
+            if (!$_event->dtstart || !$_event->dtend) {
+                $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                    Calendar_Model_iMIP::PRECONDITION_RECENT, "dstart or dtend missing");
                 $result = false;
+            } else {
+                $orgException = Calendar_Model_Rrule::computeRecurrenceSet($existingEvent,
+                    $existingEvent->exdate,
+                    $_event->dtstart->getClone(),
+                    $_event->dtend->getClone()
+                )->getFirstRecord();
+
+                if (null === $orgException || !$orgException->dtstart->equals($_event->dtstart) ||
+                    !$orgException->dtend->equals($_event->dtend)) {
+                    $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                        Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
+                    $result = false;
+                }
             }
         } elseif ($_event->isRescheduled($existingEvent)) {
-            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
+            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                Calendar_Model_iMIP::PRECONDITION_RECENT, "event was rescheduled");
             $result = false;
         }
         
         if (! $eventAttender) {
-            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_ORIGINATOR, "originator is not attendee in existing event -> party crusher?");
+            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                Calendar_Model_iMIP::PRECONDITION_ORIGINATOR,
+                "originator is not attendee in existing event -> party crusher?");
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' originator is not attendee in existing event - originator: ' . print_r($_iMIP->originator, true));
             $result = false;
@@ -428,13 +441,15 @@ class Calendar_Frontend_iMIP
                         !isset($eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]) ||
                         $_event->last_modified_time->isEarlierOrEquals(new Tinebase_DateTime(
                         $eventAttender->xprops()[Calendar_Model_Attender::XPROP_REPLY_DTSTAMP]))))) {
-                $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
+                $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                    Calendar_Model_iMIP::PRECONDITION_RECENT, "old iMIP message");
                 $result = false;
             }
         }
 
         if (! is_null($iMIPAttenderStatus) && $iMIPAttenderStatus == $eventAttenderStatus) {
-            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(), Calendar_Model_iMIP::PRECONDITION_TOPROCESS, "this REPLY was already processed");
+            $_iMIP->addFailedPrecondition($_event->getRecurIdOrUid(),
+                Calendar_Model_iMIP::PRECONDITION_TOPROCESS, "this REPLY was already processed");
             $result = false;
         }
         
