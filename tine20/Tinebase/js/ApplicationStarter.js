@@ -383,16 +383,20 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
 
                         // called from legacy code - but all filters should come from registry
                         recordClass.getFilterModel = function() { return [];};
+                        recordClass._useMCFilers = true
                     }
 
                     // register filters
-                    Ext.iterate(modelConfig.filterModel, function(key, filter) {
-                        var f = this.getFilter(key, filter, modelConfig);
+                    if (!Tine[appName].Model[modelName].hasOwnProperty('getFilterModel') || Tine[appName].Model[modelName]._useMCFilers) {
+                        Ext.iterate(modelConfig.filterModel, function (key, filter) {
+                            var f = this.getFilter(key, filter, modelConfig);
 
-                        if (f) {
-                            Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
-                        }
-                    }, this);
+                            if (f) {
+                                Tine.widgets.grid.FilterRegistry.register(appName, modelName, f);
+                            }
+                        }, this);
+                    }
+
 
                     // create recordProxy
                     var recordProxyName = modelName.toLowerCase() + 'Backend';

@@ -269,13 +269,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'weekday'                => [
                 self::FILTER => Calendar_Model_WeekdayFilter::class,
             ],
-            'site'                  => [
-                self::FILTER            => Tinebase_Model_Filter_Relation::class,
-                self::OPTIONS           => [
-                    'related_model'         => Addressbook_Model_Contact::class,
-                    'filtergroup'           => Addressbook_Model_ContactFilter::class,
-                ],
-            ],
         ],
 
         self::FIELDS        => [
@@ -367,6 +360,9 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::UI_CONFIG         => [
                     'searchComboConfig'     => [
                         'useEditPlugin'         => false,
+                    ],
+                    'filterOptions' => [
+                        'jsConfig' => ['filtertype' => 'tinebase.site']
                     ],
                     self::UI_CONFIG_FEATURE     => [
                         self::APP_NAME              => Tinebase_Config::APP_NAME,
