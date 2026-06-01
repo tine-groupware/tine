@@ -66,7 +66,7 @@ msgid "Shared folders"
 msgstr "Gemeinsame Ordner"
 
 msgid "Folders of other users"
-msgstr "Ordner anderer Benutzer*innen"
+msgstr "Ordner anderer Benutzer"
 
 msgid "Received"
 msgstr "Erhalten"
@@ -293,7 +293,7 @@ msgid "Download"
 msgstr "Herunterladen"
 
 msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer oder einer anderen Systembenutzerin zu teilen"
+msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
 
 msgid "Grants"
 msgstr "Berechtigungen"
@@ -526,7 +526,7 @@ msgid "Once a year"
 msgstr "Einmal pro Jahr"
 
 msgid "Search for users..."
-msgstr "Suche nach Benutzer*innen..."
+msgstr "Suche nach Benutzern..."
 
 msgid "No permission"
 msgstr "Keine Berechtigung"
@@ -595,10 +595,10 @@ msgid "Usage by File Type"
 msgstr "Verbrauch nach Dateityp"
 
 msgid "User"
-msgstr "Benutzer*in"
+msgstr "Benutzer"
 
 msgid "Usage by User"
-msgstr "Verbrauch nach Benutzer*innen"
+msgstr "Verbrauch nach Benutzer"
 
 msgid "unknown"
 msgstr "unbekannt"
@@ -628,3 +628,9 @@ msgstr "Zum Herunterladen Passwort eingeben"
 
 msgid "Submit"
 msgstr "Abschicken"
+
+msgid "The Download link has expired"
+msgstr "Der Download Link ist abgelaufen"
+
+msgid "Download link has expired:"
+msgstr "Der Download Link ist abgelaufen:"
