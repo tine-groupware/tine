@@ -183,8 +183,9 @@
 
 .preview-panel-felamimail {
     display: flex;
-    overflow: auto;
     flex-direction: column;
+    height: 100%;
+    min-height: 0;
 }
 
 .preview-panel-felamimail-headers {
@@ -214,6 +215,7 @@
 
 .preview-panel-felamimail-header-longtext {
     white-space: nowrap;
+    padding-right: 10px;
 }
 
 .preview-panel-felamimail-attachments {
@@ -255,10 +257,11 @@
 /* note: el tyle of html areas underling textarea are copied to iframe*/
 .felamimail-message-body-html,
 .preview-panel-felamimail-body {
-    overflow: hidden;
+    overflow: auto;
     font-size: 13px;
     padding: 15px;
-    flex-shrink: 0;
+    flex: 1 1 auto;
+    min-height: 0;
 }
 
 .preview-panel-felamimail-body ul {
