@@ -1202,7 +1202,6 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
                         ]);
                     } else {
                         $tempContact = new Addressbook_Model_Contact([
-                            'n_given' => 'tempContact',
                             'email' => $request['email'],
                         ]);
                         $this->_sendMessageWithTemplate($template, [
