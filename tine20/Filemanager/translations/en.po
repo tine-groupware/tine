@@ -97,6 +97,18 @@ msgstr "The destination has the same path as the source. No action has been perf
 msgid "Quarantined File"
 msgstr "Quarantined File"
 
+msgid "The Download link has expired"
+msgstr "The Download link has expired"
+
+msgid "Filemanager"
+msgstr "Filemanager"
+
+msgid "Show in Filemanager"
+msgstr "Show in Filemanager"
+
+msgid "Save locally"
+msgstr "Save locally"
+
 msgid "Loading"
 msgstr "Loading"
 
@@ -197,15 +209,6 @@ msgstr "An error occurred while creating this folder"
 
 msgid "An item with this name already exists!"
 msgstr "An item with this name already exists!"
-
-msgid "Filemanager"
-msgstr "Filemanager"
-
-msgid "Show in Filemanager"
-msgstr "Show in Filemanager"
-
-msgid "Save locally"
-msgstr "Save locally"
 
 msgid "Select a file"
 msgstr "Select a file"
@@ -601,6 +604,9 @@ msgstr[1] "File Locations"
 msgid "GENDER_File Location"
 msgstr "GENDER_File Location"
 
+msgid "File not found!"
+msgstr "File not found!"
+
 msgid "Action"
 msgstr "Action"
 
@@ -609,9 +615,6 @@ msgstr "No Files Found"
 
 msgid "This folder appears to be empty."
 msgstr "This folder appears to be empty."
-
-msgid "File not found!"
-msgstr "File not found!"
 
 msgid "Password required for download"
 msgstr "Password required for download"

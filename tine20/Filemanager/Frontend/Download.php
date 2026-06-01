@@ -38,14 +38,14 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             $downloadId = array_shift($splittedPath);
             $download = $this->_getDownloadLink($downloadId);
 
+            $this->_setDownloadLinkOwnerAsUser($download);
+            
+            $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
+
             if (! $this->_verfiyPassword($download)) {
                 return $this->_renderPasswordForm();
                 exit;
             }
-
-            $this->_setDownloadLinkOwnerAsUser($download);
-            
-            $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
             
             switch ($node->type) {
                 case Tinebase_Model_Tree_FileObject::TYPE_FILE:
@@ -58,7 +58,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            return $this->_handleExceptionAndShow404($e);
+            return $this->_handleExceptionAndShowErrorPage($e);
         }
         
         exit;
@@ -67,15 +67,23 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     /**
      * @param Throwable $e
      */
-    protected function _handleExceptionAndShow404(Throwable $e)
+    protected function _handleExceptionAndShowErrorPage(Throwable $e)
     {
+        $context = [];
+
+        if ($e instanceof Tinebase_Exception_AccessDenied) {
+            $translation = Tinebase_Translation::getTranslation(Filemanager_Config::APP_NAME);
+            $context['content'] = $translation->_('The Download link has expired');
+        }
+
         if ($e instanceof Tinebase_Exception_ProgramFlow) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
         } else {
             Tinebase_Exception::log($e);
         }
-        return $this->_renderNotFoundPage();
+
+        return $this->_getHTML('error', $context);
     }
 
     protected function _verfiyPassword($download)
@@ -139,14 +147,6 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
     }
 
     /**
-     * renderNotFoundPage
-     */
-    protected function _renderNotFoundPage()
-    {
-        return $this->_getHTML('notfound');
-    }
-
-    /**
      * download file
      * 
      * @param string $path
@@ -181,7 +181,7 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
             }
             
         } catch (Exception $e) {
-            $this->_handleExceptionAndShow404($e);
+            $this->_handleExceptionAndShowErrorPage($e);
         }
         
         exit;

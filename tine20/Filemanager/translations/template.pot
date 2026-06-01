@@ -97,6 +97,18 @@ msgstr ""
 msgid "Quarantined File"
 msgstr ""
 
+msgid "The Download link has expired"
+msgstr ""
+
+msgid "Filemanager"
+msgstr ""
+
+msgid "Show in Filemanager"
+msgstr ""
+
+msgid "Save locally"
+msgstr ""
+
 msgid "Loading"
 msgstr ""
 
@@ -196,15 +208,6 @@ msgid "An error occurred while creating this folder"
 msgstr ""
 
 msgid "An item with this name already exists!"
-msgstr ""
-
-msgid "Filemanager"
-msgstr ""
-
-msgid "Show in Filemanager"
-msgstr ""
-
-msgid "Save locally"
 msgstr ""
 
 msgid "Select a file"
@@ -601,6 +604,9 @@ msgstr[1] ""
 msgid "GENDER_File Location"
 msgstr ""
 
+msgid "File not found!"
+msgstr ""
+
 msgid "Action"
 msgstr ""
 
@@ -608,9 +614,6 @@ msgid "No Files Found"
 msgstr ""
 
 msgid "This folder appears to be empty."
-msgstr ""
-
-msgid "File not found!"
 msgstr ""
 
 msgid "Password required for download"
