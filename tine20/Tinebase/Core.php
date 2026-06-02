@@ -199,6 +199,8 @@ class Tinebase_Core
      */
     public const CONTAINER = 'container';
 
+    protected const SQL_GROUP_CONCAT_MAX_LEN = 1073741824;
+
     /**
      * Application Instance Cache
      * @var array
@@ -1238,7 +1240,7 @@ class Tinebase_Core
                     "SET NAMES $upperCaseCharset",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
-                    "SET SESSION group_concat_max_len = 4294967295"
+                    "SET SESSION group_concat_max_len = " . self::SQL_GROUP_CONCAT_MAX_LEN
                 );
                 /** @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
