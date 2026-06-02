@@ -359,7 +359,7 @@ Sehr effektiv ist die Funktion Suche Empfänger: Beim Anklicken dieses Buttons w
 
 <!--cc-->
 <!--bcc-->
-Mit den üblichen und Ihnen bereits aus [Adressverwaltung](ba_Addressbook.md) bekannten Filterfunktionen lassen sich nun eine beliebige Anzahl von Adressen einblenden. Rechts in der Tabelle sehen Sie dazu noch vier Spalten mit Radiobuttons: Markieren Sie eine Adresszeile mit An wird dieser Adressat zum normalen Empfänger der E-Mail gemacht. Analog bedeutet die Markierung mit Kopie, dass der Adressat die E-Mail in Kopie erhält. Die Funktion Blindkopie ist vom Standpunkt des Datenschutzes her sehr wichtig: Möglicherweise ist es Ihnen selbst auch schon passiert, dass Sie eine E-Mail erhalten haben, in deren Kopf Sie eine ganze Reihe von E-Mail-Adressen lesen konnten, denen diese E-Mail ebenfalls zugestellt worden ist. Wahrscheinlich hat der Absender hier in Unkenntnis der Kopie- und Blindkopie-Funktionen gehandelt. Kopie benutzt man, wenn man den Kopie-Empfänger ganz bewusst davon in Kenntnis setzen will, an wen die E-Mail hauptsächlich gegangen ist. Blindkopie hingegen sollten Sie benutzen, wenn Sie nicht wünschen, dass der einzelne Empfänger die Adressen der anderen Empfänger sehen kann. Das ist insbesondere beim Versenden von Massen-E-Mails bedeutsam!
+Mit den üblichen und Ihnen bereits aus [Adressverwaltung](ba_Addressbook.md) bekannten Filterfunktionen lassen sich nun eine beliebige Anzahl von Adressen einblenden. Rechts in der Tabelle sehen Sie dazu noch vier Spalten mit Radiobuttons: Markieren Sie eine Adresszeile mit An wird dieser Adressat zum normalen Empfänger der E-Mail gemacht. Analog bedeutet die Markierung mit Kopie, dass der Adressat die E-Mail in Kopie erhält. Die Funktion Blindkopie ist vom Standpunkt des Datenschutzes her sehr wichtig: Möglicherweise ist es Ihnen selbst auch schon passiert, dass Sie eine E-Mail erhalten haben, in deren Kopf Sie eine ganze Reihe von E-Mail-Adressen lesen konnten, denen diese E-Mail ebenfalls zugestellt worden ist. Wahrscheinlich hat der Absender hier in Unkenntnis der Kopie- und Blindkopie-Funktionen gehandelt. Kopie benutzt man, wenn man den Kopie-Empfänger ganz bewusst davon in Kenntnis setzen will, an wen die E-Mail hauptsächlich gegangen ist. Blindkopie hingegen sollten Sie benutzen, wenn Sie nicht wünschen, dass der einzelne Empfänger die Adressen der anderen Empfänger sehen kann. Das ist insbesondere beim Versenden von Serien-E-Mails bedeutsam!
 
 !!! tip "Tipp"
     Für eben jene Anwendungsfälle können Sie die Radiobuttons auch massenweise "anklicken", indem Sie mit den üblichen Funktionen (__Ctrl__ + Klick, __Shift__ + Klick oder Alle Seiten auswählen im Pulldown oben rechts) mehrere E-Mails markieren und dann über die rechte Maustaste die entsprechende Funktion des Kontextmenüs anwählen.
@@ -373,7 +373,7 @@ Schließen Sie nun das Empfängerfenster. Im Fenster E-Mail verfassen gibt es no
 
 Mit dem Button Lesebestätigung erhält die versendete E-Mail eine Zusatzfunktion, die den Empfänger beim Öffnen der E-Mail fragt, ob er eine Empfangsbestätigung an den Absender senden will.
 
-Zuletzt der Punkt Massen-Mail. Wird diese Funktion aktiviert, bekommt jeder Empfänger seine eigene einzelne Kopie der verfassten Mail.
+Zuletzt der Punkt Serien-Mail. Wird diese Funktion aktiviert, bekommt jeder Empfänger seine eigene einzelne Kopie der verfassten Mail.
 
 ### E-Mail verschlüsseln
 
