@@ -1886,9 +1886,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         }
 
         $relatedModels = array();
+        $forceAdvancedSearch = false;
         foreach ($this->_filterModel as $name => $filter) {
             if ($filter['filter'] === 'Tinebase_Model_Filter_ExplicitRelatedRecord') {
                 $relatedModels[] = $filter['options']['related_model'];
+                if (!empty($filter['forceAdvancedSearch'])) {
+                    $forceAdvancedSearch = true;
+                }
             }
             if (isset($filter[self::QUERY_FILTER]) && $filter[self::QUERY_FILTER]) {
                 $queryFilters[] = $name;
@@ -1915,6 +1919,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
 
             if (count($relatedModels) > 0) {
                 $queryFilterData['options']['relatedModels'] = array_unique($relatedModels);
+            }
+            if ($forceAdvancedSearch) {
+                $queryFilterData['options']['forceAdvancedSearch'] = true;
             }
 
             $this->_filterModel['query'] = $queryFilterData;

@@ -30,8 +30,9 @@ trait Tinebase_Model_Filter_AdvancedSearchTrait {
      */
     protected function _getAdvancedSearchFilter($ownModel = null, $relationsToSearchIn = null)
     {
+        $force = isset($this->_options['forceAdvancedSearch']) && $this->_options['forceAdvancedSearch'];
         if (  Tinebase_Core::get('ADVANCED_SEARCHING') ||
-            ! Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, false) ||
+            (! $force && ! Tinebase_Core::getPreference()->getValue(Tinebase_Preference::ADVANCED_SEARCH, false)) ||
             empty($relationsToSearchIn))
         {
             return null;
