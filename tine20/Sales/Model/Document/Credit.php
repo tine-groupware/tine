@@ -21,6 +21,7 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
     public const TABLE_NAME = 'sales_document_credit';
 
     public const FLD_CREDIT_STATUS = 'credit_status';
+    public const STATUS_PAID = 'PAID';
     public const FLD_DOCUMENT_PROFORMA_NUMBER = 'document_proforma_number';
     public const FLD_PAY_AT = 'pay_at';
     public const FLD_PAID_AT = 'paid_at';

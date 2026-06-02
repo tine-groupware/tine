@@ -572,6 +572,14 @@ class Sales_Config extends Tinebase_Config_Abstract
                         Sales_Model_Document_Status::FLD_CLOSED => false,
                         'system' => true
                     ], [
+                        'id' => Sales_Model_Document_Credit::STATUS_PAID,
+                        //_('Paid (booked, closed)')
+                        'value' => 'Paid (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ], [
                         'id' => Sales_Model_Document_Abstract::STATUS_COMPLETED,
                         //_('Done (booked, closed)')
                         'value' => 'Done (booked, closed)',
@@ -598,19 +606,25 @@ class Sales_Config extends Tinebase_Config_Abstract
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Abstract::STATUS_DRAFT,
                         Sales_Model_Document_Abstract::STATUS_BOOKED,
+                        Sales_Model_Document_Credit::STATUS_PAID,
                         Sales_Model_Document_Abstract::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Abstract::STATUS_DRAFT => [
                     self::TRANSITION_TARGET_STATUS => [
                         Sales_Model_Document_Abstract::STATUS_BOOKED,
+                        Sales_Model_Document_Credit::STATUS_PAID,
                         Sales_Model_Document_Abstract::STATUS_COMPLETED,
                     ]
                 ],
                 Sales_Model_Document_Abstract::STATUS_BOOKED => [
                     self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Credit::STATUS_PAID,
                         Sales_Model_Document_Abstract::STATUS_COMPLETED,
                     ]
+                ],
+                Sales_Model_Document_Credit::STATUS_PAID => [
+                    self::TRANSITION_TARGET_STATUS => []
                 ],
                 Sales_Model_Document_Abstract::STATUS_COMPLETED => [
                     self::TRANSITION_TARGET_STATUS => []

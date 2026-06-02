@@ -508,6 +508,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Boilerplate::class,
             Sales_Model_Document_Boilerplate::class,
         ]);
+
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.18', self::RELEASE018_UPDATE018);
     }
 
@@ -518,6 +519,15 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Document_Credit::class,
         ]);
 
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Sales_Model_Document_Credit::class,
+            Sales_Model_DocumentPosition_Credit::class,
+        ]);
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            Sales_Model_Document_Credit::class,
+            Sales_Model_DocumentPosition_Credit::class,
+        ]);
+        
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.19', self::RELEASE018_UPDATE019);
     }
 

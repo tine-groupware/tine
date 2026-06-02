@@ -327,10 +327,12 @@ class Sales_Setup_Initialize extends Setup_Initialize
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
             Sales_Model_Document_PurchaseInvoice::class,
+            Sales_Model_Document_Credit::class,
             Sales_Model_DocumentPosition_Invoice::class,
             Sales_Model_DocumentPosition_Offer::class,
             Sales_Model_DocumentPosition_Order::class,
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
+            Sales_Model_DocumentPosition_Credit::class,
         ]);
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
             Sales_Model_Product::class,
@@ -339,10 +341,12 @@ class Sales_Setup_Initialize extends Setup_Initialize
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
             Sales_Model_Document_PurchaseInvoice::class,
+            Sales_Model_Document_Credit::class,
             Sales_Model_DocumentPosition_Invoice::class,
             Sales_Model_DocumentPosition_Offer::class,
             Sales_Model_DocumentPosition_Order::class,
             Sales_Model_DocumentPosition_PurchaseInvoice::class,
+            Sales_Model_DocumentPosition_Credit::class,
         ]);
     }
 
