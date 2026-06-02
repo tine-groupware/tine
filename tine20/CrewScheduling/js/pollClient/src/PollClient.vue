@@ -36,6 +36,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import { BAlert } from 'bootstrap-vue-next'
 import { format_date } from 'Tinebase/js/util/datetimeformat'
+import PollReply from "../../Model/PollReply";
 
 export default {
   components: {Poll, BAlert},
@@ -131,6 +132,9 @@ export default {
           if (a.dtstart < b.dtstart) return -1
           if (a.dtstart > b.dtstart) return 1
           return 0
+        })
+        events.forEach(event => {
+            event.id = PollReply.getEventRef(event)
         })
         this.events = events
       }).catch(error => {
