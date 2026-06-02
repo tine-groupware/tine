@@ -65,7 +65,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         }));
 
         // We need to get all resources and store them in memory for default Data Creation
-        const searchResources = await Tine.Calendar.searchResources(null, 100);
+        const searchResources = await Tine.Calendar.searchResources(null);
         this.calendarResources = searchResources.results.length > 0 ? searchResources.results : null;
     },
 
