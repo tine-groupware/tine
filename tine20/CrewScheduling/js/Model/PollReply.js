@@ -31,7 +31,7 @@ const PollReply = Record.create([], {
  */
 PollReply.getEventRef = (event) => {
     const eventData = event.data || event
-    return eventData.recur_id ? `${eventData.base_event_id}/${eventData.recur_id}` : eventData.id
+    return eventData.recurid ? `${eventData.base_event_id}/${eventData.recurid}` : eventData.id
 }
 
 

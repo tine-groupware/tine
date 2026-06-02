@@ -156,11 +156,12 @@ class CrewScheduling_Import_PollReply_Csv extends Tinebase_Import_Csv_Abstract
             $events = CrewScheduling_Controller_Poll::getInstance()->getEventsForPoll($poll);
             foreach ($pollParticipants[$poll->getId()] as $participant) {
                 foreach ($events as $event) {
-                    if (!isset($replyMap[$participant->getId()][$event->getId()])) {
+                    $eventRef = CrewScheduling_Model_PollReply::getEventRef($event);
+                    if (!isset($replyMap[$participant->getId()][$eventRef])) {
                         $newStatus = $status[rand(0, count($status)-1)];
                         CrewScheduling_Controller_PollReply::getInstance()->create(new CrewScheduling_Model_PollReply([
                             CrewScheduling_Model_PollReply::FLD_POLL_PARTICIPANT_ID => $participant->getId(),
-                            CrewScheduling_Model_PollReply::FLD_EVENT_REF => $event->getId(),
+                            CrewScheduling_Model_PollReply::FLD_EVENT_REF => $eventRef,
                             CrewScheduling_Model_PollReply::FLD_STATUS => $newStatus,
                         ]));
                     }
