@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>19.2</version>
+    <version>19.4</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -2278,7 +2278,7 @@
         </table>
         <table>
             <name>filter</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2319,6 +2319,11 @@
                     <name>description</name>
                     <type>text</type>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>show_result_count</name>
+                    <type>boolean</type>
+                    <default>false</default>
                 </field>
                 <field>
                     <name>created_by</name>
