@@ -146,6 +146,6 @@ class CrewScheduling_Model_PollReply extends Tinebase_Record_NewAbstract
      */
     public static function getEventRef(Calendar_Model_Event $event): string
     {
-        return $event->recur_id ? $event->base_event_id . '/' . $event->recur_id : $event->id;
+        return $event->recurid ? $event->base_event_id . '/' . $event->recurid : $event->id;
     }
 }
