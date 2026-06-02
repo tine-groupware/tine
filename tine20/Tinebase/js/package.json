@@ -3,8 +3,8 @@
   "private": true,
   "main": "tinebase.js",
   "scripts": {
-    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.dev.js",
-    "build": "./node_modules/webpack/bin/webpack.js --progress --config webpack.prod.js",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack/dev.mjs",
+    "build": "./node_modules/webpack/bin/webpack.js --progress --config webpack/prod.mjs",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js -c /usr/share/tests/js/jest/jest.config.js",
     "test-dbg": "node --experimental-vm-modules --inspect-brk=0.0.0.0 node_modules/jest/bin/jest.js --runInBand -c /usr/share/tests/js/jest/jest.config.js",
     "test:watch": "NODE_ENV=unittest karma start karma.unittest.conf.js",

@@ -3,11 +3,14 @@
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-const path = require('path');
-const baseDir = path.resolve(__dirname , '../../');
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const baseDir = path.resolve(__dirname, '../../../');
 
 /**
  * moves unnamed chunks into "<app>/js/" dir
@@ -35,4 +38,4 @@ class ChunkNamePlugin {
     }
 }
 
-module.exports = ChunkNamePlugin;
+export default ChunkNamePlugin;

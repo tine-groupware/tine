@@ -15,10 +15,14 @@
  *       so we can't check for file_exists in PHP code. Therefore we ask webpack
  *       which files/builds exist.
  */
-var config = require('./webpack.config.js');
-var filesToInclude = [];
+
+import config from'./webpack.config.js';
+
+const resolvedConfig = await config();
+const filesToInclude = [];
+
 Object.keys(config.entry).forEach(function (bundle) {
     filesToInclude.push(bundle + '-FAT.js');
 });
 
-module.exports = filesToInclude;
+export default filesToInclude;

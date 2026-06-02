@@ -1,11 +1,23 @@
-var fs = require('fs');
-var _ = require('lodash');
-var path = require('path');
-var webpack = require('webpack');
+import fs from 'fs';
+import _ from 'lodash';
+import path from 'path';
+import webpack from 'webpack';
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import AssetsPlugin from 'assets-webpack-plugin'; // @TODO: replace by https://github.com/shellscape/webpack-manifest-plugin ?
+import { VueLoaderPlugin } from 'vue-loader';
+import ChunkNamePlugin from './ChunkNamePlugin.mjs';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
+import eslintFriendlyFormatter from 'eslint-friendly-formatter';
+// import IconLicenseCheckerPlugin from './webpack.icon-license-checker-plugin';
+// const { default: Icons } = await import('unplugin-icons/webpack');
 
-// @TODO: replace by https://github.com/shellscape/webpack-manifest-plugin ?
-var AssetsPlugin = require('assets-webpack-plugin');
-var assetsPluginInstance = new AssetsPlugin({
+const require = createRequire(import.meta.url);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export default async () => {
+
+const assetsPluginInstance = new AssetsPlugin({
     // path: 'Tinebase/js',
     // fullPath: false,
     removeFullPathAutoPrefix: true,
@@ -13,13 +25,9 @@ var assetsPluginInstance = new AssetsPlugin({
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
-var {VueLoaderPlugin} = require('vue-loader');
-var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
-var ESLintPlugin = require('eslint-webpack-plugin');
-var CopyPlugin = require("copy-webpack-plugin");
 
-var eslintPluginInstance = new ESLintPlugin({
-    formatter: require('eslint-friendly-formatter'),
+const eslintPluginInstance = new ESLintPlugin({
+    formatter: eslintFriendlyFormatter,
     extensions: ['mjs', 'es6.js', 'vue'],
     quiet: true,
     overrideConfig: {
@@ -36,12 +44,12 @@ var eslintPluginInstance = new ESLintPlugin({
 // the plugin just does the following.
 // it's better to do this ourselves, instead of relying on the plugin
 // to prevent possible lib conflicts later on.
-var providePlugin = new webpack.ProvidePlugin({
+const providePlugin = new webpack.ProvidePlugin({
     Buffer: [require.resolve('buffer/'), 'Buffer'],
     process: require.resolve('process/browser')
 })
 
-var definePlugin = new webpack.DefinePlugin({
+const definePlugin = new webpack.DefinePlugin({
     BUILD_DATE:     JSON.stringify(process.env.BUILD_DATE),
     BUILD_REVISION: JSON.stringify(process.env.BUILD_REVISION),
     CODE_NAME:      JSON.stringify(process.env.CODE_NAME),
@@ -51,13 +59,13 @@ var definePlugin = new webpack.DefinePlugin({
     __VUE_PROD_DEVTOOLS__: true
 });
 
-var copyPlugin = new CopyPlugin({
+const copyPlugin = new CopyPlugin({
     patterns: [
         {from: "node_modules/bootstrap/dist/css", to: "Tinebase/styles/build/bootstrap/"},
     ]
 });
 
-var baseDir = path.resolve(__dirname, '../../'),
+const baseDir = path.resolve(__dirname, '../../../'),
     entryPoints = {};
 
 // find all entry points
@@ -65,7 +73,7 @@ fs.readdirSync(baseDir).forEach(function (baseName) {
     // if (baseName !== 'Filemanager') return;
     try {
         // try npm package.json
-        var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
+        const pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
 
         _.each(_.get(pkgDef, 'tine20.entryPoints', []), function (entryPoint) {
             entryPoints[baseName + '/js/' + entryPoint] = baseDir + '/' + baseName + '/js/' + entryPoint;
@@ -76,7 +84,7 @@ fs.readdirSync(baseDir).forEach(function (baseName) {
     }
 });
 
-module.exports = {
+return {
     target: ['web', 'es6'],
     entry: entryPoints,
     optimization: {
@@ -118,7 +126,13 @@ module.exports = {
         new VueLoaderPlugin(),
         new ChunkNamePlugin(),
         providePlugin,
-        eslintPluginInstance
+        eslintPluginInstance,
+        // require('unplugin-vue-components/webpack')({ /* options @TODO*/ }),
+        // Icons({ /* options */ }),
+        // new IconLicenseCheckerPlugin({
+        //     allowedLicenses: ['MIT', 'Apache-2.0', 'ISC', 'CC0-1.0'],
+        //     severity: 'error', // or 'warn'
+        // }),
     ],
     module: {
         rules: [
@@ -182,7 +196,6 @@ module.exports = {
 
             // use script loader for old library classes as some of them the need to be included in window context
             { test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'], enforce: "pre", use: [{ loader: "script-loader" }] },
-            { test: /\.jsb2$/, use: [{ loader: "./jsb2-loader" }] },
             { test: /\.css$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }] },
             { test: /\.scss$/, use: ['style-loader','css-loader', 'sass-loader'] },
             { test: /\.less$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "less-loader", options: { lessOptions: { noIeCompat: true, } } }] },
@@ -193,16 +206,16 @@ module.exports = {
         ]
     },
     resolveLoader: {
-        modules: [path.resolve(__dirname, "node_modules")]
+        modules: [path.resolve(__dirname, "../node_modules")]
     },
     resolve: {
-        extensions: [".tsx", ".ts", ".js", ".es6.js"],
+        extensions: [".tsx", ".ts", ".js", ".es6.js", ".mjs"],
         // add browserify which is used by some libs (e.g. director)
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too
         modules: [
-            __dirname,
-            path.resolve(__dirname, "node_modules")
+            path.resolve(__dirname, '../'),
+            path.resolve(__dirname, "../node_modules")
         ],
         fallback: {
             'crypto': require.resolve("crypto-browserify"),
@@ -214,8 +227,8 @@ module.exports = {
         },
         alias: Object.assign({
             // convinence alias
-            "tine-vue$": path.resolve(__dirname, "node_modules/vue/dist/vue.runtime.esm-bundler.js"),
-            "Ext": path.resolve(__dirname, "../../library/ExtJS/src/"),
+            "tine-vue$": path.resolve(__dirname, "../node_modules/vue/dist/vue.runtime.esm-bundler.js"),
+            "Ext": path.resolve(__dirname, "../../../library/ExtJS/src/"),
             // "images": `${baseDir}/images`
         }, fs.readdirSync(baseDir).reduce((accu, baseName) => {
             if (fs.existsSync(`${baseDir}/${baseName}/js`)) {
@@ -228,3 +241,4 @@ module.exports = {
 };
 
 // console.error(module.exports.resolve.alias)
+};

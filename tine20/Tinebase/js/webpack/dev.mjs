@@ -1,0 +1,51 @@
+import { merge } from 'webpack-merge';
+import common from './common.mjs';
+import webpack from 'webpack';
+
+export default async () => {
+    const commonConfig = await common();
+
+    return merge(commonConfig, {
+        devtool: 'eval',
+        plugins: [
+            new webpack.DefinePlugin({
+                BUILD_TYPE: "'DEVELOPMENT'"
+            })
+        ],
+        mode: 'development',
+        devServer: {
+            hot: false,
+            liveReload: false,
+            host: '0.0.0.0',
+            port: 10443,
+
+            allowedHosts: 'all',
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+                "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+            },
+            proxy: [
+                {
+                    context: ['**', '!/webpack-dev-server*/**', '!**.json', '!/ws'],
+                    target: 'http://localhost/',
+                    secure: false
+                }
+            ],
+            client: {
+                overlay: true,
+            },
+            devMiddleware: {
+                writeToDisk: (filePath) => /\/(js|css)\/build\//.test(filePath),
+            },
+            // onBeforeSetupMiddleware: function(app, server) {
+            //     app.use(function(req, res, next) {
+            //         // check for langfile chunk requests
+            //         // build on demand
+            //         // extract-text
+            //         next();
+            //     });
+            // }
+        }
+    });
+};
