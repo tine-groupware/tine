@@ -234,7 +234,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $_group->name = trim($_group->name);
             if ($oldGroup->name !== $_group->name)
             {
-                $this->checkDuplicateName($_group->name);
+                $this->checkDuplicateName($_group->name, $_group->getId());
 
                 if (false !== ($confKey = Tinebase_Group::getDefaultGroupConfigKey($oldGroup->name))) {
                     Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -645,11 +645,14 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         return $groupUpdateCount;
     }
 
-    private function checkDuplicateName(string $name)
+    private function checkDuplicateName(string $name, ?string $excludeId = null)
     {
         $groupController = Tinebase_Group::getInstance();
         try {
-            $groupController->getGroupByName($name);
+            $existingGroup = $groupController->getGroupByName($name);
+            if ($excludeId !== null && $existingGroup->getId() === $excludeId) {
+                return;
+            }
             $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             throw new Tinebase_Exception_SystemGeneric($translation->_('A group with this name already exists'));
         } catch (Tinebase_Exception_Record_NotDefined $ternd) {

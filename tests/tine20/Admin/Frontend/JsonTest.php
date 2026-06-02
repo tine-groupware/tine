@@ -56,6 +56,23 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
     }
 
     /**
+     * try to update group name with only case change (e.g. "Testgruppe" -> "TestGruppe")
+     */
+    public function testUpdateGroupNameCaseOnly()
+    {
+        $this->_skipIfLDAPBackend('FIXME: LDAP may not support case-only name changes');
+
+        $data = $this->_createGroup();
+        $originalName = $data['name'];
+        $data['name'] = strtoupper(substr($originalName, 0, 1)) . substr($originalName, 1);
+        $data['members'] = [];
+
+        $result = $this->_json->saveGroup($data);
+
+        $this->assertEquals($data['name'], $result['name'], 'group name should be updated with new casing');
+    }
+
+    /**
      * try to get group members
      */
     public function testGetGroupMembers()
