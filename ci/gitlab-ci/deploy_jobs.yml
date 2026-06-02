@@ -422,7 +422,7 @@ deploy-test-cloud-nightly:
   environment:
     name: nightly/$CI_COMMIT_REF_NAME
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-test-cloud-nightly/
       variables:
         RELEASE_TYPE: nightly
       when: manual
