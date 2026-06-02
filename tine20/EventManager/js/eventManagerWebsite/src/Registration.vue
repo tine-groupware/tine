@@ -18,15 +18,6 @@
         </b-col>
       </b-row>
 
-      <div>
-        <b-alert v-model="knownContact" dismissible>
-          {{formatMessage('Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current.')}}
-        </b-alert>
-        <b-form-group v-if="knownContact" class="mb-3 section-heading" :label="formatMessage('Select a Participant')">
-          <b-form-select v-model="selectedParticipantId" :options="participantsDropdownOptions" @change="handleParticipantSelection" />
-        </b-form-group>
-      </div>
-
       <b-row>
         <b-col>
           <h4
@@ -272,14 +263,12 @@ const countries = ref([]);
 const REGISTRATION_SCENARIO = {
   UNKNOWN_USER: 'unknown_user',
   NEW_PARTICIPANT_FROM_ACCOUNT: 'new_participant',
-  ACCOUNT_OWNER: 'account_owner',
-  DEPENDANT: 'dependant'
+  EDIT_EXISTING_REGISTRATION: 'edit_existing_registration',
 };
 
 const isCollapsedParticipant = ref(false);
 const isCollapsedEvent = ref(false);
 const isCollapsedRegistrant = ref(false);
-const knownContact = ref(false);
 const showRegisteredContactAlert = ref(false);
 const replies = ref({});
 const uploadedFiles = ref({});
@@ -407,75 +396,18 @@ const maxBirthDate = computed(() => {
 
 const registrantId = computed(() => {
   if (!registrations.value) {
-    return accountOwner.value?.original_id || accountOwner.value?.id || null;
+    return accountOwner.value?.id || null;
   }
 
-  if (registrations.value.original_id || registrations.value.id) {
-    return registrations.value.original_id || registrations.value.id;
+  if (registrations.value.id) {
+    return registrations.value.id;
   }
 
   if (registrations.value.length > 0 && registrations.value[0].registrant) {
-    return registrations.value[0].registrant.original_id || registrations.value[0].registrant.id;
+    return registrations.value[0].registrant.id;
   }
 
   return null;
-});
-
-const participantsDropdownOptions = computed(() => {
-  const registerOthers = eventDetails.value.register_others;
-  const options = [];
-  const registerOthersNum = Number(registerOthers);
-
-  if (registerOthersNum === 1) {
-    options.push({ value: null, text: formatMessage('New participant') });
-  }
-
-  const seen = new Set();
-
-  if (accountOwner.value && accountOwner.value.n_fileas) {
-    const ownerId = accountOwner.value.original_id || accountOwner.value.id;
-    if (ownerId && !seen.has(ownerId)) {
-      options.push({
-        value: ownerId,
-        text: accountOwner.value.n_fileas
-      });
-      seen.add(ownerId);
-    }
-  }
-
-  if (registerOthersNum === 1 || registerOthersNum === 3) {
-    if (registrations.value && Array.isArray(registrations.value)) {
-      registrations.value.forEach(registration => {
-        const participantId = registration.participant?.original_id || registration.participant?.id;
-        const participantName = registration.participant?.n_fileas;
-        const selfId = registrantId.value || accountOwner.value?.id;
-        const isNotSelf = participantId !== selfId;
-
-        if (isNotSelf && participantId && participantName && !seen.has(participantId)) {
-          options.push({
-            value: participantId,
-            text: participantName
-          });
-          seen.add(participantId);
-        }
-      });
-    }
-
-    if (dependantParticipants.value && dependantParticipants.value.length > 0) {
-      dependantParticipants.value.forEach(p => {
-        const participantId = p.original_id || p.id;
-        if (participantId && p.n_fileas && !seen.has(participantId)) {
-          options.push({
-            value: participantId,
-            text: p.n_fileas
-          });
-          seen.add(participantId);
-        }
-      });
-    }
-  }
-
-  return options;
 });
 
 const sortOptionsByGroup = computed(() => {
@@ -518,10 +450,6 @@ const formatBirthday = (bday) => {
   return `${year}-${month}-${day}`;
 };
 
-const getParticipantId = (participant) => {
-  return participant?.original_id || participant?.id;
-};
-
 const isValidEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -532,17 +460,11 @@ const determineRegistrationScenario = (participantId) => {
     return REGISTRATION_SCENARIO.UNKNOWN_USER;
   }
 
-  const ownerId = getParticipantId(accountOwner.value);
-
   if (!participantId) {
     return REGISTRATION_SCENARIO.NEW_PARTICIPANT_FROM_ACCOUNT;
+  } else {
+    return REGISTRATION_SCENARIO.EDIT_EXISTING_REGISTRATION;
   }
-
-  if (String(participantId) === String(ownerId)) {
-    return REGISTRATION_SCENARIO.ACCOUNT_OWNER;
-  }
-
-  return REGISTRATION_SCENARIO.DEPENDANT;
 };
 
 const initializeFormForScenario = async (scenario, participantId) => {
@@ -557,12 +479,8 @@ const initializeFormForScenario = async (scenario, participantId) => {
       await handleNewParticipantFromAccount();
       break;
 
-    case REGISTRATION_SCENARIO.ACCOUNT_OWNER:
-      await handleAccountOwner(participantId);
-      break;
-
-    case REGISTRATION_SCENARIO.DEPENDANT:
-      await handleDependant(participantId);
+  case REGISTRATION_SCENARIO.EDIT_EXISTING_REGISTRATION:
+      await handleEditExistingRegistration(participantId);
       break;
   }
 };
@@ -572,7 +490,6 @@ const resetFormState = () => {
   registrantDetails.value = emptyContactDetails();
   isRegistrant.value = false;
   shouldShowRegistrantCheckbox.value = true;
-  knownContact.value = false;
   showRegisteredContactAlert.value = false;
   isAlreadyRegistered.value = false;
   initializeEventOptions();
@@ -581,7 +498,6 @@ const resetFormState = () => {
 const handleUnknownUser = async () => {
   shouldShowRegistrantCheckbox.value = false;
   isRegistrant.value = false;
-  knownContact.value = false;
 };
 
 const handleNewParticipantFromAccount = async () => {
@@ -596,78 +512,21 @@ const handleNewParticipantFromAccount = async () => {
 
   isRegistrant.value = true;
   shouldShowRegistrantCheckbox.value = true;
-  knownContact.value = true; // Show the dropdown
 };
 
-const handleAccountOwner = async (participantId) => {
+const handleEditExistingRegistration = async (participantId) => {
   if (!accountOwner.value) return;
 
-  contactDetails.value = {
-    ...accountOwner.value,
-    bday: formatBirthday(accountOwner.value.bday)
-  };
-
-  registrantDetails.value = {
-    ...accountOwner.value,
-    bday: formatBirthday(accountOwner.value.bday)
-  };
-  registrantEmail.value = accountOwner.value.email;
-  isVerifyEmailRegistrant.value = true;
-
-
-  isRegistrant.value = false;
-  shouldShowRegistrantCheckbox.value = true;
-  knownContact.value = true;
-
-  await checkAndLoadExistingRegistration(participantId);
-};
-
-const handleDependant = async (participantId) => {
-  let participant = null;
-
-  if (dependantParticipants.value && Array.isArray(dependantParticipants.value)) {
-    participant = dependantParticipants.value.find(p =>
-      String(getParticipantId(p)) === String(participantId)
-    );
-  }
-
-  if (!participant && Array.isArray(registrations.value)) {
-    const registration = registrations.value.find(r =>
-      registrationId.value
-        ? r.id === registrationId.value
-        : String(getParticipantId(r.participant)) === String(participantId)
-    );
-
-    participant = registration?.participant ?? participant;
-  }
-
-  if (participant) {
-    contactDetails.value = {
-      ...participant,
-      bday: formatBirthday(participant.bday)
-    };
-
-    if (accountOwner.value) {
-      registrantDetails.value = {
-        ...accountOwner.value,
-        bday: formatBirthday(accountOwner.value.bday)
-      };
-      registrantEmail.value = accountOwner.value.email;
-      isVerifyEmailRegistrant.value = true;
-    }
-
-    isRegistrant.value = true;
-    shouldShowRegistrantCheckbox.value = true;
-    knownContact.value = true;
-
-    await checkAndLoadExistingRegistration(participantId);
-  }
+   await checkAndLoadExistingRegistration(participantId);
 };
 
 const checkAndLoadExistingRegistration = async (participantId) => {
-  const registration = eventDetails.value.registrations?.find(
-    reg => String(getParticipantId(reg.participant)) === String(participantId)
-  );
+  const registration = eventDetails.value.registrations?.find(reg => {
+    if (registrationId.value) {
+      return reg.id === registrationId.value;
+    }
+    return String(reg.participant?.id) === String(participantId);
+  });
 
   if (registration) {
     const isCancelled = registration.status === '3';
@@ -676,8 +535,30 @@ const checkAndLoadExistingRegistration = async (participantId) => {
 
     if (!isCancelled) {
       await loadBookedOptions(registration);
-      registrationIdRef.value = registration.original_id || registration.id;
+      registrationIdRef.value = registration.id;
     }
+
+    contactDetails.value = {
+      ...registration.participant,
+      registration_id: registration.id
+    };
+
+    registrantDetails.value = {
+      ...registration.registrant,
+      registration_id: registration.id
+    };
+
+  } else {
+    if (accountOwner.value.id === participantId) {
+      contactDetails.value = {
+        ...accountOwner.value,
+      }
+    } else {
+      isRegistrant.value = true;
+    }
+    registrantDetails.value = {
+      ...accountOwner.value,
+    };
   }
 };
 
@@ -1229,7 +1110,7 @@ const postRegistration = async () => {
     'isAlreadyRegistered': isAlreadyRegistered.value
   };
   const body = JSON.parse(JSON.stringify(registration));
-  let registrationId = '';
+  let localRegistrationId = '';
 
   try {
     const response = await fetch(`/EventManager/register/${eventId}`, {
@@ -1241,12 +1122,12 @@ const postRegistration = async () => {
       body: JSON.stringify(body)
     }).then(resp => resp.json())
       .then(data => {
-        registrationId = data.id;
+        localRegistrationId = data.id;
         console.debug(data);
       });
 
     if (hasFileChanged.value) {
-      await uploadFiles(eventId, registrationId);
+      await uploadFiles(eventId, localRegistrationId);
     }
 
     if (isUpdate.value) {
@@ -1384,6 +1265,9 @@ onMounted(async () => {
   const participantIdFromUrl = route.query.participantId && route.query.participantId !== 'null'
     ? route.query.participantId
     : null;
+  const newProfileFromUrl = route.query.newProfile && route.query.newProfile !== 'null'
+    ? route.query.newProfile
+    : null;
   const registrationIdFromUrl = route.query.registrationId && route.query.registrationId !== 'null'
     ? route.query.registrationId
     : null;
@@ -1393,7 +1277,12 @@ onMounted(async () => {
 
   await Promise.all([fetchEvent(), fetchAccountData()]);
 
-  let initialParticipantId = participantIdFromUrl ?? getParticipantId(accountOwner.value);
+  let initialParticipantId;
+
+   if (!newProfileFromUrl) {
+     initialParticipantId = participantIdFromUrl ?? accountOwner.value.id;
+   }
+
 
   const scenario = determineRegistrationScenario(initialParticipantId);
   await initializeFormForScenario(scenario, initialParticipantId);
