@@ -204,7 +204,7 @@ export default {
       let sites = ''
       if (this.poll.sites && this.poll.sites.length > 0) {
         let siteNames = []
-        this.poll.sites.every(function (site) {
+        this.poll.sites.forEach(function (site) {
           siteNames.push(site.site_id.n_fn)
         })
         sites = ', ' + siteNames.join(', ')
@@ -216,7 +216,7 @@ export default {
     getEventTypeList () {
       if (this.poll.event_types && this.poll.event_types.length > 0) {
         let typeNames = []
-        this.poll.event_types.every(function (type) {
+        this.poll.event_types.forEach(function (type) {
           typeNames.push(type.event_type_id.name)
         })
         return this.formatMessage('for') + ' ' + typeNames.join(', ')
