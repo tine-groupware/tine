@@ -1,8 +1,6 @@
 import { merge } from 'webpack-merge';
 import prod from './prod.mjs';
-
-
-const AssetsPlugin = require('assets-webpack-plugin');
+import AssetsPlugin from 'assets-webpack-plugin';
 const assetsPluginInstance = new AssetsPlugin({
     path: '/out/tine20/Tinebase/js',
     keepInMemory: false,
