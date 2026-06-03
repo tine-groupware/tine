@@ -149,6 +149,12 @@ msgstr "Storno-Status"
 msgid "Possible Reversal Status"
 msgstr "Mögliche Storno-Status"
 
+msgid "PC-"
+msgstr "PG-"
+
+msgid "CR-"
+msgstr "GS-"
+
 msgid "Not reversed"
 msgstr "Nicht storniert"
 

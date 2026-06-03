@@ -26,6 +26,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
 
+    public const STATUS_DRAFT = 'DRAFT';
+    public const STATUS_BOOKED = 'BOOKED';
     public const STATUS_COMPLETED = 'COMPLETED';
     public const STATUS_DISPATCHED = 'DISPATCHED';
     public const STATUS_MANUAL_DISPATCH = 'MANUAL_DISPATCH';

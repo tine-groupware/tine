@@ -36,6 +36,9 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE017 = __CLASS__ . '::update017';
     protected const RELEASE018_UPDATE018 = __CLASS__ . '::update018';
 
+    protected const RELEASE018_UPDATE019 = __CLASS__ . '::update019';
+    protected const RELEASE018_UPDATE020 = __CLASS__ . '::update020';
+
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
             self::RELEASE018_UPDATE012          => [
@@ -94,6 +97,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update018',
             ],
+            self::RELEASE018_UPDATE019          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update019',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -119,6 +126,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE017          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update017',
+            ],
+            self::RELEASE018_UPDATE020          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update020',
             ],
         ],
     ];
@@ -469,6 +480,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
             Tinebase_PersistentFilter::getInstance()->update($filter);
         }
+
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.15', self::RELEASE018_UPDATE015);
     }
 
@@ -477,6 +489,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         $this->getDb()->update(Tinebase_PersistentFilter::getInstance()->getBackend()->getPrefixedTableName(), [
             'filters' => new Zend_Db_Expr('REPLACE(`filters`, \'"field":"reversal_status"\', \'"field":"reversed_status"\')'),
         ], '`model` LIKE "Sales_Model_Document_%"');
+
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.16', self::RELEASE018_UPDATE016);
     }
 
@@ -496,5 +509,60 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             Sales_Model_Document_Boilerplate::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.18', self::RELEASE018_UPDATE018);
+    }
+
+    public function update019(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_DocumentPosition_Credit::class,
+            Sales_Model_Document_Credit::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.19', self::RELEASE018_UPDATE019);
+    }
+
+    public function update020(): void
+    {
+        Sales_Controller_Boilerplate::getInstance()->create(new Sales_Model_Boilerplate([
+            Sales_Model_Boilerplate::FLD_IS_DEFAULT => true,
+            Sales_Model_Boilerplate::FLD_LANGUAGE => 'de',
+            Sales_Model_Boilerplate::FLD_MODEL => Sales_Model_Document_Credit::class,
+            Sales_Model_Boilerplate::FLD_NAME => 'Pretext',
+            Sales_Model_Boilerplate::FLD_BOILERPLATE => 'Sehr geehrte Damen und Herren,
+
+für die von Ihnen erbrachte Leistung erteilen wir folgende Gutschrift:',
+        ]));
+        Sales_Controller_Boilerplate::getInstance()->create(new Sales_Model_Boilerplate([
+            Sales_Model_Boilerplate::FLD_IS_DEFAULT => true,
+            Sales_Model_Boilerplate::FLD_LANGUAGE => 'de',
+            Sales_Model_Boilerplate::FLD_MODEL => Sales_Model_Document_Credit::class,
+            Sales_Model_Boilerplate::FLD_NAME => 'Posttext',
+            Sales_Model_Boilerplate::FLD_BOILERPLATE => 'Der Betrag wird auf Ihr Konto überwiesen.
+Für Rückfragen stehen wir Ihnen selbstverständlich zur Verfügung.
+
+Mit freundlichen Grüßen
+Ihr tine Team',
+        ]));
+        Sales_Controller_Boilerplate::getInstance()->create(new Sales_Model_Boilerplate([
+            Sales_Model_Boilerplate::FLD_IS_DEFAULT => true,
+            Sales_Model_Boilerplate::FLD_LANGUAGE => 'en',
+            Sales_Model_Boilerplate::FLD_MODEL => Sales_Model_Document_Credit::class,
+            Sales_Model_Boilerplate::FLD_NAME => 'Pretext',
+            Sales_Model_Boilerplate::FLD_BOILERPLATE => 'Dear Sir or Madam,
+
+we are issuing the following credit note for the services you have provided:',
+        ]));
+        Sales_Controller_Boilerplate::getInstance()->create(new Sales_Model_Boilerplate([
+            Sales_Model_Boilerplate::FLD_IS_DEFAULT => true,
+            Sales_Model_Boilerplate::FLD_LANGUAGE => 'en',
+            Sales_Model_Boilerplate::FLD_MODEL => Sales_Model_Document_Credit::class,
+            Sales_Model_Boilerplate::FLD_NAME => 'Posttext',
+            Sales_Model_Boilerplate::FLD_BOILERPLATE => 'The amount will be transferred to your account.
+For questions and further information, we are available at any time.
+
+With kind regards
+Your tine Team',
+        ]));
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.20', self::RELEASE018_UPDATE020);
     }
 }
