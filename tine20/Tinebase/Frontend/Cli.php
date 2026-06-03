@@ -1964,14 +1964,14 @@ fi';
         $user = Tinebase_User::getInstance()->getFullUserByLoginName($data['user']);
 
         if ($data['jwt'] ?? false) {
-            $pwd = Tinebase_Record_Abstract::generateUID();
+            $pwd = $data['pwd'] ?? Tinebase_Record_Abstract::generateUID();
 
-            $token = Tinebase_Controller_AppPassword::getInstance()->getNewJwtToken([
+            $token = Tinebase_Controller_AppPassword::getInstance()->getNewJwtToken(array_merge([
                 Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $user->getId(),
                 Tinebase_Model_AppPassword::FLD_CHANNELS => array_fill_keys((array)$data['channels'], true),
                 Tinebase_Model_AppPassword::FLD_ALLOW_GET => (bool)($data['allow_get'] ?? false),
                 Tinebase_Model_AppPassword::FLD_JWT_PRIVAT_KEY => $pwd,
-            ]);
+            ], ($data['kid'] ?? false) ? [Tinebase_Model_AppPassword::FLD_JWT_KEY_ID => $data['kid']] : []));
 
             echo PHP_EOL . 'generated jwt: ' . $token . PHP_EOL . PHP_EOL;
         } else {
