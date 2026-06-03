@@ -19,7 +19,7 @@ const abstractAction = Ext.extend(Ext.Action, {
     constructor: function (config) {
         config.app = Tine.Tinebase.appMgr.get('Sales')
         config.recordClass = Tine.Tinebase.data.RecordMgr.get(`Sales.Document_${config.documentType}`)
-        config.statusFieldName = `${config.documentType.toLowerCase()}_status`
+        config.statusFieldName = `${_.snakeCase(config.documentType)}_status`
         config.statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(config.recordClass, config.statusFieldName)
 
         Ext.Action.prototype.constructor.call(this, config);

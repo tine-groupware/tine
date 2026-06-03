@@ -183,6 +183,9 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DOCUMENT_PURCHASE_INVOICE_STATUS = 'documentPurchaseInvoiceStatus';
     public const DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS = 'documentPurchaseInvoiceStatusTransitions';
 
+    public const DOCUMENT_CREDIT_STATUS = 'documentCreditStatus';
+    public const DOCUMENT_CREDIT_STATUS_TRANSITIONS = 'documentCreditStatusTransitions';
+
     /**
      * offer status
      * 
@@ -534,6 +537,97 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 Sales_Model_Document_Abstract::STATUS_COMPLETED => [
                     self::TRANSITION_TARGET_STATUS => [],
+                ],
+            ]
+        ],
+        self::DOCUMENT_CREDIT_STATUS => [
+            //_('Credit Status')
+            self::LABEL              => 'Credit Status',
+            //_('Possible Credit Status')
+            self::DESCRIPTION        => 'Possible Credit Status',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS            => [
+                self::RECORD_MODEL => Sales_Model_Document_Status::class,
+                self::OPTION_TRANSITIONS_CONFIG => self::DOCUMENT_CREDIT_STATUS_TRANSITIONS,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Document_Abstract::STATUS_DRAFT,
+                        //_('Draft (unbooked, open)')
+                        'value' => 'Draft (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Abstract::STATUS_BOOKED,
+                        //_('Booked (booked, open)')
+                        'value' => 'Booked (booked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Credit::STATUS_PAID,
+                        //_('Paid (booked, closed)')
+                        'value' => 'Paid (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ], [
+                        'id' => Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                        //_('Done (booked, closed)')
+                        'value' => 'Done (booked, closed)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => true,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
+                        'system' => true
+                    ],
+                ],
+                self::DEFAULT_STR => Sales_Model_Document_Abstract::STATUS_DRAFT,
+            ],
+        ],
+        self::DOCUMENT_CREDIT_STATUS_TRANSITIONS => [
+            //_('Credit Status Transitions')
+            self::LABEL              => 'Credit Status Transitions',
+            //_('Possible Credit Status Transitions')
+            self::DESCRIPTION        => 'Possible Credit Status Transitions',
+            self::TYPE               => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                '' => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Abstract::STATUS_DRAFT,
+                        Sales_Model_Document_Abstract::STATUS_BOOKED,
+                        Sales_Model_Document_Credit::STATUS_PAID,
+                        Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                    ]
+                ],
+                Sales_Model_Document_Abstract::STATUS_DRAFT => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Abstract::STATUS_BOOKED,
+                        Sales_Model_Document_Credit::STATUS_PAID,
+                        Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                    ]
+                ],
+                Sales_Model_Document_Abstract::STATUS_BOOKED => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_Credit::STATUS_PAID,
+                        Sales_Model_Document_Abstract::STATUS_COMPLETED,
+                    ]
+                ],
+                Sales_Model_Document_Credit::STATUS_PAID => [
+                    self::TRANSITION_TARGET_STATUS => []
+                ],
+                Sales_Model_Document_Abstract::STATUS_COMPLETED => [
+                    self::TRANSITION_TARGET_STATUS => []
                 ],
             ]
         ],

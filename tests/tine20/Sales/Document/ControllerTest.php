@@ -1786,6 +1786,41 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertStringStartsWith($inTranslated, $updatedInvoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
     }
 
+    public function testCreditNumbers(): void
+    {
+        $customer = $this->_createCustomer();
+
+        $credit = Sales_Controller_Document_Credit::getInstance()->create(new Sales_Model_Document_Credit([
+            Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal,
+        ]));
+
+        $translate = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME);
+
+        $pcTranslated = $translate->_('PC-');
+        $crTranslated = $translate->_('CR-');
+
+        $this->assertStringStartsWith($pcTranslated, $credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER});
+        $this->assertSame($credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER}, $credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_NUMBER});
+        $this->assertSame(Sales_Model_Document_Credit::STATUS_DRAFT, $credit->{Sales_Model_Document_Credit::FLD_CREDIT_STATUS});
+
+        $credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today()->subDay(1);
+        $updatedCredit = Sales_Controller_Document_Credit::getInstance()->update($credit);
+
+        $this->assertSame($credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER},
+            $updatedCredit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER});
+        $this->assertSame($credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER}, $credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_NUMBER});
+
+        $updatedCredit->{Sales_Model_Document_Credit::FLD_CREDIT_STATUS} = Sales_Model_Document_Credit::STATUS_BOOKED;
+        $updatedCredit = Sales_Controller_Document_Credit::getInstance()->update($updatedCredit);
+
+        $this->assertSame(Sales_Model_Document_Credit::STATUS_BOOKED, $updatedCredit->{Sales_Model_Document_Credit::FLD_CREDIT_STATUS});
+        $this->assertSame($credit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER},
+            $updatedCredit->{Sales_Model_Document_Credit::FLD_DOCUMENT_PROFORMA_NUMBER});
+        $this->assertNotEmpty($updatedCredit->{Sales_Model_Document_Credit::FLD_DOCUMENT_NUMBER});
+        $this->assertStringStartsWith($crTranslated, $updatedCredit->{Sales_Model_Document_Credit::FLD_DOCUMENT_NUMBER});
+    }
+
     public function testDeliveryNumbers()
     {
         $customer = $this->_createCustomer();

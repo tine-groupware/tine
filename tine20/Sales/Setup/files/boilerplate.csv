@@ -98,6 +98,22 @@ Sales_Model_Document_Invoice,Posttext REVERSAL,"Für Rückfragen stehen wir Ihne
 
 Mit freundlichen Grüßen
 Ihr tine Team",,de,1
+Sales_Model_Document_Credit,Pretext,"Sehr geehrte Damen und Herren,
+
+für die von Ihnen erbrachte Leistung erteilen wir folgende Gutschrift:",,de,1
+Sales_Model_Document_Credit,Posttext,"Der Betrag wird auf Ihr Konto überwiesen.
+Für Rückfragen stehen wir Ihnen selbstverständlich zur Verfügung.
+
+Mit freundlichen Grüßen
+Ihr tine Team",,de,1
+Sales_Model_Document_Credit,Pretext,"Dear Sir or Madam,
+
+we are issuing the following credit note for the services you have provided:",,en,1
+Sales_Model_Document_Credit,Posttext,"The amount will be transferred to your account.
+For questions and further information, we are available at any time.
+
+With kind regards
+Your tine Team",,en,1
 Sales_Model_Document_Offer,Pretext,"Dear Sir or Madam,
 
 Thank you for your inquiry and the related interest in our products and services.

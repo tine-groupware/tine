@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -160,17 +161,35 @@ msgstr "Approved (booked, open)"
 msgid "Paid (booked, closed)"
 msgstr "Paid (booked, closed)"
 
+msgid "Done (booked, closed)"
+msgstr "Done (booked, closed)"
+
 msgid "Purchase Invoice Status Transitions"
 msgstr "Purchase Invoice Status Transitions"
+
+msgid "Credit Status"
+msgstr "Credit Status"
+
+msgid "Possible Credit Status"
+msgstr "Possible Credit Status"
+
+msgid "Draft (unbooked, open)"
+msgstr "Draft (unbooked, open)"
+
+msgid "Booked (booked, open)"
+msgstr "Booked (booked, open)"
+
+msgid "Credit Status Transitions"
+msgstr "Credit Status Transitions"
+
+msgid "Possible Credit Status Transitions"
+msgstr "Possible Credit Status Transitions"
 
 msgid "Offer Status"
 msgstr "Offer Status"
 
 msgid "Possible Offer Status"
 msgstr "Possible Offer Status"
-
-msgid "Draft (unbooked, open)"
-msgstr "Draft (unbooked, open)"
 
 msgid "Manual dispatch required (booked, open)"
 msgstr "Manual dispatch required (booked, open)"
@@ -201,12 +220,6 @@ msgstr "Received (unbooked, open)"
 
 msgid "Accepted (booked, open)"
 msgstr "Accepted (booked, open)"
-
-msgid "Done (booked, closed)"
-msgstr "Done (booked, closed)"
-
-msgid "Reversal (booked, closed)"
-msgstr "Reversal (booked, closed)"
 
 msgid "Order Status Transitions"
 msgstr "Order Status Transitions"
@@ -243,9 +256,6 @@ msgstr "Possible Invoice Status"
 
 msgid "Proforma (unbooked, open)"
 msgstr "Proforma (unbooked, open)"
-
-msgid "Booked (booked, open)"
-msgstr "Booked (booked, open)"
 
 msgid "Invoice Status Transitions"
 msgstr "Invoice Status Transitions"
@@ -316,7 +326,9 @@ msgid "Reversal"
 msgstr "Reversal"
 
 msgid "Credit"
-msgstr "Credit"
+msgid_plural "Credits"
+msgstr[0] "Credit"
+msgstr[1] "Credits"
 
 msgid "Price Type"
 msgstr "Price Type"
@@ -589,10 +601,8 @@ msgstr "Divisions"
 msgid "Categories"
 msgstr "Categories"
 
-msgid "Boilerplate"
-msgid_plural "Boilerplates"
-msgstr[0] "Boilerplate"
-msgstr[1] "Boilerplates"
+msgid "Boilerplates"
+msgstr "Boilerplates"
 
 msgid "No Right to alter the Number"
 msgstr "No Right to alter the Number"
@@ -886,6 +896,9 @@ msgstr "Change Document Date?"
 msgid "Change document date from { date } to today?"
 msgstr "Change document date from { date } to today?"
 
+msgid "Document is booked. Accounting data is write-protected."
+msgstr "Document is booked. Accounting data is write-protected."
+
 msgid "Service Start Extended"
 msgstr "Service Start Extended"
 
@@ -905,6 +918,11 @@ msgstr "The customer <b>{customer}</b> can't be selected as it has no debitor fo
 
 msgid "Open Debitor"
 msgstr "Open Debitor"
+
+msgid "Boilerplate"
+msgid_plural "Boilerplates"
+msgstr[0] "Boilerplate"
+msgstr[1] "Boilerplates"
 
 msgid "Include to Dispatch Document"
 msgstr "Include to Dispatch Document"
@@ -1023,6 +1041,9 @@ msgstr "Nothing was dispatched"
 msgid "Do you want to dispatch manually by email?"
 msgstr "Do you want to dispatch manually by email?"
 
+msgid "Document successfully dispatched."
+msgstr "Document successfully dispatched."
+
 msgid "Dispatching not Possible"
 msgstr "Dispatching not Possible"
 
@@ -1138,6 +1159,15 @@ msgstr "Required Data Missing"
 msgid "Please provide the required data before changing the workflow status."
 msgstr "Please provide the required data before changing the workflow status."
 
+msgid "This is an imported e-invoice. Accounting data is write-protected. "
+msgstr "This is an imported e-invoice. Accounting data is write-protected. "
+
+msgid "Update Supplier Data?"
+msgstr "Update Supplier Data?"
+
+msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
+msgstr "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
+
 msgid "Import as Purchase Invoice"
 msgstr "Import as Purchase Invoice"
 
@@ -1155,6 +1185,9 @@ msgstr "Importing purchase invoice not Possible"
 
 msgid "Import Purchase Invoice"
 msgstr "Import Purchase Invoice"
+
+msgid "Documents"
+msgstr "Documents"
 
 msgid "Send as Email to Datev"
 msgstr "Send as Email to Datev"
@@ -1405,9 +1438,6 @@ msgstr "Select supplier"
 msgid "Supplier Number"
 msgstr "Supplier Number"
 
-msgid "Either postal code or postbox is required!"
-msgstr "Either postal code or postbox is required!"
-
 msgid "Copy Supplier"
 msgstr "Copy Supplier"
 
@@ -1417,12 +1447,6 @@ msgstr "Add New Supplier"
 #, python-brace-format
 msgid "Edit Supplier \"{0}\""
 msgstr "Edit Supplier \"{0}\""
-
-msgid "Prefix"
-msgstr "Prefix"
-
-msgid "Additional Prefix"
-msgstr "Additional Prefix"
 
 msgid "without supplier"
 msgstr "without supplier"
@@ -1501,6 +1525,12 @@ msgstr "Buyer Reference"
 
 msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
 msgstr "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
+
+msgid "Buyer Contract Number"
+msgstr "Buyer Contract Number"
+
+msgid "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
+msgstr "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
 
 msgid "Purchase Order Reference"
 msgstr "Purchase Order Reference"
@@ -1613,6 +1643,18 @@ msgstr "Admin Debitors"
 
 msgid "The permission to administrate the division's debitors."
 msgstr "The permission to administrate the division's debitors."
+
+msgid "Read Credits"
+msgstr "Read Credits"
+
+msgid "The permission to read the division's credit documents."
+msgstr "The permission to read the division's credit documents."
+
+msgid "Admin Credits"
+msgstr "Admin Credits"
+
+msgid "The permission to administrate the division's credit documents."
+msgstr "The permission to administrate the division's credit documents."
 
 msgid "Read Offers"
 msgstr "Read Offers"
@@ -1760,9 +1802,6 @@ msgstr "GENDER_Document"
 msgid "Document Number"
 msgstr "Document Number"
 
-msgid "Boilerplates"
-msgstr "Boilerplates"
-
 msgid "Document Date"
 msgstr "Document Date"
 
@@ -1839,6 +1878,27 @@ msgstr "Created for Version"
 msgid "GENDER_Category"
 msgstr "GENDER_Category"
 
+msgid "GENDER_Credit"
+msgstr "GENDER_Credit"
+
+msgid "Proforma Number"
+msgstr "Proforma Number"
+
+msgid "PC-"
+msgstr "PC-"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Pay at"
+msgstr "Pay at"
+
+msgid "Paid at"
+msgstr "Paid at"
+
+msgid "CR-"
+msgstr "CR-"
+
 msgid "GENDER_Delivery"
 msgstr "GENDER_Delivery"
 
@@ -1846,12 +1906,6 @@ msgid "Delivery"
 msgid_plural "Deliveries"
 msgstr[0] "Delivery"
 msgstr[1] "Deliveries"
-
-msgid "Status"
-msgstr "Status"
-
-msgid "Proforma Number"
-msgstr "Proforma Number"
 
 msgid "PD-"
 msgstr "PD-"
@@ -1891,11 +1945,11 @@ msgstr "GENDER_Invoice"
 msgid "PI-"
 msgstr "PI-"
 
-msgid "Last Datev send date"
-msgstr "Last Datev send date"
-
 msgid "Payment Reminders"
 msgstr "Payment Reminders"
+
+msgid "Last Datev send date"
+msgstr "Last Datev send date"
 
 msgid "IN-"
 msgstr "IN-"
@@ -2027,6 +2081,14 @@ msgstr "Sales Tax Rate"
 msgid "Gross Price"
 msgstr "Gross Price"
 
+msgid "Credit Position"
+msgid_plural "Credit Positions"
+msgstr[0] "Credit Position"
+msgstr[1] "Credit Positions"
+
+msgid "GENDER_Credit Position"
+msgstr "GENDER_Credit Position"
+
 msgid "Delivery Position"
 msgid_plural "Delivery Positions"
 msgstr[0] "Delivery Position"
@@ -2078,12 +2140,6 @@ msgstr "Due at"
 
 msgid "Over due at"
 msgstr "Over due at"
-
-msgid "Pay at"
-msgstr "Pay at"
-
-msgid "Paid at"
-msgstr "Paid at"
 
 msgid "Paid amount"
 msgstr "Paid amount"

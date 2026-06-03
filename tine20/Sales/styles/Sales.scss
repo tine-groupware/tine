@@ -105,6 +105,10 @@
     color: #404040;
 }
 
+.SalesDocument_Credit, .SalesDocumentPosition_Credit {
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/receipt-refund.svg) !important;
+}
+
 .SalesDocument_Order, .SalesOrderConfirmation, .SalesDocumentPosition_Order, .action-sales-validate-document {
     background-image:url(../../images/icon-set/icon_order_confirmation.svg) !important;
 }

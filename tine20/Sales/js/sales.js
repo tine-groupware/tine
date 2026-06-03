@@ -10,14 +10,17 @@
 
 import '../styles/Sales.scss';
 import './Model/Document/AbstractMixin';
+import './Model/Document/Credit';
 import './Model/DocumentPosition/Offer';
 import './Model/DocumentPosition/Order';
 import './Model/DocumentPosition/Delivery';
 import './Model/DocumentPosition/Invoice';
+import './Model/DocumentPosition/Credit';
 import './Document/OfferEditDialog';
 import './Document/OrderEditDialog';
 import './Document/DeliveryEditDialog';
 import './Document/InvoiceEditDialog';
+import './Document/CreditEditDialog';
 import './Document/BookDocumentAction';
 import './Document/CopyDocumentAction';
 import './Document/CreateFollowUpAction';

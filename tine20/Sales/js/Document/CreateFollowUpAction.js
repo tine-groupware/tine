@@ -25,6 +25,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         },
         Invoice: {
             Invoice: {isReversal: true},
+        },
+        Credit: {
+            Credit: {isReversal: true},
+        },
+        PurchaseInvoice: {
+            PurchaseInvoice: {isReversal: true},
         }
     }
 
@@ -39,7 +45,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         const sharedTransitionFlag = `shared_${targetRecordClass.getMeta('recordName').toLowerCase()}`
         const recipientField = `${targetRecordClass.getMeta('recordName').toLowerCase()}_recipient_id`
         const supportsSharedTransition = sourceRecordClass.hasField(sharedTransitionFlag)
-        const statusFieldName = `${sourceType.toLowerCase()}_status`
+        const statusFieldName = `${_.snakeCase(sourceType)}_status`
         const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
         const reversedStatus = _.find(statusDef.records, { reversal: true }) || {id: 'doctype-without-reversals'}
 
@@ -51,7 +57,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
 
                 if (isReversal) {
                     // reversals are allowed for booked, non fully reversed documents only
-                    const statusFieldName = `${sourceType.toLowerCase()}_status`
+                    const statusFieldName = `${_.snakeCase(sourceType)}_status`
                     const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                     enabled = records.reduce((enabled, record) => {
                         return enabled && record.get('reversal_status') !== 'reversed' && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
