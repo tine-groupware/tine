@@ -170,11 +170,8 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
             self::FLD_BOILERPLATE        => [
                 self::LABEL             => 'Boilerplate', //_('Boilerplate')
                 self::TYPE          => self::TYPE_TEXT,
+                self::NULLABLE      => true,
                 self::LENGTH        => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
             ],
             self::FLD_LANGUAGE          => [
                 self::LABEL                 => 'Language', // _('Language')
