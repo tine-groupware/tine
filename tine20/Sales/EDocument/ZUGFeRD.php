@@ -55,7 +55,7 @@ class Sales_EDocument_ZUGFeRD
             foreach ($pdf->getObjectsByType('Filespec') as $object) {
                 foreach (['F', 'UF'] as $elementName) {
                     if ($object->getHeader()?->get($elementName)->getContent() === $filename) {
-                        if (!($efHeader = $object->getHeader()->get('EF')) instanceof \Smalot\PdfParser\Header) {
+                        if (!($efHeader = $object->getHeader()->get('EF')) instanceof \Smalot\PdfParser\Header && !$efHeader instanceof \Smalot\PdfParser\PDFObject) {
                             $warnMsg .= 'Filespec is missing EF header' . PHP_EOL;
                             continue 2;
                         }
@@ -65,6 +65,9 @@ class Sales_EDocument_ZUGFeRD
                         }
                         $this->xml = $xRef->getContent();
                         if (str_starts_with($this->xml, '<?xml ')) {
+                            break 2;
+                        } elseif(str_starts_with($this->xml, '<rsm:CrossIndustryInvoice')) {
+                            $this->xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n" . $this->xml;
                             break 2;
                         } else {
                             $warnMsg .= 'Filespecs EF header is excpected to have a ' . $elementName . ' xref header containing valid xml: ' . $this->xml . PHP_EOL;
@@ -82,7 +85,7 @@ class Sales_EDocument_ZUGFeRD
         if (null === $this->xml) {
             foreach ($pdf->getObjectsByType('Filespec') as $object) {
                 foreach (['F', 'UF'] as $elementName) {
-                    if (!($efHeader = $object->getHeader()->get('EF')) instanceof \Smalot\PdfParser\Header) {
+                    if (!($efHeader = $object->getHeader()->get('EF')) instanceof \Smalot\PdfParser\Header && !$efHeader instanceof \Smalot\PdfParser\PDFObject) {
                         continue 2;
                     }
                     if (!($xRef = $efHeader->get($elementName)) instanceof \Smalot\PdfParser\PDFObject) {
@@ -90,6 +93,9 @@ class Sales_EDocument_ZUGFeRD
                     }
                     $this->xml = $xRef->getContent();
                     if (str_starts_with($this->xml, '<?xml ')) {
+                        break 2;
+                    } elseif(str_starts_with($this->xml, '<rsm:CrossIndustryInvoice')) {
+                        $this->xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n" . $this->xml;
                         break 2;
                     } else {
                         $this->xml = null;
