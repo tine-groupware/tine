@@ -85,7 +85,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Purchasing'),
                 });
             })
         }
-    })), 32)
+    })), 39)
 
     // Ext.ux.pluginRegistry.register('Sales-Document_PurchaseInvoice-GridPanel',{
     //     ptype: 'ux.browseplugin',

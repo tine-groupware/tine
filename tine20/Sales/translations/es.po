@@ -164,16 +164,34 @@ msgstr ""
 msgid "Paid (booked, closed)"
 msgstr ""
 
+msgid "Done (booked, closed)"
+msgstr ""
+
 msgid "Purchase Invoice Status Transitions"
+msgstr ""
+
+msgid "Credit Status"
+msgstr ""
+
+msgid "Possible Credit Status"
+msgstr ""
+
+msgid "Draft (unbooked, open)"
+msgstr ""
+
+msgid "Booked (booked, open)"
+msgstr ""
+
+msgid "Credit Status Transitions"
+msgstr ""
+
+msgid "Possible Credit Status Transitions"
 msgstr ""
 
 msgid "Offer Status"
 msgstr ""
 
 msgid "Possible Offer Status"
-msgstr ""
-
-msgid "Draft (unbooked, open)"
 msgstr ""
 
 msgid "Manual dispatch required (booked, open)"
@@ -204,12 +222,6 @@ msgid "Received (unbooked, open)"
 msgstr ""
 
 msgid "Accepted (booked, open)"
-msgstr ""
-
-msgid "Done (booked, closed)"
-msgstr ""
-
-msgid "Reversal (booked, closed)"
 msgstr ""
 
 msgid "Order Status Transitions"
@@ -246,9 +258,6 @@ msgid "Possible Invoice Status"
 msgstr ""
 
 msgid "Proforma (unbooked, open)"
-msgstr ""
-
-msgid "Booked (booked, open)"
 msgstr ""
 
 msgid "Invoice Status Transitions"
@@ -321,7 +330,10 @@ msgid "Reversal"
 msgstr ""
 
 msgid "Credit"
-msgstr ""
+msgid_plural "Credits"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Price Type"
 msgstr ""
@@ -596,11 +608,8 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-msgid "Boilerplate"
-msgid_plural "Boilerplates"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgid "Boilerplates"
+msgstr ""
 
 msgid "No Right to alter the Number"
 msgstr ""
@@ -666,6 +675,9 @@ msgid "INVOICE"
 msgstr ""
 
 msgid "You have to set a customer!"
+msgstr ""
+
+msgid "This address is managed by the linked contact. Changes to the readonly fields can be done in that contact directly."
 msgstr ""
 
 msgid "Name shorthand"
@@ -769,6 +781,18 @@ msgid "without customer"
 msgstr ""
 
 msgid "Show closed"
+msgstr ""
+
+msgid "Create from Contact ..."
+msgstr ""
+
+msgid "Addressbook Contact"
+msgstr ""
+
+msgid "Contacts and sales addresses can be linked to each other so that changes to the contact automatically change the linked sales address and it is not possible to change the corresponding address fields directly in Sales."
+msgstr ""
+
+msgid "Link sales address to given addressbook contact."
 msgstr ""
 
 msgid "Select customer"
@@ -883,6 +907,9 @@ msgstr ""
 msgid "Change document date from { date } to today?"
 msgstr ""
 
+msgid "Document is booked. Accounting data is write-protected."
+msgstr ""
+
 msgid "Service Start Extended"
 msgstr ""
 
@@ -902,6 +929,12 @@ msgstr ""
 
 msgid "Open Debitor"
 msgstr ""
+
+msgid "Boilerplate"
+msgid_plural "Boilerplates"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Include to Dispatch Document"
 msgstr ""
@@ -1020,6 +1053,9 @@ msgstr ""
 msgid "Do you want to dispatch manually by email?"
 msgstr ""
 
+msgid "Document successfully dispatched."
+msgstr ""
+
 msgid "Dispatching not Possible"
 msgstr ""
 
@@ -1135,6 +1171,15 @@ msgid "Required Data Missing"
 msgstr ""
 
 msgid "Please provide the required data before changing the workflow status."
+msgstr ""
+
+msgid "This is an imported e-invoice. Accounting data is write-protected. "
+msgstr ""
+
+msgid "Update Supplier Data?"
+msgstr ""
+
+msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
 msgstr ""
 
 msgid "Import as Purchase Invoice"
@@ -1399,6 +1444,9 @@ msgstr ""
 msgid "Method of payment"
 msgstr ""
 
+msgid "Document lines"
+msgstr ""
+
 msgid "Clipboard"
 msgstr ""
 
@@ -1406,9 +1454,6 @@ msgid "Select supplier"
 msgstr ""
 
 msgid "Supplier Number"
-msgstr ""
-
-msgid "Either postal code or postbox is required!"
 msgstr ""
 
 msgid "Copy Supplier"
@@ -1419,12 +1464,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Edit Supplier \"{0}\""
-msgstr ""
-
-msgid "Prefix"
-msgstr ""
-
-msgid "Additional Prefix"
 msgstr ""
 
 msgid "without supplier"
@@ -1503,6 +1542,12 @@ msgid "Buyer Reference"
 msgstr ""
 
 msgid "An identifier assigned by the acquirer and used for internal control purposes (BT-10 [EN 16931])."
+msgstr ""
+
+msgid "Buyer Contract Number"
+msgstr ""
+
+msgid "A unique identifier for the contract (e.g., contract number) (BT-12 [EN 16931])."
 msgstr ""
 
 msgid "Purchase Order Reference"
@@ -1617,6 +1662,18 @@ msgid "Admin Debitors"
 msgstr ""
 
 msgid "The permission to administrate the division's debitors."
+msgstr ""
+
+msgid "Read Credits"
+msgstr ""
+
+msgid "The permission to read the division's credit documents."
+msgstr ""
+
+msgid "Admin Credits"
+msgstr ""
+
+msgid "The permission to administrate the division's credit documents."
 msgstr ""
 
 msgid "Read Offers"
@@ -1766,9 +1823,6 @@ msgstr ""
 msgid "Document Number"
 msgstr ""
 
-msgid "Boilerplates"
-msgstr ""
-
 msgid "Document Date"
 msgstr ""
 
@@ -1847,6 +1901,21 @@ msgstr ""
 msgid "GENDER_Category"
 msgstr ""
 
+msgid "GENDER_Credit"
+msgstr ""
+
+msgid "Proforma Number"
+msgstr ""
+
+msgid "PC-"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "CR-"
+msgstr ""
+
 msgid "GENDER_Delivery"
 msgstr ""
 
@@ -1855,12 +1924,6 @@ msgid_plural "Deliveries"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-msgid "Status"
-msgstr ""
-
-msgid "Proforma Number"
-msgstr ""
 
 msgid "PD-"
 msgstr ""
@@ -1901,10 +1964,10 @@ msgstr ""
 msgid "PI-"
 msgstr ""
 
-msgid "Last Datev send date"
+msgid "Payment Reminders"
 msgstr ""
 
-msgid "Payment Reminders"
+msgid "Last Datev send date"
 msgstr ""
 
 msgid "IN-"
@@ -2038,6 +2101,15 @@ msgid "Sales Tax Rate"
 msgstr ""
 
 msgid "Gross Price"
+msgstr ""
+
+msgid "Credit Position"
+msgid_plural "Credit Positions"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "GENDER_Credit Position"
 msgstr ""
 
 msgid "Delivery Position"

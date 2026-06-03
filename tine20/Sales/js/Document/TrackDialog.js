@@ -218,7 +218,14 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
             // NOTE: positions have their document as PARENT. documents, positions are connected by edges (because in cytoscape a node can have one parent only!)
             // BUT: at our side a position can have exactly one precursor! (link documents by edgets but posiitons by parent?)
-            const cols = {Sales_Model_Document_Offer: 0, Sales_Model_Document_Order: 1, Sales_Model_Document_Delivery: 2, Sales_Model_Document_Invoice: 3};
+            const cols = {
+                Sales_Model_Document_Offer: 0,
+                Sales_Model_Document_Order: 1,
+                Sales_Model_Document_Delivery: 2,
+                Sales_Model_Document_Invoice: 3,
+                Sales_Model_Document_Credit: 4,
+                Sales_Model_Document_PurchaseInvoice: 0
+            };
 
             const documentId = `${modelName}-${document.id}`;
             const title = await asString(document.getTitle());
@@ -247,7 +254,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.cy.remove('*');
         this.cy.add(elements);
         this.cy.endBatch();
-        let rows = {0:0, 1:0, 2:0, 3:0}
+        let rows = {0:0, 1:0, 2:0, 3:0, 4:0}
         this.cy.layout({
             name: 'grid',
             cols: 4,
