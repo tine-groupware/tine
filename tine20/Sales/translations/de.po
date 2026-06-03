@@ -2555,18 +2555,3 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
-
-#~ msgid "Reversal (booked, closed)"
-#~ msgstr "Storno (gebucht, geschlossen)"
-
-#~ msgid "Either postal code or postbox is required!"
-#~ msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
-
-#~ msgid "Prefix"
-#~ msgstr "Zusatz"
-
-#~ msgid "Additional Prefix"
-#~ msgstr "Weiterer Zusatz"
-
-#~ msgid "Document lines"
-#~ msgstr "Belegpositionen"
