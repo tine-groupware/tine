@@ -156,9 +156,12 @@ class MatrixSynapseIntegrator_Backend_Corporal
 
     protected function _getManagedRooms(): array
     {
-        // TODO add paging / use iterator / direct backend call?
-
-        $rooms = MatrixSynapseIntegrator_Controller_Room::getInstance()->getAll();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            MatrixSynapseIntegrator_Model_Room::class, [
+                ['field' => MatrixSynapseIntegrator_Model_Room::FLD_ACTIVE, 'operator' => 'equals', 'value' => 1]
+            ]
+        );
+        $rooms = MatrixSynapseIntegrator_Controller_Room::getInstance()->search($filter);
         return $rooms->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID};
     }
 

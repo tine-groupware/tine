@@ -20,6 +20,7 @@ class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
 {
     public const FLD_LIST_ID = 'list_id';
 
+    public const FLD_ACTIVE = 'active';
     public const FLD_NAME = 'name';
     public const FLD_ROOM_ID = 'room_id';
     public const FLD_SYSTEM_USER_ONLY = 'system_user_only';
@@ -78,20 +79,27 @@ class MatrixSynapseIntegrator_Model_Room extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                    => [
+            self::FLD_ACTIVE           => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => false,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                     => 'This group has a chat room', // _('This group has a chat room')
+            ],
+            self::FLD_NAME => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::NULLABLE                  => false,
+                self::LENGTH                    => 255,
+                // TODO might improve this: technically, we need the name - but the client should no mark the tab panel / form as invalid if it is empty
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL                     => 'Name', // _('Name')
+            ],
             self::FLD_TOPIC           => [
                 self::TYPE                      => self::TYPE_FULLTEXT,
                 self::NULLABLE                  => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Topic', // _('Topic')
                 self::QUERY_FILTER              => true,
-            ],
-           self::FLD_NAME => [
-               self::TYPE                      => self::TYPE_STRING,
-               self::NULLABLE                  => false,
-               self::LENGTH                    => 255,
-               // TODO might improve this: technically, we need the name - but the client should no mark the tab panel / form as invalid if it is empty
-               self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-               self::LABEL                     => 'Name', // _('Name')
             ],
             // we get the room id from synapse -> save it here
             self::FLD_ROOM_ID => [

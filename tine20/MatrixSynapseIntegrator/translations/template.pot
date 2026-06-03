@@ -28,6 +28,9 @@ msgstr ""
 msgid "Corporal Shared Auth Token"
 msgstr ""
 
+msgid "Corporal User ID"
+msgstr ""
+
 msgid "Synapse directory export enabled"
 msgstr ""
 
@@ -55,6 +58,12 @@ msgstr ""
 msgid "Synapse shared secret auth"
 msgstr ""
 
+msgid "This group has a chat room"
+msgstr ""
+
+msgid "Chat Room"
+msgstr ""
+
 msgid "Matrix Integration"
 msgstr ""
 
@@ -72,10 +81,22 @@ msgstr ""
 msgid "You have not yet been assigned an chat account. This view is therefore empty"
 msgstr ""
 
+msgid "{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser."
+msgstr ""
+
+msgid "Please wait ..."
+msgstr ""
+
+msgid "Chat could not be loaded"
+msgstr ""
+
+msgid "The Chat program could not be loaded. Try again?"
+msgstr ""
+
 msgid "Recovery Key or Password Needed"
 msgstr ""
 
-msgid "{ brandingTitle } needs your recovery key/password to access your chats. The provided key/password will be saved in a secret store on this server."
+msgid "{ brandingTitle } requires your recovery key or password to decrypt your chats. The recovery data you enter will be stored in secure storage on this { brandingTitle } server."
 msgstr ""
 
 msgid "Recovery Key or Password Incorrect"
@@ -88,6 +109,18 @@ msgid "Manual Management Required"
 msgstr ""
 
 msgid "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
+msgstr ""
+
+msgid "Chat storage corrupted"
+msgstr ""
+
+msgid "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
+msgstr ""
+
+msgid "Unhandled encryption error"
+msgstr ""
+
+msgid "An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:"
 msgstr ""
 
 msgid "Matrix Accounts"
@@ -112,6 +145,38 @@ msgid "Matrix Session Key"
 msgstr ""
 
 msgid "Active"
+msgstr ""
+
+msgid "Is Initialized"
+msgstr ""
+
+msgid "The Account is fully initialized in the synapse server and crypt setup has run."
+msgstr ""
+
+msgid "Matrix Room"
+msgid_plural "Matrix Rooms"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Matrix Rooms"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Topic"
+msgstr ""
+
+msgid "Room ID"
+msgstr ""
+
+msgid "Only System Users"
+msgstr ""
+
+msgid "Group"
+msgstr ""
+
+msgid "Matrix-ID"
 msgstr ""
 
 msgid "MatrixSynapseIntegrator"

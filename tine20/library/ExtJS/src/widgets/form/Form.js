@@ -122,12 +122,7 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
         this.form = this.createForm();
         Ext.FormPanel.superclass.initComponent.call(this);
 
-        this.bodyCfg = {
-            tag: 'form',
-            cls: this.baseCls + '-body',
-            method : this.method || 'POST',
-            id : this.formId || Ext.id()
-        };
+        this.initBodyCfg();
         if(this.fileUpload) {
             this.bodyCfg.enctype = 'multipart/form-data';
         }
@@ -144,6 +139,15 @@ Ext.FormPanel = Ext.extend(Ext.Panel, {
         );
 
         this.relayEvents(this.form, ['beforeaction', 'actionfailed', 'actioncomplete']);
+    },
+
+    initBodyCfg : function(){
+        this.bodyCfg = {
+            tag: 'form',
+            cls: this.baseCls + '-body',
+            method : this.method || 'POST',
+            id : this.formId || Ext.id()
+        };
     },
 
     // private

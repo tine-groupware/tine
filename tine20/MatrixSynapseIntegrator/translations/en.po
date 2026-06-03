@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,6 +27,9 @@ msgstr "Identity Server URL"
 
 msgid "Corporal Shared Auth Token"
 msgstr "Corporal Shared Auth Token"
+
+msgid "Corporal User ID"
+msgstr "Corporal User ID"
 
 msgid "Synapse directory export enabled"
 msgstr "Synapse directory export enabled"
@@ -56,6 +58,12 @@ msgstr "Synapse database postgres password"
 msgid "Synapse shared secret auth"
 msgstr "Synapse shared secret auth"
 
+msgid "This group has a chat room"
+msgstr "This group has a chat room"
+
+msgid "Chat Room"
+msgstr "Chat Room"
+
 msgid "Matrix Integration"
 msgstr "Matrix Integration"
 
@@ -73,11 +81,23 @@ msgstr "No chat account has been assigned"
 msgid "You have not yet been assigned an chat account. This view is therefore empty"
 msgstr "You have not yet been assigned an chat account. This view is therefore empty"
 
+msgid "{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser."
+msgstr "{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser."
+
+msgid "Please wait ..."
+msgstr "Please wait ..."
+
+msgid "Chat could not be loaded"
+msgstr "Chat could not be loaded"
+
+msgid "The Chat program could not be loaded. Try again?"
+msgstr "The Chat program could not be loaded. Try again?"
+
 msgid "Recovery Key or Password Needed"
 msgstr "Recovery Key or Password Needed"
 
-msgid "{ brandingTitle } needs your recovery key/password to access your chats. The provided key/password will be saved in a secret store on this server."
-msgstr "{ brandingTitle } needs your recovery key/password to access your chats. The provided key/password will be saved in a secret store on this server."
+msgid "{ brandingTitle } requires your recovery key or password to decrypt your chats. The recovery data you enter will be stored in secure storage on this { brandingTitle } server."
+msgstr "{ brandingTitle } requires your recovery key or password to decrypt your chats. The recovery data you enter will be stored in secure storage on this { brandingTitle } server."
 
 msgid "Recovery Key or Password Incorrect"
 msgstr "Recovery Key or Password Incorrect"
@@ -90,6 +110,18 @@ msgstr "Manual Management Required"
 
 msgid "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
 msgstr "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
+
+msgid "Chat storage corrupted"
+msgstr "Chat storage corrupted"
+
+msgid "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
+msgstr "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
+
+msgid "Unhandled encryption error"
+msgstr "Unhandled encryption error"
+
+msgid "An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:"
+msgstr "An unhandled error has occurred. Please try reloading { brandingTitle }. If the error persists, contact support. Error:"
 
 msgid "Matrix Accounts"
 msgstr "Matrix Accounts"
@@ -114,6 +146,38 @@ msgstr "Matrix Session Key"
 
 msgid "Active"
 msgstr "Active"
+
+msgid "Is Initialized"
+msgstr "Is Initialized"
+
+msgid "The Account is fully initialized in the synapse server and crypt setup has run."
+msgstr "The Account is fully initialized in the synapse server and crypt setup has run."
+
+msgid "Matrix Room"
+msgid_plural "Matrix Rooms"
+msgstr[0] "Matrix Room"
+msgstr[1] "Matrix Rooms"
+
+msgid "Matrix Rooms"
+msgstr "Matrix Rooms"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Topic"
+msgstr "Topic"
+
+msgid "Room ID"
+msgstr "Room ID"
+
+msgid "Only System Users"
+msgstr "Only System Users"
+
+msgid "Group"
+msgstr "Group"
+
+msgid "Matrix-ID"
+msgstr "Matrix-ID"
 
 msgid "MatrixSynapseIntegrator"
 msgstr "MatrixSynapseIntegrator"

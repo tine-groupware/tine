@@ -19,18 +19,30 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
         requiredGrant: 'editGrant',
         layout: 'fit',
         hideFields: ['list_id'],
+        // TODO remove if not needed
+//        isChatRoomActiveCheck: null,
 
         initComponent: function() {
+            this.recordClass = Tine.MatrixSynapseIntegrator.Model.Room;
             this.recordForm = new Tine.widgets.form.RecordForm({
-                recordClass: Tine.MatrixSynapseIntegrator.Model.Room,
-                editDialog: this,
-                // TODO is this needed?
-                // editDialog: Tine.widgets.dialog.EditDialog.getConstructor('MatrixSynapseIntegrator.Room'),
+                recordClass: this.recordClass,
+                editDialog: this
             });
 
             this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
+
+            // this.isChatRoomActiveCheck = new Ext.form.Checkbox({
+            //     hideLabels: true,
+            //     boxLabel: this.app.i18n._('This group has a chat room'),
+            //     listeners: {
+            //         scope: this,
+            //         check: this.onChatRoomActiveCheck
+            //     }
+            // });
+
             this.title = this.app.i18n._('Chat Room');
             this.items = [
+//                this.isChatRoomActiveCheck,
                 this.recordForm
             ];
 
@@ -38,27 +50,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
         },
 
         onRecordLoad: function(editDialog, record) {
-            // TODO why can't we do this.recordForm.getForm().setValues(record.get('room')); ?
-
-            const room = record.get('room');
-            if (room) {
-                this.recordForm.items.each(function(col) {
-                    if (col.items) {
-                        col.items.each(function(row) {
-                            if (row.items) {
-                                row.items.each(function(field) {
-                                    if (field.name && (room.hasOwnProperty(field.name) || (room.get && room.get(field.name) !== undefined))) {
-                                        field.setValue(room.get ? room.get(field.name) : room[field.name], room);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
+            this.record = this.recordClass.setFromJson(record.get('room'))
+            this.recordForm.getForm().loadRecord(this.record);
         },
 
         setReadOnly: function(readOnly) {
+            // @TODO: use form stuff?
             this.readOnly = readOnly;
             this.recordForm.items.each(function(col) {
                 if (col.items) {
@@ -75,30 +72,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
             });
         },
 
+        // onChatRoomActiveCheck: function(cb, checked) {
+        //     this.setReadOnly(!checked);
+        // },
+
         onRecordUpdate: function(editDialog, record) {
-            // TODO why can't we do record.set('room', this.recordForm.getForm().getValues()) ?
-
-            const roomData = {};
-            this.recordForm.items.each(function(col) {
-                if (col.items) {
-                    col.items.each(function(row) {
-                        if (row.items) {
-                            row.items.each(function(field) {
-                                if (field.name && Ext.isFunction(field.getValue)) {
-                                    roomData[field.name] = field.getValue();
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-
-            if (!roomData.name || roomData.name === '') {
-                record.set('room', null);
-            } else {
-                let room = new Tine.MatrixSynapseIntegrator.Model.Room(roomData);
-                record.set('room', room);
-            }
+            this.recordForm.getForm().updateRecord(this.record);
+            record.set('room', this.record.getData());
         },
 
         setOwnerCt: function(ct) {
