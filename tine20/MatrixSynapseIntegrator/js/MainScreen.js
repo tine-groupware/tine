@@ -13,7 +13,7 @@ Ext.namespace('Tine.MatrixSynapseIntegrator');
 Tine.MatrixSynapseIntegrator.MainScreen = Ext.extend(Ext.BoxComponent, {
     url: null,
     autoEl: { tag: 'div', cls: 't-app-matrixsynapseintegrator', cn: [
-        { tag: 'iframe', style: 'width:100%; height: 100%; border: none; visibility: hidden;', allow: 'camera; microphone; display-capture', scrolling: 'no' },
+        { tag: 'iframe', style: 'width:100%; height: 100%; border: none; visibility: hidden;', allow: 'camera; microphone; display-capture; clipboard-write', scrolling: 'no' },
         { tag: 'div', cls: 'tine-viewport-waitcycle'}
     ]},
 
