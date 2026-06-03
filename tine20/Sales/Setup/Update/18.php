@@ -34,6 +34,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE015 = __CLASS__ . '::update015';
     protected const RELEASE018_UPDATE016 = __CLASS__ . '::update016';
     protected const RELEASE018_UPDATE017 = __CLASS__ . '::update017';
+    protected const RELEASE018_UPDATE018 = __CLASS__ . '::update018';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -88,6 +89,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE013          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update013',
+            ],
+            self::RELEASE018_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -482,5 +487,14 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 'deleted_time' => new Zend_Db_Expr('NOW()'),
             ], '`filters` LIKE "Sales_Model_Document_%" and is_deleted=0');
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.17', self::RELEASE018_UPDATE017);
+    }
+
+    public function update018(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Boilerplate::class,
+            Sales_Model_Document_Boilerplate::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.18', self::RELEASE018_UPDATE018);
     }
 }
