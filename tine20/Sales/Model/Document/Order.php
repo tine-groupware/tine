@@ -62,6 +62,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_ORDER_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
             self::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS  => [
                 self::LABEL                         => 'Delivery Created', // _('Delivery Created')
@@ -70,6 +73,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
+                ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                 ],
             ],
             self::FLD_FOLLOWUP_DELIVERY_BOOKED_STATUS => [
@@ -80,6 +86,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
             self::FLD_FOLLOWUP_INVOICE_CREATED_STATUS   => [
                 self::LABEL                         => 'Invoice Created', // _('Invoice Created')
@@ -89,6 +98,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
             self::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS   => [
                 self::LABEL                         => 'Invoice Booked', // _('Invoice Booked')
@@ -97,6 +109,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
+                ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                 ],
             ],
         ]);

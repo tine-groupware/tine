@@ -715,10 +715,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => [],
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => [Tinebase_Record_Expander::EXPANDER_USE_JSON_EXPANDER => true],
                         Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => []
+                                Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION => [Tinebase_Record_Expander::EXPANDER_USE_JSON_EXPANDER => true]
                             ],
                         ],
                     ],
