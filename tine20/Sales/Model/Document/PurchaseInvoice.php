@@ -112,11 +112,17 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::LABEL             => 'Paid at', // _('Paid at')
                 self::TYPE              => self::TYPE_DATE,
                 self::NULLABLE          => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
             self::FLD_PAID_AMOUNT => [
                 self::LABEL             => 'Paid amount', //_('Paid amount')
                 self::TYPE              => self::TYPE_MONEY,
                 self::NULLABLE          => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
         ]);
 
@@ -136,6 +142,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::NAME              => Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS,
                 self::CONFIG            => [
                     self::OWNING_APP    => Sales_Config::APP_NAME,
+                    self::NO_AUTO_TRANSITION => true,
                 ],
                 self::LENGTH            => 255,
                 self::NULLABLE          => true,
@@ -152,6 +159,9 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
                 self::LABEL             => 'Approver', // _('Approver')
                 self::TYPE              => self::TYPE_USER,
                 self::NULLABLE          => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
         ]);
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_APPROVER] = [];
@@ -178,6 +188,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::LABEL             => 'Payment Reminders', // _('Payment Reminders')
             self::TYPE              => self::TYPE_RECORDS,
             self::CONFIG            => [
+                self::NO_AUTO_TRANSITION => true,
                 self::APP_NAME          => Sales_Config::APP_NAME,
                 self::MODEL_NAME        => Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
                 self::DEPENDENT_RECORDS => true,
@@ -204,6 +215,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::CONFIG            => [
                 self::OWNING_APP        => Sales_Config::APP_NAME,
                 self::NO_DEFAULT_VALIDATOR => true,
+                self::NO_AUTO_TRANSITION => true,
             ],
             self::INPUT_FILTERS     => [
                 Zend_Filter_Empty::class => null,
@@ -215,6 +227,9 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
             self::TYPE                  => self::TYPE_DATETIME,
             self::NULLABLE              => true,
             self::SHY                   => true,
+            self::CONFIG                        => [
+                self::NO_AUTO_TRANSITION            => true,
+            ],
         ];
 
         unset($_definition[self::FIELDS][self::FLD_DOCUMENT_LANGUAGE]);

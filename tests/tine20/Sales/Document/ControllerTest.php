@@ -170,6 +170,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
             Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_CONTRACT_ID => Sales_Controller_Contract::getInstance()->create(new Sales_Model_Contract([
+                'title' => 'unittest',
+            ], true)),
             Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
             Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
@@ -185,6 +188,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         ]));
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+        //$this->assertInstanceOf(Sales_Model_Contract::class, $order->{Sales_Model_Document_Order::FLD_CONTRACT_ID});
+        $this->assertNotEmpty($order->{Sales_Model_Document_Order::FLD_CONTRACT_ID});
 
         $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
@@ -197,6 +202,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+        $this->assertNotEmpty($invoice->{Sales_Model_Document_Abstract::FLD_CONTRACT_ID});
 
         $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
@@ -223,6 +229,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        $this->assertNotEmpty($invoice->{Sales_Model_Document_Abstract::FLD_CONTRACT_ID});
 
         $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
@@ -241,6 +248,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+        $this->assertNotEmpty($storno->{Sales_Model_Document_Abstract::FLD_CONTRACT_ID});
 
         Tinebase_Record_Expander_DataRequest::clearCache();
         $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
