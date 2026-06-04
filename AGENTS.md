@@ -26,7 +26,7 @@ see https://agents.md/
 | `docs/` | MkDocs documentation (developers, operators, admins) |
 | `scripts/` | Packaging, Ansible, git hooks, utilities |
 | `ci/` | GitLab CI definitions |
-| `.junie/` | Junie agent notes (e.g. testing); `memory/` and `plans/` are local-only (gitignored) |
+| `.junie/` | Junie agent notes; `memory/` and `plans/` are local-only (gitignored) |
 | `.github/workflows/` | GitHub Actions (PHPUnit on PRs) |
 
 PHP class naming follows `{App}_{Layer}_{Name}` (e.g. `Calendar_Controller_Event`, `Addressbook_Model_Contact`). Tests use the same prefix with a `Test` suffix (e.g. `Admin_Controller_SchedulerTaskTest`).
@@ -56,17 +56,17 @@ cd Tinebase/js
 npm run build
 ```
 
-Database updates: `php setup.php --update` from `tine20/`. For release/CLI-only mode, set `'buildtype' => 'RELEASE'` in `config.inc.php`; use `'DEVELOPMENT'` for webpack dev.
+Database updates: `php setup.php --update` from `tine20/`. For release/CLI-only mode, set `'buildtype' => 'RELEASE'` in `config.inc.php`; use `'DEVELOPMENT'` for webpack dev server mode.
 
 ### Supported stack (from README)
 
-- PHP 8.1–8.3
+- PHP 8.2–8.5 (composer requires `8.2 - 8.4 | ~8.5.4`)
 - MySQL 8.0.x / MariaDB 10.4–12.2
 - Redis 7.0 / Valkey 9.0
 
 ## Running tests
 
-PHPUnit and JS tests are normally run **via tine-dev’s `console`**, not by invoking PHPUnit/npm directly on the host (unless you replicate CI locally).
+PHPUnit and JS tests are normally run **via tine-dev's `console`**, not by invoking PHPUnit/npm directly on the host (unless you replicate CI locally).
 
 ### PHP (PHPUnit)
 
@@ -86,9 +86,11 @@ Example:
 - Run from `$TINE_DOCKER_PATH`.
 - `tine:test` wraps PHPUnit.
 
-**CI (without Docker):** GitHub Actions installs tine in `tine20/`, then runs `tests/tine20/../../tine20/vendor/bin/phpunit --color GithubTests.php` (see `.github/workflows/php-unit-test.yml`).
+**CI (without Docker):** GitHub Actions installs tine in `tine20/`, then runs `tests/tine20/../../tine20/vendor/bin/phpunit --color GithubTests.php` (see `.github/workflows/php-unit-test.yml`). CI runs on PHP 8.3 and 8.4. `GithubTests.php` is a curated subset, not the full suite.
 
-From `tine20/` you can also use Composer scripts: `composer test` / `composer phpunit` (phing-based).
+From `tine20/` you can also use Composer scripts: `composer test` / `composer phpunit` (phing-based, runs `phpunit-prepare phpunit-exec` which cleans, prepares, then executes).
+
+**Testing protected methods:** Use `GetProtectedMethodTrait` (see `Filemanager_Frontend_HttpTest` for example).
 
 ### JavaScript (Jest)
 
@@ -105,20 +107,29 @@ cd $TINE_DOCKER_PATH
 
 Karma watch mode is available via npm scripts in `tine20/Tinebase/js/package.json` (`test:watch`).
 
+Jest config is at `/usr/share/tests/js/jest/jest.config.js` inside the Docker container (not local).
+
 ### E2E
 
-See `tests/e2etests/README.md`. Requires a running instance (e.g. `TEST_URL`).
+See `tests/e2etests/README.md`. Requires a running instance. Config via `.env` file or env variables (`TEST_URL`, `TEST_USERNAME`, `TEST_PASSWORD`, etc.).
+
+```bash
+cd tests/e2etests
+npm install
+npm test                          # all tests
+npm test src/test/Addressbook/Addressbook.test.js  # single file
+```
 
 ## Code quality
 
 ### PHP
 
-- **Style:** PSR-12 via PHP_CodeSniffer (with project exclusions for legacy Zend-style class/method naming).
+- **Style:** PSR-12 via PHP_CodeSniffer (with project exclusions for legacy Zend-style class/method naming: `PSR1.Classes.ClassDeclaration`, `Squiz.Classes.ValidClassName`, `PSR2.Classes.PropertyDeclaration`, `PSR2.Methods.MethodDeclaration`).
 - From `tine20/`:
   - `composer phpcs` — lint
   - `composer phpcbf` — auto-fix where possible
-  - `composer rector` — refactors per `.rector/rector.php`
-- **Static analysis:** PHPStan (`phpstan.neon`, baseline in `phpstan-baseline.neon`).
+  - `composer rector` — refactors per `tine20/.rector/rector.php`
+- **Static analysis:** PHPStan level 2 (`phpstan.neon`, baseline in `phpstan-baseline.neon`). Excludes `tine20/library`, `tine20/vendor*`, and `tests/`.
 - **Contributing standard:** PSR-1 / PSR-2 referenced in `CONTRIBUTING.md`.
 
 ### JavaScript
