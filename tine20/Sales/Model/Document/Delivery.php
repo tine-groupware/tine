@@ -61,6 +61,9 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_DELIVERY_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ]
         ]);
 
@@ -77,6 +80,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                 self::QUERY_FILTER              => true,
                 self::SHY                       => true,
                 self::CONFIG                    => [
+                    self::NO_AUTO_TRANSITION        => true,
                     Tinebase_Numberable::STEPSIZE          => 1,
                     Tinebase_Numberable_String::PREFIX     => $translate->_('PD-'),
                     Tinebase_Numberable_String::ZEROFILL   => 7,

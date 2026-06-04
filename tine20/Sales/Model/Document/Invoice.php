@@ -73,6 +73,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_INVOICE_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ]
         ]);
 
@@ -87,6 +90,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                 self::QUERY_FILTER              => true,
                 self::SHY                       => true,
                 self::CONFIG                    => [
+                    self::NO_AUTO_TRANSITION        => true,
                     Tinebase_Numberable::STEPSIZE          => 1,
                     Tinebase_Numberable_String::PREFIX     => $translate->_('PI-'),
                     Tinebase_Numberable_String::ZEROFILL   => 7,
@@ -108,6 +112,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::LABEL             => 'Payment Reminders', // _('Payment Reminders')
             self::TYPE              => self::TYPE_RECORDS,
             self::CONFIG            => [
+                self::NO_AUTO_TRANSITION        => true,
                 self::APP_NAME          => Sales_Config::APP_NAME,
                 self::MODEL_NAME        => Sales_Model_Document_PaymentReminder::MODEL_NAME_PART,
                 self::DEPENDENT_RECORDS => true,
@@ -130,6 +135,9 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             self::NULLABLE              => true,
             self::SHY                   => true,
+            self::CONFIG                        => [
+                self::NO_AUTO_TRANSITION            => true,
+            ],
         ];
     }
 

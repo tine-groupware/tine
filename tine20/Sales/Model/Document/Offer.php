@@ -83,6 +83,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 self::NAME => Sales_Config::DOCUMENT_OFFER_STATUS,
                 self::LENGTH => 255,
                 self::NULLABLE => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
         ]);
 
@@ -91,6 +94,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 self::TYPE => self::TYPE_RECORD,
                 self::DISABLED => true,
                 self::CONFIG => [
+                    self::NO_AUTO_TRANSITION => true,
                     self::APP_NAME => Sales_Config::APP_NAME,
                     self::MODEL_NAME => Sales_Model_Document_Order::MODEL_NAME_PART,
                 ],
@@ -104,6 +108,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
             self::FLD_FOLLOWUP_ORDER_BOOKED_STATUS     => [
                 self::LABEL                         => 'Order Booked', // _('Order Booked')
@@ -112,6 +119,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
                 self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
+                ],
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                 ],
             ],
         ]);

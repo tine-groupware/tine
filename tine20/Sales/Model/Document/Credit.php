@@ -61,10 +61,11 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
                 self::QUERY_FILTER              => true,
                 self::SHY                       => true,
                 self::CONFIG                    => [
-                    Tinebase_Numberable::STEPSIZE          => 1,
-                    Tinebase_Numberable_String::PREFIX     => $translate->_('PC-'), // _('PC-')
-                    Tinebase_Numberable_String::ZEROFILL   => 7,
-                    Tinebase_Numberable::CONFIG_OVERRIDE   =>
+                    self::NO_AUTO_TRANSITION                => true,
+                    Tinebase_Numberable::STEPSIZE           => 1,
+                    Tinebase_Numberable_String::PREFIX      => $translate->_('PC-'), // _('PC-')
+                    Tinebase_Numberable_String::ZEROFILL    => 7,
+                    Tinebase_Numberable::CONFIG_OVERRIDE    =>
                         Sales_Controller_Document_Credit::class . '::documentProformaNumberConfigOverride',
                 ],
             ],
@@ -87,6 +88,9 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
                 self::LABEL             => 'Paid at', // _('Paid at')
                 self::TYPE              => self::TYPE_DATE,
                 self::NULLABLE          => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
             ],
         ]);
 /*

@@ -25,6 +25,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
     public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
+    public const NO_AUTO_TRANSITION = 'noAutoTransition';
 
     public const STATUS_DRAFT = 'DRAFT';
     public const STATUS_BOOKED = 'BOOKED';
@@ -239,6 +240,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                     => 'Document Number', //_('Document Number')
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
+                    self::NO_AUTO_TRANSITION        => true,
                     Tinebase_Numberable::STEPSIZE          => 1,
 //                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
                     //Tinebase_Numberable_String::PREFIX     => 'XX-',
@@ -258,6 +260,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NAME                          => Sales_Config::DOCUMENT_REVERSED_STATUS,
                 self::CONFIG                        => [
                     self::NO_DEFAULT_VALIDATOR          => true,
+                    self::NO_AUTO_TRANSITION            => true,
                 ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
@@ -267,6 +270,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Reversal', // _('Reversal')
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL                   => false,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
@@ -293,6 +299,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::DISABLED                  => true,
                 self::FILTER_DEFINITION         => [self::FILTER => Tinebase_Model_Filter_Text::class],
                 self::CONFIG                    => [
+                    self::NO_AUTO_TRANSITION        => true,
                     self::STORAGE                   => self::TYPE_JSON,
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
@@ -304,6 +311,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::DISABLED              => true,
 //                self::LABEL                 => 'Boilerplates', // _('Boilerplates')
                 self::CONFIG                => [
+                    self::NO_AUTO_TRANSITION    => true,
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Boilerplate::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Boilerplate::FLD_DOCUMENT_ID,
@@ -434,6 +442,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 //                self::LABEL                         => 'Positions',
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::REF_ID_FIELD                  => Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID,
                     self::DEPENDENT_RECORDS             => true,
@@ -533,6 +542,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Sales Tax by Rate', //_('Sales Tax by Rate')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                     self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_SalesTax::MODEL_NAME_PART,
@@ -586,6 +596,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Attached Documents', // _('Attached Documents')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                     self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_AttachedDocument::MODEL_NAME_PART,
@@ -618,6 +629,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Dispatch History', // _('Dispatch History')
                 self::TYPE                          => self::TYPE_RECORDS,
                 self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
                     self::DEPENDENT_RECORDS             => true,
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Document_DispatchHistory::MODEL_NAME_PART,
@@ -635,8 +647,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_DOCUMENT_SEQ              => [
                 self::TYPE                          => self::TYPE_INTEGER,
                 self::DEFAULT_VAL                   => 1,
-                self::UI_CONFIG                 => [
-                    self::DISABLED                  => true,
+                self::CONFIG                        => [
+                    self::NO_AUTO_TRANSITION            => true,
+                ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
                 ],
             ],
         ]
@@ -685,6 +700,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE][self::CONFIG][self::ADD_FILTERS] = [
             [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
         ];
+    }
+
+    public static function modelConfigHook(array &$_definition): void
+    {
+        parent::modelConfigHook($_definition);
+
+        foreach (Tinebase_ModelConfiguration::$genericProperties as $genericProperty) {
+            if ($_definition[$genericProperty] ?? false) {
+                $_definition[$genericProperty][self::CONFIG][self::NO_AUTO_TRANSITION] = true;
+            }
+        }
     }
 
     public function isBooked(): bool
@@ -887,35 +913,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         // for the time being we keep this simple, this is a TODO FIXME!!!
+        /** @var Tinebase_Record_NewAbstract $sourceDocument */
         $sourceDocument = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord()
             ->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT};
-        $properties = [
-            self::FLD_DOCUMENT_LANGUAGE,
-            self::FLD_DOCUMENT_CATEGORY,
-            self::FLD_CUSTOMER_ID,
-            self::FLD_CONTACT_ID,
-            self::FLD_RECIPIENT_ID,
-            self::FLD_DOCUMENT_TITLE,
-            self::FLD_BUYER_REFERENCE,
-            self::FLD_VAT_PROCEDURE,
-            self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
-            self::FLD_INVOICE_DISCOUNT_SUM,
-            self::FLD_INVOICE_DISCOUNT_TYPE,
-            self::FLD_DESCRIPTION,
-            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
-            Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
-        ];
-
-        $cfc = new Tinebase_CustomField_Config();
-        $cfc->setAllCFs();
-        $properties = array_merge($properties, array_unique($cfc->search(new Tinebase_Model_CustomField_ConfigFilter([
-            ['field' => 'model', 'operator' => 'startswith', 'value' => 'Sales_Model_Document_'],
-            ['field' => 'name', 'operator' => 'startswith', 'value' => 'eval_dim_'],
-        ], '', ['ignoreAcl' => true]))->name));
-
-
-        foreach ($properties as $property) {
-            if ($this->has($property) && $sourceDocument->has($property)) {
+        foreach ($sourceDocument::getConfiguration()->fields as $property => $fldCfg) {
+            if ($this->has($property) && !($fldCfg[$sourceDocument::CONFIG][self::NO_AUTO_TRANSITION] ?? false)) {
                 $this->{$property} = $sourceDocument->{$property};
             }
         }
