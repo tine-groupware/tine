@@ -264,7 +264,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         }
 
         $filter = $this->_decodeFilter($_filter, $_filterModel);
-        return ['totalcount' => $_controller->searchCountSum($filter)];
+        return $_controller->searchCountSum($filter);
     }
 
     /**
