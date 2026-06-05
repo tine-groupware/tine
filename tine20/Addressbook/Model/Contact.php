@@ -632,6 +632,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Display Name', // _('Display Name')
+                self::DESCRIPTION               => 'Controls how this contact is listed and sorted in the UI.', // _('Controls how this contact is listed and sorted in the UI.')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
@@ -642,6 +643,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Full Name', // _('Full Name')
+                self::DESCRIPTION               => 'The official full name for use in letters, mailings and documents.', // _('The official full name for use in letters, mailings and documents.')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
