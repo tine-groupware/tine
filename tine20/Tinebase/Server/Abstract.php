@@ -158,6 +158,12 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
         $definitions = array();
         foreach ($userApplications as $application) {
+            if (Admin_Config::APP_NAME === $application->name) {
+                continue;
+            }
+            if ('Setup' === $application->name) {
+                continue;
+            }
             if (! Tinebase_License::getInstance()->isPermitted($application->name)) {
                 continue;
             }
@@ -173,6 +179,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                 }
                 continue;
             }
+            $frontEndObject = $frontend::_getFrontend($application);
 
             foreach ($models as $model) {
                 if (! class_exists($model)) {
@@ -188,8 +195,6 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
                     foreach ($commonApiMethods as $name => $method) {
                         $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
-                        $object = $frontend::_getFrontend($application);
-
                         $definitions[$key] = new Zend_Server_Method_Definition(array(
                             'name'            => $key,
                             'prototypes'      => array(array(
@@ -198,10 +203,33 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                             )),
                             'methodHelp'      => $method['help'],
                             'invokeArguments' => array(),
-                            'object'          => $object,
+                            'object'          => clone $frontEndObject,
                             'callback'        => array(
                                 'type'   => 'instance',
-                                'class'  => $object::class,
+                                'class'  => $frontEndObject::class,
+                                'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
+                            ),
+                        ));
+                    }
+                } else {
+                    $simpleModelName = Tinebase_Record_Abstract::getSimpleModelName($application, $model);
+                    if (method_exists($frontEndObject, 'search' . $simpleModelName . 's')) {
+                        $commonApiMethods = $frontend::getCommonApiMethods($simpleModelName);
+                        $name = 'count';
+                        $method = $commonApiMethods[$name];
+                        $key = $application->name . '.' . $name . $simpleModelName . ($method['plural'] ? 's' : '');
+                        $definitions[$key] = new Zend_Server_Method_Definition(array(
+                            'name'            => $key,
+                            'prototypes'      => array(array(
+                                'returnType' => 'array',
+                                'parameters' => $method['params']
+                            )),
+                            'methodHelp'      => $method['help'],
+                            'invokeArguments' => array(),
+                            'object'          => clone $frontEndObject,
+                            'callback'        => array(
+                                'type'   => 'instance',
+                                'class'  => $frontEndObject::class,
                                 'method' => $name . $simpleModelName . ($method['plural'] ? 's' : '')
                             ),
                         ));

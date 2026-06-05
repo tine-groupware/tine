@@ -18,20 +18,12 @@
 class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
-     * the controller
-     *
-     * @var ExampleApplication_Controller_ExampleRecord
-     */
-    protected $_controller = NULL;
-
-    /**
      * the constructor
      *
      */
     public function __construct()
     {
         $this->_applicationName = 'SimpleFAQ';
-        $this->_controller = SimpleFAQ_Controller_Faq::getInstance();
     }
 
     /**
@@ -43,7 +35,7 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFaqs($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'SimpleFAQ_Model_FaqFilter', TRUE);
+        return $this->_search($filter, $paging, SimpleFAQ_Controller_Faq::getInstance(), 'SimpleFAQ_Model_FaqFilter', TRUE);
     }
 
     /**
@@ -54,7 +46,7 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getFaq($id)
     {
-        return $this->_get($id, $this->_controller);
+        return $this->_get($id, SimpleFAQ_Controller_Faq::getInstance());
     }
 
     /**
@@ -65,7 +57,7 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveFaq($recordData)
     {
-        return $this->_save($recordData, $this->_controller, 'Faq');
+        return $this->_save($recordData, SimpleFAQ_Controller_Faq::getInstance(), 'Faq');
     }
 
     /**
@@ -76,7 +68,7 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function deleteFaqs($ids)
     {
-        return $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, SimpleFAQ_Controller_Faq::getInstance());
     }
 
     /**

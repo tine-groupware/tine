@@ -42,6 +42,12 @@ class Tinebase_Server_JsonTests extends TestCase
         parent::tearDown();
     }
 
+    public function testCountApi(): void
+    {
+        $resultString = $this->_handleRequest('HumanResources.countFreeTimes', [[['field' => 'employee_id', 'operator' => 'equals', 'value' => '1']]]);
+        $this->assertStringStartsWith('{"result":{"totalcount":0}', $resultString);
+    }
+
     /**
      * @param bool $success
      * @return void
