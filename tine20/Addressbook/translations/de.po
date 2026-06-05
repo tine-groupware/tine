@@ -460,6 +460,9 @@ msgstr "Suche nach Standorten ... (leer lassen für alle Standorte)"
 msgid "Display Name"
 msgstr "Angezeigter Name"
 
+msgid "Controls how this contact is listed and sorted in the UI."
+msgstr "Bestimmt, wie der Kontakt in Listen und Auswahldialogen angezeigt und sortiert wird"
+
 msgid "Job Title"
 msgstr "Berufsbezeichnung"
 
@@ -556,6 +559,9 @@ msgstr "Tags"
 
 msgid "Full Name"
 msgstr "Vollständiger Name"
+
+msgid "The official full name for use in letters, mailings and documents."
+msgstr "Der offizielle vollständige Name für Briefe, Mailings und Dokumente."
 
 msgid "Job Role"
 msgstr "Funktion"
