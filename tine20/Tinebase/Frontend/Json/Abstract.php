@@ -257,6 +257,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         ]);
     }
 
+    protected function _count(array $_filter, Tinebase_Controller_SearchInterface $_controller, string $_filterModel)
+    {
+        if ($_controller instanceof Tinebase_Controller_Abstract) {
+            $this->_setRequestContext($_controller);
+        }
+
+        $filter = $this->_decodeFilter($_filter, $_filterModel);
+        return ['totalcount' => $_controller->searchCountSum($filter)];
+    }
+
     /**
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return Tinebase_Model_Pagination
@@ -855,9 +865,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     public function __call($method, array $args)
     {
         // provides api for default application methods
-        if (preg_match('/^(get|save|search|delete|import|copy)([A-Za-z0-9_]+)/i', $method, $matches)) {
+        if (preg_match('/^(get|save|search|delete|import|copy|count)([A-Za-z0-9_]+)/i', $method, $matches)) {
             $apiMethod = $matches[1];
-            $model = in_array($apiMethod, array('search', 'delete', 'import')) ? substr($matches[2],0,-1) : $matches[2];
+            $model = in_array($apiMethod, array('search', 'delete', 'import', 'count')) ? substr($matches[2],0,-1) : $matches[2];
             $modelController = Tinebase_Core::getApplicationInstance($this->_applicationName, $model);
             // resolve custom fields by default
             $modelController->resolveCustomfields(true);
@@ -877,6 +887,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                         $args[1] = '';
                     }
                     return $this->_search($args[0], $args[1], $modelController, $filterName, /* $_getRelations */ true);
+                case 'count':
+                    $filterName = $this->_applicationName . '_Model_' . $model . 'Filter';
+                    return $this->_count($args[0],  $modelController, $filterName);
                 case 'delete':
                     return $this->_delete($args[0], $modelController);
                 case 'import':
