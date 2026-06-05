@@ -48,8 +48,6 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Delivery::FLD_ATTACHED_DOCUMENTS,
             Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
-            Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_CENTER,
-            Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Delivery::FLD_DESCRIPTION,
             Sales_Model_Document_Delivery::FLD_REVERSED_STATUS,
             Sales_Model_Document_Delivery::FLD_PAYMENT_MEANS,

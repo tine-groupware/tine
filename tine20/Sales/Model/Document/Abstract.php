@@ -26,6 +26,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const EXCLUDE_FROM_DOCUMENT_SEQ = 'exclDocSeq';
     public const NO_AUTO_TRANSITION = 'noAutoTransition';
+    public const BOOKED_RECORD_WRITEABLE = 'bookedRecordWriteable';
+    public const BOOKED_RECORD_REQUIRED = 'bookedRecordRequired';
 
     public const STATUS_DRAFT = 'DRAFT';
     public const STATUS_BOOKED = 'BOOKED';
@@ -711,6 +713,25 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 $_definition[$genericProperty][self::CONFIG][self::NO_AUTO_TRANSITION] = true;
             }
         }
+
+        try {
+            /** @var Sales_Controller_Document_Abstract $ctrl */
+            $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+        } catch (Tinebase_Exception) {
+            return; // during installation we might run into this...
+        }
+        foreach ($ctrl->getBookRecordRequiredFields() as $field) {
+            if ($_definition[$field] ?? false) {
+                $_definition[$field][self::CONFIG][self::BOOKED_RECORD_REQUIRED] = true;
+            }
+        }
+        foreach ($ctrl->getOldRecordBookWriteableFields() as $field) {
+            if ($_definition[$field] ?? false) {
+                $_definition[$field][self::CONFIG][self::BOOKED_RECORD_WRITEABLE] = true;
+            }
+        }
+        /** @phpstan-ignore-next-line */
+        $ctrl::destroyInstance();
     }
 
     public function isBooked(): bool
