@@ -596,6 +596,16 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 'help'   => 'get one ' . $simpleModelName . ' identified by $id',
                 'plural' => false,
             ),
+            'count' => array(
+                'params' => array(
+                    new Zend_Server_Method_Parameter(array(
+                        'type' => 'array',
+                        'name' => 'filter',
+                    )),
+                ),
+                'help'   => 'Count search results for ' . $simpleModelName . 's matching given arguments',
+                'plural' => true,
+            ),
             'search' => array(
                 'params' => array(
                     new Zend_Server_Method_Parameter(array(

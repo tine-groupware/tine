@@ -19,20 +19,12 @@
 class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
     /**
-     * the controller
-     *
-     * @var Courses_Controller_Course
-     */
-    protected $_controller = NULL;
-
-    /**
      * the constructor
      *
      */
     public function __construct()
     {
         $this->_applicationName = 'Courses';
-        $this->_controller = Courses_Controller_Course::getInstance();
     }
     
     /************************************** protected helper functions **********************/
@@ -154,7 +146,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchCourses($filter, $paging)
     {
-        return $this->_search($filter, $paging, $this->_controller, 'Courses_Model_CourseFilter');
+        return $this->_search($filter, $paging, Courses_Controller_Course::getInstance(), 'Courses_Model_CourseFilter');
     }
     
     /**
@@ -165,7 +157,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getCourse($id)
     {
-        return $this->_get($id, $this->_controller);
+        return $this->_get($id, Courses_Controller_Course::getInstance());
     }
 
     /**
@@ -184,7 +176,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $memberData = isset($recordData['members']) ? $recordData['members'] : [];
 
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
-        $savedRecord = $this->_controller->saveCourseAndGroup($course, $group, $memberData);
+        $savedRecord = Courses_Controller_Course::getInstance()->saveCourseAndGroup($course, $group, $memberData);
 
         return $this->_recordToJson($savedRecord);
     }
@@ -199,7 +191,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
 
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
-        return $this->_delete($ids, $this->_controller);
+        return $this->_delete($ids, Courses_Controller_Course::getInstance());
     }
 
     /**
@@ -213,7 +205,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
-        $this->_controller->importMembers($tempFileId, $courseId);
+        Courses_Controller_Course::getInstance()->importMembers($tempFileId, $courseId);
         
         // return members to update members grid
         return array(
@@ -244,7 +236,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'accountLastName' => $userData['accountLastName'],
         ), TRUE);
         
-        $this->_controller->createNewMember($course, $user);
+        Courses_Controller_Course::getInstance()->createNewMember($course, $user);
 
         // return members to update members grid
         return array(
