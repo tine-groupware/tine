@@ -733,7 +733,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             height: 200,
             columnWidth: 0.5,
             recordClass: Ext.data.Record.create([
-                { name: 'email' }
+                { name: 'email' },
+                { name: 'dispatch_address', type: 'bool' }
             ])
         };
     },
