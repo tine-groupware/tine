@@ -60,7 +60,7 @@ Database updates: `php setup.php --update` from `tine20/`. For release/CLI-only 
 
 ### Supported stack (from README)
 
-- PHP 8.2–8.5 (composer requires `8.2 - 8.4 | ~8.5.4`)
+- PHP 8.2–8.5 (composer requires `8.2 - 8.5`)
 - MySQL 8.0.x / MariaDB 10.4–12.2
 - Redis 7.0 / Valkey 9.0
 

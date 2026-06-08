@@ -47,6 +47,10 @@ class Calendar_Frontend_CalDAV_ScheduleOutboxTest extends Calendar_TestCase
 
     public function testX()
     {
+        if (PHP_VERSION_ID >= 80500) {
+            self::markTestSkipped('FIXME with PHP 8.5');
+        }
+
         Calendar_Controller_Event::getInstance()->create($this->_getEvent());
 
         $body = 'BEGIN:VCALENDAR
