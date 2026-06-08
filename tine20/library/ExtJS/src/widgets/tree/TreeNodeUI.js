@@ -51,6 +51,19 @@ Ext.tree.TreeNodeUI.prototype = {
         }
     },
 
+    onBadgeChange : function(node, opts) {
+        if(this.rendered && opts) {
+            if(opts.text) {
+                this.badgeTextNode.innerHTML = opts.text;
+            }
+            if(opts.description) {
+                this.badgeDescriptionNode.innerHTML = opts.description;
+            }
+            this.badgeContainer.style.display = opts.text ? "inline" : "none";
+            this.badgeTextNode.setAttribute("ext:qtip", opts.qtip);
+        }
+    },
+
     // private
     onDisableChange : function(node, state){
         this.disabled = state;
@@ -440,17 +453,21 @@ Ext.tree.TreeNodeUI.prototype = {
         var cb = Ext.isBoolean(a.checked),
             nel,
             href = a.href ? a.href : Ext.isGecko ? "" : "#",
-            buf = ['<li class="x-tree-node"><div ext:tree-node-id="',n.id,'" class="x-tree-node-el x-tree-node-leaf x-unselectable ', a.cls,'" unselectable="on">',
-            '<span class="x-tree-node-indent">',this.indentMarkup,"</span>",
-            '<img src="', this.emptyIcon, '" class="x-tree-ec-icon x-tree-elbow" />',
-            '<img src="', a.icon || this.emptyIcon, '" class="x-tree-node-icon',(a.icon ? " x-tree-node-inline-icon" : ""),(a.iconCls ? " "+a.iconCls : ""),'" unselectable="on" />',
-            cb ? ('<input class="x-tree-node-cb" type="checkbox" ' + (a.checked ? 'checked="checked" />' : '/>')) : '',
-            '<a hidefocus="on" class="x-tree-node-anchor" href="',href,'" tabIndex="1" ',
-             a.hrefTarget ? ' target="'+a.hrefTarget+'"' : "", '><span unselectable="on">',n.text,"</span></a></div>",
-            '<ul class="x-tree-node-ct" style="display:none;"></ul>',
-            "</li>"].join('');
+            buf = ['<li class="x-tree-node"><div ext:tree-node-id="', n.id, '" class="x-tree-node-el x-tree-node-leaf x-unselectable ', a.cls, '" unselectable="on">',
+                '<span class="x-tree-node-indent">', this.indentMarkup, "</span>",
+                '<img src="', this.emptyIcon, '" class="x-tree-ec-icon x-tree-elbow" />',
+                '<img src="', a.icon || this.emptyIcon, '" class="x-tree-node-icon', (a.icon ? " x-tree-node-inline-icon" : ""), (a.iconCls ? " " + a.iconCls : ""), '" unselectable="on" />',
+                cb ? ('<input class="x-tree-node-cb" type="checkbox" ' + (a.checked ? 'checked="checked" />' : '/>')) : '',
+                '<a hidefocus="on" class="position-relative x-tree-node-anchor" href="', href, '" tabIndex="1" ',
+                a.hrefTarget ? ' target="' + a.hrefTarget + '"' : "", '><span unselectable="on">', n.text,
 
-        if(bulkRender !== true && n.nextSibling && (nel = n.nextSibling.ui.getEl())){
+                "</span></a>",
+                '<span class="x-tree-badge-container bootstrap-scope dark-reverse"><span class="position-absolute top-0 badge rounded-pill bg-danger"><span class="visually-hidden"></span></span></span>',
+                "</div>",
+                '<ul class="x-tree-node-ct" style="display:none;"></ul>',
+                "</li>"].join('');
+
+        if (bulkRender !== true && n.nextSibling && (nel = n.nextSibling.ui.getEl())) {
             this.wrap = Ext.DomHelper.insertHtml("beforeBegin", nel, buf);
         }else{
             this.wrap = Ext.DomHelper.insertHtml("beforeEnd", targetNode, buf);
@@ -471,6 +488,10 @@ Ext.tree.TreeNodeUI.prototype = {
         }
         this.anchor = cs[index];
         this.textNode = cs[index].firstChild;
+        this.badgeContainer = cs[index + 1];
+        this.badgeTextNode = this.badgeContainer.firstChild;
+        this.badgeDescriptionNode = this.badgeTextNode.firstChild;
+        this.onBadgeChange(n, n.badge);
     },
 
 /**
