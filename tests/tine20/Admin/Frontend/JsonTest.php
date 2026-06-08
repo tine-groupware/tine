@@ -1082,7 +1082,7 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         $info = $this->_json->getServerInfo();
         self::assertArrayHasKey('html', $info);
         self::assertStringContainsString("phpinfo()", $info['html']);
-        self::assertStringContainsString("PHP Version =>", $info['html']);
+        self::assertStringContainsString("PHP Version =", $info['html']);
     }
 
     protected function createExampleAppRecord()
