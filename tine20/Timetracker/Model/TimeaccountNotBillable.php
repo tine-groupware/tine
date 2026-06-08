@@ -145,12 +145,14 @@ class Timetracker_Model_TimeaccountNotBillable extends Timetracker_Model_Timeacc
     public function loadBillables(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate)
     {
         parent::loadBillables($date, $productAggregate);
-        foreach ($this->_billables as &$billables) {
-            $result = [];
-            foreach ($billables as $ts) {
-                $result[] = new Timetracker_Model_TimesheetNotBillable($ts->toArray());
+        if (!(intval($this->budget) > 0)) {
+            foreach ($this->_billables as &$billables) {
+                $result = [];
+                foreach ($billables as $ts) {
+                    $result[] = new Timetracker_Model_TimesheetNotBillable($ts->toArray());
+                }
+                $billables = $result;
             }
-            $billables = $result;
         }
     }
 }
