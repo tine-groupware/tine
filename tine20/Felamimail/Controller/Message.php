@@ -1639,6 +1639,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             } catch (Felamimail_Exception_IMAPServiceUnavailable
                 | Felamimail_Exception_IMAPInvalidCredentials
+                | Tinebase_Exception_NotFound
                 | Tinebase_Exception_AccessDenied $e
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
