@@ -27,6 +27,7 @@ Ext.ns('Tine.Sales');
  */
 Tine.Sales.InvoicePositionGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     storeRemoteSort: false,
+    listenMessageBus: false,
     defaultSortInfo: {field: 'month', direction: 'ASC'},
     usePagingToolbar: false,
     frame: false,
