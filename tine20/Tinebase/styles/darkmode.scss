@@ -148,14 +148,6 @@ body.dark-mode {
     border-bottom: 0.5px solid white;
   }
 
-  //.x-form-checkbox {
-  //  filter: invert(1) hue-rotate(180deg);
-  //  accent-color: #222222;
-  //  :checked::before {
-  //    background-color: #222222;
-  //  }
-  //}
-
   textarea.x-form-field, // wrap-less
   .custom-field > .x-form-field, // wrap-less
   .x-form-element > .x-form-field, // wrap-less
@@ -288,6 +280,14 @@ body.dark-mode {
   }
   .attendance-clock-menu-button-clock_out .attendance-clock {
     background-color: red !important;
+  }
+  .attendance-clock-menu-button {
+    .x-btn-image {
+      background-color: black;
+    }
+    div.x-btn-arrow {
+      background-color: white;
+    }
   }
   a {
     color: #3e4f55;

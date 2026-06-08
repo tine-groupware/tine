@@ -129,6 +129,46 @@ const toggleMenuVisibility = (e) => {
 const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.parentId}`)
 </script>
 
+<style lang="scss">
+@use "../styles/variables" as *;
+.dark-mode {
+  .tine-bar {
+    .btn-primary {
+      background-color: var(--selection-color) !important;
+      border-color: var(--selection-color) !important;
+      &:hover {
+        background-color: darken($selection-color, 10%) !important;
+      }
+    }
+    //.x-btn-arrow,
+    .x-btn-image {
+      filter: invert(0);
+    }
+    .tine-bar-item {
+      .tine-bar-image {
+        filter: invert(0);
+      }
+    }
+  }
+}
+.tine-bar {
+  .tine-bar-item {
+    width: 50px;
+    height: 34px;
+
+    .tine-bar-image {
+      position: absolute;
+      left: 10px;
+      top: 0;
+      width: 30px;
+      height: 30px;
+      background-size: cover;
+      filter: invert(1);
+    }
+  }
+}
+</style>
+
 <style scoped lang="scss">
 .tine-bar{
   box-sizing: border-box;

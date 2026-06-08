@@ -1,0 +1,45 @@
+$primary: #0062a7; // setting the primary color
+
+$alert-padding-y: 5px;
+$alert-margin-bottom: 2px;
+$popover-body-padding-y: 7px;
+$popover-body-padding-x: 7px;
+
+
+$btn-font-size: 0.95rem; // @TODO remove when small forms/fonts are removed
+$dialogBtnMinWidth: 7rem;
+
+$tbColor: darken(#ffffff, 5%);
+$filterTbColor: darken($tbColor, 10%);
+$northTbColor: lighten($tbColor, 5%);
+
+$datePickerHd: #2196f3;
+$datePickerActive: #66ccff;
+$gridHd: #c0ced8;
+$gridHdActive: darken($gridHd, 10%);
+
+$fontColor: #ffffff;
+
+$altRowColor: $northTbColor;
+
+$tabPanelColor: $tbColor;
+
+
+
+$panelBGColor: $gridHd;
+$dialogBg: #eaeef1;
+
+
+
+$sidebarBg: $tbColor;
+
+$focus-color: #0062a7;
+$selection-color: #dbecf4;
+$tab-color: #8cb8d7;
+$field-bg-color: #ffffff;
+$tip-bg-color: #163047;
+$tip-color: #ffffff;
+$shadow-color: silver;
+
+
+

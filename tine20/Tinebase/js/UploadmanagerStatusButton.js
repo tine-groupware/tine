@@ -26,6 +26,9 @@ Tine.Tinebase.UploadManagerStatusButton = Ext.extend(Ext.Button, {
     iconCls: 'action_upload_idle',
 
     cls: 'main-menu-upload-btn',
+    variant: 'primary',
+    scale: 'medium',
+    iconAlign: 'top',
 
     /**
      * @property {String} status

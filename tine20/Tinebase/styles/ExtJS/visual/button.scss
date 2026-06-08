@@ -1,34 +1,89 @@
-/*!
- * Ext JS Library 3.1.1
- * Copyright(c) 2006-2010 Ext JS, LLC
- * licensing@extjs.com
- * http://www.extjs.com/license
- */
-.x-btn{
-	font:normal 11px tahoma, verdana, helvetica;
-}
+@use "../../bootstrap-vue/global_bs" as bs;
 
-.x-btn button{
-    font:normal 11px arial,tahoma,verdana,helvetica;
-    color:#333;
-}
+.x-btn {
 
-.x-btn em {
+  @each $color, $value in bs.$theme-colors {
+
+    @if lightness(bs.color-contrast($value)) > 50 {
+      &.btn-#{$color} {
+        .x-btn-image,
+        div.x-btn-arrow {
+          filter: invert(1);
+        }
+      }
+    }
+
+  }
+  .x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-bl, .x-btn-br, .x-btn-bc {
+    display: none;
+  }
+
+  button {
+    font-family: var(--bs-btn-font-family);
+    font-size: var(--bs-btn-font-size);
+    font-weight: var(--bs-btn-font-weight);
+    line-height: var(--bs-btn-line-height);
+    color: var(--bs-btn-color);
+  }
+
+  em {
     font-style:normal;
     font-weight:normal;
-}
+  }
 
-.x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc{
-}
+  background-color: var(--bs-btn-bg);
+  &:hover {
+    background-color: var(--bs-btn-hover-bg);
+  }
+  &:active {
+    background-color: var(--bs-btn-active-bg);
+  }
 
-.x-btn-click .x-btn-text, .x-btn-menu-active .x-btn-text, .x-btn-pressed .x-btn-text{
-    color:#000;
-}
+  &.x-item-disabled,
+  &.x-btn-disabled {
+    opacity: var(--bs-btn-disabled-opacity) !important;
+    background-color: var(--bs-btn-disabled-bg);
+    border-color: var(--bs-btn-disabled-bg);
 
-.x-btn-disabled *{
-	color:gray !important;
+    button {
+      color: var(--bs-btn-disabled-color) !important;
+    }
+    //.x-btn-tl, .x-btn-tr, .x-btn-tc, .x-btn-ml, .x-btn-mr, .x-btn-mc, .x-btn-bl, .x-btn-br, .x-btn-bc {
+    &:active {
+      background-color: var(--bs-btn-disabled-bg);
+    }
+  }
 }
 
 .x-btn-group-header {
-    color: #3e6aaa;
+    color: var(--bs-btn-color);
+}
+
+.x-toolbar .x-btn-mc em.x-btn-split .x-btn-text {
+  border-right: 1px solid transparent;
+}
+
+.x-toolbar .x-btn-over .x-btn-mc em.x-btn-split,
+.x-toolbar .x-btn-click .x-btn-mc em.x-btn-split,
+.x-toolbar .x-btn-menu-active .x-btn-mc em.x-btn-split,
+.x-toolbar .x-btn-pressed .x-btn-mc em.x-btn-split {
+  background-image: url('../../../../images/icon-set/icon_arrow_down.svg');
+  background-size: 12px;
+
+  .x-btn-text {
+    border-right: 1px dotted;
+  }
+}
+
+.x-btn-mc em.x-btn-arrow,
+.x-toolbar .x-btn-mc em.x-btn-split {
+  background-image: url('../../../../images/icon-set/icon_arrow_down.svg');
+  background-size: 10px;
+  background-position-y: center;
+}
+
+/* fix: show tooltip if icon only */
+.x-btn-icon .x-btn-text{
+  position: relative;
+  z-index: 100;
 }

@@ -123,6 +123,8 @@ Tine.Tinebase.tineInit = {
     },
 
     initWindow: function () {
+        // document.getElementsByTagName('html')[0].className += ' bs-token-carrier btn';
+        // Ext.getBody().addClass(['bs-token-carrier-reset'])
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
                 // disable the native 'select all'

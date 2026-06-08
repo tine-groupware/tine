@@ -62,36 +62,6 @@ html, body {
     background-image: url('../../images/icon-set/icon_dialog_warning.svg');
 }
 
-/* ----- ext fixes -------------------------------------------------------------*/
-
-/* auto column sizing */
-.x-grid3-hd-row td {
-    box-sizing: border-box;
-}
-
-.x-grid3-row td, .x-grid3-summary-row td {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-/* active table heads when header is multi line */
-td.x-grid3-hd-over, td.sort-asc, td.sort-desc {
-    background-image: linear-gradient(to bottom, #ebf3fd, #c3daf9 80%, #ebf3fd);
-}
-
-td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-over .x-grid3-hd-inner {
-    background-image: none;
-    background-color: transparent;
-}
-
-.x-combo-list-unselectable-item {
-    color: lighten(#000000, 40%);
-    font-style: italic;
-    &.x-combo-selected {
-        background-color: transparent !important;
-    }
-}
-
 /* ----- actions -------------------------------------------------------------*/
 .action_add {
     background-image:url(../../images/icon-set/Icon_add.svg) !important;
@@ -217,58 +187,6 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 .cloud-share {
     background-image:url(../js/node_modules/@tabler/icons/icons/outline/cloud-share.svg) !important;
 }
-
-/* START svg fixes */
-.x-btn-icon {
-    background-size: 16px 16px !important;
-    background-position: top !important;
-    background-repeat: no-repeat;
-}
-
-.x-btn-icon-medium-top button {
-    background-size: 22px 22px;
-    background-position: top !important;
-    background-repeat: no-repeat;
-}
-
-.x-btn-icon-medium-top div.x-btn-image {
-    background-position-y: 2px;
-}
-
-.x-btn-icon-medium-top .x-btn-split div.x-btn-image {
-    background-position-y: 2px;
-}
-
-.x-btn-icon-large-top button {
-    background-size: 32px 32px;
-    background-position: top !important;
-    background-repeat: no-repeat;
-}
-.x-btn-icon-large-top .x-btn-image {
-    width: 32px;
-    height: 32px;
-}
-
-.x-btn-mc em.x-btn-arrow, .x-toolbar .x-btn-mc em.x-btn-split {
-    background-image: none !important;
-    .x-btn-arrow {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        width: 15px;
-        height: 100%;
-        mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
-        mask-size: 10px;
-        mask-repeat: no-repeat;
-        mask-position: 2px center;
-        -webkit-mask-image:url('../../images/icon-set/icon_arrow_down.svg') !important;
-        -webkit-mask-size: 10px;
-        -webkit-mask-repeat: no-repeat;
-        -webkit-mask-position: 2px center;
-        background-color: black;
-    }
-}
-/* END svg fixes */
 
 .action_rename {
     background-image:url(../../images/icon-set/icon_edit.svg) !important;
@@ -1091,33 +1009,80 @@ span:hover.tinebase-download-link {
     margin-right: 2px;
 }
 
-.main-menu-upload-btn.x-btn{
-    width: 30px;
-    height: 30px;
-}
 
-.main-menu-upload-btn td{
-    background-color: inherit;
-}
 
-.main-menu-upload-btn.x-btn-icon .x-btn-small .x-btn-image{
-    width: 30px;
-    height: 30px;
-    background-size: 30px 30px !important;
-    filter: invert(1);
-}
+////tbar
+//.tine-bar {
+//  .x-btn {
+//    //width: 30px;
+//    //height: 30px;
+//
+//    td {
+//      background-color: inherit;
+//    }
+//
+//    .x-btn-image {
+//      //width: 30px;
+//      //height: 30px;
+//      //background-size: 30px 30px !important;
+//      filter: invert(1);
+//    }
+//  }
+//
+//  .x-btn-over .x-btn-mc{
+//    background-color: inherit;
+//  }
+//
+//  div.x-btn-image {
+//    top: 0;
+//    left: 0;
+//  }
+//
+//  /*
+//  .attendance-clock-menu-button.x-btn {
+//    filter: none;
+//}
+//
+//.attendance-clock-menu-button div.x-btn-arrow {
+//    display: none !important;
+//}
+//
+//.attendance-clock-menu-button button {
+//    color: white !important;
+//}
+//
+//.attendance-clock-menu-button .x-btn-image.attendance-clock{
+//    width: 30px;
+//    height: 30px;
+//}
+//
+//.attendance-clock-menu-button td{
+//    background-color: inherit;
+//}
+//
+//.attendance-clock-menu-button.x-btn-over .x-btn-mc{
+//    background-color: inherit;
+//}
+//
+//.attendance-clock-menu-button.x-btn-over .x-btn-tl{
+//    display: none;
+//}
+//   */
+//}
+
+
+
+
+
+
+
+
 .dark-mode .main-menu-upload-btn.x-btn-icon .x-btn-small .x-btn-image {
-    filter: invert(0);
+  filter: invert(0);
 }
 
-.main-menu-upload-btn.x-btn .x-btn-tl, .x-btn-tc, .x-btn-tr,
-.x-btn-ml, .x-btn-mr, .x-btn-bl, .x-btn-br, .x-btn-bc{
-    display: none !important;
-}
+/* end tine-bar */
 
-.main-menu-upload-btn.x-btn.x-btn-over .x-btn-mc{
-    background-color: inherit;
-}
 
 .action_download {
     background-image:url(../../images/icon-set/icon_download.svg) !important;
@@ -1467,40 +1432,6 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit,
 
 .x-cols-icon {
     background: url(../../images/icon-set/icon_column.svg) !important;
-}
-
-
-/* only works for small btns as we don't have to align them*/
-.x-btn {
-    position: relative;
-}
-
-.x-btn-image {
-    top: 2px;
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.x-btn-medium.x-btn-icon-medium-top .x-btn-arrow .x-btn-image {
-    margin-left: -5px;
-}
-
-.x-btn-medium.x-btn-icon-medium-top .x-btn-split .x-btn-image {
-    margin-left: -7px;
-}
-
-.x-btn-medium.x-btn-icon-medium-top .x-btn-image {
-    background-repeat: no-repeat;
-    top: 0px;
-    left: 0px;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-size: 29px 29px;
-    background-position-x: center;
 }
 
 /* loading animations */

@@ -169,6 +169,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss">
+@use '../styles/variables.scss' as *;
+
 .container {
   --skin-color: #FFFFFF;
 }
@@ -183,16 +185,6 @@ onBeforeUnmount(() => {
 }
 
 .vue-button{
-  min-width: 70px;
-
-  //.btn-content{
-  //  display: flex;
-  //  flex-direction: row;
-  //  justify-content: space-around;
-  //  .buttonIcon{
-  //    height: 1.5em;
-  //  }
-  //}
-
+  min-width: $dialogBtnMinWidth;
 }
 </style>

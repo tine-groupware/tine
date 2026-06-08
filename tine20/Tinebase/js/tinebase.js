@@ -27,6 +27,9 @@ require('postal.request-response');
 // custom ext build
 require('../../library/ExtJS/ext-custom');
 
+// custom bootstrap styles
+require('../styles/bootstrap-vue/custom_vue_styles.scss')
+
 /* pkg: Ext All CSS No theme (ExtJS/ext-all-notheme.css)*/
 require('../styles/ExtJS/structure/reset.scss');
 require('../styles/ExtJS/structure/core.scss');
@@ -358,7 +361,6 @@ require("./RangeSliderComponent.js");
 require("./widgets/form/FileSelectionArea.js");
 require("./BL/BLConfigPanel.js");
 /* pkg: Tinebase FAT Client (css/Tinebase-FAT.css)*/
-require("../styles/ExtFixes.scss");
 require("../styles/Tinebase.scss");
 require("../styles/mimetypes.scss");
 require("../styles/SmallForms.scss");
@@ -425,9 +427,6 @@ var lodash = require('lodash');
 var director = require('director');
 const vue = require('vue');
 const mitt = require('mitt')
-
-// custom bootstrap styles
-require('../styles/bootstrap-vue/custom_vue_styles.scss')
 
 require('./ux/util/screenshot');
 require('./ux/file/UploadManagerUI');

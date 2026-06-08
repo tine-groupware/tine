@@ -8,12 +8,14 @@
  */
 -->
 <template>
+  <b-button class="account-btn" variant="primary">
   <div class="account-user-avatar">
     <img v-if='imgSrc' class="account-user-avatar__image" :src='imgSrc'>
     <div v-else class="account-user-avatar__image_alt text-center d-flex align-items-center justify-content-center">
       <span>{{getAbbreviatedName()}}</span>
     </div>
   </div>
+  </b-button>
 </template>
 
 <script setup>
@@ -44,13 +46,23 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped lang="scss">
+.account-btn {
+  padding-top: 0;
+  padding-bottom: 0;
+  &.color {
+    filter: invert(0);
+  }
+}
 .account-user-avatar{
   width: 30px;
   height: 30px;
   cursor: pointer;
+  color: #000;
+  &:hover {
+    color: #000;
+  }
 
   &__image{
-    filter: invert(1);
     vertical-align: middle;
     object-fit: cover;
     width: 100%;
@@ -63,7 +75,6 @@ onBeforeMount(async () => {
   }
 
   &__image_alt{
-    filter: invert(1);
     width: 100%;
     height: 100%;
     background-color: #f2f2f2;

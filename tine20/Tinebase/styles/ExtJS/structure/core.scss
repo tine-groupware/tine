@@ -5,7 +5,7 @@
  * http://www.extjs.com/license
  */
 .ext-el-mask {
-    z-index: 100;
+    z-index: 5000;
     position: absolute;
     top:0;
     left:0;
@@ -18,7 +18,7 @@
 }
 
 .ext-el-mask-msg {
-    z-index: 20001;
+    z-index: 5001;
     position: absolute;
     top: 0;
     left: 0;

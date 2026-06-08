@@ -41,3 +41,11 @@
 .x-combo-list-small {
     font:normal 11px arial, tahoma, helvetica, sans-serif;
 }
+
+.x-combo-list-unselectable-item {
+  color: lighten(#000000, 40%);
+  font-style: italic;
+  &.x-combo-selected {
+    background-color: transparent !important;
+  }
+}

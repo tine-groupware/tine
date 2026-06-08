@@ -35,11 +35,11 @@
 .x-grid3-row td, .x-grid3-summary-row td {
     line-height:13px;
     vertical-align: top;
-	padding-left:1px;
-    padding-right:1px;
     -moz-user-select: none;
     -khtml-user-select:none;
     -webkit-user-select:ignore;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .x-grid3-cell{
@@ -53,6 +53,7 @@
     vertical-align:middle;
     border-left:1px solid;
     border-right:1px solid;
+    box-sizing: border-box;
 }
 
 .x-grid3-hd-row .x-grid3-marker-hd {

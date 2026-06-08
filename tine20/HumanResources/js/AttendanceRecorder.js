@@ -60,13 +60,15 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
 
     // internal config
     showIcon: true,
-    width: 30,
-    height: 30,
+    // width: 30,
+    // height: 30,
     iconCls: 'attendance-clock',
     stateful: true,
     stateId: 'attendance-clock',
     cls: 'attendance-clock-menu-button',
-
+    variant: 'primary',
+    scale: 'medium',
+    iconAlign: 'top',
 
     // properties
     ptAllowPause: true,

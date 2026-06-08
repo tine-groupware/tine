@@ -9,13 +9,14 @@
 -->
 <template>
   <div>
-    <div
+    <b-button size="lg" variant="primary"
       ref="itemContainerRef"
       @click="visible = true"
-      class="tine-bar-item color-scheme-selector"
-      :class="config.iconCls"
       :id="popoverTarget"
-    />
+      class="tine-bar-item"
+    >
+      <div class="tine-bar-image color-scheme-selector" :class="config.iconCls"></div>
+    </b-button>
 <!--    TODO: fixme-->
 <!--    <ExtAction-->
 <!--      :item-cfg="itemCfg"-->
@@ -122,13 +123,13 @@ const hideMenu = (e) => {
 //TODO: fixme
 .tine-bar-item{
   /* margin-top: 2px;*/
-  width: 30px;
-  height: 30px;
-  filter: invert(1);
-  cursor: pointer;
+  //width: 30px;
+  //height: 30px;
+  //filter: invert(1);
+  //cursor: pointer;
 
-  .dark-mode & {
-    filter: invert(0);
-  }
+  //.dark-mode & {
+  //  filter: invert(0);
+  //}
 }
 </style>

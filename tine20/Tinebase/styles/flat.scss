@@ -1,49 +1,22 @@
 @use './common' as *;
+@use './variables' as *;
 
 :root {
-  --focus-color: #0062a7;
-  --selection-color: #dbecf4;
-  --tab-color: #8cb8d7;
-  --field-bg-color: #ffffff;
-  --tip-bg-color: #163047;
-  --tip-color: #ffffff;
-  --shadow-color: silver;
+  --focus-color: #{$focus-color};
+  --selection-color: #{$selection-color};
+  --tab-color: #{$tab-color};
+  --field-bg-color: #{$field-bg-color};
+  --tip-bg-color: #{$tip-bg-color};
+  --tip-color: #{$tab-color};
+  --shadow-color: #{$shadow-color};
+  --icon-color: var(--bs-btn-color);
 }
 //$focusColor: #0062a7;
-
-$tbColor: darken(#ffffff, 5%);
-
-$datePickerHd: #2196f3;
-$datePickerActive: #66ccff;
-$filterTbColor: darken($tbColor, 10%);
-$gridHd: #c0ced8;
-$gridHdActive: darken($gridHd, 10%);
-
-$fontColor: #ffffff;
-
-$northTbColor: lighten($tbColor, 5%);
-$altRowColor: $northTbColor;
-
-$tabPanelColor: $tbColor;
-
-
-
-$panelBGColor: $gridHd;
-//$dialogBg: #F5F6F7;
-$dialogBg: #eaeef1;
-
-
-
-$sidebarBg: $tbColor;
 
 
 //.x-shadow {
 //  display: none !important;
 //}
-
-.x-btn.waves-effect {
-  display: table;
-}
 
 .x-tree-node-el.waves-effect {
   display: block;
@@ -224,38 +197,9 @@ span.x-tab-strip-text.tine-favicon {
   border: none;
 }
 
-/* BUTTON */
 
-/* fix: show tooltip if icon only */
-.x-btn-icon .x-btn-text{
-  position: relative;
-  z-index: 100;
-}
 
 @include button($dialogBg);
-
-.x-toolbar .x-btn-mc em.x-btn-split .x-btn-text {
-  border-right: 1px solid transparent;
-}
-
-.x-toolbar .x-btn-over .x-btn-mc em.x-btn-split,
-.x-toolbar .x-btn-click .x-btn-mc em.x-btn-split,
-.x-toolbar .x-btn-menu-active .x-btn-mc em.x-btn-split,
-.x-toolbar .x-btn-pressed .x-btn-mc em.x-btn-split {
-  background-image: url('../../images/icon-set/icon_arrow_down.svg');
-  background-size: 12px;
-
-  .x-btn-text {
-    border-right: 1px dotted;
-  }
-}
-
-.x-btn-mc em.x-btn-arrow,
-.x-toolbar .x-btn-mc em.x-btn-split {
-  background-image: url('../../images/icon-set/icon_arrow_down.svg');
-  background-size: 10px;
-  background-position-y: center;
-}
 
 .tine-mainscreen-mainmenu {
   & .x-toolbar {
@@ -270,7 +214,6 @@ span.x-tab-strip-text.tine-favicon {
     @include transform-blacktowhite;
   }
 }
-
 
 /* TOOLBAR */
 .x-toolbar {
@@ -375,10 +318,10 @@ span.x-tab-strip-text.tine-favicon {
   .x-panel-body {
     color: black;
   }
-  .x-btn .x-btn-text,
-  .x-item-disabled .x-btn-text {
-    color: #000000 !important;
-  }
+  //.x-btn .x-btn-text,
+  //.x-item-disabled .x-btn-text {
+  //  color: #000000 !important;
+  //}
 
   .x-toolbar .x-btn-mc em.x-btn-arrow,
   .x-toolbar .x-btn-mc em.x-btn-split,
@@ -386,15 +329,15 @@ span.x-tab-strip-text.tine-favicon {
     //@include transform-blacktowhite;
   }
 
-  .x-toolbar .x-btn-mc em.x-btn-arrow .x-btn-image,
-  .x-toolbar .x-btn-mc em.x-btn-split .x-btn-image {
-    filter: none;
-  }
+  //.x-toolbar .x-btn-mc em.x-btn-arrow .x-btn-image,
+  //.x-toolbar .x-btn-mc em.x-btn-split .x-btn-image {
+  //  filter: none;
+  //}
 
-  .x-btn em.x-btn-arrow .x-btn-text,
-  .x-btn em.x-btn-split .x-btn-text {
-    color: #000000 !important;
-  }
+  //.x-btn em.x-btn-arrow .x-btn-text,
+  //.x-btn em.x-btn-split .x-btn-text {
+  //  color: #000000 !important;
+  //}
 
   input {
     background: transparent;
@@ -454,52 +397,6 @@ span.x-tab-strip-text.tine-favicon {
 .x-panel-bwrap .tw-filtertoolbar,
 .tw-filtertoolbar {
   background-color: $filterTbColor;
-}
-//.tw-ftb-filterpanel,
-.tw-filtertoolbar {
-  @include button($filterTbColor);
-
-  .tw-ftb-frow-searchbutton {
-    .x-btn-over {
-      .x-btn-tl,
-      .x-btn-tc,
-      .x-btn-tr,
-      .x-btn-ml,
-      .x-btn-mc,
-      .x-btn-mr,
-      .x-btn-bl,
-      .x-btn-bc,
-      .x-btn-br {
-        background-color: $filterTbColor;
-      }
-      .x-btn-over {
-        .x-btn-tl,
-        .x-btn-tc,
-        .x-btn-tr,
-        .x-btn-ml,
-        .x-btn-mc,
-        .x-btn-mr,
-        .x-btn-bl,
-        .x-btn-bc,
-        .x-btn-br {
-          background-color: lighten($filterTbColor, 10%);
-        }
-      }
-    }
-  }
-  .x-btn-over {
-    .x-btn-tl,
-    .x-btn-tc,
-    .x-btn-tr,
-    .x-btn-ml,
-    .x-btn-mc,
-    .x-btn-mr,
-    .x-btn-bl,
-    .x-btn-bc,
-    .x-btn-br {
-      background-color: lighten($filterTbColor, 10%);
-    }
-  }
 }
 
 .tw-ftb-filterstructure-treepanel {
@@ -1016,9 +913,9 @@ a.x-grid3-hd-btn:hover {
   background-color: $tbColor;
 }
 
-.x-date-middle .x-btn .x-btn-text {
-  color: #000;
-}
+//.x-date-middle .x-btn .x-btn-text {
+//  color: #000;
+//}
 
 .x-date-left a {
   background-image: url('../../images/icon-set/icon_arrow_left.svg');
