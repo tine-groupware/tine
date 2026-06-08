@@ -14,9 +14,9 @@
   ],
   "homepage": "https://www.tine-groupware.de/",
   "license": [
-    "AGPL-3.0",
+    "AGPL-3.0-or-later",
     "BSD-3-Clause",
-    "LGPL-2.1+",
+    "LGPL-2.1-or-later",
     "MIT"
   ],
   "repositories": [
@@ -244,7 +244,8 @@
       "ignore": {
         "PKSA-yhcn-xrg3-68b1": "twig v2.16.1",
         "PKSA-2wrf-1xmk-1pky": "twig v2.16.1"
-      }
+      },
+      "block-insecure": false
     },
     "secure-http": false,
     "platform": {
@@ -279,10 +280,7 @@
       "simplesamlphp/composer-xmlprovider-installer": false,
       "tine20/composerapploader": true
     },
-    "autoloader-suffix": "stable",
-    "audit": {
-      "block-insecure": false
-    }
+    "autoloader-suffix": "stable"
   },
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
