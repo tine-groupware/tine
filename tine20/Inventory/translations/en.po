@@ -25,17 +25,20 @@ msgstr "Ordered"
 msgid "Available"
 msgstr "Available"
 
+msgid "In Use"
+msgstr "In Use"
+
 msgid "Defect"
 msgstr "Defect"
+
+msgid "Unknown"
+msgstr "Unknown"
 
 msgid "Missing"
 msgstr "Missing"
 
 msgid "Removed"
 msgstr "Removed"
-
-msgid "Unknown"
-msgstr "Unknown"
 
 msgid "Stored"
 msgstr "Stored"
