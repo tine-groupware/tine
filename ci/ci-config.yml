@@ -41,8 +41,8 @@ variables:
   # "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
   PHPUNIT_FILTER: ""
   
-  # "Php version to use."
-  PHP_VERSION: "8.4"
+  # "PHP version to use."
+  PHP_VERSION: "8.5"
 
   # "Codename for build"
   CODENAME: "Mats"
