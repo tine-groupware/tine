@@ -1141,7 +1141,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             /**** TODO ****/
             // if there are no positions, no more bills need to be created,
             // but the last_autobill info is set, if the current date is later
-            if ($invoicePositions->count() > 0 ) {
+            if ($invoicePositions->count() > 0 && $invoicePositions->count() > $invoicePositions->find('model', Timetracker_Model_TimeaccountNotBillable::class)->count()) {
                 // clean up relations
                 foreach ($billableAccountables as $ba) {
                     if (!$ba['partOfInvoice']) {
