@@ -1,1 +1,1 @@
-../.agents/skills/updatescript/SKILL.md
+../../../.agents/skills/updatescript/SKILL.md
