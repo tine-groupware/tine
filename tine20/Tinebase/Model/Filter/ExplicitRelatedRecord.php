@@ -36,13 +36,19 @@ class Tinebase_Model_Filter_ExplicitRelatedRecord extends Tinebase_Model_Filter_
         $ret = parent::toArray($_valueToJson);
         if (!isset($ret['value']) || !is_array($ret['value'])) return $ret;
 
-        foreach($ret['value'] as &$filter) {
+        foreach ($ret['value'] as &$filter) {
             if ($filter['field'] == ':id' && $filter['operator'] == 'equals' && is_string($filter['value']) && strlen($filter['value']) == 40) {
                 $split = explode('_Model_', (string) $this->_options['related_model']);
                 $cname = $split[0] . '_Controller_' . $split[1];
-                $fr = $cname::getInstance()->get($filter['value'], /* $_containerId = */ null, /* $_getRelatedData = */ false);
-                $fr->relations = null;
-                $filter['value'] = $fr->toArray();
+                try {
+                    $fr = $cname::getInstance()->get($filter['value'], /* $_containerId = */ null, /* $_getRelatedData = */ false);
+                    $fr->relations = null;
+                    $filter['value'] = $fr->toArray();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    }
+                }
             }
         }
         return $ret;
