@@ -37,6 +37,19 @@ class Timetracker_Model_TimeaccountNotBillable extends Timetracker_Model_Timeacc
         $_definition[self::RECORDS_NAME] = 'Zeitkonten (nicht abrechenbar)';
     }
 
+    public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
+    {
+        $raii = null;
+        if (intval($this->budget) < 1 && !$this->is_billable) {
+            $oldValue = $this->_properties['is_billable'];
+            $this->_properties['is_billable'] = true;
+            $raii = new Tinebase_RAII(fn() => $this->_properties['is_billable'] = $oldValue);
+        }
+        $result = parent::isBillable($date, $contract, $productAggregate);
+        unset($raii);
+        return $result;
+    }
+
     protected function _getBillableTimesheetsFilter(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL)
     {
         $filter = parent::_getBillableTimesheetsFilter($date, $contract);
