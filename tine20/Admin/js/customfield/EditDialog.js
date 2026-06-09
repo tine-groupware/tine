@@ -325,6 +325,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 minWidth: 70,
                 scope: this,
                 handler: this.onStoreWindowOK,
+                variant: 'primary',
                 iconCls: 'action_applyChanges'
             }]
         });

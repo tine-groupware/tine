@@ -87,6 +87,7 @@ Ext.extend(Tine.widgets.dialog.MultipleEditResultSummary, Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler : this.onCancel,
+            variant: 'primary',
             iconCls : 'action_saveAndClose'
         });
     },

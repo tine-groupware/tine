@@ -85,6 +85,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 }
             }, {
                 text: i18n._('Ok'),
+                variant: 'primary',
                 iconCls: 'action_saveAndClose',
                 handler: function() {
                     var form = Ext.getCmp('changePasswordPanel').getForm();

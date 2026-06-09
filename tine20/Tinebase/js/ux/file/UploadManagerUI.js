@@ -205,6 +205,7 @@ Ext.ux.file.UploadManagementDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                 ref: '../buttonApply',
                 scope: this,
                 handler: this.onButtonApply,
+                variant: 'primary',
                 iconCls: 'action_saveAndClose'
             }
         ];

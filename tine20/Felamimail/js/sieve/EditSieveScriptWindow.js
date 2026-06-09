@@ -85,6 +85,7 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
                 Ext.MessageBox.alert(i18n._('Errors'), e.message);
               }
             },
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
           }
         ];
@@ -149,6 +150,7 @@ Ext.extend(Tine.Felamimail.sieve.EditSieveScriptWindow, Ext.Action, {
             ref: '../buttonApply',
             scope: this,
             handler: this.onButtonApply,
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
           }
         ];

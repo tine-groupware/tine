@@ -92,6 +92,7 @@ Tine.Calendar.EventFinderOptionsDialog = Ext.extend(Ext.Panel, {
             handler: function () {
                 this.onSaveAndClose();
             },
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
         });
 

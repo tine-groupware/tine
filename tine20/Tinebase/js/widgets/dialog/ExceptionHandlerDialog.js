@@ -198,6 +198,7 @@ Tine.widgets.dialog.ExceptionHandlerDialog = Ext.extend(Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler: this.onOk,
+            variant: 'primary',
             iconCls : 'action_saveAndClose'
         });
     }

@@ -338,6 +338,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
         this.okAction = new Ext.Action({
             text: i18n._('Ok'),
+            variant: 'primary',
             iconCls: 'action_saveAndClose',
             minWidth: 70,
             handler: this.onOk,

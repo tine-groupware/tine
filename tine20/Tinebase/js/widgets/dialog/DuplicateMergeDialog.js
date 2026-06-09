@@ -88,6 +88,7 @@ Tine.widgets.dialog.DuplicateMergeDialog = Ext.extend(Ext.FormPanel, {
             minWidth : 70,
             scope : this,
             handler : this.onUpdate,
+            variant: 'primary',
             iconCls : 'action_saveAndClose'
         });
         

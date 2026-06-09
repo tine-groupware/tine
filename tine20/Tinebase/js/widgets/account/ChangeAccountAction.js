@@ -80,6 +80,7 @@ Ext.extend(Tine.widgets.account.ChangeAccountAction, Ext.Action, {
             scope: this,
             handler: this.onOk,
             disabled: true,
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
         });
         

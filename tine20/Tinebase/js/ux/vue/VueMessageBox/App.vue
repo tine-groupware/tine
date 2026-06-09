@@ -55,7 +55,7 @@
         </BFormCheckbox>
         <div class="ms-auto">
           <BButton class="mx-1 x-tool-close vue-button" v-for="button in buttonToShow" @click="button.clickHandler"
-                   :key="button.name" :class="button.class">{{ button.name }}
+                   :key="button.name" :class="button.class" :variant="button.variant">{{ button.name }}
           </BButton>
         </div>
       </div>
@@ -164,7 +164,8 @@ const buttonToShow = computed(() => {
           })
         },
         name: props.otherConfigs.buttonText[buttonName],
-        class: `${buttonName}-button`
+        class: `${buttonName}-button`,
+        variant: props.otherConfigs.buttonVariant[buttonName] || 'secondary'
       }
     })
   } else {

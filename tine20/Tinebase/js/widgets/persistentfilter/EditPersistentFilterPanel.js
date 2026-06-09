@@ -70,6 +70,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             minWidth : 70,
             scope : this,
             handler : this.onSave,
+            variant: 'primary',
             iconCls : 'action_saveAndClose'
         });
         this.action_cancel = new Ext.Action({

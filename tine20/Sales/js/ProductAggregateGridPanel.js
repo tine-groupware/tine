@@ -452,6 +452,7 @@ Tine.Sales.ProductAggregateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGrid
                 minWidth: 70,
                 scope: this,
                 handler: this.onAttributesWindowOK,
+                variant: 'primary',
                 iconCls: 'action_applyChanges'
             }]
         });

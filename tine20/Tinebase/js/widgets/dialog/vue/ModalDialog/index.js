@@ -193,6 +193,7 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
         }, {
             name: 'ok',
             text: i18n._('Ok'),
+            variant: 'primary',
             iconCls: 'action_saveAndClose',
             eventName: 'apply'
         }]
