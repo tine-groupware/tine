@@ -267,6 +267,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.infoBox.setVisible(true);
             this.setBookedFieldsReadOnly(true);
         }
+        if (this.record.get('reversed_status') !== 'notReversed') {
+            this.warnBox.setText(this.app.formatMessage('{reversed_status, select, partiallyReversed {This document is partially reversed.} other {This document is reversed.}} See trac document for details.', {
+                reversed_status : this.record.get('reversed_status')
+            }))
+            this.warnBox.setVisible(true)
+        } else if (this.record.get('reversal')) {
+            this.warnBox.setText(this.app.formatMessage('This is a reversal document. See trac document for details.'))
+            this.warnBox.setVisible(true)
+        }
 
         // check service period contains all positions
         let servicePeriodAdopted = false
@@ -469,6 +478,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 enableResponsive: true,
             },
             items: [
+                [{ xtype: 'v-alert', variant: 'warning', columnWidth: 1, ref: '../../../../../warnBox', hidden: true, label: '...' }],
                 [{ xtype: 'v-alert', variant: 'info', columnWidth: 1, ref: '../../../../../infoBox', hidden: true, label: '...' }],
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
                 // NOTE: contract_id waits for contract rewrite

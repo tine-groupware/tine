@@ -911,6 +911,12 @@ msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
 msgid "Document is booked. Accounting data is write-protected."
 msgstr "Der Beleg ist gebucht. Die Buchhaltungsdaten sind schreibgeschützt."
 
+msgid "{reversed_status, select, partiallyReversed {This document is partially reversed.} other {This document is reversed.}} See trac document for details."
+msgstr "{reversed_status, select, partiallyReversed {Dieser Beleg ist teilweise storniert.} other {Dieser Beleg ist storniert.}} Details siehe Belegverfolgung."
+
+msgid "This is a reversal document. See trac document for details."
+msgstr "Dies ist ein Storno-Beleg. Details siehe Belegverfolgung."
+
 msgid "Service Start Extended"
 msgstr "Leistungszeitraum erweitert"
 
