@@ -37,6 +37,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE021 = self::class . '::update021';
     protected const RELEASE018_UPDATE022 = self::class . '::update022';
     protected const RELEASE018_UPDATE023 = self::class . '::update023';
+    protected const RELEASE018_UPDATE024 = self::class . '::update024';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -141,6 +142,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE023          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update023',
+            ],
+            self::RELEASE018_UPDATE024          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update024',
             ],
         ],
     ];
@@ -532,5 +537,24 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
         );
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.23', self::RELEASE018_UPDATE023);
+    }
+
+    public function update024()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $db = $this->getDb();
+
+        $db->update(SQL_TABLE_PREFIX . 'container',
+            ['hierarchy' => null],
+            [
+                'hierarchy IS NOT NULL',
+                'hierarchy != name',
+                'is_deleted = 0',
+                'model NOT LIKE "%Timeaccount"',
+                'hierarchy NOT LIKE "%/%"'
+            ]
+        );
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.24', self::RELEASE018_UPDATE024);
     }
 }
