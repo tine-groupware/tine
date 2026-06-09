@@ -84,7 +84,7 @@ class Tinebase_Model_Instance extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_FLAG_ICON_FILE         => [
-                self::LABEL                 => 'Flag Icon File', // _('Flag Icon File')
+                self::LABEL                 => 'Flag Icon URL/File', // _('Flag Icon URL/File')
                 self::TYPE                  => self::TYPE_STRING,
                 self::NULLABLE          => true,
             ],
