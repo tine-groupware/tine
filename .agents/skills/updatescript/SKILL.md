@@ -121,7 +121,9 @@ public function update001(): void
 
 ### 3. Update Doctrine Schema (Model-Driven)
 
-When model definitions change, use `Setup_SchemaTool::updateSchema()`:
+When model definitions change (e.g., `NULLABLE => true` → `false`, field types, validators), use `Setup_SchemaTool::updateSchema()`.
+
+**These updates must use `PRIO_NORMAL_APP_STRUCTURE` (500) or `PRIO_TINEBASE_STRUCTURE` (100) (for Tinebase updates)** so schema changes execute before data/logic updates:
 
 ```php
 public function update002(): void
@@ -133,6 +135,22 @@ public function update002(): void
 
     $this->addApplicationUpdate(AppName_Config::APP_NAME, '19.2', self::RELEASE019_UPDATE002);
 }
+```
+
+Example with priority registration:
+
+```php
+static protected $_allUpdates = [
+    self::PRIO_NORMAL_APP_STRUCTURE => [
+        self::RELEASE019_UPDATE002 => [
+            self::CLASS_CONST => self::class,
+            self::FUNCTION_CONST => 'update002',
+        ],
+    ],
+    self::PRIO_NORMAL_APP_UPDATE => [
+        // data/logic updates go here
+    ],
+];
 ```
 
 ### 4. Data Migration
