@@ -10,7 +10,7 @@
 
 <template>
   <div class="page-wrap">
-    <div>
+    <div v-if="removeHeaderIfSet">
       <b-navbar class="navbar-hr">
         <b-navbar-nav>
           <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
@@ -79,6 +79,12 @@ const { formatMessage } = useFormatMessage();
 import { navigateToEvents } from './searchUtils';
 
 const inputSearch = ref("");
+
+const removeHeaderIfSet = computed(() => {
+  let urlParams = new URLSearchParams(window.location.search);
+  return !(urlParams.has('header') && (urlParams.get('header') === 'false'));
+});
+
 
 const handleSearch = () => {
   navigateToEvents(inputSearch.value);
