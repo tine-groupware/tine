@@ -495,28 +495,37 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         });
     },
 
-    suggestFields: async function() {
+    suggestFields: async function(f) {
+        if (f) {
+            const fieldRawValue = f.getRawValue();
+            this.record.set(f.name, fieldRawValue);
+        }
         const fieldName = 'n_fileas';
         const field = this.getForm().findField(fieldName);
         const value = field?.getValue();
-        if (field && (!value || value === field.suggestedValue)) {
-            this.onRecordUpdate();
+
+        if (field) {
             // @FIXME twing can't cope with null values yet, remove this once twing fixed it
             const data = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
             const suggestion = await this.twingEnv.render(fieldName, data);
 
-            field.setValue(suggestion);
-            this.record.set(fieldName, suggestion);
+            if (!value || value === field.suggestedValue) {
+                field.setValue(suggestion);
+                this.record.set(fieldName, suggestion);
+                this.onRecordUpdate();
+            }
+
             field.suggestedValue = suggestion;
         }
+
         const fn = this.getForm().findField('n_given').getValue();
         const ln = this.getForm().findField('n_family').getValue();
         const initials = [fn, ln].filter(val => val && val.length > 0).map(val => val[0]);
         const t = initials.join('.');
 
         this.contactImage.textCt.dom.innerHTML = t ? t.toUpperCase() : '';
-        this.contactImage.textCt.setVisible(t && this.record.get('jpegphoto').includes('icon-set'));
-        this.contactImage.imageCt.setVisible(!t || !this.record.get('jpegphoto').includes('icon-set'));
+        this.contactImage.textCt.setVisible(t && this.record.json.jpegphoto.includes('icon-set'));
+        this.contactImage.imageCt.setVisible(!t || !this.record.json.jpegphoto.includes('icon-set'));
     },
 
     /**
