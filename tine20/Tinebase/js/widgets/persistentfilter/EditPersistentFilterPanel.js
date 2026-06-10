@@ -158,6 +158,7 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
             });
             this.window.record.set('grants', grants);
         }
+        record.set('show_result_count', this.inputShowResultCount.getValue());
         this.window.fireEvent('update');
         this.purgeListeners();
         this.window.purgeListeners();
@@ -237,6 +238,16 @@ Tine.widgets.persistentfilter.EditPersistentFilterPanel = Ext.extend(Ext.FormPan
         if (!record.isShared()) {
             this.getGrantsGrid().disable();
         }
+
+        this.inputShowResultCount = new Ext.form.Checkbox({
+            checked: (record) ? record.get('show_result_count') : false,
+            labelSeparator: '',
+            fieldLabel: i18n._('Show total count of found records'), //Tine.widgets.form.FieldManager.getDescriptionHTML('bla bla'),
+            boxLabel: i18n._('fetch result count in background'),
+            disabled: ! this.hasRight(),
+        });
+
+        items.push(this.inputShowResultCount);
         
         return {
             border : false,

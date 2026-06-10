@@ -30,6 +30,7 @@ Tine.widgets.persistentfilter.model.PersistentFilter = Tine.Tinebase.data.Record
     {name: 'filters'},
     {name: 'name'},
     {name: 'description'},
+    {name: 'show_result_count'},
     {name: 'grants'},
     {name: 'account_grants'}
 ]), {

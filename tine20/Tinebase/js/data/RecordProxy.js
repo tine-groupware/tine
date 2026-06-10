@@ -209,13 +209,72 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
         p.paging = paging;
 
         options.beforeSuccess = function(response) {
-            return [this.jsonReader.read(response)];
+            if (! options.raw) {
+                return [this.jsonReader.read(response)];
+            }
         };
         
         // increase timeout as this can take a longer (1 minute)
         options.timeout = this.searchTimeout;
         
         return this.doXHTTPRequest(options);
+    },
+
+    promiseSearchRecords: function(filter, paging, options) {
+        return new Promise((fulfill, reject) => {
+            try {
+                this.searchRecords(filter, paging, Ext.apply(options || {}, {
+                    success: function (r) {
+                        fulfill(r);
+                    },
+                    failure: function (error) {
+                        reject(new ServerError(error));
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new ServerError(error));
+                }
+            }
+        });
+    },
+
+    countRecords: function(filter, options) {
+        options = options || {};
+        options.params = options.params || {};
+
+        var p = options.params;
+
+        p.method = this.appName + '.count' + this.modelName + 's';
+        p.filter = (filter) ? filter : [];
+
+        options.beforeSuccess = function(response) {
+            return [(_.isString(response.responseText) ? JSON.parse(response.responseText) : response.responseText).totalcount];
+        };
+
+        // increase timeout as this can take a longer (1 minute)
+        options.timeout = this.countTimeout;
+
+        return this.doXHTTPRequest(options);
+    },
+
+    promiseCountRecords: function(filter, options) {
+        return new Promise((fulfill, reject) => {
+            try {
+                this.countRecords(filter, Ext.apply(options || {}, {
+                    success: function (c) {
+                        fulfill(c);
+                    },
+                    failure: function (error) {
+                        reject(new ServerError(error));
+                    }
+                }));
+            } catch (error) {
+                if (Ext.isFunction(reject)) {
+                    reject(new ServerError(error));
+                }
+            }
+        });
     },
     
     /**

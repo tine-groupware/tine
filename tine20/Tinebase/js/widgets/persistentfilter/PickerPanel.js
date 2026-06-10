@@ -5,6 +5,8 @@
  * Cornelius Weiss <c.weiss@metaways.de> @copyright Copyright (c) 2009-2011
  * Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import math from "lodash";
+
 Ext.ns('Tine.widgets.persistentfilter');
 
 /**
@@ -147,7 +149,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
 
         this.on('contextmenu', this.onContextMenu, this);
-        
+        this.on('append', this.onNodeAppend, this);
+
         this.currentUser = Tine.Tinebase.registry.get('currentAccount');
     },
 
@@ -217,6 +220,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         // NOTE: this can be removed when all instances of filterplugins are
         // removed
         store.on('beforeload', this.storeOnBeforeload, this);
+        store.on('load', this.storeOnload, this);
         store.load({persistentFilter : persistentFilter});
         
         if (this.getGrid()?.grid) {
@@ -235,6 +239,11 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     storeOnBeforeload : function(store, options) {
         options.params.filter = options.persistentFilter.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
+    },
+
+    storeOnload : function(store, records, options) {
+        this.refreshResultCount(this.getNodeById(options.persistentFilter.id), store.getCount());
+        store.un('load', this.storeOnload, this);
     },
 
     /**
@@ -348,6 +357,44 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         menu.showAt(e.getXY());
     },
 
+    onNodeAppend: function(tree, parent, node, idx) {
+        // get a result in the first 10 seconds
+        this.initialResultCountTimeout = this.initialResultCountTimeout || Math.floor(Math.random() * 10) * 1000;
+
+        node.resultCountTimeout = setTimeout(() => {
+            this.refreshResultCount(node);
+        }, this.initialResultCountTimeout);
+
+    },
+    refreshResultCount: async function(node, count=null) {
+        node.resultCountTimeout ? clearTimeout(node.resultCountTimeout) : null;
+        try {
+            const time = new Date();
+
+            if (! node.attributes.show_result_count) {
+                throw new Error('no result count option');
+            }
+
+            if (! _.isInteger(count)) {
+                count = await this.getGrid().store.proxy.promiseCountRecords(node.attributes.filters);
+            }
+
+            node.setBadge({
+                text: count,
+                qtip: i18n._('Last updated') + ' ' + Tine.Tinebase.common.timeRenderer(time)
+            });
+        } catch (e) {
+            node.setBadge(null)
+        }
+
+        const refreshInterval = 5 * 60 * 1000;
+        node.resultCountTimeout = setTimeout(() => {
+            this.refreshResultCount(node);
+        }, refreshInterval);
+    },
+
+
+
     /**
      * handler to delete filter
      * 
@@ -360,6 +407,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Deleting Favorite "{0}"'), this.containerName, node.text));
 
                 var record = this.store.getById(node.id);
+                node.resultCountTimeout ? clearTimeout(node.resultCountTimeout) : null;
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
                     scope : this,
                     success : function() {
@@ -429,9 +477,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             var title = i18n._('Edit Favorite');
         }
         
-        var height = 160;
+        var height = 200;
         if ((this.hasRight() || this.hasGrant(record, 'editGrant')) && ! record.isDefault()) {
-            height = 440;
+            height = height + 280;
         }
         
         Tine.log.debug('Tine.widgets.persistentfilter.PickerPanel::getEditWindow - create edit window for filter record: ');

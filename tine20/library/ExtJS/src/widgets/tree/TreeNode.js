@@ -289,6 +289,20 @@ Ext.extend(Ext.tree.TreeNode, Ext.data.Node, {
     },
 
     /**
+     *
+     * @param opts
+     *  text
+     *  description
+     *  variant
+     */
+    setBadge(opts) {
+        this.badge = this.attributes.badge = opts;
+        if(this.rendered){
+            this.ui.onBadgeChange(this, opts);
+        }
+    },
+
+    /**
      * Triggers selection of this node
      */
     select : function(){
