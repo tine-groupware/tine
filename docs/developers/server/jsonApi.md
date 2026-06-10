@@ -2,15 +2,14 @@
 
 tine is separated into two layers. The PHP based backend which runs on the webserver and the JavaScript based frontend which runs in the browser on the user's computer.
 
-JSON-RPC
-------
+## JSON-RPC
 
-These two layers communicate over [http://json-rpc.org/ JSON-RPC].  [http://json-rpc.org/ JSON-RPC] is a lightweight protocol which perfectly suites the needs of webbased applications, as we in fact can transport whole JavaScript arrays and objects. This makes creating the requests and parsing the response on the client side very trivial.
+These two layers communicate over [JSON-RPC](https://json-rpc.org/).  KSON-RPC is a lightweight protocol which perfectly suites the needs of webbased applications, as we in fact can transport whole JavaScript arrays and objects. This makes creating the requests and parsing the response on the client side very trivial.
 tine speaks JSON-RPC version 2.0.
 
 ### JSON-SMD
 
-Another important piece is [http://groups.google.com/group/json-schema/web/service-mapping-description-proposal JSON-SMD]. The Service Mapping Description (SMD) is a JSON representation of services and its parameters provided by a JSON-RPC server. If you are able retrieve the SMD you have a list of all functions available and accessible by your JSON-RPC client.
+Another important piece is [JSON-SMD](https://groups.google.com/group/json-schema/web/service-mapping-description-proposal). The Service Mapping Description (SMD) is a JSON representation of services and its parameters provided by a JSON-RPC server. If you are able retrieve the SMD you have a list of all functions available and accessible by your JSON-RPC client.
 
 ### Putting it together
 
@@ -30,7 +29,9 @@ If your implementation does not support JSON-SMD you can also simply have a look
 
 To find out what you need to sent, you can also install the Firebug extension in your Firefox browser and have a look at the requests sent by tine.
 
-### A real life PHP example
+### A real life PHP example (outdated)
+
+The recommended tine PHP client can be found below (-> tine-client-php) 
 
 Based on Zend_Service_Client which adds a small layer on top of Zend_Json_Client we will provide you a small example how to add a new contact and a new lead over JSON-RPC.
 
@@ -103,8 +104,8 @@ The Client can be found in the Zend Framework library, which is part of tine -> 
 
 If you want to send subsequent requests without logging in again each time, you might have to set cookie headers: https://github.com/tine20/tine20/issues/7171
 
-API Timeout
-------
+### API Timeout
+
 
 You can define the timeout (in seconds) of a JSON API method with `@apiTimeout` in the PHP docblock syntax (example \Sales_Frontend_Json::createPaperSlip):
 
@@ -118,8 +119,14 @@ You can define the timeout (in seconds) of a JSON API method with `@apiTimeout` 
     public function createPaperSlip(string $model, string $documentId): array
 ~~~
 
-Python JSON-RPC Example Script
-------
+## tine-client-php 
+
+We created an updated and stand-alone PHP client for easy tine JSON-RPC calls, which can be found here:
+
+[github.com/tine-groupware/tine-client-php](https://github.com/tine-groupware/tine-client-php)
+
+
+## Python JSON-RPC Example Script
 
 Python script using 'requests', 'json' and 'http.client' to connect to tine and sync Addressbook
 contacts from tine to Sipgate:
