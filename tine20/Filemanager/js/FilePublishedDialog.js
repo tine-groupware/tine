@@ -75,7 +75,8 @@ Tine.Filemanager.FilePublishedDialog = Ext.extend(Ext.FormPanel, {
                         xtype: 'tw-passwordTriggerField',
                         allowBlank: true,
                         editable: false,
-                        hidden: !this.password
+                        hidden: !this.password,
+                        policyConfig: Tine.Tinebase.configManager.get('downloadPwPolicy')
                     }, {
                         fieldLabel: this.app.i18n._('Valid Until'),
                         name: 'url',

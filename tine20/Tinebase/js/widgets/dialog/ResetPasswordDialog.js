@@ -92,6 +92,7 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                                 clipboard: this.hasPwGen,
                                 ref: '../../../../passwordField',
                                 value: this.record.get('accountPassword'),
+                                hasPwGen: true,
                                 listeners: {
                                     scope: this,
                                     paste: this.onChange,
