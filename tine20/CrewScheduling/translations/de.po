@@ -169,6 +169,9 @@ msgstr "Noch keine Termine zum Anzeigen vorhanden..."
 msgid "The following persons cannot be added to the selected service"
 msgstr "Die folgenden Personen können nicht zu dem ausgewählten Dienst hinzugefügt werden"
 
+msgid "Should these rules for crew scheduling be followed?"
+msgstr "Sollen diese Dienstplanungsregeln befolgt werden?"
+
 msgid "Select Service for { attendeeName }"
 msgstr "Dienste für { attendeeName } auswählen"
 
