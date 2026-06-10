@@ -919,7 +919,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
             // NOTE: we come here if attendee is capable for at least role/type combination
             //       this computation is necessary for memberTokens anyway so we can use it to reduce amount of validations
 
-            const pollStatus = _.get(member, `pollReplies.${event.id}.${role.id}.status`)
+            const pollStatus = _.get(member, `pollReplies.${Tine.CrewScheduling.Model.PollReply.getEventRef(event)}.${role.id}.status`)
             let typeValidation = (possibleDay && free && pollStatus !== 'DECLINED') || ['ACCEPT', 'TENTATIVE'].indexOf(pollStatus) >= 0
 
             if (typeValidation) {
