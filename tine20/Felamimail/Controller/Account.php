@@ -717,6 +717,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     $existContact['container_id'] = $account['contact_id']['container_id'] ?? $existContact['container_id'];
                     $existContact['n_family'] = $name;
                     $existContact['org_name'] = $account['organization'];
+                    $existContact['n_fileas'] = $name;
+
                     $contact = Addressbook_Controller_Contact::getInstance()->update($existContact, true, true);
                 }
             } catch (Tinebase_Exception_NotFound $tenf) {

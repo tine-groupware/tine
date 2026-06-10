@@ -630,6 +630,11 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             self::assertEquals($account->email, $contact['email'], 'email was not updated');
             self::assertEquals('test from name', $contact['n_family'], 'family name was not updated');
 
+            $account['from'] = 'test update from name';
+            $account = Admin_Controller_EmailAccount::getInstance()->update($account);
+            $contact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id);
+            self::assertEquals('test update from name', $contact['n_fileas'], 'name was not updated');
+
             $account->visibility = Felamimail_Model_Account::VISIBILITY_HIDDEN;
             $account = Admin_Controller_EmailAccount::getInstance()->update($account);
             $existContact = Addressbook_Controller_Contact::getInstance()->get($account->contact_id, null, true, true);
