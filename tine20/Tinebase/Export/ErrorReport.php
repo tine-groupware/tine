@@ -98,10 +98,11 @@ class Tinebase_Export_ErrorReport extends Tinebase_Export_Abstract
     }
 
     /**
-     * @param string $_value
+     * @param mixed $_value
+     * @param ?string $_type
      * @throws Tinebase_Exception_NotImplemented
      */
-    protected function _writeValue($_value): never
+    protected function _writeValue($_value, ?string $_type = null): never
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' not implementd');
     }

@@ -1527,8 +1527,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if ($this->_config->columns) {
                 $fields = $this->_modelConfig ? $this->_modelConfig->getFields() : [];
                 foreach (Tinebase_Helper_ZendConfig::getChildrenConfigs($this->_config->columns, 'column') as $column) {
-                    $this->_writeValue($this->_convertToString($_record->{$column->identifier},
-                        $fields[$column->identifier][Tinebase_ModelConfiguration_Const::TYPE] ?? null));
+                    $type = $fields[$column->identifier][Tinebase_ModelConfiguration_Const::TYPE] ?? null;
+                    $this->_writeValue($this->_convertToString($_record->{$column->identifier}, $type), $type);
                 }
                 
             } else {
@@ -1670,9 +1670,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      * NOTE: do we need this to be abstract? some exports might not need this - for example Calendar_Export_VCalendar
      *       -> so I remove the "abstract" here
      *
-     * @param string $_value
+     * @param mixed $_value
+     * @param ?string $_type
      */
-    protected function _writeValue($_value)
+    protected function _writeValue($_value, ?string $_type = null)
     {
     }
 
