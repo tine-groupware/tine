@@ -39,8 +39,11 @@ class Timetracker_Model_TimeaccountNotBillable extends Timetracker_Model_Timeacc
 
     public function isBillable(Tinebase_DateTime $date, ?\Sales_Model_Contract $contract = NULL, ?\Sales_Model_ProductAggregate $productAggregate = NULL)
     {
+        if (intval($this->budget) > 0) {
+            return false;
+        }
         $raii = null;
-        if (intval($this->budget) < 1 && !$this->is_billable) {
+        if (!$this->is_billable) {
             $oldValue = $this->_properties['is_billable'];
             $this->_properties['is_billable'] = true;
             $raii = new Tinebase_RAII(fn() => $this->_properties['is_billable'] = $oldValue);
