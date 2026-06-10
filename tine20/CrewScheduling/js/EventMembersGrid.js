@@ -327,13 +327,15 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
         const asHelper = Tine.Calendar.Model.Attender.getAttendeeStore;
         const attendeeData = event.get('attendee')
         const attendeeStore = asHelper(JSON.stringify(attendeeData));
+        const ddProxyZIndex = dd.proxy.el.getStyle('z-index');
+        dd.proxy.el.setZIndex(100);
 
         if (e.getTarget('.cs-member-cell-disabled')) {
             const validations = await async.map(data.selected, async member => {
                 return Object.assign( await this.mainScreen.attendeeValidation.validate(member, event, role), { member });
             });
-            Ext.Msg.show({
-                buttons: Ext.Msg.OK,
+            if (await Ext.Msg.show({
+                buttons: Ext.Msg.YESNO,
                 icon: Ext.MessageBox.ERROR_MILD,
                 title: this.app.i18n._('The following persons cannot be added to the selected service'),
                 closeable: false,
@@ -343,19 +345,19 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                             return `* ${ message }`
                         })).join('\n')
 
-                })).join('\n\n'))
-            });
-
-            return false;
+                })).join('\n\n') + `\n\n**${this.app.i18n._('Should these rules for crew scheduling be followed?')}**`)
+            }) !== 'no') {
+                dd.proxy.el.setZIndex(ddProxyZIndex);
+                return false;
+            };
         }
+        dd.proxy.el.setZIndex(ddProxyZIndex);
         if(e.getTarget('.cs-event-readonly')) return false;
 
         return await async.reduce(data.selected, true, async (ret, member) => {
 
             let removedAttendees;
             try {
-                dd.proxy.el.setZIndex(100);
-
                 let existing;
                 if (data.eventMemberTokenIds.length) {
                     // attendee from other eventMemberCell
@@ -399,7 +401,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
                 return false;
             } finally {
-                dd.proxy.el.setZIndex(10000);
+                dd.proxy.el.setZIndex(ddProxyZIndex);
             }
         });
     },
