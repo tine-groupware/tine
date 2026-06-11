@@ -74,3 +74,35 @@ docker-compose.yml:
     - "traefik.http.middlewares.tine20pathreplace.replacepathregex.regex=^/tine20(.*)"
     - "traefik.http.middlewares.tine20pathreplace.replacepathregex.replacement=$$1"
     #[...]
+~~~
+
+## Using Let's Encrypt with traefik + tine
+
+docker-compose.yml (only the relavant lines):
+~~~yml
+  web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`tine.domain.de`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.tls=true"
+      - "traefik.http.routers.web.tls.certresolver=http01"
+      - "traefik.http.services.web.loadbalancer.server.port=80"
+
+traefik:
+    image: "traefik:v3.6"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=web"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--certificatesresolvers.http01.acme.httpchallenge=true"
+      - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=websecure"
+      - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+~~~
