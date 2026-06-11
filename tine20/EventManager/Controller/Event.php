@@ -359,11 +359,11 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                         }
                     }
 
-                    if (count($registrations_data) === 0) {
-                        $registrations_data = $contact->toArray();
-                    }
-
                     if (!empty($contact)) {
+                        if (count($registrations_data) === 0) {
+                            $registrations_data = $contact->toArray();
+                        }
+
                         $contact = Addressbook_Controller_Contact::getInstance()
                             ->get($contact->getId()); // necessary to get relations
                         $dependant_participant = $this->getRelatedContacts($contact);
