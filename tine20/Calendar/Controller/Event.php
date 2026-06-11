@@ -2013,9 +2013,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule && $_alarm->sent_status == Tinebase_Model_Alarm::STATUS_PENDING && $_alarm->alarm_time < $_alarm->sent_time) {
             $this->adoptAlarmTime($_record, $_alarm, 'instance');
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .
-            ' alarm: ' . print_r($_alarm->toArray(), true));
     }
     
     /****************************** overwritten functions ************************/
@@ -2071,8 +2068,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return;
         }
 
-        /** @var Tinebase_Model_Container $container */
-        $container = $currentEvent?->container_id ?: Tinebase_Container::getInstance()->get($event->container_id);
+        if ($currentEvent) {
+            /** @var Tinebase_Model_Container $container */
+            $container = $currentEvent->container_id;
+        } else if (! empty($event->container_id)) {
+            /** @var Tinebase_Model_Container $container */
+            $container = Tinebase_Container::getInstance()->get($event->container_id);
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not inspect sync container - event is missing container_id: '
+                    . print_r($event->toArray(), true));
+            }
+            return;
+        }
+
         if ($config = $container->getRecordFromXProps([self::SYNC_CONTAINER], Calendar_Model_SyncContainerConfig::class)) {
             $e = new Calendar_Exception_InSyncContainer();
             $e->syncContainerConfig = $config;
