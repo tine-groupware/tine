@@ -8,6 +8,7 @@ docker_build_image_dev() {
         --file ./ci/dockerimage/Dockerfile \
         --build-arg PHP_IMAGE=php${PHP_VERSION} \
         --build-arg APT_MIRROR=${APT_MIRROR} \
+        --build-arg APT_MIRROR_UNSUPPORTED_CODENAME=${APT_MIRROR_UNSUPPORTED_CODENAME} \
         .
 
     log dev image: pushing ...
@@ -25,6 +26,7 @@ docker_build_image_test() {
         --file ./ci/dockerimage/Dockerfile \
         --build-arg PHP_IMAGE=php${PHP_VERSION} \
         --build-arg APT_MIRROR=${APT_MIRROR} \
+        --build-arg APT_MIRROR_UNSUPPORTED_CODENAME=${APT_MIRROR_UNSUPPORTED_CODENAME} \
         .
 
     log test image: pushing ...
@@ -41,6 +43,7 @@ docker_build_image_built() {
         --file ./ci/dockerimage/Dockerfile \
         --build-arg PHP_IMAGE=php${PHP_VERSION} \
         --build-arg APT_MIRROR=${APT_MIRROR} \
+        --build-arg APT_MIRROR_UNSUPPORTED_CODENAME=${APT_MIRROR_UNSUPPORTED_CODENAME} \
         --build-arg JSDEPENDENCY_IMAGE \
         --build-arg ZIP_PACKAGES \
         --build-arg RELEASE_TYPE \
@@ -67,6 +70,7 @@ docker_build_image_built_test() {
         --file ./ci/dockerimage/Dockerfile \
         --build-arg PHP_IMAGE=php${PHP_VERSION} \
         --build-arg APT_MIRROR=${APT_MIRROR} \
+        --build-arg APT_MIRROR_UNSUPPORTED_CODENAME=${APT_MIRROR_UNSUPPORTED_CODENAME} \
         --build-arg JSDEPENDENCY_IMAGE \
         --build-arg ZIP_PACKAGES \
         --build-arg RELEASE_TYPE \
@@ -92,6 +96,7 @@ docker_build_image_packages() {
         --target packages \
         --file ./ci/dockerimage/Dockerfile \
         --build-arg APT_MIRROR=${APT_MIRROR} \
+        --build-arg APT_MIRROR_UNSUPPORTED_CODENAME=${APT_MIRROR_UNSUPPORTED_CODENAME} \
         --build-arg BUILT_IMAGE \
         --build-arg ZIP_PACKAGES \
         --build-arg RELEASE=$(release_get_package_version) \
