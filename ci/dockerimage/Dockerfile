@@ -15,6 +15,7 @@ ARG DOCKER_HUB_PROXY=""
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:jammy AS php8.1
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/jammy.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
@@ -50,6 +51,7 @@ RUN apt-mirror activate \
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.2
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
@@ -89,6 +91,7 @@ RUN apt-mirror activate \
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.3
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
@@ -124,6 +127,7 @@ RUN apt-mirror activate \
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:noble AS php8.4
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/noble.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
@@ -167,7 +171,8 @@ RUN apt-mirror activate \
 
 
 FROM ${DOCKER_HUB_PROXY}library/ubuntu:resolute AS php8.5
-# ARG APT_MIRROR=""
+ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY ci/dockerimage/scripts/apt-mirror /usr/local/bin/apt-mirror
 COPY ci/dockerimage/sources.list.d/resolute.list.save /etc/apt/sources.list.d/ubuntu-mirror.list.save
 RUN apt-mirror activate \
@@ -207,6 +212,7 @@ FROM ${PHP_IMAGE} AS base
 ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 # todo: install nginx brotli
 RUN apt-mirror activate \
  && apt-get update \
@@ -287,6 +293,7 @@ CMD ["/usr/local/bin/entrypoint"]
 
 FROM ${BASE_IMAGE} AS test
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 # todo: install coreutils and build-base
 RUN apt-mirror activate \
  && apt-get update \
@@ -309,6 +316,7 @@ COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
 
 FROM ${BASE_IMAGE} AS dev
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 RUN apt-mirror activate \
  && apt-get update \
  && apt-get install -y \
@@ -322,6 +330,7 @@ RUN apt-mirror activate \
 
 FROM ${BASE_IMAGE} AS dependency
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 # todo: install coreutils and build-base
 RUN apt-mirror activate \
  && apt-get update \
@@ -342,6 +351,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-prog
 FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine AS jsdependency
 ARG TINE20ROOT=/usr/share
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 RUN apk add git
 COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.json
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
@@ -413,6 +423,7 @@ FROM ${BUILD_IMAGE} AS build-copy
 
 FROM ${BASE_IMAGE} AS built
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 RUN echo '*/1 * * * * sh -c "cd /usr/share/tine20; php tine20.php --method Tinebase.triggerAsyncEvents"' | /bin/crontab -u tine20 -
 RUN apt-mirror activate \
@@ -430,6 +441,7 @@ FROM ${BUILT_IMAGE} AS test-built
 ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
 ARG APT_MIRROR=""
+ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
 # todo: install coreutils and build-base
 RUN apt-mirror activate \
  && apt-get update \
