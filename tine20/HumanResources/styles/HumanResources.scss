@@ -118,17 +118,29 @@
   }
 }
 
-.attendance-clock-menu-button-clock_in .attendance-clock{
-    background-color: #9af56e;
+.attendance-clock-menu-button-clock_in {
+  .attendance-clock,
+  div.x-btn-arrow {
+    //background-color: #9af56e;
+    background-color: var(--bs-success) !important;
+  }
 }
 
-.attendance-clock-menu-button-clock_paused .attendance-clock{
-    background-color: #edd107;
-}
+  .attendance-clock-menu-button-clock_paused {
+    .attendance-clock,
+    div.x-btn-arrow {
+      //background-color: #edd107;
+      background-color: var(--bs-warning) !important;
+    }
+  }
 
-.attendance-clock-menu-button-clock_out .attendance-clock{
-    background-color: #f7a18f;
-}
+  .attendance-clock-menu-button-clock_out {
+    .attendance-clock,
+    div.x-btn-arrow {
+      //background-color: #f7a18f;
+      background-color: var(--bs-danger) !important;
+    }
+  }
 
 .clock-in {
     background-image:url(../../images/icon-set/df/icon_df_login.svg) !important;
