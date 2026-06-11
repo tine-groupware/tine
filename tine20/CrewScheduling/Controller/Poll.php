@@ -201,6 +201,8 @@ class CrewScheduling_Controller_Poll extends Tinebase_Controller_Record_Abstract
             'event_site' => $event->event_site,
             'location' => $event->location,
             'attendee' => $event->attendee?->filter(fn($rec) => $rec->{CrewScheduling_Config::CREWSHEDULING_ROLES}?->find(fn($rec) => $schedulingRoleIds[$rec->getIdFromProperty(CrewScheduling_Model_AttendeeRole::FLD_ROLE)] ?? null, null)),
+            'recurid' => $event->recurid,
+            'base_event_id' => $event->base_event_id,
         ], true);
     }
 
