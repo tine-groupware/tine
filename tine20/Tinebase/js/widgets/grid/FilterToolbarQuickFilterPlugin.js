@@ -109,9 +109,12 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         if (! this.quickFilterGroup) {
             this.quickFilterGroup = new Ext.ButtonGroup({
                 columns: 1,
+                style: {border: 0, background: 'none',  minWidth: '300px'},
+                displayPriority: 10,
                 items: [
                     this.quickFilter, {
                         xtype: 'toolbar',
+                        minWidth: 300,
                         style: {border: 0, background: 'none'},
                         items: [this.criteriaText, '->', this.detailsToggleBtn]
                     }
@@ -155,8 +158,8 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.initFilterToolbar(ftb);
         
         this.quickFilter = this.quickFilter ?? new Ext.ux.SearchField({
-            width: 300,
-            enableKeyEvents: true
+            enableKeyEvents: true,
+            style: {border: 0, background: 'none',  minWidth: '300px',},
         });
         
         this.quickFilter.onTrigger1Click = this.quickFilter.onTrigger1Click.createSequence(this.onQuickFilterClear, this);
@@ -235,7 +238,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         ftb.setValue        = ftb.setValue.createSequence(this.onSetValue, this);
         ftb.onRender        = ftb.onRender.createSequence(this.onRender, this);
         ftb.destroy        = ftb.destroy.createSequence(this.onDestroy.createDelegate(this, [ftb]));
-
 
         //ftb.onFilterRowsChange = ftb.onFilterRowsChange.createInterceptor(this.onFilterRowsChange, this);
         ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
