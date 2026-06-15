@@ -27,6 +27,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         'Tinebase.monitoringCheckQuota',
         'Tinebase.monitoringCheckCache',
         'Tinebase.monitoringCheckLicense',
+        'Tinebase.monitoringCheckSentry',
         'Tinebase.monitoringLoginNumber',
         'Tinebase.monitoringActiveUsers',
         'Tinebase.monitoringMailServers',
