@@ -78,6 +78,7 @@ cd $TINE_DOCKER_PATH
 Example:
 
 ```bash
+cd $TINE_DOCKER_PATH
 ./console tine:test Admin_Controller_SchedulerTaskTest::testCreateSchedulerTask
 ```
 
@@ -167,8 +168,8 @@ Managed on [Transifex](https://app.transifex.com/tine/groupware/dashboard/). Do 
 1. Read relevant code and `docs/developers/` pages before changing behavior.
 2. Match existing patterns (naming, layers: `Model`, `Controller`, `Frontend`, etc.).
 3. Keep changes focused; avoid unrelated refactors.
-4. Run targeted tests via `$TINE_DOCKER_PATH/./console tine:test …` when tine-dev is available.
-5. Run `composer phpcs` on touched PHP under `tine20/` when feasible.
+4. Run targeted tests via `cd $TINE_DOCKER_PATH && ./console tine:test …` when tine-dev is available.
+5. Run `composer phpcs` on touched PHP under `tine20/` when possible.
 6. Do not commit unless the user asks; follow conventional commit format when they do.
 7. Do not commit secrets (`config.inc.php` with credentials, license keys, etc.).
 
