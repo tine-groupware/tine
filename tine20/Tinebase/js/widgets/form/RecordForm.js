@@ -18,7 +18,7 @@ Ext.ns('Tine.widgets.form');
  * @param {Object} config The configuration options.
  */
 
-Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
+Tine.widgets.form.RecordForm = Ext.extend(Ext.FormPanel, {
     /**
      * record definition class  (required)
      * @cfg {Ext.data.Record} recordClass
@@ -35,12 +35,20 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
      */
     tabPanelPlugin: null,
 
+    labelAlign: 'top',
+
     initComponent: function() {
         var appName = this.recordClass.getMeta('appName'),
             app = Tine.Tinebase.appMgr.get(appName),
             fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(this.recordClass);
 
         let _ = window.lodash
+
+        this.defaults = this.defaults || {};
+        Ext.applyIf(this.defaults, {
+            anchor: '100%',
+            labelSeparator: ''
+        });
 
         this.items = [];
         this.plugins = this.plugins || [];
@@ -106,7 +114,8 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
         }, this);
 
         Tine.widgets.form.RecordForm.superclass.initComponent.call(this);
-    }
+    },
+    initBodyCfg: Ext.emptyFn
 });
 
 /**

@@ -15,46 +15,55 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgid "Matrix Domain"
-msgstr ""
+msgstr "Matrix Domäne"
 
 msgid "Element URL"
-msgstr ""
+msgstr "Element URL"
 
 msgid "Home Server URL"
-msgstr ""
+msgstr "Heimserver URL"
 
 msgid "Identity Server URL"
-msgstr ""
+msgstr "Identitätsserver URL"
 
 msgid "Corporal Shared Auth Token"
-msgstr ""
+msgstr "Corporal Shared Auth Token"
+
+msgid "Corporal User ID"
+msgstr "Corporal Benutzer-ID"
 
 msgid "Synapse directory export enabled"
-msgstr ""
+msgstr "Synapse Verzeichnisexport aktiviert"
 
 msgid "Synapse directory database postgres url"
-msgstr ""
+msgstr "Synapse Verzeichnisdatenbank postgres URL"
 
 msgid "Synapse directory database postgres username"
-msgstr ""
+msgstr "Synapse Verzeichnisdatenbank postgres Benutzername"
 
 msgid "Synapse directory database postgres password"
-msgstr ""
+msgstr "Synapse Verzeichnisdatenbank postgres Passwort"
 
 msgid "Synapse tenant name"
-msgstr ""
+msgstr "Synapse Mandantenname"
 
 msgid "Synapse database postgres url"
-msgstr ""
+msgstr "Synapse Datenbank postgres URL"
 
 msgid "Synapse database postgres username"
-msgstr ""
+msgstr "Synapse Datenbank postgres Benutzername"
 
 msgid "Synapse database postgres password"
-msgstr ""
+msgstr "Synapse Datenbank postgres Passwort"
 
 msgid "Synapse shared secret auth"
-msgstr ""
+msgstr "Synapse Shared Secret Auth"
+
+msgid "This group has a chat room"
+msgstr "Diese Gruppe hat einen Chat-Raum"
+
+msgid "Chat Room"
+msgstr "Chat-Raum"
 
 msgid "Matrix Integration"
 msgstr "Matrix Integration"
@@ -65,7 +74,7 @@ msgstr[0] "Matrix Konto"
 msgstr[1] "Matrix Konten"
 
 msgid "Chat"
-msgstr ""
+msgstr "Chat"
 
 msgid "No chat account has been assigned"
 msgstr "Kein Chat Konto zugewiesen"
@@ -73,11 +82,11 @@ msgstr "Kein Chat Konto zugewiesen"
 msgid "You have not yet been assigned an chat account. This view is therefore empty"
 msgstr "Ihnen wurde bis jetzt kein Chat-Konto zugewiesen. Diese Ansicht ist daher leer."
 
-msgid "Please wait ..."
-msgstr "Bitte warten ..."
-
 msgid "{ brandingTitle } is currently setting up your chat account. Please wait a moment and do not close your browser."
 msgstr "{ brandingTitle } richtet gerade ihren Chat Zugang ein. Bitte haben sie einen Moment Geduld und schließen sie den Browser nicht."
+
+msgid "Please wait ..."
+msgstr "Bitte warten ..."
 
 msgid "Chat could not be loaded"
 msgstr "Chat kann nicht geladen werden"
@@ -97,17 +106,17 @@ msgstr "Wiederherstellungs-Schlüssel oder -Passwort falsch"
 msgid "The recovery data you entered was incorrect. Please try again."
 msgstr "Ihre eingegebenen Wiederherstellungsdaten waren nicht korrekt. Bitte versuchen sie es noch einmal."
 
-msgid "Chat storage corrupted"
-msgstr "Chat-Daten beschädigt"
-
-msgid "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
-msgstr "Die lokalen Chat-Daten sind beschädigt. Dies kann vorkommen, wenn mehrere Benutzer denselben Computer nutzen. Um dieses Problem zu beheben, müssen die lokalen Chat-Daten gelöscht werden. Dies kann zum Verlust von Nachrichten führen. Möchten Sie die lokalen Chat-Daten löschen?"
-
 msgid "Manual Management Required"
 msgstr "Manuelle Verwaltung benötigt"
 
 msgid "{ brandingTitle } does not know your correct recovery data and therefore cannot unlock your chats. You can try entering your recovery data directly in the chat program. In this case, { brandingTitle } does not save this data and you may have to enter it multiple times."
 msgstr "{ brandingTitle } kennt ihren ihre korrekten Wiederherstellungsdaten nicht und kann kann ihre Chats daher nicht entsperren. Sie können versuchen ihre Wiederherstellungsdaten direkt im Chat Programm eingeben. In diesem Fall speichert { brandingTitle } diese Daten nicht und sie müssen sie ggf. mehrfach eingeben."
+
+msgid "Chat storage corrupted"
+msgstr "Chat-Daten beschädigt"
+
+msgid "Local Chat data is corrupted. This may occur if multiple users use the same computer. To resolve this issue, the local chat data needs to be deleted. This may result in messages being lost. Do you want to delete the local chat data?"
+msgstr "Die lokalen Chat-Daten sind beschädigt. Dies kann vorkommen, wenn mehrere Benutzer denselben Computer nutzen. Um dieses Problem zu beheben, müssen die lokalen Chat-Daten gelöscht werden. Dies kann zum Verlust von Nachrichten führen. Möchten Sie die lokalen Chat-Daten löschen?"
 
 msgid "Unhandled encryption error"
 msgstr "Unbehandelter Verschlüsselungsfehler"
@@ -125,7 +134,7 @@ msgid "Account"
 msgstr "Konto"
 
 msgid "Matrix ID"
-msgstr ""
+msgstr "Matrix ID"
 
 msgid "Matrix Recovery Password"
 msgstr "Matrix Wiederherstellungs-Passwort"
@@ -139,5 +148,37 @@ msgstr "Matrix Sitzungs-Schlüssel"
 msgid "Active"
 msgstr "Aktiv"
 
+msgid "Is Initialized"
+msgstr "Ist initialisiert"
+
+msgid "The Account is fully initialized in the synapse server and crypt setup has run."
+msgstr "Das Konto ist vollständig auf dem Synapse-Server initialisiert und die Krypto-Einrichtung wurde durchgeführt."
+
+msgid "Matrix Room"
+msgid_plural "Matrix Rooms"
+msgstr[0] "Matrix-Raum"
+msgstr[1] "Matrix-Räume"
+
+msgid "Matrix Rooms"
+msgstr "Matrix-Räume"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Topic"
+msgstr "Thema"
+
+msgid "Room ID"
+msgstr "Raum-ID"
+
+msgid "Only System Users"
+msgstr "Nur Systembenutzer"
+
+msgid "Group"
+msgstr "Gruppe"
+
+msgid "Matrix-ID"
+msgstr "Matrix-ID"
+
 msgid "MatrixSynapseIntegrator"
-msgstr ""
+msgstr "MatrixSynapseIntegrator"

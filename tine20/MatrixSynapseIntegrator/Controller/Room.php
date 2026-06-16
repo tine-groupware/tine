@@ -100,6 +100,7 @@ class MatrixSynapseIntegrator_Controller_Room extends MatrixSynapseIntegrator_Co
         $listIds = Addressbook_Controller_List::getInstance()->getMemberships($user->contact_id);
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(MatrixSynapseIntegrator_Model_Room::class, [
             ['field' => MatrixSynapseIntegrator_Model_Room::FLD_LIST_ID, 'operator' => 'in', 'value' => $listIds],
+            ['field' => MatrixSynapseIntegrator_Model_Room::FLD_ACTIVE, 'operator' => 'equals', 'value' => 1],
         ]);
         return $this->search($filter);
     }

@@ -18,6 +18,7 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE019_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE019_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE019_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -42,6 +43,10 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE019_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -98,5 +103,22 @@ class MatrixSynapseIntegrator_Setup_Update_19 extends Setup_Update_Abstract
             MatrixSynapseIntegrator_Config::APP_NAME,
             '19.4',
             self::RELEASE019_UPDATE004);
+    }
+
+    public function update005(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            MatrixSynapseIntegrator_Model_Room::class,
+        ]);
+        $this->_db->update(
+            SQL_TABLE_PREFIX . MatrixSynapseIntegrator_Model_Room::TABLE_NAME,
+            [MatrixSynapseIntegrator_Model_Room::FLD_ACTIVE => 1]
+        );
+        $this->addApplicationUpdate(
+            MatrixSynapseIntegrator_Config::APP_NAME,
+            '19.5',
+            self::RELEASE019_UPDATE005);
     }
 }
