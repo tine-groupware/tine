@@ -40,6 +40,7 @@ const TextPanel = Ext.extend(Ext.Panel, {
 Ext.reg('Filemanager.QuickLookTextPanel', TextPanel);
 
 Tine.Filemanager.QuickLookRegistry.registerContentType('application/json', 'Filemanager.QuickLookTextPanel');
+Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Filemanager.QuickLookTextPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('text/plain', 'Filemanager.QuickLookTextPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('text/x-shellscript', 'Filemanager.QuickLookTextPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('text/x-php', 'Filemanager.QuickLookTextPanel');

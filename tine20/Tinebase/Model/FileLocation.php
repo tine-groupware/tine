@@ -43,7 +43,6 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
                         Tinebase_Model_FileLocation_RecordAttachment::class,
                         Tinebase_Model_FileLocation_TempFile::class,
                         Tinebase_Model_FileLocation_TreeNode::class,
-                        Tinebase_Model_FileLocation_TempFile::class,
                     ],
                 ],
                 self::VALIDATORS                    => [
@@ -55,7 +54,6 @@ class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements
                         Tinebase_Model_FileLocation_RecordAttachment::class,
                         Tinebase_Model_FileLocation_TempFile::class,
                         Tinebase_Model_FileLocation_TreeNode::class,
-                        Tinebase_Model_FileLocation_TempFile::class,
                     ]],
                 ],
                 self::UI_CONFIG                     => [

@@ -19,7 +19,7 @@ class Filemanager_Model_FileLocation extends Tinebase_Record_NewAbstract impleme
 
 
     protected static $_modelConfiguration = [
-        self::APP_NAME                      => Tinebase_Config::APP_NAME,
+        self::APP_NAME                      => Filemanager_Config::APP_NAME,
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'File Location', // ngettext('File Location', 'File Locations', n)
         self::RECORDS_NAME                  => 'File Locations', // gettext('GENDER_File Location')

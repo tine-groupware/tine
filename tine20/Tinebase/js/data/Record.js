@@ -738,6 +738,9 @@ Record.create = function(o, meta) {
 
     recordMgr.add(f);
 
+    if (p.statics) {
+        apply(f, p.statics);
+    }
     if (o.length) {
         f.init(o, meta)
     }

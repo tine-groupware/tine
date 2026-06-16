@@ -33,6 +33,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_configuredModels = [
         'Node',
+        Filemanager_Model_FileLocation::MODEL_NAME_PART,
     ];
 
     /**

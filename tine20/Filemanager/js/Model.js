@@ -76,7 +76,7 @@ Tine.Filemanager.Model.NodeMixin = {
         
         extension(path) {
             const self = Tine.Filemanager.Model.Node;
-            return self.type(path) === 'file' ? self.basename(path,'.') : null;
+            return self.type(path) === 'file' ? _.toLower(self.basename(path,'.')) : null;
         },
 
         pathinfo(path) {

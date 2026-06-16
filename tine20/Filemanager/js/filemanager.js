@@ -34,4 +34,5 @@ import './FilePublishedDialog';
 import './NotificationPanel';
 import './NotificationGridPanel';
 import './RevisionPanel';
+import './Model/FileLocation';
 

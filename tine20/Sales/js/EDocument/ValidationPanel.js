@@ -20,10 +20,11 @@ Tine.Sales.EDocumentValidationPanel = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.window.setTitle(this.app.formatMessage(`Validation Report: { title }`, { title: this.nodeRecord.getTitle() }))
         this.cancelButtonText = this.app.i18n._('Close');
 
+        const fileLocation = FileLocation.create(this.nodeRecord)
         this.html = `<iframe
             class="sales-quicklook-edocuemnt"
             style="width: 100%; height: 100%; border: none;"
-            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungValidation&fileNodeId=${this.nodeRecord.id}" 
+            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungValidation&fileLocation=${encodeURI(JSON.stringify(fileLocation.getData()))}" 
         />`;
 
         Tine.Sales.EDocumentValidationPanel.superclass.initComponent.call(this);
