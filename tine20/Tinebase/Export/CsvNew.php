@@ -138,9 +138,10 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
     }
 
     /**
-     * @param string $_value
+     * @param mixed $_value
+     * @param ?string $_type
      */
-    protected function _writeValue($_value)
+    protected function _writeValue($_value, ?string $_type = null)
     {
         $this->_currentRow[] = $this->_doCsvInjectionEscaping ? $this->csvInjectionEscaping($_value) : $_value;
     }

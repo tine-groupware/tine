@@ -13,6 +13,7 @@ use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Tinebase Xls/Xlsx generation class
@@ -488,18 +489,38 @@ class Tinebase_Export_Xls extends Tinebase_Export_Abstract implements Tinebase_R
     }
 
     /**
-     * TODO pass value type? for dates etc.?
-     *
-     * @param string $_value
-     * @throws Tinebase_Exception_NotImplemented
+     * @param mixed $_value
+     * @param ?string $_type
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    protected function _writeValue($_value)
+    protected function _writeValue($_value, ?string $_type = null)
     {
         $sheet = $this->_spreadsheet->getActiveSheet();
 
         $cell = $sheet->getCellByColumnAndRow($this->_columnCount++, $this->_rowCount);
 
-        $cell->setValue($_value);
+        switch ($_type) {
+            case TMCC::TYPE_INTEGER:
+                $type = \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC;
+                $_value = intval($_value);
+                break;
+            case TMCC::TYPE_FLOAT:
+                $type = \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_NUMERIC;
+                $_value = floatval($_value);
+                break;
+            case TMCC::TYPE_DATE:
+            case TMCC::TYPE_DATETIME:
+                $type = \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_ISO_DATE;
+                break;
+            default:
+                $type = null;
+        }
+
+        if (null !== $type) {
+            $cell->setValueExplicit($_value, $type);
+        } else {
+            $cell->setValue($_value);
+        }
     }
 
     /**

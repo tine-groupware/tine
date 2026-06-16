@@ -582,10 +582,11 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     }
 
     /**
-     * @param string $_value
+     * @param mixed $_value
+     * @param ?string $_type
      * @throws Tinebase_Exception_NotImplemented
      */
-    protected function _writeValue($_value): never
+    protected function _writeValue($_value, ?string $_type = null): never
     {
         throw new Tinebase_Exception_NotImplemented(self::class . ' can not provide a meaningful default '
                 . 'implementation. Subclass needs to provide or avoid it from being called');
