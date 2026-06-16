@@ -695,8 +695,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
-            $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
-            $twigTmpl = $this->_twig->load('fileNameTmpl');
+            // Use raw autoescape so UTF-8 characters (umlauts, etc.) in record fields are not encoded
+            // (e.g. Ä would become \u00c4 with 'json' autoescape, breaking filenames).
+            $rawLoader = new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]);
+            $rawTwig = new Twig_Environment($rawLoader, ['autoescape' => false]);
+            $twigTmpl = $rawTwig->load('fileNameTmpl');
             $context = $this->_getTwigContext(['record' => $this->_currentRecord]);
             return $twigTmpl->render($context);
         }
