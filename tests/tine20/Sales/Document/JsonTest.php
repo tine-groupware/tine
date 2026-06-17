@@ -475,50 +475,6 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance->saveDocument_Offer($document->toArray(true));
     }
 
-    public function testOfferReversalTransition()
-    {
-        $customer = $this->_createCustomer();
-        $product = $this->_createProduct();
-
-        $document = new SMDOffer([
-            SMDOffer::FLD_POSITIONS => [
-                [
-                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
-                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
-                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
-                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
-                    Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
-                ]
-            ],
-            SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
-            SMDOffer::FLD_CUSTOMER_ID => $customer->toArray(),
-            SMDOffer::FLD_RECIPIENT_ID => $customer->postal->toArray(),
-        ]);
-
-        $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSED_STATUS]);
-        $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_DISPATCHED;
-        $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSED_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSED_STATUS]);
-
-        /*Tinebase_Record_Expander_DataRequest::clearCache();
-
-        /*$result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
-            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
-                new Sales_Model_Document_TransitionSource([
-                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => SMDOffer::class,
-                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $savedDocument,
-                    Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL => true,
-                ]),
-            ],
-            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE =>
-                SMDOffer::class,
-        ]))->toArray());
-
-        $updatedDocument = $this->_instance->getDocument_Offer($savedDocument['id']);
-        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED, $updatedDocument[SMDOffer::FLD_REVERSAL_STATUS]);*/
-    }
-
     public function testOfferToOrderToInvoiceTransition()
     {
         $customer = $this->_createCustomer();

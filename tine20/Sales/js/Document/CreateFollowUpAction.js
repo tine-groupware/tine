@@ -60,7 +60,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     const statusFieldName = `${_.snakeCase(sourceType)}_status`
                     const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                     enabled = records.reduce((enabled, record) => {
-                        return enabled && record.get('reversal_status') !== 'reversed' && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
+                        return enabled && record.get('reversed_status') !== 'reversed' && _.find(statusDef.records, {id: record.get(statusFieldName) })?.booked
                     }, enabled)
                     // revere a mix of reversals and non reversals is not allowed
                     const status = _.uniq(_.map(records, `data.${statusFieldName}`))
