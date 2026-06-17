@@ -1,23 +1,23 @@
-# Tine 2.0 - Contributing
+# tine Groupware - Contributing
 
 **AI coding agents:** see [AGENTS.md](AGENTS.md) at the repository root for project-specific guidance (development setup, tests, conventions, and workflow).
 
 ## Write Code
 
-You might find this wiki page helpful for setting up a development environment for Tine 2.0:
+You might find this wiki page helpful for setting up a development environment for tine Groupware:
 https://github.com/tine20/tine20/wiki/EN:Development-Setup
 
 * Please make sure that there aren’t existing pull requests attempting to address the issue mentioned
 * Check for related issues on the issue tracker
 * Non-trivial changes should be discussed on an issue first
 * Let us know you’re working on the issue (by using the
- [Kanban board](https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/projects/1))
+ [Kanban board](https://github.com/tine-groupware/tine/projects/1))
 * Develop in a topic branch, not main
 * Provide useful pull request description
 * Write a good description of your PR
 * Link to the Github issue in the description
 
-The default workflow for Github Pull Requests applies for Tine 2.0, too.
+The default workflow for Github Pull Requests applies for tine Groupware, too.
 
 see https://help.github.com/articles/about-pull-requests/
 
@@ -27,12 +27,13 @@ This can be done directly in the Pull Request, thanks to https://cla-assistant.i
 
 ### Writing Tests
 
-For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/main/tests/tine20)
-For JavaScript code, write [karma](http://karma-runner.github.io) tests (see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/tree/main/tests/js)
+For PHP code, write [phpunit](https://phpunit.de/) tests (see https://github.com/tine-groupware/tine/tree/main/tests/tine20)
+For JavaScript unit tests, write [Jest](https://jestjs.io/) tests (see https://github.com/tine-groupware/tine/tree/main/tests/js)
+For end-to-end tests, write [Jest + Puppeteer](https://github.com/tine-groupware/tine/tree/main/tests/e2etests) tests
 
 ### Commit Message Guidelines
 
-Tine 2.0 uses [Conventional Commits](https://conventionalcommits.org/) style commit messages:
+tine Groupware uses [Conventional Commits](https://conventionalcommits.org/) style commit messages:
  
     <type>(<scope>): MESSAGE
     
@@ -100,6 +101,10 @@ We also use some annotations to mark commits for documentation follow-ups:
 - @usermanual (User manual needs to be updated because of this commit)
 - @releasenotes (RELEASENOTES need to be updated because of this commit)
 
+If you use ai coding agents, please add the following annotation:
+
+- @ai supported by qwen 3.6
+
 ## Reporting Bugs
 
 Before submitting an issue please check that you’ve completed the following steps:
@@ -114,12 +119,12 @@ Bug reports should contain the following information:
 * Expected behavior: How did you expect it to behave?
 * Actual behavior: How did it actually behave?
 * References: Links to any related tickets or information sources.
-* If possible, add log file snippets (Tine 2.0 bog, webserver logs, browser console logs, ...)
+* If possible, add log file snippets (tine Groupware bog, webserver logs, browser console logs, ...)
 * If possible, attach visual documentation of the bug. Screenshots, video and/or animated gifs.
 
 ## Translations
 
-Tine 2.0 manages translations at [Transifex](https://app.transifex.com/tine/groupware/dashboard/),
+tine Groupware manages translations at [Transifex](https://app.transifex.com/tine/groupware/dashboard/),
 a free Web-Service for open source projects.
 
 ## Write Documentation
