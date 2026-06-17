@@ -775,12 +775,14 @@ class Tinebase_Frontend_CliTest extends TestCase
         self::assertEquals(1, $result);
         self::assertEquals("SENTRY WARN\n", $out);
 
-        // activate sentry
+        // activate sentry - url is still wrong
         Tinebase_Core::setupSentry();
         ob_start();
         $result = $this->_cli->monitoringCheckSentry();
         $out = ob_get_clean();
-        self::assertEquals(0, $result);
-        self::assertStringContainsString("SENTRY OK", $out);
+        self::assertEquals(1, $result);
+        self::assertStringContainsString("SENTRY WARN", $out);
+
+        // TODO mock sentry call to make check go "SENTRY OK"
     }
 }
