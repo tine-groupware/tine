@@ -30,13 +30,27 @@ class Sales_EDocument_Service_View
 
     public function getXRechnungView(Tinebase_Model_Tree_Node $node): string
     {
-        $client = new Zend_Http_Client(Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC});
+        $content = file_get_contents(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
+
+        if ($this->isZugferdPdf($content)) {
+            $xml = Sales_EDocument_ZUGFeRD::createFromString($content)->getXml();
+            $content = $xml;
+        }
+
+        $isCii = $this->isCiiXml($content);
+
+        if ($isCii) {
+            $viewSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_CII_SVC};
+        } else {
+            $viewSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_SVC};
+        }
+
+        $client = new Zend_Http_Client($viewSvc);
         if (null !== static::$zendHttpClientAdapter) {
             $client->setAdapter(static::$zendHttpClientAdapter);
         }
 
-        $client->setParameterGet('format', 'xrechnung');
-        $client->setRawData(file_get_contents(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash)));
+        $client->setRawData($content);
         $response = $client->request(Zend_Http_Client::POST);
 
         if ($response->getStatus() !== 200) {
@@ -44,6 +58,29 @@ class Sales_EDocument_Service_View
         }
 
         return $response->getBody();
+    }
+
+    /**
+     * Check if the given content is a ZUGFeRD PDF.
+     */
+    protected function isZugferdPdf(string $content): bool
+    {
+        try {
+            Sales_EDocument_ZUGFeRD::createFromString($content);
+
+            return true;
+        } catch (Tinebase_Exception_UnexpectedValue $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Check if the given XML content is a CII (CrossIndustryInvoice) document.
+     */
+    protected function isCiiXml(string $content): bool
+    {
+        return str_contains($content, '<rsm:CrossIndustryInvoice')
+            || str_contains($content, '<CrossIndustryInvoice');
     }
 
     public static $zendHttpClientAdapter = null;
