@@ -155,4 +155,41 @@ class Felamimail_Model_MessageTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($message->is_spam_suspicions, 'set the spam non-suspicion strategy failed');
     }
 
+    /**
+     * test spam suspicion header strategy
+     */
+    public function testSpamSuspicionHeaderStrategy()
+    {
+        Felamimail_Config::getInstance()->set(Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY, TRUE);
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'header');
+
+        $config = [
+            'header' => 'X-Spam',
+            'value'  => 'Yes'
+        ];
+
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG, $config);
+        $account = Felamimail_Controller_Account::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        $folder = Felamimail_Model_MessagePipeConfig::getTargetFolder($account, 'INBOX');
+        $message = new Felamimail_Model_Message([
+            'to'        => $account->email,
+            'account_id' => $account->getId(),
+            'subject'   => 'spam test',
+            'headers' => [
+                'X-Spam' => 'Yes',
+                'X-Tine20TestMessage' => 'spamtest',
+            ],
+            'folder_id' => $folder->getId(),
+        ]);
+
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        $emailTest = new Felamimail_Controller_MessageTest();
+        $emailTest->setUp();
+        $cachedSendMessage = $emailTest->searchAndCacheMessage('spamtest', $folder);
+        $strategy = Felamimail_Spam_SuspicionStrategy_Factory::factory();
+        $message->is_spam_suspicions = $strategy->apply($cachedSendMessage);
+
+        static::assertTrue($message->is_spam_suspicions, 'set the spam suspicion strategy failed');
+    }
+
 }

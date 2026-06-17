@@ -28,6 +28,7 @@
  * @property  string $user_id
  * @property  string $sieve_notification_email
  * @property  string $sieve_notification_move
+ * @property  bool   $sieve_spam_move
  * @property  string $sieve_notification_move_folder
  * @property  string $sieve_hostname
  * @property  string $migration_approved
@@ -596,6 +597,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     self::APPLICATION => Felamimail_Config::APP_NAME,
                 ],
             ],
+            'sieve_spam_move' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::LABEL => 'Auto-move spam', // _('Auto-move spam')
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
+            ],
             'sieve_vacation' => [
                 self::TYPE => self::TYPE_VIRTUAL,
                 self::VALIDATORS                => [
@@ -820,7 +829,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 if ($token->isExpired(Tinebase_DateTime::now()->addMinute(10))) {
                     unset($idTokens[$email]);
                 }
-            } catch (Throwable) {
+            } catch (Throwable $e) {
                 unset($idTokens[$email]);
             }
         }

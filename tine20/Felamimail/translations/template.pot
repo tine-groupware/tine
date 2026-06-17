@@ -142,6 +142,9 @@ msgstr ""
 msgid "Spam Suspicion Strategy Config"
 msgstr ""
 
+msgid "Spam Suspicion Header Strategy Config"
+msgstr ""
+
 msgid "Spam User Processing Pipeline"
 msgstr ""
 
@@ -197,6 +200,12 @@ msgid "Auto"
 msgstr ""
 
 msgid "Inactive"
+msgstr ""
+
+msgid "Spam move folder"
+msgstr ""
+
+msgid "The target folder for the sieve spam move rule."
 msgstr ""
 
 msgid "Trusted Mail Servers (via DKIM)"
@@ -490,6 +499,9 @@ msgstr ""
 msgid "Port (Default: 2000)"
 msgstr ""
 
+msgid "Auto-move SPAM Message"
+msgstr ""
+
 msgid "Auto-move notifications"
 msgstr ""
 
@@ -609,6 +621,59 @@ msgstr ""
 msgid "Email usage"
 msgstr ""
 
+msgid "New Mail"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Active Vacation Message"
+msgstr ""
+
+#, python-brace-format
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr ""
+
+msgid "Loading Recipients..."
+msgstr ""
+
+#, python-brace-format
+msgid "Poll URL: {0}"
+msgstr ""
+
+msgid "Mass Mailing"
+msgstr ""
+
+msgid "All Recipients"
+msgstr ""
+
+msgid "Compose email"
+msgstr ""
+
+#, python-brace-format
+msgid "{0} as default mailer"
+msgstr ""
+
+msgid "No email account has been assigned"
+msgstr ""
+
+msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
+msgstr ""
+
+msgid "New mails"
+msgstr ""
+
+#, python-brace-format
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr ""
+
+#, python-brace-format
+msgid "IMAP Credentials for {0}"
+msgstr ""
+
+msgid "Credentials"
+msgstr ""
+
 msgid "Save As"
 msgstr ""
 
@@ -678,59 +743,6 @@ msgid "Loading Email Addresses"
 msgstr ""
 
 msgid "Preferred Email"
-msgstr ""
-
-msgid "New Mail"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Active Vacation Message"
-msgstr ""
-
-#, python-brace-format
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr ""
-
-msgid "Loading Recipients..."
-msgstr ""
-
-#, python-brace-format
-msgid "Poll URL: {0}"
-msgstr ""
-
-msgid "Mass Mailing"
-msgstr ""
-
-msgid "All Recipients"
-msgstr ""
-
-msgid "Compose email"
-msgstr ""
-
-#, python-brace-format
-msgid "{0} as default mailer"
-msgstr ""
-
-msgid "No email account has been assigned"
-msgstr ""
-
-msgid "You have not yet been assigned an e-mail account. This view is therefore empty"
-msgstr ""
-
-msgid "New mails"
-msgstr ""
-
-#, python-brace-format
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr ""
-
-#, python-brace-format
-msgid "IMAP Credentials for {0}"
-msgstr ""
-
-msgid "Credentials"
 msgstr ""
 
 msgid "IMAP Error"
@@ -1622,6 +1634,9 @@ msgid "Sieve Port"
 msgstr ""
 
 msgid "Sieve SSL"
+msgstr ""
+
+msgid "Auto-move spam"
 msgstr ""
 
 msgid "File Location"

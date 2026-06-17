@@ -10,7 +10,7 @@
  */
 
 /**
- * Test class for Felamimail_Model_MessageTest
+ * Test class for Felamimail_Model_MessagePipeTest
  */
 class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
 {
@@ -265,7 +265,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
                 ]
             ]
         ];
-        $message = $this->_messagePipeTestHelper();
+        $message = $this->_messagePipeTestHelper(subject: 'SPAM? (15) *** testMessagePipeMoveWithCustomFlags');
         $this->_executePipeLine($config[$pipe], $message);
 
         $message = $this->_assertMessageInFolder($targetFolder, $message['subject']);
@@ -354,6 +354,65 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
         $this->_executePipeLine($config[$pipe], $message);
 
         $this->_assertMessageInFolder('INBOX', 'test messagePipe');
+        $this->_assertMessageNotInFolder('INBOX', 'SPAM? (15) *** test messagePipe');
+    }
+
+    public function testMessagePipeRemoveHeader()
+    {
+        $oldSpamSuspicionStrategy = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
+
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'header');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG, [
+            'header' => 'X-Rspamd-Action',
+            'value' => 'add header',
+        ]);
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_MOVE_FOLDER, 'INBOX/Spamverdacht');
+        $config = Felamimail_Config::getInstance()->{Felamimail_Config::SPAM_USERPROCESSING_PIPELINE};
+        $pipe = 'ham';
+        $config['ham'] = [
+            'strategy' => 'remove_header',
+            'config' => [
+                'header' => 'x-rspamd-action',
+            ]
+        ];
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_USERPROCESSING_PIPELINE, $config);
+
+        $this->_foldersToClear = ['INBOX', 'Sent', 'INBOX.Spamverdacht'];
+
+        $account = Felamimail_Controller_Account::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        $account->sieve_spam_move = true;
+        $account = Felamimail_Controller_Account::getInstance()->update($account);
+        $folderName = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_MOVE_FOLDER);
+        $spamMoveFolder = Felamimail_Model_MessagePipeConfig::getTargetFolder($account, $folderName);
+        // add test email message to folder
+        $emailTest = new Felamimail_Controller_MessageTest();
+        $emailTest->setUp();
+        $message = $emailTest->messageTestHelper('mw_newsletter_multipart_related.eml', null, $spamMoveFolder, ['X-Mailer: TYPO3', 'X-Rspamd-Action: add header']);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+
+        self::assertArrayHasKey('x-rspamd-action', $message['headers'], print_r($message['headers'], true));
+        $this->_executePipeLine($config[$pipe], $message);
+
+        $message = $this->_assertMessageInFolder('INBOX', 'Newsletter 3 / 11.2012');
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+        self::assertArrayNotHasKey('x-rspamd-action', $message['headers']);
+        self::assertStringContainsString('Felamimail.getResource', $message['body'], 'body should not be removed');
+        self::assertEquals(12, count($message['attachments']), 'attachments should not be removed');
+
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, $oldSpamSuspicionStrategy);
+    }
+
+    public function _executePipeLine($_config, $_message)
+    {
+        // create and execute pipeLine
+        $pipeLineRecord = Felamimail_Model_MessagePipeConfig::factory($_config);
+        $rs = new Tinebase_Record_RecordSet(Felamimail_Model_MessagePipeConfig::class);
+        $rs->addRecord(new Felamimail_Model_MessagePipeConfig([
+            Felamimail_Model_MessagePipeConfig::FLDS_CLASSNAME => get_class($pipeLineRecord),
+            Felamimail_Model_MessagePipeConfig::FLDS_CONFIG_RECORD => $pipeLineRecord]));
+
+        $pipeLine = new Tinebase_BL_Pipe($rs);
+        $pipeLine->execute($_message);
     }
 
     /**
@@ -375,7 +434,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
      * @throws Tinebase_Exception_Record_NotAllowed
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function _messagePipeTestHelper($_account = null)
+    public function _messagePipeTestHelper($_account = null, $subject = 'SPAM? (15) *** test messagePipe')
     {
         // set spam strategy config
         $this->_setFeatureForTest(Felamimail_Config::getInstance(), Felamimail_Config::FEATURE_SPAM_SUSPICION_STRATEGY);
@@ -387,7 +446,6 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
 
         $this->_getFolder('INBOX', true, $_account);
         $this->_foldersToClear = ['INBOX', 'Sent', 'Trash'];
-        $subject = 'SPAM? (15) *** test messagePipe';
 
         $message = $this->_sendMessage(
             'INBOX',
@@ -396,20 +454,7 @@ class Felamimail_Model_MessagePipeTest extends Felamimail_TestCase
             $subject);
 
         $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
-        
+
         return $message;
-    }
-
-    public function _executePipeLine($_config, $_message)
-    {
-        // create and execute pipeLine
-        $pipeLineRecord = Felamimail_Model_MessagePipeConfig::factory($_config);
-        $rs = new Tinebase_Record_RecordSet(Felamimail_Model_MessagePipeConfig::class);
-        $rs->addRecord(new Felamimail_Model_MessagePipeConfig([
-            Felamimail_Model_MessagePipeConfig::FLDS_CLASSNAME => get_class($pipeLineRecord),
-            Felamimail_Model_MessagePipeConfig::FLDS_CONFIG_RECORD => $pipeLineRecord]));
-
-        $pipeLine = new Tinebase_BL_Pipe($rs);
-        $pipeLine->execute($_message);
     }
 }

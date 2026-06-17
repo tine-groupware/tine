@@ -36,6 +36,9 @@ class Felamimail_Model_Sieve_ScriptPart extends Tinebase_Record_Abstract
     const TYPE_AUTO_MOVE_NOTIFICATION = 'autoMoveNotification';
 
     /** @var string  */
+    const TYPE_AUTO_MOVE_SPAM = 'autoMoveSpam';
+
+    /** @var string  */
     const TYPE_CUSTOM = 'custom';
 
     /**

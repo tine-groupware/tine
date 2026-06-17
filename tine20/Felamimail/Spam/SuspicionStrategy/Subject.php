@@ -37,12 +37,15 @@ class Felamimail_Spam_SuspicionStrategy_Subject implements Felamimail_Spam_Suspi
     }
 
     /**
-     * @param Felamimail_Model_Message $message
-     * @return bool|mixed
+     * @param mixed $message
+     * @return bool
      */
-    public function apply(Felamimail_Model_Message $message)
+    public function apply($message): bool
     {
-        if (!empty($message['subject']) && preg_match($this->_pattern, $message->subject)) {
+        // $message array has key 'subject', Felamimail_Model_Message has subject in key 'headers'
+        $subject = $message['headers']['subject'] ?? $message['subject'];
+
+        if (!empty($subject) && preg_match($this->_pattern, $subject)) {
             return true;
         }
 

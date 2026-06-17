@@ -594,6 +594,44 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertStringNotContainsString('fileinto', $sieveScript);
     }
 
+    public function testAutoMoveSpamScript()
+    {
+        $this->_testNeedsTransaction();
+
+        $oldSpamSuspicionStrategy = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'subject');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, 'header');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_MOVE_FOLDER, 'INBOX/Spamverdacht');
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_HEADER_STRATEGY_CONFIG, [
+            'header' => 'X-Rspamd-Action',
+            'value' => 'add header',
+        ]);
+        $account = Felamimail_Controller_Account::getInstance()->getSystemAccount(Tinebase_Core::getUser());
+        $account->sieve_spam_move = true;
+        $account = Felamimail_Controller_Account::getInstance()->update($account);
+        $folderName = Felamimail_Config::getInstance()->get(Felamimail_Config::SPAM_MOVE_FOLDER);
+        $spamMoveFolder = Felamimail_Model_MessagePipeConfig::getTargetFolder($account, $folderName);
+        self::assertEquals('INBOX.Spamverdacht', $spamMoveFolder->globalname);
+
+        $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        $sieveScript = $script->getSieve();
+
+        self::assertStringContainsString('Spamverdacht', $sieveScript);
+        self::assertStringContainsString('fileinto', $sieveScript);
+        self::assertStringContainsString('mailbox', $sieveScript);
+
+        $account->sieve_spam_move = false;
+        $account = Felamimail_Controller_Account::getInstance()->update($account);
+
+        self::assertEquals(false, $account->sieve_spam_move);
+
+        $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
+        $sieveScript = $script->getSieve();
+        self::assertStringNotContainsString('Spamverdacht', $sieveScript);
+        Felamimail_Config::getInstance()->set(Felamimail_Config::SPAM_SUSPICION_STRATEGY, $oldSpamSuspicionStrategy);
+
+        return $account;
+    }
+
     public function testChangeFrom()
     {
         $user = $this->_createUserWithEmailAccount();
