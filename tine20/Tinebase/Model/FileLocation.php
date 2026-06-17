@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
-
 class Tinebase_Model_FileLocation extends Tinebase_Record_NewAbstract implements Tinebase_Model_FileLocation_Interface
 {
     use Tinebase_Model_FileLocation_NoChgAfterInitTrait;

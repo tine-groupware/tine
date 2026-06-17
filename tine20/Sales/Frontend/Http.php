@@ -24,14 +24,18 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected $_applicationName = 'Sales';
 
-    public function getXRechnungValidation(string $fileNodeId): void
+    public function getXRechnungValidation(string $fileLocation): void
     {
         $stream = null;
         try {
-            if (!($stream = fopen('tine20://' . Tinebase_FileSystem::getInstance()->getPathOfNode($fileNodeId, true), 'r'))) {
-                throw new Tinebase_Exception_Backend('could not open node ' . $fileNodeId);
+            if (!($fLoc = json_decode($fileLocation, true))) {
+                throw new Tinebase_Exception_UnexpectedValue('given filelocation is not a valid json');
             }
-            echo (new Sales_EDocument_Service_Validate())->validateXRechnung($stream)['html'] ?? throw new Tinebase_Exception_Backend('validation failed');
+            $fLoc = new Tinebase_Model_FileLocation($fLoc, true);
+            if (!$fLoc->canReadData()) {
+                throw new Tinebase_Exception_SystemGeneric('can\'t read input data');
+            }
+            echo (new Sales_EDocument_Service_Validate())->validateXRechnungContent($fLoc->getContent())['html'] ?? throw new Tinebase_Exception_Backend('validation failed');
         } finally {
             if (null !== $stream) {
                 @fclose($stream);
@@ -39,12 +43,18 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
     }
 
-    public function getXRechnungView(string $fileNodeId): void
+    public function getXRechnungView(string $fileLocation): void
     {
         try {
-            echo (new Sales_EDocument_Service_View())->getXRechnungView(
-                Filemanager_Controller_Node::getInstance()->get($fileNodeId)
-            );
+            if (!($fLoc = json_decode($fileLocation, true))) {
+                throw new Tinebase_Exception_UnexpectedValue('given filelocation is not a valid json');
+            }
+            $fLoc = new Tinebase_Model_FileLocation($fLoc);
+            if (!$fLoc->canReadData()) {
+                throw new Tinebase_Exception_SystemGeneric('can\'t read input data');
+            }
+
+            echo (new Sales_EDocument_Service_View())->getXRechnungView($fLoc->getContent());
         } catch (Exception $e) {
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Sales'));
 

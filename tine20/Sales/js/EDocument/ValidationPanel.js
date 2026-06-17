@@ -5,7 +5,7 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
+import FileLocation from 'Model/FileLocation'
 
 Tine.Sales.EDocumentValidationPanel = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     windowWidth: (screen.height * 0.8) / Math.sqrt(2),

@@ -23,9 +23,11 @@ const FileLocation = Record.create([], {
             })
         },
         isResponsibleFor: function(data) {
+            const isFilemanagerNode = re.exec(String(get(data, 'data.path', get(data, 'path'))))
+
             return isFunction(get(data, 'constructor.getPhpClassName')) ?
-                data.constructor.getPhpClassName() === 'Filemanager_Model_Node' && re.test(data.path) :
-                data.hasOwnProperty('path') && re.test(data.path);
+                data.constructor.getPhpClassName() === 'Filemanager_Model_Node' && isFilemanagerNode :
+                data.hasOwnProperty('path') && isFilemanagerNode;
         }
     }
 })

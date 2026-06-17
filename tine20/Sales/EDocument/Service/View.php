@@ -28,16 +28,13 @@ class Sales_EDocument_Service_View
         return $response->getBody();
     }
 
-    public function getXRechnungView(Tinebase_Model_Tree_Node $node): string
+    public function getXRechnungView(string $xrechnung): string
     {
-        $content = file_get_contents(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
-
-        if ($this->isZugferdPdf($content)) {
-            $xml = Sales_EDocument_ZUGFeRD::createFromString($content)->getXml();
-            $content = $xml;
+        if ($zugPferd = Sales_EDocument_ZUGFeRD::isStringZugFeRD($xrechnung)) {
+            $xrechnung = $zugPferd->getXml();
         }
 
-        $isCii = $this->isCiiXml($content);
+        $isCii = $this->isCiiXml($xrechnung);
 
         if ($isCii) {
             $viewSvc = Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VIEW_CII_SVC};
@@ -50,7 +47,7 @@ class Sales_EDocument_Service_View
             $client->setAdapter(static::$zendHttpClientAdapter);
         }
 
-        $client->setRawData($content);
+        $client->setRawData($xrechnung);
         $response = $client->request(Zend_Http_Client::POST);
 
         if ($response->getStatus() !== 200) {
@@ -58,20 +55,6 @@ class Sales_EDocument_Service_View
         }
 
         return $response->getBody();
-    }
-
-    /**
-     * Check if the given content is a ZUGFeRD PDF.
-     */
-    protected function isZugferdPdf(string $content): bool
-    {
-        try {
-            Sales_EDocument_ZUGFeRD::createFromString($content);
-
-            return true;
-        } catch (Tinebase_Exception_UnexpectedValue $e) {
-            return false;
-        }
     }
 
     /**
