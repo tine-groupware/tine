@@ -1674,7 +1674,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
                 $defaultValue = Tinebase_Config::getAppConfig($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME])
                     ->{$fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG]};
-                $fieldDef[Zend_Filter_Input::DEFAULT_VALUE] = $this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] = $defaultValue;
+                $this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] = $defaultValue;
                 $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_CallableEmpty::class] = $defaultValue;
                 foreach ($this->_filters[$fieldKey] ?? [] as $filter) {
                     if ($filter instanceof Tinebase_Record_Filter_CallableEmpty) {
