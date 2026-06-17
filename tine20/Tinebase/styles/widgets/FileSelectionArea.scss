@@ -7,24 +7,24 @@
  *
  */
 
-.tw-FileSelectionArea td,
-.tw-FileSelectionArea tr,
-.tw-FileSelectionArea table {
-    background-image: none;
-}
-
 .tw-FileSelectionArea {
-    background-color: #F0F0F0 !important;
     border: 2px grey dashed !important;
-    border-radius: 5px !important;
-    margin-left: 2px;
-    margin-top: 2px;
 }
 
-.tw-FileSelectionArea div.x-btn-image {
-    width: 100%;
-    height: 100%;
-    background-size: contain;
-    background-position: center;
+.tw-FileSelectionArea .x-btn-image {
+    background-size: contain !important;
     opacity: 0.3;
 }
+.tw-FileSelectionArea .x-btn-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    padding: 10px;
+}
+
