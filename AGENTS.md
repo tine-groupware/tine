@@ -31,6 +31,8 @@ see https://agents.md/
 
 PHP class naming follows `{App}_{Layer}_{Name}` (e.g. `Calendar_Controller_Event`, `Addressbook_Model_Contact`). Tests use the same prefix with a `Test` suffix (e.g. `Admin_Controller_SchedulerTaskTest`).
 
+Apps: Addressbook, Calendar, Felamimail, Tasks, Timetracker, Projects, Crm, Filemanager, Bookmarks, SSO, GDPR, Admin, CoreData, EFile, ExampleApplication, HumanResources, Inventory, MatrixSynapseIntegrator, OnlyOfficeIntegrator, Poll, Purchasing, Sales, Scheduler, SaasInstance, SimpleFAQ, Setup, Tasks, Tinebase, Courses, CrewScheduling, ActiveSync, EventManager, DFCom.
+
 ## Development environment
 
 **Do not use this repo alone for a runnable stack.** Use the separate **[tine-dev](https://github.com/tine-groupware/tine-dev)** (also called tine-docker / docker-dev) Docker setup. It provides the `console` CLI used for tests, npm, and common dev tasks.
@@ -38,10 +40,10 @@ PHP class naming follows `{App}_{Layer}_{Name}` (e.g. `Calendar_Controller_Event
 Set the path to your tine-dev checkout:
 
 ```bash
-export TINE_DOCKER_PATH=/path/to/your/tine-docker
+export TINE_DEV_PATH=/path/to/your/tine-dev
 ```
 
-On this sandbox, the path is `/data/workspace/tine-docker` when that repo is present.
+On this sandbox, the path is `/tine-dev` when that repo is present.
 
 ### Build from source (summary)
 
@@ -58,11 +60,13 @@ npm run build
 
 Database updates: `php setup.php --update` from `tine20/`. For release/CLI-only mode, set `'buildtype' => 'RELEASE'` in `config.inc.php`; use `'DEVELOPMENT'` for webpack dev server mode.
 
-### Supported stack (from README)
+### Supported stack
 
 - PHP 8.2–8.5 (composer requires `8.2 - 8.5`)
-- MySQL 8.0.x / MariaDB 10.4–12.2
+- MySQL 8.0.12–8.0.44 / MariaDB 10.4–12.2
+- Apache 2.4 / Nginx 1.26
 - Redis 7.0 / Valkey 9.0
+- Node.js 10.15.3 (`.nvmrc`)
 
 ## Running tests
 
@@ -73,18 +77,18 @@ PHPUnit and JS tests are normally run **via tine-dev's `console`**, not by invok
 Canonical docs: `docs/developers/server/phpunit.md` (keep in sync when editing).
 
 ```bash
-cd $TINE_DOCKER_PATH
+cd $TINE_DEV_PATH
 ./console tine:test <TestClassName>::<TestMethodName>
 ```
 
 Example:
 
 ```bash
-cd $TINE_DOCKER_PATH
+cd $TINE_DEV_PATH
 ./console tine:test Admin_Controller_SchedulerTaskTest::testCreateSchedulerTask
 ```
 
-- Run from `$TINE_DOCKER_PATH`.
+- Run from `$TINE_DEV_PATH`.
 - `tine:test` wraps PHPUnit.
 
 **CI (without Docker):** GitHub Actions installs tine in `tine20/`, then runs `tests/tine20/../../tine20/vendor/bin/phpunit --color GithubTests.php` (see `.github/workflows/php-unit-test.yml`). CI runs on PHP 8.3 and 8.4. `GithubTests.php` is a curated subset, not the full suite.
@@ -135,8 +139,8 @@ npm test src/test/Addressbook/Addressbook.test.js  # single file
 
 ### JavaScript
 
-- ESLint (Standard-derived config) in `tine20/Tinebase/js/`.
-- `.editorconfig`: 2 spaces for `*.vue`, `*.es6.js`, `*.spec.js`, `*.mjs`.
+- ESLint (Standard-derived config) in `tine20/Tinebase/js/` (`.eslintrc.js`).
+- `.editorconfig`: 2 spaces for `*.vue`, `*.es6.js`, `*.spec.js`, `*.mjs`; LF line endings; UTF-8; trim trailing whitespace; insert final newline.
 
 ## Contributing expectations
 
@@ -171,6 +175,10 @@ Published docs: https://docs.tine-groupware.de/
 
 Managed on [Transifex](https://app.transifex.com/tine/groupware/dashboard/). Do not hand-edit `.po` files when tooling exists — use `console src:langHelper` (see `docs/developers/translations_doku.md`).
 
+Extraction: `./console src:langHelper -- '-u --app Calendar -l de'`
+Merge from Transifex: `./console src:langHelper -- '--txmerge --app Calendar -v -l bg'`
+Edit with poedit, then remove line numbers: `./console src:langHelper -- '-u -l de'`
+
 ## Files agents should respect
 
 - **`.aiignore`** (also **`.cursorignore`**): same syntax as `.gitignore` — excludes noisy paths (logs, `scripts/sql`, large mail test fixtures). Do not assume ignored paths are safe to skip for *security*; they are mainly for context size.
@@ -181,7 +189,7 @@ Managed on [Transifex](https://app.transifex.com/tine/groupware/dashboard/). Do 
 1. Read relevant code and `docs/developers/` pages before changing behavior.
 2. Match existing patterns (naming, layers: `Model`, `Controller`, `Frontend`, etc.).
 3. Keep changes focused; avoid unrelated refactors.
-4. Run targeted tests via `cd $TINE_DOCKER_PATH && ./console tine:test …` when tine-dev is available.
+4. Run targeted tests via `cd $TINE_DEV_PATH && ./console tine:test …` when tine-dev is available.
 5. Run `composer phpcs` on touched PHP under `tine20/` when possible.
 6. Do not commit unless the user asks; follow conventional commit format when they do.
 7. Do not commit secrets (`config.inc.php` with credentials, license keys, etc.).
