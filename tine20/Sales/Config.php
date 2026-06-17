@@ -66,6 +66,7 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const EDOCUMENT_SVC_BASE_URL = 'svc_base_url';
     public const VALIDATION_SVC = 'validation_svc';
     public const VIEW_SVC = 'view_svc';
+    public const VIEW_CII_SVC = 'view_cii_svc';
     const CUSTOMER_CONTACT_PERSON_FILTER = 'customerContactPersonFilter';
     public const PAYMENT_MEANS_ID_TMPL = 'paymentMeansIdTmpl';
 
@@ -942,9 +943,17 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 self::VIEW_SVC => [
                     self::LABEL                 => 'View Service URL',
-                    //_('Validation Service URL')
+                    //_('View Service URL')
                     self::DESCRIPTION           => 'View Service URL',
-                    //_('Validation Service URL')
+                    //_('View Service URL')
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
+                self::VIEW_CII_SVC => [
+                    self::LABEL                 => 'CII View Service URL',
+                    //_('CII View Service URL')
+                    self::DESCRIPTION           => 'CII View Service URL',
+                    //_('CII View Service URL')
                     self::TYPE                  => self::TYPE_STRING,
                     self::DEFAULT_STR           => '',
                 ],
