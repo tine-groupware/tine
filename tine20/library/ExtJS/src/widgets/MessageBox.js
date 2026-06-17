@@ -259,6 +259,7 @@ Ext.Msg.show({
                 const {createApp, h, reactive} = window.vue
                 initialized = true
                 otherConfigs.buttonText = this.buttonText;
+                otherConfigs.buttonVariant = this.buttonVariant;
                 vueProps = reactive({
                     opt: JSON.parse(JSON.stringify(defaultConfigs)),
                     otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
@@ -594,6 +595,11 @@ Ext.MessageBox.ERROR
             cancel : "Cancel",
             yes : "Yes",
             no : "No"
+        },
+
+        buttonVariant : {
+            ok : "primary",
+            yes : "primary"
         }
     };
 }();

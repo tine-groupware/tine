@@ -106,6 +106,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
                     minWidth: 70,
                     scope: this,
                     handler: this.onOk,
+                    variant: 'primary',
                     iconCls: 'action_saveAndClose',
                 })]
             }]

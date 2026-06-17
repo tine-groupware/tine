@@ -137,4 +137,13 @@ class Sales_EDocument_ZUGFeRD
         }
         return new self($pdf);
     }
+
+    public static function isStringZugFeRD(string $data): ?self
+    {
+        try {
+            return self::createFromString($data);
+        } catch (Tinebase_Exception_UnexpectedValue $e) {
+            return null;
+        }
+    }
 }

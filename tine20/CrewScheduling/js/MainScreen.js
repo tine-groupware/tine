@@ -322,6 +322,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                     scope: this,
                     disabled: true,
                     handler: this.onButtonApply,
+                    variant: 'primary',
                     iconCls: 'action_saveAndClose'
                 }]
             }, new Tine.CrewScheduling.MemberSelectionPanel({

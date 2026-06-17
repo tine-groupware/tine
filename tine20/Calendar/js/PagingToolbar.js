@@ -471,7 +471,7 @@ Tine.Calendar.PagingToolbar.WeekPeriodPicker.Button = Ext.extend(Ext.SplitButton
             items: [new Ext.Toolbar({
                 cls: 'cal-wkperiod-config-menu',
                 items: [].concat(this.dayBtns, {xtype: 'tbtext', width: 40}, 
-                    {text: i18n._hidden('OK'), handler: () => {this.menu.hide()}})
+                    {text: i18n._hidden('OK'), variant: 'primary', handler: () => {this.menu.hide()}})
         })]});
         
         this.menu.on('hide', this.onMenuHide, this);

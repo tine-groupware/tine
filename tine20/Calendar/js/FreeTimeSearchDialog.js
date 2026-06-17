@@ -94,6 +94,7 @@ Tine.Calendar.FreeTimeSearchDialog = Ext.extend(Ext.Panel, {
             ref: '../buttonApply',
             scope: this,
             handler: this.onButtonApply,
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
         }];
 

@@ -773,6 +773,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             actionUpdater: this.saveAndCloseActionUpdater,
             // TODO: remove the defer when all subpanels use the deferByTicket mechanism
             handler: function() { this.onSaveAndClose.defer(500, this); },
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
         });
 

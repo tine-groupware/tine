@@ -49,6 +49,7 @@ Tine.Tinebase.LicenseScreen = Ext.extend(Ext.Window, {
             },
             buttons: [{
                 text: i18n._('Ok'),
+                variant: 'primary',
                 iconCls: 'action_saveAndClose',
                 handler: this.close,
                 scope: this

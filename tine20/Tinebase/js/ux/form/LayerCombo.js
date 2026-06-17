@@ -210,6 +210,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
                 text: i18n._('Ok'),
                 scope: this,
                 handler: this.onOk,
+                variant: 'primary',
                 iconCls: 'action_saveAndClose'
             });
             

@@ -159,6 +159,7 @@ Tine.widgets.dialog.EditRecord = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             //handler: this.onSaveAndClose,
             handler: this.handlerSaveAndClose,
+            variant: 'primary',
             iconCls: 'action_saveAndClose',
             scope: this.handlerScope
         });

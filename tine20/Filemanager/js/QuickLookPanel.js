@@ -193,11 +193,12 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                 });
             }
 
-            this.actionUpdater.updateActions([this.record]);
             this.cardPanelsByRecordId[this.record.id] = previewPanel.id;
             this.cardPanel.add(previewPanel);
         }
 
+        this.actionUpdater.each(action => action.previewPanel = previewPanel);
+        this.actionUpdater.updateActions([this.record]);
         Ext.ux.layout.CardLayout.helper.setActiveCardPanelItem(this.cardPanel, previewPanel, true);
     },
 

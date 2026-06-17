@@ -82,6 +82,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         this.action_ok = new Ext.Action({
             disabled: true,
             text: i18n._('Ok'),
+            variant: 'primary',
             iconCls: 'action_saveAndClose',
             minWidth: 70,
             handler: this.onOk,

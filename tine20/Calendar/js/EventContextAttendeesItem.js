@@ -133,6 +133,7 @@ Tine.Calendar.EventContextAttendeesItem = Ext.extend(Ext.menu.Item, {
                         this.app.getMainScreen().getCenterPanel().onUpdateEvent(this.event, false, 'update');
                         win.close();
                     },
+                    variant: 'primary',
                     iconCls: 'action_saveAndClose'
                 }]
             }]

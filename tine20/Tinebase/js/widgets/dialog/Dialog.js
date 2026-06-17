@@ -80,6 +80,7 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
             scope: this,
             handler: this.onButtonApply,
             hidden: this.applyButtonText === null,
+            variant: 'primary',
             iconCls: 'action_saveAndClose'
         }];
         

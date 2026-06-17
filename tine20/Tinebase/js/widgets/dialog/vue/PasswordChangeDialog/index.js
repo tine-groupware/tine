@@ -55,6 +55,7 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Tine.widgets.dialog.ModalDialog,
         }, {
             name: 'ok',
             text: i18n._('Ok'),
+            variant: 'primary',
             iconCls: 'action_saveAndClose',
             eventName: 'ok'
         }]

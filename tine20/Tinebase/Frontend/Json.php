@@ -64,6 +64,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::MODEL_NAME_PART,
         Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::MODEL_NAME_PART,
         Tinebase_Model_TwigTemplate::MODEL_NAME_PART,
+        Tinebase_Model_FileLocation::MODEL_NAME_PART,
+        Tinebase_Model_FileLocation_RecordAttachment::MODEL_NAME_PART,
+        Tinebase_Model_FileLocation_TempFile::MODEL_NAME_PART,
+        Tinebase_Model_FileLocation_TreeNode::MODEL_NAME_PART,
     ];
     
     public function __construct()

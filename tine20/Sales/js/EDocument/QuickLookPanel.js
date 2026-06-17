@@ -6,7 +6,9 @@
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import('./ValidationPanel')
+import './quickLookAction'
+import './ValidationPanel'
+import FileLocation from 'Model/FileLocation'
 
 const EDocumentQuickLookPanel = Ext.extend(Ext.Panel, {
     border: false,
@@ -24,10 +26,11 @@ const EDocumentQuickLookPanel = Ext.extend(Ext.Panel, {
             }
         }]
 
+        const fileLocation = FileLocation.create(this.nodeRecord)
         this.html = `<iframe 
             class="sales-quicklook-edocuemnt"
             style="width: 100%; height: 100%; border: none;"
-            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungView&fileNodeId=${this.nodeRecord.id}" 
+            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungView&fileLocation=${encodeURI(JSON.stringify(fileLocation.getData()))}" 
         />`;
 
         EDocumentQuickLookPanel.superclass.initComponent.call(this);
@@ -37,8 +40,4 @@ const EDocumentQuickLookPanel = Ext.extend(Ext.Panel, {
 
 Ext.reg('Sales.EDocumentQuickLookPanel', EDocumentQuickLookPanel);
 
-// NOTE: xml should be quicklooked with an ace by default. we need a mechanism to switch views if multiple registrations
-//       are there for the same contentType/extension
-if (_.isFunction(_.get(Tine, 'Filemanager.QuickLookRegistry.registerContentType'))) {
-    Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Sales.EDocumentQuickLookPanel');
-}
+export default EDocumentQuickLookPanel;

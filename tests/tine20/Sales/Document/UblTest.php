@@ -674,7 +674,14 @@ EOSTR;
 
         $this->assertNotNull($node = $invoice->attachments->find(fn(Tinebase_Model_Tree_Node $attachment) => str_ends_with($attachment->name, '-xrechnung.xml'), null));
         ob_start();
-        (new Sales_Frontend_Http)->getXRechnungView($node->getId());
+        (new Sales_Frontend_Http)->getXRechnungView(json_encode((new Tinebase_Model_FileLocation([
+            Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_RecordAttachment([
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_NAME => $node->name,
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_RECORD_ID => $invoice->getId(),
+                Tinebase_Model_FileLocation_RecordAttachment::FLD_MODEL => SMDI::class,
+            ]),
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_RecordAttachment::class,
+        ]))->toArray()));
         $html = ob_get_clean();
         $this->assertStringContainsString($buyRef, $html);
     }
@@ -773,14 +780,20 @@ EOSTR;
         Tinebase_FileSystem::getInstance()->mkdir($path);
         fwrite(
             $fh = Tinebase_FileSystem::getInstance()->fopen($path . '/zugferd-view-test.pdf', 'w'),
-            file_get_contents(__DIR__ . '/files/ZUGFeRD-Example.pdf'));
+            file_get_contents(__DIR__ . '/files/ZUGFeRD-Example.pdf')
+            );
         Tinebase_FileSystem::getInstance()->fclose($fh);
 
         $node = Tinebase_FileSystem::getInstance()->stat($path . '/zugferd-view-test.pdf');
         $this->assertNotNull($node);
 
         ob_start();
-        (new Sales_Frontend_Http)->getXRechnungView($node->getId());
+        (new Sales_Frontend_Http)->getXRechnungView(json_encode((new Tinebase_Model_FileLocation([
+            Tinebase_Model_FileLocation::FLD_LOCATION => new Tinebase_Model_FileLocation_TreeNode([
+                Tinebase_Model_FileLocation_TreeNode::FLD_NODE_ID => $node->getId(),
+            ]),
+            Tinebase_Model_FileLocation::FLD_MODEL_NAME => Tinebase_Model_FileLocation_TreeNode::class,
+        ]))->toArray()));
         $html = ob_get_clean();
         $this->assertNotEmpty($html);
         $this->assertStringContainsString('DOCTYPE', $html);

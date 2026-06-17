@@ -91,6 +91,7 @@ Tine.Tinebase.SubscriptionScreen = Ext.extend(Ext.Window, {
             html: this.template ?? '',
             buttons: [{
                 text: i18n._('Ok'),
+                variant: 'primary',
                 iconCls: 'action_saveAndClose',
                 handler: this.close,
                 scope: this

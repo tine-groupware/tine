@@ -26,6 +26,9 @@ class Sales_EDocument_Service_Validate
 
     public function validateXRechnungContent(string $data): array
     {
+        if ($zugPferd = Sales_EDocument_ZUGFeRD::isStringZugFeRD($data)) {
+            $data = $zugPferd->getXml();
+        }
         return $this->callSvc($data, false);
     }
 
