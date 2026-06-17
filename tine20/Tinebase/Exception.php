@@ -196,8 +196,7 @@ class Tinebase_Exception extends Exception
             $scope->setExtra('tinebaseId', Tinebase_Core::getTinebaseId());
             $scope->setExtra('callTrace', $callTrace);
         });
-        Sentry\captureException($exception);
-        return true;
+        return Sentry\captureException($exception) ? true : false;
     }
 
     /**
