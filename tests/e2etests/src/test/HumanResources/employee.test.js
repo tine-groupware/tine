@@ -140,8 +140,8 @@ describe('employee', () => {
                 test('confirm dialog is shown', async () => {
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-type', {text: '[U] Urlaub'});
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.brn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
-                    await expectPuppeteer(employeeEditDialog).toClick('.brn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
                     await new Promise(r => setTimeout(r, 2000));
                 });
                 
@@ -247,8 +247,8 @@ describe('employee', () => {
                     await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.brn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
-                    await expectPuppeteer(employeeEditDialog).toClick('.brn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
 
                 });
 
