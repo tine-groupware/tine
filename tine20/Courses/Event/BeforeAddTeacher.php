@@ -15,20 +15,11 @@
  */
 class Courses_Event_BeforeAddTeacher extends Tinebase_Event_Abstract
 {
-    /**
-     * @var Tinebase_Model_FullUser account of the teacher
-     */
-    public $account;
-    
-    /**
-     * @var Courses_Model_Course
-     */
-    public $course;
-    
-    public function __construct($_account, $_course)
+    public function __construct(
+        public Tinebase_Model_FullUser $_account,
+        public Courses_Model_Course $_course,
+    )
     {
-        $this->account = $_account;
-        $this->course = $_course;
 
         parent::__construct([]);
     }

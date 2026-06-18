@@ -22,15 +22,7 @@ use \Sabre\DAV;
  */
 class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabre\CardDAV\ICard, Sabre\DAVACL\IACL
 {
-    /**
-     * @var Tinebase_Model_Container
-     */
-    protected $_container;
-    
-    /**
-     * @var Addressbook_Model_Contact
-     */
-    protected $_contact;
+
     
     /**
      * holds the vcard returned to the client
@@ -50,10 +42,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      * @param Tinebase_Model_Container $_container
      * @param  string|Addressbook_Model_Contact $_contact the id of a contact or the contact itself
      */
-    public function __construct(Tinebase_Model_Container $_container, $_contact = null) 
+    public function __construct(protected Tinebase_Model_Container $_container, protected $_contact = null) 
     {
-        $this->_container = $_container;
-        $this->_contact   = $_contact;
 
         list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         

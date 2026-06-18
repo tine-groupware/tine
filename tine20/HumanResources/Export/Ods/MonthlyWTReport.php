@@ -36,17 +36,19 @@ class HumanResources_Export_Ods_MonthlyWTReport extends Tinebase_Export_Ods
      */
     protected $_weekSummary;
 
-    protected $_orgController;
-    protected $_orgOptions;
     protected $_isMultiWTR = false;
     protected $_multiExports = [];
+    protected ?Tinebase_Controller_Record_Interface $_orgController;
+    protected array $_orgOptions;
 
-    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter, ?\Tinebase_Controller_Record_Interface $_controller = NULL, $_additionalOptions = array())
+    public function __construct(Tinebase_Model_Filter_FilterGroup $_filter,
+                                ?Tinebase_Controller_Record_Interface $_orgController = null,
+                                array $_orgOptions = [])
     {
-        $this->_orgController = $_controller;
-        $this->_orgOptions = $_additionalOptions;
+        $this->_orgController = $_orgController;
+        $this->_orgOptions = $_orgOptions;
 
-        parent::__construct($_filter, $_controller, $_additionalOptions);
+        parent::__construct($_filter, $_orgController, $_orgOptions);
 
         // group by week (Kalender Woche)
         /** @var Tinebase_DateTime $value */

@@ -15,13 +15,11 @@ use Tinebase_ModelConfiguration_Const as MCC;
 class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Expander_Property
 {
     protected $_mccCfg;
-    protected $_expanderDefinition;
 
-    public function __construct($_model, $_property, $_expanderDefinition, $_rootExpander,
+    public function __construct($_model, $_property, protected array $_expanderDefinition, $_rootExpander,
                                 $_prio = self::DATA_FETCH_PRIO_DEPENDENTRECORD)
     {
         $this->_mccCfg = $_expanderDefinition['fieldDefConfig'];
-        $this->_expanderDefinition = $_expanderDefinition;
 
         parent::__construct($_model, $_property, [] /*$_expanderDefinition*/, $_rootExpander, $_prio);
     }

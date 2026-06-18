@@ -15,20 +15,11 @@
  */
 class Admin_Event_BeforeImportUser extends Tinebase_Event_Abstract
 {
-    /**
-     * @var Tinebase_Model_FullUser account of the teacher
-     */
-    public $account;
-    
-    /**
-     * @var array options of the import plugin
-     */
-    public $options;
-    
-    public function __construct($_account, $_options)
+    public function __construct(
+        public Tinebase_Model_FullUser $_account,
+        public array $_options,
+    )
     {
-        $this->account = $_account;
-        $this->options = $_options;
 
         parent::__construct([]);
     }

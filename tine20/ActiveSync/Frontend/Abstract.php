@@ -19,19 +19,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
 {
     const LONGID_DELIMITER = "\xe2\x87\x94"; # ⇔
     
-    /**
-     * information about the current device
-     *
-     * @var Syncroton_Model_IDevice
-     */
-    protected $_device;
-    
-    /**
-     * timestamp to use for all sync requests
-     *
-     * @var Tinebase_DateTime
-     */
-    protected $_syncTimeStamp;
+
     
     /**
      * class to use for search entries
@@ -147,7 +135,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      *
      * @param Tinebase_DateTime $_syncTimeStamp
      */
-    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
+    public function __construct(protected Syncroton_Model_IDevice $_device, protected DateTime $_syncTimeStamp)
     {
         $denyList = ActiveSync_Config::getInstance()->get(ActiveSync_Config::DEVICE_MODEL_DENY_LIST);
         foreach ($denyList as $deny) {
@@ -178,14 +166,11 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         }
         
         // this is a Syncroton_Model_Device and not a ActiveSync_Model_Device
-        $this->_device              = $_device;
         $this->_device->devicetype  = strtolower($this->_device->devicetype);
         if ($this->_device->devicetype == 'ipad') {
             // map to iphone till syncroton has ipad/ios support
             $this->_device->devicetype = Syncroton_Model_Device::TYPE_IPHONE;
         }
-        
-        $this->_syncTimeStamp       = $_syncTimeStamp;
         
         $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
         if (empty($this->_contentControllerName)) {

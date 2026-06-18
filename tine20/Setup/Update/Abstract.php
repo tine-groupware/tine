@@ -29,13 +29,6 @@ class Setup_Update_Abstract
     public const PRIO_NORMAL_APP_UPDATE = 1000;
 
     /**
-     * backend for databse handling and extended database queries
-     *
-     * @var Setup_Backend_Mysql
-     */
-    protected $_backend;
-    
-    /**
      * @var Zend_Db_Adapter_Abstract
      */
     protected $_db;
@@ -45,11 +38,10 @@ class Setup_Update_Abstract
     /**
      * the constructor
      *
-     * @param Setup_Backend_Interface $_backend
+     * @param Setup_Backend_Mysql $_backend
      */
-    public function __construct($_backend)
+    public function __construct(protected Setup_Backend_Mysql $_backend)
     {
-        $this->_backend = $_backend;
         $this->_db = Tinebase_Core::getDb();
     }
 
