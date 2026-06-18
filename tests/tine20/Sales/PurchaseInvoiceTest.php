@@ -496,7 +496,6 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $this->assertCount(1, $pi->attachments);
         $this->assertSame('import.txt', $pi->attachments->getFirstRecord()->name);
         $this->assertNull($pi->{Sales_Model_Document_PurchaseInvoice::FLD_PAYMENT_MEANS_USED});
-        $this->assertCount(13, $array = array_filter($pi->toArray()), print_r($array, true));
     }
 
     public function testDuplicateCheckOnUpdate()

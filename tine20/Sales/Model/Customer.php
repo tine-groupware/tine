@@ -260,7 +260,12 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::UNSIGNED => true,
                 'shy'     => TRUE,
                 self::NULLABLE => true,
-                'inputFilters' => array('Zend_Filter_Empty' => null),
+                self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Sales_Config::APP_NAME,
+                        self::CONFIG                    => Sales_Config::DEFAULT_PAYMENT_TERMS,
+                    ],
+                ],
             ),
             'currency' => array (
                 'label'   => 'Currency', // _('Currency')
@@ -269,6 +274,12 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 'group'   => 'accounting',
                 self::NULLABLE => true,
                 self::LENGTH => 4,
+                self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                        self::CONFIG                    => Tinebase_Config::DEFAULT_CURRENCY,
+                    ],
+                ],
             ),
             'currency_trans_rate' => array (
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')

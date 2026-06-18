@@ -577,6 +577,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::UNSIGNED                      => true,
                 self::SHY                           => TRUE,
                 self::NULLABLE                      => true,
+                self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Sales_Config::APP_NAME,
+                        self::CONFIG                    => Sales_Config::DEFAULT_PAYMENT_TERMS,
+                    ],
+                ],
             ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
