@@ -71,6 +71,7 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // register additional action for genericpickergridpanel
         if (Tine.Tinebase.common.hasRight('run', 'WebAccounting')) {
             // TODO define additional models / get from registry
+            //TODO: remove?
             this.setAccountableAction = this.getSetAccountableAction('WebAccounting_Model_ProxmoxVM');
             Tine.log.info('Registering "Set Accountable" action in relation picker ctx menu ...');
             // Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', this.setAccountableAction, 100);

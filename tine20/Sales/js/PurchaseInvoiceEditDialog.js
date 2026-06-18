@@ -213,11 +213,11 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     },
 
     onSelectSupplier: function(field, newValue) {
-        if (newValue.get('credit_term') > 0) {
+        if (newValue.get('credit_term') >= 0) {
             this.dueInDaysField.setValue(newValue.get('credit_term'));
         }
         const vatProcedure = newValue.get('vat_procedure');
-        const defaultSalesTaxValue = this.salesTaxField.getValue();
+        const defaultSalesTaxValue = this.salesTaxField.getValue() || 19;
         if (defaultSalesTaxValue > 0) this.defaultSalesTaxValue = defaultSalesTaxValue;
         this.salesTaxField.setValue(vatProcedure !== 'standard' ? 0 : (this.defaultSalesTaxValue || 0));
         this.calcTax();
@@ -352,6 +352,8 @@ Tine.Sales.PurchaseInvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             name: 'sales_tax',
             fieldLabel: this.app.i18n._('Sales Tax (percent)'),
             columnWidth: 1/4,
+            //fixme: value got overwritten to '', should be 0
+            value: 0,
             suffix: ' %',
             nullable: true,
             listeners: {
