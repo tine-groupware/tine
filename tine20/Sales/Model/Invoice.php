@@ -206,6 +206,12 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'type'  => 'integer',
                 self::NULLABLE => true,
                 self::UNSIGNED => true,
+                self::CONFIG                    => [
+                    self::DEFAULT_FROM_CONFIG       => [
+                        self::APP_NAME                  => Sales_Config::APP_NAME,
+                        self::CONFIG                    => Sales_Config::DEFAULT_PAYMENT_TERMS,
+                    ],
+                ],
             ),
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')

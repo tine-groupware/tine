@@ -20,11 +20,6 @@ const AbstractMixin = {
     },
 
     statics: {
-        getDefaultData() {
-            return {
-                credit_term: Tine.Tinebase.configManager.get('defaultPaymentTerms', 'Sales')
-            }
-        },
         /**
          * returns number rounded to given number of fractionDigits or input if it's not a Number
          *
@@ -47,8 +42,6 @@ Tine.Sales.Model.Document_OrderMixin = AbstractMixin
 Tine.Sales.Model.Document_DeliveryMixin = AbstractMixin
 Tine.Sales.Model.Document_PurchaseInvoiceMixin = AbstractMixin
 Tine.Sales.Model.Document_InvoiceMixin = AbstractMixin
-Tine.Sales.Model.Document_CustomerMixin = AbstractMixin
 Tine.Sales.Model.InvoiceMixin = AbstractMixin
-Tine.Sales.Model.CustomerMixin = AbstractMixin
 
 export default AbstractMixin
