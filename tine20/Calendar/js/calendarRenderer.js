@@ -25,11 +25,11 @@ Tine.Calendar.calendarRenderer = function(value, metaData, record, rowIndex, col
         } else {
             containerHtml = Tine.Tinebase.common.containerRenderer(displayContainer);
         }
-        
+
         tip += Ext.isPrimitive(originContainer) ? 
                 Ext.util.Format.htmlEncode(app.i18n._("The original event is stored in a calendar you don't have access to.")) :
                 String.format(Ext.util.Format.htmlEncode(app.i18n._("The original event is stored in {0}")), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(originContainer)));
-        tip += displayContainer && ! Tine.Tinebase.container.pathIsMyPersonalContainer(originContainer.path) ? 
+        tip += displayContainer && ! Tine.Tinebase.container.pathIsMyPersonalContainer(originContainer?.path) ?
                 String.format(Ext.util.Format.htmlEncode(app.i18n._("This event also appears in your personal calendar {0}")), Ext.util.Format.htmlEncode(Tine.Tinebase.common.containerRenderer(displayContainer))) :
                     '';
         return containerHtml.replace('<div ', '<div ext:qtip="' + tip + '" ');
