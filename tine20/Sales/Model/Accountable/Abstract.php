@@ -84,11 +84,11 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
      *
      * @param Tinebase_DateTime $date
      * @param Sales_Model_ProductAggregate $productAggregate
-     * @param Sales_Model_Invoice $invoice
+     * @param Sales_Model_Document_Invoice $invoice
      * @param Sales_Model_Contract $contract
      * @return boolean
      */
-    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Invoice $invoice, Sales_Model_Contract $contract)
+    public function needsInvoiceRecreation(Tinebase_DateTime $date, Sales_Model_ProductAggregate $productAggregate, Sales_Model_Document_Invoice $invoice, Sales_Model_Contract $contract)
     {
         return false;
     }
@@ -256,10 +256,8 @@ abstract class Sales_Model_Accountable_Abstract extends Tinebase_Record_Abstract
     
     /**
      * set each billable of this accountable billed
-     *
-     * @param Sales_Model_Invoice $invoice
      */
-    abstract public function clearBillables(Sales_Model_Invoice $invoice);
+    abstract public function clearBillables(Sales_Model_Document_Invoice $invoice);
 
     /**
      * loads billables for this record

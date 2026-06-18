@@ -15,7 +15,6 @@
  * @package     Admin
  * @subpackage  Scheduler
  */
-
 class Admin_Controller_SchedulerTask extends Tinebase_Controller_Record_Abstract
 {
     /** @use Tinebase_Controller_SingletonTrait<Admin_Controller_SchedulerTask> */

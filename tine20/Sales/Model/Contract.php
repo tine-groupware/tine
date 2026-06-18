@@ -385,7 +385,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
 
     public static function touchOnRelated(Tinebase_Model_Relation $relation): bool
     {
-        if (Sales_Model_Invoice::class === $relation->own_model) {
+        if (Sales_Model_Document_Invoice::class === $relation->own_model) {
             return false;
         }
         return true;

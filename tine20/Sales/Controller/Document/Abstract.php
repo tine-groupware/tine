@@ -16,10 +16,11 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 /**
  * Abstract Document controller class for Sales application
  *
+ * @template T of Sales_Model_Document_Abstract
  * @package     Sales
  * @subpackage  Controller
  *
- * @extends Tinebase_Controller_Record_Abstract<Sales_Model_Document_Abstract>
+ * @extends Tinebase_Controller_Record_Abstract<T>
  */
 abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Record_Abstract
 {

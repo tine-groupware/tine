@@ -183,7 +183,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'inputFilters'          => array('Zend_Filter_Empty' => null),
                 'config'                => array(
                     'appName'               => 'Sales',
-                    'modelName'             => 'Invoice',
+                    'modelName'             => 'Document_Invoice',
                     'idProperty'            => 'id',
                 ),
                 self::UI_CONFIG         => [

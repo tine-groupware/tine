@@ -21,7 +21,6 @@ trait Tinebase_Controller_SingletonTrait
     /**
      * @return T
      */
-
     public static function getInstance(): self
     {
         if (null === self::$_instance) {

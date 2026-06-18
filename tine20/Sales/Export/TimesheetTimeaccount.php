@@ -24,7 +24,7 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
     protected $_timeaccount;
 
     /**
-     * @var Sales_Model_Invoice
+     * @var Sales_Model_Document_Invoice
      */
     protected $_invoice;
 
@@ -79,12 +79,11 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
         }
 
         if (null === $this->_contextContract) {
-            $customers = $this->_invoice->relations;
-            $customer = $customers->filter('type', 'CUSTOMER')->getFirstRecord();
-            $contract = $customers->filter('type', 'CONTRACT')->getFirstRecord();
+            $customer = Sales_Controller_Document_Customer::getInstance()->get($this->_invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CUSTOMER_ID));
+            $contract = Sales_Controller_Contract::getInstance()->get($this->_invoice->getIdFromProperty(Sales_Model_Document_Invoice::FLD_CONTRACT_ID));
 
-            $this->_contextContract = $contract ? $contract->related_record->number : '';
-            $this->_contextCustomer = $customer ? $customer->related_record->getTitle() : '';
+            $this->_contextContract = $contract ? $contract->number : '';
+            $this->_contextCustomer = $customer ? $customer->getTitle() : '';
 
             $this->_contextSumTag = 0;
             $this->_contextSum = 0;

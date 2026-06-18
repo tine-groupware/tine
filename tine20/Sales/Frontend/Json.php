@@ -1281,18 +1281,4 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, Sales_Controller_Offer::getInstance());
     }
-
-    /**
-     * @param $id Invoice Id
-     * @return bool|Sales_Model_Invoice|Tinebase_Record_Interface
-     * @throws Tinebase_Exception_SystemGeneric
-     */
-    public function createTimesheetForInvoice($id)
-    {
-        $invoice = Sales_Controller_Invoice::getInstance()->createTimesheetFor($id);
-        if (! $invoice) {
-            throw new Tinebase_Exception_SystemGeneric('Timesheet could not be created');
-        }
-        return $this->getInvoice($invoice->getId());
-    }
 }
