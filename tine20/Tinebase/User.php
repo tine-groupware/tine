@@ -1244,12 +1244,27 @@ class Tinebase_User implements Tinebase_Controller_Interface
             if (!empty($adminPassword)) {
                 $userBackend->setPassword($user, $adminPassword);
             }
-            // add the admin account to all groups
-            $groupsBackend->addGroupMember($adminGroup, $user);
-            $groupsBackend->addGroupMember($userGroup, $user);
         } catch (Tinebase_Exception_NotFound) {
-            Admin_Controller_User::getInstance()->create($user, $adminPassword, $adminPassword, true);
+            try {
+                Admin_Controller_User::getInstance()->create($user, $adminPassword, $adminPassword, true);
+            } catch (Zend_Ldap_Exception $zle) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $zle->getMessage());
+                }
+                if (preg_match('/0x44 \(already exists\)/i', $zle->getMessage())) {
+                    // try to sync existing admin user
+                    // TODO should be improved - we still have some issue with missing group memberships
+                    $user = Tinebase_User::syncUser($user);
+                } else {
+                    throw $zle;
+                }
+            }
         }
+
+        // add the admin account to all groups
+        $groupsBackend->addGroupMember($adminGroup, $user);
+        $groupsBackend->addGroupMember($userGroup, $user);
 
         $addressBookController->doContainerACLChecks($oldAcl);
         $addressBookController->setRequestContext($oldRequestContext ?? array());
@@ -1271,8 +1286,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         try {
             $systemUser = $userBackend->getFullUserByLoginName($accountLoginName);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Use existing system user ' . $accountLoginName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Use existing system user ' . $accountLoginName);
+            }
             return $systemUser;
         } catch (Tinebase_Exception_NotFound) {
             // continue
