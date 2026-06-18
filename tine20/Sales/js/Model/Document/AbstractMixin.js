@@ -13,6 +13,12 @@ const AbstractMixin = {
         return _.find(this.get('attachments'), {id: latest.node_id})
     },
 
+    isBooked: function() {
+        const statusFieldName = `${_.snakeCase(this.constructor.getMeta('modelName').replace(/^Document_/, ''))}_status`
+        const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, statusFieldName)
+        return _.find(statusDef.records, {id: this.get(statusFieldName) })?.booked
+    },
+
     statics: {
         getDefaultData() {
             return {

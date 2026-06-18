@@ -1,11 +1,11 @@
-# tine Groupware - Contributing
+# tine Groupware – Contributing
 
 **AI coding agents:** see [AGENTS.md](AGENTS.md) at the repository root for project-specific guidance (development setup, tests, conventions, and workflow).
 
 ## Write Code
 
-You might find this wiki page helpful for setting up a development environment for tine Groupware:
-https://github.com/tine20/tine20/wiki/EN:Development-Setup
+You might find this project helpful for setting up a development environment for tine Groupware:
+https://github.com/tine-groupware/tine-dev
 
 * Please make sure that there aren’t existing pull requests attempting to address the issue mentioned
 * Check for related issues on the issue tracker
@@ -59,7 +59,7 @@ Another:
 
 See also the [AngularJS commit guidelines](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines).
 
-<type> can be one of the following:
+\<type\> can be one of the following:
 
 - tweak
 - hack
@@ -75,7 +75,7 @@ See also the [AngularJS commit guidelines](https://github.com/angular/angular/bl
 - script
 - text
 
-Some example <scope>s:
+Some example \<scope\>s:
 
 - APPNAME like Addressbook, Calendar, Tasks
 - Tests / Unittests
@@ -137,9 +137,8 @@ For PHP Code, we use the [PSR-1](https://github.com/php-fig/fig-standards/blob/m
 
 ## Asking and Answering Questions
 
-If you have a question, please open an issue. We will put the label "Question" on it. Feel
-free to answer questions of other users. You could also put your question on Stackoverflow (tag "tine20"):
-https://stackoverflow.com/questions/tagged/tine20
+If you have a question, please open an issue or a [discussion](https://github.com/orgs/tine-groupware/discussions).
+We will put the label "Question" on it. Feel free to answer questions of other users.
 
 Questions on GitHub can be asked in german or english.
 

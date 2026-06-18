@@ -127,6 +127,13 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} = null;
             $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} = null;
         }
+
+        if (!$_record->isBooked() && null !== $_oldRecord &&
+                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} !== $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} &&
+                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} === $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
+            $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} = $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER};
+        }
+
         parent::_setAutoincrementValues($_record, $_oldRecord);
 
         if (!$_record->isBooked()) {
