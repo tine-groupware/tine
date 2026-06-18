@@ -22,7 +22,7 @@ Tine.Sales.Document_OrderEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
         const items = rtnVal[0].items
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
 
-        const statusLine = [this.fields.reversal_status, this.fields.followup_delivery_created_status, this.fields.followup_delivery_booked_status, this.fields.followup_invoice_created_status, this.fields.followup_invoice_booked_status]
+        const statusLine = [this.fields.reversed_status, this.fields.followup_delivery_created_status, this.fields.followup_delivery_booked_status, this.fields.followup_invoice_created_status, this.fields.followup_invoice_booked_status]
         statusLine.cls = 'status-fields'
         items.splice(0, 0, statusLine)
 
