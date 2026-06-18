@@ -75,7 +75,7 @@ See also the [AngularJS commit guidelines](https://github.com/angular/angular/bl
 - script
 - text
 
-Some example <scope>s:
+Some example \<scope\>s:
 
 - APPNAME like Addressbook, Calendar, Tasks
 - Tests / Unittests
