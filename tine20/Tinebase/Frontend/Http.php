@@ -27,9 +27,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * get json-api service map
      * 
-     * @return string
+     * @return array
      */
-    public static function getServiceMap()
+    public static function getServiceMap(): array
     {
         $smd = Tinebase_Server_Json::getServiceMap();
         

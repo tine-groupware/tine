@@ -158,9 +158,6 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
         $definitions = array();
         foreach ($userApplications as $application) {
-            if (Admin_Config::APP_NAME === $application->name) {
-                continue;
-            }
             if ('Setup' === $application->name) {
                 continue;
             }
@@ -237,9 +234,6 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                 }
             }
         }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Got MC definitions: ' . print_r(array_keys($definitions), true));
 
         Tinebase_Server_Abstract::$_modelConfigMethods[$frontend] = $definitions;
 
