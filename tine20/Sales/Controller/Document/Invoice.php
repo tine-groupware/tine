@@ -70,8 +70,12 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
 
     public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document, string $property = Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER): array
     {
+        if (Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER !== $property) {
+            throw new Tinebase_Exception_UnexpectedValue('property ' . $property . ' is not allowed');
+        }
         $result = parent::documentNumberConfigOverride($document, $property);
-        if (!$document->isBooked()) {
+        if (!$document->isBooked() && (!$document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} ||
+                $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER} === $document->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER})) {
             $result['skip'] = true;
         }
         return $result;
@@ -128,17 +132,14 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
             $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} = null;
         }
 
-        if (!$_record->isBooked() && null !== $_oldRecord &&
-                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} !== $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} &&
-                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} === $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
-            $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} = $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER};
-        }
-
         parent::_setAutoincrementValues($_record, $_oldRecord);
 
         if (!$_record->isBooked()) {
-            $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} =
-                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
+            if (!$_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} ||
+                    $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} === $_oldRecord?->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
+                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} =
+                    $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
+            }
         } elseif (null === $_oldRecord) {
             $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} =
                 $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER};
