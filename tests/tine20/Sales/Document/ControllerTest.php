@@ -1866,4 +1866,42 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertNotEmpty($updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
         $this->assertStringStartsWith($dnTranslated, $updatedDelivery->{Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER});
     }
+
+    public function testProformaNumberAlteration()
+    {
+        $customer = $this->_createCustomer();
+        $product = $this->_createProduct();
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
+            Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Invoice::class, [
+                new Sales_Model_DocumentPosition_Invoice([
+                    Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID => $product->getId(),
+                    Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE => 1,
+                    Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                    Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => 19,
+                ], true),
+            ])
+        ]));
+
+        $this->assertNotEmpty($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
+        $this->assertSame(
+            $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER},
+            $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER}
+        );
+
+        $number = Tinebase_Translation::getDefaultTranslation(Sales_Config::APP_NAME)->_('PI-') . '00042';
+        $this->assertNotSame($number, $originalProformaNumber = $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} = $number;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        $this->assertSame($number, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
+        $this->assertSame($number, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
+        $this->assertNotSame($originalProformaNumber, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
+    }
 }
