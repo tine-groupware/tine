@@ -43,7 +43,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Offer'; // gettext('GENDER_Offer')
         $_definition[self::RECORDS_NAME] = 'Offers'; // ngettext('Offer', 'Offers', n)
         
-        $_definition[self::VERSION] = 6;
+        $_definition[self::VERSION] = 7;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
@@ -70,6 +70,9 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
     {
         // offer customers are optional
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
+
+        unset($_definition[self::FIELDS][self::FLD_REVERSED_STATUS]);
+        unset($_definition[self::FIELDS][self::FLD_REVERSAL]);
 
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;

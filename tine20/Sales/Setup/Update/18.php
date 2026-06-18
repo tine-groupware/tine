@@ -38,6 +38,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
 
     protected const RELEASE018_UPDATE019 = __CLASS__ . '::update019';
     protected const RELEASE018_UPDATE020 = __CLASS__ . '::update020';
+    protected const RELEASE018_UPDATE021 = __CLASS__ . '::update021';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -100,6 +101,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE019          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update019',
+            ],
+            self::RELEASE018_UPDATE021          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update021',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -414,7 +419,6 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         foreach ([
                     Sales_Model_Document_Delivery::TABLE_NAME,
                     Sales_Model_Document_Invoice::TABLE_NAME,
-                    Sales_Model_Document_Offer::TABLE_NAME,
                     Sales_Model_Document_Order::TABLE_NAME,
                     Sales_Model_Document_PurchaseInvoice::TABLE_NAME,
                  ] as $tableName) {
@@ -446,7 +450,6 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
         foreach ([
                      Sales_Model_Document_Delivery::class,
                      Sales_Model_Document_Invoice::class,
-                     Sales_Model_Document_Offer::class,
                      Sales_Model_Document_Order::class,
                      Sales_Model_Document_PurchaseInvoice::class,
                  ] as $doc) {
@@ -574,5 +577,13 @@ With kind regards
 Your tine Team',
         ]));
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.20', self::RELEASE018_UPDATE020);
+    }
+
+    public function update021(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Offer::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.21', self::RELEASE018_UPDATE021);
     }
 }
