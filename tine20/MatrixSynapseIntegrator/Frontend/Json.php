@@ -1,12 +1,12 @@
 <?php
 /**
- * tine Groupware
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     MatrixSynapseIntegrator
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -110,5 +110,4 @@ class MatrixSynapseIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstr
         $updatedRecord = MatrixSynapseIntegrator_Controller_MatrixAccount::getInstance()->saveOwnMatrixAccount($record);
         return $this->_recordToJson($updatedRecord);
     }
-
 }

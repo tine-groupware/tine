@@ -1,0 +1,1 @@
+use this dir for (temporary) plan.md files of your agents. the plans should be removed before merging into upstream.
