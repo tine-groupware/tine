@@ -18,6 +18,7 @@ import 'widgets/form/UrlField';
 import 'widgets/form/EmailField';
 import 'widgets/TimezoneCombo';
 import {supportedTypes as supportedACETypes} from "./AceField";
+import 'widgets/form/NumberableField';
 
 /**
  * central form field manager
@@ -381,7 +382,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'numberableStr':
                 case 'numberableInt':
-                    field.xtype = 'textfield';
+                    field.xtype = 'numberablefield';
                     field.disabled = ! _.get(field, 'config.editable');
                     field.emptyText = window.i18n._('Gets assigned automatically');
                     break;
