@@ -594,6 +594,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_CONTRACT_ID               => [
                 self::TYPE                          => self::TYPE_RECORD,
                 self::LABEL                         => 'Contract', //_('Contract')
+                self::QUERY_FILTER                  => true,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     self::MODEL_NAME                    => Sales_Model_Contract::MODEL_NAME_PART,
