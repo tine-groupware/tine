@@ -25,7 +25,10 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
      * height of dialog window
      */
     windowHeight: 400,
-
+    /**
+     * @cfg {Boolean} allowCancel
+     */
+    allowCancel: true,
     /**
      * @cfg {Tine.Tinebase.Application} app
      * instance of the app object (required if not appName is given)
@@ -72,6 +75,7 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
             ref: '../buttonCancel',
             scope: this,
             handler: this.onButtonCancel,
+            hidden: this.allowCancel === false,
             iconCls: 'action_cancel'
         }, {
             text: this.applyButtonText ? this.app.i18n._hidden(this.applyButtonText) : i18n._('Ok'),
@@ -107,6 +111,7 @@ Tine.Tinebase.dialog.Dialog = Ext.extend(Ext.FormPanel, {
     getEventData: Ext.emptyFn,
     
     onButtonCancel: async function() {
+        if (! this.allowCancel) return;
         this.fireEvent.apply(this, ['cancel', await this.getEventData('cancel')]);
         if (this.window.closeAction !== 'hide') {
             this.purgeListeners();

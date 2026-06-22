@@ -11,6 +11,8 @@ import FieldTriggerPlugin from "../../ux/form/FieldTriggerPlugin"
 class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     allowCreateNew = true
 
+    readyOnly = false
+
     /**
      * properties from record.json to preserve when editing (see Ext.copyTo for syntax)
      * @type {string}
@@ -36,7 +38,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
         this.setVisible((!!this.field.selectedRecord || this.allowCreateNew));
         this.setTriggerClass(!!this.field.selectedRecord ? 'action_edit' : 'action_add');
 
-        if (this.field.readOnly || this.field.disabled) {
+        if (this.readyOnly || this.field.readOnly || this.field.disabled) {
             this.setVisible(!!this.field.selectedRecord);
             this.setTriggerClass('action_preview');
         }
@@ -67,7 +69,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
             editDialogClass.openWindow(Object.assign({mode, record,
                 recordId: record.getId(),
                 needsUpdateEvent: true,
-                readOnly: mode.match(/local/) && (this.field.readOnly || this.field.disabled),
+                readOnly: mode.match(/local/) && (this.readyOnly || this.field.readOnly || this.field.disabled),
                 listeners: {
                     scope: this,
                     'update': (updatedRecord) => {
