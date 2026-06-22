@@ -50,6 +50,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     
     revealPasswordFn: null,
     record: null,
+    policyConfig: null,
 
     initComponent: function() {
         // NOTE: we need to have this in the instance - otherwise we'd overwrite the prototype
@@ -86,7 +87,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
      * Generate pw
      */
     genPW: function () {
-        const policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
+        const policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('userPwPolicy');
 
         let config = {
             minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,

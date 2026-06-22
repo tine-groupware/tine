@@ -58,7 +58,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.widgets.dialog.Mod
     initComponent: async function () {
         this.title = this.windowTitle || i18n._('Set password');
         this.persona = Personas.QUESTION_INPUT
-        this.policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy')
+        this.policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('userPwPolicy')
 
         this.supr().initComponent.call(this)
         this.contentProps = window.vue.reactive({

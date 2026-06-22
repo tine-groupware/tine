@@ -625,7 +625,8 @@ Tine.Filemanager.nodeActions.Publish = {
             allowEmptyPassword: true,
             locked: false,
             questionText: app.i18n._('Download links can be protected with a password. Without a password, anyone with the link can access the selected files.'),
-            additionalFields: [this.validDateField]
+            additionalFields: [this.validDateField],
+            policyConfig: Tine.Tinebase.configManager.get('downloadPwPolicy')
         });
         
         passwordDialog.openWindow();

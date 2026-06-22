@@ -2031,7 +2031,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var attachmentStore = this.attachmentGrid.getStore();
 
             if (attachmentStore.find('attachment_type', 'download_protected_fm') !== -1) {
-                var dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog();
+                var dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+                    policyConfig: Tine.Tinebase.configManager.get('downloadPwPolicy')
+                });
                 dialog.openWindow();
 
                 // password entered
