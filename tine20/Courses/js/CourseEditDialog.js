@@ -376,7 +376,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             allowEmptyPassword: false,
             locked: false,
             questionText: i18n._('Please enter the new password.'),
-            policyConfig: Tine.Tinebase.configManager.get('userPwPolicy')
         });
         passwordDialog.openWindow();
 
