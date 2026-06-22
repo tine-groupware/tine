@@ -953,7 +953,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         highlightRecords.forEach((record) => {
             const row = this.getView().getRow(this.store.indexOf(record));
             if (row) {
-                Ext.fly(row).highlight('',{duration: 2});
+                Ext.fly(row).highlight('#ffffc1', {easing: 'bounceOut', duration: 2, endColor: '#ffffff'});
                 this.getView().focusRow(row);
             }
         })
