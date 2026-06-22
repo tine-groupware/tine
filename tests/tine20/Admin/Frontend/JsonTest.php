@@ -1461,6 +1461,12 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         self::assertEquals(1, $cfs['totalcount'], print_r($cfs, true));
     }
 
+    /**
+     * @return void
+     * @throws Zend_Cache_Exception
+     *
+     * @group noupdate
+     */
     public function testSearchSchedulerTasks()
     {
         Tinebase_Core::getCache()->clean();
