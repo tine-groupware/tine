@@ -199,7 +199,15 @@ class EFile_Controller extends Tinebase_Controller_Event
         // check preconditions if to run at all
         if (!$instance->doTreeNodeValidation()) return;
 
-        if ($_newRecord->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN} && strpos($_newRecord->name,
+        $renameSkipTokenCheck = false;
+
+        $tierTypeConfig = EFile_Config::getInstance()->{EFile_Config::TIER_TOKEN_RENAME};
+        $currentTierType = $_newRecord->{EFile_Config::TREE_NODE_FLD_TIER_TYPE};
+        if (null !== $currentTierType && ($tierTypeConfig[$currentTierType] ?? true) === false) {
+            $renameSkipTokenCheck = true;
+        }
+
+        if (!$renameSkipTokenCheck && $_newRecord->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN} && strpos($_newRecord->name,
                 $_newRecord->{EFile_Config::TREE_NODE_FLD_TIER_TOKEN} . self::TIER_TOKEN_SEPERATOR) !== 0) {
             throw new Tinebase_Exception_Record_Validation('node name needs to start with efile tier token');
         }
