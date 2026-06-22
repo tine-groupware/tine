@@ -1941,9 +1941,12 @@ viewConfig: {
 
     // private
     beforeColMenuShow : function(){
-        var cm = this.cm,  colCount = cm.getColumnCount();
+        const cm = this.cm;
+        const labels = _.sortBy(cm.config, ['header', 'id']);
         this.colMenu.removeAll();
-        for(var i = 0; i < colCount; i++){
+
+        _.each(labels, col => {
+            const i = _.findIndex(cm.config, {id: col.id});
             if(cm.config[i].fixed !== true && cm.config[i].hideable !== false && cm.config[i].id !== 'responsive'){
                 this.colMenu.add(new Ext.menu.CheckItem({
                     itemId: 'col-'+cm.getColumnId(i),
@@ -1953,7 +1956,7 @@ viewConfig: {
                     disabled: cm.config[i].hideable === false
                 }));
             }
-        }
+        })
     },
 
     // private
