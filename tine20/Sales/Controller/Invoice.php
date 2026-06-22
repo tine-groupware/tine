@@ -1155,7 +1155,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE => $this->_currentBillingCustomer[Sales_Model_Customer::FLD_VAT_PROCEDURE] !== Sales_Config::VAT_PROCEDURE_STANDARD ? 0 : Tinebase_Config::getInstance()->get(Tinebase_Config::SALES_TAX),
                         ], true),
                     ],
-                    Sales_Model_Document_Invoice::FLD_DESCRIPTION => $this->_currentBillingContract->title . ' (' . $this->_currentMonthToBill->toString() . ')',
+                    Sales_Model_Document_Invoice::FLD_DOCUMENT_TITLE => $this->_currentBillingContract->title . ' (' . $this->_currentMonthToBill->toString() . ')',
                     'invoice_positions' => $invoicePositions,
                     'is_auto' => true,
                     Sales_Model_Document_Invoice::FLD_PAYMENT_TERMS => $this->_currentBillingCustomer['credit_term'],
