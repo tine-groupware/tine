@@ -20,7 +20,6 @@ class Tinebase_Fulltext_TextExtract
 {
     protected $_javaBin;
     protected $_tikaJar;
-    protected const MAX_FILE_BLOB_SIZE = 524288000; // 500 MB
 
     /**
      * holds the instance of the singleton
@@ -93,16 +92,18 @@ class Tinebase_Fulltext_TextExtract
         if ($_fileObject->flysystem) {
             $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($_fileObject->flysystem);
             try {
-                if ($flySystem->mimeType($_fileObject->flypath) === 'application/encrypted') {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                        Tinebase_Core::getLogger()->info(
-                            __METHOD__ . '::' . __LINE__
-                            . ' Tika does not like encrypted files - skipping!'
-                        );
-                    }
+                if ($this->_isSkippedMimeType($flySystem->mimeType($_fileObject->flypath))) {
                     return $tempFileName;
                 }
             } catch (League\Flysystem\UnableToRetrieveMetadata) {
+                // we don't index those
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
+                        . ' UnableToRetrieveMetadata - skipping!'
+                    );
+                }
+                return $tempFileName;
             }
             $blobFileName = Tinebase_TempFile::getTempPath();
             $raii = new Tinebase_RAII(fn() => @unlink($blobFileName));
@@ -132,13 +133,7 @@ class Tinebase_Fulltext_TextExtract
                 return $tempFileName;
             }
 
-            if (mime_content_type($blobFileName) === 'application/encrypted') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__
-                        . ' Tika does not like encrypted files - skipping!'
-                    );
-                }
+            if ($this->_isSkippedMimeType(mime_content_type($blobFileName))) {
                 return $tempFileName;
             }
         }
@@ -189,5 +184,30 @@ class Tinebase_Fulltext_TextExtract
 
         unset($raii);
         return $tempFileName;
+    }
+
+    protected function _isSkippedMimeType(string $mimeType): bool
+    {
+        // @see https://stackoverflow.com/questions/6977544/rar-zip-files-mime-type
+        if (in_array($mimeType, [
+            'application/encrypted',
+            'application/gzip',
+            'application/vnd.rar',
+            'application/x-rar-compressed',
+            'application/x-zip-compressed',
+            'application/zip',
+            'application/octet-stream',
+            'multipart/x-zip'
+        ])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Tika does not like this mime type (' . $mimeType . ')- skipping!'
+                );
+            }
+            return true;
+        }
+
+        return false;
     }
 }
