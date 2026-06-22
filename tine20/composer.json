@@ -122,6 +122,7 @@
     "ext-curl": "*",
     "ext-date": "*",
     "ext-dom": "*",
+    "ext-fileinfo": "*",
     "ext-gd": "*",
     "ext-hash": "*",
     "ext-iconv": "*",
