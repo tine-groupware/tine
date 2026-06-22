@@ -241,6 +241,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * TODO support other models + make this generic
      */
+    //TODO: remove?
     protected function _resolveAssignedAccountables(&$assignedAccountables)
     {
         $assignedAccountableIds = [];
@@ -809,7 +810,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (sizeof($invalidInvoiceIds) > 0) {
             foreach ($controller->getMultiple($invalidInvoiceIds) as $invoice) {
-                $errorMessage .= PHP_EOL . $invoice->document_number . ' : ' . $invoice->document_title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
+                $title = $invoice->getTitle();
+                $errorMessage .= PHP_EOL . $title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
             }
             $exception = new Tinebase_Exception_SystemGeneric($errorMessage);
             $exception->setTitle('invoices with invalid attachments');

@@ -109,13 +109,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 root.eachChild(async (invoiceNode) => {
                                     const attachments = invoiceNode.childNodes.filter((node) => node?.attributes?.checked);
                                     allAttachments[invoiceNode.id] = attachments.map((a) => a.id);
-                                    await Tine.Sales.exportInvoicesToDatevEmail(modelName, allAttachments)
-                                        .then((result) => {
-                                            if (editDialog && result.results.length > 0) {
-                                                editDialog.loadRecord('remote');
-                                            }
-                                        });
                                 });
+                                await Tine.Sales.exportInvoicesToDatevEmail(modelName, allAttachments)
+                                    .then((result) => {
+                                        if (editDialog && result.results.length > 0) {
+                                            editDialog.loadRecord('remote');
+                                        }
+                                    });
                             }
                         },
                     });

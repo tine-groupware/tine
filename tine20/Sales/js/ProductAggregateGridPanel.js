@@ -5,6 +5,7 @@
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * @copyright   Copyright (c) 2014-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+//TODO: remove?
 Ext.ns('Tine.Sales');
 
 require('./ProductAggregateLayerCombo');
