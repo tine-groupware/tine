@@ -5,9 +5,12 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+import { get, set } from "lodash"
 import waitFor from "util/waitFor.es6"
 import asString from "../../ux/asString"
 import * as markdown from 'util/markdown'
+
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -274,7 +277,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.statics.checkStateProviders[field].push(fn)
         },
         getCheckStateProviders(field) {
-            return _.get(this, `statics.checkStateProviders.${field}`, []);
+            return get(this, `statics.checkStateProviders.${field}`, []);
         }
     },
 
@@ -575,7 +578,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     })].concat(this.getEastPanel())
                 },
                 // NOTE: this is the "History" panel (_not_ the "Notes" panel)
-                _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
+                get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     getRecordId: () => {return this.record.id },
                     record_model: this.modelName
@@ -705,7 +708,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 item.checkState(this, this.record);
             }
             if (item.fixedIf && _.isFunction(item.setReadOnly)) {
-                item.setReadOnly(_.isFunction(item.fixedIf) ? item.fixedIf(item.getValue(), this.record) : (item.fixedIf[0] === '!' ? true: false) ^_.get(this.record, item.fixedIf.replace(/^!/, '')))
+                item.setReadOnly(_.isFunction(item.fixedIf) ? item.fixedIf(item.getValue(), this.record) : (item.fixedIf[0] === '!' ? true: false) ^get(this.record, item.fixedIf.replace(/^!/, '')))
             }
             if (item.name) {
                 _.each(this.constructor.getCheckStateProviders?.(item.name), (fn) => {
@@ -1007,15 +1010,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     doCopyRecord: function() {
         this.record = this.doCopyRecordToReturn(this.record);
 
-        var _ = window.lodash,
-            hasRequiredGrant = _.get(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant');
+        const grantsPath = this.recordClass.getMeta('grantsPath');
+        const containerGrants = get(this.record, `data.${this.recordClass.getMeta('containerProperty')}.account_grants`);
+        const hasRequiredGrant = containerGrants ? containerGrants.addGrant :
+            get(this.record, grantsPath + '.addGrant');
 
         // unset container if user is not allowed to add record in original container
         if(this.evalGrants && ! hasRequiredGrant) {
             _.unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+            set(this.record, grantsPath + '.deleteGrant', true);
+            set(this.record, grantsPath + '.addGrant', true);
+            set(this.record, grantsPath + '.editGrant', true);
         }
     },
 
@@ -1120,10 +1125,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Tine.log.debug(this.record);
 
 
-        if (!this.record.id || this.record.phantom || this.recordClass.getMeta('containerProperty') && !_.get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
-            _.set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
+        if (!this.record.id || this.record.phantom || this.recordClass.getMeta('containerProperty') && !get(this.record, 'data.' + this.recordClass.getMeta('containerProperty'), false)) {
+            set(this.record, this.recordClass.getMeta('grantsPath') + '.deleteGrant', true);
+            set(this.record, this.recordClass.getMeta('grantsPath') + '.addGrant', true);
+            set(this.record, this.recordClass.getMeta('grantsPath') + '.editGrant', true);
         }
 
         this.fixedFields.eachKey(function(field, value) {
@@ -1212,10 +1217,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.evalGrants || this.readOnly) {
             this.getForm().items.each(function (f) {
                 if (f.initialConfig.disabled) return;
-                const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
+                const recordGrants = get(this.record, this.recordClass.getMeta('grantsPath'));
                 let hasRequiredGrants = !this.readOnly && true;
 
-                const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
+                const requiredGrants = get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
                 if (requiredGrants) {
                     hasRequiredGrants = hasRequiredGrants && ( recordGrants.adminGrant || requiredGrants?.some((requiredGrant) => { return recordGrants[requiredGrant] }));
                 }
@@ -1224,7 +1229,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 if (f.isFormField && f.requiredGrant !== undefined) {
                     const grantsPath = this.recordClass.getMeta('grantsPath');
                     hasRequiredGrants = hasRequiredGrants &&
-                        (_.get(this.record, `${grantsPath}.${f.requiredGrant}`) || _.get(this.record, `${grantsPath}.adminGrant`));
+                        (get(this.record, `${grantsPath}.${f.requiredGrant}`) || get(this.record, `${grantsPath}.adminGrant`));
                 }
 
                 _.isFunction(f.setReadOnly) ? f.setReadOnly(!hasRequiredGrants || f.initialConfig.readOnly) : f.setDisabled(!hasRequiredGrants || f.initialConfig.disabled);
@@ -1485,13 +1490,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
                     // NOTE: update event in local mode should have resolved data (like in remote mode)
                     this.getForm().items.items.forEach((field) => {
-                        const cfName = _.get(String(field.name).match(/^customfield_(.+)$/), '[1]');
+                        const cfName = get(String(field.name).match(/^customfield_(.+)$/), '[1]');
                         if (me.recordClass.hasField(field.name) || cfName) {
                             const path = cfName ? `customfields[${cfName}]` : field.name;
 
                             // recordPickers
                             if (field?.selectedRecord?.data) {
-                                _.set(recordData, path, field.selectedRecord.data);
+                                set(recordData, path, field.selectedRecord.data);
                             }
                             // @TODO recordsPickers & pickerGrids?
                         }
@@ -1748,7 +1753,7 @@ Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
     if (!recordClass || (recordClass && !recordClass.getMeta)) return null;
     var appName = recordClass.getMeta('appName'),
         modelName = recordClass.getMeta('modelName'),
-        editDialogClass = _.get(Tine, `${appName}.${modelName}EditDialog`);
+        editDialogClass = get(Tine, `${appName}.${modelName}EditDialog`);
 
     return editDialogClass;
 };
