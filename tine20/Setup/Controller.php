@@ -2138,10 +2138,10 @@ class Setup_Controller
         }
 
         $uninstallAll = in_array(Tinebase_Config::APP_NAME, array_keys($applications));
+        $noReplicaCheck = $uninstallAll || ($_options[self::INSTALL_NO_REPLICA_CHECK] ?? false);
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-            $this->_uninstallApplication($app, $uninstallAll, isset($_options[self::INSTALL_NO_REPLICA_CHECK]) ?
-                $_options[self::INSTALL_NO_REPLICA_CHECK] : false);
+            $this->_uninstallApplication($app, $uninstallAll, $noReplicaCheck);
         }
 
         if (true === $deactivatedForeignKeyCheck) {
