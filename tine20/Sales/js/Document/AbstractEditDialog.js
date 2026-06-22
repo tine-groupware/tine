@@ -486,13 +486,13 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 _.assign([ fields.contract_number, fields.buyer_reference, fields.purchase_order_reference, fields.project_reference, fields.contact_id], {line: 'references'}),
                 [fields.service_period_start, fields.service_period_end, _.assign({ ...placeholder } , {columnWidth: 3/5})],
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
-                [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
+                [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: true, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), _.assign(fields.positions_discount_sum, {columnWidth: 1/5}), _.assign(fields.positions_net_sum, {columnWidth: 1/5}), _.assign(fields.positions_gross_sum, {columnWidth: 1/5})],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax_by_rate, fields.gross_sum],
                 [new PaymentMeansField({editDialog: this, columnWidth: 2/5}), fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 2/5})],
-                [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
+                [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: true, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]
         }]
