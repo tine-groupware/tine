@@ -404,7 +404,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     setSelectedRecord: function (record) {
         this.selectedRecord = record;
         if (this.denormalizationRecordClass && !record.data.original_id) {
-            if (!record.json.original_id) {
+            if (!record.json.hasOwnProperty('original_id')) {
+                // an original was selected -> init denormalisation
                 this.selectedRecord.json.original_id = this.selectedRecord.data.original_id = record.id;
                 this.selectedRecord.setId(this.recordClass.generateUID());
                 this.selectedRecord.phantom = true;

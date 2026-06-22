@@ -1,9 +1,20 @@
-translations doku
------------------
+# translations doku
 
-[Transifex Projekt](https://app.transifex.com/tine/groupware/dashboard/)
+## Transifex
 
-Überblick
+Tine manages translations at [Transifex](https://app.transifex.com/tine/groupware/dashboard/), a free Web-Service for open source projects.
+
+To translate tine Groupware into your language follow these simple steps:
+
+- Make yourself familiar with the Transifex Help
+- Signup for free as on open source translator
+- request / join team for your language and wait for approval
+- Start translating in your language
+- NOTE: Please use the Save & Exit Button to unlock your files after Translating
+- Wait for Sync
+- The translations done in Transifex are not automatically available in tine Groupware but will be synced from time to time from us.
+
+## Überblick
 
 - Im Quellcode gehen die englischen strings durch die übersetzungsfunktionen `_('en text')`, `ngettext('singular en text', 'plural en text', n)`, `formatMessage('...')` (js only), `translate('...)` (templates)
 - Mittels `langHelper -u` werden diese strings aus den sourcen extrahiert und in die po/pot files aufgenommen
@@ -15,7 +26,7 @@ translations doku
   - übersetzen mit poedit
   - `./console src:langHelper -- '-u -l de'` (Zeilennummern wieder entfernen)
 
-Was wird übersetzt?
+## Was wird übersetzt?
 
 - Alle Apps aus `tine-groupware` übersetzen wir:
   - Die erste hälfte des Releases `current-stable`
@@ -23,27 +34,22 @@ Was wird übersetzt?
 - Spezial-Apps zu spezial Editionen werden aus dem Editions-Branch übersetzte / zu tx gepushed
 - Siehe `./tx/branches` Konfiguration
 
-prerequisites
+## Translation HowTo
+
+### prerequisites
+
+Transifex Client: see http://docs.transifex.com/client/setup/ for client installation.
 
     $ sudo apt install php-xml
     $ sudo pip install transifex-client
 
-for po-merge-helper (ubuntu)
-
-    $ sudo apt install gettext
-
-po-merge-helper aktivieren (eintrag in .git/config)
-
-    [merge "pofile"]
-        name = merge po-files driver
-        driver = ./scripts/git/merge-po-files %A %O %B
-        recursive = binary
-
-txmerge - synced übersetzungen mit transifex
+### txmerge: synced übersetzungen mit transifex
 
 (vor am besten neuen branch auschecken)
 
     $ ./console src:langHelper -- '--txmerge --app Calendar -v -l bg'
+
+### push to git & transifex
 
 git add
 
@@ -65,3 +71,15 @@ commit + push to git
     $ git add */translations
     $ git commit -m "backup de translations"    
 
+### po-merge-helper 
+
+install po-merge-helper (ubuntu)
+
+    $ sudo apt install gettext
+
+activate (eintrag in .git/config)
+
+    [merge "pofile"]
+        name = merge po-files driver
+        driver = ./scripts/merge-po-files %A %O %B
+        recursive = binary
