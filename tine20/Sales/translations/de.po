@@ -1180,8 +1180,8 @@ msgstr "Bitte tragen sie die benötigten Daten ein bevor sie den Workflow-Status
 msgid "This is an imported e-invoice. Accounting data is write-protected. "
 msgstr "Dies ist eine eingelesene eRechnung. Die Buchhaltungsdaten sind schreibgeschützt. "
 
-msgid "Update Supplier Data?"
-msgstr "Lieferantendaten Aktualisieren?"
+msgid "Update Existing Supplier?"
+msgstr "Vorhandene Lieferantendaten Aktualisieren?"
 
 msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
 msgstr "Der ausgewählte Lieferant hat keine Elektronische-Adresse. Möchten Sie diese nun mit den Daten aus dieser eRechnung aktualisieren?"

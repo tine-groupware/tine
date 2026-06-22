@@ -14,6 +14,8 @@ import EvaluationDimensionForm from "widgets/form/EvaluationDimensionForm";
 import PaymentMeansField from '../PaymentMeansField'
 import PositionGridPanel from "./PositionGridPanel";
 import TaxByRateField from "../TaxByRateField";
+import { PersonaContainer, Personas } from "ux/vue/PersonaContainer";
+import RecordEditFieldTriggerPlugin from "widgets/form/RecordEditFieldTriggerPlugin";
 
 Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_AbstractEditDialog, {
     windowWidth: 1240,
@@ -25,6 +27,8 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
 
     initComponent() {
         Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.initComponent.call(this)
+        this.missingSupplierText = this.app.i18n._('This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one.')
+
         this.writeableAfterBooked = this.writeableAfterBooked.concat(['payment_means_used', 'pay_at', 'paid_at', 'paid_amount'])
     },
 
@@ -68,45 +72,26 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
         if (this.getForm().findField('date').getValue() && this.getForm().findField('credit_term').getValue()) {}
     },
 
-    onRecordLoad() {
+    async onRecordLoad() {
         Tine.Sales.Document_PurchaseInvoiceEditDialog.superclass.onRecordLoad.call(this)
+
+        const supplierData = this.fields.supplier_id.getValue()
+        if (supplierData && supplierData.id && !supplierData.original_id) {
+            const supplier = await this.getSupplier(supplierData)
+            this.fields.supplier_id.setValue(supplier)
+        }
+
         const me = this
         if (_.get(this.record, 'data.xprops.is_imported_edocument')) {
             this.infoBox.setText(this.app.i18n._('This is an imported e-invoice. Accounting data is write-protected. '))
             this.infoBox.setVisible(true);
             this.setBookedFieldsReadOnly(true);
 
-            if (! this.fields.supplier_id.getValue()) {
+            const statusField = this.fields[this.statusFieldName]
+            const booked = statusField.store.getById(statusField.getValue())?.json.booked
+            if (!booked) {
                 this.fields.supplier_id.setReadOnly(false)
-                this.fields.supplier_id.on('select', async (combo, supplier) => {
-                    if (supplier && !supplier.get('electronic_address')) {
-                        // const diff = _.reduce(await supplierData, (diff, value, field) => {
-                        //     if (value && value !== supplier.get(field)) {
-                        //         diff[field] = value
-                        //     }
-                        //     return diff
-                        // }, {})
-
-                        if (await Ext.MessageBox.show({
-                            icon: Ext.MessageBox.QUESTION,
-                            buttons: Ext.MessageBox.OKCANCEL,
-                            title: this.app.formatMessage('Update Supplier Data?'),
-                            msg: this.app.formatMessage('The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?')
-                        }) === 'ok') {
-                            supplier.set('eas_id', (await supplierData).eas_id)
-                            supplier.set('electronic_address', (await supplierData).electronic_address)
-                            const updatedSupplierData = await Tine.Sales.saveSupplier(Object.assign(supplier.getData(), {id: supplier.get('original_id'), original_id: null}))
-                            combo.setValue(updatedSupplierData)
-                        }
-                    }
-                })
-                const supplierData = Tine.Sales.getEDocumentSupplierData(me.record.id)
-                const recordEditPlugin =_.find(this.fields.supplier_id.plugins, plugin => _.isFunction(plugin.getRecordDefaults))
-                if (recordEditPlugin) {
-                    recordEditPlugin.getRecordDefaults = _.wrap(recordEditPlugin.getRecordDefaults, async (getRecordDefaults) => {
-                        return Object.assign(await getRecordDefaults(), await supplierData)
-                    })
-                }
+                this.fields.approver.setReadOnly(false)
             }
         }
     },
@@ -136,6 +121,13 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                         if (vatProcedure) {
                             fields['vat_procedure']?.setValue(vatProcedure)
                         }
+                    }
+                    config.validateValue = value => {
+                        if (! this.fields.supplier_id.getValue()?.original_id) {
+                            this.fields.supplier_id.markInvalid(this.missingSupplierText)
+                            return false
+                        }
+                        return true
                     }
                     break;
                 case 'paid_at':
@@ -173,5 +165,113 @@ Tine.Sales.Document_PurchaseInvoiceEditDialog = Ext.extend(Tine.Sales.Document_A
                 [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]
         }]
+    },
+
+    getSupplier: function(supplierData) {
+        return new Promise((resolve, reject) => {
+            const onCheck = (field, checked) => {
+                if (!checked) return
+                const form = field.ownerCt
+                const existing = form.existingSupplierRadio === field
+                form.existingSupplierCombo.setDisabled(!existing)
+                form.newSupplierCombo.setDisabled(existing)
+            }
+
+            const win = Tine.WindowFactory.getWindow({
+                layout: 'fit',
+                width: 370,
+                height: 300,
+                modal: true,
+                title: this.app.i18n._('Assign Supplier'),
+                closable: false,
+                items: new Tine.Tinebase.dialog.Dialog({
+                    enableKeyEvents: true,
+                    allowCancel: false,
+                    layout: 'hbox',
+                    layoutConfig: {
+                        padding: '5',
+                        align: 'stretch'
+                    },
+                    items: [ new PersonaContainer({
+                        persona: Personas.ERROR_SEVERE,
+                        flex: 0,
+                        width: 100,
+                        height: 200
+                    }), {
+                        flex: 1,
+                        border: false,
+                        layout: 'form',
+                        ref: 'supplierForm',
+                        labelAlign: 'top',
+                        items: [{
+                            xtype: 'v-alert',
+                            variant: 'info',
+                            label: this.app.i18n._('This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one.')
+                        }, {
+                            xtype: 'radio',
+                            boxLabel: this.app.i18n._('Assign existing supplier'),
+                            name: 'supplier-src',
+                            checked: true,
+                            ref: 'existingSupplierRadio',
+                            listeners: { check: onCheck }
+                        }, {
+                            xtype: 'tinerecordpickercombobox',
+                            recordClass: 'Sales.Supplier',
+                            hideLabel: true,
+                            ref: 'existingSupplierCombo',
+                        }, {
+                            xtype: 'radio',
+                            boxLabel: this.app.i18n._('Create new supplier'),
+                            hideLabel: true,
+                            name: 'supplier-src',
+                            ref: 'newSupplierRadio',
+                            listeners: { check: onCheck }
+                        }, {
+                            xtype: 'tinerecordpickercombobox',
+                            recordClass: 'Sales.Supplier',
+                            hideLabel: true,
+                            ref: 'newSupplierCombo',
+                            value: supplierData,
+                            disabled: true,
+                            hideTrigger: true,
+                            hideTrigger2: true,
+                            plugins: [new RecordEditFieldTriggerPlugin({
+                                editDialogConfig: {
+                                    mode: 'local'
+                                }
+                            })]
+                        }]
+                    }],
+                    getEventData: function() {
+                        const isExisting = this.supplierForm.existingSupplierRadio.checked
+                        const supplier = this.supplierForm[isExisting ? 'existingSupplierCombo' : 'newSupplierCombo'].selectedRecord
+                        return { isExisting, supplier }
+                    },
+                    listeners: {
+                        beforeapply: async (data) => {
+                            if (! data.supplier) return false
+                            if (data.isExisting) {
+                                if (await Ext.MessageBox.show({
+                                    icon: Ext.MessageBox.QUESTION,
+                                    buttons: Ext.MessageBox.OKCANCEL,
+                                    title: this.app.formatMessage('Update Existing Supplier?'),
+                                    msg: this.app.formatMessage('The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?')
+                                }) === 'ok') {
+                                    // @TODO update more data? have a diff dialog?!
+                                    data.supplier.set('vatid', supplierData.vatid)
+                                    data.supplier.set('eas_id', supplierData.eas_id)
+                                    data.supplier.set('electronic_address', supplierData.electronic_address)
+                                    resolve(await Tine.Sales.saveSupplier(data.supplier.getData()))
+                                }
+                                resolve(data.supplier)
+                            } else {
+                                // create new supplier
+                                resolve(await Tine.Sales.saveSupplier(Object.assign(supplierData, { original_id: null })))
+                            }
+                        }
+                    }
+                })
+            })
+        })
     }
 })
