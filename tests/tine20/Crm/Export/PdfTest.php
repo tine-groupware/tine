@@ -157,7 +157,7 @@ class Crm_Export_PdfTest extends TestCase
         $pdfOutput = $pdf->render();
         
         $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), "no pdf generated");
-        $this->assertEquals(1, preg_match("/Lars Kneschke/", $pdfOutput), "no contact data/fullname found");
+        $this->assertEquals(1, preg_match("/no prefix Lars no middle name Kneschke no suffix/", $pdfOutput), "no contact data/fullname found");
 
         // purge all relations
         $backend = new Tinebase_Relation_Backend_Sql();

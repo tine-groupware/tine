@@ -324,9 +324,7 @@ class Tinebase_Twig
                 ? $config->records->getById($key)
                 : false;
 
-            if ($locale !== null) {
-                $locale = Tinebase_Translation::getLocale($locale);
-            }
+            $locale = Tinebase_Translation::getLocale($locale ?? Tinebase_Core::getLocale());
             
             $translation = Tinebase_Translation::getTranslation($appName, $locale);
             return $keyFieldRecord ? $translation->translate($keyFieldRecord->value) : $key;

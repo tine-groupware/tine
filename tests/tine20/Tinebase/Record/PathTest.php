@@ -328,6 +328,7 @@ class Tinebase_Record_PathTest extends TestCase
 
         // change contact name and check path in related records
         $this->_fatherRecord->n_family = 'stepfather';
+        $this->_fatherRecord->n_fn = '';
         // don't update relations
         unset($this->_fatherRecord->relations);
         Addressbook_Controller_Contact::getInstance()->update($this->_fatherRecord);
