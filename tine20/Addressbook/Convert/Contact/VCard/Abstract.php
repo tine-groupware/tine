@@ -32,12 +32,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      */
     protected $_maxPhotoSize = Addressbook_Model_Contact::SMALL_PHOTO_SIZE;
 
-    /**
-     * the version string
-     *
-     * @var string|null $_version
-     */
-    protected $_version;
+
 
     /**
      * should be overwritten by concrete class
@@ -51,9 +46,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     /**
      * @param  string|null $_version  the version of the client
      */
-    public function __construct($_version = null)
+    public function __construct(protected $_version = null)
     {
-        $this->_version = $_version;
 
         if (isset($_REQUEST['max_photo_size'])) {
             $this->_maxPhotoSize = (int) $_REQUEST['max_photo_size'];

@@ -18,30 +18,11 @@
 
 class Setup_Auth implements Zend_Auth_Adapter_Interface
 {
-    /**
-     * The username of the account being authenticated.
-     *
-     * @var string
-     */
-    protected $_username = null;
-
-    /**
-     * The password of the account being authenticated.
-     *
-     * @var string
-     */
-    protected $_password = null;
-
-    /**
-     * Sets username and password for authentication
-     *
-     * @param $username
-     * 
-     */
-    public function __construct($_username, $_password)
+    public function __construct(
+        protected ?string $_username = null,
+        protected ?string $_password = null,
+    )
     {
-        $this->_username = $_username;
-        $this->_password = $_password;
     }
     
     /**

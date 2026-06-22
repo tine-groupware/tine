@@ -32,24 +32,8 @@ class Tinebase_Twig
      */
     protected $_twigEnvironment = null;
 
-    /**
-     * translation object
-     *
-     * @var Zend_Translate
-     */
-    protected $_translate;
-
-    /**
-     * locale object
-     *
-     * @var Zend_Locale
-     */
-    protected $_locale;
-
-    public function __construct(Zend_Locale $_locale, Zend_Translate $_translate, array $_options = [])
+    public function __construct(protected Zend_Locale $_locale, protected Zend_Translate $_translate, array $_options = [])
     {
-        $this->_locale = $_locale;
-        $this->_translate = $_translate;
 
         if (isset($_options[self::TWIG_LOADER])) {
             $twigLoader = $_options[self::TWIG_LOADER];

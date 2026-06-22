@@ -21,15 +21,7 @@
  */
 class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\ICalendarObject, Sabre\DAVACL\IACL
 {
-    /**
-     * @var Tinebase_Model_Container
-     */
-    protected $_container;
-    
-    /**
-     * @var Tasks_Model_Task
-     */
-    protected $_task;
+
     
     /**
      * holds the vevent returned to the client
@@ -49,10 +41,8 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * @param Tinebase_Model_Container $_container
      * @param null|string|Tasks_Model_Task  $_task  the id of a event or the event itself
      */
-    public function __construct(Tinebase_Model_Container $_container, $_task = null) 
+    public function __construct(protected Tinebase_Model_Container $_container, protected $_task = null)
     {
-        $this->_container = $_container;
-        $this->_task      = $_task;
 
         if ($_task) {
             if (!$this->_task instanceof Tasks_Model_Task) {

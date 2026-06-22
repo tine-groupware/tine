@@ -17,10 +17,7 @@
  */
 class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
 {
-    /**
-     * @var array
-     */
-    protected $_options = array();
+
 
     /**
      * @var Tinebase_User_Ldap
@@ -35,12 +32,10 @@ class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
     /**
      * constructor
      */
-    public function __construct(array $_options)
+    public function __construct(protected array $_options)
     {
         $_options['baseDn']    = $_options['machineDn'];
         $_options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
-        
-        $this->_options = $_options;
         
         if (isset($this->_options['minMachineId'])) {
             $this->_options['minUserId'] = $_options['minMachineId'];

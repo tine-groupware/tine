@@ -14,6 +14,7 @@
  * interface for backend class
  * 
  * @package     Setup
+ * @deprecated we only have Mysql as backend...
  */
 interface Setup_Backend_Interface
 {

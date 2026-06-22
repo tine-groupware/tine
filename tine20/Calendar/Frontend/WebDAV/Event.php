@@ -24,15 +24,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
 {
     public const ALLOW_EXTERNAL_ORGANIZER_ANYWAY = 'allowExternalOrganizerAnyway';
 
-    /**
-     * @var Tinebase_Model_Container
-     */
-    protected $_container;
-    
-    /**
-     * @var Calendar_Model_Event
-     */
-    protected $_event;
+
     
     /**
      * holds the vevent returned to the client
@@ -57,10 +49,8 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
      * @param Tinebase_Model_Container $_container
      * @param null|string|Calendar_Model_Event  $_event  the id of a event or the event itself
      */
-    final public function __construct(Tinebase_Model_Container $_container, $_event = null)
+    final public function __construct(protected Tinebase_Model_Container $_container, protected $_event = null)
     {
-        $this->_container = $_container;
-        $this->_event     = $_event;
         
         if ($_event && ! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);

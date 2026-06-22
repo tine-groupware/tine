@@ -18,15 +18,10 @@
 class Tinebase_Auth_MFA_WebAuthnAdapter implements Tinebase_Auth_MFA_AdapterInterface
 {
     protected $_mfaId;
-    /**
-     * @var Tinebase_Model_MFA_WebAuthnConfig
-     */
-    protected $_config;
 
-    public function __construct(Tinebase_Record_Interface $_config, string $id)
+    public function __construct(protected Tinebase_Record_Interface $_config, string $id)
     {
         $this->_mfaId = $id;
-        $this->_config = $_config;
     }
 
     public function getClientPasswordLength(): ?int

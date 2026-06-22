@@ -19,8 +19,6 @@
  */
 class Courses_Export_PwdPrintableDoc extends Tinebase_Export_Doc2
 {
-    protected $_pwds;
-
     /**
      * the constructor
      *
@@ -31,9 +29,8 @@ class Courses_Export_PwdPrintableDoc extends Tinebase_Export_Doc2
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    public function __construct(Tinebase_Record_RecordSet $_records, array $_pwds, array $_additionalOptions = [])
+    public function __construct(Tinebase_Record_RecordSet $_records, protected array $_pwds, array $_additionalOptions = [])
     {
-        $this->_pwds = $_pwds;
         $this->_records = $_records;
         $this->_config = new Zend_Config_Xml('<?xml version="1.0" encoding="UTF-8"?><config>
                 <template>tine20:///Tinebase/folders/shared/export/templates/Courses/courses_pwd_export.docx</template>
