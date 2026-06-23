@@ -391,6 +391,11 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     public function setSenderFlag(Felamimail_Model_Message|array &$_message, $headers)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' setting sender flag...');
+        }
+
         $flag = null;
 
         if (isset($headers['user-agent'])) {
@@ -409,11 +414,24 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
             if ($dkimValidator->validateBoolean()) {
                 [, $domain] = explode('@', $_message->from_email, 2);
                 $trustedMailDomains = Tinebase_Controller_Instance::getInstance()->getTrustedMailDomains();
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Mail domains: ' . print_r($trustedMailDomains, true));
+                }
+
                 foreach ($trustedMailDomains as $server => $data) {
                     if (preg_match("/^$server$/", $domain)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' Found domain (looking for ' . $domain . '): ' . $server);
+                        }
                         $flag = $data['id'];
                     }
                 }
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                $validationResult = $dkimValidator->validate();
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' DKIM validation failed: ' . print_r($validationResult, true));
             }
         } catch (Throwable $t) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
