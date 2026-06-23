@@ -229,7 +229,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'sortable'              => false,
                 'config'                => array(
                     'appName'               => 'Sales',
-                    'modelName'             => 'Invoice',
+                    'modelName'             => 'Document_Invoice',
                     'idProperty'            => 'id',
                 ),
                 self::UI_CONFIG             => [
