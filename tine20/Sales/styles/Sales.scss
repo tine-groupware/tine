@@ -20,8 +20,12 @@
     background-image:url(../../images/icon-set/icon_products.svg) !important;
 }
 
-.SalesCustomer, .SalesDebitor {
+.SalesCustomer {
     background-image:url(../../images/icon-set/icon_client.svg) !important;
+}
+
+.SalesDebitor {
+    background-image:url(../../Tinebase/js/node_modules/@tabler/icons/icons/outline/user-dollar.svg) !important;
 }
 
 .SalesSupplier {
