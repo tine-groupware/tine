@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import { get, set } from "lodash"
+import { get, set, uniq, isArray, find, bind, concat, delay, isFunction, each, forEach, unset, keys, defer, map, isString } from "lodash"
 import waitFor from "util/waitFor.es6"
 import asString from "../../ux/asString"
 import * as markdown from 'util/markdown'
@@ -399,7 +399,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         // init plugins
-        this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? _.uniq(this.plugins.concat(_.isArray(this.initialConfig.plugins) ? this.initialConfig.plugins : Ext.decode(this.initialConfig.plugins))) : [];
+        this.plugins = Ext.isString(this.plugins) ? Ext.decode(this.plugins) : Ext.isArray(this.plugins) ? uniq(this.plugins.concat(isArray(this.initialConfig.plugins) ? this.initialConfig.plugins : Ext.decode(this.initialConfig.plugins))) : [];
         this.plugins.push(this.tokenModePlugin = new Tine.widgets.dialog.TokenModeEditDialogPlugin({}));
         // added possibility to disable using customfield plugin
         if (this.disableCfs !== true) {
@@ -411,13 +411,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Ext.ux.pluginRegistry.addRegisteredPlugins(this);
 
         // multiEditPlugin need to load before record is initialised
-        const multiEditPlugin = _.find(this.plugins, { ptype: "multiple_edit_dialog"});
+        const multiEditPlugin = find(this.plugins, { ptype: "multiple_edit_dialog"});
         if (multiEditPlugin) {
             this.initPlugin(multiEditPlugin);
         }
 
         if (this.recordClass) {
-            this.fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            this.fieldManager = bind(Tine.widgets.form.FieldManager.get,
                 Tine.widgets.form.FieldManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _,
                 Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
         }
@@ -547,7 +547,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }, plugin = {
                 init: Ext.emptyFn
             }],
-            items:_.concat([
+            items:concat([
                 {
                     title: this.i18nRecordName,
                     autoScroll: true,
@@ -700,18 +700,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.isDestroyed || !this.record) return;
 
         if(this.loadRequest){
-            return _.delay(_.bind(this.checkStates, this), 250);
+            return delay(bind(this.checkStates, this), 250);
         }
         this.onRecordUpdate();
         this.getForm().items.each(function (item) {
             if (Ext.isFunction(item.checkState)) {
                 item.checkState(this, this.record);
             }
-            if (item.fixedIf && _.isFunction(item.setReadOnly)) {
-                item.setReadOnly(_.isFunction(item.fixedIf) ? item.fixedIf(item.getValue(), this.record) : (item.fixedIf[0] === '!' ? true: false) ^get(this.record, item.fixedIf.replace(/^!/, '')))
+            if (item.fixedIf && isFunction(item.setReadOnly)) {
+                item.setReadOnly(isFunction(item.fixedIf) ? item.fixedIf(item.getValue(), this.record) : (item.fixedIf[0] === '!' ? true: false) ^get(this.record, item.fixedIf.replace(/^!/, '')))
             }
             if (item.name) {
-                _.each(this.constructor.getCheckStateProviders?.(item.name), (fn) => {
+                each(this.constructor.getCheckStateProviders?.(item.name), (fn) => {
                     fn.call(item, this, this.record);
                 });
             }
@@ -879,7 +879,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }] : [])
         });
 
-        const btnStyle = _.find(this.tbar.items.items, {scale: 'medium'}) ? { scale: 'medium', rowspan: 2, iconAlign: 'top'} : {}
+        const btnStyle = find(this.tbar.items.items, {scale: 'medium'}) ? { scale: 'medium', rowspan: 2, iconAlign: 'top'} : {}
         if (this.action_print) {
             this.tbar.add(Ext.apply(new Ext.Button(this.action_print), btnStyle));
         }
@@ -996,7 +996,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             success: function(record) {
                 this.record = record;
                 // apply modifications from initial Record
-                _.forEach(this.initialRecord?.modified, (val, field) => {
+                forEach(this.initialRecord?.modified, (val, field) => {
                     this.record.set(field, this.initialRecord.get(field));
                 });
                 this.onRecordLoad();
@@ -1017,7 +1017,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         // unset container if user is not allowed to add record in original container
         if(this.evalGrants && ! hasRequiredGrant) {
-            _.unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
+            unset(this.record, 'data.' + this.recordClass.getMeta('containerProperty'));
             set(this.record, grantsPath + '.deleteGrant', true);
             set(this.record, grantsPath + '.addGrant', true);
             set(this.record, grantsPath + '.editGrant', true);
@@ -1044,9 +1044,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @param {Boolean} omitCopyTitle
      */
     getCopyRecordData: function (record, recordClass, omitCopyTitle) {
-        var _ = window.lodash,
-            titleProperty = recordClass.getMeta('titleProperty'),
-            omitFields = _.concat(recordClass.getMeta('copyOmitFields') || [],
+        var titleProperty = recordClass.getMeta('titleProperty'),
+            omitFields = concat(recordClass.getMeta('copyOmitFields') || [],
                 // 2017-12-21 - cweiss - why where attachments omitted? if you know please document here!
                 ['id', 'notes' /*, 'attachments'*/]),
             fields = recordClass.getFieldNames(),
@@ -1119,8 +1118,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * executed after record got updated from proxy
      */
     onRecordLoad: function() {
-        var _ = window.lodash;
-
         Tine.log.debug('Tine.widgets.dialog.EditDialog::onRecordLoad() - Loading of the following record completed:');
         Tine.log.debug(this.record);
 
@@ -1193,8 +1190,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     // finally load the record into the form
     onAfterRecordLoad: function() {
-        var _ = window.lodash,
-            form = this.getForm();
+        var form = this.getForm();
 
         if (form) {
             form.loadRecord(this.record);
@@ -1232,7 +1228,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         (get(this.record, `${grantsPath}.${f.requiredGrant}`) || get(this.record, `${grantsPath}.adminGrant`));
                 }
 
-                _.isFunction(f.setReadOnly) ? f.setReadOnly(!hasRequiredGrants || f.initialConfig.readOnly) : f.setDisabled(!hasRequiredGrants || f.initialConfig.disabled);
+                isFunction(f.setReadOnly) ? f.setReadOnly(!hasRequiredGrants || f.initialConfig.readOnly) : f.setDisabled(!hasRequiredGrants || f.initialConfig.disabled);
             }, this);
         }
 
@@ -1365,7 +1361,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     onBeforeClose: function() {
         if (this.checkUnsavedChanges && this.window.confirmLeavSite && this.record) {
             this.checkStates();
-            if (_.keys(this.record.getChanges()).length) {
+            if (keys(this.record.getChanges()).length) {
                 console.warn('this changes would be lost:');
                 console.warn(this.record.getChanges());
                 return false;
@@ -1400,7 +1396,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return new Promise((resolve, reject) => {
             this.on('update', resolve, this, {single: true, buffer: 10});
             this.on('requestException', (exception) => {
-                _.defer(() => {reject(exception)});
+                defer(() => {reject(exception)});
                 return false;
             }, this, {single: true, buffer: 10});
             this.onApplyChanges(false);
@@ -1705,7 +1701,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.grantsGrid.getStore().loadData({results: grants});
             });
             this.on('recordUpdate', (me, record) => {
-                const grants = Tine.Tinebase.common.assertComparable(_.map(this.grantsGrid.getStore().data.items, 'data'));
+                const grants = Tine.Tinebase.common.assertComparable(map(this.grantsGrid.getStore().data.items, 'data'));
                 record.set('grants', grants);
             });
         }
@@ -1737,7 +1733,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         return this.afterIsRendered().then(() => {
             if (this.loadMask) {
                 return new Promise((resolve) => {
-                    _.defer(() => {
+                    defer(() => {
                         me.loadMask.hide();
                         resolve();
                     });
@@ -1749,7 +1745,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 });
 
 Tine.widgets.dialog.EditDialog.getConstructor = function(recordClass) {
-    if (_.isString(recordClass)) recordClass = Tine.Tinebase.data.RecordMgr.get(recordClass);
+    if (isString(recordClass)) recordClass = Tine.Tinebase.data.RecordMgr.get(recordClass);
     if (!recordClass || (recordClass && !recordClass.getMeta)) return null;
     var appName = recordClass.getMeta('appName'),
         modelName = recordClass.getMeta('modelName'),
