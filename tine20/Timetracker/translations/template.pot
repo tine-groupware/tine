@@ -86,16 +86,20 @@ msgstr ""
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr ""
 
-msgid "End date cannot be before start date"
+#, python-format, php-format
+msgid "End date cannot be before start date: %s is before %s"
 msgstr ""
 
-msgid "start time and end time need to be set for multi day"
+msgid "Start time and end time need to be set for multi day timesheet"
 msgstr ""
 
 msgid "The invoice you tried to edit has already been cleared. Changing the date will rebill the invoice. Do you still want to perform this action?"
 msgstr ""
 
 msgid "The related time account is already closed. Do you still want to perform this action?"
+msgstr ""
+
+msgid "CSV all data"
 msgstr ""
 
 msgid "Excel overview"
@@ -265,6 +269,9 @@ msgstr ""
 msgid "The selected time account is already closed. Do you wish to continue anyway?"
 msgstr ""
 
+msgid "New Timesheet"
+msgstr ""
+
 msgid "Working Time:"
 msgstr ""
 
@@ -315,18 +322,6 @@ msgstr ""
 
 #, python-brace-format
 msgid "Assign '{0}' Tag"
-msgstr ""
-
-msgid "Export Timesheets"
-msgstr ""
-
-msgid "Export as ODS"
-msgstr ""
-
-msgid "Export as CSV"
-msgstr ""
-
-msgid "Export as..."
 msgstr ""
 
 msgid "Read Own"
@@ -399,12 +394,6 @@ msgid "Account"
 msgstr ""
 
 msgid "Time Account (Number - Title)"
-msgstr ""
-
-msgid "Project time is invoiceable (combined)"
-msgstr ""
-
-msgid "Billable"
 msgstr ""
 
 msgid "Project time Invoice"

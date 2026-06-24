@@ -43,6 +43,11 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     copyEditAction: true,
 
     /**
+     * auto hook text i18n._('New Timesheet')
+     */
+    addButtonText: 'New Timesheet',
+
+    /**
      * only allow multi edit with manage_timeaccounts right (because of timeaccount handling in edit dlg)
      */
     multipleEditRequiredRight: 'manage_timeaccounts',
