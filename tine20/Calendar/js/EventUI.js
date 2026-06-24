@@ -184,7 +184,7 @@ Tine.Calendar.EventUI.getStatusInfo = function(event, attendeeRecord) {
         });
     }
 
-    if (event.get('rrule')) {
+    if (event.isRecurBase() || event.isRecurInstance()) {
         statusInfo.push({
             status: 'recur',
             text: app.i18n._('recurring event')
