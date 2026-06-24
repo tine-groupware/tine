@@ -59,6 +59,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
             Sales_Model_Document_PurchaseInvoice::FLD_PAY_AT,
             Sales_Model_Document_PurchaseInvoice::FLD_PAID_AT,
             Sales_Model_Document_PurchaseInvoice::FLD_PAID_AMOUNT,
+            Sales_Model_Document_PurchaseInvoice::FLD_LAST_DATEV_SEND_DATE,
             'tags', 'attachments', 'relations',
         ];
         $this->_bookRecordRequiredFields = [

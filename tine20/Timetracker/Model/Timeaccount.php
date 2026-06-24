@@ -90,6 +90,13 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 //        ]],
 
         self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'invoice_id' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => [],
+                    ],
+                ],
+            ],
             Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                 Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
             ],
