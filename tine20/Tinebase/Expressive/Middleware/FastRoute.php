@@ -44,8 +44,10 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = rtrim($uri, '/');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            if (empty($parsedBody = $request->getParsedBody())) {
-                $parsedBody = $request->getBody()->getContents();
+            if (empty($parsedBody = $request->getParsedBody()) && $request->getBody()->isSeekable()) {
+                $parsedBody = $request->getBody()->read(3 * 1024);
+                $request->getBody()->rewind();
+                $parsedBody = preg_replace('/pass(word)?.{0,40}/', 'pass *****', $parsedBody);
             }
             if ($parsedBody['password'] ?? false) {
                 $parsedBody['password'] = '*****';
