@@ -398,3 +398,7 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .cal-free-busy-url {
     background-image:url(node_modules/@tabler/icons/icons/outline/clock-share.svg) !important;
 }
+
+.btn-light.x-btn-pressed {
+    background-color: var(--bs-btn-active-bg);
+}
