@@ -409,7 +409,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
         $allInvoices = Sales_Controller_Document_Invoice::getInstance()->getAll(Sales_Model_Document_Invoice::FLD_SERVICE_PERIOD_START, 'DESC');
         $this->assertEquals(2, $allInvoices->count(), print_r($allInvoices->toArray(), true));
-        $invoice = $allInvoices->filter('description', $contract->title . ' (' .
+        $invoice = $allInvoices->filter(Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE, $contract->title . ' (' .
             $this->_referenceDate->format('Y-m-d H:i:s') . ')');
         static::assertEquals(1, $invoice->count(), 'did not find contracts invoice');
         $invoice = $invoice->getFirstRecord();
