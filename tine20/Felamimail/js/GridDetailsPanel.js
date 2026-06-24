@@ -60,7 +60,7 @@ Ext.ns('Tine.Felamimail');
         this.defaultTpl = new Ext.XTemplate(
             '<div class="preview-panel-felamimail">',
                 '<div class="preview-panel-felamimail-preparedPart"></div>',
-                '{[values?.msg ? `<div class="preview-panel-felamimail-body">${values.msg}</div>` : ""]}',
+                '{[values?.msg ? \'<div class="preview-panel-felamimail-body">\' + values.msg + \'</div>\' : ""]}',
             '</div>'
         );
     },
