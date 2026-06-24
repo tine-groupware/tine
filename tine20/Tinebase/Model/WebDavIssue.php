@@ -30,7 +30,7 @@ class Tinebase_Model_WebDavIssue extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::APP_NAME => Tinebase_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
@@ -65,7 +65,7 @@ class Tinebase_Model_WebDavIssue extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
             ],
             self::FLD_REQUEST_BODY      => [
-                self::TYPE                  => self::TYPE_TEXT,
+                self::TYPE                  => self::TYPE_BLOB,
                 self::NULLABLE              => true,
             ],
             self::FLD_CREATION_TIME     => [
