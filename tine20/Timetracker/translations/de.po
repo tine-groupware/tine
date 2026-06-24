@@ -99,6 +99,7 @@ msgstr "Sie sind dabei den Faktor des Zeitkontos zu ändern. Soll dieser neue Fa
 msgid "Time accounts are still in use! Are you sure you want to delete them?"
 msgstr "Zeitkonten sind noch in Benutzung! Sind Sie sicher, dass Sie sie löschen möchten?"
 
+#, python-format, php-format
 msgid "End date cannot be before start date: %s is before %s"
 msgstr "Das Enddatum darf nicht vor dem Startdatum liegen: %s liegt vor %s"
 
@@ -110,6 +111,9 @@ msgstr "Die Rechnung die Sie versucht haben zu bearbeiten ist bereits abgerechne
 
 msgid "The related time account is already closed. Do you still want to perform this action?"
 msgstr "Das verknüpfte Zeitkonto ist bereits geschlossen. Wollen Sie diese Aktion wirklich ausführen?"
+
+msgid "CSV all data"
+msgstr ""
 
 msgid "Excel overview"
 msgstr ""
@@ -278,6 +282,9 @@ msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen."
 msgid "The selected time account is already closed. Do you wish to continue anyway?"
 msgstr "Das ausgewählte Zeitkonto ist bereits geschlossen. Wollen Sie dennoch fortfahren?"
 
+msgid "New Timesheet"
+msgstr "Neuer Stundenzettel"
+
 msgid "Working Time:"
 msgstr "Arbeitszeit:"
 
@@ -329,18 +336,6 @@ msgstr "Detail"
 #, python-brace-format
 msgid "Assign '{0}' Tag"
 msgstr "Tag '{0}' zufügen"
-
-msgid "Export Timesheets"
-msgstr "Stundenzettel exportieren"
-
-msgid "Export as ODS"
-msgstr "Als ODS exportieren"
-
-msgid "Export as CSV"
-msgstr "Als CSV exportieren"
-
-msgid "Export as..."
-msgstr "Als ... exportieren"
 
 msgid "Read Own"
 msgstr "Eigene lesen"
@@ -413,12 +408,6 @@ msgstr "Benutzerkonto"
 
 msgid "Time Account (Number - Title)"
 msgstr "Zeitkonto (Nummer - Titel)"
-
-msgid "Project time is invoiceable (combined)"
-msgstr ""
-
-msgid "Billable"
-msgstr "Abrechenbar"
 
 msgid "Project time Invoice"
 msgstr "Projektzeit Rechnung"
@@ -509,9 +498,3 @@ msgstr "Abgerechnete Zeitkonten"
 
 msgid "Timetracker"
 msgstr "Zeiterfassung"
-
-#~ msgid "Accounting time"
-#~ msgstr "Abrechenbare Zeit"
-
-#~ msgid "Accounting Project Time"
-#~ msgstr "Abrechenbare Projektzeit"
