@@ -1,4 +1,4 @@
-# tine Groupware – Contributing
+# Contributing
 
 **AI coding agents:** see [AGENTS.md](AGENTS.md) at the repository root for project-specific guidance (development setup, tests, conventions, and workflow).
 
