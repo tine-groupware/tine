@@ -581,10 +581,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     )
                 )
                 ->setPrice((new \UBL21\Common\CommonAggregateComponents\Price)
-                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount(abs(round($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY} *
-                        (Sales_Config::PRICE_TYPE_NET === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
+                    ->setPriceAmount((new \UBL21\Common\CommonBasicComponents\PriceAmount(abs(
+                        Sales_Config::PRICE_TYPE_NET === $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE_TYPE} ?
                             $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE}
-                            : $position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE} * 100 / (100 + $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})), 2))))
+                            : round($position->{Sales_Model_DocumentPosition_Invoice::FLD_UNIT_PRICE} * 100 / (100 + $position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE}), 2))))
                         ->setCurrencyID('EUR')
                     )
                 )
