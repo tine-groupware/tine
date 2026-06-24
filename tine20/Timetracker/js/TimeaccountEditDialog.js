@@ -46,7 +46,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.useInvoice = salesApp
             && salesApp.featureEnabled('invoicesModule')
             && Tine.Tinebase.common.hasRight('manage', 'Sales', 'invoices')
-            && Tine.Sales.Model.Invoice;
+            && Tine.Sales.Model.Document_Invoice;
         Tine.Timetracker.TimeaccountEditDialog.superclass.initComponent.call(this);
     },
 
@@ -116,11 +116,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         ]];
         
         secondRow.push(
-            fieldManager('billed_in', {
-                id: 'billed_in',
-                columnWidth: 1/3,
-                disabled: false,
-            })
+            fieldManager(this.useInvoice ? 'invoice_id' : 'billed_in', {columnWidth: 1/3 }),
         );
         
         secondRow.push([
@@ -155,24 +151,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'checkbox',
             columnWidth: 1/3
         }];
-        
-        if (this.useInvoice) {
-            this.invoice = Tine.Tinebase.data.Record.setFromJson(this.record.get('invoice_id'), Tine.Sales.Model.Invoice);
-    
-            this.invoiceRecordPicker = Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
-                columnWidth: 1/3,
-                disabled: true,
-                fieldLabel: this.app.i18n._('Invoice'),
-                name: 'invoice_id',
-                listeners: {
-                    scope: this,
-                    'select': (combo, invoiceRecord, index) => {
-                        this.record.set('invoice_id', invoiceRecord.get('id'));
-                    }
-                }
-            });
-            lastRow.push(this.invoiceRecordPicker);
-        }
+
         return {
             xtype: 'tabpanel',
             border: false,
@@ -262,7 +241,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     frame: true,
                     width: '100%',
                     items: [
-                        Tine.widgets.form.RecordPickerManager.get('Sales', 'Invoice', {
+                        Tine.widgets.form.RecordPickerManager.get('Sales', 'Document_Invoice', {
                             fieldLabel: this.app.i18n._('Invoice'),
                             name: 'invoice_id',
                             value: this.invoice,
