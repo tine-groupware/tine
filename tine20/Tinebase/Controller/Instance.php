@@ -74,6 +74,6 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
         }
 
         $trustedMailDomainConfig = Felamimail_Config::getInstance()->get(Felamimail_Config::TRUSTED_MAIL_DOMAINS);
-        return array_merge($trustedMailDomainConfig, $trustedMailDomains);
+        return array_merge($trustedMailDomains, $trustedMailDomainConfig);
     }
 }

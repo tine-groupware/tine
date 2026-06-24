@@ -576,6 +576,40 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $this->assertEquals('Metaways', $result['results'][0]['flags'][1], 'Message should have sender tag');
     }
 
+    /**
+     * @group noupdate
+     *
+     * @return void
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function testAddMessageCacheWithImportedSenderFlag(): void
+    {
+        $this->_testNeedsTransaction();
+        $domains = ['metaways.de', 'metaways.net'];
+        $domainRecords = array_map(fn($domain) => [
+            Tinebase_Model_InstanceMailDomain::FLD_DOMAIN_NAME => $domain,
+        ], $domains);
+        $instance = new Tinebase_Model_Instance([
+            Tinebase_Model_Instance::FLD_NAME  => 'testInstance',
+            Tinebase_Model_Instance::FLD_URL  => 'metaways.de',
+            Tinebase_Model_Instance::FLD_MAIL_DOMAINS  => $domainRecords,
+            Tinebase_Model_Instance::FLD_FLAG_ICON_FILE => 'images/icon-set/icon_flag_mw.png'
+        ]);
+        Tinebase_Controller_Instance::getInstance()->create($instance);
+        $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
+        $filter = array(array(
+            'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
+        ));
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchMessages($filter, []);
+
+        $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
+    }
+
     public function testAddMessageCacheWithSenderFlagInvalidCTag(): void
     {
         $mailAsString = file_get_contents(dirname(__FILE__) . '/../../files/test_dkim_invalid_c.eml');
