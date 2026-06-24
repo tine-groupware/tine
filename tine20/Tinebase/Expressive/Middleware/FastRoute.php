@@ -44,7 +44,9 @@ class Tinebase_Expressive_Middleware_FastRoute implements MiddlewareInterface
         $uri = rtrim($uri, '/');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            $parsedBody = $request->getParsedBody();
+            if (empty($parsedBody = $request->getParsedBody())) {
+                $parsedBody = $request->getBody()->getContents();
+            }
             if ($parsedBody['password'] ?? false) {
                 $parsedBody['password'] = '*****';
             }
