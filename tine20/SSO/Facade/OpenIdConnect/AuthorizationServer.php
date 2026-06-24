@@ -16,15 +16,31 @@ use Tinebase_Model_Filter_Abstract as TMFA;
 
 class SSO_Facade_OpenIdConnect_AuthorizationServer extends \League\OAuth2\Server\AuthorizationServer
 {
+    protected ?SSO_Facade_OAuth2_CryptKey $activePrivateKey = null;
+    protected ?string $activePublicKey = null;
+
+    protected function getActivePrivateKey(): SSO_Facade_OAuth2_CryptKey
+    {
+        if ($this->activePrivateKey !== null) {
+            return $this->activePrivateKey;
+        }
+
+        $keyConfig = SSO_Controller::getActiveOAuth2Key();
+        $this->activePrivateKey = new SSO_Facade_OAuth2_CryptKey($keyConfig['privatekey'], $keyConfig['kid']);
+        $this->activePublicKey = $keyConfig['publickey'];
+        return $this->activePrivateKey;
+    }
+
     public function __construct()
     {
+        $activeKey = $this->getActivePrivateKey();
+
         parent::__construct(
             new SSO_Facade_OAuth2_ClientRepository(),
             new SSO_Facade_OAuth2_AccessTokenRepository(),
             new SSO_Facade_OAuth2_ScopeRepository(),
-            new SSO_Facade_OAuth2_CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
-                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['kid']),
-            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
+            $activeKey,
+            $this->activePublicKey,
             new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
         );
 
@@ -108,6 +124,6 @@ class SSO_Facade_OpenIdConnect_AuthorizationServer extends \League\OAuth2\Server
 
         /** @var \Idaas\OpenID\Entities\IdToken $idToken */
         $idToken = $response->getIdToken();
-        return $idToken->convertToJWT($this->privateKey)->toString();
+        return $idToken->convertToJWT($this->getActivePrivateKey())->toString();
     }
 }
