@@ -402,3 +402,9 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .btn-light.x-btn-pressed {
     background-color: var(--bs-btn-active-bg);
 }
+
+.x-date-middle,
+.x-date-middle .x-btn .x-btn-text
+{
+    color: var(--bs-btn-color);
+}
