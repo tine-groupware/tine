@@ -1368,8 +1368,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
 
             if (!($body = json_decode($request->getBody()->getContents(), true)) || !isset($body['user']) ||
-                    !isset($body['pass'])) {
-                return $this->_publicPostAuthPAMvalidateReturnError('bad request, json body needs to have user and pass');
+                    (!isset($body['pass']) && !isset($body['password']))) {
+                return $this->_publicPostAuthPAMvalidateReturnError('bad request, json body needs to have user and password');
+            }
+
+            if (isset($body['pass'])) {
+                Tinebase_Exception::log(new Tinebase_Exception('pass is legacy and NEEDS to be replaced by caller, use password instead!'));
+                $password = $body['pass'];
+            } else {
+                $password = $body['password'];
             }
 
             try {
@@ -1407,21 +1414,21 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                         continue;
                     }
                 }
-                if (strlen((string) $body['pass']) <= $mfaLength) {
+                if (strlen((string) $password) <= $mfaLength) {
                     continue;
                 }
-                if (Tinebase_Auth::getInstance()->authenticate($body['user'], substr((string) $body['pass'], 0, 0 - $mfaLength))
+                if (Tinebase_Auth::getInstance()->authenticate($body['user'], substr((string) $password, 0, 0 - $mfaLength))
                         ->getCode() !== Tinebase_Auth::SUCCESS) {
                     continue;
                 }
 
                 $this->setRequestContext([
-                    'MFAPassword' => substr((string) $body['pass'], 0 - $mfaLength),
+                    'MFAPassword' => substr((string) $password, 0 - $mfaLength),
                     'MFAId' => $uConf->getId(),
                 ]);
 
                 try {
-                    if ($this->login($body['user'], substr((string) $body['pass'], 0, 0 - $mfaLength), Tinebase_Core::getRequest(), self::PAM_VALIDATE_REQUEST_TYPE)) {
+                    if ($this->login($body['user'], substr((string) $password, 0, 0 - $mfaLength), Tinebase_Core::getRequest(), self::PAM_VALIDATE_REQUEST_TYPE)) {
                         return $this->_publicPostAuthPAMvalidateReturnStatus(true);
                     }
                 } catch (Tinebase_Exception_AreaUnlockFailed) {
