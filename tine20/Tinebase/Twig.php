@@ -356,7 +356,7 @@ class Tinebase_Twig
         }));
         $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderModel', fn($modelName) => $modelName::getConfiguration()->recordName));
         $this->_twigEnvironment->addFunction(new \Twig\TwigFunction('renderTitle', function ($record, $modelName) {
-            if (! $record instanceof Tinebase_Record_Abstract) {
+            if (! $record instanceof Tinebase_Record_Interface) {
                 $record = new $modelName($record);
             }
             return $record->getTitle();
