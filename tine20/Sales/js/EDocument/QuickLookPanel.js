@@ -6,7 +6,6 @@
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import './quickLookAction'
 import './ValidationPanel'
 import FileLocation from 'Model/FileLocation'
 
@@ -38,6 +37,20 @@ const EDocumentQuickLookPanel = Ext.extend(Ext.Panel, {
 
 });
 
+EDocumentQuickLookPanel.negotiate = async (fileLocation, config) => {
+    return {
+        prio:  (await Tine.Sales.isEDocumentFile(fileLocation)) ? (
+            config.contentType === 'application/pdf' ? 25 : 75) : -1,
+        label: Tine.Tinebase.appMgr.get('Sales').i18n._('eDocument'),
+        iconCls: 'SalesEDocument'
+    };
+}
+
 Ext.reg('Sales.EDocumentQuickLookPanel', EDocumentQuickLookPanel);
+
+if (_.isFunction(_.get(Tine, 'Filemanager.QuickLookRegistry.registerContentType'))) {
+    Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Sales.EDocumentQuickLookPanel');
+    Tine.Filemanager.QuickLookRegistry.registerContentType('application/pdf', 'Sales.EDocumentQuickLookPanel');
+}
 
 export default EDocumentQuickLookPanel;

@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import FileLocation from 'Model/FileLocation'
+
 Ext.ns('Tine.Filemanager');
 
 require('Filemanager/js/QuickLookRegistry');
@@ -34,9 +36,9 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
     initialApp: null,
 
     /**
-     * holds Ids of record preview panels (index is record ID)
+     * window cache for preview panels
      */
-    cardPanelsByRecordId: {},
+    cardPanelsCache: {},
 
     /**
      * @type Tine.Filemanager.QuickLookRegistry
@@ -67,8 +69,12 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
 
         this.registry = Tine.Filemanager.QuickLookRegistry;
 
+        this.selBtns = new Ext.ButtonGroup({
+            hidden: true,
+        })
+
         this.tbar = new Ext.Toolbar({
-            items: [{
+            items: [this.selBtns, {
                 xtype: 'tbfill',
                 order: 50
             }, Tine.Filemanager.nodeActionsMgr.get('download', {
@@ -143,29 +149,35 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
     /**
      * fetch/manage preview panels for records by content-type
      */
-    loadPreviewPanel: async function () {
+    loadPreviewPanel: async function (idx) {
         let previewPanel = null;
 
         await this.handleAttachments();
-        
-        this.window.setTitle(this.record.get('name'));
 
-        if (this.cardPanelsByRecordId[this.record.id]) {
-            previewPanel = this.cardPanel.get(this.cardPanelsByRecordId[this.record.id]);
+        this.window.setTitle(this.record.get('name'));
+        const cacheKey = this.record.get('id') + (idx || '');
+
+        if (this.cardPanelsCache[cacheKey]) {
+            previewPanel = this.cardPanel.get(this.cardPanelsCache[cacheKey]);
         } else {
             const fileExtension = Tine.Filemanager.Model.Node.getExtension(this.record.get('name'));
             const contentType = this.record.get('contenttype');
+            const fileLocation = FileLocation.create(this.record);
+
             let previewPanelXtype = '';
+            let previewPanelTypes;
 
             if (this.registry.hasContentType(contentType)) {
-                previewPanelXtype = this.registry.getContentType(contentType);
+                previewPanelTypes = await this.registry.getByContentType(contentType, fileLocation);
             } else if (this.registry.hasExtension(fileExtension)) {
-                previewPanelXtype = this.registry.getExtension(fileExtension);
+                previewPanelTypes = await this.registry.getByExtension(fileExtension, fileLocation);
             }
+            previewPanelXtype = _.get(previewPanelTypes, `[${idx || 0}].xtype`)
 
             //const useOriginalSizeLimit = 30 * 1024 * 1024; // @TODO have pref or conf, but do we really need this for native browser preview ?
             const isTempFile = !!_.get(this.record, 'json.input');
-            const hasRequiredGrant = this.requiredGrant ? _.get(this.record, `data.account_grants.${this.requiredGrant}`, false) : true;
+            const isAttachment = fileLocation.get('model_name') === "Tinebase_Model_FileLocation_RecordAttachment";
+            const hasRequiredGrant = this.requiredGrant && !isAttachment ? _.get(this.record, `data.account_grants.${this.requiredGrant}`, false) : true;
             const protectedContentTypes = [
                 'txt', 'rtf', 'odt', 'ods', 'odp', 'doc', 'xls', 'xlsx', 'doc', 'docx', 'ppt', 'pptx', 'pdf'
             ];
@@ -188,14 +200,31 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
                     xtype: previewPanelXtype,
                     initialApp: this.initialApp,
                     nodeRecord: this.record,
-                    contentType: contentType,
-                    url: url
+                    contentType,
+                    url
                 });
             }
 
-            this.cardPanelsByRecordId[this.record.id] = previewPanel.id;
+            previewPanel.previewPanelTypes = hasRequiredGrant ? previewPanelTypes : [] // forced DocumentPreview (image)
+            this.cardPanelsCache[cacheKey] = previewPanel.id;
             this.cardPanel.add(previewPanel);
         }
+
+        this.selBtns.removeAll();
+        if (previewPanel.previewPanelTypes.length > 1) {
+            this.selBtns.add(previewPanel.previewPanelTypes.map((previewPanelType, idx) => {
+                return {
+                    text: previewPanelType.label,
+                    iconCls: previewPanelType.iconCls,
+                    pressed: previewPanelType.xtype === previewPanel.xtype,
+                    handler: () => {
+                        this.loadPreviewPanel(idx);
+                    }
+                }
+            }))
+        }
+        this.selBtns.setVisible(previewPanel.previewPanelTypes.length > 1)
+        this.selBtns.doLayout();
 
         this.actionUpdater.each(action => action.previewPanel = previewPanel);
         this.actionUpdater.updateActions([this.record]);

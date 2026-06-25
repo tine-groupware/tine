@@ -38,6 +38,13 @@ const ObjectPanel = Ext.extend(Ext.Panel, {
     },
 });
 
+ObjectPanel.negotiate = async (fileLocation, config) => {
+    return {
+        label: window.i18n._('Native Browser Preview'),
+        iconCls: config.contentType ? Tine.Tinebase.common.getMimeIconCls(config.contentType) : 'mime-icon-file'
+    };
+}
+
 Ext.reg('Filemanager.QuickLookObjectPanel', ObjectPanel);
 
 Tine.Filemanager.QuickLookRegistry.registerContentType('application/pdf', 'Filemanager.QuickLookObjectPanel');
