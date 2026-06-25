@@ -277,6 +277,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.warnBox.setVisible(true)
         }
 
+        this.fields.document_number.emptyValue = !booked ? this.fields.document_proforma_number?.getValue() : null;
+
         // check service period contains all positions
         let servicePeriodAdopted = false
         const serviceStart = this.getForm().findField('service_period_start')?.getValue();
