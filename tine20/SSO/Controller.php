@@ -151,6 +151,8 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
+        $activeKey = static::getActiveOAuth2Key();
+
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
         $userInfo = new Idaas\OpenID\UserInfo(
@@ -158,7 +160,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             $tokenRepo = new SSO_Facade_OAuth2_AccessTokenRepository(),
             new \League\OAuth2\Server\ResourceServer(
                 $tokenRepo,
-                $cryptKey = new CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey']),
+                $cryptKey = new CryptKey($activeKey['publickey']),
                 $bearerTokenValidator = new SSO_Facade_OAuth2_BearerTokenValidator($tokenRepo, $userRep)
             ),
             new SSO_Facade_OpenIdConnect_ClaimRepository()
@@ -489,6 +491,24 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         return $response;
+    }
+
+    public static function getActiveOAuth2Key(): array
+    {
+        $now = Tinebase_DateTime::now();
+        $keys = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
+
+        foreach ($keys as $keyConfig) {
+            if (!isset($keyConfig['publickey']) || !isset($keyConfig['privatekey'])) {
+                continue;
+            }
+            if (isset($keyConfig['notBefore']) && $now->isEarlier(new Tinebase_DateTime($keyConfig['notBefore']))) {
+                continue;
+            }
+            return $keyConfig;
+        }
+
+        throw new Tinebase_Exception('No active OAuth2 key found');
     }
 
     public static function getOAuthIssuer(): string
@@ -1319,13 +1339,16 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         if ($existingKey = (SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'] ?? null)) {
-            if (preg_match('/^\d\d\d\d-\d\d-\d\d$/', ($date = basename(dirname($existingKey))))) {
-                $date = new Tinebase_DateTime($date);
-                if ($date->isLater(Tinebase_DateTime::today()->subMonth(6))) {
-                    // key still valid, nothing to do
-                    $this->retireKeys();
-                    return true;
-                }
+            // we might still have old dirs only containing date, not datetime
+            if (preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', ($dateStr = basename(dirname($existingKey))))) {
+                $date = new Tinebase_DateTime($dateStr);
+            } else {
+                $date = null;
+            }
+            if ($date && $date->isLater(Tinebase_DateTime::today()->subMonth(6))) {
+                // key still valid, nothing to do
+                $this->retireKeys();
+                return true;
             }
         }
 
@@ -1342,7 +1365,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        if (!$this->addKeysToConfig($basePath, $keyName)) {
+        if (!$this->addKeysToConfig($basePath, $keyName, null !== $existingKey)) {
             $cleanDatedDir();
             return false;
         }
@@ -1351,7 +1374,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         return true;
     }
 
-    public function addKeysToConfig(string $path, string $keyName): bool
+    public function addKeysToConfig(string $path, string $keyName, bool $setNotBefore = false): bool
     {
         if (!str_ends_with($path, '/')) {
             $path .= '/';
@@ -1372,7 +1395,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             'kid' => $keyName,
             'publickey' => $path . $keyName . '_cert.crt',
             'privatekey' => $path . $keyName . '_key.pem',
-        ]));
+        ], $setNotBefore ? ['notBefore' => Tinebase_DateTime::now()->addHour(1)->format('Y-m-d H:i:s')] : []));
         SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $oauth2Keys;
 
         $saml2Keys = SSO_Config::getInstance()->{SSO_Config::SAML2}->{SSO_Config::SAML2_KEYS};
@@ -1392,17 +1415,21 @@ class SSO_Controller extends Tinebase_Controller_Event
             $changed = false;
             foreach($keys as $index => $key) {
                 if (!isset($key['privatekey'])) continue;
-                $date = basename(dirname($key['privatekey']));
-                if (!preg_match('/^\d\d\d\d-\d\d-\d\d$/', $date)) {
+                $dirName = basename(dirname($key['privatekey']));
+                if (preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $dirName)) {
+                    $date = new Tinebase_DateTime($dirName);
+                } else {
                     $changed = true;
                     unset($keys[$index]);
-                } else {
-                    if ((new Tinebase_DateTime($date))->isLater(Tinebase_DateTime::today()->subMonth(6)->subDay(2))) {
+                    continue;
+                }
+                if ($date->isLater(Tinebase_DateTime::today()->subMonth(6)->subDay(2))) {
+                    if (!isset($key['notBefore']) || Tinebase_DateTime::now()->isLaterOrEquals(new Tinebase_DateTime($key['notBefore']))) {
                         $validKey = true;
-                    } else {
-                        $changed = true;
-                        unset($keys[$index]);
                     }
+                } else {
+                    $changed = true;
+                    unset($keys[$index]);
                 }
             }
             if ($validKey && $changed) {
@@ -1417,14 +1444,14 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         $oauth2Keys = SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS};
-        if (null !== ($saml2Keys = $filterKeys($oauth2Keys))) {
+        if (null !== ($oauth2Keys = $filterKeys($oauth2Keys))) {
             SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} = $oauth2Keys;
         }
     }
 
     protected function _makeDatedDir($path): ?string
     {
-        $path .= '/' . Tinebase_DateTime::today()->format('Y-m-d');
+        $path .= '/' . Tinebase_DateTime::now()->format('Y-m-d H:i:s');
         if (!mkdir($path)) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' can\'t mkdir ' . $path);
             return null;
