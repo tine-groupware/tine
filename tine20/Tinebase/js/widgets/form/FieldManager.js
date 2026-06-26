@@ -85,6 +85,7 @@ Tine.widgets.form.FieldManager = function() {
 
             // have self contained fieldDefinition
             fieldDefinition.appName = appName;
+            fieldDefinition.modelName = modelName;
             fieldDefinition.fieldName = fieldName;
 
             if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
@@ -383,7 +384,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableStr':
                 case 'numberableInt':
                     field.xtype = 'numberablefield';
-                    field.disabled = ! _.get(field, 'config.editable');
+                    field.readOnly = ! _.get(field, 'config.editable');
                     field.emptyText = window.i18n._('Gets assigned automatically');
                     break;
                 case 'json':
