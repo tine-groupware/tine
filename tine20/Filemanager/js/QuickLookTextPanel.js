@@ -39,6 +39,13 @@ const TextPanel = Ext.extend(Ext.Panel, {
 
 Ext.reg('Filemanager.QuickLookTextPanel', TextPanel);
 
+TextPanel.negotiate = async (fileLocation, config) => {
+    return {
+        label: window.i18n._('Text'),
+        iconCls: 'filemanager-quicklook-code'
+    };
+}
+
 Tine.Filemanager.QuickLookRegistry.registerContentType('application/json', 'Filemanager.QuickLookTextPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('application/xml', 'Filemanager.QuickLookTextPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('text/plain', 'Filemanager.QuickLookTextPanel');
