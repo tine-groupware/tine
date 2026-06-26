@@ -302,7 +302,8 @@ RUN apt-mirror activate \
     composer \
     npm \
     nodejs \
-    s3cmd \ 
+    s3cmd \
+    git \
     $(cat /etc/php/container-php-package-name)-pcov \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate
