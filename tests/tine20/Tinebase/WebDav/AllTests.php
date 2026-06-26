@@ -15,13 +15,14 @@ class Tinebase_WebDav_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tinebase All WebDAV Tests');
+        $suite->addTestSuite(Tinebase_WebDav_PrincipalBackendTest::class);
+        $suite->addTestSuite(Tinebase_WebDav_IssueTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_ACLTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_OwnCloudTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_PrincipalSearchTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_PropfindTest::class);
         $suite->addTestSuite(Tinebase_WebDav_Plugin_SyncTokenTest::class);
-        $suite->addTestSuite(Tinebase_WebDav_PrincipalBackendTest::class);
         $suite->addTestSuite(Tinebase_WebDav_RootTest::class);
 
         return $suite;
