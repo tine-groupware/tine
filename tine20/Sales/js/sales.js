@@ -32,7 +32,7 @@ import './Document/TrackAction';
 import './Document/SendToDatevAction';
 import './DocumentPosition/customerColumn';
 import './EDocument/QuickLookPanel';
-import './numberableStateProvider';
+import './numberableConfigProvider';
 import './Document/PurchaseInvoice/importPurchaseInvoiceAction';
 import './Document/PurchaseInvoice/EditDialog';
 import './MainScreen'
