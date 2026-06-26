@@ -21,6 +21,7 @@ class SSO_AllTests
         if (Tinebase_Application::getInstance()->isInstalled('SSO')) {
             $suite->addTestSuite(SSO_JsonTest::class);
             $suite->addTestSuite(SSO_PublicAPITest::class);
+            $suite->addTestSuite(SSO_KeyRotationTest::class);
         }
 
         return $suite;
