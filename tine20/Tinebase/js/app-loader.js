@@ -25,6 +25,8 @@ var baseDir  = path.resolve(__dirname , '../../'),
 
 // find initial js for all available apps at BUILDTIME!
 fs.readdirSync(baseDir).forEach(function(baseName) {
+    if (baseName === 'Tinebase') return; // directly loaded by webpack entry point
+
     var initialFile = '';
 
     try {
