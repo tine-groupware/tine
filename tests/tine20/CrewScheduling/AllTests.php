@@ -23,6 +23,7 @@ class CrewScheduling_AllTests
             $suite->addTestSuite(CrewScheduling_Export_XlsxTest::class);
             $suite->addTestSuite(CrewScheduling_Export_PdfTest::class);
             $suite->addTestSuite(CrewScheduling_FrontendTest::class);
+            $suite->addTestSuite(CrewScheduling_Model_EventRoleConfigTest::class);
         }
 
         return $suite;
