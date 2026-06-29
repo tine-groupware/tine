@@ -95,6 +95,10 @@
     {
       "type": "git",
       "url": "https://github.com/tine-groupware/basic-feeds.git"
+    },
+    {
+      "type": "git",
+      "url": "https://github.com/tine-groupware/php-jwk.git"
     }
   ],
   "require": {
@@ -166,7 +170,7 @@
     "simplesamlphp/simplesamlphp": "dev-pu/pm/replaceAssertOptions as v1.19.9",
     "smalot/pdfparser": "^2.12",
     "spomky-labs/otphp": "^10.0",
-    "strobotti/php-jwk": "^1.4",
+    "strobotti/php-jwk": "dev-master#8fca4373364a9d3b4154d11bcb0786dda783a8b2 as 1.4.4",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
