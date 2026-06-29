@@ -83,7 +83,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         if (!this.fileName && this.files.length === 1) {
             this.fileName = this.files[0]?.filename;
         }
-        
+
         this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder' && (this.fileName || this.files.length === 1);
         this.allowManageExternalFile = this.mode === 'source' && this.constraint !== 'folder';
         
