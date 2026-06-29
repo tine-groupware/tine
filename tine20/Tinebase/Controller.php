@@ -1705,11 +1705,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             /** @var Tinebase_Model_WebDavIssue $issue */
             foreach ($result as $issue) {
                 $ids[] = $issue->getId();
-                $throwable = unserialize($issue->{Tinebase_Model_WebDavIssue::FLD_EXCEPTION});
-                if (!isset($exceptions[get_class($throwable)])) {
-                    $exceptions[get_class($throwable)] = 0;
+                list($throwable, ) = explode(' ', $issue->{Tinebase_Model_WebDavIssue::FLD_EXCEPTION}, 2);
+                if (!isset($exceptions[$throwable])) {
+                    $exceptions[$throwable] = 0;
                 }
-                $exceptions[get_class($throwable)] += 1;
+                $exceptions[$throwable] += 1;
 
                 if (!isset($methods[$issue->{Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD}])) {
                     $methods[$issue->{Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD}] = 0;
