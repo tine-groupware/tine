@@ -1321,6 +1321,11 @@ class Tinebase_FileSystem implements
 
         // we clean up $tmpFile down there in finally
         if (false === ($tmpFile = Tinebase_Fulltext_TextExtract::getInstance()->fileObjectToTempFile($fileObject))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' fileObjectToTempFile failed');
+            }
+
             $work = function($fileObject) {
                 if ($fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} !== $fileObject->hash) {
                     $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = 1;
@@ -1359,8 +1364,10 @@ class Tinebase_FileSystem implements
                 $raii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_fileObjectBackend);
                 $fileObject = $this->_fileObjectBackend->get($_objectId);
             } catch(Tinebase_Exception_NotFound) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Could not find file object ' . $_objectId);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Could not find file object ' . $_objectId);
+                }
                 return true;
             } finally {
                 unset($raii);
@@ -3390,7 +3397,7 @@ class Tinebase_FileSystem implements
             . ' starting to check indexing');
 
         $success = true;
-        foreach($this->_fileObjectBackend->getNotIndexedObjectIds() as $objectId) {
+        foreach ($this->_fileObjectBackend->getNotIndexedObjectIds() as $objectId) {
             $success = $this->indexFileObject($objectId) && $success;
 
             Tinebase_Lock::keepLocksAlive();

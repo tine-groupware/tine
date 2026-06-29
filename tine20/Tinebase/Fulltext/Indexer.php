@@ -110,9 +110,18 @@ class Tinebase_Fulltext_Indexer
         $blob = Tinebase_Core::filterInputForDatabase($blob);
 
         $blobsize = strlen($blob);
-        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG))
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Blob size (max): '
-            . $blobsize . ' (' . $this->_maxBlobSize . ')');
+                . $blobsize . ' (' . $this->_maxBlobSize . ')');
+        }
+
+        if ($blobsize === 0) {
+            if (Tinebase_Core::isLogLevel(Tinebase_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no need to index empty file');
+            }
+            return;
+        }
+
         if ($this->_maxBlobSize > 0 && $blobsize > $this->_maxBlobSize) {
             if (Tinebase_Core::isLogLevel(Tinebase_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Truncating full text blob for id '
