@@ -63,6 +63,12 @@ class EventManager_Setup_Initialize extends Setup_Initialize
                 Tinebase_Model_Grants::GRANT_READ => true,
                 Tinebase_Model_Grants::GRANT_ADD => true,
             ]));
+            $grants->addRecord(new Tinebase_Model_Grants([
+                'account_id' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ => true,
+                Tinebase_Model_Grants::GRANT_ADD => true,
+            ]));
             Tinebase_FileSystem::getInstance()->setGrantsForNode($node, $grants);
         } catch (Filemanager_Exception_NodeExists $e) {
             // This is fine
