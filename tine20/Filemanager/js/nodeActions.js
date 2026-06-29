@@ -459,6 +459,7 @@ Tine.Filemanager.nodeActions.Copy = {
             windowTitle: app.i18n._('Copy Items'),
             singleSelect: true,
             mode: 'target',
+            files: records,
             constraint: (targetNode) => {
                 return Tine.Filemanager.nodeActionsMgr.checkConstraints('copy', targetNode, records);
             }
@@ -494,6 +495,7 @@ Tine.Filemanager.nodeActions.Move = {
             windowTitle: app.i18n._('Move Items'),
             singleSelect: true,
             mode: 'target',
+            files: records,
             constraint: (targetNode) => {
                 return Tine.Filemanager.nodeActionsMgr.checkConstraints('move', targetNode, records);
             }
