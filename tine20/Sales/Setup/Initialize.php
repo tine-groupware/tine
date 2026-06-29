@@ -98,6 +98,152 @@ class Sales_Setup_Initialize extends Setup_Initialize
         static::createDefaultFavoritesDocPurchaseInvoice();
 
         static::createDocumentInvoiceFavorites();
+
+        static::createDocumentOfferAndOrderFavorites();
+    }
+
+    public static function createDocumentOfferAndOrderFavorites(): void
+    {
+        $commonValues = [
+            'account_id'        => null,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId(),
+        ];
+
+        $pfe = Tinebase_PersistentFilter::getInstance();
+
+        // Offer favorites
+        $commonValues['model'] = Sales_Model_Document_Offer::class;
+
+        // All Offers
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'All Offers', // _('All Offers')
+                'description' => 'All Offers',
+                'filters'     => [],
+            ])
+        ));
+
+        // Draft Offers
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Draft Offers', // _('Draft Offers')
+                'description' => 'Draft Offers',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Offer::FLD_OFFER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Offer::STATUS_DRAFT],
+                ],
+            ])
+        ));
+
+        // To be dispatched Offers (Manual Dispatch)
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'To be dispatched Offers', // _('To be dispatched Offers')
+                'description' => 'To be dispatched Offers',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Offer::FLD_OFFER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Offer::STATUS_MANUAL_DISPATCH],
+                ],
+            ])
+        ));
+
+        // Dispatched Offers
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Dispatched Offers', // _('Dispatched Offers')
+                'description' => 'Dispatched Offers',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Offer::FLD_OFFER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Offer::STATUS_DISPATCHED],
+                ],
+            ])
+        ));
+
+        // Ordered Offers
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Ordered Offers', // _('Ordered Offers')
+                'description' => 'Ordered Offers',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Offer::FLD_OFFER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Offer::STATUS_ORDERED],
+                ],
+            ])
+        ));
+
+        // Refused Offers
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Refused Offers', // _('Refused Offers')
+                'description' => 'Refused Offers',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Offer::FLD_OFFER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Offer::STATUS_REJECTED],
+                ],
+            ])
+        ));
+
+        // Order favorites
+        $commonValues['model'] = Sales_Model_Document_Order::class;
+
+        // All Orders
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'All Orders', // _('All Orders')
+                'description' => 'All Orders',
+                'filters'     => [],
+            ])
+        ));
+
+        // Received Orders
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Received Orders', // _('Received Orders')
+                'description' => 'Received Orders',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Order::STATUS_RECEIVED],
+                ],
+            ])
+        ));
+
+        // Accepted Orders
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Accepted Orders', // _('Accepted Orders')
+                'description' => 'Accepted Orders',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
+                ],
+            ])
+        ));
+
+        // To be dispatched Orders (Manual Dispatch)
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'To be dispatched Orders', // _('To be dispatched Orders')
+                'description' => 'To be dispatched Orders',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Order::STATUS_MANUAL_DISPATCH],
+                ],
+            ])
+        ));
+
+        // Dispatched Orders
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Dispatched Orders', // _('Dispatched Orders')
+                'description' => 'Dispatched Orders',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Order::STATUS_DISPATCHED],
+                ],
+            ])
+        ));
+
+        // Done Orders
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(
+            array_merge($commonValues, [
+                'name'        => 'Done Orders', // _('Done Orders')
+                'description' => 'Done Orders',
+                'filters'     => [
+                    [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_Order::STATUS_COMPLETED],
+                ],
+            ])
+        ));
     }
 
     public static function createDocumentInvoiceFavorites(): void
