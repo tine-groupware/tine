@@ -141,6 +141,8 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
+                self::DESCRIPTION       => 'The option will be displayed first on the website, the lower the number is.',
+                // _('The option will be displayed first on the website, the lower the number is.')
             ],
             self::FLD_LEVEL         => [
                 self::TYPE              => self::TYPE_KEY_FIELD,

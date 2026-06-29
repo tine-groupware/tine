@@ -416,9 +416,6 @@ msgstr "Imprint"
 msgid "Privacy Notice"
 msgstr "Privacy Notice"
 
-msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
-msgstr "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
-
 msgid "Participant Information:"
 msgstr "Participant Information:"
 
@@ -746,6 +743,9 @@ msgstr "If you want multiple options as a group so that only one option of the g
 msgid "Display Sorting"
 msgstr "Display Sorting"
 
+msgid "The option will be displayed first on the website, the lower the number is."
+msgstr "The option will be displayed first on the website, the lower the number is."
+
 msgid "The higher the level, the greater the indentation on the website."
 msgstr "The higher the level, the greater the indentation on the website."
 
@@ -871,9 +871,6 @@ msgstr "Select an Event"
 
 msgid "Select a Person"
 msgstr "Select a Person"
-
-msgid "Select a Participant"
-msgstr "Select a Participant"
 
 msgid "Confirmation E-mail"
 msgstr "Confirmation E-mail"

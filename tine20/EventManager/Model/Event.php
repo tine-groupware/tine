@@ -286,6 +286,9 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
                 self::NULLABLE              => true,
+                self::UI_CONFIG     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_IMAGES => [
                 self::LABEL                         => 'Images', // _('Images')
