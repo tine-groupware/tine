@@ -68,7 +68,7 @@
               }">
                 <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
                   <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
-                    <div>{{option.name_option}}</div>
+                    <div v-if="option.name_option !== optionGroup.group">{{option.name_option}}</div>
                     <MarkdownRenderer :content="option.option_config.text_option" />
                   </div>
                   <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
