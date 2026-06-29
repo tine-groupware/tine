@@ -132,6 +132,7 @@ Tine.widgets.grid.ColumnManager = function() {
             const config = {
                 id: refConfig?.id ?? field.name,
                 dataIndex: refConfig?.dataIndex ?? field.name,
+                minWidth: 50
             };
             
             if (type === 'auto' && refConfig?.renderer && (!refConfig?.width || refConfig.width === 100)) {
@@ -144,11 +145,10 @@ Tine.widgets.grid.ColumnManager = function() {
                     type = resolvedType;
                 }
             }
-            
+
             if (['string', 'localizedString', 'text', 'numberablestr', 'fulltext'].includes(type)) {
                 if (fieldDefinition) {
                     const length = fieldDefinition?.length ?? 40;
-                    config.minWidth = 100;
                     config.defaultWidth = 100;
                     
                     if (length === 64) {
@@ -158,7 +158,6 @@ Tine.widgets.grid.ColumnManager = function() {
                         config.maxWidth = 250;
                     }
                     if (length === 255) {
-                        config.minWidth = 120;
                         config.defaultWidth = 150;
                         config.maxWidth = 1000;
                     }
@@ -167,7 +166,6 @@ Tine.widgets.grid.ColumnManager = function() {
                     }
 
                     if (fieldDefinition.specialType === 'currency') {
-                        config.minWidth = 50;
                         config.maxWidth = 100;
                     }
                 }
@@ -241,13 +239,11 @@ Tine.widgets.grid.ColumnManager = function() {
             }
             
             if (type === 'id') {
-                config.minWidth = 50;
                 config.defaultWidth = 100;
                 config.maxWidth = 300;
             }
             
             if (['description', 'name', 'title', 'email', 'url'].some(key => type === key)) {
-                config.minWidth = 150;
                 config.defaultWidth = 200;
                 config.maxWidth = 1000;
             }
@@ -264,13 +260,11 @@ Tine.widgets.grid.ColumnManager = function() {
             }
             
             if (type === 'type') {
-                config.minWidth = 50;
                 config.defaultWidth = 100;
                 config.maxWidth = 200;
             }
 
             if (['user', 'record', 'relation', 'virtual', 'custom', 'foo', 'dynamicrecord', 'model', 'records'].includes(type)) {
-                config.minWidth = 100;
                 config.defaultWidth = 150;
                 config.maxWidth = 1000;
                 
@@ -280,7 +274,6 @@ Tine.widgets.grid.ColumnManager = function() {
             }
             
             if (type === 'keyfield') {
-                config.minWidth = 50;
                 config.defaultWidth = 80;
                 config.maxWidth = 1000;
                 
@@ -298,13 +291,11 @@ Tine.widgets.grid.ColumnManager = function() {
                         }, data[0].i18nValue);
                         const minTextLength = Math.ceil(this.getTextWidth(minText) / 10) * 10;
                         
-                        config.minWidth = minTextLength + 50;
                         config.maxWidth = maxTextLength + 50;
-                        config.defaultWidth = config.minWidth;
+                        config.defaultWidth = minTextLength + 50;
                     } catch (e) {
                         Tine.log.error(e);
                     }
-                    config.minWidth = Math.max(config.defaultWidth, config.minWidth);
                 }
             }
             
@@ -333,6 +324,13 @@ Tine.widgets.grid.ColumnManager = function() {
                 }
                 if (fieldDefinition?.label) {
                     config.label = fieldDefinition.label;
+
+                    if (config?.maxWidth && config.maxWidth > 50) {
+                        const labelWidth = Math.ceil(this.getTextWidth(fieldDefinition.label) / 10) * 10;
+                        if (labelWidth > config.maxWidth) {
+                            config.maxWidth = labelWidth;
+                        }
+                    }
                 }
                 if (fieldDefinition.hasOwnProperty('sortable') && fieldDefinition.sortable === false) {
                     config.sortable = false;
