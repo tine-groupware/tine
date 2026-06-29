@@ -416,9 +416,6 @@ msgstr ""
 msgid "Privacy Notice"
 msgstr ""
 
-msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
-msgstr ""
-
 msgid "Participant Information:"
 msgstr ""
 
@@ -746,6 +743,9 @@ msgstr ""
 msgid "Display Sorting"
 msgstr ""
 
+msgid "The option will be displayed first on the website, the lower the number is."
+msgstr ""
+
 msgid "The higher the level, the greater the indentation on the website."
 msgstr ""
 
@@ -870,9 +870,6 @@ msgid "Select an Event"
 msgstr ""
 
 msgid "Select a Person"
-msgstr ""
-
-msgid "Select a Participant"
 msgstr ""
 
 msgid "Confirmation E-mail"

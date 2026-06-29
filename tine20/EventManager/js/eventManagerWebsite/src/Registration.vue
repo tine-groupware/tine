@@ -555,6 +555,12 @@ const checkAndLoadExistingRegistration = async (participantId) => {
       }
     } else {
       isRegistrant.value = true;
+      const reg = registrations.value.find(reg => reg.participant?.id === participantId);
+      if (reg) {
+        contactDetails.value = {
+          ...reg.participant,
+        };
+      }
     }
     registrantDetails.value = {
       ...accountOwner.value,
@@ -1283,12 +1289,15 @@ onMounted(async () => {
      initialParticipantId = participantIdFromUrl ?? accountOwner.value.id;
    }
 
+   if (participantIdFromUrl) {
+     initialParticipantId = participantIdFromUrl;
+   }
+
 
   const scenario = determineRegistrationScenario(initialParticipantId);
   await initializeFormForScenario(scenario, initialParticipantId);
 
   selectedParticipantId.value = initialParticipantId;
-  router.replace({ params: route.params, query: {} });
 });
 
 </script>
