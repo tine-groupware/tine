@@ -300,10 +300,10 @@ RUN apt-mirror activate \
  && apt-get install -y \
     rsync \
     composer \
+    git \
     npm \
     nodejs \
     s3cmd \
-    git \
     $(cat /etc/php/container-php-package-name)-pcov \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate
@@ -322,6 +322,7 @@ RUN apt-mirror activate \
  && apt-get update \
  && apt-get install -y \
     composer \
+    git \
     $(cat /etc/php/container-php-package-name)-xdebug \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate
@@ -337,6 +338,7 @@ RUN apt-mirror activate \
  && apt-get update \
  && apt-get install -y \
     composer \
+    git \
  && rm -rf /var/lib/apt/lists/* \
  && apt-mirror deactivate
 # used to inject http auth credentials for git repos
@@ -449,6 +451,7 @@ RUN apt-mirror activate \
  && apt-get install -y \
     rsync \
     composer \
+    git \
     npm \
     nodejs \
  && rm -rf /var/lib/apt/lists/* \
