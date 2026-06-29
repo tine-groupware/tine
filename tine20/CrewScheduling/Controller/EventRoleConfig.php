@@ -120,7 +120,16 @@ class CrewScheduling_Controller_EventRoleConfig extends Tinebase_Controller_Reco
             }
         }
 
+
         $managedStatus = $event->xprops()['CS-MANAGED-EVENT-STATUS'] ?? null;
+        if (!$managedStatus && $event->isRecurException()) {
+            // NOTE: for new recur exceptions we need to check if user set status manually
+            try {
+                $managedStatus = Calendar_Controller_Event::getInstance()->getRecurBaseEvent($event)->status;
+            } catch (Tinebase_Exception_NotFound $tnfe) {
+                $managedStatus = null;
+            }
+        }
         if ($managedStatus && $managedStatus !== $event->status) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
