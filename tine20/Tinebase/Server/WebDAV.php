@@ -382,7 +382,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
         Tinebase_Controller_WebDavIssue::getInstance()->create(new Tinebase_Model_WebDavIssue([
             Tinebase_Model_WebDavIssue::FLD_CREATION_TIME => Tinebase_DateTime::now(),
-            Tinebase_Model_WebDavIssue::FLD_EXCEPTION => serialize($t),
+            Tinebase_Model_WebDavIssue::FLD_EXCEPTION => get_class($t) . ' ' . $t->getMessage() . ' ' . $t->getFile() . ':' . $t->getLine() . PHP_EOL . $t->getTraceAsString(),
             Tinebase_Model_WebDavIssue::FLD_URI => $uri,
             Tinebase_Model_WebDavIssue::FLD_REQUEST_METHOD => strtoupper($this->_request->getMethod()),
             Tinebase_Model_WebDavIssue::FLD_REQUEST_HEADERS => print_r($hdrs, true),
