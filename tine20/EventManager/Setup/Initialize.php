@@ -37,6 +37,12 @@ class EventManager_Setup_Initialize extends Setup_Initialize
         $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
         $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
 
+        $folderEventExists = Tinebase_FileSystem::getInstance()->fileExists($prefix . $path);
+
+        if ($folderEventExists) {
+            $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('EventManager');
+        }
+
         EventManager_Config::getInstance()
             ->set(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH, $path);
 

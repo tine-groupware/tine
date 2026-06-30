@@ -30,6 +30,12 @@ class EventManager_Setup_Uninitialize extends Setup_Uninitialize
         $translation = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
         $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('Events');
         Filemanager_Controller_Node::getInstance()->deleteNodes([$prefix . $path]);
+
+        $path = Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/' . $translation->_('EventManager');
+        $folderEventManagerExists = Tinebase_FileSystem::getInstance()->fileExists($prefix . $path);
+        if ($folderEventManagerExists) {
+            Filemanager_Controller_Node::getInstance()->deleteNodes([$prefix . $path]);
+        }
     }
 
     protected function _uninitializeCostCenterCostBearer()
