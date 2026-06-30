@@ -130,7 +130,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * @return Tinebase_Record_RecordSet<Tasks_Model_Task>
+     * @return Tinebase_Record_RecordSet<Timetracker_Model_Timesheet>
      */
     public function testCorrelationCreate(): Tinebase_Record_RecordSet
     {
