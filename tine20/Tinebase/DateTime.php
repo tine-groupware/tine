@@ -124,7 +124,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
         }
 
         [$h, $m, $i] = explode(' ', $this->format('H i s'));
-        parent::setTime($h, $m, $i, 0);
+        parent::setTime((int) $h, (int) $m, (int) $i, 0);
     }
     
     /**
@@ -434,7 +434,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     #[\ReturnTypeWillChange]
     public function setDate($year ,$month ,$day)
     {
-        parent::setDate($year ,$month ,$day);
+        parent::setDate((int) $year ,(int) $month ,(int) $day);
         return $this;
     }
     
@@ -447,7 +447,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     #[\ReturnTypeWillChange]
     public function setTime($hour, $minute, $second = 0, $microseconds = 0)
     {
-        parent::setTime($hour, $minute, $second, $microseconds);
+        parent::setTime((int) $hour, (int) $minute, (int) $second, (int) $microseconds);
         return $this;
     }
     
@@ -460,7 +460,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     #[\ReturnTypeWillChange]
     public function setISODate($year ,$week, $day = 1)
     {
-        parent::setISODate($year ,$week, $day);
+        parent::setISODate((int) $year ,(int) $week, (int) $day);
         return $this;
     }
     
@@ -651,7 +651,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     {
         [$i, $s] = explode(' ', $this->format('i s'));
         
-        $this->setTime($modify, $i, $s);
+        $this->setTime((int) $modify, (int) $i, (int) $s);
         return $this;
     }
     
@@ -668,7 +668,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     {
         [$h, $s] = explode(' ', $this->format('H s'));
         
-        $this->setTime($h, $modify, $s);
+        $this->setTime((int) $h, (int) $modify, (int) $s);
         return $this;
     }
     
@@ -685,7 +685,7 @@ class Tinebase_DateTime extends DateTime implements \Stringable
     {
         [$h, $i] = explode(' ', $this->format('H i'));
         
-        $this->setTime($h, $i, $modify);
+        $this->setTime((int) $h, (int) $i, (int) $modify);
         return $this;
     }
     
@@ -706,7 +706,8 @@ class Tinebase_DateTime extends DateTime implements \Stringable
         
         // if we contain no time info, we are timezone invariant
         if ($this->_hasTime === FALSE) {
-            call_user_func_array($this->setDate(...), explode('-', $date));
+            $dateParts = explode('-', $date);
+            $this->setDate((int)$dateParts[0], (int)$dateParts[1], (int)$dateParts[2]);
             $this->setTime(0,0,0);
         }
         
