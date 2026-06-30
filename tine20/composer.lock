@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ad86d856d3d497b2be74feef994c18d",
+    "content-hash": "62c089ff0aaf82d3da45caaadb088d12",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
@@ -10301,17 +10301,11 @@
         },
         {
             "name": "strobotti/php-jwk",
-            "version": "v1.4.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Strobotti/php-jwk.git",
-                "reference": "091700d8874be5a8aecd8bda3eb1cc7e41559f31"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Strobotti/php-jwk/zipball/091700d8874be5a8aecd8bda3eb1cc7e41559f31",
-                "reference": "091700d8874be5a8aecd8bda3eb1cc7e41559f31",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/php-jwk.git",
+                "reference": "8fca4373364a9d3b4154d11bcb0786dda783a8b2"
             },
             "require": {
                 "ext-json": "*",
@@ -10324,13 +10318,23 @@
                 "friendsofphp/php-cs-fixer": "3.54.0",
                 "phpunit/phpunit": "^10.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Strobotti\\JWK\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Strobotti\\JWK\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "./vendor/bin/phpunit"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -10345,14 +10349,10 @@
             "description": "A small PHP library to handle JWKs (Json Web Keys)",
             "homepage": "https://github.com/Strobotti/php-jwk",
             "keywords": [
-                "JWK",
-                "JWKS"
+                "jwk",
+                "jwks"
             ],
-            "support": {
-                "issues": "https://github.com/Strobotti/php-jwk/issues",
-                "source": "https://github.com/Strobotti/php-jwk/tree/v1.4.4"
-            },
-            "time": "2024-04-30T12:23:57+00:00"
+            "time": "2025-02-27T09:58:26+00:00"
         },
         {
             "name": "symfony/cache",
@@ -16850,6 +16850,12 @@
             "alias_normalized": "1.19.9.0"
         },
         {
+            "package": "strobotti/php-jwk",
+            "version": "9999999-dev",
+            "alias": "1.4.4",
+            "alias_normalized": "1.4.4.0"
+        },
+        {
             "package": "twig/html-extra",
             "version": "3.7.1.0-patch1",
             "alias": "v3.7.1",
@@ -16866,6 +16872,7 @@
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
         "simplesamlphp/simplesamlphp": 20,
+        "strobotti/php-jwk": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
@@ -16879,6 +16886,7 @@
         "ext-curl": "*",
         "ext-date": "*",
         "ext-dom": "*",
+        "ext-fileinfo": "*",
         "ext-gd": "*",
         "ext-hash": "*",
         "ext-iconv": "*",
@@ -16919,5 +16927,5 @@
         "ext-xmlwriter": "8.1",
         "ext-zip": "8.1"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
