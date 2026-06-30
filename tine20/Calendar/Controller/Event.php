@@ -603,6 +603,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if (is_object($attender['user_id'])) {
                 $attender['user_id'] = $attender['user_id']->getId();
             }
+            if ($attender['user_id'] === null) {
+                continue;
+            }
             $typeMap[$attender['user_type']][$attender['user_id']] = array();
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__
