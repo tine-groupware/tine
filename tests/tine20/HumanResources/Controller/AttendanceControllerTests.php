@@ -59,6 +59,77 @@ class HumanResources_Controller_AttendanceControllerTests extends HumanResources
             ->getIdFromProperty(HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID));
     }
 
+    /**
+     * Test that manually altering timesheet start_time before clockOut is preserved.
+     * Clock in at 12:00, alter start_time to 11:00, clock out at 13:00.
+     * The start_time should remain 11:00 and duration should be 2 hours.
+     */
+    public function testStartAlterationPreservedOnClockOut()
+    {
+        $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount(null)->getId();
+
+        // Clean up any existing timesheets for this timeaccount
+        $existingTs = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+            ])
+        );
+        if ($existingTs->count() > 0) {
+            Timetracker_Controller_Timesheet::getInstance()->delete($existingTs->getArrayOfIds());
+        }
+
+        $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()
+            ->get(HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+        $clockInTime = Tinebase_DateTime::now()->setTime(12, 0);
+        $localClockInTime = $clockInTime->getClone()->setTimezone(Tinebase_Core::getUserTimezone());
+
+        // Step 1: Clock in at 12:00
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn(
+            (new HumanResources_Config_AttendanceRecorder())
+                ->setDevice($device)
+                ->setTimeStamp($clockInTime)
+        );
+
+        // Step 2: Process BL pipes to create the timesheet
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        $ts = Timetracker_Controller_Timesheet::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
+                ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $taId],
+            ])
+        );
+        $this->assertSame(1, $ts->count(), 'Should have exactly 1 timesheet after clock in');
+        $ts = $ts->getFirstRecord();
+
+        // Verify initial state: duration should be 0
+        $this->assertSame(0, (int)$ts->duration, 'Initial duration should be 0');
+        $this->assertSame($localClockInTime->format('H:i:s'), $ts->start_time);
+
+        // Step 3: Manually alter the start_time to 11:00 (minus 1 hour from the original)
+        $ts->start_time = $localClockInTime->subHour(1)->format('H:i:s');
+        $ts = Timetracker_Controller_Timesheet::getInstance()->update($ts);
+        $this->assertSame($localClockInTime->format('H:i:s'), $ts->start_time);
+
+        // Step 4: Clock out at 13:00
+        $clockOutTime = $clockInTime->getClone()->addHour(1);
+        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut(
+            (new HumanResources_Config_AttendanceRecorder())
+                ->setDevice($device)
+                ->setTimeStamp($clockOutTime)
+        );
+
+        // Step 5: Process BL pipes
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
+        // Step 6: Refetch the timesheet
+        $tsUpdated = Timetracker_Controller_Timesheet::getInstance()->get($ts->getId());
+
+        // Step 7: Assert start_time is still 11:00 (manually altered, not overwritten)
+        $this->assertSame($localClockInTime->format('H:i:s'), $tsUpdated->start_time, 'start_time should still be 11:00:00 after clock out (preserved from manual alteration)');
+        $this->assertSame(2 * 60, $tsUpdated->duration, 'Duration should be positive ' . $ts->start_time . ' ' . $tsUpdated->end_time);
+    }
+
     public function testClockOutOfSequenceTsUpdated()
     {
         $taId = HumanResources_Controller_WorkingTimeScheme::getInstance()->getWorkingTimeAccount(null)->getId();

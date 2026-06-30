@@ -396,6 +396,23 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
         }
         $tsRs->duration = 0;
         $processedIds = [];
+
+        // Collect timesheet IDs that were manually changed (seq increased after last BL processing)
+        // to preserve their start_time during recalculation
+        $changedTsIds = [];
+        /** @var HumanResources_Model_AttendanceRecord $rec */
+        foreach ($records as $rec) {
+            if (isset($rec->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq'])) {
+                $recordSeqMap = $rec->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['seq'];
+                foreach ($tsRs as $ts) {
+                    if (isset($recordSeqMap[$ts->getId()]) && $ts->seq > $recordSeqMap[$ts->getId()]) {
+                        $changedTsIds[] = $ts->getId();
+                        break;
+                    }
+                }
+            }
+        }
+
         if (empty($slots)) {
             $startDate = $records->getFirstRecord()->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->getClone()->setTimezone($tz)->format('Y-m-d');
             /** @var Timetracker_Model_Timesheet $ts */
@@ -421,7 +438,10 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 $processedIds[] = $ts->getId();
 
                 if (!$sameDay) {
-                    $ts->start_time = $slot['start']->format('H:i:00');
+                    $slotStartTime = $slot['start']->format('H:i:00');
+                    if (!in_array($ts->getId(), $changedTsIds, true)) {
+                        $ts->start_time = $slotStartTime;
+                    }
                 } else {
                     $ts->duration += intval(ceil((((new Tinebase_DateTime($ts->start_date->format('Y-m-d ') . $ts->end_time))->getTimestamp()
                         - (new Tinebase_DateTime($ts->start_date->format('Y-m-d ') . $ts->start_time))->getTimestamp()) / 60)));
