@@ -157,9 +157,14 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  ldapData: ' . print_r($ldapData, true));
 
-        $this->_ldap->add($dn, $ldapData);
-                
-        $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
+        $doUpdate = false;
+        if (null === ($userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute)))) {
+            $this->_ldap->add($dn, $ldapData);
+            $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
+        } else {
+            $doUpdate = true;
+        }
+
         $userId = $this->_decodeAccountId($userId[$this->_userUUIDAttribute][0]);
         if ($this->_writeGroupsIds) {
             $_user->xprops()[static::class]['syncId'] = $userId;
@@ -173,6 +178,10 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
+
+        if ($doUpdate) {
+            return $this->updateUserInSyncBackend($_user);
+        }
 
         $user = $this->getUserByPropertyFromSyncBackend('accountId', $_user, 'Tinebase_Model_FullUser');
 
