@@ -104,7 +104,9 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
     {
         // no move between division
         $_record->{Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID} = $_oldRecord->{Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID};
+        $salesTaxByRate = $_record->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE};
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $_record->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE} = $salesTaxByRate;
 
         if ($_record->isBooked() && !$_oldRecord->isBooked()) {
             $this->_checkDelegatedGrant($_record, Sales_Model_DivisionGrants::GRANT_APPROVE_DOCUMENT_PURCHASE_INVOICE, true, 'No Permission.', $_oldRecord);

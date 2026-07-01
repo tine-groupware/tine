@@ -151,9 +151,13 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         return a + sums['sales_tax_by_rate'][rate];
                     }, 0))
                 } else {
+                    // NOTE: if there is already one line it's not clear weather this line is manual or autoCalced
+                    // we just have the record here - no field. we don't store a flag (auto/manual) in the record!
+                    // practically just tax-rate is changed but in principle also amount could be adjusted
+                    // the idea of just computing all values here and just apply unchanged does not work! it needs a major refactoring an TESTS!!!
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
-                        sales_tax_by_rate = /*record.get('sales_tax_by_rate')?.[0]?.tax_rate ||*/ defaultTaxRate
-                        sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
+                        sales_tax_by_rate = defaultTaxRate === 0 ? defaultTaxRate : (record.get('sales_tax_by_rate')?.[0]?.tax_rate || defaultTaxRate)
+                        // sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
                         sales_tax = (record.get('gross_sum') || 0) - (record.get('gross_sum') || 0) / (1 + sales_tax_by_rate / 100)
                     } else {
                         // manual tax breakdown
@@ -172,8 +176,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }, 0))
                 } else {
                     if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
-                        sales_tax_by_rate = /*record.get('sales_tax_by_rate')?.[0]?.tax_rate ||*/ defaultTaxRate
-                        sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
+                        sales_tax_by_rate = defaultTaxRate === 0 ? defaultTaxRate : (record.get('sales_tax_by_rate')?.[0]?.tax_rate || defaultTaxRate)
+                        // sales_tax = record.get('sales_tax_by_rate')?.[0]?.tax_amount || 0
                         sales_tax = (record.get('net_sum') || 0) / 100 * sales_tax_by_rate;
                     } else {
                         // manual tax breakdown
@@ -191,7 +195,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     const oldRate = _.find( record.get('sales_tax_by_rate') || [], {tax_rate: Number(rate)}) ||
                         Tine.Sales.Model.Document_SalesTax.setFromJson({}).data
 
-                    return a.concat(_.isNumber(Number(rate)) ? [Object.assign(oldRate, {
+                    return a.concat(_.isNumber(Number(rate)) ? [Object.assign({}, oldRate, {
                         'net_amount': sums['net_sum_by_tax_rate'][rate],
                         'tax_rate': Number(rate),
                         'tax_amount': sums['sales_tax_by_rate'][rate],
@@ -208,7 +212,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     const oldRate = _.find(record.get('sales_tax_by_rate') || [], {tax_rate: Number(tax_rate)})
 
                     sales_tax_by_rate = !oldRate && tax_amount === 0 && net_amount === 0 && gross_amount === 0 ? null :
-                        Tine.Tinebase.common.assertComparable([Object.assign(oldRate || Tine.Sales.Model.Document_SalesTax.setFromJson({}).data, {
+                        Tine.Tinebase.common.assertComparable([Object.assign({}, oldRate || Tine.Sales.Model.Document_SalesTax.setFromJson({}).data, {
                             net_amount,
                             tax_rate,
                             tax_amount,
@@ -229,6 +233,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const { positions_net_sum: last_positions_net_sum, positions_gross_sum: last_positions_gross_sum, net_sum: last_net_sum, sales_tax: last_sales_tax, sales_tax_by_rate: last_sales_tax_by_rate, gross_sum: last_gross_sum } = autoValues(this.lastRecord, lastSums, this.lastRecord.get('positions').length ? lastSums.document_price_type : (this.document_price_type || 'net'));
         const { positions_net_sum, positions_gross_sum, net_sum, sales_tax, sales_tax_by_rate, gross_sum } = autoValues(this.record, sums, document_price_type);
 
+        if (this.forceAutoValues || ['null', JSON.stringify(last_sales_tax_by_rate)].indexOf(JSON.stringify(this.getForm().findField('sales_tax_by_rate')?.getValue())) >= 0) {
+            this.record.set('sales_tax_by_rate', sales_tax_by_rate);
+            this.getForm().findField('sales_tax_by_rate')?.setValue(sales_tax_by_rate);
+        }
+
+        // make sure sales_tax is always the sum of given sales_tax_by_rate
+        this.record.set('sales_tax', _.sum(_.map(this.record.data.sales_tax_by_rate, 'tax_amount')));
+
         if (document_price_type === 'gross') {
             if (this.forceAutoValues || (this.getForm().findField('positions_net_sum')?.getValue() || 0) === (last_positions_net_sum || 0)) {
                 this.record.set('positions_net_sum', positions_net_sum);
@@ -238,16 +250,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 this.record.set('net_sum', net_sum);
                 this.getForm().findField('net_sum')?.setValue(net_sum);
             }
-        }
-        if (this.forceAutoValues || (this.getForm().findField('sales_tax')?.getValue() || 0) === (last_sales_tax || 0)) {
-            this.record.set('sales_tax', sales_tax);
-            this.getForm().findField('sales_tax')?.setValue(sales_tax);
-        }
-        if (this.forceAutoValues || ['null', JSON.stringify(last_sales_tax_by_rate)].indexOf(JSON.stringify(this.getForm().findField('sales_tax_by_rate')?.getValue())) >= 0) {
-            this.record.set('sales_tax_by_rate', sales_tax_by_rate);
-            this.getForm().findField('sales_tax_by_rate')?.setValue(sales_tax_by_rate);
-        }
-        if (document_price_type === 'net') {
+        } else {
             if (this.forceAutoValues || (this.getForm().findField('positions_gross_sum')?.getValue() || 0) === (last_positions_gross_sum || 0)) {
                 this.record.set('positions_gross_sum', positions_gross_sum);
                 this.getForm().findField('positions_gross_sum')?.setValue(positions_gross_sum);
