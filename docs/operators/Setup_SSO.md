@@ -43,7 +43,7 @@ Go to `Admin` > `Applications` > `SSO` and open the tab `RELYING PARTIES` in the
 ```
 
 ##### - SAML2
-The metadata URL of the tine idp (needed in config of the rp) is <https://YOURTINEURL/sso/saml2/idpmetadata> .
+The metadata URL of the tine idp (needed in config of the rp) is <https://my.tine.url/sso/saml2/idpmetadata> .
 
 If not given tine fetches the `AssertionConsumerService*` and `singleLogoutService*` properties from the optional `metaUrl`.
 ``` sh title="Add SAML2 RP"
@@ -63,8 +63,37 @@ If not given tine fetches the `AssertionConsumerService*` and `singleLogoutServi
     --8<-- "etc/tine20/samlPostAuthHook.php.dist"
     ```
 
+EXAMPLE: add tine as iDP in sentry (tested with version 26.6.0 + tine 2026.11)
+
+(see https://docs.sentry.io/organization/authentication/sso/#saml2-identity-providers)
+
+- add relying party in tine via admin
+  - name: same as METADATA_URL (example: https://sentry.bla.blubb/saml/metadata/sentry/)
+  - type: SAML2 Relying Party Config 
+     - name: same as METADATA_URL
+     - entity id: same as METADATA_URL
+     - metadata_url: METADATA_URL (example: https://sentry.bla.blubb/saml/metadata/sentry/)
+     - Assertion Consumer Service Binding: :urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+     - Assertion Consumer Service Location: example: https://sentry.bla.blubb/saml/acs/sentry/
+     - Logout Service Binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+     - attribute mapping:
+~~~json
+{
+    "uid": "accountId",
+    "email": "accountEmailAddress",
+    "first_name": "accountFirstName",
+    "last_name": "accountLastName"
+}
+~~~
+
+- connect to tine via sentry
+  - add tine metadata url -> https://my.tine.url/sso/saml2/idpmetadata
+  - add mapping (uid, email, first_name, last_name) -> see above
+  - done...
+
+
 ##### - OIDC
-The OIDC provider url of the tine idp (needed in the config of the rp) is <https://YOURTINEURL> (no trailing slash). 
+The OIDC provider url of the tine idp (needed in the config of the rp) is <https://my.tine.url> (no trailing slash). 
 ``` sh title="Add OIDC RP"
 --8<-- "scripts/curl/admin_SSOAddRP_oidc"
 ```
