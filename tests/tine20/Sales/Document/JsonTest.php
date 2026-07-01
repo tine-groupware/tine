@@ -785,4 +785,81 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertStringContainsString('testAtt2.txt', $data['attachments'][1], 'attachement1 is invalid');
 
     }
+
+    public function testPurchaseInvoiceSalesTaxByRate()
+    {
+        $division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord();
+
+        $purchaseInvoiceData = [
+            Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID => $division,
+            Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => [
+                [
+                    'document_id' => [],
+                    'document_type' => '',
+                    'gross_amount' => 0,
+                    'net_amount' => 0,
+                    'tax_amount' => 93.6,
+                    'tax_rate' => 19,
+                    'id' => '556fb7fd87941556873af9584b8bdfeb59afcb17',
+                ],
+            ],
+        ];
+
+        $savedInvoice = $this->_instance->saveDocument_PurchaseInvoice($purchaseInvoiceData);
+
+        $this->assertIsArray($savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+        $this->assertCount(1, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+        $this->assertEquals(93.6, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount']);
+        $this->assertEquals(19, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate']);
+        $this->assertEquals(0, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['net_amount']);
+        $this->assertEquals(0, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount']);
+
+        $retrievedInvoice = $this->_instance->getDocument_PurchaseInvoice($savedInvoice['id']);
+        $this->assertIsArray($retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+        $this->assertCount(1, $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+        $this->assertEquals(93.6, $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount']);
+        $this->assertEquals(19, $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate']);
+
+        // update existing tax rate and add another one with different tax rate
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount'] = 187.2;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['net_amount'] = 985.26;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount'] = 1172.46;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate'] = 7;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][1] = [
+            'document_id' => [],
+            'document_type' => '',
+            'gross_amount' => 119.0,
+            'net_amount' => 626.32,
+            'tax_amount' => 93.6,
+            'tax_rate' => 5,
+            'id' => Tinebase_Record_Abstract::generateUID(),
+        ];
+
+        $updatedInvoice = $this->_instance->saveDocument_PurchaseInvoice($retrievedInvoice);
+
+        $this->assertIsArray($updatedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+        $this->assertCount(2, $updatedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
+
+        $taxRate7 = null;
+        $taxRate5 = null;
+        foreach ($updatedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE] as $tax) {
+            if ($tax['tax_rate'] == 7) {
+                $taxRate7 = $tax;
+            } elseif ($tax['tax_rate'] == 5) {
+                $taxRate5 = $tax;
+            }
+        }
+
+        $this->assertNotNull($taxRate7, 'tax rate 7 not found');
+        $this->assertNotNull($taxRate5, 'tax rate 5 not found');
+        $this->assertEquals(187.2, $taxRate7['tax_amount']);
+        $this->assertEquals(7, $taxRate7['tax_rate']);
+        $this->assertEquals(985.26, $taxRate7['net_amount']);
+        $this->assertEquals(1172.46, $taxRate7['gross_amount']);
+
+        $this->assertEquals(93.6, $taxRate5['tax_amount']);
+        $this->assertEquals(5, $taxRate5['tax_rate']);
+        $this->assertEquals(626.32, $taxRate5['net_amount']);
+        $this->assertEquals(119.0, $taxRate5['gross_amount']);
+    }
 }
