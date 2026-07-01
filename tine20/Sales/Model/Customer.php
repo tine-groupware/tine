@@ -87,6 +87,9 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                         Sales_Model_Debitor::FLD_DELIVERY     => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
                         ],
+                        Sales_Model_Debitor::FLD_EINVOICE_CONFIG => [
+                            Tinebase_Record_Expander::EXPANDER_USE_JSON_EXPANDER => true,
+                        ],
                         Sales_Model_Debitor::FLD_EAS_ID       => [],
                         Sales_Model_Debitor::FLD_PAYMENT_MEANS=> [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [

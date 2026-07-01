@@ -195,7 +195,7 @@ Date.parseFunctions['x-date-format'] = myDateParser;
             // a UTC milliseconds-since-Unix-epoch value (negative values are allowed)
             var re = new RegExp('\\/Date\\(([-+])?(\\d+)(?:[+-]\\d{4})?\\)\\/');
             var r = (input || '').match(re);
-            return r? new Date(((r[1] || '') + r[2]) * 1) : null;
+            return r? new window.Date(((r[1] || '') + r[2]) * 1) : null;
         }
     },
     parseRegexes: [],
@@ -514,7 +514,7 @@ Date.formatCodes.x = "String.leftPad(this.getDate(), 2, '0')";
         s = s || 0;
         ms = ms || 0;
 
-        var dt = new Date(y, m - 1, d, h, i, s, ms);
+        var dt = new window.Date(y, m - 1, d, h, i, s, ms);
 
         return y == dt.getFullYear() &&
             m == dt.getMonth() + 1 &&

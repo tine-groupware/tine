@@ -4,15 +4,12 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Tinebase_Group
@@ -387,5 +384,84 @@ class Sales_ControllerTest extends TestCase
 
         $this->assertSame(1, $deliveries->count());
         self::assertEquals('loco', $deliveries->getFirstRecord()->locality);
+    }
+
+    public function testCustomerDebitorWithXROverwrite()
+    {
+        $division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId();
+
+        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_NAME => '-',
+                Sales_Model_Debitor::FLD_DIVISION_ID => $division,
+                Sales_Model_Debitor::FLD_EINVOICE_TYPE => Sales_Model_Einvoice_XRechnung::class,
+                Sales_Model_Debitor::FLD_EINVOICE_CONFIG => new Sales_Model_Einvoice_XRechnung([
+                    Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES => new Tinebase_Record_RecordSet(Sales_Model_Einvoice_XRechnungOverwrite::class,[
+                        [
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => 'test-value-1',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => 'Overwrite for BT-1',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => $bt1 = Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+                                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                                    [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'BT-1'],
+                                ])
+                            )->getFirstRecord()->getId(),
+                        ],
+                        [
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => 'test-value-2',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => 'Overwrite for BT-2',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => $bt2 = Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+                                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                                    [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'BT-2'],
+                                ])
+                            )->getFirstRecord()->getId(),
+                        ],
+                    ]),
+                ]),
+            ]],
+        ]));
+        
+        $createdDebitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+        $createdEinvoiceConfig = $createdDebitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG};
+        $this->assertInstanceOf(Sales_Model_Einvoice_XRechnung::class, $createdEinvoiceConfig);
+        $createdOverwrites = $createdEinvoiceConfig->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES};
+        $this->assertCount(2, $createdOverwrites);
+        foreach ($createdOverwrites as $overwrite) {
+            $this->assertInstanceOf(Sales_Model_Einvoice_XRechnungOverwrite::class, $overwrite);
+            $this->assertInstanceOf(Sales_Model_EDocument_XRechnungElement::class, $overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT});
+            $this->assertTrue($bt1 === $overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT}->getId() || $bt2 === $overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT}->getId());
+        }
+    }
+
+    public function testCustomerDebitorWithInvalidXROverwriteActionFails()
+    {
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+
+        $division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId();
+
+        Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer([
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_NAME => '-',
+                Sales_Model_Debitor::FLD_DIVISION_ID => $division,
+                Sales_Model_Debitor::FLD_EINVOICE_TYPE => Sales_Model_Einvoice_XRechnung::class,
+                Sales_Model_Debitor::FLD_EINVOICE_CONFIG => new Sales_Model_Einvoice_XRechnung([
+                    Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES => new Tinebase_Record_RecordSet(Sales_Model_Einvoice_XRechnungOverwrite::class,[
+                        [
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => 'test-value-1',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => 'Overwrite for BT-1',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => 'invalid_action',
+                            Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+                                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                                    [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'BT-1'],
+                                ])
+                            )->getFirstRecord()->getId(),
+                        ],
+                    ]),
+                ]),
+            ]],
+        ]));
     }
 }

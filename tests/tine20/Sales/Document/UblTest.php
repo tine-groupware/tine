@@ -8,7 +8,7 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
-//use Tinebase_Model_Filter_Abstract as TMFA;
+use Tinebase_Model_Filter_Abstract as TMFA;
 use Sales_Model_Document_Invoice as SMDI;
 use Sales_Model_DocumentPosition_Invoice as SMDPI;
 
@@ -473,6 +473,475 @@ EOSTR;
         /** @var SMDI $invoice */
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
         $this->_assertUblXml($invoice, 5.89, round(5.89 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+    }
+
+    public function testCustomerDebitorXROverwrite(): void
+    {
+        $division = $this->makeDefaultDivisonUblReady();
+
+        $bt13 = Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'BT-13'],
+            ])
+        )->getFirstRecord();
+        $bt14 = Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'BT-14'],
+            ])
+        )->getFirstRecord();
+
+        $customer = $this->_createCustomer();
+        $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord();
+        $debitor->{Sales_Model_Debitor::FLD_EINVOICE_TYPE} = Sales_Model_Einvoice_XRechnung::class;
+        $debitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG} = new Sales_Model_Einvoice_XRechnung([
+            Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES => new Tinebase_Record_RecordSet(Sales_Model_Einvoice_XRechnungOverwrite::class, [
+                new Sales_Model_Einvoice_XRechnungOverwrite([
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => 'A',
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => 'Overwrite for BT-13',
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => $bt13->getId(),
+                ]),
+                new Sales_Model_Einvoice_XRechnungOverwrite([
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => 'B',
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => 'Overwrite for BT-14',
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => $bt14->getId(),
+                ]),
+            ]),
+        ]);
+        $customer = Sales_Controller_Customer::getInstance()->update($customer);
+
+        $product1 = $this->_createProduct();
+        $positions = [
+            new SMDPI([
+                SMDPI::FLD_TITLE => 'pos 1',
+                SMDPI::FLD_PRODUCT_ID => $product1->getId(),
+                SMDPI::FLD_QUANTITY => 1,
+                SMDPI::FLD_UNIT_PRICE => 10,
+                SMDPI::FLD_UNIT_PRICE_TYPE => Sales_Config::PRICE_TYPE_NET,
+                SMDPI::FLD_SALES_TAX_RATE => Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX},
+            ], true),
+        ];
+
+        $invoice = $this->_createUblInvoice($positions, invoiceData: [
+            SMDI::FLD_SERVICE_PERIOD_START => Tinebase_DateTime::today()->subDay(5),
+            SMDI::FLD_SERVICE_PERIOD_END   => Tinebase_DateTime::today()->subDay(1),
+        ], customer: $customer);
+        $invoice->{SMDI::FLD_INVOICE_STATUS} = SMDI::STATUS_BOOKED;
+
+        // Update the invoice's debitor to change the BT-13 overwrite from 'A' to 'Z'
+        /** @var Sales_Model_Document_Debitor $docDebitor */
+        $docDebitor = $invoice->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID};
+        $this->assertSame(Sales_Model_Einvoice_XRechnung::class, $docDebitor->{Sales_Model_Debitor::FLD_EINVOICE_TYPE});
+        $this->assertCount(2, $docDebitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES});
+        $this->assertSame('A', $docDebitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES}
+            ->find(Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT, $bt13->getId())
+            ->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE});
+        $docDebitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES}
+            ->find(Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT, $bt13->getId())
+            ->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE} = 'Z';
+
+        $btElements = [
+            'BT-3'  => ['label' => 'invoice_type_code', 'value' => 'overwrite-invoice_type_code'],
+            'BT-7'  => ['label' => 'value_added_tax_point_date', 'value' => '2024-01-15'],
+            'BT-8'  => ['label' => 'value_added_tax_point_date_code', 'value' => 'overwrite-value_added_tax_point_date_code'],
+            'BT-10' => ['label' => 'buyer_reference', 'value' => 'overwrite-buyer_reference'],
+            'BT-11' => ['label' => 'document_reference', 'value' => 'overwrite-document_reference'],
+            'BT-12' => ['label' => 'document_reference', 'value' => 'overwrite-document_reference'],
+            'BT-15' => ['label' => 'receiving_advice_reference', 'value' => 'overwrite-receiving_advice_reference'],
+            'BT-16' => ['label' => 'despatch_advice_reference', 'value' => 'overwrite-despatch_advice_reference'],
+            'BT-18' => ['label' => 'invoiced_object_identifier', 'value' => 'overwrite-invoiced_object_identifier'],
+            'BT-19' => ['label' => 'buyer_accounting_reference', 'value' => 'overwrite-buyer_accounting_reference'],
+            'BT-20' => ['label' => 'payment_terms', 'value' => 'overwrite-payment_terms'],
+            'BT-25' => ['label' => 'document_reference', 'value' => 'overwrite-document_reference'],
+            'BT-26' => ['label' => 'preceding_invoice_issue_date', 'value' => '2024-01-10'],
+            'BT-27' => ['label' => 'seller_name', 'value' => 'overwrite-seller_name'],
+            'BT-28' => ['label' => 'seller_trading_name', 'value' => 'overwrite-seller_trading_name'],
+            'BT-33' => ['label' => 'seller_additional_legal_information', 'value' => 'overwrite-seller_additional_legal_information'],
+            'BT-35' => ['label' => 'seller_address_line_1', 'value' => 'overwrite-seller_address_line_1'],
+            'BT-36' => ['label' => 'seller_address_line_2', 'value' => 'overwrite-seller_address_line_2'],
+            'BT-37' => ['label' => 'seller_city', 'value' => 'overwrite-seller_city'],
+            'BT-38' => ['label' => 'seller_post_code', 'value' => 'overwrite-seller_post_code'],
+            'BT-39' => ['label' => 'seller_country_subdivision', 'value' => 'overwrite-seller_country_subdivision'],
+            'BT-40' => ['label' => 'seller_country_code', 'value' => 'overwrite-seller_country_code'],
+            'BT-41' => ['label' => 'seller_contact_point', 'value' => 'overwrite-seller_contact_point'],
+            'BT-42' => ['label' => 'seller_contact_telephone_number', 'value' => 'overwrite-seller_contact_telephone_number'],
+            'BT-43' => ['label' => 'seller_contact_email_address', 'value' => 'overwrite-seller_contact_email_address'],
+            'BT-44' => ['label' => 'buyer_name', 'value' => 'overwrite-buyer_name'],
+            'BT-45' => ['label' => 'buyer_trading_name', 'value' => 'overwrite-buyer_trading_name'],
+            'BT-46' => ['label' => 'buyer_identifier', 'value' => 'overwrite-buyer_identifier'],
+            'BT-50' => ['label' => 'buyer_address_line_1', 'value' => 'overwrite-buyer_address_line_1'],
+            'BT-51' => ['label' => 'buyer_address_line_2', 'value' => 'overwrite-buyer_address_line_2'],
+            'BT-52' => ['label' => 'buyer_city', 'value' => 'overwrite-buyer_city'],
+            'BT-53' => ['label' => 'buyer_post_code', 'value' => 'overwrite-buyer_post_code'],
+            'BT-54' => ['label' => 'buyer_country_subdivision', 'value' => 'overwrite-buyer_country_subdivision'],
+            'BT-55' => ['label' => 'buyer_country_code', 'value' => 'overwrite-buyer_country_code'],
+            'BT-56' => ['label' => 'buyer_contact_point', 'value' => 'overwrite-buyer_contact_point'],
+            'BT-57' => ['label' => 'buyer_contact_telephone_number', 'value' => 'overwrite-buyer_contact_telephone_number'],
+            'BT-58' => ['label' => 'buyer_contact_email_address', 'value' => 'overwrite-buyer_contact_email_address'],
+            'BT-59' => ['label' => 'payee_name', 'value' => 'overwrite-payee_name'],
+            'BT-60' => ['label' => 'payee_identifier', 'value' => 'overwrite-payee_identifier'],
+            'BT-64' => ['label' => 'tax_representative_address_line_1', 'value' => 'overwrite-tax_representative_address_line_1'],
+            'BT-65' => ['label' => 'tax_representative_address_line_2', 'value' => 'overwrite-tax_representative_address_line_2'],
+            'BT-66' => ['label' => 'tax_representative_city', 'value' => 'overwrite-tax_representative_city'],
+            'BT-67' => ['label' => 'tax_representative_post_code', 'value' => 'overwrite-tax_representative_post_code'],
+            'BT-68' => ['label' => 'tax_representative_country_subdivision', 'value' => 'overwrite-tax_representative_country_subdivision'],
+            'BT-69' => ['label' => 'tax_representative_country_code', 'value' => 'overwrite-tax_representative_country_code'],
+            'BT-70' => ['label' => 'deliver_to_party_name', 'value' => 'overwrite-deliver_to_party_name'],
+            'BT-71' => ['label' => 'deliver_to_location_identifier', 'value' => 'overwrite-deliver_to_location_identifier'],
+            'BT-72' => ['label' => 'actual_delivery_date', 'value' => '2024-02-01'],
+            'BT-75' => ['label' => 'deliver_to_address_line_1', 'value' => 'overwrite-deliver_to_address_line_1'],
+            'BT-76' => ['label' => 'deliver_to_address_line_2', 'value' => 'overwrite-deliver_to_address_line_2'],
+            'BT-77' => ['label' => 'deliver_to_city', 'value' => 'overwrite-deliver_to_city'],
+            'BT-78' => ['label' => 'deliver_to_post_code', 'value' => 'overwrite-deliver_to_post_code'],
+            'BT-79' => ['label' => 'deliver_to_country_subdivision', 'value' => 'overwrite-deliver_to_country_subdivision'],
+            'BT-80' => ['label' => 'deliver_to_country_code', 'value' => 'overwrite-deliver_to_country_code'],
+            'BT-81' => ['label' => 'payment_means_type_code', 'value' => 'overwrite-payment_means_type_code'],
+            'BT-82' => ['label' => 'payment_means_text', 'value' => 'overwrite-payment_means_text'],
+            'BT-87' => ['label' => 'payment_card_primary_account_number', 'value' => 'overwrite-payment_card_primary_account_number'],
+            'BT-88' => ['label' => 'payment_card_holder_name', 'value' => 'overwrite-payment_card_holder_name'],
+            'BT-89' => ['label' => 'mandate_reference_identifier', 'value' => 'overwrite-mandate_reference_identifier'],
+            'BT-90' => ['label' => 'bank_assigned_creditor_identifier', 'value' => 'overwrite-bank_assigned_creditor_identifier'],
+            'BT-91' => ['label' => 'debited_account_identifier', 'value' => 'overwrite-debited_account_identifier'],
+            'BT-113' => ['label' => 'paid_amount', 'value' => '113.0'],
+            'BT-115' => ['label' => 'amount_due_for_payment', 'value' => '115.0'],
+            'BT-162' => ['label' => 'seller_address_line_3', 'value' => 'overwrite-seller_address_line_3'],
+            'BT-163' => ['label' => 'buyer_address_line_3', 'value' => 'overwrite-buyer_address_line_3'],
+            'BT-164' => ['label' => 'tax_representative_address_line_3', 'value' => 'overwrite-tax_representative_address_line_3'],
+            'BT-165' => ['label' => 'deliver_to_address_line_3', 'value' => 'overwrite-deliver_to_address_line_3'],
+        ];
+
+        $btIds = [];
+        foreach ($btElements as $btNum => $btData) {
+            $bt = Sales_Controller_EDocument_XRechnungElement::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_EDocument_XRechnungElement::class, [
+                    [TMFA::FIELD => Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $btNum],
+                ])
+            )->getFirstRecord();
+            $btIds[$btNum] = $bt->getId();
+
+            $docDebitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES}
+                ->addRecord(new Sales_Model_Einvoice_XRechnungOverwrite([
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_VALUE => $btData['value'],
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_DESCRIPTION => "Overwrite for {$btNum}",
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_ACTION => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                    Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => $bt->getId(),
+                ]));
+        }
+
+        $invoice->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = $docDebitor;
+        /** @var SMDI $invoice */
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        $xml = new SimpleXMLElement($invoice->toUbl());
+        $xml->registerXPathNamespace('ubl', 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2');
+        $xml->registerXPathNamespace('cbc', 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2');
+        $xml->registerXPathNamespace('cac', 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2');
+        //$xml = $this->_assertUblXml($invoice, 10, round(10 * (1 + Tinebase_Config::getInstance()->{Tinebase_Config::SALES_TAX} / 100), 2));
+
+        // BT-3
+        $this->assertIsArray($invoiceTypeCode = $xml->xpath('/ubl:Invoice/cbc:InvoiceTypeCode'));
+        $this->assertSame('overwrite-invoice_type_code', (string)$invoiceTypeCode[0]);
+
+        // BT-7
+        $this->assertIsArray($taxPointDate = $xml->xpath('/ubl:Invoice/cbc:TaxPointDate'));
+        $this->assertSame('2024-01-15', (string)$taxPointDate[0]);
+
+        // BT-8
+        $this->assertIsArray($invoicePeriod = $xml->xpath('/ubl:Invoice/cac:InvoicePeriod/cbc:DescriptionCode'));
+        $this->assertCount(1, $invoicePeriod);
+        $this->assertSame('overwrite-value_added_tax_point_date_code', (string)$invoicePeriod[0]);
+
+        // BT-10
+        $this->assertIsArray($buyerRef = $xml->xpath('/ubl:Invoice/cbc:BuyerReference'));
+        $this->assertSame('overwrite-buyer_reference', (string)$buyerRef[0]);
+
+        // BT-11
+        $this->assertIsArray($projectRef = $xml->xpath('/ubl:Invoice/cac:ProjectReference/cbc:ID'));
+        $this->assertCount(1, $projectRef);
+        $this->assertSame('overwrite-document_reference', (string)$projectRef[0]);
+
+        // BT-12
+        $this->assertIsArray($contractRef = $xml->xpath('/ubl:Invoice/cac:ContractDocumentReference/cbc:ID'));
+        $this->assertCount(1, $contractRef);
+        $this->assertSame('overwrite-document_reference', (string)$contractRef[0]);
+
+        // BT-13
+        $this->assertIsArray($orderRef = $xml->xpath('/ubl:Invoice/cac:OrderReference/cbc:ID'));
+        $this->assertSame('Z', (string)$orderRef[0]);
+
+        // BT-14
+        $this->assertIsArray($orderRef = $xml->xpath('/ubl:Invoice/cac:OrderReference/cbc:SalesOrderID'));
+        $this->assertSame('B', (string)$orderRef[0]);
+
+        // BT-15
+        $this->assertIsArray($receiptRef = $xml->xpath('/ubl:Invoice/cac:ReceiptDocumentReference/cbc:ID'));
+        $this->assertCount(1, $receiptRef);
+        $this->assertSame('overwrite-receiving_advice_reference', (string)$receiptRef[0]);
+
+        // BT-16
+        $this->assertIsArray($despatchRef = $xml->xpath('/ubl:Invoice/cac:DespatchDocumentReference/cbc:ID'));
+        $this->assertCount(1, $despatchRef);
+        $this->assertSame('overwrite-despatch_advice_reference', (string)$despatchRef[0]);
+
+        // BT-18
+        $this->assertIsArray($additionalDocRef = $xml->xpath('/ubl:Invoice/cac:AdditionalDocumentReference/cbc:ID'));
+        $this->assertCount(1, $additionalDocRef);
+        $this->assertSame('overwrite-invoiced_object_identifier', (string)$additionalDocRef[0]);
+
+        // BT-19
+        $this->assertIsArray($accountingCost = $xml->xpath('/ubl:Invoice/cbc:AccountingCost'));
+        $this->assertSame('overwrite-buyer_accounting_reference', (string)$accountingCost[0]);
+
+        // BT-20
+        $this->assertIsArray($paymentTerms = $xml->xpath('/ubl:Invoice/cac:PaymentTerms/cbc:Note'));
+        $this->assertCount(1, $paymentTerms);
+        $this->assertSame('overwrite-payment_terms', (string)$paymentTerms[0]);
+
+        // BT-25
+        $this->assertIsArray($billingDocRef = $xml->xpath('/ubl:Invoice/cac:BillingReference/cac:InvoiceDocumentReference/cbc:ID'));
+        $this->assertCount(1, $billingDocRef);
+        $this->assertSame('overwrite-document_reference', (string)$billingDocRef[0]);
+
+        // BT-26
+        $this->assertIsArray($precedingDate = $xml->xpath('/ubl:Invoice/cac:BillingReference/cac:InvoiceDocumentReference/cbc:IssueDate'));
+        $this->assertCount(1, $precedingDate);
+        $this->assertSame('2024-01-10', (string)$precedingDate[0]);
+
+        // BT-27
+        $this->assertIsArray($sellerName = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName'));
+        $this->assertSame('overwrite-seller_name', (string)$sellerName[0]);
+
+        // BT-28
+        $this->assertIsArray($sellerName = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name'));
+        $this->assertSame('overwrite-seller_trading_name', (string)$sellerName[0]);
+
+        // BT-33
+        $this->assertIsArray($sellerLegalInfo = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PartyLegalEntity/cbc:CompanyLegalForm'));
+        $this->assertSame('overwrite-seller_additional_legal_information', (string)$sellerLegalInfo[0]);
+
+        // BT-35
+        $this->assertIsArray($sellerStreet = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:StreetName'));
+        $this->assertSame('overwrite-seller_address_line_1', (string)$sellerStreet[0]);
+
+        // BT-36
+        $this->assertIsArray($sellerAddlStreet = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:AdditionalStreetName'));
+        $this->assertSame('overwrite-seller_address_line_2', (string)$sellerAddlStreet[0]);
+
+        // BT-37
+        $this->assertIsArray($sellerCity = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:CityName'));
+        $this->assertSame('overwrite-seller_city', (string)$sellerCity[0]);
+
+        // BT-38
+        $this->assertIsArray($sellerPostCode = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:PostalZone'));
+        $this->assertSame('overwrite-seller_post_code', (string)$sellerPostCode[0]);
+
+        // BT-39
+        $this->assertIsArray($sellerSubdivision = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cbc:CountrySubentity'));
+        $this->assertSame('overwrite-seller_country_subdivision', (string)$sellerSubdivision[0]);
+
+        // BT-40
+        $this->assertIsArray($sellerCountry = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode'));
+        $this->assertCount(1, $sellerCountry);
+        $this->assertSame('overwrite-seller_country_code', (string)$sellerCountry[0]);
+
+        // BT-41
+        $this->assertIsArray($sellerContact = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Name'));
+        $this->assertSame('overwrite-seller_contact_point', (string)$sellerContact[0]);
+
+        // BT-42
+        $this->assertIsArray($sellerTel = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:Telephone'));
+        $this->assertSame('overwrite-seller_contact_telephone_number', (string)$sellerTel[0]);
+
+        // BT-43
+        $this->assertIsArray($sellerEmail = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail'));
+        $this->assertSame('overwrite-seller_contact_email_address', (string)$sellerEmail[0]);
+
+        // BT-44
+        $this->assertIsArray($buyerName = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PartyLegalEntity/cbc:RegistrationName'));
+        $this->assertSame('overwrite-buyer_name', (string)$buyerName[0]);
+
+        // BT-45
+        $this->assertIsArray($buyerName = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name'));
+        $this->assertSame('overwrite-buyer_trading_name', (string)$buyerName[0]);
+
+        // BT-46
+        $this->assertIsArray($buyerName = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PartyIdentification/cbc:ID'));
+        $this->assertSame('overwrite-buyer_identifier', (string)$buyerName[0]);
+
+        // BT-50
+        $this->assertIsArray($buyerStreet = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:StreetName'));
+        $this->assertSame('overwrite-buyer_address_line_1', (string)$buyerStreet[0]);
+
+        // BT-51
+        $this->assertIsArray($buyerAddlStreet = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:AdditionalStreetName'));
+        $this->assertSame('overwrite-buyer_address_line_2', (string)$buyerAddlStreet[0]);
+
+        // BT-52
+        $this->assertIsArray($buyerCity = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:CityName'));
+        $this->assertSame('overwrite-buyer_city', (string)$buyerCity[0]);
+
+        // BT-53
+        $this->assertIsArray($buyerPostCode = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:PostalZone'));
+        $this->assertSame('overwrite-buyer_post_code', (string)$buyerPostCode[0]);
+
+        // BT-54
+        $this->assertIsArray($buyerSubdivision = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cbc:CountrySubentity'));
+        $this->assertSame('overwrite-buyer_country_subdivision', (string)$buyerSubdivision[0]);
+
+        // BT-55
+        $this->assertIsArray($buyerCountry = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cac:Country/cbc:IdentificationCode'));
+        $this->assertCount(1, $buyerCountry);
+        $this->assertSame('overwrite-buyer_country_code', (string)$buyerCountry[0]);
+
+        // BT-56
+        $this->assertIsArray($value = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Name'));
+        $this->assertCount(1, $value);
+        $this->assertSame('overwrite-buyer_contact_point', (string)$value[0]);
+
+        // BT-57
+        $this->assertIsArray($value = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:Telephone'));
+        $this->assertCount(1, $value);
+        $this->assertSame('overwrite-buyer_contact_telephone_number', (string)$value[0]);
+
+        // BT-58
+        $this->assertIsArray($value = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail'));
+        $this->assertCount(1, $value);
+        $this->assertSame('overwrite-buyer_contact_email_address', (string)$value[0]);
+
+        // BT-59
+        $this->assertIsArray($value = $xml->xpath('/ubl:Invoice/cac:PayeeParty/cac:PartyName/cbc:Name'));
+        $this->assertCount(1, $value);
+        $this->assertSame('overwrite-payee_name', (string)$value[0]);
+
+        // BT-60
+        $this->assertIsArray($payeeId = $xml->xpath('/ubl:Invoice/cac:PayeeParty/cac:PartyIdentification/cbc:ID[not(@schemeID = \'SEPA\')]'));
+        $this->assertCount(1, $payeeId);
+        $this->assertSame('overwrite-payee_identifier', (string)$payeeId[0]);
+
+        // BT-64
+        $this->assertIsArray($taxRepStreet = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cbc:StreetName'));
+        $this->assertSame('overwrite-tax_representative_address_line_1', (string)$taxRepStreet[0]);
+
+        // BT-65
+        $this->assertIsArray($taxRepAddlStreet = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cbc:AdditionalStreetName'));
+        $this->assertSame('overwrite-tax_representative_address_line_2', (string)$taxRepAddlStreet[0]);
+
+        // BT-66
+        $this->assertIsArray($taxRepCity = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cbc:CityName'));
+        $this->assertSame('overwrite-tax_representative_city', (string)$taxRepCity[0]);
+
+        // BT-67
+        $this->assertIsArray($taxRepPostCode = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cbc:PostalZone'));
+        $this->assertSame('overwrite-tax_representative_post_code', (string)$taxRepPostCode[0]);
+
+        // BT-68
+        $this->assertIsArray($taxRepSubdivision = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cbc:CountrySubentity'));
+        $this->assertSame('overwrite-tax_representative_country_subdivision', (string)$taxRepSubdivision[0]);
+
+        // BT-69
+        $this->assertIsArray($taxRepCountry = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cac:Country/cbc:IdentificationCode'));
+        $this->assertCount(1, $taxRepCountry);
+        $this->assertSame('overwrite-tax_representative_country_code', (string)$taxRepCountry[0]);
+
+        // BT-70
+        $this->assertIsArray($deliverName = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryParty/cac:PartyName/cbc:Name'));
+        $this->assertCount(1, $deliverName);
+        $this->assertSame('overwrite-deliver_to_party_name', (string)$deliverName[0]);
+
+        // BT-71
+        $this->assertIsArray($deliverLocId = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cbc:ID'));
+        $this->assertCount(1, $deliverLocId);
+        $this->assertSame('overwrite-deliver_to_location_identifier', (string)$deliverLocId[0]);
+
+        // BT-72
+        $this->assertIsArray($deliverDate = $xml->xpath('/ubl:Invoice/cac:Delivery/cbc:ActualDeliveryDate'));
+        $this->assertCount(1, $deliverDate);
+        $this->assertSame('2024-02-01', (string)$deliverDate[0]);
+
+        // BT-75
+        $this->assertIsArray($deliverStreet = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cbc:StreetName'));
+        $this->assertSame('overwrite-deliver_to_address_line_1', (string)$deliverStreet[0]);
+
+        // BT-76
+        $this->assertIsArray($deliverAddlStreet = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cbc:AdditionalStreetName'));
+        $this->assertSame('overwrite-deliver_to_address_line_2', (string)$deliverAddlStreet[0]);
+
+        // BT-77
+        $this->assertIsArray($deliverCity = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cbc:CityName'));
+        $this->assertSame('overwrite-deliver_to_city', (string)$deliverCity[0]);
+
+        // BT-78
+        $this->assertIsArray($deliverPostCode = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cbc:PostalZone'));
+        $this->assertSame('overwrite-deliver_to_post_code', (string)$deliverPostCode[0]);
+
+        // BT-79
+        $this->assertIsArray($deliverSubdivision = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cbc:CountrySubentity'));
+        $this->assertSame('overwrite-deliver_to_country_subdivision', (string)$deliverSubdivision[0]);
+
+        // BT-80
+        $this->assertIsArray($deliverCountry = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cac:Country/cbc:IdentificationCode'));
+        $this->assertCount(1, $deliverCountry);
+        $this->assertSame('overwrite-deliver_to_country_code', (string)$deliverCountry[0]);
+
+        // BT-81
+        $this->assertIsArray($paymentMeansCode = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cbc:PaymentMeansCode'));
+        $this->assertSame('overwrite-payment_means_type_code', (string)$paymentMeansCode[0]);
+
+        // BT-82
+        $this->assertIsArray($paymentMeansName = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cbc:PaymentMeansCode/@name'));
+        $this->assertSame('overwrite-payment_means_text', (string)$paymentMeansName[0]);
+
+        // BT-87
+        $this->assertIsArray($cardAcct = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cac:CardAccount/cbc:PrimaryAccountNumberID'));
+        $this->assertSame('overwrite-payment_card_primary_account_number', (string)$cardAcct[0]);
+
+        // BT-88
+        $this->assertIsArray($cardHolder = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cac:CardAccount/cbc:HolderName'));
+        $this->assertSame('overwrite-payment_card_holder_name', (string)$cardHolder[0]);
+
+        // BT-89
+        $this->assertIsArray($mandateId = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cac:PaymentMandate/cbc:ID'));
+        $this->assertCount(1, $mandateId);
+        $this->assertSame('overwrite-mandate_reference_identifier', (string)$mandateId[0]);
+
+        // BT-90
+        $this->assertIsArray($creditorId = $xml->xpath('/ubl:Invoice/cac:PayeeParty/cac:PartyIdentification/cbc:ID[@schemeID="SEPA"]'));
+        $this->assertCount(1, $creditorId);
+        $this->assertSame('overwrite-bank_assigned_creditor_identifier', (string)$creditorId[0]);
+
+        // BT-91
+        $this->assertIsArray($debitedAcct = $xml->xpath('/ubl:Invoice/cac:PaymentMeans/cac:PaymentMandate/cac:PayerFinancialAccount/cbc:ID'));
+        $this->assertCount(1, $debitedAcct);
+        $this->assertSame('overwrite-debited_account_identifier', (string)$debitedAcct[0]);
+
+        // BT-113
+        $this->assertIsArray($prepaidAmt = $xml->xpath('/ubl:Invoice/cac:LegalMonetaryTotal/cbc:PrepaidAmount'));
+        $this->assertSame('113.0', (string)$prepaidAmt[0]);
+
+        // BT-115
+        $this->assertIsArray($payableAmt = $xml->xpath('/ubl:Invoice/cac:LegalMonetaryTotal/cbc:PayableAmount'));
+        $this->assertSame('115.0', (string)$payableAmt[0]);
+
+        // BT-162
+        $this->assertIsArray($sellerAddrLine3 = $xml->xpath('/ubl:Invoice/cac:AccountingSupplierParty/cac:Party/cac:PostalAddress/cac:AddressLine/cbc:Line'));
+        $this->assertCount(1, $sellerAddrLine3);
+        $this->assertSame('overwrite-seller_address_line_3', (string)$sellerAddrLine3[0]);
+
+        // BT-163
+        $this->assertIsArray($buyerAddrLine3 = $xml->xpath('/ubl:Invoice/cac:AccountingCustomerParty/cac:Party/cac:PostalAddress/cac:AddressLine/cbc:Line'));
+        $this->assertCount(1, $buyerAddrLine3);
+        $this->assertSame('overwrite-buyer_address_line_3', (string)$buyerAddrLine3[0]);
+
+        // BT-164
+        $this->assertIsArray($taxRepAddrLine3 = $xml->xpath('/ubl:Invoice/cac:TaxRepresentativeParty/cac:PostalAddress/cac:AddressLine/cbc:Line'));
+        $this->assertCount(1, $taxRepAddrLine3);
+        $this->assertSame('overwrite-tax_representative_address_line_3', (string)$taxRepAddrLine3[0]);
+
+        // BT-165
+        $this->assertIsArray($deliverAddrLine3 = $xml->xpath('/ubl:Invoice/cac:Delivery/cac:DeliveryLocation/cac:Address/cac:AddressLine/cbc:Line'));
+        $this->assertCount(1, $deliverAddrLine3);
+        $this->assertSame('overwrite-deliver_to_address_line_3', (string)$deliverAddrLine3[0]);
     }
 
     public function testVatZeroReverse(): void
