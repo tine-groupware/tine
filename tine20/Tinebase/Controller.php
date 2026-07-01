@@ -1674,18 +1674,20 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 $this->_reportWebDavIssues(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebDavIssue::class, [
                     [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_REPORTED, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
                     [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_ACCOUNT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $accountId],
-                ]), array_unique(array_merge($reportUsers ?: [], [$accountId])));
+                ]), array_unique(array_merge($reportUsers ?: [], [$accountId])), summary: false, mark: !$reportUsers);
             }
-        } else {
+        }
+
+        if ($reportUsers) {
             $this->_reportWebDavIssues(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_WebDavIssue::class, [
                 [TMFA::FIELD => Tinebase_Model_WebDavIssue::FLD_REPORTED, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => false],
-            ]), $reportUsers);
+            ]), $reportUsers, summary: true, mark: true);
         }
 
         return true;
     }
 
-    protected function _reportWebDavIssues(Tinebase_Model_Filter_FilterGroup $filter, array $accountIds): void
+    protected function _reportWebDavIssues(Tinebase_Model_Filter_FilterGroup $filter, array $accountIds, bool $summary, bool $mark): void
     {
         $start = 0;
         $limit = 100;
@@ -1706,6 +1708,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             foreach ($result as $issue) {
                 $ids[] = $issue->getId();
                 list($throwable, ) = explode(' ', $issue->{Tinebase_Model_WebDavIssue::FLD_EXCEPTION}, 2);
+
+                if (!$summary && $throwable !== Sabre\DAV\Exception\Forbidden::class) {
+                    continue;
+                }
+
                 if (!isset($exceptions[$throwable])) {
                     $exceptions[$throwable] = 0;
                 }
@@ -1730,30 +1737,40 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $accounts = Tinebase_User::getInstance()->getMultiple($accountIds);
-        $subject = 'WebDAV issues notification';
-        $messageBody = "$subject: \n\nExceptions:\n";
-        foreach ($exceptions as $exception => $count) {
-            $messageBody .= "$exception: $count\n";
-        }
-        $messageBody .= "\nMethods:\n";
+        $subject = Tinebase_Translation::getDefaultTranslation()->_('WebDAV issues notification');
 
-        foreach ($methods as $method => $count) {
-            $messageBody .= "$method: $count\n";
-        }
-        $messageBody .= "\nPaths:\n";
+        if ($summary) {
+            $messageBody = "$subject: \n\nExceptions:\n";
+            foreach ($exceptions as $exception => $count) {
+                $messageBody .= "$exception: $count\n";
+            }
+            $messageBody .= "\nMethods:\n";
 
-        foreach ($paths as $path => $count) {
-            $messageBody .= "$path: $count\n";
-        }
+            foreach ($methods as $method => $count) {
+                $messageBody .= "$method: $count\n";
+            }
+            $messageBody .= "\nPaths:\n";
 
-        $messageBody = mb_substr($messageBody, 0, 2 * 1024 * 1024); // limit body size to ~2 MB unencoded
+            foreach ($paths as $path => $count) {
+                $messageBody .= "$path: $count\n";
+            }
+
+            $messageBody = mb_substr($messageBody, 0, 2 * 1024 * 1024); // limit body size to ~2 MB unencoded
+        } else {
+            $messageBody = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation()))
+                ->load('Tinebase/views/emails/webDavIssueAffectedEmail.twig')->render([
+                    'urls' => array_keys($paths)
+                ]);
+        }
 
         Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $accounts->contact_id, $subject, $messageBody);
 
-        Tinebase_Core::getDb()->query('UPDATE '
-            . SQL_TABLE_PREFIX . Tinebase_Model_WebDavIssue::TABLE_NAME . ' SET '
-            . Tinebase_Model_WebDavIssue::FLD_REPORTED . ' = 1 WHERE `id` IN '
-            . Tinebase_Core::getDb()->quoteInto('(?)', $ids));
+        if ($mark) {
+            Tinebase_Core::getDb()->query('UPDATE '
+                . SQL_TABLE_PREFIX . Tinebase_Model_WebDavIssue::TABLE_NAME . ' SET '
+                . Tinebase_Model_WebDavIssue::FLD_REPORTED . ' = 1 WHERE `id` IN '
+                . Tinebase_Core::getDb()->quoteInto('(?)', $ids));
+        }
     }
 
     /**

@@ -122,6 +122,7 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                     . ' has either not READ or SYNC grants for container ' . $node->getId());
                 throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path not found");
             }
+            \Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
             (new Filemanager_Frontend_WebDAV_Directory(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true)))->createFile($name, $data);
             throw new \Sabre\DAV\Exception\Forbidden('Moved file to ' . $this->_path . '/' . $node->name . '/' . $name);
         } else {
@@ -171,5 +172,11 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                     Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) . '/' . $user->getId() .
                     ($pathParts ? '/' . implode('/', $pathParts) : '');
         }
+    }
+
+    public function createExtendedCollection($name, \Sabre\DAV\MkCol $mkCol)
+    {
+        Tinebase_Frontend_WebDAV_Node::checkForbiddenFile($name);
+        return parent::createExtendedCollection($name, $mkCol);
     }
 }
