@@ -822,7 +822,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         $authnRequest = $binding->receive();
 
         if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
-                null !== ($spEntityId = $issuer->getValue())) {
+                null !== ($spEntityId = $issuer->getValue()))
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set SP entity id: '
+                    . $spEntityId);
+            }
             // @phpstan-ignore-next-line
             \SimpleSAML\Session::getSessionFromRequest()->setSPEntityId($spEntityId);
         } else {
@@ -856,6 +861,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         } catch (SSO_Facade_SAML_RedirectException $e) {
             $response = new \Laminas\Diactoros\Response();
             $response->getBody()->write(\Tinebase_Helper::createFormHTML($e->redirectUrl, $e->data));
+        } catch (Throwable $e) {
+            Tinebase_Exception::log($e);
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write('SAML Exception: ' . $e->getMessage());
+            $response->withStatus(500);
+            return $response;
         }
 
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
@@ -945,8 +956,13 @@ class SSO_Controller extends Tinebase_Controller_Event
             'metadata.sign.certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
             'certificate' => $saml2Config->{SSO_Config::SAML2_KEYS}[0]['certificate'],
             'enable.saml20-idp' => true,
-            'logging.level' => -1,
             'NameIDFormat' => \SAML2\Constants::NAMEID_PERSISTENT,
+            'logging.level' => -1,
+            // activate this for debug logging
+            // see https://idmengineering.com/configuring-simplesamlphp-logging-guide/
+//            'logging.level' => SimpleSAML\Logger::DEBUG,
+//            'logging.handler' => 'file',
+//            'loggingdir' => '/var/log/simplesamlphp',
         ], 'tine20'));
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
             'tine20' => [SSO_Facade_SAML_AuthSourceFactory::class]
@@ -1028,8 +1044,10 @@ class SSO_Controller extends Tinebase_Controller_Event
         $authRequest = Tinebase_Session::getSessionNamespace()->sso_oid_authRequest;
 
         if (empty($ssoIdp = Tinebase_Session::getSessionNamespace()->sso_idp)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
-                ->notice(__METHOD__ . '::' . __LINE__ . ' session does not have a sso_idp');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()
+                    ->notice(__METHOD__ . '::' . __LINE__ . ' session does not have a sso_idp');
+            }
             return static::publicOidAuthResponseErrorRedirect($authRequest);
         }
         try {
