@@ -91,9 +91,10 @@ class EventManager_Model_Appointment extends Tinebase_Record_NewAbstract
             self::FLD_SESSION_DATE      => [
                 self::TYPE                  => self::TYPE_DATE,
                 self::LABEL                 => 'Date', // _('Date')
-                self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
             ],
             self::FLD_START_TIME        => [
                 self::TYPE                  => self::TYPE_TIME,

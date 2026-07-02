@@ -349,6 +349,191 @@ class EventManager_ControllerTest extends TestCase
         $this->assertSame('New Test Street', $newTestAddress);
     }
 
+    /**
+     * creating an event (without appointments) should create a single,
+     * tagged calendar event mirroring name/start/end
+     */
+    public function testCreateEventCreatesCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+
+        $relation = $this->_getCalendarEventRelation($created_event);
+        self::assertNotNull($relation, 'no calendar event relation found');
+
+        $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
+        self::assertEquals($created_event->{EventManager_Model_Event::FLD_NAME}, $calendarEvent->summary);
+
+        // check the calendar event is tagged as automatically created
+        $isTagged = false;
+        foreach ($calendarEvent->tags as $tag) {
+            if ($tag->name === 'automatic EventManager') {
+                $isTagged = true;
+            }
+        }
+        self::assertTrue($isTagged, 'calendar event should be tagged as automatic EventManager');
+    }
+
+    /**
+     * creating an event with appointments should create one calendar event
+     * per appointment (and no general calendar event)
+     */
+    public function testCreateEventWithAppointmentsCreatesCalendarEventPerAppointment()
+    {
+        $event = $this->_getEvent();
+        $appointment1 = $this->_getAppointment($event->getId(), '2026-06-01', 1, '09:00:00', '10:00:00');
+        $appointment2 = $this->_getAppointment($event->getId(), '2026-06-02', 2, '11:00:00', '12:00:00');
+        $event->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_Appointment::class,
+            [$appointment1, $appointment2]
+        );
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+
+        foreach ($created_event->{EventManager_Model_Event::FLD_APPOINTMENTS} as $appointment) {
+            $relation = $this->_getCalendarEventRelation($created_event, $appointment->getId());
+            self::assertNotNull($relation, 'no calendar event relation found for appointment');
+            $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
+            self::assertEquals(
+                $created_event->{EventManager_Model_Event::FLD_NAME} . ' '
+                . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER},
+                $calendarEvent->summary
+            );
+        }
+
+        $generalRelation = $this->_getCalendarEventRelation($created_event);
+        self::assertNull($generalRelation, 'no general calendar event should exist when appointments are used');
+    }
+
+    /**
+     * changing the event name should update the linked calendar event's summary
+     */
+    public function testUpdateEventNameUpdatesCalendarEventSummary()
+    {
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $created_event->{EventManager_Model_Event::FLD_NAME} = 'updated phpunit event';
+        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+
+        $relation = $this->_getCalendarEventRelation($updated_event);
+        self::assertNotNull($relation);
+        $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
+        self::assertEquals('updated phpunit event', $calendarEvent->summary);
+    }
+
+    /**
+     * changing the event start/end should update the linked calendar event's dtstart/dtend
+     */
+    public function testUpdateEventStartEndUpdatesCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $newStart = new Tinebase_DateTime('2026-06-10 08:00:00');
+        $newEnd = new Tinebase_DateTime('2026-06-12 18:00:00');
+        $created_event->{EventManager_Model_Event::FLD_START} = $newStart;
+        $created_event->{EventManager_Model_Event::FLD_END} = $newEnd;
+        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+
+        $relation = $this->_getCalendarEventRelation($updated_event);
+        self::assertNotNull($relation);
+    }
+
+    /**
+     * adding appointments to an event that only had a general calendar event
+     * should remove the general one and create per-appointment calendar events
+     */
+    public function testAddAppointmentReplacesGeneralCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+
+        // general calendar event exists before adding appointments
+        $generalRelationBefore = $this->_getCalendarEventRelation($created_event);
+        self::assertNotNull($generalRelationBefore);
+
+        $appointment = $this->_getAppointment($created_event->getId(), '2026-06-15', 1, '09:00:00', '10:00:00');
+        $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_Appointment::class,
+            [$appointment]
+        );
+        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+
+        // general calendar event should be gone
+        try {
+            Calendar_Controller_Event::getInstance()->get($generalRelationBefore->related_id);
+            self::fail('general calendar event should have been deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        // a new calendar event for the appointment should exist
+        $newAppointment = $updated_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
+        $appointmentRelation = $this->_getCalendarEventRelation($updated_event, $newAppointment->getId());
+        self::assertNotNull($appointmentRelation);
+    }
+
+    /**
+     * modifying an appointment's start time should update its linked calendar event
+     */
+    public function testModifyAppointmentUpdatesCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $appointment = $this->_getAppointment($event->getId(), '2026-06-20', 1, '09:00:00', '10:00:00');
+        $event->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_Appointment::class,
+            [$appointment]
+        );
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdAppointment = $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
+
+        $createdAppointment->{EventManager_Model_Appointment::FLD_START_TIME} = '14:00:00';
+        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+
+        $relation = $this->_getCalendarEventRelation($updated_event, $createdAppointment->getId());
+        self::assertNotNull($relation);
+        $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
+        self::assertEquals('14:00:00', $calendarEvent->dtstart->format('H:i:s'));
+    }
+
+    /**
+     * removing an appointment from an event should delete its linked calendar event
+     */
+    public function testRemoveAppointmentDeletesCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $appointment = $this->_getAppointment($event->getId(), '2026-06-25', 1, '09:00:00', '10:00:00');
+        $event->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
+            EventManager_Model_Appointment::class,
+            [$appointment]
+        );
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdAppointment = $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
+        $relation = $this->_getCalendarEventRelation($created_event, $createdAppointment->getId());
+        self::assertNotNull($relation);
+
+        $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->removeRecord($createdAppointment);
+        EventManager_Controller_Event::getInstance()->update($created_event);
+
+        try {
+            Calendar_Controller_Event::getInstance()->get($relation->related_id);
+            self::fail('calendar event for removed appointment should have been deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
+
+    /**
+     * deleting an event should delete its linked calendar event(s) as well
+     */
+    public function testDeleteEventDeletesCalendarEvent()
+    {
+        $event = $this->_getEvent();
+        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $relation = $this->_getCalendarEventRelation($created_event);
+        self::assertNotNull($relation);
+
+        EventManager_Controller_Event::getInstance()->delete($created_event);
+
+        try {
+            Calendar_Controller_Event::getInstance()->get($relation->related_id);
+            self::fail('calendar event should have been deleted along with the event');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+    }
 
     /************ protected helper funcs *************/
 
@@ -467,6 +652,22 @@ class EventManager_ControllerTest extends TestCase
     }
 
     /**
+     * get appointment
+     *
+     * @return EventManager_Model_Appointment
+     */
+    protected function _getAppointment($event_id, $session_date, $session_number, $start_time = null, $end_time = null): EventManager_Model_Appointment
+    {
+        return new EventManager_Model_Appointment([
+            EventManager_Model_Appointment::FLD_EVENT_ID       => $event_id,
+            EventManager_Model_Appointment::FLD_SESSION_DATE   => new Tinebase_DateTime($session_date),
+            EventManager_Model_Appointment::FLD_SESSION_NUMBER => $session_number,
+            EventManager_Model_Appointment::FLD_START_TIME     => $start_time,
+            EventManager_Model_Appointment::FLD_END_TIME       => $end_time,
+        ], true);
+    }
+
+    /**
      * get registration
      *
      * @return EventManager_Model_Registration
@@ -563,5 +764,29 @@ class EventManager_ControllerTest extends TestCase
                 'selection_config_class' => EventManager_Model_Selections_Checkbox::class,
             ]);
         }
+    }
+
+    /**
+     * fetch the calendar event relation for an EventManager event.
+     * when $appointmentId is null, returns the "general" (no remark) calendar event relation
+     * otherwise returns the relation whose remark matches the appointment id.
+     *
+     * @return Tinebase_Model_Relation|null
+     */
+    protected function _getCalendarEventRelation($event, $appointmentId = null)
+    {
+        $fetchedEvent = EventManager_Controller_Event::getInstance()->get($event->getId());
+        foreach ($fetchedEvent->relations as $relation) {
+            if ($relation->related_model !== Calendar_Model_Event::class) {
+                continue;
+            }
+            if ($appointmentId === null && empty($relation->remark)) {
+                return $relation;
+            }
+            if ($appointmentId !== null && $relation->remark === $appointmentId) {
+                return $relation;
+            }
+        }
+        return null;
     }
 }

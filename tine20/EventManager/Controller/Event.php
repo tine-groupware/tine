@@ -138,6 +138,120 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterSetRelatedDataCreate($updatedRecord, $_record)
     {
         $this->_createImageWatermarks($updatedRecord);
+        if (count($updatedRecord->{EventManager_Model_Event::FLD_APPOINTMENTS}) > 0) {
+            $this->_createCalendarEvent(
+                $updatedRecord,
+                $_record,
+                true,
+                $updatedRecord->{EventManager_Model_Event::FLD_APPOINTMENTS}
+            );
+        } else {
+            $this ->_createCalendarEvent($updatedRecord, $_record);
+        }
+    }
+
+    protected function _createCalendarEvent ($updatedRecord, $_record, $is_appointment = false, $appointments = [])
+    {
+        $is_all_day_event = false;
+        if ($is_appointment) {
+            foreach ($appointments as $appointment) {
+                $summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME} .
+                    ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
+
+                $startTime = $appointment->{EventManager_Model_Appointment::FLD_START_TIME};
+                if ($startTime) {
+                    $dtstart = $appointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                    [$hour, $minute, $second] = explode(':', $startTime);
+                    $dtstart->setTime((int)$hour, (int)$minute, (int)$second);
+                } else {
+                    $dtstart = $appointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                    $is_all_day_event = true;
+                }
+
+                $endTime = $appointment->{EventManager_Model_Appointment::FLD_END_TIME};
+                if ($endTime) {
+                    $dtend = $appointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                    [$hour, $minute, $second] = explode(':', $endTime);
+                    $dtend->setTime((int)$hour, (int)$minute, (int)$second);
+                } else {
+                    $dtend = $dtstart->getClone()->addHour(1);
+                }
+                $this->_createSingleCalendarEvent($updatedRecord, $summary, $dtstart, $dtend, $is_all_day_event, null, $appointment->getId());
+            }
+        } else {
+            if (empty($updatedRecord->{EventManager_Model_Event::FLD_START})) {
+                $is_all_day_event = true;
+            }
+
+            $summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME};
+            $dtstart = !empty($updatedRecord->{EventManager_Model_Event::FLD_START})
+                ? $updatedRecord->{EventManager_Model_Event::FLD_START}
+                : Tinebase_DateTime::now();
+            $dtend = !empty($updatedRecord->{EventManager_Model_Event::FLD_END})
+                ? $updatedRecord->{EventManager_Model_Event::FLD_END}
+                : $dtstart->getClone()->addHour(1);
+
+            $tag = $this->createTagForEvent();
+            $this->_createSingleCalendarEvent($updatedRecord, $summary, $dtstart, $dtend, $is_all_day_event, $tag);
+        }
+    }
+
+    protected function _createSingleCalendarEvent($updatedRecord, $summary, $dtstart, $dtend, $is_all_day_event = false, $tag = null, $appointmentId = null)
+    {
+        $newEvent = new Calendar_Model_Event([
+            'summary'           => $summary,
+            'dtstart'           => $dtstart,
+            'dtend'             => $dtend,
+            'organizer'         => $updatedRecord->created_by,
+            'uid'               => Calendar_Model_Event::generateUID(),
+            'is_all_day_event'  => $is_all_day_event,
+            //'container_id' => $container, //todo shared calendar?
+
+            Tinebase_Model_Grants::GRANT_READ    => true,
+            Tinebase_Model_Grants::GRANT_EDIT    => true,
+            Tinebase_Model_Grants::GRANT_DELETE  => true,
+        ]);
+        if ($tag) {
+            $newEvent->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, [$tag]);
+        }
+        $calendarEvent = Calendar_Controller_Event::getInstance()->create($newEvent);
+
+        $relation = new Tinebase_Model_Relation([
+            'own_model'         => EventManager_Model_Event::class,
+            'own_backend'       => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'own_id'            => $updatedRecord->getId(),
+            'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
+            'related_model'     => Calendar_Model_Event::class,
+            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+            'related_id'        => $calendarEvent->getId(),
+            'type'              => 'CALENDAR_EVENT',
+            'remark'            => $appointmentId,
+        ]);
+
+        Tinebase_Relations::getInstance()->addRelation($relation, $updatedRecord);
+    }
+
+    protected function createTagForEvent()
+    {
+        try {
+            $eventTag = Tinebase_Tags::getInstance()->getTagByName('automatic EventManager');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $eventTag = new Tinebase_Model_Tag([
+                'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+                'name'  => 'automatic EventManager',
+                'description' => 'this event was automatically created by the event manager',
+                'color' => '#FF0000',
+            ]);
+            $eventTag = Tinebase_Tags::getInstance()->createTag($eventTag, true);
+            $right = new Tinebase_Model_TagRight([
+                'tag_id'        => $eventTag->getId(),
+                'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                'view_right'    => true,
+                'use_right'     => true
+            ]);
+            Tinebase_Tags::getInstance()->setRights($right);
+        }
+        return $eventTag;
     }
 
     public function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
@@ -162,6 +276,137 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
+
+        // changes in event that influence the calendar event
+        $event_diff = $currentRecord->diff($updatedRecord);
+        $changed_fields = $event_diff->diff;
+        $calendarEventRelations = $updatedRecord->relations;
+        $taggedCalendarEvent  = null;
+        foreach ($calendarEventRelations as $calendarEventRelation) {
+            if ($calendarEventRelation->own_id === $updatedRecord->getId()) {
+                $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
+                if (array_key_exists('name', $changed_fields)) {
+                    $calendarEvent->summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME};
+                }
+                if (array_key_exists('start', $changed_fields)) {
+                    $calendarEvent->dtstart = !empty($updatedRecord->{EventManager_Model_Event::FLD_START})
+                        ? $updatedRecord->{EventManager_Model_Event::FLD_START}
+                        : Tinebase_DateTime::now();
+                }
+                if (array_key_exists('end', $changed_fields)) {
+                    $calendarEvent->dtend = !empty($updatedRecord->{EventManager_Model_Event::FLD_END})
+                        ? $updatedRecord->{EventManager_Model_Event::FLD_END}
+                        : $calendarEvent->dtstart->getClone()->addHour(1);
+                }
+                $calendarEventTags = $calendarEvent->tags;
+                foreach ($calendarEventTags as $calendarEventTag) {
+                    if ($calendarEventTag->name === 'automatic EventManager') {
+                        $taggedCalendarEvent = $calendarEvent;
+                    }
+                }
+                Calendar_Controller_Event::getInstance()->update($calendarEvent);
+            }
+        }
+
+        // changes in appointments from an event that influence the calendar event
+        $appointments_diff = $currentRecord->{EventManager_Model_Event::FLD_APPOINTMENTS}
+            ->diff($updatedRecord->{EventManager_Model_Event::FLD_APPOINTMENTS});
+        if (count($appointments_diff->added) > 0) {
+            if ($taggedCalendarEvent) {
+                $this->_deleteCalendarEvent($updatedRecord);
+            }
+            $this->_createCalendarEvent($updatedRecord, $record, true, $appointments_diff->added);
+        }
+        foreach ($appointments_diff->modified as $modified_appointment) {
+            $this->_updateCalendarEvent($updatedRecord, $modified_appointment);
+        }
+        foreach ($appointments_diff->removed as $removed_appointment) {
+            $this->_deleteCalendarEvent($updatedRecord, $removed_appointment);
+        }
+    }
+    protected function _updateCalendarEvent($updatedRecord, $appointment)
+    {
+        $appointments = $updatedRecord->{EventManager_Model_Event::FLD_APPOINTMENTS};
+        $currentAppointment = $appointments->getById($appointment->id);
+        if (!$currentAppointment) {
+            return;
+        }
+
+        $changed_fields = $appointment->diff;
+
+        $calendarEventRelations = $updatedRecord->relations;
+        foreach ($calendarEventRelations as $calendarEventRelation) {
+            if (
+                $calendarEventRelation->own_id === $updatedRecord->getId()
+                && $calendarEventRelation->remark === $appointment->id
+            ) {
+                $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
+
+                if (array_key_exists('session_number', $changed_fields)) {
+                    $calendarEvent->summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME}
+                        . ' ' . $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
+                }
+                if (array_key_exists('start_time', $changed_fields)) {
+                    $startTime = $currentAppointment->{EventManager_Model_Appointment::FLD_START_TIME};
+                    if ($startTime) {
+                        $dtstart = $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                        [$hour, $minute, $second] = explode(':', $startTime);
+                        $dtstart->setTime((int)$hour, (int)$minute, (int)$second);
+                    } else {
+                        if (empty($currentAppointment->{EventManager_Model_Appointment::FLD_START_TIME})) {
+                            $calendarEvent->is_all_day_event = true;
+                        }
+                        $dtstart = $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                    }
+                    $calendarEvent->dtstart = $dtstart;
+                }
+                if (array_key_exists('end_time', $changed_fields)) {
+                    $endTime = $currentAppointment->{EventManager_Model_Appointment::FLD_END_TIME};
+                    if ($endTime) {
+                        $dtend = $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
+                        [$hour, $minute, $second] = explode(':', $endTime);
+                        $dtend->setTime((int)$hour, (int)$minute, (int)$second);
+                    } else {
+                        $dtstart = $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_DATE};
+                        $dtend = $dtstart->getClone()->addHour(1);
+                    }
+                    $calendarEvent->dtend = $dtend;
+                }
+
+                Calendar_Controller_Event::getInstance()->update($calendarEvent);
+                break;
+            }
+        }
+    }
+
+    protected function _deleteCalendarEvent($updatedRecord, $appointment = null)
+    {
+        if (empty($appointment)) {
+            $calendarEventRelations = $updatedRecord->relations;
+            foreach ($calendarEventRelations as $calendarEventRelation) {
+                if ($calendarEventRelation->own_id === $updatedRecord->getId()) {
+                    $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
+                    Calendar_Controller_Event::getInstance()->delete($calendarEvent);
+                }
+            }
+        } else {
+            $calendarEventRelations = $updatedRecord->relations;
+            foreach ($calendarEventRelations as $calendarEventRelation) {
+                if (
+                    $calendarEventRelation->own_id === $updatedRecord->getId()
+                    && $calendarEventRelation->remark === $appointment->id
+                ) {
+                    $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
+                    Calendar_Controller_Event::getInstance()->delete($calendarEvent);
+                }
+            }
+        }
+    }
+
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+        $this->_deleteCalendarEvent($record);
     }
 
 
