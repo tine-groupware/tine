@@ -114,6 +114,10 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 items: [
                                     [
                                         fieldManager('name'),
+                                        fieldManager('subheading'),
+                                        fieldManager('event_employee'),
+                                    ],
+                                    [
                                         fieldManager('start'),
                                         fieldManager('end'),
                                     ], [
@@ -140,7 +144,10 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     [ new EvaluationDimensionForm({
                                         maxItemsPerRow: 2,
                                         recordClass: this.recordClass
-                                    })]
+                                    })],
+                                    [
+                                      fieldManager('description')
+                                    ],
                                 ]
                             }]
                         }]
@@ -170,84 +177,6 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }
                             }),
                         ]
-                    }, {
-                        xtype: 'fieldset',
-                        flex: 1,
-                        title: this.app.i18n._('Registrations'),
-                        layout: 'fit',
-                        items: [
-                            fieldManager('registrations', {
-                                defaultData: function () {
-                                    const available_places = me.form.findField('available_places').getValue();
-                                    return {
-                                        status: available_places <= 0 ? "2" : "1"
-                                    };
-                                },
-                                listeners: {
-                                    render: function (grid) {
-                                        grid.on('beforeedit', function (e) {
-                                            const total_places = me.form.findField('total_places').getValue() || 0;
-                                            const available_places = me.form.findField('available_places').getValue() || 0;
-                                            const registrations = me.form.findField('registrations').store.data.items;
-                                            let registrations_count = 0;
-                                            registrations.forEach(registration => {
-                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
-                                                    registrations_count++;
-                                                }
-                                            });
-                                            const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
-                                            const statusField = editor.field;
-                                            if (statusField && available_places <= 0 && total_places <= registrations_count) {
-                                                statusField.on('expand', function (combo) {
-                                                    setTimeout(function () {
-                                                        const listId = combo.list ? combo.list.id : null;
-                                                        let list = null;
-                                                        if (listId) {
-                                                            list = document.getElementById(listId);
-                                                        } else {
-                                                            const comboLists = Ext.query('.x-combo-list');
-                                                            list = comboLists[comboLists.length - 1];
-                                                        }
-                                                        if (list) {
-                                                            const items = Ext.query('.x-combo-list-item', list);
-                                                            combo.getStore().each(function (record, index) {
-                                                                if (record.get('id') === '1' && items[index]) {
-                                                                    items[index].style.setProperty('color', '#999', 'important');
-                                                                    items[index].style.setProperty('background-color', '#f0f0f0', 'important');
-                                                                    items[index].style.setProperty('opacity', '0.6', 'important');
-                                                                }
-                                                            });
-                                                        }
-                                                    }, 10);
-                                                }, this);
-
-                                                statusField.on('beforeselect', function (combo, record, index) {
-                                                    // prevent selection of value confirmed
-                                                    return record.get(combo.valueField) !== "1";
-                                                }, this);
-                                            }
-                                        });
-
-                                        grid.store.on('add', function (store, records, index) {
-                                            const total_places = me.form.findField('total_places').getValue() || 0;
-                                            const available_places = me.form.findField('available_places').getValue() || 0;
-                                            const registrations = me.form.findField('registrations').store.data.items;
-                                            let registrations_count = 0;
-                                            registrations.forEach(registration => {
-                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
-                                                    registrations_count++;
-                                                }
-                                            });
-                                            if (available_places <= 0 && total_places <= registrations_count) {
-                                                Ext.each(records, function (record) {
-                                                    record.set('status', "2");
-                                                });
-                                            }
-                                        });
-                                    }
-                                }
-                            }),
-                        ]
                     }]
                 },
                     {
@@ -263,32 +192,99 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         margins: '0 5 0 5',
                         border: true,
                         items: [
-                            new Ext.Panel({
-                                // @todo generalise!
-                                title: this.app.i18n._('Description'),
-                                iconCls: 'descriptionIcon',
-                                layout: 'form',
-                                labelAlign: 'top',
-                                border: false,
-                                items: [{
-                                    style: 'margin-top: -4px; border 0px;',
-                                    labelSeparator: '',
-                                    xtype: 'textarea',
-                                    name: 'description',
-                                    hideLabel: true,
-                                    grow: false,
-                                    preventScrollbars: false,
-                                    anchor: '100% 100%',
-                                    emptyText: this.app.i18n._('Enter description'),
-                                    requiredGrant: 'editGrant'
-                                }]
-                            }),
                             new Tine.widgets.tags.TagPanel({
                                 app: 'EventManager',
                                 border: false,
                             })
                         ]
                 }]
+            }, {
+                title: this.app.i18n._('Registrations'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'form',
+                items: [{
+                    xtype: 'fieldset',
+                    flex: 1,
+                    title: this.app.i18n._('Registrations'),
+                    layout: 'fit',
+                    height: 600,
+                    items: [
+                        fieldManager('registrations', {
+                            defaultData: function () {
+                                const available_places = me.form.findField('available_places').getValue();
+                                return {
+                                    status: available_places <= 0 ? "2" : "1"
+                                };
+                            },
+                            listeners: {
+                                render: function (grid) {
+                                    grid.on('beforeedit', function (e) {
+                                        const total_places = me.form.findField('total_places').getValue() || 0;
+                                        const available_places = me.form.findField('available_places').getValue() || 0;
+                                        const registrations = me.form.findField('registrations').store.data.items;
+                                        let registrations_count = 0;
+                                        registrations.forEach(registration => {
+                                            if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                registrations_count++;
+                                            }
+                                        });
+                                        const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
+                                        const statusField = editor.field;
+                                        if (statusField && available_places <= 0 && total_places <= registrations_count) {
+                                            statusField.on('expand', function (combo) {
+                                                setTimeout(function () {
+                                                    const listId = combo.list ? combo.list.id : null;
+                                                    let list = null;
+                                                    if (listId) {
+                                                        list = document.getElementById(listId);
+                                                    } else {
+                                                        const comboLists = Ext.query('.x-combo-list');
+                                                        list = comboLists[comboLists.length - 1];
+                                                    }
+                                                    if (list) {
+                                                        const items = Ext.query('.x-combo-list-item', list);
+                                                        combo.getStore().each(function (record, index) {
+                                                            if (record.get('id') === '1' && items[index]) {
+                                                                items[index].style.setProperty('color', '#999', 'important');
+                                                                items[index].style.setProperty('background-color', '#f0f0f0', 'important');
+                                                                items[index].style.setProperty('opacity', '0.6', 'important');
+                                                            }
+                                                        });
+                                                    }
+                                                }, 10);
+                                            }, this);
+
+                                            statusField.on('beforeselect', function (combo, record, index) {
+                                                // prevent selection of value confirmed
+                                                return record.get(combo.valueField) !== "1";
+                                            }, this);
+                                        }
+                                    });
+
+                                    grid.store.on('add', function (store, records, index) {
+                                        const total_places = me.form.findField('total_places').getValue() || 0;
+                                        const available_places = me.form.findField('available_places').getValue() || 0;
+                                        const registrations = me.form.findField('registrations').store.data.items;
+                                        let registrations_count = 0;
+                                        registrations.forEach(registration => {
+                                            if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                registrations_count++;
+                                            }
+                                        });
+                                        if (available_places <= 0 && total_places <= registrations_count) {
+                                            Ext.each(records, function (record) {
+                                                record.set('status', "2");
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+                        }),
+                    ]
+                }
+                ]
             }, {
                 title: this.app.i18n._('Multi-appointment'),
                 autoScroll: true,

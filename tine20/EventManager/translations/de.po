@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-06-29 16:32+0200\n"
+"PO-Revision-Date: 2026-07-06 10:48+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -221,40 +221,14 @@ msgstr "Anmelden"
 msgid "Event Information"
 msgstr "Eventinformationen"
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Anmeldung"
-msgstr[1] "Anmeldungen"
-
-msgid "The event should end after the start date"
-msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
-
-msgid "One should be able to register before the end date"
-msgstr "Man sollte sich vor dem Enddatum anmelden können"
-
 msgid "Event Options"
 msgstr "Eventoptionen"
-
-msgid "Description"
-msgstr "Beschreibung"
-
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
 
 msgid "Multi-appointment"
 msgstr "Mehrfachtermin"
 
 msgid "Appointments"
 msgstr "Termine"
-
-msgid "The session should take place before the end date. Please change the date or it would be change automatically"
-msgstr "Die Sitzung sollte vor dem Enddatum stattfinden. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
-
-msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
-msgstr "Die Sitzung sollte am selben Tag oder nach Beginn der Veranstaltung beginnen. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
-
-msgid "The session should end after it begun. Please change the end time, or it would be deleted"
-msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie die Endzeit, da sie sonst gelöscht wird"
 
 msgid "Registration Contact Fields"
 msgstr "Kontaktanmeldungsfelder"
@@ -348,6 +322,9 @@ msgstr "Kontakt"
 msgid "Information of the event:"
 msgstr "Informationen zur Veranstaltung:"
 
+msgid "From:"
+msgstr "Ab:"
+
 msgid "When:"
 msgstr "Von:"
 
@@ -420,6 +397,9 @@ msgstr "Impressum"
 msgid "Privacy Notice"
 msgstr "Datenschutzerklärung"
 
+msgid "I am completing the registration form for another person"
+msgstr "Ich fülle das Anmeldeformular für eine andere Person aus"
+
 msgid "Participant Information:"
 msgstr "Teilnehmende Information:"
 
@@ -443,9 +423,6 @@ msgstr "Hochgeladene Datei"
 
 msgid "Delete file"
 msgstr "Datei entfernen"
-
-msgid "I am completing the registration form for another person"
-msgstr "Ich fülle das Anmeldeformular für eine andere Person aus"
 
 msgid "Registrant Information:"
 msgstr "Anmeldende Person:"
@@ -643,6 +620,9 @@ msgstr "Startzeit"
 msgid "End Time"
 msgstr "Endzeit"
 
+msgid "Description"
+msgstr "Beschreibung"
+
 msgid "GENDER_Booked Option"
 msgstr "female"
 
@@ -677,6 +657,12 @@ msgstr "Verfügbare Plätze"
 msgid "GENDER_Event"
 msgstr "female"
 
+msgid "Subheading"
+msgstr "Untertitel"
+
+msgid "Employee for the event"
+msgstr "Sachbearbeitende"
+
 msgid "Event start"
 msgstr "Veranstaltungsbeginn"
 
@@ -697,6 +683,9 @@ msgstr "Veranstaltungsanmeldungen"
 
 msgid "Event Appointments"
 msgstr "Veranstaltungstermine"
+
+msgid "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
+msgstr "„Legen Sie fest, ob eine Person bei dieser Veranstaltung eine andere Person anmelden darf. Als Berechtigte gelten diejenigen, die im Adressbuch als Eltern, Kinder oder Partner des Anmeldenden eingetragen sind.“"
 
 msgid "Images"
 msgstr "Bilder"
@@ -781,6 +770,11 @@ msgstr "Wert"
 
 msgid "GENDER_Registration"
 msgstr "female"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Anmeldung"
+msgstr[1] "Anmeldungen"
 
 msgid "This participant has been registered by another person"
 msgstr "Diese teilnehmende Person wurde von einer anderen Person angemeldet"
@@ -920,6 +914,24 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "Enter description"
+#~ msgstr "Beschreibung eingeben"
+
+#~ msgid "The event should end after the start date"
+#~ msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
+
+#~ msgid "One should be able to register before the end date"
+#~ msgstr "Man sollte sich vor dem Enddatum anmelden können"
+
+#~ msgid "The session should take place before the end date. Please change the date or it would be change automatically"
+#~ msgstr "Die Sitzung sollte vor dem Enddatum stattfinden. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+
+#~ msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+#~ msgstr "Die Sitzung sollte am selben Tag oder nach Beginn der Veranstaltung beginnen. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+
+#~ msgid "The session should end after it begun. Please change the end time, or it would be deleted"
+#~ msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie die Endzeit, da sie sonst gelöscht wird"
 
 #~ msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
 #~ msgstr "Willkommen zurück! Wir haben Ihre gespeicherten Daten vorab geladen. Bitte bestätigen oder aktualisieren Sie Ihre Angaben, um Ihr Anmeldung auf dem neuesten Stand zu halten."
