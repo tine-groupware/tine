@@ -93,6 +93,9 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::FLD_OPTIONS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [],
                 ],
+                self::FLD_APPOINTMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [],
+                ],
                 self::FLD_IMAGES => [],
             ],
         ],

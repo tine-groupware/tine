@@ -115,19 +115,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     [
                                         fieldManager('name'),
                                         fieldManager('start'),
-                                        fieldManager('end', {
-                                            checkState: function () {
-                                                if (me.form.findField('end').getValue() && (me.form.findField('start').getValue() > me.form.findField('end').getValue())) {
-                                                    this.setValue('');
-                                                    Ext.MessageBox.show({
-                                                        buttons: Ext.Msg.OK,
-                                                        icon: Ext.MessageBox.WARNING,
-                                                        title: me.app.i18n._('Registration'),
-                                                        msg: me.app.i18n._('The event should end after the start date')
-                                                    });
-                                                }
-                                            }
-                                        }),
+                                        fieldManager('end'),
                                     ], [
                                         fieldManager('location'),
                                         fieldManager('type'),
@@ -146,21 +134,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     ],
                                     [
                                         fieldManager('fee'),
-                                        fieldManager('registration_possible_until', {
-                                            checkState: function () {
-                                                if (me.form.findField('end').getValue() !== null) {
-                                                    if (me.form.findField('registration_possible_until').getValue() && (me.form.findField('end').getValue() < me.form.findField('registration_possible_until').getValue())) {
-                                                        this.setValue('');
-                                                        Ext.MessageBox.show({
-                                                            buttons: Ext.Msg.OK,
-                                                            icon: Ext.MessageBox.WARNING,
-                                                            title: me.app.i18n._('Registration'),
-                                                            msg: me.app.i18n._('One should be able to register before the end date')
-                                                        });
-                                                    }
-                                                }
-                                            }
-                                        }),
+                                        fieldManager('registration_possible_until'),
                                         fieldManager('register_others'),
                                     ],
                                     [ new EvaluationDimensionForm({
@@ -370,39 +344,6 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         }
                                         return start1 - start2;
                                     });
-
-                                    const eventStart = me.form.findField('start').getValue();
-                                    const eventEnd   = me.form.findField('end').getValue();
-                                    const sessStart  = combineDateTime(session['session_date'], session['start_time']);
-                                    const sessEnd    = combineDateTime(session['session_date'], session['end_time']);
-
-                                if (eventEnd && sessEnd && sessEnd > eventEnd) {
-                                    session['end_time'] = me.form.findField('end').getValue();
-                                    Ext.MessageBox.show({
-                                        buttons: Ext.Msg.OK,
-                                        icon: Ext.MessageBox.WARNING,
-                                        title: me.app.i18n._('Registration'),
-                                        msg: me.app.i18n._('The session should take place before the end date. Please change the date or it would be change automatically')
-                                    });
-                                }
-                                if (sessStart && eventStart && sessStart < eventStart) {
-                                    session['start_time'] = me.form.findField('start').getValue();
-                                    Ext.MessageBox.show({
-                                        buttons: Ext.Msg.OK,
-                                        icon: Ext.MessageBox.WARNING,
-                                        title: me.app.i18n._('Registration'),
-                                        msg: me.app.i18n._('The session should start on the same date or after the event started. Please change the date or it would be change automatically')
-                                    });
-                                }
-                                if (sessStart && sessEnd && sessStart > sessEnd) {
-                                    session['end_time'] = '';
-                                    Ext.MessageBox.show({
-                                        buttons: Ext.Msg.OK,
-                                        icon: Ext.MessageBox.WARNING,
-                                        title: me.app.i18n._('Registration'),
-                                        msg: me.app.i18n._('The session should end after it begun. Please change the end time, or it would be deleted')
-                                    });
-                                }
                                 })
                             }
                         })
