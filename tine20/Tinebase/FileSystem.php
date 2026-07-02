@@ -55,6 +55,13 @@ class Tinebase_FileSystem implements
     public const STREAM_OPTION_CREATE_PREVIEW = 'createPreview';
 
     /**
+     * maximum number of file indexing tries
+     *
+     * @var integer
+     */
+    public const MAX_FILE_INDEX_TRIES = 10;
+
+    /**
      * @var Tinebase_Tree_FileObject
      */
     protected $_fileObjectBackend;
@@ -1298,13 +1305,17 @@ class Tinebase_FileSystem implements
         try {
             $fileObject = $this->_fileObjectBackend->get($_objectId);
         } catch(Tinebase_Exception_NotFound) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Could not find file object ' . $_objectId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Could not find file object ' . $_objectId);
+            }
             return true;
         }
         if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $fileObject->type) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
+            }
             return true;
         }
         if ($fileObject->hash === $fileObject->indexed_hash) {
@@ -1316,6 +1327,17 @@ class Tinebase_FileSystem implements
         }
         if ($fileObject->{TMTFO::FLD_INDEX_LAST_TRY} && (int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} > 3 &&
                 $fileObject->{TMTFO::FLD_INDEX_LAST_TRY}->isLater(Tinebase_DateTime::now()->subDay(1))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Maximum number of indexing tries reached (3 / 24 h)');
+            }
+            return true;
+        }
+        if ((int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} > self::MAX_FILE_INDEX_TRIES) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Maximum number of indexing tries reached (' . self::MAX_FILE_INDEX_TRIES . ')');
+            }
             return true;
         }
 
@@ -1323,7 +1345,7 @@ class Tinebase_FileSystem implements
         if (false === ($tmpFile = Tinebase_Fulltext_TextExtract::getInstance()->fileObjectToTempFile($fileObject))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' fileObjectToTempFile failed');
+                    . ' fileObjectToTempFile failed for object id ' . $_objectId);
             }
 
             $work = function($fileObject) {
