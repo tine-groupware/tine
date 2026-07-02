@@ -19,6 +19,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
     public function testExpanderFilter()
     {
         $customer = $this->_createCustomer();
+        $this->assertNotSame(0, $customer->credit_term);
         $product1 = $this->_createProduct();
 
         $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
@@ -27,6 +28,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Order::FLD_SHARED_INVOICE => true,
+            Sales_Model_Document_Order::FLD_PAYMENT_TERMS => 0,
             Sales_Model_Document_Order::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Order([
                     Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
@@ -44,6 +46,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ], true),
             ],
         ]));
+
+        $this->assertSame(0, $order->{Sales_Model_Document_Order::FLD_PAYMENT_TERMS});
 
         $order = Sales_Controller_Document_Order::getInstance()->search($filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
                 [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $order->getId()],
