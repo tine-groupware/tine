@@ -1240,7 +1240,7 @@ msgid "Invalid Relations"
 msgstr "Ungültige Verknüpfung"
 
 msgid "You tried to create a relation which is forbidden by the constraints config of one of the models."
-msgstr "Sie haben versucht eine Relation zu erstellen, die durch eine, für dieses model konfigurierte, Beschränkung, verboten ist."
+msgstr "Sie haben versucht, eine Relation zu erstellen, die durch eine für diesen Datentyp konfigurierte Beschränkung verboten ist."
 
 msgid "Wrong month format!"
 msgstr "Falsches Format des Monats!"
