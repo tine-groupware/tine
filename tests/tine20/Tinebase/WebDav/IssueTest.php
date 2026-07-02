@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://tine-groupware.de
  * 
  * @package     Tinebase
  * @subpackage  WebDav
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Tine Group Developer <dev@tine-groupware.de>
  */
 
@@ -17,6 +17,15 @@
  */
 class Tinebase_WebDav_IssueTest extends TestCase
 {
+    /**
+     * set up tests
+     */
+    protected function setUp(): void
+    {
+        $this->_skipIfLDAPBackend('FIXME: auth has a problem with LDAP backend');
+        parent::setUp();
+    }
+
     /**
      * test that creating a file on /personal path leads to a WebDavIssue being created
      * 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2012 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  */
 
@@ -37,7 +37,7 @@ register_shutdown_function(function () use (&$memoryReserve) {
     $error = error_get_last();
     if ($error !== null && str_contains($error['message'], 'Allowed memory size')) {
 
-        Tinebase_Exception::log(new Tinebase_Exception('OOM aufgetreten: ' . print_r($error, true)));
+        Tinebase_Exception::log(new Tinebase_Exception('OOM Error: ' . print_r($error, true)));
         
         if (!headers_sent()) {
             http_response_code(200);
