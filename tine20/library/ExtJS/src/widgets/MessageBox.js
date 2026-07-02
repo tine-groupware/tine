@@ -99,6 +99,10 @@ Ext.MessageBox = function(){
     const handleButton = function({buttonName, textElValue, dialogStateIdData} = arg){
         handleHide()
         if (opt.stateId && dialogStateIdData) {
+            dialogStateIdData['lastClickedButton'] = buttonName;
+            if (['no', 'cancel'].includes(buttonName) && dialogStateIdData['doNotShowAgain']) {
+                dialogStateIdData['doNotShowAgain'] = false;
+            }
             Ext.state.Manager.set(opt.stateId, dialogStateIdData);
         }
         Ext.callback(opt.fn, opt.scope||window, [buttonName, textElValue, opt], 1);
@@ -182,7 +186,6 @@ Ext.MessageBox = function(){
          * Displays a new message box, or reinitializes an existing message box, based on the config options
          * passed in. All display functions (e.g. prompt, alert, etc.) on MessageBox call this function internally,
          * although those calls are basic shortcuts and do not support all of the config options allowed here.
-         * @param {Object} config The following config options are supported: <ul>
          * <li><b>animEl</b> : String/Element<div class="sub-desc">An id or Element from which the message box should animate as it
          * opens and closes (defaults to undefined)</div></li>
          * <li><b>buttons</b> : Object/Boolean<div class="sub-desc">A button config object (e.g., Ext.MessageBox.OKCANCEL or {ok:'Foo',
@@ -234,20 +237,26 @@ Ext.MessageBox = function(){
          * </ul>
          * Example usage:
          * <pre><code>
-Ext.Msg.show({
-   title: 'Address',
-   msg: 'Please enter your address:',
-   width: 300,
-   buttons: Ext.MessageBox.OKCANCEL,
-   multiline: true,
-   fn: saveAddress,
-   animEl: 'addAddressBtn',
-   icon: Ext.MessageBox.INFO
-});
-</code></pre>
+         Ext.Msg.show({
+         title: 'Address',
+         msg: 'Please enter your address:',
+         width: 300,
+         buttons: Ext.MessageBox.OKCANCEL,
+         multiline: true,
+         fn: saveAddress,
+         animEl: 'addAddressBtn',
+         icon: Ext.MessageBox.INFO
+         });
+         </code></pre>
          * @return {Ext.MessageBox} this
+         * @param options
          */
         show: async function(options){
+            if (options?.stateId) {
+                const state = Ext.state.Manager.get(options.stateId);
+                if (state?.doNotShowAgain) return Promise.resolve('yes');
+            }
+
             clearInterval(this.animateProgressInterval);
             options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
             synchronousVisibilityState = !__HIDDEN
@@ -430,7 +439,7 @@ Ext.MessageBox.ERROR
          * @param {Object} scope (optional) The scope (<code>this</code> reference) in which the callback is executed. Defaults to the browser wnidow.
          * @return {Ext.MessageBox} this
          */
-        alert : function(title, msg, fn, scope){
+        alert : function(title, msg, fn, scope, stateId = null){
             return this.show({
                 title : title,
                 msg : msg,
@@ -439,6 +448,7 @@ Ext.MessageBox.ERROR
                 scope : scope,
                 minWidth: this.minWidth,
                 icon: this.ERROR,
+                stateId: stateId
             });
         },
 
@@ -455,10 +465,6 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         confirm : function(title, msg, fn, scope, stateId = null){
-            if (stateId) {
-                const state = Ext.state.Manager.get(stateId);
-                if (state?.doNotShowAgain) return Promise.resolve('yes');
-            }
             return this.show({
                 title : title,
                 msg : msg,
