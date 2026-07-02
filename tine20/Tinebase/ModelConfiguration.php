@@ -1672,10 +1672,17 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 if ($this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] ?? false) {
                     throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend default validator not to be set');
                 }
+                $options = [];
+                if ($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO] ?? false) {
+                    $options[Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO] = $fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO];
+                }
+                if ($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO_STRING] ?? false) {
+                    $options[Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO_STRING] = $fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO_STRING];
+                }
                 $defaultValue = Tinebase_Config::getAppConfig($fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::APP_NAME])
                     ->{$fieldDef[self::CONFIG][self::DEFAULT_FROM_CONFIG][self::CONFIG]};
                 $this->_validators[$fieldKey][Zend_Filter_Input::DEFAULT_VALUE] = $defaultValue;
-                $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_CallableEmpty::class] = $defaultValue;
+                $fieldDef[self::INPUT_FILTERS][Tinebase_Record_Filter_CallableEmpty::class] = [$defaultValue, $options];
                 foreach ($this->_filters[$fieldKey] ?? [] as $filter) {
                     if ($filter instanceof Tinebase_Record_Filter_CallableEmpty) {
                         throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires callable empty filter not to be set');
@@ -1683,7 +1690,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                         throw new Tinebase_Exception_Record_DefinitionFailure('default from config requires zend empty input filter not to be set');
                     }
                 }
-                $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_CallableEmpty($defaultValue);
+                $this->_filters[$fieldKey][] = new Tinebase_Record_Filter_CallableEmpty($defaultValue, $options);
                 $this->_defaultData[$fieldKey] = $defaultValue;
             }
 

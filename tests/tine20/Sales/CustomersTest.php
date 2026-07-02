@@ -66,7 +66,7 @@ class Sales_CustomersTest extends TestCase
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createCustomer(?Tinebase_Model_Container $adbContainer = null): array
+    protected function _createCustomer(?Tinebase_Model_Container $adbContainer = null, array $customerOverwrite = []): array
     {
         if (! $adbContainer) {
             $adbContainer = Tinebase_Container::getInstance()->getSharedContainer(
@@ -93,7 +93,7 @@ class Sales_CustomersTest extends TestCase
             array('number' => '123', 'title' => 'Testing', 'description' => 'test123', 'container_id' => $containerContracts->getId())
         ));
         
-        $customerData = array(
+        $customerData = array_merge(array(
             'name' => 'Worldwide Electronics International',
             'cpextern_id' => $contact1->getId(),
             'cpintern_id' => $contact2->getId(),
@@ -162,11 +162,23 @@ class Sales_CustomersTest extends TestCase
                     Sales_Model_Debitor::FLD_EINVOICE_CONFIG => null,
                 ]
             ],
-        );
+        ), $customerOverwrite);
         
         return $this->_json->saveCustomer($customerData);
     }
-    
+
+    public function testCreditTermNull()
+    {
+        $retVal = $this->_createCustomer(null, ['credit_term' => null]);
+        $this->assertSame(Sales_Config::getInstance()->{Sales_Config::DEFAULT_PAYMENT_TERMS}, $retVal['credit_term']);
+    }
+
+    public function testCreditTermZero()
+    {
+        $retVal = $this->_createCustomer(null, ['credit_term' => 0]);
+        $this->assertSame(0, $retVal['credit_term']);
+    }
+
     public function testLifecycleCustomer()
     {
         $retVal = $this->_createCustomer();
@@ -175,6 +187,7 @@ class Sales_CustomersTest extends TestCase
         $this->assertEquals("Worldwide Electronics International", $retVal["name"]);
         $this->assertEquals("http://wwei.cn", $retVal["url"]);
         $this->assertEquals(NULL, $retVal['description']);
+        $this->assertSame(30, $retVal['credit_term']);
         
         $this->assertEquals('Yiting', $retVal['cpextern_id']['n_given']);
         $this->assertEquals('Huang', $retVal['cpextern_id']['n_family']);
