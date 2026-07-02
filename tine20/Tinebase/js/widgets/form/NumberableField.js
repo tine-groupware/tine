@@ -19,6 +19,9 @@ const NumberableField = Ext.extend(Ext.form.TextField, {
         if (configProvider[key]) {
             return configProvider[key](editDialog, record)
         } else {
+            if (this.configsAvailable.length === 0) {
+                return this.config;
+            }
             if (this.configsAvailable.length > 1) {
                 console.error('FIXME: no configProvider registered for NumberableField ' + key)
             }
