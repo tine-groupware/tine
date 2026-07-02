@@ -189,7 +189,7 @@
     "simplesamlphp/xml-common": "dev-master as v2.4.3",
     "smalot/pdfparser": "^2.12",
     "spomky-labs/base64url": "^2.0",
-    "spomky-labs/otphp": "^10.0",
+    "spomky-labs/otphp": "^11.4",
     "strobotti/php-jwk": "dev-master#8fca4373364a9d3b4154d11bcb0786dda783a8b2 as 1.4.4",
     "symfony/cache": "^5.3",
     "symfony/config": "^7",
