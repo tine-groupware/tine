@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -161,9 +161,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $document->{Sales_Model_Document_Abstract::FLD_BUYER_REFERENCE} = $document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE};
         }
 
-        if ($document->has(Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS) && empty($document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS}) &&
-                !empty($document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->credit_term)) {
-            $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->credit_term;
+        if ($document->has(Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS)) {
+            if ((null === $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} || '' === $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS}) &&
+                    null !== $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}?->credit_term) {
+                $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->credit_term;
+            }
+            $document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS} = intval($document->{Sales_Model_Document_Abstract::FLD_PAYMENT_TERMS});
         }
 
         // avoid a very strange jit issue :-/

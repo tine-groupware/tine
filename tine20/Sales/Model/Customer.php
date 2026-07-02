@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -264,6 +264,8 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                     self::DEFAULT_FROM_CONFIG       => [
                         self::APP_NAME                  => Sales_Config::APP_NAME,
                         self::CONFIG                    => Sales_Config::DEFAULT_PAYMENT_TERMS,
+                        Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO_STRING => true,
+                        Tinebase_Record_Filter_CallableEmpty::ALLOW_ZERO => true,
                     ],
                 ],
             ),
