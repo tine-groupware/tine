@@ -18,6 +18,12 @@
         </b-col>
       </b-row>
 
+      <div class="registrant-section">
+        <b-form-checkbox v-if="shouldShowRegistrantCheckbox" v-model="isRegistrant">
+          {{ formatMessage('I am completing the registration form for another person') }}
+        </b-form-checkbox>
+      </div>
+
       <b-row>
         <b-col>
           <h4
@@ -168,12 +174,6 @@
             </div>
           </b-collapse>
         </b-col>
-
-        <div class="registrant-section">
-          <b-form-checkbox v-if="shouldShowRegistrantCheckbox" v-model="isRegistrant">
-            {{ formatMessage('I am completing the registration form for another person') }}
-          </b-form-checkbox>
-        </div>
 
         <div v-if="isRegistrant">
           <b-row>
@@ -1535,7 +1535,8 @@ input[type="date"] {
 .option-group {
   color: #2c3e50;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .uploaded-file-info {
