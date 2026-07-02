@@ -105,6 +105,7 @@ const init = async function () {
   textElValue.value = props.opt.value;
   progressBarVisibility.value = props.opt.progress === true || props.opt.wait === true;
   doNotShowAgainCBBoxVisibility.value = props.opt.stateId !== null;
+  doNotShowAgain.value = false;
 
   _.delay(() => {
     if(textAreaElVisiblity.value) textAreaField.value.focus()
@@ -146,12 +147,12 @@ const msgClickHandler = (e) => {
 
 const buttonToShow = computed(() => {
   if (props.opt.buttons) {
-    let stateIdData = null;
+    let stateIdData = {
+      'buttons': props.opt.buttons
+    };
 
-    if (doNotShowAgain.value) {
-      stateIdData = {
-        doNotShowAgain: true
-      };
+    if (doNotShowAgainCBBoxVisibility.value) {
+      stateIdData['doNotShowAgain'] = doNotShowAgain.value;
     }
 
     return buttonOrder.filter( el => Object.keys(props.opt.buttons).includes(el)).map(buttonName => {
