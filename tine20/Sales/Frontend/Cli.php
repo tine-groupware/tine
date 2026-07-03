@@ -4,8 +4,10 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Cli frontend for Sales
@@ -478,12 +480,22 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function migrateOfferOrderToDocuments(/*Zend_Console_Getopt $_opts*/): int
     {
+        $offerDocCtrl = Sales_Controller_Document_Offer::getInstance();
+        $orderDocCtrl = Sales_Controller_Document_Order::getInstance();
+        $docCtrlRaii = new Tinebase_RAII(function() use($offerDocCtrl, $orderDocCtrl) {
+            $offerDocCtrl->skipSetModlog(false);
+            $orderDocCtrl->skipSetModlog(false);
+        });
+        $offerDocCtrl->skipSetModlog(true);
+        $orderDocCtrl->skipSetModlog(true);
+
         $offers = Sales_Controller_Offer::getInstance()->search(null, null, false, true);
         $offerFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Offer::class);
         $offerFilter->addFilter(
             $numberFilter = $offerFilter->createFilter(Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, 'equals', '')
         );
 
+        $yearOld = Tinebase_DateTime::today()->subYear(1);
         $offerMap = [];
         foreach ($offers as $offer) {
             $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -497,17 +509,31 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             $customer = $offer->relations->find('related_model', Sales_Model_Customer::class)?->related_record;
+            $order = $offer->relations->find('related_model', Sales_Model_OrderConfirmation::class)?->related_record;
+            if ($order) {
+                $state = Sales_Model_Document_Offer::STATUS_ORDERED;
+            } elseif ($offer->creation_time->isEarlier($yearOld)) {
+                $state = Sales_Model_Document_Offer::STATUS_REJECTED;
+            } else {
+                $state = Sales_Model_Document_Offer::STATUS_DISPATCHED;
+            }
 
             $newOffer = new Sales_Model_Document_Offer([
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE => $offer->creation_time,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER => $offer->number,
+                Sales_Model_Document_Offer::FLD_OFFER_STATUS => $state,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE => $offer->title,
                 Sales_Model_Document_Abstract::FLD_DESCRIPTION => $offer->description,
                 Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $offer->attachments,
+                Sales_Model_Document_Abstract::FLD_LAST_MODIFIED_BY => $offer->{TMCC::FLD_LAST_MODIFIED_BY},
+                Sales_Model_Document_Abstract::FLD_LAST_MODIFIED_TIME => $offer->{TMCC::FLD_LAST_MODIFIED_TIME},
+                Sales_Model_Document_Abstract::FLD_CREATED_BY => $offer->{TMCC::FLD_CREATED_BY},
+                Sales_Model_Document_Abstract::FLD_CREATION_TIME => $offer->{TMCC::FLD_CREATION_TIME},
+                Sales_Model_Document_Abstract::FLD_SEQ => $offer->{TMCC::FLD_SEQ},
             ]);
 
-            $newOffer = Sales_Controller_Document_Offer::getInstance()->create($newOffer);
+            $newOffer = $offerDocCtrl->create($newOffer);
             $offerMap[$offer->getId()] = $newOffer->getId();
 
             $transaction->release();
@@ -539,13 +565,23 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     ->getRelations(Sales_Model_Offer::class, 'Sql', $offer->getId(), _relatedModels: [Sales_Model_Customer::class])
                     ->find('related_model', Sales_Model_Customer::class)?->related_record;
             }
+            /** @var Sales_Model_Contract $contract */
             if (($contract = $order->relations->find('related_model', Sales_Model_Contract::class)?->related_record) && null === $customer) {
                 $customer = Tinebase_Relations::getInstance()
                     ->getRelations(Sales_Model_Contract::class, 'Sql', $contract->getId(), _relatedModels: [Sales_Model_Customer::class])
                     ->find('related_model', Sales_Model_Customer::class)?->related_record;
+                Tinebase_Tags::getInstance()->getTagsOfRecord($contract);
+            }
+
+            $state = Sales_Model_Document_Order::STATUS_RECEIVED;
+            if ($contract?->end_date && Tinebase_DateTime::today()->isEarlierOrEquals($contract->end_date)) {
+                $state = Sales_Model_Document_Order::STATUS_COMPLETED;
+            } elseif ($contract?->tags->find('name', 'Vertrag geprüft')) {
+                $state = Sales_Model_Document_Order::STATUS_ACCEPTED;
             }
 
             $newOrder = new Sales_Model_Document_Order([
+                Sales_Model_Document_Order::FLD_ORDER_STATUS => $state,
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
                 Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, $offer && isset($offerMap[$offer->getId()]) ? [
                     new Tinebase_Model_DynamicRecordWrapper([
@@ -558,18 +594,24 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER => $orderNumber,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_TITLE => $order->title,
                 Sales_Model_Document_Abstract::FLD_DESCRIPTION => $order->description,
-                Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $order->attachments,
                 Sales_Model_Document_Abstract::FLD_PAYMENT_MEANS => new Tinebase_Record_RecordSet(Sales_Model_PaymentMeans::class, [new Sales_Model_PaymentMeans([
                     Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => $defaultPaymentMeansId,
                     Sales_Model_PaymentMeans::FLD_DEFAULT => true,
                 ])]),
+                Sales_Model_Document_Abstract::FLD_ATTACHMENTS => $order->attachments,
+                Sales_Model_Document_Abstract::FLD_LAST_MODIFIED_BY => $order->{TMCC::FLD_LAST_MODIFIED_BY},
+                Sales_Model_Document_Abstract::FLD_LAST_MODIFIED_TIME => $order->{TMCC::FLD_LAST_MODIFIED_TIME},
+                Sales_Model_Document_Abstract::FLD_CREATED_BY => $order->{TMCC::FLD_CREATED_BY},
+                Sales_Model_Document_Abstract::FLD_CREATION_TIME => $order->{TMCC::FLD_CREATION_TIME},
+                Sales_Model_Document_Abstract::FLD_SEQ => $order->{TMCC::FLD_SEQ},
             ]);
 
-            Sales_Controller_Document_Order::getInstance()->create($newOrder);
+            $orderDocCtrl->create($newOrder);
 
             $transaction->release();
         }
 
+        unset($docCtrlRaii);
         return 0;
     }
 
