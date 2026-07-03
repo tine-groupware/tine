@@ -59,7 +59,12 @@ Ext.ux.form.NumberField = Ext.extend(Ext.form.NumberField, {
     },
 
     selectText: function() {
-        this.el.dom.select();
+        if (!this.readOnly && this.getValue() === 0) {
+            // support for third mouse button paste (moreover, select might be copy in that case...)
+            this.setRawValue('');
+        } else {
+            this.el.dom.select();
+        }
     },
     
     /**
