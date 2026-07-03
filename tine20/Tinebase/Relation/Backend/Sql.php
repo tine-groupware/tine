@@ -11,6 +11,7 @@
  * @todo        remove db table usage and extend Tinebase_Backend_Sql_Abstract
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * class Tinebase_Relation_Backend_Sql
@@ -96,6 +97,14 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         } 
                 
         $data = $_relation->toArray();
+
+        if (($mc = $data['own_model']::getConfiguration()) && $mc->{TMCC::DENORMALIZATION_OF}) {
+            throw new Tinebase_Exception_Backend($data['own_model'] . ' is a denormalization, can\'t create relations');
+        }
+        if (($mc = $data['related_model']::getConfiguration()) && $mc->{TMCC::DENORMALIZATION_OF}) {
+            throw new Tinebase_Exception_Backend($data['related_model'] . ' is a denormalization, can\'t create relations');
+        }
+
         $data['rel_id'] = $_relation->generateUID();
         $data['id'] = $_relation->generateUID();
         unset($data['related_record']);

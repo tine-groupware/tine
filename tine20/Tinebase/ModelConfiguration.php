@@ -30,6 +30,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property string     $moduleName The name of the module if it doesn't fit to the recordsName, e.g. used in frontend module tree panel
  * @property string     $containerProperty The property of the container, if any
  * @property string     $grantsModel acl grants model
+ * @property string     $denormalizationOf
  * @property boolean    $containerUsesFilter set this to false, if no filter and grid column should be created - default is true
  * @property boolean    $hasPersonalContainer set this to false, if personal containers should be ommited - default is true
  * @property string     $titleProperty The property of the title, if any - if an array is given, the second item is the array of arguments for vsprintf, the first the format string
@@ -1033,6 +1034,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         }
         /** @var Tinebase_Record_Interface $recordClass */
         $recordClass::inheritModelConfigHook($modelClassConfiguration);
+
+        if ($modelClassConfiguration[self::DENORMALIZATION_OF] ?? false) {
+            $modelClassConfiguration[self::HAS_RELATIONS] = false;
+        }
 
         // some crude validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {

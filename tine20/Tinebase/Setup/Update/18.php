@@ -11,6 +11,10 @@
  *
  * this is 2025.11 (ONLY!)
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
+
+
 class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
 {
     protected const RELEASE018_UPDATE000 = self::class . '::update000';
@@ -39,6 +43,7 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE023 = self::class . '::update023';
     protected const RELEASE018_UPDATE024 = self::class . '::update024';
     protected const RELEASE018_UPDATE025 = self::class . '::update025';
+    protected const RELEASE018_UPDATE026 = self::class . '::update026';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -151,6 +156,10 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE024          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update024',
+            ],
+            self::RELEASE018_UPDATE026          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update026',
             ],
         ],
     ];
@@ -569,5 +578,17 @@ class Tinebase_Setup_Update_18 extends Setup_Update_Abstract
             Tinebase_Model_WebDavIssue::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.25', self::RELEASE018_UPDATE025);
+    }
+
+    public function update026()
+    {
+        $db = $this->getDb();
+        /** @var Tinebase_Record_Interface $model */
+        foreach ((new Tinebase_Record_DoctrineMappingDriver())->getAllClassNames() as $model) {
+            if ($model::getConfiguration()->{TMCC::DENORMALIZATION_OF}) {
+                $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE rel_id IN (SELECT rel_id FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "' . $model . '")');
+            }
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '18.26', self::RELEASE018_UPDATE026);
     }
 }
