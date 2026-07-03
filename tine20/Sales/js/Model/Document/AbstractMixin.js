@@ -21,17 +21,33 @@ const AbstractMixin = {
 
     statics: {
         /**
-         * returns number rounded to given number of fractionDigits or input if it's not a Number
+         * Rounds a number to a specified number of fractional digits using
+         * "round half away from zero" semantics (i.e. symmetric rounding).
          *
-         * NOTE: the default is our internal precision which might be subject to change
+         * Unlike Math.round(), which always rounds .5 cases toward +Infinity
+         * (e.g. Math.round(-1.5) === -1), this function rounds symmetrically
+         * for both positive and negative values (round(-1.5) === -2).
          *
-         * @param number
-         * @param fractionDigits
-         * @returns {*}
+         * Also applies a Number.EPSILON correction to mitigate floating-point
+         * representation errors (e.g. 1.005 * 100 evaluating to 100.499...
+         * instead of 100.5).
+         *
+         * @param {number} number - The number to round.
+         * @param {number} [fractionDigits=2] - Number of digits after the
+         *   decimal point to round to.
+         * @returns {number} The rounded value.
+         *
+         * @example
+         * round(1.005);        // 1.01
+         * round(-1.005);        // -1.01
+         * round(1.2345, 3);     // 1.235
+         * round(-12.345);       // -12.35
          */
         toFixed(number, fractionDigits= 2) {
             if (!_.isNumber(fractionDigits) || !_.isNumber(number)) return number
-            return 1 * number.toFixed(fractionDigits)
+            const factor = 10 ** fractionDigits;
+            const sign = number < 0 ? -1 : 1;
+            return sign * Math.round((Math.abs(number) + Number.EPSILON) * factor) / factor;
         }
     }
 }

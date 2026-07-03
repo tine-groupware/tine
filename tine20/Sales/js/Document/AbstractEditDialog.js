@@ -280,7 +280,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.warnBox.setVisible(true)
         }
 
-        this.fields.document_number.emptyValue = !booked ? this.fields.document_proforma_number?.getValue() : null;
+        this.fields.document_number.emptyValue = this.fields.document_proforma_number?.getValue();
 
         // check service period contains all positions
         let servicePeriodAdopted = false
