@@ -24,7 +24,7 @@ Tine.Sales.EDocumentValidationPanel = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.html = `<iframe
             class="sales-quicklook-edocuemnt"
             style="width: 100%; height: 100%; border: none;"
-            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungValidation&fileLocation=${encodeURI(JSON.stringify(fileLocation.getData()))}" 
+            src="${Tine.Tinebase.common.getUrl()}index.php?method=Sales.getXRechnungValidation&fileLocation=${encodeURIComponent(JSON.stringify(fileLocation.getData()))}" 
         />`;
 
         Tine.Sales.EDocumentValidationPanel.superclass.initComponent.call(this);
