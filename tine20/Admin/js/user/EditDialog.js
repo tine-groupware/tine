@@ -194,6 +194,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // password must be changed no matter whether the flag is set
         this.record.set('password_must_change', true)
         mustChangeField.disable()
+        mustChangeField.el.parent().set({'ext:qtip': this.mustChangeTriggerPlugin.qtip})
 
         this.mustChangeTriggerPlugin.setVisible(true)
     },
@@ -955,7 +956,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             doAssertState: false,
             triggerConfig: {tag: "div", cls: "x-form-trigger-flat x-form-trigger-plugin x-form-localized-field tinebase-trigger-overlay"},
             onTriggerClick:  Ext.emptyFn,
-            qtip: i18n._('Password is expired in accordance with the password policy and needs to be changed'),
+            qtip: this.app.i18n.gettext('Password is expired in accordance with the password policy and needs to be changed'),
             preserveElStyle: true
         })
     
@@ -968,8 +969,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             hidden: this.ldapBackend && !Tine.Tinebase.registry.get('writePwToSql'),
             ctCls: 'admin-checkbox',
             fieldClass: 'admin-checkbox-box',
-            name: 'password_must_change',
-            plugins: [this.mustChangeTriggerPlugin]
+            name: 'password_must_change'
         });
 
         var config = {
