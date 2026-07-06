@@ -217,40 +217,14 @@ msgstr "Sign Up"
 msgid "Event Information"
 msgstr "Event Information"
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Registration"
-msgstr[1] "Registrations"
-
-msgid "The event should end after the start date"
-msgstr "The event should end after the start date"
-
-msgid "One should be able to register before the end date"
-msgstr "One should be able to register before the end date"
-
 msgid "Event Options"
 msgstr "Event Options"
-
-msgid "Description"
-msgstr "Description"
-
-msgid "Enter description"
-msgstr "Enter description"
 
 msgid "Multi-appointment"
 msgstr "Multi-appointment"
 
 msgid "Appointments"
 msgstr "Appointments"
-
-msgid "The session should take place before the end date. Please change the date or it would be change automatically"
-msgstr "The session should take place before the end date. Please change the date or it would be change automatically"
-
-msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
-msgstr "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
-
-msgid "The session should end after it begun. Please change the end time, or it would be deleted"
-msgstr "The session should end after it begun. Please change the end time, or it would be deleted"
 
 msgid "Registration Contact Fields"
 msgstr "Registration Contact Fields"
@@ -344,6 +318,9 @@ msgstr "Contact"
 msgid "Information of the event:"
 msgstr "Information of the event:"
 
+msgid "From:"
+msgstr "From:"
+
 msgid "When:"
 msgstr "When:"
 
@@ -416,6 +393,9 @@ msgstr "Imprint"
 msgid "Privacy Notice"
 msgstr "Privacy Notice"
 
+msgid "I am completing the registration form for another person"
+msgstr "I am completing the registration form for another person"
+
 msgid "Participant Information:"
 msgstr "Participant Information:"
 
@@ -439,9 +419,6 @@ msgstr "Uploaded file"
 
 msgid "Delete file"
 msgstr "Delete file"
-
-msgid "I am completing the registration form for another person"
-msgstr "I am completing the registration form for another person"
 
 msgid "Registrant Information:"
 msgstr "Registrant Information:"
@@ -639,6 +616,9 @@ msgstr "Start Time"
 msgid "End Time"
 msgstr "End Time"
 
+msgid "Description"
+msgstr "Description"
+
 msgid "GENDER_Booked Option"
 msgstr "GENDER_Booked Option"
 
@@ -673,6 +653,12 @@ msgstr "Available places"
 msgid "GENDER_Event"
 msgstr "GENDER_Event"
 
+msgid "Subheading"
+msgstr "Subheading"
+
+msgid "Employee for the event"
+msgstr "Employee for the event"
+
 msgid "Event start"
 msgstr "Event start"
 
@@ -693,6 +679,9 @@ msgstr "Event Registrations"
 
 msgid "Event Appointments"
 msgstr "Event Appointments"
+
+msgid "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
+msgstr "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
 
 msgid "Images"
 msgstr "Images"
@@ -777,6 +766,11 @@ msgstr "Value"
 
 msgid "GENDER_Registration"
 msgstr "GENDER_Registration"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Registration"
+msgstr[1] "Registrations"
 
 msgid "This participant has been registered by another person"
 msgstr "This participant has been registered by another person"

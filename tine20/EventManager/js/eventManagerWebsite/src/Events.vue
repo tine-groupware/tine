@@ -24,6 +24,7 @@
             v-for="event in filteredEvents"
             :key="event.id"
             :title="event.name"
+            :subtitle="event.subheading"
             tag="article"
             class="event-card mb-4"
           >
@@ -153,9 +154,12 @@ onBeforeMount(async () => {
     color: #2c3e50;
     font-weight: 600;
     font-size: 1.5rem;
+  }
+
+  :deep .card-subtitle {
+    font-weight: 600;
+    font-size: 1rem;
     margin-bottom: 1rem;
-    border-bottom: 2px solid #e9ecef;
-    padding-bottom: 0.75rem;
   }
 
   :deep .card-body {
@@ -167,6 +171,8 @@ onBeforeMount(async () => {
     line-height: 1.6;
     margin-bottom: 1.25rem;
     font-size: 1rem;
+    border-top: 2px solid #e9ecef;
+    padding-top: 0.75rem;
   }
 }
 
