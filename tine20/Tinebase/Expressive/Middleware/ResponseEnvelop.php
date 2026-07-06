@@ -23,6 +23,8 @@ use \Laminas\Diactoros\Response;
  */
 class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterface
 {
+    protected const DEBUG_BODY_SIZE = 4096;
+
     /**
      * Process an incoming server request and return a response, optionally delegating
      * to the next middleware component to create the response.
@@ -82,6 +84,7 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
                 Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
             }
+
             $response = new Response('php://memory',
                 Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
         }
@@ -91,13 +94,16 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             $body->rewind();
             $headerStr = '';
             foreach ($response->getHeaders() as $name => $values) {
-                $headerStr .= "$name: {$values[0]}\n";
+                $headerStr .= "$name: $values[0]\n";
             }
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response status code: " . $response->getStatusCode());
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response headers: " . $headerStr);
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Response body: " . $body->getContents());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Response status code: " . $response->getStatusCode());
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Response headers: " . $headerStr);
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Response body: " . mb_substr($body->getContents(), self::DEBUG_BODY_SIZE));
             }
         }
         return $response;
