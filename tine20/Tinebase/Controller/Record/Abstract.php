@@ -453,7 +453,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param boolean $value
      * @return boolean
      */
-    protected function _setBooleanMemberVar($name, $value = null)
+    protected function _setBooleanMemberVar($name, $value = null): bool
     {
         $currValue = $this->{$name};
         if ($value !== null) {
@@ -486,6 +486,11 @@ abstract class Tinebase_Controller_Record_Abstract
     public function purgeRecords($setTo = null)
     {
         return $this->_setBooleanMemberVar('_purgeRecords', $setTo);
+    }
+
+    public function skipSetModlog(?bool $setTo = null): bool
+    {
+        return $this->_setBooleanMemberVar('_skipSetModlog', $setTo);
     }
 
     /**
