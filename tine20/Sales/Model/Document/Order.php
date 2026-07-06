@@ -237,6 +237,10 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
     {
         parent::transitionFrom($transition);
 
+        if (Sales_Model_Document_Offer::class === $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getRecordClassName()) {
+            $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_ORDERED;
+        }
+
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->_checkProductPrecursorPositionsComplete();
         }
