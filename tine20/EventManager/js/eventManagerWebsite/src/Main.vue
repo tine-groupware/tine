@@ -12,8 +12,8 @@
   <div class="page-wrap">
     <div v-if="removeHeaderIfSet">
       <b-navbar class="navbar-hr">
-        <b-navbar-nav>
-          <b-navbar-brand>Pastorale Dienststelle</b-navbar-brand>
+        <b-navbar-nav class="ml-auto">
+          <b-navbar-brand v-html="headerLogoHtml"></b-navbar-brand>
           <b-nav-item href="EventManager/view/events">{{formatMessage('Events')}}</b-nav-item>
         </b-navbar-nav>
 
@@ -28,7 +28,7 @@
     </div>
     <main>
       <div>
-        <SinglePage />
+        <SinglePage ref="singlePageRef" />
         <b-modal
           v-model="modal.show"
           :title="modal.title"
@@ -56,11 +56,7 @@
 
       </div>
     </main>
-    <footer class="mx-5 text-end">
-      <a href="EventManager/contact">{{formatMessage('Imprint')}}</a>
-      &#183
-      <a href="EventManager/contact">{{formatMessage('Privacy Notice')}}</a>
-    </footer>
+    <footer class="mx-5 text-end" v-html="footerHtml"></footer>
   </div>
 </template>
 
@@ -79,6 +75,10 @@ const { formatMessage } = useFormatMessage();
 import { navigateToEvents } from './searchUtils';
 
 const inputSearch = ref("");
+const singlePageRef = ref(null);
+
+const headerLogoHtml = computed(() => singlePageRef.value?.initialData?.header ?? '');
+const footerHtml = computed(() => singlePageRef.value?.initialData?.footer ?? '');
 
 const removeHeaderIfSet = computed(() => {
   let urlParams = new URLSearchParams(window.location.search);
@@ -209,6 +209,29 @@ onBeforeMount(async () => {
 
 .navbar-hr {
   border-bottom: 1px solid #333333;
+  align-items: center;
+}
+
+.navbar-nav {
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
+
+  header,
+  .m-10 {
+    display: contents;
+    margin: 0 !important;
+  }
+
+  img {
+    max-height: 40px !important;
+    width: auto;
+  }
 }
 
 main {
