@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Tinebase
  * @subpackage  Expressive
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2017-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -76,8 +76,14 @@ class Tinebase_Expressive_Middleware_ResponseEnvelop implements MiddlewareInterf
             Tinebase_Exception::log($ter);
             $response = new Response('php://memory', $ter->getCode());
         } catch (Exception $e) {
-            Tinebase_Exception::log($e, false);
-            $response = new Response('php://memory', Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
+            if (!$e instanceof Tinebase_Exception_ProgramFlow) {
+                Tinebase_Exception::log($e, false);
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            }
+            $response = new Response('php://memory',
+                Tinebase_Server_Expressive::HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
