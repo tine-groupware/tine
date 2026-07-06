@@ -509,6 +509,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             $customer = $offer->relations->find('related_model', Sales_Model_Customer::class)?->related_record;
+            Tinebase_Record_Expander::expandRecord($customer);
             $order = $offer->relations->find('related_model', Sales_Model_OrderConfirmation::class)?->related_record;
             if ($order) {
                 $state = Sales_Model_Document_Offer::STATUS_ORDERED;
@@ -520,6 +521,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $newOffer = new Sales_Model_Document_Offer([
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal ?? null,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_DATE => $offer->creation_time,
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER => $offer->number,
                 Sales_Model_Document_Offer::FLD_OFFER_STATUS => $state,
@@ -572,6 +574,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     ->find('related_model', Sales_Model_Customer::class)?->related_record;
                 Tinebase_Tags::getInstance()->getTagsOfRecord($contract);
             }
+            Tinebase_Record_Expander::expandRecord($customer);
 
             $state = Sales_Model_Document_Order::STATUS_RECEIVED;
             if ($contract?->end_date && Tinebase_DateTime::today()->isEarlierOrEquals($contract->end_date)) {
@@ -583,6 +586,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $newOrder = new Sales_Model_Document_Order([
                 Sales_Model_Document_Order::FLD_ORDER_STATUS => $state,
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => $customer,
+                Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => $customer->postal ?? null,
                 Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => new Tinebase_Record_RecordSet(Tinebase_Model_DynamicRecordWrapper::class, $offer && isset($offerMap[$offer->getId()]) ? [
                     new Tinebase_Model_DynamicRecordWrapper([
                         Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME => Sales_Model_Document_Offer::class,
