@@ -203,11 +203,13 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
             $link = '/EventManager/view/events';
             $event = EventManager_Controller_Event::getInstance()
                 ->get($_record->{EventManager_Model_Registration::FLD_EVENT_ID});
+            $eventName = EventManager_Controller_Event::getInstance()->getEventName($event);
             $this->_sendMessageWithTemplate($template, [
                 'link' => Tinebase_Core::getUrl() . $link,
                 'contact' => $contact,
                 'email' => $contact->email,
                 'event' => $event,
+                'eventName' => $eventName,
             ]);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

@@ -4,6 +4,7 @@ available parameters:
     app.branding.title
     contact
     event
+    eventName
 #}
 {% extends 'Tinebase/views/emails/base.text.twig' %}
 {% block subject %}
@@ -12,7 +13,7 @@ available parameters:
 
 
 {% block body %}
-    {{ _('Your registration for %1$s has been cancelled successfully.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}
+    {{ _('Your registration for %1$s has been cancelled successfully.') | format('<strong>' ~ eventName ~ '</strong>') | raw }}
     {{ _('To find other events, please follow the link below') }}
 
     {{ link }}

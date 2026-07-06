@@ -79,6 +79,14 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
         ],
 
+        self::LANGUAGES_AVAILABLE => [
+            self::TYPE => self::TYPE_KEY_FIELD,
+            self::NAME => EventManager_Config::LANGUAGES_AVAILABLE,
+            self::CONFIG => [
+                self::APP_NAME => EventManager_Config::APP_NAME,
+            ],
+        ],
+
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_REGISTRATIONS => [
@@ -105,7 +113,12 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::FIELDS => [
             self::FLD_NAME      => [
                 self::LABEL         => 'Name', // _('Name')
-                self::TYPE          => self::TYPE_STRING,
+                self::TYPE          => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG        => [
+                    self::TYPE => self::TYPE_STRING,
+                    self::LENGTH => 255,
+                ],
+                self::QUERY_FILTER  => true,
                 self::NULLABLE      => true,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -114,7 +127,12 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_SUBHEADING      => [
                 self::LABEL         => 'Subheading', // _('Subheading')
-                self::TYPE          => self::TYPE_STRING,
+                self::TYPE          => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG        => [
+                    self::TYPE => self::TYPE_STRING,
+                    self::LENGTH => 255,
+                ],
+                self::QUERY_FILTER  => true,
                 self::NULLABLE      => true,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true,],
             ],
@@ -290,7 +308,11 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DESCRIPTION       => [
                 self::LABEL                 => 'Description', //_('Description')
-                self::TYPE                  => self::TYPE_FULLTEXT,
+                self::TYPE                  => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG                => [
+                    self::TYPE => self::TYPE_FULLTEXT,
+                ],
+                self::QUERY_FILTER          => true,
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],

@@ -133,7 +133,7 @@ class EventManager_Controller extends Tinebase_Controller_Event
                 }
 
                 $event = EventManager_Controller_Event::getInstance()->get($eventId);
-                $eventName = $event->{EventManager_Model_Event::FLD_NAME};
+                $eventName = EventManager_Controller_Event::getInstance()->getEventName($event);
                 $basePath = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_FOLDER_FILEMANAGER_PATH);
                 $nodeController = Filemanager_Controller_Node::getInstance();
                 $prefix = Tinebase_FileSystem::getInstance()->getApplicationBasePath('Filemanager') . '/folders/';

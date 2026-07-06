@@ -24,7 +24,8 @@ class EventManager_Config extends Tinebase_Config_Abstract
     /** @use Tinebase_Controller_SingletonTrait<EventManager_Config> */
     use Tinebase_Controller_SingletonTrait;
 
-    const APP_NAME = 'EventManager';
+    public const APP_NAME = 'EventManager';
+    public const LANGUAGES_AVAILABLE = 'languagesAvailable';
     public const EVENT_TYPE = 'eventType';
     public const EVENT_STATUS = 'eventStatus';
     public const REGISTRATION_FUNCTION = 'registrationFunction';
@@ -323,6 +324,22 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
+        ],
+        self::LANGUAGES_AVAILABLE => [
+            self::LABEL                 => 'Available Languages', //_('Available Languages')
+            self::DESCRIPTION           => 'List of the languages in which multilingual texts are available.',
+            //_('List of the languages in which multilingual texts are available.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            'localeTranslationList'     => 'Language',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'de', 'value' => 'German'],
+                    ['id' => 'en', 'value' => 'English'],
+                ],
+                self::DEFAULT_STR           => 'de',
+            ],
         ],
     ];
 
