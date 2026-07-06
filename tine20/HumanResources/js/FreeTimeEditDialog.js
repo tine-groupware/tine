@@ -104,13 +104,25 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.processStatusPicker.employee = employee;
             this.processStatusPicker.setValue('ACCEPTED');
         }
-        this.typeStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
-        this.accountPicker[type.id === 'vacation' ? 'show' : 'hide']();
+        const isVacation = type.id === 'vacation';
+        if (this._lastIsVacationState !== isVacation) {
+            this._lastIsVacationState = isVacation;
+            this.typeStatusPicker[type.id === 'sickness' ? 'show' : 'hide']();
+            this.accountPicker[isVacation ? 'show' : 'hide']();
+            this.possibleVacationDays[isVacation ? 'show' : 'hide']();
+            this.requestedDaysField[isVacation ? 'show' : 'hide']();
+            this.acceptedDaysField[isVacation ? 'show' : 'hide']();
+            this.remainingDaysField[isVacation ? 'show' : 'hide']();
+
+            if (isVacation) {
+                if (this.accountPicker.rendered && this.employeePicker.rendered) {
+                    const targetWidth = this.employeePicker.getWidth();
+                    this.accountPicker.width = null;
+                    this.accountPicker.onResize(targetWidth, undefined);
+                }
+            }
+        }
         this.accountPicker.setReadOnly(!employee);
-        this.possibleVacationDays[type.id === 'vacation' ? 'show' : 'hide']();
-        this.requestedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
-        this.acceptedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
-        this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
 
         this.datePicker.selectionStyles = {'background-color': _.get(type, 'data.color', _.get(type, 'color', type))};
 
