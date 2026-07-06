@@ -212,13 +212,13 @@
 
         <div v-if="isAlreadyRegistered">
           <div class="button-group">
-            <b-button class="action-button" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
-            <b-button class="action-button" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
+            <b-button class="action-button" :disabled="isSubmitting" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
+            <b-button class="action-button" :disabled="isSubmitting" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
           </div>
         </div>
 
         <div v-else class="button-group">
-          <b-button class="action-button" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
+          <b-button class="action-button" :disabled="isSubmitting" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
         </div>
       </b-row>
 
@@ -1019,6 +1019,7 @@ const uploadFiles = async (eventId, registrationId) => {
 };
 
 const checkWaitingList = () => {
+  if (isSubmitting.value) return;
   if (!checkValidationFields()) {
     return;
   }
@@ -1057,7 +1058,11 @@ const handlePostRegistration = (update = false) => {
   postRegistration();
 };
 
+const isSubmitting = ref(false);
 const postRegistration = async () => {
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+
   const filteredReplies = {};
   const { optionsByGroup, ungroupedOptions } = getGroupedAndUngroupedOptions();
 
@@ -1170,6 +1175,8 @@ const postRegistration = async () => {
       message: formatMessage('Registration failed. Please try again.'),
       type: 'error'
     });
+  } finally {
+    isSubmitting.value = false;
   }
 };
 
