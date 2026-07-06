@@ -14,7 +14,7 @@
 
 <script setup>
 /* eslint-disable */
-import { computed, onMounted, ref, onBeforeMount, shallowRef, defineProps } from 'vue';
+import { computed, onMounted, ref, onBeforeMount, shallowRef, defineProps, defineExpose } from 'vue';
 
 defineProps({
   autoFetch: {type: Boolean, default: true}
@@ -27,6 +27,8 @@ const route = useRoute();
 const errorMessage = computed(() => {
     return initialData.value.errorMessage ?? null;
 })
+
+defineExpose({ initialData });
 
 // Compute a class based on the current route
 const currentRouteClass = computed(() => {
