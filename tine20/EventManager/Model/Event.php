@@ -23,6 +23,8 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 class EventManager_Model_Event extends Tinebase_Record_NewAbstract
 {
     public const FLD_NAME = 'name';
+    public const FLD_SUBHEADING = 'subheading';
+    public const FLD_EMPLOYEE = 'event_employee';
     public const FLD_START = 'start';
     public const FLD_END = 'end';
     public const FLD_LOCATION = 'location';
@@ -104,11 +106,29 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             self::FLD_NAME      => [
                 self::LABEL         => 'Name', // _('Name')
                 self::TYPE          => self::TYPE_STRING,
-                self::NULLABLE          => true,
+                self::NULLABLE      => true,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_SUBHEADING      => [
+                self::LABEL         => 'Subheading', // _('Subheading')
+                self::TYPE          => self::TYPE_STRING,
+                self::NULLABLE      => true,
+                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+            ],
+            self::FLD_EMPLOYEE      => [
+                self::TYPE              => self::TYPE_RECORD,
+                self::QUERY_FILTER      => true,
+                self::LABEL             => 'Employee for the event', // _('Employee for the event')
+                self::NULLABLE          => true,
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
+                self::CONFIG            => [
+                    self::APP_NAME          => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
+                ]
             ],
             self::FLD_START     => [
                 self::TYPE          => self::TYPE_DATETIME,
@@ -282,6 +302,8 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL       => 1,
                 self::NAME              => EventManager_Config::EVENT_REGISTER_OTHERS,
                 self::NULLABLE          => true,
+                self::DESCRIPTION       => 'Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant',
+                // _('Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant')
             ],
             self::FLD_CONTACT_FIELDS       => [
                 self::LABEL                 => 'Contact Fields', //_('Contact Fields')

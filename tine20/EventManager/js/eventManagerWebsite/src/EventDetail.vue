@@ -12,52 +12,58 @@
   <div class="event-detail-container">
     <div class="event-detail-card">
       <div class="title my-4">{{eventDetails.name}}</div>
+      <div class="subtitle">{{eventDetails.subheading}}</div>
 
       <div v-if="eventDetails.description" class="description-section mb-4">
         <MarkdownRenderer :content="eventDetails.description" />
       </div>
 
-      <h5 class="section-heading mb-4">{{formatMessage('Information of the event:')}}</h5>
+      <div v-if="hasEventInfo">
+        <h5 class="section-heading mb-4">{{formatMessage('Information of the event:')}}</h5>
 
-      <div class="info-grid">
-        <div class="info-row" v-if="eventDetails.start && eventDetails.start !== '1.1.1970'">
-          <div class="info-label">{{formatMessage('When:')}}</div>
-          <div class="info-value">{{eventDetails.start}}</div>
-        </div>
+        <div class="info-grid">
+          <div class="info-row" v-if="eventDetails.start && eventDetails.start !== '1.1.1970'">
+            <div v-if="eventDetails.start && !eventDetails.end">
+              <div class="info-label">{{formatMessage('From:')}}</div>
+            </div>
+            <div v-else class="info-label">{{formatMessage('When:')}}</div>
+            <div class="info-value">{{eventDetails.start}}</div>
+          </div>
 
-        <div class="info-row" v-if="eventDetails.end && eventDetails.end !== '1.1.1970'">
-          <div class="info-label">{{formatMessage('Until:')}}</div>
-          <div class="info-value">{{eventDetails.end}}</div>
-        </div>
+          <div class="info-row" v-if="eventDetails.end && eventDetails.end !== '1.1.1970'">
+            <div class="info-label">{{formatMessage('Until:')}}</div>
+            <div class="info-value">{{eventDetails.end}}</div>
+          </div>
 
-        <div class="info-row appointments-row" v-if="eventDetails.appointments && eventDetails.appointments.length > 0">
-          <div class="info-label">{{formatMessage('Appointments:')}}</div>
-          <div class="info-value">
-            <div v-for="appointment in eventDetails.appointments" :key="appointment.id" class="appointment-card">
-              <div class="appointment-session"><strong>{{formatMessage('Session')}} {{appointment.session_number}}</strong></div>
-              <div class="appointment-time">{{appointment.formattedDate}} | {{appointment.formattedStartTime}} - {{appointment.formattedEndTime}}</div>
-              <MarkdownRenderer v-if="appointment.description" :content="appointment.description" class="appointment-description" />
+          <div class="info-row appointments-row" v-if="eventDetails.appointments && eventDetails.appointments.length > 0">
+            <div class="info-label">{{formatMessage('Appointments:')}}</div>
+            <div class="info-value">
+              <div v-for="appointment in eventDetails.appointments" :key="appointment.id" class="appointment-card">
+                <div class="appointment-session"><strong>{{formatMessage('Session')}} {{appointment.session_number}}</strong></div>
+                <div class="appointment-time">{{appointment.formattedDate}} | {{appointment.formattedStartTime}} - {{appointment.formattedEndTime}}</div>
+                <MarkdownRenderer v-if="appointment.description" :content="appointment.description" class="appointment-description" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="info-row" v-if="eventDetails.location && eventDetails.location.adr_one_postalcode">
-          <div class="info-label">{{formatMessage('Address:')}}</div>
-          <div class="info-value">
-            <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_street')}}</p>
-            <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_postalcode')}}</p>
-            <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_locality')}}</p>
+          <div class="info-row" v-if="eventDetails.location && eventDetails.location.adr_one_postalcode">
+            <div class="info-label">{{formatMessage('Address:')}}</div>
+            <div class="info-value">
+              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_street')}}</p>
+              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_postalcode')}}</p>
+              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_locality')}}</p>
+            </div>
           </div>
-        </div>
 
-        <div class="info-row" v-if="eventDetails.fee">
-          <div class="info-label">{{formatMessage('Fee:')}}</div>
-          <div class="info-value">{{formatMessage('from ')}}{{eventDetails.fee}} €</div>
-        </div>
+          <div class="info-row" v-if="eventDetails.fee">
+            <div class="info-label">{{formatMessage('Fee:')}}</div>
+            <div class="info-value">{{formatMessage('from ')}}{{eventDetails.fee}} €</div>
+          </div>
 
-        <div class="info-row" v-if="eventDetails.registration_possible_until && eventDetails.registration_possible_until !== '1.1.1970'">
-          <div class="info-label">{{formatMessage('Registration possible until:')}}</div>
-          <div class="info-value">{{eventDetails.registration_possible_until}}</div>
+          <div class="info-row" v-if="eventDetails.registration_possible_until && eventDetails.registration_possible_until !== '1.1.1970'">
+            <div class="info-label">{{formatMessage('Registration possible until:')}}</div>
+            <div class="info-value">{{eventDetails.registration_possible_until}}</div>
+          </div>
         </div>
       </div>
 
@@ -241,6 +247,19 @@ const handleEmailSubmit = async () => {
   }
 };
 
+const hasEventInfo = computed(() => {
+  const d = eventDetails.value;
+
+  const hasStart = d.start && d.start !== '1.1.1970';
+  const hasEnd = d.end && d.end !== '1.1.1970';
+  const hasAppointments = d.appointments && d.appointments.length > 0;
+  const hasLocation = d.location && d.location.adr_one_postalcode;
+  const hasFee = !!d.fee;
+  const hasRegistrationDeadline = d.registration_possible_until && d.registration_possible_until !== '1.1.1970';
+
+  return hasStart || hasEnd || hasAppointments || hasLocation || hasFee || hasRegistrationDeadline;
+});
+
 async function getEvent() {
   let eventId = route.params.id
   await fetch(`/EventManager/event/${eventId}`, {
@@ -317,6 +336,13 @@ getEvent();
   color: #2c3e50;
   border-bottom: 3px solid #2c3e50;
   padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
   margin-bottom: 1.5rem;
 }
 

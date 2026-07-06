@@ -217,39 +217,13 @@ msgstr ""
 msgid "Event Information"
 msgstr ""
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "The event should end after the start date"
-msgstr ""
-
-msgid "One should be able to register before the end date"
-msgstr ""
-
 msgid "Event Options"
-msgstr ""
-
-msgid "Description"
-msgstr ""
-
-msgid "Enter description"
 msgstr ""
 
 msgid "Multi-appointment"
 msgstr ""
 
 msgid "Appointments"
-msgstr ""
-
-msgid "The session should take place before the end date. Please change the date or it would be change automatically"
-msgstr ""
-
-msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
-msgstr ""
-
-msgid "The session should end after it begun. Please change the end time, or it would be deleted"
 msgstr ""
 
 msgid "Registration Contact Fields"
@@ -344,6 +318,9 @@ msgstr ""
 msgid "Information of the event:"
 msgstr ""
 
+msgid "From:"
+msgstr ""
+
 msgid "When:"
 msgstr ""
 
@@ -416,6 +393,9 @@ msgstr ""
 msgid "Privacy Notice"
 msgstr ""
 
+msgid "I am completing the registration form for another person"
+msgstr ""
+
 msgid "Participant Information:"
 msgstr ""
 
@@ -438,9 +418,6 @@ msgid "Uploaded file"
 msgstr ""
 
 msgid "Delete file"
-msgstr ""
-
-msgid "I am completing the registration form for another person"
 msgstr ""
 
 msgid "Registrant Information:"
@@ -639,6 +616,9 @@ msgstr ""
 msgid "End Time"
 msgstr ""
 
+msgid "Description"
+msgstr ""
+
 msgid "GENDER_Booked Option"
 msgstr ""
 
@@ -673,6 +653,12 @@ msgstr ""
 msgid "GENDER_Event"
 msgstr ""
 
+msgid "Subheading"
+msgstr ""
+
+msgid "Employee for the event"
+msgstr ""
+
 msgid "Event start"
 msgstr ""
 
@@ -692,6 +678,9 @@ msgid "Event Registrations"
 msgstr ""
 
 msgid "Event Appointments"
+msgstr ""
+
+msgid "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
 msgstr ""
 
 msgid "Images"
@@ -777,6 +766,11 @@ msgstr ""
 
 msgid "GENDER_Registration"
 msgstr ""
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "This participant has been registered by another person"
 msgstr ""
