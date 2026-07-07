@@ -1500,13 +1500,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function getStatusMetrics($apiKey = null)
     {
-        if (! Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY)) {
+        $apiKeyCfg = Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false);
+        if (!$apiKeyCfg) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No API key configured');
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
 
-        if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false)) {
+        if ($apiKey !== $apiKeyCfg) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid metrics API Key.');
         }
         
@@ -1537,7 +1538,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $data = [
             'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
-            'nonSystemUsers'   => Tinebase_User::getInstance()->countNonSystemUsers(),
+            'nonSystemUsers' => Tinebase_User::getInstance()->countNonSystemUsers(),
             'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
         ];
 
