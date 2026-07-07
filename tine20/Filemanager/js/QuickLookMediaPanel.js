@@ -66,6 +66,7 @@ Tine.Filemanager.QuickLookRegistry.registerContentType('video/ogg', 'Filemanager
 Tine.Filemanager.QuickLookRegistry.registerContentType('application/x-mpegURL', 'Filemanager.QuickLookMediaPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('video/3gpp', 'Filemanager.QuickLookMediaPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('video/quicktime', 'Filemanager.QuickLookMediaPanel');
+Tine.Filemanager.QuickLookRegistry.registerContentType('video/x-matroska', 'Filemanager.QuickLookMediaPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('video/x-msvideo', 'Filemanager.QuickLookMediaPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('video/x-ms-wmv', 'Filemanager.QuickLookMediaPanel');
 Tine.Filemanager.QuickLookRegistry.registerContentType('video/x-flv', 'Filemanager.QuickLookMediaPanel');
