@@ -93,7 +93,9 @@ class Felamimail_Import_ImapTest extends TestCase
         self::assertEquals(1, $result['totalcount'], print_r($result, true));
         self::assertEquals(1, $result['failcount'], print_r($result, true));
         $contact = $result['results']->getFirstRecord();
-        self::assertEquals('Setz', $contact->n_fn, print_r($contact->toArray(), true));
+        $translate = Tinebase_Translation::getTranslation(Addressbook_Config::APP_NAME);
+        $translation = $translate->_('Ms');
+        self::assertEquals($translation . ' Dr, Setz', $contact->n_fn, print_r($contact->toArray(), true));
 
         // check if failed import is marked FLAGGED
         $message = $this->_emailTestClass->searchAndCacheMessage($failFilename);

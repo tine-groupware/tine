@@ -237,7 +237,7 @@ class Addressbook_Export_DocTest extends TestCase
         $plain = $this->getPlainTextFromDocx($doc);
 
         static::assertStringContainsString($export->getTranslate()->_('Mr'), $plain);
-        static::assertStringContainsString($contact->n_fn, $plain);
+        static::assertStringContainsString($contact->n_family, $plain);
         static::assertStringContainsString($contact->n_given, $plain);
         $relatedRecord = $contact->relations[0]['related_record'];
         static::assertStringContainsString($relatedRecord->getTitle(), $plain);

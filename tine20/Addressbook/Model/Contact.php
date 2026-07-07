@@ -1349,12 +1349,21 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         }
 
         // always update fn
-        if (!empty($_data['n_given'])) {
-            $_data['n_fn'] = $_data['n_given'] . (!empty($_data['n_family']) ? ' ' . $_data['n_family'] : '');
-        } else {
-            $_data['n_fn'] = (!empty($_data['n_family'])) ? $_data['n_family']
-                : ((! empty($_data['org_name'])) ? $_data['org_name']
-                    : ((isset($_data['n_fn'])) ? $_data['n_fn'] : ''));
+        if (empty($_data['n_fn'])) {
+            $name = 'n_fn';
+            $template = Addressbook_Config::getInstance()->{Addressbook_Config::FORMATTED_NAME_TEMPLATE};
+
+            $locale = Tinebase_Core::getLocale();
+            if (! $locale) {
+                $locale = Tinebase_Translation::getLocale();
+            }
+            $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
+                Tinebase_Twig::TWIG_LOADER =>
+                    new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function () use ($template) {
+                        return $template;
+                    })
+            ]);
+            $_data['n_fn'] = $twig->load(__METHOD__ . $name)->render($_data);
         }
 
         // truncate some values if too long
@@ -1391,23 +1400,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     public function __set($_name, $_value)
     {
-
         switch ($_name) {
-            case 'n_given':
-                $resolved = array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name'));
-                $this->_resolveAutoValues($resolved);
-                parent::__set('n_fn', $resolved['n_fn']);
-                break;
-            case 'n_family':
-                $resolved = array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name'));
-                $this->_resolveAutoValues($resolved);
-                parent::__set('n_fn', $resolved['n_fn']);
-                break;
-            case 'org_name':
-                $resolved = array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family'));
-                $this->_resolveAutoValues($resolved);
-                parent::__set('n_fn', $resolved['n_fn']);
-                break;
             default:
                 // normalize telephone numbers
                 if (isset(static::$_telFields[$_name])) {

@@ -67,6 +67,8 @@ class Addressbook_Config extends Tinebase_Config_Abstract
 
     public const FILE_AS_TEMPLATE = 'fileAsTemplate';
 
+    public const FORMATTED_NAME_TEMPLATE = 'formattedNameTemplate';
+
     /**
      * fields for list type
      *
@@ -401,6 +403,17 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'Template for file_as field',
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => '{% if n_family %}{% set n = n_family %}{% elseif org_name %}{% set n = org_name %}{% elseif n_given %}{% set n = n_given %}{% elseif email %}{% set n = email %}{% endif %}{% if n and n_given and n != n_given %}{{ n }}, {{ n_given }}{% else %}{{ n }}{% endif %}',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
+        self::FORMATTED_NAME_TEMPLATE => [
+            //_('Template for n_fn field')
+            self::LABEL                 => 'Template for n_fn field',
+            //_('Template for n_fn field')
+            self::DESCRIPTION           => 'Template for n_fn field',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR => '{% if salutation and salutation != \'COMPANY\' and salutation != \'PERSON\' %}{{ keyField("Addressbook", "contactSalutation", salutation) }} {% endif %}{% if n_prefix %}{{ n_prefix }} {% endif %}{% if n_given %}{{ n_given }}{% if n_middle %} {{ n_middle }}{% endif %}{% if n_family %} {{ n_family }}{% endif %}{% elseif n_family %}{{ n_family }}{% elseif org_name %}{{ org_name }}{% elseif n_fn is defined %}{{ n_fn }}{% endif %}{% if n_suffix %} {{ n_suffix }}{% endif %}',
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,

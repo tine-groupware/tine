@@ -160,6 +160,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                         'select': function (combo, record, index) {
                                             var jpegphoto = this.getForm().findField('jpegphoto');
                                             jpegphoto.setDefaultImage(record.json.image || 'images/icon-set/icon_undefined_contact.svg');
+                                            this.suggestFields(combo);
                                         }
                                     }
                                 }), {
@@ -192,6 +193,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     readOnly: this.record.data?.type === 'email_account',
                                     qtip: emailContactToolTip,
                                 }],
+                                [this.fieldManager('n_fn', {
+                                    columnWidth: 1,
+                                })],
                                 [{
                                     columnWidth: 0.65,
                                     xtype: 'tine.widget.field.AutoCompleteField',
@@ -231,12 +235,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     isMetadataModelFor: 'site',
                                     requiredGrant: 'editGrant',
                                 }],
-                                [{
+                                [this.fieldManager('n_fileas', {
                                     columnWidth: 0.64,
-                                    xtype: 'textfield',
-                                    fieldLabel: this.app.i18n._('Display Name'),
-                                    name: 'n_fileas'
-                                }, {
+                                }), {
                                     columnWidth: 0.36,
                                     fieldLabel: this.app.i18n._('Job Title'),
                                     name: 'title',
@@ -487,6 +488,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         this.twingEnv = getTwingEnv();
         const loader = this.twingEnv.getLoader();
         loader.setTemplate('n_fileas', Tine.Tinebase.configManager.get('fileAsTemplate', 'Addressbook'));
+        loader.setTemplate('n_fn', Tine.Tinebase.configManager.get('formattedNameTemplate', 'Addressbook'));
+
         this.getForm().items.each((field) => {
             if (field.initKeyEvents) {
                 field.initKeyEvents();
@@ -500,22 +503,24 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             const fieldRawValue = f.getRawValue();
             this.record.set(f.name, fieldRawValue);
         }
-        const fieldName = 'n_fileas';
-        const field = this.getForm().findField(fieldName);
-        const value = field?.getValue();
+        const fieldNames = ['n_fileas', 'n_fn'];
+        for (const fieldName of fieldNames) {
+            const field = this.getForm().findField(fieldName);
+            const value = field?.getValue();
 
-        if (field) {
-            // @FIXME twing can't cope with null values yet, remove this once twing fixed it
-            const data = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
-            const suggestion = await this.twingEnv.render(fieldName, data);
+            if (field) {
+                // @FIXME twing can't cope with null values yet, remove this once twing fixed it
+                const data = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
+                const suggestion = await this.twingEnv.render(fieldName, data);
 
-            if (!value || value === field.suggestedValue) {
-                field.setValue(suggestion);
-                this.record.set(fieldName, suggestion);
-                this.onRecordUpdate();
+                if (!value || value === field.suggestedValue) {
+                    field.setValue(suggestion);
+                    this.record.set(fieldName, suggestion);
+                    this.onRecordUpdate();
+                }
+
+                field.suggestedValue = suggestion;
             }
-
-            field.suggestedValue = suggestion;
         }
 
         const fn = this.getForm().findField('n_given').getValue();

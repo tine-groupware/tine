@@ -106,7 +106,7 @@ class Addressbook_Import_VCardTest extends \PHPUnit\Framework\TestCase
 
         $importedContact = $result['results']->getFirstRecord();
         $this->assertTrue($importedContact !== NULL);
-        $this->assertEquals('Hans Müller', $importedContact->n_fn, print_r($importedContact, TRUE));
+        $this->assertEquals('Hans Müller - Mein Schiff', $importedContact->n_fn, print_r($importedContact, TRUE));
     }
 
     /**
@@ -127,7 +127,7 @@ class Addressbook_Import_VCardTest extends \PHPUnit\Framework\TestCase
 
         $importedContact = $result['results']->getFirstRecord();
         $this->assertTrue($importedContact !== NULL);
-        $this->assertEquals('Stephan Läunig', $importedContact->n_fn, print_r($importedContact, TRUE));
+        $this->assertEquals('Läunig, Stephan', $importedContact->n_fn, print_r($importedContact, TRUE));
 
         return $importedContact;
     }
@@ -162,7 +162,7 @@ class Addressbook_Import_VCardTest extends \PHPUnit\Framework\TestCase
         $importedContact = $result['results']->getFirstRecord();
 
         $this->assertTrue($importedContact !== NULL);
-        $this->assertEquals('Falk München', $importedContact->n_fn, print_r($importedContact->toArray(), TRUE));
+        $this->assertEquals('München, Falk', $importedContact->n_fn, print_r($importedContact->toArray(), TRUE));
         $this->assertEquals('Düsseldorf', $importedContact->adr_one_locality, print_r($importedContact->toArray(), TRUE));
     }
 
