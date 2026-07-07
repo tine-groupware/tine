@@ -150,14 +150,28 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    public function getEventName($eventRecord)
+    {
+        $eventNames = $eventRecord->{EventManager_Model_Event::FLD_NAME};
+        $eventName = '';
+        foreach ($eventNames as $eventName) {
+            if ($eventName->language === 'de') {
+                $eventName = $eventName->text;
+            } elseif ($eventName->language === 'en') {
+                $eventName = $eventName->text;
+            }
+        }
+        return $eventName;
+    }
+
     protected function _createCalendarEvent ($updatedRecord, $_record, $is_appointment = false, $appointments = [])
     {
         $is_all_day_event = false;
+        $eventName = $this->getEventName($updatedRecord);
+
         if ($is_appointment) {
             foreach ($appointments as $appointment) {
-                $summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME} .
-                    ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
-
+                $summary = $eventName . ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
                 $startTime = $appointment->{EventManager_Model_Appointment::FLD_START_TIME};
                 if ($startTime) {
                     $dtstart = $appointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
@@ -183,7 +197,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $is_all_day_event = true;
             }
 
-            $summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME};
+            $summary = $eventName;
             $dtstart = !empty($updatedRecord->{EventManager_Model_Event::FLD_START})
                 ? $updatedRecord->{EventManager_Model_Event::FLD_START}
                 : Tinebase_DateTime::now();
@@ -258,6 +272,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
     {
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
         $this->_createImageWatermarks($updatedRecord);
+        $eventName = $this->getEventName($updatedRecord);
 
         // check if $currentrecord had options that have been deleted in $record
         // - those need to be removed from registrations
@@ -286,7 +301,7 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             if ($calendarEventRelation->own_id === $updatedRecord->getId()) {
                 $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
                 if (array_key_exists('name', $changed_fields)) {
-                    $calendarEvent->summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME};
+                    $calendarEvent->summary = $eventName;
                 }
                 if (array_key_exists('start', $changed_fields)) {
                     $calendarEvent->dtstart = !empty($updatedRecord->{EventManager_Model_Event::FLD_START})
@@ -332,6 +347,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             return;
         }
 
+        $eventName = $this->getEventName($updatedRecord);
+
         $changed_fields = $appointment->diff;
 
         $calendarEventRelations = $updatedRecord->relations;
@@ -343,8 +360,8 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $calendarEvent = Calendar_Controller_Event::getInstance()->get($calendarEventRelation->related_id);
 
                 if (array_key_exists('session_number', $changed_fields)) {
-                    $calendarEvent->summary = $updatedRecord->{EventManager_Model_Event::FLD_NAME}
-                        . ' ' . $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
+                    $calendarEvent->summary = $eventName . ' ' .
+                        $currentAppointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
                 }
                 if (array_key_exists('start_time', $changed_fields)) {
                     $startTime = $currentAppointment->{EventManager_Model_Appointment::FLD_START_TIME};
@@ -478,8 +495,24 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 ->search($filter);
             $events = $eventListOfRecords->getFirstRecord();
             $converter = Tinebase_Convert_Factory::factory($events);
-            $eventArray = $converter->fromTine20RecordSet($eventListOfRecords);
-            $response->getBody()->write(json_encode($eventArray));
+            $eventsArray = $converter->fromTine20RecordSet($eventListOfRecords);
+
+            for ($i = 0; $i < count($eventsArray); $i++) {
+                $eventArray = $eventsArray[$i];
+                $localizationFields = ['name', 'subheading', 'description'];
+                foreach ($localizationFields as $localizationField) {
+                    if (!empty($eventArray[$localizationField]) && is_array($eventArray[$localizationField])) {
+                        foreach ($eventArray[$localizationField] as $field) {
+                            if ($field['language'] === 'de') {
+                                $eventArray[$localizationField] = $field['text'];
+                            }
+                        }
+                    }
+                }
+                $eventsArray[$i] = $eventArray;
+            }
+
+            $response->getBody()->write(json_encode($eventsArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);
             $response->getBody()->write(json_encode($tenf->getMessage()));
@@ -505,6 +538,17 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             $converter = Tinebase_Convert_Factory::factory($event);
             $eventArray = $converter->fromTine20Model($event);
+
+            $localizationFields = ['name', 'subheading', 'description'];
+            foreach ($localizationFields as $localizationField) {
+                if (!empty($eventArray[$localizationField]) && is_array($eventArray[$localizationField])) {
+                    foreach ($eventArray[$localizationField] as $field) {
+                        if ($field['language'] === 'de') {
+                            $eventArray[$localizationField] = $field['text'];
+                        }
+                    }
+                }
+            }
 
             if (!empty($eventArray['contact_fields']) && is_array($eventArray['contact_fields'])) {
                 $contactModelConfig = Addressbook_Model_Contact::getConfiguration();

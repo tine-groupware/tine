@@ -33,7 +33,7 @@ class EventManager_ControllerTest extends TestCase
     {
         $event = $this->_getEvent();
         EventManager_Controller_Event::getInstance()->create($event);
-        self::assertEquals('phpunit event', $event['name']);
+        self::assertEquals('phpunit event', $event['name'][0]['text']);
     }
 
     /**
@@ -306,13 +306,13 @@ class EventManager_ControllerTest extends TestCase
         $this->_testNeedsTransaction(); //registerOnCommitCallback
 
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
-        $booked_places = $created_event->{EventManager_Model_Event::FLD_BOOKED_PLACES};
-        $available_places = $created_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+        $booked_places = $createdEvent->{EventManager_Model_Event::FLD_BOOKED_PLACES};
+        $available_places = $createdEvent->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
         $registration = $this->_getRegistration($event->getId());
         $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
-        $created_event->{EventManager_Model_Event::FLD_REGISTRATIONS}->addRecord($created_registration);
-        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        $createdEvent->{EventManager_Model_Event::FLD_REGISTRATIONS}->addRecord($created_registration);
+        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
         self::assertEquals(1, count($updated_event->{EventManager_Model_Event::FLD_REGISTRATIONS}));
         self::assertEquals($booked_places + 1, $updated_event->{EventManager_Model_Event::FLD_BOOKED_PLACES});
         self::assertEquals($available_places - 1, $updated_event->{EventManager_Model_Event::FLD_AVAILABLE_PLACES});
@@ -356,13 +356,14 @@ class EventManager_ControllerTest extends TestCase
     public function testCreateEventCreatesCalendarEvent()
     {
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
-        $relation = $this->_getCalendarEventRelation($created_event);
+        $relation = $this->_getCalendarEventRelation($createdEvent);
         self::assertNotNull($relation, 'no calendar event relation found');
 
         $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
-        self::assertEquals($created_event->{EventManager_Model_Event::FLD_NAME}, $calendarEvent->summary);
+        $eventName = EventManager_Controller_Event::getInstance()->getEventName($createdEvent);
+        self::assertEquals($eventName, $calendarEvent->summary);
 
         // check the calendar event is tagged as automatically created
         $isTagged = false;
@@ -387,20 +388,20 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment1, $appointment2]
         );
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
-        foreach ($created_event->{EventManager_Model_Event::FLD_APPOINTMENTS} as $appointment) {
-            $relation = $this->_getCalendarEventRelation($created_event, $appointment->getId());
+        foreach ($createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS} as $appointment) {
+            $relation = $this->_getCalendarEventRelation($createdEvent, $appointment->getId());
             self::assertNotNull($relation, 'no calendar event relation found for appointment');
             $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
+            $eventName = EventManager_Controller_Event::getInstance()->getEventName($createdEvent);
             self::assertEquals(
-                $created_event->{EventManager_Model_Event::FLD_NAME} . ' '
-                . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER},
+                $eventName . ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER},
                 $calendarEvent->summary
             );
         }
 
-        $generalRelation = $this->_getCalendarEventRelation($created_event);
+        $generalRelation = $this->_getCalendarEventRelation($createdEvent);
         self::assertNull($generalRelation, 'no general calendar event should exist when appointments are used');
     }
 
@@ -410,9 +411,9 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateEventNameUpdatesCalendarEventSummary()
     {
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
-        $created_event->{EventManager_Model_Event::FLD_NAME} = 'updated phpunit event';
-        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+        $createdEvent->{EventManager_Model_Event::FLD_NAME}[0]['text'] = 'updated phpunit event';
+        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         $relation = $this->_getCalendarEventRelation($updated_event);
         self::assertNotNull($relation);
@@ -426,12 +427,12 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateEventStartEndUpdatesCalendarEvent()
     {
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $newStart = new Tinebase_DateTime('2026-06-10 08:00:00');
         $newEnd = new Tinebase_DateTime('2026-06-12 18:00:00');
-        $created_event->{EventManager_Model_Event::FLD_START} = $newStart;
-        $created_event->{EventManager_Model_Event::FLD_END} = $newEnd;
-        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        $createdEvent->{EventManager_Model_Event::FLD_START} = $newStart;
+        $createdEvent->{EventManager_Model_Event::FLD_END} = $newEnd;
+        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         $relation = $this->_getCalendarEventRelation($updated_event);
         self::assertNotNull($relation);
@@ -444,18 +445,18 @@ class EventManager_ControllerTest extends TestCase
     public function testAddAppointmentReplacesGeneralCalendarEvent()
     {
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
         // general calendar event exists before adding appointments
-        $generalRelationBefore = $this->_getCalendarEventRelation($created_event);
+        $generalRelationBefore = $this->_getCalendarEventRelation($createdEvent);
         self::assertNotNull($generalRelationBefore);
 
-        $appointment = $this->_getAppointment($created_event->getId(), '2026-06-15', 1, '09:00:00', '10:00:00');
-        $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
+        $appointment = $this->_getAppointment($createdEvent->getId(), '2026-06-15', 1, '09:00:00', '10:00:00');
+        $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS} = new Tinebase_Record_RecordSet(
             EventManager_Model_Appointment::class,
             [$appointment]
         );
-        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         // general calendar event should be gone
         try {
@@ -480,11 +481,11 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment]
         );
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
-        $createdAppointment = $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+        $createdAppointment = $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
 
         $createdAppointment->{EventManager_Model_Appointment::FLD_START_TIME} = '14:00:00';
-        $updated_event = EventManager_Controller_Event::getInstance()->update($created_event);
+        $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         $relation = $this->_getCalendarEventRelation($updated_event, $createdAppointment->getId());
         self::assertNotNull($relation);
@@ -503,13 +504,13 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment]
         );
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
-        $createdAppointment = $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
-        $relation = $this->_getCalendarEventRelation($created_event, $createdAppointment->getId());
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+        $createdAppointment = $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
+        $relation = $this->_getCalendarEventRelation($createdEvent, $createdAppointment->getId());
         self::assertNotNull($relation);
 
-        $created_event->{EventManager_Model_Event::FLD_APPOINTMENTS}->removeRecord($createdAppointment);
-        EventManager_Controller_Event::getInstance()->update($created_event);
+        $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS}->removeRecord($createdAppointment);
+        EventManager_Controller_Event::getInstance()->update($createdEvent);
 
         try {
             Calendar_Controller_Event::getInstance()->get($relation->related_id);
@@ -523,11 +524,11 @@ class EventManager_ControllerTest extends TestCase
     public function testDeleteEventDeletesCalendarEvent()
     {
         $event = $this->_getEvent();
-        $created_event = EventManager_Controller_Event::getInstance()->create($event);
-        $relation = $this->_getCalendarEventRelation($created_event);
+        $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
+        $relation = $this->_getCalendarEventRelation($createdEvent);
         self::assertNotNull($relation);
 
-        EventManager_Controller_Event::getInstance()->delete($created_event);
+        EventManager_Controller_Event::getInstance()->delete($createdEvent);
 
         try {
             Calendar_Controller_Event::getInstance()->get($relation->related_id);
@@ -558,7 +559,10 @@ class EventManager_ControllerTest extends TestCase
         $event_status = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_STATUS)->records->getById('1');
 
         return new EventManager_Model_Event([
-            'name'                          => 'phpunit event',
+            'name'                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'phpunit event'
+            ]],
             'start'                         => new Tinebase_DateTime("2025-05-28 17:00:00"),
             'end'                           => new Tinebase_DateTime("2025-05-31 20:30:00"),
             'location'                      => $contact,
@@ -572,7 +576,10 @@ class EventManager_ControllerTest extends TestCase
             'options'                       => [],
             'registrations'                 => [],
             'appointments'                  => [],
-            'description'                   => 'description test phpunit event',
+            'description'                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'description test phpunit event'
+            ]],
             'is_live'                       => true,
             'registraion_possible_until'    => new Tinebase_DateTime("2025-05-27"),
         ], true);

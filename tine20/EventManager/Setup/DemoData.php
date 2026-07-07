@@ -183,7 +183,10 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         ];
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Familienexerzitien 2027',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Familienexerzitien 2027'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-20 17:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-24 13:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-21"),
@@ -223,66 +226,72 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ],
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
-HIER EINIGE STICHWORTE, WAS SIE ERWARTET
-Die Familienexerzitien richten sich an alle Familien – Eltern mit Kindern, Ein-Eltern-Familien, Patchworkfamilien und 
-Kinder mit ihren Großeltern oder Pat_innen –, die sich eine Auszeit vom Alltag nehmen möchten, um Zeit füreinander und für den eigenen Glauben zu finden.
-
-IN DIESEM JAHR STEHEN DIE FAMILIENEXERZITIEN UNTER DEM TITEL „ICH SEGNE DICH UND DU SOLLST EIN SEGEN SEIN“.
-Diese Zusage gibt Gott Abraham mit auf den Weg, als er seine Heimat verlässt und in das verheißene Land aufbricht.
-Wir können diese Zusage Gottes aber auch für uns selbst hören, wenn wir daran denken, dass Gott die ganze Schöpfung segnet.
-Aus dem Segen Gottes dürfen wir leben und Kraft schöpfen. Dadurch gestärkt können wir zum Segen für andere werden.
-Während der Familienexerzitien soll uns das Thema „Segen“ begleiten. Wir schauen, welchen Segen wir im Leben schon empfangen haben.
-Welcher Segen ist ausgeblieben? Wie kann ich zum Segen werden?
-
-KINDER UND ERWACHSENE – PERSÖNLICH UND IN DER FAMILIE GLAUBEN
-Die Familien werden Zeit zur gemeinsamen Gestaltung haben. Darüber hinaus wird es Zeitfenster geben,
-in denen sich die Kinder in Begleitung von qualifizierten Betreuungspersonen dem Thema der Woche altersgerecht nähern.
-Die Erwachsenen haben Zeit zum Austausch, zur Vertiefung und zum Gebet.
-
-
-### Geplanter Verlauf
-
-Montag, 20. Oktober, ab 17 Uhr
-
-* Ankommen, Zimmerbezug, Kennenlernen
-
-Dienstag, 21. Oktober, bis Donnerstag, 23. Oktober
-
-* Morgenimpuls
-* gemeinsames Frühstück
-* Zeit für die Erwachsenen und die Kinder unter sich
-* Mittagsgebet
-* gemeinsames Mittagessen
-* freie Gestaltungszeit für die Familie
-* Kaffeetrinken
-* Zeit für die Erwachsenen und die Kinder unter sich (am Donnerstag gemeinsame Zeit)
-* gemeinsames Abendessen
-* Gute-Nacht-Geschichte und Segen
-* gemütlicher Ausklang des Tages
-
-Freitag, 24. Oktober
-
-* Abschluss der Exerzitien
-* Reflexion und Abreise nach dem Mittagessen
-
-Nach Ihrer Anmeldung erhalten Sie von uns eine Rechnung mit dem genauen Preis und den Zahlungsinformationen.
-
-Ausfallgebühren:
-
-* Ab 4 Wochen vor der Veranstaltung: 40 % des Teilnehmendenbetrags
-* Ab 2 Wochen vor der Veranstaltung: 70 % des Teilnehmendenbetrags
-
-### Zusatzinformationen
-
-Da die Anzahl der Teilnehmenden begrenzt ist, bitten wir Sie, sich frühzeitig anzumelden.
-Für alle Fragen rund um die Familienexerzitien melden Sie sich gern bei:
-Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum-hamburg.org',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Wir laden Sie herzlich zu unseren Familienexerzitien im Erzbistum Hamburg ein!
+                HIER EINIGE STICHWORTE, WAS SIE ERWARTET
+                Die Familienexerzitien richten sich an alle Familien – Eltern mit Kindern, Ein-Eltern-Familien, Patchworkfamilien und 
+                Kinder mit ihren Großeltern oder Pat_innen –, die sich eine Auszeit vom Alltag nehmen möchten, um Zeit füreinander und für den eigenen Glauben zu finden.
+                
+                IN DIESEM JAHR STEHEN DIE FAMILIENEXERZITIEN UNTER DEM TITEL „ICH SEGNE DICH UND DU SOLLST EIN SEGEN SEIN“.
+                Diese Zusage gibt Gott Abraham mit auf den Weg, als er seine Heimat verlässt und in das verheißene Land aufbricht.
+                Wir können diese Zusage Gottes aber auch für uns selbst hören, wenn wir daran denken, dass Gott die ganze Schöpfung segnet.
+                Aus dem Segen Gottes dürfen wir leben und Kraft schöpfen. Dadurch gestärkt können wir zum Segen für andere werden.
+                Während der Familienexerzitien soll uns das Thema „Segen“ begleiten. Wir schauen, welchen Segen wir im Leben schon empfangen haben.
+                Welcher Segen ist ausgeblieben? Wie kann ich zum Segen werden?
+                
+                KINDER UND ERWACHSENE – PERSÖNLICH UND IN DER FAMILIE GLAUBEN
+                Die Familien werden Zeit zur gemeinsamen Gestaltung haben. Darüber hinaus wird es Zeitfenster geben,
+                in denen sich die Kinder in Begleitung von qualifizierten Betreuungspersonen dem Thema der Woche altersgerecht nähern.
+                Die Erwachsenen haben Zeit zum Austausch, zur Vertiefung und zum Gebet.
+                
+                
+                ### Geplanter Verlauf
+                
+                Montag, 20. Oktober, ab 17 Uhr
+                
+                * Ankommen, Zimmerbezug, Kennenlernen
+                
+                Dienstag, 21. Oktober, bis Donnerstag, 23. Oktober
+                
+                * Morgenimpuls
+                * gemeinsames Frühstück
+                * Zeit für die Erwachsenen und die Kinder unter sich
+                * Mittagsgebet
+                * gemeinsames Mittagessen
+                * freie Gestaltungszeit für die Familie
+                * Kaffeetrinken
+                * Zeit für die Erwachsenen und die Kinder unter sich (am Donnerstag gemeinsame Zeit)
+                * gemeinsames Abendessen
+                * Gute-Nacht-Geschichte und Segen
+                * gemütlicher Ausklang des Tages
+                
+                Freitag, 24. Oktober
+                
+                * Abschluss der Exerzitien
+                * Reflexion und Abreise nach dem Mittagessen
+                
+                Nach Ihrer Anmeldung erhalten Sie von uns eine Rechnung mit dem genauen Preis und den Zahlungsinformationen.
+                
+                Ausfallgebühren:
+                
+                * Ab 4 Wochen vor der Veranstaltung: 40 % des Teilnehmendenbetrags
+                * Ab 2 Wochen vor der Veranstaltung: 70 % des Teilnehmendenbetrags
+                
+                ### Zusatzinformationen
+                
+                Da die Anzahl der Teilnehmenden begrenzt ist, bitten wir Sie, sich frühzeitig anzumelden.
+                Für alle Fragen rund um die Familienexerzitien melden Sie sich gern bei:
+                Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum-hamburg.org'
+            ]],
         ]));
 
         // event 2
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Ausbildungskurs für Gottesdienstbeauftragte',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Ausbildungskurs für Gottesdienstbeauftragte',
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-09-16 13:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-09-18 13:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-15"),
@@ -297,19 +306,22 @@ Christoph Riethmüller; Telefon: 0151 65020455; christoph.riethmueller@erzbistum
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Das gottesdienstliche Leben hat seit dem II. Vatikanischen Konzil eine grundlegende Veränderung erfahren - mit ihr auch die Rolle der Gläubigen, da das Konzil eine volle, bewusste und tätige Teilnahme an den liturgischen Feiern unterstützt, wie sie das Wesen der Liturgie selbst verlangt und zu der das christliche Volk - kraft der Taufe - berechtigt und verpflichtet ist. (SC 14)
 
-Anmeldung:
-
-Dieser Kompaktkurs richtet sich an Ehrenamtliche, die sich im Bereich der Liturgie bereits engagieren... z.B. als Kommunionhelfer_innen oder Küster_innen. 
-
-Die Teilnahme am gesamten Ausbildungskurs ist Voraussetzung für die Beauftragung.
-Bei der Anmeldung sind folgende Unterlagen abzugeben:
-- schriftliche Bestätigung des Pfarrers (nach vorheriger Rücksprache mit Pfarrpastoralrat)
-- kurzes Motivationsschreiben
-
-Das Mindestalter beträgt 25 Jahre (Jüngere Interessierte melden sich bitte im Referat Liturgie).
-Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und gefirmt, sowie in Familie, Gemeinde und Beruf bewährt sein.',
+                Anmeldung:
+                
+                Dieser Kompaktkurs richtet sich an Ehrenamtliche, die sich im Bereich der Liturgie bereits engagieren... z.B. als Kommunionhelfer_innen oder Küster_innen. 
+                
+                Die Teilnahme am gesamten Ausbildungskurs ist Voraussetzung für die Beauftragung.
+                Bei der Anmeldung sind folgende Unterlagen abzugeben:
+                - schriftliche Bestätigung des Pfarrers (nach vorheriger Rücksprache mit Pfarrpastoralrat)
+                - kurzes Motivationsschreiben
+                
+                Das Mindestalter beträgt 25 Jahre (Jüngere Interessierte melden sich bitte im Referat Liturgie).
+                Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und gefirmt, sowie in Familie, Gemeinde und Beruf bewährt sein.'
+            ]],
         ]));
 
         // event 3
@@ -322,7 +334,10 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Modul 1',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 1'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 18:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
@@ -337,7 +352,10 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.'
+            ]],
         ]));
 
 
@@ -351,7 +369,10 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Modul 2',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 2'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-07 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-09 18:00:00"),
             EventManager_Model_Event::FLD_LOCATION                      => $location,
@@ -365,7 +386,10 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.',
+            ]],
         ]));
 
         // event 5
@@ -378,7 +402,10 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
         );
 
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Modul 3',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Modul 3'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 15:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 16:00:00"),
             EventManager_Model_Event::FLD_LOCATION                      => $location,
@@ -392,12 +419,18 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'folgt.',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'folgt.'
+            ]],
         ]));
 
         // event 6
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Gesänge für die Advents- und Weihnachtszeit',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Gesänge für die Advents- und Weihnachtszeit'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 10:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 17:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
@@ -412,17 +445,23 @@ Die Teilnehmer_innen müssen im Besitz der kirchlichen Rechte sein, getauft und 
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
-Für die Advents- und Weihnachtszeit werden Wechselgesänge aus dem Gebet- und Gesangbuch GOTTESLOB erarbeitet und Gestaltungsmöglichkeiten aus dem 
-- Münchener Kantorale, 
-- den Freiburger Kantorenbüchern, 
-- dem St. Galler Kantorenbuch 
-und aus weiteren Materialien vorgestellt.',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'In der Messfeier gibt es vielfältige Einsatzmöglichkeiten für eine Kantorin / einen Kantor bzw. eine kl. Ansingegruppe / Schola.
+                Für die Advents- und Weihnachtszeit werden Wechselgesänge aus dem Gebet- und Gesangbuch GOTTESLOB erarbeitet und Gestaltungsmöglichkeiten aus dem 
+                - Münchener Kantorale, 
+                - den Freiburger Kantorenbüchern, 
+                - dem St. Galler Kantorenbuch 
+                und aus weiteren Materialien vorgestellt.'
+            ]],
         ]));
 
         // event 7
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Eingeladen zum Fest des Glaubens',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Eingeladen zum Fest des Glaubens'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-20 19:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-20 21:30:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-11-20"),
@@ -437,15 +476,21 @@ und aus weiteren Materialien vorgestellt.',
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'Herzliche Einladung zu einem nächsten Online-Abend zum Thema "Familiengottesdienste".
-Heute im Mittelpunkt: der Eröffnungsteil. Was kann man da eigentlich machen - was darf ich und welche Ideen gibt es dazu? 
-Eine Veranstaltung des Netzwerks "Kindergottesdienst katholisch" 
-www.kindergottesdienst-katholisch.de',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Herzliche Einladung zu einem nächsten Online-Abend zum Thema "Familiengottesdienste".
+                Heute im Mittelpunkt: der Eröffnungsteil. Was kann man da eigentlich machen - was darf ich und welche Ideen gibt es dazu? 
+                Eine Veranstaltung des Netzwerks "Kindergottesdienst katholisch" 
+                www.kindergottesdienst-katholisch.de'
+            ]],
         ]));
 
         // event 8
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Religiöse Vielfalt in der Kita religionssensibel begegnen',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Religiöse Vielfalt in der Kita religionssensibel begegnen'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 00:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 23:45:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
@@ -460,22 +505,28 @@ www.kindergottesdienst-katholisch.de',
             EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
-Uns begegnen Familien in verschiedenen Beziehungsformen, aus unterschiedlichen Milieus und aus unterschiedlichen Religionen.
-
-Dieser Selbstlernkurs soll besonders für den letzten Punkt sensibilisieren. Die große Frage dabei ist:
-Wie gehen wir respektvoll und religionssensibel mit den unterschiedlichen Religions- und Glaubensformen in unserer Kita um,
-ohne das katholische, das christliche Profil zu verwässern?
-
-Dafür ist sowohl eine Kenntnis der Situation vor Ort,
-ein Grundwissen zu den unterschiedlichen Religionen und eine Vergewisserung des eigenen Glaubens notwendig.
-Und das soll Ihnen dieser Kurs auch bieten. Hinzukommt die intensive Auseinandersetzung mit unterschiedlichen Schwerpunkten,
-die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Unsere katholischen Kitas sind in der heutigen Zeit in vielen Bereichen heterogen.
+                Uns begegnen Familien in verschiedenen Beziehungsformen, aus unterschiedlichen Milieus und aus unterschiedlichen Religionen.
+                
+                Dieser Selbstlernkurs soll besonders für den letzten Punkt sensibilisieren. Die große Frage dabei ist:
+                Wie gehen wir respektvoll und religionssensibel mit den unterschiedlichen Religions- und Glaubensformen in unserer Kita um,
+                ohne das katholische, das christliche Profil zu verwässern?
+                
+                Dafür ist sowohl eine Kenntnis der Situation vor Ort,
+                ein Grundwissen zu den unterschiedlichen Religionen und eine Vergewisserung des eigenen Glaubens notwendig.
+                Und das soll Ihnen dieser Kurs auch bieten. Hinzukommt die intensive Auseinandersetzung mit unterschiedlichen Schwerpunkten,
+                die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.'
+            ]],
         ]));
 
         // event 9
         EventManager_Controller_Event::getInstance()->create(new EventManager_Model_Event([
-            EventManager_Model_Event::FLD_NAME                          => 'Katholisch werden',
+            EventManager_Model_Event::FLD_NAME                          => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'Katholisch werden'
+            ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-13 09:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-16 19:30:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-10-12"),
@@ -585,22 +636,25 @@ die zum praktischen Umsetzen von Ideen in der eigenen Kita führen soll.',
                     EventManager_Model_Appointment::FLD_DESCRIPTION => 'Welche Werte, Rituale und Feste prägen den katholischen Glauben? Wie kann ich meinen eigenen Glaubensweg gestalten?',
                 ],
             ],
-            EventManager_Model_Event::FLD_DESCRIPTION                   => '„Katholisch werden“ ist eine offene Veranstaltung für alle, die sich für den katholischen Glauben interessieren, Fragen zur Kirche haben oder darüber nachdenken, selbst den Schritt in die katholische Gemeinschaft zu gehen. In einer einladenden und respektvollen Atmosphäre bieten wir Raum für Gespräche, Begegnungen und ehrliche Fragen.
+            EventManager_Model_Event::FLD_DESCRIPTION                   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'de',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => '„Katholisch werden“ ist eine offene Veranstaltung für alle, die sich für den katholischen Glauben interessieren, Fragen zur Kirche haben oder darüber nachdenken, selbst den Schritt in die katholische Gemeinschaft zu gehen. In einer einladenden und respektvollen Atmosphäre bieten wir Raum für Gespräche, Begegnungen und ehrliche Fragen.
 
-Gemeinsam mit Seelsorgerinnen und Seelsorgern, Katechumenatsbegleiterinnen und Menschen, die den Weg des Glaubens bereits gegangen sind, sprechen wir über Themen wie:
-
-Was bedeutet es, katholisch zu sein?
-
-Wie läuft der Eintritt in die katholische Kirche ab?
-
-Welche Werte, Rituale und Feste prägen den katholischen Glauben?
-
-Wie kann ich meinen eigenen Glaubensweg gestalten?
-
-Neben kurzen Impulsen gibt es Austausch in Kleingruppen, Erfahrungsberichte und die Möglichkeit zu persönlichen Gesprächen.
-
-Zielgruppe:
-Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach neugierig sind.',
+                Gemeinsam mit Seelsorgerinnen und Seelsorgern, Katechumenatsbegleiterinnen und Menschen, die den Weg des Glaubens bereits gegangen sind, sprechen wir über Themen wie:
+                
+                Was bedeutet es, katholisch zu sein?
+                
+                Wie läuft der Eintritt in die katholische Kirche ab?
+                
+                Welche Werte, Rituale und Feste prägen den katholischen Glauben?
+                
+                Wie kann ich meinen eigenen Glaubensweg gestalten?
+                
+                Neben kurzen Impulsen gibt es Austausch in Kleingruppen, Erfahrungsberichte und die Möglichkeit zu persönlichen Gesprächen.
+                
+                Zielgruppe:
+                Interessierte, Suchende, Ausgetretene, Wieder-Eintretende und alle, die einfach neugierig sind.'
+            ]],
         ]));
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating 9 test events'

@@ -4,6 +4,7 @@ available parameters:
     app.branding.title
     contact
     event
+    eventName
 #}
 
 {% extends 'Tinebase/views/emails/base.html.twig' %}
@@ -16,7 +17,7 @@ available parameters:
     {% if event != '' %}
         <div class="mt-3 mb-5">
             <p class="text-start">
-                {{ _('You are registered for %1$s.') | format('<strong>' ~ event.name ~ '</strong>') | raw }}<br>
+                {{ _('You are registered for %1$s.') | format('<strong>' ~ eventName ~ '</strong>') | raw }}<br>
                 {{ _('To find other events or manage your registration, please follow the link below') }}
             </p>
         </div>
