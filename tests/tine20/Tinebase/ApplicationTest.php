@@ -403,6 +403,8 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_WTRCorrection::class,
             ),
             'Inventory' => array(
+                Inventory_Model_ElectricalEquipment::class,
+                Inventory_Model_ElectricalSafetyTest::class,
                 Inventory_Model_InventoryItem::class,
                 Inventory_Model_Status::class,
                 Inventory_Model_Type::class,

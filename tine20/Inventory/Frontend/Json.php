@@ -25,9 +25,11 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
+        Inventory_Model_ElectricalEquipment::MODEL_NAME_PART,
+        Inventory_Model_ElectricalSafetyTest::MODEL_NAME_PART,
         Inventory_Model_InventoryItem::MODEL_NAME_PART,
-        Inventory_Model_Type::MODEL_NAME_PART,
         Inventory_Model_Status::MODEL_NAME_PART,
+        Inventory_Model_Type::MODEL_NAME_PART,
     ];
 
     /**

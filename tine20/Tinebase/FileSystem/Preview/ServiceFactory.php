@@ -39,6 +39,8 @@ class Tinebase_FileSystem_Preview_ServiceFactory
 
                 $networkAdapter = new Tinebase_FileSystem_Preview_AuthNetworkAdapter($url, $licensePath, $caPath);
                 return new Tinebase_FileSystem_Preview_ServiceV2($networkAdapter);
+            case -1: /** @phpstan-ignore-next-line  */
+                if (class_exists('Tinebase_FileSystem_TestPreviewService')) return new Tinebase_FileSystem_TestPreviewService; // unittest
         }
         throw new Tinebase_Exception_NotFound("Preview Service Version not found", 500);
     }

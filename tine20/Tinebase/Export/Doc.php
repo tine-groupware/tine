@@ -911,8 +911,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
     }
 
     /**
-     * @param $to
-     * @param null $from
+     * @param string $to
+     * @param ?string $from
      * @throws Tinebase_Exception_NotFound
      */
     function convert($to, $from = null)

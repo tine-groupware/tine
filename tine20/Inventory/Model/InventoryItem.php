@@ -39,6 +39,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     public const FLD_DEPRECATED_STATUS = 'deprecated_status';
     public const FLD_IMAGE = 'image';
     public const FLD_EMPLOYEE = 'employee';
+    public const FLD_ELECTRICAL_EQUIPMENTS = 'electrical_equipments';
     
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -90,6 +91,16 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             ]
         ],
 
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_ELECTRICAL_EQUIPMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Inventory_Model_ElectricalEquipment::FLD_ELECTRICAL_SAFETY_TESTS => [],
+                    ],
+                ],
+            ],
+        ],
+
         'import'            => [
             'defaultImportContainerRegistryKey' => 'defaultInventoryItemContainer',
         ],
@@ -108,7 +119,19 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     'own_controller' => 'Inventory_Controller_InventoryItem',
                     'related_model' => HumanResources_Model_Employee::class,
                 ]
-            ]
+            ],
+            'electrical_equipments' => [
+                self::FILTER    => 'Tinebase_Model_Filter_ForeignRecords',
+                self::OPTIONS   => [
+                    self::APP_NAME              => Inventory_Config::APP_NAME,
+                    self::MODEL_NAME            => Inventory_Model_ElectricalEquipment::MODEL_NAME_PART,
+                    self::REF_ID_FIELD          => Inventory_Model_ElectricalEquipment::FLD_INVENTORY_ITEM_ID,
+                    self::CONTROLLER            => Inventory_Controller_ElectricalEquipment::class,
+                    self::RECORD_CLASS_NAME     => Inventory_Model_ElectricalEquipment::class,
+                    self::FILTER_GROUP          => 'Inventory_Model_ElectricalEquipmentFilter',
+                    self::DO_JOIN               => true,
+                ],
+            ],
         ],
 
         self::FIELDS            => [
@@ -256,6 +279,17 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                     ]
                 ],
             ),
+            self::FLD_ELECTRICAL_EQUIPMENTS => [
+                self::TYPE                  => self::TYPE_RECORDS,
+                self::LABEL                 => 'Electrical Equipments',
+                self::QUERY_FILTER          => true,
+                self::CONFIG                => [
+                    self::APP_NAME          => Inventory_Config::APP_NAME,
+                    self::MODEL_NAME        => Inventory_Model_ElectricalEquipment::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS   => true,
+                    self::REF_ID_FIELD      => Inventory_Model_ElectricalEquipment::FLD_INVENTORY_ITEM_ID,
+                ],
+            ],
         ]
     ];
 }
