@@ -908,6 +908,9 @@ class EventManager_Controller_Registration extends Tinebase_Controller_Record_Ab
         } catch (Tinebase_Exception_Record_NotAllowed $terna) {
             $response = new \Laminas\Diactoros\Response('php://memory', 401);
             $response->getBody()->write(json_encode($terna->getMessage()));
+        } catch (Tinebase_Exception_ConcurrencyConflict $tecc) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 409);
+            $response->getBody()->write(json_encode($tecc->getMessage()));
         } finally {
             $assertAclUsage();
         }
