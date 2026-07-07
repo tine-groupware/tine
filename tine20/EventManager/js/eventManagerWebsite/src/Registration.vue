@@ -387,7 +387,9 @@ const eventDate = computed(() => {
   };
 
   const formattedDate = formatDate(eventDetails.value.start, dateFormat);
-  return `${formatMessage('on the')} ${formattedDate || formatMessage('TBD')}`
+  return formattedDate
+    ? `${formatMessage('on the')} ${formattedDate}`
+    : formatMessage('TBD');
 });
 
 const maxBirthDate = computed(() => {
