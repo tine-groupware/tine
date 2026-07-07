@@ -577,6 +577,15 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $eventArray['required_contact_fields'] = $requiredContactFields;
             }
             $eventArray['country_list'] = Tinebase_Translation::getCountryList()['results'];
+
+            if (!empty($eventArray['options'])) {
+                foreach ($eventArray['options'] as &$option) {
+                    if (!isset($option['option_config'])) {
+                        $option['option_config'] = [];
+                    }
+                }
+            }
+
             $response->getBody()->write(json_encode($eventArray));
         } catch (Tinebase_Exception_NotFound $tenf) {
             $response = new \Laminas\Diactoros\Response('php://memory', 404);

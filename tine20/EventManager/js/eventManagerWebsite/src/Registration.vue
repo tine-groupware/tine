@@ -84,6 +84,7 @@
                       content-cols-sm
                       content-cols-lg="7"
                       :label="`${option.name_option}`"
+                      class="mb-4"
                     >
                       <b-form-textarea
                         v-if="option.option_config.multiple_lines"
