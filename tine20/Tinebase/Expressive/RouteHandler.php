@@ -222,7 +222,7 @@ class Tinebase_Expressive_RouteHandler
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
-                . __LINE__ . ' Calling: ' . print_r($callable, true));
+                . __LINE__ . ' Calling: ' . $this->_class . '::' . $this->_method);
         }
 
         return call_user_func_array($callable, $orderedParams);
