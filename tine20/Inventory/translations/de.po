@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2012-10-04 15:23+0000\n"
+"PO-Revision-Date: 2026-06-08 10:47+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>, 2015\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -19,9 +19,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Country: GB\n"
-"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.9\n"
 
 msgid "Inventory Status Available"
 msgstr "Inventar Status verfügbar"
@@ -35,17 +34,20 @@ msgstr "Bestellt"
 msgid "Available"
 msgstr "Verfügbar"
 
+msgid "In Use"
+msgstr "In Nutzung"
+
 msgid "Defect"
 msgstr "Defekt"
+
+msgid "Unknown"
+msgstr "Unbekannt"
 
 msgid "Missing"
 msgstr "Vermisst"
 
 msgid "Removed"
 msgstr "Entfernt"
-
-msgid "Unknown"
-msgstr "Unbekannt"
 
 msgid "Stored"
 msgstr "Eingelagert"
@@ -57,7 +59,7 @@ msgid "Destroyed"
 msgstr "Vernichtet"
 
 msgid "Types"
-msgstr ""
+msgstr "Typen"
 
 msgid "Tine 2.0 inventory CSV import"
 msgstr "CSV-Import aus Tine 2.0-Inventar"
@@ -151,7 +153,7 @@ msgid "Inventory ID"
 msgstr "Inventar ID"
 
 msgid "Depreciated"
-msgstr ""
+msgstr "Abgeschrieben"
 
 msgid "Inventory type"
 msgid_plural "Inventory types"

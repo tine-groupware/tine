@@ -35,7 +35,21 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
     },
-    defaultFilters: [
-        {field: 'status', operator: 'in', value: ['ORDERED', 'AVAILABLE', 'DEFECT', 'UNKNOWN',]},
-    ],
+    initComponent: function() {
+        this.defaultFilters = this._buildDefaultStatusFilter();
+        Tine.Inventory.InventoryItemGridPanel.superclass.initComponent.call(this);
+    },
+
+    _buildDefaultStatusFilter: function() {
+        const statuses = Tine.Inventory.registry.get('config')
+            ?.inventoryStatus?.value?.records ?? [];
+
+        const openIds = statuses
+            .filter(s => Number(s.is_open) === 1)
+            .map(s => s.id);
+
+        return openIds.length
+            ? [{ field: 'status', operator: 'in', value: openIds }]
+            : [];
+    },
 });
