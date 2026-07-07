@@ -65,7 +65,5 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('EventManager'), Tine.Tinebase.A
     const mediumBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
 
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(actionHomepage), mediumBtnStyle), 50)
-    Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ContextMenu`, actionHomepage, 5)
     Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ActionToolbar-leftbtngrp`, Ext.apply(new Ext.Button(actionDetailsPage), mediumBtnStyle), 60)
-    Ext.ux.ItemRegistry.registerItem(`EventManager-Event-GridPanel-ContextMenu`, actionDetailsPage, 6)
 });
