@@ -211,16 +211,19 @@
           </b-row>
         </div>
 
-        <div v-if="isAlreadyRegistered">
-          <div class="button-group">
-            <b-button class="action-button" :disabled="isSubmitting" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
-            <b-button class="action-button" :disabled="isSubmitting" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
+        <div v-if="!isPreview">
+          <div v-if="isAlreadyRegistered">
+            <div class="button-group">
+              <b-button class="action-button" :disabled="isSubmitting" @click="() => handlePostRegistration(true)">{{formatMessage('Update Registration')}}</b-button>
+              <b-button class="action-button" :disabled="isSubmitting" @click="openCancelConfirmation">{{formatMessage('Cancel Registration')}}</b-button>
+            </div>
+          </div>
+
+          <div v-else class="button-group">
+            <b-button class="action-button" :disabled="isSubmitting" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
           </div>
         </div>
 
-        <div v-else class="button-group">
-          <b-button class="action-button" :disabled="isSubmitting" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
-        </div>
       </b-row>
 
       <b-modal
@@ -285,6 +288,7 @@ const registrationIdRef = ref();
 const selectedParticipantId = ref(null);
 const shouldShowRegistrantCheckbox = ref(true);
 const registrationId = ref(null);
+const isPreview = ref(false);
 
 // Data from backend
 const dependantParticipants = ref(null);
@@ -1241,6 +1245,29 @@ const clearForm = () => {
   });
 };
 
+function isJwt(token) {
+  if (typeof token !== 'string') return false;
+
+  const parts = token.split('.');
+  if (parts.length !== 3) return false;
+
+  const base64UrlPattern = /^[A-Za-z0-9_-]+$/;
+  if (!parts.every(p => p.length > 0 && base64UrlPattern.test(p))) return false;
+
+  try {
+    const decode = (str) => {
+      const padded = str + '='.repeat((4 - (str.length % 4)) % 4);
+      const base64 = padded.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    };
+    const header = decode(parts[0]);
+    decode(parts[1]);
+    return typeof header === 'object' && !!header.alg;
+  } catch (e) {
+    return false;
+  }
+}
+
 const fetchEvent = async () => {
   let eventId = route.params.id;
   const response = await fetch(`/EventManager/event/${eventId}`, {
@@ -1261,7 +1288,10 @@ const fetchEvent = async () => {
 
 const fetchAccountData = async () => {
   let token = route.params.token;
-  if (!token) return;
+
+  if (!isJwt(token)) {
+    isPreview.value = true;
+  }
 
   try {
     const resp = await fetch(`/EventManager/account/${token}`, {
