@@ -568,10 +568,12 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     ->find('related_model', Sales_Model_Customer::class)?->related_record;
             }
             /** @var Sales_Model_Contract $contract */
-            if (($contract = $order->relations->find('related_model', Sales_Model_Contract::class)?->related_record) && null === $customer) {
-                $customer = Tinebase_Relations::getInstance()
-                    ->getRelations(Sales_Model_Contract::class, 'Sql', $contract->getId(), _relatedModels: [Sales_Model_Customer::class])
-                    ->find('related_model', Sales_Model_Customer::class)?->related_record;
+            if (($contract = $order->relations->find('related_model', Sales_Model_Contract::class)?->related_record)) {
+                if (null === $customer) {
+                    $customer = Tinebase_Relations::getInstance()
+                        ->getRelations(Sales_Model_Contract::class, 'Sql', $contract->getId(), _relatedModels: [Sales_Model_Customer::class])
+                        ->find('related_model', Sales_Model_Customer::class)?->related_record;
+                }
                 Tinebase_Tags::getInstance()->getTagsOfRecord($contract);
             }
             Tinebase_Record_Expander::expandRecord($customer);
