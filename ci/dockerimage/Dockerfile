@@ -351,7 +351,7 @@ RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-scripts --no-ansi --no-prog
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine AS jsdependency
+FROM ${DOCKER_HUB_PROXY}library/node:26.1.0-alpine AS jsdependency
 ARG TINE20ROOT=/usr/share
 ARG APT_MIRROR=""
 ARG APT_MIRROR_UNSUPPORTED_CODENAME=""
@@ -384,7 +384,7 @@ FROM ${SOURCE_IMAGE} AS source-copy
 
 
 
-FROM ${DOCKER_HUB_PROXY}library/node:18.9.0-alpine AS jsbuild
+FROM ${DOCKER_HUB_PROXY}library/node:26.1.0-alpine AS jsbuild
 ARG TINE20ROOT=/usr/share
 ARG REVISION=local
 WORKDIR ${TINE20ROOT}/tine20/Tinebase/js
