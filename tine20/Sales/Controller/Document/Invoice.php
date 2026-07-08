@@ -382,13 +382,13 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
 
         $stream = null;
-        $attachmentName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+        $attachmentName = str_replace('/', '_', (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
             Tinebase_Twig::TWIG_LOADER =>
                 new Tinebase_Twig_CallBackLoader(__METHOD__, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_NAME_TMPL}),
             Tinebase_Twig::TWIG_AUTOESCAPE => false,
         ]))->load(__METHOD__)->render([
             'document' => $record,
-        ]);
+        ]));
 
         try {
             if (!($stream = fopen('php://temp', 'r+'))) {
@@ -422,7 +422,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
 
             if (($remove = $record->attachments->filter(fn($rec) => $attachmentName === $rec->name || str_ends_with($rec->name, '.validation.html')))->count() > 0) {
                 if (Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL} && ($node = $remove->find('name', $attachmentName))) {
-                    $replaceName = (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
+                    $replaceName = str_replace('/', '_', (new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME), [
                         Tinebase_Twig::TWIG_LOADER =>
                             new Tinebase_Twig_CallBackLoader(Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL, time() - 1, fn() => Sales_Config::getInstance()->{Sales_Config::INVOICE_EDOCUMENT_RENAME_TMPL}),
                         Tinebase_Twig::TWIG_AUTOESCAPE => false,
@@ -430,7 +430,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                         'document' => $record,
                         'node' => $node,
                         'date' => Tinebase_DateTime::now()->format('Y-m-d'),
-                    ]);
+                    ]));
                     $path = Tinebase_FileSystem::getInstance()->getPathOfNode($node);
                     array_walk($path, fn(&$path) => $path = $path['name']);
                     $oldPath = '/' . implode('/', $path);
