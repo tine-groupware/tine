@@ -6,6 +6,7 @@ tinedockercompose_tinesetuphtpasswd: "setup:$$apr1$$JhCtViTh$$k15DH.HvNR5hZ66Ew5
 tinedockercompose_tineloggerprio: "5"
 tinedockercompose_tinesharedkey: "changeme"
 tinedockercompose_tine_cronjob_deactivated: false
+tinedockercompose_tine_run_update: false
 
 ### TODO rename *_path to *_host_path
 tinedockercompose_path: "/srv/tine"
