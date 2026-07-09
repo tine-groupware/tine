@@ -242,7 +242,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     },
 
     storeOnload : function(store, records, options) {
-        this.refreshResultCount(this.getNodeById(options.persistentFilter.id), store.getCount());
+        this.refreshResultCount(this.getNodeById(options.persistentFilter.id), store.getTotalCount());
         store.un('load', this.storeOnload, this);
     },
 
