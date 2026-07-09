@@ -113,7 +113,9 @@ msgid "Available number"
 msgstr "Available number"
 
 msgid "Status"
-msgstr "Status"
+msgid_plural "Statuses"
+msgstr[0] "Status"
+msgstr[1] "Statuses"
 
 msgid "ID"
 msgstr "ID"
@@ -145,6 +147,12 @@ msgstr "Inventory ID"
 
 msgid "Depreciated"
 msgstr "Depreciated"
+
+msgid "GENDER_Status"
+msgstr "GENDER_Status"
+
+msgid "Is open"
+msgstr "Is open"
 
 msgid "Inventory type"
 msgid_plural "Inventory types"

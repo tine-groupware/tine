@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-06-08 10:47+0200\n"
+"PO-Revision-Date: 2026-07-09 10:15+0200\n"
 "Last-Translator: sstamer <s.stamer@metaways.de>, 2015\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -121,8 +121,11 @@ msgstr "Totale Anzahl"
 msgid "Available number"
 msgstr "Verfügbare Anzahl"
 
+#, fuzzy
 msgid "Status"
-msgstr "Status"
+msgid_plural "Statuses"
+msgstr[0] "Status"
+msgstr[1] "Status"
 
 msgid "ID"
 msgstr "ID"
@@ -154,6 +157,12 @@ msgstr "Inventar ID"
 
 msgid "Depreciated"
 msgstr "Abgeschrieben"
+
+msgid "GENDER_Status"
+msgstr ""
+
+msgid "Is open"
+msgstr "ist geöffnet"
 
 msgid "Inventory type"
 msgid_plural "Inventory types"

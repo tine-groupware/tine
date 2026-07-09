@@ -45,7 +45,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             ?.inventoryStatus?.value?.records ?? [];
 
         const openIds = statuses
-            .filter(s => Number(s.is_open) === 1)
+            .filter(s => !!s.is_open)
             .map(s => s.id);
 
         return openIds.length
