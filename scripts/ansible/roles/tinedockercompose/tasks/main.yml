@@ -126,13 +126,16 @@
   when:
     - tinedockercompose_tine_cronjob_deactivated|bool
 
-## TODO make this work
-#- name: Create and start services
-#  community.docker.docker_compose:
-#    project_src: "{{ tinedockercompose_path }}"
-#  register: output
-#  vars:
-#    ansible_python_interpreter: /usr/bin/python3
-#
-#- ansible.builtin.debug:
-#    var: output
+- name: update tine
+  ansible.builtin.shell: docker compose exec --user tine20 web sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+  when:
+    - tinedockercompose_tine_run_update|bool
+
+- name: restart tine php worker after update
+  ansible.builtin.shell: docker compose exec web sh -c "supervisorctl restart worker"
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+  when:
+    - tinedockercompose_tine_run_update|bool

@@ -60,6 +60,10 @@ You can just set this ENV variable (for example in docker-compose.yml) to deacti
     ps aux | grep worker # get PID
     kill PID
 
+or
+
+    supervisorctl restart worker
+
 -> worker process restarts.
 
 ## Activate Worker Logging
