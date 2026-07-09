@@ -217,6 +217,11 @@ abstract class Tinebase_WebDav_Collection_AbstractContainerTree
                 $path = $this->_path . '/__currentuser__';
 
             } else {
+                if ($name === 'ocs') {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . ' Not implemented yet.');
+                    return null;
+                }
                 try {
                     // check if it exists only
                     $this->_getUser($name);
