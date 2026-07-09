@@ -1,6 +1,10 @@
 phpstan-baseline\.neon
 ci/ci-config\.yml
 ci/gitlab-ci/custom_merge_jobs\.yml
+scripts/postInstall.sh
+scripts/postInstallDocker.sh
+scripts/postInstallGitlab.sh
+scripts/sql/.*
 tine20/composer\.json
 tine20/composer\.lock
 tests/tine20/AllTests\.php
