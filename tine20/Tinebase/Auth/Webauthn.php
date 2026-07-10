@@ -63,7 +63,7 @@ final class Tinebase_Auth_Webauthn
                 self::_getRPName()
             );
 
-        (new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->saveCredentialSource($publicKeyCredentialSource);
+        (new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())->saveCredentialRecord($publicKeyCredentialSource);
 
         return Base64Url::encode($publicKeyCredentialSource->publicKeyCredentialId);
     }
@@ -76,23 +76,23 @@ final class Tinebase_Auth_Webauthn
             throw new WebauthnException('AuthenticatorAssertionResponse is not an assertion response.');
         }
 
-        if (null === ($publicKeyCredentialSource = ($credentialRepo = new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())
+        if (null === ($credentialRecord = ($credentialRepo = new Tinebase_Auth_WebAuthnPublicKeyCredentialSourceRepository())
                 ->findOneByCredentialId($publicKeyCredential->rawId))) {
             throw new WebauthnException('PublicKeyCredentialSource does not exist.');
         }
 
         $assertionValidator = AuthenticatorAssertionResponseValidator::create(self::_getCeremonyFactory()->requestCeremony());
 
-        $publicKeyCredentialSource = $assertionValidator->check(
-            publicKeyCredentialSource: $publicKeyCredentialSource,
+        $credentialRecord = $assertionValidator->check(
+            credentialRecord: $credentialRecord,
             authenticatorAssertionResponse: $publicKeyCredential->response,
             publicKeyCredentialRequestOptions: self::getWebAuthnRequestOptions($config, false),
             host: self::_getRPName(),
-            userHandle: $publicKeyCredentialSource->userHandle
+            userHandle: $credentialRecord->userHandle
         );
 
-        $credentialRepo->saveCredentialSource($publicKeyCredentialSource);
-        return Tinebase_User::getInstance()->getFullUserById($publicKeyCredentialSource->userHandle);
+        $credentialRepo->saveCredentialRecord($credentialRecord);
+        return Tinebase_User::getInstance()->getFullUserById($credentialRecord->userHandle);
     }
 
     public static function getWebAuthnCreationOptions(bool $createChallenge, ?Tinebase_Model_FullUser $user = null, ?Tinebase_Model_MFA_WebAuthnConfig $config = null): PublicKeyCredentialCreationOptions
@@ -197,20 +197,20 @@ final class Tinebase_Auth_Webauthn
         return self::serializeWebAuthnObject($creationOptions);
     }
 
-    public static function serializePublicKeyCredentialSource(PublicKeyCredentialSource $publicKeyCredentialSource): string
+    public static function serializePublicKeyCredentialRecord(\Webauthn\CredentialRecord $credentialRecord): string
     {
-        return self::serializeWebAuthnObject($publicKeyCredentialSource);
+        return self::serializeWebAuthnObject($credentialRecord);
     }
 
-    public static function deserializePublicKeyCredentialSource(string $publicKeyCredentialSource): PublicKeyCredentialSource
+    public static function deserializePublicKeyCredentialRecord(string $credentialRecordStr): \Webauthn\CredentialRecord
     {
-        $publicKeyCredentialSource = self::getSerializer()->deserialize(
-            $publicKeyCredentialSource,
-            PublicKeyCredentialSource::class,
+        /** @var \Webauthn\CredentialRecord $credentialRecord */
+        $credentialRecord = self::getSerializer()->deserialize(
+            $credentialRecordStr,
+            \Webauthn\CredentialRecord::class,
             'json'
         );
-        /** @var PublicKeyCredentialSource $publicKeyCredentialSource */
-        return $publicKeyCredentialSource;
+        return $credentialRecord;
     }
 
     protected static function serializeWebAuthnObject(Object $object): string
