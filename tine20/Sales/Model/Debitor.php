@@ -96,6 +96,10 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                         Sales_Model_PaymentMeans::FLD_PAYMENT_MEANS_CODE => [],
                     ],
                 ],
+                self::FLD_EAS_ID => [],
+                self::FLD_EINVOICE_CONFIG => [
+                    Tinebase_Record_Expander_Abstract::EXPANDER_USE_JSON_EXPANDER => true,
+                ]
             ],
         ],
 

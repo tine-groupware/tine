@@ -221,7 +221,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         if (!$this->{self::FLD_SALES_TAX_BY_RATE} instanceof Tinebase_Record_RecordSet) {
             throw new Tinebase_Exception_UnexpectedValue(self::FLD_SALES_TAX_BY_RATE . ' not resolved');
         }
-        if (!$debitor->{Sales_Model_Debitor::FLD_EAS_ID} || !$debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}) {
+        if (null === $debitor->{Sales_Model_Debitor::FLD_EAS_ID} || 0 === strlen(trim((string)$debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS}))) {
             $orgDebitor = Sales_Controller_Debitor::getInstance()->get($debitor->getIdFromProperty(Sales_Model_Debitor::FLD_ORIGINAL_ID));
             $debitor->{Sales_Model_Debitor::FLD_EAS_ID} = $orgDebitor->{Sales_Model_Debitor::FLD_EAS_ID};
             $debitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS} = $orgDebitor->{Sales_Model_Debitor::FLD_ELECTRONIC_ADDRESS};
@@ -651,6 +651,21 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             $legalMonetaryTotal->setAllowanceTotalAmount((new \UBL21\Common\CommonBasicComponents\AllowanceTotalAmount(round($allowances, 2)))
                 ->setCurrencyID('EUR')
             );
+        }
+
+        if ($debitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG} instanceof Sales_Model_Einvoice_XRechnung) {
+            if ($debitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES} instanceof Tinebase_Record_RecordSet) {
+                /** @var Sales_Model_Einvoice_XRechnungOverwrite $overwrite */
+                foreach ($debitor->{Sales_Model_Debitor::FLD_EINVOICE_CONFIG}->{Sales_Model_Einvoice_XRechnung::FLD_OVERWRITES} as $overwrite) {
+                    if (!$overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT} instanceof Sales_Model_EDocument_XRechnungElement) {
+                        $overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT} = Sales_Controller_EDocument_XRechnungElement::getInstance()->get($overwrite->getIdFromProperty(Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT));
+                    }
+                    if (!$overwrite->{Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT}->{Sales_Model_EDocument_XRechnungElement::FLD_IS_OVERRIDEABLE}) {
+                        continue;
+                    }
+                    $overwrite->executeOverwrite($this, $ublInvoice);
+                }
+            }
         }
 
         $xml = $serializer->serialize($ublInvoice, 'xml');

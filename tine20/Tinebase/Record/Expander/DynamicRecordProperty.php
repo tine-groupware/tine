@@ -101,7 +101,8 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
             return;
         }
 
-        $this->_subExpanders = [];
+        (new Tinebase_Record_Expander($expandData->getRecordClassName(), $this->_expanderDefinition))->expand($expandData);
+        /*$this->_subExpanders = [];
         if (isset($this->_expanderDefinition[self::EXPANDER_PROPERTIES])) {
             foreach ($this->_expanderDefinition[self::EXPANDER_PROPERTIES] as $prop => $definition) {
                 $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($modelToProcess, $definition, $prop,
@@ -116,6 +117,6 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
         }
 
         // TODO we should delay this expanding until the current run of \Tinebase_Record_Expander::_fetchData finished!
-        $this->expand($expandData);
+        $this->expand($expandData);*/
     }
 }

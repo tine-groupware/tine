@@ -273,6 +273,8 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const FEATURE_LEGACY_OFFERS = 'legacyOffers';
 
+    const XRECHNUNG_OVERWRITE_ACTION = 'xRechnungOverwriteAction';
+
     /**
      * order confirmations module feature
      *
@@ -302,6 +304,35 @@ class Sales_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => TRUE,
             'default'               => 12
         ),
+        self::XRECHNUNG_OVERWRITE_ACTION => [
+            self::LABEL                 => 'XRechnung Overwrite Actions', //_('XRechnung Overwrite Actions')
+            self::DESCRIPTION           => 'XRechnung Overwrite Actions',
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_DELETE,
+                        'value' => 'Delete property', //_('Delete property')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_DYNAMIC,
+                        'value' => 'Replace with result of evaluated template', //_('Replace with result of evaluated template')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+                        'value' => 'Replace with static value', //_('Replace with static value')
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => Sales_Model_Einvoice_XRechnungOverwrite::ACTION_STATIC,
+            ],
+        ],
         self::ATTACHED_DOCUMENT_TYPES => [
             self::LABEL              => 'Attached Document Types', //_('Attached Document Types')
             self::DESCRIPTION        => 'Attached Document Types',

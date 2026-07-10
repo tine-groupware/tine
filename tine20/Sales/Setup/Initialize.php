@@ -19,6 +19,111 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Setup_Initialize extends Setup_Initialize
 {
+    protected function _initializeEDocumentXRechnungElement(): void
+    {
+        self::initializeEDocumentXRechnungElement();
+    }
+
+    public static function initializeEDocumentXRechnungElement(): void
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/files/xrechnung-semantic-model.xsd');
+        $xpath = new DOMXPath($doc);
+        $xpath->registerNamespace('xs', 'http://www.w3.org/2001/XMLSchema');
+        $ctrl = Sales_Controller_EDocument_XRechnungElement::getInstance();
+
+        $fun = null;
+        $fun = function(?Sales_Model_EDocument_XRechnungElement $parent, $elementDefs, array $stack) use($ctrl, $xpath, &$fun): void{
+            /** @var DOMNode $elementDef */
+            foreach($elementDefs as $elementDef) {
+                $xrElement = $ctrl->create(new Sales_Model_EDocument_XRechnungElement([
+                    Sales_Model_EDocument_XRechnungElement::FLD_PARENT_ID => $parent?->getId(),
+                    Sales_Model_EDocument_XRechnungElement::FLD_TYPE => $type = substr($xpath->evaluate('string(./@type)', $elementDef), 3),
+                    Sales_Model_EDocument_XRechnungElement::FLD_NAME => $xpath->evaluate('string(./@name)', $elementDef),
+                    Sales_Model_EDocument_XRechnungElement::FLD_BT_NUMBER => ($btNum = $xpath->evaluate('string(./xs:annotation/xs:appinfo/text()[1])', $elementDef)),
+                    Sales_Model_EDocument_XRechnungElement::FLD_DESCRIPTION => $xpath->evaluate('string(./xs:annotation/xs:documentation/text()[1])', $elementDef),
+                    Sales_Model_EDocument_XRechnungElement::FLD_IS_OVERRIDEABLE => in_array($btNum, [
+                        'BT-3', // Invoice_type_code
+                        'BT-7', // Value_added_tax_point_date
+                        'BT-8', // Value_added_tax_point_date_code
+                        'BT-10', //.Buyer_reference
+                        'BT-11', // document_reference
+                        'BT-12', // document_reference
+                        'BT-13', // Purchase_order_reference
+                        'BT-14', // Sales_order_reference
+                        'BT-15', // Receiving_advice_reference
+                        'BT-16', // Despatch_advice_reference
+                        'BT-18', // Invoiced_object_identifier
+                        'BT-19', // Buyer_accounting_reference
+                        'BT-20', // Payment_terms
+                        'BT-25', // document_reference
+                        'BT-26', // Preceding_Invoice_issue_date
+                        'BT-27', // Seller_name
+                        'BT-28', // Seller_trading_name
+                        'BT-33', // Seller_additional_legal_information
+                        'BT-35', // Seller_address_line_1
+                        'BT-36', // Seller_address_line_2
+                        'BT-37', // Seller_city
+                        'BT-38', // Seller_post_code
+                        'BT-39', // Seller_country_subdivision
+                        'BT-40', // Seller_country_code
+                        'BT-41', // Seller_contact_point
+                        'BT-42', // Seller_contact_telephone_number
+                        'BT-43', // Seller_contact_email_address
+                        'BT-44', // Buyer_name
+                        'BT-45', // Buyer_trading_name
+                        'BT-46', // Buyer_identifier
+                        'BT-50', // Buyer_address_line_1
+                        'BT-51', // Buyer_address_line_2
+                        'BT-52', // Buyer_city
+                        'BT-53', // Buyer_post_code
+                        'BT-54', // Buyer_country_subdivision
+                        'BT-55', // Buyer_country_code
+                        'BT-56', // Buyer_contact_point
+                        'BT-57', // Buyer_contact_telephone_number
+                        'BT-58', // Buyer_contact_email_address
+                        'BT-59', // Payee_name
+                        'BT-60', // Payee_identifier
+                        'BT-64', // Tax_representative_address_line_1
+                        'BT-65', // Tax_representative_address_line_2
+                        'BT-66', // Tax_representative_city
+                        'BT-67', // Tax_representative_post_code
+                        'BT-68', // Tax_representative_country_subdivision
+                        'BT-69', // Tax_representative_country_code
+                        'BT-70', // Deliver_to_party_name
+                        'BT-71', // Deliver_to_location_identifier
+                        'BT-72', // Actual_delivery_date
+                        'BT-75', // Deliver_to_address_line_1
+                        'BT-76', // Deliver_to_address_line_2
+                        'BT-77', // Deliver_to_city
+                        'BT-78', // Deliver_to_post_code
+                        'BT-79', // Deliver_to_country_subdivision
+                        'BT-80', // Deliver_to_country_code
+                        'BT-81', // Payment_means_type_code
+                        'BT-82', // Payment_means_text
+                        'BT-87', // Payment_card_primary_account_number
+                        'BT-88', // Payment_card_holder_name
+                        'BT-89', // Mandate_reference_identifier
+                        'BT-90', // Bank_assigned_creditor_identifier
+                        'BT-91', // Debited_account_identifier
+                        'BT-113', // Paid_amount
+                        'BT-115', // Amount_due_for_payment
+                        'BT-162', // Seller_address_line_3
+                        'BT-163', // Buyer_address_line_3
+                        'BT-164', // Tax_representative_address_line_3
+                        'BT-165', // Deliver_to_address_line_3
+                    ]),
+                ]));
+                if (in_array($type, $stack)) continue;
+                $tmpStack = $stack;
+                $tmpStack[] = $type;
+                $fun($xrElement, $xpath->evaluate('/xs:schema/xs:complexType[@name = \'' . $type . '\']/xs:sequence/xs:element'), $tmpStack);
+            }
+        };
+
+        $fun(null, $xpath->evaluate('/xs:schema/xs:element/xs:complexType/xs:sequence/xs:element'), []);
+    }
+
     /**
     * init favorites
     */

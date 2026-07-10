@@ -36,6 +36,7 @@ import './EDocument/QuickLookPanel';
 import './numberableConfigProvider';
 import './Document/PurchaseInvoice/importPurchaseInvoiceAction';
 import './Document/PurchaseInvoice/EditDialog';
+import './Einvoice/XRechnungOverwriteEditDialog'
 
 /**
  * address renderer, not a default renderer
