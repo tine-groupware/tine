@@ -5,8 +5,6 @@ require('dotenv').config();
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
-const uuid = require('uuid');
-
 const simpleConsole = require('console');
 const {blue, cyan, green, magenta, red, yellow} = require('colorette')
 const colors = {
@@ -35,7 +33,8 @@ const priorities = {
 
 module.exports = {
     download: async function (page, selector, option = {}) {
-        const downloadPath = path.resolve(__dirname, 'download', uuid.v1());
+        const { v1: uuidv1 } = await import('uuid');
+        const downloadPath = path.resolve(__dirname, 'download', uuidv1());
         mkdirp(downloadPath);
         console.log('Downloading file to:', downloadPath);
         const cdpSession = await page.createCDPSession();
