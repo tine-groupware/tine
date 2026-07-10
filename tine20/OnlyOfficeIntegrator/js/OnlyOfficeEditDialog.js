@@ -137,7 +137,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         this.window.onlyOfficeDocumentDirty = false;
 
         this.window.setTitle([Tine.title, 'ONLYOFFICE', this.record.get('name')].join(' - '));
-        
+        this.window.rename(Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.prototype.windowNamePrefix + this.record.id);
+
         const localeParts = _.split(Tine.Tinebase.registry.get('locale').locale, '_');
         const lang = localeParts[0];
         const region = lang + '-' + localeParts[1] ? localeParts[1] : _.toUpper(lang);
