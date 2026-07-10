@@ -85,6 +85,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 xtype: 'spacer'
             }
 
+        let plugin
         return {
             xtype: 'tabpanel',
             border: false,
@@ -93,6 +94,14 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             defaults: {
                 hideMode: 'offsets'
             },
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
+            }, plugin = {
+                init: Ext.emptyFn
+            }],
             items: [{
                 // Start first tab
                 title: this.app.i18n._('General'),
