@@ -107,7 +107,7 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_ADDR_PREFIX1          => [
                 self::LABEL                     => 'Address Prefix 1', // _('Address Prefix 1')
-                self::DESCRIPTION               => 'The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-31 [EN 16931]).', // _('The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-31 [EN 16931]).')
+                self::DESCRIPTION               => 'The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-35 [EN 16931]).', // _('The main line in an address. This is usually either the street and house number or the text "PO box" followed by the PO box number (BT-31 [EN 16931]).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
@@ -117,12 +117,14 @@ class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tineba
             ],
             self::FLD_ADDR_PREFIX2          => [
                 self::LABEL                     => 'Address Prefix 2', // _('Address Prefix 2')
+                self::DESCRIPTION               => 'An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931]).', // _('An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931]).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
                 self::QUERY_FILTER              => true,
             ],
             self::FLD_ADDR_PREFIX3          => [
                 self::LABEL                     => 'Address Prefix 3', // _('Address Prefix 3')
+                self::DESCRIPTION               => 'An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931]).', // _('An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931]).')
                 self::TYPE                      => self::TYPE_STRING,
                 self::NULLABLE                  => true,
                 self::QUERY_FILTER              => true,
