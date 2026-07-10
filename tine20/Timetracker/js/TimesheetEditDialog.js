@@ -325,7 +325,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     onBeforeApplyChanges: async function() {
         if (this.record.get('correlation_id')) {
             const changes = this.record.getChanges();
-            const multiApplicableFields = _.difference(Object.keys(changes), ['start_date', 'start_time', 'end_time', 'duration', 'accounting_time']);
+            const multiApplicableFields = _.difference(Object.keys(changes), ['start_date', 'start_time', 'end_date', 'end_time', 'duration', 'accounting_time']);
             if (multiApplicableFields.length) {
                 if (await Ext.MessageBox.show({
                     title: this.app.formatMessage('Change all Correlated Timesheets'),
