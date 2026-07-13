@@ -10,6 +10,7 @@
 import './filePanel';
 import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 import ContactFieldsFieldset from "../../Tinebase/js/widgets/form/ContactFieldsFieldset";
+import formatAddress from "util/postalAddressFormater";
 
 Ext.namespace('Tine.EventManager');
 
@@ -120,10 +121,27 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     [
                                         fieldManager('start'),
                                         fieldManager('end'),
-                                    ], [
-                                        fieldManager('location'),
+                                    ],
+                                    [
                                         fieldManager('type'),
                                         fieldManager('status'),
+                                    ],
+                                    [
+                                        fieldManager('location_record', {
+                                            listeners: {
+                                                scope: me,
+                                                select: async function (combo, rec) {
+                                                    const aStruct = await formatAddress(rec.getPreferredAddressObject());
+                                                    this.form.findField('location').setValue(aStruct.join('\n'));
+                                                }
+                                            }
+                                        }),
+                                        fieldManager('location', {
+                                            xtype: 'textarea',
+                                            grow: true,
+                                            growMin: 18,
+                                            growAppend: '',
+                                        }),
                                     ],
                                     [
                                         fieldManager('total_places', {

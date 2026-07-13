@@ -501,6 +501,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 $eventArray = $eventsArray[$i];
                 $localizationFields = ['name', 'subheading', 'description'];
                 foreach ($localizationFields as $localizationField) {
+                    if (empty($eventArray[$localizationField])) {
+                        $eventArray[$localizationField] = null;
+                    }
                     if (!empty($eventArray[$localizationField]) && is_array($eventArray[$localizationField])) {
                         foreach ($eventArray[$localizationField] as $field) {
                             if ($field['language'] === 'de') {
@@ -541,6 +544,9 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
             $localizationFields = ['name', 'subheading', 'description'];
             foreach ($localizationFields as $localizationField) {
+                if (empty($eventArray[$localizationField])) {
+                    $eventArray[$localizationField] = null;
+                }
                 if (!empty($eventArray[$localizationField]) && is_array($eventArray[$localizationField])) {
                     foreach ($eventArray[$localizationField] as $field) {
                         if ($field['language'] === 'de') {

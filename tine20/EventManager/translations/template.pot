@@ -193,6 +193,12 @@ msgstr ""
 msgid "Pastoral Erzbistum Hamburg URL to events"
 msgstr ""
 
+msgid "Available Languages"
+msgstr ""
+
+msgid "List of the languages in which multilingual texts are available."
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -385,12 +391,6 @@ msgid "My Registrations"
 msgstr ""
 
 msgid "Search"
-msgstr ""
-
-msgid "Imprint"
-msgstr ""
-
-msgid "Privacy Notice"
 msgstr ""
 
 msgid "I am completing the registration form for another person"
@@ -669,6 +669,9 @@ msgid "Registration possible until"
 msgstr ""
 
 msgid "Location"
+msgstr ""
+
+msgid "Location Record"
 msgstr ""
 
 msgid "Fee"
