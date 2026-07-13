@@ -99,7 +99,10 @@ class Calendar_Frontend_iMIPTest extends TestCase
         $event->attendee->removeRecord($attendee);
 
         $calCtrl = Calendar_Controller_Event::getInstance();
+        $calCtrl->getBackend()->externalOrganizerEventsSkipAclCheck(true);
+        $raii = new Tinebase_RAII(fn() =>  $calCtrl->getBackend()->externalOrganizerEventsSkipAclCheck(false));
         $calCtrl->sendNotifications(false);
+
         $createdEvent = $calCtrl->create($event);
 
         $exceptions = new Tinebase_Record_RecordSet(Calendar_Model_Event::class);
@@ -1571,7 +1574,7 @@ CREATED:20240613T160230Z', $iMIP->ics);
         }
 
         $updatedEvent = $iMIP->getExistingEvent($iMIP->getEvents()->getFirstRecord(), _refetch: true);
-        $updatedEvent = Calendar_Controller_Event::getInstance()->get($updatedEvent->getId());
+        $updatedEvent = Calendar_Controller_Event::getInstance()->get($updatedEvent->getId(), _aclProtect: false);
         $this->assertEquals(4, count($updatedEvent->attendee), 'attendee count must be 4');
     }
 

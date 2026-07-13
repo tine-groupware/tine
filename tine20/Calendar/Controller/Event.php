@@ -1849,7 +1849,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             return $exdate !== false ? $exceptions[$exdate] :
                 Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $originalDtStart);
         } else {
-            return parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
+            $event = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
+            if ($_aclProtect) {
+                $this->_freeBusyCleanup(new Tinebase_Record_RecordSet(Calendar_Model_Event::class, [$event]), 'get');
+            }
+            return $event;
         }
     }
     
@@ -2559,7 +2563,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $attendee = $_record->assertAttendee(new Calendar_Model_Attender(array(
                 'user_type'    => Calendar_Model_Attender::USERTYPE_USER,
                 'user_id'      => $calendarUserId
-            )), false, false, true);
+            )), false, false, false);
             
             if ($attendee && $container instanceof Tinebase_Model_Container) {
                 $attendee->displaycontainer_id = $container->getId();
