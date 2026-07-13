@@ -33,6 +33,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
 
     public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
+    public const FLD_REMITTANCE_INFORMATION = 'remittance_information';
 
     /**
      * invoice status
@@ -53,7 +54,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Invoice'; // gettext('GENDER_Invoice')
         $_definition[self::RECORDS_NAME] = 'Invoices'; // ngettext('Invoice', 'Invoices', n)
 
-        $_definition[self::VERSION] = 5;
+        $_definition[self::VERSION] = 6;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
@@ -137,6 +138,19 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::SHY                   => true,
             self::CONFIG                        => [
                 self::NO_AUTO_TRANSITION            => true,
+            ],
+        ];
+
+        $_definition[self::FIELDS][self::FLD_REMITTANCE_INFORMATION] = [
+            self::LABEL                 => 'Remittance information', // _('Remittance information')
+            self::TYPE                  => self::TYPE_STRING,
+            self::NULLABLE              => true,
+            self::CONFIG                => [
+                self::NO_AUTO_TRANSITION    => true,
+                self::DEFAULT_FROM_CONFIG   => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::CONFIG                    => Sales_Config::PAYMENT_MEANS_ID_TMPL,
+                ],
             ],
         ];
     }
