@@ -63,6 +63,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         Tinebase_Model_Grants::GRANT_DELETE,
         Calendar_Model_EventPersonalGrants::GRANT_PRIVATE,
     );
+
+    protected $_externalOrganizerEventsSkipAclCheck = false;
     
     /**
      * the constructor
@@ -75,6 +77,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         parent::__construct($_dbAdapter, $_options);
         
         $this->_attendeeBackend = new Calendar_Backend_Sql_Attendee($_dbAdapter);
+    }
+
+    public function externalOrganizerEventsSkipAclCheck(?bool $value = null): bool
+    {
+        $oldValue = $this->_externalOrganizerEventsSkipAclCheck;
+        if (null !== $value) {
+            $this->_externalOrganizerEventsSkipAclCheck = $value;
+        }
+        return $oldValue;
     }
 
     public function getEtagsForContainerId(string $containerId, ?string $externalId = null): array
@@ -318,7 +329,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             // either current user is organizer or has admin right on container
             if (($event->organizer === $currentContact
                     && Calendar_Config::getInstance()->get(Calendar_Config::ORGANIZER_IMPLICIT_EDIT_GRANT))
-                || $event->hasExternalOrganizer()
+                || ($this->_externalOrganizerEventsSkipAclCheck && $event->hasExternalOrganizer())
             ) {
                 foreach ($this->_recordBasedGrants as $grant) {
                     $event->{$grant} = true;

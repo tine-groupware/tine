@@ -4,14 +4,11 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
-/**
- * Test helper
- */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Test class for Calendar_Controller_Event
@@ -492,7 +489,42 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         
         $this->assertEquals(1, count($events), 'testuser has implicit syncGrant, but serach for action sync found no event');
     }
-    
+
+    public function testExternalOrganizerFreeBusy()
+    {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+
+        // jsmith, testuser has read but not private
+        $organizer = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact([
+            'email' => 'j.loew@caldav.org',
+        ], true));
+
+        $event = $this->_getEvent();
+        $event->organizer = $organizer;
+        $event->class = Calendar_Model_Event::CLASS_PRIVATE;
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_id'        => $this->_getPersonasContacts('rwright')->getId(),
+                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+            )
+        ));
+        $persistentEvent = $this->_uit->create($event);
+
+        Tinebase_Core::getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'cal_attendee WHERE cal_event_id="' . $persistentEvent->getId() . '" AND user_id !="' . $this->_getPersonasContacts('rwright')->getId() . '"');
+
+        $this->assertEmpty($this->_uit->get($persistentEvent->getId())->summary);
+        $this->assertEmpty($this->_uit->getMultiple([$persistentEvent->getId()])[0]->summary);
+        $this->assertEmpty($this->_uit->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_Event::class, [
+            [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $persistentEvent->getId()],
+        ]))->getFirstRecord()->summary);
+
+        /*$resolvedAttendees = Calendar_Model_Attender::getResolvedAttendees($persistentEvent->attendee, true);
+        $webdav = new Calendar_Frontend_WebDAV_Container($resolvedAttendees->getFirstRecord()->displaycontainer_id);
+        $webdavEvent = $webdav->getChild($persistentEvent->getId());
+        todo assert webdav event
+        */
+    }
+
     protected function _testSearchGrantsActionForAction($_action)
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright');
@@ -619,7 +651,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
      *  pwulf:     anyone readGrant, sclever addGrant, readGrant, editGrant, deleteGrant, privateGrant
      *  sclever:   testuser addGrant, readGrant, editGrant, deleteGrant, privateGrant
      *  jmcblack:  prim group of testuser readGrant, testuser privateGrant
-     *  rwright:   testuser freebusyGrant, sclever has readGrant and editGrant
+     *  rwright:   testuser freebusyGrant. syncGrant, sclever has readGrant and editGrant
      */
     protected function _setupTestCalendars()
     {
@@ -754,6 +786,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
             Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => false,
             Tinebase_Model_Grants::GRANT_ADMIN    => false,
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+            Tinebase_Model_Grants::GRANT_SYNC     => true,
         ), array(
             'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',

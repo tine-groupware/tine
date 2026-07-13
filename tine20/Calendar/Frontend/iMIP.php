@@ -598,7 +598,12 @@ class Calendar_Frontend_iMIP
                 // Attendee cancelled
                 if ($ownAttendee = Calendar_Model_Attender::getOwnAttender($existingEvent->attendee)) {
                     $existingEvent->attendee->removeRecord($ownAttendee);
-                    Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                    $oldValue = Calendar_Controller_MSEventFacade::getInstance()->getEventController()->useExternalOrganizerContainer(false);
+                    try {
+                        Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                    } finally {
+                        Calendar_Controller_MSEventFacade::getInstance()->getEventController()->useExternalOrganizerContainer($oldValue);
+                    }
                 }
             }
         }

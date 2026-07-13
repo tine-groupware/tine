@@ -750,16 +750,24 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $event = $this->testCreateEventWithExternalOrganizer();
+        $firstRecord = $event->getRecord();
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
         $event->put($vcalendarStream);
         
         $record = $event->getRecord();
+        $this->assertSame($firstRecord->getId(), $record->getId());
+
+        $calCtrl = Calendar_Controller_Event::getInstance();
+        $oldAcl = $calCtrl->getBackend()->externalOrganizerEventsSkipAclCheck(true);
+        $raii = new Tinebase_RAII(fn() => $calCtrl->getBackend()->externalOrganizerEventsSkipAclCheck($oldAcl));
+        $record = $calCtrl->get($record->getId());
         
         $this->assertEquals('New Event', $record->summary);
         $this->assertEquals(2, $record->seq, 'tine20 seq should have increased');
         $this->assertEquals(0, $record->external_seq, 'external seq must not have increased');
+        $this->assertNotNull(Calendar_Model_Attender::getOwnAttender($record->attendee));
     }
 
     /**

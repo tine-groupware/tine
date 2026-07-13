@@ -351,7 +351,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             Calendar_Model_Attender::resolveAttendee($_event->attendee, false);
             while ($_event->dtstart->equals($_event->getOriginalDtStart())) {
                 try {
-                    $baseEvent = $this->_eventController->get($_event->base_event_id);
+                    $baseEvent = $this->_eventController->get($_event->base_event_id, _aclProtect: false);
                 } catch (Tinebase_Exception_NotFound) {
                     break;
                 }
@@ -1182,6 +1182,11 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         };
 
+        /** @phpstan-ignore-next-line */
+        $oldAcl = $this->_eventController->getBackend()->externalOrganizerEventsSkipAclCheck(true);
+        /** @phpstan-ignore-next-line */
+        $raii = new Tinebase_RAII(fn() => $this->_eventController->getBackend()->externalOrganizerEventsSkipAclCheck($oldAcl));
+
         if ($_event->isRecurException() && (!is_string($_event->recurid) || !str_starts_with($_event->recurid, $_event->uid))) {
             $_event->setRecurId($_event->base_event_id);
         }
@@ -1284,11 +1289,18 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         if (null === $result && $foundWithoutGrant) {
             throw new Tinebase_Exception_AccessDenied('access denied');
         }
+
+        unset($raii);
         return $result;
     }
 
     public function getExistingEventByUID(string $_uid, ?string $_recurid, string $_action, string $_grant, bool $_getDeleted = false): ?Calendar_Model_Event
     {
+        /** @phpstan-ignore-next-line */
+        $oldAcl = $this->_eventController->getBackend()->externalOrganizerEventsSkipAclCheck(true);
+        /** @phpstan-ignore-next-line */
+        $raii = new Tinebase_RAII(fn() => $this->_eventController->getBackend()->externalOrganizerEventsSkipAclCheck($oldAcl));
+
         $filters = new Calendar_Model_EventFilter([
             ['field' => 'uid', 'operator' => 'equals', 'value' => $_uid],
             ['field' => 'recurid', 'operator' => null === $_recurid ? 'isnull' : 'equals', 'value' => $_recurid],
@@ -1306,6 +1318,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 'dir' => 'ASC',
             ]), _action: $_action)->filter($_grant, true));
         }
+
+        unset($raii);
         return $event;
     }
 
