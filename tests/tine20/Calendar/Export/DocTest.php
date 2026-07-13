@@ -193,4 +193,31 @@ class Calendar_Export_DocTest extends Calendar_TestCase
 
         static::assertSame('testName_' . $prop->getValue($export) . '.docx', $filename);
     }
+
+    public function testFileNameDateTemplate()
+    {
+        /** @var Tinebase_Model_ImportExportDefinition $definition */
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+                'model' => 'Calendar_Model_Event',
+                'name' => 'cal_default_doc_single'
+            ]))->getFirstRecord();
+
+        $definition->plugin_options = substr($definition->plugin_options, 0, strlen($definition->plugin_options) - 10)
+            . '<exportFilename>Test_KW{{ dateFormat(calendar.from, \'w\') }}.docx</exportFilename></config>';
+
+        Tinebase_ImportExportDefinition::getInstance()->update($definition);
+
+        $export = new Calendar_Export_Doc(new Calendar_Model_EventFilter(), null,
+            [
+                'definitionId'  => $definition->getId(),
+                'recordData'    => $this->_getEvent(true)->toArray()
+            ]);
+        $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
+            Tinebase_Record_Abstract::generateUID()));
+
+        $export->generate();
+        $filename = $export->getDownloadFilename('a', 'b');
+        static::assertSame('Test_KW"'  .  date("W") . '".docx', $filename);
+    }
 }
