@@ -197,6 +197,13 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
     protected $_twigExtensions = [];
 
     /**
+     * set to false to disable auto-escaping
+     *
+     * @var mixed|string
+     */
+    protected mixed $_twigAutoescape = 'json';
+
+    /**
      * @var string
      */
     protected $_templateFileName = null;
@@ -695,11 +702,8 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
-            // Use raw autoescape so UTF-8 characters (umlauts, etc.) in record fields are not encoded
-            // (e.g. Ä would become \u00c4 with 'json' autoescape, breaking filenames).
-            $rawLoader = new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]);
-            $rawTwig = new Twig_Environment($rawLoader, ['autoescape' => false]);
-            $twigTmpl = $rawTwig->load('fileNameTmpl');
+            $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
+            $twigTmpl = $this->_twig->load('fileNameTmpl');
             $context = $this->_getTwigContext(['record' => $this->_currentRecord]);
             return $twigTmpl->render($context);
         }
@@ -862,9 +866,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         $options = [
-            // in order to cache the templates, we need to cache $this->_twigMapping too!
+            // to cache the templates, we need to cache $this->_twigMapping too!
             Tinebase_Twig::TWIG_CACHE       => false,
-            Tinebase_Twig::TWIG_AUTOESCAPE  => 'json',
+            Tinebase_Twig::TWIG_AUTOESCAPE  => $this->_twigAutoescape,
             Tinebase_Twig::TWIG_LOADER      => new Twig\Loader\ChainLoader(array(
                 new Tinebase_Twig_CallBackLoader($this->_templateFileName, $this->_getLastModifiedTimeStamp(),
                     $this->_getTwigSource(...))))
