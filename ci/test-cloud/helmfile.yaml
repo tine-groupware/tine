@@ -10,6 +10,7 @@ environments:
 helmDefaults:
   wait: true
   waitForJobs: true
+  timeout: 600
 
 repositories:
 - name: tine-charts
