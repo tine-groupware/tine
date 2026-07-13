@@ -46,12 +46,19 @@
             </div>
           </div>
 
-          <div class="info-row" v-if="eventDetails.location && eventDetails.location.adr_one_postalcode">
+          <div class="info-row" v-if="eventDetails.location">
             <div class="info-label">{{formatMessage('Address:')}}</div>
             <div class="info-value">
-              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_street')}}</p>
-              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_postalcode')}}</p>
-              <p class="mb-0">{{_.get(eventDetails, 'location.adr_one_locality')}}</p>
+              <p class="mb-0 address-text">{{eventDetails.location}}</p>
+            </div>
+          </div>
+
+          <div class="info-row" v-else-if="eventDetails.location_record && eventDetails.location_record.adr_one_postalcode">
+            <div class="info-label">{{formatMessage('Address:')}}</div>
+            <div class="info-value">
+              <p class="mb-0">{{_.get(eventDetails, 'location_record.adr_one_street')}}</p>
+              <p class="mb-0">{{_.get(eventDetails, 'location_record.adr_one_postalcode')}}</p>
+              <p class="mb-0">{{_.get(eventDetails, 'location_record.adr_one_locality')}}</p>
             </div>
           </div>
 
@@ -116,7 +123,7 @@ const eventDetails = ref({
   name: "",
   start : "",
   end: "",
-  location: "",
+  location_record: "",
   type: "",
   status: "",
   fee: "",
@@ -253,7 +260,7 @@ const hasEventInfo = computed(() => {
   const hasStart = d.start && d.start !== '1.1.1970';
   const hasEnd = d.end && d.end !== '1.1.1970';
   const hasAppointments = d.appointments && d.appointments.length > 0;
-  const hasLocation = d.location && d.location.adr_one_postalcode;
+  const hasLocation = d.location_record && d.location_record.adr_one_postalcode;
   const hasFee = !!d.fee;
   const hasRegistrationDeadline = d.registration_possible_until && d.registration_possible_until !== '1.1.1970';
 
@@ -375,10 +382,9 @@ getEvent();
   grid-template-columns: 200px 1fr;
   gap: 1.5rem;
   padding: 1rem 0;
-  border-bottom: 1px solid #e9ecef;
 
-  &:last-child {
-    border-bottom: none;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #e9ecef;
   }
 }
 
@@ -432,6 +438,10 @@ getEvent();
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.address-text {
+  white-space: pre-line;
 }
 
 .action-button {

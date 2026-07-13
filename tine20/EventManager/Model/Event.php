@@ -27,6 +27,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_EMPLOYEE = 'event_employee';
     public const FLD_START = 'start';
     public const FLD_END = 'end';
+    public const FLD_LOCATION_RECORD = 'location_record';
     public const FLD_LOCATION = 'location';
     public const FLD_TYPE = 'type';
     public const FLD_STATUS = 'status';
@@ -171,17 +172,30 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS                 => [Zend_Filter_Empty::class => null],
                 self::ALLOW_CAMEL_CASE              => true,
             ],
-            self::FLD_LOCATION      => [
+            self::FLD_LOCATION              => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::LABEL             => 'Location', // _('Location')
+                self::INPUT_FILTERS => [],
+                self::LENGTH        => 1024,
+                self::NULLABLE      => true,
+                self::QUERY_FILTER  => true,
+            ],
+            self::FLD_LOCATION_RECORD      => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::QUERY_FILTER      => true,
-                self::LABEL             => 'Location', // _('Location')
+                self::LABEL             => 'Location Record', // _('Location Record')
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
                 self::CONFIG            => [
                     self::APP_NAME          => Addressbook_Config::APP_NAME,
                     self::MODEL_NAME        => Addressbook_Model_Contact::MODEL_NAME_PART,
-                ]
+                ],
+                self::UI_CONFIG             => [
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => false,
+                    ],
+                ],
             ],
                 self::FLD_TYPE      => [
                 self::TYPE              => self::TYPE_KEY_FIELD,

@@ -130,7 +130,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         EventManager_Config::getInstance()
             ->set(EventManager_Config::JWT_SECRET, 'jwtSecretCreatedFromEventManagerDemoData');
 
-        $location = $this->getLocation(
+        $locationRecord = $this->getLocation(
             'Familienferienstätte St. Ursula',
             'Ribnitzer Str. 1',
             '18181',
@@ -190,7 +190,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-20 17:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-24 13:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-21"),
-            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => $locationRecord,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -295,7 +295,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2025-09-16 13:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2025-09-18 13:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2025-09-15"),
-            EventManager_Model_Event::FLD_LOCATION                      => '',
+            EventManager_Model_Event::FLD_LOCATION_RECORD                      => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => 250,
@@ -326,7 +326,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 3
 
-        $location = $this->getLocation(
+        $locationRecord = $this->getLocation(
             'St. Ansgarhaus',
             'Schmilinskystraße 78',
             '20099',
@@ -341,7 +341,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 18:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
-            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => $locationRecord,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -361,7 +361,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 4
 
-        $location = $this->getLocation(
+        $locationRecord = $this->getLocation(
             'Kloster Nütschau',
             'Schloßstraße 26',
             '23843',
@@ -375,7 +375,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-07 18:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-09 18:00:00"),
-            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => $locationRecord,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -394,7 +394,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         // event 5
 
-        $location = $this->getLocation(
+        $locationRecord = $this->getLocation(
             'St. Ansgarhaus',
             'Schmilinskystraße 78',
             '20099',
@@ -408,7 +408,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             ]],
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-17 15:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-18 16:00:00"),
-            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => $locationRecord,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -434,7 +434,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 10:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 17:00:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
-            EventManager_Model_Event::FLD_LOCATION                      => '',
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -465,7 +465,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-20 19:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-20 21:30:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-11-20"),
-            EventManager_Model_Event::FLD_LOCATION                      => '',
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -494,7 +494,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-11-08 00:00:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-11-08 23:45:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-09-15"),
-            EventManager_Model_Event::FLD_LOCATION                      => '',
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => '',
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => '',
@@ -530,7 +530,7 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_START                         => new Tinebase_DateTime("2027-10-13 09:30:00"),
             EventManager_Model_Event::FLD_END                           => new Tinebase_DateTime("2027-10-16 19:30:00"),
             EventManager_Model_Event::FLD_REGISTRATION_POSSIBLE_UNTIL   => new Tinebase_DateTime("2027-10-12"),
-            EventManager_Model_Event::FLD_LOCATION                      => $location,
+            EventManager_Model_Event::FLD_LOCATION_RECORD               => $locationRecord,
             EventManager_Model_Event::FLD_TYPE                          => $event_type,
             EventManager_Model_Event::FLD_STATUS                        => $event_status,
             EventManager_Model_Event::FLD_FEE                           => 5,
@@ -670,17 +670,17 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
             ['field' => 'org_name', 'operator' => 'equals', 'value' => $org_name],
         ]);
-        $location = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
-        if (!$location) {
+        $locationRecord = Addressbook_Controller_Contact::getInstance()->search($filter)->getFirstRecord();
+        if (!$locationRecord) {
             $adbController = Addressbook_Controller_Contact::getInstance();
-            $location = $adbController->create(new Addressbook_Model_Contact([
+            $locationRecord = $adbController->create(new Addressbook_Model_Contact([
                 'org_name' => $org_name,
                 'adr_one_street' => $adr_one_street,
                 'adr_one_postalcode' => $adr_one_postalcode,
                 'adr_one_locality' => $adr_one_locality,
             ]));
         }
-        return $location;
+        return $locationRecord;
     }
 
     protected function setOptionConfigCheckboxDemoData(

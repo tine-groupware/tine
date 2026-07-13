@@ -80,22 +80,50 @@ class EventManager_Frontend_RssFeed
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($event);
             $converter = Tinebase_Convert_Factory::factory($event);
             $event = $converter->fromTine20Model($event);
+
+            $localizationFields = ['name', 'subheading', 'description'];
+            foreach ($localizationFields as $localizationField) {
+                if (empty($event[$localizationField])) {
+                    $event[$localizationField] = null;
+                }
+                if (!empty($event[$localizationField]) && is_array($event[$localizationField])) {
+                    foreach ($event[$localizationField] as $field) {
+                        if ($field['language'] === 'de') {
+                            $event[$localizationField] = $field['text'];
+                        }
+                    }
+                }
+            }
+
             $title = $event['name'];
             $description = $event['description'] ?? '';
-            try {
-                $location = $ab_controller->get($event['location']);
-                $location = implode(', ', array_filter([
-                    $location['n_fileas'] ?? '',
-                    trim(($location['adr_one_street'] ?? '') . ' ' . ($location['adr_one_street2'] ?? '')),
-                    trim(($location['adr_one_postalcode'] ?? '') . ' ' . ($location['adr_one_locality'] ?? ''))
-                ]));
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Location (ID: ' . $event['location'] . ') of task ' . $event['id'] . ' not found!');
+
+            if (!empty($event['location'])) {
+                $locationRecord = $event['location'];
+            } else {
+                try {
+                    $locationRecord = $ab_controller->get($event['location_record']);
+                    $locationRecord = implode(', ', array_filter([
+                        $locationRecord['n_fileas'] ?? '',
+                        trim(
+                            ($locationRecord['adr_one_street'] ?? '') . ' ' . ($locationRecord['adr_one_street2'] ?? '')
+                        ),
+                        trim(
+                            (
+                                $locationRecord['adr_one_postalcode'] ?? '')
+                            . ' ' . ($locationRecord['adr_one_locality'] ?? ''
+                            )
+                        )
+                    ]));
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Location (ID: ' . $event['location'] . ') of task ' . $event['id'] . ' not found!');
+                    }
+                    continue;
                 }
-                continue;
             }
+
             $start = $event['start'];
             $end = $event['end'];
             $type = EventManager_Config::getInstance()
@@ -135,7 +163,7 @@ class EventManager_Frontend_RssFeed
                 'description' => $description,
                 'start' => $start,
                 'end' => $end,
-                'location' => $location,
+                'location' => $locationRecord,
                 'type' => $type,
                 'status' => $status,
                 'fee' => $fee,
