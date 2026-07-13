@@ -35,9 +35,10 @@ import './EDocument/QuickLookPanel';
 import './numberableConfigProvider';
 import './Document/PurchaseInvoice/importPurchaseInvoiceAction';
 import './Document/PurchaseInvoice/EditDialog';
-import './MainScreen'
-import './AccountableRegistry'
-import './InvoicePositionQuantityRendererRegistry'
+import './Einvoice/XRechnungOverwriteEditDialog';
+import './MainScreen';
+import './AccountableRegistry';
+import './InvoicePositionQuantityRendererRegistry';
 import './ContractSearchCombo';
 import './OfferSearchCombo';
 import './InvoiceSearchCombo';

@@ -19,13 +19,34 @@ class Sales_Model_Einvoice_XRechnung extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Einvoice_XRechnung';
 
+    public const FLD_OVERWRITES = 'overwrites';
+
     protected static $_modelConfiguration = [
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME                   => 'XRechnung', // ngettext('XRechnung', 'XRechnungen', n)
         self::RECORDS_NAME                  => 'XRechnungen', // gettext('GENDER_XRechnung')
 
-        self::FIELDS                    => [],
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_OVERWRITES   => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        \Sales_Model_Einvoice_XRechnungOverwrite::FLD_XRECHNUNG_ELEMENT => [],
+                    ],
+                ],
+            ],
+        ],
+        self::FIELDS                    => [
+            self::FLD_OVERWRITES            => [
+                self::TYPE                      => self::TYPE_RECORDS,
+                self::LABEL                     => 'Overwrites', // _('Overwrites')
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                => Sales_Model_Einvoice_XRechnungOverwrite::MODEL_NAME_PART,
+                    self::STORAGE                   => self::TYPE_JSON,
+                ],
+            ],
+        ],
     ];
 
     /**

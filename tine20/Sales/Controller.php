@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -173,6 +173,13 @@ class Sales_Controller extends Tinebase_Controller_Event
             'application_id' => $application,
             'model' => 'Sales_Model_Boilerplate',
             'label' => 'Boilerplates' // _('Boilerplates')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => 'sales_edocument_xrechnung_element',
+            'application_id' => $application,
+            'model' => Sales_Model_EDocument_XRechnungElement::class,
+            'label' => 'XRechnung Element' // _('XRechnung Element')
         )));
 
         return $result;

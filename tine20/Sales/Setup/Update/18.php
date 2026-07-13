@@ -39,6 +39,8 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE019 = __CLASS__ . '::update019';
     protected const RELEASE018_UPDATE020 = __CLASS__ . '::update020';
     protected const RELEASE018_UPDATE021 = __CLASS__ . '::update021';
+    protected const RELEASE018_UPDATE022 = __CLASS__ . '::update022';
+    protected const RELEASE018_UPDATE023 = __CLASS__ . '::update023';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -106,6 +108,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update021',
             ],
+            self::RELEASE018_UPDATE022          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update022',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
@@ -135,6 +141,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE020          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update020',
+            ],
+            self::RELEASE018_UPDATE023          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update023',
             ],
         ],
     ];
@@ -585,5 +595,20 @@ Your tine Team',
             Sales_Model_Document_Offer::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.21', self::RELEASE018_UPDATE021);
+    }
+
+    public function update022(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_EDocument_XRechnungElement::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.22', self::RELEASE018_UPDATE022);
+    }
+
+    public function update023(): void
+    {
+        Sales_Setup_Initialize::initializeEDocumentXRechnungElement();
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.23', self::RELEASE018_UPDATE023);
     }
 }
