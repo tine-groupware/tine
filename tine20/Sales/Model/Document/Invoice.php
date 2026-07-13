@@ -348,13 +348,10 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         ->setRegistrationName(new \UBL21\Common\CommonBasicComponents\RegistrationName($division->{Sales_Model_Division::FLD_NAME}))
                     ])
                     ->setPostalAddress((new \UBL21\Common\CommonAggregateComponents\PostalAddress())
-                        //->setStreetName(new \UBL21\Common\CommonBasicComponents\StreetName($division->{Sales_Model_Division::FLD_ADDR_PREFIX1}))
-                        ->setAddressLine(array_merge(
-                            [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line($division->{Sales_Model_Division::FLD_ADDR_PREFIX1}))],
-                            trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX2}) ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
-                                ->setLine(new \UBL21\Common\CommonBasicComponents\Line(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX2})))] : [],
-                            trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX3}) ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
+                        ->setStreetName(new \UBL21\Common\CommonBasicComponents\StreetName($division->{Sales_Model_Division::FLD_ADDR_PREFIX1}))
+                        ->setAdditionalStreetName(strlen(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX2})) > 0 ? new \UBL21\Common\CommonBasicComponents\AdditionalStreetName($division->{Sales_Model_Division::FLD_ADDR_PREFIX2}) : null)
+                        ->setAddressLine(array_merge([],
+                            strlen(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX3})) > 0 ? [(new \UBL21\Common\CommonAggregateComponents\AddressLine())
                                 ->setLine(new \UBL21\Common\CommonBasicComponents\Line(trim((string)$division->{Sales_Model_Division::FLD_ADDR_PREFIX3})))] : []
                         ))
                         ->setPostalZone(new \UBL21\Common\CommonBasicComponents\PostalZone($division->{Sales_Model_Division::FLD_ADDR_POSTAL}))
