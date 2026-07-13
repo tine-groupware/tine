@@ -250,7 +250,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 'select': (combo, invoiceRecord, index) => {
                                     this.updateTimeaccount = true;
                                     this.record.set('invoice_id', invoiceRecord.get('id'));
-                                    this.invoiceRecordPicker.setValue(invoiceRecord);
+                                    this.getForm().findField('invoice_id').setValue(invoiceRecord);
                                 }
                             }
                         })
