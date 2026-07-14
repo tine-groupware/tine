@@ -211,6 +211,12 @@
           </b-row>
         </div>
 
+        <div :class="{ 'required-field-error-container': validationErrors.includes('consent') }">
+          <b-form-checkbox v-model="hasConsent">
+            {{ formatMessage('I consent to the processing and storage of the data I have entered for the purpose of organizing the event.') }}
+          </b-form-checkbox>
+        </div>
+
         <div v-if="!isPreview">
           <div v-if="isAlreadyRegistered">
             <div class="button-group">
@@ -289,6 +295,7 @@ const selectedParticipantId = ref(null);
 const shouldShowRegistrantCheckbox = ref(true);
 const registrationId = ref(null);
 const isPreview = ref(false);
+const hasConsent = ref(false);
 
 // Data from backend
 const dependantParticipants = ref(null);
@@ -499,6 +506,7 @@ const resetFormState = () => {
   shouldShowRegistrantCheckbox.value = true;
   showRegisteredContactAlert.value = false;
   isAlreadyRegistered.value = false;
+  hasConsent.value = false;
   initializeEventOptions();
 };
 
@@ -863,6 +871,10 @@ const validateRequiredFields = () => {
     if (!errors.includes('email')) {
       errors.push('email');
     }
+  }
+
+  if (!hasConsent.value) {
+    errors.push('consent');
   }
 
   // Check grouped options (only one needs to be filled per group if option is required)
@@ -1238,6 +1250,7 @@ const confirmCancel = async () => {
 const clearForm = () => {
   contactDetails.value = emptyContactDetails();
   replies.value = {};
+  hasConsent.value = false;
 
   const fileInputs = document.querySelectorAll('input[type="file"]');
   fileInputs.forEach(input => {
