@@ -312,7 +312,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->on('exception', fn(Throwable $t) => $this->_reportWebDavIssue($t));
 
             // check Calendar noSyncDeclinedAttendeeEvents
-            if (Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->getValueForUser(Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV, Tinebase_Core::getUser()->getId())) {
+            $user = Tinebase_Core::getUser();
+            if ($user && Tinebase_Core::getPreference(Calendar_Config::APP_NAME)->getValueForUser(
+                Calendar_Preference::EXCLUDE_CANCELLED_EVENTS_WEBDAV, $user->getId())
+            ) {
                 Calendar_Controller_Event::getInstance()->doNoSyncDeclinedAttendeeEvents(true);
             }
 
