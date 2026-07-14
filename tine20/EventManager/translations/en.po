@@ -429,6 +429,9 @@ msgstr "Update Registration"
 msgid "Register"
 msgstr "Register"
 
+msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
+msgstr "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
+
 msgid "Mr"
 msgstr "Mr"
 
