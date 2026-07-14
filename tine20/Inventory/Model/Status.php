@@ -57,10 +57,8 @@ class Inventory_Model_Status extends Tinebase_Config_MCKeyFieldRecord
         Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_VALUE, [
             self::FLD_IS_OPEN => [
                 self::LABEL => 'Is open', // _('Is open')
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 5,
+                self::TYPE => self::TYPE_BOOLEAN,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::NULLABLE => false,
             ],
         ]);
 

@@ -39,16 +39,16 @@ class Inventory_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => [
                 self::RECORDS => [
-                    ['id' => Inventory_Model_Status::ORDERED,       'value' => 'Ordered',   'is_open' => 1], //_('Ordered')
-                    ['id' => Inventory_Model_Status::AVAILABLE,     'value' => 'Available', 'is_open' => 1], //_('Available')
-                    ['id' => Inventory_Model_Status::IN_USE,        'value' => 'In Use',    'is_open' => 1], //_('In Use')
-                    ['id' => Inventory_Model_Status::DEFECT,        'value' => 'Defect',    'is_open' => 1], //_('Defect')
-                    ['id' => Inventory_Model_Status::UNKNOWN,       'value' => 'Unknown',   'is_open' => 1], //_('Unknown')
-                    ['id' => Inventory_Model_Status::MISSING,       'value' => 'Missing'        ], //_('Missing')
-                    ['id' => Inventory_Model_Status::REMOVED,       'value' => 'Removed'        ], //_('Removed')
-                    ['id' => Inventory_Model_Status::STORED,        'value' => 'Stored'         ], //_('Stored')
-                    ['id' => Inventory_Model_Status::SOLD,          'value' => 'Sold'           ], //_('Sold')
-                    ['id' => Inventory_Model_Status::DESTROYED,     'value' => 'Destroyed'      ], //_('Destroyed')
+                    ['id' => Inventory_Model_Status::ORDERED, 'value' => 'Ordered', 'is_open' => true], //_('Ordered')
+                    ['id' => Inventory_Model_Status::AVAILABLE, 'value' => 'Available', 'is_open' => true], //_('Available')
+                    ['id' => Inventory_Model_Status::IN_USE, 'value' => 'In Use', 'is_open' => true], //_('In Use')
+                    ['id' => Inventory_Model_Status::DEFECT, 'value' => 'Defect', 'is_open' => true], //_('Defect')
+                    ['id' => Inventory_Model_Status::UNKNOWN, 'value' => 'Unknown', 'is_open' => true], //_('Unknown')
+                    ['id' => Inventory_Model_Status::MISSING, 'value' => 'Missing', 'is_open' => false], //_('Missing')
+                    ['id' => Inventory_Model_Status::REMOVED, 'value' => 'Removed', 'is_open' => false], //_('Removed')
+                    ['id' => Inventory_Model_Status::STORED, 'value' => 'Stored', 'is_open' => false], //_('Stored')
+                    ['id' => Inventory_Model_Status::SOLD, 'value' => 'Sold', 'is_open' => false], //_('Sold')
+                    ['id' => Inventory_Model_Status::DESTROYED, 'value' => 'Destroyed', 'is_open' => false], //_('Destroyed')
                 ],
                 self::DEFAULT_STR => Inventory_Model_Status::AVAILABLE,
             ]
