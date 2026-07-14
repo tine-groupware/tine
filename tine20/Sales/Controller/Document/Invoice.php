@@ -90,17 +90,26 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         return $result;
     }
 
+    /**
+     * @param Sales_Model_Document_Invoice $_record
+     */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         parent::_inspectBeforeCreate($_record);
 
-        if ($_record->isBooked() &&
-                (!$_record->{Sales_Model_Document_Invoice::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet ||
-                null === $_record->{Sales_Model_Document_Invoice::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Invoice::FLD_REVERSAL, true))) {
-            throw new Tinebase_Exception_Record_Validation('document must not be booked');
+        if ($_record->isBooked()) {
+            if (!$_record->{Sales_Model_Document_Invoice::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet ||
+                null === $_record->{Sales_Model_Document_Invoice::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Invoice::FLD_REVERSAL, true)) {
+                throw new Tinebase_Exception_Record_Validation('document must not be booked');
+            }
+            $this->_renderRemittanceInformation($_record);
         }
     }
 
+    /**
+     * @param Sales_Model_Document_Invoice $_record
+     * @param Sales_Model_Document_Invoice $_oldRecord
+     */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
@@ -108,6 +117,19 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         if (!$_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
             $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} = $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
         }
+
+        if ($_record->isBooked() && !$_oldRecord->isBooked()) {
+            $this->_renderRemittanceInformation($_record);
+        }
+    }
+
+    protected function _renderRemittanceInformation(Sales_Model_Document_Invoice $invoice)
+    {
+        $invoice->{Sales_Model_Document_Invoice::FLD_REMITTANCE_INFORMATION} =
+            (new Tinebase_Twig(($local = new Zend_Locale($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE})), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $local)))
+            ->getEnvironment()
+            ->createTemplate(Sales_Config::getInstance()->{Sales_Config::PAYMENT_MEANS_ID_TMPL})
+            ->render(['invoice' => $invoice]);
     }
 
     protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
