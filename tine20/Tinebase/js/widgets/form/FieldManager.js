@@ -137,7 +137,7 @@ Tine.widgets.form.FieldManager = function() {
             field.emptyValue = field.hasOwnProperty('emptyValue') ? field.emptyValue : (fieldDefinition.nullable ? null : '');
 
             // make field available via recordForm.formfield_NAME
-            field.ref = '../../formfield_' + field.name;
+            field.ref = 'formfield_' + field.name;
 
             if (fieldDefinition['default']) {
                 field['default'] = i18n._hidden(fieldDefinition['default']);
