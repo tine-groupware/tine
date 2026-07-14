@@ -1551,6 +1551,7 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::LABEL                     => 'Payment Means Identifier Template', //_('Payment Means Identifier Template')
             self::DESCRIPTION               => 'Payment Means Identifier Template',
             self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
             self::DEFAULT_STR               => '{{ invoice.document_number }} {{ invoice.debitor_id.number }}',
         ],

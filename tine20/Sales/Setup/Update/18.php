@@ -41,6 +41,7 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE021 = __CLASS__ . '::update021';
     protected const RELEASE018_UPDATE022 = __CLASS__ . '::update022';
     protected const RELEASE018_UPDATE023 = __CLASS__ . '::update023';
+    protected const RELEASE018_UPDATE024 = __CLASS__ . '::update024';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -111,6 +112,10 @@ class Sales_Setup_Update_18 extends Setup_Update_Abstract
             self::RELEASE018_UPDATE022          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update022',
+            ],
+            self::RELEASE018_UPDATE024          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update024',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -610,5 +615,41 @@ Your tine Team',
         Sales_Setup_Initialize::initializeEDocumentXRechnungElement();
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.23', self::RELEASE018_UPDATE023);
+    }
+
+    public function update024(): void
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Invoice::class,
+        ]);
+
+        $invoiceCtrl = Sales_Controller_Document_Invoice::getInstance();
+        $raii = new Tinebase_RAII($invoiceCtrl->assertPublicUsage());
+        $twigTemplates = [];
+
+        /** @var Sales_Model_Document_Invoice $invoice */
+        foreach ($invoiceCtrl->getAll() as $invoice) {
+            if ($invoice->isBooked()) {
+                $twigTemplate = $twigTemplates[$invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE}] ??
+                    $twigTemplates[$invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE}] =
+                        (new Tinebase_Twig(($local = new Zend_Locale($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE})), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $local)))
+                            ->getEnvironment()
+                            ->createTemplate(Sales_Config::getInstance()->{Sales_Config::PAYMENT_MEANS_ID_TMPL});
+
+                $this->getDb()->update(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME, [
+                    Sales_Model_Document_Invoice::FLD_REMITTANCE_INFORMATION => $twigTemplate->render(['invoice' => $invoice]),
+                ], $this->getDb()->quoteInto('id = ?', $invoice->getId()));
+            } else {
+                $this->getDb()->update(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME, [
+                    Sales_Model_Document_Invoice::FLD_REMITTANCE_INFORMATION => Sales_Config::getInstance()->{Sales_Config::PAYMENT_MEANS_ID_TMPL},
+                ], $this->getDb()->quoteInto('id = ?', $invoice->getId()));
+            }
+        }
+
+        unset($raii);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '18.24', self::RELEASE018_UPDATE024);
     }
 }

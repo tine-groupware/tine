@@ -34,6 +34,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public const FLD_PAYMENT_REMINDERS = 'payment_reminders';
     public const FLD_AUTO_INVOICE_BILLING_DATE = 'auto_invoice_billing_date';
+    public const FLD_REMITTANCE_INFORMATION = 'remittance_information';
 
     /**
      * invoice status
@@ -143,6 +144,19 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             self::SHY                   => true,
             self::CONFIG                => [
                 self::NO_AUTO_TRANSITION    => true,
+            ],
+        ];
+
+        $_definition[self::FIELDS][self::FLD_REMITTANCE_INFORMATION] = [
+            self::LABEL                 => 'Remittance information', // _('Remittance information')
+            self::TYPE                  => self::TYPE_STRING,
+            self::NULLABLE              => true,
+            self::CONFIG                => [
+                self::NO_AUTO_TRANSITION    => true,
+                self::DEFAULT_FROM_CONFIG   => [
+                    self::APP_NAME                  => Sales_Config::APP_NAME,
+                    self::CONFIG                    => Sales_Config::PAYMENT_MEANS_ID_TMPL,
+                ],
             ],
         ];
     }
