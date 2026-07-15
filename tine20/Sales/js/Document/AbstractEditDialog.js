@@ -211,7 +211,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
                     const oldRate = _.find(record.get('sales_tax_by_rate') || [], {tax_rate: Number(tax_rate)})
 
-                    sales_tax_by_rate = !oldRate && tax_amount === 0 && net_amount === 0 && gross_amount === 0 ? null :
+                    sales_tax_by_rate = !oldRate && tax_amount === 0 && net_amount === 0 && gross_amount === 0 ? [] :
                         Tine.Tinebase.common.assertComparable([Object.assign({}, oldRate || Tine.Sales.Model.Document_SalesTax.setFromJson({}).data, {
                             net_amount,
                             tax_rate,
