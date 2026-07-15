@@ -1413,6 +1413,55 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         unset($unitTestModeRaii);
     }
 
+    public function testPurchaseInvoiceDuplicate(): void
+    {
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+            'name' => 'test supplier',
+            'postal_id' => new Sales_Model_Address([
+                'email' => 'x@y.z',
+            ], true),
+        ]));
+
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today = Tinebase_DateTime::today(),
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '1',
+        ]));
+
+        $this->expectException(Tinebase_Exception_Duplicate::class);
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today,
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '1',
+        ]));
+    }
+
+    public function testPurchaseInvoiceUpdateDuplicate(): void
+    {
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+            'name' => 'test supplier',
+            'postal_id' => new Sales_Model_Address([
+                'email' => 'x@y.z',
+            ], true),
+        ]));
+
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today = Tinebase_DateTime::today(),
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '1',
+        ]));
+
+        $pi = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today,
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '2',
+        ]));
+
+        $this->expectException(Tinebase_Exception_Duplicate::class);
+        $pi->{Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER} = '1';
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->update($pi);
+    }
+
     public function testPurchaseInvoiceSupplier(): void
     {
         $pInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
