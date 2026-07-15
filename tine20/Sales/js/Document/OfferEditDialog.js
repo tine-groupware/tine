@@ -23,7 +23,7 @@ Tine.Sales.Document_OfferEditDialog = Ext.extend(Tine.Sales.Document_AbstractEdi
         const items = rtnVal[0].items
         const placeholder = {xtype: 'label', html: '&nbsp', columnWidth: 1/5}
 
-        const statusLine = [this.fields.followup_order_created_status, this.fields.followup_order_booked_status, {... placeholder}, {... placeholder}, {... placeholder}]
+        const statusLine = [this.fields.reversed_status, this.fields.followup_order_created_status, this.fields.followup_order_booked_status, {... placeholder}, {... placeholder}]
         statusLine.cls = 'status-fields'
         items.splice(0, 0, statusLine)
 

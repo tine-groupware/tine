@@ -13,7 +13,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     const allowedTransitions = {
         Offer: {
             Order: {},
-            Offer: {isReversal: false}
+            Offer: {isReversal: true}
         },
         Order: {
             Delivery: {},
