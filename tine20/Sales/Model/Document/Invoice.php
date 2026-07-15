@@ -143,6 +143,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
         $_definition[self::FIELDS][self::FLD_REMITTANCE_INFORMATION] = [
             self::LABEL                 => 'Remittance information', // _('Remittance information')
+            self::DESCRIPTION           => 'A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking.', // _('A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking.')
             self::TYPE                  => self::TYPE_STRING,
             self::NULLABLE              => true,
             self::CONFIG                => [

@@ -1969,6 +1969,12 @@ msgstr "Zahlungserinnerungen"
 msgid "Last Datev send date"
 msgstr "Letztes Datev Sende-Datum"
 
+msgid "Remittance information"
+msgstr "Verwendungszweck"
+
+msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
+msgstr "Ein Textwert, der zur Verknüpfung der Zahlung mit der vom Verkäufer ausgestellten Rechnung verwendet wird (BT-83 [EN 16931]). Platzhalter werden beim Buchen ersetzt."
+
 msgid "IN-"
 msgstr "RE-"
 

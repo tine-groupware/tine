@@ -24,7 +24,7 @@ Tine.Sales.Document_InvoiceEditDialog = Ext.extend(Tine.Sales.Document_AbstractE
         const row = _.find(rows, row => _.indexOf(row, this.fields.credit_term) >= 0)
         const colIdx = _.indexOf(row, this.fields.credit_term)
 
-        row.splice(colIdx+1, 1, this.fields.payment_reminders, {xtype: 'label', html: '&nbsp', columnWidth: 1/5})
+        row.splice(colIdx+1, 1, this.fields.remittance_information, this.fields.payment_reminders)
 
         return items
     }
