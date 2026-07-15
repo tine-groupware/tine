@@ -6,9 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Debitor controller class for Sales application
@@ -58,5 +60,16 @@ class Sales_Controller_Debitor extends Tinebase_Controller_Record_Abstract
         return [
             Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->getId(),
         ];
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        $diff = $currentRecord->diff($updatedRecord, TMCC::$modLogProperties);
+        if (!$diff->isEmpty()) {
+            Sales_Controller_Document_Abstract::propagateUpdatesToDenormalizedRecordsOfUnbookedDocuments($diff, [Sales_Model_Document_Debitor::class]);
+            Tinebase_Event::fireEvent(new Tinebase_Event_Record_Update(['observable' => $updatedRecord, 'oldRecord' => $currentRecord]));
+        }
     }
 }

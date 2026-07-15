@@ -3555,6 +3555,31 @@ abstract class Tinebase_Controller_Record_Abstract
         unset($ctrlAclRaii);
     }
 
+    public static function propagateUpdatesToDenormalizedRecords(Tinebase_Record_Diff $diff, array $targetModels, ?array $propagateProperties = null): void
+    {
+        /** @var Tinebase_Record_Interface $model */
+        foreach ($targetModels as $model => $cfg) {
+            $propertiesToSet = $propagateProperties ?: array_diff($model::getConfiguration()->fieldKeys, TMCC::$modLogProperties);
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = Tinebase_Core::getApplicationInstance($model);
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, array_merge([
+                [TMFA::FIELD => TMCC::FLD_ORIGINAL_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $diff->getId()],
+            ], $cfg['additionalFilter'] ?? []), _options: $cfg['filterOptions'] ?? []);
+            if (is_callable($cfg['filterCallBack'] ?? null)) {
+                $cfg['filterCallBack']($filter);
+            }
+            /** @var Tinebase_Record_NewAbstract $denormRec */
+            foreach ($ctrl->search($filter) as $denormRec) {
+                foreach($propertiesToSet as $prop) {
+                    if (isset($diff->diff[$prop])) {
+                        $denormRec->{$prop} = $diff->diff[$prop];
+                    }
+                }
+                $ctrl->update($denormRec);
+            }
+        }
+    }
+
     /**
      * updates dependent records on update the parent record
      *

@@ -17,6 +17,17 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
+
+    public static $modLogProperties = [
+        self::FLD_CREATED_BY,
+        self::FLD_CREATION_TIME,
+        self::FLD_LAST_MODIFIED_BY,
+        self::FLD_LAST_MODIFIED_TIME,
+        self::FLD_SEQ,
+        self::FLD_DELETED_BY,
+        self::FLD_DELETED_TIME,
+    ];
+
     public const ADD_FILTERS = 'addFilters';
     public const ALLOW_CAMEL_CASE = 'allowCamelCase';
     public const APPLICATION = 'application';

@@ -1538,6 +1538,65 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         self::assertSame($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId(), $order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Document_Debitor::FLD_ORIGINAL_ID});
     }
 
+    public function testDebitorUpdatePropagation(): void
+    {
+        $customer = $this->_createCustomer();
+
+        $booked = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
+            Sales_Model_Document_Delivery::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Delivery::FLD_RECIPIENT_ID => $customer->postal,
+        ]));
+        $booked->{Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS} = Sales_Model_Document_Delivery::STATUS_DELIVERED;
+        $booked = Sales_Controller_Document_Delivery::getInstance()->update($booked);
+        $this->assertSame('buy ref', $booked->{Sales_Model_Document_Delivery::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE});
+
+        $delivery = Sales_Controller_Document_Delivery::getInstance()->create(new Sales_Model_Document_Delivery([
+            Sales_Model_Document_Delivery::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Delivery::FLD_RECIPIENT_ID => $customer->postal,
+        ]));
+        $this->assertSame('buy ref', $delivery->{Sales_Model_Document_Delivery::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE});
+
+        $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BUYER_REFERENCE} = 'unittest';
+        Sales_Controller_Customer::getInstance()->update($customer);
+
+        $delivery = Sales_Controller_Document_Delivery::getInstance()->get($delivery->getId());
+        $this->assertSame('unittest', $delivery->{Sales_Model_Document_Delivery::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE});
+
+        $booked = Sales_Controller_Document_Delivery::getInstance()->get($booked->getId());
+        $this->assertSame('buy ref', $booked->{Sales_Model_Document_Delivery::FLD_DEBITOR_ID}->{Sales_Model_Debitor::FLD_BUYER_REFERENCE});
+
+        $supplier = Sales_Controller_Supplier::getInstance()->create(new Sales_Model_Supplier([
+            'name' => 'test supplier',
+            'postal_id' => new Sales_Model_Address([
+                'email' => 'x@y.z',
+            ], true),
+        ]));
+
+        $booked = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today = Tinebase_DateTime::today(),
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '1',
+        ]));
+        $this->assertSame('test supplier', $booked->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->name);
+
+        $pinvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID => $supplier,
+            Sales_Model_Document_PurchaseInvoice::FLD_DOCUMENT_DATE => $today,
+            Sales_Model_Document_PurchaseInvoice::FLD_EXTERNAL_INVOICE_NUMBER => '2',
+        ]));
+        $this->assertSame('test supplier', $pinvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->name);
+
+        $supplier->name = 'unittest';
+        Sales_Controller_Supplier::getInstance()->update($supplier);
+
+        $booked = Sales_Controller_Document_PurchaseInvoice::getInstance()->get($booked->getId());
+        $this->assertSame('test supplier', $booked->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->name);
+
+        $pinvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->get($pinvoice->getId());
+        $this->assertSame('unittest', $pinvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SUPPLIER_ID}->name);
+    }
+
     public function testDocumentPositionFilters(): void
     {
         $customer = $this->_createCustomer();
