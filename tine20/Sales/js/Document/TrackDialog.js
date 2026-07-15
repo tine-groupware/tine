@@ -34,7 +34,10 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         })();
 
 
-        this.cyImport = import(/* webpackChunkName: "Tinebase/js/cytoscape" */ 'cytoscape')
+        this.cyImport = Promise.all([
+            import(/* webpackChunkName: "Tinebase/js/cytoscape" */ 'cytoscape'),
+            import(/* webpackChunkName: "Tinebase/js/cytoscape" */ 'cytoscape-dagre')
+        ])
         this.cyPanel = new Ext.Panel({
             tbar: [this.refresh = new Ext.Toolbar.Button({
                 tooltip: Ext.PagingToolbar.prototype.refreshText,
@@ -81,7 +84,11 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
             this.cyPanel.afterIsRendered(),
             this.cyImport
         ]).then((values) => {
-            this.renderCy(values[1].default);
+            const cytoscape = values[1][0].default
+            const dagre = values[1][1].default
+            cytoscape.use(dagre);
+
+            this.renderCy(cytoscape);
         })
 
         Promise.all([cy, Tine.Sales.trackDocument(this.documentModel, this.record.id)]).then((values) => {
@@ -93,6 +100,7 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
 
     renderCy (cytoscape) {
         const darkMode = window.document.body.classList.contains('dark-mode');
+        const bgColor = window.getComputedStyle(this.cyPanel.body.dom).backgroundColor;
 
         this.cy = cytoscape({
             container: this.cyPanel.body.dom,
@@ -119,7 +127,12 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         // 'overlay-padding': '10',
 
                         'text-valign': 'center',
-                        'text-halign': 'right'
+                        'text-halign': 'right',
+                        'text-margin-x': 4,
+                        'text-background-color': bgColor,
+                        'text-background-opacity': 1,
+                        'text-background-shape': 'roundrectangle',
+                        'text-background-padding': '3px'
 
                     }
                 },
@@ -137,8 +150,14 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
                         'border-opacity': 1,
                         'text-valign': 'top',
                         'text-halign': 'center',
+                        'text-margin-x': 4,
+                        'text-background-color': bgColor,
+                        'text-background-opacity': 1,
+                        'text-background-shape': 'roundrectangle',
+                        'text-background-padding': '3px'
                     }
                 },
+                { selector: '.reversed', style: { 'color': darkMode ? '#888' : '#aaa', 'text-opacity': 0.6, 'opacity': 0.5 } },
                 {
                     selector: 'edge',
                     css: {
@@ -214,34 +233,28 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         await async.forEach(this.tracData, (async (dynamicRecordWrapper) => {
             const {model_name: modelName, record: recordData} = dynamicRecordWrapper;
             const document = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Tinebase.data.RecordMgr.get(modelName));
-            // const precursor_documents
-
-            // NOTE: positions have their document as PARENT. documents, positions are connected by edges (because in cytoscape a node can have one parent only!)
-            // BUT: at our side a position can have exactly one precursor! (link documents by edgets but posiitons by parent?)
-            const cols = {
-                Sales_Model_Document_Offer: 0,
-                Sales_Model_Document_Order: 1,
-                Sales_Model_Document_Delivery: 2,
-                Sales_Model_Document_Invoice: 3,
-                Sales_Model_Document_Credit: 4,
-                Sales_Model_Document_PurchaseInvoice: 0
-            };
+            const isReversed = document.get('reversed_status') !== 'notReversed';
 
             const documentId = `${modelName}-${document.id}`;
-            const title = await asString(document.getTitle());
-            elements.nodes.push({data: {id: documentId, name: title, col: cols[modelName], modelName, collapsed: this.cyNodesCollapsed } });
+            const title = await asString(document.get('document_number'));
+            elements.nodes.push({
+                data: {id: documentId, name: title, modelName, collapsed: this.cyNodesCollapsed },
+                classes: [modelName, isReversed ? 'reversed' : ''].join(' ').trim()
+            });
 
             if (this.cyNodesCollapsed) {
                 _.forEach(document.get('precursor_documents'), (precursorDynamicRecordWrapper) => {
                     const {model_name: precursorModelName, record: precursorRecordId} = precursorDynamicRecordWrapper;
                     const precursorDocumentId = `${precursorModelName}-${precursorRecordId}`;
-                    elements.edges.push({ data: {id: `${precursorDocumentId}-${documentId}`, source: precursorDocumentId, target: documentId}});
+                    elements.edges.push({
+                        data: {id: `${precursorDocumentId}-${documentId}`, source: precursorDocumentId, target: documentId}
+                    });
                 })
             } else {
                 _.forEach(document.get('positions'), (positionData) => {
-                    const positoinModelName = modelName.replace(/_Document_/, '_DocumentPosition_');
-                    const positionId = `${positoinModelName}-${positionData.id}`;
-                    elements.nodes.push({data: {id: positionId, name: `${positionData.pos_number} ${positionData.title}`, parent: `${modelName}-${document.id}`, col: cols[modelName] } });
+                    const positionModelName = modelName.replace(/_Document_/, '_DocumentPosition_');
+                    const positionId = `${positionModelName}-${positionData.id}`;
+                    elements.nodes.push({data: {id: positionId, name: `${positionData.pos_number} ${positionData.title}`, parent: `${modelName}-${document.id}`} });
                     if (positionData.precursor_position) {
                         const precursorId = `${positionData.precursor_position_model}-${positionData.precursor_position}`;
                         elements.edges.push({ data: {id: `${precursorId}-${positionId}`, source: precursorId, target: positionId}});
@@ -254,18 +267,13 @@ Tine.Sales.Document.TrackDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
         this.cy.remove('*');
         this.cy.add(elements);
         this.cy.endBatch();
-        let rows = {0:0, 1:0, 2:0, 3:0, 4:0}
         this.cy.layout({
-            name: 'grid',
-            cols: 4,
-            position: function(node) {
-                return {
-                    row: rows[node.data('col')]++,
-                    col: node.data('col')
-                }
-            },
-            // directed: true,
-            padding: 10
+            name: 'dagre',
+            rankDir: 'LR',
+            nodeSep: 30,
+            rankSep: 80,
+            nodeDimensionsIncludeLabels: true,
+            animate: true
         }).run();
     },
 
