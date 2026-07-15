@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <model>EventManager_Model_Event</model>
+    <name>eventmanager_xls</name>
+    <!-- _('Export Events') -->
+    <label>Export events</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_Xls</plugin>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <favorite>true</favorite>
+    <order>400</order>
+    <scope>multi</scope>
+</config>
