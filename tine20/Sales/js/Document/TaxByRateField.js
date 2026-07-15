@@ -7,6 +7,12 @@
  */
 import TaxByRateGridPanel from "./TaxByRateGridPanel";
 
+const EMPTY_VALUES = [null, undefined, false, '', NaN];
+
+const withDefault = (value, defaultValue) =>
+    EMPTY_VALUES.includes(value) ? defaultValue : value;
+
+
 const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
     minLayerWidth: 400,
     validationEvent: 'blur',
@@ -79,7 +85,7 @@ const TaxByRateField = Ext.extend(Ext.ux.form.LayerCombo, {
         value = [null, '', undefined].indexOf(value) >= 0 ? value : _.reduce(_.compact(String(value).split(/%\),?/)), (a, v) => {
             let [t,r] = String(v).split(/[^0-9,.]+\(/)
 
-            const tax_rate = this.parseValue(r, 'tax_rate') || Tine.Tinebase.configManager.get('salesTax')
+            const tax_rate = withDefault(this.parseValue(r, 'tax_rate'), Tine.Tinebase.configManager.get('salesTax'))
             const tax_amount = this.parseValue(t, 'tax_amount') || 0
             const net_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(tax_amount / tax_rate * 100)
             const gross_amount = Tine.Sales.Model.Document_InvoiceMixin.statics.toFixed(net_amount + tax_amount)
