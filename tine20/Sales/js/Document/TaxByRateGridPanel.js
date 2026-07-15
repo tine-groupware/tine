@@ -60,8 +60,8 @@ const TaxByRateGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 break;
 
             case 'tax_rate':
-                const f = e.value / originalValues.tax_rate;
-                tax_amount = originalValues.tax_amount * f;
+                const f = originalValues.tax_rate ? e.value / originalValues.tax_rate : 1;
+                tax_amount = originalValues.tax_amount ? originalValues.tax_amount * f : (originalValues.gross_amount * e.value / (100 + e.value));
                 e.record.set('tax_amount', tax_amount);
                 e.record.set('net_amount', originalValues.gross_amount - tax_amount);
                 break;
