@@ -13,6 +13,7 @@
 
 use Sales_Model_Document_PurchaseInvoice as SMD_PInvoice;
 use Tinebase_Model_Filter_Abstract as TMFA;
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * PurchaseInvoice Document controller class for Sales application
@@ -48,6 +49,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $this->_modelName = Sales_Model_Document_PurchaseInvoice::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+        $this->_duplicateCheckOnUpdate = true;
 
         $this->_documentStatusConfig = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS;
         $this->_documentStatusTransitionConfig = Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS;
@@ -76,10 +78,16 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
 
     protected function _getDuplicateFilter(Tinebase_Record_Interface $_record)
     {
+        if (!$_record->{SMD_PInvoice::FLD_EXTERNAL_INVOICE_NUMBER} || !$_record->{SMD_PInvoice::FLD_SUPPLIER_ID}) {
+            return null;
+        }
         return Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+            [TMFA::FIELD => TMCC::ID, TMFA::OPERATOR => 'not', TMFA::VALUE => $_record->getId()],
             [TMFA::FIELD => SMD_PInvoice::FLD_EXTERNAL_INVOICE_NUMBER, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_EXTERNAL_INVOICE_NUMBER}],
             [TMFA::FIELD => SMD_PInvoice::FLD_DOCUMENT_DATE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_DOCUMENT_DATE}],
-            [TMFA::FIELD => SMD_PInvoice::FLD_SUPPLIER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_SUPPLIER_ID}],
+            [TMFA::FIELD => SMD_PInvoice::FLD_SUPPLIER_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => TMCC::FLD_ORIGINAL_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->{SMD_PInvoice::FLD_SUPPLIER_ID}?->{TMCC::FLD_ORIGINAL_ID} ?: $_record->{SMD_PInvoice::FLD_SUPPLIER_ID}->getId()],
+            ]],
         ]);
     }
 
