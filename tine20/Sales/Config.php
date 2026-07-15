@@ -495,6 +495,14 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 self::RECORDS => [
                     [
+                        'id' => Sales_Model_Document_PurchaseInvoice::STATUS_DRAFT,
+                        //_('Approval Requested (unbooked, open)')
+                        'value' => 'Daft (unbooked, open)',
+                        'icon' => null,
+                        Sales_Model_Document_Status::FLD_BOOKED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        'system' => true
+                    ], [
                         'id' => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
                         //_('Approval Requested (unbooked, open)')
                         'value' => 'Approval Requested (unbooked, open)',
@@ -528,7 +536,7 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true
                     ],
                 ],
-                self::DEFAULT_STR => Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
+                self::DEFAULT_STR => Sales_Model_Document_PurchaseInvoice::STATUS_DRAFT,
             ],
         ],
         self::DOCUMENT_PURCHASE_INVOICE_STATUS_TRANSITIONS => [
@@ -543,11 +551,20 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           => [
                 '' => [
                     self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_DRAFT,
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
                         Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
                         Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
                         Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
                     ]
+                ],
+                Sales_Model_Document_PurchaseInvoice::STATUS_DRAFT => [
+                    self::TRANSITION_TARGET_STATUS => [
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_APPROVED,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_PAID,
+                        Sales_Model_Document_PurchaseInvoice::STATUS_COMPLETED,
+                    ],
                 ],
                 Sales_Model_Document_PurchaseInvoice::STATUS_APPROVAL_REQUESTED => [
                     self::TRANSITION_TARGET_STATUS => [

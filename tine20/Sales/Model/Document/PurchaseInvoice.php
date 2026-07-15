@@ -23,6 +23,7 @@ class Sales_Model_Document_PurchaseInvoice extends Sales_Model_Document_Abstract
     public const MODEL_NAME_PART = 'Document_PurchaseInvoice';
     public const TABLE_NAME = 'sales_document_purchase_invoice';
 
+    public const STATUS_DRAFT = 'draft';
     public const STATUS_APPROVAL_REQUESTED = 'approvalRequested';
     public const STATUS_APPROVED = 'approved';
     public const STATUS_PAID = 'paid';
