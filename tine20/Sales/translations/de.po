@@ -1758,8 +1758,14 @@ msgstr "Die Hauptzeile in einer Anschrift. Üblicherweise ist dies entweder Stra
 msgid "Address Prefix 2"
 msgstr "Adresspräfix 2"
 
+msgid "An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931])."
+msgstr "Eine zusätzliche Adresszeile in einer Anschrift, die verwendet werden kann, um weitere Einzelheiten in Ergänzung zur Hauptzeile anzugeben (BT-36 [EN 16931])."
+
 msgid "Address Prefix 3"
 msgstr "Adresspräfix 3"
+
+msgid "An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931])."
+msgstr "Eine zusätzliche Adresszeile in einer Anschrift, die verwendet werden kann, um weitere Einzelheiten in Ergänzung zur Hauptzeile anzugeben (BT-162 [EN 16931])."
 
 msgid "Address Postal Code"
 msgstr "Adresspostleitzahl"
@@ -2561,11 +2567,11 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
 
-msgid "An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931])."
-msgstr "Eine zusätzliche Adresszeile in einer Anschrift, die verwendet werden kann, um weitere Einzelheiten in Ergänzung zur Hauptzeile anzugeben (BT-36 [EN 16931])."
+msgid "Remittance information"
+msgstr "Verwendungszweck"
 
-msgid "An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931])."
-msgstr "Eine zusätzliche Adresszeile in einer Anschrift, die verwendet werden kann, um weitere Einzelheiten in Ergänzung zur Hauptzeile anzugeben (BT-162 [EN 16931])."
+msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
+msgstr "Ein Textwert, der zur Verknüpfung der Zahlung mit der vom Verkäufer ausgestellten Rechnung verwendet wird (BT-83 [EN 16931]). Platzhalter werden beim Buchen ersetzt."
 
 msgid "Update Supplier Data?"
 msgstr "Lieferantendaten Aktualisieren?"
