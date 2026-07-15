@@ -105,8 +105,6 @@ Tine.Tinebase.widgets.dialog.ResetPasswordDialog = Ext.extend(Tine.Tinebase.dial
                                 xtype: 'checkbox',
                                 boxLabel: i18n.gettext('Password Must Change'),
                                 hidden: this.ldapBackend,
-                                ctCls: 'admin-checkbox',
-                                fieldClass: 'admin-checkbox-box',
                                 name: 'password_must_change',
                                 plugins: [this.mustChangeTriggerPlugin],
                                 columnWidth: 0.5,
