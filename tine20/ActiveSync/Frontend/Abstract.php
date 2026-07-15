@@ -127,7 +127,8 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
         'bb10',
         'outlook', // Outlook-iOS-Android
         // android supports multiple folders since 4.4
-        Syncroton_Model_Device::TYPE_ANDROID
+        Syncroton_Model_Device::TYPE_ANDROID,
+        'tbsync',
     );
     
     /**
