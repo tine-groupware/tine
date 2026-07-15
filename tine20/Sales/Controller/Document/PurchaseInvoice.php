@@ -166,7 +166,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
 
     protected const TYPE_UBL = 1;
     protected const TYPE_CII = 2;
-    protected function _getEDocumentXml(Tinebase_Model_FileLocation $fileLocation, ?string &$content, ?int &$type): ?string
+    protected function _getEDocumentXml(Tinebase_Model_FileLocation $fileLocation, ?string &$content, ?int &$type, bool $skipLogging = false): ?string
     {
         if (!$fileLocation->isFile()) {
             throw new Tinebase_Exception('fileLocation is not a file');
@@ -179,7 +179,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
         $xmlContent = $content = $fileLocation->getContent();
         if ('xml' !== $locationExt) {
             try {
-                $zugPferd = Sales_EDocument_ZUGFeRD::createFromString($xmlContent);
+                $zugPferd = Sales_EDocument_ZUGFeRD::createFromString($xmlContent, $skipLogging);
                 $xmlContent = $zugPferd->getXml();
             } catch (Tinebase_Exception_UnexpectedValue $e) {}
         }
@@ -214,7 +214,7 @@ class Sales_Controller_Document_PurchaseInvoice extends Sales_Controller_Documen
                 && ($node->xprops()[self::class][self::IS_EDOCUMENT] ?? null) === $node->hash) {
             return true;
         }
-        $result = null !== $this->_getEDocumentXml($fileLocation, $content, $type);
+        $result = null !== $this->_getEDocumentXml($fileLocation, $content, $type, true);
 
         if ($result && null !== $node) {
             $node->xprops()[self::class][self::IS_EDOCUMENT] = $node->hash;
