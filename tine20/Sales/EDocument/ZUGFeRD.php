@@ -124,15 +124,17 @@ class Sales_EDocument_ZUGFeRD
     /**
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public static function createFromString(string $data): self
+    public static function createFromString(string $data, bool $skipLogging = false): self
     {
         try {
             $pdf = (new \Smalot\PdfParser\Parser())->parseContent($data);
         } catch (Exception $e) {
-            $te = new Tinebase_Exception($e->getMessage(), previous: $e);
-            $te->setLogToSentry(true);
-            $te->setLogLevelMethod('warn');
-            Tinebase_Exception::log($te);
+            if (!$skipLogging) {
+                $te = new Tinebase_Exception($e->getMessage(), previous: $e);
+                $te->setLogToSentry(true);
+                $te->setLogLevelMethod('warn');
+                Tinebase_Exception::log($te);
+            }
             throw new Tinebase_Exception_UnexpectedValue('not a ZUGFeRD pdf');
         }
         return new self($pdf);
@@ -141,7 +143,7 @@ class Sales_EDocument_ZUGFeRD
     public static function isStringZugFeRD(string $data): ?self
     {
         try {
-            return self::createFromString($data);
+            return self::createFromString($data, true);
         } catch (Tinebase_Exception_UnexpectedValue $e) {
             return null;
         }
