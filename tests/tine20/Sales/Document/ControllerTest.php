@@ -1967,4 +1967,61 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertNotSame($number, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER});
         $this->assertSame($number, $invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER});
     }
+
+    public function testPurchaseInvoiceSalesTaxByIdNullUpdate()
+    {
+        $division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord();
+
+        $salesTax1 = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => 19,
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 93.6,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 492.63,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 586.23,
+        ], true);
+
+        $salesTax2 = new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => 7,
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 23.4,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 334.29,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 357.69,
+        ], true);
+
+        $salesTaxSet = new Tinebase_Record_RecordSet(Sales_Model_Document_SalesTax::class, [
+            $salesTax1,
+            $salesTax2,
+        ]);
+
+        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->create(new Sales_Model_Document_PurchaseInvoice([
+            Sales_Model_Document_PurchaseInvoice::FLD_DIVISION_ID => $division,
+            Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE => $salesTaxSet,
+        ]));
+
+        $this->assertNotEmpty($purchaseInvoice->getId());
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE});
+        $this->assertSame(2, $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->count());
+
+        $savedTaxRates = [];
+        foreach ($purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE} as $tax) {
+            $savedTaxRates[$tax->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}] = $tax->getId();
+        }
+
+        $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(0)->setId(null);
+        $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(1)->setId(null);
+
+        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($purchaseInvoice);
+
+        foreach ($purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE} as $tax) {
+            $this->assertSame($savedTaxRates[$tax->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}],  $tax->getId());
+        }
+        $firstId = $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(0)->getId();
+        $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(0)->setId(
+            $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(1)->getId()
+        );
+        $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->getByIndex(1)->setId($firstId);
+
+        $purchaseInvoice = Sales_Controller_Document_PurchaseInvoice::getInstance()->update($purchaseInvoice);
+        foreach ($purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE} as $tax) {
+            $this->assertSame($savedTaxRates[$tax->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}],  $tax->getId());
+        }
+    }
 }

@@ -78,6 +78,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             self::UNIQUE_CONSTRAINTS        => [
                 self::FLD_NUMBER                 => [
                     self::COLUMNS                   => [self::FLD_DIVISION_ID, self::FLD_NUMBER, self::FLD_DELETED_TIME],
+                    self::CONFIG                    => [self::SKIP_UNIQUE_CONTAINS_PARENT_CHECK => true],
                 ],
             ],
         ],

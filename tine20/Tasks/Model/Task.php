@@ -278,6 +278,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::APP_NAME          => Tasks_Config::APP_NAME,
                     self::MODEL_NAME        => Tasks_Model_TaskDependency::MODEL_NAME_PART,
                     self::DEPENDENT_RECORDS => true,
+                    self::NO_UPDATE         => true,
                     self::REF_ID_FIELD      => Tasks_Model_TaskDependency::FLD_TASK_ID,
                 ],
                 self::UI_CONFIG                 => [
@@ -291,6 +292,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::APP_NAME          => Tasks_Config::APP_NAME,
                     self::MODEL_NAME        => Tasks_Model_TaskDependency::MODEL_NAME_PART,
                     self::DEPENDENT_RECORDS => true,
+                    self::NO_UPDATE         => true,
                     self::REF_ID_FIELD      => Tasks_Model_TaskDependency::FLD_DEPENDS_ON,
                 ],
                 self::UI_CONFIG                 => [

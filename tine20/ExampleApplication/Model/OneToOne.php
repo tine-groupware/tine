@@ -52,7 +52,7 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
             self::NAME                      => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS        => [
                 self::FLD_EXAMPLE_RECORD        => [
-                    self::COLUMNS                   => [self::FLD_EXAMPLE_RECORD, 'deleted_time']
+                    self::COLUMNS                   => [self::FLD_EXAMPLE_RECORD, self::FLD_DELETED_TIME]
                 ]
             ]
         ],
@@ -104,6 +104,7 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
                 self::CONFIG                    => [
                     self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
                     self::MODEL_NAME                => ExampleApplication_Model_ExampleRecord::MODEL_NAME_PART,
+                    self::IS_PARENT                 => true,
                 ]
             ],
             self::FLD_ADB_RECORD            => [
