@@ -165,7 +165,7 @@ Tine.Filemanager.QuickLookPanel = Ext.extend(Ext.Panel, {
             const fileLocation = FileLocation.create(this.record);
 
             let previewPanelXtype = '';
-            let previewPanelTypes;
+            let previewPanelTypes = [];
 
             if (this.registry.hasContentType(contentType)) {
                 previewPanelTypes = await this.registry.getByContentType(contentType, fileLocation);
