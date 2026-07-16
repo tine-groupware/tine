@@ -1052,6 +1052,26 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
 
         $this->_application = $this->_applicationName = $this->_appName;
 
+        if ($this->_isDependent && ($this->_table[self::UNIQUE_CONSTRAINTS] ?? false)) {
+            $parents = [];
+            foreach ($this->_fields as $fieldName => $fieldValue) {
+                if ($fieldValue[self::CONFIG][self::IS_PARENT] ?? false) {
+                    $parents[] = $fieldName;
+                }
+            }
+            if (empty($parents)) {
+                throw new Tinebase_Exception_Record_DefinitionFailure('dependent model, but no parent defined: ' . $recordClass);
+            }
+            foreach ($this->_table[self::UNIQUE_CONSTRAINTS] as $name => $uniqueConstraint) {
+                if ($uniqueConstraint[self::CONFIG][self::SKIP_UNIQUE_CONTAINS_PARENT_CHECK] ?? false) {
+                    continue;
+                }
+                if (array_diff($parents, $uniqueConstraint[self::COLUMNS] ?? [])) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure($recordClass . ' unique constraint ' . $name . ' is lacking parent property');
+                }
+            }
+        }
+
         // add appName to available applications
         self::$_availableApplications[$this->_appName] = TRUE;
 

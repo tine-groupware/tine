@@ -83,6 +83,7 @@ class Sales_Model_DivisionBankAccount extends Tinebase_Record_NewAbstract
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Division::MODEL_NAME_PART,
+                    self::IS_PARENT                 => true,
                 ],
             ],
         ],

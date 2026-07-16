@@ -197,6 +197,7 @@ class Tinebase_ModelConfiguration_Const {
 
     public const NAME = 'name';
     public const NO_DEFAULT_VALIDATOR = 'noDefaultValidator';
+    public const NO_UPDATE = 'noUpdate';
     public const NORESOLVE = 'noResolve';
     public const NULLABLE = 'nullable';
 
@@ -247,6 +248,7 @@ class Tinebase_ModelConfiguration_Const {
     public const SHY = 'shy';
     public const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     public const SKIP_LEGACY_JSON_CONVERT = 'skipLegacyJsonConvert';
+    public const SKIP_UNIQUE_CONTAINS_PARENT_CHECK = 'skipUniqueParentCheck';
     public const SPECIAL_TYPE = 'specialType';
     public const SPECIAL_TYPE_DISCOUNT = 'discount';
     public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';

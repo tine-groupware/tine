@@ -3592,8 +3592,6 @@ abstract class Tinebase_Controller_Record_Abstract
         $recordClassName = $_fieldConfig['recordClassName'];
         $recordMC = $recordClassName::getConfiguration();
         $filterClassName = $_fieldConfig['filterClassName'];
-        /** @var Tinebase_Record_RecordSet|Tinebase_Record_Interface $existing */
-        $existing = new Tinebase_Record_RecordSet($recordClassName);
 
         $ctrlAclRaii = null;
         if ($_fieldConfig[TMCC::IGNORE_ACL] ?? false) {
@@ -3613,6 +3611,14 @@ abstract class Tinebase_Controller_Record_Abstract
                 });
             }
         }
+
+        $filterArray = $_fieldConfig['addFilters'] ?? [];
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND',
+            $_fieldConfig[TMCC::FILTER_OPTIONS] ?? []);
+
+        $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        $existing = $controller->search($filter);
+        $newRecords = new Tinebase_Record_RecordSet($recordClassName);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -3641,6 +3647,9 @@ abstract class Tinebase_Controller_Record_Abstract
 
             $uniqueFlds = [];
             foreach ($recordMC->getTable()[TMCC::UNIQUE_CONSTRAINTS] ?? [] as $uniqueDef) {
+                if ($uniqueDef[TMCC::CONFIG][TMCC::SKIP_UNIQUE_CONTAINS_PARENT_CHECK] ?? false) {
+                    continue;
+                }
                 foreach ($uniqueDef[TMCC::COLUMNS] ?? [] as $column) {
                     $uniqueFlds[$column] = $column;
                 }
@@ -3650,11 +3659,15 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($_record->{$_property} as $record) {
                 $record->{$_fieldConfig['refIdField']} = $_record->getId();
 
-                while ($uniqueFlds && (empty($record->getId()) || !$controller->has([$record->getId()], true))) {
+                while ($uniqueFlds) {
                     $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($recordClassName);
                     foreach ($uniqueFlds as $uniqueFld) {
                         if (null === $record->{$uniqueFld}) {
-                            break 2;
+                            if (TMCC::FLD_DELETED_TIME === $uniqueFld) {
+                                $record->{$uniqueFld} = '1970-01-01 00:00:00';
+                            } else {
+                                break 2;
+                            }
                         }
                         $filter->addFilter($filter->createFilter($uniqueFld, TMFA::OP_EQUALS, $record->getIdFromProperty($uniqueFld)));
                     }
@@ -3667,6 +3680,18 @@ abstract class Tinebase_Controller_Record_Abstract
                     break;
                 }
 
+                if (!empty($record->getId())) {
+                    $existing->removeById($record->getId());
+                }
+            }
+
+            if ($existing->count() > 0) {
+                $controller->delete($existing->getArrayOfIds());
+                $existing->removeAll();
+            }
+
+            /** @var Tinebase_Record_Interface $record */
+            foreach ($_record->{$_property} as $record) {
                 $create = false;
                 if (!empty($record->getId())) {
                     try {
@@ -3674,6 +3699,10 @@ abstract class Tinebase_Controller_Record_Abstract
                         $prevRecord = $controller->get($record->getId(), _getDeleted: true);
                         if ($prevRecord->{$_fieldConfig['refIdField']} !== $prevRecord->{$_fieldConfig['refIdField']}) {
                             throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+                        }
+
+                        if ($_fieldConfig[TMCC::NO_UPDATE] ?? false) {
+                            continue;
                         }
 
                         if ($prevRecord->is_deleted) {
@@ -3696,12 +3725,12 @@ abstract class Tinebase_Controller_Record_Abstract
                                     $controller,
                                     $_fieldConfig[TMCC::IGNORE_ACL] ?? false,
                                     false);
-                                $existing->addRecord($record);
+                                $newRecords->addRecord($record);
                             } else {
-                                $existing->addRecord($controller->update($record));
+                                $newRecords->addRecord($controller->update($record));
                             }
                         } else {
-                            $existing->addRecord($record);
+                            $newRecords->addRecord($record);
                         }
 
                     } catch (Tinebase_Exception_NotFound $tenf) {
@@ -3726,7 +3755,7 @@ abstract class Tinebase_Controller_Record_Abstract
                         $crc = $record;
                     } else {
                         $crc = $controller->create($record);
-                        $existing->addRecord($crc);
+                        $newRecords->addRecord($crc);
                     }
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
@@ -3736,26 +3765,11 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        $filterArray = $_fieldConfig['addFilters'] ?? [];
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND',
-            $_fieldConfig[TMCC::FILTER_OPTIONS] ?? []);
-
-        $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
-
-        // an empty array will remove all records on this property
-        if (! empty($_record->{$_property})) {
-            $filter->addFilter($filter->createFilter('id', 'notin', $existing->getId()));
+        if ($existing->count() > 0) {
+            $controller->delete($existing->getArrayOfIds());
         }
 
-        $deleteIds = $controller->search($filter, null, false, true);
-
-        if (! empty($deleteIds)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__. ' Deleting dependent records with id = "' . print_r($deleteIds, 1) . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
-            }
-            $controller->delete($deleteIds);
-        }
-        $_record->{$_property} = $existing;
+        $_record->{$_property} = $newRecords;
 
         unset($ctrlAclRaii);
     }

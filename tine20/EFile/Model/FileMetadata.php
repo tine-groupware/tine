@@ -104,6 +104,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::CONFIG => [
                     self::APP_NAME => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME => 'Tree_Node',
+                    self::IS_PARENT => true,
                 ]
             ],
             self::FLD_DURATION_START => [

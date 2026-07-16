@@ -93,7 +93,10 @@ class Projects_JsonTest extends TestCase
 
         $this->assertCount(1, $projectData[Projects_Model_Project::FLD_TASKS]);
         $this->assertSame($id1, $projectData[Projects_Model_Project::FLD_TASKS][0]['id']);
+        $this->assertSame('task1', $projectData[Projects_Model_Project::FLD_TASKS][0]['summary']);
         $this->assertCount(1, $projectData[Projects_Model_Project::FLD_TASKS][0][Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $task = (new Tasks_Frontend_Json())->getTask($projectData[Projects_Model_Project::FLD_TASKS][0][Tasks_Model_Task::FLD_DEPENDENT_TASKS][0]['task_id']);
+        $this->assertSame('task2', $task['summary']);
     }
 
     public function testAddProjectTasksDependingOnEach()

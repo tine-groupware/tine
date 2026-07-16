@@ -1,4 +1,13 @@
 <?php declare(strict_types=1);
+/**
+ * Tine 2.0
+ *
+ * @package     Tinebase
+ * @subpackage  Record
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
 
 abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewAbstract
 {
@@ -48,7 +57,9 @@ abstract class Tinebase_Record_PropertyLocalization extends Tinebase_Record_NewA
         self::FIELDS                        => [
             self::FLD_RECORD_ID                 => [
                 self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [],
+                self::CONFIG                        => [
+                    self::IS_PARENT                     => true,
+                ],
                 self::DISABLED                      => true,
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
