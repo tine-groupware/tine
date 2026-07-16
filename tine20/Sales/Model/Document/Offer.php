@@ -68,9 +68,6 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
      */
     protected static function _adaptFields(array &$_definition)
     {
-        // offer customers are optional
-        unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
-
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART;
 
