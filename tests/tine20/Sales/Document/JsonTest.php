@@ -796,8 +796,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 [
                     'document_id' => [],
                     'document_type' => '',
-                    'gross_amount' => 0,
-                    'net_amount' => 0,
+                    'gross_amount' => 586.23,
+                    'net_amount' => 492.63,
                     'tax_amount' => 93.6,
                     'tax_rate' => 19,
                     'id' => '556fb7fd87941556873af9584b8bdfeb59afcb17',
@@ -811,8 +811,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertCount(1, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
         $this->assertEquals(93.6, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount']);
         $this->assertEquals(19, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate']);
-        $this->assertEquals(0, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['net_amount']);
-        $this->assertEquals(0, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount']);
+        $this->assertEquals(586.23, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount']);
+        $this->assertEquals(492.63, $savedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['net_amount']);
 
         $retrievedInvoice = $this->_instance->getDocument_PurchaseInvoice($savedInvoice['id']);
         $this->assertIsArray($retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE]);
@@ -821,16 +821,16 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertEquals(19, $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate']);
 
         // update existing tax rate and add another one with different tax rate
-        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount'] = 187.2;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_amount'] = 68.97;
         $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['net_amount'] = 985.26;
-        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount'] = 1172.46;
+        $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['gross_amount'] = 1054.23;
         $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][0]['tax_rate'] = 7;
         $retrievedInvoice[Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE][1] = [
             'document_id' => [],
             'document_type' => '',
-            'gross_amount' => 119.0,
+            'gross_amount' => 657.63,
             'net_amount' => 626.32,
-            'tax_amount' => 93.6,
+            'tax_amount' => 31.31,
             'tax_rate' => 5,
             'id' => Tinebase_Record_Abstract::generateUID(),
         ];
@@ -852,14 +852,14 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
         $this->assertNotNull($taxRate7, 'tax rate 7 not found');
         $this->assertNotNull($taxRate5, 'tax rate 5 not found');
-        $this->assertEquals(187.2, $taxRate7['tax_amount']);
+        $this->assertEquals(68.97, $taxRate7['tax_amount']);
         $this->assertEquals(7, $taxRate7['tax_rate']);
         $this->assertEquals(985.26, $taxRate7['net_amount']);
-        $this->assertEquals(1172.46, $taxRate7['gross_amount']);
+        $this->assertEquals(1054.23, $taxRate7['gross_amount']);
 
-        $this->assertEquals(93.6, $taxRate5['tax_amount']);
+        $this->assertEquals(31.31, $taxRate5['tax_amount']);
         $this->assertEquals(5, $taxRate5['tax_rate']);
         $this->assertEquals(626.32, $taxRate5['net_amount']);
-        $this->assertEquals(119.0, $taxRate5['gross_amount']);
+        $this->assertEquals(657.63, $taxRate5['gross_amount']);
     }
 }

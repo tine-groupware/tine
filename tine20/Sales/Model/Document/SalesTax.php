@@ -108,7 +108,7 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Gross amount', // _('Gross amount')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
@@ -121,7 +121,7 @@ class Sales_Model_Document_SalesTax extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Net amount', // _('Net amount')
                 self::TYPE                          => self::TYPE_MONEY,
                 self::VALIDATORS                    => [
-                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
                 self::UI_CONFIG                     => [
