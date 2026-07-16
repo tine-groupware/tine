@@ -298,15 +298,18 @@ class Tinebase_Group
         $adbInstalled = Tinebase_Application::getInstance()->isInstalled('Addressbook');
 
         if (! $groupBackend instanceof Tinebase_Group_Interface_SyncAble) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' No syncable group backend found - skipping syncGroups.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' No sync-able group backend found - skipping syncGroups.');
+            }
             return true;
         }
 
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}
+            ->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
             return true;
         }
-        
+
         if (!$groupBackend->isDisabledBackend()) {
             $groups = $groupBackend->getGroupsFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL);
         } else {
@@ -329,16 +332,25 @@ class Tinebase_Group
             }
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Syncing ' . count($groups) . ' groups from sync backend...');
+        }
+
         foreach ($groups as $group) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                ' Sync group: ' . $group->name . ' - update or create group in local sql backend');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
+                    ' Sync group: "' . $group->name . '": update or create group in local sql backend');
+            }
 
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             try {
                 $sqlGroup = $groupBackend->getGroupById($group, true);
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .
-                    ' Merge missing properties and update group.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' Merge missing properties and update group.');
+                }
                 $groupBackend->mergeMissingProperties($group, $sqlGroup);
 
                 if ($adbInstalled) {
