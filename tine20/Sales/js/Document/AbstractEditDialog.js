@@ -206,7 +206,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 if (!record.get('sales_tax_by_rate')?.length || record.get('sales_tax_by_rate').length === 1) {
                     const tax_rate = Number(sales_tax_by_rate)
                     const tax_amount = sales_tax
-                    const net_amount = this.recordClass.toFixed(tax_amount / tax_rate * 100)
+                    const net_amount = tax_rate ? this.recordClass.toFixed(tax_amount / tax_rate * 100) : record.get('net_sum')
                     const gross_amount = this.recordClass.toFixed(net_amount + tax_amount)
 
                     const oldRate = _.find(record.get('sales_tax_by_rate') || [], {tax_rate: Number(tax_rate)})
