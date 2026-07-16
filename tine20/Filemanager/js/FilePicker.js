@@ -263,7 +263,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         const field = this.fileNameField;
         const fileName = field.getValue();
         const basePathNodeRecord = this.treePanel.getSelectedContainer();
-        const basePath = basePathNodeRecord?.path;
+        const basePath = basePathNodeRecord?.path ?? this.initialPath;
         
         if (!this.allowCreateNewFile) return;
 
