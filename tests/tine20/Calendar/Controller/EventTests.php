@@ -963,6 +963,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Calendar_Model_Attender::clearCache();
         $event = $this->_controller->get($event->getId());
         static::assertSame(3, $event->attendee->count(), 'expect 3 attendees on event');
+
+        // TODO add one + remove one, check attendee...
     }
 
     public function testAttendeeSetStatus()
