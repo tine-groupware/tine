@@ -52,7 +52,6 @@ class Tinebase_Model_MunicipalityKey extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::VERSION => 4,
         self::MODLOG_ACTIVE => true,
-        self::IS_DEPENDENT => true,
 
         self::APP_NAME => Tinebase_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
