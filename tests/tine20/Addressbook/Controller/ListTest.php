@@ -406,7 +406,7 @@ class Addressbook_Controller_ListTest extends TestCase
             'n_fn' => 'another contact'
         ]));
         $list->members = [$this->objects['contact2'], $emailHomeContact];
-        $list->email = 'foo@bar.de';
+        $list->email = 'foo@' . TestServer::getPrimaryMailDomain();
 
         $list = $this->_instance->update($list);
 
