@@ -39,4 +39,27 @@ class Sales_Controller_Document_SalesTax extends Tinebase_Controller_Record_Abst
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        /** @var Sales_Model_Document_SalesTax $_record */
+        $this->_inspectVATConsistency($_record);
+        parent::_inspectBeforeCreate($_record);
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        /** @var Sales_Model_Document_SalesTax $_record */
+        $this->_inspectVATConsistency($_record);
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+    }
+
+    protected function _inspectVATConsistency(Sales_Model_Document_SalesTax $_record): void
+    {
+        $taxAmount = $_record->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} * $_record->{Sales_Model_Document_SalesTax::FLD_TAX_RATE} / 100;
+        if ((float)$_record->{Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT} !== (float)$_record->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} + (float)$_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} ||
+             $taxAmount < $_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} - 0.05 || $taxAmount > $_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} + 0.05) {
+            throw new Tinebase_Exception_Record_Validation('tax amount, net amount, gros amount and tax rate are not coherent');
+        }
+    }
 }
