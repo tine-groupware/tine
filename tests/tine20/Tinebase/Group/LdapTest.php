@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  Group
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  *
  * TODO extend TestCase to use generic cleanup
@@ -398,5 +398,77 @@ class Tinebase_Group_LdapTest extends \PHPUnit\Framework\TestCase
         $memberships = $this->_groupLDAP->getGroupMembers($defaultUserGroup);
         $this->assertTrue(in_array($user->getId(), $memberships), 'group memberships not updated: '
             . print_r($memberships, true));
+    }
+
+    /**
+     * Test that group membership changes made directly in LDAP are synced correctly.
+     * 
+     * Steps:
+     * 1. Create two groups, add user to second group (not primary group)
+     * 2. Sync to establish baseline
+     * 3. Remove user from second group directly in LDAP
+     * 4. Run the LDAP group membership sync
+     * 5. Verify the group membership is removed in the SQL backend
+     */
+    public function testSyncGroupMembershipAddAndRemove()
+    {
+        // Create first group (will be user's primary group)
+        $primaryGroup = $this->testAddGroup();
+        $primaryGroupId = $primaryGroup->getId();
+        
+        // Create second group for membership testing (not the primary group)
+        $this->objects['initialGroup']->name = 'tine20phpunit_testsync';
+        $testGroup = $this->testAddGroup();
+        $testGroupId = $testGroup->getId();
+        
+        // Create first user with primary group set to primaryGroup
+        $this->objects['initialAccount']->accountLoginName = 'tine20phpunit_testsync1';
+        $this->objects['initialAccount']->accountPrimaryGroup = $primaryGroupId;
+        $user1 = $this->_userLDAP->addUser($this->objects['initialAccount']);
+        $this->objects['users']->addRecord($user1);
+        
+        // Create second user with primary group set to primaryGroup
+        $this->objects['initialAccount']->accountLoginName = 'tine20phpunit_testsync2';
+        $this->objects['initialAccount']->accountPrimaryGroup = $primaryGroupId;
+        $user2 = $this->_userLDAP->addUser($this->objects['initialAccount']);
+        $this->objects['users']->addRecord($user2);
+
+        // Add user1 to test group via sync backend API (adds to both LDAP and SQL)
+        $this->_groupLDAP->addGroupMemberInSyncBackend($testGroupId, $user1);
+
+        // Sync to establish baseline (user1 is now in test group in SQL)
+        Tinebase_User::syncUsers(array('syncContactData' => TRUE));
+
+        // Verify user1 is in the test group in SQL after initial sync
+        $sqlMemberships1BeforeChange = $this->_groupSQL->getGroupMemberships($user1->getId(), false);
+        $this->assertContains($testGroupId, $sqlMemberships1BeforeChange, 'user1 should be in test group in SQL after initial sync');
+
+        // Add user2 to the test group directly in LDAP only (bypassing SQL)
+        $this->_groupLDAP->addGroupMemberInSyncBackend($testGroupId, $user2);
+
+        // Remove user1 from the test group directly in LDAP only (bypassing SQL)
+        $this->_groupLDAP->removeGroupMemberInSyncBackend($testGroupId, $user1);
+
+        // Verify user2 is in the test group in LDAP
+        $membershipsUser2 = $this->_groupLDAP->getGroupMembershipsFromSyncBackend($user2);
+        $this->assertContains($testGroupId, $membershipsUser2, 'user2 should be in test group in LDAP');
+
+        // Verify user1 is no longer in the test group in LDAP
+        $membershipsUser1 = $this->_groupLDAP->getGroupMembershipsFromSyncBackend($user1);
+        $this->assertNotContains($testGroupId, $membershipsUser1, 'user1 should not be in test group in LDAP');
+
+        // Now run sync to sync LDAP state to SQL
+        Tinebase_User::syncUsers(array('syncContactData' => TRUE));
+
+        // Clear caches to ensure fresh data
+        $this->_groupSQL->resetClassCache();
+
+        // Verify user1 is no longer in the test group in SQL after sync
+        $sqlMemberships1AfterSync = $this->_groupSQL->getGroupMemberships($user1->getId(), false);
+        $this->assertNotContains($testGroupId, $sqlMemberships1AfterSync, 'user1 should not be in test group in SQL after sync');
+
+        // Verify user2 is now in the test group in SQL after sync
+        $sqlMemberships2AfterSync = $this->_groupSQL->getGroupMemberships($user2->getId(), false);
+        $this->assertContains($testGroupId, $sqlMemberships2AfterSync, 'user2 should be in test group in SQL after sync');
     }
 }

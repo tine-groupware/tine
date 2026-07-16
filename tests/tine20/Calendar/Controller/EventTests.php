@@ -1,10 +1,10 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -939,7 +939,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      */
     public function testGroupMembershipChangeReflectsInAttendeeList()
     {
-        // $this->_testNeedsTransaction();
+        $this->_skipIfLDAPBackend('see testGroupMembershipChangeReflectsInAttendeeListLDAP');
+
         $admGrpCtrl = Admin_Controller_Group::getInstance();
         $user1 = $this->_createTestUser();
         $group = $admGrpCtrl->create(new Tinebase_Model_Group(['name' => 'unittest']));
@@ -948,10 +949,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
         $event = $this->_getEvent(true);
         $event->attendee = new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [[
-                'user_id'   => $group->list_id,
-                'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ]]);
+            'user_id'   => $group->list_id,
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ]]);
         $event = $this->_controller->create($event);
         static::assertSame(2, $event->attendee->count(), 'expect 2 attendees on event: '
             . print_r($event->attendee->toArray(), true));
@@ -963,6 +964,135 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Calendar_Model_Attender::clearCache();
         $event = $this->_controller->get($event->getId());
         static::assertSame(3, $event->attendee->count(), 'expect 3 attendees on event');
+    }
+
+    public function testGroupMembershipChangeReflectsInAttendeeListLDAP()
+    {
+        // Skip if LDAP backend is not configured
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend not enabled');
+        }
+
+        $admGrpCtrl = Admin_Controller_Group::getInstance();
+        $_userLDAP = Tinebase_User::factory(Tinebase_User::LDAP);
+        $_groupLDAP = Tinebase_Group::factory(Tinebase_Group::LDAP);
+
+        // Clean up LDAP objects from previous runs
+        foreach ($_userLDAP->getUsersFromSyncBackend() as $existingUser) {
+            if (strpos($existingUser->accountLoginName, 'tine20phpunit_syncuser') === 0) {
+                try {
+                    $_userLDAP->deleteUserInSyncBackend($existingUser->getId());
+                } catch (Exception $e) {
+                    // ignore
+                }
+            }
+        }
+        foreach ($_groupLDAP->getGroupsFromSyncBackend() as $existingGroup) {
+            if (strpos($existingGroup->name, 'tine20phpunit_sync') === 0) {
+                try {
+                    $_groupLDAP->deleteGroupsInSyncBackend($existingGroup->getId());
+                } catch (Exception $e) {
+                    // ignore
+                }
+            }
+        }
+
+        // Create primary groups for LDAP users (tracked for cleanup in _groupIdsToDelete)
+        $primaryGroup3 = new Tinebase_Model_Group(array(
+            'name' => 'tine20phpunit_syncgroup3',
+            'description' => 'Primary group for sync user 3',
+        ));
+        $_groupLDAP->addGroup($primaryGroup3);
+        $this->_groupIdsToDelete[] = $primaryGroup3->getId();
+
+        $primaryGroup4 = new Tinebase_Model_Group(array(
+            'name' => 'tine20phpunit_syncgroup4',
+            'description' => 'Primary group for sync user 4',
+        ));
+        $_groupLDAP->addGroup($primaryGroup4);
+        $this->_groupIdsToDelete[] = $primaryGroup4->getId();
+
+        // Create LDAP users using _createTestUser pattern (tracked in _usernamesToDelete for cleanup)
+        $user3 = $_userLDAP->addUser(new Tinebase_Model_FullUser(array(
+            'accountLoginName' => 'tine20phpunit_syncuser3',
+            'accountLastName' => 'syncuser3',
+            'accountFullName' => 'Test Sync User 3',
+            'accountUserGroupName' => 'tine20phpunit_syncgroup3',
+            'accountPrimaryGroup' => $primaryGroup3->getId(),
+            'accountEmailAddress' => 'syncuser3@' . TestServer::getPrimaryMailDomain(),
+            'password' => 'tine20phpunit',
+        )));
+        $this->_usernamesToDelete[] = $user3->accountLoginName;
+
+        $user4 = $_userLDAP->addUser(new Tinebase_Model_FullUser(array(
+            'accountLoginName' => 'tine20phpunit_syncuser4',
+            'accountLastName' => 'syncuser4',
+            'accountFullName' => 'Test Sync User 4',
+            'accountUserGroupName' => 'tine20phpunit_syncgroup4',
+            'accountPrimaryGroup' => $primaryGroup4->getId(),
+            'accountEmailAddress' => 'syncuser4@' . TestServer::getPrimaryMailDomain(),
+            'password' => 'tine20phpunit',
+        )));
+        $this->_usernamesToDelete[] = $user4->accountLoginName;
+
+        // Create test group for membership testing
+        $testGroup = new Tinebase_Model_Group(array(
+            'name' => 'tine20phpunit_synchronizetest',
+            'description' => 'Test group for attendee sync',
+        ));
+        $_groupLDAP->addGroup($testGroup);
+        $this->_groupIdsToDelete[] = $testGroup->getId();
+
+        // Add user3 to the test group via SQL (establishes baseline sync)
+        $admGrpCtrl->addGroupMember($testGroup->getId(), $user3->getId());
+
+        // Sync to establish baseline
+        Tinebase_User::syncUsers(array('syncContactData' => TRUE));
+        Calendar_Model_Attender::clearCache();
+
+        // Create event with group as attendee
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        $event->attendee->addRecord(new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'user_id' => $testGroup->getId(),
+            'role' => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status' => Calendar_Model_Attender::STATUS_NEEDSACTION,
+        )));
+        $event->organizer = Tinebase_Core::getUser()->contact_id;
+        $event = $this->_controller->create($event);
+
+        // Verify user3 is in the event attendee list
+        $event = $this->_controller->get($event->getId());
+        Calendar_Model_Attender::resolveGroupMembers($event->attendee);
+        $user3Attendees = $event->attendee->filter('user_id', $user3->contact_id);
+        static::assertCount(1, $user3Attendees, 'user3 should be in event attendee list after initial sync');
+
+        // Add user4 to the group directly in LDAP (bypassing SQL)
+        $_groupLDAP->addGroupMemberInSyncBackend($testGroup->getId(), $user4);
+
+        // Remove user3 from the group directly in LDAP (bypassing SQL)
+        $_groupLDAP->removeGroupMemberInSyncBackend($testGroup->getId(), $user3);
+
+        // Verify LDAP state: user4 should be in group, user3 should not
+        $ldapMembershipsUser4 = $_groupLDAP->getGroupMembershipsFromSyncBackend($user4);
+        static::assertContains($testGroup->getId(), $ldapMembershipsUser4, 'user4 should be in group in LDAP');
+
+        $ldapMembershipsUser3 = $_groupLDAP->getGroupMembershipsFromSyncBackend($user3);
+        static::assertNotContains($testGroup->getId(), $ldapMembershipsUser3, 'user3 should not be in group in LDAP');
+
+        // Sync LDAP state to SQL and addressbook list
+        Tinebase_User::syncUsers(array('syncContactData' => TRUE));
+        Calendar_Model_Attender::clearCache();
+
+        // Verify the event attendee list is updated: user3 removed, user4 added
+        $event = $this->_controller->get($event->getId());
+        Calendar_Model_Attender::resolveGroupMembers($event->attendee);
+        $user3AttendeesAfterSync = $event->attendee->filter('user_id', $user3->contact_id);
+        static::assertCount(0, $user3AttendeesAfterSync, 'user3 should be removed from event attendee list after sync');
+
+        $user4AttendeesAfterSync = $event->attendee->filter('user_id', $user4->contact_id);
+        static::assertCount(1, $user4AttendeesAfterSync, 'user4 should be added to event attendee list after sync');
     }
 
     public function testAttendeeSetStatus()
