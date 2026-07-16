@@ -357,7 +357,7 @@ const common = {
         }
 
         const cellId = `markdown-cell-${Ext.id()}`;
-        const maxHeight = metaData.maxRowHeight || 'none';
+        const maxHeight = metaData?.maxRowHeight || 'none';
         const qtip = i18n._('This field supports Markdown formatting. For more information check the user manual');
         const initialContent = `<div ext:qtip="${qtip}" id="${cellId}" class="tb-markdown-loading">
         ${Ext.util.Format.htmlEncode(v)}
