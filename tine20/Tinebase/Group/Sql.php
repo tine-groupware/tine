@@ -615,7 +615,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 
         $oldGroup = $this->getGroupById($groupId, $_getDeleted);
 
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group, !$_group->is_deleted && $oldGroup->is_deleted ? 'undelete' : 'update', $oldGroup);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_group,
+            !$_group->is_deleted && $oldGroup->is_deleted ? 'undelete' : 'update', $oldGroup);
 
         if (empty($_group->list_id)) {
             $_group->visibility = Tinebase_Model_Group::VISIBILITY_HIDDEN;

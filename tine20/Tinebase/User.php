@@ -531,8 +531,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $username = $username->accountLoginName;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Sync options: ' . print_r($options, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Sync options: ' . print_r($options, true));
+        }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . " Sync user data for: " . $username);
@@ -592,8 +594,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $syncedUser = self::_syncDataAndUpdateUser($user, $options);
 
             } catch (Tinebase_Exception_NotFound $ten) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' ' . $ten->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' ' . $ten->getMessage());
+                }
                 try {
                     $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
                     if (isset($options['deleteUsers']) && $options['deleteUsers']) {
@@ -637,13 +641,15 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     Tinebase_Exception::log($e);
                 }
 
-                // the addressbook is registered as a plugin and will take care of the create
+                // the Addressbook is registered as a plugin and will take care of the creation
                 // see \Addressbook_Controller_Contact::inspectUpdateUser
                 try {
                     $userBackend->addPluginUser($syncedUser, $user);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                    }
                     $transactionId = null;
                     return null;
                 }
@@ -962,16 +968,21 @@ class Tinebase_User implements Tinebase_Controller_Interface
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Start synchronizing users with options ' . print_r($options, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Start synchronizing users with options ' . print_r($options, true));
+        }
 
         if (! self::_getLdapUserController() instanceof Tinebase_User_Interface_SyncAble) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
+            }
             return true;
         }
         
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}
+            ->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
             return true;
         }
 
@@ -982,8 +993,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
         
         $users = self::_getLdapUserController()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' About to sync ' . count($users) . ' users from sync backend ...');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' About to sync ' . count($users) . ' users from sync backend ...');
+        }
 
         $result = true;
         foreach ($users as $user) {
@@ -1003,8 +1016,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         self::_getLdapGroupController()->resetClassCache();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Finished synchronizing users.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Finished synchronizing users.');
+        }
 
         return $result;
     }

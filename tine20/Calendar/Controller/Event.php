@@ -3464,16 +3464,22 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->_increaseDisplayContainerContentSequence($attender, $event);
         }
     }
-    
+
     /**
      * event handler for group updates
-     * 
-     * @param Tinebase_Model_Group $_group
+     *
+     * @param string $_groupId
      * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function onUpdateGroup($_groupId)
+    public function onUpdateGroup(string $_groupId): void
     {
-        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Handling update event for group ID ' . $_groupId);
+        }
+
+        $doContainerACLChecks = $this->doContainerACLChecks(false);
         
         $filter = new Calendar_Model_EventFilter(array(
             array('field' => 'attender', 'operator' => 'equals', 'value' => array(
@@ -3485,7 +3491,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 'until' => Tinebase_DateTime::now()->addYear(100)->get(Tinebase_Record_Abstract::ISO8601LONG))
             )
         ));
-        $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
+        $events = $this->search($filter, new Tinebase_Model_Pagination());
         
         foreach ($events as $event) {
             try {
@@ -3495,7 +3501,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $this->update($event);
                 } else {
                     // update this-and-future for recurring events
-                    $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $this->getRecurExceptions($event), Tinebase_DateTime::now());
+                    $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event,
+                        $this->getRecurExceptions($event), Tinebase_DateTime::now());
                     if ($nextOccurrence) {
                         Calendar_Model_Attender::resolveGroupMembers($nextOccurrence->attendee);
 
