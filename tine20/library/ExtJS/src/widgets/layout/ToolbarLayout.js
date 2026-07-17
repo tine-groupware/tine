@@ -22,7 +22,7 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
             var align = ct.buttonAlign == 'center' ? 'center' : 'left';
             target.addClass('x-toolbar-layout-ct');
             target.insertHtml('beforeEnd',
-                 '<table cellspacing="0" class="x-toolbar-ct"><tbody><tr><td class="x-toolbar-left" align="' + align + '"><table cellspacing="0"><tbody><tr class="x-toolbar-left-row"></tr></tbody></table></td><td class="x-toolbar-right" align="right"><table cellspacing="0" class="x-toolbar-right-ct"><tbody><tr><td><table cellspacing="0"><tbody><tr class="x-toolbar-right-row"></tr></tbody></table></td><td><table cellspacing="0"><tbody><tr class="x-toolbar-extras-row"></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>');
+                 '<table cellspacing="0" role="presentation" class="x-toolbar-ct"><tbody><tr><td class="x-toolbar-left" align="' + align + '"><table role="presentation"cellspacing="0"><tbody><tr class="x-toolbar-left-row"></tr></tbody></table></td><td class="x-toolbar-right" align="right"><table role="presentation"cellspacing="0" class="x-toolbar-right-ct"><tbody><tr><td><table role="presentation"cellspacing="0"><tbody><tr class="x-toolbar-right-row"></tr></tbody></table></td><td><table role="presentation"cellspacing="0"><tbody><tr class="x-toolbar-extras-row"></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table>');
             this.leftTr = target.child('tr.x-toolbar-left-row', true);
             this.rightTr = target.child('tr.x-toolbar-right-row', true);
             this.extrasTr = target.child('tr.x-toolbar-extras-row', true);

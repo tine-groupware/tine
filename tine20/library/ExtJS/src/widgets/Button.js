@@ -188,6 +188,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
      */
 
     initComponent : function(){
+        this.tabIndex = Ext.isDefined(this.tabIndex) ? this.tabIndex : 0;
         Ext.Button.superclass.initComponent.call(this);
 
         this.addEvents(
@@ -340,11 +341,10 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
         this.setIcon(this.icon);
         this.setText(this.text);
         this.setIconClass(this.iconCls);
-        if(Ext.isDefined(this.tabIndex)){
-            btnEl.dom.tabIndex = this.tabIndex;
-        }
+        btnEl.dom.tabIndex = -1;
         if(this.tooltip){
             this.setTooltip(this.tooltip, true);
+            this.ariaLabel = this.tooltip;
         }
 
         if(this.handleMouseEvents){
@@ -357,6 +357,14 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
             // new functionality for monitoring on the document level
             //this.mon(btn, 'mouseout', this.onMouseOut, this);
         }
+
+        this.mon(btn, {
+            keydown: (e) => {
+                if(e.getKey() == e.ENTER){
+                    this.onClick(e)
+                }
+            },
+        });
 
         if(this.menu){
             this.mon(this.menu, {
@@ -380,6 +388,29 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
         this.setButtonClass();
         this.doc = Ext.getDoc();
         this.doAutoWidth();
+
+        if (this.el) {
+            this.el.dom.setAttribute('role', 'button');
+            const innerBtn = this.el.child('button');
+            if (innerBtn) {
+                innerBtn.dom.setAttribute('tabindex', '-1');
+                innerBtn.dom.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        if(this.ariaLabel !== undefined) {
+            this.el.dom.setAttribute('aria-label', this.ariaLabel);
+        } else if(this.text !== undefined){
+            this.el.dom.setAttribute('aria-label', this.text);
+        } else if (this.tooltip !== undefined && tooltip.length < 25){
+            this.el.dom.setAttribute('aria-label', this.tooltip);
+        } else {
+            console.warn("The element " + this.el.dom.id + " has no aria-label and can't be announced by screen readers.")
+        }
+
+        if(this.tabIndex) {
+            this.el.dom.setAttribute('tabindex', this.tabIndex);
+        }
     },
 
     /**
@@ -416,6 +447,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
                       target: this.btnEl.id
                 }, tooltip));
                 this.tooltip = tooltip;
+                this.ariaLabel = tooltip;
             }else{
                 this.btnEl.dom[this.tooltipType] = tooltip;
                 const iconEl = this.btnEl.next('.x-btn-image');
@@ -594,6 +626,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
             }
             this.menu.ownerCt = this;
             this.menu.show(this.el, this.menuAlign);
+            this.btnEl.blur();
         }
         return this;
     },
@@ -621,7 +654,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
         if(e){
             e.preventDefault();
         }
-        if(e.button !== 0){
+        if(e.button !== 0 && !e.type === 'keydown'){
             return;
         }
         if(!this.disabled){

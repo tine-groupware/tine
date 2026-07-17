@@ -12,6 +12,8 @@ Ext.ns('Tine.UserManual');
 Tine.UserManual.UserManualAction = function(config) {
     return new Ext.Button({
         showIcon: true,
+        ariaLabel: i18n._('User Manual') + i18n._('. Clicking this button will open the content in a new window.'),
+        tabIndex: 0,
         variant: 'primary',
         scale: 'medium',
         iconAlign: 'top',

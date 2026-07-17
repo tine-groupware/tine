@@ -850,8 +850,10 @@ ul.x-tab-strip li.x-tab-edge {
     margin: 0 0 0 0;
 }
 
-.ext-webkit *:focus{
-    outline: none !important;
+*:focus-visible{
+    outline: 3px solid #ff0000  !important;
+    outline-offset: -2px !important;
+    border-radius:4px !important;
 }
 
 /* ---- text fields ---- */

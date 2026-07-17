@@ -212,6 +212,7 @@ Ext.ux.grid.GridViewMenuPlugin = Ext.extend(Object, {
         var a = document.createElement('a');
         a.className = 'ext-ux-grid-gridviewmenuplugin-menuBtn x-grid3-hd-btn';
         a.href = '#';
+        a.ariaLabel= window.i18n._('Choose more column categories.');
 
         return new Ext.Element(a);
     },

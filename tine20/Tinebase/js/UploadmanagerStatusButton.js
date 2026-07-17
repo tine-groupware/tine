@@ -29,6 +29,7 @@ Tine.Tinebase.UploadManagerStatusButton = Ext.extend(Ext.Button, {
     variant: 'primary',
     scale: 'medium',
     iconAlign: 'top',
+    tabIndex: 0,
 
     /**
      * @property {String} status
@@ -36,6 +37,7 @@ Tine.Tinebase.UploadManagerStatusButton = Ext.extend(Ext.Button, {
     status: 'idle',
 
     initComponent: async function () {
+        this.ariaLabel = i18n._('Uploads') + i18n._('. Clicking this button will open the content in a new window.');
         this.hidden = !Tine.Tinebase.appMgr.isEnabled('Filemanager');
         this.app = Tine.Tinebase.appMgr.get('Filemanager');
         if (!this.app) return;

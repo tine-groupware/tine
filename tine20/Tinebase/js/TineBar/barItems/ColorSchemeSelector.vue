@@ -9,11 +9,16 @@
 -->
 <template>
   <div>
-    <b-button size="lg" variant="primary"
+    <b-button
+      size="lg"
+      variant="primary"
       ref="itemContainerRef"
       @click="visible = true"
       :id="popoverTarget"
       class="tine-bar-item"
+      @keydown.enter ="visible = true"
+      tabindex="0"
+      :aria-label="window.i18n._('Turn on Dark or Light Mode.')"
     >
       <div class="tine-bar-image color-scheme-selector" :class="config.iconCls"></div>
     </b-button>
@@ -24,18 +29,25 @@
 <!--      @click="visible = true"-->
 <!--    />-->
     <TMenu
+      role="dialog"
+      aria-modal="true"
       :target="popoverTarget"
       :visible="visible"
       :placement="'bottom-start'"
       @hide="hideMenu"
       class="color-scheme-selector__menu"
     >
-      <ul class="p-0 m-0">
+      <ul ref="menuListRef" role="menu" class="p-0 m-0">
         <li
+          role="menuitem"
           v-for="action in config.menu"
           :key="action.text"
+          :tabindex="0"
+          :aria-label="action.title"
           class="action-menu-item px-3 d-flex align-items-center pe-5"
           @click="menuItemClicked(action, $event)"
+          @keydown.enter="menuItemClicked(action, $event)"
+          @keydown.esc="hideMenu"
         >
           <div class="action-menu-item__icon d-flex align-items-center">
             <div v-if="action._name === config.getActiveColorScheme()" class="action-menu-item__icon__selected"/>
@@ -60,7 +72,8 @@ const props = defineProps({
 
 const config = computed(() => props.itemCfg.initialConfig)
 
-const visible = ref()
+const visible = ref(false)
+const itemContainerRef = ref(null)
 
 const popoverTarget = computed(() => {
   const PREFIX = 'tine-bar-item'
@@ -73,8 +86,11 @@ const menuItemClicked = (action, ev) => {
 }
 
 const hideMenu = (e) => {
+  if (e) {
+    if (typeof e.stopPropagation === 'function') e.stopPropagation()
+    if (typeof e.preventDefault === 'function') e.preventDefault()
+  }
   visible.value = false
-  e.stopPropagation()
 }
 </script>
 

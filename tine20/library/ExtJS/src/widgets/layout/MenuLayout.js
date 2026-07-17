@@ -23,7 +23,7 @@
     renderItem : function(c, position, target){
         if (!this.itemTpl) {
             this.itemTpl = Ext.layout.MenuLayout.prototype.itemTpl = new Ext.XTemplate(
-                '<li id="{itemId}" class="{itemCls}">',
+                '<li id="{itemId}" class="{itemCls}" tabindex="0">',
                     '<tpl if="needsIcon">',
                         '<img src="{icon}" class="{iconCls}"/>',
                     '</tpl>',
