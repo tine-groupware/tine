@@ -78,7 +78,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
 
         onRecordUpdate: function(editDialog, record) {
             this.recordForm.getForm().updateRecord(this.record);
-            record.set('room', this.record.getData());
+
+            record.set('room', this.editDialog.getForm().findField('active').getValue() ? record.getData() : null);
         },
 
         setOwnerCt: function(ct) {
