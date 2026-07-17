@@ -11,6 +11,7 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
@@ -623,9 +624,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
     {
         if ($_record->has(Sales_Model_Document_Abstract::FLD_CUSTOMER_ID)) {
             $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} = Sales_Controller_Document_Customer::getInstance()
-                ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Customer::class, [
-                    ['field' => Sales_Model_Document_Customer::FLD_DOCUMENT_ID, 'operator' => 'equals', 'value' => $_record->getId()],
-                ]))->getFirstRecord();
+                ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Customer::class, [])->addFilter(new Tinebase_Model_Filter_ForeignIdDynamic(
+                    Sales_Model_Document_Customer::FLD_DOCUMENT_ID, TMFA::OP_EQUALS, $_record->getId(), [
+                        TMCC::REF_MODEL_FIELD => Sales_Model_Document_Customer::FLD_DOCUMENT_TYPE,
+                        Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => $this->_modelName,
+                    ]
+                )))->getFirstRecord();
         }
         parent::_deleteRecord($_record);
     }

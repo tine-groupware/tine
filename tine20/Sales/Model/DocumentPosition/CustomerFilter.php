@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_ModelConfiguration_Const as TMCC;
@@ -24,6 +24,10 @@ class Sales_Model_DocumentPosition_CustomerFilter extends Tinebase_Model_Filter_
     {
         $_options['id_field'] = Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID;
         $_options[TMCC::REF_ID_FIELD] = [TMCC::ID, Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY]; // little hack to bypass array_keys in parent::appendFilterSql on the result of the foreignKeys query.... not ideal, but works for the time being. dont try to join this
+        $_options['filterGroupOptions'] = [
+            TMCC::REF_MODEL_FIELD => Sales_Model_Document_Customer::FLD_DOCUMENT_TYPE,
+            Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => 'Sales_Model_' . $_options[TMCC::MODEL_NAME],
+        ];
         parent::_setOptions($_options);
     }
 
@@ -34,16 +38,7 @@ class Sales_Model_DocumentPosition_CustomerFilter extends Tinebase_Model_Filter_
                 [TMFA::FIELD => Sales_Model_Document_Customer::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'definedBy?condition=and&setOperator=oneOf', TMFA::VALUE => $_value]
             ]],
         ];
-        Sales_Model_Document_Customer::$documentIdModel = $this->_options[TMCC::MODEL_NAME];
-        Sales_Model_Document_Customer::resetConfiguration();
         parent::setValue($value);
-    }
-
-    public function appendFilterSql($_select, $_backend)
-    {
-        Sales_Model_Document_Customer::$documentIdModel = $this->_options[TMCC::MODEL_NAME];
-        Sales_Model_Document_Customer::resetConfiguration();
-        parent::appendFilterSql($_select, $_backend);
     }
 
     public function toArray($_valueToJson = false)

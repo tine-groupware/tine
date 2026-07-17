@@ -3315,11 +3315,15 @@ abstract class Tinebase_Controller_Record_Abstract
 
         $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
         $filter = [['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]];
+        $options = [];
+        if (Tinebase_Model_Filter_ForeignIdDynamic::class === ($recordClassName::getConfiguration()->getFilterModel()['_filterModel'][$_fieldConfig[TMCC::REF_ID_FIELD]][TMCC::FILTER] ?? null)) {
+            $options = [Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => $_record::class];
+        }
         if (isset($_fieldConfig[TMCC::ADD_FILTERS])) {
             $filter = array_merge($filter, $_fieldConfig[TMCC::ADD_FILTERS]);
         }
         $existingDepRec = ($exRecs = $controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-            $recordClassName,$filter)))->getFirstRecord();
+            $recordClassName, $filter, _options: $options)))->getFirstRecord();
         if ($exRecs->count() > 1) {
             $exRecs->removeRecord($existingDepRec);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .

@@ -1538,6 +1538,68 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         self::assertSame($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId(), $order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Document_Debitor::FLD_ORIGINAL_ID});
     }
 
+    public function testDocumentPositionFilters(): void
+    {
+        $customer = $this->_createCustomer();
+        $cat = Sales_Controller_Document_Category::getInstance()->getAll()->getFirstRecord();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY => $cat->getId(),
+            Sales_Model_Document_Order::FLD_POSITIONS => new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_Order::class, [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'unittest',
+                ], true),
+            ]),
+        ]));
+        $orderPosition = $order->{Sales_Model_Document_Order::FLD_POSITIONS}->getFirstRecord();
+        $this->assertNotNull($orderPosition);
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'category', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $cat->getId()],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertSame($orderPosition->getId(), $position->getId());
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'category', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => $cat->getId()],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertNull($position);
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'division', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $cat->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID)],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertSame($orderPosition->getId(), $position->getId());
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'division', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => $cat->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID)],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertNull($position);
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'customer', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customer->getId()],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertSame($orderPosition->getId(), $position->getId());
+
+        $position = Sales_Controller_DocumentPosition_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Order::class, [
+            [TMFA::FIELD => 'customer', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OPERATOR_NOT, TMFA::VALUE => $customer->getId()],
+            ]],
+        ]))->getFirstRecord();
+        $this->assertNull($position);
+    }
+
     public function testCustomerFilterForDocuments()
     {
         $customer = $this->_createCustomer();

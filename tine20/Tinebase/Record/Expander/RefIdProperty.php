@@ -15,6 +15,7 @@ use Tinebase_ModelConfiguration_Const as MCC;
 class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Property
 {
     protected $_mccCfg = null;
+    protected $_isDynamicRecord = false;
 
     public function __construct($_model, $_property, $_expanderDefinition, $_rootExpander,
                                 $_prio = self::DATA_FETCH_PRIO_DEPENDENTRECORD, protected $_singleRecord = false)
@@ -22,6 +23,12 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
         $this->_mccCfg = $_expanderDefinition['fieldDefConfig'];
 
         parent::__construct($_model, $_property, $_expanderDefinition, $_rootExpander, $_prio);
+
+        /** @var Tinebase_ModelConfiguration $mc */
+        $mc = $this->_mccCfg[MCC::RECORD_CLASS_NAME]::getConfiguration();
+        if (MCC::TYPE_DYNAMIC_RECORD === $mc->getFields()[$this->_mccCfg[MCC::REF_ID_FIELD]][MCC::TYPE]) {
+            $this->_isDynamicRecord = true;
+        }
     }
 
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
@@ -39,7 +46,7 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
                     function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
                     ->setAdditionalFilter(array_merge($this->_mccCfg[MCC::ADD_FILTERS] ?? [], $this->_definitionFilter ?? []) ?: null)
                     ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
-                    ->setFilterOptions($this->_mccCfg[MCC::FILTER_OPTIONS] ?? null)
+                    ->setFilterOptions(array_merge($this->_mccCfg[MCC::FILTER_OPTIONS] ?? [], $this->_isDynamicRecord ? [Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => $_records->getRecordClassName()] : []) ?: null)
                 );
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {

@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -139,12 +139,14 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CUSTOMER_ID           => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LENGTH                    => 40,
                 self::LABEL                     => 'Customer', // _('Customer')
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Customer::MODEL_NAME_PART,
                     self::IS_PARENT                 => true,
+                    self::FIXED_LENGTH              => true,
                 ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
@@ -153,10 +155,12 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DIVISION_ID            => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LENGTH                    => 40,
                 self::LABEL                     => 'Division', // _('Division')
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Division::MODEL_NAME_PART,
+                    self::FIXED_LENGTH              => true,
                 ],
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,

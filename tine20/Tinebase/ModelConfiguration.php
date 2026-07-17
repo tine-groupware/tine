@@ -2431,6 +2431,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         return $this->_defaultData;
     }
 
+    public function setFields(array $fields): void
+    {
+        $this->_fields = $fields;
+    }
+
     /**
      * returns the field configuration of the model
      *

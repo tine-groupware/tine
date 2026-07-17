@@ -22,6 +22,7 @@ class Sales_Model_Document_Address extends Sales_Model_Address
 
     public const FLD_DOCUMENT_ID = 'document_id';
     public const FLD_DOCUMENT_FIELD = 'document_field';
+    public const FLD_DOCUMENT_TYPE = 'document_type';
 
     /**
      * @param array $_definition
@@ -30,7 +31,7 @@ class Sales_Model_Document_Address extends Sales_Model_Address
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 4;
+        $_definition[self::VERSION] = 5;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
         $_definition[self::TABLE][self::INDEXES] = [
@@ -42,11 +43,19 @@ class Sales_Model_Document_Address extends Sales_Model_Address
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Address::class;
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
-            self::TYPE                  => self::TYPE_RECORD,
+            self::TYPE                  => self::TYPE_DYNAMIC_RECORD,
+            self::LENGTH                => 40,
             self::CONFIG                => [
-                self::APP_NAME              => Sales_Config::APP_NAME,
-                self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
+                self::REF_MODEL_FIELD       => self::FLD_DOCUMENT_TYPE,
+                self::PERSISTENT            => Tinebase_Model_Converter_DynamicRecord::REFID,
                 self::IS_PARENT             => true,
+                self::FIXED_LENGTH          => true,
+            ],
+            self::FILTER_DEFINITION     => [
+                self::FILTER                => Tinebase_Model_Filter_ForeignIdDynamic::class,
+                self::OPTIONS               => [
+                    self::REF_MODEL_FIELD       => self::FLD_DOCUMENT_TYPE,
+                ],
             ],
         ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_FIELD] = [
@@ -54,8 +63,20 @@ class Sales_Model_Document_Address extends Sales_Model_Address
             self::LENGTH                => 255,
             self::NULLABLE              => true,
         ];
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_TYPE] = [
+            self::TYPE                  => self::TYPE_MODEL,
+            self::CONFIG                => [
+                self::AVAILABLE_MODELS      => [
+                    Sales_Model_Document_Delivery::class,
+                    Sales_Model_Document_Invoice::class,
+                    Sales_Model_Document_Offer::class,
+                    Sales_Model_Document_Order::class,
+                    Sales_Model_Document_PurchaseInvoice::class,
+                ],
+            ],
+            self::LENGTH                => 255,
+        ];
         $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::TYPE] = self::TYPE_STRING;
-        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::LENGTH] = 40;
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::LABEL]);
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG]);
