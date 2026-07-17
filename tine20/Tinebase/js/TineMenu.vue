@@ -23,11 +23,15 @@
     <div class="bootstrap-scope menu-container" ref="menu">
       <div class="d-flex flex-wrap align-content-start justify-content-evenly mt-2">
         <div
+          role="dialog"
+          aria-modal="true"
           v-for="item in menuItems"
           :key="item.text"
+          :tabindex="0"
           class="menu-item d-flex align-items-center flex-column mb-2 cursor-pointer"
           :class="{'menu-item-active': item.text === activeApp }"
           @click="itemClicked(item)"
+          @keydown.enter ="itemClicked(item)"
         >
           <div class="icon-container" :class="item.iconCls"/>
           <div>{{item.text}}</div>

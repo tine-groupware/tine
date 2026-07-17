@@ -54,6 +54,17 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     xtype: 'Tine.widgets.MainScreen',
 
     initComponent: function() {
+
+
+        if (!document.getElementById('tine-live-announcer')) {
+            var announcer = document.createElement('div');
+            announcer.id = 'tine-live-announcer';
+            announcer.setAttribute('aria-live', 'assertive'); // 'assertive' unterbricht andere Ansagen sofort
+            announcer.style.position = 'absolute';
+            announcer.style.left = '-9999px';
+            document.body.appendChild(announcer);
+        }
+
         var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
         this.contentTypes = (this.contentTypes || []).concat(registeredContentTypes);
 
@@ -240,7 +251,6 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             ref: 'westRegionPanel',
             cls: 'tine-mainscreen-centerpanel-west',
             region: 'west',
-            //id: 'west',
             stateful: false,
             split: true,
             width: this.westWidth,
@@ -253,11 +263,42 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             listeners: {
                 scope: this,
                 resize: this.saveState,
-                afterrender: function() {
-                    // add to scrollmanager
-                    if (arguments[0] && arguments[0].hasOwnProperty('body')) {
-                        Ext.dd.ScrollManager.register(arguments[0].body);
+                afterrender: function(panel) {
+                    if (panel && panel.body) {
+                        Ext.dd.ScrollManager.register(panel.body);
                     }
+
+                    panel.el.on('keydown', function(e) {
+                        if (e.getKey() === e.ENTER) {
+                            var folderName = e.getTarget() ? e.getTarget().innerText.split('\n')[0].trim() : window.i18n._('Folder');
+
+                            setTimeout(function() {
+                                var cp = this.getCenterPanel();
+                                var grid = (cp && typeof cp.getGrid === 'function') ? cp.getGrid() : null;
+
+                                if (grid && grid.getView) {
+                                    var row = grid.getView().getRow(0);
+                                    if (row) {
+                                        var el = Ext.get(row);
+                                        el.dom.setAttribute('tabindex', '-1');
+
+                                        grid.getSelectionModel().selectFirstRow();
+
+                                        setTimeout( function(){
+                                            el.focus();
+                                        },500)
+
+
+                                        var announcer = document.getElementById('tine-live-announcer');
+                                        if (announcer) announcer.innerText = folderName + ' ' + this.app.i18n._('has been opened');
+                                    }else{
+                                        var announcer = document.getElementById('tine-live-announcer');
+                                        if (announcer) announcer.innerText = folderName +  ' ' + this.app.i18n._('is empty. There is no data to be shown.');
+                                    }
+                                }
+                            }.createDelegate(this), 600);
+                        }
+                    }, this);
                 }
             },
             autoScroll: true,

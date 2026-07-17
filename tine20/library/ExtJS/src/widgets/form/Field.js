@@ -325,6 +325,15 @@ var form = new Ext.form.FormPanel({
         Ext.form.Field.superclass.afterRender.call(this);
         this.initEvents();
         this.initValue();
+
+
+        if(this.fieldLabel != 'undefined' && this.fieldLabel != null) {
+            this.el.dom.setAttribute('aria-label', this.fieldLabel);
+        }
+
+        if(this.emptyText != 'undefined' && this.emptyText != null) {
+            this.el.dom.setAttribute('aria-label', this.emptyText);
+        }
     },
 
     // private

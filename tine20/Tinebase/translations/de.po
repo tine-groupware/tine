@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: tine-groupware\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-04-15 12:22+0200\n"
+"PO-Revision-Date: 2026-02-05 17:17+0100\n"
 "Last-Translator: pschuele <p.schuele@metaways.de>, 2012\n"
 "Language-Team: German (http://app.transifex.com/tine/groupware/language/de/)\n"
 "Language: de\n"
@@ -26,8 +26,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.8\n"
 
 msgid "admin"
 msgstr "Admin"
@@ -1187,10 +1189,6 @@ msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Feiertagskalender"
 msgstr[1] "Feiertagskalender"
 
-#, python-format, php-format
-msgid "You do not have permission to %s record of type %s"
-msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
-
 #, python-brace-format
 msgid "A Message has been filed to this record. Subject: {0}"
 msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
@@ -1207,6 +1205,10 @@ msgstr "Aktualisieren"
 
 msgid "delete"
 msgstr "Löschen"
+
+#, python-format, php-format
+msgid "You do not have permission to %s record of type %s"
+msgstr "Sie haben nicht die Berechtigungen zum %s vom Datensatz des Typs %s"
 
 #, python-brace-format
 msgid "Email address {0} not in allowed domains [{1}] or invalid"
@@ -1494,27 +1496,6 @@ msgstr "Der ganze Tag"
 msgid "Add new Element..."
 msgstr "Neues Element zufügen…"
 
-msgid "Test Connection"
-msgstr ""
-
-msgid "Cloud Account Access Possible"
-msgstr ""
-
-msgid "Cloud connect to cloud account with given data."
-msgstr ""
-
-msgid "Cloud Account Access Failure"
-msgstr ""
-
-msgid "Cloud not connect to cloud account with given data."
-msgstr ""
-
-msgid "Save cloud account anyway?"
-msgstr ""
-
-msgid "Select a { collectionName }..."
-msgstr ""
-
 msgid "Usage:&#160;"
 msgstr "Verwendung:&#160;"
 
@@ -1523,9 +1504,6 @@ msgstr "Persönlich"
 
 msgid "No Information"
 msgstr "Keine Information"
-
-msgid "This field supports Markdown formatting. For more information check the user manual"
-msgstr "Dieses Feld unterstützt Markdown-Formatierung. Weitere Informationen finden Sie im Handbuch."
 
 msgid "No Access"
 msgstr "Kein Zugriff"
@@ -3301,18 +3279,6 @@ msgstr "Konfiguration speichern"
 msgid "Reload config"
 msgstr "Konfiguration neu laden"
 
-msgid "Optional"
-msgstr "Optional"
-
-msgid "Required"
-msgstr "Erforderlich"
-
-msgid "Field"
-msgstr "Feld"
-
-msgid "Contact Fields"
-msgstr "Kontaktfelder"
-
 msgid "Compose Email"
 msgstr "E-Mail erstellen"
 
@@ -4822,3 +4788,65 @@ msgstr "Nur Nachbarn"
 msgid "Preview"
 msgstr "Vorschau"
 
+msgid "Turn on Dark or Light Mode."
+msgstr "Schalten Sie Dunkler Modus oder Heller Modus ein."
+
+msgid "Main Menu"
+msgstr "Hauptmenü"
+
+msgid "Search for applications."
+msgstr "Suche nach Applikationen."
+
+msgid "All chosen applications"
+msgstr "Auswahl aller Applikationen"
+
+msgid "Choose from all applications."
+msgstr "Wählen Sie aus allen Applikationen die Benötigten aus."
+
+msgid "show markdown"
+msgstr "Markdown anzeigen"
+
+msgid "Setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+msgid "Confirm Logout"
+msgstr "Ausloggen bestätigen"
+
+msgid "Show confirmation dialog on logout."
+msgstr "Bestätigungsdialog beim Ausloggen anzeigen."
+
+msgid "Choose more column categories."
+msgstr "Wählen Sie weitere Spalten-Kategorien aus."
+
+msgid "Attendance recorder"
+msgstr "Stempeluhr"
+
+msgid "Uploads"
+msgstr "Uploads"
+
+msgid "This field supports Markdown formatting. For more information check the user manual"
+msgstr "Dieses Feld unterstützt Markdown-Formatierung. Weitere Informationen finden Sie im Handbuch."
+
+msgid "Optional"
+msgstr "Optional"
+
+msgid "Required"
+msgstr "Erforderlich"
+
+msgid "Field"
+msgstr "Feld"
+
+msgid "Contact Fields"
+msgstr "Kontaktfelder"
+
+msgid "Column Headers"
+msgstr "Spalten-Überschriften"
+
+msgid "has been opened"
+msgstr "wurde geöffnet"
+
+msgid ". Clicking this button will open the content in a new window."
+msgstr ". Klicken dieses Knopfes öffnet den Inhalt in einem neuen Fenster."
+
+msgid "is empty. There is no data to be shown."
+msgstr "ist leer. Es können keine Daten angezeigt werden."

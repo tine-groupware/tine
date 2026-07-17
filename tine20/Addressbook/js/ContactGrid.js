@@ -238,7 +238,7 @@ Tine.Addressbook.ContactGridPanel.contactTypeRenderer = function(data, cell, rec
     const cssClass = 'tine-grid-row-action-icon ' + typeRenderer;
     const qtipText = Tine.Tinebase.common.doubleEncode(hasAccount ? i18n._('Contact of a user account') : isEmailAccount ? i18n._('Email Account Contact') : isExternalEmail ? i18n._('External E-Mail') : i18n._('Contact'));
     
-    return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+    return '<div aria-label =  "' + qtipText + '"  ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
 };
 
 Tine.Addressbook.ContactGridPanel.displayNameRenderer = function(data) {
@@ -292,8 +292,8 @@ Tine.Addressbook.ContactGridPanel.languageRenderer = function(value) {
 Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
     const columns = [
         { id: 'type', header: i18n._('Type'), renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false, resizable: false, width: 30 },
-        { id: 'jpegphoto', header: '<div class="action_image tine-grid-row-action-icon"></div>', tooltip: i18n._('Contact Image'), sortable: false, resizable: false, renderer: Tine.widgets.grid.imageRenderer, hidden: false, width: 30 },
-        { id: 'attachments', sortable: false, hidden: false },
+        { id: 'jpegphoto', header: '<div aria-label= "'+ i18n._('Contact Image') +'"  class="action_image tine-grid-row-action-icon"></div>', tooltip: i18n._('Contact Image'), sortable: false, resizable: false, renderer: Tine.widgets.grid.imageRenderer, hidden: false, width: 30 },
+        { id: 'attachments', sortable: false, hidden: false, header: '<div aria-label= "'+ i18n._('Attachments') +'" class="action_attach tine-grid-row-action-icon"></div>'},
         { id: 'tags', header: i18n._('Tags'), renderer: Tine.Tinebase.common.tagsRenderer, hidden: false, fit: false },
         { id: 'salutation', header: i18n._('Salutation'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
         { id: 'container_id', header: Tine.Addressbook.Model.Contact.getContainerName(), width: 150, renderer: Tine.Tinebase.common.containerRenderer },

@@ -15,11 +15,19 @@
     <div class="h-100 d-flex align-items-center justify-content-between">
       <div class="color d-flex align-items-center cursor-pointer">
         <div class="action_menu application-menu-btn"
+             :id="menuIconId"
+             tabindex="0"
+             role="button"
+             :aria-label= "window.i18n._('Choose from all applications.')"
              @click.stop="toggleAppMenuVisibility($event)"
-             :id="menuIconId"/>
+             @keydown.enter ="toggleAppMenuVisibility($event)"
+        />
         <TApplicationMenu
           :popoverTarget="menuIconId"
           :visible="appMenuVisible"
+          :openedViaMouse="openedViaMouse"
+          role="dialog"
+          aria-modal="true"
           @hide="hideApplicationMenu($event)"
           @itemClicked="activateApp"
           :placement="'bottom-end'"
@@ -37,7 +45,11 @@
         />
         <TAvatar
           class="color"
-          @click="toggleMenuVisibility($event)" :id="avatarId"/>
+          @click="toggleMenuVisibility($event)"
+          :id="avatarId"
+          tabindex="0"
+          @keydown.enter="toggleMenuVisibility($event)"/>
+
         <TMainMenu
           :popoverTarget="avatarId"
           :visible="mainMenuVisible"
@@ -104,12 +116,14 @@ const activeApp = computed(() => {
 })
 
 const appMenuVisible = ref(false)
+const openedViaMouse = ref(true)
 const hideApplicationMenu = (e) => {
   appMenuVisible.value = false
   e.__skip_toggle = true
 }
 const toggleAppMenuVisibility = (e) => {
   if (e.__skip_toggle) return
+  openedViaMouse.value = e.detail === 1
   appMenuVisible.value = !appMenuVisible.value
 }
 const activateApp = (appName) => {
@@ -127,6 +141,7 @@ const toggleMenuVisibility = (e) => {
 }
 
 const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.parentId}`)
+
 </script>
 
 <style lang="scss">

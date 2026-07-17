@@ -69,6 +69,8 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     variant: 'primary',
     scale: 'medium',
     iconAlign: 'top',
+    ariaLabel: i18n._('Attendance recorder'),
+    tabIndex: 0,
 
     // properties
     ptAllowPause: true,
@@ -95,7 +97,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             iconCls: 'clock-break',
             handler: this.onClockPause,
             disabled: true,
-            scope: this
+            scope: this,
         });
 
         this.actionClockOut = new Ext.Action({
@@ -109,7 +111,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             text: this.app.i18n._('ESC'),
             iconCls: 'clock-esc',
             handler: this.onESC,
-            scope: this
+            scope: this,
         });
 
         this.actionProjectTime = new Ext.Action({
@@ -125,7 +127,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             iconCls: 'clock-info',
             handler: this.onInfo,
             // disabled: true,
-            scope: this
+            scope: this,
         });
 
         const defaults = {
@@ -135,6 +137,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
             iconAlign: 'top',
         };
         this.menu = new Ext.menu.Menu({
+            keyNav: false,
             cls: 'attendance-recorder',
             width: 300,
             height: 450,
@@ -188,6 +191,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                     editDialogClass: false,
                     contextMenuItems: ['-', new Ext.Action({
                         text: this.app.i18n._('Create Timesheet'),
+                        tabIndex: 0,
                         iconCls: 'TimetrackerTimesheet',
                         handler: () => {
                             const timeAccount = this.menu.timeAccountPickerGrid.selModel.getSelected();
@@ -557,6 +561,11 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
         this.menu.displayPanel.update('');
         if (this.clockTimeout) {
             window.clearTimeout(this.clockTimeout);
+        }
+        if (this.el && typeof this.el.focus === 'function') {
+            (function() {
+                this.el.focus();
+            }).defer(50, this);
         }
     },
 

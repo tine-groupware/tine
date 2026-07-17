@@ -1106,5 +1106,27 @@ msgstr ""
 #~ msgid "Please enable \"This group is a mailing list\" in mailing list panel."
 #~ msgstr "Bitte aktivieren Sie \"Diese Gruppe ist ein E-Mail-Verteiler\" im E-Mail-Verteiler Karteireiter"
 
-#~ msgid "Invalid"
-#~ msgstr "Ungültig"
+msgid "Invalid"
+msgstr "Ungültig"
+
+msgid "Folder"
+msgstr "Ordner"
+
+msgid "has been opened"
+msgstr "wurde geöffnet"
+
+msgid "is empty. There is no data to be shown."
+msgstr "ist leer. Es können keine Daten angezeigt werden."
+
+msgid "Attachments"
+msgstr "Anhänge"
+
+msgid "Column Headers"
+msgstr "Spalten-Überschriften"
+
+msgid "Choose the required applications from all applications."
+msgstr "Wähle aus allen Applikationen die Benötigten aus."
+
+msgid "An image of the chosen contact."
+msgstr "Ein Bild des ausgewählten Kontaktes."
+

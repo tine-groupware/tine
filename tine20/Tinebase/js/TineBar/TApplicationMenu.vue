@@ -12,22 +12,28 @@
     :target="popoverTarget"
     :visible="visibleInternal"
     :placement="placement"
-    @hide="hide($event)"
-    @keydown.esc="hide($event)"
-    @keydown.enter="selectAppInFocus($event)"
+    @hide="hideMenu($event)"
+    @keydown.esc="hideMenu($event)"
     @keydown.up.down.left.right.stop="moveFocusAround($event)"
   >
-    <div class="tine-application-menu">
+    <div class="tine-application-menu"
+         :class="{ 'is-mouse': mouseClicked }"
+    >
       <div class="container">
-        <BFormInput class="mb-3 mt-2" v-model="searchTerm" ref="searchField"/>
+        <BFormInput :aria-label="window.i18n._('Search for applications.')" tabindex="0" class="mb-3 mt-2" v-model="searchTerm" ref="searchField"/>
         <hr class="my-1">
         <div class="row row-cols-3">
           <div
             v-for="(item, idx) in menuItemsInternal"
             :key="item.name"
+            :ref="el => setAppRef(el, idx)"
+            :tabindex=0
+            @focus="appInFocus = idx"
+            :aria-label="item.title"
             class="col application-menu-item"
             role="button"
             @click="emits('itemClicked', item.name)"
+            @keydown.enter ="emits('itemClicked', item.name)"
             :class="{
                 'application-menu-item__active': appInFocus === idx,
               }"
@@ -51,8 +57,17 @@ import TMenu from '../vue/components/TMenu.vue'
 const props = defineProps({
   popoverTarget: { type: String, required: true },
   visible: { type: Boolean, default: false },
-  placement: { type: String, default: 'right-start' }
+  placement: { type: String, default: 'right-start' },
+  openedViaMouse: { type: Boolean, default: true }
 })
+
+const mouseClicked = ref(true)
+const appRefs = ref([])
+const setAppRef = (el, idx) => {
+  if (el) {
+    appRefs.value[idx] = el
+  }
+}
 
 const searchTerm = ref('')
 
@@ -91,8 +106,9 @@ const visibleInternal = ref(false)
 const searchField = ref()
 watch(() => props.visible, newVal => {
   if (newVal) {
-    appInFocus.value = 0
+    appInFocus.value = -1
     searchTerm.value = ''
+    mouseClicked.value = props.openedViaMouse
     nextTick(() => {
       searchField.value.focus()
     })
@@ -100,9 +116,20 @@ watch(() => props.visible, newVal => {
   visibleInternal.value = newVal
 }, { immediate: true })
 
-const hide = (e) => {
+const hideMenu = (e) => {
+  if (e) {
+    e.stopPropagation()
+    e.preventDefault()
+  }
   visibleInternal.value = false
   emits('hide', e)
+
+  nextTick(() => {
+    const triggerEl = document.getElementById(props.popoverTarget)
+    if (triggerEl) {
+      triggerEl.focus()
+    }
+  })
 }
 
 const appInFocus = ref(0)
@@ -111,16 +138,20 @@ watch(menuItemsInternal, (newVal) => {
   if (appInFocus.value > newVal.length) appInFocus.value = newVal.length - 1
 })
 
-const selectAppInFocus = (e) => {
-  const app = menuItemsInternal.value[appInFocus.value]
-  emits('itemClicked', app.name)
-  hide(e)
-}
-
 const moveFocusAround = (e) => {
+  e.preventDefault()
   function moveFocusToIdx (idx) {
-    if (idx < 0 || idx > menuItemsInternal.value.length - 1) return
-    appInFocus.value = idx
+    let targetIdx = idx
+    if (appInFocus.value === -1) {
+      targetIdx = (e.key === 'ArrowUp') ? menuItemsInternal.value.length - 1 : 0
+    }
+    if (targetIdx < 0 || targetIdx >= menuItemsInternal.value.length) return
+    appInFocus.value = targetIdx
+
+    nextTick(() => {
+      const el = appRefs.value[targetIdx]
+      if (el) el.focus()
+    })
   }
 
   switch (e.key) {

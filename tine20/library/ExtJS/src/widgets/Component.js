@@ -964,6 +964,10 @@ Ext.Foo = Ext.extend(Ext.Bar, {
             if(this.overCls){
                 this.el.addClassOnOver(this.overCls);
             }
+            if (this.tabIndex !== undefined) {
+                this.el.dom.setAttribute('tabIndex', this.tabIndex);
+            }
+
             this.fireEvent('render', this);
 
 

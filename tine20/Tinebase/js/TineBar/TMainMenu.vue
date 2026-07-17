@@ -9,22 +9,29 @@
 -->
 <template>
   <TMenu
+    ref="itemContainerRef"
     :target="popoverTarget"
     :visible="visibleInternal"
     @hide="emits('hide', $event)"
+    tabindex="0"
   >
+    <ul role="menu" class="p-0 m-0" style="list-style: none;">
     <li
       v-for="action in userActionsInternal"
+      role="menuitem"
       :key="action.text"
       class="main-menu-item px-3 py-1 d-flex align-items-center pe-5"
       @click="menuItemClicked(action, $event)"
+      @keydown.enter="menuItemClicked(action, $event)"
+      tabindex="0"
+      @keydown.esc="hideMenu"
     >
       <div class="main-menu-item__icon" :class="action.iconCls"></div>
       <div class="ms-2">
         {{action.text}}
       </div>
     </li>
-
+    </ul>
   </TMenu>
 </template>
 
@@ -48,9 +55,29 @@ watch(() => props.visible, newVal => {
   visibleInternal.value = newVal
 }, { immediate: true })
 
+const itemContainerRef = ref(null)
+
 const emits = defineEmits(['hide'])
 const menuItemClicked = (action, e) => {
   action.handler.call(action?.scope)
+  emits('hide', e)
+}
+
+const menuItemsInternal = computed(() => {
+  return props.mainMenuItems.value
+})
+
+const appInFocus = ref(0)
+
+watch(menuItemsInternal, (newVal) => {
+  if (appInFocus.value > newVal.length) appInFocus.value = newVal.length - 1
+})
+
+const hideMenu = (e) => {
+  if (e) {
+    e.stopPropagation()
+    e.preventDefault()
+  }
   emits('hide', e)
 }
 </script>
@@ -66,6 +93,11 @@ const menuItemClicked = (action, e) => {
   &__icon{
     width: 20px;
     height: 20px;
+  }
+
+  &:focus{
+    background-color: #d9d9d9;
+    border-left: #a6a6a6 solid 2px;
   }
 
   @media (hover: hover) {

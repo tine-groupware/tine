@@ -9,7 +9,7 @@
 -->
 <template>
   <div class="d-flex align-items-center">
-    <div ref="itemContainerRef" v-if="config.iconCls" :class="config.iconCls" @click="config?.handler" class="action-bar-item"/>
+    <div ref="itemContainerRef" v-if="config.iconCls" :class="config.iconCls" class="action-bar-item"/>
     <a class="action-bar-item__text" v-if="itemCfg._showText || config.showText" @click="config?.handler">
       {{config.text}}
     </a>

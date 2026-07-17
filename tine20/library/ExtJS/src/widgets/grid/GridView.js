@@ -273,7 +273,7 @@ viewConfig: {
 
         if(!ts.header){
             ts.header = new Ext.Template(
-                    '<table border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+                    '<table role="navigation" aria-label="' + window.i18n._('Column Headers') + '" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
                     '<thead><tr class="x-grid3-hd-row">{cells}</tr></thead>',
                     '</table>'
                     );
@@ -281,7 +281,7 @@ viewConfig: {
 
         if(!ts.hcell){
             ts.hcell = new Ext.Template(
-                    '<td class="x-grid3-hd x-grid3-cell x-grid3-td-{id} {css}" style="{style}"><div {tooltip} {attr} class="x-grid3-hd-inner x-grid3-hd-{id}" unselectable="on" style="{istyle}">', this.grid.enableHdMenu ? '<a class="x-grid3-hd-btn" href="#"></a>' : '',
+                    '<td class="x-grid3-hd x-grid3-cell x-grid3-td-{id} {css}" style="{style}"><div  tabindex="0" {tooltip} {attr} class="x-grid3-hd-inner x-grid3-hd-{id}" unselectable="on" style="{istyle}">', this.grid.enableHdMenu ? '<a class="x-grid3-hd-btn" href="#"></a>' : '',
                     '{value}<img class="x-grid3-sort-icon" src="', Ext.BLANK_IMAGE_URL, '" />',
                     '</div></td>'
                     );
@@ -293,16 +293,16 @@ viewConfig: {
 
         if(!ts.row){
             ts.row = new Ext.Template(
-                    '<div class="x-grid3-row {alt}" style="{tstyle}"><table class="x-grid3-row-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
+                    '<div class="x-grid3-row {alt}" role="row" tabIndex="0" style="{tstyle}"><table class="x-grid3-row-table" border="0" cellspacing="0" cellpadding="0" style="{tstyle}">',
                     '<tbody><tr>{cells}</tr>',
-                    (this.enableRowBody ? '<tr class="x-grid3-row-body-tr" style="{bodyStyle}"><td colspan="{cols}" class="x-grid3-body-cell" tabIndex="0" hidefocus="on"><div class="x-grid3-row-body">{body}</div></td></tr>' : ''),
+                    (this.enableRowBody ? '<tr class="x-grid3-row-body-tr" style="{bodyStyle}"><td colspan="{cols}" class="x-grid3-body-cell" hidefocus="on"><div class="x-grid3-row-body">{body}</div></td></tr>' : ''),
                     '</tbody></table></div>'
                     );
         }
 
         if(!ts.cell){
             ts.cell = new Ext.Template(
-                    '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}" style="{style}" tabIndex="0" {cellAttr}>',
+                    '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}"  role="gridcell" style="{style}" {cellAttr}>',
                     '<div class="x-grid3-cell-inner x-grid3-col-{id}" unselectable="on" {attr}>{value}</div>',
                     '</td>'
                     );

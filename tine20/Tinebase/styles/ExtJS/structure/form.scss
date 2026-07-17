@@ -9,8 +9,17 @@
     margin: 0 0 0 0;
 }
 
-.ext-webkit *:focus{
-    outline: none !important;
+
+*:not(input,textarea):focus-visible {
+  outline-style: solid !important;
+  outline-width: 3px !important;
+  outline-color: #ff0000 !important;
+  outline-offset: -2px !important;
+  border-radius: 4px !important;
+}
+
+.tine-application-menu.is-mouse .form-control:focus {
+  outline: none !important;
 }
 
 /* ---- text fields ---- */

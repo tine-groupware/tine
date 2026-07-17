@@ -17,7 +17,8 @@
     @dragstart.stop
   >
     <div class="w-100 h-100 tine-dock" ref="tineDockRef">
-      <div class="docked-app-container" ref="dockContainerRef">
+      <div class="docked-app-container" ref="dockContainerRef" tabindex="0" role="navigation"
+           :aria-label="window.i18n._('All chosen applications')">
         <div
           v-for="(app, idx) in dockedAppsInternal"
           :key="app.name"
@@ -25,6 +26,11 @@
           'dragged-item': idx === draggedIdx
           }"
           :id="app.id"
+          :aria-label="app.text"
+          tabindex="0"
+          role="link"
+          href = ""
+          style="color: inherit; text-decoration: none;"
           draggable="true"
           @dragstart.stop="dragStart(idx, $event)"
           @dragenter.prevent
@@ -33,6 +39,7 @@
           @drop.stop="dragFinish(idx, app.id, $event)"
           @click.right.prevent="activateContextMenu(app)"
           @click.left.prevent="activateApp(app.name)"
+          @keydown.enter ="activateApp(app.name)"
         >
           <div
             class="dock-item d-flex align-items-center flex-column"

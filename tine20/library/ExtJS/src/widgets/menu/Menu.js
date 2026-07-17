@@ -212,7 +212,7 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
         }
         Ext.menu.Menu.superclass.onRender.call(this, ct, position);
 
-        if(!this.keyNav){
+        if(!this.keyNav && this.keyNav !== false){
             this.keyNav = new Ext.menu.MenuNav(this);
         }
         // generic focus element
@@ -270,6 +270,7 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
                 item.focus();
             }else{
                 item.activate(autoExpand);
+                item.el.parent().focus();
             }
         }else if(autoExpand){
             item.expandMenu();
@@ -513,7 +514,12 @@ Ext.menu.Menu = Ext.extend(Ext.Container, {
 
     doFocus : function(){
         if(!this.hidden){
-            this.focusEl.focus();
+            const focusEl = this.el.query('[tabindex="0"]')
+            if (focusEl.length > 0) {
+                Ext.fly(focusEl[0]).focus();
+            } else {
+                this.focusEl.focus();
+            }
         }
     },
 
