@@ -37,7 +37,7 @@ class Inventory_Model_ElectricalEquipment extends Tinebase_Record_NewAbstract
         self::VERSION                   => 1,
         self::RECORD_NAME               => 'Electrical Equipment',
         self::RECORDS_NAME              => 'Electrical Equipments', // ngettext('Electrical Equipment', 'Electrical Equipments', n)
-        self::TITLE_PROPERTY            => self::FLD_NAME,
+        self::TITLE_PROPERTY            => '{{ '. self::FLD_NAME . ' }} ({{ '. self::FLD_INVENTORY_ID . ' }})',
         self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_NAME],
         self::MODLOG_ACTIVE             => true,
         self::IS_DEPENDENT              => true,
@@ -59,6 +59,7 @@ class Inventory_Model_ElectricalEquipment extends Tinebase_Record_NewAbstract
         self::FIELDS                    => [
             self::FLD_INVENTORY_ITEM_ID     => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Inventory Item',
                 self::LENGTH                    => 40,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Inventory_Config::APP_NAME,
@@ -115,6 +116,14 @@ class Inventory_Model_ElectricalEquipment extends Tinebase_Record_NewAbstract
                 ],
                 self::VALIDATORS                => [
                     [Tinebase_Record_Validator_SubValidate::class],
+                ],
+                self::UI_CONFIG                 => [
+                    self::COLUMNS                   => [
+                        Inventory_Model_ElectricalSafetyTest::FLD_TEST_DATE,
+                        Inventory_Model_ElectricalSafetyTest::FLD_EQUIPMENT_ID,
+                        Inventory_Model_ElectricalSafetyTest::FLD_TEST_PASSED,
+
+                    ],
                 ],
             ],
         ],

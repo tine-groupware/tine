@@ -60,6 +60,7 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
         self::FIELDS                    => [
             self::FLD_EQUIPMENT_ID          => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Electrical Equipment',
                 self::LENGTH                    => 40,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Inventory_Config::APP_NAME,
@@ -82,6 +83,10 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'extuxnumberfield',
+                    'suffix' => ' Ω'
+                ],
             ],
             self::FLD_INSULATION_RESISTANCE => [
                 self::LABEL                     => 'Insulation resistance', // _('Insulation resistance')
@@ -89,6 +94,10 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'extuxnumberfield',
+                    'suffix' => ' MΩ'
                 ],
             ],
             self::FLD_PROTECTIVE_CONDUCTOR_CURRENT => [
@@ -98,6 +107,10 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'extuxnumberfield',
+                    'suffix' => ' mA'
+                ],
             ],
             self::FLD_TOUCH_CURRENT         => [
                 self::LABEL                     => 'Touch current', // _('Touch current')
@@ -105,6 +118,10 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'extuxnumberfield',
+                    'suffix' => ' mA'
                 ],
             ],
             self::FLD_TEST_PASSED           => [

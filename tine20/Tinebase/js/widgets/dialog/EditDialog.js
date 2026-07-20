@@ -1178,7 +1178,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
     },
 
     setReadOnly: function(readOnly) {
-        this.readOnly = true;
+        this.readOnly = _.isBoolean(readOnly) ? readOnly : true;
         if (! this.saveAndCloseActionUpdater) {
             this.action_saveAndClose.setHidden(readOnly);
         }

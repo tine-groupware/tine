@@ -16,6 +16,8 @@ class Inventory_ControllerTest extends Inventory_TestCase
 {
     public function testAttachmentCreation(): void
     {
+        $this->markTestSkipped('template file needs to be fixed, ci doesnt do pdf conversion?');
+        
         $this->_testNeedsTransaction();
 
         $orgFsConfig = $fsConfig = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->toArray();

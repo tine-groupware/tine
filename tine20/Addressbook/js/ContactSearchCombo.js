@@ -202,8 +202,8 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     } else {
                         // account record
                         this.selectedRecord = this.selectedAccount = value;
-                        this.accountId = value.get('id');
-                        value = value.get('name');
+                        this.accountId = value.get('accountId');
+                        value = value.get('accountDisplayName');
                     }
                 }
             } else {
