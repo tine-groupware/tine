@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-07-14 12:01+0200\n"
+"PO-Revision-Date: 2026-07-20 11:18+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -401,7 +401,7 @@ msgid "I am completing the registration form for another person"
 msgstr "Ich fülle das Anmeldeformular für eine andere Person aus"
 
 msgid "Participant Information:"
-msgstr "Teilnehmende Information:"
+msgstr "Teilnehmende Person:"
 
 msgid "Event Information:"
 msgstr "Veranstaltungsinformationen:"
@@ -427,14 +427,14 @@ msgstr "Datei entfernen"
 msgid "Registrant Information:"
 msgstr "Anmeldende Person:"
 
+msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
+msgstr "Ich willige in die Verarbeitung und Speicherung meiner eingegebenen Daten zum Zweck der Durchführung der Veranstaltung ein."
+
 msgid "Update Registration"
 msgstr "Anmeldung aktualisieren"
 
 msgid "Register"
 msgstr "Anmelden"
-
-msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
-msgstr "Ich willige in die Verarbeitung und Speicherung meiner eingegebenen Daten zum Zweck der Durchführung der Veranstaltung ein."
 
 msgid "Mr"
 msgstr "Herr"
@@ -444,6 +444,9 @@ msgstr "Frau"
 
 msgid "Person"
 msgstr "Person"
+
+msgid "participant"
+msgstr "Teilnehmende"
 
 msgid "Registration for"
 msgstr "Anmeldung für"
