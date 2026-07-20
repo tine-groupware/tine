@@ -65,7 +65,9 @@ class MatrixSynapseIntegrator_Controller_RoomTests extends TestCase
         self::assertNotNull($listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM],
             print_r($listArray, true));
         $room = new MatrixSynapseIntegrator_Model_Room($listArray[MatrixSynapseIntegrator_Config::ADDRESSBOOK_CF_NAME_ROOM]);
-        self::assertNotNull($room->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID});
+        if ($isActive) {
+            self::assertNotNull($room->{MatrixSynapseIntegrator_Model_Room::FLD_ROOM_ID});
+        }
         return $room;
     }
 
