@@ -3,9 +3,9 @@
  * Calendar Event Notifications
  * 
  * @package     Calendar
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 ?>
 <?php if ($this && count((array)$this->updates) > 0): ?>
@@ -13,16 +13,28 @@
 <?php 
 foreach ($this->updates as $field => $update) {
     if ($field != 'attendee') {
-        $i18nFieldName = Calendar_Model_Event::getTranslatedFieldName($field, $this->translate);
-        $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone);
-        $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone);
 
-        if($field == 'rrule' && $this->event->recurid) {
+        if ($field == 'rrule' && $this->event->recurid) {
             echo $this->translate->_("This is an event series exception.")  . "\n" ;
             continue;
         }
 
-        echo sprintf($this->translate->_('%1$s changed from "%2$s" to "%3$s"'), $i18nFieldName, $i18nOldValue, $i18nCurrValue) . "\n";
+        $i18nFieldName = Calendar_Model_Event::getTranslatedFieldName($field, $this->translate);
+        $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone);
+        $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate,
+            $this->timezone);
+        $translatedMessage = $this->translate->_('%1$s changed from "%2$s" to "%3$s"');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' $i18nFieldName: ' . $i18nFieldName
+                . ' $i18nOldValue: ' . $i18nOldValue
+                . ' $i18nCurrValue: ' . $i18nCurrValue
+                . ' $translatedMessage: ' . $translatedMessage
+            );
+        }
+
+        echo sprintf($translatedMessage, $i18nFieldName, $i18nOldValue, $i18nCurrValue) . "\n";
     }
 }
 
