@@ -19,8 +19,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
         requiredGrant: 'editGrant',
         layout: 'fit',
         hideFields: ['list_id'],
-        // TODO remove if not needed
-//        isChatRoomActiveCheck: null,
 
         initComponent: function() {
             this.recordClass = Tine.MatrixSynapseIntegrator.Model.Room;
@@ -31,18 +29,8 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
 
             this.app = Tine.Tinebase.appMgr.get('MatrixSynapseIntegrator');
 
-            // this.isChatRoomActiveCheck = new Ext.form.Checkbox({
-            //     hideLabels: true,
-            //     boxLabel: this.app.i18n._('This group has a chat room'),
-            //     listeners: {
-            //         scope: this,
-            //         check: this.onChatRoomActiveCheck
-            //     }
-            // });
-
             this.title = this.app.i18n._('Chat Room');
             this.items = [
-//                this.isChatRoomActiveCheck,
                 this.recordForm
             ];
 
@@ -72,14 +60,13 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('MatrixSynapseIntegrator'),
             });
         },
 
-        // onChatRoomActiveCheck: function(cb, checked) {
-        //     this.setReadOnly(!checked);
-        // },
-
         onRecordUpdate: function(editDialog, record) {
             this.recordForm.getForm().updateRecord(this.record);
 
-            record.set('room', this.editDialog.getForm().findField('active').getValue() ? record.getData() : null);
+            // do not create/update room if no record exists yet and it is inactive
+            if (this.record.get('active') || this.record.get('list_id')) {
+                record.set('room', this.record.getData());
+            }
         },
 
         setOwnerCt: function(ct) {

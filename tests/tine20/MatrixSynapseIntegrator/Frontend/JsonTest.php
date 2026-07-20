@@ -45,6 +45,7 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             MatrixSynapseIntegrator_Model_Room::FLD_NAME => 'test room',
             MatrixSynapseIntegrator_Model_Room::FLD_TOPIC => 'topic',
             MatrixSynapseIntegrator_Model_Room::FLD_SYSTEM_USER_ONLY => true,
+            MatrixSynapseIntegrator_Model_Room::FLD_ACTIVE => true,
         ];
 
         $adbJson = new Addressbook_Frontend_Json();
