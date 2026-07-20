@@ -46,7 +46,6 @@ class Inventory_ControllerTest extends Inventory_TestCase
                     Inventory_Model_ElectricalEquipment::FLD_PROTECTION_CLASS => 'I',
                     Inventory_Model_ElectricalEquipment::FLD_ELECTRICAL_SAFETY_TESTS => new Tinebase_Record_RecordSet(Inventory_Model_ElectricalSafetyTest::class, [
                         new Inventory_Model_ElectricalSafetyTest([
-                            Inventory_Model_ElectricalSafetyTest::FLD_TEST_DATE => $today = Tinebase_DateTime::today(),
                             Inventory_Model_ElectricalSafetyTest::FLD_PROTECTIVE_CONDUCTOR_RESISTANCE => 0.5,
                             Inventory_Model_ElectricalSafetyTest::FLD_INSULATION_RESISTANCE => 0.6,
                             Inventory_Model_ElectricalSafetyTest::FLD_PROTECTIVE_CONDUCTOR_CURRENT => 0.7,
@@ -59,7 +58,7 @@ class Inventory_ControllerTest extends Inventory_TestCase
         ], true));
 
         $this->assertCount(2, $item->attachments);
-        $this->assertSame($today->add(new DateInterval(Inventory_Config::getInstance()->{Inventory_Config::ELECTRICAL_SAFETY_TEST_INTERVAL}))->format('Y-m-d'),
+        $this->assertSame(Tinebase_Core::getCurrentUserDate()->add(new DateInterval(Inventory_Config::getInstance()->{Inventory_Config::ELECTRICAL_SAFETY_TEST_INTERVAL}))->format('Y-m-d'),
             $item->{Inventory_Model_InventoryItem::FLD_ELECTRICAL_EQUIPMENTS}->getFirstRecord()->{Inventory_Model_ElectricalEquipment::FLD_NEXT_TEST_DUE}->format('Y-m-d'));
         foreach ($item->attachments as $attachment) {
             if ($attachment->name === 'testAttachmentData.txt') {

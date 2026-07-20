@@ -29,13 +29,6 @@ class Inventory_Controller_ElectricalSafetyTest extends Tinebase_Controller_Reco
         $this->_doContainerACLChecks = false;
     }
 
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
-    {
-        parent::_inspectBeforeCreate($_record);
-        if (empty($_record->{Inventory_Model_ElectricalSafetyTest::FLD_INSPECTOR})) {
-            $_record->{Inventory_Model_ElectricalSafetyTest::FLD_INSPECTOR} = Tinebase_Core::getUser();
-        }
-    }
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);

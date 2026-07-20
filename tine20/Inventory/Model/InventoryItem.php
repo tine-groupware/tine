@@ -284,10 +284,13 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 self::LABEL                 => 'Electrical Equipments',
                 self::QUERY_FILTER          => true,
                 self::CONFIG                => [
-                    self::APP_NAME          => Inventory_Config::APP_NAME,
-                    self::MODEL_NAME        => Inventory_Model_ElectricalEquipment::MODEL_NAME_PART,
-                    self::DEPENDENT_RECORDS   => true,
-                    self::REF_ID_FIELD      => Inventory_Model_ElectricalEquipment::FLD_INVENTORY_ITEM_ID,
+                    self::APP_NAME              => Inventory_Config::APP_NAME,
+                    self::MODEL_NAME            => Inventory_Model_ElectricalEquipment::MODEL_NAME_PART,
+                    self::DEPENDENT_RECORDS     => true,
+                    self::REF_ID_FIELD          => Inventory_Model_ElectricalEquipment::FLD_INVENTORY_ITEM_ID,
+                ],
+                self::VALIDATORS            => [
+                    [Tinebase_Record_Validator_SubValidate::class],
                 ],
             ],
         ]

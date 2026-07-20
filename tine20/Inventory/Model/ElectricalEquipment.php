@@ -113,6 +113,9 @@ class Inventory_Model_ElectricalEquipment extends Tinebase_Record_NewAbstract
                     self::DEPENDENT_RECORDS         => true,
                     self::REF_ID_FIELD              => Inventory_Model_ElectricalSafetyTest::FLD_EQUIPMENT_ID,
                 ],
+                self::VALIDATORS                => [
+                    [Tinebase_Record_Validator_SubValidate::class],
+                ],
             ],
         ],
     ];

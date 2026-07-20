@@ -70,9 +70,8 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
             self::FLD_TEST_DATE             => [
                 self::LABEL                     => 'Test Date', // _('Test Date')
                 self::TYPE                      => self::TYPE_DATE,
-                self::VALIDATORS                => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                self::INPUT_FILTERS             => [
+                    Tinebase_Record_Filter_CallableEmpty::class => [[[Tinebase_Core::class, 'getCurrentUserDate']]],
                 ],
                 self::QUERY_FILTER              => true,
             ],
@@ -119,6 +118,9 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
             self::FLD_INSPECTOR             => [
                 self::LABEL                     => 'Inspector', // _('Inspector')
                 self::TYPE                      => self::TYPE_USER,
+                self::INPUT_FILTERS             => [
+                    Tinebase_Record_Filter_CallableEmpty::class => [[[Tinebase_Core::class, 'getUser']]],
+                ],
             ],
         ],
     ];
