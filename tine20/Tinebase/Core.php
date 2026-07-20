@@ -1807,6 +1807,21 @@ class Tinebase_Core
         Tinebase_Log_Formatter::resetUsername();
     }
 
+    public static function getCurrentUserId(): ?string
+    {
+        return static::getUser()?->getId();
+    }
+
+    public static function getCurrentUserDateTime(): Tinebase_DateTime
+    {
+        return Tinebase_DateTime::now()->setTimezone(static::getUserTimezone());
+    }
+
+    public static function getCurrentUserDate(): Tinebase_DateTime
+    {
+        return Tinebase_DateTime::today(static::getUserTimezone());
+    }
+
     /**
      * get anonymous registry
      *
