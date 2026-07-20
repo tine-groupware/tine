@@ -585,7 +585,9 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        Tinebase_EmailUser::checkAllowedDomain($email);
+        if (! empty($email)) {
+            Tinebase_EmailUser::checkAllowedDomain($email, true);
+        }
     }
 
     protected function _createMailAccount(Addressbook_Model_List $_list)
@@ -762,8 +764,10 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
                 }
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Update list ' . $group->name);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Update list ' . $group->name);
+            }
 
             $upList = clone $list;
             $upList->name = $group->name;
