@@ -40,7 +40,7 @@
                 label-cols-lg="3"
                 content-cols-sm
                 content-cols-lg="7"
-                :label="registrationContactFields[fieldName].label + (requiredContactFields.includes(fieldName) ? ' *' : '')"
+                :label="getParticipantFieldLabel(fieldName)"
                 class="mb-3"
               >
                 <component
@@ -325,6 +325,14 @@ const eventDetails = ref({
   registerOthers: "",
   contactFields: [],
 });
+
+const getParticipantFieldLabel = (fieldName) => {
+  const baseLabel = registrationContactFields.value[fieldName].label;
+  const participantSuffix = isRegistrant.value ? ` (${formatMessage('participant')})` : '';
+  const requiredSuffix = requiredContactFields.value.includes(fieldName) ? '*' : '';
+
+  return `${baseLabel}${participantSuffix}${requiredSuffix}`;
+};
 
 const emptyContactDetails = () => {
   const details = {};

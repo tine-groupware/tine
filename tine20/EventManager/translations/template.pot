@@ -423,13 +423,13 @@ msgstr ""
 msgid "Registrant Information:"
 msgstr ""
 
+msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
+msgstr ""
+
 msgid "Update Registration"
 msgstr ""
 
 msgid "Register"
-msgstr ""
-
-msgid "I consent to the processing and storage of the data I have entered for the purpose of organizing the event."
 msgstr ""
 
 msgid "Mr"
@@ -439,6 +439,9 @@ msgid "Ms"
 msgstr ""
 
 msgid "Person"
+msgstr ""
+
+msgid "participant"
 msgstr ""
 
 msgid "Registration for"
