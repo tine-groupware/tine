@@ -199,6 +199,18 @@ msgstr ""
 msgid "List of the languages in which multilingual texts are available."
 msgstr ""
 
+msgid "EVENT SHARED CALENDAR NAME"
+msgstr ""
+
+msgid "Session"
+msgstr ""
+
+msgid "To create the event there must be a shared calendar. Please create it first or contact your administrator."
+msgstr ""
+
+msgid "You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions."
+msgstr ""
+
 msgid "Options"
 msgstr ""
 
@@ -209,6 +221,9 @@ msgid "Registrations"
 msgstr ""
 
 msgid "Deregistered"
+msgstr ""
+
+msgid "Export Events"
 msgstr ""
 
 msgid "Event Manager | RSS"
@@ -334,9 +349,6 @@ msgid "Until:"
 msgstr ""
 
 msgid "Appointments:"
-msgstr ""
-
-msgid "Session"
 msgstr ""
 
 msgid "Address:"
