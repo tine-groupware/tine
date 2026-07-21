@@ -35,6 +35,7 @@ class Tinebase_Controller_Instance extends Tinebase_Controller_Record_Abstract
             Tinebase_Backend_Sql::MODEL_NAME        => Tinebase_Model_Instance::class,
             Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
         ]);
+        $this->_duplicateCheckFields = [Tinebase_Model_Instance::FLD_NAME];
     }
 
     public function getTrustedMailDomains(): array
