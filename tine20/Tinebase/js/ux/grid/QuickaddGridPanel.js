@@ -335,14 +335,19 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     var columns = this.colModel.config;
                     for (var i = 0, len = columns.length; i < len; i++) {
                         if (columns[i].quickaddField != undefined && (this.resetAllOnNew || columns[i].quickaddField.resetOnNew)) {
-                            // columns[i].quickaddField.setValue(this.quickaddRecord.get(columns[i].dataIndex));
-                            if (columns[i].quickaddField.xtype === 'extuxmoneyfield') {
-                                // prevent 0,00 € in moneyfields
-                                columns[i].quickaddField.setRawValue('');
+                            const quickAddField = columns[i].quickaddField;
+                            if (quickAddField.xtype === 'extuxmoneyfield') {
+                                // prevent 0,00 € in money fields
+                                quickAddField.setRawValue('');
+                                quickAddField.applyEmptyText?.();
+                            } else if (quickAddField.xtype === 'durationspinner' && quickAddField.originalValue) {
+                                // TODO use originalValue for other xtypes, too?
+                                //      make sure it contains the default value we want to reset to
+                                quickAddField.setValue(quickAddField.originalValue);
                             } else {
-                                columns[i].quickaddField.setValue('');
+                                quickAddField.setValue('');
+                                quickAddField.applyEmptyText?.();
                             }
-                            columns[i].quickaddField.applyEmptyText?.();
                         }
                     }
                 }
