@@ -23,12 +23,30 @@ class Inventory_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const INVENTORY_STATUS = 'inventoryStatus';
+    const PROTECTION_CLASS = 'protectionClass';
+    const ELECTRICAL_SAFETY_TEST_INTERVAL =  'electricalSafetyTestInterval';
+    const ELECTRICAL_SAFETY_TEST_REPORT_TEMPLATE = 'electricalSafetyReportTemplate';
     
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = [
+        self::ELECTRICAL_SAFETY_TEST_REPORT_TEMPLATE => [
+            self::LABEL                 => 'Electrical safety test report template', //_('Electrical safety test report template')
+            self::DESCRIPTION           => 'Electrical safety test report template', //_('Electrical safety test report template')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+        ],
+        self::ELECTRICAL_SAFETY_TEST_INTERVAL => [
+            self::LABEL                 => 'Electrical safety test interval', //_('Electrical safety test interval')
+            self::DESCRIPTION           => 'Electrical safety test interval', //_('Electrical safety test interval')
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => 'P1Y',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+        ],
         self::INVENTORY_STATUS => [
             //_('Inventory Status Available')
             self::LABEL                 => 'Inventory Status Available',
@@ -51,7 +69,21 @@ class Inventory_Config extends Tinebase_Config_Abstract
                     ['id' => Inventory_Model_Status::DESTROYED, 'value' => 'Destroyed', 'is_open' => false], //_('Destroyed')
                 ],
                 self::DEFAULT_STR => Inventory_Model_Status::AVAILABLE,
-            ]
+            ],
+        ],
+        self::PROTECTION_CLASS => [
+            self::LABEL                 => 'Protection Class', //_('Protection Class')
+            self::DESCRIPTION           => 'Protection Class', //_('Protection Class')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    ['id' => 'I', 'value' => 'I' ],
+                    ['id' => 'II', 'value' => 'II' ],
+                    ['id' => 'III', 'value' => 'III' ],
+                ],
+            ],
         ],
     ];
     

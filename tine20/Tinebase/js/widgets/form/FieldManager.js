@@ -230,8 +230,8 @@ Tine.widgets.form.FieldManager = function() {
 
                     break;
                 case 'float':
-                    field.xtype = 'numberfield';
-                    field.decimalPrecision = 2;
+                    field.xtype = field.xtype || 'numberfield';
+                    field.decimalPrecision = field.decimalPrecision || 2;
 
                     if (fieldDefinition.specialType && fieldDefinition.specialType === 'percent') {
                         field.xtype = 'extuxnumberfield';

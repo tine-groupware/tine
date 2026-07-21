@@ -86,7 +86,7 @@ const Field = function(config){
                         return new Date().clearTime();
                     }
                     if (v === 'CURRENT_TIME') {
-                        return new Date().clearTime();
+                        return new Date();
                     }
                     if(isDate(v)){
                         return v;

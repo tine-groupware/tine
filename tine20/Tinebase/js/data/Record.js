@@ -458,6 +458,21 @@ const getFieldFromModelConfig = function(fieldDefinition, key) {
             }
         }
 
+        forEach(get(fieldDefinition, 'inputFilters.Tinebase_Record_Filter_CallableEmpty', []), (spec) => {
+            switch(_.get(spec, '[0][1]')) {
+                case 'getUser':
+                case 'getCurrentUserId':
+                    field.defaultValue = () => Tine.Tinebase.registry.get('currentAccount');
+                    break;
+                case 'getCurrentUserDateTime':
+                    field.defaultValue = () => new Date();
+                    break;
+                case 'getCurrentUserDate':
+                    field.defaultValue = () => new Date().clearTime();
+                    break;
+            }
+        });
+
         if ((toUpper(get(fieldDefinition, `config.storage`)) === 'JSON' || get(fieldDefinition, `config.persistent`) === true)
             && !isArray(field.defaultValue) && String(field.defaultValue).match(/^[\[{]/)) {
             // NOTE: Server can't handle this properly, see {tine20/vendor/zendframework/zendframework1/library/Zend/Filter/Input.php:998}

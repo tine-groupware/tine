@@ -3,8 +3,10 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+import './ElectricalEquipment/InventoryItemPanel';
 import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 
 Ext.ns('Tine.Inventory');
@@ -30,7 +32,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    windowHeight: 550,
+    windowHeight: 600,
     windowWidth: 800,
     displayNotes: true,
     defaultRelationCombo: ['Inventory', 'InventoryItem'],

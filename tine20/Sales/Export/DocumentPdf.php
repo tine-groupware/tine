@@ -15,7 +15,6 @@ class Sales_Export_DocumentPdf extends Sales_Export_Document
 {
     use Tinebase_Export_DocumentPdfTrait;
 
-    // we need to set locale etc before loading twig, so we overwrite _loadTwig
     protected function _loadTwig()
     {
         if (class_exists('OnlyOfficeIntegrator_Config') &&

@@ -15,8 +15,15 @@ class Inventory_Setup_Update_19 extends Setup_Update_Abstract
 {
     protected const RELEASE019_UPDATE000 = __CLASS__ . '::update000';
     protected const RELEASE019_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE019_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE019_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE019_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -41,7 +48,7 @@ class Inventory_Setup_Update_19 extends Setup_Update_Abstract
         $hasUpdates = false;
 
         foreach ($config->records as $record) {
-            if (! isset($record->is_open)) {
+            if (!isset($record->is_open)) {
                 $record->is_open = in_array($record->id, [
                     Inventory_Model_Status::ORDERED,
                     Inventory_Model_Status::AVAILABLE,
@@ -59,7 +66,16 @@ class Inventory_Setup_Update_19 extends Setup_Update_Abstract
                 $config
             );
         }
-
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '19.1', self::RELEASE019_UPDATE001);
+    }
+
+    public function update002(): void
+    {
+        Setup_SchemaTool::updateSchema([
+            Inventory_Model_ElectricalEquipment::class,
+            Inventory_Model_ElectricalSafetyTest::class,
+        ]);
+
+        $this->addApplicationUpdate(Inventory_Config::APP_NAME, '19.2', self::RELEASE019_UPDATE002);
     }
 }

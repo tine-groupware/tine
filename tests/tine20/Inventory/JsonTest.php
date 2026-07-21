@@ -322,4 +322,90 @@ class Inventory_JsonTest extends Inventory_TestCase
         );
         self::assertTrue(isset($result['success']) && $result['success']);
     }
+
+    /**
+     * test creation of an InventoryItem with 2 ElectricalEquipments
+     */
+    public function testCreateInventoryItemWithElectricalEquipments()
+    {
+        $inventoryItem = $this->_getInventoryItem();
+        $inventoryItemArray = $inventoryItem->toArray();
+
+        $inventoryItemArray['electrical_equipments'] = [
+            [
+                'name' => 'Electrical Equipment 1',
+                'inventory_id' => 'EE-001',
+                'protection_class' => 'I',
+            ],
+            [
+                'name' => 'Electrical Equipment 2',
+                'inventory_id' => 'EE-002',
+                'protection_class' => 'II',
+            ],
+        ];
+
+        $returnedRecord = $this->_json->saveInventoryItem($inventoryItemArray);
+        $this->assertNotEmpty($returnedRecord['id'], 'InventoryItem ID should not be empty');
+
+        $retrieved = $this->_json->getInventoryItem($returnedRecord['id'], 0, '');
+        $this->assertArrayHasKey('electrical_equipments', $retrieved, 'electrical_equipments should be present in retrieved record');
+        $this->assertCount(2, $retrieved['electrical_equipments'], 'Should have exactly 2 ElectricalEquipments');
+
+        $ee1 = null;
+        $ee2 = null;
+        foreach ($retrieved['electrical_equipments'] as $ee) {
+            if ($ee['inventory_id'] === 'EE-001') {
+                $ee1 = $ee;
+            } elseif ($ee['inventory_id'] === 'EE-002') {
+                $ee2 = $ee;
+            }
+        }
+        $this->assertNotNull($ee1, 'ElectricalEquipment with inventory_id EE-001 should be found');
+        $this->assertNotNull($ee2, 'ElectricalEquipment with inventory_id EE-002 should be found');
+        $this->assertEquals('Electrical Equipment 1', $ee1['name']);
+        $this->assertEquals('I', $ee1['protection_class']);
+        $this->assertEquals('Electrical Equipment 2', $ee2['name']);
+        $this->assertEquals('II', $ee2['protection_class']);
+
+        return $returnedRecord;
+    }
+
+    /**
+     * test search for InventoryItem by ElectricalEquipment inventory_id using query filter
+     */
+    public function testSearchInventoryItemByElectricalEquipmentInventoryId()
+    {
+        $inventoryItem = $this->_getInventoryItem();
+        $inventoryItemArray = $inventoryItem->toArray();
+
+        $testInventoryId = 'TEST-EE-' . uniqid();
+        $inventoryItemArray['electrical_equipments'] = [
+            [
+                'name' => 'EE For Search Test',
+                'inventory_id' => $testInventoryId,
+                'protection_class' => 'I',
+                'next_test_due' => '2026-12-31',
+            ],
+        ];
+
+        $returnedRecord = $this->_json->saveInventoryItem($inventoryItemArray);
+        $this->assertNotEmpty($returnedRecord['id'], 'InventoryItem ID should not be empty');
+
+        $searchFilter = [
+            [
+                'condition' => 'AND',
+                'filters' => [
+                    [
+                        'field' => 'query',
+                        'operator' => 'contains',
+                        'value' => $testInventoryId,
+                    ],
+                ],
+            ],
+        ];
+
+        $searchResult = $this->_json->searchInventoryItems($searchFilter, $this->_getPaging());
+        $this->assertEquals(1, $searchResult['totalcount'], 'Should find exactly 1 InventoryItem by ElectricalEquipment inventory_id. Results: ' . print_r($searchResult, true));
+        $this->assertEquals($returnedRecord['id'], $searchResult['results'][0]['id'], 'Should find the correct InventoryItem');
+    }
 }

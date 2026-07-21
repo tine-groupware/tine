@@ -70,11 +70,11 @@ trait Tinebase_Export_FileLocationTrait
                 }
                 $targetNode = new Tinebase_Model_Tree_Node([
                     'name' => $fileName,
-                    'tempFile' => Tinebase_TempFile::getTempPath(),
+                    'tempFile' => new Tinebase_Model_TempFile(['path' => Tinebase_TempFile::getTempPath()], true),
                 ], true);
 
                 try {
-                    $this->save($targetNode->tempFile);
+                    $this->save($targetNode->tempFile->path);
 
                     [$record, $ctrl] = $this->_fileLocation->getAttachmentRecordAndCtrl();
                     Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
@@ -87,7 +87,7 @@ trait Tinebase_Export_FileLocationTrait
                     $record->attachments->addRecord($targetNode);
                     $ctrl->update($record);
                 } finally {
-                    @unlink($targetNode->tempFile);
+                    @unlink($targetNode->tempFile->path);
                 }
                 break;
 
