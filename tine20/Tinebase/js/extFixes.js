@@ -929,6 +929,7 @@ Ext.layout.VBoxLayout.prototype.onLayout = Ext.layout.VBoxLayout.prototype.onLay
             })
         }, this);
         this.vboxfix = true;
+        this.align = 'stretch';
     }
 });
 
