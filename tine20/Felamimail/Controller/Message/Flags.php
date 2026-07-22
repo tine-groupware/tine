@@ -451,6 +451,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
                 $this->addFlags($_message['id'], $flag);
             }
             $flags[] = $flag;
+            self::$_allowedFlags[$flag] = $flag;
             $_message['flags'] = $flags;
         }
     }

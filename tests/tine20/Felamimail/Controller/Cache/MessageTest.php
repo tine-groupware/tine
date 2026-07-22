@@ -564,7 +564,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function testAddMessageCacheWithSenderFlag(): void
+    public function testAddMessageCacheWithDefaultSenderFlag(): void
     {
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $filter = array(array(
@@ -599,7 +599,9 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
             Tinebase_Model_Instance::FLD_MAIL_DOMAINS  => $domainRecords,
             Tinebase_Model_Instance::FLD_FLAG_ICON_FILE => 'images/icon-set/icon_flag_mw.png'
         ]);
-        Tinebase_Controller_Instance::getInstance()->create($instance);
+        $instance = Tinebase_Controller_Instance::getInstance()->create($instance);
+
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $filter = array(array(
             'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
@@ -608,6 +610,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $result = $json->searchMessages($filter, []);
 
         $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
+        Felamimail_Controller_Message::getInstance()->deleteByFolder($inbox, false);
     }
 
     public function testAddMessageCacheWithSenderFlagInvalidCTag(): void
@@ -631,5 +634,45 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         $validator = new Validator($mailAsString);
         $result = $validator->validateBoolean();
         $this->assertFalse($result);
+    }
+
+    public function testMoveMessageCacheWithImportedSenderFlag(): void
+    {
+        $this->_testNeedsTransaction();
+
+        $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage test_dkim.eml';
+
+        $filter = array(array(
+            'field' => 'messageuid', 'operator' => 'in', 'value' => array($message->messageuid)
+        ));
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchMessages($filter, []);
+
+        $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
+
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $test = $this->_emailTestClass->getFolder('test');
+
+        $messageFilter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($message->getId()))
+        ));
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($messageFilter, $test);
+        $json->updateMessageCache($inbox['id'], 30);
+        $json->updateMessageCache($test['id'], 30);
+        $result = $json->searchMessages([['field' => 'folder_id', 'operator' => 'equals', 'value' => $test->getId()]], []);
+        $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
+
+        $messageFilter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($result['results'][0]['id']))
+        ));
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($messageFilter, $inbox);
+
+        $json->updateMessageCache($test['id'], 30);
+        $json->updateMessageCache($inbox['id'], 30);
+        $result = $json->searchMessages([['field' => 'folder_id', 'operator' => 'equals', 'value' => $inbox->getId()]], []);
+
+        $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
+        $message = $this->_emailTestClass->searchAndCacheMessage('test_dkim.eml', $inbox);
     }
 }
