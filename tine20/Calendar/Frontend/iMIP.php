@@ -66,6 +66,13 @@ class Calendar_Frontend_iMIP
                 $_iMIP->event = $events->getFirstRecord();
             }
             foreach ($events as $event) {
+                if (!$this->_assertValidEvent($event)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Skipping bogus event: ' . print_r($event->toArray(), true));
+                    }
+                    continue;
+                }
                 try {
                     $this->_process($_iMIP, $event, $_status);
                 } catch (Zend_Db_Statement_Exception $zdbse) {
@@ -86,6 +93,26 @@ class Calendar_Frontend_iMIP
             $_iMIP->{Calendar_Model_iMIP::FLD_RESPONSE_EMAILS} = Calendar_Controller_EventNotifications::getInstance()->getGeneratedEmails();
             unset($onlyGenerateRaii);
         }
+    }
+
+    protected function _assertValidEvent(Calendar_Model_Event $event): bool
+    {
+        // TODO do we need the organizer check?
+//        if (!$event->resolveOrganizer()) {
+//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+//                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+//                    . ' Organizer missing');
+//            }
+//            return false;
+//        } else
+        if (empty($event->dtend) || empty($event->dtstart)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Empty dtend/dtstart');
+            }
+            return false;
+        }
+        return true;
     }
     
     /**
@@ -158,8 +185,10 @@ class Calendar_Frontend_iMIP
             $preconditionCheckSuccessful = $this->{$preconditionMethodName}($_iMIP, $_event, $_status);
         } else {
             $preconditionCheckSuccessful = true;
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " No preconditions check fn found for method " . $method);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " No preconditions check fn found for method " . $method);
+            }
         }
         
         $_iMIP->xprops('preconditionsChecked')[$key] = true;
@@ -242,22 +271,50 @@ class Calendar_Frontend_iMIP
     /**
      * process request
      *
-     * TODO on multi process, only process exceptions that have the same start/end as baseevent
+     * TODO on multi process, only process exceptions that have the same start/end as base event
+     *
+     * @param Calendar_Model_iMIP $_iMIP
+     * @param Calendar_Model_Event $_event
+     * @param string|Calendar_Model_Attender|null $_status
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _processRequest(Calendar_Model_iMIP $_iMIP, Calendar_Model_Event $_event, null|string|Calendar_Model_Attender $_status = null): void
+    protected function _processRequest(Calendar_Model_iMIP $_iMIP,
+                                       Calendar_Model_Event $_event,
+                                       null|string|Calendar_Model_Attender $_status = null): void
     {
         $existingEvent = $_iMIP->getExistingEvent($_event, _getDeleted: true);
         $displaycontainer_id = null;
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' event: ' . print_r($_event->toArray(), true)
+                . ' existing_event: ' . ($existingEvent ? print_r($existingEvent->toArray(), true) : ' - none -')
+            );
+        }
+
         if ($_status instanceof Calendar_Model_Attender) {
-            $attendee = Calendar_Model_Attender::getAttendee($existingEvent?->attendee ?: $_event->attendee, $_status);
+            $attendee = Calendar_Model_Attender::getAttendee(
+                $existingEvent?->attendee ?: $_event->attendee, $_status);
             $displaycontainer_id = $_status->displaycontainer_id;
             $_status = $_status->status;
         } else {
-            $attendee = Calendar_Model_Attender::getOwnAttender($existingEvent?->attendee ?: $_event->attendee) ?:
+            $attendee = Calendar_Model_Attender::getOwnAttender(
+                $existingEvent?->attendee ?: $_event->attendee) ?:
                 Calendar_Model_Attender::getOwnAttender($_event->attendee);
         }
         $organizer = $existingEvent?->resolveOrganizer() ?: $_event->resolveOrganizer();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ($organizer
+                    ? ' Organizer: ' . $organizer->getId() . ' (' . $organizer->getTitle() . ')'
+                    : ' No valid organizer found')
+            );
+        }
         
         // internal organizer:
         //  - event is up-to-date
@@ -274,19 +331,18 @@ class Calendar_Frontend_iMIP
 
             if ($attendee) {
                 $needsUpdate = false;
-
                 if ($_status && $_status != $attendee->status) {
                     $attendee->status = $_status;
                     $needsUpdate = true;
                 }
-
                 if ($displaycontainer_id && $displaycontainer_id !== $attendee->displaycontainer_id) {
                     $attendee->displaycontainer_id = $displaycontainer_id;
                     $needsUpdate = true;
                 }
 
                 if ($needsUpdate) {
-                    Calendar_Controller_Event::getInstance()->attenderStatusUpdate($existingEvent, $attendee, $attendee->status_authkey);
+                    Calendar_Controller_Event::getInstance()->attenderStatusUpdate(
+                        $existingEvent, $attendee, $attendee->status_authkey);
                 }
             }
         }
@@ -295,20 +351,25 @@ class Calendar_Frontend_iMIP
         else {
             $sendNotifications = Calendar_Controller_Event::getInstance()->sendNotifications(false);
             $calCtrl = Calendar_Controller_Event::getInstance();
-            $mergeIntoExistingSeries = function(Calendar_Model_Event $_event) use($calCtrl) {
+            $mergeIntoExistingSeries = function (Calendar_Model_Event $_event) use ($calCtrl) {
                 if ($_event->isRecurException()) {
                     // merge this event into the existing event series, if it does exist
-                    $invitationContainer = Calendar_Controller::getInstance()->getInvitationContainer($_event->organizer_email ? null : $_event->resolveOrganizer(), $_event->organizer_email)->getId();
-                    $_event->base_event_id = $calCtrl->search(new Calendar_Model_EventFilter([
-                        ['field' => 'container_id', 'operator' => 'equals', 'value' => $invitationContainer],
-                        ['field' => 'uid', 'operator' => 'equals', 'value' => $_event->uid],
-                        ['field' => 'recurid', 'operator' => 'isnull', 'value' => null],
-                        ['field' => 'base_event_id', 'operator' => 'isnull', 'value' => null],
-                        ['field' => 'rrule', 'operator' => 'notnull', 'value' => null],
-                    ]))->getFirstRecord()?->getId();
+                    $organizer = $_event->organizer_email ? null : $_event->resolveOrganizer();
+                    $organizerEmail = $_event->organizer_email;
+                    if ($organizer || $organizerEmail) {
+                        $invitationContainer = Calendar_Controller::getInstance()->getInvitationContainer(
+                            $organizer, $organizerEmail)->getId();
+                        $_event->base_event_id = $calCtrl->search(new Calendar_Model_EventFilter([
+                            ['field' => 'container_id', 'operator' => 'equals', 'value' => $invitationContainer],
+                            ['field' => 'uid', 'operator' => 'equals', 'value' => $_event->uid],
+                            ['field' => 'recurid', 'operator' => 'isnull', 'value' => null],
+                            ['field' => 'base_event_id', 'operator' => 'isnull', 'value' => null],
+                            ['field' => 'rrule', 'operator' => 'notnull', 'value' => null],
+                        ]))->getFirstRecord()?->getId();
+                    }
                 }
             };
-            $collectExistingExceptions = function(Calendar_Model_Event $_event) use($calCtrl) {
+            $collectExistingExceptions = function (Calendar_Model_Event $_event) use ($calCtrl) {
                 if (null !== $_event->rrule) {
                     // merge existing exceptions into this event series
                     foreach ($calCtrl->search(new Calendar_Model_EventFilter([
