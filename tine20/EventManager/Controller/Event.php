@@ -170,8 +170,11 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
         $eventName = $this->getEventName($updatedRecord);
 
         if ($is_appointment) {
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
             foreach ($appointments as $appointment) {
-                $summary = $eventName . ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
+                $summary = $eventName . ' ' .
+                    $translate->_('Session') . ' ' .
+                    $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER};
                 $startTime = $appointment->{EventManager_Model_Appointment::FLD_START_TIME};
                 if ($startTime) {
                     $dtstart = $appointment->{EventManager_Model_Appointment::FLD_SESSION_DATE}->getClone();
@@ -212,37 +215,62 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
 
     protected function _createSingleCalendarEvent($updatedRecord, $summary, $dtstart, $dtend, $is_all_day_event = false, $tag = null, $appointmentId = null)
     {
-        $newEvent = new Calendar_Model_Event([
-            'summary'           => $summary,
-            'dtstart'           => $dtstart,
-            'dtend'             => $dtend,
-            'organizer'         => $updatedRecord->created_by,
-            'uid'               => Calendar_Model_Event::generateUID(),
-            'is_all_day_event'  => $is_all_day_event,
-            //'container_id' => $container, //todo shared calendar?
-
-            Tinebase_Model_Grants::GRANT_READ    => true,
-            Tinebase_Model_Grants::GRANT_EDIT    => true,
-            Tinebase_Model_Grants::GRANT_DELETE  => true,
-        ]);
-        if ($tag) {
-            $newEvent->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, [$tag]);
+        $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
+        try {
+            $calendarName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
+            $container = Tinebase_Container::getInstance()->getContainerByName(
+                Calendar_Model_Event::class,
+                $calendarName,
+                Tinebase_Model_Container::TYPE_SHARED,
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            throw new Tinebase_Exception_SystemGeneric(
+                $translate->_('To create the event there must be a shared calendar. Please create it first or contact your administrator.')
+            );
         }
-        $calendarEvent = Calendar_Controller_Event::getInstance()->create($newEvent);
 
-        $relation = new Tinebase_Model_Relation([
-            'own_model'         => EventManager_Model_Event::class,
-            'own_backend'       => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-            'own_id'            => $updatedRecord->getId(),
-            'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model'     => Calendar_Model_Event::class,
-            'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-            'related_id'        => $calendarEvent->getId(),
-            'type'              => 'CALENDAR_EVENT',
-            'remark'            => $appointmentId,
-        ]);
+        if ($container) {
+            $newEvent = new Calendar_Model_Event([
+                'summary'           => $summary,
+                'dtstart'           => $dtstart,
+                'dtend'             => $dtend,
+                'organizer'         => $updatedRecord->created_by,
+                'uid'               => Calendar_Model_Event::generateUID(),
+                'is_all_day_event'  => $is_all_day_event,
+                'container_id'      => $container->getId(),
 
-        Tinebase_Relations::getInstance()->addRelation($relation, $updatedRecord);
+                Tinebase_Model_Grants::GRANT_READ    => true,
+                Tinebase_Model_Grants::GRANT_EDIT    => true,
+                Tinebase_Model_Grants::GRANT_DELETE  => true,
+            ]);
+
+            if ($tag) {
+                $newEvent->tags = new Tinebase_Record_RecordSet(Tinebase_Model_Tag::class, [$tag]);
+            }
+
+            $grants = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container);
+            if ($grants->editGrant === true) {
+                $calendarEvent = Calendar_Controller_Event::getInstance()->create($newEvent);
+            } else {
+                throw new Tinebase_Exception_SystemGeneric(
+                    $translate->_('You do not have permission to add an event to the shared calendar. Please contact your administrator to update your permissions.')
+                );
+            }
+
+            $relation = new Tinebase_Model_Relation([
+                'own_model'         => EventManager_Model_Event::class,
+                'own_backend'       => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'own_id'            => $updatedRecord->getId(),
+                'related_degree'    => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'     => Calendar_Model_Event::class,
+                'related_backend'   => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_id'        => $calendarEvent->getId(),
+                'type'              => 'CALENDAR_EVENT',
+                'remark'            => $appointmentId,
+            ]);
+
+            Tinebase_Relations::getInstance()->addRelation($relation, $updatedRecord);
+        }
     }
 
     protected function createTagForEvent()

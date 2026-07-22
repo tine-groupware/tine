@@ -317,48 +317,44 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     items: [
                         fieldManager('appointments', {
                             checkState: function () {
-                                let sessions = me.form.findField('appointments').getValue()
-                                let counter = 0;
-                                sessions.forEach((session) => {
-                                    session['session_number'] = counter + 1;
-                                    counter += 1;
+                                let field = me.form.findField('appointments');
+                                let sessions = field.getValue();
 
-                                    const combineDateTime = (sessionDate, time) => {
-                                        if (!sessionDate || !time || time === '') {
-                                            return null;
-                                        }
+                                const getDateStr = (sessionDate) => {
+                                    if (!sessionDate) return null;
+                                    return (sessionDate instanceof Date)
+                                        ? `${sessionDate.getFullYear()}-${String(sessionDate.getMonth() + 1).padStart(2, '0')}-${String(sessionDate.getDate()).padStart(2, '0')}`
+                                        : sessionDate.substring(0, 10);
+                                };
 
-                                        const dateStr = (sessionDate instanceof Date)
-                                            ? `${sessionDate.getFullYear()}-${String(sessionDate.getMonth() + 1).padStart(2, '0')}-${String(sessionDate.getDate()).padStart(2, '0')}`
-                                            : sessionDate.substring(0, 10);
+                                const getTimeStr = (time) => {
+                                    if (!time || time === '') return null;
+                                    if (time instanceof Date) return time.toTimeString().substring(0, 8);
+                                    return time.length > 8 ? time.substring(11, 19) : time;
+                                };
 
-                                        let timeStr;
-                                        if (time instanceof Date) {
-                                            timeStr = time.toTimeString().substring(0, 8);
-                                        } else if (time.length > 8) {
-                                            timeStr = time.substring(11, 19);
-                                        } else {
-                                            timeStr = time;
-                                        }
+                                sessions.sort((session1, session2) => {
+                                    const date1 = getDateStr(session1['session_date']);
+                                    const date2 = getDateStr(session2['session_date']);
 
-                                        return new Date(`${dateStr}T${timeStr}`);
-                                    };
+                                    if (date1 === null && date2 === null) return 0;
+                                    if (date1 === null) return 1;
+                                    if (date2 === null) return -1;
+                                    if (date1 !== date2) return date1 < date2 ? -1 : 1;
 
-                                    sessions.sort((session1, session2) => {
-                                        const start1 = combineDateTime(session1['session_date'], session1['start_time']);
-                                        const start2 = combineDateTime(session2['session_date'], session2['start_time']);
-                                        if (start1 === null && start2 === null) {
-                                            return 0;
-                                        }
-                                        if (start1 === null) {
-                                            return 1;
-                                        }
-                                        if (start2 === null) {
-                                            return -1;
-                                        }
-                                        return start1 - start2;
-                                    });
-                                })
+                                    const time1 = getTimeStr(session1['start_time']);
+                                    const time2 = getTimeStr(session2['start_time']);
+                                    if (time1 === null && time2 === null) return 0;
+                                    if (time1 === null) return 1;
+                                    if (time2 === null) return -1;
+                                    return time1 < time2 ? -1 : (time1 > time2 ? 1 : 0);
+                                });
+
+                                sessions.forEach((session, index) => {
+                                    session['session_number'] = index + 1;
+                                });
+
+                                field.setValue(sessions);
                             }
                         })
                     ]

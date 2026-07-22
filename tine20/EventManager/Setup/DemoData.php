@@ -102,8 +102,31 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
+        $this->_createSharedEventContainer();
         $this->_createEvents();
         $this->_createCustomfields();
+    }
+
+    protected function _createSharedEventContainer()
+    {
+        try {
+            $calendarName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
+            Tinebase_Container::getInstance()->getContainerByName(
+                Calendar_Model_Event::class,
+                $calendarName,
+                Tinebase_Model_Container::TYPE_SHARED,
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            $container = new Tinebase_Model_Container([
+                'name'              => $calendarName,
+                'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'          => Tinebase_Core::getUser(),
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId(),
+                'model'             => Calendar_Model_Event::class
+            ]);
+            Tinebase_Container::getInstance()->addContainer($container);
+        }
     }
 
     protected function _createEvents()

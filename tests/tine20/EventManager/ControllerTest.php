@@ -32,6 +32,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         self::assertEquals('phpunit event', $event['name'][0]['text']);
     }
@@ -42,6 +43,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddOptionToEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
         $created_option = EventManager_Controller_Option::getInstance()->create($option);
@@ -57,6 +59,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddRegistrationToEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $registration = $this->_getRegistration($event->getId());
         $created_registration = EventManager_Controller_Registration::getInstance()->create($registration);
@@ -77,6 +80,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddRegistrationToEventWithUpdate()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $registration = $this->_getRegistration($event->getId());
         $event->{EventManager_Model_Event::FLD_REGISTRATIONS} =
@@ -94,6 +98,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddRegistrantToRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $registration = $this->_getRegistration($event->getId(), null, true);
         $event->{EventManager_Model_Event::FLD_REGISTRATIONS} =
@@ -116,6 +121,7 @@ class EventManager_ControllerTest extends TestCase
     public function testDeleteOptionFromEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
         $created_option = EventManager_Controller_Option::getInstance()->create($option);
@@ -150,6 +156,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddAndDeleteBookedOptionFromRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
         $created_option = EventManager_Controller_Option::getInstance()->create($option);
@@ -197,6 +204,7 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateBookedOptionFromRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getOption($event->getId());
         $created_option = EventManager_Controller_Option::getInstance()->create($option);
@@ -225,6 +233,7 @@ class EventManager_ControllerTest extends TestCase
     public function testFileOptionFileUpload()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
         $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
@@ -242,6 +251,7 @@ class EventManager_ControllerTest extends TestCase
     public function testFileUploadToRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
         $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
@@ -262,6 +272,7 @@ class EventManager_ControllerTest extends TestCase
     public function testFileUploadToRegistrationAnonymousUser()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option = $this->_getFileOption($event->getId());
         $tempf_id = $option->{EventManager_Model_Option::FLD_OPTION_CONFIG}
@@ -286,6 +297,7 @@ class EventManager_ControllerTest extends TestCase
     public function testMoreThanOneBookedOptionTypeToRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $option1 = $this->_getOption($event->getId());
         $created_option1 = EventManager_Controller_Option::getInstance()->create($option1);
@@ -306,6 +318,7 @@ class EventManager_ControllerTest extends TestCase
         $this->_testNeedsTransaction(); //registerOnCommitCallback
 
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $booked_places = $createdEvent->{EventManager_Model_Event::FLD_BOOKED_PLACES};
         $available_places = $createdEvent->{EventManager_Model_Event::FLD_AVAILABLE_PLACES};
@@ -334,6 +347,7 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateParticipantFromRegistration()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         EventManager_Controller_Event::getInstance()->create($event);
         $registration = $this->_getRegistration($event->getId(), null, true);
         $event->{EventManager_Model_Event::FLD_REGISTRATIONS} =
@@ -356,6 +370,7 @@ class EventManager_ControllerTest extends TestCase
     public function testCreateEventCreatesCalendarEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
         $relation = $this->_getCalendarEventRelation($createdEvent);
@@ -388,6 +403,7 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment1, $appointment2]
         );
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
         foreach ($createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS} as $appointment) {
@@ -395,8 +411,11 @@ class EventManager_ControllerTest extends TestCase
             self::assertNotNull($relation, 'no calendar event relation found for appointment');
             $calendarEvent = Calendar_Controller_Event::getInstance()->get($relation->related_id);
             $eventName = EventManager_Controller_Event::getInstance()->getEventName($createdEvent);
+            $translate = Tinebase_Translation::getTranslation(EventManager_Config::APP_NAME);
             self::assertEquals(
-                $eventName . ' ' . $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER},
+                $eventName . ' ' .
+                $translate->_('Session') . ' ' .
+                $appointment->{EventManager_Model_Appointment::FLD_SESSION_NUMBER},
                 $calendarEvent->summary
             );
         }
@@ -411,6 +430,7 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateEventNameUpdatesCalendarEventSummary()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $createdEvent->{EventManager_Model_Event::FLD_NAME}[0]['text'] = 'updated phpunit event';
         $updated_event = EventManager_Controller_Event::getInstance()->update($createdEvent);
@@ -427,6 +447,7 @@ class EventManager_ControllerTest extends TestCase
     public function testUpdateEventStartEndUpdatesCalendarEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $newStart = new Tinebase_DateTime('2026-06-10 08:00:00');
         $newEnd = new Tinebase_DateTime('2026-06-12 18:00:00');
@@ -445,6 +466,7 @@ class EventManager_ControllerTest extends TestCase
     public function testAddAppointmentReplacesGeneralCalendarEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
 
         // general calendar event exists before adding appointments
@@ -481,6 +503,7 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment]
         );
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $createdAppointment = $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
 
@@ -504,6 +527,7 @@ class EventManager_ControllerTest extends TestCase
             EventManager_Model_Appointment::class,
             [$appointment]
         );
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $createdAppointment = $createdEvent->{EventManager_Model_Event::FLD_APPOINTMENTS}->getFirstRecord();
         $relation = $this->_getCalendarEventRelation($createdEvent, $createdAppointment->getId());
@@ -524,6 +548,7 @@ class EventManager_ControllerTest extends TestCase
     public function testDeleteEventDeletesCalendarEvent()
     {
         $event = $this->_getEvent();
+        $this->_createSharedEventContainer();
         $createdEvent = EventManager_Controller_Event::getInstance()->create($event);
         $relation = $this->_getCalendarEventRelation($createdEvent);
         self::assertNotNull($relation);
@@ -795,5 +820,27 @@ class EventManager_ControllerTest extends TestCase
             }
         }
         return null;
+    }
+
+    protected function _createSharedEventContainer()
+    {
+        try {
+            $calendarName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CALENDAR_NAME);
+            Tinebase_Container::getInstance()->getContainerByName(
+                Calendar_Model_Event::class,
+                $calendarName,
+                Tinebase_Model_Container::TYPE_SHARED,
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            $container = new Tinebase_Model_Container([
+                'name'              => $calendarName,
+                'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'          => Tinebase_Core::getUser(),
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Calendar_Config::APP_NAME)->getId(),
+                'model'             => Calendar_Model_Event::class
+            ]);
+            Tinebase_Container::getInstance()->addContainer($container);
+        }
     }
 }
