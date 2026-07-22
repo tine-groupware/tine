@@ -98,11 +98,29 @@ msgstr "Geschäftsbereiche verwalten"
 msgid "Add, edit and delete divisions"
 msgstr "Geschäftsbereiche hinzufügen, bearbeiten und löschen"
 
+msgid "Manage Credits"
+msgstr "Gutschriften verwalten"
+
+msgid "Add, edit and delete credits."
+msgstr "Gutschriften hinzufügen, bearbeiten und löschen."
+
 msgid "Auto Invoice Contract Interval"
 msgstr "Vertragsintervall automatisch abrechnen"
 
 msgid "Sets the maximum interval at which contracts will be billed."
 msgstr "Setze das größte Intervall, zu dem Verträge gebucht werden."
+
+msgid "XRechnung Overwrite Actions"
+msgstr ""
+
+msgid "Delete property"
+msgstr ""
+
+msgid "Replace with result of evaluated template"
+msgstr ""
+
+msgid "Replace with static value"
+msgstr ""
 
 msgid "Attached Document Types"
 msgstr "Angehängte Dokumententypen"
@@ -253,6 +271,12 @@ msgstr ""
 
 msgid "Validation Service URL"
 msgstr "Validierungsservice URL"
+
+msgid "View Service URL"
+msgstr ""
+
+msgid "CII View Service URL"
+msgstr ""
 
 msgid "Delivery Status Transitions"
 msgstr "Lieferstatus-Übergänge"
@@ -615,6 +639,11 @@ msgstr "Kategorien"
 
 msgid "Boilerplates"
 msgstr "Textbausteine"
+
+msgid "XRechnung Element"
+msgid_plural "XRechnung Elements"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Right to alter the Number"
 msgstr "Keine Berechtigung die Nummer zu verändern"
@@ -1168,6 +1197,9 @@ msgid_plural "Categories"
 msgstr[0] "Kategorie"
 msgstr[1] "Kategorien"
 
+msgid "This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one."
+msgstr ""
+
 msgid "Value must not be empty."
 msgstr "Der Wert darf nicht leer sein."
 
@@ -1179,6 +1211,15 @@ msgstr "Bitte tragen sie die benötigten Daten ein bevor sie den Workflow-Status
 
 msgid "This is an imported e-invoice. Accounting data is write-protected. "
 msgstr "Dies ist eine eingelesene eRechnung. Die Buchhaltungsdaten sind schreibgeschützt. "
+
+msgid "Assign Supplier"
+msgstr ""
+
+msgid "Assign existing supplier"
+msgstr ""
+
+msgid "Create new supplier"
+msgstr ""
 
 msgid "Update Existing Supplier?"
 msgstr "Vorhandene Lieferantendaten Aktualisieren?"
@@ -1203,6 +1244,9 @@ msgstr "Eingangsrechnung importieren ist nicht möglich"
 
 msgid "Import Purchase Invoice"
 msgstr "Eingangsrechnung importieren"
+
+msgid "Documents"
+msgstr ""
 
 msgid "Send as Email to Datev"
 msgstr "Als E-Mail an Datev senden"
@@ -1230,6 +1274,18 @@ msgstr "eDokument validieren"
 
 msgid "Close"
 msgstr "Schließen"
+
+msgid "Please enter a valid date in the format YYYY-MM-DD"
+msgstr ""
+
+msgid "Element gets removed from the invoice"
+msgstr ""
+
+msgid "Dynamic template for the element"
+msgstr ""
+
+msgid "Static value for the element"
+msgstr ""
 
 msgid "Invoice Number"
 msgstr "Rechnungsnummer"
@@ -1443,9 +1499,6 @@ msgstr "Gezahlt am"
 
 msgid "Method of payment"
 msgstr "Zahlungsart"
-
-msgid "Document lines"
-msgstr "Belegpositionen"
 
 msgid "Clipboard"
 msgstr "Zwischenablage"
@@ -1914,6 +1967,12 @@ msgstr "PG-"
 msgid "Status"
 msgstr "Status"
 
+msgid "Pay at"
+msgstr "Zahlen am"
+
+msgid "Paid at"
+msgstr "Bezahlt am"
+
 msgid "CR-"
 msgstr "GS-"
 
@@ -1968,6 +2027,12 @@ msgstr "Zahlungserinnerungen"
 
 msgid "Last Datev send date"
 msgstr "Letztes Datev Sende-Datum"
+
+msgid "Remittance information"
+msgstr "Verwendungszweck"
+
+msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
+msgstr "Ein Textwert, der zur Verknüpfung der Zahlung mit der vom Verkäufer ausgestellten Rechnung verwendet wird (BT-83 [EN 16931]). Platzhalter werden beim Buchen ersetzt."
 
 msgid "IN-"
 msgstr "RE-"
@@ -2159,12 +2224,6 @@ msgstr "Fällig am"
 msgid "Over due at"
 msgstr "Überfällig am"
 
-msgid "Pay at"
-msgstr "Zahlen am"
-
-msgid "Paid at"
-msgstr "Bezahlt am"
-
 msgid "Paid amount"
 msgstr "Gezahlter Betrag"
 
@@ -2339,6 +2398,29 @@ msgstr[1] "Umsatzsteuerbefreiungsgrund-Codes"
 msgid "GENDER_VAT exemption reason code"
 msgstr "male"
 
+msgid "XRechnung Elements"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "BT Number"
+msgstr ""
+
+msgid "Is Overrideable"
+msgstr ""
+
+msgid "XRechnung Overwrite"
+msgid_plural "XRechnung Overwrites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_XRechnung Overwrite"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] ""
@@ -2346,6 +2428,9 @@ msgstr[1] ""
 
 msgid "GENDER_XRechnung"
 msgstr "female"
+
+msgid "Overwrites"
+msgstr ""
 
 msgid "Reversal Invoice"
 msgstr "Storno-Rechnung"
@@ -2459,6 +2544,60 @@ msgstr "Alle Angebotsdatensätze"
 msgid "All offer records"
 msgstr "Alle Angebote"
 
+msgid "Draft Offers"
+msgstr ""
+
+msgid "To be dispatched Offers"
+msgstr ""
+
+msgid "Dispatched Offers"
+msgstr ""
+
+msgid "Ordered Offers"
+msgstr ""
+
+msgid "Refused Offers"
+msgstr ""
+
+msgid "All Orders"
+msgstr ""
+
+msgid "Received Orders"
+msgstr ""
+
+msgid "Accepted Orders"
+msgstr ""
+
+msgid "To be dispatched Orders"
+msgstr ""
+
+msgid "Dispatched Orders"
+msgstr ""
+
+msgid "Done Orders"
+msgstr ""
+
+msgid "All Invoices"
+msgstr "Alle Rechnungen"
+
+msgid "Invoices current month"
+msgstr "Rechnungen des aktuellen Monats"
+
+msgid "Invoices not booked"
+msgstr "ungebuchte Rechnungen"
+
+msgid "Invoices manual dispatch"
+msgstr "nicht versandte Rechnungen"
+
+msgid "Invoices unpaid"
+msgstr "unbezahlte Rechnungen"
+
+msgid "Invoices reversed"
+msgstr "stornierte Rechnungen"
+
+msgid "Reversal Invoices"
+msgstr "Storno Rechnungen"
+
 msgid "All Purchase Invoices"
 msgstr "Alle Eingangsrechnungen"
 
@@ -2509,9 +2648,6 @@ msgstr "Alle Verträge"
 
 msgid "All contract records"
 msgstr "Alle Vertragsdatensätze"
-
-msgid "All Invoices"
-msgstr "Alle Rechnungen"
 
 msgid "All invoice records"
 msgstr "Alle Rechnungsdatensätze"
@@ -2567,41 +2703,20 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
 
-msgid "Remittance information"
-msgstr "Verwendungszweck"
+#~ msgid "Document lines"
+#~ msgstr "Belegpositionen"
 
-msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
-msgstr "Ein Textwert, der zur Verknüpfung der Zahlung mit der vom Verkäufer ausgestellten Rechnung verwendet wird (BT-83 [EN 16931]). Platzhalter werden beim Buchen ersetzt."
+#~ msgid "Update Supplier Data?"
+#~ msgstr "Lieferantendaten Aktualisieren?"
 
-msgid "Update Supplier Data?"
-msgstr "Lieferantendaten Aktualisieren?"
+#~ msgid "Reversal (booked, closed)"
+#~ msgstr "Storno (gebucht, geschlossen)"
 
-msgid "Reversal (booked, closed)"
-msgstr "Storno (gebucht, geschlossen)"
+#~ msgid "Either postal code or postbox is required!"
+#~ msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
 
-msgid "Invoices current month"
-msgstr "Rechnungen des aktuellen Monats"
+#~ msgid "Prefix"
+#~ msgstr "Zusatz"
 
-msgid "Invoices not booked"
-msgstr "ungebuchte Rechnungen"
-
-msgid "Invoices manual dispatch"
-msgstr "nicht versandte Rechnungen"
-
-msgid "Invoices unpaid"
-msgstr "unbezahlte Rechnungen"
-
-msgid "Invoices reversed"
-msgstr "stornierte Rechnungen"
-
-msgid "Reversal Invoices"
-msgstr "Storno Rechnungen"
-
-msgid "Either postal code or postbox is required!"
-msgstr "Entweder die Postleitzahl oder ein Schließfach ist erforderlich!"
-
-msgid "Prefix"
-msgstr "Zusatz"
-
-msgid "Additional Prefix"
-msgstr "Weiterer Zusatz"
+#~ msgid "Additional Prefix"
+#~ msgstr "Weiterer Zusatz"

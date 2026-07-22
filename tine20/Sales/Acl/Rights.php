@@ -1,12 +1,12 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Sales
  * @subpackage  Acl
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -109,6 +109,13 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_PURCHASE_INVOICES = 'manage_purchase_invoices';
     
     /**
+     * the right to manage credits
+     * 
+     * @staticvar string
+     */
+    const MANAGE_CREDITS = 'manage_credits';
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Sales_Acl_Rights
@@ -175,6 +182,9 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             $addRights[] = self::MANAGE_ORDERCONFIRMATIONS;
             $addRights[] = self::CHANGE_OC_NUMBER;
         }
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            $addRights[] = self::MANAGE_CREDITS;
+        }
         
         $allRights = array_merge($allRights, $addRights);
         
@@ -238,6 +248,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_DIVISIONS => array(
                 'text'          => $translate->_('Manage Divisions'),
                 'description'   => $translate->_('Add, edit and delete divisions'),
+            ),
+            self::MANAGE_CREDITS => array(
+                'text'          => $translate->_('Manage Credits'),
+                'description'   => $translate->_('Add, edit and delete credits.'),
             ),
         );
         
