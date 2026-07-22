@@ -3,10 +3,9 @@
     <model>EventManager_Model_Event</model>
     <name>teilnehmerliste</name>
     <type>export</type>
-    <plugin>Tinebase_Export_Doc</plugin>
-    <scope>multi</scope>
+    <plugin>EventManager_Export_Document</plugin>
     <template>tine20:///Tinebase/folders/shared/export/templates/EventManager/teilnehmerliste.docx</template>
     <label>Teilnehmerliste</label>
-    <description>Exportiert eine Teilnehmerliste</description>
+    <description>Export von der Teilnehmerliste dieser Veranstaltung</description>
     <exportFilename>Teilnehmerliste.docx</exportFilename>
 </config>
