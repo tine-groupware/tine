@@ -15,6 +15,8 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
 
     public const FLD_EQUIPMENT_ID = 'equipment_id';
     public const FLD_TEST_DATE = 'test_date';
+    public const FLD_VISUAL_INSPECTION_PASSED = 'visual_inspection_passed';
+    public const FLD_FINDINGS  = 'findings';
     public const FLD_PROTECTIVE_CONDUCTOR_RESISTANCE = 'protective_conductor_resistance';
     public const FLD_INSULATION_RESISTANCE = 'insulation_resistance';
     public const FLD_PROTECTIVE_CONDUCTOR_CURRENT = 'protective_conductor_current';
@@ -35,7 +37,7 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::RECORD_NAME               => 'Electrical Safety Test',
         self::RECORDS_NAME              => 'Electrical Safety Tests', // ngettext('Electrical Safety Test', 'Electrical Safety Tests', n)
         self::TITLE_PROPERTY            => self::FLD_TEST_DATE,
@@ -57,6 +59,12 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
             ]
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES   => [
+                self::FLD_EQUIPMENT_ID => [],
+            ],
+        ],
+
         self::FIELDS                    => [
             self::FLD_EQUIPMENT_ID          => [
                 self::TYPE                      => self::TYPE_RECORD,
@@ -75,6 +83,14 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                     Tinebase_Record_Filter_CallableEmpty::class => [[[Tinebase_Core::class, 'getCurrentUserDate']]],
                 ],
                 self::QUERY_FILTER              => true,
+            ],
+            self::FLD_VISUAL_INSPECTION_PASSED => [
+                self::LABEL                      => 'Visual Inspection Passed', // _('Visual Inspection Passed')
+                self::TYPE                       => self::TYPE_BOOLEAN,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ],
             self::FLD_PROTECTIVE_CONDUCTOR_RESISTANCE => [
                 self::LABEL                     => 'Protective conductor resistance', // _('Protective conductor resistance')
@@ -123,6 +139,11 @@ class Inventory_Model_ElectricalSafetyTest extends Tinebase_Record_NewAbstract
                     'xtype' => 'extuxnumberfield',
                     'suffix' => ' mA'
                 ],
+            ],
+            self::FLD_FINDINGS              => [
+                self::LABEL                      => 'Findings', // _('Findings')
+                self::TYPE                       => self::TYPE_TEXT,
+                self::NULLABLE                   => true,
             ],
             self::FLD_TEST_PASSED           => [
                 self::LABEL                     => 'Test passed', // _('Test passed')
