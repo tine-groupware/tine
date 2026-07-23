@@ -66,7 +66,8 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
      * @var Tinebase_Model_FullUser
      */
     protected $_testUser = null;
-    
+    protected $_instances = null;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -127,6 +128,10 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         // reset user if changed
         if (is_object($this->_testUser) && Tinebase_Core::getUser()->getId() !== $this->_testUser->getId()) {
             Tinebase_Core::setUser($this->_testUser);
+        }
+
+        if ($this->_instances !== NULL) {
+            Tinebase_Controller_Instance::getInstance()->delete($this->_instances);
         }
     }
     
@@ -309,6 +314,28 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         }
 
         return $folder;
+    }
+
+    /**
+     * custom Instance Flags Helper
+     *
+     */
+    protected function _customInstanceFlagsHelper()
+    {
+        try {
+            $domains = ['metaways.de', 'metaways.net'];
+            $domainRecords = array_map(fn($domain) => [
+                Tinebase_Model_InstanceMailDomain::FLD_DOMAIN_NAME => $domain,
+            ], $domains);
+            $instance = new Tinebase_Model_Instance([
+                Tinebase_Model_Instance::FLD_NAME  => 'testInstance',
+                Tinebase_Model_Instance::FLD_URL  => 'metaways.de',
+                Tinebase_Model_Instance::FLD_MAIL_DOMAINS  => $domainRecords,
+                Tinebase_Model_Instance::FLD_FLAG_ICON_FILE => 'images/icon-set/icon_flag_mw.png'
+            ]);
+            $instance = Tinebase_Controller_Instance::getInstance()->create($instance);
+            $this->_instances = $instance;
+        } catch (Exception $e) {}
     }
     
     /**
@@ -589,17 +616,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
     public function testAddMessageCacheWithImportedSenderFlag(): void
     {
         $this->_testNeedsTransaction();
-        $domains = ['metaways.de', 'metaways.net'];
-        $domainRecords = array_map(fn($domain) => [
-            Tinebase_Model_InstanceMailDomain::FLD_DOMAIN_NAME => $domain,
-        ], $domains);
-        $instance = new Tinebase_Model_Instance([
-            Tinebase_Model_Instance::FLD_NAME  => 'testInstance',
-            Tinebase_Model_Instance::FLD_URL  => 'metaways.de',
-            Tinebase_Model_Instance::FLD_MAIL_DOMAINS  => $domainRecords,
-            Tinebase_Model_Instance::FLD_FLAG_ICON_FILE => 'images/icon-set/icon_flag_mw.png'
-        ]);
-        $instance = Tinebase_Controller_Instance::getInstance()->create($instance);
+        $this->_customInstanceFlagsHelper();
 
         $inbox = $this->_emailTestClass->getFolder('INBOX');
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
@@ -608,9 +625,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
         ));
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchMessages($filter, []);
-
         $this->assertEquals('metaways.de', $result['results'][0]['flags'][1], 'Message should have the imported sender flag from url field');
-        Felamimail_Controller_Message::getInstance()->deleteByFolder($inbox, false);
     }
 
     public function testAddMessageCacheWithSenderFlagInvalidCTag(): void
@@ -639,6 +654,7 @@ class Felamimail_Controller_Cache_MessageTest extends TestCase
     public function testMoveMessageCacheWithImportedSenderFlag(): void
     {
         $this->_testNeedsTransaction();
+        $this->_customInstanceFlagsHelper();
 
         $message = $this->_emailTestClass->messageTestHelper('test_dkim.eml');
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage test_dkim.eml';
