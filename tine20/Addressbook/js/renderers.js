@@ -1,9 +1,9 @@
 /*
- * Tine 2.0
+ * tine Groupware
  *
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Christian Feitl <c.feitl@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  */
 
 import { HTMLProxy, Expression } from "twingEnv.es6";
@@ -29,6 +29,32 @@ const mailAddressRenderer = function (email) {
         + Ext.util.Format.ellipsis(email, 18) + '</a>';
 }
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'email', mailAddressRenderer, 'displayPanel');
+
+/**
+ * Render given phone number
+ *
+ * @namespace   Tine.Addressbook
+ * @singleton
+ */
+const phoneNumberRenderer = function (number) {
+    if (!number) {
+        return '';
+    }
+
+    number = Tine.Tinebase.EncodingHelper.encode(number);
+    const link = 'tel:' + number;
+    const id = Ext.id() + ':' + number;
+
+    // TODO add class="tinebase-phone-link" ?
+    return '<a href="' + link + '" class="tinebase-phone-link" id="' + id + '">'
+        + Ext.util.Format.ellipsis(number, 18) + '</a>';
+}
+Tine.widgets.grid.RendererManager.register(
+    'Addressbook',
+    'Addressbook_Model_Contact',
+    'phone', phoneNumberRenderer,
+    'displayPanel'
+);
 
 /**
  * Render country name by it's iso code
