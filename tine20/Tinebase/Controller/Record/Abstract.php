@@ -3689,9 +3689,17 @@ abstract class Tinebase_Controller_Record_Abstract
             foreach ($_record->{$_property} as $record) {
                 $create = false;
                 if (!empty($record->getId())) {
+                    $prevRecord = null;
                     try {
-
                         $prevRecord = $controller->get($record->getId(), _getDeleted: true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' ' . $tenf->getMessage());
+                        }
+                        $create = true;
+                    }
+                    if (null !== $prevRecord) {
                         if ($prevRecord->{$_fieldConfig['refIdField']} !== $prevRecord->{$_fieldConfig['refIdField']}) {
                             throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
                         }
@@ -3727,13 +3735,6 @@ abstract class Tinebase_Controller_Record_Abstract
                         } else {
                             $newRecords->addRecord($record);
                         }
-
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' ' . $tenf->getMessage());
-                        }
-                        $create = true;
                     }
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
