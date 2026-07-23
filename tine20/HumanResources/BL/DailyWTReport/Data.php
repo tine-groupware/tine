@@ -58,9 +58,11 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             'result' => $this->result->toArray(),
         ];
     }
+
     /**
      * @param Tinebase_Record_RecordSet $_timeSheets
      * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_BL
      */
     public function convertTimeSheetsToTimeSlots(Tinebase_Record_RecordSet $_timeSheets)
     {
@@ -99,14 +101,19 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             $timeSlot->timeSheetId = $timeSheet->getId();
             $timeSlot->absenceReason = $timeSheet->{HumanResources_Model_FreeTimeType::TT_TS_SYSCF_ABSENCE_REASON};
 
-            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) { /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
+            if (!$this->allowTimesheetOverlap && false !== ($lastSlot = end($this->timeSlots))) {
+                /** @var HumanResources_BL_DailyWTReport_TimeSlot $lastSlot */
                 if ($timeSlot->start->isEarlier($lastSlot->end)) {
-                    if (strcmp($timeSlot->start->format('Y-m-d H:i'), $lastSlot->end->format('Y-m-d H:i')) > 0) {
-                        throw new Tinebase_Exception_BL('timesheets must not overlap');
+                    $start = $timeSlot->start->format('Y-m-d H:i');
+                    $end = $lastSlot->end->format('Y-m-d H:i');
+                    $infoString = ' start: '. $start . ' / end of last slot: ' . $end;
+                    if (strcmp($start, $end) > 0) {
+                        throw new Tinebase_Exception_BL('Timesheets must not overlap!' . $infoString);
                     }
                     $timeSlot->start = clone $lastSlot->end;
                     if ($timeSlot->start->isLater($timeSlot->end)) {
-                        throw new Tinebase_Exception_BL('timesheets must not overlap');
+                        throw new Tinebase_Exception_BL(
+                            'Timesheets must not overlap (start later than end)!' . $infoString);
                     }
                 }
             }

@@ -427,8 +427,9 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
                 }
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' could not create daily wt report for '
-                    . $this->_currentDate->toString());
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create daily wt report for employee ' . $employee->getTitle()
+                    . ' (Date: '. $this->_currentDate->toString());
                 $this->_reportResult['errors'] += 1;
 
                 if (isset($existingReports[$dateStr])) {
@@ -467,7 +468,7 @@ class HumanResources_Controller_DailyWTReport extends Tinebase_Controller_Record
             HumanResources_Controller_MonthlyWTReport::getInstance()->recalculateReport(current($this->_monthlyWTR));
         }
 
-        // to satifisfy unused variable check
+        // to satisfy unused variable check
         unset($rcRaii);
         unset($multiServerLockRAII);
         unset($aclRaii);
