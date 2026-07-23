@@ -241,6 +241,12 @@ msgstr ""
 msgid "Event Options"
 msgstr ""
 
+msgid "Search Participant"
+msgstr ""
+
+msgid "Search participant ..."
+msgstr ""
+
 msgid "Multi-appointment"
 msgstr ""
 
@@ -879,6 +885,9 @@ msgid "Text"
 msgstr ""
 
 msgid "EventManager"
+msgstr ""
+
+msgid "Arial"
 msgstr ""
 
 msgid "Select an Event"

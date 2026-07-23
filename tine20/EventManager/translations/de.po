@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-07-21 15:05+0200\n"
+"PO-Revision-Date: 2026-07-23 12:07+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -244,6 +244,12 @@ msgstr "Eventinformationen"
 
 msgid "Event Options"
 msgstr "Eventoptionen"
+
+msgid "Search Participant"
+msgstr "Suche nach Teilnehmern"
+
+msgid "Search participant ..."
+msgstr "Suche nach Teilnehmern …"
 
 msgid "Multi-appointment"
 msgstr "Mehrfachtermin"
@@ -884,6 +890,9 @@ msgstr "Text"
 
 msgid "EventManager"
 msgstr "Veranstaltungsmanager"
+
+msgid "Arial"
+msgstr ""
 
 msgid "Select an Event"
 msgstr "Wählen Sie eine Veranstaltung aus"

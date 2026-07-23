@@ -226,81 +226,136 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'fieldset',
                     flex: 1,
                     title: this.app.i18n._('Registrations'),
-                    layout: 'fit',
+                    layout: 'border',
                     height: 600,
-                    items: [
-                        fieldManager('registrations', {
-                            defaultData: function () {
-                                const available_places = me.form.findField('available_places').getValue();
-                                return {
-                                    status: available_places <= 0 ? "2" : "1"
-                                };
-                            },
-                            listeners: {
-                                render: function (grid) {
-                                    grid.on('beforeedit', function (e) {
-                                        const total_places = me.form.findField('total_places').getValue() || 0;
-                                        const available_places = me.form.findField('available_places').getValue() || 0;
-                                        const registrations = me.form.findField('registrations').store.data.items;
-                                        let registrations_count = 0;
-                                        registrations.forEach(registration => {
-                                            if (registration.data.status !== "3" && registration.data.status !== "2") {
-                                                registrations_count++;
-                                            }
+                    items: [{
+                        region: 'north',
+                        xtype: 'columnform',
+                        labelAlign: 'top',
+                        border: false,
+                        height: 45,
+                        formDefaults: {
+                            anchor: '100%',
+                            labelSeparator: '',
+                            columnWidth: 1
+                        },
+                        items: [[
+                            this.participantSearchCombo = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                                mode: 'local',
+                                useEditPlugin: false,
+                                fieldLabel: this.app.i18n._('Search Participant'),
+                                emptyText: this.app.i18n._('Search participant ...'),
+                                anchor: '100%',
+                                columnWidth: 1,
+                                listeners: {
+                                    scope: this,
+                                    select: function (combo, record) {
+                                        const grid = this.form.findField('registrations');
+                                        const idx = grid.store.findBy(function (r) {
+                                            return _.get(r.get('participant'), 'id') === record.get('id');
                                         });
-                                        const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
-                                        const statusField = editor.field;
-                                        if (statusField && available_places <= 0 && total_places <= registrations_count) {
-                                            statusField.on('expand', function (combo) {
-                                                setTimeout(function () {
-                                                    const listId = combo.list ? combo.list.id : null;
-                                                    let list = null;
-                                                    if (listId) {
-                                                        list = document.getElementById(listId);
-                                                    } else {
-                                                        const comboLists = Ext.query('.x-combo-list');
-                                                        list = comboLists[comboLists.length - 1];
-                                                    }
-                                                    if (list) {
-                                                        const items = Ext.query('.x-combo-list-item', list);
-                                                        combo.getStore().each(function (record, index) {
-                                                            if (record.get('id') === '1' && items[index]) {
-                                                                items[index].style.setProperty('color', '#999', 'important');
-                                                                items[index].style.setProperty('background-color', '#f0f0f0', 'important');
-                                                                items[index].style.setProperty('opacity', '0.6', 'important');
-                                                            }
-                                                        });
-                                                    }
-                                                }, 10);
-                                            }, this);
-
-                                            statusField.on('beforeselect', function (combo, record, index) {
-                                                // prevent selection of value confirmed
-                                                return record.get(combo.valueField) !== "1";
-                                            }, this);
+                                        if (idx !== -1) {
+                                            grid.getSelectionModel().selectRow(idx);
+                                            grid.getView().focusRow(idx);
                                         }
-                                    });
-
-                                    grid.store.on('add', function (store, records, index) {
-                                        const total_places = me.form.findField('total_places').getValue() || 0;
-                                        const available_places = me.form.findField('available_places').getValue() || 0;
-                                        const registrations = me.form.findField('registrations').store.data.items;
-                                        let registrations_count = 0;
-                                        registrations.forEach(registration => {
-                                            if (registration.data.status !== "3" && registration.data.status !== "2") {
-                                                registrations_count++;
-                                            }
-                                        });
-                                        if (available_places <= 0 && total_places <= registrations_count) {
-                                            Ext.each(records, function (record) {
-                                                record.set('status', "2");
-                                            });
-                                        }
-                                    });
+                                    }
                                 }
-                            }
-                        }),
-                    ]
+                            }),
+                        ]]
+                    }, {
+                        region: 'center',
+                        xtype: 'panel',
+                        layout: 'fit',
+                        border: false,
+                        items: [
+                            fieldManager('registrations', {
+                                defaultData: function () {
+                                    const available_places = me.form.findField('available_places').getValue();
+                                    return {
+                                        status: available_places <= 0 ? "2" : "1"
+                                    };
+                                },
+                                listeners: {
+                                    render: function (grid) {
+                                        grid.on('beforeedit', function (e) {
+                                            const total_places = me.form.findField('total_places').getValue() || 0;
+                                            const available_places = me.form.findField('available_places').getValue() || 0;
+                                            const registrations = me.form.findField('registrations').store.data.items;
+                                            let registrations_count = 0;
+                                            registrations.forEach(registration => {
+                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                    registrations_count++;
+                                                }
+                                            });
+                                            const editor = e.grid.getColumnModel().getCellEditor(e.column, e.row);
+                                            const statusField = editor.field;
+                                            if (statusField && available_places <= 0 && total_places <= registrations_count) {
+                                                statusField.on('expand', function (combo) {
+                                                    setTimeout(function () {
+                                                        const listId = combo.list ? combo.list.id : null;
+                                                        let list = null;
+                                                        if (listId) {
+                                                            list = document.getElementById(listId);
+                                                        } else {
+                                                            const comboLists = Ext.query('.x-combo-list');
+                                                            list = comboLists[comboLists.length - 1];
+                                                        }
+                                                        if (list) {
+                                                            const items = Ext.query('.x-combo-list-item', list);
+                                                            combo.getStore().each(function (record, index) {
+                                                                if (record.get('id') === '1' && items[index]) {
+                                                                    items[index].style.setProperty('color', '#999', 'important');
+                                                                    items[index].style.setProperty('background-color', '#f0f0f0', 'important');
+                                                                    items[index].style.setProperty('opacity', '0.6', 'important');
+                                                                }
+                                                            });
+                                                        }
+                                                    }, 10);
+                                                }, this);
+
+                                                statusField.on('beforeselect', function (combo, record, index) {
+                                                    // prevent selection of value confirmed
+                                                    return record.get(combo.valueField) !== "1";
+                                                }, this);
+                                            }
+                                        });
+
+                                        grid.store.on('add', function (store, records, index) {
+                                            const total_places = me.form.findField('total_places').getValue() || 0;
+                                            const available_places = me.form.findField('available_places').getValue() || 0;
+                                            const registrations = me.form.findField('registrations').store.data.items;
+                                            let registrations_count = 0;
+                                            registrations.forEach(registration => {
+                                                if (registration.data.status !== "3" && registration.data.status !== "2") {
+                                                    registrations_count++;
+                                                }
+                                            });
+                                            if (available_places <= 0 && total_places <= registrations_count) {
+                                                Ext.each(records, function (record) {
+                                                    record.set('status', "2");
+                                                });
+                                            }
+                                        });
+
+                                        const syncParticipantStore = () => {
+                                            const participants = grid.store.getRange()
+                                                .map(r => r.get('participant'))
+                                                .filter(Boolean);
+                                            me.participantSearchCombo.store.loadData(participants);
+                                        };
+
+                                        grid.store.on('add', syncParticipantStore);
+                                        grid.store.on('remove', syncParticipantStore);
+                                        grid.store.on('update', syncParticipantStore);
+                                        grid.store.on('load', syncParticipantStore);
+
+                                        syncParticipantStore();
+
+                                    }
+                                }
+                            }),
+                        ]
+                    }]
                 }
                 ]
             }, {
