@@ -335,22 +335,23 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     public function getInvitationContainer($organizer, $emailAddress = null)
     {
-        if (null!==$organizer) {
+        if (null !== $organizer) {
             $containerName = $organizer->getPreferredEmailAddress();
         } else {
             $containerName = $emailAddress;
         }
 
         if (empty($containerName)) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' event organizer does not have an email address');
-            throw new Tinebase_Exception_UnexpectedValue('event organizer does not have an email address');
+            throw new Tinebase_Exception_UnexpectedValue('Event organizer does not have an email address');
         }
         
         try {
             $container = Tinebase_Container::getInstance()->getContainerByName(Calendar_Model_Event::class, $containerName, Tinebase_Model_Container::TYPE_SHARED);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' No invitation container found. Creating a new one for organizer ' . $containerName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No invitation container found. Creating a new one for organizer ' . $containerName);
+            }
             
             $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'              => $containerName,
