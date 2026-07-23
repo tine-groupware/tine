@@ -1,10 +1,10 @@
 /**
- * Tine 2.0
+ * tine Groupware
  *
  * @package     Addressbook
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
  * TODO         add preference for sending mails with felamimail or mailto?
  */
@@ -97,14 +97,19 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                         name: 'dtstart',
                                         hideLabel: true,
                                         htmlEncode: false,
-                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'addressblock', 'displayPanel').createDelegate(this, {
-                                            'street': 'adr_one_street',
-                                            'street2': 'adr_one_street2',
-                                            'postalcode': 'adr_one_postalcode',
-                                            'locality': 'adr_one_locality',
-                                            'region': 'adr_one_region',
-                                            'countryname': 'adr_one_countryname'
-                                        }, true)
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'addressblock',
+                                            'displayPanel').createDelegate(this, {
+                                                'street': 'adr_one_street',
+                                                'street2': 'adr_one_street2',
+                                                'postalcode': 'adr_one_postalcode',
+                                                'locality': 'adr_one_locality',
+                                                'region': 'adr_one_region',
+                                                'countryname': 'adr_one_countryname'
+                                            }, true
+                                        )
                                     }]
                                 }, {
                                     layout: 'ux.display',
@@ -117,11 +122,23 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                     items: [{
                                         xtype: 'ux.displayfield',
                                         name: 'tel_work',
-                                        fieldLabel: app.i18n._('Phone')
+                                        fieldLabel: app.i18n._('Phone'),
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'phone',
+                                            'displayPanel').createDelegate(this)
                                     }, {
                                         xtype: 'ux.displayfield',
                                         name: 'tel_cell',
-                                        fieldLabel: app.i18n._('Mobile')
+                                        fieldLabel: app.i18n._('Mobile'),
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'phone',
+                                            'displayPanel').createDelegate(this)
                                     }, {
                                         xtype: 'ux.displayfield',
                                         name: 'tel_fax',
@@ -131,13 +148,21 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                         name: 'email',
                                         fieldLabel: app.i18n._('E-Mail'),
                                         htmlEncode: false,
-                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'email', 'displayPanel').createDelegate(this)
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'email',
+                                            'displayPanel').createDelegate(this)
                                     }, {
                                         xtype: 'ux.displayfield',
                                         name: 'url',
                                         fieldLabel: app.i18n._('Web'),
                                         htmlEncode: false,
-                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'url', 'displayPanel').createDelegate(this)
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'url',
+                                            'displayPanel').createDelegate(this)
                                     }]
                                 }]
                             }]
@@ -174,14 +199,19 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                         name: 'attendee',
                                         hideLabel: true,
                                         htmlEncode: false,
-                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'addressblock', 'displayPanel').createDelegate(this, {
-                                            'street': 'adr_two_street',
-                                            'street2': 'adr_two_street2',
-                                            'postalcode': 'adr_two_postalcode',
-                                            'locality': 'adr_two_locality',
-                                            'region': 'adr_two_region',
-                                            'countryname': 'adr_two_countryname'
-                                        }, true)
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'addressblock',
+                                            'displayPanel').createDelegate(this, {
+                                                'street': 'adr_two_street',
+                                                'street2': 'adr_two_street2',
+                                                'postalcode': 'adr_two_postalcode',
+                                                'locality': 'adr_two_locality',
+                                                'region': 'adr_two_region',
+                                                'countryname': 'adr_two_countryname'
+                                            }, true
+                                        )
                                     }]
                                 }, {
                                     layout: 'ux.display',
@@ -194,11 +224,23 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                     items: [{
                                         xtype: 'ux.displayfield',
                                         name: 'tel_home',
-                                        fieldLabel: app.i18n._('Phone')
+                                        fieldLabel: app.i18n._('Phone'),
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'phone',
+                                            'displayPanel').createDelegate(this)
                                     }, {
                                         xtype: 'ux.displayfield',
                                         name: 'tel_cell_private',
-                                        fieldLabel: app.i18n._('Mobile')
+                                        fieldLabel: app.i18n._('Mobile'),
+                                        htmlEncode: false,
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'phone',
+                                            'displayPanel').createDelegate(this)
                                     }, {
                                         xtype: 'ux.displayfield',
                                         name: 'tel_fax_home',
@@ -208,7 +250,11 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                         name: 'email_home',
                                         fieldLabel: app.i18n._('E-Mail'),
                                         htmlEncode: false,
-                                        renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'email', 'displayPanel').createDelegate(this)
+                                        renderer: Tine.widgets.grid.RendererManager.get(
+                                            'Addressbook',
+                                            'Addressbook_Model_Contact',
+                                            'email',
+                                            'displayPanel').createDelegate(this)
                                     }]
                                 }]
                             }]
@@ -237,13 +283,11 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
      */
     afterRender: function() {
         Tine.Addressbook.ContactGridDetailsPanel.superclass.afterRender.apply(this, arguments);
-
         if (this.felamimail === true) {
             this.body.on('click', this.onClick, this);
         }
     },
     
     onClick: function(e) {
-     
     },
 });
