@@ -47,5 +47,5 @@ KONTO2
 | /KONTO1/INBOX/**  |    KONTO1     | Unterordner (rekursiv) unter INBOX | KONTO1.INBOX.1<br/>KONTO1.INBOX.1.2                                                                               |                                                                                       
 | /KONTO1/INBOX/1   |    KONTO1     | 1                                  | KONTO1.INBOX.1                                                                                                     |                                                                                       
 
-### [Glob Filter Tester](https://toools.cloud/miscellaneous/glob-tester)
+### [Glob Filter Tester](http://web.archive.org/web/20260207204811/https://toools.cloud/miscellaneous/glob-tester)
 - Derzeit unterstützen wir die "!" Syntax in unserer Glob Filter nicht.
