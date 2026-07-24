@@ -13,6 +13,9 @@
  */
 class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record_Expander_DataRequest
 {
+    protected static array $_containerCache = [];
+    protected static array $_funcCache = [];
+
     public function __construct($prio, $controller, $ids, protected Tinebase_ModelConfiguration $parentMC, $callback, $getDeleted = false)
     {
         parent::__construct($prio, $controller, $ids, $callback, $getDeleted);
@@ -32,9 +35,7 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
 
     public function getData()
     {
-        $containerCache = [];
-        $funcCache = [];
-        $func = function (Tinebase_Record_Interface $record, callable $func) use(&$funcCache) {
+        $func = function (Tinebase_Record_Interface $record, callable $func) {
             $mc = $record::getConfiguration();
             if ($mc->delegateAclField) {
                 if (empty($delegateRecord = $record->{$mc->delegateAclField})) {
@@ -58,12 +59,12 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                     }
                     return $record->{Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS};
                 } elseif (!$delegateRecord instanceof Tinebase_Record_Interface) {
-                    if (!isset($funcCache[$delegateRecord])) {
-                        $funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord, null, true, true);
+                    if (!isset(static::$_funcCache[$delegateRecord])) {
+                        static::$_funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord, null, true, true);
                     }
-                    $delegateRecord = $funcCache[$delegateRecord];
-                } elseif (!isset($funcCache[$delegateRecord->getId()])) {
-                    $funcCache[$delegateRecord->getId()] = $delegateRecord;
+                    $delegateRecord = static::$_funcCache[$delegateRecord];
+                } elseif (!isset(static::$_funcCache[$delegateRecord->getId()])) {
+                    static::$_funcCache[$delegateRecord->getId()] = $delegateRecord;
                 }
                 // see comment below
                 $record->setAccountGrants($func($delegateRecord, $func));
@@ -82,15 +83,21 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
                 } else {
                     $containerId = $record->getIdFromProperty($delAclFld ?: $this->parentMC->getContainerProperty());
                 }
-                if (!isset($containerCache[$containerId])) {
-                    $containerCache[$containerId] = $func($record, $func);
+                if (!isset(static::$_containerCache[$containerId])) {
+                    static::$_containerCache[$containerId] = $func($record, $func);
                 }
-                if ($containerCache[$containerId]) {
-                    $record->setAccountGrants($containerCache[$containerId]);
+                if (static::$_containerCache[$containerId]) {
+                    $record->setAccountGrants(static::$_containerCache[$containerId]);
                 }
             }
         }
 
         // TODO add sub expanding!
+    }
+
+    public static function clearCache()
+    {
+        static::$_containerCache = [];
+        static::$_funcCache = [];
     }
 }

@@ -129,5 +129,6 @@ class Tinebase_Record_Expander_DataRequest
     {
         static::$_dataCache = [];
         static::$_deletedDataCache = [];
+        Tinebase_Record_Expander_DataRequest_AccountGrants::clearCache();
     }
 }
