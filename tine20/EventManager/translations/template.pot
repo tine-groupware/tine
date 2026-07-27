@@ -713,11 +713,8 @@ msgstr ""
 msgid "Images"
 msgstr ""
 
-msgid "GENDER_File"
-msgstr ""
-
-msgid "File"
-msgid_plural "Files"
+msgid "EventManager_File"
+msgid_plural "EventManager_Files"
 msgstr[0] ""
 msgstr[1] ""
 
