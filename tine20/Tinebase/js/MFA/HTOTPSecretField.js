@@ -29,8 +29,8 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
             setValue: this.setValue.createDelegate(this)
         });
         this.qrField = new Ext.BoxComponent({
-            width: 150,
-            height: 150,
+            width: 200,
+            height: 200,
             html: '<canvas style="width: 100%; height: 100%"/><img src="favicon/180" style="display: none;">'
         });
         this.items = [
