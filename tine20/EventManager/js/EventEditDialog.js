@@ -64,6 +64,12 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
     },
 
+    _applyGroupSortKey: function (record) {
+        const group = record.get('group') || '';
+        const sorting = record.get('sorting') || 0;
+        record.data.groupSortKey = group + '_' + String(sorting).padStart(8, '0');
+    },
+
     getFormItems: function () {
         const me = this;
         const fieldManager = _.bind(
@@ -176,9 +182,24 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         layout: 'fit',
                         items: [
                             fieldManager('options', {
-                                defaultSortInfo: {field: 'sorting', direction: 'ASC'},
+                                store: new Ext.data.GroupingStore({
+                                    reader: new Ext.data.JsonReader({}, Tine.Tinebase.data.RecordMgr.get('EventManager', 'Option')),
+                                    groupField: 'group',
+                                    remoteGroup: false,
+                                    sortInfo: { field: 'groupSortKey', direction: 'ASC' }
+                                }),
+                                view: new Ext.grid.GroupingView({
+                                    showGroupName: false,
+                                }),
                                 listeners: {
                                     afterrender: function (grid) {
+                                        const store = grid.store;
+                                        const applyKeys = () => store.each(r => me._applyGroupSortKey(r));
+                                        store.on('load', applyKeys);
+                                        store.on('add', (s, recs) => recs.forEach(r => me._applyGroupSortKey(r)));
+                                        store.on('update', (s, r) => me._applyGroupSortKey(r));
+                                        applyKeys();
+
                                         const cm = grid.getColumnModel();
                                         const colIndex = cm.findColumnIndex('name_option');
                                         if (colIndex !== -1) {
