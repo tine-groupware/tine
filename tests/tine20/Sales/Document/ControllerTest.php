@@ -2023,5 +2023,13 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         foreach ($purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE} as $tax) {
             $this->assertSame($savedTaxRates[$tax->{Sales_Model_Document_SalesTax::FLD_TAX_RATE}],  $tax->getId());
         }
+
+        $purchaseInvoice->{Sales_Model_Document_PurchaseInvoice::FLD_SALES_TAX_BY_RATE}->addRecord(new Sales_Model_Document_SalesTax([
+            Sales_Model_Document_SalesTax::FLD_TAX_RATE => 19,
+            Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT => 1608.35,
+            Sales_Model_Document_SalesTax::FLD_NET_AMOUNT => 8465.03,
+            Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT => 10073.38,
+        ], true));
+        Sales_Controller_Document_PurchaseInvoice::getInstance()->update($purchaseInvoice);
     }
 }
