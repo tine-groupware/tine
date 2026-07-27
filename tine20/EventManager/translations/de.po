@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-07-23 12:07+0200\n"
+"PO-Revision-Date: 2026-07-27 12:01+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -717,11 +717,8 @@ msgstr "„Legen Sie fest, ob eine Person bei dieser Veranstaltung eine andere P
 msgid "Images"
 msgstr "Bilder"
 
-msgid "GENDER_File"
-msgstr "female"
-
-msgid "File"
-msgid_plural "Files"
+msgid "EventManager_File"
+msgid_plural "EventManager_Files"
 msgstr[0] "Datei"
 msgstr[1] "Dateien"
 
@@ -944,6 +941,14 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid "GENDER_File"
+#~ msgstr "female"
+
+#~ msgid "File"
+#~ msgid_plural "Files"
+#~ msgstr[0] "Datei"
+#~ msgstr[1] "Dateien"
 
 #~ msgid "To create the event there must be a shared calendar."
 #~ msgstr "Um den Termin anzulegen, muss ein gemeinsamer Kalender vorhanden sein."

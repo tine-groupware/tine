@@ -74,7 +74,7 @@
               }">
                 <div v-for="option in optionGroup.options" :key="option.id" :style="{'margin-left' : (option.level-1) * 2 + 'em'}">
                   <div v-if="option.option_config_class === 'EventManager_Model_TextOption'">
-                    <div v-if="option.name_option !== optionGroup.group">{{option.name_option}}</div>
+                    <div v-if="option.name_option !== optionGroup.group" class="option-group">{{option.name_option}}</div>
                     <MarkdownRenderer :content="option.option_config.text_option" />
                   </div>
                   <div v-if="option.option_config_class === 'EventManager_Model_TextInputOption'">
@@ -435,16 +435,27 @@ const registrantId = computed(() => {
 const sortOptionsByGroup = computed(() => {
   const options = eventDetails.value.options;
 
-  return _.chain(options)
-    .groupBy(option => option.group || '')
+  const groupedEntries = _.chain(options)
+    .filter(option => option.group && option.group.trim() !== '')
+    .groupBy(option => option.group)
     .map((groupOptions, groupName) => ({
       group: groupName,
       options: _.sortBy(groupOptions, option => option.sorting ?? -1),
-      sorting: groupName === '' ? -1 : _.min(groupOptions.map(opt => opt.sorting ?? Infinity)),
+      sorting: _.min(groupOptions.map(opt => opt.sorting ?? Infinity)),
       level: _.min(groupOptions.map(opt => opt.level))
     }))
-    .sortBy('sorting')
     .value();
+
+  const ungroupedEntries = options
+    .filter(option => !option.group || option.group.trim() === '')
+    .map(option => ({
+      group: '',
+      options: [option],
+      sorting: option.sorting ?? -1,
+      level: option.level
+    }));
+
+  return _.sortBy([...groupedEntries, ...ungroupedEntries], 'sorting');
 });
 
 const visibleOptionsByGroup = computed(() => {
