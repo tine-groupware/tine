@@ -57,7 +57,7 @@ class Sales_Controller_Document_SalesTax extends Tinebase_Controller_Record_Abst
     protected function _inspectVATConsistency(Sales_Model_Document_SalesTax $_record): void
     {
         $taxAmount = $_record->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} * $_record->{Sales_Model_Document_SalesTax::FLD_TAX_RATE} / 100;
-        if ((float)$_record->{Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT} !== (float)$_record->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} + (float)$_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} ||
+        if ((string)$_record->{Sales_Model_Document_SalesTax::FLD_GROSS_AMOUNT} !== (string)($_record->{Sales_Model_Document_SalesTax::FLD_NET_AMOUNT} + $_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT}) ||
              $taxAmount < $_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} - 0.05 || $taxAmount > $_record->{Sales_Model_Document_SalesTax::FLD_TAX_AMOUNT} + 0.05) {
             throw new Tinebase_Exception_Record_Validation('tax amount, net amount, gros amount and tax rate are not coherent');
         }
