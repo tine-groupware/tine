@@ -579,6 +579,7 @@ Tine.CrewScheduling.EventMembersGrid = Ext.extend(Ext.grid.GridPanel, {
 
                         Ext.fly(rowEl).select('.cs-members-cell').elements.map
                         const eventToUpdate = Tine.Calendar.backend.recordReader({responseText: eventJson});
+                        eventToUpdate.set('mute', true);
 
                         Ext.MessageBox.updateProgress(0.3);
                         const updatedEvent = eventToUpdate.isRecurBase() || eventToUpdate.isRecurInstance() ?
