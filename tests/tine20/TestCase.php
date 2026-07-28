@@ -213,6 +213,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         Tinebase_Lock::clearLocks();
 
         Felamimail_Controller_AccountMock::getInstance()->cleanUp();
+        Tinebase_Record_Expander_DataRequest::clearCache();
     }
 
     /**

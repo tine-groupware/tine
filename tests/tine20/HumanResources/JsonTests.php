@@ -322,6 +322,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertFalse($result['results'][0]['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
         $this->assertTrue($division['account_grants'][HumanResources_Model_DivisionGrants::READ_OWN_DATA]);
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
         Tinebase_Core::setUser($this->_personas['jsmith']);
         $freeTimes = $this->_json->getFeastAndFreeDays($savedEmployee['id'], $date->format('Y'));
 
@@ -1459,6 +1460,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $this->assertCount(1, $result['results']);
         $this->assertSame($d['id'], $result['results'][0]['id']);
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
         Tinebase_Core::setUser($this->_personas['jsmith']);
 
         $result = $this->_json->searchDivisions([['field' => 'id', 'operator' => 'equals', 'value' => $d['id']]]);
