@@ -21,6 +21,7 @@ class Tinebase_ModelConfiguration_Const {
     public const ALLOW_CAMEL_CASE = 'allowCamelCase';
     public const APPLICATION = 'application';
     public const APP_NAME = 'appName';
+    public const ASCII_GENERAL_CI = 'ascii_general_ci';
     public const ASSOCIATIONS = 'associations';
     public const AUTOINCREMENT = 'autoincrement';
     public const AVAILABLE_MODELS = 'availableModels';
@@ -31,6 +32,7 @@ class Tinebase_ModelConfiguration_Const {
     public const BOX_LABEL = 'boxLabel';
 
     public const CASCADE = 'CASCADE';
+    public const COLLATION = 'collation';
     public const CONFIG = 'config';
     public const CONTROLLER = 'controller';
     public const CONTROLLER_CLASS_NAME = 'controllerClassName';

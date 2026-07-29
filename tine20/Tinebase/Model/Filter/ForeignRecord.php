@@ -142,7 +142,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         if ($_value instanceof Tinebase_Record_Interface) {
             $_value = $_value->getId();
         }
-        $this->_foreignIds = NULL;
+        $this->_foreignIds = null;
         $this->_valueIsNull = $this->isValueNull($_value);
 
         // id(s) is/are to be provided directly as value
@@ -161,10 +161,11 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
                     $_value = $vals;
                 }
             }
-            $this->_foreignIds = $this->_valueIsNull ? null : (array) $_value;
             $this->_value = null;
             if ($this->_valueIsNull) {
                 $this->_setFilterGroup();
+            } else {
+                $this->_foreignIds = (array) $_value;
             }
 
         } else {
@@ -213,6 +214,9 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         }
         if (isset($this->_options['subTablename'])) {
             $options['tablename'] = $this->_options['subTablename'];
+        }
+        if ($this->_options['filterGroupOptions'] ?? false) {
+            $options = array_merge($options, $this->_options['filterGroupOptions']);
         }
         $this->_filterGroup = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             $this->_options['filtergroup'],

@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2024-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -60,17 +60,21 @@ class Sales_Model_DivisionEvalDimensionItem extends Tinebase_Record_NewAbstract
             self::FLD_DIVISION_ID           => [
                 self::LABEL                     => 'Division', // _('Division')
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LENGTH                    => 40,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Division::MODEL_NAME_PART,
+                    self::FIXED_LENGTH              => true,
                 ],
             ],
             self::FLD_EVAL_DIMENSION_ITEM_ID=> [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LENGTH                    => 40,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
                     self::IS_PARENT                 => true,
+                    self::FIXED_LENGTH              => true,
                 ],
             ],
         ],

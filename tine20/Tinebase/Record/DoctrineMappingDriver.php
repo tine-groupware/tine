@@ -216,6 +216,9 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         if (($config[self::CONFIG][self::FIXED_LENGTH] ?? false) && !array_key_exists('fixed', $config[self::OPTIONS] ?? [])) {
             $config[self::OPTIONS]['fixed'] = true;
         }
+        if ($config[self::CONFIG]['collation'] ?? false) {
+            $config[self::OPTIONS]['collation'] = $config[self::CONFIG]['collation'];
+        }
         if (isset(self::$_typeMap[$type])) {
             if ($type === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;

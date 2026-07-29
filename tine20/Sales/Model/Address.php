@@ -6,7 +6,7 @@
  * @subpackage  Address
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -98,11 +98,13 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
             self::FLD_CUSTOMER_ID       => [
                 self::LABEL         => 'Customer',    // _('Customer')
                 self::TYPE          => self::TYPE_RECORD,
+                self::LENGTH        => 40,
                 'sortable'          => false,
                 self::CONFIG        => [
-                    self::APP_NAME     => Sales_Config::APP_NAME,
-                    self::MODEL_NAME   => Sales_Model_Customer::MODEL_NAME_PART,
-                    self::IS_PARENT => true,
+                    self::APP_NAME      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME    => Sales_Model_Customer::MODEL_NAME_PART,
+                    self::IS_PARENT     => true,
+                    self::FIXED_LENGTH  => true,
                 ],
                 self::QUERY_FILTER  => true,
                 self::NULLABLE      => true,
@@ -111,11 +113,13 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::LABEL         => 'Debitor Number',    // _('Debitor Number')
                 self::DESCRIPTION   => 'A buyer identifier (usually assigned by the seller), such as the customer number for accounting or the customer number for order management. Note: No standardized scheme is required for the creation of the buyer identifier. (BT-64 [EN 16931]).', // _('A buyer identifier (usually assigned by the seller), such as the customer number for accounting or the customer number for order management. Note: No standardized scheme is required for the creation of the buyer identifier. (BT-64 [EN 16931]).')
                 self::TYPE          => self::TYPE_RECORD,
+                self::LENGTH        => 40,
                 'sortable'          => false,
                 self::CONFIG => [
                     self::APP_NAME     => Sales_Config::APP_NAME,
                     self::MODEL_NAME   => Sales_Model_Debitor::MODEL_NAME_PART,
                     self::IS_PARENT => true,
+                    self::FIXED_LENGTH  => true,
                 ],
                 self::NULLABLE => true,
             ],
@@ -123,10 +127,12 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::LABEL         => 'Supplier',    // _('Supplier')
                 self::TYPE          => self::TYPE_RECORD,
                 'sortable'          => false,
+                self::LENGTH        => 40,
                 self::CONFIG => [
                     self::APP_NAME     => Sales_Config::APP_NAME,
                     self::MODEL_NAME   => Sales_Model_Supplier::MODEL_NAME_PART,
                     self::IS_PARENT => true,
+                    self::FIXED_LENGTH  => true,
                 ],
                 self::NULLABLE => true,
             ],

@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -407,7 +407,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
                 ],
-                // not null! mandatory property
             ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
@@ -416,7 +415,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
-                    self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
                 ],
                 self::SHY                   => true,
                 self::UI_CONFIG             => [
@@ -689,13 +687,31 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE => static::class,
         ];
         $_definition[self::FIELDS][self::FLD_ATTACHED_DOCUMENTS][self::CONFIG][self::ADD_FILTERS] = [
-            [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+            [TMFA::FIELD => Sales_Model_Document_AttachedDocument::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+        ];
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_Customer::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_Customer::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+        ];
+        $_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_Debitor::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_Debitor::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
         ];
         $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::FORCE_VALUES] = [
             Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE => static::class,
         ];
         $_definition[self::FIELDS][self::FLD_DISPATCH_HISTORY][self::CONFIG][self::ADD_FILTERS] = [
-            [TMFA::FIELD => Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+            [TMFA::FIELD => Sales_Model_Document_DispatchHistory::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
+        ];
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES] = [
+            Sales_Model_Document_Address::FLD_DOCUMENT_TYPE => static::class,
+        ];
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::ADD_FILTERS] = [
+            [TMFA::FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => static::class],
         ];
         $_definition[self::FIELDS][self::FLD_SALES_TAX_BY_RATE][self::CONFIG][self::FORCE_VALUES] = [
             Sales_Model_Document_SalesTax::FLD_DOCUMENT_TYPE => static::class,

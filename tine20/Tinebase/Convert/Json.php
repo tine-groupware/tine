@@ -600,6 +600,9 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
             if (isset($config['addFilters']) && is_array($config['addFilters'])) {
                 $filterArray = array_merge($filterArray, $config['addFilters']);
             }
+            if (Tinebase_Model_Filter_ForeignIdDynamic::class === ($config[MCC::RECORD_CLASS_NAME]::getConfiguration()?->getFilterModel()['_filterModel'][$config[MCC::REF_ID_FIELD]][MCC::FILTER] ?? null)) {
+                $config[MCC::FILTER_OPTIONS][Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE] = $_records->getRecordClassName();
+            }
 
             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterName, $filterArray,
                 Tinebase_Model_Filter_FilterGroup::CONDITION_AND, $config[MCC::FILTER_OPTIONS] ?? []);
