@@ -825,4 +825,49 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         unset($unlock);
         return $result;
     }
+
+    public static function propagateUpdatesToDenormalizedRecordsOfUnbookedDocuments(Tinebase_Record_Diff $diff, array $targetModels): void
+    {
+        $fun = function(Tinebase_Model_Filter_FilterGroup $filter) {
+            $orFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filter->getModelName(), _condition: Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+            $filter->addFilterGroup($orFilter);
+            foreach ([
+                         Sales_Model_Document_Delivery::class => [
+                             'statusFld' => Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
+                             'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_DELIVERY_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
+                         ],
+                         Sales_Model_Document_Invoice::class => [
+                             'statusFld' => Sales_Model_Document_Invoice::FLD_INVOICE_STATUS,
+                             'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_INVOICE_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
+                         ],
+                         Sales_Model_Document_Offer::class => [
+                             'statusFld' => Sales_Model_Document_Offer::FLD_OFFER_STATUS,
+                             'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_OFFER_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
+                         ],
+                         Sales_Model_Document_Order::class => [
+                             'statusFld' => Sales_Model_Document_Order::FLD_ORDER_STATUS,
+                             'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_ORDER_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
+                         ],
+                     ] as $model => $mc) {
+                $orFilter->addFilterGroup(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel($filter->getModelName(), [
+                        [TMFA::FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $model],
+                        [TMFA::FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                            [TMFA::FIELD => $mc['statusFld'], TMFA::OPERATOR => 'in', TMFA::VALUE => $mc['unbookedValues']],
+                        ]],
+                    ], _options: [
+                        TMCC::REF_MODEL_FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_TYPE,
+                        Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => $model,
+                    ])
+                );
+            }
+        };
+        $models = [];
+        foreach ($targetModels as $targetModel) {
+            $models[$targetModel] = [
+                'filterCallBack' => $fun,
+            ];
+        }
+        static::propagateUpdatesToDenormalizedRecords($diff, $models);
+    }
 }

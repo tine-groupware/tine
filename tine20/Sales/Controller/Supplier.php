@@ -6,9 +6,12 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * supplier controller class for Sales application
@@ -124,6 +127,32 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
         
         if ($_record->number != $_oldRecord->number) {
             $this->_setNextNumber($_record, TRUE);
+        }
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        $diff = $currentRecord->diff($updatedRecord, TMCC::$modLogProperties);
+        if (!$diff->isEmpty()) {
+            $fun = function(Tinebase_Model_Filter_FilterGroup $filter) {
+                $orFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filter->getModelName(), _condition: Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+                $filter->addFilterGroup($orFilter);
+                $orFilter->addFilterGroup(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel($filter->getModelName(), [
+                        [TMFA::FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_TYPE, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Model_Document_PurchaseInvoice::class],
+                        [TMFA::FIELD => Sales_Model_Document_Address::FLD_DOCUMENT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                            [TMFA::FIELD => Sales_Model_Document_PurchaseInvoice::FLD_PURCHASE_INVOICE_STATUS, TMFA::OPERATOR => 'in', TMFA::VALUE => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_PURCHASE_INVOICE_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id],
+                        ]],
+                    ], _options: [
+                        TMCC::REF_MODEL_FIELD => Sales_Model_Document_Supplier::FLD_DOCUMENT_TYPE,
+                        Tinebase_Model_Filter_ForeignIdDynamic::REF_MODEL_VALUE => Sales_Model_Document_PurchaseInvoice::class,
+                    ])
+                );
+            };
+            static::propagateUpdatesToDenormalizedRecords($diff, [Sales_Model_Document_Supplier::class => ['filterCallBack' => $fun]]);
+            Tinebase_Event::fireEvent(new Tinebase_Event_Record_Update(['observable' => $updatedRecord, 'oldRecord' => $currentRecord]));
         }
     }
     

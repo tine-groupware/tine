@@ -884,40 +884,6 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
     }
 
     /**
-     * merge given record into $this
-     *
-     * @param Tinebase_Record_Interface $record
-     * @param Tinebase_Record_Diff $diff
-     * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_Date
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    public function merge($record, $diff = null)
-    {
-        if (! $this->getId()) {
-            $this->setId($record->getId());
-        }
-
-        if ($diff === null) {
-            $diff = $this->diff($record);
-        }
-
-        if ($diff === null || empty($diff->diff)) {
-            return $this;
-        }
-
-        foreach ($diff->diff as $field => $value) {
-            if (empty($this->{$field})) {
-                $this->{$field} = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * returns TRUE if given record obsoletes this one
      *
      * @param  Tinebase_Record_Interface $_record

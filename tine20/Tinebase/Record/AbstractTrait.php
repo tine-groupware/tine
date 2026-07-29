@@ -240,4 +240,35 @@ trait Tinebase_Record_AbstractTrait
         }
         return null;
     }
+
+    /**
+     * merge given record into $this, only fills so far empty properties with new values from given record
+     * note that 0, '0' are not empty, while null, '' are empty
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Record_Diff $diff
+     * @return Tinebase_Record_Interface
+     */
+    public function merge($record, $diff = null)
+    {
+        if (! $this->getId()) {
+            $this->setId($record->getId());
+        }
+
+        if ($diff === null) {
+            $diff = $this->diff($record);
+        }
+
+        if ($diff === null || empty($diff->diff)) {
+            return $this;
+        }
+
+        foreach ($diff->diff as $field => $value) {
+            if (empty($this->{$field}) && $this->{$field} !== 0 && $this->{$field} !== '0') {
+                $this->{$field} = $value;
+            }
+        }
+
+        return $this;
+    }
 }
