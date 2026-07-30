@@ -1,6 +1,7 @@
 phpstan-baseline\.neon
 ci/ci-config\.yml
 ci/gitlab-ci/custom_merge_jobs\.yml
+ci/upstream-change-whitelist.txt
 tine20/composer\.json
 tine20/composer\.lock
 tests/tine20/AllTests\.php
