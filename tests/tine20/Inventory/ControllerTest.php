@@ -16,7 +16,7 @@ class Inventory_ControllerTest extends Inventory_TestCase
 {
     public function testAttachmentCreation(): void
     {
-        $this->markTestSkipped('template file needs to be fixed, ci doesnt do pdf conversion?');
+        $this->markTestSkipped('ci can\'t do pdf conversion');
         
         $this->_testNeedsTransaction();
 
@@ -70,7 +70,7 @@ class Inventory_ControllerTest extends Inventory_TestCase
             $data = file_get_contents('tine20:///Inventory/folders' . $attachment->path);
             $pdf = (new \Smalot\PdfParser\Parser())->parseContent($data);
             $text = $pdf->getText();
-            //$this->assertStringContainsString('inventory id unittest', $text);
+            $this->assertStringContainsString('inventory id unittest', $text);
         }
 
         $equipment->{Inventory_Model_ElectricalEquipment::FLD_ELECTRICAL_SAFETY_TESTS}->addRecord(new Inventory_Model_ElectricalSafetyTest([
