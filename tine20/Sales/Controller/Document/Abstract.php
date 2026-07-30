@@ -832,6 +832,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             $orFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filter->getModelName(), _condition: Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
             $filter->addFilterGroup($orFilter);
             foreach ([
+                         Sales_Model_Document_Credit::class => [
+                             'statusFld' => Sales_Model_Document_Credit::FLD_CREDIT_STATUS,
+                             'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CREDIT_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
+                         ],
                          Sales_Model_Document_Delivery::class => [
                              'statusFld' => Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
                              'unbookedValues' => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_DELIVERY_STATUS}->records->filter(Sales_Model_Document_Status::FLD_BOOKED, false)->id,
