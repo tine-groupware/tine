@@ -1,6 +1,7 @@
 phpstan-baseline\.neon
 ci/ci-config\.yml
 ci/gitlab-ci/custom_merge_jobs\.yml
+ci/upstream-change-whitelist.txt
 scripts/postInstall.sh
 scripts/postInstallDocker.sh
 scripts/postInstallGitlab.sh
