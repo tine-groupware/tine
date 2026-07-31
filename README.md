@@ -3,7 +3,7 @@ tine is the ideal software for digital collaboration in companies and organizati
 functionalities to clever add-ons, tine combines everything to make daily team collaboration easier.
 
 For more information please visit our [homepage](https://www.tine-groupware.de) and don't miss our latest
-[podcast](https://www.tine-groupware.de/tine-podcast/) episodes.
+[podcast](http://web.archive.org/web/20260416203738/https://www.tine-groupware.de/tine-podcast/) episodes.
 
 ## Official resources
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
