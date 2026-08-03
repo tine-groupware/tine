@@ -1,7 +1,7 @@
 <?php
 /**
  * Tine 2.0 - http://www.tine20.org
- * 
+ *
  * @package     CrewScheduling
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2017-2025 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -10,7 +10,7 @@
 
 /**
  * All CrewScheduling tests
- * 
+ *
  * @package     CrewScheduling
  */
 class CrewScheduling_AllTests
@@ -24,6 +24,7 @@ class CrewScheduling_AllTests
             $suite->addTestSuite(CrewScheduling_Export_PdfTest::class);
             $suite->addTestSuite(CrewScheduling_FrontendTest::class);
             $suite->addTestSuite(CrewScheduling_Model_EventRoleConfigTest::class);
+            $suite->addTestSuite(CrewScheduling_Server_RoutingTests::class);
         }
 
         return $suite;

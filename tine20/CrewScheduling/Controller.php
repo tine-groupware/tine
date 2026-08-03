@@ -189,18 +189,33 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
         $pollReply = new CrewScheduling_Model_PollReply(_bypassFilters: true);
         $pollReply->setFromJsonInUsersTimezone($pollReplyJson);
 
-        $poll = CrewScheduling_Controller_Poll::getInstance()->get($pollId);
+        $poll = CrewScheduling_Controller_Poll::getInstance()->get($pollId, _aclProtect: false);
         if (!($participant = $poll->{CrewScheduling_Model_Poll::FLD_PARTICIPANTS}->getById($participantId))) {
             throw new Tinebase_Exception_AccessDenied('not allowed');
         }
+
+        $oldDoAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $oldReplyAcl = CrewScheduling_Controller_PollReply::getInstance()->doContainerACLChecks(false);
+        $oldParticipantAcl = CrewScheduling_Controller_PollParticipant::getInstance()->doContainerACLChecks(false);
+        $aclRaii = new Tinebase_RAII(fn() =>
+            Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldDoAcl) &
+            CrewScheduling_Controller_PollReply::getInstance()->doContainerACLChecks($oldReplyAcl) &
+            CrewScheduling_Controller_PollParticipant::getInstance()->doContainerACLChecks($oldParticipantAcl)
+        );
+
         // if participant is an account, current user needs to be that account
+        $resetUser = false;
         if (Addressbook_Model_Contact::CONTACTTYPE_USER === $participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->type) {
-            if (null === Tinebase_Core::getUser() || (Tinebase_Core::getUser()->getId() !== $participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->getIdFromProperty('account_id') &&
-                !CrewScheduling_Controller_Poll::getInstance()->checkGrant($poll, CrewScheduling_Model_SchedulingRoleGrants::MANAGE_POLL, false))
-            ) {
-                throw new Tinebase_Exception_AccessDenied('not allowed');
+            $participantUser = Tinebase_User::getInstance()->getFullUserById($participant->{CrewScheduling_Model_PollParticipant::FLD_CONTACT}->account_id);
+            $currentUser = Tinebase_Core::getUser();
+            if ($currentUser && $currentUser->getId() !== $participantUser->getId()) {
+                throw new Tinebase_Exception_AccessDenied('Current user is not the participant');
             }
-        } else { // if participant is not an account only annonymous usage!
+            if (null === Tinebase_Core::getUser()) {
+                Tinebase_Core::setUser($participantUser);
+                $resetUser = true;
+            }
+        } else {
             if (null === Tinebase_Core::getUser()) {
                 Tinebase_Core::setUser(Tinebase_User::getInstance()->getFullUserById($poll->getIdFromProperty('created_by')));
             }
@@ -216,6 +231,11 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
         }
 
         $transaction->release();
+        if ($resetUser) {
+            Tinebase_Core::unSetUser();
+        }
+
+        unset($aclRaii);
 
         $response = new \Laminas\Diactoros\Response(headers: [
             'Content-Type' => 'application/json',
