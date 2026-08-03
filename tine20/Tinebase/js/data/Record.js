@@ -519,7 +519,7 @@ Record.convertModelConfig = function(modelConfig) {
 
     const recordConfig = copyTo({modelConfiguration: modelConfig}, modelConfig,
         'idProperty,defaultFilter,appName,modelName,recordName,recordsName,titleProperty,' +
-        'containerProperty,containerName,containersName,group,copyOmitFields,copyNoAppendTitle');
+        'containerProperty,containerName,containersName,group,copyOmitFields, copyResetProperties, copyNoAppendTitle');
 
     return { modelArray, recordConfig }
 }

@@ -277,6 +277,7 @@ describe('data/Record', () => {
             "delegateAclField": null,
             "copyEditAction": null,
             "copyOmitFields": null,
+            "copyResetProperties": null,
             "recordName": "LogEntry",
             "recordsName": "LogEntries",
             "appName": "Tinebase",

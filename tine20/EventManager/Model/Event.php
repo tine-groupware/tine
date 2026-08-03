@@ -111,6 +111,13 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
             ],
         ],
 
+        self::COPY_RESET_PROPERTIES => [
+            self::FLD_NAME => ['id', 'record_id'],
+            self::FLD_SUBHEADING => ['id', 'record_id'],
+            self::FLD_DESCRIPTION => ['id', 'record_id'],
+            self::FLD_OPTIONS => ['id', 'event_id'],
+        ],
+
         self::FIELDS => [
             self::FLD_NAME      => [
                 self::LABEL         => 'Name', // _('Name')
@@ -232,6 +239,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
+                self::COPY_OMIT             => true,
                 self::ALLOW_CAMEL_CASE  => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
@@ -243,6 +251,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+                self::COPY_OMIT             => true,
                 self::ALLOW_CAMEL_CASE      => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
@@ -278,6 +287,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::NULLABLE              => true,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+                self::COPY_OMIT             => true,
                 self::UI_CONFIG             => [
                     self::COLUMNS               => [
                         EventManager_Model_Registration::FLD_PARTICIPANT,

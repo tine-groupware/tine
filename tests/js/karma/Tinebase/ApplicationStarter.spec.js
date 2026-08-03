@@ -615,6 +615,7 @@ describe('ApplicationStarter', () => {
           'multipleEditRequiredRight': null,
           'copyEditAction': null,
           'copyOmitFields': null,
+          'copyResetProperties': null,
           'recordName': 'Inventory item',
           'recordsName': 'Inventory items',
           'appName': 'Inventory',

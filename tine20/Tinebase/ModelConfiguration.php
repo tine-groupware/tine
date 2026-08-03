@@ -94,6 +94,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property array      $validatorMapping This maps field types to their default validators, just zendfw validators can be used here.
  * @property array      $converterDefaultMapping This maps field types to their default converter
  * @property array      $copyOmitFields Collection of copy omit properties for frontend
+ * @property array      $copyResetProperties Collection of copy omit properties for frontend
  * @property array      $keyfieldFields
  * @property array      $jsonExpander
  * @property array      $denormalizedFields
@@ -841,7 +842,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
         'containerProperty', 'extendsContainer', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable', 'uiconfig', 'delegateAclField',
-        'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
+        'copyEditAction', 'copyOmitFields', 'copyResetProperties', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasNotes', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
         'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf', 'isMetadataModelFor'
@@ -976,6 +977,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
      * @var array
      */
     protected $_copyOmitFields = NULL;
+
+    /**
+     * Collection of copy reset properties for frontend
+     *
+     *
+     * @var array
+     */
+    protected $_copyResetProperties = NULL;
 
     /**
      * @deprecated -> use definitions
@@ -1643,6 +1652,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                     $this->_copyOmitFields = array();
                 }
                 $this->_copyOmitFields[] = $fieldKey;
+            }
+
+            if (isset($fieldDef['copyResetProperties']) && $fieldDef['copyResetProperties']) {
+                if (!is_array($this->_copyResetProperties)) {
+                    $this->_copyResetProperties = array();
+                }
+                $this->_copyResetProperties[] = $fieldKey;
             }
 
             // TODO: implement complex default values (maybe use defaultConfig for this?)

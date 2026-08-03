@@ -1050,12 +1050,13 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 ['id', 'notes' /*, 'attachments'*/]),
             fields = recordClass.getFieldNames(),
             fieldsToCopy = fields.diff(omitFields),
-            recordData = Ext.copyTo({__meta: { phantom: true }}, record.data, fieldsToCopy),
-            resetProperties = {
+            resetProperties = Ext.apply({
                 alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
-                relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
-            },
-            setProperties = {alarms: {sent_status: 'pending'}};
+                relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time'],
+            }, recordClass.getMeta('copyResetProperties') || {}),
+            setProperties = Ext.apply({alarms: {sent_status: 'pending'}}, recordClass.getMeta('copySetProperties') || {});
+            let recordData = _.cloneDeep(Ext.copyTo({__meta: { phantom: true }}, record.data, fieldsToCopy));
+
 
         Ext.iterate(resetProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
@@ -1085,7 +1086,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         });
         if (! omitCopyTitle && !(recordClass.getMeta('copyNoAppendTitle'))) {
-            recordData[titleProperty] = String.format(i18n._('{0} (copy)'), recordData[titleProperty]);
+            if (Ext.isArray(recordData[titleProperty])) {
+                recordData[titleProperty] = _.cloneDeep(recordData[titleProperty]);
+                Ext.each(recordData[titleProperty], function (entry) {
+                    entry.text = String.format(
+                        i18n._('{0} (copy)'),
+                        entry.text
+                    );
+                });
+            } else {
+                recordData[titleProperty] = String.format(
+                    i18n._('{0} (copy)'),
+                    recordData[titleProperty]
+                );
+            }
         }
 
         return recordData;
