@@ -567,6 +567,7 @@ Tine.CrewScheduling.MainScreen = Ext.extend(Ext.Panel, {
                     .then(_.bind(me.mergeEvent, me, event))
                     .then(_.bind(function(event) {
                         Ext.MessageBox.updateProgress((idx+1)/(modified.length));
+                        event.set('mute', true);
 
                         return event.isRecurBase() || event.isRecurInstance() ?
                             Tine.Calendar.backend.promiseCreateRecurException(event, 0, 0, 0) :
