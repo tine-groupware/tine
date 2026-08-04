@@ -65,6 +65,7 @@ class SimpleFAQ_Model_Faq extends Tinebase_Record_Abstract
          'is_deleted'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'deleted_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'deleted_by'           => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
+         self::FLD_PURGE_DATE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
          'tags'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true,),
          'relations'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
          'notes'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),

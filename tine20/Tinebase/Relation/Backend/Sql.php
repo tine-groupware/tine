@@ -175,17 +175,22 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Model_Relation $_relation 
      * @return void 
      */
-    public function breakRelation($_id)
+    public function breakRelation($_id, bool $_purgeNow = false)
     {
         $where = array(
             $this->_db->quoteIdentifier('rel_id') . ' = ' . $this->_db->quote($_id)
         );
-        
-        $this->_dbTable->update(array(
-            'is_deleted'   => (int)true,
-            'deleted_by'   => Tinebase_Core::getUser()->getId(),
-            'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-        ), $where);
+
+        if ($_purgeNow) {
+            $this->_dbTable->delete($where);
+        } else {
+            $this->_dbTable->update(array(
+                'is_deleted' => (int)true,
+                'deleted_by' => Tinebase_Core::getUser()->getId(),
+                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                TMCC::FLD_PURGE_DATE => Tinebase_Timemachine_ModificationLog::getPurgeDate()->toString(),
+            ), $where);
+        }
     }
     
     /**

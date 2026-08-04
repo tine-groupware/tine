@@ -20,6 +20,7 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
     protected const RELEASE019_UPDATE002 = __CLASS__ . '::update002';
     protected const RELEASE019_UPDATE003 = __CLASS__ . '::update003';
     protected const RELEASE019_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE019_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE       => [
@@ -32,6 +33,10 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
             self::RELEASE019_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE019_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -143,5 +148,38 @@ class Sales_Setup_Update_19 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.4', self::RELEASE019_UPDATE004);
+    }
+
+    public function update005(): void
+    {
+        $_purgeDateField = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>purge_date</name>
+                <type>date</type>
+                <notnull>false</notnull>
+            </field>');
+
+        if (!$this->_backend->columnExists('purge_date', 'sales_product_agg')) {
+            $this->_backend->addCol('sales_product_agg', $_purgeDateField);
+            if ($this->getTableVersion('sales_product_agg') < 7) {
+                $this->setTableVersion('sales_product_agg', 7);
+            }
+        }
+
+        if (!$this->_backend->columnExists('purge_date', 'sales_orderconf')) {
+            $this->_backend->addCol('sales_orderconf', $_purgeDateField);
+            if ($this->getTableVersion('sales_orderconf') < 3) {
+                $this->setTableVersion('sales_orderconf', 3);
+            }
+        }
+
+        if (!$this->_backend->columnExists('purge_date', 'sales_offers')) {
+            $this->_backend->addCol('sales_offers', $_purgeDateField);
+            if ($this->getTableVersion('sales_offers') < 3) {
+                $this->setTableVersion('sales_offers', 3);
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '19.5', self::RELEASE019_UPDATE005);
     }
 }

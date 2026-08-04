@@ -63,6 +63,7 @@ class Tinebase_Model_Department extends Tinebase_Record_Abstract
         'is_deleted'             => array('allowEmpty' => true),
         'deleted_time'           => array('allowEmpty' => true),
         'deleted_by'             => array('allowEmpty' => true),
+        'purge_date'             => array('allowEmpty' => true),
         'seq'                    => array('allowEmpty' => true),
     );
     

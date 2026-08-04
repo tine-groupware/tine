@@ -361,26 +361,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
             /** @var Tinebase_Model_ModificationLog $modification */
             foreach($modifications as $modification) {
-                $modified_attribute = $modification->modified_attribute;
-
-                // legacy code
-                if (!empty($modified_attribute)) {
-                    if (in_array($modification->modified_attribute, array_keys(Addressbook_Model_Contact::getEmailFields()))) {
-                        if ($modification->old_value) {
-                            $emails[] = $modification->old_value;
-                        }
-                    }
-
-                // new code modificationLog implementation
-                } else {
-                    /** @var Tinebase_Record_Diff $diff */
-                    $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
-                    if (isset($diff->oldData['email'])) {
-                        $emails[] = $diff->oldData['email'];
-                    }
-                    if (isset($diff->oldData['email_home'])) {
-                        $emails[] = $diff->oldData['email_home'];
-                    }
+                /** @var Tinebase_Record_Diff $diff */
+                $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
+                if (isset($diff->oldData['email'])) {
+                    $emails[] = $diff->oldData['email'];
+                }
+                if (isset($diff->oldData['email_home'])) {
+                    $emails[] = $diff->oldData['email_home'];
                 }
             }
         }

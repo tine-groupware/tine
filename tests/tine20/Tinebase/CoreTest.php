@@ -210,12 +210,6 @@ class Tinebase_CoreTest extends TestCase
             SQL_TABLE_PREFIX . 'tree_nodes' => [
                 'parent_id',
             ],
-            SQL_TABLE_PREFIX . 'timemachine_modlog' => [
-                'seq',
-                'modified_attribute',
-                'record_type',
-                'record_id',
-            ],
             SQL_TABLE_PREFIX . 'record_observer' => [
                 'observable_identifier',
             ],

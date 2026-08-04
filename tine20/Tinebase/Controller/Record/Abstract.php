@@ -29,6 +29,10 @@ abstract class Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_Record_ModlogTrait;
 
+    public const RC_PURGE_DATE = 'rcPurgeDate';
+    public const RC_PURGE_DATE_NEVER = -1;
+    public const RC_PURGE_DATE_NOW = 'now';
+
     /**
      * Model name
      *
@@ -2533,16 +2537,31 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkGrant($_record, self::ACTION_DELETE);
 
-        if (! $this->_purgeRecords && $_record->has('created_by')) {
+        if (! $this->_purgeRecords && $_record->has('created_by') && self::RC_PURGE_DATE_NOW !== ($this->_requestContext[self::RC_PURGE_DATE] ?? null)) {
             $currentRecord = clone $_record;
+            $purgeRAII = null;
+            if ($this->_requestContext[self::RC_PURGE_DATE] ?? false) {
+                if (self::RC_PURGE_DATE_NEVER === $this->_requestContext[self::RC_PURGE_DATE]) {
+                    $orgPurgeDate = Tinebase_Timemachine_ModificationLog::setPurgeDate(new Tinebase_DateTime('1970-01-01 00:00:00'));
+                } else {
+                    $orgPurgeDate = Tinebase_Timemachine_ModificationLog::setPurgeDate(new Tinebase_DateTime($this->_requestContext[self::RC_PURGE_DATE]));
+                }
+                $purgeRAII = new Tinebase_RAII(fn() => Tinebase_Timemachine_ModificationLog::setPurgeDate($orgPurgeDate));
+            }
             $this->_deleteLinkedObjects($_record);
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, self::ACTION_DELETE, $_record);
+            unset($purgeRAII);
             $this->_backend->update($_record);
             $this->_writeModLog($_record, $currentRecord);
         } else {
-            $this->_deleteLinkedObjects($_record);
+            $this->_deleteLinkedObjects($_record, _purgeNow: true);
             $this->_backend->delete($_record);
-            $this->_writeModLog(null, $_record);
+            Tinebase_Timemachine_ModificationLog::getInstance()->purgeRecord(
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+                get_class($_record),
+                $_record->getId()
+            );
+            $this->_notifyBroadcastHub(null, $_record);
         }
         $this->_freeAutoincrements($_record);
         $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
@@ -2553,45 +2572,57 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
         if ($_record->has('notes') && $this->useNotes()) {
-            Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId());
+            Tinebase_Notes::getInstance()->deleteNotesOfRecord($this->_modelName, $this->_getBackendType(), $_record->getId(), $_purgeNow);
         }
         
         if ($_record->has('relations')) {
-            $this->deleteLinkedRelations($_record);
+            $this->deleteLinkedRelations($_record, _purgeNow: $_purgeNow);
         }
 
         if ($_record->has('attachments') && Tinebase_Core::isFilesystemAvailable()) {
+            $fsRaii = null;
+            if ($_purgeNow) {
+                $fsConfig = ($oldFsCfg = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM})->toArray();
+                $fsRaii = new Tinebase_RAII(function() use ($oldFsCfg): void {
+                    Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $oldFsCfg);
+                    Tinebase_FileSystem::getInstance()->resetBackends();
+                });
+                $fsConfig[Tinebase_Config::FILESYSTEM_MODLOGACTIVE] = false;
+                Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
+                Tinebase_FileSystem::getInstance()->resetBackends();
+            }
             Tinebase_FileSystem_RecordAttachments::getInstance()->deleteRecordAttachments($_record);
+            unset($fsRaii);
         }
 
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
 
-        $this->handleDeleteDependentRecords($_record);
+        $this->handleDeleteDependentRecords($_record, $_purgeNow);
     }
 
-    public function handleDeleteDependentRecords(Tinebase_Record_Interface $_record): void
+    public function handleDeleteDependentRecords(Tinebase_Record_Interface $_record, bool $_purgeNow = false): void
     {
         if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
             if (is_array($config->recordsFields)) {
                 foreach ($config->recordsFields as $property => $fieldDef) {
-                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config'], $_purgeNow);
                 }
             }
             if (is_array($config->recordFields)) {
                 foreach ($config->recordFields as $property => $fieldDef) {
-                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config']);
+                    $this->_deleteDependentRecords($_record, $property, $fieldDef['config'], $_purgeNow);
                 }
             }
             foreach ($config->getFields() as $key => $field) {
                 if (TMCC::TYPE_DYNAMIC_RECORD === ($field[TMCC::TYPE] ?? null) &&
                         true === ($field[TMCC::CONFIG][TMCC::PERSISTENT] ?? null) &&
                         $_record->$key instanceof Tinebase_Record_Interface) {
-                    $this->handleDeleteDependentRecords($_record->$key);
+                    $this->handleDeleteDependentRecords($_record->$key, $_purgeNow);
                 }
                 if (TMCC::TYPE_PASSWORD === ($field[TMCC::TYPE] ?? null) &&
                         'shared' === ($field[TMCC::CONFIG][TMCC::CREDENTIAL_CACHE] ?? null) &&
@@ -2600,7 +2631,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     try {
                         /** @var Tinebase_Model_CredentialCache $cc */
                         $cc = Tinebase_Auth_CredentialCache::getInstance()->get($ccId);
-                        $validUntil = Tinebase_DateTime::now()->addMonth(6);
+                        $validUntil = $_purgeNow ? Tinebase_DateTime::now() : Tinebase_DateTime::now()->addMonth(6);
                         if (!$cc->valid_until || $cc->valid_until > $validUntil) {
                             $cc->valid_until = $validUntil;
                             Tinebase_Auth_CredentialCache::getInstance()->update($cc);
@@ -2681,7 +2712,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param array $modelsToDelete
      * @param array $typesToDelete
      */
-    public function deleteLinkedRelations(Tinebase_Record_Interface $record, $modelsToDelete = array(), $typesToDelete = array())
+    public function deleteLinkedRelations(Tinebase_Record_Interface $record, $modelsToDelete = array(), $typesToDelete = array(), bool $_purgeNow = false)
     {
         $relations = isset($record->relations) && $record->relations instanceof Tinebase_Record_RecordSet
             ? $record->relations
@@ -2692,7 +2723,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         // unset record relations
-        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $record->getId(), array());
+        Tinebase_Relations::getInstance()->setRelations($this->_modelName, $this->_getBackendType(), $record->getId(), array(), _purgeNow: $_purgeNow);
 
         if (empty($modelsToDelete)) {
             $modelsToDelete = $this->_relatedObjectsToDelete;
@@ -2709,12 +2740,17 @@ abstract class Tinebase_Controller_Record_Abstract
             if (in_array($relation->related_model, $modelsToDelete) || in_array($relation->type, $typesToDelete)) {
                 [$appName, , $itemName] = explode('_', $relation->related_model);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
-
+                $oldRequestContext = $appController->getRequestContext() ?? [];
                 try {
+                    if ($_purgeNow) {
+                        $appController->setRequestContext(array_merge($oldRequestContext, [self::RC_PURGE_DATE => self::RC_PURGE_DATE_NOW]));
+                    }
                     $appController->delete($relation->related_id);
                 } catch (Exception $e) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' Error deleting: ' . $e->getMessage());
+                } finally {
+                    $appController->setRequestContext($oldRequestContext);
                 }
             }
         }
@@ -3810,7 +3846,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param array $_fieldConfig
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    protected function _deleteDependentRecords($_record, $_property, $_fieldConfig)
+    protected function _deleteDependentRecords($_record, $_property, $_fieldConfig, bool $_purgeNow = false)
     {
         if (!($_fieldConfig[TMCC::DEPENDENT_RECORDS] ?? false) || ($_fieldConfig[TMCC::STORAGE] ?? null) === TMCC::TYPE_JSON) {
             return;
@@ -3824,6 +3860,12 @@ abstract class Tinebase_Controller_Record_Abstract
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
+        $rcRaii = null;
+        if ($_purgeNow) {
+            $oldRequestContext = $controller->getRequestContext() ?? [];
+            $rcRaii = new Tinebase_RAII(fn() => $controller->setRequestContext($oldRequestContext));
+            $controller->setRequestContext(array_merge($oldRequestContext, [self::RC_PURGE_DATE => self::RC_PURGE_DATE_NOW]));
+        }
         $filterClassName = $_fieldConfig['filterClassName'];
 
         $ctrlAclRaii = null;
@@ -3871,6 +3913,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         unset($ctrlAclRaii);
+        unset($rcRaii);
     }
 
     /**

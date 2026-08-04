@@ -117,6 +117,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
         'is_deleted'            ,
         'deleted_time'          ,
         'deleted_by'            ,
+        'purge_date'            ,
         'relations'             ,
         'tasks'                 ,
     );

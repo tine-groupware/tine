@@ -333,13 +333,15 @@ abstract class Tinebase_Controller_Record_Container extends Tinebase_Controller_
      * delete linked objects (notes, relations, attachments, alarms) of record
      *
      * @param Tinebase_Record_Interface $_record
+     * @param bool $_purgeNow
      */
-    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
+    protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record, bool $_purgeNow = false)
     {
-        parent::_deleteLinkedObjects($_record);
+        parent::_deleteLinkedObjects($_record, $_purgeNow);
 
         try {
             static::$_deletingRecordId = $_record->getId();
+            // TODO make this purgeable
             Tinebase_Container::getInstance()->deleteContainer($_record->container_id, true);
         } finally {
             static::$_deletingRecordId = null;

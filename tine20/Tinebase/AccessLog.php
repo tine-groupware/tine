@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */ 
 
@@ -15,25 +15,13 @@
  */
 class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
 {
-    /**
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_backend;
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_AccessLog
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the constructor
-     *
-     */
-    private function __construct()
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_AccessLog> */
+    use Tinebase_Controller_SingletonTrait;
+
+    protected function __construct()
     {
-        $this->_modelName = 'Tinebase_Model_AccessLog';
+        $this->_applicationName = Tinebase_Config::APP_NAME;
+        $this->_modelName = Tinebase_Model_AccessLog::class;
         $this->_omitModLog = TRUE;
         $this->_doContainerACLChecks = FALSE;
         
@@ -41,20 +29,6 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             'modelName' => $this->_modelName, 
             'tableName' => 'access_log',
         ));
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_AccessLog
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_AccessLog;
-        }
-        
-        return self::$_instance;
     }
 
     /**

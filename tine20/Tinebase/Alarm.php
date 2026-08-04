@@ -6,7 +6,7 @@
  * @subpackage  Alarm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -18,55 +18,18 @@
  */
 class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
 {
-    /**
-     * @var Tinebase_Backend_Sql
-     */
-    protected $_backend;
-    
-    /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = Tinebase_Model_Alarm::class;
-    
-    /**
-     * check for container ACLs?
-     *
-     * @var boolean
-     */
-    protected $_doContainerACLChecks = FALSE;
-    
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_Alarm
-     */
-    private static $instance = NULL;
-    
-    /**
-     * the constructor
-     *
-     */
-    private function __construct()
+    /** @use Tinebase_Controller_SingletonTrait<Tinebase_Alarm> */
+    use Tinebase_Controller_SingletonTrait;
+
+    protected function __construct()
     {
+        $this->_applicationName = Tinebase_Config::APP_NAME;
+        $this->_modelName = Tinebase_Model_Alarm::class;
         $this->_backend = new Tinebase_Backend_Sql(array(
             'modelName' => $this->_modelName, 
-            'tableName' => 'alarm',
+            'tableName' => Tinebase_Model_Alarm::TABLE_NAME,
         ));
-    }
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Alarm
-     */
-    public static function getInstance() 
-    {
-        if (self::$instance === NULL) {
-            self::$instance = new Tinebase_Alarm();
-        }
-        return self::$instance;
+        $this->_doContainerACLChecks = false;
     }
     
     /**************************** public funcs *************************************/

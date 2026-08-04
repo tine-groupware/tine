@@ -53,6 +53,7 @@ class Addressbook_Model_Salutation extends Tinebase_Config_KeyFieldRecord
         'is_deleted'           => array('allowEmpty' => true          ),
         'deleted_time'         => array('allowEmpty' => true          ),
         'deleted_by'           => array('allowEmpty' => true          ),
+        'purge_date'           => array('allowEmpty' => true          ),
         'seq'                  => array('allowEmpty' => true,  'Int'  ),
 
     // key field record specific

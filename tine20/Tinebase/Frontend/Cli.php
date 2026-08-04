@@ -188,47 +188,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * clean timemachine_modlog for records that have been pruned (not deleted!)
-     *  - accepts optional param date=YYYY-MM-DD to delete all modlogs before this date
-     *  - accepts optional param instanceseq=NUMBER to delete all modlogs before this instance_seq
-     *
-     * @param Zend_Console_Getopt|null $_opts
-     * @return int
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    public function cleanModlog(?Zend_Console_Getopt $_opts = null): int
-    {
-        $this->_checkAdminRight();
-
-        $args = $_opts ? $this->_parseArgs($_opts) : [];
-
-        $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
-        $beforeSeq = $args['instanceseq'] ?? null;
-
-        $additionalFilter = [];
-        if (isset($args['app_id'])) {
-            $additionalFilter['application_id'] = $args['app_id'];
-        }
-        if (isset($args['model'])) {
-            $additionalFilter['record_type'] = $args['model'];
-        }
-        if (isset($args['change_type'])) {
-            $additionalFilter['change_type'] = $args['change_type'];
-        }
-
-        if ($beforeSeq || $before) {
-            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($before, $beforeSeq, $additionalFilter);
-        } else {
-            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean($additionalFilter);
-        }
-
-        echo "\nDeleted $deleted modlogs records\n";
-
-        return 0;
-    }
-
-    /**
      * clean relations, set relation to deleted if at least one of the ends has been set to deleted or pruned
      */
     public function cleanRelations(): int
@@ -500,9 +459,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 case 'temp_files':
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
                     break;
-                case 'timemachine_modlog':
-                    Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($date);
-                    break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }
@@ -541,11 +497,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             // TODO move to \Tinebase_Controller::removeObsoleteData
             echo "\nCleaning relations...";
             $this->cleanRelations();
-
-            if ('modlog' !== $skip) {
-                echo "\nCleaning modlog...";
-                $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
-            }
 
             echo "\nCleaning customfields...";
             $this->cleanCustomfields();
@@ -1705,7 +1656,6 @@ fi';
 
         $data = $this->_parseArgs($opts, array('iseqfrom', 'iseqto', 'accountid', 'models'));
         $dryrun = (bool)$opts->d;
-        $overwrite = (bool)($data['overwrite'] ?? false);
 
         $data['iseqfrom'] = intval($data['iseqfrom']);
         $data['iseqto'] = intval($data['iseqto']);
@@ -1735,7 +1685,7 @@ fi';
         }
 
         $filter = new Tinebase_Model_ModificationLogFilter($filterData);
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $dryrun);
 
         if (! $dryrun) {
             Setup_Controller::getInstance()->clearCache(false);
@@ -1815,8 +1765,7 @@ fi';
         $filter = new Tinebase_Model_ModificationLogFilter($filterData);
         
         $dryrun = $opts->d;
-        $overwrite = (isset($data['overwrite']) && $data['overwrite']) ? TRUE : FALSE;
-        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $overwrite, $dryrun, ($data['modified_attribute'] ?? null));
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter, $dryrun);
         
         if (! $dryrun) {
             Setup_Controller::getInstance()->clearCache(false);
@@ -1825,20 +1774,15 @@ fi';
             echo "Dry run\n";
             echo 'Would revert ' . $result['totalcount'] . " change(s):\n";
             foreach ($result['undoneModlogs'] as $modlog) {
-                $modifiedAttribute = $modlog->modified_attribute;
-                if (!empty($modifiedAttribute)) {
-                    echo 'id ' . $modlog->record_id . ' [' . $modifiedAttribute . ']: ' . $modlog->new_value . ' -> ' . $modlog->old_value . PHP_EOL;
+                if ($modlog->change_type === Tinebase_Timemachine_ModificationLog::CREATED) {
+                    echo 'id ' . $modlog->record_id . ' DELETE' . PHP_EOL;
+                } elseif ($modlog->change_type === Tinebase_Timemachine_ModificationLog::DELETED) {
+                    echo 'id ' . $modlog->record_id . ' UNDELETE' . PHP_EOL;
                 } else {
-                    if ($modlog->change_type === Tinebase_Timemachine_ModificationLog::CREATED) {
-                        echo 'id ' . $modlog->record_id . ' DELETE' . PHP_EOL;
-                    } elseif ($modlog->change_type === Tinebase_Timemachine_ModificationLog::DELETED) {
-                        echo 'id ' . $modlog->record_id . ' UNDELETE' . PHP_EOL;
-                    } else {
-                        $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value));
-                        if (is_array($diff->diff)) {
-                            foreach ($diff->diff as $key => $val) {
-                                echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
-                            }
+                    $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value));
+                    if (is_array($diff->diff)) {
+                        foreach ($diff->diff as $key => $val) {
+                            echo 'id ' . $modlog->record_id . ' [' . $key . ']: ' . $val . ' -> ' . $diff->oldData[$key] . PHP_EOL;
                         }
                     }
                 }
@@ -2653,6 +2597,114 @@ fi';
         print_r(Tinebase_FileSystem::getInstance()->reportPreviewStatus());
 
         return 0;
+    }
+
+    /**
+     * remove late 2027.11 / 2028.11
+     */
+    public function cleanDataUpdate19007(): void
+    {
+        $this->_checkAdminRight();
+        $db = Tinebase_Core::getDb();
+
+        $tbId = Tinebase_Core::getTinebaseId();
+
+        while ($db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE application_id = ? AND record_type = "Tinebase_Model_User" AND (client LIKE "ActiveSync%" OR client LIKE "Tinebase_Server_WebDAV%") limit 5000', [$tbId])->rowCount() > 0);
+        while ($db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE application_id = ? AND record_type = "Tinebase_Model_FullUser" AND (client LIKE "ActiveSync%" OR client LIKE "Tinebase_Server_WebDAV%") limit 5000', [$tbId])->rowCount() > 0);
+
+        $db->query('create temporary table delete_ids select id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog limit 1');
+        do {
+            $db->query('truncate delete_ids');
+            $db->query(
+                'insert into delete_ids select modLog.id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog AS modLog LEFT JOIN ' . SQL_TABLE_PREFIX . 'tree_fileobjects AS rec ON modLog.record_id = rec.id WHERE modLog.application_id = ? AND modLog.record_type = "Tinebase_Model_Tree_FileObject" AND modLog.record_backend = "Sql" AND rec.id IS NULL limit 5000',
+                [$tbId]
+            );
+        } while ($db->query('delete modlog.* from ' . SQL_TABLE_PREFIX . 'timemachine_modlog as modlog join delete_ids ON modlog.id = delete_ids.id')->rowCount() > 0);
+
+        do {
+            $db->query('truncate delete_ids');
+            $db->query(
+                'insert into delete_ids select modLog.id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog AS modLog LEFT JOIN ' . SQL_TABLE_PREFIX . 'tree_nodes AS rec ON modLog.record_id = rec.id WHERE modLog.application_id = ? AND modLog.record_type = "Tinebase_Model_Tree_Node" AND modLog.record_backend = "Sql" AND rec.id IS NULL limit 5000',
+                [$tbId]
+            );
+        } while ($db->query('delete modlog.* from ' . SQL_TABLE_PREFIX . 'timemachine_modlog as modlog join delete_ids ON modlog.id = delete_ids.id')->rowCount() > 0);
+    }
+
+    /**
+     * remove late 2027.11 / 2028.11
+     */
+    public function prepareUpdate19007(): void
+    {
+        $this->_checkAdminRight();
+
+        $setupBackend = new Setup_Backend_Mysql();
+        $db = Tinebase_Core::getDb();
+
+        try {
+            $setupBackend->dropIndex('timemachine_modlog', 'unique-fields');
+        } catch (Zend_Db_Statement_Exception) {}
+
+        if ($setupBackend->columnExists('modified_attribute', 'timemachine_modlog')) {
+            $setupBackend->dropCol('timemachine_modlog', 'modified_attribute');
+        }
+        if ($setupBackend->columnExists('old_value', 'timemachine_modlog')) {
+            $setupBackend->dropCol('timemachine_modlog', 'old_value');
+        }
+
+        while ($ids = $db->query('SELECT id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE record_backend IS NULL LIMIT 10000')->fetchAll(Zend_Db::FETCH_COLUMN, 0)) {
+            $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'timemachine_modlog SET record_backend = "Sql" WHERE record_backend IS NULL AND id IN (?)', $ids);
+        }
+
+        $sql = $setupBackend->addAlterCol('', 'timemachine_modlog', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>record_type</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>'));
+        $sql = $setupBackend->addAlterCol($sql, 'timemachine_modlog', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>record_backend</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>'));
+        $sql = $setupBackend->addAlterCol($sql, 'timemachine_modlog', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>record_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>'));
+        $db->query($setupBackend->addAlterCol($sql, 'timemachine_modlog', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>seq</name>
+                <type>integer</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>')));
+
+        $setupBackend->addIndex('timemachine_modlog', new Setup_Backend_Schema_Index_Xml(
+            '<index>
+                <name>unique-fields</name>
+                <field>
+                    <name>application_id</name>
+                </field>
+                <field>
+                    <name>record_type</name>
+                </field>
+                <field>
+                    <name>record_backend</name>
+                </field>
+                <field>
+                    <name>record_id</name>
+                </field>
+                <field>
+                    <name>seq</name>
+                </field>
+            </index>'));
+
+        (new Tinebase_Setup_Update_19($setupBackend))->setTableVersion('timemachine_modlog', 7);
     }
 
     /**
