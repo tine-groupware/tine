@@ -9,6 +9,7 @@
 Ext.ns('Tine.EventManager');
 
 Tine.EventManager.EventGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+    copyEditAction: true,
 
     initComponent: function () {
         Tine.EventManager.EventGridPanel.superclass.initComponent.call(this);

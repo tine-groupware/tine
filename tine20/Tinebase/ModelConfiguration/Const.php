@@ -56,6 +56,7 @@ class Tinebase_ModelConfiguration_Const {
     public const COLUMN_CONFIG = 'columnConfig';
     public const COPY_OMIT = 'copyOmit';
     public const COPY_RELATIONS = 'copyRelations';
+    public const COPY_RESET_PROPERTIES = 'copyResetProperties';
 
     public const CREATE = 'create';
     public const CREATE_MODULE = 'createModule';
