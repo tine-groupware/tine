@@ -119,12 +119,14 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         }
 
         if ($_record->isBooked() && !$_oldRecord->isBooked()) {
-            $this->_renderRemittanceInformation($_record);
+            $this->_renderRemittanceInformation($_record, $_oldRecord);
         }
     }
 
-    protected function _renderRemittanceInformation(Sales_Model_Document_Invoice $invoice)
+    protected function _renderRemittanceInformation(Sales_Model_Document_Invoice $invoice, ?Sales_Model_Document_Invoice $oldInvoice = null)
     {
+        $this->_setAutoincrementValues($invoice, $oldInvoice);
+
         $invoice->{Sales_Model_Document_Invoice::FLD_REMITTANCE_INFORMATION} =
             (new Tinebase_Twig(($local = new Zend_Locale($invoice->{Sales_Model_Document_Invoice::FLD_DOCUMENT_LANGUAGE})), Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $local)))
             ->getEnvironment()
@@ -141,12 +143,37 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $_record->{Sales_Model_Document_Invoice::FLD_PAYMENT_MEANS}->filter(Sales_Model_PaymentMeans::FLD_DEFAULT, true);
         }
     }
+
+    protected $_setAutoincrementValuesCounter = 0;
+    public function create(Tinebase_Record_Interface $_record, $_duplicateCheck = true)
+    {
+        $this->_setAutoincrementValuesCounter = 0;
+        try {
+            return parent::create($_record, $_duplicateCheck);
+        } finally {
+            $this->_setAutoincrementValuesCounter = 0;
+        }
+    }
+
+    public function update(Tinebase_Record_Interface $_record, $_duplicateCheck = true, $_updateDeleted = false)
+    {
+        $this->_setAutoincrementValuesCounter = 0;
+        try {
+            return parent::update($_record, $_duplicateCheck, $_updateDeleted);
+        } finally {
+            $this->_setAutoincrementValuesCounter = 0;
+        }
+    }
+
     /**
      * @param Sales_Model_Document_Invoice $_record
      * @param Sales_Model_Document_Invoice|null $_oldRecord
      */
     protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, ?\Tinebase_Record_Interface $_oldRecord = null)
     {
+        if (++$this->_setAutoincrementValuesCounter > 1) {
+            return;
+        }
         if ($_oldRecord && $_record->isBooked() && !$_oldRecord->isBooked() &&
                 $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} ===
                 $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
