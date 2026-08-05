@@ -195,12 +195,14 @@ class CrewScheduling_Controller extends Tinebase_Controller_Event implements
         }
 
         $oldDoAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
+        $oldCalEventAcl = Calendar_Controller_Event::getInstance()->doContainerACLChecks(false);
         $oldReplyAcl = CrewScheduling_Controller_PollReply::getInstance()->doContainerACLChecks(false);
         $oldParticipantAcl = CrewScheduling_Controller_PollParticipant::getInstance()->doContainerACLChecks(false);
         $aclRaii = new Tinebase_RAII(fn() =>
             Addressbook_Controller_Contact::getInstance()->doContainerACLChecks($oldDoAcl) &
             CrewScheduling_Controller_PollReply::getInstance()->doContainerACLChecks($oldReplyAcl) &
-            CrewScheduling_Controller_PollParticipant::getInstance()->doContainerACLChecks($oldParticipantAcl)
+            CrewScheduling_Controller_PollParticipant::getInstance()->doContainerACLChecks($oldParticipantAcl) &
+            Calendar_Controller_Event::getInstance()->doContainerACLChecks($oldCalEventAcl)
         );
 
         // if participant is an account, current user needs to be that account
