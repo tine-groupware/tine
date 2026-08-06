@@ -62,6 +62,7 @@ class RestAuthProvider:
     async def check_auth_rest(self, password: str, username: str = None, email: str = None):
         data = {'user': {'password': password}}
 
+        qualified_user_id = ""
         if username is not None:
             qualified_user_id = self.api.get_qualified_user_id(username.lower())
 
@@ -84,13 +85,13 @@ class RestAuthProvider:
 
         auth = r["auth"]
         if not auth["success"]:
-            logger.info("RestAuthProvider: User not authenticated: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
+            logger.info("RestAuthProvider: User not authenticated: username = {} email= {} qualified_user_id = {}".format(username, email, qualified_user_id))
             return None
 
         matrix_id = auth["mxid"]
 
         if await self.api.check_user_exists(matrix_id) == None:
-            logger.info("RestAuthProvider: User dose not exist yet: username = {} email= {} matrix_id = {}".format(username, email, matrix_id))
+            logger.info("RestAuthProvider: User dose not exist yet: username = {} email= {} qualified_user_id = {}".format(username, email, qualified_user_id))
             localpart = matrix_id.split(":", 1)[0][1:]
 
             await self.api.register_user(localpart, auth["profile"]["display_name"])
