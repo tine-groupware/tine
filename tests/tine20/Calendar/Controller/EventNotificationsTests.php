@@ -486,6 +486,29 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     /**
      * testRecuringExceptions
      */
+    public function testRecuringExceptionDeLocale()
+    {
+        $jmcblack =  $this->_getPersona('jmcblack');
+        Tinebase_Core::getPreference()->setValueForUser(Tinebase_Preference::LOCALE, 'de', $jmcblack->getId(), true);
+
+        $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
+        $event = new Calendar_Model_Event(array(
+            'summary'       => 'Some Daily Event',
+            'dtstart'       =>  $year . '-03-14 09:00:00',
+            'dtend'         => $year . '-03-14 10:00:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            'attendee'      => $this->_getPersonaAttendee('jmcblack')->merge($this->_getPersonaAttendee('pwulf')),
+        ));
+
+        self::flushMailer();
+        $this->_eventController->create($event);
+        $this->_assertMail('jmcblack', 'Wiederholungsregel: Täglich, ab dem 14.03.' . substr($year, 2) . ', für immer', 'body');
+    }
+
+    /**
+     * testRecuringExceptions
+     */
     public function testRecuringExceptions()
     {
         $jmcblack =  $this->_getPersona('jmcblack');
@@ -510,7 +533,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         self::flushMailer();
         $persistentEvent = $this->_eventController->create($event);
-        $this->_assertMail('jmcblack', 'Recurrence Rule:    Daily', 'body');
+        $this->_assertMail('jmcblack', 'Recurrence Rule:    daily, starting from 14/03/' . $year . ', forever', 'body');
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
@@ -565,7 +588,91 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_eventController->createRecurException($updatedBaseEvent, FALSE, FALSE); // 2012-03-14
         $this->_assertMail('jmcblack', 'has been updated');
     }
-    
+
+    /**
+     * testRecurExceptionIcsContainsOnlyException
+     *
+     * Verifies that the iCal attachment in notification emails for recurring event
+     * exceptions contains only the single exception (with RECURRENCE-ID) and not the
+     * full recurrence rule. Similarly, updates to the base event should not include
+     * exception-specific data.
+     */
+    public function testRecurExceptionIcsContainsOnlyException()
+    {
+        $jmcblack = $this->_getPersona('jmcblack');
+        try {
+            Addressbook_Controller_Contact::getInstance()->get($jmcblack->contact_id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('jmcblack contact not found / was deleted by another test');
+        }
+
+        $year = Tinebase_DateTime::now()->subYear(2)->format('Y');
+
+        $event = new Calendar_Model_Event(array(
+            'summary'       => 'Recurring Event for ICS Test',
+            'dtstart'       => $year . '-06-01 09:00:00',
+            'dtend'         => $year . '-06-01 10:00:00',
+            'rrule'         => 'FREQ=DAILY;COUNT=10',
+            'container_id'  => $this->_getTestCalendar()->getId(),
+            'attendee'      => $this->_getPersonaAttendee('jmcblack'),
+        ));
+
+        self::flushMailer();
+        $persistentEvent = $this->_eventController->create($event);
+        $this->_assertMail('jmcblack', 'Recurrence Rule', 'body');
+
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $from = new Tinebase_DateTime($year . '-06-01 00:00:00');
+        $until = new Tinebase_DateTime($year . '-06-10 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecurrenceSet($persistentEvent, $exceptions, $from, $until);
+
+        // Create an exception for the 3rd occurrence (2012-06-03)
+        self::flushMailer();
+        $updatedBaseEvent = $this->_eventController->getRecurBaseEvent($recurSet[2]);
+        $recurSet[2]->last_modified_time = $updatedBaseEvent->last_modified_time;
+        $recurSet[2]->summary = 'Exception Summary';
+        $this->_eventController->createRecurException($recurSet[2], FALSE, FALSE);
+
+        // The iCal attachment should contain RECURRENCE-ID (it's an exception)
+        $this->_assertMail('jmcblack', 'RECURRENCE-ID', 'ics');
+
+        // The iCal attachment should contain only the exception VEVENT, not the base event with RRULE
+        $messages = self::getMessages();
+        $mailsForJmcblack = array();
+        $personaEmail = $this->_getPersona('jmcblack')->accountEmailAddress;
+        foreach ($messages as $message) {
+            if (Tinebase_Helper::array_value(0, $message->getRecipients()) == $personaEmail) {
+                array_push($mailsForJmcblack, $message);
+            }
+        }
+        $this->assertEquals(1, count($mailsForJmcblack), 'One mail should be sent for jmcblack');
+        $parts = $mailsForJmcblack[0]->getParts();
+        $vcalendarPart = $parts[0];
+        $vcalendar = quoted_printable_decode($vcalendarPart->getContent());
+        $vcalendarClean = str_replace("\r\n ", '', $vcalendar);
+
+        // Extract VEVENT content (between BEGIN:VEVENT and END:VEVENT)
+        $veventMatches = array();
+        preg_match_all('/BEGIN:VEVENT(.*?)END:VEVENT/s', $vcalendarClean, $veventMatches);
+        $this->assertEquals(1, count($veventMatches[0]), 'iCal must contain exactly one VEVENT for the exception');
+
+        $veventContent = $veventMatches[1][0];
+        // The VEVENT must NOT contain RRULE (it's a single exception, not the full series)
+        $this->assertStringNotContainsString('RRULE', $veventContent,
+            'VEVENT for exception must NOT contain RRULE, only the single exception with RECURRENCE-ID');
+
+        // Update the base event and check the iCal
+        self::flushMailer();
+        $persistentEvent->summary = 'Updated Base Event Summary';
+        $this->_eventController->update($persistentEvent);
+
+        // The iCal for base event update should contain RRULE
+        $this->_assertMail('jmcblack', 'RRULE', 'ics');
+
+        // The iCal for base event update should contain the base event UID
+        $this->_assertMail('jmcblack', $persistentEvent->uid, 'ics');
+    }
+
     public function testAttendeeAlarmSkip()
     {
         $event = $this->_getEvent();

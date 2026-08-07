@@ -181,6 +181,7 @@
     "psr/http-server-middleware": "^1.0",
     "ramsey/collection": "^1.2",
     "ramsey/uuid": "^4.7",
+    "rlanvin/php-rrule": "^3.0",
     "sabre/dav": "^4.5",
     "sabre/vobject": "^4.5",
     "sentry/sentry": "3.22.1pl3 as 3.22.1",

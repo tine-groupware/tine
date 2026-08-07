@@ -1182,7 +1182,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$this might not be defined\\.$#"
-			count: 15
+			count: 16
 			path: tine20/Calendar/views/eventNotification.php
 
 		-

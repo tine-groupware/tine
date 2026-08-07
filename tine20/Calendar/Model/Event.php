@@ -866,9 +866,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * @param  mixed            $_value
      * @param  Zend_Translate   $_translation
      * @param  string           $_timezone
+     * @param  DateTime         $_refDT
      * @return string
      */
-    public static function getTranslatedValue($_field, $_value, $_translation, $_timezone)
+    public static function getTranslatedValue($_field, $_value, $_translation, $_timezone, $_refDT)
     {
         $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
 
@@ -887,7 +888,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             case 'rrule':
                 if ($_value) {
                     $rrule = $_value instanceof Calendar_Model_Rrule ? $_value : new Calendar_Model_Rrule($_value);
-                    return $rrule->getTranslatedRule($_translation);
+                    return $rrule->getTranslatedRule($_translation, $_refDT);
                 }
                 return '';
             case 'status':

@@ -363,8 +363,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * @param  Zend_Translate   $translation
      * @return string
      */
-    public function getTranslatedRule($translation)
+    public function getTranslatedRule($translation, DateTime $_refDT)
     {
+        try {
+            $rrule = new RRule\RRule($this->__toString(), $_refDT);
+            $locale = (string)$translation->getAdapter()->getLocale();
+            return $rrule->humanReadable(['locale' => $locale === 'en' ? 'en-GB' : $locale]); // sorry, but not sorry
+        } catch (\InvalidArgumentException) {}
         $rule = '';
         $locale = new Zend_Locale($translation->getAdapter()->getLocale());
         $numberFormatter = null;
