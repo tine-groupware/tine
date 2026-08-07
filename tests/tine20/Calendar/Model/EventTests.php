@@ -95,7 +95,7 @@ class Calendar_Model_EventTests extends TestCase
         
         $translation = Tinebase_Translation::getTranslation('Calendar');
         $timezone = Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::TIMEZONE, Tinebase_Core::getUser()->getId());
-        $fileas = Calendar_Model_Event::getTranslatedValue('organizer', $event->organizer, $translation, $timezone);
+        $fileas = Calendar_Model_Event::getTranslatedValue('organizer', $event->organizer, $translation, $timezone, $event->dtstart);
         
         $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
         $this->assertEquals($userContact->n_fileas, $fileas);

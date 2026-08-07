@@ -20,9 +20,9 @@ foreach ($this->updates as $field => $update) {
         }
 
         $i18nFieldName = Calendar_Model_Event::getTranslatedFieldName($field, $this->translate);
-        $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone);
+        $i18nOldValue  = Calendar_Model_Event::getTranslatedValue($field, $update, $this->translate, $this->timezone, $this->event->dtstart);
         $i18nCurrValue = Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate,
-            $this->timezone);
+            $this->timezone, $this->event->dtstart);
         $translatedMessage = $this->translate->_('%1$s changed from "%2$s" to "%3$s"');
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -90,7 +90,7 @@ $orderedFields = array('dtstart', 'dtend', 'summary', 'url', 'location', 'descri
 foreach($orderedFields as $field) {
     if ($this->event->$field) {
         echo str_pad(Calendar_Model_Event::getTranslatedFieldName($field, $this->translate) . ':', 20) . 
-             Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone) . "\n";
+             Calendar_Model_Event::getTranslatedValue($field, $this->event->$field, $this->translate, $this->timezone, $this->event->dtstart) . "\n";
     }
 }
 

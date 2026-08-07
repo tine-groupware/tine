@@ -775,7 +775,10 @@ class Calendar_Controller_EventNotifications
         $converter->setMethod($method);
         $converter->setCalendarUser($attendee);
 
-        Calendar_Controller_MSEventFacade::getInstance()->prepareAttendeesView($event, $attendee);
+        // Don't replace recurring exceptions with the base event; notifications should only contain the exception itself
+        if (!$event->isRecurException()) {
+            Calendar_Controller_MSEventFacade::getInstance()->prepareAttendeesView($event, $attendee);
+        }
         $vcalendar = $converter->fromTine20Model($event);
 
         foreach ($vcalendar->children() as $component) {
