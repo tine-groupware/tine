@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>EventManager_Model_Event</model>
+    <name>unterschriften</name>
+    <type>export</type>
+    <plugin>EventManager_Export_Document</plugin>
+    <template>tine20:///Tinebase/folders/shared/export/templates/EventManager/unterschriften.docx</template>
+    <label>Unterschriften</label>
+    <description>Export für Sammlung der Unterschriften der Teilnehmenden dieser Veranstaltung</description>
+    <exportFilename>unterschriften.docx</exportFilename>
+</config>
