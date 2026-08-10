@@ -56,6 +56,9 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::VERSION                   => 3,
         self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
+        self::CONTAINER_PROPERTY        => 'container_id',
+        self::CONTAINER_NAME            => 'Area of responsibility',
+        self::CONTAINERS_NAME           => 'Area of responsibilities', // ngettext('Area of responsibility', 'Area of responsibilities', n)
         self::TITLE_PROPERTY            => 'name',
         self::HAS_RELATIONS             => true,
         self::HAS_CUSTOM_FIELDS         => true,
