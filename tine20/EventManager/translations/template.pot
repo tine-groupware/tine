@@ -677,6 +677,11 @@ msgstr ""
 msgid "GENDER_Event"
 msgstr ""
 
+msgid "Area of responsibility"
+msgid_plural "Area of responsibilities"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "Subheading"
 msgstr ""
 
