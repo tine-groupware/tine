@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -89,10 +89,7 @@ class Tinebase_Model_Filter_Tag extends Tinebase_Model_Filter_Abstract
         
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_options['applicationName']);
 
-        $correlationName = Tinebase_Record_Abstract::generateUID(5) . ((is_array($tagIds) === true)
-                ? implode(',', $tagIds) : $tagIds) . 'tag';
-        // per left join we add a tag column named as the tag and filter this joined column
-        // NOTE: we name the column we join like the tag, to be able to join multiple tag criteria (multiple invocations of this function)
+        $correlationName = Tinebase_Record_Abstract::generateUID(20) . 'tag';
         $_select->joinLeft(
             /* what */    array($correlationName => SQL_TABLE_PREFIX . 'tagging'), 
             /* on   */    $db->quoteIdentifier("{$correlationName}.record_id") . " = $idProperty " .
