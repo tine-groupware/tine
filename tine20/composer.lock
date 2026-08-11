@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "62c089ff0aaf82d3da45caaadb088d12",
+    "content-hash": "7f904a459af7faa5d9a52eeefc566585",
     "packages": [
         {
             "name": "antibodies-online/bootstrap-email",
