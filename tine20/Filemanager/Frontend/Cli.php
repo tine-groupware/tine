@@ -33,7 +33,93 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         print_r($data);
 
         return 0;
+    }
 
+    public function createBackup($opt): int
+    {
+        $echoUsage = function() {
+            echo 'usage: --method=Filemanager.createBackup -- type={dump|symlink|zip} out={targetDir|targetFile} [src={filemanager path}]' . PHP_EOL;
+        };
+        try {
+            $args = $this->_parseArgs($opt, ['type', 'out']);
+        } catch (Tinebase_Exception_InvalidArgument) {
+            $echoUsage();
+            return 1;
+        }
+
+        $fs = Tinebase_FileSystem::getInstance();
+
+        if ($args['src'] ?? false) {
+            $srcPaths = [$cutoffPath = Filemanager_Controller_Node::getInstance()->addBasePath(rtrim($args['src'], DIRECTORY_SEPARATOR))];
+        } else {
+            $cutoffPath = $fs->getApplicationBasePath(Filemanager_Config::APP_NAME) . '/folders';
+            $srcPaths = [
+                $cutoffPath . DIRECTORY_SEPARATOR . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL,
+                $cutoffPath . DIRECTORY_SEPARATOR . Tinebase_FileSystem::FOLDER_TYPE_SHARED,
+            ];
+        }
+        $cutoffLen = strlen($cutoffPath);
+
+        switch ($args['type']) {
+            case 'dump':
+                $out = rtrim($args['out'], DIRECTORY_SEPARATOR);
+                foreach ($srcPaths as $srcPath) {
+                    $rootNodeId = $fs->stat($srcPath);
+                    $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($out, $cutoffLen, $fs): bool {
+                        $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                            mkdir($out . $path, recursive: true);
+                        } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
+                            copy($fs->getRealPathForHash($node->hash), $out . $path);
+                        }
+                        return true;
+                    });
+                }
+                break;
+
+            case 'symlink':
+                $out = rtrim($args['out'], DIRECTORY_SEPARATOR);
+                foreach ($srcPaths as $srcPath) {
+                    $rootNodeId = $fs->stat($srcPath);
+                    $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($out, $cutoffLen, $fs): bool {
+                        $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                            mkdir($out . $path, recursive: true);
+                        } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
+                            symlink($fs->getRealPathForHash($node->hash), $out . $path);
+                        }
+                        return true;
+                    });
+                }
+                break;
+
+            case 'zip':
+                $zipOptions = new \ZipStream\Option\Archive();
+                $zipOptions->setOutputStream(fopen($args['out'], 'wb'));
+                $zip = new ZipStream\ZipStream(opt: $zipOptions);
+                foreach ($srcPaths as $srcPath) {
+                    $rootNodeId = $fs->stat($srcPath);
+                    $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($zip, $cutoffLen, $fs): bool {
+                        if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
+                            $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                            if ($fh = fopen($fs->getRealPathForHash($node->hash), 'rb')) {
+                                $zip->addFileFromStream($path, $fh);
+                                fclose($fh);
+                            }
+                        }
+                        return true;
+                    });
+                }
+                $zip->finish();
+                fclose($zipOptions->getOutputStream());
+                break;
+
+            default:
+                $echoUsage();
+                return 1;
+        }
+
+        return 0;
     }
 
     /**
