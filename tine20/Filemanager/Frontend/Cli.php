@@ -94,9 +94,7 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 break;
 
             case 'zip':
-                $zipOptions = new \ZipStream\Option\Archive();
-                $zipOptions->setOutputStream(fopen($args['out'], 'wb'));
-                $zip = new ZipStream\ZipStream(opt: $zipOptions);
+                $zip = new ZipStream\ZipStream(outputStream: $fh = fopen($args['out'], 'wb'));
                 foreach ($srcPaths as $srcPath) {
                     $rootNodeId = $fs->stat($srcPath);
                     $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($zip, $cutoffLen, $fs): bool {
@@ -111,7 +109,7 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     });
                 }
                 $zip->finish();
-                fclose($zipOptions->getOutputStream());
+                fclose($fh);
                 break;
 
             default:
