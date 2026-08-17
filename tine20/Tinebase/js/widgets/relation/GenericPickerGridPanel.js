@@ -295,7 +295,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      */
     getViewRowClass: function(record, index, rowParams, store) {
         var relatedModel = record.get('related_model').split('_Model_');
-            relatedModel = Tine[relatedModel[0]].Model ? Tine[relatedModel[0]].Model[relatedModel[1]] : null;
+            relatedModel = Tine[relatedModel[0]] && Tine[relatedModel[0]].Model ? Tine[relatedModel[0]].Model[relatedModel[1]] : null;
         
         var ownModel = record.get('own_model').split('_Model_');
             ownModel = Tine[ownModel[0]].Model ? Tine[ownModel[0]].Model[ownModel[1]] : null;
@@ -755,6 +755,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         }
         var split = relm.split('_Model_'); 
         var recordClass = Tine[split[0]].Model[split[1]];
+        if (! recordClass) {
+            return '';
+        }
         var record = Tine.Tinebase.data.Record.setFromJson(recData, recordClass);
         var result = '';
         if (recData) {
