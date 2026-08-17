@@ -26,7 +26,6 @@ see https://agents.md/
 | `docs/` | MkDocs documentation (developers, operators, admins) |
 | `scripts/` | Packaging, Ansible, git hooks, utilities |
 | `ci/` | GitLab CI definitions |
-| `.junie/` | Junie agent notes; `memory/` and `plans/` are local-only (gitignored) |
 | `.github/workflows/` | GitHub Actions (PHPUnit on PRs) |
 
 PHP class naming follows `{App}_{Layer}_{Name}` (e.g. `Calendar_Controller_Event`, `Addressbook_Model_Contact`). Tests use the same prefix with a `Test` suffix (e.g. `Admin_Controller_SchedulerTaskTest`).
@@ -182,7 +181,6 @@ Edit with poedit, then remove line numbers: `./console src:langHelper -- '-u -l 
 ## Files agents should respect
 
 - **`.aiignore`** (also **`.cursorignore`**): same syntax as `.gitignore` — excludes noisy paths (logs, `scripts/sql`, large mail test fixtures). Do not assume ignored paths are safe to skip for *security*; they are mainly for context size.
-- **`.junie/`**: project-specific agent notes; `memory/` and `plans/` are developer-local.
 
 ## Agent workflow checklist
 
