@@ -261,7 +261,7 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
 
     // private
     beforeMoreShow : function(m){
-        var h = this.hiddens,
+        var h = m.showAll ? this.container.items.items : this.hiddens,
             len = h.length,
             c,
             prev,
