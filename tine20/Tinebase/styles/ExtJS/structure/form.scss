@@ -9,7 +9,7 @@
     margin: 0 0 0 0;
 }
 
-:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea)):focus-visible {
+:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus-visible {
   outline: none !important;
   clip-path: none !important;
   position: relative !important;
@@ -19,7 +19,7 @@
   position: absolute !important;
 }
 
-:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea )):focus-visible::after {
+:where(*:not(html, body, .x-viewport, .x-body, .modal, input, textarea, .x-grid3-focus)):focus-visible::after {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
