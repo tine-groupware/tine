@@ -1,14 +1,13 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Tinebase
  * @subpackage  Frontend
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
-use Firebase\JWT\JWT;
 
 /**
  * cli server
@@ -1583,6 +1582,65 @@ fi';
         }
         echo $message . "\n";
         return $result;
+    }
+
+    /**
+     * nagios monitoring for disk usage
+     *
+     * @return integer
+     * @todo allow to configure df mountpoint(s) to be checked (or use tine filesdir by default)
+     * @todo allow to configure thresholds
+     * @todo check write to tempdir (CRIT if fails)
+     * @todo add to health/status info
+     */
+    public function monitoringCheckDiskUsage()
+    {
+        $result = 0;
+
+        exec('df /', $output, $returnCode);
+        if ($returnCode !== 0) {
+            $message = 'DISK UNKNOWN: failed to execute df';
+            $this->_logMonitoringResult(1, $message);
+            echo $message . "\n";
+            return 1;
+        }
+
+        $usagePercent = $this->_parseDiskUsageFromDfOutput($output);
+
+        if ($usagePercent === null) {
+            $message = 'DISK UNKNOWN: could not parse df output';
+            $this->_logMonitoringResult(1, $message);
+            echo $message . "\n";
+            return 1;
+        }
+
+        if ($usagePercent >= 99) {
+            $result = 2;
+            $message = 'DISK CRIT: ' . $usagePercent . '% used';
+        } elseif ($usagePercent >= 90) {
+            $result = 1;
+            $message = 'DISK WARN: ' . $usagePercent . '% used';
+        } else {
+            $message = 'DISK OK: ' . $usagePercent . '% used';
+        }
+
+        $this->_logMonitoringResult($result, $message);
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * @param array $dfOutput
+     * @return int|null
+     */
+    protected function _parseDiskUsageFromDfOutput(array $dfOutput)
+    {
+        foreach ($dfOutput as $line) {
+            if (preg_match('/\s+(\d+)%\s+\/$/', $line, $matches)) {
+                return (int) $matches[1];
+            }
+        }
+        return null;
     }
 
     /**
