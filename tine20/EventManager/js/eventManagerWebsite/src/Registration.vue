@@ -34,7 +34,7 @@
             {{formatMessage('Participant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedParticipant }">▼</span>
           </h4>
           <b-collapse visible id="collapse-1">
-            <template v-for="fieldName in visibleContactFields" :key="fieldName">
+            <template v-for="fieldName in visibleParticipantContactFields" :key="fieldName">
               <b-form-group
                 label-cols-sm="4"
                 label-cols-lg="3"
@@ -48,7 +48,7 @@
                   v-model="contactDetails[fieldName]"
                   v-bind="contactFieldConfig[fieldName]?.props?.()"
                   :class="{
-                    'required-field-error': requiredContactFields.includes(fieldName) && validationErrors.includes(fieldName)
+                    'required-field-error': requiredParticipantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
                   }"
                 />
               </b-form-group>
@@ -187,13 +187,13 @@
                 {{formatMessage('Registrant Information:')}} <span class="chevron" :class="{ 'rotated': !isCollapsedRegistrant }">▼</span>
               </h4>
               <b-collapse visible id="collapse-3">
-                <template v-for="fieldName in visibleContactFields" :key="fieldName">
+                <template v-for="fieldName in visibleRegistrantContactFields" :key="fieldName">
                   <b-form-group
                     label-cols-sm="4"
                     label-cols-lg="3"
                     content-cols-sm
                     content-cols-lg="7"
-                    :label="registrationContactFields[fieldName].label + (requiredContactFields.includes(fieldName) ? ' *' : '')"
+                    :label="registrationRegistrantContactFields[fieldName].label + (requiredRegistrantContactFields.includes(fieldName) ? ' *' : '')"
                     class="mb-3"
                   >
                     <component
@@ -201,7 +201,7 @@
                       v-model="registrantDetails[fieldName]"
                       v-bind="contactFieldConfig[fieldName]?.props?.()"
                       :class="{
-                    'required-field-error': requiredContactFields.includes(fieldName) && validationErrors.includes(fieldName)
+                    'required-field-error': requiredRegistrantContactFields.includes(fieldName) && validationErrors.includes(fieldName)
                   }"
                     />
                   </b-form-group>
@@ -301,8 +301,10 @@ const hasConsent = ref(false);
 const dependantParticipants = ref(null);
 const registrations = ref(null);
 const accountOwner = ref(null);
-const registrationContactFields = ref([]);
-const requiredContactFields = ref([]);
+const registrationParticipantContactFields = ref([]);
+const requiredParticipantContactFields = ref([]);
+const registrationRegistrantContactFields = ref([]);
+const requiredRegistrantContactFields = ref([]);
 
 const eventDetails = ref({
   name: "",
@@ -327,25 +329,28 @@ const eventDetails = ref({
 });
 
 const getParticipantFieldLabel = (fieldName) => {
-  const baseLabel = registrationContactFields.value[fieldName].label;
+  const baseLabel = registrationParticipantContactFields.value[fieldName].label;
   const participantSuffix = isRegistrant.value ? ` (${formatMessage('participant')})` : '';
-  const requiredSuffix = requiredContactFields.value.includes(fieldName) ? '*' : '';
+  const requiredSuffix = requiredParticipantContactFields.value.includes(fieldName) ? '*' : '';
 
   return `${baseLabel}${participantSuffix}${requiredSuffix}`;
 };
 
-const emptyContactDetails = () => {
+const emptyFieldsFrom = (fieldsRef) => {
   const details = {};
-  if (registrationContactFields.value && typeof registrationContactFields.value === 'object') {
-    for (const fieldName of Object.keys(registrationContactFields.value)) {
+  if (fieldsRef && typeof fieldsRef === 'object') {
+    for (const fieldName of Object.keys(fieldsRef)) {
       details[fieldName] = '';
     }
   }
   return details;
 };
 
+const emptyContactDetails = () => emptyFieldsFrom(registrationParticipantContactFields.value);
+const emptyRegistrantDetails = () => emptyFieldsFrom(registrationRegistrantContactFields.value);
+
 const contactDetails = ref(emptyContactDetails());
-const registrantDetails = ref(emptyContactDetails());
+const registrantDetails = ref(emptyRegistrantDetails());
 
 const modal = reactive({
   show: false,
@@ -520,7 +525,7 @@ const initializeFormForScenario = async (scenario, participantId) => {
 
 const resetFormState = () => {
   contactDetails.value = emptyContactDetails();
-  registrantDetails.value = emptyContactDetails();
+  registrantDetails.value = emptyRegistrantDetails();
   isRegistrant.value = false;
   shouldShowRegistrantCheckbox.value = true;
   showRegisteredContactAlert.value = false;
@@ -857,8 +862,7 @@ const contactFieldOrder = [
   'adr_one_locality', 'adr_one_region', 'adr_one_countryname'
 ];
 
-const visibleContactFields = computed(() => {
-  const fields = registrationContactFields.value;
+const getVisibleContactFields = (fields) => {
   if (!fields) return [];
 
   const enabledFields = Object.keys(fields).filter(
@@ -874,16 +878,27 @@ const visibleContactFields = computed(() => {
     if (indexB === -1) return -1;
     return indexA - indexB;
   });
+};
+
+const visibleParticipantContactFields = computed(() => {
+  return getVisibleContactFields(registrationParticipantContactFields.value);
+});
+
+const visibleRegistrantContactFields = computed(() => {
+  return getVisibleContactFields(registrationRegistrantContactFields.value);
 });
 
 const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
-  const missingFields = _.filter(requiredContactFields.value, field =>
-    _.isEmpty((_.get(contactDetails.value, field) ?? '').toString().trim())
-  );
-  errors.push(...missingFields);
+  const getMissingFields = (requiredFields) =>
+    _.filter(requiredFields, field =>
+      _.isEmpty((_.get(contactDetails.value, field) ?? '').toString().trim())
+    );
+
+  errors.push(...getMissingFields(requiredParticipantContactFields.value));
+  errors.push(...getMissingFields(requiredRegistrantContactFields.value));
 
   const email = _.get(contactDetails.value, 'email', '').trim();
   if (email && !isValidEmail(email)) {
@@ -1307,8 +1322,10 @@ const fetchEvent = async () => {
   });
   const data = await response.json();
   eventDetails.value = data;
-  registrationContactFields.value = data.contact_fields;
-  requiredContactFields.value = data.required_contact_fields;
+  registrationParticipantContactFields.value = data.participant_contact_fields;
+  requiredParticipantContactFields.value = data.required_participant_contact_fields;
+  registrationRegistrantContactFields.value = data.registrant_contact_fields;
+  requiredRegistrantContactFields.value = data.required_registrant_contact_fields;
   if (data.country_list) {
     countries.value = data.country_list.map(c => ({
       value: c.shortName,

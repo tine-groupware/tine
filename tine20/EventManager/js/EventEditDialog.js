@@ -14,6 +14,30 @@ import formatAddress from "util/postalAddressFormater";
 
 Ext.namespace('Tine.EventManager');
 
+const CONTACT_FIELDS_SHARED_CONFIG = {
+    unwantedFields: ['account_id', 'color', 'groups', 'language', 'org_unit', 'pubkey',
+        'syncBackendIds', 'tel_other', 'tel_pager_normalized', 'type',
+        'tel_cell_private_normalized', 'tel_fax_home_normalized', 'cat_id',
+        'GDPR_DataEditingReason', 'customfields', 'attachments', 'creation_time',
+        'last_modified', 'deleted_by', 'is_deleted', 'deleted_time',
+        'adr_one_lon', 'adr_one_lat', 'adr_two_lon', 'adr_two_lat',
+        'calendar_uri', 'groups_diff', 'note', 'paths', 'tel_prefer',
+        'tel_other_normalized', 'tel_home_normalized', 'sites',
+        'GDPR_DataProvenance', 'GDPR_DataIntendedPurposeRecord', 'relations',
+        'xprops', 'last_modified_by', 'freebusy_uri', 'preferred_address',
+        'room', 'tel_car', 'tel_assistent_normalized', 'tel_prefer_normalized',
+        'tel_cell_normalized', 'tel_work_normalized', 'tel_fax_normalized',
+        'ical_fb_urls', 'GDPR_DataExpiryDate', 'container_id', 'notes',
+        'last_modified_time', 'assistent', 'geo', 'tel_car_normalized',
+        'label', 'id', 'matrix_id', 'GDPR_Blacklist', 'tags', 'created_by',
+        'seq', 'test'],
+    defaultCheckedFields: ['n_given', 'n_middle', 'n_family', 'bday', 'email',
+        'tel_cell', 'tel_work', 'adr_one_street', 'adr_one_street2',
+        'adr_one_postalcode', 'adr_one_locality', 'adr_one_region',
+        'adr_one_countryname'],
+    defaultRequiredFields: ['n_given', 'n_family', 'email'],
+};
+
 Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'EventManager',
     modelName: 'Event',
@@ -21,6 +45,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1050,
 
     windowNamePrefix: 'EventEditWindow_',
+    showContainerSelector: true,
 
     optionTemplates: [
         // Verpflegung
@@ -437,36 +462,29 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
                 ]
             }, {
-                title: this.app.i18n._('Registration Contact Fields'),
+                title: this.app.i18n._('Registration Participant Fields'),
                 autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'form',
                 items: [
                     new ContactFieldsFieldset({
-                        title: this.app.i18n._('Contact Fields'),
-                        name: 'contact_fields',
-                        unwantedFields: ['account_id', 'color', 'groups', 'language', 'org_unit', 'pubkey',
-                            'syncBackendIds', 'tel_other', 'tel_pager_normalized', 'type',
-                            'tel_cell_private_normalized', 'tel_fax_home_normalized', 'cat_id',
-                            'GDPR_DataEditingReason', 'customfields', 'attachments', 'creation_time',
-                            'last_modified', 'deleted_by', 'is_deleted', 'deleted_time',
-                            'adr_one_lon', 'adr_one_lat', 'adr_two_lon', 'adr_two_lat',
-                            'calendar_uri', 'groups_diff', 'note', 'paths', 'tel_prefer',
-                            'tel_other_normalized', 'tel_home_normalized', 'sites',
-                            'GDPR_DataProvenance', 'GDPR_DataIntendedPurposeRecord', 'relations',
-                            'xprops', 'last_modified_by', 'freebusy_uri', 'preferred_address',
-                            'room', 'tel_car', 'tel_assistent_normalized', 'tel_prefer_normalized',
-                            'tel_cell_normalized', 'tel_work_normalized', 'tel_fax_normalized',
-                            'ical_fb_urls', 'GDPR_DataExpiryDate', 'container_id', 'notes',
-                            'last_modified_time', 'assistent', 'geo', 'tel_car_normalized',
-                            'label', 'id', 'matrix_id', 'GDPR_Blacklist', 'tags', 'created_by',
-                            'seq', 'test'],
-                        defaultCheckedFields: ['n_given', 'n_middle', 'n_family', 'bday', 'email',
-                            'tel_cell', 'tel_work', 'adr_one_street', 'adr_one_street2',
-                            'adr_one_postalcode', 'adr_one_locality', 'adr_one_region',
-                            'adr_one_countryname'],
-                        defaultRequiredFields: ['n_given','n_family', 'email'],
+                        title: this.app.i18n._('Participant Contact Fields'),
+                        name: 'participant_contact_fields',
+                        ...CONTACT_FIELDS_SHARED_CONFIG,
+                    })
+                ]
+            }, {
+                title: this.app.i18n._('Registration Registrant Fields'),
+                autoScroll: true,
+                border: false,
+                frame: true,
+                layout: 'form',
+                items: [
+                    new ContactFieldsFieldset({
+                        title: this.app.i18n._('Registrant Fields'),
+                        name: 'registrant_contact_fields',
+                        ...CONTACT_FIELDS_SHARED_CONFIG,
                     })
                 ]
             }, new Tine.widgets.activities.ActivitiesTabPanel({

@@ -220,7 +220,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_TOTAL_PLACES                  => 39,
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_OPTIONS                       => [
                 [
                     EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
@@ -326,7 +327,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -372,7 +374,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -406,7 +409,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -439,7 +443,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -465,7 +470,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -496,7 +502,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -525,7 +532,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
             EventManager_Model_Event::FLD_OPTIONS                       => [],
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_REGISTRATIONS                 => [],
             EventManager_Model_Event::FLD_APPOINTMENTS                  => [],
             EventManager_Model_Event::FLD_DESCRIPTION                   => [[
@@ -560,7 +568,8 @@ class EventManager_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             EventManager_Model_Event::FLD_TOTAL_PLACES                  => 20,
             EventManager_Model_Event::FLD_BOOKED_PLACES                 => '',
             EventManager_Model_Event::FLD_AVAILABLE_PLACES              => '',
-            EventManager_Model_Event::FLD_CONTACT_FIELDS                => $defaultContactFields,
+            EventManager_Model_Event::FLD_PARTICIPANT_CONTACT_FIELDS    => $defaultContactFields,
+            EventManager_Model_Event::FLD_REGISTRANT_CONTACT_FIELDS     => $defaultContactFields,
             EventManager_Model_Event::FLD_OPTIONS                       => [
                 [
                     EventManager_Model_Option::FLD_NAME_OPTION => 'Erwachsene',
