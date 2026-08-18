@@ -253,11 +253,17 @@ msgstr "Multi-appointment"
 msgid "Appointments"
 msgstr "Appointments"
 
-msgid "Registration Contact Fields"
-msgstr "Registration Contact Fields"
+msgid "Registration Participant Fields"
+msgstr "Registration Participant Fields"
 
-msgid "Contact Fields"
-msgstr "Contact Fields"
+msgid "Participant Contact Fields"
+msgstr "Participant Contact Fields"
+
+msgid "Registration Registrant Fields"
+msgstr "Registration Registrant Fields"
+
+msgid "Registrant Fields"
+msgstr "Registrant Fields"
 
 msgid "Waiting List"
 msgstr "Waiting List"
@@ -714,6 +720,9 @@ msgstr "Event Appointments"
 
 msgid "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
 msgstr "Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant"
+
+msgid "Registrant Contact Fields"
+msgstr "Registrant Contact Fields"
 
 msgid "Images"
 msgstr "Images"
