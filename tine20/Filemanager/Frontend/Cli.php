@@ -37,6 +37,8 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     public function createBackup($opt): int
     {
+        $this->_checkAdminRight();
+
         $echoUsage = function() {
             echo 'usage: --method=Filemanager.createBackup -- type={dump|symlink|zip} out={targetDir|targetFile} [src={filemanager path}]' . PHP_EOL;
         };
@@ -66,12 +68,17 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 foreach ($srcPaths as $srcPath) {
                     $rootNodeId = $fs->stat($srcPath);
                     $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($out, $cutoffLen, $fs): bool {
-                        $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
-                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                            mkdir($out . $path, recursive: true);
-                        } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
-                            copy($fs->getRealPathForHash($node->hash), $out . $path);
+                        if ($node->is_deleted) {
+                            return false;
                         }
+                        try {
+                            $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                                mkdir($out . $path, recursive: true);
+                            } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
+                                copy($fs->getRealPathForHash($node->hash), $out . $path);
+                            }
+                        } catch (Tinebase_Exception_NotFound) {}
                         return true;
                     });
                 }
@@ -82,28 +89,41 @@ class Filemanager_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 foreach ($srcPaths as $srcPath) {
                     $rootNodeId = $fs->stat($srcPath);
                     $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($out, $cutoffLen, $fs): bool {
-                        $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
-                        if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-                            mkdir($out . $path, recursive: true);
-                        } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
-                            symlink($fs->getRealPathForHash($node->hash), $out . $path);
+                        if ($node->is_deleted) {
+                            return false;
                         }
+                        try {
+                            $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                            if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
+                                mkdir($out . $path, recursive: true);
+                            } elseif (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type && $hashPath = $fs->getRealPathForHash($node->hash)) {
+                                symlink($hashPath, $out . $path);
+                            }
+                        } catch (Tinebase_Exception_NotFound) {}
                         return true;
                     });
                 }
                 break;
 
             case 'zip':
-                $zip = new ZipStream\ZipStream(outputStream: $fh = fopen($args['out'], 'wb'));
+                if (!($fh = fopen($args['out'], 'wb'))) {
+                    throw new Tinebase_Exception('Unable to open for writing: ' . $args['out']);
+                }
+                $zip = new ZipStream\ZipStream(outputStream: $fh);
                 foreach ($srcPaths as $srcPath) {
                     $rootNodeId = $fs->stat($srcPath);
                     $fs->walkNodeTree($rootNodeId->getId(), function (Tinebase_Model_Tree_Node $node) use ($zip, $cutoffLen, $fs): bool {
+                        if ($node->is_deleted) {
+                            return false;
+                        }
                         if (Tinebase_Model_Tree_FileObject::TYPE_FILE === $node->type) {
-                            $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
-                            if ($fh = fopen($fs->getRealPathForHash($node->hash), 'rb')) {
-                                $zip->addFileFromStream($path, $fh);
-                                fclose($fh);
-                            }
+                            try {
+                                $path = substr($fs->getPathOfNode($node, true, true), $cutoffLen);
+                                if (($hashPath = $fs->getRealPathForHash($node->hash)) && $fh = fopen($hashPath, 'rb')) {
+                                    $zip->addFileFromStream($path, $fh);
+                                    fclose($fh);
+                                }
+                            } catch (Tinebase_Exception_NotFound) {}
                         }
                         return true;
                     });
