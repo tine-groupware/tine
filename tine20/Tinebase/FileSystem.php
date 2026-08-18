@@ -3449,7 +3449,7 @@ class Tinebase_FileSystem implements
     {
         $hasPermission = false;
         $user = Tinebase_Core::getUser();
-        if (!$user) {
+        if (!$user instanceof Tinebase_Model_User) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                     . __LINE__ . ' No user set ... we might be in setup - skip acl check');

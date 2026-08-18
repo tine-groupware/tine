@@ -1,11 +1,11 @@
 <?php
-
 /**
- * Tine 2.0 - http://www.tine20.org
- * 
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     Tinebase
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @subpackage  Frontend
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2010-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -800,5 +800,59 @@ class Tinebase_Frontend_CliTest extends TestCase
         self::assertStringContainsString("SENTRY WARN", $out);
 
         // TODO mock sentry call to make check go "SENTRY OK"
+    }
+
+    public function testMonitoringCheckDiskUsageMockedDf()
+    {
+        $cli = new Tinebase_Frontend_Cli_Mock();
+        // Test OK (usage < 90%)
+        $mockOutput = [
+            'Filesystem     1K-blocks    Used Available Use% Mounted on',
+            '/dev/sda1      100000000 45000000  55000000  45% /',
+        ];
+        $result = $cli->monitoringCheckDiskUsageMock($mockOutput);
+        self::assertEquals(0, $result);
+
+        // Test WARN (usage >= 90% and < 99%)
+        $mockOutput = [
+            'Filesystem     1K-blocks    Used Available Use% Mounted on',
+            '/dev/sda1      100000000 92000000   8000000  92% /',
+        ];
+        $result = $cli->monitoringCheckDiskUsageMock($mockOutput);
+        self::assertEquals(1, $result);
+
+        // Test CRIT (usage >= 99%)
+        $mockOutput = [
+            'Filesystem     1K-blocks    Used Available Use% Mounted on',
+            '/dev/sda1      100000000 99500000   5000000  99% /',
+        ];
+        $result = $cli->monitoringCheckDiskUsageMock($mockOutput);
+        self::assertEquals(2, $result);
+
+        // Test exact 90% boundary (should be WARN)
+        $mockOutput = [
+            'Filesystem     1K-blocks    Used Available Use% Mounted on',
+            '/dev/sda1      100000000 90000000  10000000  90% /',
+        ];
+        $result = $cli->monitoringCheckDiskUsageMock($mockOutput);
+        self::assertEquals(1, $result);
+
+        // Test exact 99% boundary (should be CRIT)
+        $mockOutput = [
+            'Filesystem     1K-blocks    Used Available Use% Mounted on',
+            '/dev/sda1      100000000 99000000   1000000  99% /',
+        ];
+        $result = $cli->monitoringCheckDiskUsageMock($mockOutput);
+        self::assertEquals(2, $result);
+    }
+
+    public function testMonitoringCheckDiskUsageRealDf()
+    {
+        Tinebase_Core::setLocale('en');
+        ob_start();
+        $result = $this->_cli->monitoringCheckDiskUsage();
+        $out = ob_get_clean();
+        self::assertEquals(0, $result);
+        self::assertStringContainsString("DISK OK", $out);
     }
 }
