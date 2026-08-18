@@ -584,32 +584,17 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
                 }
             }
 
-            if (!empty($eventArray['contact_fields']) && is_array($eventArray['contact_fields'])) {
-                $contactModelConfig = Addressbook_Model_Contact::getConfiguration();
-                $fields = $contactModelConfig->getFields();
+            $eventArray = $this->_enrichContactFields(
+                $eventArray,
+                'participant_contact_fields',
+                'required_participant_contact_fields'
+            );
+            $eventArray = $this->_enrichContactFields(
+                $eventArray,
+                'registrant_contact_fields',
+                'required_registrant_contact_fields'
+            );
 
-                $enriched = [];
-                $requiredContactFields = [];
-                foreach ($eventArray['contact_fields'] as $fieldName => $fieldConfig) {
-                    $optional = isset($fieldConfig['optional']) ? (bool)$fieldConfig['optional'] : false;
-                    $required = isset($fieldConfig['required']) ? (bool)$fieldConfig['required'] : false;
-
-                    $enriched[$fieldName] = [
-                        'optional' => $optional,
-                        'required' => $required,
-                        'label'    => isset($fields[$fieldName]['label'])
-                            ? Tinebase_Translation::getTranslation('Addressbook')
-                                ->translate($fields[$fieldName]['label'])
-                            : $fieldName,
-                    ];
-
-                    if ($required) {
-                        $requiredContactFields[] = $fieldName;
-                    }
-                }
-                $eventArray['contact_fields'] = $enriched;
-                $eventArray['required_contact_fields'] = $requiredContactFields;
-            }
             $eventArray['country_list'] = Tinebase_Translation::getCountryList()['results'];
 
             if (!empty($eventArray['options'])) {
@@ -634,6 +619,41 @@ class EventManager_Controller_Event extends Tinebase_Controller_Record_Abstract
             $assertAclUsage();
         }
         return $response;
+    }
+
+    protected function _enrichContactFields(array $eventArray, string $fieldsKey, string $requiredKey): array
+    {
+        if (empty($eventArray[$fieldsKey]) || !is_array($eventArray[$fieldsKey])) {
+            return $eventArray;
+        }
+
+        $contactModelConfig = Addressbook_Model_Contact::getConfiguration();
+        $fields = $contactModelConfig->getFields();
+
+        $enriched = [];
+        $requiredFields = [];
+        foreach ($eventArray[$fieldsKey] as $fieldName => $fieldConfig) {
+            $optional = isset($fieldConfig['optional']) ? (bool)$fieldConfig['optional'] : false;
+            $required = isset($fieldConfig['required']) ? (bool)$fieldConfig['required'] : false;
+
+            $enriched[$fieldName] = [
+                'optional' => $optional,
+                'required' => $required,
+                'label'    => isset($fields[$fieldName]['label'])
+                    ? Tinebase_Translation::getTranslation('Addressbook')
+                        ->translate($fields[$fieldName]['label'])
+                    : $fieldName,
+            ];
+
+            if ($required) {
+                $requiredFields[] = $fieldName;
+            }
+        }
+
+        $eventArray[$fieldsKey] = $enriched;
+        $eventArray[$requiredKey] = $requiredFields;
+
+        return $eventArray;
     }
 
     public function publicApiGetAccountDetails($token)

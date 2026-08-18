@@ -41,7 +41,11 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_REGISTRATION_POSSIBLE_UNTIL = 'registration_possible_until';
     public const FLD_REGISTER_OTHERS = 'register_others';
-    public const FLD_CONTACT_FIELDS = 'contact_fields';
+    public const FLD_PARTICIPANT_CONTACT_FIELDS = 'participant_contact_fields';
+
+    public const FLD_REGISTRANT_CONTACT_FIELDS = 'registrant_contact_fields';
+
+    public const FLD_CONTAINER_ID = 'container_id';
     public const FLD_IMAGES = 'images';
 
     const MODEL_NAME_PART = 'Event';
@@ -56,7 +60,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::VERSION                   => 3,
         self::RECORD_NAME               => 'Event', // gettext('GENDER_Event')
         self::RECORDS_NAME              => 'Events', // ngettext('Event', 'Events', n)
-        self::CONTAINER_PROPERTY        => 'container_id',
+        self::CONTAINER_PROPERTY        => self::FLD_CONTAINER_ID,
         self::CONTAINER_NAME            => 'Area of responsibility',
         self::CONTAINERS_NAME           => 'Area of responsibilities', // ngettext('Area of responsibility', 'Area of responsibilities', n)
         self::TITLE_PROPERTY            => 'name',
@@ -79,7 +83,9 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
             self::INDEXES => [
-
+                self::FLD_CONTAINER_ID          => [
+                    self::COLUMNS                   => [self::FLD_CONTAINER_ID]
+                ],
             ],
         ],
 
@@ -354,8 +360,18 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 self::DESCRIPTION       => 'Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant',
                 // _('Decide if a person is allowed to register another in this event. Dependants are those register in the Addressbook as parents/kids/partners of the registrant')
             ],
-            self::FLD_CONTACT_FIELDS       => [
-                self::LABEL                 => 'Contact Fields', //_('Contact Fields')
+            self::FLD_PARTICIPANT_CONTACT_FIELDS       => [
+                self::LABEL                 => 'Participant Contact Fields', //_('Participant Contact Fields')
+                self::TYPE                  => self::TYPE_JSON,
+                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
+                self::NULLABLE              => true,
+                self::UI_CONFIG     => [
+                    self::DISABLED                      => true,
+                ],
+            ],
+            self::FLD_REGISTRANT_CONTACT_FIELDS       => [
+                self::LABEL                 => 'Registrant Contact Fields', //_('Registrant Contact Fields')
                 self::TYPE                  => self::TYPE_JSON,
                 self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS         => [Zend_Filter_Empty::class => null],
