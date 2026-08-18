@@ -5330,7 +5330,7 @@ class Tinebase_FileSystem implements
                 $paths[] = [
                     'path' => $filePath,
                     'statpath' => $pathRecord->statpath,
-                    'created_by' => $createdBy['accountEmailAddress'],
+                    'created_by' => is_scalar($createdBy) ? $createdBy : $createdBy['accountEmailAddress'],
                 ];
             }
 
