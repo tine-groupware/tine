@@ -71,22 +71,10 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onRecordLoad: function () {
-        this.supr().onRecordLoad.apply(this, arguments);
-
-        if (this.record.id === null || this.record.phantom) {
-            const optionsField = this.form.findField('options');
-            if (optionsField && optionsField.store.getCount() === 0) {
-                this._applyOptionTemplates(optionsField);
-            }
+        if ((this.record.id === null || this.record.phantom) && !this.record.get('options')?.length) {
+            this.record.set('options', this.optionTemplates);
         }
-    },
-
-    _applyOptionTemplates: function (optionsField) {
-        const RecordType = optionsField.store.recordType;
-        _.each(this.optionTemplates, function (tpl) {
-            const record = new RecordType(Ext.apply({ id: Ext.id(null, 'new-') }, tpl));
-            optionsField.store.add(record);
-        });
+        this.supr().onRecordLoad.apply(this, arguments);
     },
 
     _applyGroupSortKey: function (record) {
