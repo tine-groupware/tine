@@ -1,13 +1,13 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  *
  * the class provides functions to handle config options
  *
  * @package     Tinebase
  * @subpackage  Config
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo remove all deprecated stuff
@@ -996,6 +996,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const QUOTA_TOTALBYUSERINMB = 'totalByUserInMB';
     public const QUOTA_NOTIFICATION_ADDRESSES = 'quotaNotificationAddresses';
     public const QUOTA_MONITORING = 'quotaMonitoring';
+    public const MONITORING_EMAILS = 'monitoringEmails';
+    public const MONITORING_EMAIL_THRESHOLD = 'monitoringEmailThreshold';
 
     public const TINE20_URL = 'tine20URL';
     public const TINE20_URL_USEFORJSCLIENT = 'tine20URLUseForJSClient';
@@ -3776,18 +3778,40 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::QUOTA_MONITORING => [
                     //_('Quota Monitoring')
-                    'label'                 => 'Quota Monitoring',
+                    self::LABEL => 'Quota Monitoring',
                     //_('Quota Monitoring')
-                    'description'           => 'Quota Monitoring',
-                    'type'                  => self::TYPE_BOOL,
-                    'clientRegistryInclude' => false,
-                    'setByAdminModule'      => false,
-                    'setBySetupModule'      => false,
-                    'default'               => false,
-                    ]
+                    self::DESCRIPTION => 'Quota Monitoring',
+                    self::TYPE => self::TYPE_BOOL,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE => false,
+                    self::SETBYSETUPMODULE => false,
+                    self::DEFAULT_STR => false,
+                ],
             ),
             self::DEFAULT_STR => array(),
         ),
+        self::MONITORING_EMAILS => [
+            //_('Monitoring Emails')
+            self::LABEL => 'Monitoring Emails',
+            //_('Email addresses to send monitoring notifications to')
+            self::DESCRIPTION => 'Email addresses to send monitoring notifications to',
+            self::TYPE => self::TYPE_ARRAY,
+            self::DEFAULT_STR => [],
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+        ],
+        self::MONITORING_EMAIL_THRESHOLD => [
+            //_('Monitoring Emails Threshold')
+            self::LABEL => 'Monitoring Email Threshold',
+            //_('Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)')
+            self::DESCRIPTION => 'Minimum monitoring result level to trigger email notification (0=OK, 1=WARN, 2=CRIT)',
+            self::TYPE => self::TYPE_INT,
+            self::DEFAULT_STR => 2,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE => true,
+            self::SETBYSETUPMODULE => true,
+        ],
         self::TINE20_URL => [
             //_('Tine20 URL')
             self::LABEL => 'Tine20 URL',
@@ -4143,7 +4167,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
                         __METHOD__ . '::' . __LINE__  . ' ' . print_r($definition, true));
                     
-                    if (isset($definition['clientRegistryInclude']) && $definition['clientRegistryInclude'] === true)
+                    if (isset($definition[self::CLIENTREGISTRYINCLUDE]) && $definition[self::CLIENTREGISTRYINCLUDE] === true)
                     {
                         // add definition here till we have a better place
                         try {

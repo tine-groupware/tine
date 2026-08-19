@@ -64,6 +64,8 @@ class Tinebase_Frontend_CliTest extends TestCase
         }
 
         Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, '');
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MONITORING_EMAILS, []);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MONITORING_EMAIL_THRESHOLD, 3);
 
         parent::tearDown();
     }
@@ -761,29 +763,32 @@ class Tinebase_Frontend_CliTest extends TestCase
     public function testMonitoringCheckSentry()
     {
         Tinebase_Core::setLocale('en');
-        ob_start();
-        $result = $this->_cli->monitoringCheckSentry();
-        $out = ob_get_clean();
-        self::assertEquals(0, $result);
-        self::assertEquals("SENTRY INACTIVE\n", $out);
+        $this->_monitoringCheckSentry(0, "SENTRY INACTIVE\n");
 
         // set some dummy sentry url
         Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, 'https://88123ad22cee14899962a6b0edb04d08f@sentry.example.org/2');
-        ob_start();
-        $result = $this->_cli->monitoringCheckSentry();
-        $out = ob_get_clean();
-        self::assertEquals(1, $result);
-        self::assertEquals("SENTRY WARN\n", $out);
+        $this->_monitoringCheckSentry();
 
         // activate sentry - url is still wrong
         Tinebase_Core::setupSentry();
+        $this->_monitoringCheckSentry(1, "SENTRY WARN", false);
+
+        // TODO mock sentry call to make check go "SENTRY OK"
+    }
+
+    protected function _monitoringCheckSentry(int $expectedResult = 1,
+                                              string $expectedString = "SENTRY WARN\n",
+                                              bool $exactMatch = true): void
+    {
         ob_start();
         $result = $this->_cli->monitoringCheckSentry();
         $out = ob_get_clean();
-        self::assertEquals(1, $result);
-        self::assertStringContainsString("SENTRY WARN", $out);
-
-        // TODO mock sentry call to make check go "SENTRY OK"
+        self::assertEquals($expectedResult, $result);
+        if ($exactMatch) {
+            self::assertEquals($expectedString, $out);
+        } else {
+            self::assertStringContainsString($expectedString, $out);
+        }
     }
 
     public function testMonitoringCheckDiskUsageMockedDf()
@@ -838,5 +843,22 @@ class Tinebase_Frontend_CliTest extends TestCase
         $out = ob_get_clean();
         self::assertEquals(0, $result);
         self::assertStringContainsString("DISK OK", $out);
+    }
+
+    public function testLogMonitoringResultWithEmailNotification()
+    {
+        $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct())->toArray();
+        if (empty($smtpConfig)) {
+            $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+
+        // Test: threshold=1, result=1 (WARN) → email sent
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MONITORING_EMAILS, [$this->_personas['sclever']->accountEmailAddress]);
+        Tinebase_Config::getInstance()->set(Tinebase_Config::MONITORING_EMAIL_THRESHOLD, 1);
+
+        self::flushMailer();
+        Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, 'https://88123ad22cee14899962a6b0edb04d08f@sentry.example.org/2');
+        $this->_monitoringCheckSentry();
+        $this->_assertMail('sclever', 'MONITORING ALERT');
     }
 }

@@ -966,6 +966,29 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // just logging
             }
         }
+
+        try {
+            $emails = Tinebase_Config::getInstance()->get(Tinebase_Config::MONITORING_EMAILS, []);
+            $threshold = (int) Tinebase_Config::getInstance()->get(Tinebase_Config::MONITORING_EMAIL_THRESHOLD, 0);
+
+            if (! empty($emails) && $result >= $threshold) {
+                $recipients = [];
+                foreach ($emails as $email) {
+                    $recipients[] = new Addressbook_Model_Contact(['email' => $email], true);
+                }
+
+                Tinebase_Notification::getInstance()->send(
+                    Tinebase_Core::getUser(),
+                    $recipients,
+                    'MONITORING ALERT: ' . $message,
+                    'Result: ' . $result . "\n" . $message
+                );
+            }
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Failed to send monitoring email: ' . $e->getMessage());
+            }
+        }
     }
     
     /**
