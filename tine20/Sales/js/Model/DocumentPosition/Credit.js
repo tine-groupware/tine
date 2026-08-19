@@ -10,9 +10,9 @@ import AbstractMixin from './AbstractMixin'
 
 Ext.ns('Tine.Sales.Model')
 
-Tine.Sales.Model.DocumentPosition_CrediteMixin = {
+Tine.Sales.Model.DocumentPosition_CreditMixin = {
 
 };
 
 // @TODO this should be done by modelConfig!
-_.defaultsDeep(Tine.Sales.Model.DocumentPosition_CrediteMixin, AbstractMixin);
+_.defaultsDeep(Tine.Sales.Model.DocumentPosition_CreditMixin, AbstractMixin);

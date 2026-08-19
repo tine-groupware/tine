@@ -144,6 +144,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Offer::class,
                         Sales_Model_Document_Order::class,
                         Sales_Model_Document_PurchaseInvoice::class,
+                        Sales_Model_Document_Credit::class,
                     ],
                 ],
                 self::VALIDATORS                    => [
@@ -155,6 +156,7 @@ class Sales_Model_Document_DispatchHistory extends Tinebase_Record_NewAbstract
                         Sales_Model_Document_Offer::class,
                         Sales_Model_Document_Order::class,
                         Sales_Model_Document_PurchaseInvoice::class,
+                        Sales_Model_Document_Credit::class,
                     ]],
                 ],
                 self::UI_CONFIG                     => [
