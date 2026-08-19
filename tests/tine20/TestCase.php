@@ -62,7 +62,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     protected $_invalidateRolesCache = false;
     
     /**
-     * test personas (sclever,pwulf,rwright,jmcblack...)
+     * test persona (sclever,pwulf,rwright,jmcblack...) - contains Tinebase_Model_FullUser objects
      * 
      * @var array
      */

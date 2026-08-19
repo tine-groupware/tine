@@ -78,7 +78,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         self::flushMailer();
        
-        $persistentEvent = $this->_eventController->delete($persistentEvent); 
+        $this->_eventController->delete($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
