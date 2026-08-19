@@ -72,6 +72,7 @@ class Sales_Model_Document_Address extends Sales_Model_Address
                     Sales_Model_Document_Offer::class,
                     Sales_Model_Document_Order::class,
                     Sales_Model_Document_PurchaseInvoice::class,
+                    Sales_Model_Document_Credit::class,
                 ],
             ],
             self::LENGTH                => 255,
