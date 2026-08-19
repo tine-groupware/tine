@@ -42,6 +42,10 @@ class Sales_Model_Document_Credit extends Sales_Model_Document_Abstract
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
 
+        // credit recipient type
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_BILLING;
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::UI_CONFIG][self::TYPE] = Sales_Model_Document_Address::TYPE_BILLING;
+
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_DocumentPosition_Credit::MODEL_NAME_PART;
 
