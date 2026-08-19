@@ -8200,16 +8200,16 @@
         },
         {
             "name": "simplesamlphp/saml2-legacy",
-            "version": "v4.19.1",
+            "version": "v4.19.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2-legacy.git",
-                "reference": "a9812c7fc0bb7cee9ce001e8cc94570c37acdfb2"
+                "reference": "7f1217a6296df3a89565ec7cd121bfe2e76e2bdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2-legacy/zipball/a9812c7fc0bb7cee9ce001e8cc94570c37acdfb2",
-                "reference": "a9812c7fc0bb7cee9ce001e8cc94570c37acdfb2",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2-legacy/zipball/7f1217a6296df3a89565ec7cd121bfe2e76e2bdc",
+                "reference": "7f1217a6296df3a89565ec7cd121bfe2e76e2bdc",
                 "shasum": ""
             },
             "require": {
@@ -8218,7 +8218,7 @@
                 "ext-zlib": "*",
                 "php": ">=7.1 || ^8.0",
                 "psr/log": "~1.1 || ^2.0 || ^3.0",
-                "robrichards/xmlseclibs": "^3.1.4",
+                "robrichards/xmlseclibs": "^3.1.5",
                 "webmozart/assert": "^1.9"
             },
             "conflict": {
@@ -8254,9 +8254,9 @@
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
-                "source": "https://github.com/simplesamlphp/saml2-legacy/tree/v4.19.1"
+                "source": "https://github.com/simplesamlphp/saml2-legacy/tree/v4.19.3"
             },
-            "time": "2025-12-08T12:05:03+00:00"
+            "time": "2026-07-06T21:36:01+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
