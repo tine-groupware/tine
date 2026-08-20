@@ -95,6 +95,7 @@ class Tinebase_Frontend_Http_CspRegistryTest extends \PHPUnit\Framework\TestCase
         $csp = $header['Content-Security-Policy'];
 
         $this->assertStringContainsString('https://versioncheck.tine20.net', $csp);
+        $this->assertStringContainsString('https://api.tine20.net', $csp);
         $this->assertStringContainsString(" frame-src 'self' blob:", $csp);
     }
 }

@@ -4265,23 +4265,37 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         $url = $this->get(Tinebase_Config::BROADCASTHUB)->{Tinebase_Config::BROADCASTHUB_URL};
 
         if (!empty($url)) {
-            $parsed = parse_url(rtrim($url, '/'));
-            if ($parsed) {
-                $origin = $parsed['scheme'] . '://' . $parsed['host']
-                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+            $this->_registerOriginFromUrl($url, true);
+        }
 
-                $wsScheme = $parsed['scheme'] === 'https' ? 'wss' : 'ws';
-                $wsOrigin = $wsScheme . '://' . $parsed['host']
-                    . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+        $bugsUrl = $this->get(Tinebase_Config::BRANDING_BUGSURL);
+        if (!empty($bugsUrl)) {
+            $this->_registerOriginFromUrl($bugsUrl, false);
+        }
+    }
 
-                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $origin);
-                Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $wsOrigin);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . ' Broadcasthub URL could not be parsed: ' . $url);
-                }
+    protected function _registerOriginFromUrl(string $url, bool $addWsVariant): void
+    {
+        $parsed = parse_url(rtrim($url, '/'));
+        if (!$parsed || empty($parsed['host'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' URL could not be parsed: ' . $url);
             }
+            return;
+        }
+
+        $scheme = $parsed['scheme'] ?? 'https';
+        $origin = $scheme . '://' . $parsed['host']
+            . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+
+        Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $origin);
+
+        if ($addWsVariant) {
+            $wsScheme = $scheme === 'https' ? 'wss' : 'ws';
+            $wsOrigin = $wsScheme . '://' . $parsed['host']
+                . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+            Tinebase_Frontend_Http_CspRegistry::getInstance()->addSource('connect-src', $wsOrigin);
         }
     }
 }
