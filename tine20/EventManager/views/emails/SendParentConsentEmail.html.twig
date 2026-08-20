@@ -1,0 +1,36 @@
+{#
+available parameters:
+    link
+    app.branding.title
+    contact
+    email
+    event
+    eventName
+    participantName
+#}
+
+{% extends 'Tinebase/views/emails/base.html.twig' %}
+
+{% block subject %}
+    {{ _('Consent needed for event registration') }}
+{% endblock %}
+
+{% block body %}
+    <div class="mt-3 mb-5">
+        <p class="text-start">
+            {{ _('You have received this email because') }} {{ participantName }} {{ _('would like to register for the following event, and has indicated that you are their parent or legal guardian:')}}<br>
+            <strong>{{ eventName }}</strong>
+        </p>
+        <p class="text-start">
+            {{ _('Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below.')}}
+        </p>
+    </div>
+    <div class="ax-center my-5">
+        <a class="btn btn-primary p-2" href="{{ link }}" role="button">{{ _('Confirm consent and complete registration') }}</a>
+    </div>
+    <div class="mt-3 mb-5">
+        <p class="text-start">
+            {{ _('If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required.')}}
+        </p>
+    </div>
+{% endblock %}

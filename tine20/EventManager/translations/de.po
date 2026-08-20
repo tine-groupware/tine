@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-08-19 08:45+0200\n"
+"PO-Revision-Date: 2026-08-25 12:21+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -204,7 +204,7 @@ msgid "List of the languages in which multilingual texts are available."
 msgstr "Liste der Sprachen, in denen mehrsprachige Texte verfügbar sind."
 
 msgid "EVENT SHARED CALENDAR NAME"
-msgstr ""
+msgstr "NAME DES GEMEINSAMEN VERANSTALTUNGSKALENDERS"
 
 msgid "Session"
 msgstr "Sitzung"
@@ -226,6 +226,15 @@ msgstr "Anmeldungen"
 
 msgid "Deregistered"
 msgstr "Abgemeldet"
+
+msgid "Parent or guardian consent is required for participants under 16."
+msgstr "Für Teilnehmende Personen unter 16 Jahren ist die Einwilligung der Eltern oder Erziehungsberechtigten erforderlich."
+
+msgid "This confirmation link is invalid or has expired."
+msgstr "Dieser Bestätigungslink ist ungültig oder abgelaufen."
+
+msgid "Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email."
+msgstr "Vielen Dank! Die Einwilligung wurde bestätigt und die Anmeldung abgeschlossen. Die Teilnehmende Person erhält eine Bestätigungs-E-Mail."
 
 msgid "Export Events"
 msgstr "Veranstaltungen exportieren"
@@ -291,7 +300,7 @@ msgid "Cancel Registration"
 msgstr "Abmeldung"
 
 msgid "You don't have any registrations yet. Get started by creating one!"
-msgstr "Sie haben noch keine Registrierungen. Legen Sie los und erstellen Sie eine!"
+msgstr "Sie haben noch keine Anmeldungen. Legen Sie los und erstellen Sie eine!"
 
 msgid "Create a new registration"
 msgstr "Neue Anmeldung erstellen"
@@ -427,6 +436,9 @@ msgstr "Ich fülle das Anmeldeformular für eine andere Person aus"
 msgid "Participant Information:"
 msgstr "Teilnehmende Person:"
 
+msgid "This participant is under 16. We will email the parent/guardian a consent link before the registration is completed."
+msgstr "Dieser Teilnehmer ist unter 16 Jahre alt. Wir werden den Sorgeberechtigten vor Abschluss der Anmeldung per E-Mail einen Link zur Einwilligungserklärung zusenden."
+
 msgid "Event Information:"
 msgstr "Veranstaltungsinformationen:"
 
@@ -481,6 +493,9 @@ msgstr "am"
 msgid "Validation Error"
 msgstr "Validierungsfehler"
 
+msgid "The parent/guardian email must be different from the participant's own email address."
+msgstr "Die E-Mail-Adresse der Sorgeberechtigten muss sich von der E-Mail-Adresse des Teilnehmers unterscheiden."
+
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
@@ -510,6 +525,15 @@ msgstr "Ihre Anmeldung wurde erfolgreich abgeschlossen! Sie erhalten eine Bestä
 
 msgid "Registration failed. Please try again."
 msgstr "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+
+msgid "Parent/Guardian consent required"
+msgstr "Zustimmung der Sorgeberechtigten erforderlich"
+
+msgid "Since the participant is under 16, we've sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, haben wir eine E-Mail an die Sorgeberechtigten gesendet, um die Einwilligung einzuholen. Die Anmeldung wird automatisch abgeschlossen, sobald diese ihre Einwilligung erteilt haben."
+
+msgid "Could not send the parent/guardian consent request. Please try again."
+msgstr "Die Einverständniserklärung der Sorgeberechtigten konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
 
 msgid "File Acknowledgement or Upload"
 msgstr "Dateibestätigung oder Datei-Upload"
@@ -911,6 +935,9 @@ msgstr "Wählen Sie eine Veranstaltung aus"
 msgid "Select a Person"
 msgstr "Wählen Sie eine Person aus"
 
+msgid "Parent/Guardian email"
+msgstr "Sorgeberechtigte E-mail"
+
 msgid "Confirmation E-mail"
 msgstr "Anmeldebestätigung E-Mail"
 
@@ -931,6 +958,27 @@ msgstr "Um weitere Veranstaltungen zu finden, folgen Sie bitte dem unten stehend
 
 msgid "More Events"
 msgstr "Weitere Veranstaltungen"
+
+msgid "Consent needed for event registration"
+msgstr "Für die Anmeldung zur Veranstaltung ist eine Einwilligung erforderlich"
+
+msgid "You have received this email because"
+msgstr "Sie haben diese E-Mail erhalten, weil"
+
+msgid "would like to register for the following event, and has indicated that you are their parent or legal guardian:"
+msgstr "möchte sich für die folgende Veranstaltung anmelden und hat angegeben, dass Sie dessen Sorgeberechtigten sind:"
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, benötigen wir Ihre Einwilligung, bevor die Anmeldung abgeschlossen werden kann. Um Ihre Einwilligung zu bestätigen und die Anmeldung abzuschließen, klicken Sie bitte auf den Bestätigungsknopf unten."
+
+msgid "Confirm consent and complete registration"
+msgstr "Einwilligung bestätigen und Anmeldung abschließen"
+
+msgid "If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required."
+msgstr "Falls Sie diese E-Mail nicht erwartet haben oder keine Einwilligung erteilen möchten, können Sie diese Nachricht einfach ignorieren. Es erfolgt keine Anmeldung und es sind keine weiteren Schritte erforderlich."
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the link below."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, benötigen wir Ihre Einwilligung, bevor die Anmeldung abgeschlossen werden kann. Um Ihre Einwilligung zu bestätigen und die Anmeldung abzuschließen, klicken Sie bitte auf den Bestätigungsknopf unten."
 
 msgid "Confirm your E-mail"
 msgstr "Bestätigen Sie Ihre E-Mail-Adresse"
@@ -955,6 +1003,13 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
+
+#~ msgid ""
+#~ "Thank you! Consent confirmed and registration completed.\n"
+#~ "                    The participant will receive a confirmation email."
+#~ msgstr ""
+#~ "Vielen Dank! Die Einwilligung wurde bestätigt und die Anmeldung abgeschlossen.\n"
+#~ "                    Der Teilnehmer erhält eine Bestätigungs-E-Mail."
 
 #~ msgid "Registration Contact Fields"
 #~ msgstr "Kontaktanmeldungsfelder"
