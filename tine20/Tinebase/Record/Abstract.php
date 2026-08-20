@@ -1283,12 +1283,31 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             $recordData = Zend_Json::decode($_data);
         }
 
-        if ($this->has('image') && !empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', (string) $_data['image'], $matches)) {
-            // add image to attachments
-            if (! isset($recordData['attachments'])) {
-                $recordData['attachments'] = array();
+        if ($this->has('image')) {
+            if (!empty($_data['image']) && preg_match('/location=tempFile&id=([a-z0-9]*)/', (string)$_data['image'], $matches)) {
+                // add image to attachments
+                if (!isset($recordData['attachments'])) {
+                    $recordData['attachments'] = array();
+                }
+                $recordData['attachments'][] = array('tempFile' => array('id' => $matches[1]));
+            } elseif (isset($_data['image']) && $_data['image'] === ''
+                && isset($recordData['attachments']) && is_array($recordData['attachments'])) {
+                // remove image attachments
+                foreach ($recordData['attachments'] as $key => $attachment) {
+                    $contentType = null;
+                    if ($attachment instanceof Tinebase_Model_Tree_Node) {
+                        $contentType = $attachment->contenttype;
+                    } elseif (is_array($attachment) && isset($attachment['contenttype'])) {
+                        $contentType = $attachment['contenttype'];
+                    }
+
+                    if ($contentType && in_array($contentType, Tinebase_ImageHelper::getSupportedImageMimeTypes())) {
+                        unset($recordData['attachments'][$key]);
+                    }
+                }
+                // reset indices
+                $recordData['attachments'] = array_values($recordData['attachments']);
             }
-            $recordData['attachments'][] = array('tempFile' => array('id' => $matches[1]));
         }
 
         // sanitize container id if it is an array
