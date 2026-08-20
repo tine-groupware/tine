@@ -305,6 +305,25 @@ class Inventory_JsonTest extends Inventory_TestCase
             print_r($result['results'][0], true));
     }
 
+    public function testSaveRecordRemoveImage()
+    {
+        // create TEMPFILE and save in inv item
+        $imageFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/tine20/images/cancel.gif';
+        $tempImage = Tinebase_TempFile::getInstance()->createTempFile($imageFile);
+        $imageUrl = Tinebase_Model_Image::getImageUrl('Tinebase', $tempImage->getId(), 'tempFile');
+
+        $invItem = $this->_getInventoryItem()->toArray();
+        $invItem['image'] = $imageUrl;
+        $savedItem = $this->_json->saveInventoryItem($invItem);
+
+        $this->assertTrue(! empty($savedItem['image']), 'image url is empty');
+
+        $savedItem['image'] = '';
+        $savedItem = $this->_json->saveInventoryItem($savedItem);
+
+        $this->assertTrue(empty($savedItem['image']), 'image url is not empty');
+    }
+
     /**
      * testAttachMultipleTagsToMultipleRecord for mcv2 records
      */
