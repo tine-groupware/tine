@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -57,9 +58,6 @@ msgstr "Synapse database postgres password"
 
 msgid "Synapse shared secret auth"
 msgstr "Synapse shared secret auth"
-
-msgid "This group has a chat room"
-msgstr "This group has a chat room"
 
 msgid "Chat Room"
 msgstr "Chat Room"
@@ -161,6 +159,9 @@ msgstr[1] "Matrix Rooms"
 msgid "Matrix Rooms"
 msgstr "Matrix Rooms"
 
+msgid "This group has a chat room"
+msgstr "This group has a chat room"
+
 msgid "Name"
 msgstr "Name"
 
@@ -175,6 +176,12 @@ msgstr "Only System Users"
 
 msgid "Group"
 msgstr "Group"
+
+msgid "Start client in background"
+msgstr "Start client in background"
+
+msgid "Automatically starts Chat client in the background to show new messages (e.g. the unread count). When disabled, the app only starts when you open it directly."
+msgstr "Automatically starts Chat client in the background to show new messages (e.g. the unread count). When disabled, the app only starts when you open it directly."
 
 msgid "Matrix-ID"
 msgstr "Matrix-ID"

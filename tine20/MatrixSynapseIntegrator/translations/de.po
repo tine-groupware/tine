@@ -59,9 +59,6 @@ msgstr "Synapse Datenbank postgres Passwort"
 msgid "Synapse shared secret auth"
 msgstr "Synapse Shared Secret Auth"
 
-msgid "This group has a chat room"
-msgstr "Diese Gruppe hat einen Chat-Raum"
-
 msgid "Chat Room"
 msgstr "Chat-Raum"
 
@@ -162,6 +159,9 @@ msgstr[1] "Matrix-Räume"
 msgid "Matrix Rooms"
 msgstr "Matrix-Räume"
 
+msgid "This group has a chat room"
+msgstr "Diese Gruppe hat einen Chat-Raum"
+
 msgid "Name"
 msgstr "Name"
 
@@ -176,6 +176,12 @@ msgstr "Nur Systembenutzer"
 
 msgid "Group"
 msgstr "Gruppe"
+
+msgid "Start client in background"
+msgstr "Chat im Hintergrund starten"
+
+msgid "Automatically starts Chat client in the background to show new messages (e.g. the unread count). When disabled, the app only starts when you open it directly."
+msgstr "Startet Chat automatisch im Hintergrund, um neue Nachrichten anzuzeigen (z. B. den Ungelesen-Zähler). Wenn deaktiviert, wird die App nur gestartet, wenn du sie aktiv öffnest."
 
 msgid "Matrix-ID"
 msgstr "Matrix-ID"
