@@ -2788,6 +2788,94 @@ fi';
         return 0;
     }
 
+    public function prepareModLogMigrationData(): int
+    {
+        $this->_checkAdminRight();
+
+        $db = Tinebase_Core::getDb();
+
+        do {
+            $count = $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE application_id = ? AND record_type = "Tinebase_Model_User" AND (client LIKE "ActiveSync%" OR client LIKE "Tinebase_Server_WebDAV%" OR client LIKE "Tinebase_Server_Cli%") limit 5000', [Tinebase_Core::getTinebaseId()])->rowCount();
+            usleep(5000);
+        } while ($count > 0);
+
+        do {
+            $count = $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE application_id = ? AND record_type = "Tinebase_Model_FullUser" AND (client LIKE "ActiveSync%" OR client LIKE "Tinebase_Server_WebDAV%" OR client LIKE "Tinebase_Server_Cli%") limit 5000', [Tinebase_Core::getTinebaseId()])->rowCount();
+            usleep(5000);
+        } while ($count > 0);
+
+        if ($db->query('SELECT id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog WHERE record_backend IS NULL LIMIT 1')->fetchColumn(0)) {
+            $db->query('UPDATE ' . SQL_TABLE_PREFIX . 'timemachine_modlog SET record_backend = "Sql" WHERE record_backend IS NULL');
+        }
+
+        $db->query('create temporary table temp_delete_ids select id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog limit 1');
+        do {
+            $db->query('truncate temp_delete_ids');
+            $count = $db->query('insert into temp_delete_ids select modLog.id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog AS modLog LEFT JOIN ' . SQL_TABLE_PREFIX . 'tree_fileobjects AS rec ON modLog.record_id = rec.id WHERE modLog.application_id = ? AND modLog.record_type = "Tinebase_Model_Tree_FileObject" AND modLog.record_backend = "Sql" AND rec.id IS NULL limit 5000', [Tinebase_Core::getTinebaseId()])->rowCount();
+            if ($count > 0) {
+                $db->query('delete modlog.* from ' . SQL_TABLE_PREFIX . 'timemachine_modlog as modlog join temp_delete_ids ON modlog.id = temp_delete_ids.id');
+                usleep(5000);
+            }
+        } while ($count > 0);
+
+        do {
+            $db->query('truncate temp_delete_ids');
+            $count = $db->query('insert into temp_delete_ids select modLog.id FROM ' . SQL_TABLE_PREFIX . 'timemachine_modlog AS modLog LEFT JOIN ' . SQL_TABLE_PREFIX . 'tree_nodes AS rec ON modLog.record_id = rec.id WHERE modLog.application_id = ? AND modLog.record_type = "Tinebase_Model_Tree_Node" AND modLog.record_backend = "Sql" AND rec.id IS NULL limit 5000', [Tinebase_Core::getTinebaseId()])->rowCount();
+            if ($count > 0) {
+                $db->query('delete modlog.* from ' . SQL_TABLE_PREFIX . 'timemachine_modlog as modlog join temp_delete_ids ON modlog.id = temp_delete_ids.id');
+                usleep(5000);
+            }
+        } while ($count > 0);
+
+        return 0;
+    }
+
+    public function prepareModLogMigrationSchema(): int
+    {
+        $this->_checkAdminRight();
+
+        $setupBackend = new Setup_Backend_Mysql();
+        $db = Tinebase_Core::getDb();
+
+        try {
+            $setupBackend->dropIndex('timemachine_modlog', 'seq');
+        } catch (Zend_Db_Statement_Exception) {}
+
+        try {
+            $setupBackend->dropIndex('timemachine_modlog', 'instance_id');
+        } catch (Zend_Db_Statement_Exception) {}
+
+        if (5 < $db->select()
+                ->from('information_schema.KEY_COLUMN_USAGE', [new Zend_Db_Expr('count(*)')])
+                ->where($db->quoteIdentifier('TABLE_SCHEMA') . ' = ?', Tinebase_Core::getConfig()->database->dbname)
+                ->where($db->quoteIdentifier('TABLE_NAME') . ' = ?',  SQL_TABLE_PREFIX . 'timemachine_modlog')
+                ->where($db->quoteIdentifier('CONSTRAINT_NAME') . ' = ?',  'unique-fields')->query()->fetchColumn(0)) {
+            $setupBackend->dropIndex('timemachine_modlog', 'unique-fields');
+
+            $setupBackend->addIndex('timemachine_modlog', new Setup_Backend_Schema_Index_Xml(
+                '<index>
+                <name>unique-fields</name>
+                <field>
+                    <name>application_id</name>
+                </field>
+                <field>
+                    <name>record_type</name>
+                </field>
+                <field>
+                    <name>record_backend</name>
+                </field>
+                <field>
+                    <name>record_id</name>
+                </field>
+                <field>
+                    <name>seq</name>
+                </field>
+            </index>'));
+        }
+
+        return 0;
+    }
+
     public function exportGroupListIds(): int
     {
         $this->_checkAdminRight();
