@@ -972,17 +972,23 @@ EOS
         $request->getServer()->set('REMOTE_ADDR',   'localhost');
 
         $server = new Tinebase_Server_WebDAV();
-        Tinebase_Server_WebDAV::getServer()->sapi = new Tinebase_WebDav_Sabre_SapiMock();
+        Tinebase_Server_WebDAV::getServer()->sapi = $sapi = new Tinebase_WebDav_Sabre_SapiMock();
         Tinebase_Server_WebDAV::$_recreateServer = false;
         try {
             $server->handle($request);
         } finally {
             Tinebase_Server_WebDAV::$_recreateServer = true;
+            Tinebase_Core::setUser($this->_originalTestUser);
         }
 
-        Tinebase_Core::setUser($this->_originalTestUser);
-        static::assertSame('abcdefgh', file_get_contents(
-            'tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test'));
+        try {
+            static::assertSame('abcdefgh', file_get_contents(
+                'tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test'));
+        } catch (Throwable $e) {
+            $this->fail(get_class($e) . ': ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString() . PHP_EOL
+                . $sapi::$lastReponse?->getStatus() . ' ' . $sapi::$lastReponse->getStatusText() . PHP_EOL
+                . $sapi::$lastReponse->getBodyAsString() . PHP_EOL);
+        }
     }
 
     /**
