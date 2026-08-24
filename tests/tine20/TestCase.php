@@ -1544,12 +1544,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * checks if mail for persona got send
      *
      * @param string $_personas
-     * @param string $_assertString
+     * @param ?string $_assertString
+     * @param string $_location
      * @return void
      *
      * @see #6800: add message-id to notification mails
      */
-    protected function _assertMail($_personas, $_assertString = NULL, $_location = 'subject')
+    protected function _assertMail(string $_personas,
+                                   ?string $_assertString = null,
+                                   string $_location = 'subject',
+                                   bool $_assertHostnameInMessageID = true): void
     {
         $messages = self::getMessages();
 
@@ -1615,8 +1619,10 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
                 $headers = $mailsForPersona[0]->getHeaders();
                 $this->assertTrue(isset($headers['Message-Id']), 'message-id header not found');
-                $this->assertStringContainsString('@' . php_uname('n'), $headers['Message-Id'][0],
-                    'hostname not in message-id');
+                if ($_assertHostnameInMessageID) {
+                    $this->assertStringContainsString('@' . php_uname('n'), $headers['Message-Id'][0],
+                        'hostname not in message-id');
+                }
             }
         }
     }
