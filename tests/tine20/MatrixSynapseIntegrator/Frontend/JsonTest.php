@@ -1,9 +1,11 @@
 <?php
 /**
+ * tine Groupware - https://www.tine-groupware.de/
+ *
  * @package     MatrixSynapseIntegrator
  * @subpackage  Test
- * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2025-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -185,5 +187,49 @@ class MatrixSynapseIntegrator_Frontend_JsonTest extends TestCase
             $account[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_DESCRIPTION],
             $updatedAccount[MatrixSynapseIntegrator_Model_MatrixAccount::FLD_DESCRIPTION]
         );
+    }
+
+    public function testRevealPassword()
+    {
+        $account = $this->testMatrixAccountApi(false);
+        $knownPassword = 'testRecoveryPw123';
+        $this->_getUit()->setRecoveryPassword($knownPassword);
+        $tbJson = new Tinebase_Frontend_Json();
+
+        $result = $tbJson->revealPassword(MatrixSynapseIntegrator_Model_MatrixAccount::class,
+            $account['id'], MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_RECOVERY_PASSWORD);
+
+        self::assertIsArray($result);
+        self::assertArrayHasKey('password', $result);
+        self::assertEquals($knownPassword, $result['password']);
+
+        $notes = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
+            ['field' => 'record_id', 'operator' => 'equals', 'value' => $account['id']],
+            ['field' => 'record_model', 'operator' => 'equals', 'value' => MatrixSynapseIntegrator_Model_MatrixAccount::class],
+            ['field' => 'note_type_id', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD],
+        ]));
+        self::assertCount(1, $notes, 'reveal password note should be logged');
+    }
+
+    public function testRevealPasswordInvalidField()
+    {
+        $account = $this->testMatrixAccountApi(false);
+        $tbJson = new Tinebase_Frontend_Json();
+
+        try {
+            $tbJson->revealPassword(MatrixSynapseIntegrator_Model_MatrixAccount::class,
+                $account['id'], MatrixSynapseIntegrator_Model_MatrixAccount::FLD_MATRIX_ID);
+            self::fail('Expected Tinebase_Exception_InvalidArgument for non-password field');
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            self::assertStringContainsString('not a password field', $e->getMessage());
+        }
+
+        try {
+            $tbJson->revealPassword(MatrixSynapseIntegrator_Model_MatrixAccount::class,
+                $account['id'], 'nonexistent_field');
+            self::fail('Expected Tinebase_Exception_InvalidArgument for nonexistent field');
+        } catch (Tinebase_Exception_InvalidArgument $e) {
+            self::assertStringContainsString('does not exist', $e->getMessage());
+        }
     }
 }
