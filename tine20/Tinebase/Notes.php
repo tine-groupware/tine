@@ -520,15 +520,19 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         
         return $this->addNote($note);
     }
-    
+
     /**
      * get system note change text
-     * 
+     *
      * @param Tinebase_Model_ModificationLog $modification
-     * @param Zend_Translate $translate
+     * @param Zend_Translate|null $translate
      * @return string
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Json_Exception
      */
-    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, ?\Zend_Translate $translate = null)
+    protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification,
+                                                ?Zend_Translate $translate = null): string
     {
         $recordProperties = [];
         /** @var Tinebase_Record_Interface $model */
@@ -545,10 +549,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
                 if (is_array($value) && isset($value['model']) && isset($value['added'])) {
                     $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                        . ' fetching translated text for diff: ' . print_r($tmpDiff->toArray(), true));
-
                     $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
                     $oldData = $diff->oldData ? $diff->oldData[$attribute] : null;
@@ -561,7 +561,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_array($oldData)) $oldData = $oldData['id'] ?? '';
                             try {
                                 $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
-                            } catch (Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
+                            } catch (Tinebase_Exception_ProgramFlow $tepf) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                        . ' ' . $tepf->getMessage());
+                                }
                                 $oldDataString = $oldData;
                             }
                         } else {
@@ -571,7 +575,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                             if (is_array($value)) $value = $value['id'] ?? '';
                             try {
                                 $valueString = $controller->get($value, null, false, true)->getTitle();
-                            } catch(Tinebase_Exception_NotFound|Tinebase_Exception_AccessDenied) {
+                            } catch (Tinebase_Exception_ProgramFlow $tepf) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                        . ' ' . $tepf->getMessage());
+                                }
                                 $valueString = $value;
                             }
                         } else {
