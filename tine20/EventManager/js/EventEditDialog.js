@@ -106,7 +106,7 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
             items: [{
-                title: this.app.i18n._('Sign Up'),
+                title: this.app.i18n._('Event'),
                 autoScroll: true,
                 border: false,
                 frame: true,
