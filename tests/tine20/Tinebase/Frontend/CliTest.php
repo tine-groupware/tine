@@ -859,6 +859,6 @@ class Tinebase_Frontend_CliTest extends TestCase
         self::flushMailer();
         Tinebase_Config::getInstance()->set(Tinebase_Config::SENTRY_URI, 'https://88123ad22cee14899962a6b0edb04d08f@sentry.example.org/2');
         $this->_monitoringCheckSentry();
-        $this->_assertMail('sclever', 'MONITORING ALERT');
+        $this->_assertMail('sclever', 'MONITORING ALERT', _assertHostnameInMessageID: false);
     }
 }
