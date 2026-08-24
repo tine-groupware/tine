@@ -233,6 +233,7 @@ class Tinebase_WebDav_IssueTest extends TestCase
         Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::REPORT_WEBDAV, $newReportWebDav);
 
         $oldUser = Tinebase_Core::getUser();
+        /** @var Tinebase_Model_FullUser $sclever */
         $sclever = $this->_personas['sclever'];
         $fileManagerAppId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
 
@@ -252,6 +253,7 @@ class Tinebase_WebDav_IssueTest extends TestCase
         try {
             Tinebase_Acl_Roles::unsetInstance();
             Tinebase_Core::set(Tinebase_Core::USER, $sclever);
+            $this->assertFalse($sclever->hasRight($fileManagerAppId, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS));
 
             $request = Tinebase_Http_Request::fromString(
                 "MKCOL /remote.php/dav/files/" . $sclever->accountLoginName . "/shared/testfolder HTTP/1.1\r\n"
