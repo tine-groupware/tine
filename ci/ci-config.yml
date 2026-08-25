@@ -1,8 +1,8 @@
 # overwritten by: ci-config.yml < variables in gitlab-ci.yml < gitlab project variables < per pipeline variables
 variables:
-  # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
-  # The major commit ref name is configures in to parts, the base and and the customer specific part.
-  BASE_MAJOR_COMMIT_REF_NAME: "main"
+  # The major commit ref name is mainly used for ci caching. Non-feature branches should be their own major. The major of feature branches should be the branch the will be merged into.
+  # The major commit ref name is configured in two parts, the base and the customer-specific part.
+  BASE_MAJOR_COMMIT_REF_NAME: "2026.11"
   # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templating and is required to allow branches with out a customer.
   CUSTOMER_MAJOR_COMMIT_REF_NAME: ""
 
@@ -11,8 +11,8 @@ variables:
 
   # RELEASE_UPDATE_TEST_START_REF: "2024.11.17"
 
-  # Upstream branch as string. For non custom branches, the branch should be its own UPSTREAM_BRANCH.
-  UPSTREAM_BRANCH: 'main'
+  # Upstream branch. For non-custom branches, the branch should be its own UPSTREAM_BRANCH.
+  UPSTREAM_BRANCH: '2026.11'
 
   # General
   # "Docker hub tag for this build."
@@ -56,15 +56,15 @@ variables:
   # "Rewrite composer lock to pull packages from cache."
   COMPOSER_LOCK_REWRITE: "true"
 
-  # Applications to install for tests. Can be all comma separated list with out spaces of application names
+  # Applications to install for tests. Can be all comma-separated list with out spaces of application names
   TINE20_APPLICATION_TO_INSTALL: all
 
   # Test Jobs
   # Variable are switched on with the string "true" and off with the string "false".
   # No test job must run if RUN_NO_TESTS is true.
   #
-  # Every test job has an variable (uppercase(name)) which determent's if it should run. These Should not be set in the ci config or project variables.
-  # They should strictly be used for pipeline triggert manually or by api. Or for customising schedules.
+  # Every test job has an variable (uppercase(name)) which determines if it should run. These Should not be set in the ci config or project variables.
+  # They should strictly be used for pipeline triggert manually or by api. Or for customizing schedules.
   # For these vars applies true = always run, false = never run and "" = if some other rule matches
   #
   # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determines if it is run during the corresponding pipelines.
