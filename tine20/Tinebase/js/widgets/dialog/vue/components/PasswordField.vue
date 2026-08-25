@@ -26,7 +26,7 @@
         :state="validationState"
         :name="name"
       />
-      <BInputGroupAppend v-if="!disabled">
+      <template v-if="!disabled">
         <BInputGroupText
           v-if="unLockable"
           @click="handlePWToggle"
@@ -57,7 +57,7 @@
             alt="copy-to-clipboard" :style="{width: '1.4em'}"
             class="enlarge-on-hover shrink-on-click">
         </BInputGroupText>
-      </BInputGroupAppend>
+      </template>
     </BInputGroup>
   </div>
 </template>

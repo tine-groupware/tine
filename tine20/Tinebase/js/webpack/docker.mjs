@@ -1,13 +1,5 @@
 import { merge } from 'webpack-merge';
 import prod from './prod.mjs';
-import AssetsPlugin from 'assets-webpack-plugin';
-const assetsPluginInstance = new AssetsPlugin({
-    path: '/out/tine20/Tinebase/js',
-    keepInMemory: false,
-    removeFullPathAutoPrefix: true,
-    filename: 'webpack-assets-FAT.json',
-    prettyPrint: true
-});
 
 export default async () => {
     const prodConfig = await prod();
@@ -15,8 +7,5 @@ export default async () => {
         output: {
             path: '/out/tine20'
         },
-        plugins: [
-            assetsPluginInstance
-        ]
     });
 };

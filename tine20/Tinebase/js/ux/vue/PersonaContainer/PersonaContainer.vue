@@ -8,7 +8,7 @@
  */
 -->
 <template>
-  <div v-html="rawSvg" class="vue-msg-box-svg-container" :style="`--skin-color: ${skinColor}`"></div>
+  <div v-html="rawSvg" class="vue-msg-box-svg-container" :style="`--skin-color: ${resolvedSkinColor}`"></div>
 </template>
 
 <script setup>
@@ -28,12 +28,12 @@ const props = defineProps({
 })
 
 const rawSvg = ref(null)
-const skinColor = ref(null)
+const resolvedSkinColor = ref(null)
 
 const skinShades = ['#ffffff', '#fad9b4', '#fcbf89', '#ec8f2e', '#d97103', '#b75b01', '#924500']
 const init = async function () {
   const { default: img } = await import(/* webpackChunkName: "Tinebase/js/[request]" */`../../../../../images/dialog-personas/${getIconPath(props.iconName)}.svg`)
-  skinColor.value = props.skinColor ? props.skinColor : skinShades[Math.floor(Math.random() * skinShades.length)]
+  resolvedSkinColor.value = props.skinColor ? props.skinColor : skinShades[Math.floor(Math.random() * skinShades.length)]
   rawSvg.value = window.atob(img.split(',')[1])
 }
 

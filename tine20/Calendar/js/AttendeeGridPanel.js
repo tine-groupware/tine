@@ -1024,7 +1024,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     setDisabled: function(v) {
         if (v) {
             // remove "add new attender" row
-            this.store.filterBy(function(r) {return ! (r.id && r.id.match(/^new-/))});
+            this.store.filterBy(function(r) {return ! (r.id && String(r.id).match(/^new-/))});
         } else {
             this.store.clearFilter();
         }

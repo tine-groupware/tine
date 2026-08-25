@@ -1,6 +1,6 @@
 import * as vue from "tine-vue";
 window.vue = vue;
-import BootstrapVueNext from 'bootstrap-vue-next';
+import { createBootstrap } from "bootstrap-vue-next";
 import { createRouter, createWebHistory } from 'vue-router';
 import _ from 'lodash';
 import FormatMessage from 'format-message';
@@ -109,7 +109,7 @@ export function createTineApp(AppComponent, options = {})
         });
         app.use(router);
     }
-    app.use(BootstrapVueNext);
+    app.use(createBootstrap());
 
     return {
         app,

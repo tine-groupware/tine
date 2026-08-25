@@ -1,4 +1,5 @@
 @use './common' as *;
+@use "sass:color";
 
 // NOTE: we need to use native prefers-color-scheme to prevent white/black flickering on new window
 //       as *-mode cls is appended after js bootstrap which needs some time
@@ -186,7 +187,7 @@ body.dark-mode {
     .ext-webkit .x-form-field-wrap,
     .x-form-field-wrap {
       background-color: transparent;
-      border-color: lighten(#1b1b1b, 10%) !important;
+      border-color: color.adjust(#1b1b1b, $lightness: 10%) !important;
       &.x-form-focus,
       &.x-trigger-wrap-focus {
         border-color: var(--focus-color) !important;
@@ -238,13 +239,13 @@ body.dark-mode {
       background-color: #dbdbdb;
     }
     .ace_gutter-layer {
-      background-color: lighten(#dbdbdb, 5%);
+      background-color: color.adjust(#dbdbdb, $lightness: 5%);
     }
     .ace_gutter-layer .ace_gutter-active-line {
-      background-color: darken(#dbdbdb, 5%);
+      background-color: color.adjust(#dbdbdb, $lightness: -5%);
     }
     .ace_marker-layer .ace_active-line {
-      background-color: darken(#dbdbdb, 10%);
+      background-color: color.adjust(#dbdbdb, $lightness: -10%);
     }
   }
   .tinebase-editmultipledialog-noneedit,

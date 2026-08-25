@@ -198,7 +198,7 @@
             ADJ_SCOPE = 3,
             SCROLLLEFT = 'scrollLeft',
             SCROLLTOP = 'scrollTop',
-            UNLOAD = 'unload',
+            UNLOAD = 'unload', //todo change to pagehide
             MOUSEOVER = 'mouseover',
             MOUSEOUT = 'mouseout',
             // private

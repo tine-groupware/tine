@@ -1,5 +1,6 @@
 @use './common' as *;
 @use './variables' as *;
+@use "sass:color";
 
 :root {
   --focus-color: #{$focus-color};
@@ -262,7 +263,7 @@ span.x-tab-strip-text.tine-favicon {
 }
 
 .x-panel-footer {
-  @include button(darken(#F0F0F0, 10%));
+  @include button(color.adjust(#F0F0F0, $lightness: -10%));
 }
 
 .x-btn-group {
@@ -404,7 +405,7 @@ span.x-tab-strip-text.tine-favicon {
     color: #4c4c4c;
   }
   & div.x-tree-selected {
-    background-color: lighten($filterTbColor, 10%);
+    background-color: color.adjust($filterTbColor, $lightness: 10%);
   }
 }
 
@@ -784,7 +785,7 @@ textarea.x-form-field, // wrap-less
   .ext-webkit .x-form-field-wrap,
   .x-form-field-wrap {
     background-color: $dialogBg;
-    border-color: darken($dialogBg, 10%) !important;
+    border-color: color.adjust($dialogBg, $lightness: -10%) !important;
   }
 }
 .ext-webkit .x-form-invalid,
@@ -970,7 +971,7 @@ td.x-date-mp-sel a,
 
 .x-date-mp-btns button {
   color: #000;
-  background-color: darken($tbColor, 10%);
+  background-color: color.adjust($tbColor, $lightness: -10%);
   border: none;
 }
 
@@ -1157,7 +1158,7 @@ td.x-date-mp-sel a,
   background-color: $filterTbColor;
   border-color: $filterTbColor;
   border-style: none;
-  border-left: 2px solid darken($filterTbColor, 20%);
+  border-left: 2px solid color.adjust($filterTbColor, $lightness: -20%);
   margin: 0;
   padding: 1px;
 

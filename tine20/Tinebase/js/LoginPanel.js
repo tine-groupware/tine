@@ -9,7 +9,7 @@
 /*global Ext, Tine*/
  
 import LoginPanel from "./LoginPanel.vue";
-import {BootstrapVueNext} from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next";
 
 Ext.ns('Tine.Tinebase');
 
@@ -108,7 +108,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.BoxComponent, {
         })
         this.vueHandle.config.globalProperties.window = window
         this.vueHandle.provide(this.injectKey, this.vueEventBus)
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
     },
 
     /**

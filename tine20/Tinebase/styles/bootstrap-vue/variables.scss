@@ -1,3 +1,6 @@
+
+@use "sass:color";
+
 // NOTE: we import bootstrap variables here so they are present with
 //       @use "../styles/bootstrap-vue/variables" as bs;
 @import "bootstrap/scss/functions";
@@ -11,7 +14,7 @@
 $theme-colors: map-merge(
                 $theme-colors,
                 (
-                        "ftb":   darken($filterTbColor, 5%)
+                        "ftb":   color.adjust($filterTbColor, $lightness: -5%)
                   //"ftb":   $filterTbColor
                 )
 );

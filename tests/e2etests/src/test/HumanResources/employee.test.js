@@ -38,7 +38,7 @@ describe('employee', () => {
                     freetimeEditDialog = await lib.getEditDialog('Urlaubstage hinzufügen', employeeEditDialog);
                     await new Promise(r => setTimeout(r, 2000));
                     try {
-                        await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
+                        await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div')?.textContent === 'Übertrage Abwesenheit...');
                     } catch {}
 
                     await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'));
@@ -58,7 +58,11 @@ describe('employee', () => {
                     let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4) > a > em > span');
-                    await new Promise(r => setTimeout(r, 50));
+                    await freetimeEditDialog.waitForFunction(
+                        (prev) => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value === prev - 2,
+                        {},
+                        remainingDays
+                    );
                     
                     if (remainingDays-2 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not decrease');
@@ -69,7 +73,11 @@ describe('employee', () => {
                     let remainingDays = await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value);
 
                     await expectPuppeteer(freetimeEditDialog).toClick('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > a > em > span');
-                    await new Promise(r => setTimeout(r, 50));
+                    await freetimeEditDialog.waitForFunction(
+                        (prev) => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value === prev + 1,
+                        {},
+                        remainingDays
+                    );
                     
                     if (remainingDays+1 !== await freetimeEditDialog.evaluate(() => +document.querySelector('input[name=scheduled_remaining_vacation_days]').value)) {
                         throw new Error('remaining days do not increase');
@@ -99,7 +107,7 @@ describe('employee', () => {
                     freetimeEditDialog = await lib.getEditDialog('Urlaubstage bearbeiten', employeeEditDialog);
                     await new Promise(r => setTimeout(r, 1000));
                     try {
-                        await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div').textContent === 'Übertrage Abwesenheit...');
+                        await freetimeEditDialog.waitForFunction(() => document.querySelector('.ext-el-mask-msg.x-mask-loading div')?.textContent === 'Übertrage Abwesenheit...');
                     } catch {}
                     await freetimeEditDialog.waitForFunction(() => !document.querySelector('.ext-el-mask-msg.x-mask-loading div'));
                     await freetimeEditDialog.waitForSelector('.x-date-picker table > tbody > tr:nth-child(2) > td > table > tbody > tr:nth-child(3) > td:nth-child(4).x-date-selected');
@@ -140,8 +148,8 @@ describe('employee', () => {
                 test('confirm dialog is shown', async () => {
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-col-type', {text: '[U] Urlaub'});
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
-                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button');
                     await new Promise(r => setTimeout(r, 2000));
                 });
                 
@@ -247,8 +255,8 @@ describe('employee', () => {
                     await new Promise(r => setTimeout(r, 2000));
                     await expectPuppeteer(employeeEditDialog).toClick('.tine-hr-freetimegrid-type-VACATION .x-grid3-cell-inner.x-grid3-col-type', {text: '[U] Urlaub'});
                     await expectPuppeteer(employeeEditDialog).toClick('button', {text: 'Urlaubstage löschen'});
-                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
-                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.btn-md.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toMatchElement('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button');
+                    await expectPuppeteer(employeeEditDialog).toClick('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button');
 
                 });
 

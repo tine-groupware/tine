@@ -33,7 +33,12 @@ export default async () => {
                 }
             ],
             client: {
-                overlay: true,
+                overlay: {
+                    runtimeErrors: (error) => {
+                        return error.message !== 'ResizeObserver loop completed with undelivered notifications.';
+
+                    },
+                },
             },
             devMiddleware: {
                 writeToDisk: (filePath) => /\/(js|css)\/build\//.test(filePath),

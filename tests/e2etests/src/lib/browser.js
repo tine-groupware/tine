@@ -170,9 +170,9 @@ module.exports = {
                 args: args
             };
 
-            if (process.platform === "darwin") {
+            /*if (process.platform === "darwin") { // it does not work anymore since CDP evolves with each Chrome release
                 opts.executablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-            }
+            }*/
 
             browser = await puppeteer.launch(opts);
         } catch (e) {

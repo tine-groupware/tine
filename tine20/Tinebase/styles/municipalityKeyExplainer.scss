@@ -1,5 +1,7 @@
+@use "sass:color";
+
 $borderColor: lightgray;
-$selectedBorderColor: darken($borderColor, 10%);
+$selectedBorderColor: color.adjust($borderColor, $lightness: -10%);
 
 table.x-ars-xplain, .x-ars-xplain table {
   border-spacing: 0px;
@@ -72,7 +74,7 @@ table.x-ars-xplain, .x-ars-xplain table {
 .x-tip-body,
 .x-ars-xplain-search-item {
   .search-item {
-    background-color: darken(white, 3%);
+    background-color: color.adjust(white, $lightness: -3%);
   }
   .x-ars-xplain-data.x-ars-xplain-col.x-ars-xplain-value-stand,
   .x-ars-xplain-data.x-ars-xplain-col.x-ars-xplain-show-original-btn {

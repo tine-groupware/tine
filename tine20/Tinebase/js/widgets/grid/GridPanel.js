@@ -1555,7 +1555,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
             await this.grid.saveState();
         }
-        this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
+        this.grid.getView().setResponsiveMode(this.regionConfig?.[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
         this.grid.view.layout();
     },
 

@@ -55,7 +55,8 @@ describe('usersettings', () => {
         await new Promise(r => setTimeout(r, 2000));
         await page.click('.account-user-avatar');
         await new Promise(r => setTimeout(r, 2000));
-        settings = await expectPuppeteer(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
+        settings = await expectPuppeteer(page).toMatchElement('.main-menu-item', {text: 'Einstellungen', visible: true});
+        // settings = await expectPuppeteer(page).toMatchElement('.main-menu-item.px-3.py-1.d-flex.align-items-center.pe-5 .ms-2', {text: 'Einstellungen', visible: true});
         await settings.hover();
         await lib.makeScreenshot(
             page, {path: 'screenshots/Benutzereinstellungen/1_benutzereinstellungen_link.png',
