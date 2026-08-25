@@ -53,6 +53,24 @@
                 />
               </b-form-group>
             </template>
+            <b-form-group
+              v-if="isParticipantUnderage && !isAlreadyRegistered"
+              label-cols-sm="4"
+              label-cols-lg="3"
+              content-cols-sm
+              content-cols-lg="7"
+              :label="formatMessage('Parent/Guardian email') + ' *'"
+              class="mb-3"
+            >
+              <b-form-input
+                v-model="parentEmail"
+                type="email"
+                :class="{ 'required-field-error': validationErrors.includes('parentEmail') }"
+              />
+              <small class="text-muted">
+                {{ formatMessage('This participant is under 16. We will email the parent/guardian a consent link before the registration is completed.') }}
+              </small>
+            </b-form-group>
           </b-collapse>
         </b-col>
       </b-row>
@@ -226,7 +244,7 @@
           </div>
 
           <div v-else class="button-group">
-            <b-button class="action-button" :disabled="isSubmitting" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
+            <b-button class="action-button" :disabled="isSubmitting || isSendingParentConsent" @click="checkWaitingList">{{formatMessage('Register')}}</b-button>
           </div>
         </div>
 
@@ -249,11 +267,10 @@
 </template>
 
 <script setup>
-import {computed, ref, reactive, watch} from 'vue';
+import {computed, ref, reactive, watch, onMounted} from 'vue';
 import {useFormatMessage} from './index.es6';
 const { formatMessage } = useFormatMessage();
 import _ from 'lodash';
-import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MarkdownRenderer from './../../../../Tinebase/js/MarkdownRenderer.vue';
 
@@ -296,6 +313,8 @@ const shouldShowRegistrantCheckbox = ref(true);
 const registrationId = ref(null);
 const isPreview = ref(false);
 const hasConsent = ref(false);
+const parentEmail = ref('');
+const isSendingParentConsent = ref(false);
 
 // Data from backend
 const dependantParticipants = ref(null);
@@ -327,6 +346,24 @@ const eventDetails = ref({
   registerOthers: "",
   contactFields: [],
 });
+
+const calculateAge = (bday) => {
+  if (!bday) return null;
+  const birthDate = new Date(bday);
+  if (isNaN(birthDate.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDiff = today.getMonth() - birthDate.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+};
+
+const participantAge = computed(() => calculateAge(contactDetails.value.bday));
+const isParticipantUnderage = computed(
+  () => participantAge.value !== null && participantAge.value < 16
+);
 
 const getParticipantFieldLabel = (fieldName) => {
   const baseLabel = registrationParticipantContactFields.value[fieldName].label;
@@ -579,11 +616,13 @@ const checkAndLoadExistingRegistration = async (participantId) => {
 
     contactDetails.value = {
       ...registration.participant,
+      bday: formatBirthday(registration.participant.bday),
       registration_id: registration.id
     };
 
     registrantDetails.value = {
       ...registration.registrant,
+      bday: formatBirthday(registration.registrant.bday),
       registration_id: registration.id
     };
 
@@ -591,6 +630,7 @@ const checkAndLoadExistingRegistration = async (participantId) => {
     if (accountOwner.value.id === participantId) {
       contactDetails.value = {
         ...accountOwner.value,
+        bday: formatBirthday(accountOwner.value.bday),
       }
     } else {
       isRegistrant.value = true;
@@ -598,11 +638,13 @@ const checkAndLoadExistingRegistration = async (participantId) => {
       if (reg) {
         contactDetails.value = {
           ...reg.participant,
+          bday: formatBirthday(reg.participant.bday),
         };
       }
     }
     registrantDetails.value = {
       ...accountOwner.value,
+      bday: formatBirthday(accountOwner.value.bday),
     };
   }
 };
@@ -892,6 +934,18 @@ const validateRequiredFields = () => {
   validationErrors.value = [];
   const errors = [];
 
+  if (isParticipantUnderage.value && !isAlreadyRegistered.value) {
+    const trimmedParentEmail = (parentEmail.value || '').trim();
+    const participantEmail = (contactDetails.value.email || '').trim();
+
+    if (!trimmedParentEmail || !isValidEmail(trimmedParentEmail)) {
+      errors.push('parentEmail');
+    } else if (trimmedParentEmail.toLowerCase() === participantEmail.toLowerCase()) {
+      errors.push('parentEmail');
+      errors.push('parentEmailSameAsParticipant');
+    }
+  }
+
   const getMissingFields = (requiredFields) =>
     _.filter(requiredFields, field =>
       _.isEmpty((_.get(contactDetails.value, field) ?? '').toString().trim())
@@ -956,18 +1010,38 @@ const checkValidationFields = () => {
   if (!validateRequiredFields()) {
     const email = _.get(contactDetails.value, 'email', '').trim();
     const hasInvalidEmail = email && !isValidEmail(email);
+    const isSameEmail = validationErrors.value.includes('parentEmailSameAsParticipant');
 
     showModal({
       title: formatMessage('Validation Error'),
-      message: hasInvalidEmail
-        ? formatMessage('Please enter a valid email address.')
-        : formatMessage('Please fill all required fields.'),
+      message: isSameEmail
+        ? formatMessage('The parent/guardian email must be different from the participant\'s own email address.')
+        : hasInvalidEmail
+          ? formatMessage('Please enter a valid email address.')
+          : formatMessage('Please fill all required fields.'),
       type: 'error'
     });
     return false;
   }
   return true;
 };
+
+watch([() => parentEmail.value, () => contactDetails.value.email], () => {
+  if (!isParticipantUnderage.value) return;
+  const p = (parentEmail.value || '').trim().toLowerCase();
+  const c = (contactDetails.value.email || '').trim().toLowerCase();
+  const isDuplicate = p && c && p === c;
+
+  validationErrors.value = validationErrors.value.filter(
+    err => err !== 'parentEmailSameAsParticipant'
+  );
+  if (isDuplicate) {
+    validationErrors.value.push('parentEmailSameAsParticipant');
+    if (!validationErrors.value.includes('parentEmail')) {
+      validationErrors.value.push('parentEmail');
+    }
+  }
+});
 
 const getCharacterCount = (optionId) => {
   return replies.value[optionId] ? replies.value[optionId].length : 0;
@@ -1072,8 +1146,13 @@ const uploadFiles = async (eventId, registrationId) => {
 };
 
 const checkWaitingList = () => {
-  if (isSubmitting.value) return;
+  if (isSubmitting.value || isSendingParentConsent.value) return;
   if (!checkValidationFields()) {
+    return;
+  }
+
+  if (isParticipantUnderage.value && !isAlreadyRegistered.value) {
+    requestParentConsent();
     return;
   }
 
@@ -1200,24 +1279,14 @@ const postRegistration = async () => {
         title: formatMessage('Update Registration'),
         message: formatMessage('Your registration was updated successfully.'),
         type: 'success',
-        onConfirm: () => {
-          clearForm();
-          const baseUrl = window.location.origin;
-          const token = window.location.href.split('/').pop();
-          window.location.href = `${baseUrl}/EventManager/view/account/${token}`;
-        }
+        onConfirm: goToAccountPage
       });
     } else {
       showModal({
         title: formatMessage('Success'),
         message: formatMessage('Registration completed successfully! You will receive a confirmation e-mail.'),
         type: 'success',
-        onConfirm: () => {
-          clearForm();
-          const baseUrl = window.location.origin;
-          const token = window.location.href.split('/').pop();
-          window.location.href = `${baseUrl}/EventManager/view/account/${token}`;
-        }
+        onConfirm: goToAccountPage
       });
     }
 
@@ -1230,6 +1299,61 @@ const postRegistration = async () => {
     });
   } finally {
     isSubmitting.value = false;
+  }
+};
+
+const goToAccountPage = () => {
+  clearForm();
+  const baseUrl = window.location.origin;
+  const token = route.params.token;
+  window.location.href = `${baseUrl}/EventManager/view/account/${token}`;
+};
+
+const requestParentConsent = async () => {
+  if (isSendingParentConsent.value) return;
+  isSendingParentConsent.value = true;
+
+  const eventId = route.params.id;
+  registrantDetails.value.email = registrantEmail.value;
+
+  const body = {
+    eventId,
+    parentEmail: parentEmail.value.trim(),
+    contactDetails: contactDetails.value,
+    replies: replies.value,
+    registrantDetails: registrantDetails.value,
+  };
+
+  try {
+    const resp = await fetch(`/EventManager/registration/parentConsent/${eventId}`, {
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      method: 'POST',
+      body: JSON.stringify(body)
+    });
+
+    if (!resp.ok) throw new Error('Request failed');
+
+    showModal({
+      title: formatMessage('Parent/Guardian consent required'),
+      message: formatMessage(
+        'Since the participant is under 16, we\'ve sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm.'
+      ),
+      type: 'success',
+      onConfirm: () => {
+        clearForm();
+        const baseUrl = window.location.origin;
+        window.location.href = `${baseUrl}/EventManager/view/events`;
+      }
+    });
+  } catch (error) {
+    console.error('Failed to send parent consent request:', error);
+    showModal({
+      title: formatMessage('Error'),
+      message: formatMessage('Could not send the parent/guardian consent request. Please try again.'),
+      type: 'error'
+    });
+  } finally {
+    isSendingParentConsent.value = false;
   }
 };
 
@@ -1246,7 +1370,7 @@ const openCancelConfirmation = () => {
 };
 
 const confirmCancel = async () => {
-  const token = window.location.href.split('/').pop();
+  const token = route.params.token;
   let eventId = route.params.id;
 
   try {
