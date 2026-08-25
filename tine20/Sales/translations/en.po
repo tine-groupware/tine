@@ -5,7 +5,6 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -91,6 +90,18 @@ msgstr "Auto Invoice Contract Interval"
 
 msgid "Sets the maximum interval at which contracts will be billed."
 msgstr "Sets the maximum interval at which contracts will be billed."
+
+msgid "XRechnung Overwrite Actions"
+msgstr "XRechnung Overwrite Actions"
+
+msgid "Delete property"
+msgstr "Delete property"
+
+msgid "Replace with result of evaluated template"
+msgstr "Replace with result of evaluated template"
+
+msgid "Replace with static value"
+msgstr "Replace with static value"
 
 msgid "Attached Document Types"
 msgstr "Attached Document Types"
@@ -578,6 +589,15 @@ msgstr "For selected VAT procedure an exemption reason needs to be provided"
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr "Selected VAT procedure and selected VAT exemption reason are not compatible"
 
+msgid "Customer and debitor need to denormalized records"
+msgstr "Customer and debitor need to denormalized records"
+
+msgid "Customer and debitor need to denormalized records with original id"
+msgstr "Customer and debitor need to denormalized records with original id"
+
+msgid "Selected debitor is not of selected customer or customer not found"
+msgstr "Selected debitor is not of selected customer or customer not found"
+
 msgid "Document date is required."
 msgstr "Document date is required."
 
@@ -603,6 +623,11 @@ msgstr "Categories"
 
 msgid "Boilerplates"
 msgstr "Boilerplates"
+
+msgid "XRechnung Element"
+msgid_plural "XRechnung Elements"
+msgstr[0] "XRechnung Element"
+msgstr[1] "XRechnung Elements"
 
 msgid "No Right to alter the Number"
 msgstr "No Right to alter the Number"
@@ -899,6 +924,12 @@ msgstr "Change document date from { date } to today?"
 msgid "Document is booked. Accounting data is write-protected."
 msgstr "Document is booked. Accounting data is write-protected."
 
+msgid "{reversed_status, select, partiallyReversed {This document is partially reversed.} other {This document is reversed.}} See trac document for details."
+msgstr "{reversed_status, select, partiallyReversed {This document is partially reversed.} other {This document is reversed.}} See trac document for details."
+
+msgid "This is a reversal document. See trac document for details."
+msgstr "This is a reversal document. See trac document for details."
+
 msgid "Service Start Extended"
 msgstr "Service Start Extended"
 
@@ -1150,6 +1181,9 @@ msgid_plural "Categories"
 msgstr[0] "Category"
 msgstr[1] "Categories"
 
+msgid "This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one."
+msgstr "This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one."
+
 msgid "Value must not be empty."
 msgstr "Value must not be empty."
 
@@ -1162,8 +1196,17 @@ msgstr "Please provide the required data before changing the workflow status."
 msgid "This is an imported e-invoice. Accounting data is write-protected. "
 msgstr "This is an imported e-invoice. Accounting data is write-protected. "
 
-msgid "Update Supplier Data?"
-msgstr "Update Supplier Data?"
+msgid "Assign Supplier"
+msgstr "Assign Supplier"
+
+msgid "Assign existing supplier"
+msgstr "Assign existing supplier"
+
+msgid "Create new supplier"
+msgstr "Create new supplier"
+
+msgid "Update Existing Supplier?"
+msgstr "Update Existing Supplier?"
 
 msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
 msgstr "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
@@ -1212,6 +1255,18 @@ msgstr "Validate eDocument"
 
 msgid "Close"
 msgstr "Close"
+
+msgid "Please enter a valid date in the format YYYY-MM-DD"
+msgstr "Please enter a valid date in the format YYYY-MM-DD"
+
+msgid "Element gets removed from the invoice"
+msgstr "Element gets removed from the invoice"
+
+msgid "Dynamic template for the element"
+msgstr "Dynamic template for the element"
+
+msgid "Static value for the element"
+msgstr "Static value for the element"
 
 msgid "Invoice Number"
 msgstr "Invoice Number"
@@ -1740,8 +1795,14 @@ msgstr "The main line in an address. This is usually either the street and house
 msgid "Address Prefix 2"
 msgstr "Address Prefix 2"
 
+msgid "An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931])."
+msgstr "An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931])."
+
 msgid "Address Prefix 3"
 msgstr "Address Prefix 3"
+
+msgid "An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931])."
+msgstr "An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931])."
 
 msgid "Address Postal Code"
 msgstr "Address Postal Code"
@@ -1890,6 +1951,12 @@ msgstr "PC-"
 msgid "Status"
 msgstr "Status"
 
+msgid "Pay at"
+msgstr "Pay at"
+
+msgid "Paid at"
+msgstr "Paid at"
+
 msgid "CR-"
 msgstr "CR-"
 
@@ -1944,6 +2011,12 @@ msgstr "Payment Reminders"
 
 msgid "Last Datev send date"
 msgstr "Last Datev send date"
+
+msgid "Remittance information"
+msgstr "Remittance information"
+
+msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
+msgstr "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
 
 msgid "IN-"
 msgstr "IN-"
@@ -2135,12 +2208,6 @@ msgstr "Due at"
 msgid "Over due at"
 msgstr "Over due at"
 
-msgid "Pay at"
-msgstr "Pay at"
-
-msgid "Paid at"
-msgstr "Paid at"
-
 msgid "Paid amount"
 msgstr "Paid amount"
 
@@ -2315,6 +2382,29 @@ msgstr[1] "VAT exemption reason codes"
 msgid "GENDER_VAT exemption reason code"
 msgstr "GENDER_VAT exemption reason code"
 
+msgid "XRechnung Elements"
+msgstr "XRechnung Elements"
+
+msgid "Parent"
+msgstr "Parent"
+
+msgid "BT Number"
+msgstr "BT Number"
+
+msgid "Is Overrideable"
+msgstr "Is Overrideable"
+
+msgid "XRechnung Overwrite"
+msgid_plural "XRechnung Overwrites"
+msgstr[0] "XRechnung Overwrite"
+msgstr[1] "XRechnung Overwrites"
+
+msgid "GENDER_XRechnung Overwrite"
+msgstr "GENDER_XRechnung Overwrite"
+
+msgid "Action"
+msgstr "Action"
+
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] "XRechnung"
@@ -2322,6 +2412,9 @@ msgstr[1] "XRechnungen"
 
 msgid "GENDER_XRechnung"
 msgstr "GENDER_XRechnung"
+
+msgid "Overwrites"
+msgstr "Overwrites"
 
 msgid "Reversal Invoice"
 msgstr "Reversal Invoice"
