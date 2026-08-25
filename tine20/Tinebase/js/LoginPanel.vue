@@ -114,7 +114,7 @@ const logoUrl = `logo/i/300x100/image%2Fsvg%2Bxml/${isDark ? 'dark' : 'light'}`
             <div ref="langChooserRef" class="my-2" id="langChooser"/>
           </div>
         </div>
-        <BForm validated="true" novalidate class="login-form">
+        <BForm :validated="true" novalidate class="login-form">
           <BFormGroup
               :label="i18n._('Username')"
           >

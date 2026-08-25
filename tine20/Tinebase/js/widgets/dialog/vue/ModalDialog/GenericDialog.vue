@@ -21,6 +21,9 @@
           :noCloseOnBackdrop="true"
           v-bind:data-bs-theme="darkmode"
           :noCloseOnEsc="true"
+          :no-trap="true"
+          @shown="onShown"
+          @hidden="onHidden"
           class="dark-reverse"
           @close="handleModalClose" :style="{'z-index': modalProps.zIndex}"
           :id="modalProps.injectKey"
@@ -56,7 +59,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, onBeforeUnmount, watch, nextTick } from 'vue'
+import { computed, inject, ref, onBeforeUnmount, watch } from 'vue'
 import PersonaContainer from '../../../../ux/vue/PersonaContainer/PersonaContainer.vue'
 import { createFocusTrap } from 'focus-trap'
 
@@ -93,34 +96,52 @@ const { eventBus: EventBus } = inject(props.modalProps.injectKey)
 const showModal = ref(false)
 const buttonRefs = ref()
 let ft = null
-watch(() => props.modalProps.visible, (newVal) => {
-  if (newVal) {
-    showModal.value = newVal
-    const isKeyForward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
-    }
-    const isKeyBackward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
-    }
-    nextTick(() => {
-      const focusEl = contentCompRef.value?.initialFocus || buttonRefs?.value[buttonRefs.value.length - 1].$el
-      ft = createFocusTrap(
-        `#${props.modalProps.injectKey} .modal-content`,
-        {
-          trapStack: props.modalProps.focusTrapStack,
-          initialFocus: focusEl,
-          isKeyForward,
-          isKeyBackward,
-          escapeDeactivates: false
-        }
-      )
-      ft.activate()
-    })
-  } else {
-    ft.deactivate()
-    ft = null
-    showModal.value = newVal
+
+const isKeyForward = (event) => {
+  return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
+}
+const isKeyBackward = (event) => {
+  return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
+}
+
+const onShown = () => {
+  const container = document.querySelector(`#${props.modalProps.injectKey} .modal-content`)
+  if (!container) return // defensive: nothing to trap if it's not there
+
+  const focusEl = contentCompRef.value?.initialFocus || buttonRefs?.value[buttonRefs.value.length - 1].$el
+  ft = createFocusTrap(container, {
+    trapStack: props.modalProps.focusTrapStack,
+    initialFocus: focusEl,
+    isKeyForward,
+    isKeyBackward,
+    escapeDeactivates: false
+  })
+  try {
+    ft.activate()
+  } catch (e) {
+    const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
+    if (e.message !== msg) throw e
+    else deactivateTrap()
   }
+}
+
+const onHidden = () => {
+  deactivateTrap()
+}
+
+const deactivateTrap = () => {
+  try {
+    ft?.deactivate()
+  } catch (e) {
+    const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
+    if (e.message !== msg) throw e
+  } finally {
+    ft = null
+  }
+}
+
+watch(() => props.modalProps.visible, (newVal) => {
+  showModal.value = newVal
 })
 
 const buttonToShow = computed(() => {
@@ -158,18 +179,18 @@ const handleButtonClick = (eventName) => {
 }
 
 const handleModalClose = () => {
-  ft.deactivate()
+  deactivateTrap()
   showModal.value = false
   EventBus.emit('close')
 }
 
 onBeforeUnmount(() => {
-  ft?.deactivate()
+  deactivateTrap()
 })
 </script>
 
 <style lang="scss">
-@use '../styles/variables.scss' as *;
+@use '../../../../../styles/variables.scss' as *;
 
 .container {
   --skin-color: #FFFFFF;

@@ -47,7 +47,7 @@ describe('message', () => {
         filePickerWindow = await filePickerWindow;
         await expectPuppeteer(filePickerWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
         await expectPuppeteer(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, count: 2});
-        await new Promise(r => setTimeout(r, 2000)); //musst wait!
+        await new Promise(r => setTimeout(r, 15000)); //musst wait!
         await filePickerWindow.waitForSelector('input[type=file]');
         let inputUploadHandle = await filePickerWindow.$('input[type=file]');
         await inputUploadHandle.uploadFile(fileToUpload);

@@ -8,7 +8,7 @@
  */
 
 import GenericDialog from "./GenericDialog.vue";
-import {BootstrapVueNext} from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next";
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -106,7 +106,7 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
 
         this.injected['eventBus'] = this.vueEventBus
         this.vueHandle.provide(this.injectKey, this.injected)
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
         this.vueHandle.mount(this.vueMountPoint)
     },
 

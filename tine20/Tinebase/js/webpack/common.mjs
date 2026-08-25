@@ -4,12 +4,14 @@ import path from 'path';
 import webpack from 'webpack';
 import { createRequire } from 'module';
 import { fileURLToPath } from 'url';
-import AssetsPlugin from 'assets-webpack-plugin'; // @TODO: replace by https://github.com/shellscape/webpack-manifest-plugin ?
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import { VueLoaderPlugin } from 'vue-loader';
 import ChunkNamePlugin from './ChunkNamePlugin.mjs';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import eslintFriendlyFormatter from 'eslint-friendly-formatter';
+import Components from 'unplugin-vue-components/webpack'
+import { BootstrapVueNextResolver } from 'bootstrap-vue-next'
 // import IconLicenseCheckerPlugin from './webpack.icon-license-checker-plugin';
 // const { default: Icons } = await import('unplugin-icons/webpack');
 
@@ -17,13 +19,19 @@ const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default async () => {
 
-const assetsPluginInstance = new AssetsPlugin({
-    // path: 'Tinebase/js',
-    // fullPath: false,
-    removeFullPathAutoPrefix: true,
-    keepInMemory: global.mode !== 'production',
-    filename: 'webpack-assets-FAT.json',
-    prettyPrint: true
+const assetsPluginInstance = new WebpackManifestPlugin({
+    fileName: 'Tinebase/js/webpack-assets-FAT.json',
+    generate: (seed, files, entrypoints) => {
+        const map = {};
+        for (const [entryName, entryFiles] of Object.entries(entrypoints)) {
+            map[entryName] = {};
+            for (const f of entryFiles) {
+                if (f.endsWith('.js')) map[entryName].js = f;
+                if (f.endsWith('.css')) map[entryName].css = f;
+            }
+        }
+        return map;
+    }
 });
 
 const eslintPluginInstance = new ESLintPlugin({
@@ -56,7 +64,8 @@ const definePlugin = new webpack.DefinePlugin({
     PACKAGE_STRING: JSON.stringify(process.env.PACKAGE_STRING),
     RELEASE_TIME: JSON.stringify(process.env.RELEASE_TIME),
     __VUE_OPTIONS_API__: true,
-    __VUE_PROD_DEVTOOLS__: true
+    __VUE_PROD_DEVTOOLS__: true,
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
 });
 
 const copyPlugin = new CopyPlugin({
@@ -127,7 +136,10 @@ return {
         new ChunkNamePlugin(),
         providePlugin,
         eslintPluginInstance,
-        // require('unplugin-vue-components/webpack')({ /* options @TODO*/ }),
+        Components({
+            resolvers: [BootstrapVueNextResolver()],
+            dts: false,
+        }),
         // Icons({ /* options */ }),
         // new IconLicenseCheckerPlugin({
         //     allowedLicenses: ['MIT', 'Apache-2.0', 'ISC', 'CC0-1.0'],
@@ -197,7 +209,21 @@ return {
             // use script loader for old library classes as some of them the need to be included in window context
             { test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'], enforce: "pre", use: [{ loader: "script-loader" }] },
             { test: /\.css$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }] },
-            { test: /\.scss$/, use: ['style-loader','css-loader', 'sass-loader'] },
+            { test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                quietDeps: true,
+                                silenceDeprecations: ['import', 'global-builtin'], // because Bootstrap 5.3.3's own SCSS has deprecation warnings
+                            },
+                        },
+                    },
+                ]
+            },
             { test: /\.less$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "less-loader", options: { lessOptions: { noIeCompat: true, } } }] },
             {
                 test: /\.(woff2?|eot|ttf|otf|png|gif|svg)(\?.*)?$/,
@@ -215,7 +241,8 @@ return {
         // we need an absolut path here so that apps can resolve modules too
         modules: [
             path.resolve(__dirname, '../'),
-            path.resolve(__dirname, "../node_modules")
+            path.resolve(__dirname, "../node_modules"),
+            "node_modules" // we need this for the nested package resolution
         ],
         fallback: {
             'crypto': require.resolve("crypto-browserify"),

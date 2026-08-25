@@ -1,5 +1,5 @@
 // docs see https://bootstrap-vue.org/docs/components/alert
-import BootstrapVueNext from 'bootstrap-vue-next'
+import { createBootstrap } from "bootstrap-vue-next";
 
 Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
     vueHandle: null,
@@ -21,7 +21,7 @@ Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
         this.vueHandle = createApp({
             render: () => h(VueAlert, this.props)
         });
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
         this.vueHandle.mount('#'+this.el.id)
     },
 

@@ -1,7 +1,6 @@
 @import "../variables";
 
 @import 'global_bs'; // global bs styles needed for modal
-@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'; // bs-Vue styles
 
 .bootstrap-scope{
   @import './scopable_bs';

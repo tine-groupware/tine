@@ -12,7 +12,7 @@
     ref="itemContainerRef"
     :target="popoverTarget"
     :visible="visibleInternal"
-    @hide="emits('hide', $event)"
+    @hide="hideMenuEmit($event)"
     tabindex="0"
   >
     <ul role="menu" class="p-0 m-0" style="list-style: none;">
@@ -73,11 +73,8 @@ watch(menuItemsInternal, (newVal) => {
   if (appInFocus.value > newVal.length) appInFocus.value = newVal.length - 1
 })
 
-const hideMenu = (e) => {
-  if (e) {
-    e.stopPropagation()
-    e.preventDefault()
-  }
+const hideMenuEmit = (e) => {
+  if (!visibleInternal.value) return
   emits('hide', e)
 }
 </script>

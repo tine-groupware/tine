@@ -302,7 +302,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         
         attendeeStatusField.setDisabled(isOriginPerspective || ! perspectiveRecord.get('status_authkey'));
         attendeeTranspField.setDisabled(isOriginPerspective || ! perspectiveRecord.get('status_authkey'));
-        attendeeContainerField.setDisabled(isOriginPerspective || !perspectiveRecord.get('displaycontainer_id').account_grants[containerField.requiredGrant]);
+        attendeeContainerField.setDisabled(isOriginPerspective || !perspectiveRecord.get('displaycontainer_id')?.account_grants?.[containerField.requiredGrant]);
         this.editDialog.alarmPanel.setDisabled((! isOriginPerspective || ! this.editDialog.record.get('editGrant')) && ! perspectiveRecord.get('status_authkey'));
         this.editDialog.attendeeGridPanel.setDisabled(! isOriginPerspective || ! this.editDialog.record.get('editGrant'));
         this.editDialog.rrulePanel.setDisabled(! isOriginPerspective || ! this.editDialog.record.get('editGrant') || this.editDialog.record.isRecurException());

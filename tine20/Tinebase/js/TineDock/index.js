@@ -7,7 +7,7 @@
  */
 
 import TineDock from "./TineDock.vue";
-import BootstrapVueNext from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next";
 
 Ext.ns('Tine.Tinebase');
 
@@ -99,7 +99,7 @@ Tine.Tinebase.TineDock = Ext.extend(Ext.BoxComponent, {
                 this.fireEvent('syncState', this)
             }
         )
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
         this.vueHandle.config.globalProperties.window = window
         this.vueHandle.mount(this.el.dom)
     },

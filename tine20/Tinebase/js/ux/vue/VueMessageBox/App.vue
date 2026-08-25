@@ -12,6 +12,9 @@
           v-bind:data-bs-theme="darkmode"
           :noCloseOnBackdrop="true"
           :noCloseOnEsc="true"
+          :no-trap="true"
+          @shown="onShown"
+          @hidden="onHidden"
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
           @keydown.esc="props.opt.closable ? reject() : null"
   >
@@ -166,7 +169,7 @@ const buttonToShow = computed(() => {
         },
         name: props.otherConfigs.buttonText[buttonName],
         class: `${buttonName}-button`,
-        variant: props.otherConfigs.buttonVariant[buttonName] || 'secondary'
+        variant: props.otherConfigs.buttonVariant?.[buttonName] || 'secondary'
       }
     })
   } else {
@@ -176,46 +179,52 @@ const buttonToShow = computed(() => {
 
 const showModal = ref(false)
 let ft = null
+const isKeyForward = (event) => {
+  return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
+}
+const isKeyBackward = (event) => {
+  return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
+}
+const onShown = () => {
+  const container = document.querySelector('.vue-message-box .modal-content')
+  if (!container) return
+
+  ft = createFocusTrap(container, {
+    trapStack: props.opt.focusTrapStack,
+    isKeyForward, isKeyBackward,
+    escapeDeactivates: false,
+  })
+  try {
+    ft.activate()
+  } catch (e) {
+    const msg = "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
+    if (e.message !== msg) throw e
+    else deactivateTrap()
+  }
+}
+
+const onHidden = () => {
+  deactivateTrap()
+}
+
 watch(() => props.otherConfigs.visible, newVal => {
   if (newVal) {
     init();
     showModal.value = newVal
-    const isKeyForward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
-    }
-    const isKeyBackward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
-    }
-    nextTick(() => {
-      ft = createFocusTrap(
-        '.vue-message-box .modal-content',
-        {
-          trapStack: props.opt.focusTrapStack,
-          isKeyForward, isKeyBackward,
-          escapeDeactivates: false,
-        }
-      )
-      try{
-        ft.activate()
-      } catch (e) {
-        // ignorable error
-        const msg = "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
-        if(e.message !== msg){
-          throw e
-        } else {
-          deactivateTrap()
-        }
-      }
-    })
   } else {
-    deactivateTrap()
     showModal.value = newVal
   }
 })
 
 const deactivateTrap = () => {
-  ft?.deactivate()
-  ft = null
+  try {
+    ft?.deactivate()
+  } catch (e) {
+    const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
+    if (e.message !== msg) throw e
+  } finally {
+    ft = null
+  }
 }
 
 onBeforeMount(async () => {

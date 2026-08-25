@@ -117,9 +117,9 @@ watch(() => props.visible, newVal => {
 }, { immediate: true })
 
 const hideMenu = (e) => {
+  if (!visibleInternal.value) return
   if (e) {
     e.stopPropagation()
-    e.preventDefault()
   }
   visibleInternal.value = false
   emits('hide', e)

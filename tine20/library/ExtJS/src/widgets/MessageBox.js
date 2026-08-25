@@ -4,7 +4,7 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-import {BootstrapVueNext} from 'bootstrap-vue-next'
+import { createBootstrap } from "bootstrap-vue-next";
 
 /**
  * @class Ext.MessageBox
@@ -296,7 +296,7 @@ Ext.MessageBox = function(){
                 vueHandle.config.globalProperties.window = window;
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
-                vueHandle.use(BootstrapVueNext)
+                vueHandle.use(createBootstrap())
 
                 const mp = document.createElement("div");
                 mp.id = MSG_BOX_MOUNT_ID;

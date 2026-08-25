@@ -28,7 +28,8 @@ require('postal.request-response');
 require('../../library/ExtJS/ext-custom');
 
 // custom bootstrap styles
-require('../styles/bootstrap-vue/custom_vue_styles.scss')
+require('../styles/bootstrap-vue/custom_vue_styles.scss');
+require('bootstrap-vue-next/dist/bootstrap-vue-next.css');
 
 /* pkg: Ext All CSS No theme (ExtJS/ext-all-notheme.css)*/
 require('../styles/ExtJS/structure/reset.scss');
@@ -422,11 +423,12 @@ require('node-waves/src/less/waves.less');
 require('../styles/flat.scss');
 require('../styles/darkmode.scss');
 
+
 // other libs
 var lodash = require('lodash');
 var director = require('director');
 const vue = require('vue');
-const mitt = require('mitt')
+const mitt = require('mitt').default
 
 require('./ux/util/screenshot');
 require('./ux/file/UploadManagerUI');

@@ -1,10 +1,11 @@
+@use "sass:color";
 @use "../../bootstrap-vue/global_bs" as bs;
 
 .x-btn {
 
   @each $color, $value in bs.$theme-colors {
 
-    @if lightness(bs.color-contrast($value)) > 50 {
+    @if color.channel(bs.color-contrast($value), "lightness", $space: hsl) > 50 {
       &.btn-#{$color} {
         .x-btn-image,
         div.x-btn-arrow {

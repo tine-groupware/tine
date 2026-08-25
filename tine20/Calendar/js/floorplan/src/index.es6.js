@@ -1,7 +1,7 @@
 import "./loadVue"
 
 import App from "./App.vue"
-import BootstrapVueNext from "bootstrap-vue-next"
+import { createBootstrap } from "bootstrap-vue-next";
 // until the floorplans work quite well in dark mode
 import './styles.scss'
 import _ from "lodash";
@@ -36,5 +36,5 @@ app.config.globalProperties.formatMessage = function (template) {
 _.assign(app.config.globalProperties.formatMessage, FormatMessage)
 app.provide(translationHelper, app.config.globalProperties.formatMessage)
 
-app.use(BootstrapVueNext)
+app.use(createBootstrap())
 app.mount("#tine-viewport-app")

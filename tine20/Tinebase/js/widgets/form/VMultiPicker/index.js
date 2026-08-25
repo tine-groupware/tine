@@ -5,7 +5,7 @@
  * @author      Sohan Deshar<s.deshar@metaways.de>
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-import BootstrapVueNext from 'bootstrap-vue-next'
+import { createBootstrap } from "bootstrap-vue-next";
 import RecordsDisplayContainer from "./RecordsDisplayContainer.vue";
 import * as async from 'async'
 Ext.ns('Tine.Tinebase.widgets.form')
@@ -115,7 +115,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             render: () => h(RecordsDisplayContainer, this.props)
         })
         this.vueHandle.provide(this.injectKey, this.vueEventBus)
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
     },
 
     initCombo: function(listMode= false){

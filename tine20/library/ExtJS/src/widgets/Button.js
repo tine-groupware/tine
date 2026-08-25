@@ -405,7 +405,7 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
         } else if (this.tooltip !== undefined && tooltip.length < 25){
             this.el.dom.setAttribute('aria-label', this.tooltip);
         } else {
-            console.warn("The element " + this.el.dom.id + " has no aria-label and can't be announced by screen readers.")
+            console.debug("The element " + this.el.dom.id + " has no aria-label and can't be announced by screen readers.")
         }
 
         if(this.tabIndex) {

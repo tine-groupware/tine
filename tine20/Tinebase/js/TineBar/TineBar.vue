@@ -33,7 +33,7 @@
           :placement="'bottom-end'"
         />
         <div class="tine-favicon mx-2"/>
-        <span class="tine-bar__active-app ms-3">{{activeApp}}</span>
+        <span class="tine-bar__active-app ms-3">{{currentActiveApp }}</span>
       </div>
       <div class="me-3 d-flex">
         <Component
@@ -108,7 +108,7 @@ const _barItems = computed(() => {
 
 const mainMenuVisible = ref(false)
 
-const activeApp = computed(() => {
+const currentActiveApp = computed(() => {
   const dockState = Tine.Tinebase.MainScreen.getDock().vueProps.state || null
   if (!dockState) return ''
   const _activeApp = Tine.Tinebase.appMgr.getAll().find(app => app.name === dockState.activeApp)
@@ -118,6 +118,7 @@ const activeApp = computed(() => {
 const appMenuVisible = ref(false)
 const openedViaMouse = ref(true)
 const hideApplicationMenu = (e) => {
+  if (!appMenuVisible.value) return
   appMenuVisible.value = false
   e.__skip_toggle = true
 }
@@ -132,6 +133,7 @@ const activateApp = (appName) => {
 }
 
 const hideMenu = (e) => {
+  if (!mainMenuVisible.value) return
   mainMenuVisible.value = false
   e.__skip_toggle = true
 }
@@ -145,14 +147,15 @@ const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.p
 </script>
 
 <style lang="scss">
-@use "../styles/variables" as *;
+@use "sass:color";
+@use "../../styles/variables" as *;
 .dark-mode {
   .tine-bar {
     .btn-primary {
       background-color: var(--selection-color) !important;
       border-color: var(--selection-color) !important;
       &:hover {
-        background-color: darken($selection-color, 10%) !important;
+        background-color: color.adjust($selection-color, $lightness: -10%) !important;
       }
     }
     //.x-btn-arrow,
@@ -168,6 +171,7 @@ const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.p
 }
 .tine-bar {
   .tine-bar-item {
+    position: relative;
     width: 50px;
     height: 34px;
 

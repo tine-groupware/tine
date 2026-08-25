@@ -156,7 +156,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
                 searchbar.setWidth(totalWidth - 50);
             } else {
-                console.warn("responsive dropdowns not found");
+                console.debug("responsive dropdowns not found");
             }
         }
     },

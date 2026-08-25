@@ -7,7 +7,7 @@
  */
 
 import TineBar from "./TineBar.vue";
-import BootstrapVueNext from "bootstrap-vue-next";
+import { createBootstrap } from "bootstrap-vue-next";
 Ext.ns('Tine.Tinebase');
 
 import '../MFA/DeviceSelfServiceDialog';
@@ -81,7 +81,7 @@ Tine.Tinebase.TineBar = Ext.extend(Ext.BoxComponent, {
             render: () => window.vue.h(this.vueApp, this.vueProps)
         })
         this.vueHandle.provide(this.injectKey, this.vueEventBus)
-        this.vueHandle.use(BootstrapVueNext)
+        this.vueHandle.use(createBootstrap())
         this.vueHandle.config.globalProperties.window = window
         this.vueHandle.mount(this.el.dom)
     },

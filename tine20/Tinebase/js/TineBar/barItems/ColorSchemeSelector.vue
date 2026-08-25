@@ -84,11 +84,10 @@ const menuItemClicked = (action, ev) => {
   hideMenu(ev)
   action.checkHandler()
 }
-
 const hideMenu = (e) => {
+  if (!visible.value) return
   if (e) {
     if (typeof e.stopPropagation === 'function') e.stopPropagation()
-    if (typeof e.preventDefault === 'function') e.preventDefault()
   }
   visible.value = false
 }

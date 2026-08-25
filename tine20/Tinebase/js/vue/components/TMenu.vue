@@ -13,7 +13,7 @@
     role="dialog"
     aria-modal="true"
     tabindex="0"
-    container="body"
+    teleport-to="body"
     v-model="_visible"
     manual
     :delay="0"
@@ -38,7 +38,7 @@
 
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { offset, shift, size, hide as hideFloatMiddleWare } from '@floating-ui/vue'
+import { offset as floatingOffset, shift, size, hide as hideFloatMiddleWare } from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
 
 const props = defineProps({
@@ -62,7 +62,7 @@ const popoverId = computed(() => `${props.target}-menu`)
 const _visible = ref(false)
 
 const _floatingMiddleware = computed(() => {
-  const arr = [offset({
+  const arr = [floatingOffset({
     mainAxis: props.offset.mainAxis,
     crossAxis: props.offset.crossAxis
   })]
@@ -104,7 +104,9 @@ const handleAfterHide = () => {
   }
 }
 const menu = ref()
-onClickOutside(menu, hide)
+onClickOutside(menu, hide, {
+  ignore: [`#${props.target}`]
+})
 const winMgrProxy = {
   eventManager: window.mitt(),
   setZIndex,

@@ -4,6 +4,9 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
+@use "sass:color";
+
 .x-combo-list {
     border-color:#98c0f4;
     background-color:#ddecfe;
@@ -43,7 +46,7 @@
 }
 
 .x-combo-list-unselectable-item {
-  color: lighten(#000000, 40%);
+  color: color.adjust(#000000, $lightness: 40%);
   font-style: italic;
   &.x-combo-selected {
     background-color: transparent !important;
