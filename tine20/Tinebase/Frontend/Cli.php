@@ -291,6 +291,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function handle($_opts)
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::setTransactionName('CLI: ' . $_opts->method);
+        }
+
         [$application, $method] = explode('.', $_opts->method);
         $class = $application . '_Frontend_Cli';
         

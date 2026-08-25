@@ -37,6 +37,15 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::watchCallback(
+                'Zend_Json_Server::_handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName($name = 'Json: ' . $context['object']->getRequest()->getMethod());
+                }
+            );
+        }
+
         Tinebase_AreaLock::getInstance()->activatedByFE();
 
         $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
