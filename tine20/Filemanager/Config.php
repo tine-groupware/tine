@@ -15,9 +15,9 @@
  */
 class Filemanager_Config extends Tinebase_Config_Abstract
 {
-    const APP_NAME = 'Filemanager';
-    const PUBLIC_DOWNLOAD_URL = 'publicDownloadUrl';
-    const PUBLIC_DOWNLOAD_DEFAULT_VALID_TIME = 'publicDownloadDefaultValidTime';
+    public const APP_NAME = 'Filemanager';
+    public const PUBLIC_DOWNLOAD_URL = 'publicDownloadUrl';
+    public const PUBLIC_DOWNLOAD_DEFAULT_VALID_TIME = 'publicDownloadDefaultValidTime';
 
     /**
      * (non-PHPdoc)

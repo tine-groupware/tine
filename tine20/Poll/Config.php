@@ -4,7 +4,7 @@
  *
  * @package     Poll
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2026 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Christian Feitl <c.feitl@metaways.de>
  */
 
@@ -52,9 +52,10 @@ class Poll_Config extends Tinebase_Config_Abstract
      */
     protected $_appName = 'Poll';
 
+    public const APP_NAME = 'Poll';
 
+    public const STATUS = 'status';
 
-    const STATUS = 'status';
     /**
      * holds the instance of the singleton
      *

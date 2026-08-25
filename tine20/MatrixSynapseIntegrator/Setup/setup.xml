@@ -2,7 +2,7 @@
 <application>
     <name>MatrixSynapseIntegrator</name>
     <!-- gettext('MatrixSynapseIntegrator') -->
-    <version>19.5</version>
+    <version>20.0</version>
     <order>150</order>
     <status>enabled</status>
 </application>
