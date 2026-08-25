@@ -2,7 +2,7 @@
 variables:
   # The major commit ref name is mainly used for ci caching. Non-feature branches should be their own major. The major of feature branches should be the branch the will be merged into.
   # The major commit ref name is configured in two parts, the base and the customer-specific part.
-  BASE_MAJOR_COMMIT_REF_NAME: "2026.11"
+  BASE_MAJOR_COMMIT_REF_NAME: "main"
   # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templating and is required to allow branches with out a customer.
   CUSTOMER_MAJOR_COMMIT_REF_NAME: ""
 
@@ -12,7 +12,7 @@ variables:
   # RELEASE_UPDATE_TEST_START_REF: "2024.11.17"
 
   # Upstream branch. For non-custom branches, the branch should be its own UPSTREAM_BRANCH.
-  UPSTREAM_BRANCH: '2026.11'
+  UPSTREAM_BRANCH: 'main'
 
   # General
   # "Docker hub tag for this build."
@@ -45,7 +45,7 @@ variables:
   PHP_VERSION: "8.5"
 
   # "Codename for build"
-  CODENAME: "Mats"
+  CODENAME: "TBA"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
