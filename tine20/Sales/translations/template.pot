@@ -91,6 +91,18 @@ msgstr ""
 msgid "Sets the maximum interval at which contracts will be billed."
 msgstr ""
 
+msgid "XRechnung Overwrite Actions"
+msgstr ""
+
+msgid "Delete property"
+msgstr ""
+
+msgid "Replace with result of evaluated template"
+msgstr ""
+
+msgid "Replace with static value"
+msgstr ""
+
 msgid "Attached Document Types"
 msgstr ""
 
@@ -577,6 +589,15 @@ msgstr ""
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr ""
 
+msgid "Customer and debitor need to denormalized records"
+msgstr ""
+
+msgid "Customer and debitor need to denormalized records with original id"
+msgstr ""
+
+msgid "Selected debitor is not of selected customer or customer not found"
+msgstr ""
+
 msgid "Document date is required."
 msgstr ""
 
@@ -602,6 +623,11 @@ msgstr ""
 
 msgid "Boilerplates"
 msgstr ""
+
+msgid "XRechnung Element"
+msgid_plural "XRechnung Elements"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Right to alter the Number"
 msgstr ""
@@ -898,6 +924,12 @@ msgstr ""
 msgid "Document is booked. Accounting data is write-protected."
 msgstr ""
 
+msgid "{reversed_status, select, partiallyReversed {This document is partially reversed.} other {This document is reversed.}} See trac document for details."
+msgstr ""
+
+msgid "This is a reversal document. See trac document for details."
+msgstr ""
+
 msgid "Service Start Extended"
 msgstr ""
 
@@ -1149,6 +1181,9 @@ msgid_plural "Categories"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one."
+msgstr ""
+
 msgid "Value must not be empty."
 msgstr ""
 
@@ -1161,7 +1196,16 @@ msgstr ""
 msgid "This is an imported e-invoice. Accounting data is write-protected. "
 msgstr ""
 
-msgid "Update Supplier Data?"
+msgid "Assign Supplier"
+msgstr ""
+
+msgid "Assign existing supplier"
+msgstr ""
+
+msgid "Create new supplier"
+msgstr ""
+
+msgid "Update Existing Supplier?"
 msgstr ""
 
 msgid "The selected supplier does not have an electronic address. Do you want to update it with the data from this e-invoice now?"
@@ -1210,6 +1254,18 @@ msgid "Validate eDocument"
 msgstr ""
 
 msgid "Close"
+msgstr ""
+
+msgid "Please enter a valid date in the format YYYY-MM-DD"
+msgstr ""
+
+msgid "Element gets removed from the invoice"
+msgstr ""
+
+msgid "Dynamic template for the element"
+msgstr ""
+
+msgid "Static value for the element"
 msgstr ""
 
 msgid "Invoice Number"
@@ -1739,7 +1795,13 @@ msgstr ""
 msgid "Address Prefix 2"
 msgstr ""
 
+msgid "An additional address line in an address that can be used to provide further details to supplement the main line (BT-36 [EN 16931])."
+msgstr ""
+
 msgid "Address Prefix 3"
+msgstr ""
+
+msgid "An additional line in an address that can be used to provide further details in addition to the main line (BT-162 [EN 16931])."
 msgstr ""
 
 msgid "Address Postal Code"
@@ -1889,6 +1951,12 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Pay at"
+msgstr ""
+
+msgid "Paid at"
+msgstr ""
+
 msgid "CR-"
 msgstr ""
 
@@ -1942,6 +2010,12 @@ msgid "Payment Reminders"
 msgstr ""
 
 msgid "Last Datev send date"
+msgstr ""
+
+msgid "Remittance information"
+msgstr ""
+
+msgid "A text value used to link the payment to the invoice issued by the seller (BT-83 [EN 16931]). Placeholders will be replaced when booking."
 msgstr ""
 
 msgid "IN-"
@@ -2134,12 +2208,6 @@ msgstr ""
 msgid "Over due at"
 msgstr ""
 
-msgid "Pay at"
-msgstr ""
-
-msgid "Paid at"
-msgstr ""
-
 msgid "Paid amount"
 msgstr ""
 
@@ -2314,12 +2382,38 @@ msgstr[1] ""
 msgid "GENDER_VAT exemption reason code"
 msgstr ""
 
+msgid "XRechnung Elements"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "BT Number"
+msgstr ""
+
+msgid "Is Overrideable"
+msgstr ""
+
+msgid "XRechnung Overwrite"
+msgid_plural "XRechnung Overwrites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_XRechnung Overwrite"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] ""
 msgstr[1] ""
 
 msgid "GENDER_XRechnung"
+msgstr ""
+
+msgid "Overwrites"
 msgstr ""
 
 msgid "Reversal Invoice"

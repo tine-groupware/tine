@@ -104,6 +104,18 @@ msgstr "Vertragsintervall automatisch abrechnen"
 msgid "Sets the maximum interval at which contracts will be billed."
 msgstr "Setze das größte Intervall, zu dem Verträge gebucht werden."
 
+msgid "XRechnung Overwrite Actions"
+msgstr ""
+
+msgid "Delete property"
+msgstr ""
+
+msgid "Replace with result of evaluated template"
+msgstr ""
+
+msgid "Replace with static value"
+msgstr ""
+
 msgid "Attached Document Types"
 msgstr "Angehängte Dokumententypen"
 
@@ -590,6 +602,15 @@ msgstr "Für das gewählte USt.-Verfahren muss ein Befreiungsgrund angegeben wer
 msgid "Selected VAT procedure and selected VAT exemption reason are not compatible"
 msgstr "Das gewählte USt.-Verfahren und der angegebene Befreiungsgrund sind nicht kompatibel."
 
+msgid "Customer and debitor need to denormalized records"
+msgstr ""
+
+msgid "Customer and debitor need to denormalized records with original id"
+msgstr ""
+
+msgid "Selected debitor is not of selected customer or customer not found"
+msgstr "Der Debitor passt nicht zum Rechnungskunden oder der Kunde ist nicht mehr verfügbar"
+
 msgid "Document date is required."
 msgstr "Belegdatum erforderlich"
 
@@ -615,6 +636,11 @@ msgstr "Kategorien"
 
 msgid "Boilerplates"
 msgstr "Textbausteine"
+
+msgid "XRechnung Element"
+msgid_plural "XRechnung Elements"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "No Right to alter the Number"
 msgstr "Keine Berechtigung die Nummer zu verändern"
@@ -1168,6 +1194,9 @@ msgid_plural "Categories"
 msgstr[0] "Kategorie"
 msgstr[1] "Kategorien"
 
+msgid "This invoice could not be assigned to a supplier. Please select an existing supplier or create a new one."
+msgstr ""
+
 msgid "Value must not be empty."
 msgstr "Der Wert darf nicht leer sein."
 
@@ -1179,6 +1208,15 @@ msgstr "Bitte tragen sie die benötigten Daten ein bevor sie den Workflow-Status
 
 msgid "This is an imported e-invoice. Accounting data is write-protected. "
 msgstr "Dies ist eine eingelesene eRechnung. Die Buchhaltungsdaten sind schreibgeschützt. "
+
+msgid "Assign Supplier"
+msgstr ""
+
+msgid "Assign existing supplier"
+msgstr ""
+
+msgid "Create new supplier"
+msgstr ""
 
 msgid "Update Existing Supplier?"
 msgstr "Vorhandene Lieferantendaten Aktualisieren?"
@@ -1230,6 +1268,18 @@ msgstr "eDokument validieren"
 
 msgid "Close"
 msgstr "Schließen"
+
+msgid "Please enter a valid date in the format YYYY-MM-DD"
+msgstr ""
+
+msgid "Element gets removed from the invoice"
+msgstr ""
+
+msgid "Dynamic template for the element"
+msgstr ""
+
+msgid "Static value for the element"
+msgstr ""
 
 msgid "Invoice Number"
 msgstr "Rechnungsnummer"
@@ -1914,6 +1964,12 @@ msgstr "PG-"
 msgid "Status"
 msgstr "Status"
 
+msgid "Pay at"
+msgstr "Zahlen am"
+
+msgid "Paid at"
+msgstr "Bezahlt am"
+
 msgid "CR-"
 msgstr "GS-"
 
@@ -2165,12 +2221,6 @@ msgstr "Fällig am"
 msgid "Over due at"
 msgstr "Überfällig am"
 
-msgid "Pay at"
-msgstr "Zahlen am"
-
-msgid "Paid at"
-msgstr "Bezahlt am"
-
 msgid "Paid amount"
 msgstr "Gezahlter Betrag"
 
@@ -2345,6 +2395,29 @@ msgstr[1] "Umsatzsteuerbefreiungsgrund-Codes"
 msgid "GENDER_VAT exemption reason code"
 msgstr "male"
 
+msgid "XRechnung Elements"
+msgstr ""
+
+msgid "Parent"
+msgstr ""
+
+msgid "BT Number"
+msgstr ""
+
+msgid "Is Overrideable"
+msgstr ""
+
+msgid "XRechnung Overwrite"
+msgid_plural "XRechnung Overwrites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "GENDER_XRechnung Overwrite"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
 msgid "XRechnung"
 msgid_plural "XRechnungen"
 msgstr[0] ""
@@ -2352,6 +2425,9 @@ msgstr[1] ""
 
 msgid "GENDER_XRechnung"
 msgstr "female"
+
+msgid "Overwrites"
+msgstr ""
 
 msgid "Reversal Invoice"
 msgstr "Storno-Rechnung"
@@ -2572,4 +2648,3 @@ msgstr "Der eDokument Typ wird nicht unterstützt"
 
 msgid "Service disruption of view service"
 msgstr "Störung des anzeige Services"
-
