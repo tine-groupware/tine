@@ -245,18 +245,22 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
     protected function _inspectCustomerDebitor(Sales_Model_Document_Abstract $document): void
     {
+        $translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME);
         if (!$document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID} instanceof Sales_Model_Document_Customer ||
                 !$document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} instanceof Sales_Model_Document_Debitor) {
-            throw new Tinebase_Exception_UnexpectedValue('customer and debitor need to denormalized records');
+            throw new Tinebase_Exception_UnexpectedValue(
+                $translate->_('Customer and debitor need to denormalized records'));
         }
         if (!($orgCustomer = $document->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}) ||
                 !($orgDebitor = $document->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID})) {
-            throw new Tinebase_Exception_UnexpectedValue('customer and debitor need to denormalized records with original id');
+            throw new Tinebase_Exception_UnexpectedValue(
+                $translate->_('Customer and debitor need to denormalized records with original id'));
         }
 
         $orgDebitor = Sales_Controller_Debitor::getInstance()->get($orgDebitor, _getDeleted: true);
         if ($orgDebitor->getIdFromProperty(Sales_Model_Debitor::FLD_CUSTOMER_ID) !== $orgCustomer) {
-            throw new Tinebase_Exception_UnexpectedValue('selected debitor is not of selected customer');
+            throw new Tinebase_Exception_UnexpectedValue(
+                $translate->_('Selected debitor is not of selected customer or customer not found'));
         }
     }
 
