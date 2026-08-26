@@ -25,6 +25,106 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
+        $tidewaysTransactionNameRaii = null;
+        if (class_exists('Tideways\Profiler')) {
+            $tidewaysTransactionNameRaii = new Tinebase_RAII(function () {
+                if (null === \Tideways\Profiler::getTransactionName()) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync');
+                }
+            });
+
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_FolderCreate::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: FolderCreate');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_FolderDelete::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: FolderDelete');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_FolderSync::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: FolderSync');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_FolderUpdate::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: FolderUpdate');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_GetItemEstimate::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: GetItemEstimate');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_ItemOperations::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: ItemOperations');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_MeetingResponse::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: MeetingResponse');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_MoveItems::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: MoveItems');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_Search::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: Search');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_SendMail::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: SendMail');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_Settings::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: Settings');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_Sync::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: Sync');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_GetAttachment::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: GetAttachment');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_Provision::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: Provision');
+                }
+            );
+            \Tideways\Profiler::watchCallback(
+                'Syncroton_Command_Ping::handle',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('ActiveSync: Ping');
+                }
+            );
+        }
+
         try {
             $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
             $this->_body = $this->_getBody($body);
@@ -124,6 +224,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract implements Tinebas
         } finally {
             Tinebase_Session::destroyAndRemoveCookie();
         }
+        unset($tidewaysTransactionNameRaii);
     }
 
     protected function _unauthorized()

@@ -102,6 +102,10 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      */
     public function handle($request = false)
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::setTransactionName('HTTP: ' . ($request['method'] ?? 'unknown'));
+        }
+
         if (!$request) {
             $request = $_REQUEST;
         }

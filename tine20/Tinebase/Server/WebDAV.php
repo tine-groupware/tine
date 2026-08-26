@@ -55,6 +55,21 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
+        $tidewaysTransactionNameRaii = null;
+        if (class_exists('Tideways\Profiler')) {
+            $tidewaysTransactionNameRaii = new Tinebase_RAII(function () {
+                if (null === \Tideways\Profiler::getTransactionName()) {
+                    \Tideways\Profiler::setTransactionName('WebDAV: unauthenticated/misc');
+                }
+            });
+            \Tideways\Profiler::watchCallback(
+                'Sabre\DAV\Server::start',
+                function($context) {
+                    \Tideways\Profiler::setTransactionName('WebDAV: sabre');
+                }
+            );
+        }
+
         try {
             $this->_disallowAppPwdSessions();
 
@@ -350,6 +365,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $this->_reportWebDavIssue($e);
         }
         unset($calResourceCtrlRaii);
+        unset($tidewaysTransactionNameRaii);
     }
 
     protected function _reportWebDavIssue(Throwable $t): void
