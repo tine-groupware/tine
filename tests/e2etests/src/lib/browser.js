@@ -226,6 +226,7 @@ module.exports = {
             await expectPuppeteer(page).toClick('.action_menu.application-menu-btn');
             await page.waitForSelector('.application-menu-item');
             await expectPuppeteer(page).toClick('.application-menu-item__text', {text: app});
+            await new Promise(r => setTimeout(r, 1000));
         }
         if (module) {
             await page.waitForSelector('span', {text: 'Module'});
