@@ -88,7 +88,7 @@ class Tinebase_Twig
         $this->_twigEnvironment->addExtension(new CssInlinerExtension());
         $this->_twigEnvironment->addExtension(new HtmlExtension());
         $this->_twigEnvironment->addExtension(new Tinebase_Twig_BootstrapEmailExtension());
-
+        $this->_twigEnvironment->addExtension(new Twig\Extension\SandboxExtension(new Tinebase_Twig_SecurityPolicy(), true));
 
         $this->_addTwigFunctions();
 
