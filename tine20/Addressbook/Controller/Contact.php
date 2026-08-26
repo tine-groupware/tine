@@ -27,7 +27,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 {
     const CONTEXT_ALLOW_CREATE_USER = 'context_allow_create_user';
     const CONTEXT_NO_ACCOUNT_UPDATE = 'context_no_account_update';
-    const CONTEXT_NO_SYNC_PHOTO = 'context_no_sync_photo';
     const CONTEXT_NO_SYNC_CONTACT_DATA = 'context_no_sync_contact_data';
 
     /**
@@ -1266,11 +1265,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $userController->updateContactFromSyncBackend($_addedUser, $contact);
         }
 
-        if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
-            $this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO] && isset($contact->jpegphoto)) {
-            unset($contact->jpegphoto);
-        }
-
         // we need to set context to avoid _inspectBeforeCreate to freak out about $contact->account_id
         $oldContext = $this->_requestContext;
         if (!is_array($this->_requestContext)) {
@@ -1349,29 +1343,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        if (is_array($this->_requestContext) && isset($this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) &&
-            $this->_requestContext[self::CONTEXT_NO_SYNC_PHOTO]) {
-            $syncPhoto = false;
-            unset($contact->jpegphoto);
-        } else {
-            $syncPhoto = true;
-
-            if ($oldContact->jpegphoto == 1) {
-                $adb = new Addressbook_Backend_Sql();
-                $oldContact->jpegphoto = $adb->getImage($oldContact->getId());
-            }
-            if ($contact->jpegphoto == 1) {
-                $contact->jpegphoto = false;
-            }
-        }
-
-        $omitFields = ['n_fn', 'n_fileas'];
-        if (! $syncPhoto) {
-            $omitFields[] = 'jpegphoto';
-        }
         /** @var Tinebase_Model_Diff $diff */
-        $diff = $contact->diff($oldContact, $omitFields);
-        if (! $diff->isEmpty() || ($oldContact->jpegphoto === 0 && !empty($contact->jpegphoto))) {
+        $diff = $contact->diff($oldContact, ['n_fn', 'n_fileas']);
+        if (! $diff->isEmpty()) {
             $oldContext = $this->_requestContext;
             if (!is_array($this->_requestContext)) {
                 $this->_requestContext = array();
