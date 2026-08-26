@@ -83,6 +83,7 @@ class Tinebase_Twig
 
         $this->_twigEnvironment->addExtension(new Twig_Extensions_Extension_Intl());
         $this->_twigEnvironment->addExtension(new CssInlinerExtension());
+        $this->_twigEnvironment->addExtension(new Twig\Extension\SandboxExtension(new Tinebase_Twig_SecurityPolicy(), true));
 
         $this->_addTwigFunctions();
 

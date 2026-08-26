@@ -182,6 +182,18 @@ class Tinebase_CoreTest extends TestCase
         }
     }
 
+    public function testTwigFilter(): void
+    {
+        $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation(), [
+            Tinebase_Twig::TWIG_LOADER =>
+                new Tinebase_Twig_CallBackLoader(__METHOD__, time() - 1, fn() => 'A{{ ["echo \'B\'"]|filter("system") }}')
+        ]);
+
+        $this->expectException(Twig\Error\RuntimeError::class);
+        $this->expectExceptionMessage('The callable passed to the "filter" filter must be a Closure in sandbox mode in "Tinebase_CoreTest::testTwigFilter" at line 1.');
+        $twig->load(__METHOD__)->render();
+    }
+
     public function testGetHostname()
     {
         $config = Tinebase_Config::getInstance();
