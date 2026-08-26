@@ -574,9 +574,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $oldRequestContext = Addressbook_Controller_Contact::getInstance()->getRequestContext();
 
         $requestContext = array();
-        if (!isset($options['syncContactPhoto']) || !$options['syncContactPhoto']) {
-            $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_PHOTO] = true;
-        }
         if (!isset($options['syncContactData']) || !$options['syncContactData']) {
             $requestContext[Addressbook_Controller_Contact::CONTEXT_NO_SYNC_CONTACT_DATA] = true;
         }
