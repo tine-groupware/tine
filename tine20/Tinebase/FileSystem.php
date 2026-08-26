@@ -840,10 +840,16 @@ class Tinebase_FileSystem implements
         if ($_node->flysystem) {
             if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $_node->type) {
                 $flysystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($_node->getIdFromProperty('flysystem'));
-                $updatedFileObject->size = $flysystem->fileSize($_node->flypath);
                 try {
+                    $updatedFileObject->size = $flysystem->fileSize($_node->flypath);
                     $updatedFileObject->contenttype = $flysystem->mimeType($_node->flypath);
-                } catch (League\Flysystem\UnableToRetrieveMetadata) {
+                } catch (League\Flysystem\UnableToRetrieveMetadata $utrm) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $utrm->getMessage());
+                    }
+
+                    $updatedFileObject->size = 0;
                     $updatedFileObject->contenttype = null;
                 }
             }
@@ -856,8 +862,10 @@ class Tinebase_FileSystem implements
                 $updatedFileObject->contenttype = $mimeType;
             }
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' File hash does not exist - directory?');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' File hash does not exist - directory?');
+            }
         }
         
         $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
