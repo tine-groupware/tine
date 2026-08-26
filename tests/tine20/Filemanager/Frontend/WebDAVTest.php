@@ -979,14 +979,16 @@ EOS
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
+        $webDavInfo = $sapi::$lastReponse?->getStatus() . ' ' . $sapi::$lastReponse->getStatusText() . PHP_EOL
+        . $sapi::$lastReponse->getBodyAsString();
+
         try {
-            static::assertSame('abcdefgh', file_get_contents(
-                'tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test'));
+            $data = @file_get_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile%.test');
         } catch (Throwable $e) {
             $this->fail(get_class($e) . ': ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString() . PHP_EOL
-                . $sapi::$lastReponse?->getStatus() . ' ' . $sapi::$lastReponse->getStatusText() . PHP_EOL
-                . $sapi::$lastReponse->getBodyAsString() . PHP_EOL);
+                . $webDavInfo);
         }
+        $this->assertSame('abcdefgh', $data, $webDavInfo);
     }
 
     /**
