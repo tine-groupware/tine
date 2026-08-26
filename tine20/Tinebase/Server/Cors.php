@@ -27,6 +27,11 @@ class Tinebase_Server_Cors extends Tinebase_Server_Abstract implements Tinebase_
 
     public function handle(?\Laminas\Http\Request $request = null, $body = null)
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::setTransactionName('cors');
+            \Tideways\Profiler::ignoreTransaction();
+        }
+
         if ($this->allowed) {
             header('Access-Control-Allow-Methods: POST');
             header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey, authorization');

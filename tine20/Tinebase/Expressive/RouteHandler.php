@@ -194,6 +194,10 @@ class Tinebase_Expressive_RouteHandler
      */
     public function dispatch()
     {
+        if (class_exists('Tideways\Profiler')) {
+            \Tideways\Profiler::setTransactionName('Expressive: ' . $this->getName());
+        }
+
         $orderedParams = [];
         foreach ($this->_methodParams as $refParam) {
             $refParamName = $refParam->getName();
