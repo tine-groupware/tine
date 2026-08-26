@@ -3697,6 +3697,11 @@ class Tinebase_FileSystem implements
      */
     public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Syncing FlySystem on node ' . $node->getId() . ' (depth ' . $depth . ')');
+        }
+
         if (isset(static::$syncFlySystemRecursionCache[$node->getId()])) return;
         static::$syncFlySystemRecursionCache[$node->getId()] = true;
 
