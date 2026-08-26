@@ -17,6 +17,7 @@ const HTMLPanel = Ext.extend(Ext.Panel, {
         this.html = `<iframe
             class="sales-quicklook-edocuemnt dark-reverse"
             style="width: 100%; height: 100%; border: none; background-color: white"
+            sandbox=""
             src="${this.url}&disposition=inline"
         />`;
 
