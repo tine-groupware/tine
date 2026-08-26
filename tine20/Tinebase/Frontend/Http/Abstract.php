@@ -350,6 +350,10 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     {
         $requiredGrant = $disposition === 'inline' ? Tinebase_Model_Grants::GRANT_READ : Tinebase_Model_Grants::GRANT_DOWNLOAD;
 
+        if ($disposition === 'inline') {
+            header("Content-Security-Policy: sandbox; default-src 'none'; script-src 'none'");
+        }
+
         if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, $requiredGrant)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' User has no ' . $requiredGrant . ' grant for node ' . $node->getId());
@@ -399,6 +403,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         // overwrite Pragma header from session
         header("Pragma: cache");
+        header('X-Content-Type-Options: nosniff');
 
         if ($disposition) {
             $headerLine = 'Content-Disposition: ' . $disposition . '; filename="' . $filename . '"';
