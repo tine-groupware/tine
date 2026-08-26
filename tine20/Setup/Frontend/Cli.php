@@ -4,7 +4,7 @@
  * tine Groupware - https://www.tine-groupware.de/
  *
  * @package     Tinebase
- * @license     https://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     https://www.gnu.org/licenses/agpl.html
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  *
@@ -839,9 +839,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         if ($_opts->syncaccountstatus) {
             $options['syncAccountStatus'] = true;
-        }
-        if ($_opts->syncontactphoto) {
-            $options['syncContactPhoto'] = true;
         }
 
         Tinebase_User::syncUsers($options);
