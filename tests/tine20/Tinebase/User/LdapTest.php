@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0 - http://www.tine20.org
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  User
- * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2008-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -330,7 +330,6 @@ class Tinebase_User_LdapTest extends TestCase
         // add+remove phone data in ldap and check if it is removed in adb, too
         $syncOptions = array(
             'syncContactData' => true,
-            'syncContactPhoto' => true,
         );
         $ldap = $this->_backend->getLdap();
         $dn = $this->_backend->generateDn($syncedUser);
@@ -394,7 +393,6 @@ class Tinebase_User_LdapTest extends TestCase
         // add phone data in ldap and check that it did not reach adb
         $syncOpt = array(
             'syncContactData' => true,
-            'syncContactPhoto' => true,
         );
         $ldap = $this->_backend->getLdap();
         $dn = $this->_backend->generateDn($syncedUser);

@@ -519,13 +519,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     public const SYNC_USER_CONTACT_DATA = 'syncUserContactData';
 
     /**
-     * configure if user contact photo should be synced from sync backend, default yes
-     *
-     * @var string
-     */
-    public const SYNC_USER_CONTACT_PHOTO = 'syncUserContactPhoto';
-
-    /**
      * configure if deleted users from sync back should be deleted in sql backend, default yes
      *
      * @var string
@@ -1877,17 +1870,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             self::LABEL => 'Sync contact data from sync backend',
                             //_('Sync user contact data from sync backend')
                             self::DESCRIPTION => 'Sync user contact data from sync backend',
-                            self::TYPE => 'bool',
-                            self::CLIENTREGISTRYINCLUDE => FALSE,
-                            self::SETBYADMINMODULE => FALSE,
-                            self::SETBYSETUPMODULE => FALSE,
-                            self::DEFAULT_STR => TRUE
-                        ),
-                        self::SYNC_USER_CONTACT_PHOTO => array(
-                            //_('Sync contact photo from sync backend')
-                            self::LABEL => 'Sync contact photo from sync backend',
-                            //_('Sync user contact photo from sync backend')
-                            self::DESCRIPTION => 'Sync user contact photo from sync backend',
                             self::TYPE => 'bool',
                             self::CLIENTREGISTRYINCLUDE => FALSE,
                             self::SETBYADMINMODULE => FALSE,
