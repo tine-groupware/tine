@@ -236,9 +236,15 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
     protected function _readRawData(): bool
     {
         $fn = function(array $data): array {
-            array_splice($data, 1, 1);
-            array_splice($data, 14, 1);
-            array_splice($data, 18, 1);
+            array_splice($data, 1, 1); // Nachname Kurzform
+            array_splice($data, 8, 2); // Schulform;Jahrgangsstufe
+            $benutzerKennung = $data[8];
+            $email = $data[9];
+            $data[8] = $data[12];
+            $data[9] = $data[11];
+            array_splice($data, 10, 5); // E-Mail-Aliasse;Klassen (alle);Klassen (alle) interner Gruppenname;
+            array_splice($data, 12, 0, [$benutzerKennung, $email]);
+            array_splice($data, 18, 1); // Export ID
             $tmp = $data[0];
             $data[0] = $data[1];
             $data[1] = $tmp;
@@ -246,8 +252,8 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         };
         $fh = fopen($this->fileNode->getFilesystemPath(), 'r');
         $headLine = join(';', $fn(fgetcsv($fh, null, ';', '"', '\\')));
-        //$headLine = trim(fgets($fh));// 0         1       2        3          4          5     6         7        8          9           10           11            12                     13                         14     15    16     17           18    19          20          21
-        if (!str_starts_with($headLine, 'Vorname;Nachname;Rufname;Geburtstag;Geschlecht;Kürzel;Schulen;Stammschule;Klassen;Klassennamen;Angebote;Manuelle Gruppen;Anmeldekennung;E-Mail-Adressen der weiteren Schulen;Status;Rolle;Quelle;Interne ID;Kurze ID;Gültig ab;Gültig bis;Löschdatum')) {
+        //$headLine = trim(fgets($fh));// 0         1       2        3            4          5     6         7            8                                     9           10           11            12                     13             14     15    16     17           18    19          20          21
+        if (!str_starts_with($headLine, 'Vorname;Nachname;Rufname;Geburtsdatum;Geschlecht;Kürzel;Schulen;Stammschule;Klassen (aktiv) interner Gruppenname;Klassen (aktiv);Angebote;Manuelle Gruppen;Benutzerkennung;Weitere E-Mail-Adressen;Status;Rolle;Quelle;Interne ID;Kurze ID;Gültig ab;Gültig bis;Löschdatum')) {
             $msg = 'unknown headline, will not import file:' . PHP_EOL . $headLine;
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                 . ' ' . $msg);
