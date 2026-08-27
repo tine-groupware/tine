@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  Server
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -59,7 +59,6 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                     'onlyusers'             => 'Only usable with sync_accounts_from_ldap. Fetches only users and no groups from LDAP.',
                     'syncdeletedusers'      => 'Only usable with sync_accounts_from_ldap. Removes users from Tine 2.0 DB that no longer exist in LDAP',
                     'syncaccountstatus'     => 'Only usable with sync_accounts_from_ldap. Synchronizes current account status from LDAP',
-                    'syncontactphoto'       => 'Only usable with sync_accounts_from_ldap. Always syncs contact photo from ldap',
                 'sync_passwords_from_ldap'  => 'Synchronize user passwords from ldap',
                 'reset_demodata'            => 'reinstall applications and install Demodata (Needs Admin user)',
                 'updateAllImportExportDefinitions' => 'update ImportExport definitions for all applications',

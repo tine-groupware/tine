@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  Server
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2025 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -259,7 +259,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                         ? array()
                         : array(
                             'syncContactData' => true,
-                            'syncContactPhoto' => true
                         );
 
                     Tinebase_User::syncUser($_username, $syncOptions);
