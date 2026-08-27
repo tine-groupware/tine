@@ -215,6 +215,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Inventory Type', // _('Inventory Type')
                 self::NULLABLE          => true,
+                self::QUERY_FILTER      => true,
             ],
             self::FLD_PRICE => [
                 self::TYPE         => self::TYPE_MONEY,
