@@ -82,7 +82,7 @@ and follow the instructions of the repo.
 - Android to version 16
 
 ### WebDAV Clients
-- OwnCloud Client to version 5.3
+- OwnCloud Client to version 6.0
 - Windows Explorer to version 11
 - macOS X Finder to macOS 26
 - KDE Plasma to version 6.4
