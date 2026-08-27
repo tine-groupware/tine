@@ -30,7 +30,7 @@
   >
     <template #default>
       <BOverlay :show="_maskModal">
-        <div class="row">
+        <div class="row" ref="modalContentRef">
           <div class="col-3" v-if="modalProps.persona">
             <PersonaContainer :icon-name="modalProps.persona" :skin-color="modalProps.skinColor"/>
           </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, onBeforeUnmount, watch } from 'vue'
+import { computed, inject, ref, onBeforeUnmount, watch, nextTick } from 'vue'
 import PersonaContainer from '../../../../ux/vue/PersonaContainer/PersonaContainer.vue'
 import { createFocusTrap } from 'focus-trap'
 
@@ -95,6 +95,7 @@ const { eventBus: EventBus } = inject(props.modalProps.injectKey)
 
 const showModal = ref(false)
 const buttonRefs = ref()
+const modalContentRef = ref()
 let ft = null
 
 const isKeyForward = (event) => {
@@ -104,17 +105,23 @@ const isKeyBackward = (event) => {
   return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
 }
 
-const onShown = () => {
-  const container = document.querySelector(`#${props.modalProps.injectKey} .modal-content`)
+const onShown = async () => {
+  await nextTick()
+
+  deactivateTrap()
+
+  const container = modalContentRef.value?.closest('.modal-content')
   if (!container) return // defensive: nothing to trap if it's not there
 
-  const focusEl = contentCompRef.value?.initialFocus || buttonRefs?.value[buttonRefs.value.length - 1].$el
+  const focusEl = contentCompRef.value?.initialFocus || buttonRefs?.value?.[buttonRefs.value.length - 1]?.$el
   ft = createFocusTrap(container, {
     trapStack: props.modalProps.focusTrapStack,
     initialFocus: focusEl,
     isKeyForward,
     isKeyBackward,
-    escapeDeactivates: false
+    escapeDeactivates: false,
+    returnFocusOnDeactivate: false,
+    allowOutsideClick: true
   })
   try {
     ft.activate()
@@ -130,13 +137,16 @@ const onHidden = () => {
 }
 
 const deactivateTrap = () => {
+  const trap = ft
+  ft = null
+
   try {
-    ft?.deactivate()
+    trap?.deactivate({
+      returnFocus: false
+    })
   } catch (e) {
     const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
     if (e.message !== msg) throw e
-  } finally {
-    ft = null
   }
 }
 

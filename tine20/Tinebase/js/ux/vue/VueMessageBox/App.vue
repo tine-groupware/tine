@@ -19,7 +19,7 @@
           @keydown.esc="props.opt.closable ? reject() : null"
   >
     <template #default>
-      <div class="container">
+      <div class="container" ref="modalContentRef">
         <div class="row">
           <div class="col-3" v-if="props.opt.icon">
             <PersonaContainer :iconName="opt.icon" :skinColor="opt?.skinColor"/>
@@ -71,7 +71,7 @@
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
 /* eslint-disable */
-import {computed, inject, nextTick, onBeforeMount, ref, watch} from "vue"
+import {computed, inject, nextTick, onBeforeMount, onBeforeUnmount, ref, watch} from "vue"
 import PersonaContainer from "../PersonaContainer/PersonaContainer.vue";
 
 import { createFocusTrap } from "focus-trap";
@@ -178,6 +178,7 @@ const buttonToShow = computed(() => {
 })
 
 const showModal = ref(false)
+const modalContentRef = ref()
 let ft = null
 const isKeyForward = (event) => {
   return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
@@ -185,21 +186,28 @@ const isKeyForward = (event) => {
 const isKeyBackward = (event) => {
   return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
 }
-const onShown = () => {
-  const container = document.querySelector('.vue-message-box .modal-content')
+const onShown = async () => {
+  await nextTick()
+
+  deactivateTrap()
+
+  const container = modalContentRef.value?.closest('.modal-content')
+
   if (!container) return
 
   ft = createFocusTrap(container, {
     trapStack: props.opt.focusTrapStack,
     isKeyForward, isKeyBackward,
     escapeDeactivates: false,
+    returnFocusOnDeactivate: false,
+    allowOutsideClick: true,
   })
   try {
     ft.activate()
   } catch (e) {
     const msg = "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
     if (e.message !== msg) throw e
-    else deactivateTrap()
+    deactivateTrap()
   }
 }
 
@@ -217,15 +225,22 @@ watch(() => props.otherConfigs.visible, newVal => {
 })
 
 const deactivateTrap = () => {
+  const trap = ft
+  ft = null
+
   try {
-    ft?.deactivate()
+    trap?.deactivate({
+      returnFocus: false,
+    })
   } catch (e) {
     const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
     if (e.message !== msg) throw e
-  } finally {
-    ft = null
   }
 }
+
+onBeforeUnmount(() => {
+  deactivateTrap()
+})
 
 onBeforeMount(async () => {
   await init();
