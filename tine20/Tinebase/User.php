@@ -1,11 +1,11 @@
 <?php
 /**
- * Tine 2.0
+ * tine Groupware - https://www.tine-groupware.de/
  * 
  * @package     Tinebase
  * @subpackage  User
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     https://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2007-2026 Metaways Infosystems GmbH (https://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -953,9 +953,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $syncOptions = Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)->{Tinebase_Config::SYNCOPTIONS};
             if (!isset($options['deleteUsers'])) {
                 $options['deleteUsers'] = $syncOptions->{Tinebase_Config::SYNC_DELETED_USER};
-            }
-            if (!isset($options['syncContactPhoto'])) {
-                $options['syncContactPhoto'] = $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_PHOTO};
             }
             if (!isset($options['syncContactData'])) {
                 $options['syncContactData'] = $syncOptions->{Tinebase_Config::SYNC_USER_CONTACT_DATA};
