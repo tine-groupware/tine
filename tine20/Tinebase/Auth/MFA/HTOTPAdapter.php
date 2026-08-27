@@ -87,7 +87,7 @@ class Tinebase_Auth_MFA_HTOTPAdapter implements Tinebase_Auth_MFA_AdapterInterfa
             }
             try {
                 $result = $_data !== null && !in_array($_data, $htOTPCfg->{Tinebase_Model_MFA_TOTPUserConfig::FLD_USED}) &&
-                    $otp->verify($_data, null, 1);
+                    $otp->verify($_data, null, TOTP::DEFAULT_PERIOD - 1);
             } catch (RuntimeException) {
                 $result = false;
             }
