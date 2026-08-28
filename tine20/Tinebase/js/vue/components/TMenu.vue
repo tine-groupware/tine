@@ -28,9 +28,10 @@
     `"
     @keyup.esc="hide"
     class="tmenu"
+    @shown="handleShown"
     @hidden="handleAfterHide"
   >
-    <div class="bootstrap-scope" ref="menu" role="menu" @keydown="handleMenuNavigation">
+    <div class="bootstrap-scope" ref="menu" role="menu" tabindex="-1" @keydown="handleMenuNavigation">
       <slot></slot>
     </div>
   </BPopover>
@@ -40,6 +41,7 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { offset as floatingOffset, shift, size, hide as hideFloatMiddleWare } from '@floating-ui/vue'
 import { onClickOutside } from '@vueuse/core'
+import { createFocusTrap } from 'focus-trap'
 
 const props = defineProps({
   target: {},
@@ -54,7 +56,9 @@ const props = defineProps({
   padding: { type: Number },
 
   backgroundColor: { type: String, default: '#F0F0F0' },
-  darkModeBackgroundColor: { type: String, default: '#f2f2f2' }
+  darkModeBackgroundColor: { type: String, default: '#f2f2f2' },
+
+  focusTrapStack: { type: Object, default: null }
 })
 
 const popoverId = computed(() => `${props.target}-menu`)
@@ -85,25 +89,95 @@ const zIndex = ref()
 const setZIndex = (index) => {
   zIndex.value = index
 }
+let returnFocusTimer = null
+const clearReturnFocusTimer = () => {
+  if (returnFocusTimer) {
+    clearTimeout(returnFocusTimer)
+    returnFocusTimer = null
+  }
+}
 const hide = (e) => {
+  clearReturnFocusTimer()
+  deactivateTrap()
   _visible.value = false
   emits('hide', e)
 }
 
 const handleAfterHide = () => {
+  deactivateTrap()
+  clearReturnFocusTimer()
+
   if (props.target) {
     const targetId = typeof props.target === 'string' ? props.target : props.target?.id
     if (targetId) {
-      setTimeout(() => {
+      returnFocusTimer = setTimeout(() => {
+        returnFocusTimer = null
+
+        if (_visible.value) return
+
         const triggerEl = document.getElementById(targetId)
-        if (triggerEl) {
+        if (
+          triggerEl &&
+          document.contains(triggerEl) &&
+          triggerEl.offsetParent !== null &&
+          !triggerEl.disabled
+        ) {
           triggerEl.focus()
         }
       }, 50)
     }
   }
 }
+
 const menu = ref()
+let ft = null
+
+const handleShown = async () => {
+  clearReturnFocusTimer()
+  await nextTick()
+  await activateTrap()
+
+  if (menu.value) {
+    const firstItem = menu.value.querySelector('[tabindex="0"], li, a, button')
+    if (firstItem) firstItem.focus()
+  }
+}
+
+const activateTrap = async () => {
+  await nextTick()
+
+  deactivateTrap()
+
+  if (!menu.value) return
+
+  ft = createFocusTrap(menu.value, {
+    trapStack: props.focusTrapStack,
+    escapeDeactivates: false,
+    returnFocusOnDeactivate: false,
+    allowOutsideClick: true
+  })
+  try {
+    ft.activate()
+  } catch (e) {
+    const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
+    if (e.message !== msg) throw e
+    else deactivateTrap()
+  }
+}
+
+const deactivateTrap = () => {
+  const trap = ft
+  ft = null
+  try {
+    trap?.deactivate({
+      returnFocus: false
+    })
+  } catch (e) {
+    const msg = 'Your focus-trap must have at least one container with at least one tabbable node in it at all times'
+    if (e.message !== msg) throw e
+  }
+}
+
 onClickOutside(menu, hide, {
   ignore: [`#${props.target}`]
 })
@@ -150,26 +224,27 @@ const handleMenuNavigation = (event) => {
   }
 }
 
-watch(() => props.visible, async (newVal) => {
+watch(() => props.visible, (newVal) => {
   _visible.value = newVal
-
   if (newVal) {
+    clearReturnFocusTimer()
     Ext.WindowMgr.bringToFront(winMgrProxy)
-
-    await nextTick()
-    if (menu.value) {
-      const firstItem = menu.value.querySelector('[tabindex="0"], li, a, button')
-      if (firstItem) {
-        firstItem.focus()
-      }
-    }
+  } else {
+    clearReturnFocusTimer()
+    deactivateTrap()
   }
 }, { immediate: true })
 
 const emits = defineEmits(['hide'])
 
 onMounted(() => Ext.WindowMgr.register(winMgrProxy))
-onUnmounted(() => Ext.WindowMgr.unregister(winMgrProxy))
+
+onUnmounted(() => {
+  clearReturnFocusTimer()
+  deactivateTrap()
+  Ext.WindowMgr.unregister(winMgrProxy)
+})
+
 </script>
 
 <style>
