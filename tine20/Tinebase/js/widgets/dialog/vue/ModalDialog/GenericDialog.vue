@@ -25,7 +25,7 @@
           @shown="onShown"
           @hidden="onHidden"
           class="dark-reverse"
-          @close="handleModalClose" :style="{'z-index': modalProps.zIndex}"
+          @close="handleModalClose" :style="{'--bs-modal-zindex': modalProps.zIndex}"
           :id="modalProps.injectKey"
   >
     <template #default>
