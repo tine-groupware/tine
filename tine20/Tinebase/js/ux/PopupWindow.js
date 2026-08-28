@@ -179,7 +179,10 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                     // NOTE: 'beforeunload' in Chrome does not work and there is no event to detect window moves,
                     //       so we frequently check for state updates
                     this.popup.setInterval(() => {
-                        if (_.reduce(this.getState(), (save, value, key) => {
+                        const state = this.getState();
+                        if (!state) return;
+                        
+                        if (_.reduce(state, (save, value, key) => {
                             // save state if difference > 5% (to suppress annoying window manager effects)
                             if (Math.max(value, this[key])/Math.min(value, this[key]) > 1.05) {
                                 this[key] = value;
@@ -187,7 +190,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                             }
                             return save;
                         }, false)) {
-                            // console.error(this.getState())
                             this.saveState();
                         }
                     }, 2000);
@@ -251,12 +253,12 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
     getState : function() {
         // NOTE: innerWidth/Height is the original dimension without scaling
         // NOTE: FF does auto scaling!
-        const state = {
+        const state = this.popup ? {
             width: this.popup.innerWidth,
             height: this.popup.innerHeight,
             screenX: this.popup.screenX,
             screenY: this.popup.screenY
-        };
+        } : null;
         return state;
     },
 
