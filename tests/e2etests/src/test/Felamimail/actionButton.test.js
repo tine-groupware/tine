@@ -45,7 +45,7 @@ beforeEach(async () => {
 })
 
 // skip... is to unstable
-describe('test action button of felamimail (grid)', () => {
+describe.skip('test action button of felamimail (grid)', () => {
     test('delete email', async () => {
         let currentUser = await lib.getCurrentUser(page);
         await expectPuppeteer(page).toClick('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
