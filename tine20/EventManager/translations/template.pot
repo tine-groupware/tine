@@ -241,10 +241,20 @@ msgstr ""
 msgid "All Events in Event Manager"
 msgstr ""
 
-msgid "Sign Up"
-msgstr ""
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Event Information"
+msgstr ""
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "The event should end after the start date"
 msgstr ""
 
 msgid "Event Options"
@@ -312,11 +322,6 @@ msgstr ""
 
 msgid "Please select an event"
 msgstr ""
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "Date"
 msgstr ""
@@ -828,11 +833,6 @@ msgstr ""
 
 msgid "GENDER_Registration"
 msgstr ""
-
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
 
 msgid "This participant has been registered by another person"
 msgstr ""
