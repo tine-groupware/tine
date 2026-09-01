@@ -63,9 +63,54 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        // drop old event manager localization table if exists
+        $locTableName = SQL_TABLE_PREFIX . EventManager_Model_EventLocalization::getConfiguration()->getTableName();
+        $this->dropTable($locTableName);
+
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_EventLocalization::class,
+        ]);
+
+        $eventTableName = SQL_TABLE_PREFIX . EventManager_Model_Event::TABLE_NAME;
+        $db = $this->getDb();
+        $schema = $db->describeTable($eventTableName);
+        if (
+            array_key_exists('name', $schema)
+            && array_key_exists('description', $schema)
+            && array_key_exists('subheading', $schema)
+        ) {
+            $fields = ['name', 'description', 'subheading'];
+            foreach (EventManager_Config::getInstance()->{EventManager_Config::LANGUAGES_AVAILABLE}->records as $lang) {
+                foreach (
+                    $db->query('SELECT id, name, description, subheading FROM ' . $eventTableName)
+                             ->fetchAll(Zend_Db::FETCH_NUM) as $row
+                ) {
+                    foreach ($fields as $idx => $fieldName) {
+                        $localization = [
+                            'id' => Tinebase_Record_Abstract::generateUID(),
+                            Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
+                            Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldName,
+                            Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[$idx + 1],
+                            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        ];
+                        try {
+                            $db->insert($locTableName, $localization);
+                        } catch (Zend_Db_Statement_Exception $zdse) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()
+                                    ->debug(__METHOD__ . '::' . __LINE__ . ' lang text: ' . print_r($lang, true));
+                            }
+                            Tinebase_Exception::log($zdse);
+                        }
+                    }
+                }
+            }
+        }
+
         Setup_SchemaTool::updateSchema([
             EventManager_Model_Event::class,
-            EventManager_Model_EventLocalization::class,
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.1', self::RELEASE019_UPDATE001);
