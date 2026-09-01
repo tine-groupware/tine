@@ -66,7 +66,7 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         // drop old event manager localization table if exists
-        $locTableName = SQL_TABLE_PREFIX . EventManager_Model_EventLocalization::getConfiguration()->getTableName();
+        $locTableName = EventManager_Model_EventLocalization::getConfiguration()->getTableName();
         $this->dropTable($locTableName);
 
         Setup_SchemaTool::updateSchema([
