@@ -139,7 +139,19 @@ Tine.EventManager.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     ],
                                     [
                                         fieldManager('start'),
-                                        fieldManager('end'),
+                                        fieldManager('end', {
+                                            checkState: function () {
+                                                if (me.form.findField('end').getValue() && (me.form.findField('start').getValue() > me.form.findField('end').getValue())) {
+                                                    this.setValue('');
+                                                    Ext.MessageBox.show({
+                                                        buttons: Ext.Msg.OK,
+                                                        icon: Ext.MessageBox.WARNING,
+                                                        title: me.app.i18n._('Registration'),
+                                                        msg: me.app.i18n._('The event should end after the start date')
+                                                    });
+                                                }
+                                            }
+                                        }),
                                     ],
                                     [
                                         fieldManager('type'),

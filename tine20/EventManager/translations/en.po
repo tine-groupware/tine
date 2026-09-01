@@ -241,11 +241,21 @@ msgstr "Event Manager | RSS"
 msgid "All Events in Event Manager"
 msgstr "All Events in Event Manager"
 
-msgid "Sign Up"
-msgstr "Sign Up"
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Event"
+msgstr[1] "Events"
 
 msgid "Event Information"
 msgstr "Event Information"
+
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] "Registration"
+msgstr[1] "Registrations"
+
+msgid "The event should end after the start date"
+msgstr "The event should end after the start date"
 
 msgid "Event Options"
 msgstr "Event Options"
@@ -312,11 +322,6 @@ msgstr "New participant"
 
 msgid "Please select an event"
 msgstr "Please select an event"
-
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Event"
-msgstr[1] "Events"
 
 msgid "Date"
 msgstr "Date"
@@ -828,11 +833,6 @@ msgstr "Value"
 
 msgid "GENDER_Registration"
 msgstr "GENDER_Registration"
-
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] "Registration"
-msgstr[1] "Registrations"
 
 msgid "This participant has been registered by another person"
 msgstr "This participant has been registered by another person"
