@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Bookmarks\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2026-08-19 08:45+0200\n"
+"PO-Revision-Date: 2026-08-25 12:21+0200\n"
 "Last-Translator: corneliusweiss <mail@corneliusweiss.de>, 2024\n"
 "Language-Team: German (https://app.transifex.com/tine/teams/16133/de/)\n"
 "Language: de\n"
@@ -204,7 +204,7 @@ msgid "List of the languages in which multilingual texts are available."
 msgstr "Liste der Sprachen, in denen mehrsprachige Texte verfügbar sind."
 
 msgid "EVENT SHARED CALENDAR NAME"
-msgstr ""
+msgstr "NAME DES GEMEINSAMEN VERANSTALTUNGSKALENDERS"
 
 msgid "Session"
 msgstr "Sitzung"
@@ -226,6 +226,15 @@ msgstr "Anmeldungen"
 
 msgid "Deregistered"
 msgstr "Abgemeldet"
+
+msgid "Parent or guardian consent is required for participants under 16."
+msgstr "Für Teilnehmende Personen unter 16 Jahren ist die Einwilligung der Eltern oder Erziehungsberechtigten erforderlich."
+
+msgid "This confirmation link is invalid or has expired."
+msgstr "Dieser Bestätigungslink ist ungültig oder abgelaufen."
+
+msgid "Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email."
+msgstr "Vielen Dank! Die Einwilligung wurde bestätigt und die Anmeldung abgeschlossen. Die Teilnehmende Person erhält eine Bestätigungs-E-Mail."
 
 msgid "Export Events"
 msgstr "Veranstaltungen exportieren"
@@ -291,7 +300,7 @@ msgid "Cancel Registration"
 msgstr "Abmeldung"
 
 msgid "You don't have any registrations yet. Get started by creating one!"
-msgstr "Sie haben noch keine Registrierungen. Legen Sie los und erstellen Sie eine!"
+msgstr "Sie haben noch keine Anmeldungen. Legen Sie los und erstellen Sie eine!"
 
 msgid "Create a new registration"
 msgstr "Neue Anmeldung erstellen"
@@ -427,6 +436,9 @@ msgstr "Ich fülle das Anmeldeformular für eine andere Person aus"
 msgid "Participant Information:"
 msgstr "Teilnehmende Person:"
 
+msgid "This participant is under 16. We will email the parent/guardian a consent link before the registration is completed."
+msgstr "Dieser Teilnehmer ist unter 16 Jahre alt. Wir werden den Sorgeberechtigten vor Abschluss der Anmeldung per E-Mail einen Link zur Einwilligungserklärung zusenden."
+
 msgid "Event Information:"
 msgstr "Veranstaltungsinformationen:"
 
@@ -481,6 +493,9 @@ msgstr "am"
 msgid "Validation Error"
 msgstr "Validierungsfehler"
 
+msgid "The parent/guardian email must be different from the participant's own email address."
+msgstr "Die E-Mail-Adresse der Sorgeberechtigten muss sich von der E-Mail-Adresse des Teilnehmers unterscheiden."
+
 msgid "Please enter a valid email address."
 msgstr "Bitte geben Sie eine gültige E-Mail-Adresse ein."
 
@@ -510,6 +525,15 @@ msgstr "Ihre Anmeldung wurde erfolgreich abgeschlossen! Sie erhalten eine Bestä
 
 msgid "Registration failed. Please try again."
 msgstr "Die Anmeldung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
+
+msgid "Parent/Guardian consent required"
+msgstr "Zustimmung der Sorgeberechtigten erforderlich"
+
+msgid "Since the participant is under 16, we've sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, haben wir eine E-Mail an die Sorgeberechtigten gesendet, um die Einwilligung einzuholen. Die Anmeldung wird automatisch abgeschlossen, sobald diese ihre Einwilligung erteilt haben."
+
+msgid "Could not send the parent/guardian consent request. Please try again."
+msgstr "Die Einverständniserklärung der Sorgeberechtigten konnte nicht gesendet werden. Bitte versuchen Sie es erneut."
 
 msgid "File Acknowledgement or Upload"
 msgstr "Dateibestätigung oder Datei-Upload"
@@ -911,6 +935,9 @@ msgstr "Wählen Sie eine Veranstaltung aus"
 msgid "Select a Person"
 msgstr "Wählen Sie eine Person aus"
 
+msgid "Parent/Guardian email"
+msgstr "Sorgeberechtigte E-mail"
+
 msgid "Confirmation E-mail"
 msgstr "Anmeldebestätigung E-Mail"
 
@@ -931,6 +958,27 @@ msgstr "Um weitere Veranstaltungen zu finden, folgen Sie bitte dem unten stehend
 
 msgid "More Events"
 msgstr "Weitere Veranstaltungen"
+
+msgid "Consent needed for event registration"
+msgstr "Für die Anmeldung zur Veranstaltung ist eine Einwilligung erforderlich"
+
+msgid "You have received this email because"
+msgstr "Sie haben diese E-Mail erhalten, weil"
+
+msgid "would like to register for the following event, and has indicated that you are their parent or legal guardian:"
+msgstr "möchte sich für die folgende Veranstaltung anmelden und hat angegeben, dass Sie dessen Sorgeberechtigten sind:"
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, benötigen wir Ihre Einwilligung, bevor die Anmeldung abgeschlossen werden kann. Um Ihre Einwilligung zu bestätigen und die Anmeldung abzuschließen, klicken Sie bitte auf den Bestätigungsknopf unten."
+
+msgid "Confirm consent and complete registration"
+msgstr "Einwilligung bestätigen und Anmeldung abschließen"
+
+msgid "If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required."
+msgstr "Falls Sie diese E-Mail nicht erwartet haben oder keine Einwilligung erteilen möchten, können Sie diese Nachricht einfach ignorieren. Es erfolgt keine Anmeldung und es sind keine weiteren Schritte erforderlich."
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the link below."
+msgstr "Da der Teilnehmer unter 16 Jahre alt ist, benötigen wir Ihre Einwilligung, bevor die Anmeldung abgeschlossen werden kann. Um Ihre Einwilligung zu bestätigen und die Anmeldung abzuschließen, klicken Sie bitte auf den Bestätigungsknopf unten."
 
 msgid "Confirm your E-mail"
 msgstr "Bestätigen Sie Ihre E-Mail-Adresse"
@@ -956,431 +1004,438 @@ msgstr "Die Anmeldefrist für die Veranstaltung %1$s ist abgelaufen. Wir setzen 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
 msgstr "Leider ist die Veranstaltung %1$s derzeit ausgebucht. Wir setzen Sie auf unsere Warteliste. Sobald ein Platz frei wird, werden wir Sie informieren."
 
-#~ msgid "Registration Contact Fields"
-#~ msgstr "Kontaktanmeldungsfelder"
+msgid "The event should end after the start date"
+msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
 
-#~ msgid "Contact Fields"
-#~ msgstr "Kontaktfelder"
+msgid ""
+"Thank you! Consent confirmed and registration completed.\n"
+"                    The participant will receive a confirmation email."
+msgstr ""
+"Vielen Dank! Die Einwilligung wurde bestätigt und die Anmeldung abgeschlossen.\n"
+"                    Der Teilnehmer erhält eine Bestätigungs-E-Mail."
 
-#~ msgid "GENDER_File"
-#~ msgstr "female"
+msgid "Registration Contact Fields"
+msgstr "Kontaktanmeldungsfelder"
 
-#~ msgid "File"
-#~ msgid_plural "Files"
-#~ msgstr[0] "Datei"
-#~ msgstr[1] "Dateien"
+msgid "Contact Fields"
+msgstr "Kontaktfelder"
 
-#~ msgid "To create the event there must be a shared calendar."
-#~ msgstr "Um den Termin anzulegen, muss ein gemeinsamer Kalender vorhanden sein."
+msgid "GENDER_File"
+msgstr "female"
 
-#~ msgid "You do not have permission to add an event to the shared calendar."
-#~ msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender hinzuzufügen."
+msgid "File"
+msgid_plural "Files"
+msgstr[0] "Datei"
+msgstr[1] "Dateien"
 
-#~ msgid ""
-#~ "To create the event there must be a shared calendar.\n"
-#~ "             Please create it first or contact your administrator."
-#~ msgstr ""
-#~ "Um die Veranstaltung anzulegen, muss ein gemeinsamer Kalender vorhanden sein.\n"
-#~ "             Bitte legen Sie diesen zunächst an oder wenden Sie sich an Ihren Administrator."
+msgid "To create the event there must be a shared calendar."
+msgstr "Um den Termin anzulegen, muss ein gemeinsamer Kalender vorhanden sein."
 
-#~ msgid ""
-#~ "You do not have permission to add an event to the shared calendar.\n"
-#~ "                     Please contact your administrator to update your permissions."
-#~ msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender hinzuzufügen. Bitte wenden Sie sich an Ihren Administrator, um Ihre Berechtigungen anzupassen."
+msgid "You do not have permission to add an event to the shared calendar."
+msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender hinzuzufügen."
+
+msgid ""
+"To create the event there must be a shared calendar.\n"
+"             Please create it first or contact your administrator."
+msgstr ""
+"Um die Veranstaltung anzulegen, muss ein gemeinsamer Kalender vorhanden sein.\n"
+"             Bitte legen Sie diesen zunächst an oder wenden Sie sich an Ihren Administrator."
+
+msgid ""
+"You do not have permission to add an event to the shared calendar.\n"
+"                     Please contact your administrator to update your permissions."
+msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender hinzuzufügen. Bitte wenden Sie sich an Ihren Administrator, um Ihre Berechtigungen anzupassen."
 
 #, php-format
-#~ msgid ""
-#~ "To create the event there must be a shared calendar.\n"
-#~ "                 The shared calendar \"%s\" does not exist. Please create it first or contact your administrator."
-#~ msgstr "Um den Termin anzulegen, muss ein gemeinsamer Kalender vorhanden sein. Der gemeinsame Kalender „%s“ existiert nicht. Bitte legen Sie ihn zunächst an oder wenden Sie sich an Ihren Administrator."
+msgid ""
+"To create the event there must be a shared calendar.\n"
+"                 The shared calendar \"%s\" does not exist. Please create it first or contact your administrator."
+msgstr "Um den Termin anzulegen, muss ein gemeinsamer Kalender vorhanden sein. Der gemeinsame Kalender „%s“ existiert nicht. Bitte legen Sie ihn zunächst an oder wenden Sie sich an Ihren Administrator."
 
 #, php-format
-#~ msgid ""
-#~ "You do not have permission to add an event to the shared calendar \"%s\".\n"
-#~ "                     Please contact your administrator to update your permissions."
-#~ msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender „%s“ hinzuzufügen. Bitte wenden Sie sich an Ihren Administrator, um Ihre Berechtigungen anzupassen."
+msgid ""
+"You do not have permission to add an event to the shared calendar \"%s\".\n"
+"                     Please contact your administrator to update your permissions."
+msgstr "Sie haben keine Berechtigung, einen Termin zum gemeinsamen Kalender „%s“ hinzuzufügen. Bitte wenden Sie sich an Ihren Administrator, um Ihre Berechtigungen anzupassen."
 
-#~ msgid "Imprint"
-#~ msgstr "Impressum"
+msgid "Imprint"
+msgstr "Impressum"
 
-#~ msgid "Privacy Notice"
-#~ msgstr "Datenschutzerklärung"
+msgid "Privacy Notice"
+msgstr "Datenschutzerklärung"
 
-#~ msgid "Enter description"
-#~ msgstr "Beschreibung eingeben"
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
 
-#~ msgid "The event should end after the start date"
-#~ msgstr "Die Veranstaltung sollte nach dem Startdatum enden"
+msgid "One should be able to register before the end date"
+msgstr "Man sollte sich vor dem Enddatum anmelden können"
 
-#~ msgid "One should be able to register before the end date"
-#~ msgstr "Man sollte sich vor dem Enddatum anmelden können"
+msgid "The session should take place before the end date. Please change the date or it would be change automatically"
+msgstr "Die Sitzung sollte vor dem Enddatum stattfinden. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
 
-#~ msgid "The session should take place before the end date. Please change the date or it would be change automatically"
-#~ msgstr "Die Sitzung sollte vor dem Enddatum stattfinden. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
+msgstr "Die Sitzung sollte am selben Tag oder nach Beginn der Veranstaltung beginnen. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
 
-#~ msgid "The session should start on the same date or after the event started. Please change the date or it would be change automatically"
-#~ msgstr "Die Sitzung sollte am selben Tag oder nach Beginn der Veranstaltung beginnen. Bitte ändern Sie das Datum, da es sonst automatisch geändert wird"
+msgid "The session should end after it begun. Please change the end time, or it would be deleted"
+msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie die Endzeit, da sie sonst gelöscht wird"
 
-#~ msgid "The session should end after it begun. Please change the end time, or it would be deleted"
-#~ msgstr "Die Sitzung sollte nach ihrem Beginn beendet werden. Bitte ändern Sie die Endzeit, da sie sonst gelöscht wird"
+msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
+msgstr "Willkommen zurück! Wir haben Ihre gespeicherten Daten vorab geladen. Bitte bestätigen oder aktualisieren Sie Ihre Angaben, um Ihr Anmeldung auf dem neuesten Stand zu halten."
 
-#~ msgid "Welcome back! We’ve preloaded your saved information. Please confirm or update your details to keep your account current."
-#~ msgstr "Willkommen zurück! Wir haben Ihre gespeicherten Daten vorab geladen. Bitte bestätigen oder aktualisieren Sie Ihre Angaben, um Ihr Anmeldung auf dem neuesten Stand zu halten."
+msgid "Select a Participant"
+msgstr "Wählen Sie eine Person aus"
 
-#~ msgid "Select a Participant"
-#~ msgstr "Wählen Sie eine Person aus"
+msgid "Option type "
+msgstr "Optionstyp"
 
-#~ msgid "Option type "
-#~ msgstr "Optionstyp"
+msgid "Here you can ask the participant for relevant information for the event"
+msgstr "Hier können Sie den Teilnehmer um relevante Informationen für die Veranstaltung bitten"
 
-#~ msgid "Here you can ask the participant for relevant information for the event"
-#~ msgstr "Hier können Sie den Teilnehmer um relevante Informationen für die Veranstaltung bitten"
+msgid "Open"
+msgstr "Offen"
 
-#~ msgid "Open"
-#~ msgstr "Offen"
+msgid "Closed"
+msgstr "Geschlossen"
 
-#~ msgid "Closed"
-#~ msgstr "Geschlossen"
+msgid "Planning"
+msgstr "Planung"
 
-#~ msgid "Planning"
-#~ msgstr "Planung"
+msgid "Company"
+msgstr "Firma / Organisation"
 
-#~ msgid "Company"
-#~ msgstr "Firma / Organisation"
+msgid "Deutschland"
+msgstr "Deutschland"
 
-#~ msgid "Deutschland"
-#~ msgstr "Deutschland"
+msgid "Salutation"
+msgstr "Anrede"
 
-#~ msgid "Salutation"
-#~ msgstr "Anrede"
+msgid "Title"
+msgstr "Titel"
 
-#~ msgid "Title"
-#~ msgstr "Titel"
+msgid "First Name"
+msgstr "Vorname"
 
-#~ msgid "First Name"
-#~ msgstr "Vorname"
+msgid "Middle Name"
+msgstr "Zweiter Vorname"
 
-#~ msgid "Middle Name"
-#~ msgstr "Zweiter Vorname"
+msgid "Last Name"
+msgstr "Nachname"
 
-#~ msgid "Last Name"
-#~ msgstr "Nachname"
+msgid "Day of Birth"
+msgstr "Geburtstag"
 
-#~ msgid "Day of Birth"
-#~ msgstr "Geburtstag"
+msgid "E-mail"
+msgstr "E-mail"
 
-#~ msgid "E-mail"
-#~ msgstr "E-mail"
+msgid "Mobile"
+msgstr "Handy"
 
-#~ msgid "Mobile"
-#~ msgstr "Handy"
+msgid "Telephone"
+msgstr "Telefon"
 
-#~ msgid "Telephone"
-#~ msgstr "Telefon"
+msgid "Street"
+msgstr "Straße"
 
-#~ msgid "Street"
-#~ msgstr "Straße"
+msgid "House Nr."
+msgstr "Hsnr."
 
-#~ msgid "House Nr."
-#~ msgstr "Hsnr."
+msgid "Postal Code"
+msgstr "Postleitzahl"
 
-#~ msgid "Postal Code"
-#~ msgstr "Postleitzahl"
+msgid "City"
+msgstr "Ort"
 
-#~ msgid "City"
-#~ msgstr "Ort"
+msgid "Region"
+msgstr "Bundesland"
 
-#~ msgid "Region"
-#~ msgstr "Bundesland"
+msgid "Country"
+msgstr "Land"
 
-#~ msgid "Country"
-#~ msgstr "Land"
+msgid "You don't have any registrations for yourself yet. Get started by creating one!"
+msgstr "Sie haben noch keine Anmeldungen für sich selbst. Legen Sie los und erstellen Sie eine!"
 
-#~ msgid "You don't have any registrations for yourself yet. Get started by creating one!"
-#~ msgstr "Sie haben noch keine Anmeldungen für sich selbst. Legen Sie los und erstellen Sie eine!"
+msgid "Users you registered"
+msgstr "Von dir angemeldete Personen"
 
-#~ msgid "Users you registered"
-#~ msgstr "Von dir angemeldete Personen"
+msgid "Event Contacts"
+msgstr "Veranstaltungsmanager-Kontakte"
 
-#~ msgid "Event Contacts"
-#~ msgstr "Veranstaltungsmanager-Kontakte"
+msgid "Manage my registration"
+msgstr "Anmeldung bearbeiten"
 
-#~ msgid "Manage my registration"
-#~ msgstr "Anmeldung bearbeiten"
+msgid "Register now"
+msgstr "Jetzt anmelden"
 
-#~ msgid "Register now"
-#~ msgstr "Jetzt anmelden"
+msgid "Church Service"
+msgstr "Gottesdienst"
 
-#~ msgid "Church Service"
-#~ msgstr "Gottesdienst"
+msgid "Voluntary Service"
+msgstr "Ehrenamtliche Tätigkeiten"
 
-#~ msgid "Voluntary Service"
-#~ msgstr "Ehrenamtliche Tätigkeiten"
+msgid "Children"
+msgstr "Kinder"
 
-#~ msgid "Children"
-#~ msgstr "Kinder"
+msgid "Choir"
+msgstr "Chor"
 
-#~ msgid "Choir"
-#~ msgstr "Chor"
+msgid "Topics"
+msgstr "Themen"
 
-#~ msgid "Topics"
-#~ msgstr "Themen"
+msgid "You don’t have any registrations for yourself yet — get started by creating one!"
+msgstr "Sie haben noch keine eigene Registrierung– legen Sie los und erstellen Sie eine!"
 
-#~ msgid "You don’t have any registrations for yourself yet — get started by creating one!"
-#~ msgstr "Sie haben noch keine eigene Registrierung– legen Sie los und erstellen Sie eine!"
+msgid "You already sign for this event. If you want to register a new person under the same e-mail account click"
+msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Konto registrieren möchten, klicken Sie bitte"
 
-#~ msgid "You already sign for this event. If you want to register a new person under the same e-mail account click"
-#~ msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Konto registrieren möchten, klicken Sie bitte"
+msgid "here"
+msgstr "hier"
 
-#~ msgid "here"
-#~ msgstr "hier"
+msgid "Event is live"
+msgstr "Veranstaltung ist live"
 
-#~ msgid "Event is live"
-#~ msgstr "Veranstaltung ist live"
+msgid "Please select a person"
+msgstr "Bitte wählen Sie eine Person aus"
 
-#~ msgid "Please select a person"
-#~ msgstr "Bitte wählen Sie eine Person aus"
+msgid "Please select a person."
+msgstr "Bitte wählen Sie eine Person aus."
 
-#~ msgid "Please select a person."
-#~ msgstr "Bitte wählen Sie eine Person aus."
+msgid "Personal Information:"
+msgstr "Persönliche Daten:"
 
-#~ msgid "Personal Information:"
-#~ msgstr "Persönliche Daten:"
+msgid "Your Information:"
+msgstr "Ihre Informationen:"
 
-#~ msgid "Your Information:"
-#~ msgstr "Ihre Informationen:"
+msgid "You don’t have any registrations yet — get started by creating one!"
+msgstr "Sie haben noch keine Registrierung – legen Sie los und erstellen Sie eine!"
 
-#~ msgid "You don’t have any registrations yet — get started by creating one!"
-#~ msgstr "Sie haben noch keine Registrierung – legen Sie los und erstellen Sie eine!"
+msgid "Website"
+msgstr "Webseite"
 
-#~ msgid "Website"
-#~ msgstr "Webseite"
+msgid "Registrator"
+msgstr "Registrator"
 
-#~ msgid "Registrator"
-#~ msgstr "Registrator"
+msgid "File Acknowledgement"
+msgstr "Bestätigung der Datei"
 
-#~ msgid "File Acknowledgement"
-#~ msgstr "Bestätigung der Datei"
+msgid "File Upload"
+msgstr "Datei-Upload"
 
-#~ msgid "File Upload"
-#~ msgstr "Datei-Upload"
+msgid "Since there are no more available places, this registration is on the waiting list."
+msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
 
-#~ msgid "Since there are no more available places, this registration is on the waiting list."
-#~ msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
+msgid "Registration Request Sent"
+msgstr "Anmeldeanfrage gesendet"
 
-#~ msgid "Registration Request Sent"
-#~ msgstr "Anmeldeanfrage gesendet"
+msgid "Loading your registrations..."
+msgstr "Ihre Anmeldungen werden geladen..."
 
-#~ msgid "Loading your registrations..."
-#~ msgstr "Ihre Anmeldungen werden geladen..."
+msgid "If you want to permanently delete your data from our system please click "
+msgstr "Wenn Sie Ihre Daten dauerhaft aus unserem System löschen möchten, klicken Sie bitte "
 
-#~ msgid "If you want to permanently delete your data from our system please click "
-#~ msgstr "Wenn Sie Ihre Daten dauerhaft aus unserem System löschen möchten, klicken Sie bitte "
+msgid "Confirm Data Deletion"
+msgstr "Löschen von Daten bestätigen"
 
-#~ msgid "Confirm Data Deletion"
-#~ msgstr "Löschen von Daten bestätigen"
+msgid "To be able to attend to this event we need to save your information. If you delete your account"
+msgstr "Um an dieser Veranstaltung teilnehmen zu können, müssen wir Ihre Daten speichern. Wenn Sie Ihr Konto löschen,"
 
-#~ msgid "To be able to attend to this event we need to save your information. If you delete your account"
-#~ msgstr "Um an dieser Veranstaltung teilnehmen zu können, müssen wir Ihre Daten speichern. Wenn Sie Ihr Konto löschen,"
+msgid "you and all the profiles under this e-mail account will no longer be register for this and other events."
+msgstr "Sie und alle Profile unter diesem E-Mail-Konto werden nicht mehr für diese und andere Veranstaltungen registriert sein."
 
-#~ msgid "you and all the profiles under this e-mail account will no longer be register for this and other events."
-#~ msgstr "Sie und alle Profile unter diesem E-Mail-Konto werden nicht mehr für diese und andere Veranstaltungen registriert sein."
+msgid "Are you sure you want to permanently delete all your data from our system? This action cannot be undone."
+msgstr "Sind Sie sicher, dass Sie alle Ihre Daten dauerhaft aus unserem System löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden."
 
-#~ msgid "Are you sure you want to permanently delete all your data from our system? This action cannot be undone."
-#~ msgstr "Sind Sie sicher, dass Sie alle Ihre Daten dauerhaft aus unserem System löschen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden."
+msgid "Delete"
+msgstr "Löschen"
 
-#~ msgid "Delete"
-#~ msgstr "Löschen"
+msgid "Please confirm your email address by clicking on the button below."
+msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den untenstehenden Button klicken."
 
-#~ msgid "Please confirm your email address by clicking on the button below."
-#~ msgstr "Bitte bestätigen Sie Ihre E-Mail-Adresse, indem Sie auf den untenstehenden Button klicken."
+msgid "You already sign for this event. If you want to register a new person under the same e-mail account click here."
+msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Adresse anmelden möchten, klicken Sie hier."
 
-#~ msgid "You already sign for this event. If you want to register a new person under the same e-mail account click here."
-#~ msgstr "Sie haben sich bereits für diese Veranstaltung angemeldet. Wenn Sie eine neue Person unter demselben E-Mail-Adresse anmelden möchten, klicken Sie hier."
+msgid "Event Specific Information:"
+msgstr "Veranstaltungsspezifische Informationen:"
 
-#~ msgid "Event Specific Information:"
-#~ msgstr "Veranstaltungsspezifische Informationen:"
+msgid "Thank you for expressing your interest in the event %1$s."
+msgstr "Vielen Dank für Ihr Interesse an der Veranstaltung %1$s."
 
-#~ msgid "Thank you for expressing your interest in the event %1$s."
-#~ msgstr "Vielen Dank für Ihr Interesse an der Veranstaltung %1$s."
+msgid "To complete the registration, please confirm your e-mail address via this link:"
+msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link:"
 
-#~ msgid "To complete the registration, please confirm your e-mail address via this link:"
-#~ msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link:"
+msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
+msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
 
-#~ msgid "The EventManager JWT secret string corresponding to the EventManager JWT_SECRET environment variable."
-#~ msgstr "Die EventManager-JWT-Geheimzeichenfolge, die der EventManager-JWT_SECRET-Umgebungsvariablen entspricht."
+msgid "Since there are no more available places, this registration is on waiting list."
+msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
 
-#~ msgid "Since there are no more available places, this registration is on waiting list."
-#~ msgstr "Da keine Plätze mehr verfügbar sind, wird diese Anmeldung auf die Warteliste gesetzt."
+msgid "Please enter your details to register for this event:"
+msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
 
-#~ msgid "Please enter your details to register for this event:"
-#~ msgstr "Bitte geben Sie Ihre Daten ein, um sich für diese Veranstaltung anzumelden:"
+msgid "First Name:"
+msgstr "Vorname:"
 
-#~ msgid "First Name:"
-#~ msgstr "Vorname:"
+msgid "Please enter your first name."
+msgstr "Bitte geben Sie Ihren Vornamen ein."
 
-#~ msgid "Please enter your first name."
-#~ msgstr "Bitte geben Sie Ihren Vornamen ein."
+msgid "Last Name:"
+msgstr "Nachname:"
 
-#~ msgid "Last Name:"
-#~ msgstr "Nachname:"
+msgid "Please enter your last name."
+msgstr "Bitte geben Sie Ihren Nachnamen ein."
 
-#~ msgid "Please enter your last name."
-#~ msgstr "Bitte geben Sie Ihren Nachnamen ein."
+msgid "Email Address:"
+msgstr "E-Mail-Adresse:"
 
-#~ msgid "Email Address:"
-#~ msgstr "E-Mail-Adresse:"
+msgid "Sending..."
+msgstr "Anfrage senden…"
 
-#~ msgid "Sending..."
-#~ msgstr "Anfrage senden…"
+msgid "Send Registration Request"
+msgstr "Anmeldeanfrage senden"
 
-#~ msgid "Send Registration Request"
-#~ msgstr "Anmeldeanfrage senden"
+msgid "Event Registration"
+msgstr "Veranstaltungsanmeldung"
 
-#~ msgid "Event Registration"
-#~ msgstr "Veranstaltungsanmeldung"
+msgid "Enter your first name"
+msgstr "Geben Sie Ihren Vornamen ein"
 
-#~ msgid "Enter your first name"
-#~ msgstr "Geben Sie Ihren Vornamen ein"
+msgid "Enter your last name"
+msgstr "Geben Sie Ihren Nachnamen ein"
 
-#~ msgid "Enter your last name"
-#~ msgstr "Geben Sie Ihren Nachnamen ein"
+msgid "Wait List"
+msgstr "Warteliste"
 
-#~ msgid "Wait List"
-#~ msgstr "Warteliste"
+msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
+msgstr "Da keine Plätze mehr verfügbar sind, werden die neuesten Anmeldungen nach dem Speichern der Änderungen auf die Warteliste verschoben."
 
-#~ msgid "Since there are no more available places, the latest registrations will be move to the waiting list after saving the changes."
-#~ msgstr "Da keine Plätze mehr verfügbar sind, werden die neuesten Anmeldungen nach dem Speichern der Änderungen auf die Warteliste verschoben."
+msgid "I have read and accept the terms and conditions"
+msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
 
-#~ msgid "I have read and accept the terms and conditions"
-#~ msgstr "Ich habe die Allgemeinen Bedingungen gelesen und akzeptiere sie"
+msgid "Complete Registration"
+msgstr "Registrierung abschließen"
 
-#~ msgid "Complete Registration"
-#~ msgstr "Registrierung abschließen"
+msgid "Manage your registration"
+msgstr "Verwalten Sie Ihre Registrierung"
 
-#~ msgid "Manage your registration"
-#~ msgstr "Verwalten Sie Ihre Registrierung"
+msgid "To manage your registration, please follow the link below"
+msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
 
-#~ msgid "To manage your registration, please follow the link below"
-#~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+msgid "Confirm your registration"
+msgstr "Bestätigen Sie Ihre Registrierung"
 
-#~ msgid "Confirm your registration"
-#~ msgstr "Bestätigen Sie Ihre Registrierung"
+msgid "Thank you for your registration to the event %1$s."
+msgstr "Vielen Dank für Ihre Anmeldung zur Veranstaltung %1$s."
 
-#~ msgid "Thank you for your registration to the event %1$s."
-#~ msgstr "Vielen Dank für Ihre Anmeldung zur Veranstaltung %1$s."
+msgid "To complete the registration, please confirm your e-mail address via this link"
+msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
 
-#~ msgid "To complete the registration, please confirm your e-mail address via this link"
-#~ msgstr "Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
+msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
 
-#~ msgid "thank you for your registration, to complete the registration, please confirm your e-mail address via this link"
-#~ msgstr "Vielen Dank für Ihre Registrierung. Um die Registrierung abzuschließen, bestätigen Sie bitte Ihre E-Mail-Adresse über diesen Link"
+msgid "Failed to update rules: "
+msgstr "Aktualisierung der Regeln fehlgeschlagen: "
 
-#~ msgid "Failed to update rules: "
-#~ msgstr "Aktualisierung der Regeln fehlgeschlagen: "
+msgid "Config Class"
+msgstr "Konfigurationklasse"
 
-#~ msgid "Config Class"
-#~ msgstr "Konfigurationklasse"
+msgid "Display"
+msgstr "Anzeigen"
 
-#~ msgid "Display"
-#~ msgstr "Anzeigen"
+msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
+msgstr "Wenn Sie mehrere Optionen als Gruppe festlegen möchten, sodass nur eine Option aus der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
 
-#~ msgid "If you want multiple options as a group so that only one option of the group can be chosen, give them the same group name. Otherwise leave this field empty"
-#~ msgstr "Wenn Sie mehrere Optionen als Gruppe festlegen möchten, sodass nur eine Option aus der Gruppe ausgewählt werden kann, geben Sie ihnen denselben Gruppennamen. Andernfalls lassen Sie dieses Feld leer"
+msgid "GENDER_Selections"
+msgstr "GENDER_Auswahl"
 
-#~ msgid "GENDER_Selections"
-#~ msgstr "GENDER_Auswahl"
+msgid "Reply should only be a number"
+msgstr "Die Antwort sollte nur eine Zahl sein"
 
-#~ msgid "Reply should only be a number"
-#~ msgstr "Die Antwort sollte nur eine Zahl sein"
+msgid "Multiple lines reply"
+msgstr "Mehrere Zeilen Antwort"
 
-#~ msgid "Multiple lines reply"
-#~ msgstr "Mehrere Zeilen Antwort"
+msgid "To manage your registration, please follow thie link below"
+msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
 
-#~ msgid "To manage your registration, please follow thie link below"
-#~ msgstr "Um Ihre Registrierung zu verwalten, folgen Sie bitte dem unten stehenden Link"
+msgid "Event Folder FileManager Path Options"
+msgstr "Veranstaltungsordner Dateimanager Pfad Optionen"
 
-#~ msgid "Event Folder FileManager Path Options"
-#~ msgstr "Veranstaltungsordner Dateimanager Pfad Optionen"
+msgid "Please enter your email address to register for this event:"
+msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um sich für diese Veranstaltung anzumelden:"
 
-#~ msgid "Please enter your email address to register for this event:"
-#~ msgstr "Bitte geben Sie Ihre E-Mail-Adresse ein, um sich für diese Veranstaltung anzumelden:"
+msgid "Checkbox Option "
+msgid_plural "Checkbox Options"
+msgstr[0] "Checkbox Option "
+msgstr[1] "Checkbox Optionen"
 
-#~ msgid "Checkbox Option "
-#~ msgid_plural "Checkbox Options"
-#~ msgstr[0] "Checkbox Option "
-#~ msgstr[1] "Checkbox Optionen"
+msgid "File Option"
+msgid_plural "File Options"
+msgstr[0] "Datei Option"
+msgstr[1] "Datei Optionen"
 
-#~ msgid "File Option"
-#~ msgid_plural "File Options"
-#~ msgstr[0] "Datei Option"
-#~ msgstr[1] "Datei Optionen"
+msgid "Option Config Class"
+msgstr "Option Konfigurationsklasse"
 
-#~ msgid "Option Config Class"
-#~ msgstr "Option Konfigurationsklasse"
+msgid "Option Config"
+msgstr "Option Konfiguration"
 
-#~ msgid "Option Config"
-#~ msgstr "Option Konfiguration"
+msgid "Text Input Option "
+msgid_plural "Text Input Options"
+msgstr[0] "Texteingabe Option "
+msgstr[1] "Texteingabe Optionen"
 
-#~ msgid "Text Input Option "
-#~ msgid_plural "Text Input Options"
-#~ msgstr[0] "Texteingabe Option "
-#~ msgstr[1] "Texteingabe Optionen"
+msgid "Text Option "
+msgid_plural "Text Options"
+msgstr[0] "Text Option "
+msgstr[1] "Text Optionen"
 
-#~ msgid "Text Option "
-#~ msgid_plural "Text Options"
-#~ msgstr[0] "Text Option "
-#~ msgstr[1] "Text Optionen"
+msgid "/Events"
+msgstr "/Veranstaltungen"
 
-#~ msgid "/Events"
-#~ msgstr "/Veranstaltungen"
+msgid "to the top"
+msgstr "nach oben"
 
-#~ msgid "to the top"
-#~ msgstr "nach oben"
-
-#~ msgid "Edit Option Rules"
-#~ msgstr "Bearbeiten Sie die Optionsregeln"
+msgid "Edit Option Rules"
+msgstr "Bearbeiten Sie die Optionsregeln"
 
 #, python-brace-format
-#~ msgid "Transferring {0}..."
-#~ msgstr "Übertragung von {0}..."
+msgid "Transferring {0}..."
+msgstr "Übertragung von {0}..."
 
 #, python-brace-format
-#~ msgid "Copy {0}"
-#~ msgstr "Kopieren {0}"
+msgid "Copy {0}"
+msgstr "Kopieren {0}"
 
-#~ msgid "Edit Rules for: "
-#~ msgstr "Regeln bearbeiten für:"
+msgid "Edit Rules for: "
+msgstr "Regeln bearbeiten für:"
 
-#~ msgid "Option Name"
-#~ msgstr "Optionsname"
+msgid "Option Name"
+msgstr "Optionsname"
 
-#~ msgid "Option Required"
-#~ msgstr "Option erforderlich"
+msgid "Option Required"
+msgstr "Option erforderlich"
 
-#~ msgid "Member Status"
-#~ msgstr "Mitgliedsstatus"
+msgid "Member Status"
+msgstr "Mitgliedsstatus"
 
-#~ msgid "Member"
-#~ msgstr "Mitglied"
+msgid "Member"
+msgstr "Mitglied"
 
-#~ msgid "Not a Member"
-#~ msgstr "Kein Mitglied"
+msgid "Not a Member"
+msgstr "Kein Mitglied"
 
-#~ msgid "Languages Available"
-#~ msgstr "Verfügbare Sprachen"
+msgid "Languages Available"
+msgstr "Verfügbare Sprachen"
 
-#~ msgid "List of languages available in the modules."
-#~ msgstr "Liste der in den Modulen verfügbaren Sprachen."
+msgid "List of languages available in the modules."
+msgstr "Liste der in den Modulen verfügbaren Sprachen."
 
-#~ msgid "Optional"
-#~ msgstr "Optional"
+msgid "Optional"
+msgstr "Optional"
 
-#~ msgid "Required"
-#~ msgstr "Erforderlich"
+msgid "Required"
+msgstr "Erforderlich"
 
-#~ msgid "Text block"
-#~ msgstr "Textbaustein"
+msgid "Text block"
+msgstr "Textbaustein"
 
-#~ msgid "URL"
-#~ msgstr "URL"
+msgid "URL"
+msgstr "URL"
