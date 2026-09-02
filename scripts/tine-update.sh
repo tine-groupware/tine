@@ -3,6 +3,7 @@
 # authors:  Philipp Schüle <p.schuele@metaways.de>
 # TODO add more variables?
 # TODO add more packages?
+# TODO make this a basic install script, too?
 
 TINEPATH="/usr/share/"
 TINEUSER="www-data"
@@ -25,10 +26,14 @@ for package in allinone humanresources gdpr inventory usermanual; do wget https:
 for package in allinone humanresources gdpr inventory usermanual; do tar -xjvf tine20-"$package"_$TAG.tar.bz2; done
 rm *.bz2
 cd $TINEPATH
-# TODO only if file exists
-# cp $TINEDIR/config.inc.php tine_$TAG
-rm $TINEDIR
+if [ -f "$TINEDIR/config.inc.php" ]; then
+    cp $TINEDIR/config.inc.php tine_$TAG
+fi
+if [ -d "$TINEDIR" ]; then
+    rm $TINEDIR
+fi
 ln -s tine_$TAG/ $TINEDIR
+
 sudo -u $TINEUSER php $TINEPATH/$TINEDIR/setup.php --config=$CONFIG --update -v
 
 echo "done."

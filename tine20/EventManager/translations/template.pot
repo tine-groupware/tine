@@ -223,15 +223,6 @@ msgstr ""
 msgid "Deregistered"
 msgstr ""
 
-msgid "Parent or guardian consent is required for participants under 16."
-msgstr ""
-
-msgid "This confirmation link is invalid or has expired."
-msgstr ""
-
-msgid "Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email."
-msgstr ""
-
 msgid "Export Events"
 msgstr ""
 
@@ -241,20 +232,10 @@ msgstr ""
 msgid "All Events in Event Manager"
 msgstr ""
 
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "Event Information"
+msgid "Sign Up"
 msgstr ""
 
-msgid "Registration"
-msgid_plural "Registrations"
-msgstr[0] ""
-msgstr[1] ""
-
-msgid "The event should end after the start date"
+msgid "Event Information"
 msgstr ""
 
 msgid "Event Options"
@@ -322,6 +303,11 @@ msgstr ""
 
 msgid "Please select an event"
 msgstr ""
+
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Date"
 msgstr ""
@@ -437,9 +423,6 @@ msgstr ""
 msgid "Participant Information:"
 msgstr ""
 
-msgid "This participant is under 16. We will email the parent/guardian a consent link before the registration is completed."
-msgstr ""
-
 msgid "Event Information:"
 msgstr ""
 
@@ -494,9 +477,6 @@ msgstr ""
 msgid "Validation Error"
 msgstr ""
 
-msgid "The parent/guardian email must be different from the participant's own email address."
-msgstr ""
-
 msgid "Please enter a valid email address."
 msgstr ""
 
@@ -525,15 +505,6 @@ msgid "Registration completed successfully! You will receive a confirmation e-ma
 msgstr ""
 
 msgid "Registration failed. Please try again."
-msgstr ""
-
-msgid "Parent/Guardian consent required"
-msgstr ""
-
-msgid "Since the participant is under 16, we've sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm."
-msgstr ""
-
-msgid "Could not send the parent/guardian consent request. Please try again."
 msgstr ""
 
 msgid "File Acknowledgement or Upload"
@@ -834,6 +805,11 @@ msgstr ""
 msgid "GENDER_Registration"
 msgstr ""
 
+msgid "Registration"
+msgid_plural "Registrations"
+msgstr[0] ""
+msgstr[1] ""
+
 msgid "This participant has been registered by another person"
 msgstr ""
 
@@ -931,9 +907,6 @@ msgstr ""
 msgid "Select a Person"
 msgstr ""
 
-msgid "Parent/Guardian email"
-msgstr ""
-
 msgid "Confirmation E-mail"
 msgstr ""
 
@@ -953,27 +926,6 @@ msgid "To find other events, please follow the link below"
 msgstr ""
 
 msgid "More Events"
-msgstr ""
-
-msgid "Consent needed for event registration"
-msgstr ""
-
-msgid "You have received this email because"
-msgstr ""
-
-msgid "would like to register for the following event, and has indicated that you are their parent or legal guardian:"
-msgstr ""
-
-msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below."
-msgstr ""
-
-msgid "Confirm consent and complete registration"
-msgstr ""
-
-msgid "If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required."
-msgstr ""
-
-msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the link below."
 msgstr ""
 
 msgid "Confirm your E-mail"
@@ -998,4 +950,55 @@ msgid "The registration date for the event %1$s is overdue. We add you to our wa
 msgstr ""
 
 msgid "Unfortunately the event %1$s is currently full. We add you to our waiting list. If a space opens we will inform you."
+msgstr ""
+
+msgid "Parent or guardian consent is required for participants under 16."
+msgstr ""
+
+msgid "This confirmation link is invalid or has expired."
+msgstr ""
+
+msgid "Thank you! Consent confirmed and registration completed.The participant will receive a confirmation email."
+msgstr ""
+
+msgid "This participant is under 16. We will email the parent/guardian a consent link before the registration is completed."
+msgstr ""
+
+msgid "The parent/guardian email must be different from the participant's own email address."
+msgstr ""
+
+msgid "Parent/Guardian consent required"
+msgstr ""
+
+msgid "Since the participant is under 16, we've sent an email to the parent/guardian to confirm consent. The registration will be completed automatically once they confirm."
+msgstr ""
+
+msgid "Could not send the parent/guardian consent request. Please try again."
+msgstr ""
+
+msgid "Parent/Guardian email"
+msgstr ""
+
+msgid "Consent needed for event registration"
+msgstr ""
+
+msgid "You have received this email because"
+msgstr ""
+
+msgid "would like to register for the following event, and has indicated that you are their parent or legal guardian:"
+msgstr ""
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the button below."
+msgstr ""
+
+msgid "Confirm consent and complete registration"
+msgstr ""
+
+msgid "If you did not expect this email, or do not wish to give consent, you can simply ignore this message — no registration will be completed and no further action is required."
+msgstr ""
+
+msgid "Since the participant is under 16 years old, we need your consent before the registration can be completed. To confirm your consent and finish the registration, please click the link below."
+msgstr ""
+
+msgid "The event should end after the start date"
 msgstr ""
