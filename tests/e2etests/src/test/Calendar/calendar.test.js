@@ -92,7 +92,7 @@ describe.skip('changeViews', () => {
     });
 
     test('week View custom days', async () => {
-        await lib.clickSlitButton(page, "Woche");
+        await lib.clickSplitButton(page, "Woche");
 
         await expectPuppeteer(page).toClick('button', {text: 'Sa'});
         await expectPuppeteer(page).toClick('.cal-wkperiod-config-menu button', {text: 'OK'});

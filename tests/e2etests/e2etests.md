@@ -174,7 +174,7 @@ Helper Functions:
      
 Doku von Puppeteer & Expect: 
 
-    https://github.com/puppeteer/puppeteer/blob/master/docs/api.md
+    https://pptr.dev/api
     https://www.npmjs.com/package/expect-puppeteer
     
 ## Jest Config

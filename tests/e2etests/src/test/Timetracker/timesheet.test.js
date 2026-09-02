@@ -1,7 +1,7 @@
 const { expect: expectPuppeteer } = require('expect-puppeteer');
 const lib = require('../../lib/browser');
 
-require('dotenv').config();
+// TODO: Create a dummy time account in the test setup, use it for testing instead of relying on existing data, and delete it again.
 
 beforeAll(async () => {
     await lib.getBrowser('Zeiterfassung', 'Stundenzettel');
@@ -17,30 +17,28 @@ describe('Create and delete time sheet', () => {
     });
 
     test('Select time account', async() => {
-        await popupWindow.waitForSelector('[name="timeaccount_id"]');
-        await expectPuppeteer(popupWindow).toFill('[name="timeaccount_id"]', 'test');
-        await popupWindow.waitForSelector('.x-combo-list-item');
-        await expectPuppeteer(popupWindow).toClick('.x-combo-list-item', {text: '1 - Test Timeaccount 1'});
+        await lib.formFillComboField(popupWindow, {selector: 'input[name="timeaccount_id"]', inputValue: 'test', itemValue: '1 - Test Timeaccount 1'});
     });
 
-    test('Enter start and end time', async() => {
+    test('Enter duration and end time', async() => {
+        // Try a lot of different formats.
+        // NOTE: This relates to a "spinner" input field, which does annoying ExtJS validation, requiring us to work around it (more delay between typing, see formFillInputField() method).
+        for (const val of ['03:30', '3:30', '3.5', '3,5']) {
+            await lib.formFillInputField(popupWindow, {selector: 'input[name="duration"]', value: val, expectedValue: '03:30', typingDelay: 100});
+        }
+
+        // Try a lot of different formats as well.
+        for (const val of ['08:30', '8:30', '830']) {
+            await lib.formFillInputField(popupWindow, {selector: 'input[name="start_time"]', value: val, expectedValue: '08:30'});
+        }
+
+        // Check if the current username is correct.
         const currentUser = await lib.getCurrentUser(popupWindow);
-
-        await popupWindow.waitForSelector('input[name="duration"]');
-        await expectPuppeteer(popupWindow).toFill('input[name="duration"]', '03:30');
-        await new Promise(r => setTimeout(r, 500));
-
-        await popupWindow.waitForSelector('input[name="start_time"]');
-        await expectPuppeteer(popupWindow).toFill('input[name="start_time"]', '08:00');
-        await new Promise(r => setTimeout(r, 500));
-
         expect(await popupWindow.evaluate(() => document.querySelector('input[name=account_id]').value)).toEqual(currentUser.accountDisplayName);
     });
 
     test('Enter description', async () => {
-        await popupWindow.waitForSelector('[name="description"]');
-        await expectPuppeteer(popupWindow).toClick('[name="description"]');
-        await expectPuppeteer(popupWindow).toFill('[name=description]', testDescription);
+        await lib.formFillInputField(popupWindow, {selector: '[name="description"]', value: testDescription});
     });
 
     test('Confirm', async() => {
@@ -48,29 +46,33 @@ describe('Create and delete time sheet', () => {
     });
 
     test('Check values in the grid', async() => {
-        await page.waitForSelector('.t-app-timetracker .x-btn-image.x-tbar-loading');
-        await page.click('.t-app-timetracker .x-btn-image.x-tbar-loading');
-        await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).toMatchElement('div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1', visible: true});
-        await expectPuppeteer(page).toMatchElement('div.x-grid3-col-description', {text: testDescription, visible: true});
-        //await expectPuppeteer(page).toMatchElement('div.x-grid3-col-duration', {text: '3 Stunden, 30 Minuten'});
+        // Refresh grid and compare the values.
+        await lib.formRefreshGrid(global.page, '.t-app-timetracker');
+        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-timeaccount_id', {text: '1 - Test Timeaccount 1', visible: true});
+        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-description', {text: testDescription, visible: true});
+        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-duration span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
+        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-duration span.duration-renderer-small', {text: '3:30'});
+        await expectPuppeteer(global.page).toMatchElement('div.x-grid3-col-accounting_time span.duration-renderer-medium', {text: '3 Stunden, 30 Minuten'});
     });
 
     test('Delete and confirm', async() => {
-        await expectPuppeteer(page).toClick('div.x-grid3-col-description', {text: testDescription, visible: true});
-        await new Promise(r => setTimeout(r, 500));
-        await page.waitForSelector('.x-grid3-row-selected');
-        await page.keyboard.press('Delete');
-        await page.waitForSelector('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button', {visible: true});
-        await expectPuppeteer(page).toClick('.btn.btn-primary.mx-1.x-tool-close.vue-button.yes-button', {text: 'Ja', visible: true});
-        await new Promise(r => setTimeout(r, 1000));
-        await page.waitForSelector('.t-app-timetracker .x-btn-image.x-tbar-loading');
-        await page.click('.t-app-timetracker .x-btn-image.x-tbar-loading');
-        await new Promise(r => setTimeout(r, 2000));
-        await expectPuppeteer(page).not.toMatchElement('div.x-grid3-col-description', {text: testDescription});
+        // Click on entry and press Delete key.
+        await global.page.waitForSelector('div.x-grid3-col-description', {visible: true});
+        await expectPuppeteer(global.page).toClick('div.x-grid3-col-description', {text: testDescription});
+        await global.page.waitForSelector('.x-grid3-row-selected', { visible: true, timeout: lib.getEnvInt('TEST_TIMEOUT_ACTIONABLE') });
+        await global.page.keyboard.press('Delete');
+
+        // Wait for modal confirmation dialog to appear, click on "Ja" and wait until the dialog disappears.
+        await global.page.waitForSelector('button.yes-button', {visible: true});
+        await expectPuppeteer(global.page).toClick('button.yes-button', {text: 'Ja'});
+        await expectPuppeteer(global.page).not.toMatchElement('div.modal.vue-message-box.show');
+
+        // Refresh grid and check for absence of the entry.
+        await lib.formRefreshGrid(global.page, '.t-app-timetracker');
+        await expectPuppeteer(global.page).not.toMatchElement('div.x-grid3-col-description', {text: testDescription});
     });
 });
 
 afterAll(async () => {
-    browser.close();
+    global.browser.close();
 });
