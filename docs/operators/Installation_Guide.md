@@ -3,11 +3,11 @@ Installation Guide
 
 Docker Installation Guide
 ---
-[www.tine-groupware.de](https://www.tine-groupware.de/) | [docker-compose.yml](https://tine-docu.s3web.rz1.metaways.net/operators/docker/docker-compose.yml) | [Dockerfile](https://github.com/tine-groupware/tine/blob/main/ci/dockerimage/built.Dockerfile)
+[www.tine-groupware.de](https://www.tine-groupware.de/) | [docker-compose.yml](https://docs.tine-groupware.de/operators/docker/docker-compose.yml) | [Dockerfile](https://github.com/tine-groupware/tine/blob/main/ci/dockerimage/Dockerfile)
 
 ## Quickstart
 
-This is an easy way to try out tine-groupware. You need Docker and Docker Compose (https://docs.docker.com/compose/).
+This is an easy way to try out tine-groupware. You need Docker and Docker Compose ([https://docs.docker.com/compose/](https://docs.docker.com/compose/)).
 
 First, create a folder. Docker Compose uses the folder names as an identifier.
 
@@ -17,7 +17,7 @@ cd tine
 ```
 Then you need to download the current docker-compose.yml (see below). And save it in the folder just created.
 ```
-wget https://tine-docu.s3web.rz1.metaways.net/operators/docker/docker-compose.yml
+wget https://docs.tine-groupware.de/operators/docker/docker-compose.yml
 ```
 Now you can start the docker-compose.
 
@@ -39,11 +39,11 @@ Wait for the database to become available. If it is, the web container will log 
 docker compose exec web su tine20 bash -c "php /usr/share/tine20/setup.php --config /etc/tine20/config.inc.php --install"
 ```
 
-Your tine-groupware is now reachable at http://127.0.0.1:4000.
+Your tine-groupware is now reachable at [http://127.0.0.1:4000](http://127.0.0.1:4000).
 
 ### setup.php UI
 
-The setup.php browser interface can be accessed here: http://127.0.0.1:4000/setup.php. The site is protected by HTTP basic auth. 
+The setup.php browser interface can be accessed here: [http://127.0.0.1:4000/setup.php](http://127.0.0.1:4000/setup.php). The site is protected by HTTP basic auth. 
 Username and password hash can be configured with the ENV Variable TINE20_SETUP_HTPASSWD (example: "setup:$apr1$JhCtViTh$k15DH.HvNR5hZ66Ew5aTH/" #setup:setuppw).
 The hash can be generated with htpasswd:
 
@@ -202,4 +202,4 @@ Please note that the tine container needs to access the backup/dump files, so it
 
 ## Ansible Role For Deployments
 
-https://github.com/tine-groupware/tine/tree/main/scripts/ansible/roles/tinedockercompose
+[https://github.com/tine-groupware/tine/tree/main/scripts/ansible/roles/tinedockercompose](https://github.com/tine-groupware/tine/tree/main/scripts/ansible/roles/tinedockercompose)
