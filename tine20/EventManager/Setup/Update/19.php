@@ -27,12 +27,12 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
             ],
-        ],
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE019_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
+        ],
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE019_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
@@ -63,56 +63,6 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
 
     public function update001()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-
-        // drop old event manager localization table if exists
-        $locTableName = EventManager_Model_EventLocalization::getConfiguration()->getTableName();
-        $this->dropTable($locTableName);
-
-        Setup_SchemaTool::updateSchema([
-            EventManager_Model_EventLocalization::class,
-        ]);
-
-        $eventTableName = SQL_TABLE_PREFIX . EventManager_Model_Event::TABLE_NAME;
-        $db = $this->getDb();
-        $schema = $db->describeTable($eventTableName);
-        if (
-            array_key_exists('name', $schema)
-            && array_key_exists('description', $schema)
-            && array_key_exists('subheading', $schema)
-        ) {
-            $fields = ['name', 'description', 'subheading'];
-            foreach (EventManager_Config::getInstance()->{EventManager_Config::LANGUAGES_AVAILABLE}->records as $lang) {
-                foreach (
-                    $db->query('SELECT id, name, description, subheading FROM ' . $eventTableName)
-                             ->fetchAll(Zend_Db::FETCH_NUM) as $row
-                ) {
-                    foreach ($fields as $idx => $fieldName) {
-                        $localization = [
-                            'id' => Tinebase_Record_Abstract::generateUID(),
-                            Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row[0],
-                            Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldName,
-                            Tinebase_Record_PropertyLocalization::FLD_TEXT => $row[$idx + 1],
-                            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
-                        ];
-                        try {
-                            $db->insert($locTableName, $localization);
-                        } catch (Zend_Db_Statement_Exception $zdse) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                Tinebase_Core::getLogger()
-                                    ->debug(__METHOD__ . '::' . __LINE__ . ' lang text: ' . print_r($lang, true));
-                            }
-                            Tinebase_Exception::log($zdse);
-                        }
-                    }
-                }
-            }
-        }
-
-        Setup_SchemaTool::updateSchema([
-            EventManager_Model_Event::class,
-        ]);
-
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.1', self::RELEASE019_UPDATE001);
     }
 
@@ -121,6 +71,10 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             EventManager_Model_Event::class,
         ]);
+
+        // location has been moved to location_record -> we remove the value
+        $db = $this->getDb();
+        $db->query('UPDATE ' . SQL_TABLE_PREFIX . EventManager_Model_Event::TABLE_NAME . ' set location = ""');
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.2', self::RELEASE019_UPDATE002);
     }
@@ -149,7 +103,61 @@ class EventManager_Setup_Update_19 extends Setup_Update_Abstract
             EventManager_Model_Event::class,
         ]);
 
+        $container = $this->_getOrCreateSharedEventContainer();
+
+        $db = $this->getDb();
+        $eventTableName = SQL_TABLE_PREFIX . EventManager_Model_Event::TABLE_NAME;
+        $db->update(
+            $eventTableName,
+            ['container_id' => $container->getId()],
+            $db->quoteInto('container_id IS NULL OR container_id = ?', '')
+        );
+
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '19.5', self::RELEASE019_UPDATE005);
+    }
+
+    protected function _getOrCreateSharedEventContainer()
+    {
+        $containerName = EventManager_Config::getInstance()->get(EventManager_Config::EVENT_SHARED_CONTAINER_NAME);
+
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName(
+                EventManager_Model_Event::class,
+                $containerName,
+                Tinebase_Model_Container::TYPE_SHARED
+            );
+        } catch (Tinebase_Exception_NotFound $e) {
+            $container = new Tinebase_Model_Container([
+                'name'           => $containerName,
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'        => 'Sql',
+                'owner_id'       => Tinebase_Core::getUser(),
+                'application_id' => Tinebase_Application::getInstance()
+                    ->getApplicationByName(EventManager_Config::APP_NAME)->getId(),
+                'model'          => EventManager_Model_Event::class,
+            ]);
+            $container = Tinebase_Container::getInstance()->addContainer($container);
+
+            $grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class, [[
+                'account_id'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ   => true,
+                Tinebase_Model_Grants::GRANT_ADD    => true,
+                Tinebase_Model_Grants::GRANT_EDIT   => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+            ], [
+                'account_id'   => Tinebase_Group::getInstance()->getDefaultAdminGroup()->getId(),
+                'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+                Tinebase_Model_Grants::GRANT_READ   => true,
+                Tinebase_Model_Grants::GRANT_ADD    => true,
+                Tinebase_Model_Grants::GRANT_EDIT   => true,
+                Tinebase_Model_Grants::GRANT_DELETE => true,
+                Tinebase_Model_Grants::GRANT_ADMIN => true,
+            ]]);
+            Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, true, false);
+        }
+
+        return $container;
     }
 
     public function update006()

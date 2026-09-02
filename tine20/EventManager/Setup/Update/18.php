@@ -31,9 +31,16 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
     protected const RELEASE018_UPDATE015 = __CLASS__ . '::update015';
     protected const RELEASE018_UPDATE016 = __CLASS__ . '::update016';
     protected const RELEASE018_UPDATE017 = __CLASS__ . '::update017';
+    protected const RELEASE018_UPDATE018 = __CLASS__ . '::update018';
 
 
     protected static $_allUpdates = [
+        self::PRIO_TINEBASE_UPDATE        => [
+            self::RELEASE018_UPDATE018          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update018',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE018_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -273,5 +280,86 @@ class EventManager_Setup_Update_18 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.17', self::RELEASE018_UPDATE017);
+    }
+
+    public function update018()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        // drop old event manager localization table if exists
+        $tableName = 'eventmanager_event_localization';
+        $this->dropTable($tableName);
+
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_EventLocalization::class,
+        ]);
+
+        $eventTableName = SQL_TABLE_PREFIX . EventManager_Model_Event::TABLE_NAME;
+        $db = $this->getDb();
+        $schema = $db->describeTable($eventTableName);
+
+        $sourceFields = [];
+        foreach (['name', 'description', 'subheading'] as $fieldName) {
+            if (array_key_exists($fieldName, $schema)) {
+                $sourceFields[] = $fieldName;
+            }
+        }
+
+        if (in_array('name', $sourceFields, true) || in_array('description', $sourceFields, true)) {
+            $locTableName = SQL_TABLE_PREFIX . EventManager_Model_EventLocalization::getConfiguration()->getTableName();
+            $selectCols = array_merge(['id'], $sourceFields);
+            $rows = $db->query(
+                'SELECT ' . implode(', ', $selectCols) . ' FROM ' . $eventTableName . ' WHERE is_deleted=0'
+            )->fetchAll(Zend_Db::FETCH_ASSOC);
+
+            foreach (EventManager_Config::getInstance()->{EventManager_Config::LANGUAGES_AVAILABLE}->records as $lang) {
+                foreach ($rows as $row) {
+                    foreach ($sourceFields as $fieldName) {
+                        $value = $row[$fieldName];
+                        if ($value === null || $value === '') {
+                            continue;
+                        }
+                        $localization = [
+                            'id' => Tinebase_Record_Abstract::generateUID(),
+                            Tinebase_Record_PropertyLocalization::FLD_RECORD_ID => $row['id'],
+                            Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldName,
+                            Tinebase_Record_PropertyLocalization::FLD_TEXT => $value,
+                            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => $lang->id,
+                        ];
+                        try {
+                            $db->insert($locTableName, $localization);
+                        } catch (Zend_Db_Statement_Exception $zdse) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                                Tinebase_Core::getLogger()
+                                    ->debug(__METHOD__ . '::' . __LINE__ . ' lang text: ' . print_r($lang, true));
+                            }
+                            Tinebase_Exception::log($zdse);
+                        }
+                    }
+                }
+            }
+
+            // explicitly drop the now obsolete sourceFields, to avoid pairing a
+            // dropped column with a newly added column of a similar type and rewriting it
+            foreach ($sourceFields as $fieldName) {
+                try {
+                    $db->query('ALTER TABLE ' . $eventTableName . ' DROP COLUMN ' . $fieldName);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    Tinebase_Exception::log($zdse);
+                }
+            }
+        } elseif (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+            Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__
+                . ' neither name nor description column found on ' . $eventTableName
+                . ' - skipping data migration, nothing to preserve.'
+            );
+        }
+
+        Setup_SchemaTool::updateSchema([
+            EventManager_Model_Event::class,
+        ]);
+
+        $this->addApplicationUpdate(EventManager_Config::APP_NAME, '18.18', self::RELEASE018_UPDATE018);
     }
 }

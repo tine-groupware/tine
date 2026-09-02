@@ -47,6 +47,7 @@ class EventManager_Config extends Tinebase_Config_Abstract
     public const EVENT_PASTORAL_URL = 'eventPastoralUrl';
 
     public const EVENT_SHARED_CALENDAR_NAME = 'eventSharedCalendarName';
+    public const EVENT_SHARED_CONTAINER_NAME = 'eventSharedContainerName';
 
 
 
@@ -351,6 +352,15 @@ class EventManager_Config extends Tinebase_Config_Abstract
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::DEFAULT_STR           => 'Allg. Pfarreikalender',
+        ],
+        self::EVENT_SHARED_CONTAINER_NAME => [
+            self::LABEL                 => 'EVENT SHARED CONTAINER NAME',
+            //_('EVENT SHARED CONTAINER NAME')
+            self::DESCRIPTION           => '', //_('')
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => 'Allg. Veranstaltungen',
         ],
     ];
 
