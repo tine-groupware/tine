@@ -3,7 +3,7 @@ tine is the ideal software for digital collaboration in companies and organizati
 functionalities to clever add-ons, tine combines everything to make daily team collaboration easier.
 
 For more information please visit our [homepage](https://www.tine-groupware.de) and don't miss our latest
-[podcast](https://www.tine-groupware.de/tine-podcast/) episodes.
+[podcast](https://www.tine-groupware.de/podcast-2/) episodes.
 
 ## Official resources
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
@@ -15,7 +15,7 @@ For more information please visit our [homepage](https://www.tine-groupware.de) 
 
 ## quick start
 tine consists of a number of integrated services which are provided as oci images. The easiest way to get you own
-evaluation copy up and running on premise, please follow our [quick-start-guide](https://tine-docu.s3web.rz1.metaways.net/en/operators/Installation_Guide/#quickstart).
+evaluation copy up and running on premise, please follow our [quick-start-guide](https://docs.tine-groupware.de/main/operators/Installation_Guide/#quickstart).
 
 For most use cases our [saas packages](https://www.tine-groupware.de/produkte/) should be the perfect fit to get a
 professional hosting environment.
