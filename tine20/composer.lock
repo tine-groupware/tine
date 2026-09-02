@@ -8124,16 +8124,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v6.0.1",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "c15bde28f1c32f8a54f177fcd65c6580238817c9"
+                "reference": "5a18379c031074cfcd55c18f7d7af752bf8fa64b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/c15bde28f1c32f8a54f177fcd65c6580238817c9",
-                "reference": "c15bde28f1c32f8a54f177fcd65c6580238817c9",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/5a18379c031074cfcd55c18f7d7af752bf8fa64b",
+                "reference": "5a18379c031074cfcd55c18f7d7af752bf8fa64b",
                 "shasum": ""
             },
             "require": {
@@ -8194,9 +8194,9 @@
             "description": "SAML2 PHP library from SimpleSAMLphp",
             "support": {
                 "issues": "https://github.com/simplesamlphp/saml2/issues",
-                "source": "https://github.com/simplesamlphp/saml2/tree/v6.0.1"
+                "source": "https://github.com/simplesamlphp/saml2/tree/v6.3.0"
             },
-            "time": "2025-12-06T11:49:43+00:00"
+            "time": "2026-08-09T18:28:49+00:00"
         },
         {
             "name": "simplesamlphp/saml2-legacy",
