@@ -1104,7 +1104,7 @@ msgstr[0] "Signatur"
 msgstr[1] "Signatur"
 
 msgid "Some attachments are of type “systemlinks”, but some recipients (marked in yellow) could not be validated as accounts on this installation. Only recipients with an active account will be able to open these attachments."
-msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger*innen (gelb markiert) sind keine Benutzer*innen dieser Instanz. Nur Empfänger*innen mit einem aktiven Benutzerkonto können diese Links öffnen."
+msgstr "Einige Anhänge sind vom Typ \"Systemlink\". Einige Empfänger*innen (gelb markiert) sind keine Benutzer*innen dieser Instanz. Nur Empfänger*innen mit einem aktiven Benutzerkonto können diese Links öffnen."
 
 msgid "Are you sure you want to send?"
 msgstr "Wollen Sie die Nachricht wirklich absenden?"
