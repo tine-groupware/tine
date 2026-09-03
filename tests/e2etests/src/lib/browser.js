@@ -53,6 +53,7 @@ module.exports = {
             await page.waitForSelector('.application-menu-item');
             await expectPuppeteer(page).toClick('.application-menu-item__text', { text: app });
             await expectPuppeteer(page).toMatchElement('title', { text: `${this.getEnvStr('TEST_BRANDING_TITLE')} - ${app}` });
+            await new Promise(r => setTimeout(r, 1500));
         }
         if (module) {
             await expectPuppeteer(page).toMatchElement('.tine-mainscreen-centerpanel-west-modules span', { text: 'Module' });
