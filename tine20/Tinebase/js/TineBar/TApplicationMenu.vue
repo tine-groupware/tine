@@ -20,7 +20,7 @@
          :class="{ 'is-mouse': mouseClicked }"
     >
       <div class="container">
-        <BFormInput :aria-label="window.i18n._('Search for applications.')" tabindex="0" class="mb-3 mt-2" v-model="searchTerm" ref="searchField"/>
+        <BFormInput :aria-label="window.i18n._('Search for applications.')" tabindex="0" class="mb-3 mt-2" v-model="searchTerm" ref="searchField" autocomplete="off"/>
         <hr class="my-1">
         <div class="row row-cols-3">
           <div
