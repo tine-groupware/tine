@@ -174,7 +174,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                                             Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You must enter a {0} name!'), nodeName));
                                             return;
                                         }
-                                        const invalidChar = Tine.Filemanager.Model.Node.checkForinvalidChars(text);
+                                        const invalidChar = Tine.Filemanager.Model.Node.checkForInvalidChars(text);
                                         if (invalidChar) {
                                             Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal character found:') + ` ${invalidChar}`);
                                             return;

@@ -658,7 +658,7 @@ msgid "Poll URL: {0}"
 msgstr "Umfrage Link: {0}"
 
 msgid "Mass Mailing"
-msgstr "Serien-Mail"
+msgstr "Serienmail"
 
 msgid "All Recipients"
 msgstr "Alle Empfänger"
@@ -1104,7 +1104,7 @@ msgid "Body"
 msgstr "Nachricht"
 
 msgid "NOTE: This mail will be sent as a mass mail, i.e. each recipient will get his or her own copy."
-msgstr "Beachte: Diese Nachricht wird als Serien-Mail verschickt. So bekommen z.b. alle Empfängerinnen und Empfänger eine eigene einzelne Kopie."
+msgstr "Beachte: Diese Nachricht wird als Serienmail verschickt. So bekommen z.b. alle Empfängerinnen und Empfänger eine eigene einzelne Kopie."
 
 msgid "Add email address here for reply-to"
 msgstr "Antwortadresse hier eintragen (reply-to)"
@@ -1116,7 +1116,7 @@ msgstr[0] "Signatur"
 msgstr[1] "Signatur"
 
 msgid "Some attachments are of type “systemlinks”, but some recipients (marked in yellow) could not be validated as accounts on this installation. Only recipients with an active account will be able to open these attachments."
-msgstr "Einige Anhänge sind vom Typ \"Systenlink\". Einige Empfänger*innen (gelb markiert) sind keine Benutzer*innen dieser Instanz. Nur Empfänger*innen mit einem aktiven Benutzer*innenkonto können diese Links öffnen."
+msgstr "Einige Anhänge sind vom Typ \"Systemlink\". Einige Empfänger*innen (gelb markiert) sind keine Benutzer*innen dieser Instanz. Nur Empfänger*innen mit einem aktiven Benutzer*innenkonto können diese Links öffnen."
 
 msgid "Are you sure you want to send?"
 msgstr "Wollen Sie die Nachricht wirklich absenden?"
@@ -1369,7 +1369,7 @@ msgid "Remove"
 msgstr "Entfernen"
 
 msgid "The following recipients will be removed from this mass mail"
-msgstr "Die folgenden Empfänger werden von dieser Serien Mail entfernt"
+msgstr "Die folgenden Empfänger werden von dieser Serienmail entfernt"
 
 msgid "(new message)"
 msgstr "(neue Nachricht)"

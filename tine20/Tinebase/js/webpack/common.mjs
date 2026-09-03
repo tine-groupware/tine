@@ -217,6 +217,7 @@ return {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
+                                charset: false, // avoid BOM in the middle of the build files
                                 quietDeps: true,
                                 silenceDeprecations: ['import', 'global-builtin'], // because Bootstrap 5.3.3's own SCSS has deprecation warnings
                             },
