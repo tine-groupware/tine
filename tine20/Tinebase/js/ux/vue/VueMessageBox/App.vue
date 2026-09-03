@@ -15,7 +15,7 @@
           :no-trap="true"
           @shown="onShown"
           @hidden="onHidden"
-          @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
+          @close="closeBox" :style="{'--bs-modal-zindex': otherConfigs.zIndex}"
           @keydown.esc="props.opt.closable ? reject() : null"
   >
     <template #default>
